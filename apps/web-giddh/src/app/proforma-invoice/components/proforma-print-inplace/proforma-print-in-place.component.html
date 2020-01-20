@@ -1,13 +1,13 @@
 <div class="modal-header themeBg pd2 pdL2 pdR2 clearfix" style="background-color: #525252">
-  <h3 class="modal-title bg" id="modal-title">Print Voucher </h3>
-  <i aria-hidden="true" class="fa fa-times text-right close_modal" (click)="cancelEvent.emit()"></i>
+    <h3 class="modal-title bg" id="modal-title">Print Voucher </h3>
+    <i aria-hidden="true" class="fa fa-times text-right close_modal" (click)="cancelEvent.emit()"></i>
 </div>
 
 <div class="modal-body">
 
-  <div class="invoice-image-section">
+    <div class="invoice-image-section">
 
-    <div *ngIf="isVoucherDownloading" class="no-data mrT2 loader-main">
+        <div *ngIf="isVoucherDownloading" class="no-data mrT2 loader-main">
             <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
             <div class="spinner2">
                 <div class="cube1"></div>
@@ -15,15 +15,15 @@
             </div>
         </div>
 
-    <div *ngIf="isVoucherDownloadError && !isVoucherDownloading" class="error">
-              <span>
+        <div *ngIf="isVoucherDownloadError && !isVoucherDownloading" class="error">
+            <span>
                 Invoice Preview is not available right now!Please try again..
-              </span>
+            </span>
+        </div>
+
+        <ng2-pdfjs-viewer [downloadFileName]="'invoice.pdf'" [openFile]="false" [viewBookmark]="false"
+            [download]="true">
+        </ng2-pdfjs-viewer>
+
     </div>
-
-    <ng2-pdfjs-viewer [downloadFileName]="'invoice.pdf'" [openFile]="false" [viewBookmark]="false"
-                      [download]="true">
-    </ng2-pdfjs-viewer>
-
-  </div>
 </div>

@@ -7,21 +7,21 @@ import { CheckIfPublicPath } from './checkIfPublicPath';
 import { BrowserSupported } from './BrowserSupported';
 
 @NgModule({
-  imports: [],
-  exports: []
+    imports: [],
+    exports: []
 })
 export class DecoratorsModule {
-  public static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: DecoratorsModule,
-      providers: [
-        NeedsAuthentication,
-        UserAuthenticated,
-        NewUserAuthGuard,
-        NeedsAuthorization,
-        CheckIfPublicPath,
-        BrowserSupported
-      ]
-    };
-  }
+    public static forRoot(): ModuleWithProviders {
+        return {
+            ngModule: DecoratorsModule,
+            providers: [
+                NeedsAuthentication,
+                UserAuthenticated,
+                NewUserAuthGuard,
+                NeedsAuthorization,
+                CheckIfPublicPath,
+                BrowserSupported
+            ]
+        };
+    }
 }

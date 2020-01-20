@@ -1,21 +1,21 @@
-import {catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil} from 'rxjs/operators';
-import {Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
-import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
-import {Observable, of, ReplaySubject} from 'rxjs';
-import {SettingsLinkedAccountsService} from '../../../services/settings.linked.accounts.service';
-import {TypeaheadMatch} from 'ngx-bootstrap';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ToasterService} from '../../../services/toaster.service';
-import {AppState} from 'apps/web-giddh/src/app/store';
-import {Store} from '@ngrx/store';
+import { catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { Observable, of, ReplaySubject } from 'rxjs';
+import { SettingsLinkedAccountsService } from '../../../services/settings.linked.accounts.service';
+import { TypeaheadMatch } from 'ngx-bootstrap';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToasterService } from '../../../services/toaster.service';
+import { AppState } from 'apps/web-giddh/src/app/store';
+import { Store } from '@ngrx/store';
 
 @Component({
     selector: 'connect-bank-modal',
     templateUrl: './connect.bank.modal.component.html',
     styles: [`iframe {
-        width: 100%;
-        height: 400px;
-    }
+    width: 100%;
+    height: 400px;
+  }
 
     .connect-page .page-title {
         margin-top: 0;
@@ -65,10 +65,10 @@ export class ConnectBankModalComponent implements OnChanges {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(public sanitizer: DomSanitizer,
-                private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
-                private _fb: FormBuilder,
-                private _toaster: ToasterService,
-                private store: Store<AppState>
+        private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
+        private _fb: FormBuilder,
+        private _toaster: ToasterService,
+        private store: Store<AppState>
     ) {
         this.needReloadingLinkedAccounts$ = this.store.select(s => s.settings.linkedAccounts.needReloadingLinkedAccounts).pipe(takeUntil(this.destroyed$));
         this.dataSource = (text$: Observable<any>): Observable<any> => {
@@ -263,7 +263,6 @@ export class ConnectBankModalComponent implements OnChanges {
             if (res.status === 'success' && res.body.providerAccount && res.body.providerAccount.length) {
                 this.bankSyncInProgress = true;
                 validateProvider = this.validateProviderResponse(res.body.providerAccount[0]);
-                console.log('getBankSyncStatus...', validateProvider, this.cancelRequest);
                 if (!validateProvider && !this.cancelRequest) {
                     setTimeout(() => {
                         this.getBankSyncStatus(providerId);
@@ -344,7 +343,6 @@ export class ConnectBankModalComponent implements OnChanges {
      */
     public bypassSecurityTrustResourceUrl(val) {
         let str = 'data:application/pdf;base64,' + val;
-        // console.log('chala');
         this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
     }
 

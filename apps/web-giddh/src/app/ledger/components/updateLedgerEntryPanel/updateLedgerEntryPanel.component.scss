@@ -1,3 +1,4 @@
+@import "../../../../assets/css/color.scss";
 .pItem {
     padding: 0 4px;
 }
@@ -148,8 +149,9 @@ ng-select .select_drop i.fa.fa-caret-up::before {
 .icon-box {
     text-align: center;
     display: flex;
+    -webkit-box-align: end;
     align-items: flex-end;
-    padding: 0 10px 10px;
+    padding: 8px 10px 10px;
 }
 
 .add-multicurrency .icon-box {
@@ -161,7 +163,23 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     width: 80px !important;
     min-width: 80px;
 }
-
+.download-invoice-ledger > i {
+    top: 15px;
+    position: relative;
+}
+.checkbox-custom-label strong {
+    display: contents;
+}
+span.eligible-ITC {
+    font-size: 11px;
+    cursor: pointer;
+    padding-top: 5px;
+    display: inline-block;
+    span {
+        color: $btnLink;
+        font-size: 10px;
+    }
+}
 @media only screen and (max-width: 1024px) {
     .ledger_book {
         display: block;
@@ -283,5 +301,11 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     }
     .entrypanel .bl-1 {
         border-left: 0;
+    }
+    .advanced input[type="checkbox"] {
+        width: initial !important;
+    }
+    .xs-pt-0 {
+        padding-top: 0px !important;
     }
 }

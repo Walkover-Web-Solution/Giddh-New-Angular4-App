@@ -23,21 +23,35 @@
 .warehouseCard {
     background-color: #ebecee;
     padding: 15px;
-    min-height: 270px;
+    min-height: 300px;
     margin-bottom: 15px;
 }
-.warehouseOptions .btn-group.show {
-    display: inline-block !important;
+.warehouseOptions {
+    min-width: 180px;
+    text-align: right;
 }
-.warehouseOptions .btn-group .btn {
-    background-color: transparent;
-    padding: 0;
-    color: #707070;
-    margin-right: 0;
-    font-size: 20px;
-}
-.warehouseOptions .btn-group .btn:focus {
-    box-shadow: none;
+.warehouseOptions {
+    .warehouse-options {
+        cursor: pointer;
+    }
+    .btn-group.show {
+        display: inline-block !important;
+    }
+    .btn-group .btn {
+        background-color: transparent;
+        padding: 0;
+        color: #707070;
+        margin-right: 0;
+        font-size: 20px;
+    }
+    .btn-group .btn:focus {
+        box-shadow: none;
+    }
+    ul#dropdown-basic {
+        left: auto !important;
+        right: 0 !important;
+        min-width: 100px;
+    }
 }
 .warehouseCard .d-flex {
     justify-content: space-between;
@@ -51,6 +65,7 @@
     font-family: "opensans-semibold";
     float: left;
     width: 66%;
+    word-break: break-all;
 }
 span.setAsDefault {
     background-color: #d9d9d9;
@@ -58,30 +73,27 @@ span.setAsDefault {
     font-size: 14px;
     border-radius: 13px;
     margin-right: 10px;
+    cursor: pointer;
 }
 .warehouse-details {
     font-size: 14px;
 }
 .warehouse-details label {
     font-family: "opensans-semibold";
-    float: left;
-    width: 160px;
+    width: 140px;
 }
 .warehouse-details p {
-    float: left;
-    width: 68%;
+    word-break: break-all;
+    white-space: initial;
+    width: 100%;
 }
 .about-warehaouse {
     margin: 15px 0;
+    display: flex;
 }
 .gray-text {
     color: #8f9091;
     font-size: 12px;
-}
-.warehouseOptions ul#dropdown-basic {
-    left: auto !important;
-    right: 0 !important;
-    min-width: 100px;
 }
 .setAsDefault i.icon-favorite-selected {
     color: #5b64c9;
@@ -90,4 +102,22 @@ span.setAsDefault {
     justify-content: center;
     align-items: center;
     display: flex;
+}
+.warehouse-pagination {
+    width: 100%;
+    text-align: center;
+    .pagination .disabled a {
+        cursor: not-allowed;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .warehouseCard .d-flex {
+        display: block;
+    }
+    .warehouseCard h3 {
+        float: none;
+        width: 100%;
+        margin-bottom: 15px;
+    }
 }

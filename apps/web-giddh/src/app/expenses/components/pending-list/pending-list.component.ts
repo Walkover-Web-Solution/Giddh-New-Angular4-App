@@ -54,10 +54,10 @@ export class PendingListComponent implements OnInit, OnChanges {
     public approveEntryRequestInProcess: boolean = false;
 
     constructor(private store: Store<AppState>,
-                private _expenceActions: ExpencesAction,
-                private expenseService: ExpenseService,
-                private _toasty: ToasterService,
-                private _cdRf: ChangeDetectorRef, private _modalService: BsModalService) {
+        private _expenceActions: ExpencesAction,
+        private expenseService: ExpenseService,
+        private _toasty: ToasterService,
+        private _cdRf: ChangeDetectorRef, private _modalService: BsModalService) {
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.select(p => p.session.todaySelected).pipe(takeUntil(this.destroyed$));
         this.pettyCashReportsResponse$ = this.store.select(p => p.expense.pettycashReport).pipe(takeUntil(this.destroyed$));
@@ -78,7 +78,7 @@ export class PendingListComponent implements OnInit, OnChanges {
     }
 
     public showApproveConfirmPopup(ref: TemplateRef<any>, item: ExpenseResults) {
-        this.approveEntryModalRef = this._modalService.show(ref, {class: 'modal-md', backdrop: true, ignoreBackdropClick: true});
+        this.approveEntryModalRef = this._modalService.show(ref, { class: 'modal-md', backdrop: true, ignoreBackdropClick: true });
         this.selectedEntryForApprove = item;
     }
 
@@ -92,7 +92,7 @@ export class PendingListComponent implements OnInit, OnChanges {
     }
 
     public showFilterModal(ref: TemplateRef<any>) {
-        this.filterModalRef = this._modalService.show(ref, {class: 'modal-md'});
+        this.filterModalRef = this._modalService.show(ref, { class: 'modal-md' });
     }
 
     public hideFilterModal() {
@@ -122,7 +122,7 @@ export class PendingListComponent implements OnInit, OnChanges {
             return;
         }
 
-        this.expenseService.actionPettycashReports(actionType, {ledgerRequest: ledgerRequest.body}).subscribe((res) => {
+        this.expenseService.actionPettycashReports(actionType, { ledgerRequest: ledgerRequest.body }).subscribe((res) => {
             this.approveEntryRequestInProcess = false;
             if (res.status === 'success') {
                 this._toasty.successToast(res.body);

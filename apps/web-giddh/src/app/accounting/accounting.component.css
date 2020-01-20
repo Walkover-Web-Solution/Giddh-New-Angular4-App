@@ -1,145 +1,145 @@
 :host ::ng-deep .parent-Group {
-  padding-left: 0;
+    padding-left: 0;
 }
 
 :host ::ng-deep .acntAccordion .mainLiAclist .title:before {
-  content: none;
+    content: none;
 }
 
 :host ::ng-deep .accountli {
-  margin: 7px;
-  text-transform: capitalize;
+    margin: 7px;
+    text-transform: capitalize;
 }
 
 :host ::ng-deep .accounts-side-bar {
-  box-shadow: none;
-  overflow: auto;
-  width: 100%;
+    box-shadow: none;
+    overflow: auto;
+    width: 100%;
 }
 
 .custom-input-group-addon {
-  min-width: 40px;
-  border-radius: 0;
-  padding: 0;
-  border: none;
+    min-width: 40px;
+    border-radius: 0;
+    padding: 0;
+    border: none;
 }
 
 .bg_wrap {
-  background: #f5f5f5;
+    background: #f5f5f5;
 }
 
 .entry_table thead th {
-  font-weight: normal;
-  padding: 8px 6px;
+    font-weight: normal;
+    padding: 8px 6px;
 }
 
 .entry_table tbody tr td {
-  padding: 0;
-  border: 0;
+    padding: 0;
+    border: 0;
 }
 
 .entry_table tbody tr td .form-control {
-  background: transparent !important;
-  border: 0;
-  border-radius: 0 !important;
-  height: 28px;
-  line-height: 28px;
-  padding: 0 6px !important;
+    background: transparent !important;
+    border: 0;
+    border-radius: 0 !important;
+    height: 28px;
+    line-height: 28px;
+    padding: 0 6px !important;
 }
 
 .entry_table tbody tr td .form-control.focus:focus {
-  background: #ccc !important;
+    background: #ccc !important;
 }
 
 .activeRow {
-  background: #e5e5e5;
+    background: #e5e5e5;
 }
 
 .confirmation_box {
-  background: white;
-  display: inline-block;
-  padding: 20px;
-  width: 230px;
-  position: absolute;
-  right: 280px;
-  z-index: 9;
-  min-height: 135px;
-  margin: 20px 0;
+    background: white;
+    display: inline-block;
+    padding: 20px;
+    width: 230px;
+    position: absolute;
+    right: 280px;
+    z-index: 9;
+    min-height: 135px;
+    margin: 20px 0;
 }
 
 .total_box {
-  padding: 15px 0;
-  border-top: 1px solid;
-  border-bottom: 1px solid;
-  margin: 20px 0;
-  min-width: 250px;
-  font-size: 14px;
+    padding: 15px 0;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    margin: 20px 0;
+    min-width: 250px;
+    font-size: 14px;
 }
 
 .total_box > span {
-  margin: 0 8px;
-  display: inline-block;
-  min-width: 120px;
+    margin: 0 8px;
+    display: inline-block;
+    min-width: 120px;
 }
 
 .appearance_none {
-  background: #e5e5e5 !important;
-  border: 0 !important;
-  font-size: 16px;
-  color: #333333;
+    background: #e5e5e5 !important;
+    border: 0 !important;
+    font-size: 16px;
+    color: #333333;
 }
 
 .account_listbar {
-  overflow-y: hidden;
-  height: 100vh;
-  width: 250px;
-  background: white;
-  position: absolute;
-  left: -250px;
-  z-index: 0;
+    overflow-y: hidden;
+    height: 100vh;
+    width: 250px;
+    background: white;
+    position: absolute;
+    left: -250px;
+    z-index: 0;
 }
 
 .sidebar_menu {
-  min-height: 100vh;
-  background: #262626;
-  color: white;
-  float: right;
-  /* width: 250px; */
-  position: relative;
+    min-height: 100vh;
+    background: #262626;
+    color: white;
+    float: right;
+    /* width: 250px; */
+    position: relative;
 }
 
 .menu_list {
-  padding: 15px 0;
+    padding: 15px 0;
 }
 
 .menu_list li {
-  list-style: none
+    list-style: none;
 }
 
 .menu_list li a {
-  color: #fff;
-  padding: 4px 12px;
-  display: block;
+    color: #fff;
+    padding: 4px 12px;
+    display: block;
 }
 
 .menu_list li a.isHidden {
-  color: #4d4d4d
+    color: #4d4d4d;
 }
 
 .sidebar_list {
-  width: 300px;
-  position: absolute;
-  right: 0;
-  top: 0;
-  height: 100vh;
-  padding: 0 !important;
-  border: 0;
-  z-index: 0;
-  border-left: 1px solid #d6d6d6;
+    width: 300px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    padding: 0 !important;
+    border: 0;
+    z-index: 0;
+    border-left: 1px solid #d6d6d6;
 }
 
 .sidebar_list h3 {
-  background: #fff;
+    background: #fff;
 }
 /*
 .label.isActive {
@@ -150,33 +150,33 @@
 } */
 
 input[name="entryDate"] {
-  background: transparent !important;
-  border: 0;
-  padding: 0 !important;
-  color: #333;
-  height: auto;
-  width: 100px;
-  font-size: 16px
+    background: transparent !important;
+    border: 0;
+    padding: 0 !important;
+    color: #333;
+    height: auto;
+    width: 100px;
+    font-size: 16px;
 }
 
 textarea[name="narration"] {
-  background: transparent !important;
-  border: 0;
+    background: transparent !important;
+    border: 0;
 }
 
 input[name="entryDate"]:focus,
 textarea[name="narration"]:focus {
-  background: #e5e5e5 !important;
+    background: #e5e5e5 !important;
 }
 
 :host ::ng-deep .menu {
-  box-shadow: none !important;
+    box-shadow: none !important;
 }
 
 :host ::ng-deep .item .list-item {
-  border: 0 !important;
+    border: 0 !important;
 }
 
 :host ::ng-deep .menu {
-  border-left: 0 !important;
+    border-left: 0 !important;
 }

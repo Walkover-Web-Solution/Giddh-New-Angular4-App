@@ -1,46 +1,46 @@
 .templateEditor {
-  width: 30%;
-  float: left;
-  /* overflow: auto; */
+    width: 30%;
+    float: left;
+    /* overflow: auto; */
 }
 
 .invoice-preview {
-  width: 9in;
-  float: right;
-  overflow: auto;
-  max-height: calc(100vh - 108px);
-  /* margin-bottom: 70px; */
+    width: 9in;
+    float: right;
+    overflow: auto;
+    max-height: calc(100vh - 108px);
+    /* margin-bottom: 70px; */
 }
 
 #email-template {
-  background-color: #fff;
-  border: 1px solid #ddd;
+    background-color: #fff;
+    border: 1px solid #ddd;
 }
 
 #email-template .form-control {
-  min-height: 45px;
-  border: 0;
-  border-radius: 0 !important;
-  color: #000;
-  border-bottom: 1px solid #ddd;
-  background: transparent !important;
+    min-height: 45px;
+    border: 0;
+    border-radius: 0 !important;
+    color: #000;
+    border-bottom: 1px solid #ddd;
+    background: transparent !important;
 }
 
 #email-template .input-group-addon:first-child {
-  min-width: 80px;
-  background: transparent;
-  text-align: left;
-  border: 0;
-  border-radius: 0;
-  border-bottom: 1px solid #ddd;
+    min-width: 80px;
+    background: transparent;
+    text-align: left;
+    border: 0;
+    border-radius: 0;
+    border-bottom: 1px solid #ddd;
 }
 
 #email-body {
-  min-height: 400px;
+    min-height: 400px;
 }
 
-@media(max-width:1266px){
-  .invoice-preview{
+@media (max-width: 1266px) {
+    .invoice-preview {
         width: 7in;
-  }
+    }
 }

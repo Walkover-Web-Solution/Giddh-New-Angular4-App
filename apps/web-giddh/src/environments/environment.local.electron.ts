@@ -1,14 +1,14 @@
 /* tslint:disable */
-import {NgModuleRef} from '@angular/core';
-import {Environment} from './model';
+import { NgModuleRef } from '@angular/core';
+import { Environment } from './model';
 
 export const environment: Environment = {
     production: true,
     showDevModule: true,
     AppUrl: 'http://localhost:4200/',
-    ApiUrl: 'http://apitest.giddh.com/',
-    isCordova: false,
+    ApiUrl: 'https://apitest.giddh.com/',
     isElectron: true,
+    isCordova: false,
     OtpToken: '73k6G_GDzvhy4XE33EQCaKUnC0PHwEZBvf0qsZ3Q9S3ZBcXH-f_6JT_4fH-Qx1Y5LxIIwzqy7cFQVMoyUSXBfLL5WBX6oQWifweWIQlJQ8YkRZ1lAmu3oqwvNJXP1Y5ZTXDHO1IV5-Q63zwNbzxTFw==',
     APP_FOLDER: '',
     /** Angular debug tools in the dev console

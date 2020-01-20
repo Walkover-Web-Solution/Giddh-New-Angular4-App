@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { GeneralService } from '../services/general.service';
-import { BillingDetails, CompanyCreateRequest, CreateCompanyUsersPlan, States, SubscriptionRequest, StatesRequest } from '../models/api-models/Company';
+import { BillingDetails, CompanyCreateRequest, CreateCompanyUsersPlan, States, StatesRequest, SubscriptionRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IOption } from '../theme/sales-ng-virtual-select/sh-options.interface';
 import { select, Store } from '@ngrx/store';
@@ -60,6 +60,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     public isRefreshing$: Observable<boolean>;
     public isCreateAndSwitchCompanyInProcess: boolean = true;
     public isUpdateCompanyInProgress$: Observable<boolean>;
+    public isUpdateCompanySuccess$: Observable<boolean>;
     public SubscriptionRequestObj: SubscriptionRequest = {
         planUniqueName: '',
         subscriptionId: '',
@@ -77,18 +78,37 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     public testRazorPayKeyforAuthentication = 'rzp_test_QS3CQB90ukHDIF';
     public razorpayAuthKey = 'rzp_live_rM2Ub3IHfDnvBq';
 
-    constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions, private winRef: WindowRefService, private cdRef: ChangeDetectorRef, private settingsProfileActions: SettingsProfileActions, private commonActions: CommonActions) {
+    private activeCompany;
+
+    constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router,
+        private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions,
+        private companyActions: CompanyActions, private winRef: WindowRefService, private cdRef: ChangeDetectorRef,
+        private settingsProfileActions: SettingsProfileActions, private commonActions: CommonActions) {
         this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
         this.fromSubscription = this._route.routerState.snapshot.url.includes('buy-plan');
+        this.isUpdateCompanySuccess$ = this.store.select(s => s.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
+        this.store.dispatch(this.settingsProfileActions.resetPatchProfile());
+        // set active company
+        this.store.pipe(
+            select(state => state.session.companies), take(1)
+        ).subscribe(companies => {
+            companies = companies || [];
+            this.activeCompany = companies.find(company => company.uniqueName === this._generalService.companyUniqueName);
+        });
+
+        this.getStates();
+
         this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
         this.isRefreshing$ = this.store.select(s => s.session.isRefreshing).pipe(takeUntil(this.destroyed$));
         this.logedInuser = this._generalService.user;
+
         if (this._generalService.createNewCompany) {
             this.createNewCompanyFinalObj = this._generalService.createNewCompany;
         }
+
         this.store.pipe(select(s => s.session.userSelectedSubscriptionPlan), takeUntil(this.destroyed$)).subscribe(res => {
             this.selectedPlans = res;
             if (this.selectedPlans) {
@@ -102,7 +122,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.UserCurrency = this.createNewCompany.baseCurrency;
                     this.orderId = this.createNewCompany.orderId;
                     this.razorpayAmount = this.getPayAmountForRazorPay(this.createNewCompany.amountPaid);
-                    this.getStates();
                     this.getOnboardingForm();
                 }
             }
@@ -115,7 +134,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.UserCurrency = this.createNewCompany.baseCurrency;
                     this.orderId = this.createNewCompany.orderId;
                     this.razorpayAmount = this.getPayAmountForRazorPay(this.createNewCompany.amountPaid);
-                    this.getStates();
                     this.getOnboardingForm();
                 }
             }
@@ -129,6 +147,11 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         });
         this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
             this.isCreateAndSwitchCompanyInProcess = inProcess;
+        });
+        this.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(success => {
+            if (success) {
+                this._route.navigate(['pages', 'user-details', 'subscription']);
+            }
         });
         this.cdRef.detectChanges();
         if (this.fromSubscription && this.selectedPlans) {
@@ -252,7 +275,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     public backToSubscriptions() {
-        this._route.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, isPlanPage: true } });
+        this._route.navigate(['pages', 'user-details', 'subscription']);
     }
 
     public payWithRazor(billingDetail: NgForm) {
@@ -262,10 +285,15 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         }
         if (billingDetail.valid && this.createNewCompany) {
             this.createNewCompany.userBillingDetails = billingDetail.value;
+            if (this.billingDetailsObj) {
+                if (this.billingDetailsObj.stateCode) {
+                    this.createNewCompany.userBillingDetails.stateCode = this.billingDetailsObj.stateCode;
+                }
+            }
         }
         this.razorpay.open();
-
     }
+
     public patchProfile(obj) {
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
     }
@@ -283,7 +311,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                     razorpaySignature: razorPay_response.razorpay_signature,
                     amountPaid: this.ChangePaidPlanAMT,
                     userBillingDetails: this.billingDetailsObj,
-                    country: this.companyCountry
+                    country: this.createNewCompany ? this.createNewCompany.country : ''
                 };
                 this.patchProfile(reQuestob);
             }
@@ -302,7 +330,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         document.body.appendChild(s);
         this.options = {
             key: 'rzp_test_QS3CQB90ukHDIF',   // rzp_live_rM2Ub3IHfDnvBq   // rzp_test_QS3CQB90ukHDIF //rzp_live_rM2Ub3IHfDnvBq  //'https://i.imgur.com/n5tjHFD.png'
-            image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAAAk1BMVEUAAAAgICCvIAAoKCivIAArKyWvIACuIAAoKCirIAApKSasIwArKCitIwApKSesIgApKSmtIgCtIgAqKiitIgArKSmtIgAqKSmsIgAqKiitIgArKSisIwAqKSmsIwAqKimsIwArKSisIwArKSitIwCsIgArKiitIgCtIgAqKSmtIgArKimtIgArKSisIgArKimtIwCLeJzxAAAAL3RSTlMAEBAgIDAwP0BAUF9gYG9vcHB/gICPj5CQn5+goK+vsLC/v8DAz9DQ3+Dg7+/w8HQisAwAAALGSURBVFjDrZjreqIwEIaR4iFV1oJsdVvXIgWTjRi4/6tbah91JkxCwu78bNP3mfnmwEyDwGKzZVoUou1MFEW6nAVjLFof6laz+rCOPDHLQ2uww9KdEqZ1azGRhm4cO+Ya4toBw6rWwSo2xHltHe3VnqqqdbbKksBZ3XpYbayruPW02Jkj9xljXbJDxrK9dCT1ODLTVIgy6UBi2pOSTDArtWc9nSKsszTWCcNe1XrucN4zW41kuArwL3fInYF5wRR8vTMKxAd7MuTwPTMExh16G5EqOmruNCMQKbn/FGRMOs6aECSvDgmHnOcyI5JcO+bdWAWi1xvSZ65LvVNyOpM+weXX5gD95fepAX331SjJSIeQSwmKTPp+RCWKrR6TMj1xdTencaBeNoP1F4+PDMYWA/f2/qA9kKUcLxEUqQQg5g9iACT+D6gKHsIbBsj05/F4Pv7+8UR94h9/DUAkZnFsbvaLQDmDtg2w87MbiAjtvcG2soQmLWJvG90WJrG5Lf2LHqc5T4zptxTkqQ9qNoaCzC0tQjjUuWRskVgf4RaFvgxlToCmNY+RTxK0MY2RQJlEOg2CHrIoNGq12EhO80FGltuG/2Bo2vAH1Vn4gQpNXtMH8oUETY0fSPjJRipNKc4fSqHbcqsMSwQV2wu1REhirYHBPfU5J3KtuW1aIXBJwGGy0jmXKbWcqfvfJHAjDM16A05FrX5BwE2k1QUKTXO4aT1GpMl9SF4eFYQ4uGbQwi7QIjl53rx/bjdgNrLauLDj4No2tR7P6CnXx7jCJ7n5qBHooYosK8p339FnVjF0ZhGHn0i1V7NUjDshO9ZbOp93zkfzefom/uWoHXUcd74rH4yynBsRd+dw+8q5c+XsBncnJ6e4y1aWDCqlEsejLpM2jExC9+Uwzk2YPPb9Z12S90JUeeJ9HXzXVZyV5TVMXuZZbD1T/wJZ67NdEouQRAAAAABJRU5ErkJggg==',
+            image: 'data:image/png;base64,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',
             handler: function (res) {
                 that.createPaidPlanCompany(res);
             },
@@ -313,7 +341,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             amount: this.razorpayAmount,
             currency: this.UserCurrency,
             name: 'GIDDH',
-            description: 'Walkover Web Solutions Pvt. Ltd.',
+            description: 'Walkover Technologies Private Limited.',
 
         };
         setTimeout(() => {
@@ -323,9 +351,29 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     public reFillForm() {
+        // if createNewCompany is undefined or null
+        // it means user came from user derails => subscription => buy new plan
+        // then get current company data and assign it to createNewCompany object
+        if (!this.createNewCompany) {
+            this.createNewCompany = new CompanyCreateRequest();
+            this.createNewCompany.name = this.activeCompany.name;
+            this.createNewCompany.contactNo = this.activeCompany.contactNo;
+            this.createNewCompany.phoneCode = this.activeCompany.countryV2 ? this.activeCompany.countryV2.callingCode : '';
+            this.createNewCompany.country = this.activeCompany.countryV2 ? this.activeCompany.countryV2.alpha2CountryCode : '';
+            this.createNewCompany.uniqueName = this.activeCompany.uniqueName;
+            this.createNewCompany.address = this.activeCompany.address;
+            this.createNewCompany.addresses = this.activeCompany.addresses;
+            this.createNewCompany.subscriptionRequest = new SubscriptionRequest();
+            this.createNewCompany.subscriptionRequest.userUniqueName = this.activeCompany.subscription ? this.activeCompany.subscription.userDetails.uniqueName : '';
+
+            // assign state code to billing details object
+            this.billingDetailsObj.stateCode = this.activeCompany.state;
+        }
+
         this.billingDetailsObj.name = this.createNewCompany.name;
         this.billingDetailsObj.contactNo = this.createNewCompany.contactNo;
         this.billingDetailsObj.email = this.createNewCompany.subscriptionRequest.userUniqueName;
+        // this.billingDetailsObj.stateCode = this.billingDetailsObj.stateCode;
 
         let selectedBusinesstype = this.createNewCompany.businessType;
         if (selectedBusinesstype === 'Registered') {
@@ -357,8 +405,11 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
                 this.statesSource$ = observableOf(this.states);
             } else {
+                // initialize new StatesRequest();
                 let statesRequest = new StatesRequest();
-                statesRequest.country = this.createNewCompany.country;
+
+                // check if createNewCompany object is initialized if not then user current company country code
+                statesRequest.country = this.createNewCompany ? this.createNewCompany.country : this.activeCompany.countryV2 ? this.activeCompany.countryV2.alpha2CountryCode : '';
                 this.store.dispatch(this._generalActions.getAllState(statesRequest));
             }
         });

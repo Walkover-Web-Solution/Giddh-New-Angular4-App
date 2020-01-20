@@ -1,73 +1,80 @@
 <div class="box clearfix bg-none">
-  <div class="row" *ngIf="!(isGetAllRequestInProcess$ | async)">
-    <div class="col-md-4 col-sm-6" *ngFor="let company of companies">
-      <div class="company-box">
-        <div class="clearfix relative">
-          <h3>{{company.name}}</h3>
-          <div class="btn-group d-inline-block custom-dropdown" dropdown placement="bottom right">
-            <button id="button-alignment" dropdownToggle type="button" class="dropdown-toggle" aria-controls="dropdown-alignment">
-              <span class="icon-dots-three-vertical"></span>
-            </button>
-            <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-alignment">
-              <li role="menuitem">
-                <a class="dropdown-item" href="javascript:void(0)">Edit</a>
-              </li>
-              <li role="menuitem">
-                <a class="dropdown-item" href="javascript:void(0)" (click)="openModal(template, company)">Delete</a>
-              </li>
-            </ul>
-          </div>
+    <div class="row" *ngIf="!(isGetAllRequestInProcess$ | async)">
+        <div class="col-md-4 col-sm-6" *ngFor="let company of companies">
+            <div class="company-box">
+                <div class="clearfix relative">
+                    <h3>{{company.name}}</h3>
+                    <div class="btn-group d-inline-block custom-dropdown" dropdown placement="bottom right">
+                        <button id="button-alignment" dropdownToggle type="button" class="dropdown-toggle"
+                            aria-controls="dropdown-alignment">
+                            <span class="icon-dots-three-vertical"></span>
+                        </button>
+                        <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                            aria-labelledby="button-alignment">
+                            <li role="menuitem">
+                                <a class="dropdown-item" href="javascript:void(0)">Edit</a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item" href="javascript:void(0)"
+                                    (click)="openModal(template, company)">Delete</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="inner-company-box clearfix">
+                    <ul>
+                        <li>
+                            <span>Unique Name:</span>
+                            <div class="box-name" tooltip="{{company.uniqueName}}">{{company.uniqueName}}</div>
+                        </li>
+                        <li>
+                            <span>Created On: </span>
+                            <div class="box-name">{{company.createdAt}}</div>
+                        </li>
+                        <li>
+                            <span>Address: </span>
+                            <div class="address">{{company.address}}</div>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
         </div>
-        <div class="inner-company-box clearfix">
-          <ul>
-              <li>
-                <span>Unique Name:</span> <div class="box-name" tooltip="{{company.uniqueName}}">{{company.uniqueName}}</div> </li>
-            <li>
-              <span>Created On: </span> <div class="box-name">{{company.createdAt}}</div></li>
-            <li>
-              <span>Address: </span>
-              <div class="address">{{company.address}}</div>
-            </li>
-          </ul>
 
+        <div class="col-md-4 col-sm-6">
+            <div class="company-box text-center align-item-center">
+                <button type="button" (click)="createNewCompany()" class="btn btn-pink">Create New</button>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <div class="col-md-4 col-sm-6">
-      <div class="company-box text-center align-item-center">
-        <button type="button" (click)="createNewCompany()" class="btn btn-pink">Create  New</button>
-      </div>
-    </div>
+        <ng-template #template>
+            <div class="modal-header">
+                <h3 class="modal-title pull-left">Delete Company</h3>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pd-3">
+                <p class="mb-2">Are you sure you want to permanently delete <strong>{{selectedCmp.name}}</strong> ?</p>
 
-    <ng-template #template>
-      <div class="modal-header">
-        <h3 class="modal-title pull-left">Delete Company</h3>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body pd-3">
-        <p class="mb-2">Are you sure you want to permanently delete <strong>{{selectedCmp.name}}</strong> ?</p>
-
-        <button type="button" class="btn btn-default" (click)="confirmDelete()" >Ok</button>
-        <button type="button" class="btn btn-default" (click)="declineDelete()" >Cancel</button>
-      </div>
-    </ng-template>
-    <!--add company new modal  -->
-    <div bsModal #addCompanyNewModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade"
-         role="dialog" (onHidden)="hideAddCompanyModal()">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <ng-template element-view-container-ref #companynewadd=elementviewcontainerref>
-          </ng-template>
+                <button type="button" class="btn btn-default" (click)="confirmDelete()">Ok</button>
+                <button type="button" class="btn btn-default" (click)="declineDelete()">Cancel</button>
+            </div>
+        </ng-template>
+        <!--add company new modal  -->
+        <div bsModal #addCompanyNewModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade"
+            role="dialog" (onHidden)="hideAddCompanyModal()">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <ng-template element-view-container-ref #companynewadd=elementviewcontainerref>
+                    </ng-template>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-  <!--loading-->
+    <!--loading-->
 
-  <div *ngIf="(isGetAllRequestInProcess$ | async)" class="no-data mrT2 loader-main">
+    <div *ngIf="(isGetAllRequestInProcess$ | async)" class="no-data mrT2 loader-main">
         <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
         <div class="spinner2">
             <div class="cube1"></div>

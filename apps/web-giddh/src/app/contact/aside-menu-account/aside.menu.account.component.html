@@ -8,14 +8,23 @@
     <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
     <div class="aside-body">
         <div class="aside-pane-form">
-            <account-add-new-details #addAccountNewComponent *ngIf="activeGroupUniqueName && !isUpdateAccount" class="mrT4" [activeGroupUniqueName]="activeGroupUniqueName" [flatGroupsOptions]="flatGroupsOptions" [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$"
-                [isDebtorCreditor]="isDebtorCreditor" [createAccountInProcess$]="createAccountInProcess$" (submitClicked)="addNewAcSubmit($event)" (isGroupSelected)="isGroupSelected($event)" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
+            <account-add-new-details #addAccountNewComponent *ngIf="activeGroupUniqueName && !isUpdateAccount"
+                class="mrT4" [activeGroupUniqueName]="activeGroupUniqueName" [flatGroupsOptions]="flatGroupsOptions"
+                [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$"
+                [isDebtorCreditor]="isDebtorCreditor" [createAccountInProcess$]="createAccountInProcess$"
+                (submitClicked)="addNewAcSubmit($event)" (isGroupSelected)="isGroupSelected($event)"
+                [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
                 [showBankDetail]="showBankDetail">
             </account-add-new-details>
 
-            <account-update-new-details *ngIf="activeGroupUniqueName && isUpdateAccount" [activeGroupUniqueName]="activeGroupUniqueName" [isGstEnabledAcc]="isGstEnabledAcc" [activeAccount$]="activeAccount$" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [updateAccountInProcess$]="updateAccountInProcess$"
-                [accountDetails]="accountDetails" [updateAccountIsSuccess$]="updateAccountIsSuccess$" (deleteClicked)="showDeleteAccountModal()" (submitClicked)="updateAccount($event)" (isGroupSelected)="isGroupSelected($event)" [showBankDetail]="showBankDetail"
-                [flatGroupsOptions]="flatGroupsOptions" [showVirtualAccount]="showVirtualAccount" [isDebtorCreditor]="isDebtorCreditor">
+            <account-update-new-details *ngIf="activeGroupUniqueName && isUpdateAccount"
+                [activeGroupUniqueName]="activeGroupUniqueName" [isGstEnabledAcc]="isGstEnabledAcc"
+                [activeAccount$]="activeAccount$" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
+                [updateAccountInProcess$]="updateAccountInProcess$" [accountDetails]="accountDetails"
+                [updateAccountIsSuccess$]="updateAccountIsSuccess$" (deleteClicked)="showDeleteAccountModal()"
+                (submitClicked)="updateAccount($event)" (isGroupSelected)="isGroupSelected($event)"
+                [showBankDetail]="showBankDetail" [flatGroupsOptions]="flatGroupsOptions"
+                [showVirtualAccount]="showVirtualAccount" [isDebtorCreditor]="isDebtorCreditor">
             </account-update-new-details>
         </div>
     </div>
@@ -25,7 +34,8 @@
 <div bsModal #deleteAccountModal="bs-modal" class="modal fade aaa" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <confirm-modal [title]="'Delete Account'" [body]="'Are you sure you want to delete this Account?'" (cancelCallBack)="hideDeleteAccountModal()" (successCallBack)="deleteAccount()">
+            <confirm-modal [title]="'Delete Account'" [body]="'Are you sure you want to delete this Account?'"
+                (cancelCallBack)="hideDeleteAccountModal()" (successCallBack)="deleteAccount()">
             </confirm-modal>
         </div>
     </div>

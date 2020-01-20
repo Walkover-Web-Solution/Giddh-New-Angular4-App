@@ -59,74 +59,76 @@ import { ProformaService } from './proforma.service';
 import { ExpenseService } from './expences.service';
 import { CommonService } from './common.service';
 import { VatService } from './vat.service';
+import { CommandKService } from './commandk.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
  */
 
 @NgModule({
-  imports: [CommonModule, RouterModule
-  ],
-  exports: [CommonModule, FormsModule, RouterModule]
+    imports: [CommonModule, RouterModule
+    ],
+    exports: [CommonModule, FormsModule, RouterModule]
 })
 export class ServiceModule {
-  public static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: ServiceModule,
-      providers: [
-        GeneralService,
-        PermissionDataService,
-        LoaderService,
-        StorageService,
-        ErrorHandler,
-        HttpWrapperService,
-        AuthenticationService,
-        ToasterService,
-        DashboardService,
-        CompanyService,
-        SalesService,
-        LocationService,
-        GroupService,
-        AccountService,
-        InventoryService,
-        PermissionService,
-        ManufacturingService,
-        SearchService,
-        InvoiceService,
-        InvoiceTemplatesService,
-        LogsService,
-        TlPlService,
-        LedgerService,
-        MagicLinkService,
-        SettingsIntegrationService,
-        SettingsProfileService,
-        SettingsTaxesService,
-        SettingsLinkedAccountsService,
-        PurchaseInvoiceService,
-        SettingsFinancialYearService,
-        SettingsPermissionService,
-        DaybookService,
-        SettingsBranchService,
-        SettingsTagService,
-        ContactService,
-        SettingsTriggersService,
-        RecurringVoucherService,
-        ImportExcelService,
-        SettingsBunchService,
-        SettingsDiscountService,
-        NewVsOldInvoicesService,
-        AgingreportingService,
-        CompanyImportExportService,
-        ReceiptService,
-        DbService,
-        GstReconcileService,
-        VersionCheckService,
-        SubscriptionsService,
-        ProformaService,
-        ExpenseService,
-        CommonService,
-        VatService
-      ]
-    };
-  }
+    public static forRoot(): ModuleWithProviders {
+        return {
+            ngModule: ServiceModule,
+            providers: [
+                GeneralService,
+                PermissionDataService,
+                LoaderService,
+                StorageService,
+                ErrorHandler,
+                HttpWrapperService,
+                AuthenticationService,
+                ToasterService,
+                DashboardService,
+                CompanyService,
+                SalesService,
+                LocationService,
+                GroupService,
+                AccountService,
+                InventoryService,
+                PermissionService,
+                ManufacturingService,
+                SearchService,
+                InvoiceService,
+                InvoiceTemplatesService,
+                LogsService,
+                TlPlService,
+                LedgerService,
+                MagicLinkService,
+                SettingsIntegrationService,
+                SettingsProfileService,
+                SettingsTaxesService,
+                SettingsLinkedAccountsService,
+                PurchaseInvoiceService,
+                SettingsFinancialYearService,
+                SettingsPermissionService,
+                DaybookService,
+                SettingsBranchService,
+                SettingsTagService,
+                ContactService,
+                SettingsTriggersService,
+                RecurringVoucherService,
+                ImportExcelService,
+                SettingsBunchService,
+                SettingsDiscountService,
+                NewVsOldInvoicesService,
+                AgingreportingService,
+                CompanyImportExportService,
+                ReceiptService,
+                DbService,
+                GstReconcileService,
+                VersionCheckService,
+                SubscriptionsService,
+                ProformaService,
+                ExpenseService,
+                CommonService,
+                VatService,
+                CommandKService
+            ]
+        };
+    }
 }

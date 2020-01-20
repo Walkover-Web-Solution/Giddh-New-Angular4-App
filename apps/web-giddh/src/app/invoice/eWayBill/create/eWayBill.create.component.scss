@@ -1,5 +1,5 @@
 .right-penal {
-    border-left: 1px solid #C6C6C6;
+    border-left: 1px solid #c6c6c6;
     position: fixed;
     right: 0;
     bottom: 0;
@@ -15,7 +15,7 @@
         padding: 15px;
         h2 {
             font-size: 14px;
-            color: #0C8FE6;
+            color: #0c8fe6;
         }
         label {
             color: #666666;
@@ -76,7 +76,7 @@
     cursor: pointer;
 }
 
-.list-icon-group input:checked+label {
+.list-icon-group input:checked + label {
     background-color: white;
     box-shadow: 2px 2px 5px gainsboro;
 }
@@ -108,7 +108,7 @@
     font-size: 14px;
     background: #fff;
     right: -530px;
-    transition: .5s all ease;
+    transition: 0.5s all ease;
     z-index: 999;
 }
 
@@ -122,7 +122,7 @@
 }
 
 .bg-gray {
-    background: #F7F8FA;
+    background: #f7f8fa;
 }
 
 .aside-right .list-icon-group label {
@@ -135,8 +135,7 @@
     border: 1px solid transparent;
 }
 
-.aside-right .list-icon-group input:checked+label {
-
+.aside-right .list-icon-group input:checked + label {
     border-radius: 0px;
 }
 
@@ -147,21 +146,21 @@
 
 .table-modal tbody td {
     border-top: 0px solid !important;
-    border-right: 1px solid #C6C6C6;
+    border-right: 1px solid #c6c6c6;
 }
 
 .table-modal thead th {
-    border-right: 1px solid #C6C6C6 !important;
+    border-right: 1px solid #c6c6c6 !important;
 }
 
 .table-modal {
-    border-bottom: 1px solid #C6C6C6 !important;
+    border-bottom: 1px solid #c6c6c6 !important;
 }
 
 .table-modal tbody tr td button {
     background: none;
     border: 0px;
-    color: #C7C7C7;
+    color: #c7c7c7;
     font-size: 16px;
     padding: 2px;
     margin-right: 3px;
@@ -169,7 +168,7 @@
 }
 
 .table-modal tbody tr td .icon-edit {
-    border-bottom: 2px solid #C7C7C7;
+    border-bottom: 2px solid #c7c7c7;
 }
 
 .aside-overlay.out {
@@ -179,12 +178,11 @@
 
 .aside-overlay.in {
     visibility: visible;
-    opacity: .6;
+    opacity: 0.6;
     z-index: 9999;
 }
 
 .aside-overlay {
-    transition: .5s all ease;
+    transition: 0.5s all ease;
     z-index: 999;
 }
-

@@ -1,78 +1,89 @@
 <section>
-	<nav class="navbar">
-		<div class="invoce-controll">
-			<div class="row" style="margin: 0 !important;">
+    <nav class="navbar">
+        <div class="invoce-controll">
+            <div class="row" style="margin: 0 !important;">
 
-				<div class="vat-report" id="settingTab">
-					<tabset #staticTabs>
-						<tab heading="VAT Report">
+                <div class="vat-report" id="settingTab">
+                    <tabset #staticTabs>
+                        <tab heading="VAT Report">
 
-							<div class="navbar_header mb-2 mt-2">
-                                    <div class="d-flex align-items-center tax-engine">
-									<span class="d-inline-block mr-2">VAT Report for period</span>
+                            <div class="navbar_header mb-2 mt-2">
+                                <div class="d-flex align-items-center tax-engine">
+                                    <span class="d-inline-block mr-2">VAT Report for period</span>
 
                                     <div class="advanceSearchByDate date-advanceSearch">
                                         <span class="inputWrapper">
-                                            <div class="btn-group dropdown" dropdown [autoClose]="false" (isOpenChange)="onOpenChange($event)"
-                                                 #periodDropdown="bs-dropdown" (clickOutside)="periodDropdown.hide()" [attachOutsideOnClick]="true">
-                                                  <button id="button-nested" dropdownToggle type="button"
-                                                          class="dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle pull-left"
-                                                          aria-controls="dropdown-nested">
+                                            <div class="btn-group dropdown" dropdown [autoClose]="false"
+                                                (isOpenChange)="onOpenChange($event)" #periodDropdown="bs-dropdown"
+                                                (clickOutside)="periodDropdown.hide()" [attachOutsideOnClick]="true">
+                                                <button id="button-nested" dropdownToggle type="button"
+                                                    class="dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle pull-left"
+                                                    aria-controls="dropdown-nested">
                                                     <ng-container *ngIf="isMonthSelected">
-                                                      {{ moment(selectedMonth).format('MMMM YYYY') }}
+                                                        {{ moment(selectedMonth).format('MMMM YYYY') }}
                                                     </ng-container>
                                                     <ng-container *ngIf="!isMonthSelected">
-                                                      {{moment(currentPeriod?.from, 'DD-MM-YYYY').format('DD MMM YYYY')}}
-                                                        - {{moment(currentPeriod?.to, 'DD-MM-YYYY').format('DD MMM YYYY')}}
+                                                        {{moment(currentPeriod?.from, 'DD-MM-YYYY').format('DD MMM YYYY')}}
+                                                        -
+                                                        {{moment(currentPeriod?.to, 'DD-MM-YYYY').format('DD MMM YYYY')}}
                                                     </ng-container>
                                                     <span class="caret"></span>
-                                                  </button>
+                                                </button>
 
 
-                                                  <ul id="dropdown-nested" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-nested">
-                                                    <li role="menuitem" dropdown placement="right" [autoClose]="false" #monthWise="bs-dropdown">
-                                                      <a dropdownToggle class="dropdown-item dropdown-toggle cp">
-                                                        Month Wise
-                                                        <div class="pull-right">
-                                                          <span class="caret rotate-90"></span>
-                                                        </div>
-                                                      </a>
-                                                      <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
-                                                        <li role="menuitem">
-                                                          <a class="dropdown-item" href="javascript:void(0)">
-                                                            <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()"
+                                                <ul id="dropdown-nested" *dropdownMenu class="dropdown-menu" role="menu"
+                                                    aria-labelledby="button-nested">
+                                                    <li role="menuitem" dropdown placement="right" [autoClose]="false"
+                                                        #monthWise="bs-dropdown">
+                                                        <a dropdownToggle class="dropdown-item dropdown-toggle cp">
+                                                            Month Wise
+                                                            <div class="pull-right">
+                                                                <span class="caret rotate-90"></span>
+                                                            </div>
+                                                        </a>
+                                                        <ul *dropdownMenu class="dropdown-menu month-picker" role="menu"
+                                                            id="monthPicker">
+                                                            <li role="menuitem">
+                                                                <a class="dropdown-item" href="javascript:void(0)">
+                                                                    <datepicker [datepickerMode]="'month'"
+                                                                        name="fromDate"
+                                                                        (click)="$event.stopPropagation()"
                                                                         [showWeeks]="false" [minMode]="'month'"
-                                                                        (selectionDone)="periodChanged($event);monthWise.hide()" [ngModel]="selectedMonth">
-                                                            </datepicker>
-                                                          </a>
-                                                        </li>
-                                                      </ul>
+                                                                        (selectionDone)="periodChanged($event);monthWise.hide()"
+                                                                        [ngModel]="selectedMonth">
+                                                                    </datepicker>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
                                                     </li>
 
                                                     <li role="menuitem">
-                                                      <a class="dropdown-item" href="javascript:void(0)" (click)="monthWise.hide()">
-                                                        <label for="daterangeInput" class="d-block cp">Custom Range
-                                                          <div class="pull-right">
-                                                            <span class="caret rotate-90"></span>
-                                                          </div>
-                                                        </label>
-                                                        <input id="daterangeInput" type="text" name="daterangeInput" [options]="{'autoApply': true}"
-                                                               #dateRangePickerCmp daterangepicker class="form-control daterangePicker"
-                                                               (applyDaterangepicker)="periodChanged($event);" />
-                                                      </a>
+                                                        <a class="dropdown-item" href="javascript:void(0)"
+                                                            (click)="monthWise.hide()">
+                                                            <label for="daterangeInput" class="d-block cp">Custom Range
+                                                                <div class="pull-right">
+                                                                    <span class="caret rotate-90"></span>
+                                                                </div>
+                                                            </label>
+                                                            <input id="daterangeInput" type="text" name="daterangeInput"
+                                                                [options]="{'autoApply': true}" #dateRangePickerCmp
+                                                                daterangepicker class="form-control daterangePicker"
+                                                                (applyDaterangepicker)="periodChanged($event);" />
+                                                        </a>
                                                     </li>
 
-                                                  </ul>
+                                                </ul>
                                             </div>
                                         </span>
                                     </div>
                                 </div>
-								<div class="clearfix" *ngIf="allowVatReportAccess">
-									<button type="button" class="btn btn-default" (click)="downloadVatReport()"><i class=" icon-download1"></i>
-										Download
-									</button>
-								</div>
-							</div>
+                                <div class="clearfix" *ngIf="allowVatReportAccess">
+                                    <button type="button" class="btn btn-default" (click)="downloadVatReport()"><i
+                                            class=" icon-download1"></i>
+                                        Download
+                                    </button>
+                                </div>
+                            </div>
                             <div *ngFor="let report of vatReport; let i = index">
                                 <div class="white-box" *ngIf="i < 2">
                                     <p class="font-14 text-black">
@@ -81,36 +92,57 @@
                                     <div class="table-responsive">
                                         <table class="table basic table-border-bottom mrT2 onMobileView">
                                             <thead>
-                                            <tr>
-                                                <th width="5%"></th>
-                                                <th width="40%"></th>
-                                                <th width="10%"></th>
-                                                <th width="15%" class="text-right">Amount ({{activeCompany.baseCurrency}})</th>
-                                                <th width="15%" class="text-right">VAT Amount ({{activeCompany.baseCurrency}})</th>
-                                                <th width="15%" class="text-right">Adjustment ({{activeCompany.baseCurrency}})</th>
-                                            </tr>
+                                                <tr>
+                                                    <th width="5%"></th>
+                                                    <th width="40%"></th>
+                                                    <th width="10%"></th>
+                                                    <th width="15%" class="text-right">Amount
+                                                        ({{activeCompany.baseCurrency}})</th>
+                                                    <th width="15%" class="text-right">VAT Amount
+                                                        ({{activeCompany.baseCurrency}})</th>
+                                                    <th width="15%" class="text-right">Adjustment
+                                                        ({{activeCompany.baseCurrency}})</th>
+                                                </tr>
                                             </thead>
                                             <tbody>
-                                            <tr *ngFor="let reportSections of report.sections; let i = index">
-                                                <td>{{reportSections.section}}</td>
-                                                <td>{{reportSections.description}}</td>
-                                                <td class="invoice-preview">
-                                                    <a href="javascript:void(0)" class="text-light invoice-preview" *ngIf="reportSections.toolTip" tooltip="{{reportSections.toolTip}}"><span class="icon-info text-light"></span></a>
-                                                </td>
-                                                <td data-title="Amount ({{activeCompany.baseCurrencySymbol}})" class="text-right">{{activeCompany.baseCurrencySymbol}} {{reportSections.amount | giddhCurrency}}</td>
-                                                <td data-title="VAT Amount ({{activeCompany.baseCurrencySymbol}})" class="text-right">{{activeCompany.baseCurrencySymbol}} {{reportSections.vatAmount | giddhCurrency}}</td>
-                                                <td data-title="Adjustment ({{activeCompany.baseCurrencySymbol}})" class="text-right">{{activeCompany.baseCurrencySymbol}} {{reportSections.adjustmentAmount | giddhCurrency}}</td>
-                                            </tr>
-                                            <tr class="last-row">
-                                                <td>&nbsp;</td>
-                                                <td>Total</td>
-                                                <td>
-                                                    <a href="javascript:void(0)" class="text-light" *ngIf="report.toolTip" tooltip="{{report.toolTip}}"><span class="icon-info text-light"></span></a>
-                                                </td>
-                                                <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{report.totalAmount | giddhCurrency}}</td>
-                                                <td class="text-right"><span *ngIf="i === 0">A =</span><span *ngIf="i === 1">C =</span> {{activeCompany.baseCurrencySymbol}} {{report.totalVatAmount | giddhCurrency}}</td>
-                                                <td class="text-right"><span *ngIf="i === 0">B =</span><span *ngIf="i === 1">D =</span> {{activeCompany.baseCurrencySymbol}} {{report.totalAdjustmentAmount | giddhCurrency}}</td>
-                                            </tr>
+                                                <tr *ngFor="let reportSections of report.sections; let i = index">
+                                                    <td>{{reportSections.section}}</td>
+                                                    <td>{{reportSections.description}}</td>
+                                                    <td class="invoice-preview">
+                                                        <a href="javascript:void(0)" class="text-light invoice-preview"
+                                                            *ngIf="reportSections.toolTip"
+                                                            tooltip="{{reportSections.toolTip}}"><span
+                                                                class="icon-info text-light"></span></a>
+                                                    </td>
+                                                    <td data-title="Amount ({{activeCompany.baseCurrencySymbol}})"
+                                                        class="text-right">{{activeCompany.baseCurrencySymbol}}
+                                                        {{reportSections.amount | giddhCurrency}}</td>
+                                                    <td data-title="VAT Amount ({{activeCompany.baseCurrencySymbol}})"
+                                                        class="text-right">{{activeCompany.baseCurrencySymbol}}
+                                                        {{reportSections.vatAmount | giddhCurrency}}</td>
+                                                    <td data-title="Adjustment ({{activeCompany.baseCurrencySymbol}})"
+                                                        class="text-right">{{activeCompany.baseCurrencySymbol}}
+                                                        {{reportSections.adjustmentAmount | giddhCurrency}}</td>
+                                                </tr>
+                                                <tr class="last-row">
+                                                    <td>&nbsp;</td>
+                                                    <td>Total</td>
+                                                    <td>
+                                                        <a href="javascript:void(0)" class="text-light"
+                                                            *ngIf="report.toolTip" tooltip="{{report.toolTip}}"><span
+                                                                class="icon-info text-light"></span></a>
+                                                    </td>
+                                                    <td class="text-right">{{activeCompany.baseCurrencySymbol}}
+                                                        {{report.totalAmount | giddhCurrency}}</td>
+                                                    <td class="text-right"><span *ngIf="i === 0">A =</span><span
+                                                            *ngIf="i === 1">C =</span>
+                                                        {{activeCompany.baseCurrencySymbol}}
+                                                        {{report.totalVatAmount | giddhCurrency}}</td>
+                                                    <td class="text-right"><span *ngIf="i === 0">B =</span><span
+                                                            *ngIf="i === 1">D =</span>
+                                                        {{activeCompany.baseCurrencySymbol}}
+                                                        {{report.totalAdjustmentAmount | giddhCurrency}}</td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -120,25 +152,27 @@
                                         <strong>{{report.section}}</strong>
                                     </p>
                                     <div class="table-responsive">
-                                        <table class="table-hide-title table basic table-border-bottom mrT2 onMobileView">
+                                        <table
+                                            class="table-hide-title table basic table-border-bottom mrT2 onMobileView">
                                             <tbody>
-                                            <tr *ngFor="let reportSections of report.sections; let i = index">
-                                                <td width="5%">{{reportSections.section}}</td>
-                                                <td width="50%">{{reportSections.description}}</td>
-                                                <td width="45%">
-                                                    <span class="pr-1">{{reportSections.toolTip}}</span>
-                                                    <strong>{{activeCompany.baseCurrencySymbol}} {{reportSections.amount | giddhCurrency}}</strong>
-                                                </td>
-                                            </tr>
+                                                <tr *ngFor="let reportSections of report.sections; let i = index">
+                                                    <td width="5%">{{reportSections.section}}</td>
+                                                    <td width="50%">{{reportSections.description}}</td>
+                                                    <td width="45%">
+                                                        <span class="pr-1">{{reportSections.toolTip}}</span>
+                                                        <strong>{{activeCompany.baseCurrencySymbol}}
+                                                            {{reportSections.amount | giddhCurrency}}</strong>
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
-						</tab>
-					</tabset>
-				</div>
-			</div>
-		</div>
-	</nav>
+                        </tab>
+                    </tabset>
+                </div>
+            </div>
+        </div>
+    </nav>
 </section>

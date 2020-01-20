@@ -11,7 +11,10 @@
                     </div>
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
-                        <sh-select class=" input " #subgrp [options]="SubsupplyTypesList" (selected)="subTypeElementSelected($event)" required placeholder="select type" [isFilterEnabled]="true" name="subSupplyType" [(ngModel)]="generateEwayBillform.subSupplyType" [ItemHeight]="33"></sh-select>
+                        <sh-select class=" input " #subgrp [options]="SubsupplyTypesList"
+                            (selected)="subTypeElementSelected($event)" required placeholder="select type"
+                            [isFilterEnabled]="true" name="subSupplyType"
+                            [(ngModel)]="generateEwayBillform.subSupplyType" [ItemHeight]="33"></sh-select>
 
                     </div>
                 </div>
@@ -23,7 +26,9 @@
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
                         <!-- <input type="text " placeholder="Mention Number " class="form-control input " /> -->
-                        <sh-select class="input" #doctypes autocomplete="xyz" [options]="TransporterDocType" required placeholder="select type" [isFilterEnabled]="true" name="docType" [(ngModel)]="generateEwayBillform.docType" [ItemHeight]="33"></sh-select>
+                        <sh-select class="input" #doctypes autocomplete="xyz" [options]="TransporterDocType" required
+                            placeholder="select type" [isFilterEnabled]="true" name="docType"
+                            [(ngModel)]="generateEwayBillform.docType" [ItemHeight]="33"></sh-select>
 
 
                     </div>
@@ -35,7 +40,10 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 d-inline">
 
-                        <input type="text " disabled="true" name="toGstIn" required minlength="15" maxlength="15" autocomplete="off" placeholder="Enter GSTIN of receiver" [(ngModel)]="generateEwayBillform.toGstIn" class="form-control input d-inline-block mr-2 " />
+                        <input type="text " disabled="true" name="toGstIn" required minlength="15" maxlength="15"
+                            autocomplete="off" placeholder="Enter GSTIN of receiver"
+                            [(ngModel)]="generateEwayBillform.toGstIn"
+                            class="form-control input d-inline-block mr-2 " />
                         <!-- <label class="d-inline-block mr-2">Select for Unregistered Person</label> <input type="checkbox" (change)="selectUnregistered($event)" class=" d-inline-block" /> -->
 
                     </div>
@@ -48,7 +56,9 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <input type="number " name="toPinCode" autocomplete="off" maxlength="6" digitsOnlyDirective required [(ngModel)]="generateEwayBillform.toPinCode" placeholder="Enter pincode " class="form-control input " />
+                        <input type="number " name="toPinCode" autocomplete="off" maxlength="6" digitsOnlyDirective
+                            required [(ngModel)]="generateEwayBillform.toPinCode" placeholder="Enter pincode "
+                            class="form-control input " />
 
                     </div>
                 </div>
@@ -62,13 +72,18 @@
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
                         <!-- <input type="text " name="transporterName" [(ngModel)]="generateEwayBillform.transporterName" placeholder="Select Transporter " class="form-control input " /> -->
-                        <sh-select class=" input " #trans [showClear]="showClear" [options]="transporterDropdown$ | async" (keydown)="keydownPressed($event)" (selected)="selectTransporter($event)" placeholder="Select the Transporter's name" [notFoundLink]="true" [multiple]="false"
-                            [isFilterEnabled]="true" name="transporterId" [(ngModel)]="generateEwayBillform.transporterId" [ItemHeight]="33">
+                        <sh-select class=" input " #trans [showClear]="showClear"
+                            [options]="transporterDropdown$ | async" (keydown)="keydownPressed($event)"
+                            (selected)="selectTransporter($event)" placeholder="Select the Transporter's name"
+                            [notFoundLink]="true" [multiple]="false" [isFilterEnabled]="true" name="transporterId"
+                            [(ngModel)]="generateEwayBillform.transporterId" [ItemHeight]="33">
 
                             <ng-template #notFoundLinkTemplate>
 
-                                <a [ngClass]="{'active': keydownClassAdded}" class="notfound-option" [keyboardShortcut]="'alt+c'" (onShortcutPress)="keydownPressed()">
-                                    <span (click)="OpenTransporterModel()" [ngClass]="{'active': keydownClassAdded}">Create New</span>
+                                <a [ngClass]="{'active': keydownClassAdded}" class="notfound-option"
+                                    [keyboardShortcut]="'alt+c'" (onShortcutPress)="keydownPressed()">
+                                    <span (click)="OpenTransporterModel()"
+                                        [ngClass]="{'active': keydownClassAdded}">Create New</span>
                                     <!-- <span style="float: right;">Alt+C</span> -->
                                 </a>
                             </ng-template>
@@ -88,7 +103,9 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <input type="number" maxLength="4" minlength="4" digitsOnlyDirective required name="transDistance" [(ngModel)]="generateEwayBillform.transDistance" placeholder="Mention Distance " class="form-control input " />
+                        <input type="number" maxLength="4" minlength="4" digitsOnlyDirective required
+                            name="transDistance" [(ngModel)]="generateEwayBillform.transDistance"
+                            placeholder="Mention Distance " class="form-control input " />
 
                     </div>
                 </div>
@@ -105,19 +122,27 @@
 
                         <ul class="list-icon-group ">
                             <li>
-                                <input id="transMode1" type="radio" name="transMode" (change)="selectedModeOfTrans('road')" value="1" [(ngModel)]="generateEwayBillform.transMode">
+                                <input id="transMode1" type="radio" name="transMode"
+                                    (change)="selectedModeOfTrans('road')" value="1"
+                                    [(ngModel)]="generateEwayBillform.transMode">
                                 <label for="transMode1"><img src="assets/icon/4.svg " /> Road</label>
                             </li>
                             <li>
-                                <input id="transMode2" type="radio" name="transMode" (change)="selectedModeOfTrans('rail')" value="2" [(ngModel)]="generateEwayBillform.transMode">
+                                <input id="transMode2" type="radio" name="transMode"
+                                    (change)="selectedModeOfTrans('rail')" value="2"
+                                    [(ngModel)]="generateEwayBillform.transMode">
                                 <label for="transMode2"><img src="assets/icon/3.svg " /> Rail</label>
                             </li>
                             <li>
-                                <input id="transMode3" type="radio" name="transMode" (change)="selectedModeOfTrans('air')" value="3" [(ngModel)]="generateEwayBillform.transMode">
+                                <input id="transMode3" type="radio" name="transMode"
+                                    (change)="selectedModeOfTrans('air')" value="3"
+                                    [(ngModel)]="generateEwayBillform.transMode">
                                 <label for="transMode3"><img src="assets/icon/1.svg " /> Air</label>
                             </li>
                             <li>
-                                <input id="transMode4" type="radio" name="transMode" (change)="selectedModeOfTrans('ship')" value="4" [(ngModel)]="generateEwayBillform.transMode">
+                                <input id="transMode4" type="radio" name="transMode"
+                                    (change)="selectedModeOfTrans('ship')" value="4"
+                                    [(ngModel)]="generateEwayBillform.transMode">
                                 <label for="transMode4"><img src="assets/icon/2.svg " /> Ship</label>
                             </li>
 
@@ -133,9 +158,12 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType"   value="R" [(ngModel)]="generateEwayBillform.vehicleType" type="radio" />Regular </label>
+                        <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType" value="R"
+                                [(ngModel)]="generateEwayBillform.vehicleType" type="radio" />Regular </label>
                         <ng-container *ngIf="!isTransModeRoad">
-                            <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType"  value="O" [(ngModel)]="generateEwayBillform.vehicleType" type="radio"/>Over Dimensional Cargo {{isTransModeRoad}}</label>
+                            <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType"
+                                    value="O" [(ngModel)]="generateEwayBillform.vehicleType" type="radio" />Over
+                                Dimensional Cargo {{isTransModeRoad}}</label>
                         </ng-container>
                     </div>
                 </div>
@@ -147,11 +175,14 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <input #name="ngModel" type="text" name="vehicleNo" required [ngClass]="{'hasError': name.invalid && name.touched && name.dirty, 'has-success':name.valid}" placeholder="Mention Number" pattern="[a-zA-Z0-9]{7,11}" maxlength="11" minlength="7" [(ngModel)]="generateEwayBillform.vehicleNo"
-                            class="form-control input " />
+                        <input #name="ngModel" type="text" name="vehicleNo" required
+                            [ngClass]="{'hasError': name.invalid && name.touched && name.dirty, 'has-success':name.valid}"
+                            placeholder="Mention Number" pattern="[a-zA-Z0-9]{7,11}" maxlength="11" minlength="7"
+                            [(ngModel)]="generateEwayBillform.vehicleNo" class="form-control input " />
 
-                        <small class="text-danger" *ngIf="name.invalid && name.touched && name.dirty">Vehicle No. format must be like: mp01aa1234
-                                </small>
+                        <small class="text-danger" *ngIf="name.invalid && name.touched && name.dirty">Vehicle No. format
+                            must be like: mp01aa1234
+                        </small>
                     </div>
                 </div>
 
@@ -163,7 +194,8 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <input type="text " name="transDocNo" placeholder="Mention Number " [(ngModel)]="generateEwayBillform.transDocNo" maxlength="15" class="form-control input " />
+                        <input type="text " name="transDocNo" placeholder="Mention Number "
+                            [(ngModel)]="generateEwayBillform.transDocNo" maxlength="15" class="form-control input " />
 
                     </div>
                 </div>
@@ -176,8 +208,12 @@
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
                         <div style="position: relative " class="input ">
-                            <input name="transDocDate" placeholder="dd/mm/yyyy " type="text " [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'} " [(ngModel)]="generateEwayBillform.transDocDate" class="form-control " bsDatepicker style="padding-right: 27px !important; " />
-                            <img class="text-light-2 " src="assets/icon/date.svg " style="position: absolute;top: 9px;right: 8px; " />
+                            <input name="transDocDate" placeholder="dd/mm/yyyy " type="text "
+                                [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'} "
+                                [(ngModel)]="generateEwayBillform.transDocDate" class="form-control " bsDatepicker
+                                style="padding-right: 27px !important; " />
+                            <img class="text-light-2 " src="assets/icon/date.svg "
+                                style="position: absolute;top: 9px;right: 8px; " />
                         </div>
 
                     </div>
@@ -186,7 +222,9 @@
                 <div class="row ">
                     <div class="col-md-12 mt-4 ">
                         <!-- <button class="btn btn-success " [disabled]="isUserAddedSuccessfully$ | async" type="button" (click)="toggleEwayBillCredentialsPopup() ">Save</button> -->
-                        <button class="btn btn-success " [disabled]="generateInvForm.invalid" [ladda]="isEwaybillGenerateInProcess$ | async" (click)="onSubmitEwaybill(generateInvForm)">Save & Generate</button>
+                        <button class="btn btn-success " [disabled]="generateInvForm.invalid"
+                            [ladda]="isEwaybillGenerateInProcess$ | async"
+                            (click)="onSubmitEwaybill(generateInvForm)">Save & Generate</button>
                         <button class="btn btn-danger " (click)="onCancelGenerateBill()">Cancel</button>
                     </div>
                 </div>
@@ -221,14 +259,17 @@
 <div bsModal #eWayBillCredentials="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <app-eWayBill-credentials-modal (closeModelEvent)="toggleEwayBillCredentialsPopup()"></app-eWayBill-credentials-modal>
+            <app-eWayBill-credentials-modal (closeModelEvent)="toggleEwayBillCredentialsPopup()">
+            </app-eWayBill-credentials-modal>
         </div>
     </div>
 </div>
-<div bsModal #invoiceRemoveConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
+<div bsModal #invoiceRemoveConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
+    tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <delete-template-confirmation-modal [message]='deleteTemplateConfirmationMessage' [flag]="confirmationFlag" (closeModelEvent)="onCloseConfirmationModal($event)"></delete-template-confirmation-modal>
+            <delete-template-confirmation-modal [message]='deleteTemplateConfirmationMessage' [flag]="confirmationFlag"
+                (closeModelEvent)="onCloseConfirmationModal($event)"></delete-template-confirmation-modal>
         </div>
     </div>
 </div>
@@ -239,7 +280,8 @@
 <div class="right-modal accountAsideMenuState2">
     <div class="aside-overlay" [ngClass]="status ? 'in' : 'out'"></div>
     <div class="aside-pane aside-right" [ngClass]="status ? 'in' : 'out'">
-        <button type="button" class="btn btn-sm btn-primary" id="close" (click)="OpenTransporterModel()"><i class="icon-cross"></i></button>
+        <button type="button" class="btn btn-sm btn-primary" id="close" (click)="OpenTransporterModel()"><i
+                class="icon-cross"></i></button>
         <div class="form-header">
             <h3 class="aside-title pl-2">Manage Transporter</h3>
         </div>
@@ -247,31 +289,44 @@
             <div class="aside-body pt-2 pb-1 pr-2 pl-2 bg-gray">
                 <div class="form-group">
                     <label for="transporterName">Transporter Name <span class="text-danger">*</span></label>
-                    <input #Transportersname="ngModel" type="text" class="form-control" [ngClass]="{'hasError': Transportersname.invalid && Transportersname.touched && Transportersname.dirty, 'has-success':Transportersname.valid}" required placeholder="Mention name" pattern="[a-zA-Z0-9^ .&]{5,100}"
-                        name="transporterName" [(ngModel)]="generateNewTransporter.transporterName">
+                    <input #Transportersname="ngModel" type="text" class="form-control"
+                        [ngClass]="{'hasError': Transportersname.invalid && Transportersname.touched && Transportersname.dirty, 'has-success':Transportersname.valid}"
+                        required placeholder="Mention name" pattern="[a-zA-Z0-9^ .&]{5,100}" name="transporterName"
+                        [(ngModel)]="generateNewTransporter.transporterName">
 
-                    <small class="text-danger" *ngIf="Transportersname.invalid && Transportersname.touched && Transportersname.dirty && Transportersname.value">Transporter name should
-                                        contain atleast 5 characters and should not contain any special character.
-                                </small>
+                    <small class="text-danger"
+                        *ngIf="Transportersname.invalid && Transportersname.touched && Transportersname.dirty && Transportersname.value">Transporter
+                        name should
+                        contain atleast 5 characters and should not contain any special character.
+                    </small>
                 </div>
 
                 <div class="form-group">
                     <label for="transporterId">Transporter ID <span class="text-danger">*</span></label>
-                    <input #TransportersID="ngModel" type="number" pattern="[0-9^ .&]{4,15}" minlength="4" class="form-control" onKeyPress="if(this.value.length==15) return false;" [ngClass]="{'hasError': TransportersID.invalid && TransportersID.touched && TransportersID.dirty, 'has-success':TransportersID.valid}"
-                        name="transporterId" [(ngModel)]="generateNewTransporter.transporterId" required placeholder="Mention number">
-                    <small class="text-danger" *ngIf="TransportersID.invalid && TransportersID.touched && TransportersID.dirty && TransportersID.value">Transporter id should
-                                        contain atleast 4 characters and should contain digit only.
-                                </small>
+                    <input #TransportersID="ngModel" type="number" pattern="[0-9^ .&]{4,15}" minlength="4"
+                        class="form-control" onKeyPress="if(this.value.length==15) return false;"
+                        [ngClass]="{'hasError': TransportersID.invalid && TransportersID.touched && TransportersID.dirty, 'has-success':TransportersID.valid}"
+                        name="transporterId" [(ngModel)]="generateNewTransporter.transporterId" required
+                        placeholder="Mention number">
+                    <small class="text-danger"
+                        *ngIf="TransportersID.invalid && TransportersID.touched && TransportersID.dirty && TransportersID.value">Transporter
+                        id should
+                        contain atleast 4 characters and should contain digit only.
+                    </small>
                 </div>
 
                 <div class="form-group mt-3">
                     <div class="clearfix" *ngIf="!transportEditMode">
                         <!-- <button class="btn btn-md btn-green mrR1" (click)="saveTransportForm(generateTransporterForm)">Save</button> -->
-                        <button class="btn btn-md btn-success mrR1" [disabled]="generateTransporterForm.invalid" [ladda]="isGenarateTransporterInProcess$ | async" (click)="generateTransporter(generateTransporterForm)" type="submit">Save</button>
-                        <button class="btn btn-md btn-danger" (click)="clearTransportForm()" type="submit">Clear</button>
+                        <button class="btn btn-md btn-success mrR1" [disabled]="generateTransporterForm.invalid"
+                            [ladda]="isGenarateTransporterInProcess$ | async"
+                            (click)="generateTransporter(generateTransporterForm)" type="submit">Save</button>
+                        <button class="btn btn-md btn-danger" (click)="clearTransportForm()"
+                            type="submit">Clear</button>
                     </div>
                     <div class="clearfix" *ngIf="transportEditMode">
-                        <button class="btn btn-md btn-green mrR1" [ladda]="updateTransporterInProcess$ | async" (click)="updateTransporter(generateTransporterForm)" type="submit">Update</button>
+                        <button class="btn btn-md btn-green mrR1" [ladda]="updateTransporterInProcess$ | async"
+                            (click)="updateTransporter(generateTransporterForm)" type="submit">Update</button>
                         <button class="btn btn-md btn-danger" (click)="clearTransportForm()">Clear</button>
                     </div>
                 </div>
@@ -293,15 +348,27 @@
                     <tr>
                         <th width="45%">Name
                             <div class="icon-pointer pull-right">
-                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'transporterName')" [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'asc'}"></div>
-                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'transporterName')" [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'desc'}"></div>
+                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                                    (click)="sortButtonClicked('asc', 'transporterName')"
+                                    [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'asc'}">
+                                </div>
+                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                                    (click)="sortButtonClicked('desc', 'transporterName')"
+                                    [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'desc'}">
+                                </div>
                             </div>
                         </th>
                         <th width="45%">
                             Transporter ID
                             <div class="icon-pointer pull-right">
-                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'transporterId')" [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'asc'}"></div>
-                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'transporterId')" [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'desc'}"></div>
+                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                                    (click)="sortButtonClicked('asc', 'transporterId')"
+                                    [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'asc'}">
+                                </div>
+                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                                    (click)="sortButtonClicked('desc', 'transporterId')"
+                                    [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'desc'}">
+                                </div>
                             </div>
                         </th>
                         <th width="10%" class="nowrap">Actions</th>
@@ -318,7 +385,9 @@
             </table>
         </div>
         <div class="alC mt-4 mb-4" *ngIf="transporterListDetails">
-            <pagination [totalItems]="transporterListDetails.totalPages" [(ngModel)]="transporterListDetails.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+            <pagination [totalItems]="transporterListDetails.totalPages" [(ngModel)]="transporterListDetails.page"
+                [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
+                (pageChanged)="pageChanged($event)"></pagination>
         </div>
 
     </div>

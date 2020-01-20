@@ -1,6 +1,6 @@
 /**new modal design**/
 
-@import '../../../../../assets/css/color.scss';
+@import "../../../../../assets/css/color.scss";
 .modal-body label {
     color: #707070;
     margin-bottom: 5px;
@@ -9,7 +9,7 @@
 label .required {
     position: relative;
     top: 0px;
-    color: #CF0606;
+    color: #cf0606;
 }
 
 .form-control {
@@ -18,7 +18,7 @@ label .required {
 
 .modal-body p {
     font-size: 14px;
-    color: #B3B3B3;
+    color: #b3b3b3;
     text-align: center;
     margin-left: -28px;
     margin-right: -28px;
@@ -39,13 +39,13 @@ label .required {
 }
 
 .add-companyDetail {
-    background-color: #F7F8FA;
+    background-color: #f7f8fa;
     margin-bottom: 0 !important;
 }
 
 .welcome_header h1 {
     font-size: 30px;
-    font-family: 'opensans-regular';
+    font-family: "opensans-regular";
     color: $pageTitleColor;
 }
 
@@ -62,7 +62,7 @@ label .required {
 }
 
 .add-companyDetail {
-    background-color: #F7F8FA;
+    background-color: #f7f8fa;
 }
 
 @media (min-width: 768px) {
@@ -79,6 +79,5 @@ label .required {
         padding: 20px 0;
     }
 }
-
 
 /**end new modal design**/

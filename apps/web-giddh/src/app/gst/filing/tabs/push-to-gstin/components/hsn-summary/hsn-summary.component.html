@@ -1,103 +1,103 @@
 <div class="gstr-transactions-summary">
 
-  <h4 class="clearfix gstr-summary-title">HSN Summary</h4>
-  <p style="padding-top:6px;" class="text-muted half">This section includes the HSN-wise summary of the items you have
-    sold</p>
+	<h4 class="clearfix gstr-summary-title">HSN Summary</h4>
+	<p style="padding-top:6px;" class="text-muted half">This section includes the HSN-wise summary of the items you have
+		sold</p>
 
-  <div class="">
+	<div class="">
 
-    <div *ngIf="hsnSummary">
-      <table class="transactions-table table-striped  table zi-table  ">
+		<div *ngIf="hsnSummary">
+			<table class="transactions-table table-striped  table zi-table  ">
 
-        <thead>
-        <tr>
-          <th style="" class="  text-left ">
-            <div style="position: relative">
-              <div class="pull-left over-flow"> HSN/SAC</div>
-            </div>
-          </th>
-          <th style="" class="  text-left ">
-            <div style="position: relative">
-              <div class=" over-flow"> Description</div>
-            </div>
-          </th>
-          <th style="" class="text-left ">
-            <div style="position: relative">
-              <div class=" over-flow"> Quantity</div>
-            </div>
-          </th>
+				<thead>
+					<tr>
+						<th style="" class="  text-left ">
+							<div style="position: relative">
+								<div class="pull-left over-flow"> HSN/SAC</div>
+							</div>
+						</th>
+						<th style="" class="  text-left ">
+							<div style="position: relative">
+								<div class=" over-flow"> Description</div>
+							</div>
+						</th>
+						<th style="" class="text-left ">
+							<div style="position: relative">
+								<div class=" over-flow"> Quantity</div>
+							</div>
+						</th>
 
-          <th style="" class="text-left ">
-            <div style="position: relative">
-              <div class=" over-flow"> Unit</div>
-            </div>
-          </th>
+						<th style="" class="text-left ">
+							<div style="position: relative">
+								<div class=" over-flow"> Unit</div>
+							</div>
+						</th>
 
-          <th style="" class="  text-right ">
-            <div style="position: relative">
-              <div class=" over-flow"> Taxable Amount</div>
-            </div>
-          </th>
+						<th style="" class="  text-right ">
+							<div style="position: relative">
+								<div class=" over-flow"> Taxable Amount</div>
+							</div>
+						</th>
 
-          <th style="" class="  text-right ">
-            <div style="position: relative">
-              <div class=" over-flow"> IGST Amount</div>
-            </div>
-          </th>
-          <th style="" class="  text-right ">
-            <div style="position: relative">
-              <div class=" over-flow"> CGST Amount</div>
-            </div>
-          </th>
-          <th style="" class="  text-right ">
-            <div style="position: relative">
-              <div class=" over-flow"> SGST Amount</div>
-            </div>
-          </th>
-          <th style="" class="  text-right ">
-            <div style="position: relative">
-              <div class=" over-flow"> CESS</div>
-            </div>
-          </th>
+						<th style="" class="  text-right ">
+							<div style="position: relative">
+								<div class=" over-flow"> IGST Amount</div>
+							</div>
+						</th>
+						<th style="" class="  text-right ">
+							<div style="position: relative">
+								<div class=" over-flow"> CGST Amount</div>
+							</div>
+						</th>
+						<th style="" class="  text-right ">
+							<div style="position: relative">
+								<div class=" over-flow"> SGST Amount</div>
+							</div>
+						</th>
+						<th style="" class="  text-right ">
+							<div style="position: relative">
+								<div class=" over-flow"> CESS</div>
+							</div>
+						</th>
 
-          <th style="" class="  text-right ">
-            <div style="position: relative">
-              <div class=" over-flow"> Total Amount</div>
-            </div>
-          </th>
-        </tr>
-        </thead>
+						<th style="" class="  text-right ">
+							<div style="position: relative">
+								<div class=" over-flow"> Total Amount</div>
+							</div>
+						</th>
+					</tr>
+				</thead>
 
-        <tbody>
-        <tr *ngFor="let item of hsnSummary.data">
-          <td> {{item.hsn_sc ? item.hsn_sc : '-'}} </td>
-          <td> {{item.desc ? item.desc : '-'}} </td>
-          <td> {{item.qty ? item.qty : '-'}} </td>
-          <td> {{item.uqc ? item.uqc : '-'}} </td>
-          <td class="text-right"> {{item.txval | giddhCurrency }} </td>
-          <td class="text-right"> {{item.iamt | giddhCurrency }} </td>
-          <td class="text-right"> {{item.camt | giddhCurrency }} </td>
-          <td class="text-right"> {{item.samt | giddhCurrency }} </td>
-          <td class="text-right"> {{item.csamt | giddhCurrency }} </td>
-          <td class="text-right"> {{item.val | giddhCurrency }} </td>
-        </tr>
-        </tbody>
+				<tbody>
+					<tr *ngFor="let item of hsnSummary.data">
+						<td> {{item.hsn_sc ? item.hsn_sc : '-'}} </td>
+						<td> {{item.desc ? item.desc : '-'}} </td>
+						<td> {{item.qty ? item.qty : '-'}} </td>
+						<td> {{item.uqc ? item.uqc : '-'}} </td>
+						<td class="text-right"> {{item.txval | giddhCurrency }} </td>
+						<td class="text-right"> {{item.iamt | giddhCurrency }} </td>
+						<td class="text-right"> {{item.camt | giddhCurrency }} </td>
+						<td class="text-right"> {{item.samt | giddhCurrency }} </td>
+						<td class="text-right"> {{item.csamt | giddhCurrency }} </td>
+						<td class="text-right"> {{item.val | giddhCurrency }} </td>
+					</tr>
+				</tbody>
 
-      </table>
+			</table>
 
-      <!--      <div class="text-center" *ngIf="(hsnSummaryResponse$ | async)?.totalPages > 1">-->
-      <!--        <pagination [maxSize]="5" [totalItems]="(hsnSummaryResponse$ | async)?.totalItems" [itemsPerPage]="10"-->
-      <!--                    (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true"-->
-      <!--                    [rotate]="false"></pagination>-->
-      <!--      </div>-->
-    </div>
+			<!--      <div class="text-center" *ngIf="(hsnSummaryResponse$ | async)?.totalPages > 1">-->
+			<!--        <pagination [maxSize]="5" [totalItems]="(hsnSummaryResponse$ | async)?.totalItems" [itemsPerPage]="10"-->
+			<!--                    (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true"-->
+			<!--                    [rotate]="false"></pagination>-->
+			<!--      </div>-->
+		</div>
 
-    <div class="" *ngIf="!hsnSummary">
-      <div class="filings-empty-state">
-        <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110"/>
-        <div class="empty-msg"><span>  There is no HSN-wise summary.  </span></div>
-      </div>
-    </div>
+		<div class="" *ngIf="!hsnSummary">
+			<div class="filings-empty-state">
+				<img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
+				<div class="empty-msg"><span> There is no HSN-wise summary. </span></div>
+			</div>
+		</div>
 
-  </div>
+	</div>
 </div>

@@ -1,36 +1,182 @@
 @charset "utf-8";
-/* @font-face {
-    font-family: 'icomoon';
-    src: url('../fonts/main-icomoon/icomoon.eot');
-    src: url('../fonts/main-icomoon/icomoon.eot') format('eot'), url('../fonts/icomoon/icomoon.ttf') format('ttf'), url('../fonts/main-icomoon/icomoon.woff') format('woff'), url('../fonts/main-icomoon/icomoon.svg') format('svg');
-    font-weight: normal;
-    font-style: normal;
-} */
 
-/* @font-face {
-  font-family: 'icomoon';
-  src:  url('../fonts/main-icomoon/icomoon.eot?3n1cct');
-  src:  url('../fonts/main-icomoon/icomoon.eot?3n1cct#iefix') format('embedded-opentype'),
-    url('../fonts/main-icomoon/icomoon.ttf?3n1cct') format('truetype'),
-    url('../fonts/main-icomoon/icomoon.woff?3n1cct') format('woff'),
-    url('../fonts/main-icomoon/icomoon.svg?3n1cct#icomoon') format('svg');
-  font-weight: normal;
-  font-style: normal;
-} */
+@import "../css/giddh-common.scss";
 
-/* @import "../fonts/main-icomoon/style.css"; */
+/* table css need to removed at last  (start)
+   Don't touch this table css (If any body work on that contact me..)
+*/
 
-/* css start */
+.basic > tbody > tr > td,
+.basic > tbody > tr > th,
+.basic > tfoot > tr > td,
+.basic > tfoot > tr > th,
+.basic > thead > tr > td,
+.basic > thead > tr > th {
+    vertical-align: middle !important;
+    font-size: 14px;
+    word-break: break-word;
+    white-space: nowrap;
+}
+.basic > tbody > tr > td,
+.basic > thead > tr > th {
+    font-weight: 400;
+    padding: 14px 10px;
+    text-transform: capitalize;
+    border-right: none !important;
+    border-left: none !important;
+}
 
-/* :root {
-  --light-blue:#5b63b9;
-  --light-blue01:#868ee0;
-  --dark-blue:#1A237E;
-  --dark-blue01: #313a96;
-  --light-gray:#e6e7e8;
-} */
+.basic > tbody > tr td:last-child,
+.basic > thead > tr th:last-child {
+    border-right: 1px solid #ddd !important;
+}
 
-@import "../css/color.scss";
+.basic > tbody > tr td:first-child,
+.basic > thead > tr th:first-child {
+    border-left: 1px solid #ddd !important;
+}
+.basic > thead > tr > th {
+    background: #fff;
+    color: #000000;
+    border-right: 1px solid #d1d1d1;
+    padding: 15px 11px !important;
+    font-weight: 400;
+    border-bottom: 1px solid #d1d1d1;
+    font-family: opensans-semibold;
+    font-size: 14px;
+    border-top: 1px solid #d1d1d1; // position: sticky !important;
+    // top: 60px;
+    // z-index: 999;
+}
+
+.basic > tbody > tr:hover td {
+    background: rgba(221, 225, 230, 0.5);
+}
+
+
+.basic {
+    background: #fff;
+}
+
+/*
+.aging-table > thead > tr > th {
+    background: #e5e5e5;
+    color: #262626;
+    border: 0;
+    font-family: "" opensans-semibold "";
+    text-transform: capitalize;
+    border-right: 1px solid #cac8c6;
+    border-top: 1px solid #cac8c6;
+    border-bottom: 1px solid #cac8c6;
+}*/
+
+
+@media (max-width: 768px) {
+    .onMobileView tbody tr {
+        box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
+        background: #fff;
+        border-bottom: 1px solid #dfdfdf;
+        cursor: pointer;
+        display: block;
+        padding: 5px 0 10px 0px;
+        margin: 22px auto 0;
+        width: 100%;
+        max-width: 100%;
+    }
+    .onMobileView table {
+        background: transparent;
+        margin-bottom: 0;
+        width: 100%;
+        display: block;
+    }
+    .onMobileView table tbody {
+        display: block;
+        width: 100%;
+    }
+    .onMobileView table thead {
+        display: none;
+    }
+    .onMobileView tbody > tr > td {
+        border: 0 !important;
+        display: block;
+        padding: 5px 10px 5px 50% !important;
+        position: relative;
+        text-align: left;
+        height: auto !important;
+        min-height: 30px !important;
+        word-wrap: inherit !important;
+        max-width: 100%;
+        white-space: inherit;
+    }
+    .onMobileView tbody td:after {
+        content: "";
+        width: calc(100% - 30px);
+        display: block;
+        margin: 0 auto;
+        height: 1px;
+        background: transparent;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -6px;
+    }
+    .onMobileView tbody td:before {
+        color: rgba(0, 0, 0, 0.55);
+        font-size: 14px;
+        content: attr(data-title);
+        display: table-cell;
+        font-weight: 500;
+        height: 100%;
+        left: 27px;
+        margin: auto;
+        position: absolute;
+        vertical-align: middle;
+        white-space: nowrap;
+        width: 40%;
+        text-align: left;
+    }
+    .onMobileView .table-bordered > tfoot > tr > td {
+        border: none;
+    }
+    .onMobileView th {
+        display: none;
+    }
+    .onMobileView.basic > tbody > tr:hover td,
+    .onMobileView .basic > tbody > tr:hover td {
+        background: transparent;
+    }
+     .onMobileView.table-bordered {
+        border: none;
+        background: transparent;
+        margin-top: 0;
+    }
+    .noRecords.onMobileView td:before {
+        display: none !important;
+    }
+    .noRecords.onMobileView td {
+        text-align: center !important;
+        padding: 5px 10px 5px 0% !important;
+    }
+     .onMobileView tbody td::first-letter {
+        text-transform: uppercase;
+    }
+     .onMobileView,
+    .onMobileView tbody {
+        display: block;
+    }
+
+}
+
+
+
+@media (max-width: 320px) {
+    .onMobileView tbody td {
+        padding: 5px 10px 5px 53% !important;
+    }
+}
+
+/* table css need to removed at last (finish)*/
+
 [class^="icon-"],
 [class*=" icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
@@ -292,13 +438,14 @@ input {
     display: block;
     width: 18px;
     height: 18px;
-    background: #bbbbbb;
     position: absolute;
     top: -2px;
     bottom: 0;
     right: 28px;
     border-radius: 30px;
     transition: all 0.3s ease-in 0s;
+    background-color: #5b64c9;
+    border-color: #5b64c9;
 }
 
 .toggle-checkbox:checked + .toggle-label .toggle-inner {
@@ -389,10 +536,13 @@ input {
 }
 
 /**/
+.dropdown-arrow {
+    position: relative;
+}
 .dropdown-arrow:after {
     width: 0px;
     height: 0px;
-    content: '';
+    content: "";
     position: absolute;
     right: 7px;
     top: 16px;
@@ -411,13 +561,11 @@ input {
 }
 
 .invoce-controll .invoice-nav.navbar-nav > li > a:hover {
-    
     color: #fff;
 }
 
 .invoce-controll .invoice-nav.navbar-nav > li > a.active {
     background-color: #fff;
-  
 }
 
 .navbar {
@@ -442,7 +590,7 @@ input {
 }
 
 .otherAccountEntry .header {
-    border: 1px solid #C40000 !important;
+    border: 1px solid #c40000 !important;
     display: block;
     overflow: hidden;
 }
@@ -529,6 +677,9 @@ input {
 
 .mb-5 {
     margin-bottom: 50px;
+}
+.mb-15 {
+    margin-bottom: 15px;
 }
 
 .mr-1 {
@@ -714,6 +865,7 @@ ul.sub-list {
     box-shadow: 0 6px 7px #cacaca;
     border: 1px solid $dark-blue00 !important;
     color: #333333 !important;
+    border-radius: 3px;
     /* display: block; */
 }
 
@@ -794,16 +946,15 @@ ul.sub-list {
     color: #1c1c1c !important;
 }
 
-
 .custom-tabs .nav.nav-tabs {
     border-bottom: 1px solid #e0e0e0;
     padding: 0px 0px 0 15px !important;
-    background-color:#f7f8fa;
+    background-color: #f7f8fa;
     z-index: 9;
     position: relative;
     top: -4px;
 }
- 
+
 .btn-pink {
     background: $primaryBtncolror;
     border: 1px solid $primaryBtncolror;
@@ -838,14 +989,6 @@ ul.sub-list {
     font-style: italic;
 }
 
-.aging-table.basic > thead > tr > th {
-    border: 1px solid $tableBorderColor !important;
-    position: relative;
-    border-right-color: $tableBorderColor !important;
-    padding-right: 10px !important;
-    border-left: none !important;
-    border-right: none !important;
-}
 
 .sorting-box {
     position: absolute;
@@ -864,14 +1007,17 @@ ul.sub-list {
     line-height: 0;
     margin: 1px 0;
 }
-
+.aging-table-top td  {
+    border: 0px solid !important;
+    background: #f7f8fa !important;
+}
 .aging-table-top .top-aging-table-top {
     background: rgba(
         49,
         58,
         151,
         0.15
-    ); // border: 1px solid rgba(49,58,151,0.15) !important;
+    ) !important;
 }
 
 .aging-table-top .top-aging-table-top strong,
@@ -883,10 +1029,7 @@ ul.sub-list {
     font-family: opensans-semibold;
 }
 
-.aging-table-top td {
-    border: 0px solid !important;
-    background: #f7f8fa;
-}
+
 
 .aging-table {
     border: 0px;
@@ -898,16 +1041,7 @@ ul.sub-list {
     min-width: 145px;
 }
 
-.aging-table > thead > tr > th {
-    background: #e5e5e5;
-    color: #262626;
-    border: 0;
-    font-family: "" opensans-semibold "";
-    text-transform: capitalize;
-    border-right: 1px solid #cac8c6;
-    border-top: 1px solid #cac8c6;
-    border-bottom: 1px solid #cac8c6;
-}
+
 
 .d-none {
     display: none;
@@ -970,7 +1104,7 @@ ul.sub-list {
 
 .unbold {
     font-weight: normal !important;
-    font-family: inherit !important;
+    font-family: $tableFontRegular !important;
 }
 
 .top-aging-table-top .date-range-picker {
@@ -1000,7 +1134,6 @@ ul.sub-list {
 }
 
 .custom-dropdown .dropdown-menu > li > a:hover {
- 
     background: #e5e5e5 !important;
 }
 
@@ -1026,7 +1159,6 @@ ul.sub-list {
 }
 
 .sorting-box a.active {
-  
     background: none;
 }
 
@@ -1198,7 +1330,7 @@ ul.sub-list {
 }
 
 .text-light {
-    color: #a9a9a9 !important;
+    color: #999 !important;
 }
 
 .list-middle li {
@@ -1396,6 +1528,12 @@ modal-container.modal {
 .dot-success {
     background: #2daa4a;
 }
+.pt-85 {
+    padding-top: 85px !important;
+}
+.mb-0 {
+    margin-bottom: 0px;
+}
 
 /* my css end */
 
@@ -1474,6 +1612,8 @@ input:-moz-placeholder {
     justify-content: center;
     align-items: center;
     padding: 0;
+    margin-right: 5px;
+        float: left;
 }
 
 .company-name .cText .fyear {
@@ -1578,7 +1718,8 @@ header .navbar {
 .btn-primary.active,
 .btn-primary:active,
 .open > .dropdown-toggle.btn-primary,
-.btn-primary:active:focus {
+.btn-primary:active:focus,
+.btn-primary:active:hover {
     background: $border-blue;
     color: #fff;
     border-color: $border-blue;
@@ -1623,7 +1764,8 @@ fieldset[disabled] .btn-primary:hover {
 .open > .dropdown-toggle.btn-default:focus,
 .open > .dropdown-toggle.btn-default:hover,
 .btn-default:active,
-.btn-default:active:focus , .open>.dropdown-toggle.btn-default{
+.btn-default:active:focus,
+.open > .dropdown-toggle.btn-default {
     background: $border-blue;
     color: #fff;
     border-color: $border-blue;
@@ -1876,11 +2018,9 @@ fieldset[disabled] .btn-primary:hover {
 .childTab > .nav-tabs > li.active > a,
 .childTab > .nav-tabs > li.active > a:focus,
 .childTab > .nav-tabs > li.active > a:hover {
- 
     border: 0;
     cursor: pointer;
     background: none;
-    
 }
 
 /*.childTab >.nav.nav-tabs {
@@ -1912,7 +2052,7 @@ fieldset[disabled] .btn-primary:hover {
 .childTab .nav-tabs>li.active>a, .childTab .nav-tabs>li.active>a:focus, .childTab .nav-tabs>li.active>a:hover {
     padding: 13px 18px;
     background: white;
-     
+
     border: 1px solid #ddd;
     border-bottom-color: transparent;
 }*/
@@ -1923,7 +2063,6 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .danger-btn {
-
     color: #fff;
     text-shadow: none;
     background-image: none;
@@ -1958,7 +2097,6 @@ fieldset[disabled] .btn-primary:hover {
     text-transform: capitalize;
 }
 
- 
 #companyList li.selected-company span {
     color: var(--dark-blue01) !important;
 }
@@ -1989,17 +2127,7 @@ fieldset[disabled] .btn-primary:hover {
     color: #fff;
 }
 
-.basic > tbody > tr > td,
-.basic > tbody > tr > th,
-.basic > tfoot > tr > td,
-.basic > tfoot > tr > th,
-.basic > thead > tr > td,
-.basic > thead > tr > th {
-    vertical-align: middle !important;
-    font-size: 14px;
-    word-break: break-word;
-    white-space: nowrap;
-}
+
 
 p.table-email {
     white-space: nowrap;
@@ -2020,24 +2148,6 @@ p.table-email {
 }
 
 
-.basic > tbody > tr > td,
-.basic > thead > tr > th {
-    font-weight: 400;
-    padding: 14px 10px;
-    text-transform: capitalize;
-    border-right: none !important;
-    border-left: none !important;
-}
-
-.basic > tbody > tr td:last-child,
-.basic > thead > tr th:last-child {
-    border-right: 1px solid #ddd !important;
-}
-
-.basic > tbody > tr td:first-child,
-.basic > thead > tr th:first-child {
-    border-left: 1px solid #ddd !important;
-}
 
 .top-five-cr-dr-table .basic > tbody > tr td:last-child,
 .top-five-cr-dr-table .basic > thead > tr th:last-child {
@@ -2048,7 +2158,6 @@ p.table-email {
 .top-five-cr-dr-table .basic > thead > tr th:first-child {
     border-left: none !important;
 }
- 
 
 .delt {
     text-align: center;
@@ -2246,7 +2355,6 @@ input[type="checkbox"]:checked:after {
 .thumbnail.active {
     background: #ffffff;
     box-shadow: 0 5px 34px 0 rgba(211, 95, 41, 0.18);
-    
 }
 
 .thumbnail {
@@ -2640,6 +2748,12 @@ input[type="checkbox"]:checked:after {
     overflow: hidden;
 }
 
+.mandatory-asterisk {
+    font-size: 14px;
+    top: 0;
+    color: red;
+}
+
 @media only screen and (max-width: 1400px) {
     .template_list {
         width: 25%;
@@ -2688,7 +2802,7 @@ input[type="checkbox"]:checked:after {
     padding: 10px 0;
     border: 0 !important;
 }
- 
+
 .proforma-list > .filters > div {
     margin-right: 0;
 }
@@ -2837,6 +2951,8 @@ input[type="checkbox"]:checked:after {
 .download-invoice-ledger {
     padding-right: 6px;
     padding-left: 0;
+    align-items: center;
+    font-size: 15px;
 }
 
 .popover.bottom > .arrow:after {
@@ -3092,7 +3208,6 @@ footer small a {
     border-radius: 0px !important;
 }
 
- 
 .form-theme {
     background: #f4f5f8;
     padding: 20px;
@@ -3212,7 +3327,6 @@ a.btn.btn-xs.btn-link.pull-right {
     margin-left: 5px;
 }
 
- 
 .action .btn {
     border-color: transparent;
     padding: 4px 14px;
@@ -3282,7 +3396,6 @@ a.btn.btn-xs.btn-link.pull-right {
 .ReportInfo {
     text-transform: capitalize;
 }
- 
 
 .linkstock {
     min-height: 200px;
@@ -4024,12 +4137,10 @@ label {
 
 .btn-add {
     display: inline-block !important;
-  
 }
 
 .btn-add:hover,
 .btn-add:focus {
-  
     color: #fff !important;
 }
 
@@ -4102,7 +4213,6 @@ label {
 
 .col_wrapper:nth-child(1) .isParent {
     background: #e1ebf0 !important;
-  
 }
 
 .col_wrapper:last-child ul li a.isParent {
@@ -4127,7 +4237,6 @@ label {
 }
 
 .isParent {
-   
     background: #f0f0f0;
 }
 
@@ -4226,12 +4335,10 @@ label {
 
 .btn-add {
     display: inline-block !important;
-    
 }
 
 .btn-add:hover,
 .btn-add:focus {
-  
     color: #fff !important;
 }
 
@@ -4357,7 +4464,6 @@ label {
 }
 
 .accmerge li a.isActive {
-  
     color: #808080;
 }
 
@@ -4485,8 +4591,6 @@ label {
     overflow: hidden;
     padding-right: 15px;
 }
-
-
 
 .manageModal .modal-dialog {
     height: 100%;
@@ -4830,7 +4934,6 @@ label {
 .pagination > .active > span,
 .pagination > .active > span:focus,
 .pagination > .active > span:hover {
-
     color: #fff;
 }
 
@@ -4840,7 +4943,6 @@ label {
 .pagination > li > span:hover {
     background-color: #d9d9d9 !important;
     border-color: #ddd;
-
 }
 
 #manufacture .section_title {
@@ -5019,6 +5121,8 @@ label {
     border: 1px solid $border-blue;
 }
 
+
+
 .dropdown-container .dropdown-menu {
     display: block;
     height: 200px;
@@ -5116,7 +5220,6 @@ label {
 
 #customInvoice .templateEditor .btn-group-lg > .btn:hover {
     background: #fff;
-  
 }
 
 #customInvoice {
@@ -5143,7 +5246,6 @@ label {
 }
 
 #customInvoice .templateEditor h3 {
- 
     margin: 15px 0;
     font-size: 18px;
 }
@@ -5357,28 +5459,7 @@ input[type="checkbox"][disabled] {
     opacity: 2.2;
 }
 
-.basic {
-    background: #fff;
-} // table.basic{
-//   position: relative;
-// }
-.basic > thead > tr > th {
-    background: #fff;
-    color: #000000;
-    border-right: 1px solid #d1d1d1;
-    padding: 15px 11px !important;
-    font-weight: 400;
-    border-bottom: 1px solid #d1d1d1;
-    font-family: opensans-semibold;
-    font-size: 14px;
-    border-top: 1px solid #d1d1d1; // position: sticky !important;
-    // top: 60px;
-    // z-index: 999;
-}
 
-.basic > tbody > tr:hover td {
-    background: #f4f5f8;
-}
 
 .nested_table > tbody tr td {
     border: 0 !important;
@@ -5488,17 +5569,16 @@ input[type="checkbox"][disabled] {
     padding-right: 0;
 } */
 
-
 datepicker-inner .well table tbody tr td .btn-default {
     padding: 0 4px;
     border: 0;
     background: none;
 }
-datepicker-inner .well table tbody tr td .btn-default:hover{
+datepicker-inner .well table tbody tr td .btn-default:hover {
     background: $border-blue !important;
     color: #fff;
 }
-datepicker-inner .well table tbody tr td .btn-default:hover span{
+datepicker-inner .well table tbody tr td .btn-default:hover span {
     text-decoration: none;
 }
 datepicker-inner .well {
@@ -5507,7 +5587,7 @@ datepicker-inner .well {
     box-shadow: none;
     margin: 0;
 }
-datepicker-inner  .well table button.btn.btn-default.btn-sm {
+datepicker-inner .well table button.btn.btn-default.btn-sm {
     line-height: 1;
     background-color: transparent !important;
     font-size: 20px;
@@ -5524,10 +5604,8 @@ datepicker-inner .well table thead tr th button {
 
 datepicker-inner .well table tbody .btn.active,
 datepicker-inner .well table tbody .btn:active {
-  
     box-shadow: none;
 }
-
 
 datepicker-inner .well table tbody .btn.active .text-info,
 datepicker-inner .well table tbody .btn:active .text-info {
@@ -5817,11 +5895,9 @@ typeahead-container .dropdown-menu li:hover > a,
 typeahead-container .dropdown-menu > .active > a:hover,
 typeahead-container .dropdown-menu li.active > a > a:hover {
     background-color: rgb(244, 245, 248);
-  
 }
 
 typeahead-container .dropdown-menu li.active > a > a {
-  
 }
 
 .has-item {
@@ -6332,7 +6408,6 @@ table td[class*=col-]:last-child {
     width: 100% !important;
 }
 
-
 /* left bar menu */
 
 .form_body .toggle-btn label {
@@ -6502,7 +6577,7 @@ table td[class*=col-]:last-child {
 .illustration_box img {
     /* max-width: 85%; */
     opacity: 0.7;
-    /* max-width: 300px; */
+    max-width: 600px;
 }
 
 .cursor-pointer {
@@ -6606,7 +6681,6 @@ table td[class*=col-]:last-child {
 }
 
 .dropdown-option li a:hover {
-  
     background: #f4f5f8;
 }
 
@@ -6632,7 +6706,6 @@ panel.sFthanks.fieldset {
 }
 
 .tbpl-dropdown > li:hover a {
-   
     background: #f4f5f8;
 }
 
@@ -6733,7 +6806,6 @@ GST filing
     float: none;
 }
 
-
 .tax-engine .btn .caret,
 .tax-engine .btn-group > .btn:first-child {
     margin-left: 0;
@@ -6822,7 +6894,6 @@ perfect-scrollbar > .ps > .ps-overlay {
     color: $border-blue;
     background: #eeeff9;
 }
- 
 
 .hamburger_menu button,
 .hamburger_menu button:hover,
@@ -6898,7 +6969,6 @@ perfect-scrollbar > .ps > .ps-overlay {
 .space {
     margin-top: 10px;
 }
-
 
 .tax-engine .nav > li,
 .tax-engine .nav > li > a {
@@ -7029,8 +7099,6 @@ perfect-scrollbar > .ps > .ps-overlay {
     vertical-align: middle;
 }
 
-
-
 .table-striped > tbody > tr:nth-child(even) > td,
 .table-striped > tbody > tr:nth-child(odd) > th {
     background-color: #f9f9f9;
@@ -7112,8 +7180,6 @@ perfect-scrollbar > .ps > .ps-overlay {
     font-size: 13px;
     background: none !important;
 }
-
-
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a,
 .tax-engine .sub-filter-nav-bandnew ul > li.active > a {
@@ -7336,8 +7402,6 @@ perfect-scrollbar > .ps > .ps-overlay {
     border: 0;
 }
 
-
-
 .tax-engine .sub-filter-nav-band.reconciliation-type-band ul > li:last-child {
     float: right;
 }
@@ -7446,11 +7510,10 @@ perfect-scrollbar > .ps > .ps-overlay {
     color: #cb1119;
 }
 
-.tax-engine .table.reconciliations-table .recognized-value,
+/*.tax-engine .table.reconciliations-table .recognized-value,
 .tax-engine .table.reconciliations-table .unrecognized-value {
     padding-top: 10px;
-}
-
+}*/
 .tax-engine .reconciliation-accepted {
     color: #39c296;
 }
@@ -7608,6 +7671,12 @@ app-header {
 }
 
 /* my css */
+.box .company-box .inner-company-box ul > li .tooltip {
+    word-break: break-all;
+}
+.radius-none {
+    border-radius: 0px !important;
+}
 
 #form-place .dropdown-menu {
     height: 392px;
@@ -7627,7 +7696,6 @@ app-header {
 
 #form-place .dropdown-menu .dropdown-item:hover {
     background-color: rgb(244, 245, 248);
-   
 }
 
 /* sticky footer css merged */
@@ -7649,7 +7717,7 @@ app-header {
 
 .stickyFooterSaleAmount .total-due h3 {
     font-size: 20px;
-   
+
     padding-right: 13px;
 }
 
@@ -7771,13 +7839,13 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
     padding-bottom: 0;
 }
 
-.aging-table .vendorCustomerName .table-checkbox {
+.aging-table .vendor-customer-name .table-checkbox {
     position: absolute;
     left: 5px;
     top: 13px;
 }
 
-.aging-table tr:hover .vendorCustomerName .table-checkbox {
+.aging-table tr:hover .vendor-customer-name .table-checkbox {
     top: 13px;
 }
 
@@ -7964,9 +8032,6 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     color: #333;
 }
 
-.basic > thead > tr > th {
-    border-right: 1px solid #c6c4c4;
-}
 
 .welcome-container input::placeholder {
     color: rgba(0, 0, 0, 0.4) !important;
@@ -7990,7 +8055,7 @@ span.red-text {
 
 #invoice-setting .nav > li > a:focus,
 #invoice-setting .nav > li > a:hover {
-    background: transparent !important;
+    background: $White !important;
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
 
@@ -8175,7 +8240,7 @@ ul.dropdown-menu p.lead.pd {
     padding-bottom: 7px !important;
     font-family: "opensans-semibold";
 }
-.invoce-controll .nav-tabs > li > a{
+.invoce-controll .nav-tabs > li > a {
     border-bottom: 4px solid transparent !important;
 }
 
@@ -8186,7 +8251,6 @@ ul.dropdown-menu p.lead.pd {
 
 .debit-blank-row td .form-control,
 .credit-blank-row td .form-control {
-
     position: relative;
     top: 1px;
 }
@@ -8290,7 +8354,9 @@ ul.dropdown-menu p.lead.pd {
     border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
     font-size: 18px;
 }
-
+#tab-integration .nav-tabs > li a:hover {
+    background-color: $White !important;
+}
 #tab-integration .nav-tabs > li a.active {
     border-bottom: 1px solid $activeTabBorder !important;
     font-family: "opensans-regular";
@@ -8339,14 +8405,8 @@ table.basic td {
     color: #1c1c1c;
 }
 
-.aging-table .text-light-2 {
-    color: $iconColorTh;
-}
 
-.aging-table .icon-pointer .activeTextColor {
-    color: #000 !important;
-    opacity: 1 !important;
-}
+
 
 .invoice-table td > a {
     color: #1c1c1c;
@@ -8579,6 +8639,11 @@ p.remvBrnchName {
     margin-top: 0;
     border-radius: 0;
 }
+.popover.purchase-invoice-rcm, .update-ledger-rcm {
+    .popover-arrow.arrow {
+        display: none;
+    }
+}
 @media (min-width: 564px) {
     #date-range-picker-parent .daterangepicker {
         width: 100%;
@@ -8607,6 +8672,93 @@ button {
     color: inherit !important;
     background: inherit !important;
 }
+.disable-select-group .toggle {
+    display: none;
+}
+
+/* radio & checkbox new CSS start */
+input.checkbox-custom[type="checkbox"] {
+    position: absolute;
+    top: 1px;
+    text-align: center;
+    margin: 0 8px 0 0;
+    cursor: pointer;
+    left: 0px;
+    height: 19px;
+}
+.checkbox-custom,
+.radio-custom {
+    opacity: 0;
+    position: absolute;
+}
+.checkbox-custom,
+.checkbox-custom-label,
+.radio-custom,
+.radio-custom-label {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+    cursor: pointer;
+    padding-bottom: 0;
+}
+.checkbox-custom-label,
+.radio-custom-label {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+
+}
+.checkbox-custom + .checkbox-custom-label:before,
+.radio-custom + .radio-custom-label:before {
+    content: "";
+    background: #fff;
+    border: 1px solid #ccc;
+    display: inline-block;
+    vertical-align: middle;
+    width: 18px;
+    height: 18px;
+    padding: 2px;
+    margin-right: 5px;
+    border-radius: 2px;
+    text-align: center;
+}
+.checkbox-custom + .checkbox-custom-label:after{
+        transform: rotate(-45deg) scale(0,0);
+    content: "";
+    position: absolute;
+    left: 3px;
+    top: 5px;
+    z-index: 1;
+    width: 12px;
+    height: 7px;
+    border: 2px solid #fff;
+    border-top-style: none;
+    border-right-style: none;
+    transition: transform .4s cubic-bezier(.45,1.8,.5,.75)
+}
+.checkbox-custom:checked + .checkbox-custom-label:after{
+    transform: rotate(-45deg) scale(1,1);
+}
+.checkbox-custom:checked + .checkbox-custom-label:before {
+    background: $border-blue;
+
+    border: 2px solid $border-blue;
+}
+.radio-custom + .radio-custom-label:before {
+    border-radius: 50%;
+    border: 1px solid $border-blue;
+}
+.radio-custom:checked + :before {
+    background: $border-blue;
+    border: 1px solid $border-blue;
+    box-shadow: inset 0px 0px 0px 4px #fff;
+}
+.checkbox-custom:focus + .checkbox-custom-label:before {
+    border: 1px solid $border-blue;
+}
+
+/* radio & checkbox new CSS end */
+
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -8792,82 +8944,10 @@ button {
         top: 0;
         z-index: 4;
     }
-    .onMobileView tbody tr {
-        box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
-        background: #fff;
-        border-bottom: 1px solid #dfdfdf;
-        cursor: pointer;
-        display: block;
-        padding: 5px 0 10px 0px;
-        margin: 22px auto 0;
-        width: 100%;
-        max-width: 100%;
-    }
-    .onMobileView table {
-        background: transparent;
-        margin-bottom: 0;
-        width: 100%;
-        display: block;
-    }
-    .onMobileView table tbody {
-        display: block;
-        width: 100%;
-    }
-    .onMobileView table thead {
-        display: none;
-    }
-    .onMobileView tbody > tr > td {
-        border: 0 !important;
-        display: block;
-        padding: 5px 10px 5px 50% !important;
-        position: relative;
-        text-align: left;
-        height: auto !important;
-        min-height: 30px !important;
-        word-wrap: inherit !important;
-        max-width: 100%;
-        white-space: inherit;
-    }
-    .onMobileView tbody td:after {
-        content: "";
-        width: calc(100% - 30px);
-        display: block;
-        margin: 0 auto;
-        height: 1px;
-        background: transparent;
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: -6px;
-    }
-    .onMobileView tbody td:before {
-        color: rgba(0, 0, 0, 0.55);
-        font-size: 14px;
-        content: attr(data-title);
-        display: table-cell;
-        font-weight: 500;
-        height: 100%;
-        left: 27px;
-        margin: auto;
-        position: absolute;
-        vertical-align: middle;
-        white-space: nowrap;
-        width: 40%;
-        text-align: left;
-    }
-    .onMobileView .table-bordered > tfoot > tr > td {
-        border: none;
-    }
-    .onMobileView th {
-        display: none;
-    }
-    .onMobileView.basic > tbody > tr:hover td,
-    .onMobileView .basic > tbody > tr:hover td {
-        background: transparent;
-    }
+
     .tax-engine .table.transactions-table.onMobileView tbody > tr > td {
-    max-width: 100% !important;
-}
+        max-width: 100% !important;
+    }
 
     .nav-tabs > li {
         float: left;
@@ -8878,18 +8958,7 @@ button {
         display: inline-block;
         cursor: grab;
     }
-    .onMobileView.table-bordered {
-        border: none;
-        background: transparent;
-        margin-top: 0;
-    }
-    .noRecords.onMobileView td:before {
-        display: none !important;
-    }
-    .noRecords.onMobileView td {
-        text-align: center !important;
-        padding: 5px 10px 5px 0% !important;
-    }
+
     .table-responsive {
         padding: 0 3px;
         border: none;
@@ -8911,9 +8980,7 @@ button {
     .table > thead > tr > th {
         white-space: initial !important;
     }
-    .onMobileView tbody td::first-letter {
-        text-transform: uppercase;
-    }
+
     .universal_date label.btn.btn-link {
         display: none;
     }
@@ -8922,17 +8989,21 @@ button {
         padding: 10px 0px 0 15px !important;
     }
     overview-summary .transactions-overview {
-    background: transparent;
-}
-.tax-engine .transactions-overview .gstr-transactions-summary .transactions-table {
-    border: none;
-}
-.tax-engine .table-striped > tbody > tr:nth-child(odd) > td, .tax-engine .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: #fff;
-}
-.tax-engine .table-striped>tbody>tr:nth-of-type(odd) {
-    background-color: #fff;
-}
+        background: transparent;
+    }
+    .tax-engine
+        .transactions-overview
+        .gstr-transactions-summary
+        .transactions-table {
+        border: none;
+    }
+    .tax-engine .table-striped > tbody > tr:nth-child(odd) > td,
+    .tax-engine .table-striped > tbody > tr:nth-child(odd) > th {
+        background-color: #fff;
+    }
+    .tax-engine .table-striped > tbody > tr:nth-of-type(odd) {
+        background-color: #fff;
+    }
 }
 
 @media (max-width: 1280px) {
@@ -9017,10 +9088,7 @@ button {
     .card-table tbody tr {
         display: block;
     }
-    .onMobileView,
-    .onMobileView tbody {
-        display: block;
-    }
+
     .blank-label {
         display: none;
     }
@@ -9086,38 +9154,42 @@ button {
     .tooltip.bs-tooltip-top {
         display: none !important;
     }
-    .custom-body #settingTab .tab-container .nav.nav-tabs{
-            position: inherit;
+    .custom-body #settingTab .tab-container .nav.nav-tabs {
+        position: inherit;
     }
     .aside-pane-form .custom-tabs ul.nav.nav-tabs {
         white-space: nowrap;
         display: inline-block;
         overflow-y: hidden;
     }
-    .basic>tbody>tr td:last-child, .basic>thead>tr th:last-child {
-    border-right: none !important;
+    .basic > tbody > tr td:last-child,
+    .basic > thead > tr th:last-child {
+        border-right: none !important;
     }
-    #content_wrapper{
+    #content_wrapper {
         height: 100vh;
     }
- .tax-engine .nav-band .nav-tabs {
-    white-space: nowrap;
-    padding-top: 0 !important;
-}
-.gst-filing-container {
-    padding-top: 38px;
-}
-.tax-engine .transactions-overview .gstr-transactions-summary .title {
-    padding: 0;
-}
-.tax-engine .list-filter {
-    padding: 15px !important;
-    border-bottom: 1px solid #ddd !important;
-    height: auto;
-}
-.list-style ul.list-inline.list-middle.download-drop-down {
-    text-align: left;
-}
+    .tax-engine .nav-band .nav-tabs {
+        white-space: nowrap;
+        padding-top: 0 !important;
+    }
+    .gst-filing-container {
+        padding-top: 38px;
+    }
+    .tax-engine .transactions-overview .gstr-transactions-summary .title {
+        padding: 0;
+    }
+    .tax-engine .list-filter {
+        padding: 15px !important;
+        border-bottom: 1px solid #ddd !important;
+        height: auto;
+    }
+    .list-style ul.list-inline.list-middle.download-drop-down {
+        text-align: left;
+    }
+    .checkbox-custom-label, .radio-custom-label{
+        display: inline;
+    }
 }
 
 @media (max-width: 575px) {
@@ -9166,7 +9238,6 @@ button {
 }
 
 @media (max-width: 375px) {
-
     #settingTab .tab-container .nav.nav-tabs,
     .custom-tabs .nav.nav-tabs {
         top: 78px;
@@ -9201,11 +9272,7 @@ button {
     }
 }
 
-@media (max-width: 320px) {
-    .onMobileView tbody td {
-        padding: 5px 10px 5px 53% !important;
-    }
-}
+
 
 @media only screen and (max-width: 1400px) {
     .template_list {
@@ -9387,3 +9454,4 @@ button {
         margin: 70px auto;
     }
 }
+

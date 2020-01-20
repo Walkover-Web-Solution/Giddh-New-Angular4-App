@@ -1,25 +1,13 @@
 <div class="form-header">
     <div>
-        <h3 class="">
+        <h3>
             <span>Transfer</span>
-            <!-- <span class="pull-right fs14">Multiple
-        <a href="javascript:void(0)" [ngClass]="{'text-link': mode === 'receiver' }"
-          (click)="modeChanged('receiver')">Destination</a> /
-        <a href="javascript:void(0)" [ngClass]="{'text-link': mode === 'product' }"
-          (click)="modeChanged('product')">Products</a>
-      </span> -->
         </h3>
-
     </div>
 </div>
 <div class="form_body witBg clearfix mrBChldLbl">
     <div class="branch-transfer">
-        <button class="btn btn-light-gray" (click)="openBranchTransferPopup('receipt')">
-            <!-- redirectToReciptNote() -->
-            Receipt Note
-        </button>
-        <button class="btn btn-light-gray" (click)="openBranchTransferPopup('delivery')">
-            Delivery Note
-        </button>
+        <button class="btn btn-light-gray" (click)="openBranchTransferPopup('receiptnote')">Receipt Note</button>
+        <button class="btn btn-light-gray" (click)="openBranchTransferPopup('deliverynote')">Delivery Challan</button>
     </div>
 </div>

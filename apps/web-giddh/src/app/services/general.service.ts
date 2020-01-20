@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { UserDetails } from '../models/api-models/loginModels';
-import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
-import { IUlist } from '../models/interfaces/ulist.interface';
+import { BehaviorSubject, Subject } from 'rxjs';
+
+import { RcmModalButton, RcmModalConfiguration } from '../common/rcm-modal/rcm-modal.interface';
 import { CompanyCreateRequest } from '../models/api-models/Company';
-import { COMPANY_API } from "./apiurls/comapny.api";
-import { catchError, map } from "rxjs/operators";
-import { BaseResponse } from "../models/api-models/BaseResponse";
-import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from "../models/api-models/Reports";
+import { UserDetails } from '../models/api-models/loginModels';
+import { IUlist } from '../models/interfaces/ulist.interface';
+import * as moment from 'moment';
 
 @Injectable()
 export class GeneralService {
@@ -18,7 +17,6 @@ export class GeneralService {
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
 
     get user(): UserDetails {
         return this._user;
@@ -119,5 +117,148 @@ export class GeneralService {
 
     public capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    public base64ToBlob(b64Data, contentType, sliceSize) {
+        contentType = contentType || '';
+        sliceSize = sliceSize || 512;
+        let byteCharacters = atob(b64Data);
+        let byteArrays = [];
+        let offset = 0;
+        while (offset < byteCharacters.length) {
+            let slice = byteCharacters.slice(offset, offset + sliceSize);
+            let byteNumbers = new Array(slice.length);
+            let i = 0;
+            while (i < slice.length) {
+                byteNumbers[i] = slice.charCodeAt(i);
+                i++;
+            }
+            let byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+            offset += sliceSize;
+        }
+        return new Blob(byteArrays, { type: contentType });
+    }
+
+    convertExponentialToNumber(n) {
+        var [lead, decimal, pow] = n.toString().split(/e|\./);
+        if (decimal) {
+            return +pow <= 0
+                ? "0." + "0".repeat(Math.abs(pow) - 1) + lead + decimal
+                : lead + (+pow >= decimal.length ? (decimal + "0".repeat(+pow - decimal.length)) : (decimal.slice(0, +pow) + "." + decimal.slice(+pow)))
+        } else {
+            return n;
+        }
+    }
+
+    storeUtmParameters(routerParams: any): void {
+        if (routerParams['utm_source']) {
+            localStorage.setItem('utm_source', routerParams['utm_source']);
+        }
+        if (routerParams['utm_medium']) {
+            localStorage.setItem('utm_medium', routerParams['utm_medium']);
+        }
+        if (routerParams['utm_campaign']) {
+            localStorage.setItem('utm_campaign', routerParams['utm_campaign']);
+        }
+        if (routerParams['utm_term']) {
+            localStorage.setItem('utm_term', routerParams['utm_term']);
+        }
+        if (routerParams['utm_content']) {
+            localStorage.setItem('utm_content', routerParams['utm_content']);
+        }
+    }
+
+    getUtmParameter(param: string): string {
+        if (localStorage.getItem(param)) {
+            return localStorage.getItem(param);
+        } else {
+            return "";
+        }
+    }
+
+    removeUtmParameters(): void {
+        localStorage.removeItem("utm_source");
+        localStorage.removeItem("utm_medium");
+        localStorage.removeItem("utm_campaign");
+        localStorage.removeItem("utm_term");
+        localStorage.removeItem("utm_content");
+    }
+
+    getLastElement(array) {
+        return array[array.length - 1];
+    };
+
+    /**
+     * Returns the RCM modal configuration based on 'isRcmSelected' flag value
+     *
+     * @param {boolean} isRcmSelected True, if user selects the RCM checkbox
+     * @returns {RcmModalConfiguration}
+     * @memberof GeneralService
+     */
+    getRcmConfiguration(isRcmSelected: boolean): RcmModalConfiguration {
+        const buttons: Array<RcmModalButton> = [{
+            text: 'Yes',
+            cssClass: 'btn btn-success'
+        },
+        {
+            text: 'No',
+            cssClass: 'btn btn-danger'
+        }];
+        const headerText: string = 'Reverse Charge Confirmation';
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mrB1 text-light';
+        const footerCssClass: string = 'mrB1';
+        return (isRcmSelected) ? {
+            headerText,
+            headerCssClass,
+            messageText: `Note: If you check this transaction for Reverse Charge,
+            applied taxes will be considered under Reverse Charge taxes and
+            will be added in GST Report.`,
+            messageCssClass,
+            footerText: 'Are you sure you want to check this transaction for Reverse Charge?',
+            footerCssClass,
+            buttons
+        } : {
+                headerText,
+                headerCssClass,
+                messageText: `Note: If you uncheck this transaction from Reverse Charge, applied
+                taxes will be considered as normal taxes and reverse
+                charge effect will be removed from GST Report.`,
+                messageCssClass,
+                footerText: 'Are you sure you want to uncheck this transaction from Reverse Charge?',
+                footerCssClass,
+                buttons
+            };
+    }
+
+    /**
+     * Decides based on current ledger and selected account details whether the RCM section
+     * needs to be displayed
+     *
+     * @param {*} currentLedgerAccountDetails Current ledger detail
+     * @param {*} selectedAccountDetails User selected particular account
+     * @returns {boolean} True, if the current ledger and user selected particular account belongs to RCM category accounts
+     * @memberof GeneralService
+     */
+    shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any): boolean {
+        if (currentLedgerAccountDetails && selectedAccountDetails) {
+            if (![currentLedgerAccountDetails.uniqueName, selectedAccountDetails.uniqueName].includes('roundoff')) {
+                // List of allowed first level parent groups
+                const allowedFirstLevelUniqueNames = ['operatingcost', 'indirectexpenses', 'fixedassets'];
+                // List of not allowed second level parent groups
+                const disallowedSecondLevelUniqueNames = ['discount', 'exchangeloss'];
+                const currentLedgerFirstParent = currentLedgerAccountDetails.parentGroups[0] ? currentLedgerAccountDetails.parentGroups[0].uniqueName : '';
+                const currentLedgerSecondParent = currentLedgerAccountDetails.parentGroups[1] ? currentLedgerAccountDetails.parentGroups[1].uniqueName : '';
+                const selectedAccountFirstParent = selectedAccountDetails.parentGroups[0] ? selectedAccountDetails.parentGroups[0].uniqueName : '';
+                const selectedAccountSecondParent = selectedAccountDetails.parentGroups[1] ? selectedAccountDetails.parentGroups[1].uniqueName : '';
+                // Both accounts (current ledger and selected account) in order to satisfy RCM MUST have first
+                // level parent group unique name in allowed unique names and MUST NOT have their second level parent
+                // in disallowed unique names
+                return (allowedFirstLevelUniqueNames.some((firstLevelUniqueName: string) => [currentLedgerFirstParent, selectedAccountFirstParent].includes(firstLevelUniqueName)) &&
+                    !disallowedSecondLevelUniqueNames.some((secondLevelUniqueName: string) => [currentLedgerSecondParent, selectedAccountSecondParent].includes(secondLevelUniqueName)));
+            }
+        }
+        return false;
     }
 }

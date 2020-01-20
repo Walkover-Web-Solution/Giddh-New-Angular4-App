@@ -1,173 +1,158 @@
 <div class="box clearfix mrT1">
-  <h1 class="section_head pdT0">Create New Trigger</h1>
-  <div class="row">
-    <form (ngSubmit)="onSubmit(newTriggerObj)" class="col-sm-10 col-xs-12 ">
-      <div class="row">
-        <div class="form-group col-sm-3 col-xs-12">
-          <label>Name</label><br>
-          <input type="text" placeholder="Name" autocomplete="off" [(ngModel)]="newTriggerObj.name" name="name"
-            class="form-control" />
-        </div>
-        <div class="form-group col-sm-3 col-xs-12">
-          <label>Select Entity Type</label><br>
-          <sh-select (onClear)="onResetEntityType()" (selected)="onEntityTypeSelected($event)"
-            [forceClearReactive]="forceClear$ | async" [options]="entityList" [isFilterEnabled]="false"
-            name="entityType" [(ngModel)]="newTriggerObj.entity" [placeholder]="'Select Entity Type'" [ItemHeight]="33">
-          </sh-select>
-        </div>
-        <div class="form-group col-sm-3 col-xs-12">
-          <label>Select Entity</label><br>
-          <sh-select [disabled]="!newTriggerObj.entity" [forceClearReactive]="forceClearEntityList$ | async"
-            [options]="entityOptions$ | async" name="entityOptions" [(ngModel)]="newTriggerObj.entityUniqueName"
-            [placeholder]="'Select Entity'" [ItemHeight]="33"></sh-select>
-        </div>
-        <div class="form-group col-sm-3 col-xs-12">
-          <label>Scope</label><br>
-          <sh-select [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" placeholder="Select Scope"
-            name="scope" [(ngModel)]="newTriggerObj.scope" [options]="scopeList" (selected)="onSelectScope($event)">
-            <option>selected</option>
-          </sh-select>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-sm-3 col-xs-12">
-          <label>Filter</label><br>
-          <sh-select [forceClearReactive]="forceClearFilterList$ | async" [options]="filterList"
-            [isFilterEnabled]="true" name="filter" [(ngModel)]="newTriggerObj.filter" [placeholder]="'Select Filter'"
-            [ItemHeight]="33">
-          </sh-select>
-        </div>
-        <div class="form-group col-sm-3 col-xs-12">
-          <label>Action</label><br>
-          <sh-select [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" placeholder="Select Action"
-            name="action" [(ngModel)]="newTriggerObj.action" [options]="actionList"></sh-select>
-        </div>
-        <div class="form-group col-sm-3 col-xs-12">
-          <label>Value</label><br>
-          <input type="number" [(ngModel)]="newTriggerObj.value" name="value" placeholder="Value" class="form-control" />
-        </div>
-        <div class="form-group col-sm-3 col-xs-12">
-          <label>URL</label><br>
-          <input type="text" [(ngModel)]="newTriggerObj.url" name="url" placeholder="URL" class="form-control" />
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-sm-3 col-xs-12">
-          <label>Description</label><br>
-          <textarea class="form-control" [(ngModel)]="newTriggerObj.description" name="description"></textarea>
-        </div>
-      </div>
-      <div class="row">
-        <div class=col-xs-12>
-          <button type="submit" class="btn btn-success">Add</button>
-          <button type="button" (click)="onCancel()" class="btn btn-cancel">Cancel</button>
-        </div>
-      </div>
-    </form>
-  </div>
-  <div class="col-xs-12 pdT2">
+    <h1 class="section_head pdT0">Create New Trigger(Webhook)</h1>
     <div class="row">
-      <h1 class="section_head pdT1">Added Triggers</h1>
-      <div class="table-responsive">
-        <table class="table table-bordered basic mrB onMobileView">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Entity type</th>
-              <th>Entity</th>
-              <th>Scope</th>
-              <th>Filter</th>
-              <th>Action</th>
-              <th>Value</th>
-              <th>URL</th>
-              <th>Description</th>
-              <th class="text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody *ngIf="availableTriggers.length">
-            <tr *ngFor="let trigger of availableTriggers; let i = index">
-              <td data-title="#">{{i+1}}</td>
-              <td data-title="Name">
-                <span *ngIf="!triggerToEdit[i]">{{trigger.name}}</span>
-                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
-                  [(ngModel)]="trigger.name">
-              </td>
-              <td data-title="Entity Type">
-                <span *ngIf="!triggerToEdit[i]">{{trigger.entity}}</span>
-                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
-                  [(ngModel)]="trigger.entity">
-              </td>
-              <td data-title="Entity">
-                <span *ngIf="!triggerToEdit[i]">{{trigger.entityUniqueName}}</span>
-                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
-                  [(ngModel)]="trigger.entityUniqueName">
-              </td>
-              <td data-title="Scope">
-                <span *ngIf="!triggerToEdit[i]">{{trigger.scope}}</span>
-                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
-                  [(ngModel)]="trigger.scope">
-              </td>
-              <td data-title="Filter">
-                <span *ngIf="!triggerToEdit[i]">{{trigger.filter}}</span>
-                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
-                  [(ngModel)]="trigger.filter">
-              </td>
-              <td data-title="Action">
-                <span *ngIf="!triggerToEdit[i]">{{trigger.action}}</span>
-                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
-                  [(ngModel)]="trigger.action">
-              </td>
-              <td data-title="Value">
-                <span *ngIf="!triggerToEdit[i]">{{trigger.value}}</span>
-                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
-                  [(ngModel)]="trigger.value">
-              </td>
-              <td data-title="URL">
-                <span *ngIf="!triggerToEdit[i]">{{trigger.url}}</span>
-                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
-                  [(ngModel)]="trigger.url">
-              </td>
-              <td data-title="Description">
-                <span *ngIf="!triggerToEdit[i]">{{trigger.description}}</span>
-                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
-                  [(ngModel)]="trigger.description">
-              </td>
+        <form (ngSubmit)="onSubmit(newTriggerObj)" class="col-sm-10 col-xs-12 ">
+            <div class="row">
+                <div class="form-group col-sm-4 col-xs-12">
+                    <label>Name</label><br>
+                    <input type="text" placeholder="Name" autocomplete="off" [(ngModel)]="newTriggerObj.name" name="name" class="form-control" />
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                    <label>Select Entity Type</label><br>
+                    <sh-select (onClear)="onResetEntityType()" (selected)="onEntityTypeSelected($event)" [forceClearReactive]="forceClear$ | async" [options]="entityList" [isFilterEnabled]="false" name="entityType" [(ngModel)]="newTriggerObj.entity" [placeholder]="'Select Entity Type'"
+                        [ItemHeight]="33">
+                    </sh-select>
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                    <label>Select Entity</label><br>
+                    <sh-select [disabled]="!newTriggerObj.entity" [forceClearReactive]="forceClearEntityList$ | async" [options]="entityOptions$ | async" name="entityOptions" [(ngModel)]="newTriggerObj.entityUniqueName" [placeholder]="'Select Entity'" [ItemHeight]="33">
+                    </sh-select>
+                </div>
 
-              <td class="text-center ico-btn" data-title="Action">
-                <button *ngIf="!triggerToEdit[i]" type="button" class="btn btn-xs"
-                  (click)="triggerToEdit = [];triggerToEdit[i] = true"><i class="fa fa-pencil" aria-hidden="true"
-                    tooltip="Edit"></i></button>
-                <button *ngIf="!triggerToEdit[i]" type="button" class="btn btn-xs" (click)="deleteTax(trigger);"><i
-                    class="fa fa-trash" aria-hidden="true" tooltip="Delete"></i></button>
-                <button *ngIf="triggerToEdit[i]" type="button" class="btn btn-xs"
-                  (click)="updateTrigger(i); triggerToEdit[i] = false"><i class="fa fa-check" aria-hidden="true"
-                    tooltip="Save"></i></button>
-                <button *ngIf="triggerToEdit[i]" type="button" class="btn btn-xs" (click)="triggerToEdit[i] = false"><i
-                    class="fa fa-times" aria-hidden="true" tooltip="Reset"></i></button>
-              </td>
-            </tr>
-          </tbody>
-          <tbody *ngIf="!availableTriggers.length" class="onMobileView noRecords">
-            <tr>
-              <td colspan="11" class="text-center empty_table">
-                <h1>No Record Found !! {{availableTriggers}}</h1>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4 col-xs-12">
+                    <label>Filter</label><br>
+                    <sh-select [forceClearReactive]="forceClearFilterList$ | async" [options]="filterList" [isFilterEnabled]="true" name="filter" [(ngModel)]="newTriggerObj.filter" [placeholder]="'Select Filter'" [ItemHeight]="33">
+                    </sh-select>
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                    <label>Scope</label><br>
+                    <sh-select [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" placeholder="Select Scope" name="scope" [(ngModel)]="newTriggerObj.scope" [options]="scopeList" (selected)="onSelectScope($event)">
+                        <option>selected</option>
+                    </sh-select>
+                </div>
+                <!-- <div class="form-group col-sm-3 col-xs-12">
+                    <label>Action</label><br>
+                    <sh-select [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" placeholder="Select Action" name="action" [(ngModel)]="newTriggerObj.action" [options]="actionList"></sh-select>
+                </div> -->
+                <!-- <div class="form-group col-sm-3 col-xs-12">
+                    <label>Value</label><br>
+                    <input type="number" [(ngModel)]="newTriggerObj.value" name="value" placeholder="Value" class="form-control" />
+                </div> -->
+                <div class="form-group col-sm-4 col-xs-12">
+                    <label>URL</label><br>
+                    <input type="text" [(ngModel)]="newTriggerObj.url" name="url" placeholder="URL" class="form-control" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4 col-xs-12">
+                    <label>Description</label><br>
+                    <textarea class="form-control" [(ngModel)]="newTriggerObj.description" name="description"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class=col-xs-12>
+                    <button type="submit" class="btn btn-success">Add</button>
+                    <button type="button" (click)="onCancel()" class="btn btn-cancel">Cancel</button>
+                </div>
+            </div>
+        </form>
     </div>
-  </div>
+    <div class="col-xs-12 pdT2">
+        <div class="row">
+            <h1 class="section_head pdT1">Added Triggers</h1>
+            <div class="table-responsive">
+                <table class="table table-bordered basic mrB onMobileView">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Entity type</th>
+                            <th>Entity</th>
+                            <th>Scope</th>
+                            <th>Filter</th>
+                            <th>Action</th>
+                            <!-- value option is hide now bcz there is only single "Entity Type" called "Closing Balance"  -->
+                            <!-- <th>Value</th> -->
+                            <th>URL</th>
+                            <th>Description</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="availableTriggers.length">
+                        <tr *ngFor="let trigger of availableTriggers; let i = index">
+                            <td data-title="#">{{i+1}}</td>
+                            <td data-title="Name">
+                                <span *ngIf="!triggerToEdit[i]">{{trigger.name}}</span>
+                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.name">
+                            </td>
+                            <td data-title="Entity Type">
+                                <span *ngIf="!triggerToEdit[i]">{{trigger.entity}}</span>
+                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.entity">
+                            </td>
+                            <td data-title="Entity">
+                                <span *ngIf="!triggerToEdit[i]">{{trigger.entityUniqueName}}</span>
+                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.entityUniqueName">
+                            </td>
+                            <td data-title="Scope">
+                                <span *ngIf="!triggerToEdit[i]">{{trigger.scope}}</span>
+                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.scope">
+                            </td>
+                            <td data-title="Filter">
+                                <span *ngIf="!triggerToEdit[i]">{{trigger.filter}}</span>
+                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.filter">
+                            </td>
+                            <td data-title="Action">
+                                <span *ngIf="!triggerToEdit[i]">{{trigger.action}}</span>
+                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.action">
+                            </td>
+                            <!-- <td data-title="Value">
+                                <span *ngIf="!triggerToEdit[i]">{{trigger.value}}</span>
+                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
+                                    [(ngModel)]="trigger.value">
+                            </td> -->
+                            <td data-title="URL">
+                                <span *ngIf="!triggerToEdit[i]">{{trigger.url}}</span>
+                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.url">
+                            </td>
+                            <td data-title="Description">
+                                <span *ngIf="!triggerToEdit[i]">{{trigger.description}}</span>
+                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.description">
+                            </td>
+
+                            <td class="text-center ico-btn" data-title="Action">
+                                <button *ngIf="!triggerToEdit[i]" type="button" class="btn btn-xs" (click)="triggerToEdit = [];triggerToEdit[i] = true"><i class="fa fa-pencil"
+                                        aria-hidden="true" tooltip="Edit"></i></button>
+                                <button *ngIf="!triggerToEdit[i]" type="button" class="btn btn-xs" (click)="deleteTax(trigger);"><i class="fa fa-trash" aria-hidden="true"
+                                        tooltip="Delete"></i></button>
+                                <button *ngIf="triggerToEdit[i]" type="button" class="btn btn-xs" (click)="updateTrigger(i); triggerToEdit[i] = false"><i class="fa fa-check"
+                                        aria-hidden="true" tooltip="Save"></i></button>
+                                <button *ngIf="triggerToEdit[i]" type="button" class="btn btn-xs" (click)="triggerToEdit[i] = false"><i class="fa fa-times" aria-hidden="true"
+                                        tooltip="Reset"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="!availableTriggers.length" class="onMobileView noRecords">
+                        <tr>
+                            <td colspan="11" class="text-center empty_table">
+                                <h1>No Record Found !! {{availableTriggers}}</h1>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
 </div>
 <!-- Trigger Confirmation Model model -->
 <div bsModal #triggerConfirmationModel="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-md">
-    <!-- modal-liq90 class is removed for now-->
-    <div class="modal-content">
-      <delete-tax-confirmation-model [message]="confirmationMessage" (userConfirmationEvent)="userConfirmation($event)">
-      </delete-tax-confirmation-model>
+    <div class="modal-dialog modal-md">
+        <!-- modal-liq90 class is removed for now-->
+        <div class="modal-content">
+            <delete-tax-confirmation-model [message]="confirmationMessage" (userConfirmationEvent)="userConfirmation($event)">
+            </delete-tax-confirmation-model>
+        </div>
     </div>
-  </div>
 </div>

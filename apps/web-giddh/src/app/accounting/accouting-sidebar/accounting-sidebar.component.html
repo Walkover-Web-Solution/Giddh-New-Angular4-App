@@ -1,56 +1,57 @@
 <ul class="menu_list">
-  <li><a class="cp" (click)="setSelectedPage('Contra', 'voucher', 'purchases')"
-         [ngClass]="{ activeparent: selectedVoucher === 'Contra'}">F4: Contra</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Contra', 'voucher', 'purchases')"
+            [ngClass]="{ activeparent: selectedVoucher === 'Contra'}">F4: Contra</a></li>
 
-  <li><a class="cp" (click)="setSelectedPage('Payment', 'voucher', 'purchases')"
-         [ngClass]="{ activeparent: selectedVoucher === 'Payment'}">F5: Payment</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Payment', 'voucher', 'purchases')"
+            [ngClass]="{ activeparent: selectedVoucher === 'Payment'}">F5: Payment</a></li>
 
-  <li><a class="cp" (click)="setSelectedPage('Receipt', 'voucher', 'purchases')"
-         [ngClass]="{ activeparent: selectedVoucher === 'Receipt'}">F6: Receipt</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Receipt', 'voucher', 'purchases')"
+            [ngClass]="{ activeparent: selectedVoucher === 'Receipt'}">F6: Receipt</a></li>
 
-  <!-- "isHidden" class  if user is not able to access the module-->
-  <li><a class="cp" (click)="setSelectedPage('Journal', 'voucher', null)"
-         [ngClass]="{ activeparent: selectedVoucher === 'Journal'}">F7: Journal</a></li>
+    <!-- "isHidden" class  if user is not able to access the module-->
+    <li><a class="cp" (click)="setSelectedPage('Journal', 'voucher', null)"
+            [ngClass]="{ activeparent: selectedVoucher === 'Journal'}">F7: Journal</a></li>
 
-  <li><a class="cp" (click)="setSelectedPage('Sales', 'voucher', 'sales')"
-         [ngClass]="{ activeparent: selectedVoucher === 'Sales'}">F8: Sales</a></li>
-  <li><a class="cp" (click)="setSelectedPage('Sales', 'voucher', 'sales')"
-         [ngClass]="{ activechild: selectedVoucher === 'Sales'}" [hidden]="selectedVoucher !== 'Sales'"><span
-    class="dblUnderlined">V:</span> As Voucher</a></li>
-  <li><a class="cp" (click)="setSelectedPage('Sales', 'invoice', 'sales')"
-         [ngClass]="{ activechild: selectedVoucher === 'Sales'}" [hidden]="selectedVoucher !== 'Sales'"><span
-    class="dblUnderlined">I:</span> As Invoice</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Sales', 'voucher', 'sales')"
+            [ngClass]="{ activeparent: selectedVoucher === 'Sales'}">F8: Sales</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Sales', 'voucher', 'sales')"
+            [ngClass]="{ activechild: selectedVoucher === 'Sales'}" [hidden]="selectedVoucher !== 'Sales'"><span
+                class="dblUnderlined">V:</span> As Voucher</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Sales', 'invoice', 'sales')"
+            [ngClass]="{ activechild: selectedVoucher === 'Sales'}" [hidden]="selectedVoucher !== 'Sales'"><span
+                class="dblUnderlined">I:</span> As Invoice</a></li>
 
-  <li><a class="cp" (click)="setSelectedPage('Credit note', 'voucher', 'purchases')"
-         [ngClass]="{ activeparent: selectedVoucher === 'Credit note'}"><span class="dblUnderlined">F8:</span> Credit
-    Note</a></li>
-  <li><a class="cp" (click)="setSelectedPage('Credit note', 'voucher', 'sales')"
-         [ngClass]="{ activechild: selectedVoucher === 'Credit note'}"
-         [hidden]="selectedVoucher !== 'Credit note'"><span class="dblUnderlined">V:</span> As Voucher</a></li>
-  <li><a class="cp" (click)="setSelectedPage('Credit note', 'invoice', 'sales')"
-         [ngClass]="{ activechild: selectedVoucher === 'Credit note'}"
-         [hidden]="selectedVoucher !== 'Credit note'"><span class="dblUnderlined">I:</span> As Invoice</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Credit note', 'voucher', 'purchases')"
+            [ngClass]="{ activeparent: selectedVoucher === 'Credit note'}"><span class="dblUnderlined">F8:</span> Credit
+            Note</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Credit note', 'voucher', 'sales')"
+            [ngClass]="{ activechild: selectedVoucher === 'Credit note'}"
+            [hidden]="selectedVoucher !== 'Credit note'"><span class="dblUnderlined">V:</span> As Voucher</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Credit note', 'invoice', 'sales')"
+            [ngClass]="{ activechild: selectedVoucher === 'Credit note'}"
+            [hidden]="selectedVoucher !== 'Credit note'"><span class="dblUnderlined">I:</span> As Invoice</a></li>
 
 
-  <li><a class="cp" (click)="setSelectedPage('Purchase', 'voucher', 'purchases')"
-         [ngClass]="{ activeparent: selectedVoucher === 'Purchase'}">F9: Purchase</a></li>
-  <li><a class="cp" (click)="setSelectedPage('Purchase', 'voucher', 'purchases')"
-         [ngClass]="{ activechild: selectedVoucher === 'Purchase'}" [hidden]="selectedVoucher !== 'Purchase'"><span
-    class="dblUnderlined">V:</span> As Voucher</a></li>
-  <li><a class="cp" (click)="setSelectedPage('Purchase', 'invoice', 'purchases')"
-         [ngClass]="{ activechild: selectedVoucher === 'Purchase'}" [hidden]="selectedVoucher !== 'Purchase'"><span
-    class="dblUnderlined">I:</span> As Invoice</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Purchase', 'voucher', 'purchases')"
+            [ngClass]="{ activeparent: selectedVoucher === 'Purchase'}">F9: Purchase</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Purchase', 'voucher', 'purchases')"
+            [ngClass]="{ activechild: selectedVoucher === 'Purchase'}" [hidden]="selectedVoucher !== 'Purchase'"><span
+                class="dblUnderlined">V:</span> As Voucher</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Purchase', 'invoice', 'purchases')"
+            [ngClass]="{ activechild: selectedVoucher === 'Purchase'}" [hidden]="selectedVoucher !== 'Purchase'"><span
+                class="dblUnderlined">I:</span> As Invoice</a></li>
 
-  <li>
-    <a class="cp" (click)="setSelectedPage('Debit note', 'voucher', 'purchases')"
-       [ngClass]="{ activeparent: selectedVoucher === 'Debit note'}"> <span class="dblUnderlined">F9:</span> Debit Note</a>
-  </li>
-  <li><a class="cp" (click)="setSelectedPage('Debit note', 'voucher', 'sales')"
-         [ngClass]="{ activechild: selectedVoucher === 'Debit note'}" [hidden]="selectedVoucher !== 'Debit note'"><span
-    class="dblUnderlined">V:</span>As Voucher</a></li>
-  <li><a class="cp" (click)="setSelectedPage('Debit note', 'invoice', 'sales')"
-         [ngClass]="{ activechild: selectedVoucher === 'Debit note'}" [hidden]="selectedVoucher !== 'Debit note'"><span
-    class="dblUnderlined">I:</span>As Invoice</a></li>
+    <li>
+        <a class="cp" (click)="setSelectedPage('Debit note', 'voucher', 'purchases')"
+            [ngClass]="{ activeparent: selectedVoucher === 'Debit note'}"> <span class="dblUnderlined">F9:</span> Debit
+            Note</a>
+    </li>
+    <li><a class="cp" (click)="setSelectedPage('Debit note', 'voucher', 'sales')"
+            [ngClass]="{ activechild: selectedVoucher === 'Debit note'}"
+            [hidden]="selectedVoucher !== 'Debit note'"><span class="dblUnderlined">V:</span>As Voucher</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Debit note', 'invoice', 'sales')"
+            [ngClass]="{ activechild: selectedVoucher === 'Debit note'}"
+            [hidden]="selectedVoucher !== 'Debit note'"><span class="dblUnderlined">I:</span>As Invoice</a></li>
 
 
 </ul>

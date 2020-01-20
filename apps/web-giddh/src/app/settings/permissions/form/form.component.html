@@ -1,135 +1,144 @@
 <form name="permissionForm" [formGroup]="permissionForm" [ngClass]="{'permissionForm': isHorizntl}"
-      (ngSubmit)="submitPermissionForm()">
+    (ngSubmit)="submitPermissionForm()">
 
-  <div class="form-group" style="margin-left:0;">
-    <label *ngIf="isLblShow">Unique Name/Email ID</label>
-    <input type="text" name="emailId" formControlName="emailId" placeholder="Unique Name/Email ID"
-           class="form-control "/>
-  </div>
+    <div class="form-group" style="margin-left:0;">
+        <label *ngIf="isLblShow">Unique Name/Email ID</label>
+        <input type="text" name="emailId" formControlName="emailId" placeholder="Unique Name/Email ID"
+            class="form-control " />
+    </div>
 
-  <div class="form-group">
-    <label *ngIf="isLblShow">Role Name</label>
-    <!-- <select name="roleUniqueName" formControlName="roleUniqueName" class="form-control ">
+    <div class="form-group">
+        <label *ngIf="isLblShow">Role Name</label>
+        <!-- <select name="roleUniqueName" formControlName="roleUniqueName" class="form-control ">
         <option [value]="role.uniqueName" *ngFor="let role of allRoles">{{role.name}}</option>
     </select> -->
-    <sh-select placeholder="Select role" formControlName="roleUniqueName" [options]="allRoles"></sh-select>
-  </div>
+        <sh-select placeholder="Select role" formControlName="roleUniqueName" [options]="allRoles"></sh-select>
+    </div>
 
-  <!-- time span -->
-  <div class="form-group" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('timeSpanSection')">
-    <label *ngIf="isLblShow">Time Span</label>
-    <div class="btn-group" [ngClass]="{'open': showTimeSpan, 'btn-group-liq': !isHorizntl}">
-      <button (click)="showTimeSpan = !showTimeSpan" type="button" class="form-control text-left ">
-        {{selectedTimeSpan}}
-        <span class="pull-right"><span class="fa fa-caret-down"></span></span>
-      </button>
-      <section class="dropdown-menu custom_dropdown mrB1" [ngClass]="{'open': showTimeSpan}">
+    <!-- time span -->
+    <div class="form-group" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('timeSpanSection')">
+        <label *ngIf="isLblShow">Time Span</label>
+        <div class="btn-group" [ngClass]="{'open': showTimeSpan, 'btn-group-liq': !isHorizntl}">
+            <button (click)="showTimeSpan = !showTimeSpan" type="button" class="form-control text-left ">
+                {{selectedTimeSpan}}
+                <span class="pull-right"><span class="fa fa-caret-down"></span></span>
+            </button>
+            <section class="dropdown-menu custom_dropdown mrB1" [ngClass]="{'open': showTimeSpan}">
 
-        <div class="clearfix pd1 option_box">
-          <label class="radio-inline pd0">
-            <input type="radio" name="periodOptions" formControlName="periodOptions" value="daterange"
-                   class="radio_theme"> Date Range
-          </label>
-          <label class="radio-inline pd0">
-            <input type="radio" name="periodOptions" formControlName="periodOptions" value="pastperiod"
-                   class="radio_theme"> Past Period
-          </label>
-        </div>
+                <div class="clearfix pd1 option_box">
+                    <label class="radio-inline pd0">
+                        <input type="radio" name="periodOptions" formControlName="periodOptions" value="daterange"
+                            class="radio_theme"> Date Range
+                    </label>
+                    <label class="radio-inline pd0">
+                        <input type="radio" name="periodOptions" formControlName="periodOptions" value="pastperiod"
+                            class="radio_theme"> Past Period
+                    </label>
+                </div>
 
-        <section class="periods container-fluid mrB1" *ngIf="permissionForm.get('periodOptions').value === 'daterange'">
-          <div class="row">
-            <div class="col-xs-12">
-              <label>From - To</label>
-              <input name="DateRangePicker" [bsValue]="dateRangePickerValue" (bsValueChange)="onSelectDateRange($event)"
-                     placeholder="Date range picker" type="text" class="form-control" bsDaterangepicker>
+                <section class="periods container-fluid mrB1"
+                    *ngIf="permissionForm.get('periodOptions').value === 'daterange'">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label>From - To</label>
+                            <input name="DateRangePicker" [bsValue]="dateRangePickerValue"
+                                (bsValueChange)="onSelectDateRange($event)" placeholder="Date range picker" type="text"
+                                class="form-control" bsDaterangepicker>
 
-              <!-- <input class="form-control " name="from" formControlName="from" type="text" placeholder="DD-MM-YYYY" /> -->
-            </div>
-            <!-- <div class="col-xs-6">
+                            <!-- <input class="form-control " name="from" formControlName="from" type="text" placeholder="DD-MM-YYYY" /> -->
+                        </div>
+                        <!-- <div class="col-xs-6">
                 <label>To</label>
                 <input class="form-control " name="to" formControlName="to" type="text" placeholder="DD-MM-YYYY" />
             </div> -->
-          </div>
-        </section>
+                    </div>
+                </section>
 
-        <section class="periods container-fluid mrB1"
-                 *ngIf="permissionForm.get('periodOptions').value === 'pastperiod'">
-          <label>Select Past Period</label>
-          <div class="row">
-            <div class="col-xs-6">
-              <input class="form-control " name="duration" digitsOnlyDirective formControlName="duration" type="number"
-                     placeholder="Number"/>
-            </div>
-            <div class="col-xs-6 pdL0 lh34">
-              Days
-            </div>
-          </div>
-        </section>
+                <section class="periods container-fluid mrB1"
+                    *ngIf="permissionForm.get('periodOptions').value === 'pastperiod'">
+                    <label>Select Past Period</label>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <input class="form-control " name="duration" digitsOnlyDirective formControlName="duration"
+                                type="number" placeholder="Number" />
+                        </div>
+                        <div class="col-xs-6 pdL0 lh34">
+                            Days
+                        </div>
+                    </div>
+                </section>
 
-      </section>
-    </div>
-  </div>
-  <!-- time span end -->
-
-  <div class="form-group" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('rangeSpanSection')">
-    <label *ngIf="isLblShow">IP Addresses</label>
-    <div class="btn-group " [ngClass]="{'open': showIPWrap, 'btn-group-liq': !isHorizntl}">
-      <button (click)="showIPWrap = !showIPWrap" type="button" class="form-control text-left ">
-        {{selectedIPRange}}
-        <span class="pull-right"><span class="fa fa-caret-down"></span></span>
-      </button>
-      <section class="dropdown-menu custom_dropdown" role="menu" [ngClass]="{'open': showIPWrap}">
-        <div class="clearfix option_box pd1">
-          <label class="radio-inline pd0">
-            <input type="radio" class="radio_theme" name="ipOptions" formControlName="ipOptions" value="cidr_range">
-            CIDR Range
-          </label>
-          <label class="radio-inline pd0">
-            <input type="radio" class="radio_theme" name="ipOptions" formControlName="ipOptions" value="ip_address"> IP
-            Address
-          </label>
+            </section>
         </div>
-
-        <section formArrayName="allowedCidrs" class="iprange container-fluid"
-                 *ngIf="permissionForm.get('ipOptions').value === 'cidr_range'">
-          <div class="row mrB1"
-               *ngFor="let item of permissionForm.get('allowedCidrs')['controls']; let i = index; let l = last"
-               [formGroupName]="i">
-            <div class="col-xs-11">
-              <input class="form-control " name="item_{{i}}" formControlName="range" type="text"
-                     placeholder="192.168.1.0/24"/>
-            </div>
-            <div class="pull-left lh34">
-              <i *ngIf="!l" (click)="delRow('allowedCidrs', i, $event)" class="fa fa-trash-o cursor-pointer"></i>
-              <i *ngIf="l" (click)="addNewRow('allowedCidrs', item, $event)" class="fa fa-plus cursor-pointer"></i>
-            </div>
-          </div>
-        </section>
-
-        <section formArrayName="allowedIps" class="iprange container-fluid"
-                 *ngIf="permissionForm.get('ipOptions').value === 'ip_address'">
-          <div class="row mrB1"
-               *ngFor="let item of permissionForm.get('allowedIps')['controls']; let i = index; let l = last"
-               [formGroupName]="i">
-            <div class="col-xs-11">
-              <input class="form-control " decimalDigitsDirective name="item_{{i}}" formControlName="range" type="text"
-                     placeholder="192.168.1.0"/>
-            </div>
-            <div class="pull-left lh34">
-              <i *ngIf="!l" (click)="delRow('allowedIps', i, $event)" class="fa fa-trash-o cursor-pointer"></i>
-              <i *ngIf="l" (click)="addNewRow('allowedIps', item, $event)" class="fa fa-plus cursor-pointer"></i>
-            </div>
-          </div>
-        </section>
-
-      </section>
     </div>
-  </div>
+    <!-- time span end -->
 
-  <div class="form-group">
-    <button [ladda]="createPermissionInProcess$ | async" [disabled]="permissionForm.invalid" class="btn btn-success">
-      <span *ngIf="!isUpdtCase">Add</span>
-      <span *ngIf="isUpdtCase">Update</span>
-    </button>
-  </div>
+    <div class="form-group" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('rangeSpanSection')">
+        <label *ngIf="isLblShow">IP Addresses</label>
+        <div class="btn-group " [ngClass]="{'open': showIPWrap, 'btn-group-liq': !isHorizntl}">
+            <button (click)="showIPWrap = !showIPWrap" type="button" class="form-control text-left ">
+                {{selectedIPRange}}
+                <span class="pull-right"><span class="fa fa-caret-down"></span></span>
+            </button>
+            <section class="dropdown-menu custom_dropdown" role="menu" [ngClass]="{'open': showIPWrap}">
+                <div class="clearfix option_box pd1">
+                    <label class="radio-inline pd0">
+                        <input type="radio" class="radio_theme" name="ipOptions" formControlName="ipOptions"
+                            value="cidr_range">
+                        CIDR Range
+                    </label>
+                    <label class="radio-inline pd0">
+                        <input type="radio" class="radio_theme" name="ipOptions" formControlName="ipOptions"
+                            value="ip_address"> IP
+                        Address
+                    </label>
+                </div>
+
+                <section formArrayName="allowedCidrs" class="iprange container-fluid"
+                    *ngIf="permissionForm.get('ipOptions').value === 'cidr_range'">
+                    <div class="row mrB1"
+                        *ngFor="let item of permissionForm.get('allowedCidrs')['controls']; let i = index; let l = last"
+                        [formGroupName]="i">
+                        <div class="col-xs-11">
+                            <input class="form-control " name="item_{{i}}" formControlName="range" type="text"
+                                placeholder="192.168.1.0/24" />
+                        </div>
+                        <div class="pull-left lh34">
+                            <i *ngIf="!l" (click)="delRow('allowedCidrs', i, $event)"
+                                class="fa fa-trash-o cursor-pointer"></i>
+                            <i *ngIf="l" (click)="addNewRow('allowedCidrs', item, $event)"
+                                class="fa fa-plus cursor-pointer"></i>
+                        </div>
+                    </div>
+                </section>
+
+                <section formArrayName="allowedIps" class="iprange container-fluid"
+                    *ngIf="permissionForm.get('ipOptions').value === 'ip_address'">
+                    <div class="row mrB1"
+                        *ngFor="let item of permissionForm.get('allowedIps')['controls']; let i = index; let l = last"
+                        [formGroupName]="i">
+                        <div class="col-xs-11">
+                            <input class="form-control " decimalDigitsDirective name="item_{{i}}"
+                                formControlName="range" type="text" placeholder="192.168.1.0" />
+                        </div>
+                        <div class="pull-left lh34">
+                            <i *ngIf="!l" (click)="delRow('allowedIps', i, $event)"
+                                class="fa fa-trash-o cursor-pointer"></i>
+                            <i *ngIf="l" (click)="addNewRow('allowedIps', item, $event)"
+                                class="fa fa-plus cursor-pointer"></i>
+                        </div>
+                    </div>
+                </section>
+
+            </section>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <button [ladda]="createPermissionInProcess$ | async" [disabled]="permissionForm.invalid"
+            class="btn btn-success">
+            <span *ngIf="!isUpdtCase">Add</span>
+            <span *ngIf="isUpdtCase">Update</span>
+        </button>
+    </div>
 </form>

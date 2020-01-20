@@ -22,6 +22,11 @@ export class SocketNewCompanyRequest {
     public LoggedInEmailID: string;
     public Timestamp: number;
     public Name: string;
+    public utm_source: string;
+    public utm_medium: string;
+    public utm_campaign: string;
+    public utm_term: string;
+    public utm_content: string;
 }
 
 export class StateDetailsRequest {

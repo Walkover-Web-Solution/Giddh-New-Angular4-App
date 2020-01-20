@@ -1,25 +1,25 @@
 <div class="form-header">
-  <h2 class="">Create Account</h2>
+    <h2 class="">Create Account</h2>
 </div>
 <div class="form_body witBg clearfix mrBChldLbl">
-  <div class="form_bg clearfix">
-    <form [formGroup]="form" autocomplete="off" class="form-group">
-      <div class="row">
-        <div class="col-xs-6">
-          <label>Name</label>
-          <input type="text" formControlName="name" class="form-control"/>
-        </div>
+    <div class="form_bg clearfix">
+        <form [formGroup]="form" autocomplete="off" class="form-group">
+            <div class="row">
+                <div class="col-xs-6">
+                    <label>Name</label>
+                    <input type="text" formControlName="name" class="form-control" />
+                </div>
 
-      </div>
+            </div>
 
-      <div class="row">
-        <div class="col-xs-12 text-left mrT1">
-          <button class="btn btn-default" (click)="onCancel.emit($event)">Cancel</button>
-          <button class="btn btn-success" [ladda]="isLoading" (click)="save()">Save</button>
-        </div>
-      </div>
+            <div class="row">
+                <div class="col-xs-12 text-left mrT1">
+                    <button class="btn btn-default" (click)="onCancel.emit($event)">Cancel</button>
+                    <button class="btn btn-success" [ladda]="isLoading" (click)="save()">Save</button>
+                </div>
+            </div>
 
-      <!-- <div class="row">
+            <!-- <div class="row">
   <div class="col-lg-3 form-group mrR1">
     <label class="d-block">&nbsp;</label>
     <button class="btn btn-sm" (click)="onCancel.emit($event)">Cancel</button>
@@ -30,6 +30,6 @@
     <button class="btn btn-success btn-sm" [ladda]="isLoading" (click)="save()">Save</button>
   </div>
 </div> -->
-    </form>
-  </div>
+        </form>
+    </div>
 </div>

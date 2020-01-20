@@ -1,60 +1,59 @@
 <div class="inner-tabs">
-  <div class="gst-error">
+    <div class="gst-error">
 
-    <div class="table-responsive table-sgt">
+        <div class="table-responsive table-sgt">
 
-      <table class="table basic table-bordered custom-table">
+            <table class="table basic table-bordered custom-table">
 
-        <thead>
-        <tr>
-          <th>#</th>
-          <th>Invoice / Voucher Number
-            <span class="sortTable">
-             <a href="javascript:void(0)" class="top-sort" (click)="sortBy('number', 'asc')"></a>
-             <a href="javascript:void(0)" class="bottom-sort" (click)="sortBy('number', 'desc')"></a>
-           </span>
-          </th>
-          <th>Type
-            <span class="sortTable">
-             <a href="javascript:void(0)" class="top-sort" (click)="sortBy('type', 'asc')"></a>
-             <a href="javascript:void(0)" class="bottom-sort" (click)="sortBy('type', 'desc')"></a>
-           </span>
-          </th>
-          <th>Messages
-            <span class="sortTable">
-             <a href="javascript:void(0)" class="top-sort" (click)="sortBy('messages', 'asc')"></a>
-             <a href="javascript:void(0)" class="bottom-sort" (click)="sortBy('messages', 'desc')"></a>
-           </span>
-          </th>
-        </tr>
-        </thead>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Invoice / Voucher Number
+                            <span class="sortTable">
+                                <a href="javascript:void(0)" class="top-sort" (click)="sortBy('number', 'asc')"></a>
+                                <a href="javascript:void(0)" class="bottom-sort" (click)="sortBy('number', 'desc')"></a>
+                            </span>
+                        </th>
+                        <th>Type
+                            <span class="sortTable">
+                                <a href="javascript:void(0)" class="top-sort" (click)="sortBy('type', 'asc')"></a>
+                                <a href="javascript:void(0)" class="bottom-sort" (click)="sortBy('type', 'desc')"></a>
+                            </span>
+                        </th>
+                        <th>Messages
+                            <span class="sortTable">
+                                <a href="javascript:void(0)" class="top-sort" (click)="sortBy('messages', 'asc')"></a>
+                                <a href="javascript:void(0)" class="bottom-sort"
+                                    (click)="sortBy('messages', 'desc')"></a>
+                            </span>
+                        </th>
+                    </tr>
+                </thead>
 
 
-        <tbody>
-        <tr *ngFor="let item of filteredTransactions; let i = index">
-          <td>{{i + 1}}</td>
-          <td class="nowrap">{{item.number}}</td>
-          <td class="nowrap">{{item.type}}</td>
-          <td>{{item.messages}}</td>
-        </tr>
-        </tbody>
+                <tbody>
+                    <tr *ngFor="let item of filteredTransactions; let i = index">
+                        <td>{{i + 1}}</td>
+                        <td class="nowrap">{{item.number}}</td>
+                        <td class="nowrap">{{item.type}}</td>
+                        <td>{{item.messages}}</td>
+                    </tr>
+                </tbody>
 
-      </table>
+            </table>
+        </div>
+
+        <div class="text-center mb-4" [hidden]="!failedTransactions.length">
+            <pagination [totalItems]="failedTransactions.length" [itemsPerPage]="itemsPerPage"
+                (pageChanged)="pageChanged($event)"></pagination>
+        </div>
+
+        <div class="" *ngIf="!failedTransactions.length">
+            <div class="filings-empty-state">
+                <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
+                <div class="empty-msg"><span> No result found. </span></div>
+            </div>
+        </div>
+
     </div>
-
-    <div class="text-center mb-4" [hidden]="!failedTransactions.length">
-      <pagination [totalItems]="failedTransactions.length"
-                  [itemsPerPage]="itemsPerPage"
-                  (pageChanged)="pageChanged($event)"
-      ></pagination>
-    </div>
-
-    <div class="" *ngIf="!failedTransactions.length">
-      <div class="filings-empty-state">
-        <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110"/>
-        <div class="empty-msg"><span>  No result found.  </span></div>
-      </div>
-    </div>
-
-  </div>
 </div>

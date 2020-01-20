@@ -8,9 +8,9 @@ import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions
 import { take } from 'rxjs/operators';
 
 @Component({
-  selector: '[tb-pl-bs-grid-row]',  // <home></home>
-  styleUrls: ['./tb-pl-bs-grid-row.component.scss'],
-  template: `
+    selector: '[tb-pl-bs-grid-row]',  // <home></home>
+    styleUrls: ['./tb-pl-bs-grid-row.component.scss'],
+    template: `
     <div class="row row-2 tb-pl-bs-grid-row" style="overflow: visible;" [trial-accordion]="groupDetail" [hidden]="!groupDetail.isVisible" *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)">
       <div class="col-xs-4 group" [ngStyle]="{'padding-left': padding+'px'}" [innerHTML]="groupDetail.groupName | uppercase | highlight:search"></div>
       <div class="col-xs-2 group text-right">{{ groupDetail.forwardedBalance?.amount | giddhCurrency }} {{groupDetail.forwardedBalance | recType }}
@@ -52,31 +52,31 @@ import { take } from 'rxjs/operators';
   `
 })
 export class TlPlGridRowComponent implements OnInit, OnChanges {
-  @Input() public groupDetail: ChildGroup;
-  @Input() public search: string;
-  @Input() public from: string;
-  @Input() public to: string;
-  @Input() public padding: string;
-  public ModalUniqueName: string = null;
-  public accountDetails: IFlattenAccountsResultItem;
-  public flattenAccounts$: Observable<IFlattenAccountsResultItem[]>;
+    @Input() public groupDetail: ChildGroup;
+    @Input() public search: string;
+    @Input() public from: string;
+    @Input() public to: string;
+    @Input() public padding: string;
+    public ModalUniqueName: string = null;
+    public accountDetails: IFlattenAccountsResultItem;
+    public flattenAccounts$: Observable<IFlattenAccountsResultItem[]>;
 
-  constructor(private cd: ChangeDetectorRef, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
-    this.flattenAccounts$ = this.store.pipe(select(s => s.general.flattenAccounts));
-  }
-
-  public ngOnChanges(changes: SimpleChanges) {
-    if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
-      this.cd.detectChanges();
+    constructor(private cd: ChangeDetectorRef, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
+        this.flattenAccounts$ = this.store.pipe(select(s => s.general.flattenAccounts));
     }
-    if (changes.search && !changes.search.firstChange && changes.search.currentValue !== changes.search.previousValue) {
-      this.cd.detectChanges();
-    }
-  }
 
-  public ngOnInit() {
-    //  this.accountDetails.map(f=> f.parentGroups.find(e=> e.name === this.groupDetail.groupName));
-  }
+    public ngOnChanges(changes: SimpleChanges) {
+        if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
+            this.cd.detectChanges();
+        }
+        if (changes.search && !changes.search.firstChange && changes.search.currentValue !== changes.search.previousValue) {
+            this.cd.detectChanges();
+        }
+    }
+
+    public ngOnInit() {
+        //  this.accountDetails.map(f=> f.parentGroups.find(e=> e.name === this.groupDetail.groupName));
+    }
 
   public entryClicked(acc) {
     let url = location.href + '?returnUrl=ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
@@ -89,34 +89,34 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
     }
   }
 
-  public accountInfo(acc, e: Event) {
-    this.flattenAccounts$.pipe(
-      take(1),
-    ).subscribe(data => {
-      if (data && data.length) {
-        let account = data.find(f => f.uniqueName === acc.uniqueName);
-        if (account) {
-          let creditorsString = 'currentliabilities, sundrycreditors';
-          let debtorsString = 'currentassets, sundrydebtors';
-          if (account.uNameStr.indexOf(creditorsString) > -1 || account.uNameStr.indexOf(debtorsString) > -1) {
-            this.ModalUniqueName = account.uniqueName;
-          } else {
-            this.ModalUniqueName = '';
-            this.entryClicked(acc);
-          }
-        } else {
-          this.ModalUniqueName = '';
-          this.entryClicked(acc);
-        }
-      }
-    });
-  }
+    public accountInfo(acc, e: Event) {
+        this.flattenAccounts$.pipe(
+            take(1),
+        ).subscribe(data => {
+            if (data && data.length) {
+                let account = data.find(f => f.uniqueName === acc.uniqueName);
+                if (account) {
+                    let creditorsString = 'currentliabilities, sundrycreditors';
+                    let debtorsString = 'currentassets, sundrydebtors';
+                    if (account.uNameStr.indexOf(creditorsString) > -1 || account.uNameStr.indexOf(debtorsString) > -1) {
+                        this.ModalUniqueName = account.uniqueName;
+                    } else {
+                        this.ModalUniqueName = '';
+                        this.entryClicked(acc);
+                    }
+                } else {
+                    this.ModalUniqueName = '';
+                    this.entryClicked(acc);
+                }
+            }
+        });
+    }
 
-  public hideModal() {
-    this.ModalUniqueName = null;
-  }
+    public hideModal() {
+        this.ModalUniqueName = null;
+    }
 
-  public trackByFn(index, item: Account) {
-    return item;
-  }
+    public trackByFn(index, item: Account) {
+        return item;
+    }
 }

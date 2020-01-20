@@ -1,56 +1,63 @@
 <div class="box clearfix mrT1">
-  <div class="row">
-    <form (ngSubmit)="updateProfile(companyProfileObj)" class="col-lg-10 col-md-11">
-      <div class="row">
-        <div class="form-group col-lg-3 col-sm-4 col-xs-12">
-          <label>Company Name</label><br>
-          <input type="text" placeholder="Company name" class="form-control" [(ngModel)]="companyProfileObj.name"
-            name="name" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
-          <!-- (keydown)="keyDownSubject$.next($event)" -->
-        </div>
-        <div class="form-group col-lg-3 col-sm-4 col-xs-12">
-          <label>Unique Name</label><br>
-          <input type="text" placeholder="Unique Name" [disabled]="true" class="form-control"
-            [(ngModel)]="companyProfileObj.uniqueName" name="uniqueName"
-            (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
-        </div>
-        <div class="form-group col-lg-3 col-sm-4 col-xs-12">
-          <label>Email Address</label><br>
-          <input type="text" placeholder="Email Address" class="form-control" [(ngModel)]="companyProfileObj.email"
-            name="email" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-lg-3 col-sm-4 col-xs-12">
-          <label>Contact No.</label>
-          <input type="text" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.contactNo"
-            #mobileNumberField name="contactNo" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
-          <!-- commented temporary due to static countryCode  -->
-          <!-- <div class="input-group ">
+    <div class="row">
+        <form (ngSubmit)="updateProfile(companyProfileObj)" class="col-lg-10 col-md-11">
+            <div class="row">
+                <div class="form-group col-lg-3 col-sm-4 col-xs-12">
+                    <label>Company Name</label><br>
+                    <input type="text" placeholder="Company name" class="form-control"
+                        [(ngModel)]="companyProfileObj.name" name="name"
+                        (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
+                    <!-- (keydown)="keyDownSubject$.next($event)" -->
+                </div>
+                <div class="form-group col-lg-3 col-sm-4 col-xs-12">
+                    <label>Unique Name</label><br>
+                    <input type="text" placeholder="Unique Name" [disabled]="true" class="form-control"
+                        [(ngModel)]="companyProfileObj.uniqueName" name="uniqueName"
+                        (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
+                </div>
+                <div class="form-group col-lg-3 col-sm-4 col-xs-12">
+                    <label>Email Address</label><br>
+                    <input type="text" placeholder="Email Address" class="form-control"
+                        [(ngModel)]="companyProfileObj.email" name="email"
+                        (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-3 col-sm-4 col-xs-12">
+                    <label>Contact No.</label>
+                    <input type="text" placeholder="Contact Number" class="form-control"
+                        [(ngModel)]="companyProfileObj.contactNo" #mobileNumberField name="contactNo"
+                        (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
+                    <!-- commented temporary due to static countryCode  -->
+                    <!-- <div class="input-group ">
   <span class="input-group-addon">+{{countryCode}}</span>
   <input type="text" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.contactNo" #mobileNumberField
     (blur)="isValidMobileNumber(mobileNumberField)" name="contactNo" />
 </div> -->
-        </div>
-        <div class="col-lg-3 col-sm-4 col-xs-12 pd0">
-          <div class="form-group col-xs-4 pdR0">
-            <label>Currency</label><br>
-            <div class="custom-select pos-rel">
-<!--              <sh-select [options]="currencySource$ | async" placeholder="Currency" [isFilterEnabled]="true" name="baseCurrency" [(ngModel)]="companyProfileObj.baseCurrency" [defaultValue]="companyProfileObj.baseCurrency" (selected)="changeEventOfForm('baseCurrency')"></sh-select>-->
-              <input type="text" placeholder="Currency" class="form-control" disabled [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" />
-            </div>
+                </div>
+                <div class="col-lg-3 col-sm-4 col-xs-12 pd0">
+                    <div class="form-group col-xs-4 pdR0">
+                        <label>Currency</label><br>
+                        <div class="custom-select pos-rel">
+                            <!--              <sh-select [options]="currencySource$ | async" placeholder="Currency" [isFilterEnabled]="true" name="baseCurrency" [(ngModel)]="companyProfileObj.baseCurrency" [defaultValue]="companyProfileObj.baseCurrency" (selected)="changeEventOfForm('baseCurrency')"></sh-select>-->
+                            <input type="text" placeholder="Currency" class="form-control" disabled
+                                [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" />
+                        </div>
 
-          </div>
-          <div class="form-group col-xs-8">
-            <div class="checkbox pt-26 noMarg">
-              <label>
-                <input type="checkbox" [(ngModel)]="companyProfileObj.isMultipleCurrency" name="isMultiple"
-                  (change)="changeEventOfForm('isMultipleCurrency')">Multicurrency?
-              </label>
-            </div>
-          </div>
-        </div>
-        <!-- <div class="col-lg-3 col-md-4 col-xs-4">
+                    </div>
+                    <div class="form-group col-xs-8">
+                        <div class="checkbox pt-26 noMarg">
+                            <span>
+                                <input id="isMultiple" (change)="changeEventOfForm('isMultipleCurrency')"
+                                    [(ngModel)]="companyProfileObj.isMultipleCurrency" class="checkbox-custom"
+                                    name="isMultiple" type="checkbox">
+                                <label for="isMultiple" class="checkbox-custom-label">Multicurrency?</label>
+                            </span>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-lg-3 col-md-4 col-xs-4">
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="form-group">
@@ -67,52 +74,69 @@
                     </div>
                 </div>
             </div> -->
-        <div class="col-lg-3 col-sm-4 col-xs-12">
-          <div class="row">
-            <div class="col-xs-12">
-              <div class="form-group clearfix">
-                <label>Inventory Type</label>
-                <div class="mrT1">
-                  <label class="radio-inline pd0 w100">
-                    <input type="radio" class="radio_theme cp ml0"
-                      [checked]="CompanySettingsObj?.companyInventorySettings && CompanySettingsObj?.companyInventorySettings?.manageInventory"
-                      (change)="updateInventorySetting(true)" name="inventoryType" />Product
-                  </label>
-                  <label class="radio-inline pd0 mrL2">
-                    <input type="radio" class="radio_theme cp"
-                      [checked]="CompanySettingsObj?.companyInventorySettings && !CompanySettingsObj?.companyInventorySettings?.manageInventory"
-                      (change)="updateInventorySetting(false)" name="inventoryType" />Service
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-lg-3 col-sm-4 col-xs-12">
-          <label>Address</label><br>
-          <textarea rows="4" style="height: 170px;" type="text" placeholder="Address" class="form-control"
-            [(ngModel)]="companyProfileObj.address" name="address"
-            (keydown)="pushToUpdate($event);keyDownSubject$.next($event)"></textarea>
-        </div>
-        <div class="form-group col-lg-3 col-sm-4 col-xs-12">
-          <div class="clearfix">
-            <div class="form-group">
-              <label>Country</label><br>
-<!--              <sh-select placeholder="Select Country" name="country_dd" [(ngModel)]="companyProfileObj.country"-->
-<!--                [options]="countrySource$ | async" [ItemHeight]="33" (selected)="checkCountry($event)" [defaultValue]="companyProfileObj.countryV2.countryName"></sh-select>-->
-               <input type="text" placeholder="Country" disabled class="form-control" *ngIf="companyProfileObj.countryV2 !== undefined" [(ngModel)]="companyProfileObj.countryV2.countryName" name="country" />
-            </div>
+                <div class="col-lg-3 col-sm-4 col-xs-12">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group clearfix">
+                                <label>Inventory Type</label>
+                                <div class="mrT1">
 
-            <div class="form-group select2-parent">
-              <label>State</label><br>
-              <sh-select placeholder="Select state" name="state_dd" [(ngModel)]="companyProfileObj.state" [options]="statesSource$ | async" [ItemHeight]="33" (selected)="selectState($event)" [hidden]="!states" [defaultValue]="selectedState"></sh-select>
-              <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state" [hidden]="states" name="state" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
+
+                                    <span class="pd0 mrR3">
+                                        <input id="radio-1" class="radio-custom cp ml0" name="radio-group" type="radio"
+                                            [checked]="CompanySettingsObj?.companyInventorySettings && CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                                            (change)="updateInventorySetting(true)" name="inventoryType" checked>
+                                        <label for="radio-1" class="radio-custom-label">Product</label>
+
+                                    </span>
+
+
+
+
+                                    <span class="pd0 ">
+                                        <input id="radio-2" class="radio-custom cp ml0" name="radio-group" type="radio"
+                                            [checked]="CompanySettingsObj?.companyInventorySettings && !CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                                            (change)="updateInventorySetting(false)" name="inventoryType">
+                                        <label for="radio-2" class="radio-custom-label">Service</label>
+
+                                    </span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <!-- Removed city label G0-1822 -->
-          <!-- <div class="">
+            <div class="row">
+                <div class="form-group col-lg-3 col-sm-4 col-xs-12">
+                    <label>Address</label><br>
+                    <textarea rows="4" style="height: 170px;" type="text" placeholder="Address" class="form-control"
+                        [(ngModel)]="companyProfileObj.address" name="address"
+                        (keydown)="pushToUpdate($event);keyDownSubject$.next($event)"></textarea>
+                </div>
+                <div class="form-group col-lg-3 col-sm-4 col-xs-12">
+                    <div class="clearfix">
+                        <div class="form-group">
+                            <label>Country</label><br>
+                            <!--              <sh-select placeholder="Select Country" name="country_dd" [(ngModel)]="companyProfileObj.country"-->
+                            <!--                [options]="countrySource$ | async" [ItemHeight]="33" (selected)="checkCountry($event)" [defaultValue]="companyProfileObj.countryV2.countryName"></sh-select>-->
+                            <input type="text" placeholder="Country" disabled class="form-control"
+                                *ngIf="companyProfileObj.countryV2 !== undefined"
+                                [(ngModel)]="companyProfileObj.countryV2.countryName" name="country" />
+                        </div>
+
+                        <div class="form-group select2-parent">
+                            <label>State</label><br>
+                            <sh-select placeholder="Select state" name="state_dd" [(ngModel)]="companyProfileObj.state"
+                                [options]="statesSource$ | async" [ItemHeight]="33" (selected)="selectState($event)"
+                                [hidden]="!states" [defaultValue]="selectedState"></sh-select>
+                            <input type="text" placeholder="State" class="form-control"
+                                [(ngModel)]="companyProfileObj.state" [hidden]="states" name="state"
+                                (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
+                        </div>
+                    </div>
+                    <!-- Removed city label G0-1822 -->
+                    <!-- <div class="">
             <div class="row">
               <div class="col-xs-6">
                 <div class="">
@@ -124,8 +148,8 @@
                   <ng-template #rt let-r="result" let-t="term">
                     <span>{{ r }}</span>
                   </ng-template>-->
-          <!-- <input type="text" placeholder="City" class="form-control" [(ngModel)]="companyProfileObj.city" name="city" /> -->
-          <!-- </div>
+                    <!-- <input type="text" placeholder="City" class="form-control" [(ngModel)]="companyProfileObj.city" name="city" /> -->
+                    <!-- </div>
               </div>
               <div class="col-xs-6">
                 <div class="">
@@ -136,128 +160,147 @@
               </div>
             </div>
           </div> -->
-        </div>
-        <div class=" col-lg-3 col-sm-4 col-xs-12 ">
-          <div class="row ">
-            <div class="form-group col-xs-12 col-sm-6 ">
-              <label>Digits After Decimal</label><br>
-              <div class="custom-select pos-rel ">
-                <sh-select [options]="decimalDigitSource " placeholder="select type " [isFilterEnabled]="true "
-                  name="digitafterdecimal " [(ngModel)]="companyProfileObj.balanceDecimalPlaces"
-                  (selected)="checkDigitAfterDecimal($event) "></sh-select>
-              </div>
-              <!-- <input type="text " placeholder="Currency " class="form-control " [(ngModel)]="companyProfileObj.baseCurrency " name="baseCurrency " /> -->
-            </div>
-            <div class="form-group col-xs-12 col-sm-6 ">
-              <label>Number System</label><br>
-              <div class="custom-select pos-rel ">
-                <!-- <sh-select [options]="numberSystemSource " placeholder="Select type " [isFilterEnabled]="true " name="numberSystem " [(ngModel)]="companyProfileObj.balanceDisplayFormat " (selected)="checkNumberSystem($event) "></sh-select> -->
-                <sh-select #shnumberSystemSource [options]="numberSystemSource " name="numberSystem "
-                  [(ngModel)]="companyProfileObj.balanceDisplayFormat " (selected)="checkNumberSystem($event) "
-                  [placeholder]=" 'Select type'
-                                    " [ItemHeight]="41 ">
-                  <ng-template #optionTemplate let-option="option ">
-                    <ng-container>
-                      <a href="javascript:void(0) " class="list-item " style="border-bottom: 1px solid #ccc; ">
-                        <p class="numberSystem ">{{ option.label }} <span
-                            class="pull-right ">{{ option.additional.type}}</span></p>
-                      </a>
-                    </ng-container>
-                  </ng-template>
-                </sh-select>
-              </div>
-              <!-- <input type="text " placeholder="Currency " class="form-control " [(ngModel)]="companyProfileObj.baseCurrency " name="baseCurrency " /> -->
-            </div>
-          </div>
-          <div class="form-group ">
-            <div *ngIf="companyProfileObj.branchCount>0" class="form-group">
-              <label>Branch Unique Name</label><br>
-              <div class="custom-select pos-rel">
-                <input type="text" [(ngModel)]="companyProfileObj.nameAlias" placeholder="Branch unique name"
-                  name="nameAlias" class="form-control" (blur)="nameAlisPush($event)"
-                  (keydown)="pushToUpdate($event);" /> </div>
-              <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
-            </div>
-            <div *ngIf="companyProfileObj.branchCount==0" class="form-group">
-              <label>Headquarter Unique Name</label><br>
-              <div class="custom-select pos-rel">
-                <input type="text" [(ngModel)]="companyProfileObj.nameAlias" placeholder="Headquarter unique name"
-                  name="nameAlias" class="form-control" (blur)="nameAlisPush($event)"
-                  (keydown)="pushToUpdate($event);" /> </div>
-              <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
-            </div>
-          </div>
-        </div>
-
-
-      </div>
-
-      <div class="row mrB1">
-        <div class="col-xs-12" *ngIf="formFields['taxName'] !== undefined">
-          <hr>
-          <br />
-          <h3 class="mrB1"> Add <span
-              *ngIf="companyProfileObj.addresses !== undefined && companyProfileObj.addresses.length >= 1">More</span> {{formFields['taxName'].label}}
-            (Note: Check to set to default)</h3>
-          <button type="button" (click)="addGst()" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i>
-            Add
-          </button>
-          <div *ngIf="companyProfileObj.addresses !== undefined && companyProfileObj.addresses.length > 0">
-            <div *ngFor="let gst of companyProfileObj.addresses; let i = index" class="mrT1 company_gst"
-              [ngClass]="{'mrT2': i != gst.length-1, 'bdrB': i != gst.length-1}">
-              <div class="row">
-                <div class="col-lg-3 col-sm-4 col-xs-12">
-                  <div class="row">
-                    <div class="col-xs-12">
-                      <div class="form-group">
-                        <label for="" class="d-block">{{formFields['taxName'].label}}</label>
-                        <div class="input-group">
-                          <div class="input-group-addon">
-                            <input type="checkbox" (click)="setGstAsDefault(i, $event)"
-                              [(ngModel)]="gst.isDefault" name="isDefault+{{i}}" tooltip="Default {{formFields['taxName'].label}}"
-                              placement="bottom" (change)="checkGstDetails()" />
-                          </div>
-                          <input type="text" placeholder="{{formFields['taxName'].label}}" class="form-control" (keyup)="setChildState(gstNumberField, i);" #gstNumberField (blur)="setChildState(gstNumberField, i); checkGstNumValidation(gstNumberField);gstKeyDownSubject$.next($event)" [(ngModel)]="gst.taxNumber" name="newgstNumber+{{i}}" />
-                          <div class="input-group-addon">
-                            <i class="fa fa-trash-o cp" (click)="removeGstEntry(i)" aria-hidden="true"
-                              style="font-size:18px;" tooltip="Delete {{formFields['taxName'].label}}" placement="right"></i>
-                          </div>
+                </div>
+                <div class=" col-lg-3 col-sm-4 col-xs-12 ">
+                    <div class="row ">
+                        <div class="form-group col-xs-12 col-sm-6 ">
+                            <label>Digits After Decimal</label><br>
+                            <div class="custom-select pos-rel ">
+                                <sh-select [options]="decimalDigitSource " placeholder="select type "
+                                    [isFilterEnabled]="true " name="digitafterdecimal "
+                                    [(ngModel)]="companyProfileObj.balanceDecimalPlaces"
+                                    (selected)="checkDigitAfterDecimal($event) "></sh-select>
+                            </div>
+                            <!-- <input type="text " placeholder="Currency " class="form-control " [(ngModel)]="companyProfileObj.baseCurrency " name="baseCurrency " /> -->
                         </div>
-                      </div>
+                        <div class="form-group col-xs-12 col-sm-6 ">
+                            <label>Number System</label><br>
+                            <div class="custom-select pos-rel ">
+                                <!-- <sh-select [options]="numberSystemSource " placeholder="Select type " [isFilterEnabled]="true " name="numberSystem " [(ngModel)]="companyProfileObj.balanceDisplayFormat " (selected)="checkNumberSystem($event) "></sh-select> -->
+                                <sh-select #shnumberSystemSource [options]="numberSystemSource " name="numberSystem "
+                                    [(ngModel)]="companyProfileObj.balanceDisplayFormat "
+                                    (selected)="checkNumberSystem($event) " [placeholder]=" 'Select type'
+                                    " [ItemHeight]="41 ">
+                                    <ng-template #optionTemplate let-option="option ">
+                                        <ng-container>
+                                            <a href="javascript:void(0) " class="list-item "
+                                                style="border-bottom: 1px solid #ccc; ">
+                                                <p class="numberSystem ">{{ option.label }} <span
+                                                        class="pull-right ">{{ option.additional.type}}</span></p>
+                                            </a>
+                                        </ng-container>
+                                    </ng-template>
+                                </sh-select>
+                            </div>
+                            <!-- <input type="text " placeholder="Currency " class="form-control " [(ngModel)]="companyProfileObj.baseCurrency " name="baseCurrency " /> -->
+                        </div>
                     </div>
-                    <div class="col-xs-12">
-                      <div class="form-group select2-parent">
-                        <label>State</label><br>
-                        <sh-select [disabled]="gst.stateCode" (selected)="stateSelected($event, i)" placeholder="Select state" name="newstateCode+{{i}}" [options]="statesSource$ | async" [(ngModel)]="gst.stateCode"></sh-select>
-                      </div>
+                    <div class="form-group ">
+                        <div *ngIf="companyProfileObj.branchCount>0" class="form-group">
+                            <label>Branch Unique Name</label><br>
+                            <div class="custom-select pos-rel">
+                                <input type="text" [(ngModel)]="companyProfileObj.nameAlias"
+                                    placeholder="Branch unique name" name="nameAlias" class="form-control"
+                                    (blur)="nameAlisPush($event)" (keydown)="pushToUpdate($event);" /> </div>
+                            <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
+                        </div>
+                        <div *ngIf="companyProfileObj.branchCount==0" class="form-group">
+                            <label>Headquarter Unique Name</label><br>
+                            <div class="custom-select pos-rel">
+                                <input type="text" [(ngModel)]="companyProfileObj.nameAlias"
+                                    placeholder="Headquarter unique name" name="nameAlias" class="form-control"
+                                    (blur)="nameAlisPush($event)" (keydown)="pushToUpdate($event);" /> </div>
+                            <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
+                        </div>
                     </div>
-                  </div>
                 </div>
-                <div class="col-lg-3 col-sm-4 col-xs-12">
-                  <div class="form-group">
-                    <label>Address</label><br>
-                    <textarea rows="4" type="text" placeholder="Address" class="form-control"
-                      [(ngModel)]="gst.address" #gstAddressField name="newaddress+{{i}}"
-                      (keydown)="gstKeyDownSubject$.next($event)"></textarea>
-                  </div>
-                </div>
-              </div>
+
+
             </div>
-          </div>
-          <div class="col-xs-12 text-center" *ngIf="gstDetailsBackup">
-            <button type="button" class="btn btn-link" (click)="onToggleAllGSTDetails()">
-              <span *ngIf="!showAllGST">Show more</span>
-              <span *ngIf="showAllGST">Show less</span>
-            </button>
-          </div>
-        </div>
-      </div>
-      <!-- <div class="clearfix">
+
+            <div class="row mrB1">
+                <div class="col-xs-12" *ngIf="formFields['taxName'] !== undefined">
+                    <hr>
+                    <br />
+                    <h3 class="mrB1"> Add <span
+                            *ngIf="companyProfileObj.addresses !== undefined && companyProfileObj.addresses.length >= 1">More</span>
+                        {{formFields['taxName'].label}}
+                        (Note: Check to set to default)</h3>
+                    <button type="button" (click)="addGst()" class="btn btn-primary"><i class="fa fa-plus"
+                            aria-hidden="true"></i>
+                        Add
+                    </button>
+                    <div *ngIf="companyProfileObj.addresses !== undefined && companyProfileObj.addresses.length > 0">
+                        <div *ngFor="let gst of companyProfileObj.addresses; let i = index" class="mrT1 company_gst"
+                            [ngClass]="{'mrT2': i != gst.length-1, 'bdrB': i != gst.length-1}">
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-4 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="form-group">
+                                                <label for="" class="d-block">{{formFields['taxName'].label}}</label>
+                                                <div class="input-group width-100">
+                                                    <div class="input-group-addon">
+                                                        <input id="checkbox-{{i}}" class="checkbox-custom"
+                                                            (click)="setGstAsDefault(i, $event)"
+                                                            [(ngModel)]="gst.isDefault" name="isDefault+{{i}}"
+                                                            tooltip="Default {{formFields['taxName'].label}}"
+                                                            placement="bottom" (change)="checkGstDetails()"
+                                                            type="checkbox">
+                                                        <label for="checkbox-{{i}}"
+                                                            class="checkbox-custom-label"></label>
+
+                                                    </div>
+                                                    <input type="text" placeholder="{{formFields['taxName'].label}}"
+                                                        class="form-control" (keyup)="setChildState(gstNumberField, i);"
+                                                        #gstNumberField
+                                                        (blur)="setChildState(gstNumberField, i); checkGstNumValidation(gstNumberField);gstKeyDownSubject$.next($event)"
+                                                        [(ngModel)]="gst.taxNumber" name="newgstNumber+{{i}}" />
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-trash-o cp" (click)="removeGstEntry(i)"
+                                                            aria-hidden="true" style="font-size:18px;"
+                                                            tooltip="Delete {{formFields['taxName'].label}}"
+                                                            placement="right"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <div class="form-group select2-parent">
+                                                <label>State</label><br>
+                                                <sh-select [disabled]="gst.stateCode"
+                                                    (selected)="stateSelected($event, i)" placeholder="Select state"
+                                                    name="newstateCode+{{i}}" [options]="statesSource$ | async"
+                                                    [(ngModel)]="gst.stateCode"></sh-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label>Address</label><br>
+                                        <textarea rows="4" type="text" placeholder="Address" class="form-control"
+                                            [(ngModel)]="gst.address" #gstAddressField name="newaddress+{{i}}"
+                                            (keydown)="gstKeyDownSubject$.next($event)"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 text-center" *ngIf="gstDetailsBackup">
+                        <button type="button" class="btn btn-link" (click)="onToggleAllGSTDetails()">
+                            <span *ngIf="!showAllGST">Show more</span>
+                            <span *ngIf="showAllGST">Show less</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="clearfix">
             <button type="submit" class="btn btn-success" [disabled]="!isGstValid || !isPANValid || !isMobileNumberValid">
         Update
       </button>
             <button type="button" class="btn btn-primary" (click)="onReset()">Cancel</button>
         </div> -->
-    </form>
-  </div>
+        </form>
+    </div>
 </div>

@@ -509,7 +509,6 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
                 });
                 this.InventoryEntryValue.isManufactured = this.isManufactured.value;
             }
-            console.log("this.InventoryEntryValue", this.InventoryEntryValue);
             this.onSave.emit({ ...this.InventoryEntryValue });
         }
     }
@@ -533,11 +532,6 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
         });
         linkedStocks = _.cloneDeep(rawArr);
         return linkedStocks;
-    }
-
-    public redirectToReciptNote() {
-        this.invViewService.setActiveView('receipt', null);
-        this._router.navigate(['/pages/inventory/receipt-note']);
     }
 
     public openBranchTransferPopup(transferType) {

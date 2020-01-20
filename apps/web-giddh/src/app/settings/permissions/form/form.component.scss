@@ -1,91 +1,90 @@
 .btn-group.btn-group-liq {
-  width: 100%;
+    width: 100%;
 }
 
 .custom_dropdown {
-  width: 300px;
-  border-radius: 0;
-  margin: 0px 0;
-  margin-top: 0px;
-  box-shadow: none;
-  transition: all 0.7s ease;
-  background: #fff !important;
-  opacity: 1;
-  box-shadow: 0px 2px 6px #ddd;
-  padding: 0;
+    width: 300px;
+    border-radius: 0;
+    margin: 0px 0;
+    margin-top: 0px;
+    box-shadow: none;
+    transition: all 0.7s ease;
+    background: #fff !important;
+    opacity: 1;
+    box-shadow: 0px 2px 6px #ddd;
+    padding: 0;
 }
 
 .custom_dropdown.open {
-  // margin-top: 5px;
-  transform: translateY(5px);
+    // margin-top: 5px;
+    transform: translateY(5px);
 }
 
 .lh34 {
-  line-height: 34px;
+    line-height: 34px;
 }
 
 .form-group > label {
-  margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 .permissionForm {
-  .form-group {
-    width: 188px;
-    display: inline-block;
-    margin: 0 10px;
-    position: relative;
-    .btn-group {
-      width: 188px;
+    .form-group {
+        width: 188px;
+        display: inline-block;
+        margin: 0 10px;
+        position: relative;
+        .btn-group {
+            width: 188px;
+        }
     }
-  }
 }
 
 .periods {
-  label {
-    margin-bottom: 5px;
-  }
+    label {
+        margin-bottom: 5px;
+    }
 }
 
 .permissionForm .btn-group.open .dropdown-toggle {
-  box-shadow: none;
-  background: transparent;
+    box-shadow: none;
+    background: transparent;
 }
 
 .custom_dropdown > li > a {
-  padding: 6px;
+    padding: 6px;
 }
 
 .custom_dropdown > li > a:focus,
 .custom_dropdown > li > a:hover {
-  background: #d9d9d9 !important;
+    background: #d9d9d9 !important;
 }
 
 .custom_dropdown .caret {
-  transform: rotate(-90deg);
+    transform: rotate(-90deg);
 }
-@media(max-width:1024px){
-  .permissionForm {
-    .form-group {
-
-      margin-left: 0;
-      margin-top: 5px;
-      .btn-group {
-        width: 188px;
-      }
+@media (max-width: 1024px) {
+    .permissionForm {
+        .form-group {
+            margin-left: 0;
+            margin-top: 5px;
+            .btn-group {
+                width: 188px;
+            }
+        }
     }
-  }
 }
 
-@media(max-width:575px){
-  .permissionForm {
-    .form-group {
-      width: 100%;
-      display: block;
-      margin-top:5px;
-      position: relative;
-      .btn-group {
-        width: 100%;
-      }
+@media (max-width: 575px) {
+    .permissionForm {
+        .form-group {
+            width: 100%;
+            display: block;
+            margin-top: 5px;
+            position: relative;
+            .btn-group {
+                width: 100%;
+            }
+        }
     }
-  }
 }

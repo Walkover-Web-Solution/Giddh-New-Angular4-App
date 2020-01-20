@@ -1,22 +1,21 @@
 <div class="">
-  <div id="">
-    <div class="">
-      <form #search="ngForm" name="searchFormClb" novalidate="" class="form-inline mrT2">
-        <div class="form-group mrR1">
-          <label class="d-block">Select Groups</label>
-          <input [typeahead]="dataSource" type="text" [(ngModel)]="groupName"
-                 (typeaheadOnSelect)="OnSelectGroup($event)" (typeaheadOnBlur)="OnSelectGroup($event)"
-                 typeaheadOptionField="name" (typeaheadNoResults)="changeTypeaheadNoResults($event)" required
-                 class="form-control"
-                 name="city" autocomplete="off" maxlength="50" placeholder="Search Groups">
-        </div>
-        <div class="form-group mrR1">
-          <label>From - To</label>
-          <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
-                 (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
-                 class="form-control date-range-picker"/>
-        </div>
-        <!-- <div class="form-group" (clickOutside)="showFromDatePicker=false;">
+    <div id="">
+        <div class="">
+            <form #search="ngForm" name="searchFormClb" novalidate="" class="form-inline mrT2">
+                <div class="form-group mrR1">
+                    <label class="d-block">Select Groups</label>
+                    <input [typeahead]="dataSource" type="text" [(ngModel)]="groupName"
+                        (typeaheadOnSelect)="OnSelectGroup($event)" (typeaheadOnBlur)="OnSelectGroup($event)"
+                        typeaheadOptionField="name" (typeaheadNoResults)="changeTypeaheadNoResults($event)" required
+                        class="form-control" name="city" autocomplete="off" maxlength="50" placeholder="Search Groups">
+                </div>
+                <div class="form-group mrR1">
+                    <label>From - To</label>
+                    <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+                        (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
+                        class="form-control date-range-picker" />
+                </div>
+                <!-- <div class="form-group" (clickOutside)="showFromDatePicker=false;">
             <label>From date</label>
             <div class="input-group">
                 <input type="text" name="from" pattern="\d{1,2}\-\d{1,2}\-\d{4}$" [ngModel]="moment(fromDate).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true; showToDatePicker=false;" class="form-control" required/>
@@ -42,17 +41,19 @@
                 <datepicker name="toDate" [(ngModel)]="toDate" (selectionDone)="showToDatePicker=!showToDatePicker" [showWeeks]="false"></datepicker>
             </div>
         </div> -->
-        <div class="form-group mrT2">
-          <button [disabled]="search.invalid" class="btn btn-sm btn-success" (click)="getClosingBalance(false,$event)">
-            Search
-          </button>
-          <button [disabled]="search.invalid" class="btn btn-sm btn-default" (click)="getClosingBalance(true,$event)">
-            Refresh
-          </button>
+                <div class="form-group mrT2">
+                    <button [disabled]="search.invalid" class="btn btn-sm btn-success"
+                        (click)="getClosingBalance(false,$event)">
+                        Search
+                    </button>
+                    <button [disabled]="search.invalid" class="btn btn-sm btn-default"
+                        (click)="getClosingBalance(true,$event)">
+                        Refresh
+                    </button>
+                </div>
+            </form>
         </div>
-      </form>
+
+
     </div>
-
-
-  </div>
 </div>

@@ -1,86 +1,93 @@
 <section id="single_role" *ngIf="roleObj">
 
 
-  <div class="pd3 pdT1 pdB1 bdrB clearfix text-center">
-    <span class="lead">{{ newRole.name }}</span>
-    <button class="btn btn-md btn-primary pull-left" (click)="goToRoles()">Back</button>
-    <button *ngIf="!newRole.isUpdateCase" class="btn btn-md btn-success pull-right" (click)="addNewRole()">Save</button>
-    <button *ngIf="newRole.isUpdateCase" [disabled]="newRole.isFixed" class="btn btn-md btn-success pull-right"
+    <div class="pd3 pdT1 pdB1 bdrB clearfix text-center">
+        <span class="lead">{{ newRole.name }}</span>
+        <button class="btn btn-md btn-primary pull-left" (click)="goToRoles()">Back</button>
+        <button *ngIf="!newRole.isUpdateCase" class="btn btn-md btn-success pull-right"
+            (click)="addNewRole()">Save</button>
+        <button *ngIf="newRole.isUpdateCase" [disabled]="newRole.isFixed" class="btn btn-md btn-success pull-right"
             (click)="updateRole()">Update
-    </button>
-  </div>
-
-  <section class="pd3">
-    <!--*ngIf="roleObj.isUpdateCase"-->
-    <div class="row mrB2">
-      <div class="col-xs-12 form-inline">
-        <div class="form-group custom-select pos-rel">
-          <select class="form-control" [disabled]="newRole.isFixed" required [(ngModel)]="pageName" name="pageName">
-            <option value="">--Select Pages--</option>
-            <option [disabled]="checkForAlreadyExistInPageArray(page)" *ngFor="let page of pageList;" [ngValue]="page">
-              {{page}}
-            </option>
-          </select>
-          <!--<span class="select_drop"><i class="fa fa-caret-down"></i></span>-->
-        </div>
-        <div class="form-group">
-          <button class="btn btn-success" (click)="addNewPage(pageName)" [disabled]="!pageName">Add</button>
-        </div>
-      </div>
+        </button>
     </div>
-    <div class="row">
-      <div class="col-xs-4" *ngFor="let page of roleObj.scopes; let idx = index">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            {{ page.name }}
-            <!--roleObj.isUpdateCase -->
-            <!-- <i  class="fa fa-times  text-danger" aria-hidden="true" ></i> -->
-            <a class="close pull-right" href="javascript:void(0);" (click)="removePageFromScope(page.name)"
-               *ngIf="!newRole.isFixed">×</a>
-          </div>
-          <div class="panel-body pd0">
-            <table class="table basic">
-              <thead>
-              <tr>
-                <th>{{ newRole.name }}</th>
-                <th class="text-center">Admin</th>
-                <th class="text-center">View</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <td colspan="100%">
-                  <input id="{{page.name}}+_{{idx}}" [disabled]="newRole.isFixed" name="{{page.name}}+_{{idx}}"
-                         (change)="toggleItems(page.name, $event)" type="checkbox" [(ngModel)]="page.selectAll"/>
-                  <label for="{{page.name}}+_{{idx}}"> Select All</label>
-                </td>
-              </tr>
-              <tr *ngFor="let item of page.permissions | mySortBy : ['code']; let i = index">
-                <ng-container *ngIf="item.code !== 'SHR'">
-                  <td>
-                    <input id="{{item.code}}+{{idx}}+{{i}}" [disabled]="newRole.isFixed"
-                           (change)="toggleItem(page.name, item, $event)" type="checkbox" name="{{item.code}}_{{i}}"
-                           [(ngModel)]="item.isSelected"/>
-                    <label for="{{item.code}}+{{idx}}+{{i}}"> {{getNameByCode(item.code)}}</label>
-                  </td>
-                  <td class="text-center">
-                    <i class="fa" [ngClass]="isHavePermission(page.name, item, 'admin') ? 'fa-check' : 'fa-times'"
-                       aria-hidden="true"></i>
-                  </td>
-                  <td class="text-center">
-                    <i class="fa" [ngClass]="isHavePermission(page.name, item, 'view') ? 'fa-check' : 'fa-times'"
-                       aria-hidden="true"></i>
-                  </td>
-                </ng-container>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--end of row  -->
 
-  </section>
+    <section class="pd3">
+        <!--*ngIf="roleObj.isUpdateCase"-->
+        <div class="row mrB2">
+            <div class="col-xs-12 form-inline">
+                <div class="form-group custom-select pos-rel">
+                    <select class="form-control" [disabled]="newRole.isFixed" required [(ngModel)]="pageName"
+                        name="pageName">
+                        <option value="">--Select Pages--</option>
+                        <option [disabled]="checkForAlreadyExistInPageArray(page)" *ngFor="let page of pageList;"
+                            [ngValue]="page">
+                            {{page}}
+                        </option>
+                    </select>
+                    <!--<span class="select_drop"><i class="fa fa-caret-down"></i></span>-->
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success" (click)="addNewPage(pageName)" [disabled]="!pageName">Add</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4" *ngFor="let page of roleObj.scopes; let idx = index">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {{ page.name }}
+                        <!--roleObj.isUpdateCase -->
+                        <!-- <i  class="fa fa-times  text-danger" aria-hidden="true" ></i> -->
+                        <a class="close pull-right" href="javascript:void(0);" (click)="removePageFromScope(page.name)"
+                            *ngIf="!newRole.isFixed">×</a>
+                    </div>
+                    <div class="panel-body pd0">
+                        <table class="table basic">
+                            <thead>
+                                <tr>
+                                    <th>{{ newRole.name }}</th>
+                                    <th class="text-center">Admin</th>
+                                    <th class="text-center">View</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="100%">
+                                        <input id="{{page.name}}+_{{idx}}" [disabled]="newRole.isFixed"
+                                            name="{{page.name}}+_{{idx}}" (change)="toggleItems(page.name, $event)"
+                                            type="checkbox" [(ngModel)]="page.selectAll" />
+                                        <label for="{{page.name}}+_{{idx}}"> Select All</label>
+                                    </td>
+                                </tr>
+                                <tr *ngFor="let item of page.permissions | mySortBy : ['code']; let i = index">
+                                    <ng-container *ngIf="item.code !== 'SHR'">
+                                        <td>
+                                            <input id="{{item.code}}+{{idx}}+{{i}}" [disabled]="newRole.isFixed"
+                                                (change)="toggleItem(page.name, item, $event)" type="checkbox"
+                                                name="{{item.code}}_{{i}}" [(ngModel)]="item.isSelected" />
+                                            <label for="{{item.code}}+{{idx}}+{{i}}">
+                                                {{getNameByCode(item.code)}}</label>
+                                        </td>
+                                        <td class="text-center">
+                                            <i class="fa"
+                                                [ngClass]="isHavePermission(page.name, item, 'admin') ? 'fa-check' : 'fa-times'"
+                                                aria-hidden="true"></i>
+                                        </td>
+                                        <td class="text-center">
+                                            <i class="fa"
+                                                [ngClass]="isHavePermission(page.name, item, 'view') ? 'fa-check' : 'fa-times'"
+                                                aria-hidden="true"></i>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end of row  -->
+
+    </section>
 
 </section>

@@ -239,7 +239,7 @@ export class MaskApplierService {
                 // tslint:disable-next-line
                 let i: number = 0, inputSymbol: string = inputArray[0];
                 i < inputArray.length;
-                i++, inputSymbol = inputArray[i]
+                i++ , inputSymbol = inputArray[i]
             ) {
                 if (cursor === maskExpression.length) {
                     break;
@@ -403,8 +403,6 @@ export class MaskApplierService {
         if (stepBack) {
             actualShift--;
         }
-        // console.log('position:- ', position);
-        // console.log('actualShift:- ', actualShift);
         cb(actualShift, backspaceShift);
         if (shift < 0) {
             this._shift.clear();
@@ -455,7 +453,7 @@ export class MaskApplierService {
      * @param indFormat indian format or not ( 2 for indian and 3 for others)
      */
     private currencySeparator = (str: string, char: string, decimalChar: string, precision: number,
-                                 indFormat: boolean = false) => {
+        indFormat: boolean = false) => {
         str += '';
         const x: string[] = str.split(decimalChar);
         const decimals: string = x.length > 1 ? `${decimalChar}${x[1]}` : '';

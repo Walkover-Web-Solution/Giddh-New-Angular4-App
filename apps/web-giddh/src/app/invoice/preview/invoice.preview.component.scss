@@ -54,7 +54,6 @@
 
 .td_in_searchBox {
     padding: 0px !important;
-    position: relative;
 }
 
 .td_in_searchBox .input-container input {
@@ -416,14 +415,14 @@ button.btn.btn-filter span.icon-cross {
     top: 0;
 }
 
-.invoice-preview {
+/* .invoice-preview {
     padding-bottom: 250px;
 }
 
 .paginationWrapper {
     position: relative;
     top: -220px;
-}
+} */
 
 .invoiceFooter h3 {
     font-size: 16px;

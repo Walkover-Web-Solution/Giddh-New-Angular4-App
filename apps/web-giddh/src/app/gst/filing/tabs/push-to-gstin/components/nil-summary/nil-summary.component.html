@@ -1,68 +1,70 @@
 <div class="gstr-transactions-summary">
 
-  <h4 class="clearfix gstr-summary-title">Nil Summary</h4>
-  <p style="padding-top:6px;" class="text-muted half">This section displays the sale of goods and services that are nil
-    rated.&nbsp;Nil rated goods and services are those that have 0% GST but allows you to claim ITC on the filing paid
-    on inputs</p>
+    <h4 class="clearfix gstr-summary-title">Nil Summary</h4>
+    <p style="padding-top:6px;" class="text-muted half">This section displays the sale of goods and services that are
+        nil
+        rated.&nbsp;Nil rated goods and services are those that have 0% GST but allows you to claim ITC on the filing
+        paid
+        on inputs</p>
 
-  <div class="">
+    <div class="">
 
-    <div *ngIf="nilSummary && nilSummary.inv">
+        <div *ngIf="nilSummary && nilSummary.inv">
 
-      <table class="transactions-table table-striped  table zi-table  ">
+            <table class="transactions-table table-striped  table zi-table  ">
 
-        <thead>
-        <tr>
-          <th style="" class="text-left">
-            <div style="position: relative">
-              <div class="pull-left over-flow"> Supply Type</div>
+                <thead>
+                    <tr>
+                        <th style="" class="text-left">
+                            <div style="position: relative">
+                                <div class="pull-left over-flow"> Supply Type</div>
+                            </div>
+                        </th>
+                        <th style="" class="text-right">
+                            <div style="position: relative">
+                                <div class=" over-flow"> Nil Amount</div>
+                            </div>
+                        </th>
+                        <th style="" class="text-right">
+                            <div style="position: relative">
+                                <div class=" over-flow"> Exempt Amount</div>
+                            </div>
+                        </th>
+                        <th style="" class="text-right">
+                            <div style="position: relative">
+                                <div class=" over-flow"> Non GST Amount</div>
+                            </div>
+                        </th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let item of nilSummary.inv">
+                        <td> {{item.sply_ty ? item.sply_ty : '-'}} </td>
+                        <td class="text-right"> {{item.nil_amt | giddhCurrency}} </td>
+                        <td class="text-right"> {{item.expt_amt | giddhCurrency}} </td>
+                        <td class="text-right"> {{item.ngsup_amt | giddhCurrency}} </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+            <!--      <div class="text-center" *ngIf="(nilSummaryResponse$ | async)?.totalPages > 1">-->
+            <!--        <pagination [maxSize]="5" [totalItems]="(nilSummaryResponse$ | async)?.totalItems" [itemsPerPage]="10"-->
+            <!--                    (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true"-->
+            <!--                    [rotate]="false"></pagination>-->
+            <!--      </div>-->
+
+        </div>
+
+        <div class="" *ngIf="!nilSummary">
+            <div class="filings-empty-state">
+                <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
+                <div class="empty-msg"><span> There is no NIL-wise summary. </span></div>
             </div>
-          </th>
-          <th style="" class="text-right">
-            <div style="position: relative">
-              <div class=" over-flow"> Nil Amount</div>
-            </div>
-          </th>
-          <th style="" class="text-right">
-            <div style="position: relative">
-              <div class=" over-flow"> Exempt Amount</div>
-            </div>
-          </th>
-          <th style="" class="text-right">
-            <div style="position: relative">
-              <div class=" over-flow"> Non GST Amount</div>
-            </div>
-          </th>
-        </tr>
-
-        </thead>
-
-        <tbody>
-        <tr *ngFor="let item of nilSummary.inv">
-          <td> {{item.sply_ty ? item.sply_ty : '-'}} </td>
-          <td class="text-right"> {{item.nil_amt | giddhCurrency}} </td>
-          <td class="text-right"> {{item.expt_amt | giddhCurrency}} </td>
-          <td class="text-right"> {{item.ngsup_amt | giddhCurrency}} </td>
-        </tr>
-
-        </tbody>
-
-      </table>
-
-      <!--      <div class="text-center" *ngIf="(nilSummaryResponse$ | async)?.totalPages > 1">-->
-      <!--        <pagination [maxSize]="5" [totalItems]="(nilSummaryResponse$ | async)?.totalItems" [itemsPerPage]="10"-->
-      <!--                    (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true"-->
-      <!--                    [rotate]="false"></pagination>-->
-      <!--      </div>-->
+        </div>
 
     </div>
-
-    <div class="" *ngIf="!nilSummary">
-      <div class="filings-empty-state">
-        <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110"/>
-        <div class="empty-msg"><span>  There is no NIL-wise summary.  </span></div>
-      </div>
-    </div>
-
-  </div>
 </div>

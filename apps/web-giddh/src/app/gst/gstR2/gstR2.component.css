@@ -26,8 +26,8 @@
 }
 
 .tax-engine .list-filter {
-    padding: 20px 30px 18px 20px!important;
-    border-bottom: 1px solid #ddd!important;
+    padding: 20px 30px 18px 20px !important;
+    border-bottom: 1px solid #ddd !important;
     height: 80px;
 }
 
@@ -44,19 +44,19 @@ list-header .btn-toolbar .btn-group {
 }
 
 .btn .caret,
-.btn-group>.btn:first-child {
+.btn-group > .btn:first-child {
     margin-left: 0;
 }
 
-.btn-group-vertical>.btn,
-.btn-group>.btn {
+.btn-group-vertical > .btn,
+.btn-group > .btn {
     position: relative;
     float: left;
 }
 
 .tax-engine .bottom-action,
 .tax-engine a,
-.tax-engine a>.dropdown {
+.tax-engine a > .dropdown {
     cursor: pointer;
 }
 
@@ -102,7 +102,7 @@ fieldset[disabled] .btn-link {
     user-select: none;
 }
 
-.list-header .list-filter .btn [class*=icon] {
+.list-header .list-filter .btn [class*="icon"] {
     position: relative;
     top: 1px;
 }
@@ -162,8 +162,8 @@ svg.icon.icon-sm {
     margin-top: 10px;
 }
 
-.tax-engine .nav-band .nav-tabs>li.active>a::before {
-    content: '';
+.tax-engine .nav-band .nav-tabs > li.active > a::before {
+    content: "";
     display: inline-block;
     width: 6px;
     height: 6px;
@@ -173,8 +173,8 @@ svg.icon.icon-sm {
     vertical-align: middle;
 }
 
-.nav>li,
-.nav>li>a {
+.nav > li,
+.nav > li > a {
     display: block;
     position: relative;
 }
@@ -184,7 +184,7 @@ svg.icon.icon-sm {
     padding: 0;
 }
 
-.nav-tabs>li a {
+.nav-tabs > li a {
     font-size: 15px;
     color: #555;
     margin-right: 0;
@@ -193,11 +193,11 @@ svg.icon.icon-sm {
     border-radius: 0px;
 }
 
-.nav-tabs>li.active a {
+.nav-tabs > li.active a {
     font-weight: bold;
 }
 
-.nav-tabs>li {
+.nav-tabs > li {
     margin-bottom: 0;
 }
 
@@ -209,7 +209,8 @@ svg.icon.icon-sm {
     -webkit-overflow-scrolling: touch;
 }
 
-.tax-engine .body {}
+.tax-engine .body {
+}
 
 .content-column .body {
     padding: 0 20px 50px;
@@ -235,7 +236,10 @@ hr {
     text-transform: uppercase;
 }
 
-.tax-engine .transactions-overview .gstr-transactions-summary .transactions-table {
+.tax-engine
+    .transactions-overview
+    .gstr-transactions-summary
+    .transactions-table {
     border: 1px solid #ededed;
 }
 
@@ -249,7 +253,11 @@ address {
     margin-bottom: 20px;
 }
 
-.tax-engine .table.transactions-table thead:first-child tr:first-child th:first-child {
+.tax-engine
+    .table.transactions-table
+    thead:first-child
+    tr:first-child
+    th:first-child {
     padding-left: 20px;
 }
 
@@ -263,7 +271,7 @@ address {
     border-top: 1px solid #ddd;
 }
 
-.tax-engine .gstr-transactions-summary .table>thead>tr>th {
+.tax-engine .gstr-transactions-summary .table > thead > tr > th {
     padding: 10px;
     font-size: 13px;
     font-weight: 600;
@@ -273,53 +281,62 @@ address {
     border-top: 1px solid #ddd;
 }
 
-.table caption+thead tr:first-child td,
-.table caption+thead tr:first-child th,
-.table colgroup+thead tr:first-child td,
-.table colgroup+thead tr:first-child th,
+.table caption + thead tr:first-child td,
+.table caption + thead tr:first-child th,
+.table colgroup + thead tr:first-child td,
+.table colgroup + thead tr:first-child th,
 .table thead:first-child tr:first-child td,
 .table thead:first-child tr:first-child th {
     border-top: 0;
 }
 
-.table thead>tr>th {
-    border-bottom: 1px solid #EEE;
+.table thead > tr > th {
+    border-bottom: 1px solid #eee;
     color: #777;
 }
 
-.tax-engine .table.transactions-table tbody>tr>td {
+.tax-engine .table.transactions-table tbody > tr > td {
     max-width: 160px;
     font-size: 14px;
     padding: 16px 12px;
     vertical-align: middle;
 }
 
-.table-striped>tbody>tr:nth-child(even)>td,
-.table-striped>tbody>tr:nth-child(odd)>th {
+.table-striped > tbody > tr:nth-child(even) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
     background-color: #f9f9f9;
 }
 
-.table tbody>tr>td,
-.table tbody>tr>th,
-.table tfoot>tr>td,
-.table tfoot>tr>th,
-.table thead>tr>td,
-.table thead>tr>th {
+.table tbody > tr > td,
+.table tbody > tr > th,
+.table tfoot > tr > td,
+.table tfoot > tr > th,
+.table thead > tr > td,
+.table thead > tr > th {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
     border-top: 1px solid #eee;
 }
 
-.tax-engine .table.transactions-summary-table>tbody>tr:not(.secondary-row)+tr.secondary-row>td {
+.tax-engine
+    .table.transactions-summary-table
+    > tbody
+    > tr:not(.secondary-row)
+    + tr.secondary-row
+    > td {
     border-top: 1px solid #ededed;
 }
 
-.tax-engine .table.transactions-summary-table>tbody>tr.secondary-row>td:nth-child(2) {
+.tax-engine
+    .table.transactions-summary-table
+    > tbody
+    > tr.secondary-row
+    > td:nth-child(2) {
     padding-left: 50px;
 }
 
-.tax-engine .table.transactions-summary-table>tbody>tr.secondary-row>td {
+.tax-engine .table.transactions-summary-table > tbody > tr.secondary-row > td {
     border: none;
     background-color: #fff;
     border-right: 1px solid #ededed;
@@ -327,20 +344,24 @@ address {
     padding: 13px;
 }
 
-.tax-engine .table.transactions-table tbody>tr>td {
+.tax-engine .table.transactions-table tbody > tr > td {
     max-width: 160px;
     font-size: 14px;
     padding: 16px 12px;
     vertical-align: middle;
 }
 
-.tax-engine .gstr-transactions-summary .table>tbody>tr>td {
+.tax-engine .gstr-transactions-summary .table > tbody > tr > td {
     padding-top: 15px;
     padding-bottom: 15px;
     vertical-align: middle;
 }
 
-.tax-engine .table.transactions-summary-table>tbody>tr.secondary-row>td:first-child {
+.tax-engine
+    .table.transactions-summary-table
+    > tbody
+    > tr.secondary-row
+    > td:first-child {
     border-right: none;
 }
 
@@ -349,13 +370,13 @@ address {
     background-color: #f7f7f7;
 }
 
-.tax-engine .sub-filter-nav-band ul>li,
-.tax-engine .sub-filter-nav-bandnew ul>li {
+.tax-engine .sub-filter-nav-band ul > li,
+.tax-engine .sub-filter-nav-bandnew ul > li {
     display: inline-block;
 }
 
-.tax-engine .sub-filter-nav-band ul>li>a,
-.tax-engine .sub-filter-nav-bandnew ul>li>a {
+.tax-engine .sub-filter-nav-band ul > li > a,
+.tax-engine .sub-filter-nav-bandnew ul > li > a {
     cursor: pointer;
     font-style: italic;
     padding: 14px 25px;
@@ -363,17 +384,17 @@ address {
     background: none !important;
 }
 
-.tax-engine .sub-filter-nav-band ul>li.active:after,
-.tax-engine .sub-filter-nav-bandnew ul>li.active:after {
-    content: '';
+.tax-engine .sub-filter-nav-band ul > li.active:after,
+.tax-engine .sub-filter-nav-bandnew ul > li.active:after {
+    content: "";
     display: block;
     border-bottom: 2px solid #2a85fb;
     width: 55%;
     margin: auto;
 }
 
-.tax-engine .sub-filter-nav-band ul>li.active>a,
-.tax-engine .sub-filter-nav-bandnew ul>li.active>a {
+.tax-engine .sub-filter-nav-band ul > li.active > a,
+.tax-engine .sub-filter-nav-bandnew ul > li.active > a {
     color: #222;
     font-weight: 600;
 }
@@ -392,7 +413,7 @@ address {
 }
 
 .tax-engine .half {
-    width: 50%!important;
+    width: 50% !important;
 }
 
 .tax-engine .filings-empty-state {
@@ -455,7 +476,7 @@ svg.icon.icon-sm {
     vertical-align: text-top;
 }
 
-.tax-engine .transactions-list .filter-row+.filter-row {
+.tax-engine .transactions-list .filter-row + .filter-row {
     margin-left: 20px;
 }
 
@@ -547,7 +568,7 @@ svg.icon.icon-sm {
     max-width: 100%;
 }
 
-.list-header .list-title>a,
+.list-header .list-title > a,
 .list-notes,
 .list-primary .name,
 .over-flow {
@@ -565,36 +586,36 @@ svg.icon.icon-sm {
     margin-bottom: 0;
 }
 
-.tax-engine .sub-filter-nav-band ul>li {
+.tax-engine .sub-filter-nav-band ul > li {
     display: inline-block;
     position: relative;
 }
 
-.tax-engine .sub-filter-nav-band ul>li>a {
+.tax-engine .sub-filter-nav-band ul > li > a {
     cursor: pointer;
     font-style: italic;
     padding: 14px 25px;
     font-size: 13px;
 }
 
-.tax-engine .sub-filter-nav-band ul>li .count {
+.tax-engine .sub-filter-nav-band ul > li .count {
     color: #cb1119;
 }
 
-.tax-engine .sub-filter-nav-band ul>li.active>a {
+.tax-engine .sub-filter-nav-band ul > li.active > a {
     color: #222;
     font-weight: 600;
 }
 
-.tax-engine .sub-filter-nav-band ul>li.active:after {
-    content: '';
+.tax-engine .sub-filter-nav-band ul > li.active:after {
+    content: "";
     display: block;
     border-bottom: 2px solid #2a85fb;
     width: 55%;
     margin: auto;
 }
 
-.tax-engine .sub-filter-nav-band.reconciliation-type-band ul>li:last-child {
+.tax-engine .sub-filter-nav-band.reconciliation-type-band ul > li:last-child {
     float: right;
 }
 
@@ -611,8 +632,8 @@ svg.icon.icon-sm {
     table-layout: fixed;
 }
 
-.tax-engine .table.reconciliations-table tbody>tr>td:first-child,
-.tax-engine .table.reconciliations-table thead>tr>th:first-child {
+.tax-engine .table.reconciliations-table tbody > tr > td:first-child,
+.tax-engine .table.reconciliations-table thead > tr > th:first-child {
     padding: 13px 0 13px 20px;
 }
 
@@ -629,13 +650,13 @@ svg.icon.icon-sm {
     width: 40px;
 }
 
-tax-engine .table.reconciliations-table thead>tr>th {
+tax-engine .table.reconciliations-table thead > tr > th {
     border-bottom-width: 1px;
     font-size: 12px;
 }
 
-.tax-engine .table.reconciliations-table tbody>tr>td,
-.tax-engine .table.reconciliations-table thead>tr>th {
+.tax-engine .table.reconciliations-table tbody > tr > td,
+.tax-engine .table.reconciliations-table thead > tr > th {
     font-size: 13px;
     padding: 13px;
 }
@@ -645,12 +666,12 @@ tax-engine .table.reconciliations-table thead>tr>th {
     cursor: pointer;
 }
 
-.table tbody>tr>td,
-.table tbody>tr>th,
-.table tfoot>tr>td,
-.table tfoot>tr>th,
-.table thead>tr>td,
-.table thead>tr>th {
+.table tbody > tr > td,
+.table tbody > tr > th,
+.table tfoot > tr > td,
+.table tfoot > tr > th,
+.table thead > tr > td,
+.table thead > tr > th {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
@@ -658,7 +679,7 @@ tax-engine .table.reconciliations-table thead>tr>th {
 }
 
 .details .details-info,
-.warehouses>li div,
+.warehouses > li div,
 .zi-table tbody td {
     word-wrap: break-word;
 }
@@ -671,7 +692,7 @@ tax-engine .table.reconciliations-table thead>tr>th {
     font-size: 11px;
 }
 
-.tax-engine .table.reconciliations-table tbody>tr>td.primary-details {
+.tax-engine .table.reconciliations-table tbody > tr > td.primary-details {
     border-right: 1px solid #ededed;
 }
 
@@ -681,12 +702,20 @@ tax-engine .table.reconciliations-table thead>tr>th {
     padding-top: 7px;
 }
 
-.tax-engine .table.reconciliations-table tbody>tr:hover .actions-dropdown-btn {
+.tax-engine
+    .table.reconciliations-table
+    tbody
+    > tr:hover
+    .actions-dropdown-btn {
     border: 1px solid #2a85fb;
 }
 
 .tax-engine .table.reconciliations-table .actions-dropdown-btn,
-.tax-engine .table.reconciliations-table tbody>tr:hover .reconcile-row-action {
+.tax-engine
+    .table.reconciliations-table
+    tbody
+    > tr:hover
+    .reconcile-row-action {
     color: #2a85fb;
 }
 
@@ -694,18 +723,18 @@ tax-engine .table.reconciliations-table thead>tr>th {
     color: #cb1119;
 }
 
-.tax-engine .table.reconciliations-table .recognized-value,
+/*.tax-engine .table.reconciliations-table .recognized-value,
 .tax-engine .table.reconciliations-table .unrecognized-value {
     padding-top: 10px;
-}
+}*/
 
 .tax-engine .reconciliation-accepted {
     color: #39c296;
 }
 
-.zi-table.table thead>tr>th {
+.zi-table.table thead > tr > th {
     color: #263035;
-    background: #FFF;
+    background: #fff;
     font-weight: 700;
     font-size: 12px;
     text-transform: uppercase;
@@ -722,16 +751,16 @@ tax-engine .table.reconciliations-table thead>tr>th {
     background: #fff;
 }
 
-.tax-engine .sub-filter-nav-band ul>li.active>a .count {
+.tax-engine .sub-filter-nav-band ul > li.active > a .count {
     color: #222;
 }
 
-.table-striped>tbody>tr:nth-child(odd)>td,
-.table-striped>tbody>tr:nth-child(odd)>th {
+.table-striped > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
     background-color: #f9f9f9;
 }
 
-.table-striped>tbody>tr:nth-child(even)>td,
-.table-striped>tbody>tr:nth-child(even)>th {
+.table-striped > tbody > tr:nth-child(even) > td,
+.table-striped > tbody > tr:nth-child(even) > th {
     background-color: #fff;
 }

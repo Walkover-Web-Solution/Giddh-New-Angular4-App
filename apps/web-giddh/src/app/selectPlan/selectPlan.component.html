@@ -21,32 +21,32 @@
             </div>
 
 
-      <div *ngIf="!isCreateAndSwitchCompanyInProcess" class="choose-ur-plan">
-        <div class="row">
-          <div class="col-sm-12 col-md-9">
-            <div class="row">
-              <ng-container *ngFor="let item of SubscriptionPlans; let i=index">
-                <!-- Free plans -->
-                <ng-container *ngIf="!item?.planDetails?.amount && !item.subscriptionId">
-                  <div class="col-md-4 col-sm-6 col-xs-12 ">
-                    <div class="select-plan-block">
-                      {{item?.planDetails?.name}}
-                      <div class="your-account">
+            <div *ngIf="!isCreateAndSwitchCompanyInProcess" class="choose-ur-plan">
+                <div class="row">
+                    <div class="col-sm-12 col-md-9">
                         <div class="row">
-                          <div class="col-xs-6">
-                            <span>
-                              Subscription Price
-                            </span>
-                          </div>
-                          <div class="col-xs-6">
-                            <p *ngIf="item?.planDetails?.amount">
-                              {{item?.planDetails?.amount | number}}
-                            </p>
-                            <p *ngIf="!item?.planDetails?.amount">
-                              FREE
-                            </p>
-                          </div>
-                        </div>
+                            <ng-container *ngFor="let item of SubscriptionPlans; let i=index">
+                                <!-- Free plans -->
+                                <ng-container *ngIf="!item?.planDetails?.amount && !item.subscriptionId">
+                                    <div class="col-md-4 col-sm-6 col-xs-12 ">
+                                        <div class="select-plan-block">
+                                            {{item?.planDetails?.name}}
+                                            <div class="your-account">
+                                                <div class="row">
+                                                    <div class="col-xs-6">
+                                                        <span>
+                                                            Subscription Price
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-xs-6">
+                                                        <p *ngIf="item?.planDetails?.amount">
+                                                            {{item?.planDetails?.amount | number}}
+                                                        </p>
+                                                        <p *ngIf="!item?.planDetails?.amount">
+                                                            FREE
+                                                        </p>
+                                                    </div>
+                                                </div>
 
                                                 <div class="row">
                                                     <div class="col-xs-6">
@@ -100,26 +100,26 @@
 
                                         </div>
 
-                  </div>
-                </ng-container>
-                <!-- new plan after free -->
-                <ng-container *ngIf="item?.planDetails?.amount && !item.subscriptionId">
-                  <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="select-plan-block">
-                      {{item?.planDetails?.name}}
-                      <div class="your-account">
-                        <div class="row">
-                          <div class="col-xs-6">
-                            <span>
-                              Subscription Price
-                            </span>
-                          </div>
-                          <div class="col-xs-6">
-                            <p>
-                              {{item?.planDetails?.amount | number}}
-                            </p>
-                          </div>
-                        </div>
+                                    </div>
+                                </ng-container>
+                                <!-- new plan after free -->
+                                <ng-container *ngIf="item?.planDetails?.amount && !item.subscriptionId">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="select-plan-block">
+                                            {{item?.planDetails?.name}}
+                                            <div class="your-account">
+                                                <div class="row">
+                                                    <div class="col-xs-6">
+                                                        <span>
+                                                            Subscription Price
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-xs-6">
+                                                        <p>
+                                                            {{item?.planDetails?.amount | number}}
+                                                        </p>
+                                                    </div>
+                                                </div>
 
                                                 <div class="row">
                                                     <div class="col-xs-6">
@@ -270,26 +270,28 @@
                         </div>
                     </div>
 
-          <div class="col-sm-12 col-md-3">
-            <div class="activation-key">
-              <label>Activation Key</label>
-              <input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey" class="form-control mrT1" placeholder="Enter activation key">
+                    <div class="col-sm-12 col-md-3">
+                        <div class="activation-key">
+                            <label>Activation Key</label>
+                            <input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey"
+                                class="form-control mrT1" placeholder="Enter activation key">
+                        </div>
+                        <div class="activation-btn">
+                            <button class="btn btn-green mrT1" [disabled]="!licenceKey.value"
+                                (click)="createCompanyViaActivationKey()"> Activate</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="activation-btn">
-              <button class="btn btn-green mrT1" [disabled]="!licenceKey.value" (click)="createCompanyViaActivationKey()"> Activate</button>
+            <div *ngIf="isCreateAndSwitchCompanyInProcess">
+                <div class="no-data mrT2 loader-main">
+                    <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                    <div class="spinner2">
+                        <div class="cube1"></div>
+                        <div class="cube2"></div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-      <div *ngIf="isCreateAndSwitchCompanyInProcess">
-        <div class="no-data mrT2 loader-main">
-            <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-            <div class="spinner2">
-                <div class="cube1"></div>
-                <div class="cube2"></div>
-            </div>
-        </div>
-      </div>
-    </div>
-  </layout-main>
+    </layout-main>
 </div>

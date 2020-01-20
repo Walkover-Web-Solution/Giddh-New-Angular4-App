@@ -1,11 +1,11 @@
 import { SocialUser } from './user';
 
 export interface LoginProvider {
-  isInitialize: boolean;
+    isInitialize: boolean;
 
-  initialize(): Promise<SocialUser>;
+    initialize(): Promise<SocialUser>;
 
-  signIn(): Promise<SocialUser>;
+    signIn(): Promise<SocialUser>;
 
-  signOut(): Promise<any>;
+    signOut(): Promise<any>;
 }

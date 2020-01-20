@@ -6,14 +6,14 @@
     overflow-y: auto;
 }
 
-.upload-fil ul>li {
+.upload-fil ul > li {
     padding-right: 15px;
 }
 
 .upload-fil ul li .upload-img {
     width: 120px;
     height: 120px;
-    background: #CBCBCB;
+    background: #cbcbcb;
     display: flex;
     align-items: center;
     overflow: hidden;
@@ -23,7 +23,7 @@
     color: #999999;
 }
 
-.upload-fil ul li .upload-img>a {
+.upload-fil ul li .upload-img > a {
     color: #999999;
     display: block;
     width: 100%;
@@ -55,7 +55,7 @@
     top: 0;
     right: -29px;
     z-index: 99;
-    background: #CBCBCB;
+    background: #cbcbcb;
     width: 30px;
     height: 30px;
     text-align: center;
@@ -100,13 +100,13 @@ span.close-modal.cp.pull-right {
     visibility: hidden;
 }
 .pettycash {
-    height: 57vh;
-    overflow-y: auto;
+    /** height: 57vh;
+    overflow-y: auto;**/
     background: #fff;
 }
 @media only screen and (max-width: 1440px) {
     .pettycash {
-        height: 52vh;
+        height: initial;
     }
 }
 @media only screen and (max-width: 991px) {

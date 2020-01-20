@@ -1,67 +1,64 @@
 <label *ngIf="label !== ''">
-  {{label}}
+    {{label}}
 </label>
 <div #selection [attr.tabindex]="disabled || isTypeAheadMode ? null : 0"
-     [ngClass]="{'open': isOpen, 'focus': hasFocus, 'below': isBelow, 'disabled': disabled}"
-     (click)="onSelectContainerClick($event)" (focus)="onSelectContainerFocus()"
-     (keydown)="onSelectContainerKeydown($event)">
+    [ngClass]="{'open': isOpen, 'focus': hasFocus, 'below': isBelow, 'disabled': disabled}"
+    (click)="onSelectContainerClick($event)" (focus)="onSelectContainerFocus()"
+    (keydown)="onSelectContainerKeydown($event)">
 
-  <div class="single" *ngIf="!multiple && !isTypeAheadMode">
-    <div class="value" *ngIf="optionList.hasSelected">
-      <ng-template
-        [ngTemplateOutletContext]="{option: optionList.selection[0], onDeselectOptionClick: onDeselectOptionClick}"
-        [ngTemplateOutlet]="optionTemplate"></ng-template>
-      <span *ngIf="!optionTemplate">{{optionList.selection[0].label}}</span>
+    <div class="single" *ngIf="!multiple && !isTypeAheadMode">
+        <div class="value" *ngIf="optionList.hasSelected">
+            <ng-template
+                [ngTemplateOutletContext]="{option: optionList.selection[0], onDeselectOptionClick: onDeselectOptionClick}"
+                [ngTemplateOutlet]="optionTemplate"></ng-template>
+            <span *ngIf="!optionTemplate">{{optionList.selection[0].label}}</span>
+        </div>
+        <div class="placeholder" *ngIf="!optionList.hasSelected">
+            {{placeholderView}}
+        </div>
+        <div class="clear" *ngIf="allowClear && optionList.hasSelected" (click)="onClearSelectionClick($event)">
+            &#x2715;
+        </div>
+        <div class="toggle" *ngIf="isOpen">
+            <span class="select_drop"><i class="fa fa-caret-up"></i></span>
+            <!-- <span class="glyphicon glyphicon-triangle-top"></span> -->
+        </div>
+        <div class="toggle" *ngIf="!isOpen">
+            <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+            <!-- <span class="glyphicon glyphicon-triangle-bottom"></span> -->
+        </div>
     </div>
-    <div class="placeholder" *ngIf="!optionList.hasSelected">
-      {{placeholderView}}
-    </div>
-    <div class="clear" *ngIf="allowClear && optionList.hasSelected" (click)="onClearSelectionClick($event)">
-      &#x2715;
-    </div>
-    <div class="toggle" *ngIf="isOpen">
-      <span class="select_drop"><i class="fa fa-caret-up"></i></span>
-      <!-- <span class="glyphicon glyphicon-triangle-top"></span> -->
-    </div>
-    <div class="toggle" *ngIf="!isOpen">
-      <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-      <!-- <span class="glyphicon glyphicon-triangle-bottom"></span> -->
-    </div>
-  </div>
 
-  <div class="multiple" *ngIf="multiple">
-    <div class="option" *ngFor="let option of optionList.selection">
+    <div class="multiple" *ngIf="multiple">
+        <div class="option" *ngFor="let option of optionList.selection">
             <span class="deselect-option" (click)=onDeselectOptionClick(option)>
-        &#x2715;
-      </span> {{option.label}}
-    </div>
-    <div class="placeholder" *ngIf="!filterEnabled && !optionList.hasSelected">
-      {{placeholderView}}
-    </div>
-    <input *ngIf="filterEnabled" #filterInput autocomplete="off" tabindex="-1" [placeholder]="placeholderView"
-           [ngStyle]="{'width.px': filterInputWidth}" (input)="onFilterInput($event.target.value)"
-           (keydown)="onMultipleFilterKeydown($event)" (focus)="onMultipleFilterFocus()"
-    />
+                &#x2715;
+            </span> {{option.label}}
+        </div>
+        <div class="placeholder" *ngIf="!filterEnabled && !optionList.hasSelected">
+            {{placeholderView}}
+        </div>
+        <input *ngIf="filterEnabled" #filterInput autocomplete="off" tabindex="-1" [placeholder]="placeholderView"
+            [ngStyle]="{'width.px': filterInputWidth}" (input)="onFilterInput($event.target.value)"
+            (keydown)="onMultipleFilterKeydown($event)" (focus)="onMultipleFilterFocus()" />
 
-  </div>
-  <div class="single" *ngIf="isTypeAheadMode">
-    <div class="option" style="width:100%;">
-      <input #filterInput autocomplete="off" tabindex="0" [placeholder]="placeholderView"
-             [value]="optionList.hasSelected ? optionList.selection[0].label : ''"
-             (input)="onFilterInput($event.target.value)" (keydown)="onTypeAheadFilterKeydown($event)"
-             (keyup)="onTypeAheadFilterKeyup($event)"
-             (focus)="onTypeAheadFilterFocus()" class="form-control"/>
     </div>
+    <div class="single" *ngIf="isTypeAheadMode">
+        <div class="option" style="width:100%;">
+            <input #filterInput autocomplete="off" tabindex="0" [placeholder]="placeholderView"
+                [value]="optionList.hasSelected ? optionList.selection[0].label : ''"
+                (input)="onFilterInput($event.target.value)" (keydown)="onTypeAheadFilterKeydown($event)"
+                (keyup)="onTypeAheadFilterKeyup($event)" (focus)="onTypeAheadFilterFocus()" class="form-control" />
+        </div>
 
-  </div>
+    </div>
 
 </div>
 <select-dropdown *ngIf="isOpen" #dropdown [multiple]="multiple" [isTypeAheadMode]="isTypeAheadMode"
-                 [optionList]="optionList" [notFoundMsg]="notFoundMsg" [highlightColor]="highlightColor"
-                 [highlightTextColor]="highlightTextColor" [filterEnabled]="filterEnabled"
-                 [noResultLinkEnabled]="notFoundLink" [placeholder]="filterPlaceholder" [width]="width" [top]="top"
-                 [left]="left" [optionTemplate]="optionTemplate" (noResultClicked)="onNoResultClicked()"
-                 (optionClicked)="onDropdownOptionClicked($event)" (optionsListClick)="onOptionsListClick()"
-                 (singleFilterClick)="onSingleFilterClick()" (singleFilterFocus)="onSingleFilterFocus()"
-                 (singleFilterInput)="onFilterInput($event)"
-                 (singleFilterKeydown)="onSingleFilterKeydown($event)"></select-dropdown>
+    [optionList]="optionList" [notFoundMsg]="notFoundMsg" [highlightColor]="highlightColor"
+    [highlightTextColor]="highlightTextColor" [filterEnabled]="filterEnabled" [noResultLinkEnabled]="notFoundLink"
+    [placeholder]="filterPlaceholder" [width]="width" [top]="top" [left]="left" [optionTemplate]="optionTemplate"
+    (noResultClicked)="onNoResultClicked()" (optionClicked)="onDropdownOptionClicked($event)"
+    (optionsListClick)="onOptionsListClick()" (singleFilterClick)="onSingleFilterClick()"
+    (singleFilterFocus)="onSingleFilterFocus()" (singleFilterInput)="onFilterInput($event)"
+    (singleFilterKeydown)="onSingleFilterKeydown($event)"></select-dropdown>

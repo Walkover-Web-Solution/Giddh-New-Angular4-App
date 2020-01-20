@@ -198,7 +198,8 @@
         </section>
     </section>
 </form> -->
-<form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm()" novalidate class="clearfix mrB2" *ngIf="invoiceDataFound && templateHeader" autocomplete="off">
+<form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm()" novalidate class="clearfix mrB2"
+    *ngIf="invoiceDataFound && templateHeader" autocomplete="off">
     <div class="clearfix ">
         <div class="clearfix wrapperCustomerTable  pdT2">
             <table class="table customerInvoiceTable">
@@ -208,7 +209,8 @@
                     </td>
                     <td width="65%">
                         <div class="clearfix">
-                            <input style="width:48.5%; float: left;" type="text" name="customerName" class="form-control" [(ngModel)]="invFormData.voucherDetails.customerName" />
+                            <input style="width:48.5%; float: left;" type="text" name="customerName"
+                                class="form-control" [(ngModel)]="invFormData.voucherDetails.customerName" />
                         </div>
                         <!-- flex row child end -->
                     </td>
@@ -216,7 +218,8 @@
                         <div class=" text-right">
                             <p class="fs20 b">
                                 <span class="balance-due">Balance Due: </span>
-                                <span class="sp-rupees">Rs {{invFormData.voucherDetails.grandTotal |giddhCurrency }}</span>
+                                <span class="sp-rupees">Rs
+                                    {{invFormData.voucherDetails.grandTotal |giddhCurrency }}</span>
                             </p>
                         </div>
                     </td>
@@ -232,22 +235,38 @@
                                             <div class="form-group">
                                                 <label>Billing Address</label>
                                                 <div class="billing-address clearfix">
-                                                    <textarea name="billingDetails.address" class="form-control" [(ngModel)]="invFormData.accountDetails.billingDetails.address" rows="3" autocomplete="off" autofocus="off" aria-autocomplete="none"></textarea>
+                                                    <textarea name="billingDetails.address" class="form-control"
+                                                        [(ngModel)]="invFormData.accountDetails.billingDetails.address"
+                                                        rows="3" autocomplete="off" autofocus="off"
+                                                        aria-autocomplete="none"></textarea>
                                                     <div class="">
                                                         <div class="col-sm-3 pd mrB1">
 
-                                                            <sales-sh-select [placeholder]="'Country'" [disabled]="true" [showBottomBorderOnly]="true" [width]="'100%'" class="select-bdr-bottom"></sales-sh-select>
+                                                            <sales-sh-select [placeholder]="'Country'" [disabled]="true"
+                                                                [showBottomBorderOnly]="true" [width]="'100%'"
+                                                                class="select-bdr-bottom"></sales-sh-select>
 
                                                         </div>
                                                         <div class="col-sm-5 pd mrB1">
 
-                                                            <sales-sh-select [placeholder]="'State'" class="select-bdr-bottom" (selected)="autoFillShippingDetails()" #statesBilling [showBottomBorderOnly]="true" [options]="statesSource$ | async" name="billingDetails.stateCode" [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></sales-sh-select>
+                                                            <sales-sh-select [placeholder]="'State'"
+                                                                class="select-bdr-bottom"
+                                                                (selected)="autoFillShippingDetails()" #statesBilling
+                                                                [showBottomBorderOnly]="true"
+                                                                [options]="statesSource$ | async"
+                                                                name="billingDetails.stateCode"
+                                                                [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode">
+                                                            </sales-sh-select>
 
                                                         </div>
                                                         <div class="col-sm-4 pd mrB1">
 
-                                                            <input maxLength="15" type="text" name="billingDetails.gstNumber" class="form-control input-custom" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber" (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()" placeholder="GSTIN"
-                                                            />
+                                                            <input maxLength="15" type="text"
+                                                                name="billingDetails.gstNumber"
+                                                                class="form-control input-custom"
+                                                                [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber"
+                                                                (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
+                                                                placeholder="GSTIN" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -256,26 +275,43 @@
                                         <div class="col-xs-6">
                                             <div class="form-group p0 width100">
                                                 <label>
-                                    <input type="checkbox" (change)="autoFillShippingDetails()" name="autoFillShipping"
-                                           [attr.checked]="true"
-                                           [(ngModel)]="autoFillShipping"> Shipping Address Same as Billing Address</label>
+                                                    <input type="checkbox" (change)="autoFillShippingDetails()"
+                                                        name="autoFillShipping" [attr.checked]="true"
+                                                        [(ngModel)]="autoFillShipping"> Shipping Address Same as Billing
+                                                    Address</label>
                                                 <div class="billing-address" [ngClass]="{'disabled': autoFillShipping}">
-                                                    <textarea [readonly]="autoFillShipping" name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.address" rows="3" autocomplete="off"></textarea>
+                                                    <textarea [readonly]="autoFillShipping"
+                                                        name="shippingDetails.address" class="form-control"
+                                                        [(ngModel)]="invFormData.accountDetails.shippingDetails.address"
+                                                        rows="3" autocomplete="off"></textarea>
                                                     <div class="clearfix">
                                                         <div class="form-group">
                                                             <div class="col-sm-3 pd mrB1">
                                                                 <div class="form-group">
 
-                                                                    <sales-sh-select [disabled]="true" [placeholder]="'Country'" [showBottomBorderOnly]="true" [width]="'100%'" class="select-bdr-bottom"></sales-sh-select>
+                                                                    <sales-sh-select [disabled]="true"
+                                                                        [placeholder]="'Country'"
+                                                                        [showBottomBorderOnly]="true" [width]="'100%'"
+                                                                        class="select-bdr-bottom"></sales-sh-select>
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-5 pd mrB1">
 
-                                                                <sales-sh-select [disabled]="autoFillShipping" [placeholder]="'State'" class="select-bdr-bottom" #statesShipping [showBottomBorderOnly]="true" [options]="statesSource$ | async" name="shippingDetails.stateCode" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></sales-sh-select>
+                                                                <sales-sh-select [disabled]="autoFillShipping"
+                                                                    [placeholder]="'State'" class="select-bdr-bottom"
+                                                                    #statesShipping [showBottomBorderOnly]="true"
+                                                                    [options]="statesSource$ | async"
+                                                                    name="shippingDetails.stateCode"
+                                                                    [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode">
+                                                                </sales-sh-select>
                                                             </div>
                                                             <div class="col-sm-4 pd mrB1">
 
-                                                                <input [readonly]="autoFillShipping" maxLength="15" type="text" name="shippingDetails.gstNumber" class="form-control input-custom" [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber" (keyup)="getStateCode('shippingDetails', statesShipping)"
+                                                                <input [readonly]="autoFillShipping" maxLength="15"
+                                                                    type="text" name="shippingDetails.gstNumber"
+                                                                    class="form-control input-custom"
+                                                                    [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber"
+                                                                    (keyup)="getStateCode('shippingDetails', statesShipping)"
                                                                     placeholder="GSTIN" />
                                                             </div>
                                                         </div>
@@ -301,7 +337,8 @@
                         <div class="form-group pl0 m-r-15 col-xs-6">
 
 
-                            <input type="text" name="attention" placeholder="Attention to" class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.attentionTo" />
+                            <input type="text" name="attention" placeholder="Attention to"
+                                class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.attentionTo" />
                         </div>
                     </td>
                     <td></td>
@@ -317,8 +354,10 @@
                     <td width="65%">
                         <div class="col-xs-6 pl-0">
 
-                            <input type="email" placeholder="someone@example.com" name="accountDetails.email" class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" #customeremail="ngModel" [class.invalid-inp]="customeremail.errors && (customeremail.dirty || customeremail.touched)"
-                            />
+                            <input type="email" placeholder="someone@example.com" name="accountDetails.email"
+                                class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.email"
+                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" #customeremail="ngModel"
+                                [class.invalid-inp]="customeremail.errors && (customeremail.dirty || customeremail.touched)" />
                         </div>
 
                     </td>
@@ -330,7 +369,9 @@
                     </td>
                     <td>
                         <div class="col-xs-6 pl-0">
-                            <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text" name="accountDetails.mobileNumber" class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.mobileNumber" />
+                            <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text"
+                                name="accountDetails.mobileNumber" class="form-control attentionTo"
+                                [(ngModel)]="invFormData.accountDetails.mobileNumber" />
 
                         </div>
 
@@ -343,7 +384,8 @@
                     </td>
                     <td style="position:relative">
                         <div class="col-xs-6 pl-0">
-                            <input type="text" [disabled]="updateMode" name="invoiceNumber" class="form-control" [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
+                            <input type="text" [disabled]="updateMode" name="invoiceNumber" class="form-control"
+                                [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
                         </div>
                         <div class="col-xs-6 invoiceDateDueDate">
                             <div class="form-inline ">
@@ -351,7 +393,10 @@
 
                                     <label>Invoice Date</label>
 
-                                    <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="invoiceDate" [(ngModel)]="invFormData.voucherDetails.voucherDate" />
+                                    <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel"
+                                        class="form-control dateinvoice" bsDatepicker
+                                        [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="invoiceDate"
+                                        [(ngModel)]="invFormData.voucherDetails.voucherDate" />
                                     <!-- <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">Invalid Date
                                     </p> -->
 
@@ -361,8 +406,11 @@
                                 </div>
                                 <div class="form-group m-l-10 m-r-15">
                                     <label>{{templateHeader?.dueDate?.label}}</label>
-                                    <input type="text" [placeholder]="giddhDateFormat" name="dueDate" [(ngModel)]="invFormData.voucherDetails.dueDate" [minDate]="maxDueDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" #dueDate="ngModel" [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
-                                    />
+                                    <input type="text" [placeholder]="giddhDateFormat" name="dueDate"
+                                        [(ngModel)]="invFormData.voucherDetails.dueDate" [minDate]="maxDueDate"
+                                        class="form-control" bsDatepicker
+                                        [bsConfig]="{ dateInputFormat: giddhDateFormat }" #dueDate="ngModel"
+                                        [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)" />
 
 
                                 </div>
@@ -445,8 +493,10 @@
                         <!-- {{ getSerialNos(entryIndex, transIndex) }} -->
                         <td>
                             <div class="productName">
-                                <label *ngIf="!transaction.accountName" class="selectAccountLabel">Click to Select Account </label>{{transaction.accountName}}
-                                <span *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.name}})</span>
+                                <label *ngIf="!transaction.accountName" class="selectAccountLabel">Click to Select
+                                    Account </label>{{transaction.accountName}}
+                                <span
+                                    *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.name}})</span>
 
                             </div>
                             <div class="skuNumber">
@@ -462,8 +512,8 @@
                                         <div class="entryDate">
                                             <label>Entry Date: </label> {{moment(entry.entryDate) | date: 'MM-dd-yyyy'}}
                                             <span class="edit-icon">
-                          <img src="assets/images/edit-pencilicon.svg">
-                         </span>
+                                                <img src="assets/images/edit-pencilicon.svg">
+                                            </span>
 
 
 
@@ -474,12 +524,12 @@
                                         <div class="hsnCode text-right">
                                             <label>HSN Code:</label>
                                             <span>
-                            {{transaction?.hsnNumber}}
+                                                {{transaction?.hsnNumber}}
 
 
-                           <span class="edit-icon">
-                            <img src="assets/images/edit-pencilicon.svg">
-                          </span>
+                                                <span class="edit-icon">
+                                                    <img src="assets/images/edit-pencilicon.svg">
+                                                </span>
                                             </span>
 
                                         </div>
@@ -508,8 +558,10 @@
                         </td>
                         <td class="text-right">{{ getTransactionTotalTax(entry.taxes) |giddhCurrency }}</td>
 
-                        <td *ngIf="transaction.category === 'income'" style="vertical-align:top !important;" class="text-right">{{ getEntryTotal(entry, transIndex) |giddhCurrency }}</td>
-                        <td *ngIf="transaction.category !== 'income'" style="vertical-align:top !important;" class="text-right">{{ transaction.amount |giddhCurrency }}</td>
+                        <td *ngIf="transaction.category === 'income'" style="vertical-align:top !important;"
+                            class="text-right">{{ getEntryTotal(entry, transIndex) |giddhCurrency }}</td>
+                        <td *ngIf="transaction.category !== 'income'" style="vertical-align:top !important;"
+                            class="text-right">{{ transaction.amount |giddhCurrency }}</td>
 
 
 
@@ -524,7 +576,8 @@
                         <td>
                             <div class="productName">
                                 <div class="ng-select-wrap">
-                                    <input type="text" [(ngModel)]="transaction.accountName" [disabled]="true" name="transaction.accountName" [placeholder]="'Select A/c'" />
+                                    <input type="text" [(ngModel)]="transaction.accountName" [disabled]="true"
+                                        name="transaction.accountName" [placeholder]="'Select A/c'" />
 
                                 </div>
 
@@ -534,7 +587,9 @@
                                     <label>SKU:</label>Number
                                 </div>
                                 <div class="discription">
-                                    <textarea type="text" placeholder="Add Description" name="transaction.description_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.description"></textarea>
+                                    <textarea type="text" placeholder="Add Description"
+                                        name="transaction.description_{{entryIdx}}" class="form-control"
+                                        [(ngModel)]="transaction.description"></textarea>
 
                                 </div>
                                 <div class="dateHsnCode">
@@ -543,12 +598,15 @@
                                             <div class="entryDate">
                                                 <label>Entry Date: </label>
                                                 <span>
-                                <input type="text"  [placeholder]="giddhDateFormat" bsDatepicker name="transaction.date_{{entryIdx}}"
-                                class="form-control text-left" [(ngModel)]="entry.entryDate"
-                                [bsConfig]="{ dateInputFormat: giddhDateFormat }" #dp="bsDatepicker"  [bsValue]="bsValue"/>
-                            <span class="edit-icon" (click)="dp.toggle()" [attr.aria-expanded]="dp.isOpen">
-                              <img src="assets/images/edit-pencilicon.svg">
-                            </span>
+                                                    <input type="text" [placeholder]="giddhDateFormat" bsDatepicker
+                                                        name="transaction.date_{{entryIdx}}"
+                                                        class="form-control text-left" [(ngModel)]="entry.entryDate"
+                                                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                                        #dp="bsDatepicker" [bsValue]="bsValue" />
+                                                    <span class="edit-icon" (click)="dp.toggle()"
+                                                        [attr.aria-expanded]="dp.isOpen">
+                                                        <img src="assets/images/edit-pencilicon.svg">
+                                                    </span>
 
 
                                                 </span>
@@ -557,16 +615,18 @@
                                         </div>
                                         <div class="col-xs-6">
                                             <div class="wrap-hsnBox">
-                                                <div class="hsnCode text-right" (click)="hsnDropdownShow=!hsnDropdownShow">
+                                                <div class="hsnCode text-right"
+                                                    (click)="hsnDropdownShow=!hsnDropdownShow">
                                                     <label>HSN Code:</label>
                                                     <span>
-                              <!-- <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" maxLength="10" placeholder="HSN Number"
+                                                        <!-- <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" maxLength="10" placeholder="HSN Number"
                               name="transaction.hsnNumber_{{entryIdx}}" class="form-control text-right"
                               [(ngModel)]="transaction.hsnNumber"/> -->
-                              {{transaction?.hsnNumber }} <span *ngIf="!transaction.hsnNumber" class="updateText">Update</span>
-                                                    <span class="edit-icon">
-                                 <img src="assets/images/edit-pencilicon.svg">
-                              </span>
+                                                        {{transaction?.hsnNumber }} <span *ngIf="!transaction.hsnNumber"
+                                                            class="updateText">Update</span>
+                                                        <span class="edit-icon">
+                                                            <img src="assets/images/edit-pencilicon.svg">
+                                                        </span>
                                                     </span>
 
                                                 </div>
@@ -574,10 +634,15 @@
 
                                                 <div class="hsnCodeDropdown" *ngIf="hsnDropdownShow">
                                                     <label>HSN Code</label>
-                                                    <input type="text" maxLength="10" placeholder="HSN Number" name="transaction.hsnNumber_{{entryIdx}}" class="" [(ngModel)]="transaction.hsnNumber" /> <a><i class="fa fa-search"></i> </a>
+                                                    <input type="text" maxLength="10" placeholder="HSN Number"
+                                                        name="transaction.hsnNumber_{{entryIdx}}" class=""
+                                                        [(ngModel)]="transaction.hsnNumber" /> <a><i
+                                                            class="fa fa-search"></i> </a>
                                                     <div class="btn-group">
-                                                        <button class="btn btn-sm btn-success" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">Save</button>
-                                                        <button class="btn btn-sm btn-primary" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">Cancel</button>
+                                                        <button class="btn btn-sm btn-success" type="button"
+                                                            (click)="hsnDropdownShow=!hsnDropdownShow">Save</button>
+                                                        <button class="btn btn-sm btn-primary" type="button"
+                                                            (click)="hsnDropdownShow=!hsnDropdownShow">Cancel</button>
                                                     </div>
 
                                                 </div>
@@ -588,24 +653,33 @@
                             </div>
                         </td>
                         <td class="text-right">
-                            <input type="number" [disabled]="true" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.quantity" />
+                            <input type="number" [disabled]="true" placeholder="Quantity"
+                                name="transaction.quantity_{{entryIdx}}" class="form-control text-right"
+                                [(ngModel)]="transaction.quantity" />
 
-                            <select class="form-control" style=" max-width: 150px;" [disabled]="true" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit" (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
-                      <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">{{stock.text}}
-                      </option>
-                  </select>
+                            <select class="form-control" style=" max-width: 150px;" [disabled]="true"
+                                name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit"
+                                (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
+                                <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">{{stock.text}}
+                                </option>
+                            </select>
                         </td>
                         <td class="text-right">
-                            <input type="number" [disabled]="true" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control transaction-rate text-right" [(ngModel)]="transaction.rate" />
+                            <input type="number" [disabled]="true" placeholder="Rate"
+                                name="transaction.rate_{{entryIdx}}" class="form-control transaction-rate text-right"
+                                [(ngModel)]="transaction.rate" />
 
                         </td>
                         <td class="text-right">
-                            <input type="text" [disabled]="true" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount" decimalDigitsDirective [DecimalPlaces]="2" />
+                            <input type="text" [disabled]="true" placeholder="Amount"
+                                name="transaction.amount_{{entryIdx}}" class="form-control text-right"
+                                [(ngModel)]="transaction.amount" decimalDigitsDirective [DecimalPlaces]="2" />
                         </td>
                         <td *ngIf="transaction.category === 'income'">
 
                             <div class=" text-right">
-                                <input type="text" [disabled]="true" placeholder="Discount" [value]="tx_discount" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" />
+                                <input type="text" [disabled]="true" placeholder="Discount" [value]="tx_discount"
+                                    class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" />
 
                                 <!-- <discount-list #discountComponent [isMenuOpen]="false" [discountAccountsDetails]="entry.discounts" [totalAmount]="transaction.amount"></discount-list> -->
                             </div>
@@ -615,17 +689,24 @@
                         <td *ngIf="transaction.category !== 'income'">&nbsp;</td>
 
                         <td *ngIf="transaction.category === 'income'" class="text-right">
-                            <input type="text" [disabled]="true" placeholder="Tax" [value]="totalTax" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" />
+                            <input type="text" [disabled]="true" placeholder="Tax" [value]="totalTax"
+                                class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" />
 
                             <!-- <sales-tax-list class="salesTax" [showTaxPopup]="false" (selectedTaxEvent)="selectedTaxEvent($event)" (closeOtherPopupEvent)="closeDiscountPopup()" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
                             </sales-tax-list> -->
                         </td>
                         <td *ngIf="transaction.category !== 'income'">&nbsp;</td>
 
-                        <td *ngIf="transaction.category === 'income'" class="text-right" style="vertical-align:top !important;">
-                            <input type="text" name="transaction.total_{{entryIdx}}" placeholder="Total" class="form-control text-right" [value]="tx_total" readonly decimalDigitsDirective [DecimalPlaces]="2" /></td>
-                        <td *ngIf="transaction.category !== 'income'" class="text-right" style="vertical-align:top !important;">
-                            <input type="text" name="transaction.total_{{entryIdx}}" placeholder="Total" class="form-control text-right" [value]="transaction.amount" readonly decimalDigitsDirective [DecimalPlaces]="2" /></td>
+                        <td *ngIf="transaction.category === 'income'" class="text-right"
+                            style="vertical-align:top !important;">
+                            <input type="text" name="transaction.total_{{entryIdx}}" placeholder="Total"
+                                class="form-control text-right" [value]="tx_total" readonly decimalDigitsDirective
+                                [DecimalPlaces]="2" /></td>
+                        <td *ngIf="transaction.category !== 'income'" class="text-right"
+                            style="vertical-align:top !important;">
+                            <input type="text" name="transaction.total_{{entryIdx}}" placeholder="Total"
+                                class="form-control text-right" [value]="transaction.amount" readonly
+                                decimalDigitsDirective [DecimalPlaces]="2" /></td>
                     </tr>
                 </ng-container>
             </tbody>
@@ -644,7 +725,8 @@
                             <div class="collapse-pane-heading">
                                 <div class="ico-box-wrap">
                                     <div class="ico-box">
-                                        <span [ngClass]="isOthrDtlCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
+                                        <span [ngClass]="isOthrDtlCollapsed ? 'icon-add' : 'icon-minus'"
+                                            aria-hidden="true"></span>
                                     </div>
                                 </div>
                                 <div class="ico-head">Other Details</div>
@@ -653,32 +735,48 @@
                                 <div class="row">
                                     <div class="form-group col-xs-4">
                                         <!-- <label>Ship Date</label> -->
-                                        <input type="text" #shippingDate="ngModel" [placeholder]="giddhDateFormat" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }" placeholder="Ship Date"
+                                        <input type="text" #shippingDate="ngModel" [placeholder]="giddhDateFormat"
+                                            bsDatepicker name="shippingDate"
+                                            [(ngModel)]="invFormData.templateDetails.other.shippingDate"
+                                            class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                            placeholder="Ship Date"
                                             [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
-                                        <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">Invalid Date</p>
+                                        <p class="text-danger"
+                                            *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
+                                            Invalid Date</p>
                                         <!--[placeholder]="giddhDateFormat"-->
                                     </div>
                                     <div class="form-group col-xs-4">
                                         <!-- <label>Ship Via</label> -->
-                                        <input type="text" name="shippedVia" [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control" placeholder="Ship Via" />
+                                        <input type="text" name="shippedVia"
+                                            [(ngModel)]="invFormData.templateDetails.other.shippedVia"
+                                            class="form-control" placeholder="Ship Via" />
                                     </div>
                                     <div class="form-group col-xs-4">
                                         <!-- <label>Tracking No.</label> -->
-                                        <input type="text" name="trackingNumber" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control" placeholder="Tracking No." />
+                                        <input type="text" name="trackingNumber"
+                                            [(ngModel)]="invFormData.templateDetails.other.trackingNumber"
+                                            class="form-control" placeholder="Tracking No." />
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-xs-4">
                                         <!-- <label>Field 1</label> -->
-                                        <input type="text" name="customField1" [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control" placeholder="Field 1" />
+                                        <input type="text" name="customField1"
+                                            [(ngModel)]="invFormData.templateDetails.other.customField1"
+                                            class="form-control" placeholder="Field 1" />
                                     </div>
                                     <div class="form-group col-xs-4">
                                         <!-- <label>Field 2</label> -->
-                                        <input type="text" name="customField2" [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control" placeholder="Field 2" />
+                                        <input type="text" name="customField2"
+                                            [(ngModel)]="invFormData.templateDetails.other.customField2"
+                                            class="form-control" placeholder="Field 2" />
                                     </div>
                                     <div class="form-group col-xs-4">
                                         <!-- <label>Field 3</label> -->
-                                        <input type="text" name="customField3" [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control" placeholder="Field 3" />
+                                        <input type="text" name="customField3"
+                                            [(ngModel)]="invFormData.templateDetails.other.customField3"
+                                            class="form-control" placeholder="Field 3" />
                                     </div>
                                 </div>
                             </div>
@@ -686,32 +784,38 @@
                     </div>
                     <div class="pdT1 pl0 max-600">
                         <label class="mrB1">Message</label>
-                        <textarea style="height:120px !important;" class="form-control" name="message2" [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
+                        <textarea style="height:120px !important;" class="form-control" name="message2"
+                            [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
 
                     </div>
                     <!-- commented due to presently attachfile key is not available in request
 -->
 
                 </td>
-                <td class="text-danger text-center" style="display:none;">Note:To edit current invoice amount or rate <a class="cursor-pointer" (click)="goToLeger();">Click here</a></td>
+                <td class="text-danger text-center" style="display:none;">Note:To edit current invoice amount or rate <a
+                        class="cursor-pointer" (click)="goToLeger();">Click here</a></td>
                 <td>
                     <section class="tableSec form-group">
                         <div class="tableRow">
                             <div class="tableCell">Total Amount</div>
-                            <div class="tableCell figureCell">{{invFormData.voucherDetails.subTotal |giddhCurrency }}</div>
+                            <div class="tableCell figureCell">{{invFormData.voucherDetails.subTotal |giddhCurrency }}
+                            </div>
                         </div>
                         <div class="tableRow">
                             <div class="tableCell">Discount</div>
-                            <div class="tableCell figureCell">-{{invFormData.voucherDetails.totalDiscount |giddhCurrency }}</div>
+                            <div class="tableCell figureCell">
+                                -{{invFormData.voucherDetails.totalDiscount |giddhCurrency }}</div>
                         </div>
                         <div class="tableRow">
                             <div class="tableCell">Taxable Value</div>
-                            <div class="tableCell figureCell">{{invFormData.voucherDetails.totalTaxableValue |giddhCurrency }}
+                            <div class="tableCell figureCell">
+                                {{invFormData.voucherDetails.totalTaxableValue |giddhCurrency }}
                             </div>
                         </div>
                         <div class="tableRow">
                             <div class="tableCell">Tax</div>
-                            <div class="tableCell figureCell">{{invFormData.voucherDetails.gstTaxesTotal |giddhCurrency }}</div>
+                            <div class="tableCell figureCell">
+                                {{invFormData.voucherDetails.gstTaxesTotal |giddhCurrency }}</div>
                         </div>
                         <div class="tableRow">
                             <div class="tableCell">
@@ -728,24 +832,36 @@
 <div class="btn-group" dropdown #depositDropdown="bs-dropdown" [autoClose]="false">
 -->
                                 <div class="btn-group">
-                                    <button id="depositBoxTrigger" type="button" class="btn btn-default dropdown-toggle" aria-controls="deposit-dropdown" (click)="dropdownisOpen = dropdownisOpen">
-                    {{  'Deposit' }}
-                  </button>
-                                    <ul (click)="clickedInside($event)" id="deposit-dropdown" *ngIf="dropdownisOpen" class="dropdown-menu form-group pd1" role="menu" aria-labelledby="button-dropup">
+                                    <button id="depositBoxTrigger" type="button" class="btn btn-default dropdown-toggle"
+                                        aria-controls="deposit-dropdown" (click)="dropdownisOpen = dropdownisOpen">
+                                        {{  'Deposit' }}
+                                    </button>
+                                    <ul (click)="clickedInside($event)" id="deposit-dropdown" *ngIf="dropdownisOpen"
+                                        class="dropdown-menu form-group pd1" role="menu"
+                                        aria-labelledby="button-dropup">
                                         <span class="caret"></span>
                                         <li role="menuitem">
                                             <div class="">
                                                 <label>Amount</label>
-                                                <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount" class="form-control max100" [(ngModel)]="dueAmount" />
+                                                <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount"
+                                                    name="dueAmount" class="form-control max100"
+                                                    [(ngModel)]="dueAmount" />
                                             </div>
                                         </li>
                                         <li role="menuitem" class="mrT1">
                                             <div class="">
                                                 <label>Payment Mode</label>
-                                                <sh-select name="depositAccountUniqueName" [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
-                                                    [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
+                                                <sh-select name="depositAccountUniqueName"
+                                                    [options]="bankAccounts$ | async"
+                                                    [(ngModel)]="depositAccountUniqueName"
+                                                    (selected)="onSelectPaymentMode($event)"
+                                                    [placeholder]="'Select Account'" [notFoundLink]="false"
+                                                    [forceClearReactive]="forceClear$ | async" [multiple]="false"
+                                                    [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true"
+                                                    class="text-left">
                                                     <ng-template #optionTemplate1 let-option="option">
-                                                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                                        <a href="javascript:void(0)" class="list-item"
+                                                            style="border-bottom: 1px solid #ccc;">
                                                             <div class="item">{{ option.label }}</div>
                                                             <div class="item_unq">{{ option.value }}</div>
                                                         </a>
@@ -806,11 +922,12 @@
         <section id="actionPane" class="text-center mrB4">
             <div class="col-xs-12">
                 <div class="pull-right pr">
-                    <button *ngIf="showCloseButton" type="button" class="btn btn-default mrR1" (click)="closePopupEvent({ action: 'closed' })">Close
-          </button>
+                    <button *ngIf="showCloseButton" type="button" class="btn btn-default mrR1"
+                        (click)="closePopupEvent({ action: 'closed' })">Close
+                    </button>
                     <button type="submit" class="btn btn-default" [disabled]="invoiceForm.invalid">
-            <span>Update Voucher</span>
-          </button>
+                        <span>Update Voucher</span>
+                    </button>
                 </div>
             </div>
         </section>

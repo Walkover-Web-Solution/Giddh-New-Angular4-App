@@ -5,110 +5,110 @@
   <% } %> -->
 
 <head>
-  <script type="text/javascript">
-    if (window.location.hostname.indexOf('www') == 0) {
-      window.location = window.location.href.replace('www.', '');
-    }
-  </script>
+    <script type="text/javascript">
+        if (window.location.hostname.indexOf('www') == 0) {
+            window.location = window.location.href.replace('www.', '');
+        }
+    </script>
 
-  <meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="cache-control" content="max-age=0"/>
-  <meta http-equiv="cache-control" content="no-cache"/>
-  <meta http-equiv="expires" content="0"/>
-  <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT"/>
-  <meta http-equiv="pragma" content="no-cache"/>
-  <title>Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software</title>
-  <meta name="description" content="Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software">
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <title>Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software</title>
+    <meta name="description" content="Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software">
     <script>
         window.usingCordova = false;
     </script>
-  <script type='text/javascript'>
-    var jQuery = $ = window.$ = window.jQuery = require("jquery");
-  </script>
+    <script type='text/javascript'>
+        var jQuery = $ = window.$ = window.jQuery = require("jquery");
+    </script>
 
 
-  <script>
-    // if (<%= htmlWebpackPlugin.options.metadata.errlyticsNeeded %>)
-    if (true) {
-      !function() {
-        var analytics = window.analytics = window.analytics || [];
-        if (!analytics.initialize)
-          if (analytics.invoked) window.console && console.error && console.error('Segment snippet included twice.');
-          else {
-            analytics.invoked = !0;
-            analytics.methods = ['trackSubmit', 'trackClick', 'trackLink', 'trackForm', 'pageview', 'identify', 'reset', 'group', 'track', 'ready', 'alias', 'debug', 'page', 'once', 'off', 'on'];
-            analytics.factory = function(t) {
-              return function() {
-                var e = Array.prototype.slice.call(arguments);
-                e.unshift(t);
-                analytics.push(e);
-                return analytics;
-              };
-            };
-            for (var t = 0; t < analytics.methods.length; t++) {
-              var e = analytics.methods[t];
-              analytics[e] = analytics.factory(e);
+    <script>
+        // if (<%= htmlWebpackPlugin.options.metadata.errlyticsNeeded %>)
+        if (true) {
+            !function () {
+                var analytics = window.analytics = window.analytics || [];
+                if (!analytics.initialize)
+                    if (analytics.invoked) window.console && console.error && console.error('Segment snippet included twice.');
+                    else {
+                        analytics.invoked = !0;
+                        analytics.methods = ['trackSubmit', 'trackClick', 'trackLink', 'trackForm', 'pageview', 'identify', 'reset', 'group', 'track', 'ready', 'alias', 'debug', 'page', 'once', 'off', 'on'];
+                        analytics.factory = function (t) {
+                            return function () {
+                                var e = Array.prototype.slice.call(arguments);
+                                e.unshift(t);
+                                analytics.push(e);
+                                return analytics;
+                            };
+                        };
+                        for (var t = 0; t < analytics.methods.length; t++) {
+                            var e = analytics.methods[t];
+                            analytics[e] = analytics.factory(e);
+                        }
+                        analytics.load = function (t, e) {
+                            var n = document.createElement('script');
+                            n.type = 'text/javascript';
+                            n.async = !0;
+                            n.src = 'https://cdn.segment.com/analytics.js/v1/' + t + '/analytics.min.js';
+                            var a = document.getElementsByTagName('script')[0];
+                            a.parentNode.insertBefore(n, a);
+                            analytics._loadOptions = e;
+                        };
+                        analytics.SNIPPET_VERSION = '4.1.0';
+                        analytics.load('pwEAdSA97VnDhJ3j2DEJlm9JfLkv3CmU');
+                        analytics.page();
+                        setTimeout(senduserInfo, 30000);
+
+                    }
+            }();
+
+
+            function senduserInfo() {
+                var session = localStorage.getItem('session');
+                var user = JSON.parse(session).user;
+                var companyUniqueName = JSON.parse(session).companyUniqueName;
+                if (user && user.session.id) {
+                    analytics.identify(user.user.uniqueName, {
+                        name: user.user.name,
+                        email: user.user.email,
+                        companyName: companyUniqueName,
+                        isDesktop: false
+                        // isDesktop:  <%= htmlWebpackPlugin.options.metadata.isElectron %>
+
+                    },
+                        {
+                            Intercom: {
+                                user_hash: user.intercomHash
+                            }
+                        }
+                    )
+                        ;
+                }
             }
-            analytics.load = function(t, e) {
-              var n = document.createElement('script');
-              n.type = 'text/javascript';
-              n.async = !0;
-              n.src = 'https://cdn.segment.com/analytics.js/v1/' + t + '/analytics.min.js';
-              var a = document.getElementsByTagName('script')[0];
-              a.parentNode.insertBefore(n, a);
-              analytics._loadOptions = e;
-            };
-            analytics.SNIPPET_VERSION = '4.1.0';
-            analytics.load('pwEAdSA97VnDhJ3j2DEJlm9JfLkv3CmU');
-            analytics.page();
-            setTimeout(senduserInfo, 30000);
-
-          }
-      }();
-
-
-      function senduserInfo() {
-        var session = localStorage.getItem('session');
-        var user = JSON.parse(session).user;
-        var companyUniqueName = JSON.parse(session).companyUniqueName;
-        if (user && user.session.id) {
-          analytics.identify(user.user.uniqueName, {
-              name: user.user.name,
-              email: user.user.email,
-              companyName: companyUniqueName,
-              isDesktop: false
-              // isDesktop:  <%= htmlWebpackPlugin.options.metadata.isElectron %>
-
-            },
-            {
-              Intercom: {
-                user_hash: user.intercomHash
-              }
-            }
-          )
-          ;
         }
-      }
-    }
-  </script>
+    </script>
 
 
-  <!--<% if (webpackConfig.htmlElements.headTags) { %>-->
-  <!--&lt;!&ndash; Configured Head Tags  &ndash;&gt;-->
-  <!--<%= webpackConfig.htmlElements.headTags %>-->
-  <!--<% } %>-->
+    <!--<% if (webpackConfig.htmlElements.headTags) { %>-->
+    <!--&lt;!&ndash; Configured Head Tags  &ndash;&gt;-->
+    <!--<%= webpackConfig.htmlElements.headTags %>-->
+    <!--<% } %>-->
 
-  <!-- CSS will be injected by webpack here -->
-  <!-- Preload link tags will be injected by webpack here -->
+    <!-- CSS will be injected by webpack here -->
+    <!-- Preload link tags will be injected by webpack here -->
 </head>
 
 
 <body class="unresponsive">
 
-<!--<div id="loader-1" class="giddh-spinner vertical-center-spinner"></div>-->
-<!-- Scripts will be injected by webpack here -->
+    <!--<div id="loader-1" class="giddh-spinner vertical-center-spinner"></div>-->
+    <!-- Scripts will be injected by webpack here -->
 
 </body>
 

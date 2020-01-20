@@ -1,89 +1,91 @@
 <div class="column content-column gst-filing-container navs-list">
-  <div class="tax-engine">
-    <!---->
-    <!---->
-    <div class="column list-column expanded-list-column transactions-list">
+    <div class="tax-engine">
+        <!---->
+        <!---->
+        <div class="column list-column expanded-list-column transactions-list">
 
-      <div class="scroll-y noscroll-x body fill">
+            <div class="scroll-y noscroll-x body fill">
 
-        <div class="reconciliation-type-band push-gstin">
+                <div class="reconciliation-type-band push-gstin">
 
-          <tabset #staticTabs class="sub-filter-nav-band" *ngIf="!gstr1SummaryDetailsInProcess">
+                    <tabset #staticTabs class="sub-filter-nav-band" *ngIf="!gstr1SummaryDetailsInProcess">
 
-            <tab>
-              <ng-template tabHeading>
-                Transaction Summary
-              </ng-template>
+                        <tab>
+                            <ng-template tabHeading>
+                                Transaction Summary
+                            </ng-template>
 
-              <div class="subtabs-box transactions-overview">
-                <transaction-summary [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod"
-                                     [selectedGst]="selectedGst" [isTransactionSummary]="true"></transaction-summary>
-              </div>
+                            <div class="subtabs-box transactions-overview">
+                                <transaction-summary [activeCompanyGstNumber]="activeCompanyGstNumber"
+                                    [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"
+                                    [isTransactionSummary]="true"></transaction-summary>
+                            </div>
 
-            </tab>
+                        </tab>
 
-            <tab>
-              <ng-template tabHeading>
-                HSN
-              </ng-template>
+                        <tab>
+                            <ng-template tabHeading>
+                                HSN
+                            </ng-template>
 
-              <div class="subtabs-box transactions-overview">
-                <hsn-summary [hsnSummary]="gstr1SummaryDetails.data.hsn"></hsn-summary>
-              </div>
-            </tab>
+                            <div class="subtabs-box transactions-overview">
+                                <hsn-summary [hsnSummary]="gstr1SummaryDetails.data.hsn"></hsn-summary>
+                            </div>
+                        </tab>
 
-            <tab>
-              <ng-template tabHeading>
-                NIL
-              </ng-template>
-              <div class="subtabs-box transactions-overview">
-                <nil-summary [nilSummary]="gstr1SummaryDetails.data.nil"></nil-summary>
-              </div>
-            </tab>
+                        <tab>
+                            <ng-template tabHeading>
+                                NIL
+                            </ng-template>
+                            <div class="subtabs-box transactions-overview">
+                                <nil-summary [nilSummary]="gstr1SummaryDetails.data.nil"></nil-summary>
+                            </div>
+                        </tab>
 
-            <tab>
-              <ng-template tabHeading>
-                B2CS
-              </ng-template>
-              <div class="subtabs-box transactions-overview">
-                <b2cs-summary [brcsSummary]="gstr1SummaryDetails.data.b2cs"></b2cs-summary>
-              </div>
-            </tab>
+                        <tab>
+                            <ng-template tabHeading>
+                                B2CS
+                            </ng-template>
+                            <div class="subtabs-box transactions-overview">
+                                <b2cs-summary [brcsSummary]="gstr1SummaryDetails.data.b2cs"></b2cs-summary>
+                            </div>
+                        </tab>
 
-            <tab>
-              <ng-template tabHeading>
-                Document Issued
-              </ng-template>
-              <div class="subtabs-box transactions-overview">
-                <document-issued [doc_issues]="gstr1SummaryDetails.data.doc_issue"></document-issued>
-              </div>
-            </tab>
+                        <tab>
+                            <ng-template tabHeading>
+                                Document Issued
+                            </ng-template>
+                            <div class="subtabs-box transactions-overview">
+                                <document-issued [doc_issues]="gstr1SummaryDetails.data.doc_issue"></document-issued>
+                            </div>
+                        </tab>
 
-            <tab>
-              <ng-template tabHeading>
-                Failed Transactions
-              </ng-template>
-              <div class="subtabs-box transactions-overview">
-                <failed-transactions [failedTransactions]="gstr1SummaryDetails.errors"></failed-transactions>
-              </div>
-            </tab>
+                        <tab>
+                            <ng-template tabHeading>
+                                Failed Transactions
+                            </ng-template>
+                            <div class="subtabs-box transactions-overview">
+                                <failed-transactions [failedTransactions]="gstr1SummaryDetails.errors">
+                                </failed-transactions>
+                            </div>
+                        </tab>
 
-          </tabset>
+                    </tabset>
 
-          <div class="filings-empty-state" *ngIf="gstr1SummaryDetailsInProcess">
-                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-                <div class="spinner2">
-                    <div class="cube1"></div>
-                    <div class="cube2"></div>
+                    <div class="filings-empty-state" *ngIf="gstr1SummaryDetailsInProcess">
+                        <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                        <div class="spinner2">
+                            <div class="cube1"></div>
+                            <div class="cube2"></div>
+                        </div>
+
+                        <div class="empty-msg"><span> Loading Data. </span></div>
+                    </div>
+
                 </div>
 
-            <div class="empty-msg"><span>  Loading Data.  </span></div>
-          </div>
+            </div>
 
         </div>
-
-      </div>
-
     </div>
-  </div>
 </div>

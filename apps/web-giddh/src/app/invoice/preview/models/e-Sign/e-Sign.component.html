@@ -1,15 +1,16 @@
 <div id="" class="">
-  <div class="clearfix" id="export-body">
-    <form name="esignature" id="eSignForm" #eSign class="" autocomplete="off" action="" target="_blank" method="post">
-      <input id="AadhaarNumber" placeholder="Your Aadhaar No." name="AadhaarNumber" type="text" class="form-control"
-             [(ngModel)]="eSignModel.AadhaarNumber">
+    <div class="clearfix" id="export-body">
+        <form name="esignature" id="eSignForm" #eSign class="" autocomplete="off" action="" target="_blank"
+            method="post">
+            <input id="AadhaarNumber" placeholder="Your Aadhaar No." name="AadhaarNumber" type="text"
+                class="form-control" [(ngModel)]="eSignModel.AadhaarNumber">
 
-      <p class="mrT1">NOTE: Aadhaar is required for <strong>Aadhaar eSign</strong></p>
-      <div class="pull-left mrT1">
-        <button type="submit" class="btn btn-md btn-success" (click)="onConfirmation(eSign)">Go</button>
-      </div>
-    </form>
+            <p class="mrT1">NOTE: Aadhaar is required for <strong>Aadhaar eSign</strong></p>
+            <div class="pull-left mrT1">
+                <button type="submit" class="btn btn-md btn-success" (click)="onConfirmation(eSign)">Go</button>
+            </div>
+        </form>
 
 
-  </div>
+    </div>
 </div>

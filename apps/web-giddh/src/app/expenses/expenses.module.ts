@@ -22,29 +22,29 @@ import { ApprovePettyCashEntryConfirmDialogComponent } from './components/approv
 
 
 @NgModule({
-  declarations: [ExpensesComponent, PendingListComponent, RejectedListComponent, FilterListComponent, ExpenseDetailsComponent, ApprovePettyCashEntryConfirmDialogComponent],
-  providers: [],
-  imports: [CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    BsDatepickerModule,
-    DatepickerModule,
-    Daterangepicker,
-    ExpensesRoutingModule,
-    TabsModule.forRoot(),
-    LedgerModule,
-    CurrencyModule,
-    NgxUploaderModule,
-    PaginationModule,
-    SharedModule,
-    ShSelectModule,
-    ModalModule,
-    ElementViewChildModule, SalesModule
-  ],
-  exports: [
-    ExpensesComponent,
-    CurrencyModule
-  ]
+    declarations: [ExpensesComponent, PendingListComponent, RejectedListComponent, FilterListComponent, ExpenseDetailsComponent, ApprovePettyCashEntryConfirmDialogComponent],
+    providers: [],
+    imports: [CommonModule,
+        ReactiveFormsModule,
+        FormsModule,
+        BsDatepickerModule,
+        DatepickerModule,
+        Daterangepicker,
+        ExpensesRoutingModule,
+        TabsModule.forRoot(),
+        LedgerModule,
+        CurrencyModule,
+        NgxUploaderModule,
+        PaginationModule,
+        SharedModule,
+        ShSelectModule,
+        ModalModule,
+        ElementViewChildModule, SalesModule
+    ],
+    exports: [
+        ExpensesComponent,
+        CurrencyModule
+    ]
 })
 export class ExpensesModule {
 }

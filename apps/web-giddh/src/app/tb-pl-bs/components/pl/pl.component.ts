@@ -12,8 +12,8 @@ import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
-  selector: 'pl',
-  template: `
+    selector: 'pl',
+    template: `
       <tb-pl-bs-filter
               #filter
               [selectedCompany]="selectedCompany"
@@ -57,219 +57,218 @@ import { ToasterService } from '../../../services/toaster.service';
   `
 })
 export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
-  public from: string;
-  public to: string;
+    public from: string;
+    public to: string;
 
-  public get selectedCompany(): CompanyResponse {
-    return this._selectedCompany;
-  }
-
-  // set company and fetch data...
-  @Input()
-  public set selectedCompany(value: CompanyResponse) {
-    this._selectedCompany = value;
-    if (value && !this.isDateSelected) {
-
-      let index = this.findIndex(value.activeFinancialYear, value.financialYears);
-      this.request = {
-        refresh: false,
-        fy: index,
-        from: value.activeFinancialYear.financialYearStarts,
-        to: value.activeFinancialYear.financialYearEnds
-      };
-      // this.filterData(this.request);
+    public get selectedCompany(): CompanyResponse {
+        return this._selectedCompany;
     }
-  }
 
-  public showLoader: Observable<boolean>;
-  public data: ProfitLossData;
-  public cogsData: ChildGroup;
-  public request: ProfitLossRequest;
-  public expandAll: boolean;
-  @Input() public isDateSelected: boolean = false;
+    // set company and fetch data...
+    @Input()
+    public set selectedCompany(value: CompanyResponse) {
+        this._selectedCompany = value;
+        if (value && value.activeFinancialYear && !this.isDateSelected) {
 
-  public search: string;
-  @ViewChild('plGrid') public plGrid: PlGridComponent;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-  private _selectedCompany: CompanyResponse;
-
-  constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private _toaster: ToasterService) {
-    this.showLoader = this.store.select(p => p.tlPl.pl.showLoader).pipe(takeUntil(this.destroyed$));
-  }
-
-  public ngOnInit() {
-    // console.log('hello Tb Component');
-    this.store.pipe(select(p => p.tlPl.pl.data), takeUntil(this.destroyed$)).subscribe(p => {
-      if (p) {
-        let data = _.cloneDeep(p) as ProfitLossData;
-        let cogs;
-        if (data && data.incomeStatment && data.incomeStatment.costOfGoodsSold) {
-          cogs = _.cloneDeep(data.incomeStatment.costOfGoodsSold) as GetCogsResponse;
-        } else {
-          cogs = null;
-        }
-
-        if (data && data.message) {
-          setTimeout(() => {
-            this._toaster.clearAllToaster();
-            this._toaster.infoToast(data.message);
-          }, 100);
-        }
-
-        if (cogs) {
-          let cogsGrp: ChildGroup = new ChildGroup();
-          cogsGrp.isCreated = true;
-          cogsGrp.isVisible = true;
-          cogsGrp.isIncludedInSearch = true;
-          cogsGrp.isOpen = false;
-          cogsGrp.level1 = false;
-          cogsGrp.uniqueName = 'cogs';
-          cogsGrp.groupName = 'Less: Cost of Goods Sold';
-          cogsGrp.closingBalance = {
-            amount: cogs.cogs,
-            type: 'DEBIT'
-          };
-          cogsGrp.accounts = [];
-          cogsGrp.childGroups = [];
-
-          Object.keys(cogs).filter(f => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses'].includes(f)).forEach(f => {
-            let cg = new ChildGroup();
-            cg.isCreated = false;
-            cg.isVisible = false;
-            cg.isIncludedInSearch = true;
-            cg.isOpen = false;
-            cg.uniqueName = f;
-            cg.groupName = f.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
-            // removed following line in favour of G0-908
-            // cg.category = f === 'closingInventory' ? 'expenses' : 'income';
-            cg.category = f === 'income';
-            cg.closingBalance = {
-              amount: cogs[f],
-              type: 'CREDIT'
+            let index = this.findIndex(value.activeFinancialYear, value.financialYears);
+            this.request = {
+                refresh: false,
+                fy: index,
+                from: value.activeFinancialYear.financialYearStarts,
+                to: value.activeFinancialYear.financialYearEnds
             };
-            cg.accounts = [];
-            cg.childGroups = [];
-            if (['purchasesStockAmount', 'manufacturingExpenses'].includes(f)) {
-              cg.groupName = `+ ${cg.groupName}`;
-            } else if (f === 'closingInventory') {
-              cg.groupName = `- ${cg.groupName}`;
+            // this.filterData(this.request);
+        }
+    }
+
+    public showLoader: Observable<boolean>;
+    public data: ProfitLossData;
+    public cogsData: ChildGroup;
+    public request: ProfitLossRequest;
+    public expandAll: boolean;
+    @Input() public isDateSelected: boolean = false;
+
+    public search: string;
+    @ViewChild('plGrid') public plGrid: PlGridComponent;
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+    private _selectedCompany: CompanyResponse;
+
+    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private _toaster: ToasterService) {
+        this.showLoader = this.store.select(p => p.tlPl.pl.showLoader).pipe(takeUntil(this.destroyed$));
+    }
+
+    public ngOnInit() {
+        this.store.pipe(select(p => p.tlPl.pl.data), takeUntil(this.destroyed$)).subscribe(p => {
+            if (p) {
+                let data = _.cloneDeep(p) as ProfitLossData;
+                let cogs;
+                if (data && data.incomeStatment && data.incomeStatment.costOfGoodsSold) {
+                    cogs = _.cloneDeep(data.incomeStatment.costOfGoodsSold) as GetCogsResponse;
+                } else {
+                    cogs = null;
+                }
+
+                if (data && data.message) {
+                    setTimeout(() => {
+                        this._toaster.clearAllToaster();
+                        this._toaster.infoToast(data.message);
+                    }, 100);
+                }
+
+                if (cogs) {
+                    let cogsGrp: ChildGroup = new ChildGroup();
+                    cogsGrp.isCreated = true;
+                    cogsGrp.isVisible = true;
+                    cogsGrp.isIncludedInSearch = true;
+                    cogsGrp.isOpen = false;
+                    cogsGrp.level1 = false;
+                    cogsGrp.uniqueName = 'cogs';
+                    cogsGrp.groupName = 'Less: Cost of Goods Sold';
+                    cogsGrp.closingBalance = {
+                        amount: cogs.cogs,
+                        type: 'DEBIT'
+                    };
+                    cogsGrp.accounts = [];
+                    cogsGrp.childGroups = [];
+
+                    Object.keys(cogs).filter(f => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses'].includes(f)).forEach(f => {
+                        let cg = new ChildGroup();
+                        cg.isCreated = false;
+                        cg.isVisible = false;
+                        cg.isIncludedInSearch = true;
+                        cg.isOpen = false;
+                        cg.uniqueName = f;
+                        cg.groupName = f.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+                        // removed following line in favour of G0-908
+                        // cg.category = f === 'closingInventory' ? 'expenses' : 'income';
+                        cg.category = f === 'income';
+                        cg.closingBalance = {
+                            amount: cogs[f],
+                            type: 'CREDIT'
+                        };
+                        cg.accounts = [];
+                        cg.childGroups = [];
+                        if (['purchasesStockAmount', 'manufacturingExpenses'].includes(f)) {
+                            cg.groupName = `+ ${cg.groupName}`;
+                        } else if (f === 'closingInventory') {
+                            cg.groupName = `- ${cg.groupName}`;
+                        }
+                        cogsGrp.childGroups.push(cg);
+                    });
+
+                    this.cogsData = cogsGrp;
+                }
+
+                if (data && data.expArr) {
+                    this.InitData(data.expArr);
+                    data.expArr.forEach(g => {
+                        g.isVisible = true;
+                        g.isCreated = true;
+                        g.isIncludedInSearch = true;
+                        g.isOpen = true;
+                        g.childGroups.forEach(c => {
+                            c.isVisible = true;
+                            c.isCreated = true;
+                            c.isIncludedInSearch = true;
+                        });
+                    });
+                }
+                if (data && data.incArr) {
+                    this.InitData(data.incArr);
+                    data.incArr.forEach(g => {
+                        g.isVisible = true;
+                        g.isCreated = true;
+                        g.isIncludedInSearch = true;
+                        g.isOpen = true;
+                        g.childGroups.forEach(c => {
+                            c.isVisible = true;
+                            c.isCreated = true;
+                            c.isIncludedInSearch = true;
+                        });
+                    });
+                }
+                this.data = data;
+            } else {
+                this.data = null;
             }
-            cogsGrp.childGroups.push(cg);
-          });
-
-          this.cogsData = cogsGrp;
-        }
-
-        if (data && data.expArr) {
-          this.InitData(data.expArr);
-          data.expArr.forEach(g => {
-            g.isVisible = true;
-            g.isCreated = true;
-            g.isIncludedInSearch = true;
-            g.isOpen = true;
-            g.childGroups.forEach(c => {
-              c.isVisible = true;
-              c.isCreated = true;
-              c.isIncludedInSearch = true;
-            });
-          });
-        }
-        if (data && data.incArr) {
-          this.InitData(data.incArr);
-          data.incArr.forEach(g => {
-            g.isVisible = true;
-            g.isCreated = true;
-            g.isIncludedInSearch = true;
-            g.isOpen = true;
-            g.childGroups.forEach(c => {
-              c.isVisible = true;
-              c.isCreated = true;
-              c.isIncludedInSearch = true;
-            });
-          });
-        }
-        this.data = data;
-      } else {
-        this.data = null;
-      }
-      this.cd.detectChanges();
-    });
-  }
-
-  public InitData(d: ChildGroup[]) {
-    _.each(d, (grp: ChildGroup) => {
-      grp.isVisible = false;
-      grp.isCreated = false;
-      grp.isIncludedInSearch = true;
-      _.each(grp.accounts, (acc: Account) => {
-        acc.isIncludedInSearch = true;
-        acc.isCreated = false;
-        acc.isVisible = false;
-      });
-      if (grp.childGroups) {
-        this.InitData(grp.childGroups);
-      }
-    });
-  }
-
-  public ngAfterViewInit() {
-    //
-    this.cd.detectChanges();
-  }
-
-  public exportXLS(event) {
-    //
-  }
-
-  public filterData(request: ProfitLossRequest) {
-    this.from = request.from;
-    this.to = request.to;
-    this.isDateSelected = request && request.selectedDateOption === '1';
-    if (this.isDateSelected) {
-      delete request['selectedFinancialYearOption'];
+            this.cd.detectChanges();
+        });
     }
-    if (!request.tagName) {
-      delete request.tagName;
+
+    public InitData(d: ChildGroup[]) {
+        _.each(d, (grp: ChildGroup) => {
+            grp.isVisible = false;
+            grp.isCreated = false;
+            grp.isIncludedInSearch = true;
+            _.each(grp.accounts, (acc: Account) => {
+                acc.isIncludedInSearch = true;
+                acc.isCreated = false;
+                acc.isVisible = false;
+            });
+            if (grp.childGroups) {
+                this.InitData(grp.childGroups);
+            }
+        });
     }
-    this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(request)));
-    // this.store.dispatch(this.tlPlActions.GetCogs({from: request.from, to: request.to}));
-  }
 
-  public ngOnDestroy(): void {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
-  }
+    public ngAfterViewInit() {
+        //
+        this.cd.detectChanges();
+    }
 
-  public findIndex(activeFY, financialYears) {
-    let tempFYIndex = 0;
-    _.each(financialYears, (fy: any, index: number) => {
-      if (fy.uniqueName === activeFY.uniqueName) {
-        if (index === 0) {
-          tempFYIndex = index;
-        } else {
-          tempFYIndex = index * -1;
+    public exportXLS(event) {
+        //
+    }
+
+    public filterData(request: ProfitLossRequest) {
+        this.from = request.from;
+        this.to = request.to;
+        this.isDateSelected = request && request.selectedDateOption === '1';
+        if (this.isDateSelected) {
+            delete request['selectedFinancialYearOption'];
         }
-      }
-    });
-    return tempFYIndex;
-  }
+        if (!request.tagName) {
+            delete request.tagName;
+        }
+        this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(request)));
+        // this.store.dispatch(this.tlPlActions.GetCogs({from: request.from, to: request.to}));
+    }
 
-  public expandAllEvent(event: boolean) {
-    this.cd.checkNoChanges();
-    this.expandAll = !this.expandAll;
-    setTimeout(() => {
-      this.expandAll = event;
-      this.cd.detectChanges();
-    }, 1);
-  }
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 
-  public searchChanged(event: string) {
-    // this.cd.checkNoChanges();
-    this.search = event;
-    this.cd.detectChanges();
-    // setTimeout(() => {
-    //   this.search = event;
-    // }, 1);
-  }
+    public findIndex(activeFY, financialYears) {
+        let tempFYIndex = 0;
+        _.each(financialYears, (fy: any, index: number) => {
+            if (fy.uniqueName === activeFY.uniqueName) {
+                if (index === 0) {
+                    tempFYIndex = index;
+                } else {
+                    tempFYIndex = index * -1;
+                }
+            }
+        });
+        return tempFYIndex;
+    }
+
+    public expandAllEvent(event: boolean) {
+        this.cd.checkNoChanges();
+        this.expandAll = !this.expandAll;
+        setTimeout(() => {
+            this.expandAll = event;
+            this.cd.detectChanges();
+        }, 1);
+    }
+
+    public searchChanged(event: string) {
+        // this.cd.checkNoChanges();
+        this.search = event;
+        this.cd.detectChanges();
+        // setTimeout(() => {
+        //   this.search = event;
+        // }, 1);
+    }
 }

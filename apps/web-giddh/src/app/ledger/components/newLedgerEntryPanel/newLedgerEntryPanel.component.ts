@@ -1,6 +1,4 @@
-import {BehaviorSubject, Observable, of as observableOf, ReplaySubject} from 'rxjs';
-import {FileTransfer} from '@ionic-native/file-transfer/ngx';
-import {take, takeUntil} from 'rxjs/operators';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
     AfterViewChecked,
     AfterViewInit,
@@ -16,49 +14,55 @@ import {
     OnInit,
     Output,
     SimpleChanges,
-    ViewChild
+    ViewChild,
 } from '@angular/core';
-import {AppState} from '../../../store';
-import {select, Store} from '@ngrx/store';
-import {LedgerActions} from '../../../actions/ledger/ledger.actions';
-import {BlankLedgerVM, TransactionVM} from '../../ledger.vm';
-import {CompanyActions} from '../../../actions/company.actions';
-import {ICurrencyResponse, TaxResponse} from '../../../models/api-models/Company';
-import {UploaderOptions, UploadInput, UploadOutput} from 'ngx-uploader';
-import {LEDGER_API} from '../../../services/apiurls/ledger.api';
-import {ToasterService} from '../../../services/toaster.service';
-import {BsDatepickerDirective, ModalDirective} from 'ngx-bootstrap';
-import {LedgerDiscountComponent} from '../ledgerDiscount/ledgerDiscount.component';
-import {TaxControlComponent} from '../../../theme/tax-control/tax-control.component';
-import {LedgerService} from '../../../services/ledger.service';
-import {ReconcileRequest, ReconcileResponse} from '../../../models/api-models/Ledger';
-import {BaseResponse} from '../../../models/api-models/BaseResponse';
-import {forEach, sumBy} from '../../../lodash-optimized';
-import {ILedgerTransactionItem} from '../../../models/interfaces/ledger.interface';
-import {IOption} from '../../../theme/ng-virtual-select/sh-options.interface';
-import {ShSelectComponent} from '../../../theme/ng-virtual-select/sh-select.component';
-import {LoaderService} from '../../../loader/loader.service';
-import {AccountResponse} from 'apps/web-giddh/src/app/models/api-models/Account';
-import {Configuration} from 'apps/web-giddh/src/app/app.constant';
-import {SettingsTagActions} from '../../../actions/settings/tag/settings.tag.actions';
-import {createSelector} from 'reselect';
-import {TagRequest} from '../../../models/api-models/settingsTags';
-import {AdvanceSearchRequest} from '../../../models/interfaces/AdvanceSearchRequest';
-import {SettingsProfileActions} from '../../../actions/settings/profile/settings.profile.action';
-import {IDiscountList} from '../../../models/api-models/SettingsDiscount';
-import {GIDDH_DATE_FORMAT} from '../../../shared/helpers/defaultDateFormat';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import {SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal} from '../../../models/api-models/Sales';
-import {ResizedEvent} from 'angular-resize-event';
-import {giddhRoundOff} from '../../../shared/helpers/helperFunctions';
-import {isAndroidCordova, isIOSCordova} from "@giddh-workspaces/utils";
-import {IOSFilePicker} from "@ionic-native/file-picker/ngx";
-import {FileChooser} from "@ionic-native/file-chooser/ngx";
+import { select, Store } from '@ngrx/store';
+import { ResizedEvent } from 'angular-resize-event';
+import { Configuration, Subvoucher } from 'apps/web-giddh/src/app/app.constant';
+import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
+import { BsDatepickerDirective, ModalDirective, PopoverDirective } from 'ngx-bootstrap';
+import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
+import { createSelector } from 'reselect';
+import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+
+import { RcmModalConfiguration, RCM_ACTIONS } from '../../../common/rcm-modal/rcm-modal.interface';
+import { LoaderService } from '../../../loader/loader.service';
+import { forEach, sumBy } from '../../../lodash-optimized';
+import { BaseResponse } from '../../../models/api-models/BaseResponse';
+import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
+import { ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
+import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
+import { TagRequest } from '../../../models/api-models/settingsTags';
+import { AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
+import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
+import { LEDGER_API } from '../../../services/apiurls/ledger.api';
+import { LedgerService } from '../../../services/ledger.service';
+import { ToasterService } from '../../../services/toaster.service';
+import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { AppState } from '../../../store';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
+import { BlankLedgerVM, TransactionVM } from '../../ledger.vm';
+import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
+import { GeneralService } from '../../../services/general.service';
+
+/** New ledger entries */
+const NEW_LEDGER_ENTRIES = [
+    ['amount', 'convertedAmount'],
+    ['discount', 'convertedDiscount'],
+    ['tax', 'convertedTax'],
+    ['total', 'convertedTotal'],
+];
 
 @Component({
     selector: 'new-ledger-entry-panel',
     templateUrl: 'newLedgerEntryPanel.component.html',
-    styleUrls: ['./newLedgerEntryPanel.component.css'],
+    styleUrls: ['./newLedgerEntryPanel.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [
         trigger('slideInOut', [
@@ -73,7 +77,6 @@ import {FileChooser} from "@ionic-native/file-chooser/ngx";
         ]),
     ]
 })
-
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewChecked, AfterViewInit {
     @Input() public blankLedger: BlankLedgerVM;
     @Input() public currentTxn: TransactionVM = null;
@@ -95,12 +98,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
     public selectedInvoices: string[] = [];
-    @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
+    @Output() public changeTransactionType: EventEmitter<any> = new EventEmitter();
     @Output() public resetBlankLedger: EventEmitter<boolean> = new EventEmitter();
     @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
     @Output() public clickedOutsideEvent: EventEmitter<any> = new EventEmitter();
     @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
-    @Output() public currencyChangeEvent: EventEmitter<string> = new EventEmitter();
     @ViewChild('entryContent') public entryContent: ElementRef;
     @ViewChild('sh') public sh: ShSelectComponent;
     @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
@@ -109,6 +111,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @ViewChild('discount') public discountControl: LedgerDiscountComponent;
     @ViewChild('tax') public taxControll: TaxControlComponent;
 
+    /** RCM popup instance */
+    @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
+
+    public sourceWarehouse: true;
     public uploadInput: EventEmitter<UploadInput>;
     public fileUploadOptions: UploaderOptions;
     public discountAccountsList$: Observable<IDiscountList[]>;
@@ -143,23 +149,36 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
     public companyTaxesList: TaxResponse[] = [];
     public totalTdElementWidth: number = 0;
+    /** Default warehouse for a company */
+    public defaultWarehouse: string;
+    /** List of warehouses for a company */
+    public warehouses: Array<any>;
+    /** Currently selected warehouse */
+    public selectedWarehouse: any;
+    /** True, if subvoucher is RCM */
+    public isRcmEntry: boolean = false;
+    /** RCM modal configuration */
+    public rcmConfiguration: RcmModalConfiguration;
+    /** True, if the selected voucher type is 'Receipt' */
+    public shouldShowAdvanceReceipt: boolean = false;
+    /** True, if advance receipt is enabled */
+    public isAdvanceReceipt: boolean = false;
+    /** True, if advance receipt checkbox is checked, will show the mandatory fields for Advance Receipt */
+    public shouldShowAdvanceReceiptMandatoryFields: boolean = false;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-    private fetchedBaseCurrency: string = null;
-    private fetchedConvertToCurrency: string = null;
-    private fetchedConvertedRate: number = null;
+    /** True, if exchange rate is swapped */
+    private isExchangeRateSwapped: boolean = false;
 
     constructor(private store: Store<AppState>,
-                private _ledgerService: LedgerService,
-                private _ledgerActions: LedgerActions,
-                private _companyActions: CompanyActions,
-                private cdRef: ChangeDetectorRef,
-                private _toasty: ToasterService,
-                private _loaderService: LoaderService,
-                private _settingsTagActions: SettingsTagActions,
-                private _settingsProfileActions: SettingsProfileActions) {
+        private cdRef: ChangeDetectorRef,
+        private generalService: GeneralService,
+        private _ledgerService: LedgerService,
+        private _loaderService: LoaderService,
+        private settingsUtilityService: SettingsUtilityService,
+        private _toasty: ToasterService
+    ) {
         this.discountAccountsList$ = this.store.select(p => p.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
         this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
@@ -198,7 +217,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = {concurrency: 0};
         this.activeAccount$.subscribe(acc => {
-            //   console.log('activeAccount...');
             if (acc) {
                 this.activeAccount = acc;
                 let parentAcc = acc.parentGroups[0].uniqueName;
@@ -211,6 +229,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     acc.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
                     this.currentAccountApplicableTaxes = appTaxes;
                 }
+            }
+        });
+
+        this.store.pipe(select(appState => appState.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
+            if (warehouses) {
+                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
+                this.warehouses = warehouseData.formattedWarehouses;
+                this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
+                this.selectedWarehouse = String(this.defaultWarehouse);
             }
         });
 
@@ -235,6 +262,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.companyTaxesList = res || [];
         });
 
+        this.shouldShowAdvanceReceipt = (this.blankLedger) ? this.blankLedger.voucherType === 'rcpt' : false;
+        this.isAdvanceReceipt = (this.currentTxn) ? this.currentTxn['subVoucher'] === Subvoucher.AdvanceReceipt : false;
+        this.isRcmEntry = (this.currentTxn) ? this.currentTxn['subVoucher'] === Subvoucher.ReverseCharge : false;
+        this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
         // this.baseCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.baseCurrencyDetails) : cloneDeep(this.foreignCurrencyDetails);
         // this.foreignCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.foreignCurrencyDetails) : cloneDeep(this.baseCurrencyDetails);
     }
@@ -259,15 +290,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
                 if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
                     let appTaxes = [];
-
                     if (this.activeAccount && this.activeAccount.applicableTaxes) {
                         this.activeAccount.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
                         this.taxListForStock = appTaxes;
                     }
-
                 }
             } else {
                 this.taxListForStock = [];
+            }
+
+            if (!this.currentTxn.selectedAccount.stock) {
+                this.selectedWarehouse = String(this.defaultWarehouse);
             }
 
             let companyTaxes: TaxResponse[] = [];
@@ -324,8 +357,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public addToDrOrCr(type: string, e: Event) {
-        this.changeTransactionType.emit(type);
         e.stopPropagation();
+        if ((this.isRcmEntry || this.isAdvanceReceipt) && !this.validateTaxes()) {
+            this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
+            return;
+        }
+        this.changeTransactionType.emit({
+            type,
+            warehouse: this.selectedWarehouse
+        });
     }
 
     public calculateDiscount(total: number) {
@@ -383,20 +423,22 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public changePrice(val: string) {
-        this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.giddhBalanceDecimalPlaces);
-        this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate);
+        if (!this.isExchangeRateSwapped) {
+            this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.giddhBalanceDecimalPlaces);
+            this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate);
 
-        this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
-        this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
+            this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
 
-        // calculate discount on change of price
-        if (this.discountControl) {
-            this.discountControl.ledgerAmount = this.currentTxn.amount;
-            this.discountControl.change();
+            // calculate discount on change of price
+            if (this.discountControl) {
+                this.discountControl.ledgerAmount = this.currentTxn.amount;
+                this.discountControl.change();
+            }
+
+            this.calculateTotal();
+            this.calculateCompoundTotal();
         }
-
-        this.calculateTotal();
-        this.calculateCompoundTotal();
     }
 
     public changeQuantity(val: string) {
@@ -438,7 +480,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.taxControll) {
             taxTotal = this.taxControll.taxRenderData.filter(f => f.isChecked)
                 .reduce((pv, cv) => {
-                    return Number(pv) + Number(cv.amount)
+                    return Number(pv) + Number(cv.amount);
                 }, 0) || 0;
         }
         // A = (P+X+ 0.01XT) /(1-0.01Y + 0.01T -0.0001YT)
@@ -506,6 +548,20 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public saveLedger() {
+        if ((this.isRcmEntry || this.isAdvanceReceipt) && !this.validateTaxes()) {
+            if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
+                // Taxes are mandatory for RCM and Advance Receipt entries
+                this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
+                return;
+            }
+        }
+        /* Add warehouse to the stock entry if the user hits 'Save' button without clicking on 'Add to CR/DR' button
+            This will add the warehouse to the entered item */
+        this.blankLedger.transactions.map((transaction) => {
+            if (transaction.inventory && !transaction.inventory.warehouse) {
+                transaction.inventory.warehouse = { name: '', uniqueName: this.selectedWarehouse };
+            }
+        });
         this.saveBlankLedger.emit(true);
     }
 
@@ -739,7 +795,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
     }
 
-    public detactChanges() {
+    public detectChanges() {
         if (!this.cdRef['destroyed']) {
             this.cdRef.detectChanges();
         }
@@ -790,7 +846,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public getInvoiveListsData(e: any) {
         if (e.value === 'rcpt') {
+            this.shouldShowAdvanceReceipt = true;
             this.clickUnpaidInvoiceList.emit(true);
+        } else {
+            this.shouldShowAdvanceReceipt = false;
+            this.isAdvanceReceipt = false;
         }
     }
 
@@ -859,20 +919,35 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.blankLedger.otherTaxesSum = giddhRoundOff((this.blankLedger.tdsTcsTaxesSum), this.giddhBalanceDecimalPlaces);
         } else {
             this.blankLedger.otherTaxesSum = 0;
+            this.blankLedger.tdsTcsTaxesSum = 0;
             this.blankLedger.isOtherTaxesApplicable = false;
             this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
         }
     }
 
     public currencyChange() {
-        this.blankLedger.selectedCurrencyToDisplay = this.blankLedger.selectedCurrencyToDisplay === 0 ? 1 : 0;
         let rate = 0;
         if (Number(this.blankLedger.exchangeRateForDisplay)) {
             rate = 1 / this.blankLedger.exchangeRate;
         }
         this.blankLedger.exchangeRate = rate;
         this.blankLedger.exchangeRateForDisplay = giddhRoundOff(rate, this.giddhBalanceDecimalPlaces);
-        this.detactChanges();
+        if (this.blankLedger.selectedCurrencyToDisplay === 0) {
+            // Currency changed to account currency (currency different from base currency of company)
+            this.blankLedger.selectedCurrencyToDisplay = 1;
+            this.blankLedger.valuesInAccountCurrency = false;
+        } else {
+            // Currency changed to company currency
+            this.blankLedger.selectedCurrencyToDisplay = 0;
+            this.blankLedger.valuesInAccountCurrency = true;
+        }
+        this.selectedCurrency = this.blankLedger.selectedCurrencyToDisplay;
+        this.swapEntries(NEW_LEDGER_ENTRIES);
+
+        setTimeout(() => {
+            this.assignPrefixAndSuffixForCurrency();
+            this.detectChanges();
+        }, 100);
     }
 
     public exchangeRateChanged() {
@@ -885,11 +960,105 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (!baseModel || !this.blankLedger.exchangeRate) {
             return 0;
         }
-        //multiplying AND DIVIDING with exchange rate for display instead of original exchange rate
-        if (this.blankLedger.selectedCurrencyToDisplay === 0) {
-            return giddhRoundOff(baseModel * this.blankLedger.exchangeRateForDisplay, this.giddhBalanceDecimalPlaces);
-        } else {
-            return giddhRoundOff(baseModel / this.blankLedger.exchangeRateForDisplay, this.giddhBalanceDecimalPlaces);
+        return giddhRoundOff(baseModel * Number(this.blankLedger.exchangeRate), this.giddhBalanceDecimalPlaces);
+    }
+
+    /**
+     * Swaps provided entries value with their converted values (obtained by multiplying exchange rate with
+     * actual value)
+     *
+     * @param {Array<any>} entryKeys Arrays of keys to be swapped
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public swapEntries(entryKeys: Array<any>): void {
+        this.isExchangeRateSwapped = true;
+        if (this.currentTxn.inventory) {
+            // Swap the unit rate and converted rate
+            let rate = this.currentTxn.inventory.unit.rate;
+            this.currentTxn.inventory.unit.rate = this.currentTxn.convertedRate;
+            this.currentTxn.convertedRate = rate;
         }
+
+        // Swap the provided key value pairs
+        entryKeys.forEach((entry: any) => {
+            let value = this.currentTxn[entry[0]];
+            this.currentTxn[entry[0]] = this.currentTxn[entry[1]];
+            this.currentTxn[entry[1]] = value;
+        });
+        if (this.discountControl) {
+            this.discountControl.discountTotal = this.currentTxn.discount;
+        }
+        if (this.taxControll) {
+            this.taxControll.taxTotalAmount = this.currentTxn.tax;
+        }
+        setTimeout(() => {
+            // Set it to false after some time, done as (ngModelChange) is triggered twice for amount field
+            this.isExchangeRateSwapped = false;
+        }, 300);
+    }
+
+    /**
+     * Toggle the RCM checkbox based on user confirmation
+     *
+     * @param {*} event Click event
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public toggleRcmCheckbox(event: any): void {
+        event.preventDefault();
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked);
+    }
+
+    /**
+     * RCM change handler, triggerreed when the user performs any
+     * action with the RCM popup
+     *
+     * @param {string} action Action performed by user
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public handleRcmChange(action: string): void {
+        if (action === RCM_ACTIONS.YES) {
+            // Toggle the state of RCM as user accepted the terms of RCM modal
+            this.isRcmEntry = !this.isRcmEntry;
+        }
+        this.currentTxn['subVoucher'] = this.isRcmEntry ? Subvoucher.ReverseCharge : '';
+        if (this.rcmPopup) {
+            this.rcmPopup.hide();
+        }
+    }
+
+    /**
+     * Handles the advance receipt change by appending the advance receipt
+     * in subvoucher of current transaction
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public handleAdvanceReceiptChange(): void {
+        this.currentTxn['subVoucher'] = this.isAdvanceReceipt ? Subvoucher.AdvanceReceipt : '';
+        this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
+    }
+
+    /**
+     * Assigns the prefix and suffix based on currency toggle button present in this
+     * component
+     *
+     * @private
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private assignPrefixAndSuffixForCurrency(): void {
+        const isPrefixAppliedForCurrency = !(['AED'].includes(this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code));
+        this.selectedPrefixForCurrency = isPrefixAppliedForCurrency ? this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol : '';
+        this.selectedSuffixForCurrency = isPrefixAppliedForCurrency ? '' : this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol;
+    }
+
+    /**
+     * Validates the taxes
+     *
+     * @private
+     * @returns {boolean} True, if taxes are applied
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private validateTaxes(): boolean {
+        const taxes = [...this.currentTxn.taxesVm.filter(p => p.isChecked).map(p => p.uniqueName)];
+        return taxes.length > 0;
     }
 }

@@ -117,7 +117,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public moveMergedAccountModalBody: string;
     public selectedAccountForDelete: string;
     public selectedAccountForMove: string;
-    public selectedAccountCurrency: string = '';
+    public selectedCountryCurrency: string = '';
     public selectedAccountCallingCode: string = '';
     public isOtherSelectedTab: boolean = false;
     public selectedaccountForMerge: any = [];
@@ -149,7 +149,24 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         this.prepareTaxDropdown();
         this.getDiscountList();
-
+        this.store.select(s => s.session).pipe(takeUntil(this.destroyed$)).subscribe((session) => {
+            let companyUniqueName: string;
+            if (session.companyUniqueName) {
+                companyUniqueName = _.cloneDeep(session.companyUniqueName);
+            }
+            if (session.companies && session.companies.length) {
+                let companies = _.cloneDeep(session.companies);
+                let currentCompany = companies.find((company) => company.uniqueName === companyUniqueName);
+                if (currentCompany) {
+                    if (currentCompany.countryV2) {
+                        this.selectedCompanyCountryName = currentCompany.countryV2.alpha2CountryCode + ' - ' + currentCompany.country;
+                        this.companyCountry = currentCompany.countryV2.alpha2CountryCode;
+                    }
+                    this.companyCurrency = _.clone(currentCompany.baseCurrency);
+                    this.isMultipleCurrency = _.clone(currentCompany.isMultipleCurrency);
+                }
+            }
+        });
     }
 
     public ngOnInit() {
@@ -210,9 +227,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
 
                 this.addAccountForm.patchValue(accountDetails);
+                if (accountDetails.currency) {
+                    this.selectedCurrency = accountDetails.currency;
+                    this.addAccountForm.get('currency').patchValue(this.selectedCurrency);
+                } else {
+                    this.selectedCurrency = this.companyCurrency;
+                    this.addAccountForm.get('currency').patchValue(this.selectedCurrency);
+                }
                 if (accountDetails.country) {
                     if (accountDetails.country.countryCode) {
-                        this.getStates(accountDetails.country.countryCode);
+                        this.getStates(accountDetails.country.countryCode, accountDetails.currency);
                         this.getOnboardingForm(accountDetails.country.countryCode);
                         // let ss = this.getStateGSTCode(this.stateList, accountDetails.country.countryCode);
                     }
@@ -222,6 +246,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     accountDetails.addresses.map(a => {
                         this.renderGstDetails(a, accountDetails.addresses.length);
                     });
+                } else {
+                    if (accountDetails.addresses.length === 0) {
+                        this.addBlankGstForm();
+                    }
                 }
 
                 // hsn/sac enable disable
@@ -249,11 +277,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     this.addAccountForm.get('mobileNo').patchValue('');
                     this.addAccountForm.get('mobileCode').patchValue(this.selectedAccountCallingCode);  // if mobile no null then country calling cade will assign
                 }
-                if (accountDetails.currency) {
-                    this.selectedCurrency = accountDetails.currency;
-                } else {
-                    this.selectedCurrency = this.companyCurrency;
-                }
+
             }
 
         });
@@ -330,24 +354,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         });
 
-        this.store.select(s => s.session).pipe(takeUntil(this.destroyed$)).subscribe((session) => {
-            let companyUniqueName: string;
-            if (session.companyUniqueName) {
-                companyUniqueName = _.cloneDeep(session.companyUniqueName);
-            }
-            if (session.companies && session.companies.length) {
-                let companies = _.cloneDeep(session.companies);
-                let currentCompany = companies.find((company) => company.uniqueName === companyUniqueName);
-                if (currentCompany) {
-                    if (currentCompany.countryV2) {
-                        this.selectedCompanyCountryName = currentCompany.countryV2.alpha2CountryCode + ' - ' + currentCompany.country;
-                        this.companyCountry = currentCompany.countryV2.alpha2CountryCode;
-                    }
-                    this.companyCurrency = _.clone(currentCompany.baseCurrency);
-                    this.isMultipleCurrency = _.clone(currentCompany.isMultipleCurrency);
-                }
-            }
-        });
 
         // COMMENTED BELOW CODE TO REMOVE AUTOCOMPLETE ON ACCOUNT NAME SINCE API TEAM IS HANDING THE ACCOUNT UNIQUE NAME
         // this.addAccountForm.get('name').valueChanges.pipe(debounceTime(100)).subscribe(name => {
@@ -418,7 +424,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
             }
         }, (err: any) => {
-            // console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
         });
     }
 
@@ -438,7 +443,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         })
         if (selectedGroupDetails) {
             if (selectedGroupDetails.additional) {
-                let parentGroup = selectedGroupDetails.additional.length > 1 ? selectedGroupDetails.additional[1] : '';
+                let parentGroup = selectedGroupDetails.additional.length > 1 ? selectedGroupDetails.additional[1] : { uniqueName: selectedGroupDetails.value };
                 if (parentGroup) {
                     this.isParentDebtorCreditor(parentGroup.uniqueName);
                 }
@@ -542,12 +547,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 // this.addAccountForm.controls['addresses'] = this._fb.array([]);
                 this.isIndia = false;
             } else {
-                const addresses = this.addAccountForm.get('addresses') as FormArray;
-                if (addresses.controls.length === 0) {
-                    this.addBlankGstForm();
-                }
                 this.isIndia = true;
             }
+        }
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        if (addresses.controls.length === 0) {
+            this.addBlankGstForm();
         }
     }
     public tabChanged(activeTab: string) {
@@ -595,7 +600,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 name: [''],
                 virtualAccountNumber: ['']
             }),
-            closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
+            closingBalanceTriggerAmount: [Validators.compose([digitsOnly])],
             closingBalanceTriggerAmountType: ['CREDIT']
         });
     }
@@ -603,7 +608,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public initialGstDetailsForm(val: IAccountAddress = null): FormGroup {
         let gstFields = this._fb.group({
             gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
-            address: ['', Validators.maxLength(120)],
+            address: [''],
             state: this._fb.group({
                 code: [''],
                 name: [''],
@@ -827,15 +832,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (this.activeGroupUniqueName === 'discount') {
             delete accountRequest['addresses'];
         }
-        this.isShowBankDetails(this.activeGroupUniqueName);
+        // this.isShowBankDetails(this.activeGroupUniqueName);
         if (!this.showVirtualAccount) {
             delete accountRequest['cashFreeVirtualAccountData'];
         }
-
         if (!this.showBankDetail) {
             delete accountRequest['accountBankDetails'];
         }
 
+        if (!accountRequest.currency) {
+            this.selectedCurrency = this.companyCurrency;
+            this.addAccountForm.get('currency').patchValue(this.selectedCurrency);
+        }
         this.submitClicked.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
             accountRequest: this.addAccountForm.value
@@ -1004,17 +1012,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
-    public getStates(countryCode) {
+    public getStates(countryCode, selectedAcountCurrency?: string) {
         this.store.dispatch(this._generalActions.resetStatesList());
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 if (res.country) {
                     if (res.country.currency) {
-                        this.selectedAccountCurrency = res.country.currency.code;
+                        this.selectedCountryCurrency = res.country.currency.code;
                         this.selectedAccountCallingCode = res.country.callingCode;
-                        if (!this.addAccountForm.get('currency').value) {
-                            this.addAccountForm.get('currency').patchValue(this.selectedAccountCurrency);
-                        }
+                        this.addAccountForm.get('currency').patchValue(selectedAcountCurrency);
                         if (!this.addAccountForm.get('mobileCode').value) {
                             this.addAccountForm.get('mobileCode').patchValue(this.selectedAccountCallingCode);
                         }

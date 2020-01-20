@@ -9,8 +9,8 @@ import { GeneralService } from './services/general.service';
 import { GeneralActions } from './actions/general/general.actions';
 
 @Component({
-  selector: 'page',
-  template: `
+    selector: 'page',
+    template: `
     <div id="main">
       <giddh-loader></giddh-loader>
       <app-header (menuStateChange)="sidebarStatusChange($event)"></app-header>
@@ -21,34 +21,34 @@ import { GeneralActions } from './actions/general/general.actions';
     </div>`
 })
 export class PageComponent implements AfterViewInit, OnInit, OnDestroy {
-  // tslint:disable-next-line:no-empty
-  public sideMenu: { isopen: boolean } = { isopen: true };
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    // tslint:disable-next-line:no-empty
+    public sideMenu: { isopen: boolean } = { isopen: true };
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private comapnyActions: CompanyActions, private store: Store<AppState>,
-    private router: Router, private activatedRoute: ActivatedRoute, private location: Location,
-    private _generalService: GeneralService, private generalActions: GeneralActions) {
-  }
+    constructor(private comapnyActions: CompanyActions, private store: Store<AppState>,
+        private router: Router, private activatedRoute: ActivatedRoute, private location: Location,
+        private _generalService: GeneralService, private generalActions: GeneralActions) {
+    }
 
-  public ngOnInit() {
-    // this.store.dispatch(this.comapnyActions.RefreshCompanies());
-  }
+    public ngOnInit() {
+        // this.store.dispatch(this.comapnyActions.RefreshCompanies());
+    }
 
-  public ngAfterViewInit() {
-    this._generalService.SetIAmLoaded(true);
-    // if (this.location.path() === '/pages') {
-    //   this.router.navigate(['/pages', 'home']);
-    // }
-  }
+    public ngAfterViewInit() {
+        this._generalService.SetIAmLoaded(true);
+        // if (this.location.path() === '/pages') {
+        //   this.router.navigate(['/pages', 'home']);
+        // }
+    }
 
-  public sidebarStatusChange(event) {
+    public sidebarStatusChange(event) {
 
-    this.sideMenu.isopen = event;
-    this.store.dispatch(this.generalActions.setSideMenuBarState(event));
-  }
+        this.sideMenu.isopen = event;
+        this.store.dispatch(this.generalActions.setSideMenuBarState(event));
+    }
 
-  public ngOnDestroy(): void {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
-  }
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }

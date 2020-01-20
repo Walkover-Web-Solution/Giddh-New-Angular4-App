@@ -1,18 +1,17 @@
 .secondryDarkbg span {
-  background: #087E7D;
-  width: 15px;
-  height: 15px;
-  display: inline-block;
-  margin-right: 5px;
-
+    background: #087e7d;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    margin-right: 5px;
 }
 
 .secondrylightbg span {
-  background:#0CB1AF;
-  width: 15px;
-  height: 15px;
-  display: inline-block;
-  margin-right: 5px;
+    background: #0cb1af;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    margin-right: 5px;
 }
 .dashboard-option li {
     padding-right: 15px;
@@ -20,22 +19,21 @@
     justify-content: center;
     align-items: center;
 }
-.dashboard-option li.secondryDarkbg{
-   color: #087E7D;
-   font-size: 14px;
+.dashboard-option li.secondryDarkbg {
+    color: #087e7d;
+    font-size: 14px;
 }
-.dashboard-option li.secondrylightbg{
-   color: #0CB1AF;
-   font-size: 14px;
+.dashboard-option li.secondrylightbg {
+    color: #0cb1af;
+    font-size: 14px;
 }
 
-.dashboard-option li h3{
-  color: #666666;
+.dashboard-option li h3 {
+    color: #666666;
 }
-.leftColumn{
-  border-right:1px solid #ddd;
-  margin: 5px 0;
-
+.leftColumn {
+    border-right: 1px solid #ddd;
+    margin: 5px 0;
 }
 span.thisWeek {
     color: #666666;
@@ -56,8 +54,8 @@ span.thisWeek {
     color: #000000;
 }
 
-.total-sale-detail span{
-   font-size: 18px;
+.total-sale-detail span {
+    font-size: 18px;
     color: #000000;
 }
 .singleSaleDetail {
@@ -68,186 +66,183 @@ span.icon-collapse-icon {
     outline: none;
 }
 span.icon-collapse-icon:hover {
-    color: #1A237E;
+    color: #1a237e;
 }
 
 /* CSS FOR LINE CHART */
 
 p.bankName {
-  font-size: 14px;
-  color: #1A237E;
-  margin-bottom: 5px;
+    font-size: 14px;
+    color: #1a237e;
+    margin-bottom: 5px;
 }
 
 p.bankBalnc {
-  color: #666666;
-  font-size: 14px;
-  display: flex;
-  justify-content: space-between;
+    color: #666666;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
 }
 .single-bank-detatil {
-  border-bottom: 1px solid #D9D9D9;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
+    border-bottom: 1px solid #d9d9d9;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
 }
 a.connectBnk {
-  position: absolute;
-  bottom: 10px;
-  color: #262626;
-  font-size: 14px;
-  text-decoration: underline;
+    position: absolute;
+    bottom: 10px;
+    color: #262626;
+    font-size: 14px;
+    text-decoration: underline;
 }
-.dashboard-container{
-  padding: 15px;
+.dashboard-container {
+    padding: 15px;
 }
 .totalSalesHeader {
-  background-color: #fff;
-  border:1px solid #D9D9D9;
-  border-radius: 2px;
-  padding: 15px 15px 20px;
+    background-color: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    padding: 15px 15px 20px;
 }
 .dashboard-container label {
-  font-size: 14px;
-  color: #484848;
-  margin-bottom: 3px;
+    font-size: 14px;
+    color: #484848;
+    margin-bottom: 3px;
 }
-.daterang-block .form-control{
-  border: 1px solid #5B64C9;
+.daterang-block .form-control {
+    border: 1px solid #5b64c9;
 }
 .dateRangeInput {
-  position: relative;
+    position: relative;
 }
 .dateRangeInput span.icon-calender {
-  position: absolute;
-  width: 32px;
-  height: 32px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  border-right: 1px solid #d1d1d1;
-  color: #262626;
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid #d1d1d1;
+    color: #262626;
 }
-.dateRangeInput input{
-  padding-left: 35px !important;
-  color: #262626;
+.dateRangeInput input {
+    padding-left: 35px !important;
+    color: #262626;
 }
 .page-title h1 {
-  color: #1A237E;
-  font-size: 28px;
-  text-align: center;
-  font-weight: 600;
-  line-height: 2.3;
-  display: inline-flex;
-  float: right;
+    color: #1a237e;
+    font-size: 28px;
+    text-align: center;
+    font-weight: 600;
+    line-height: 2.3;
+    display: inline-flex;
+    float: right;
 }
 .collapse-close {
-  text-align: right;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  float: right;
-  height: 65px;
-  width: 65px;
-  box-shadow: none;
-  outline: none;
+    text-align: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: right;
+    height: 65px;
+    width: 65px;
+    box-shadow: none;
+    outline: none;
 }
 .collapse-close span.icon-collapse-icon {
-  transform: rotate(180deg);
-  display: inline;
-  text-align: right;
-  font-size: 24px;
-  color: #1A237E;
+    transform: rotate(180deg);
+    display: inline;
+    text-align: right;
+    font-size: 24px;
+    color: #1a237e;
 }
 .dateRangeInput.disabled {
-  opacity: .5;
+    opacity: 0.5;
 }
-.page-title{
-  margin: 0;
+.page-title {
+    margin: 0;
 }
 
 .aboutDate {
-  display: inline-flex;
-  font-size: 18px;
+    display: inline-flex;
+    font-size: 18px;
 }
 .active-date {
-  color: #1A237E;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 32px;
+    color: #1a237e;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 32px;
 }
 .active-date span {
-  width: 15px;
-  height: 15px;
-  display: inline-block;
-  background-color: #1A237E;
-  margin-right: 5px;
-
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    background-color: #1a237e;
+    margin-right: 5px;
 }
 .inActive-date {
-  color: #5B64C9;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 32px;
+    color: #5b64c9;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 32px;
 }
 .inActive-date span {
-  width: 15px;
-  height: 15px;
-  display: inline-block;
-  background-color: #5B64C9;
-  margin-right: 5px;
-
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    background-color: #5b64c9;
+    margin-right: 5px;
 }
 
+.panel {
+    padding: 15px;
+    border-radius: 2px;
+    border: 1px solid #d9d9d9;
 
-.panel{
-  padding: 15px;
-  border-radius: 2px;
-  border: 1px solid #D9D9D9;
-
-  position: relative;
+    position: relative;
 }
-.topdates{
-  min-height: 60px;
+.topdates {
+    min-height: 60px;
 }
 .single-sale-data p {
-  color: #484848;
-  font-size: 16px;
+    color: #484848;
+    font-size: 16px;
 }
 .single-sale-data h3 {
-  font-size: 22px;
-  color: #1A237E;
-  margin-top: 6px;
+    font-size: 22px;
+    color: #1a237e;
+    margin-top: 6px;
 }
 span.dateWiseSale {
-  color: #1A237E;
-  font-size: 18px;
+    color: #1a237e;
+    font-size: 18px;
 }
 
 .single-sale-data {
-  border-right: 1px solid #D9D9D9;
-  min-height: 78px;
+    border-right: 1px solid #d9d9d9;
+    min-height: 78px;
 }
 .total-sale-data {
-  padding-top: 40px;
-  padding-bottom: 30px;
+    padding-top: 40px;
+    padding-bottom: 30px;
 }
-.single-sale-data:last-child{
-  border-right:none;
+.single-sale-data:last-child {
+    border-right: none;
 }
 .total-salesTabs a {
     color: #484848;
     cursor: pointer;
 }
 .total-salesTabs a.active-graph {
-    font-family: 'opensans-semibold';
+    font-family: "opensans-semibold";
 }
 input:read-only {
     border-color: #d1d1d1 !important;
 }
-input:read-only:focus{
-      border-color: #d1d1d1 !important;
+input:read-only:focus {
+    border-color: #d1d1d1 !important;
 }
 .totalSalesHeader label {
     margin-bottom: 5px;

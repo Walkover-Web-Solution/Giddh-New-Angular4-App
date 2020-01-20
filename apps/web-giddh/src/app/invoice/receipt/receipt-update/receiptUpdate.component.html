@@ -1,214 +1,222 @@
 <div id="" class="">
 
-  <div class="modal-header clearfix">
-    <h3 class="modal-title" id="modal-title">{{activatedInvoice | titlecase }}</h3>
-    <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="closeModelEvent.emit()"></i>
+    <div class="modal-header clearfix">
+        <h3 class="modal-title" id="modal-title">{{activatedInvoice | titlecase }}</h3>
+        <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="closeModelEvent.emit()"></i>
 
-  </div>
-  <div class="modal-body noPad clearfix" id="export-body">
-    <form #invoiceForm="ngForm" novalidate class="clearfix mrB2" autocomplete="off" *ngIf="voucherFormDetails">
+    </div>
+    <div class="modal-body noPad clearfix" id="export-body">
+        <form #invoiceForm="ngForm" novalidate class="clearfix mrB2" autocomplete="off" *ngIf="voucherFormDetails">
 
-      <div class="bdrB clearfix">
-        <div class="col-xs-6">
-          <div class="form-group size_380">
-            <label>Customer Name</label>
-            <input type="text" name="customerName" class="form-control"
-                   [(ngModel)]="voucherFormDetails.voucherDetails.customerName"/>
-          </div>
-        </div>
-        <div class="col-xs-6 text-right">
-          <label>&nbsp;</label>
-          <p class="lead b">Balance Due: {{ voucherFormDetails.voucherDetails.grandTotal }}</p>
-        </div>
-      </div>
-
-      <section class="clearfix mrB4">
-        <section class="form-inline col-xs-12">
-          <div class="pdT2 clearfix">
-            <div class="form-group size_340">
-              <label>Attention to</label>
-              <input type="text" name="attention" class="form-control"
-                     [(ngModel)]="voucherFormDetails.accountDetails.attentionTo"/>
-            </div>
-            <div class="form-group">
-              <label>Voucher Date</label>
-              <input type="text" [placeholder]="giddhDateFormat" name="voucherDate"
-                     [(ngModel)]="voucherFormDetails.voucherDetails.voucherDate" class="form-control" bsDatepicker
-                     value="{{ voucherFormDetails.voucherDetails.voucherDate | date: giddhDateFormatUI }}"/>
-            </div>
-            <div class="form-group">
-              <label>Voucher Number</label>
-              <input type="text" name="voucherNumber" class="form-control"
-                     [(ngModel)]="voucherFormDetails.voucherDetails.voucherNumber"/>
-            </div>
-            <!--<div class="form-group">-->
-            <!--<label>{{templateHeader.dueDate.label}}</label>-->
-            <!--<input type="text" [placeholder]="giddhDateFormat" name="dueDate"-->
-            <!--[(ngModel)]="voucherDetails.invoiceDetails.dueDate" [maxDate]="maxDueDate" class="form-control"-->
-            <!--bsDatepicker value="{{ voucherDetails.invoiceDetails.dueDate | date: giddhDateFormatUI }}"/>-->
-            <!--</div>-->
-          </div>
-
-          <div class="pdT2 clearfix flex-row">
-            <div class="flex-row-child">
-              <div class="form-group size_340">
-                <label>Billing Address</label>
-                <textarea name="billingDetails.address" class="form-control"
-                          [(ngModel)]="voucherFormDetails.accountDetails.billingDetails.address"></textarea>
-              </div>
-              <div class="form-group">
-                <div class="mrB2">
-                  <label>State</label>
-                  <sh-select [placeholder]="'State'" [options]="statesSource$ | async" #statesBilling
-                             name="billingDetails.stateCode"
-                             [(ngModel)]="voucherFormDetails.accountDetails.billingDetails.stateCode"></sh-select>
-                  <!-- <input type="text" name="billingDetails.stateName" class="form-control" [(ngModel)]="voucherDetails.account.billingDetails.stateName" /> -->
+            <div class="bdrB clearfix">
+                <div class="col-xs-6">
+                    <div class="form-group size_380">
+                        <label>Customer Name</label>
+                        <input type="text" name="customerName" class="form-control"
+                            [(ngModel)]="voucherFormDetails.voucherDetails.customerName" />
+                    </div>
                 </div>
-                <div class="">
-                  <label>GSTIN</label>
-                  <input type="text" name="billingDetails.gstNumber" decimalDigitsDirective class="form-control"
-                         [(ngModel)]="voucherFormDetails.accountDetails.billingDetails.gstNumber" maxLength="15"
-                         (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
-                  />
+                <div class="col-xs-6 text-right">
+                    <label>&nbsp;</label>
+                    <p class="lead b">Balance Due: {{ voucherFormDetails.voucherDetails.grandTotal }}</p>
                 </div>
-              </div>
             </div>
-            <div class="flex-row-child">
-              <div class="form-group size_340">
-                <label>Shipping Address</label>
-                <textarea name="shippingDetails.address" class="form-control"
-                          [(ngModel)]="voucherFormDetails.accountDetails.shippingDetails.address"></textarea>
-              </div>
-              <div class="form-group">
-                <div class="mrB2">
-                  <label>State</label>
-                  <sh-select [disabled]="autoFillShipping" #statesShipping [placeholder]="'State'"
-                             [options]="statesSource$ | async" name="shippingDetails.stateCode"
-                             [(ngModel)]="voucherFormDetails.accountDetails.shippingDetails.stateCode"></sh-select>
-                  <!-- <input type="text" name="shippingDetails.stateName" class="form-control" [(ngModel)]="voucherDetails.account.shippingDetails.stateName" /> -->
-                </div>
-                <div class="">
-                  <label>GSTIN</label>
-                  <input type="text" name="shippingDetails.gstNumber" decimalDigitsDirective class="form-control"
-                         [(ngModel)]="voucherFormDetails.accountDetails.shippingDetails.gstNumber" maxLength="15"
-                         (keyup)="getStateCode('shippingDetails', statesShipping)"/>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <div class="pdT2 clearfix">
-            <div class="form-group size_175">
-              <label>Ship Date</label>
-              <input type="text" [placeholder]="giddhDateFormat" name="shippingDate"
-                     [(ngModel)]="voucherFormDetails.templateDetails.other.shippingDate" class="form-control"
-                     bsDatepicker
-                     value="{{ voucherFormDetails.templateDetails.other.shippingDate | date: giddhDateFormatUI }}"/>
-            </div>
-            <div class="form-group size_175">
-              <label>Ship Via</label>
-              <input type="text" name="shippedVia" class="form-control"
-                     [(ngModel)]="voucherFormDetails.templateDetails.other.shippedVia"/>
-            </div>
-            <div class="form-group size_175">
-              <label>Tracking No.</label>
-              <input type="text" name="country" class="form-control"
-                     [(ngModel)]="voucherFormDetails.templateDetails.other.trackingNumber"/>
-            </div>
-            <div class="form-group size_175">
-              <label>Custom Field 1</label>
-              <input type="text" name="customField1" class="form-control"
-                     [(ngModel)]="voucherFormDetails.templateDetails.other.customField1"/>
-            </div>
-            <div class="form-group size_175">
-              <label>Custom Field 2</label>
-              <input type="text" name="customField2" class="form-control"
-                     [(ngModel)]="voucherFormDetails.templateDetails.other.customField2"/>
-            </div>
-            <div class="form-group size_175">
-              <label>Custom Field 3</label>
-              <input type="text" name="customField3" class="form-control"
-                     [(ngModel)]="voucherFormDetails.templateDetails.other.customField3"/>
-            </div>
-          </div>
-        </section>
-      </section>
+            <section class="clearfix mrB4">
+                <section class="form-inline col-xs-12">
+                    <div class="pdT2 clearfix">
+                        <div class="form-group size_340">
+                            <label>Attention to</label>
+                            <input type="text" name="attention" class="form-control"
+                                [(ngModel)]="voucherFormDetails.accountDetails.attentionTo" />
+                        </div>
+                        <div class="form-group">
+                            <label>Voucher Date</label>
+                            <input type="text" [placeholder]="giddhDateFormat" name="voucherDate"
+                                [(ngModel)]="voucherFormDetails.voucherDetails.voucherDate" class="form-control"
+                                bsDatepicker
+                                value="{{ voucherFormDetails.voucherDetails.voucherDate | date: giddhDateFormatUI }}" />
+                        </div>
+                        <div class="form-group">
+                            <label>Voucher Number</label>
+                            <input type="text" name="voucherNumber" class="form-control"
+                                [(ngModel)]="voucherFormDetails.voucherDetails.voucherNumber" />
+                        </div>
+                        <!--<div class="form-group">-->
+                        <!--<label>{{templateHeader.dueDate.label}}</label>-->
+                        <!--<input type="text" [placeholder]="giddhDateFormat" name="dueDate"-->
+                        <!--[(ngModel)]="voucherDetails.invoiceDetails.dueDate" [maxDate]="maxDueDate" class="form-control"-->
+                        <!--bsDatepicker value="{{ voucherDetails.invoiceDetails.dueDate | date: giddhDateFormatUI }}"/>-->
+                        <!--</div>-->
+                    </div>
 
-      <section class="clearfix mrB2 whiteBg">
-        <table class="table">
-          <thead class="t-h-bg1">
-          <tr *ngIf="customThead">
-            <th *ngFor="let item of customThead;" [hidden]="!item.display">{{item.label}}</th>
-          </tr>
-          </thead>
-          <tbody *ngFor="let entry of voucherFormDetails.entries; let entryIndex = index">
-          <tr *ngFor="let transaction of entry.transactions; let transIndex = index">
-            <td *ngIf="customThead[0]?.display">{{ getSerialNos(entryIndex, transIndex) }}</td>
-            <td *ngIf="customThead[1]?.display">{{ entry.entryDate }}</td>
-            <td *ngIf="customThead[2]?.display">
-              {{ transaction.accountName }}
-            </td>
-            <td *ngIf="customThead[3]?.display">{{ transaction.hsnNumber || transaction.sacNumber }}</td>
-            <td *ngIf="customThead[4]?.display">{{ transaction.quantity }} {{ transaction.stockUnit }}</td>
-            <td *ngIf="customThead[5]?.display"><input type="text"
-                                                       name="transaction.description_{{entryIndex}}_{{transIndex}}"
-                                                       class="form-control" [(ngModel)]="transaction.description"/></td>
-            <td *ngIf="customThead[6]?.display">{{ transaction.rate}}</td>
-            <td *ngIf="customThead[7]?.display && transaction.category === 'income'">{{
+                    <div class="pdT2 clearfix flex-row">
+                        <div class="flex-row-child">
+                            <div class="form-group size_340">
+                                <label>Billing Address</label>
+                                <textarea name="billingDetails.address" class="form-control"
+                                    [(ngModel)]="voucherFormDetails.accountDetails.billingDetails.address"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <div class="mrB2">
+                                    <label>State</label>
+                                    <sh-select [placeholder]="'State'" [options]="statesSource$ | async" #statesBilling
+                                        name="billingDetails.stateCode"
+                                        [(ngModel)]="voucherFormDetails.accountDetails.billingDetails.stateCode">
+                                    </sh-select>
+                                    <!-- <input type="text" name="billingDetails.stateName" class="form-control" [(ngModel)]="voucherDetails.account.billingDetails.stateName" /> -->
+                                </div>
+                                <div class="">
+                                    <label>GSTIN</label>
+                                    <input type="text" name="billingDetails.gstNumber" decimalDigitsDirective
+                                        class="form-control"
+                                        [(ngModel)]="voucherFormDetails.accountDetails.billingDetails.gstNumber"
+                                        maxLength="15"
+                                        (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-row-child">
+                            <div class="form-group size_340">
+                                <label>Shipping Address</label>
+                                <textarea name="shippingDetails.address" class="form-control"
+                                    [(ngModel)]="voucherFormDetails.accountDetails.shippingDetails.address"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <div class="mrB2">
+                                    <label>State</label>
+                                    <sh-select [disabled]="autoFillShipping" #statesShipping [placeholder]="'State'"
+                                        [options]="statesSource$ | async" name="shippingDetails.stateCode"
+                                        [(ngModel)]="voucherFormDetails.accountDetails.shippingDetails.stateCode">
+                                    </sh-select>
+                                    <!-- <input type="text" name="shippingDetails.stateName" class="form-control" [(ngModel)]="voucherDetails.account.shippingDetails.stateName" /> -->
+                                </div>
+                                <div class="">
+                                    <label>GSTIN</label>
+                                    <input type="text" name="shippingDetails.gstNumber" decimalDigitsDirective
+                                        class="form-control"
+                                        [(ngModel)]="voucherFormDetails.accountDetails.shippingDetails.gstNumber"
+                                        maxLength="15" (keyup)="getStateCode('shippingDetails', statesShipping)" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pdT2 clearfix">
+                        <div class="form-group size_175">
+                            <label>Ship Date</label>
+                            <input type="text" [placeholder]="giddhDateFormat" name="shippingDate"
+                                [(ngModel)]="voucherFormDetails.templateDetails.other.shippingDate" class="form-control"
+                                bsDatepicker
+                                value="{{ voucherFormDetails.templateDetails.other.shippingDate | date: giddhDateFormatUI }}" />
+                        </div>
+                        <div class="form-group size_175">
+                            <label>Ship Via</label>
+                            <input type="text" name="shippedVia" class="form-control"
+                                [(ngModel)]="voucherFormDetails.templateDetails.other.shippedVia" />
+                        </div>
+                        <div class="form-group size_175">
+                            <label>Tracking No.</label>
+                            <input type="text" name="country" class="form-control"
+                                [(ngModel)]="voucherFormDetails.templateDetails.other.trackingNumber" />
+                        </div>
+                        <div class="form-group size_175">
+                            <label>Custom Field 1</label>
+                            <input type="text" name="customField1" class="form-control"
+                                [(ngModel)]="voucherFormDetails.templateDetails.other.customField1" />
+                        </div>
+                        <div class="form-group size_175">
+                            <label>Custom Field 2</label>
+                            <input type="text" name="customField2" class="form-control"
+                                [(ngModel)]="voucherFormDetails.templateDetails.other.customField2" />
+                        </div>
+                        <div class="form-group size_175">
+                            <label>Custom Field 3</label>
+                            <input type="text" name="customField3" class="form-control"
+                                [(ngModel)]="voucherFormDetails.templateDetails.other.customField3" />
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <section class="clearfix mrB2 whiteBg">
+                <table class="table">
+                    <thead class="t-h-bg1">
+                        <tr *ngIf="customThead">
+                            <th *ngFor="let item of customThead;" [hidden]="!item.display">{{item.label}}</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let entry of voucherFormDetails.entries; let entryIndex = index">
+                        <tr *ngFor="let transaction of entry.transactions; let transIndex = index">
+                            <td *ngIf="customThead[0]?.display">{{ getSerialNos(entryIndex, transIndex) }}</td>
+                            <td *ngIf="customThead[1]?.display">{{ entry.entryDate }}</td>
+                            <td *ngIf="customThead[2]?.display">
+                                {{ transaction.accountName }}
+                            </td>
+                            <td *ngIf="customThead[3]?.display">{{ transaction.hsnNumber || transaction.sacNumber }}
+                            </td>
+                            <td *ngIf="customThead[4]?.display">{{ transaction.quantity }} {{ transaction.stockUnit }}
+                            </td>
+                            <td *ngIf="customThead[5]?.display"><input type="text"
+                                    name="transaction.description_{{entryIndex}}_{{transIndex}}" class="form-control"
+                                    [(ngModel)]="transaction.description" /></td>
+                            <td *ngIf="customThead[6]?.display">{{ transaction.rate}}</td>
+                            <td *ngIf="customThead[7]?.display && transaction.category === 'income'">{{
               getEntryTotalDiscount(entry.discounts) }}
-            </td>
-            <td *ngIf="customThead[8]?.display || customThead[9]?.display && transaction.category === 'income'">{{
+                            </td>
+                            <td
+                                *ngIf="customThead[8]?.display || customThead[9]?.display && transaction.category === 'income'">{{
               getEntryTaxableAmount(transaction, entry.discounts) }}
-            </td>
-            <td *ngIf="customThead[9]?.display && transaction.category === 'income'">{{
+                            </td>
+                            <td *ngIf="customThead[9]?.display && transaction.category === 'income'">{{
               getTransactionTotalTax(entry.taxes)
               }}
-            </td>
-            <td *ngIf="customThead[10]?.display && transaction.category === 'income'">{{ getEntryTotal(entry,
+                            </td>
+                            <td *ngIf="customThead[10]?.display && transaction.category === 'income'">{{ getEntryTotal(entry,
               transIndex)
               }}
-            </td>
+                            </td>
 
-            <!-- empty tds -->
-            <td *ngIf="customThead[6]?.display && transaction.category !== 'income'">&nbsp;</td>
-            <td *ngIf="customThead[7]?.display && transaction.category !== 'income'">&nbsp;</td>
-            <td *ngIf="customThead[8]?.display && transaction.category !== 'income'">&nbsp;</td>
-            <td *ngIf="customThead[9]?.display && transaction.category !== 'income'">&nbsp;</td>
-            <td *ngIf="customThead[10]?.display && transaction.category !== 'income'">{{ transaction.amount }}</td>
-          </tr>
-          </tbody>
-        </table>
-        sub total and total calc
-        <table class="table">
-          <tbody>
-          <tr>
-            <td width="50%">
-              <div class="col-xs-8 pdT1">
-                <label class="mrB1">Message</label>
-                <textarea style="height:140px" class="form-control" name="message2"
-                          [(ngModel)]="voucherFormDetails.templateDetails.other.message2"></textarea>
-              </div>
-            </td>
-            <td width="50%">&nbsp;</td>
-          </tr>
-          </tbody>
-        </table>
-      </section>
+                            <!-- empty tds -->
+                            <td *ngIf="customThead[6]?.display && transaction.category !== 'income'">&nbsp;</td>
+                            <td *ngIf="customThead[7]?.display && transaction.category !== 'income'">&nbsp;</td>
+                            <td *ngIf="customThead[8]?.display && transaction.category !== 'income'">&nbsp;</td>
+                            <td *ngIf="customThead[9]?.display && transaction.category !== 'income'">&nbsp;</td>
+                            <td *ngIf="customThead[10]?.display && transaction.category !== 'income'">
+                                {{ transaction.amount }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                sub total and total calc
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td width="50%">
+                                <div class="col-xs-8 pdT1">
+                                    <label class="mrB1">Message</label>
+                                    <textarea style="height:140px" class="form-control" name="message2"
+                                        [(ngModel)]="voucherFormDetails.templateDetails.other.message2"></textarea>
+                                </div>
+                            </td>
+                            <td width="50%">&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
 
-      <section class="row">
-        <section id="actionPane" class="text-center mrB4">
-          <div class="col-xs-12">
-            <div class="pull-right">
-              <button type="button" class="btn btn-default mrR1"
-                      (click)="closeModelEvent.emit()">Close
-              </button>
-              <button type="submit" class="btn btn-default" (click)="updateModelData()">
-                <span>Update {{activatedInvoice | titlecase}}</span>
-              </button>
-            </div>
-          </div>
-        </section>
-      </section>
-    </form>
-  </div>
+            <section class="row">
+                <section id="actionPane" class="text-center mrB4">
+                    <div class="col-xs-12">
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-default mrR1" (click)="closeModelEvent.emit()">Close
+                            </button>
+                            <button type="submit" class="btn btn-default" (click)="updateModelData()">
+                                <span>Update {{activatedInvoice | titlecase}}</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </section>
+        </form>
+    </div>
 </div>

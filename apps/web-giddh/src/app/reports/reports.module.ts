@@ -17,50 +17,53 @@ import { SalesRegisterComponent } from './components/sales-register-component/sa
 import { SalesRegisterExpandComponent } from './components/salesRegister-expand-component/sales.register.expand.component';
 import { SalesRegisterDetailsComponent } from './components/sales-register-details-component/sales.register.details.component';
 import { ReportsDashboardComponent } from './components/report-dashboard/reports.dashboard.component';
+import { PurchaseRegisterComponent } from './components/purchase-register-component/purchase.register.component';
+import { PurchaseRegisterTableComponent } from './components/purchase-register-table-component/purchase.register.table.component';
+import { PurchaseRegisterExpandComponent } from './components/purchase-register-expand-component/purchase.register.expand.component';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-// import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-
 
 @NgModule({
-  declarations: [
-    ReportsComponent,
-    ReportsDetailsComponent,
-    ReportsGraphComponent,
-    ReportsTableComponent,
-    SalesRegisterComponent,
-    SalesRegisterExpandComponent,
-    SalesRegisterDetailsComponent,
-    ReportsDashboardComponent
-  ],
-  exports: [
-    ReportsComponent,
-    ReportsDetailsComponent,
-    DatepickerModule,
-    BsDropdownModule,
-    Daterangepicker,
-    PaginationModule
-  ],
-  providers: [],
-  imports: [
-    ReportsRoutingModule,
-    // NgMultiSelectDropDownModule.forRoot(),
-    BsDatepickerModule.forRoot(),
-    CommonModule,
-    ChartModule,
-    BsDropdownModule,
-    PaginationModule,
-    ShSelectModule,
-    FormsModule,
-    CurrencyModule,
-    AccountDetailModalModule,
-    ReactiveFormsModule,
-    ClickOutsideModule,
-    TooltipModule
-  ]
+    declarations: [
+        ReportsComponent,
+        ReportsDetailsComponent,
+        ReportsGraphComponent,
+        ReportsTableComponent,
+        SalesRegisterComponent,
+        SalesRegisterExpandComponent,
+        SalesRegisterDetailsComponent,
+        ReportsDashboardComponent,
+        PurchaseRegisterComponent,
+        PurchaseRegisterTableComponent,
+        PurchaseRegisterExpandComponent
+    ],
+    exports: [
+        ReportsComponent,
+        ReportsDetailsComponent,
+        DatepickerModule,
+        BsDropdownModule,
+        Daterangepicker,
+        PaginationModule
+    ],
+    providers: [],
+    imports: [
+        ReportsRoutingModule,
+        BsDatepickerModule.forRoot(),
+        CommonModule,
+        ChartModule,
+        BsDropdownModule,
+        PaginationModule,
+        ShSelectModule,
+        FormsModule,
+        CurrencyModule,
+        AccountDetailModalModule,
+        ReactiveFormsModule,
+        ClickOutsideModule,
+        TooltipModule
+    ]
 })
 
 export class ReportsModule {

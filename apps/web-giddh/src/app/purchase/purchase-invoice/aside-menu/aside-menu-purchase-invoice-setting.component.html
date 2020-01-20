@@ -12,12 +12,14 @@
             <div class="form-group" *ngIf="selectedService === 'TAXPRO' || selectedService === 'VAYANA' ">
                 <!-- <h3 class="mrB1">Choose Provider (GSP)</h3> -->
                 <label class="mrR1 row pdL1">
-              <input type="radio" name="serviceType" class="radio_theme" (change)="changeProvider('VAYANA')" [checked]="selectedService === 'VAYANA'"> VAYANA
-            </label>
+                    <input type="radio" name="serviceType" class="radio_theme" (change)="changeProvider('VAYANA')"
+                        [checked]="selectedService === 'VAYANA'"> VAYANA
+                </label>
 
                 <label>
-              <input type="radio" name="serviceType" class="radio_theme" (change)="changeProvider('TAXPRO')" [checked]="selectedService === 'TAXPRO'"> TAX PRO
-            </label>
+                    <input type="radio" name="serviceType" class="radio_theme" (change)="changeProvider('TAXPRO')"
+                        [checked]="selectedService === 'TAXPRO'"> TAX PRO
+                </label>
             </div>
 
             <!-- GIO GST -->
@@ -26,13 +28,15 @@
                     <div class="col-xs-6">
                         <div class="form-group">
                             <label for="jio_user_name">Username:</label>
-                            <input autocomplete="off" type="email" name="username" class="form-control" id="jio_user_name" [(ngModel)]="jioGstForm.uid">
+                            <input autocomplete="off" type="email" name="username" class="form-control"
+                                id="jio_user_name" [(ngModel)]="jioGstForm.uid">
                         </div>
                     </div>
                     <div class="col-xs-6">
                         <div class="form-group">
                             <label for="jio_password">Password:</label>
-                            <input type="password" name="pwd" class="form-control" id="jio_password" [(ngModel)]="jioGstForm.pwd">
+                            <input type="password" name="pwd" class="form-control" id="jio_password"
+                                [(ngModel)]="jioGstForm.pwd">
                         </div>
                     </div>
                 </div>
@@ -51,19 +55,22 @@
                     <div class="col-xs-6">
                         <div class="form-group">
                             <label for="tax_pro_username">Username:</label>
-                            <input autocomplete="off" type="text" name="username" class="form-control" id="tax_pro_username" [(ngModel)]="taxProForm.uid">
+                            <input autocomplete="off" type="text" name="username" class="form-control"
+                                id="tax_pro_username" [(ngModel)]="taxProForm.uid">
                         </div>
                     </div>
                     <div class="col-xs-6">
                         <div class="form-group">
                             <label for="tax_pro_gst_number">GSTIN:</label>
-                            <input autocomplete="off" type="text" name="gstin" class="form-control" id="tax_pro_gst_number" [(ngModel)]="taxProForm.gstin">
+                            <input autocomplete="off" type="text" name="gstin" class="form-control"
+                                id="tax_pro_gst_number" [(ngModel)]="taxProForm.gstin">
                         </div>
                     </div>
                     <div class="col-xs-6" *ngIf="otpSentSuccessFully">
                         <div class="form-group">
                             <label for="tax_pro_otp">OTP:</label>
-                            <input autocomplete="off" type="text" name="otp" class="form-control" id="tax_pro_otp" [(ngModel)]="taxProForm.otp">
+                            <input autocomplete="off" type="text" name="otp" class="form-control" id="tax_pro_otp"
+                                [(ngModel)]="taxProForm.otp">
                         </div>
                     </div>
                 </div>
@@ -85,7 +92,8 @@
                             <div class="col-xs-6">
                                 <div class="form-group">
                                     <label for="tax_pro_username">Username:</label>
-                                    <input autocomplete="off" type="text" name="username" class="form-control" id="reconcile_username" [(ngModel)]="reconcileForm.uid">
+                                    <input autocomplete="off" type="text" name="username" class="form-control"
+                                        id="reconcile_username" [(ngModel)]="reconcileForm.uid">
                                 </div>
                             </div>
                         </ng-container>
@@ -94,7 +102,8 @@
                             <div class="col-xs-6" *ngIf="(reconcileOtpSuccess$ | async)">
                                 <div class="form-group">
                                     <label for="reconcile_otp">OTP:</label>
-                                    <input autocomplete="off" type="text" name="otp" class="form-control" id="reconcile_otp" [(ngModel)]="reconcileForm.otp">
+                                    <input autocomplete="off" type="text" name="otp" class="form-control"
+                                        id="reconcile_otp" [(ngModel)]="reconcileForm.otp">
                                 </div>
                             </div>
                         </ng-container>
@@ -103,7 +112,8 @@
                             <div class="col-xs-6" *ngIf="activeCompanyGstNumber">
                                 <div class="form-group">
                                     <label for="reconcile_otp">GSTN:</label>
-                                    <input autocomplete="off" type="text" name="otp" class="form-control" id="reconcile_gstn" [value]="(companyGst$ | async)" [disabled]="true">
+                                    <input autocomplete="off" type="text" name="otp" class="form-control"
+                                        id="reconcile_gstn" [value]="(companyGst$ | async)" [disabled]="true">
                                 </div>
                             </div>
                         </ng-container>
@@ -111,19 +121,23 @@
                     <ng-container *ngIf="(gstAuthenticated$ | async)">
                         <div class="col-xs-12">
                             <span>
-                Gst No - {{ (companyGst$ | async) }} Verified Successfully
-              </span>
+                                Gst No - {{ (companyGst$ | async) }} Verified Successfully
+                            </span>
                         </div>
                     </ng-container>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-12 mrT1">
-                        <button class="btn btn-success" (click)="generateReconcileOtp(reconcileForm)" *ngIf="!(reconcileOtpSuccess$ | async)" [ladda]="reconcileOtpInProcess$ | async" [disabled]="!reconcileForm.uid">Submit
-            </button>
+                        <button class="btn btn-success" (click)="generateReconcileOtp(reconcileForm)"
+                            *ngIf="!(reconcileOtpSuccess$ | async)" [ladda]="reconcileOtpInProcess$ | async"
+                            [disabled]="!reconcileForm.uid">Submit
+                        </button>
 
-                        <button class="btn btn-success" (click)="sendReconcileOtp(reconcileForm)" *ngIf="(reconcileOtpSuccess$ | async)" [ladda]="reconcileOtpVerifyInProcess$ | async" [disabled]="!reconcileForm.otp">Submit
-            </button>
+                        <button class="btn btn-success" (click)="sendReconcileOtp(reconcileForm)"
+                            *ngIf="(reconcileOtpSuccess$ | async)" [ladda]="reconcileOtpVerifyInProcess$ | async"
+                            [disabled]="!reconcileForm.otp">Submit
+                        </button>
 
                         <button class="btn btn-default" (click)="closeAsidePane($event)">Cancel</button>
                     </div>

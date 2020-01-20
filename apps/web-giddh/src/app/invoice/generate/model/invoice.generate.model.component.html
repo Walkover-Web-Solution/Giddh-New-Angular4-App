@@ -7,10 +7,12 @@
 
         </div>
         <section *ngIf="hasErr">
-            <p class="lead">Something went wrong please reload page or go <a (click)="closePopupEvent('error')" href="javascript:void(0)">back</a></p>
+            <p class="lead">Something went wrong please reload page or go <a (click)="closePopupEvent('error')"
+                    href="javascript:void(0)">back</a></p>
         </section>
         <section *ngIf="goAhead">
-            <invoice-create [showCloseButton]="true" (closeEvent)="closePopupEvent($event)" [isGenerateInvoice]="isGenerateInvoice"></invoice-create>
+            <invoice-create [showCloseButton]="true" (closeEvent)="closePopupEvent($event)"
+                [isGenerateInvoice]="isGenerateInvoice"></invoice-create>
         </section>
     </div>
 </section>

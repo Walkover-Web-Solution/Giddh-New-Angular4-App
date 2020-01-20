@@ -3,22 +3,22 @@ import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permis
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
-  selector: 'invoice-template-preview-modal',
-  templateUrl: './template-preview.modal.component.html'
+    selector: 'invoice-template-preview-modal',
+    templateUrl: './template-preview.modal.component.html'
 })
 
 export class InvoiceTemplatePreviewModelComponent {
 
-  @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
+    @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
 
-  constructor(public sanitizer: DomSanitizer) {
-  }
+    constructor(public sanitizer: DomSanitizer) {
+    }
 
-  public onCancel() {
-    this.closeModelEvent.emit(true);
-  }
+    public onCancel() {
+        this.closeModelEvent.emit(true);
+    }
 
-  public getObjectUrl(url) {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
-  }
+    public getObjectUrl(url) {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    }
 }

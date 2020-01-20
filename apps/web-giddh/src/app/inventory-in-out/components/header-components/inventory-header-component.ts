@@ -4,22 +4,22 @@ import { Store } from '@ngrx/store';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
-  selector: 'inventory-inout-header',
-  styles: [`
+    selector: 'inventory-inout-header',
+    styles: [`
   `],
-  animations: [
-    trigger('slideInOut', [
-      state('in', style({
-        transform: 'translate3d(0, 0, 0)'
-      })),
-      state('out', style({
-        transform: 'translate3d(100%, 0, 0)'
-      })),
-      transition('in => out', animate('400ms ease-in-out')),
-      transition('out => in', animate('400ms ease-in-out'))
-    ]),
-  ],
-  template: `
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ],
+    template: `
     <div class="inline pull-right">
       <div class="">
         <div class="pull-right">
@@ -54,37 +54,37 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 // <button type="button" *ngIf="activeGroupName$ | async" class="btn btn-default" (click)="goToAddStock()">Add Stock</button>
 // [routerLink]="['custom-stock']"
 export class InventoryHeaderComponent implements OnInit {
-  public asideMenuState: string = 'out';
-  public selectedAsideView: string = '';
+    public asideMenuState: string = 'out';
+    public selectedAsideView: string = '';
 
-  constructor(private _store: Store<AppState>) {
+    constructor(private _store: Store<AppState>) {
 
-  }
+    }
 
-  public ngOnInit() {
-    this._store
-      .select(p => p.inventoryInOutState.entrySuccess)
-      .subscribe(p => {
-        if (p) {
-          this.toggleGroupStockAsidePane('');
+    public ngOnInit() {
+        this._store
+            .select(p => p.inventoryInOutState.entrySuccess)
+            .subscribe(p => {
+                if (p) {
+                    this.toggleGroupStockAsidePane('');
+                }
+            });
+    }
+
+    public toggleGroupStockAsidePane(view, event?): void {
+        if (event) {
+            event.preventDefault();
         }
-      });
-  }
-
-  public toggleGroupStockAsidePane(view, event?): void {
-    if (event) {
-      event.preventDefault();
+        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+        this.selectedAsideView = view;
     }
-    this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-    this.toggleBodyClass();
-    this.selectedAsideView = view;
-  }
 
-  public toggleBodyClass() {
-    if (this.asideMenuState === 'in') {
-      document.querySelector('body').classList.add('fixed');
-    } else {
-      document.querySelector('body').classList.remove('fixed');
+    public toggleBodyClass() {
+        if (this.asideMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
     }
-  }
 }

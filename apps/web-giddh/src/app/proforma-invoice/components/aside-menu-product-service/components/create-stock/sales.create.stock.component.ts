@@ -229,7 +229,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
             if (a) {
                 purchaseUnitRatesControls.enable();
-                // console.log(a);
             } else {
                 purchaseUnitRatesControls.disable();
             }
@@ -240,7 +239,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             const saleUnitRatesControls = this.addStockForm.controls['saleUnitRates'] as FormArray;
             if (a) {
                 saleUnitRatesControls.enable();
-                // console.log(a);
             } else {
                 saleUnitRatesControls.disable();
             }
@@ -403,7 +401,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
 
         this.manageInProcess$.subscribe(s => {
             if (!s.isOpen) {
-                // console.log('s:', s);
                 this.addStockForm.reset();
             }
         });

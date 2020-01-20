@@ -1,58 +1,62 @@
 <div id="" class="add-new-role-modal">
-  <div class="modal-header clearfix">
-    <h3>Add Role</h3>
-    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closePopupEvent()">×</span>
-  </div>
-  <div class="modal-body clearfix" id="export-body">
-    <form #newRoleForm="ngForm" (submit)="addNewRole()" autocomplete="off">
-      <div class="">
-        <div class="form-group">
-          <label>Role Name</label>
-          <input type="text" required name="name" class="form-control" [(ngModel)]="newRoleObj.name"
-                 placeholder="Role Name" #name="ngModel"/>
-        </div>
-        <div class="form-group custom-select pos-rel">
-          <label>Role Type</label>
-          <select class="form-control" required [(ngModel)]="newRoleObj.isFresh" name="isFresh" #isFresh="ngModel">
-            <option [ngValue]="true">Fresh Start</option>
-            <option [ngValue]="false">Copy From Other Role</option>
-          </select>
-          <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-        </div>
-        <div class="form-group" *ngIf="newRoleObj.isFresh">
-          <div class="btn-group btn-block" dropdown (onShown)="onDDShown()" (onHidden)="onDDHidden()">
-            <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
-              {{ dropdownHeading}} <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
-            </button>
-            <ul id="pageListDD" *dropdownMenu class="dropdown-menu pdL1 pdR1" role="menu">
-              <li>
-                <label>
-                  <input type="checkbox" [ngModelOptions]="{standalone: true}" (click)="selectAllPages($event)"
-                         [(ngModel)]="newRoleObj.isSelectedAllPages"> Select all
-                </label>
-              </li>
-              <li *ngFor="let item of newRoleObj.pageList; let i = index">
-                <label>
-                  <input type="checkbox" [ngModelOptions]="{standalone: true}" (click)="selectPage($event)"
-                         [(ngModel)]="item.isSelected"> {{ item.name | capitalize}}
-                </label>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="form-group custom-select pos-rel" *ngIf="!newRoleObj.isFresh">
-          <label>Copy Permission</label>
-          <select class="form-control text-capitalize" name="somename" [(ngModel)]="newRoleObj.uniqueName">
-            <option [ngValue]="">Please Select</option>
-            <option *ngFor="let role of allRoles" [ngValue]="role.uniqueName"> {{ role.name }}</option>
-          </select>
-          <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-        </div>
-        <div class="clearfix text-right mrT4">
-          <button type="submit" class="btn btn-sm btn-success" [disabled]="!isFormValid">Next</button>
-          <button type="button" class="btn btn-sm btn-danger" (click)="closePopupEvent()">Cancel</button>
-        </div>
-      </div>
-    </form>
-  </div>
+    <div class="modal-header clearfix">
+        <h3>Add Role</h3>
+        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closePopupEvent()">×</span>
+    </div>
+    <div class="modal-body clearfix" id="export-body">
+        <form #newRoleForm="ngForm" (submit)="addNewRole()" autocomplete="off">
+            <div class="">
+                <div class="form-group">
+                    <label>Role Name</label>
+                    <input type="text" required name="name" class="form-control" [(ngModel)]="newRoleObj.name"
+                        placeholder="Role Name" #name="ngModel" />
+                </div>
+                <div class="form-group custom-select pos-rel">
+                    <label>Role Type</label>
+                    <select class="form-control" required [(ngModel)]="newRoleObj.isFresh" name="isFresh"
+                        #isFresh="ngModel">
+                        <option [ngValue]="true">Fresh Start</option>
+                        <option [ngValue]="false">Copy From Other Role</option>
+                    </select>
+                    <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                </div>
+                <div class="form-group" *ngIf="newRoleObj.isFresh">
+                    <div class="btn-group btn-block" dropdown (onShown)="onDDShown()" (onHidden)="onDDHidden()">
+                        <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
+                            {{ dropdownHeading}} <span class="select_drop pull-right mrT1"><i
+                                    class="fa fa-caret-down"></i></span>
+                        </button>
+                        <ul id="pageListDD" *dropdownMenu class="dropdown-menu pdL1 pdR1" role="menu">
+                            <li>
+                                <label>
+                                    <input type="checkbox" [ngModelOptions]="{standalone: true}"
+                                        (click)="selectAllPages($event)" [(ngModel)]="newRoleObj.isSelectedAllPages">
+                                    Select all
+                                </label>
+                            </li>
+                            <li *ngFor="let item of newRoleObj.pageList; let i = index">
+                                <label>
+                                    <input type="checkbox" [ngModelOptions]="{standalone: true}"
+                                        (click)="selectPage($event)" [(ngModel)]="item.isSelected">
+                                    {{ item.name | capitalize}}
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-group custom-select pos-rel" *ngIf="!newRoleObj.isFresh">
+                    <label>Copy Permission</label>
+                    <select class="form-control text-capitalize" name="somename" [(ngModel)]="newRoleObj.uniqueName">
+                        <option [ngValue]="">Please Select</option>
+                        <option *ngFor="let role of allRoles" [ngValue]="role.uniqueName"> {{ role.name }}</option>
+                    </select>
+                    <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                </div>
+                <div class="clearfix text-right mrT4">
+                    <button type="submit" class="btn btn-sm btn-success" [disabled]="!isFormValid">Next</button>
+                    <button type="button" class="btn btn-sm btn-danger" (click)="closePopupEvent()">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>

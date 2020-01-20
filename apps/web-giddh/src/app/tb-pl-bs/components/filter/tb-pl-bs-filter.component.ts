@@ -152,7 +152,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
             return { label: q.uniqueName, value: q.uniqueName };
         });
 
-        if (this.filterForm.get('selectedDateOption').value === '0') {
+        if (this.filterForm.get('selectedDateOption').value === '0' && value.activeFinancialYear) {
             this.datePickerOptions = {
                 ...this.datePickerOptions, startDate: moment(value.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY'),
                 endDate: moment(value.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY')
@@ -226,9 +226,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
             }
         });
 
-        // this.universalDate$.subscribe(s => {
-        //   console.log('original u date', s);
-        // });
     }
 
     public setCurrentFY() {
@@ -280,14 +277,16 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         if (v.value) {
             let financialYear = this._selectedCompany.financialYears.find(p => p.uniqueName === v.value);
             let index = this._selectedCompany.financialYears.findIndex(p => p.uniqueName === v.value);
-            this.datePickerOptions.startDate = moment(financialYear.financialYearStarts, 'DD-MM-YYYY');
-            this.datePickerOptions.endDate = moment(financialYear.financialYearEnds, 'DD-MM-YYYY');
+            if (financialYear) {
+                this.datePickerOptions.startDate = moment(financialYear.financialYearStarts, 'DD-MM-YYYY');
+                this.datePickerOptions.endDate = moment(financialYear.financialYearEnds, 'DD-MM-YYYY');
 
-            this.filterForm.patchValue({
-                to: financialYear.financialYearEnds,
-                from: financialYear.financialYearStarts,
-                fy: index === 0 ? 0 : index * -1
-            });
+                this.filterForm.patchValue({
+                    to: financialYear.financialYearEnds,
+                    from: financialYear.financialYearStarts,
+                    fy: index === 0 ? 0 : index * -1
+                });
+            }
         } else {
             this.filterForm.patchValue({
                 to: '',

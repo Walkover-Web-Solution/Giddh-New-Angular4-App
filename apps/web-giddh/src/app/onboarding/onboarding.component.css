@@ -18,8 +18,8 @@
 
 .borderbtm {
     font-size: 16px;
-    font-family: ''opensans-semibold'';
-    border-bottom: 1px solid #CCCCCC;
+    font-family: "" opensans-semibold "";
+    border-bottom: 1px solid #cccccc;
     padding: 7px 0;
     margin-bottom: 10px;
 }
@@ -46,10 +46,10 @@
 }
 
 .manage_invoice li a {
-    background: #FFF;
+    background: #fff;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
     padding: 9px 15px;
-    color: #10AAE0;
+    color: #10aae0;
     font-size: 16px;
     margin-top: 15px;
     display: block;
@@ -73,25 +73,25 @@
 .btn-sync {
     color: #125446;
     margin-top: 12px;
-    background: #C9E6CA;
+    background: #c9e6ca;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.16);
     font-size: 16px;
-    font-family: 'opensans-regular';
+    font-family: "opensans-regular";
 }
 
 p {
-    color: #B1B1B3;
+    color: #b1b1b3;
 }
 
 .right_section span {
     font-size: 14px;
-    color: #B2B2B4;
+    color: #b2b2b4;
     display: block;
 }
 
 .btn-default {
-    background: #E6E6E6;
-    color: #2FAB4A;
+    background: #e6e6e6;
+    color: #2fab4a;
     padding: 8px 16px;
 }
 
@@ -107,17 +107,17 @@ a.text-dark {
 .your-account span {
     display: block;
     font-size: 16px;
-    color: #9B9B9B;
+    color: #9b9b9b;
     margin-bottom: 10px;
 }
 
 .your-account p {
-    color: #2C2C2C;
+    color: #2c2c2c;
     font-size: 16px;
 }
 
 .your-account p.success-text {
-    color: #2FAB4A !important;
+    color: #2fab4a !important;
 }
 
 .importData-blocks .d-inline-flex {
@@ -144,7 +144,7 @@ a.text-dark {
 }
 
 .importData-blocks a p {
-    color: #0C8FE6;
+    color: #0c8fe6;
 }
 
 .right_section {
@@ -155,9 +155,7 @@ a.text-dark {
     width: 200px;
 }
 
-
 /* talk to sales modal */
-
 
 /*modal css*/
 
@@ -182,7 +180,7 @@ a.text-dark {
 }
 
 .custom-dialog .modal-header h3 {
-    font-family: 'CambriaBold';
+    font-family: "CambriaBold";
     font-size: 20px;
     color: #333333 !important;
     margin-bottom: 15px;
@@ -218,7 +216,7 @@ a.text-dark {
     height: 42px !important;
 }
 
-#talk_sales>li {
+#talk_sales > li {
     text-align: left;
     width: 156px;
 }
@@ -227,32 +225,32 @@ a.text-dark {
     padding-left: 0;
 }
 
-.nav-tabs-talk>li {
+.nav-tabs-talk > li {
     float: left;
     margin-bottom: -1px;
     list-style: none;
 }
 
-#talk_sales>li.active>a {
+#talk_sales > li.active > a {
     font-weight: 500;
     position: relative;
 }
 
-#talk_sales>li>a {
+#talk_sales > li > a {
     color: #333;
-    font-family: 'CambriaBold';
+    font-family: "CambriaBold";
     padding-left: 28px !important;
     line-height: 35px;
     font-size: 16px;
 }
 
-#talk_sales>li>a:hover,
-#talk_sales>li>a:focus {
+#talk_sales > li > a:hover,
+#talk_sales > li > a:focus {
     border-color: transparent;
     text-decoration: none;
 }
 
-#talk_sales>li.active>a:after {
+#talk_sales > li.active > a:after {
     background: #e34b26;
     position: absolute;
     bottom: -14px;
@@ -279,7 +277,7 @@ a.text-dark {
     margin-bottom: 0;
 }
 
-.nav-tabs-talk.nav-tabs>li.active>a {
+.nav-tabs-talk.nav-tabs > li.active > a {
     background: transparent;
     border: none;
 }
@@ -306,17 +304,17 @@ a.text-dark {
 #sFform-V6Lc input {
     font-family: "AvenirLTStdMedium" !important;
 }
-@media(max-width:767px){
-  .scheduleImg{
-    display: none;
-  }
+@media (max-width: 767px) {
+    .scheduleImg {
+        display: none;
+    }
 }
 
 @media (max-width: 600px) {
     .white-popup {
         width: 90%;
     }
-    #talk_sales>li {
+    #talk_sales > li {
         width: auto;
     }
 }
@@ -368,7 +366,7 @@ a.text-dark {
 
 .talktosale-superform .sFSection {
     padding: 0 !important;
-    font-family: 'CambriaRegular' !important;
+    font-family: "CambriaRegular" !important;
 }
 
 .talktosale-superform .sFSection .sFform textarea {

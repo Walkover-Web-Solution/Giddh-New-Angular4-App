@@ -1,3 +1,24 @@
+.clear-filter-close {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: center;
+}
+.clear-filter-close a {
+    color: #fff;
+    font-size: 14px;
+}
+.modal-header {
+    display: flex;
+    justify-content: space-around;
+}
+.modal-header .close {
+    color: #fff;
+    opacity: 1;
+    font-weight: 100;
+    text-shadow: none;
+    font-size: 30px;
+}
 @media (min-width: 1200px) {
     .container {
         width: 100%;
@@ -10,7 +31,6 @@
     }
 }
 @media only screen and (max-width: 767px) {
-    
     .ledger-state-box {
         margin-bottom: 20px;
     }

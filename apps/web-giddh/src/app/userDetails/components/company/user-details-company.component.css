@@ -1,10 +1,10 @@
 .company-box h3 {
-  white-space: normal;
-  width: 94%;
-  word-break: break-word;
+    white-space: normal;
+    width: 94%;
+    word-break: break-word;
 }
 .box-name {
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

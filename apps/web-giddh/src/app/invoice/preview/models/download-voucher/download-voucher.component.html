@@ -1,46 +1,45 @@
 <div class="modal-header themeBg pd2 pdL2 pdR2 clearfix" style="background-color: #525252">
-  <h3 class="modal-title bg" id="modal-title">Download Voucher</h3>
-  <i aria-hidden="true" class="fa fa-times text-right close_modal" (click)="cancel()"></i>
+    <h3 class="modal-title bg" id="modal-title">Download Voucher</h3>
+    <i aria-hidden="true" class="fa fa-times text-right close_modal" (click)="cancel()"></i>
 </div>
 
 <div class="modal-body">
 
-  <div class="clearfix">
-    <h3 class="fs16 mrB">Invoice Copy</h3>
-    <hr>
+    <div class="clearfix">
+        <h3 class="fs16 mrB">Invoice Copy</h3>
+        <hr>
 
-    <div class="checkbox">
-      <label>
-        <input type="checkbox" value="Transport" (change)="invoiceTypeChanged($event)" [(ngModel)]="isTransport">
-        Transport
-      </label>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="Transport" (change)="invoiceTypeChanged($event)"
+                    [(ngModel)]="isTransport">
+                Transport
+            </label>
+        </div>
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="Customer" (change)="invoiceTypeChanged($event)" [(ngModel)]="isCustomer">
+                Customer
+            </label>
+        </div>
     </div>
 
-    <div class="checkbox">
-      <label>
-        <input type="checkbox" value="Customer" (change)="invoiceTypeChanged($event)" [(ngModel)]="isCustomer">
-        Customer
-      </label>
+
+    <!-- region buttons -->
+    <div class="row mrT2 mrB1">
+        <div class="col-sm-12">
+
+            <div class="btn-group" role="group" aria-label="Basic example">
+
+                <button type="button" class="btn btn-success" (click)="onDownloadInvoiceEvent()">Download
+                </button>
+
+                <button type="button" class="btn btn-danger" (click)="cancel()">Cancel</button>
+
+            </div>
+        </div>
     </div>
-  </div>
-
-
-  <!-- region buttons -->
-  <div class="row mrT2 mrB1">
-    <div class="col-sm-12">
-
-      <div class="btn-group" role="group" aria-label="Basic example">
-
-        <button type="button" class="btn btn-success"
-                (click)="onDownloadInvoiceEvent()"
-        >Download
-        </button>
-
-        <button type="button" class="btn btn-danger" (click)="cancel()">Cancel</button>
-
-      </div>
-    </div>
-  </div>
-  <!-- endregion -->
+    <!-- endregion -->
 
 </div>

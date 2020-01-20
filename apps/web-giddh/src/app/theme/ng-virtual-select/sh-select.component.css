@@ -3,7 +3,6 @@
     position: relative;
 }
 
-
 /* .header {
     width: 100%;
     margin: 0 !important;
@@ -29,7 +28,7 @@
 
 .header.open {
     border-radius: 2px 2px 0 0;
-    box-shadow: 0 2px 3px 0 rgba(34, 36, 38, .15);
+    box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
     border-bottom: none;
 }
 
@@ -40,7 +39,6 @@
 div {
     display: block;
 }
-
 
 /* input[type="text"] {
     border: none !important;
@@ -90,10 +88,10 @@ i.close.icon.clear:hover::after {
     font-size: 25px;
     font-weight: 500;
     line-height: 100%;
-    opacity: .5;
+    opacity: 0.5;
     color: black;
     transform: translateY(-50%);
-  }
+}
 
 .sh-select-disabled {
     background-color: #e3e3e3;
@@ -119,17 +117,23 @@ i.close.icon.clear:hover::after {
     float: right;
     font-size: 20px;
     cursor: pointer;
-    opacity: .6;
+    opacity: 0.6;
 }
 
 .chipClosebtn:hover {
     font-weight: 700;
-    opacity: .5;
+    opacity: 0.5;
     color: black;
 }
 
+.header .form-control[readonly] {
+    background-color: #fff !important;
+    border: 1px solid #ccc;
+}
+
 .sh-select-disabled .selectedVal,
-.sh-select-disabled .form-control {
+.sh-select-disabled .form-control,
+.sh-select-disabled .form-control[readonly] {
     background: #eee !important;
     pointer-events: none;
     cursor: not-allowed;
@@ -141,23 +145,22 @@ i.close.icon.clear:hover::after {
     background: #fff !important;
 }
 
-.header.open>input[type="text"] {
+.header.open > input[type="text"] {
     border-color: #d6d6d6;
 }
 
-.header .bdr>input[type="text"] {
+.header .bdr > input[type="text"] {
     border: 0;
 }
 .header .bdr > input[type="text"]::-webkit-input-placeholder {
     color: #c1c1c1 !important;
-  }
-  .header .bdr > input[type="text"]::-moz-placeholder {
+}
+.header .bdr > input[type="text"]::-moz-placeholder {
     color: #c1c1c1 !important;
-  }
-  .header .bdr > input[type="text"]:-ms-input-placeholder {
+}
+.header .bdr > input[type="text"]:-ms-input-placeholder {
     color: #c1c1c1 !important;
-  }
-  .header .bdr > input[type="text"]:-moz-placeholder {
+}
+.header .bdr > input[type="text"]:-moz-placeholder {
     color: #c1c1c1 !important;
-  }
-  
+}

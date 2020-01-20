@@ -14,9 +14,9 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
 import { orderBy } from '../../../../lodash-optimized';
 import { LedgerService } from "../../../../services/ledger.service";
 import { ReceiptItem } from "../../../../models/api-models/recipt";
-import {AccountService} from "../../../../services/account.service";
-import {INameUniqueName} from "../../../../models/api-models/Inventory";
-import {GeneralService} from "../../../../services/general.service";
+import { AccountService } from "../../../../services/account.service";
+import { INameUniqueName } from "../../../../models/api-models/Inventory";
+import { GeneralService } from "../../../../services/general.service";
 
 @Component({
     selector: 'invoice-payment-model',
@@ -86,7 +86,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
                 data.forEach((item) => {
                     let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts' || grp.uniqueName === 'cash');
                     if (findBankIndx !== -1) {
-                        paymentMode.push({label: item.name, value: item.uniqueName, additional: {parentUniqueName: item.parentGroups[1].uniqueName, currency: item.currency, currencySymbol: item.currencySymbol}});
+                        paymentMode.push({ label: item.name, value: item.uniqueName, additional: { parentUniqueName: item.parentGroups[1].uniqueName, currency: item.currency, currencySymbol: item.currencySymbol } });
                     }
                 });
                 this.paymentMode = paymentMode;
@@ -99,8 +99,8 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public provideStrings = (arr: any[]) => {
-        let o = {nameStr: [], uNameStr: []};
-        let b = {nameStr: '', uNameStr: ''};
+        let o = { nameStr: [], uNameStr: [] };
+        let b = { nameStr: '', uNameStr: '' };
         try {
             arr.forEach((item: INameUniqueName) => {
                 o.nameStr.push(item.name);
@@ -119,7 +119,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
             if (tags && tags.length) {
                 let arr: IOption[] = [];
                 tags.forEach(tag => {
-                    arr.push({value: tag.name, label: tag.name});
+                    arr.push({ value: tag.name, label: tag.name });
                 });
                 this.tags = orderBy(arr, 'name');
             }
@@ -287,7 +287,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
                 arr.forEach((item) => {
                     let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts' || grp.uniqueName === 'cash');
                     if (findBankIndx !== -1) {
-                        paymentMode.push({label: item.name, value: item.uniqueName, additional: {parentUniqueName: item.parentGroups[1].uniqueName, currency: item.currency, currencySymbol: item.currencySymbol}});
+                        paymentMode.push({ label: item.name, value: item.uniqueName, additional: { parentUniqueName: item.parentGroups[1].uniqueName, currency: item.currency, currencySymbol: item.currencySymbol } });
                     }
                 });
 

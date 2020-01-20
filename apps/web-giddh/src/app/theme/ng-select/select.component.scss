@@ -1,139 +1,139 @@
 ng-select {
-  display: inline-block;
-  margin: 0;
-  position: relative;
-  vertical-align: middle;
-  // width: 100%;
-  outline: none;
-  font-size: 14px;
-  * {
-    box-sizing: border-box;
-  }
-  // Container.
-  > div {
-    border: none;
-    border-bottom: 1px solid #ddd;
-    box-sizing: border-box;
-    cursor: pointer;
-    user-select: none;
-    width: 100%;
-    background-color: #fff;
-    &.open {
+    display: inline-block;
+    margin: 0;
+    position: relative;
+    vertical-align: middle;
+    // width: 100%;
+    outline: none;
+    font-size: 14px;
+    * {
+        box-sizing: border-box;
     }
-    &.focus {
-      outline: none;
-    }
-    &.below {
-    }
-    &.disabled {
-      background-color: #eee;
-      color: #aaa;
-      cursor: default;
-      pointer-events: none;
-    }
-    > div.single {
-      display: flex;
-      height: 30px;
-      width: 100%;
-      > div.value,
-      > div.placeholder {
-        flex: 1;
-        line-height: 30px;
-        overflow: hidden;
-        padding: 0 6px;
-        white-space: nowrap;
-      }
-      > div.placeholder {
-        color: rgba(0, 0, 0, 0.3)
-      }
-      > div.clear,
-      > div.toggle {
-        color: #aaa;
-        line-height: 30px;
-        text-align: center;
-        width: 30px;
-        &:hover {
-          background-color: #ececec;
-        }
-      }
-      > div.clear {
-        font-size: 18px;
-      }
-      > div.toggle {
-        font-size: 14px;
-      }
-    }
-    > div.multiple {
-      display: flex;
-      flex-flow: row wrap;
-      height: 100%;
-      min-height: 30px;
-      padding: 0 10px;
-      width: 100%;
-      > div.option {
-        background-color: #eee;
-        border: 1px solid #aaa;
-        border-radius: 4px;
-        color: #333;
-        cursor: default;
-        display: inline-block;
-        flex-shrink: 0;
-        font-size: 14px;
-        line-height: 22px;
-        margin: 3px 5px 3px 0;
-        padding: 0 4px;
-        span.deselect-option {
-          color: #aaa;
-          cursor: pointer;
-          font-size: 14px;
-          height: 20px;
-          line-height: 20px;
-          &:hover {
-            color: #555;
-          }
-        }
-      }
-      input {
-        background-color: transparent;
+    // Container.
+    > div {
         border: none;
+        border-bottom: 1px solid #ddd;
+        box-sizing: border-box;
         cursor: pointer;
-        height: 30px;
-        line-height: 30px;
-        padding: 0;
-        &:focus {
-          outline: none;
+        user-select: none;
+        width: 100%;
+        background-color: #fff;
+        &.open {
         }
-      }
+        &.focus {
+            outline: none;
+        }
+        &.below {
+        }
+        &.disabled {
+            background-color: #eee;
+            color: #aaa;
+            cursor: default;
+            pointer-events: none;
+        }
+        > div.single {
+            display: flex;
+            height: 30px;
+            width: 100%;
+            > div.value,
+            > div.placeholder {
+                flex: 1;
+                line-height: 30px;
+                overflow: hidden;
+                padding: 0 6px;
+                white-space: nowrap;
+            }
+            > div.placeholder {
+                color: rgba(0, 0, 0, 0.3);
+            }
+            > div.clear,
+            > div.toggle {
+                color: #aaa;
+                line-height: 30px;
+                text-align: center;
+                width: 30px;
+                &:hover {
+                    background-color: #ececec;
+                }
+            }
+            > div.clear {
+                font-size: 18px;
+            }
+            > div.toggle {
+                font-size: 14px;
+            }
+        }
+        > div.multiple {
+            display: flex;
+            flex-flow: row wrap;
+            height: 100%;
+            min-height: 30px;
+            padding: 0 10px;
+            width: 100%;
+            > div.option {
+                background-color: #eee;
+                border: 1px solid #aaa;
+                border-radius: 4px;
+                color: #333;
+                cursor: default;
+                display: inline-block;
+                flex-shrink: 0;
+                font-size: 14px;
+                line-height: 22px;
+                margin: 3px 5px 3px 0;
+                padding: 0 4px;
+                span.deselect-option {
+                    color: #aaa;
+                    cursor: pointer;
+                    font-size: 14px;
+                    height: 20px;
+                    line-height: 20px;
+                    &:hover {
+                        color: #555;
+                    }
+                }
+            }
+            input {
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                height: 30px;
+                line-height: 30px;
+                padding: 0;
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
     }
-  }
-  // Label.
-  label {
-    color: rgba(0, 0, 0, 0.6);
-    display: block;
-    font-size: 13px;
-    padding: 4px 0;
-  }
+    // Label.
+    label {
+        color: rgba(0, 0, 0, 0.6);
+        display: block;
+        font-size: 13px;
+        padding: 4px 0;
+    }
 }
 
 .ng-select-wrap.liq ng-select .below {
-  width: 100% !important;
+    width: 100% !important;
 }
 
 ng-select.splSales {
-  width: 190px;
-  // height: 42px;
-  > div {
-    border-color: #d6d6d6;
-    // height: 41px;
-    > .single {
-      // height: 39px;
-      .placeholder,
-      .value {
-        // line-height: 39px;
-      }
+    width: 190px;
+    // height: 42px;
+    > div {
+        border-color: #d6d6d6;
+        // height: 41px;
+        > .single {
+            // height: 39px;
+            .placeholder,
+            .value {
+                // line-height: 39px;
+            }
+        }
     }
-  }
-  .glyphicon {
-    top: 7px;
-  }
+    .glyphicon {
+        top: 7px;
+    }
 }

@@ -11,21 +11,12 @@ import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 
 import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
-import { GeneralActions } from '../../actions/general/general.actions';
 import { LoginActions } from '../../actions/login.action';
 import { VerifyMobileActions } from '../../actions/verifyMobile.actions';
 import { CountryRequest } from '../../models/api-models/Common';
-import {
-    CompanyCreateRequest,
-    CompanyResponse,
-    SocketNewCompanyRequest,
-    StateDetailsRequest,
-} from '../../models/api-models/Company';
+import { CompanyCreateRequest, CompanyResponse, StateDetailsRequest } from '../../models/api-models/Company';
 import { userLoginStateEnum } from '../../models/user-login-state';
-import { AuthenticationService } from '../../services/authentication.service';
-import { CompanyService } from '../../services/companyService.service';
 import { GeneralService } from '../../services/general.service';
-import { LocationService } from '../../services/location.service';
 import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store';
 import { AuthService } from '../../theme/ng-social-login-module';
@@ -45,7 +36,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
     @Input() public createBranch: boolean = false;
 
     /** Stores the on boarding type of any item */
-    @Input() public onboardingType: OnBoardingType;
+    @Input() public onBoardingType: OnBoardingType;
 
     public imgPath: string = '';
     public countrySource: IOption[] = [];
@@ -88,7 +79,6 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         amountPaid: '',
         razorpaySignature: ''
     };
-    public socketCompanyRequest: SocketNewCompanyRequest = new SocketNewCompanyRequest();
     public companies$: Observable<CompanyResponse[]>;
     public isCompanyCreationInProcess$: Observable<boolean>;
     public isCompanyCreated$: Observable<boolean>;
@@ -110,12 +100,8 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private verifyActions: VerifyMobileActions,
         private companyActions: CompanyActions,
-        private _location: LocationService,
         private _route: Router,
         private _loginAction: LoginActions,
-        private _companyService: CompanyService,
-        private _aunthenticationService: AuthenticationService,
-        private _generalActions: GeneralActions,
         private _generalService: GeneralService,
         private _toaster: ToasterService,
         private commonActions: CommonActions
@@ -123,7 +109,6 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.getCountry();
-        this.getCurrency();
         this.getCallingCodes();
 
         this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
@@ -204,22 +189,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
             this._generalService.createNewCompany = this.company;
             this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
             this.closeCompanyModal.emit({ isFirstStepCompleted: true });
-            // this._route.navigate(['welcome']);
-            if (companies) {
-                if (companies.length === 0) {
-                    this.fireSocketCompanyCreateRequest();
-                }
-            }
         }
-    }
-
-    public fireSocketCompanyCreateRequest() {
-        this.socketCompanyRequest.CompanyName = this.company.name;
-        this.socketCompanyRequest.Timestamp = Date.now();
-        this.socketCompanyRequest.LoggedInEmailID = this._generalService.user.email;
-        this.socketCompanyRequest.MobileNo = this.company.contactNo.toString();
-        this.socketCompanyRequest.Name = this._generalService.user.name;
-        this._companyService.SocketCreateCompany(this.socketCompanyRequest).subscribe();
     }
 
     public closeModal() {
@@ -359,12 +329,25 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                     if (this.company.country === res[key].alpha2CountryCode) {
                         this.selectedCountry = res[key].alpha2CountryCode + ' - ' + res[key].countryName;
                     }
+                    this.getCurrency();
                 });
                 this.countrySource$ = observableOf(this.countrySource);
             } else {
                 let countryRequest = new CountryRequest();
-                countryRequest.formName = (this.onboardingType) ? this.onboardingType.toLowerCase() : 'onboarding';
+                countryRequest.formName = (this.onBoardingType) ? this.onBoardingType.toLowerCase() : 'onboarding';
                 this.store.dispatch(this.commonActions.GetCountry(countryRequest));
+            }
+        });
+        this.store.pipe(select(state => state.session), takeUntil(this.destroyed$)).subscribe((session: any) => {
+            // Fetch current company country
+            if (session.companies) {
+                session.companies.forEach(company => {
+                    if (company.uniqueName === session.companyUniqueName) {
+                        const countryDetails = company.countryV2;
+                        this.company.country = countryDetails.alpha2CountryCode || countryDetails.alpha3CountryCode;
+                        this.company.phoneCode = countryDetails.callingCode;
+                    }
+                });
             }
         });
     }
@@ -376,6 +359,9 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                     this.currencies.push({ label: res[key].code, value: res[key].code });
                 });
                 this.currencySource$ = observableOf(this.currencies);
+                if (this.onBoardingType === OnBoardingType.Warehouse) {
+                    this.company.baseCurrency = this.countryCurrency[this.company.country];
+                }
             } else {
                 this.store.dispatch(this.commonActions.GetCurrency());
             }
@@ -399,5 +385,39 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         this._generalService.createNewCompany = null;
         this.store.dispatch(this.commonActions.resetCountry());
         this.store.dispatch(this.companyActions.removeCompanyCreateSession());
+    }
+
+    /**
+     * On boarding name change handler
+     *
+     * @param {string} itemName Change event
+     * @memberof OnBoardingComponent
+     */
+    public handleOnBoardingNameChange(itemName: string): void {
+        if (this.onBoardingType === OnBoardingType.Warehouse) {
+            if (itemName.length > 100) {
+                this.companyForm.form.controls['name'].setErrors({ 'maxlength': true });
+            }
+        }
+    }
+
+    /**
+     * Validates onboarding item name
+     *
+     * @param {string} itemName Name of the item to be validated
+     * @memberof OnBoardingComponent
+     */
+    public validateOnBoardingItemName(itemName: string): void {
+        setTimeout(() => {
+            if (itemName) {
+                itemName = itemName.trim();
+                if (!itemName) {
+                    this.companyForm.form.controls['name'].setErrors({ 'required': true });
+                }
+                if (itemName.length > 100) {
+                    this.companyForm.form.controls['name'].setErrors({ 'maxlength': true });
+                }
+            }
+        });
     }
 }

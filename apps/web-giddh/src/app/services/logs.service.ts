@@ -14,26 +14,26 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()
 export class LogsService {
-  private companyUniqueName: string;
-  private user: UserDetails;
+    private companyUniqueName: string;
+    private user: UserDetails;
 
-  constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router,
-              private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
-  }
+    constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router,
+        private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    }
 
-  /**
-   * get transactions
-   */
-  public GetAuditLogs(model: LogsRequest, page: number = 1): Observable<BaseResponse<LogsResponse, LogsRequest>> {
-    this.user = this._generalService.user;
-    this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + LOGS_API.AUDIT_LOGS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':page', page.toString()), model).pipe(
-      map((res) => {
-        let data: BaseResponse<LogsResponse, LogsRequest> = res;
-        data.request = model;
-        data.queryString = {page};
-        return data;
-      }),
-      catchError((e) => this.errorHandler.HandleCatch<LogsResponse, LogsRequest>(e, model, {page})));
-  }
+    /**
+     * get transactions
+     */
+    public GetAuditLogs(model: LogsRequest, page: number = 1): Observable<BaseResponse<LogsResponse, LogsRequest>> {
+        this.user = this._generalService.user;
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.post(this.config.apiUrl + LOGS_API.AUDIT_LOGS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':page', page.toString()), model).pipe(
+            map((res) => {
+                let data: BaseResponse<LogsResponse, LogsRequest> = res;
+                data.request = model;
+                data.queryString = { page };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<LogsResponse, LogsRequest>(e, model, { page })));
+    }
 }

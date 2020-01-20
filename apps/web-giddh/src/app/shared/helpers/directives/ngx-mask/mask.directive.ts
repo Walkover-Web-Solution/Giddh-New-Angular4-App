@@ -107,6 +107,8 @@ const unSupportedPrefixAndSuffix = [
 })
 export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, OnDestroy {
     @Input('mask') public maskExpression: string = '';
+    // special input for extracting raw value of input box
+    @Input() public rawInputValue: any = '';
     @Input() public specialCharacters: IConfig['specialCharacters'] = [];
     @Input() public patterns: IConfig['patterns'] = {};
     @Input() public prefix: IConfig['prefix'] = '';
@@ -161,6 +163,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
         const {
             maskExpression,
             specialCharacters,
+            rawInputValue,
             patterns,
             prefix,
             suffix,
@@ -185,6 +188,12 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
             }
             this._maskService.maskSpecialCharacters = changes.specialCharacters.currentValue || '';
         }
+
+        if (rawInputValue && this.rawInputValue !== undefined && this.rawInputValue !== null) {
+            // replace input value with raw value for getting update values
+            this._inputValue = this.rawInputValue.toString();
+        }
+
         if (patterns) {
             this._maskService.maskAvailablePatterns = patterns.currentValue;
         }
@@ -316,7 +325,6 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
         const positionToApply: number = this._position
             ? this._inputValue.length + position + caretShift
             : position + (this._code === 'Backspace' && !backspaceShift ? 0 : caretShift);
-        // console.log('positionToApply: ', positionToApply);
         el.setSelectionRange(positionToApply, positionToApply);
         if ((this.maskExpression.includes('H') || this.maskExpression.includes('M')) && caretShift === 0) {
             el.setSelectionRange((el.selectionStart as number) + 1, (el.selectionStart as number) + 1);

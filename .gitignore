@@ -159,7 +159,12 @@ xplat/**/*.metadata.json
 xplat/**/*.ngfactory.ts
 xplat/**/*.ngsummary.json
 
+/apps/electron-giddh/src/node_modules
+
 /apps/giddh-cordova/giddh/www/
+/apps/giddh-cordova/giddh/platforms/
+/apps/giddh-cordova/giddh/plugins/
+/apps/giddh-cordova/giddh/node_modules/
 /giddh-cordova-prod/dist/apps/giddh-cordova-prod/www/app-cordova/
 /apps/giddh-cordova/giddh/package-lock.json
 

@@ -1,12 +1,13 @@
 <div>
-  <div class="modal-header">
-    <h3 class="modal-title">{{title}}</h3>
-  </div>
-  <div class="modal-body">
-    {{body}}
-  </div>
-  <div class="modal-footer">
-    <button class="btn btn-success" (click)="onSuccess($event)">{{ok}}</button>
-    <button class="btn btn-danger" (click)="onCancel($event)">{{cancel}}</button>
-  </div>
+    <div class="modal-header">
+        <h3 class="modal-title">{{title}}</h3>
+        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel($event)">×</span>
+    </div>
+    <div class="modal-body">
+        {{body}}
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success" (click)="onSuccess($event)">{{ok}}</button>
+        <button class="btn btn-danger" (click)="onCancel($event)">{{cancel}}</button>
+    </div>
 </div>

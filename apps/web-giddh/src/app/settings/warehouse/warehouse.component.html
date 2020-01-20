@@ -1,23 +1,28 @@
-<ng-container *ngIf="(allWarehouses$ | async) as warehouses">
+<ng-container *ngIf="warehouses">
     <div class="createWarehouse" *ngIf="!warehouses?.length">
-        <img src="{{imgPath}}warehouse-vector.svg" alt="warehouse image" />
-        <h2>Create Warehouse</h2>
-        <p>under <span class="">ABC Pvt. Ltd.</span> headquarter</p>
-        <button class="btn btn-pink mrT2" (click)="openCreateWarehouseModal()">
-            Create Warehouse
-        </button>
+        <div class="spinner2">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
     </div>
 
     <div *ngIf="warehouses?.length" class="warehouseCardView">
+
+        <div class="mb-15 text-right">
+            <button class="btn btn-pink" (click)="resetOnboardingForm();openCreateWarehouseModal();">
+                + New Warehouse
+            </button>
+        </div>
+
         <div class="row">
-            <div *ngFor="let warehouse of warehouses" class="col-sm-4 pdR1">
+            <div *ngFor="let warehouse of warehouses; index as warehouseIndex" class="col-md-4 col-sm-6 pdR1">
                 <div class="warehouseCard">
                     <div class="d-flex">
                         <h3>{{ warehouse.name }}</h3>
                         <div class="warehouseOptions">
-                            <span class="setAsDefault">
-                                <i class="icon-no-selected"></i>
-                                <i class="icon-favorite-selected" hidden></i>
+                            <span class="setAsDefault" (click)="setAsDefault(warehouse, warehouseIndex)">
+                                <i *ngIf="warehouse.isDefault" class="icon-favorite-selected"></i>
+                                <i *ngIf="!warehouse.isDefault" class="icon-no-selected"></i>
                                 Set as Default</span>
                             <div class="btn-group" dropdown>
                                 <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
@@ -27,7 +32,7 @@
                                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                                     aria-labelledby="button-basic">
                                     <li role="menuitem" (click)="editWarehouse(warehouse)"><a
-                                            class="dropdown-item">Edit</a>
+                                            class="dropdown-item warehouse-options">Edit</a>
                                     </li>
                                 </ul>
                             </div>
@@ -35,31 +40,21 @@
                     </div>
                     <div class="warehouse-details">
                         <!--
-                            TODO: Integrate below code once the API is ready
-                        -->
+                                TODO: Integrate below code once the API is ready
+                            -->
                         <!--
-                            <div class="clearfix about-warehaouse">
-                                <label>Linked with:</label>
-                                <p>{{warehouse.uniqueName}}</p>
-                            </div>
-                        -->
+                                <div class="clearfix about-warehaouse">
+                                    <label>Linked with:</label>
+                                    <p>{{warehouse.uniqueName}}</p>
+                                </div>
+                            -->
 
                         <!--
-                            <div class="clearfix about-warehaouse">
-                                <label>Inventory Value:</label>
-                                <p>22,000/-</p>
-                            </div>
-                        -->
-                        <div class="clearfix about-warehaouse">
-                            <label>GSTIN:</label>
-                            <p>
-                                <span [class.gray-text]="!warehouse.taxNumber">{{
-                                        warehouse.taxNumber
-                                            ? warehouse.taxNumber
-                                            : "not available"
-                                    }}</span>
-                            </p>
-                        </div>
+                                <div class="clearfix about-warehaouse">
+                                    <label>Inventory Value:</label>
+                                    <p>22,000/-</p>
+                                </div>
+                            -->
                         <div class="clearfix about-warehaouse">
                             <label>Address:</label>
                             <p>{{ warehouse.address }}</p>
@@ -67,22 +62,19 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4 pdR1 ">
-                <div class="warehouseCard createNewWarehouseBtn">
-                    <div class="">
-                        <button class="btn btn-pink" (click)="resetOnboardingForm();openCreateWarehouseModal();">
-                            Create New
-                        </button>
-                    </div>
-                </div>
-            </div>
+
         </div>
+    </div>
+    <div class="warehouse-pagination">
+        <pagination #warehousePagination *ngIf="paginationConfig?.totalItems > paginationLimit"
+            [totalItems]="paginationConfig?.totalItems" [maxSize]="5" [itemsPerPage]="paginationConfig?.count"
+            [boundaryLinks]="true" [rotate]="true" (pageChanged)="pageChanged($event)"></pagination>
     </div>
 </ng-container>
 
 <!-- Warehouse on boarding modal (Step 1) -->
-<div bsModal #warehouseOnBoardingModal="bs-modal" [config]="{ backdrop: 'static', keyboard: 'true' }" tabindex="-1"
-    class="modal fade openPoup" role="dialog" (onHidden)="onBoardingModalDismiss($event)">
+<div bsModal #warehouseOnBoardingModal="bs-modal" [config]="{ ignoreBackdropClick: 'true', keyboard: 'true'}"
+    tabindex="-1" class="modal fade openPoup" role="dialog" (onHidden)="onBoardingModalDismiss($event)">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <ng-template element-view-container-ref #onBoardingContainer="elementviewcontainerref">
@@ -93,7 +85,7 @@
 
 <!-- Welcome component (Step 2) -->
 <ng-template #welcomeComponent>
-    <welcome-component [itemDetails]="selectedWarehouse" (backButtonClicked)="handleBackButtonClick()"
+    <welcome-component [itemDetails]="selectedWarehouse" (backButtonClicked)="handleBackButtonClick(false)"
         (nextButtonClicked)="handleFormSubmit($event)">
     </welcome-component>
 </ng-template>

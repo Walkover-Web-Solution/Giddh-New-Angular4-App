@@ -1,62 +1,62 @@
-<div class="aside-pane sales-aside-tax-pane text-left" [keyboardShortcut]="'esc'"
-     (onShortcutPress)="saveTaxes()">
-
-  <button id="close" type="button" class="btn btn-sm btn-primary" (click)="saveTaxes()">X</button>
-
-  <div class="aside-header">
-    <h3 class="aside-title">Tax applicable</h3>
-  </div>
-
-  <div class="row">
-    <div class="col-sm-12 mrB2 mrT1">
-      <span>
-        {{ otherTaxesModal.itemLabel }}
-      </span>
+<div class="aside-pane sales-aside-tax-pane text-left" [keyboardShortcut]="'esc'" (onShortcutPress)="saveTaxes()">
+    <div class="form-header">
+        <h3 class="aside-title">Tax applicable</h3>
     </div>
-
-    <div class="col-xs-6">
-
-      <div style="display: flex;flex-direction: column" class="selectTaxDropdown">
-        <label>Select Tax<span class="text-danger">*</span></label>
-
-        <div class="mrB2">
-          <sh-select
-            name="selectTax" [placeholder]="'Select Tax'"
-            [options]="taxesOptions" [(ngModel)]="selectedTaxUniqueName"
-            (selected)="applyTax($event)" (onClear)="onClear()"
-            [showClear]="true"
-          ></sh-select>
-
-          <label style="margin-top: 3px;margin-left: 2px;" *ngIf="otherTaxesModal?.appliedOtherTax?.name">
-            {{ otherTaxesModal?.appliedOtherTax?.name | uppercase}}
-          </label>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="col-xs-6">
-
-      <div>
-        <label>Calculation Method<span class="text-danger">*</span></label>
-      </div>
-
-      <div>
-        <sh-select [options]="calculationMethodOptions" name="tcsCalculationMethod"
-                   [placeholder]="'Select Method'"
-                   [disabled]="isDisabledCalMethod"
-                   [(ngModel)]="otherTaxesModal.tcsCalculationMethod"></sh-select>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div>
-    <button class="btn btn-success" type="button" [disabled]="!otherTaxesModal.tcsCalculationMethod"
-            (click)="saveTaxes()">
-      Apply
+    <button id="close" type="button" (click)="saveTaxes()"> <i class="icon-cross"></i>
     </button>
-  </div>
+
+    <div class="aside-body">
+        <div class="aside-pane-form">
+            <div class="row">
+                <div class="col-sm-12 mrB1 ">
+                    <span>
+                        {{ otherTaxesModal.itemLabel }}
+                    </span>
+                </div>
+
+                <div class="col-sm-6 col-xs-12">
+
+                    <div style="display: flex;flex-direction: column" class="selectTaxDropdown">
+                        <label>Select Tax<span class="text-danger">*</span></label>
+
+                        <div class="mrB2">
+                            <sh-select name="selectTax" [placeholder]="'Select Tax'" [options]="taxesOptions"
+                                [(ngModel)]="selectedTaxUniqueName" (selected)="applyTax($event)" (onClear)="onClear()"
+                                [showClear]="true"></sh-select>
+
+                            <label style="margin-top: 3px;margin-left: 2px;"
+                                *ngIf="otherTaxesModal?.appliedOtherTax?.name">
+                                {{ otherTaxesModal?.appliedOtherTax?.name | uppercase}}
+                            </label>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-sm-6 col-xs-12">
+
+                    <div>
+                        <label>Calculation Method<span class="text-danger">*</span></label>
+                    </div>
+
+                    <div class="mrB2">
+                        <sh-select [options]="calculationMethodOptions" name="tcsCalculationMethod"
+                            [placeholder]="'Select Method'" [disabled]="isDisabledCalMethod"
+                            [(ngModel)]="otherTaxesModal.tcsCalculationMethod"></sh-select>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div>
+                <button class="btn btn-success" type="button" [disabled]="!otherTaxesModal.tcsCalculationMethod"
+                    (click)="saveTaxes()">
+                    Apply
+                </button>
+            </div>
+
+        </div>
+    </div>
 </div>

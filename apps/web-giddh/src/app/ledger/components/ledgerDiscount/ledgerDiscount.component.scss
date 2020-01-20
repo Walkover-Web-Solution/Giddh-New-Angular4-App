@@ -1,20 +1,20 @@
 .or-line::before {
-  content: " ";
-  border-bottom: 1px solid #a2a2a2;
-  display: inline-block;
-  width: 57px;
-  margin-right: 13px;
+    content: " ";
+    border-bottom: 1px solid #a2a2a2;
+    display: inline-block;
+    width: 57px;
+    margin-right: 13px;
 }
 .or-line::after {
-  content: "";
-  border-bottom: 1px solid #a2a2a2;
-  display: inline-block;
-  width: 57px;
-  margin-left: 13px;
+    content: "";
+    border-bottom: 1px solid #a2a2a2;
+    display: inline-block;
+    width: 57px;
+    margin-left: 13px;
 }
-.or-line{
-  display: flex;
-  align-items: center;
-  color:#a2a2a2;
-  margin-bottom: 10px;
+.or-line {
+    display: flex;
+    align-items: center;
+    color: #a2a2a2;
+    margin-bottom: 10px;
 }

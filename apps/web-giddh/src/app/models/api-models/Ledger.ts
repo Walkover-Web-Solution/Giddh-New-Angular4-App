@@ -96,6 +96,7 @@ export class LedgerResponse {
     public particular?: INameUniqueName;
     public particularType?: string;
     public actualAmount?: number;
+    public actualRate?: number;
     public invoicesToBePaid?: string[];
     public linkedInvoices?: string[];
     public warning?: string;
@@ -115,7 +116,7 @@ export class LedgerResponse {
     public exchangeRateForDisplay?: number = 1;
     public valuesInAccountCurrency?: boolean = false;
     public discountResources?: any[];
-
+    public subVoucher?: string = '';
     public pettyCashEntryStatus?: PettyCashEntryStatus;
     public attachedFileUniqueNames?: string[];
 

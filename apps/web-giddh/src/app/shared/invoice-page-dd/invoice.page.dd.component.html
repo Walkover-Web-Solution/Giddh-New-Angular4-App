@@ -9,11 +9,12 @@
 </span> -->
 <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()">
     <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle" aria-controls="dropdown-basic">
-    {{selectedType}}
-    <span class="caret"></span>
-  </button>
+        {{selectedType}}
+        <span class="caret"></span>
+    </button>
     <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-        <li role="menuitem" *ngFor="let pg of dropDownPages" (click)="changePage(pg)"><a class="dropdown-item cp" href="javascript:void(0)">{{ pg.name
+        <li role="menuitem" *ngFor="let pg of dropDownPages" (click)="changePage(pg)"><a class="dropdown-item cp"
+                href="javascript:void(0)">{{ pg.name
       }}</a></li>
     </ul>
 </div>

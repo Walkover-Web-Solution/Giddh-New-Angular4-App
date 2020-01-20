@@ -6,22 +6,22 @@ declare var require: any;
 @Injectable()
 export class DaterangepickerConfig {
 
-  public settings: any;
-  public skipCSS: boolean = false;
-  private addedCSS = false;
+    public settings: any;
+    public skipCSS: boolean = false;
+    private addedCSS = false;
 
-  constructor() {
-    this.settings = {};
-  }
-
-  public embedCSS(): void {
-    // avoid adding duplicated styles
-    if (this.addedCSS) {
-      return;
+    constructor() {
+        this.settings = {};
     }
 
-    if (this.skipCSS === false) {
-      $('head').append(`<style>
+    public embedCSS(): void {
+        // avoid adding duplicated styles
+        if (this.addedCSS) {
+            return;
+        }
+
+        if (this.skipCSS === false) {
+            $('head').append(`<style>
             .daterangepicker.single .calendar,.daterangepicker.single .ranges,.ranges{float:none}
             .daterangepicker{position:absolute;color:#111;background:#fff;border-radius:4px;width:278px;padding:4px;
               margin-top:1px;top:100px;left:20px}.daterangepicker:after,
@@ -91,7 +91,7 @@ export class DaterangepickerConfig {
                                            .calendar-table,.daterangepicker.rtl .left .daterangepicker_input{padding-left:12px}
                                            .daterangepicker.rtl .calendar,.daterangepicker.rtl .ranges{text-align:right;float:right}}@media (min-width:730px){.daterangepicker .ranges{width:auto}.daterangepicker.ltr .ranges{float:left}.daterangepicker.rtl .ranges{float:right}.daterangepicker .calendar.left{clear:none!important}}
             </style>`);
+        }
     }
-  }
 
 }

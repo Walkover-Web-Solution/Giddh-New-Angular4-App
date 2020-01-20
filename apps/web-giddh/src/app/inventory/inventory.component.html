@@ -1,54 +1,59 @@
 <div style="min-height:100%;">
-  <div class="inventory-controll">
-    <tabset #inventoryStaticTabs>
+    <div class="inventory-controll">
+        <tabset #inventoryStaticTabs>
 
-      <tab heading="Inventory" (select)="redirectUrlToActiveTab('inventory', $event)" [active]="activeTabIndex === 0">
-        <!--sidebar-->
-        <ng-container *ngIf="activeTabIndex === 0 && activeView !== 'receipt'">
-          <inventory-sidebar></inventory-sidebar>
-          <!--/sidebar-->
+            <tab heading="Inventory" (select)="redirectUrlToActiveTab('inventory', $event)"
+                [active]="activeTabIndex === 0">
+                <!--sidebar-->
+                <ng-container *ngIf="activeTabIndex === 0 && activeView !== 'receipt'">
+                    <inventory-sidebar></inventory-sidebar>
+                    <!--/sidebar-->
 
-          <section class="rightBar">
-            <!-- uiView: inventory-detail -->
-            <section class="container-fluid  clearfix pdT2">
+                    <section class="rightBar">
+                        <!-- uiView: inventory-detail -->
+                        <section class="container-fluid  clearfix pdT2">
 
-              <div *ngIf="activeView === 'stock'">
-                <invetory-stock-report></invetory-stock-report>
-              </div>
-              <div *ngIf="activeView === 'group'">
-                <invetory-group-stock-report></invetory-group-stock-report>
-              </div>
-              <div *ngIf="!activeView">
-                <welcome-inventory></welcome-inventory>
-              </div>
-              <inventory-header>
-              </inventory-header>
-            </section>
-          </section>
-        </ng-container>
-        <ng-container *ngIf="activeTabIndex === 0 && activeView === 'receipt'">
-          <receipt-note></receipt-note>
-        </ng-container>
+                            <div *ngIf="activeView === 'stock'">
+                                <invetory-stock-report></invetory-stock-report>
+                            </div>
+                            <div *ngIf="activeView === 'group'">
+                                <invetory-group-stock-report></invetory-group-stock-report>
+                            </div>
+                            <div *ngIf="!activeView">
+                                <welcome-inventory></welcome-inventory>
+                            </div>
+                            <inventory-header>
+                            </inventory-header>
+                        </section>
+                    </section>
+                </ng-container>
+            </tab>
 
-      </tab>
+            <tab heading="Job Work" (select)="redirectUrlToActiveTab('jobwork', $event)"
+                [active]="activeTabIndex === 1">
 
-      <tab heading="Job Work" (select)="redirectUrlToActiveTab('jobwork', $event)" [active]="activeTabIndex === 1">
+                <ng-container *ngIf="activeTabIndex === 1">
+                    <jobwork></jobwork>
+                </ng-container>
 
-        <ng-container *ngIf="activeTabIndex === 1">
-          <jobwork></jobwork>
-        </ng-container>
+            </tab>
 
-      </tab>
 
- 
-      <tab heading="Manufacturing" (select)="redirectUrlToActiveTab('manufacturing', $event)" [active]="activeTabIndex === 2">
-  
-        <ng-container *ngIf="activeTabIndex === 2">
-          <manufacturing></manufacturing>
-        </ng-container>
+            <tab heading="Manufacturing" (select)="redirectUrlToActiveTab('manufacturing', $event)"
+                [active]="activeTabIndex === 2">
 
-      </tab>
+                <ng-container *ngIf="activeTabIndex === 2">
+                    <manufacturing></manufacturing>
+                </ng-container>
 
-    </tabset>
-  </div>
+            </tab>
+
+            <tab heading="Report" (select)="redirectUrlToActiveTab('report', $event)" [active]="activeTabIndex === 3">
+                <ng-container *ngIf="activeTabIndex === 3">
+                    <new-branch-transfer-list></new-branch-transfer-list>
+                </ng-container>
+            </tab>
+
+        </tabset>
+    </div>
 </div>

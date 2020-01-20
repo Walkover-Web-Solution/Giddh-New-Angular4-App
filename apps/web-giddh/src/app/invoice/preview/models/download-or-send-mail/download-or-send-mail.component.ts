@@ -1,35 +1,35 @@
-import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 // import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
-import {ILedgersInvoiceResult} from '../../../../models/api-models/Invoice';
-import {ToasterService} from '../../../../services/toaster.service';
-import {DomSanitizer} from '@angular/platform-browser';
-import {Store} from '@ngrx/store';
-import {AppState} from '../../../../store/roots';
-import {Observable, of, ReplaySubject} from 'rxjs';
+import { ILedgersInvoiceResult } from '../../../../models/api-models/Invoice';
+import { ToasterService } from '../../../../services/toaster.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../../store/roots';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import * as _ from '../../../../lodash-optimized';
-import {InvoiceActions} from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
-import {InvoiceReceiptActions} from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
-import {ReceiptVoucherDetailsRequest} from 'apps/web-giddh/src/app/models/api-models/recipt';
-import {Router} from '@angular/router';
+import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
+import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
+import { ReceiptVoucherDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'download-or-send-mail-invoice',
     templateUrl: './download-or-send-mail.component.html',
     styles: [`
-        .dropdown-menu {
-            width: 400px;
-        }
+    .dropdown-menu {
+      width: 400px;
+    }
 
-        .dropdown-menu .form-group {
-            padding: 20px;
-            margin-bottom: 0
-        }
+    .dropdown-menu .form-group {
+      padding: 20px;
+      margin-bottom: 0
+    }
 
-        .dropdown-menu.open {
-            display: block
-        }
-    `]
+    .dropdown-menu.open {
+      display: block
+    }
+  `]
 })
 
 export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
@@ -95,7 +95,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                         byteArrays.push(byteArray);
                     }
 
-                    const blob = new Blob(byteArrays, {type: contentType});
+                    const blob = new Blob(byteArrays, { type: contentType });
                     return blob;
                 }
 
@@ -109,7 +109,8 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                     if (this.isElectron) {
                         this.pdfViewer.pdfSrc = blob; // pdfSrc can be Blob or Uint8Array
                         this.pdfViewer.refresh();
-                    } else if (this.isCordova) {
+                    }
+                    else if (this.isCordova) {
                     }
                     //   this.pdfViewer.pdfSrc =  new Blob([ e.srcElement.result], { type: "application/pdf" }); // pdfSrc can be Blob or Uint8Array
                     //  this.pdfViewer.refresh();
@@ -168,7 +169,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
      * onDownloadInvoice
      */
     public onDownloadInvoice() {
-        this.downloadOrSendMailEvent.emit({action: 'download', emails: null});
+        this.downloadOrSendMailEvent.emit({ action: 'download', emails: null });
     }
 
     /**
@@ -181,11 +182,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         }
         let emailList = email.split(',');
         if (Array.isArray(emailList)) {
-            this.downloadOrSendMailEvent.emit({
-                action: 'send_mail',
-                emails: emailList,
-                typeOfInvoice: this.invoiceType
-            });
+            this.downloadOrSendMailEvent.emit({ action: 'send_mail', emails: emailList, typeOfInvoice: this.invoiceType });
             this.showEmailTextarea = false;
         } else {
             this._toasty.errorToast('Invalid email(s).');
@@ -202,7 +199,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         }
         let numberList = numbers.split(',');
         if (Array.isArray(numberList)) {
-            this.downloadOrSendMailEvent.emit({action: 'send_sms', numbers: numberList});
+            this.downloadOrSendMailEvent.emit({ action: 'send_sms', numbers: numberList });
             this.showEmailTextarea = false;
         }
     }

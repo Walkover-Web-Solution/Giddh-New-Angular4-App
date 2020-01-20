@@ -2,14 +2,10 @@
     <div class="form-header" *ngIf="selectedAsideView=='mainview'">
         <h3>Create</h3>
     </div>
-
-
     <button id="close" (click)="closeAsidePane($event)" *ngIf="selectedAsideView=='mainview'"><i
             class="icon-cross"></i></button>
     <button id="back" (click)="backButtonPressed()" *ngIf="selectedAsideView!='mainview'">Back</button>
     <div [ngSwitch]="selectedAsideView">
-
-
         <ng-container *ngSwitchCase="'inward'">
             <transfer-inward-note [stockList]="stockList$ | async" [userList]="userList$ | async"
                 [stockUnits]="stockUnits$ | async" [isLoading]="isLoading" (onSave)="onSave($event)"
@@ -17,14 +13,12 @@
             </transfer-inward-note>
         </ng-container>
         <ng-container *ngSwitchCase="'outward'">
-
             <transfer-outward-note [stockList]="stockList$ | async" [userList]="userList$ | async"
                 [stockUnits]="stockUnits$ | async" [isLoading]="isLoading" (onSave)="onSave($event)"
                 (onCancel)="onCancel()">
             </transfer-outward-note>
         </ng-container>
         <ng-container *ngSwitchCase="'transfer'">
-
             <transfer-notes [stockList]="stockList$ | async" [userList]="userList$ | async"
                 [stockUnits]="stockUnits$ | async" [isLoading]="isLoading" (onSave)="onSave($event.entry,$event.user)"
                 (onCancel)="onCancel()">
@@ -49,10 +43,6 @@
                         Note</button>
                 </div>
                 <div class="pd1 alC">
-                    <button type="button" class="btn btn-lg btn-primary" (click)="selectView('transfer')">Transfer
-                        Note</button>
-                </div>
-                <div class="pd1 alC">
                     <button type="button" class="btn btn-lg btn-primary" (click)="selectView('createStock')">Create
                         Stock</button>
                 </div>
@@ -62,7 +52,5 @@
                 </div>
             </div>
         </ng-container>
-
-
     </div>
 </div>

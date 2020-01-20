@@ -79,7 +79,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     public asideMenuStateForOtherTaxes: string = 'out';
 
     public accountType: string;
-    public forceClear$: Observable<IForceClear> = observableOf({status: false});
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public DownloadAttachedImgResponse: DownloadLedgerAttachmentResponse[] = [];
     public comment: string = '';
     public accountEntryPettyCash: PettyCashResonse;
@@ -100,13 +100,13 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private modalService: BsModalService,
-                private _toasty: ToasterService,
-                private _expenseService: ExpenseService,
-                private _ledgerActions: LedgerActions,
-                private store: Store<AppState>,
-                private _expenceActions: ExpencesAction,
-                private expenseService: ExpenseService,
-                private _cdRf: ChangeDetectorRef
+        private _toasty: ToasterService,
+        private _expenseService: ExpenseService,
+        private _ledgerActions: LedgerActions,
+        private store: Store<AppState>,
+        private _expenceActions: ExpencesAction,
+        private expenseService: ExpenseService,
+        private _cdRf: ChangeDetectorRef
     ) {
         this.files = [];
         this.uploadInput = new EventEmitter<UploadInput>();
@@ -120,7 +120,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     }
 
     openModal(RejectionReason: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(RejectionReason, {class: 'modal-md'});
+        this.modalRef = this.modalService.show(RejectionReason, { class: 'modal-md' });
     }
 
     public ngOnInit() {
@@ -131,14 +131,14 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
             if (res) {
                 res.forEach(acc => {
                     if (acc.parentGroups.some(p => p.uniqueName === 'sundrydebtors')) {
-                        debtorsAccountsOptions.push({label: acc.name, value: acc.uniqueName, additional: acc});
+                        debtorsAccountsOptions.push({ label: acc.name, value: acc.uniqueName, additional: acc });
                     }
 
                     if (acc.parentGroups.some(p => p.uniqueName === 'sundrycreditors')) {
-                        creditorsAccountsOptions.push({label: acc.name, value: acc.uniqueName, additional: acc});
+                        creditorsAccountsOptions.push({ label: acc.name, value: acc.uniqueName, additional: acc });
                     }
                     if (acc.parentGroups.some(p => p.uniqueName === 'bankaccounts' || p.uniqueName === 'cash')) {
-                        cashAndBankAccountsOptions.push({label: acc.name, value: acc.uniqueName, additional: acc});
+                        cashAndBankAccountsOptions.push({ label: acc.name, value: acc.uniqueName, additional: acc });
                     }
                 });
             }
@@ -148,7 +148,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
             this.cashAndBankAccountsOptions = cashAndBankAccountsOptions;
         });
 
-        this.fileUploadOptions = {concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg']};
+        this.fileUploadOptions = { concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg'] };
 
         this.selectedPettycashEntry$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -220,7 +220,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     }
 
     public showApproveConfirmPopup(ref: TemplateRef<any>) {
-        this.approveEntryModalRef = this.modalService.show(ref, {class: 'modal-md'});
+        this.approveEntryModalRef = this.modalService.show(ref, { class: 'modal-md' });
         this.selectedEntryForApprove = cloneDeep(this.selectedItem);
         this.selectedEntryForApprove.amount = this.updateLedgerComponentInstance.vm.compoundTotal;
     }
@@ -260,7 +260,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         delete ledgerRequest['pettyCashEntryStatus'];
         delete ledgerRequest['othersCategory'];
 
-        this.expenseService.actionPettycashReports(actionType, {ledgerRequest}).subscribe(res => {
+        this.expenseService.actionPettycashReports(actionType, { ledgerRequest }).subscribe(res => {
             this.approveEntryRequestInProcess = false;
             if (res.status === 'success') {
                 this.hideApproveConfirmPopup(false);
@@ -329,15 +329,15 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     }
 
     public cancelUpload(id: string): void {
-        this.uploadInput.emit({type: 'cancel', id});
+        this.uploadInput.emit({ type: 'cancel', id });
     }
 
     public removeFile(id: string): void {
-        this.uploadInput.emit({type: 'remove', id});
+        this.uploadInput.emit({ type: 'remove', id });
     }
 
     public removeAllFiles(): void {
-        this.uploadInput.emit({type: 'removeAll'});
+        this.uploadInput.emit({ type: 'removeAll' });
     }
 
     public onUploadFileOutput(output: UploadOutput): void {
@@ -375,7 +375,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
             type: 'uploadAll',
             url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', this.companyUniqueName),
             method: 'POST',
-            headers: {'Session-Id': sessionId},
+            headers: { 'Session-Id': sessionId },
         };
 
         this.uploadInput.emit(event);

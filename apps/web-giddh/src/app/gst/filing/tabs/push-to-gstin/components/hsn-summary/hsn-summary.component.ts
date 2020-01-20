@@ -4,41 +4,41 @@ import { ReplaySubject } from 'rxjs';
 import { HSNSummary } from '../../../../../../models/api-models/GstReconcile';
 
 @Component({
-  // tslint:disable-next-line:component-selector
-  selector: 'hsn-summary',
-  templateUrl: './hsn-summary.component.html',
-  styleUrls: ['hsn-summary.component.css'],
+    // tslint:disable-next-line:component-selector
+    selector: 'hsn-summary',
+    templateUrl: './hsn-summary.component.html',
+    styleUrls: ['hsn-summary.component.css'],
 })
 export class HsnSummaryComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() public hsnSummary: HSNSummary = new HSNSummary();
-  public imgPath: string = '';
+    @Input() public hsnSummary: HSNSummary = new HSNSummary();
+    public imgPath: string = '';
 
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor() {
-    //
-  }
+    constructor() {
+        //
+    }
 
-  public ngOnInit() {
-    this.imgPath = (isElectron ||isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
-  }
+    public ngOnInit() {
+        this.imgPath = (isElectron ||isCordova)  ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+    }
 
-  public pageChanged(event) {
-    // this.request['page'] = event.page;
-    // this._store.dispatch(this.gstrAction.GetReturnSummary(this.selectedGst, this.request));
-  }
+    public pageChanged(event) {
+        // this.request['page'] = event.page;
+        // this._store.dispatch(this.gstrAction.GetReturnSummary(this.selectedGst, this.request));
+    }
 
-  /**
-   * ngOnChnages
-   */
-  public ngOnChanges(s: SimpleChanges) {
-    //
-  }
+    /**
+     * ngOnChnages
+     */
+    public ngOnChanges(s: SimpleChanges) {
+        //
+    }
 
-  public ngOnDestroy() {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
-  }
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 
 }

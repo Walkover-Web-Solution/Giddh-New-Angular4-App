@@ -19,7 +19,9 @@ import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-sc
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
 
 import { LedgerDiscountComponent } from '../../app/ledger/components/ledgerDiscount/ledgerDiscount.component';
+import { RcmModalComponent } from '../common/rcm-modal/rcm-modal.component';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
+import { CommandKModule } from '../theme/command-k/command.k.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import {
@@ -71,8 +73,8 @@ import { OnBoardingComponent } from './on-boarding/on-boarding.component';
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
 
-const getGoogleCredentials = (baseHref: string) => {
-    if (baseHref === 'https://giddh.com/' || (isElectron|| isCordova)) {
+const getGoogleCredentials = () => {
+    if (PRODUCTION_ENV || isElectron  || isCordova) {
         return {
             GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
         };
@@ -90,7 +92,7 @@ const SOCIAL_CONFIG = (isElectron|| isCordova) ? null : new AuthServiceConfig([
     {
         id: GoogleLoginProvider.PROVIDER_ID,
         // provider: new GoogleLoginProvider('641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com')
-        provider: new GoogleLoginProvider(getGoogleCredentials(AppUrl).GOOGLE_CLIENT_ID)
+        provider: new GoogleLoginProvider(getGoogleCredentials().GOOGLE_CLIENT_ID)
     },
     {
         id: LinkedinLoginProvider.PROVIDER_ID,
@@ -128,7 +130,8 @@ export function provideConfig() {
         AsideMenuOtherTaxes,
         AccountAddNewDetailsComponent,
         AccountUpdateNewDetailsComponent,
-        WelcomeComponent
+        WelcomeComponent,
+        RcmModalComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -143,7 +146,7 @@ export function provideConfig() {
         NgbTypeaheadModule,
         TooltipModule,
         BsDropdownModule,
-        PopoverModule,
+        PopoverModule.forRoot(),
         PerfectScrollbarModule,
         SocialLoginModule,
         FormWizardModule,
@@ -163,12 +166,14 @@ export function provideConfig() {
         HighlightModule,
         TabsModule,
         CKEditorModule,
-        NgxMaskModule
+        NgxMaskModule,
+        CommandKModule
     ],
     exports: [
         CommonModule,
         DatepickerModule,
         DecimalDigitsModule,
+        PopoverModule,
         FormsModule,
         ReactiveFormsModule,
         LaddaModule,
@@ -180,6 +185,7 @@ export function provideConfig() {
         FooterComponent,
         FixedFooterComponent,
         ManageGroupsAccountsComponent,
+        RcmModalComponent,
         AccountFilterPipe,
         SelectModule,
         PaginationModule,

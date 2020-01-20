@@ -1,32 +1,91 @@
 :host {
-  position: fixed;
-  left: auto;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 400px;
-  z-index: 99999;
-}
-
-#close {
-  display: none;
+    position: fixed;
+    left: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    max-width: 760px;
+    width: 100%;
+    z-index: 99999;
 }
 
 :host.in #close {
-  display: block;
-  position: fixed;
-  left: -41px;
-  top: 0;
-  z-index: 5;
-  border: 0;
-  border-radius: 0;
+    display: block;
+    position: absolute;
+    right: 10px;
+    top: 16px;
+    z-index: 5;
+    border: 0;
+    border-radius: 0;
+    background: 0 0;
+    color: #fff;
 }
 
 :host .container-fluid {
-  padding-left: 0;
-  padding-right: 0;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 :host .aside-pane {
-  width: 400px;
+    max-width: 760px;
+    width: 100%;
+}
+
+.custom-tags {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+
+    span {
+        border: 1px solid #ddd;
+        padding: 5px 8px;
+        margin: 10px 10px 12px 0px;
+        background-color: #ddd;
+    }
+}
+.input-group {
+    width: 100%;
+}
+.aside-pane-form {
+    background-color: #fff;
+    box-shadow: 0px 3px 6px #0000001a;
+    padding: 15px 15px;
+    height: calc(100vh - 90px);
+    overflow: auto;
+    scroll-behavior: smooth;
+    position: relative;
+    margin-top: 15px;
+}
+@media (max-width: 768px) {
+    :host {
+        max-width: 600px;
+    }
+    :host .aside-pane {
+        max-width: 600px;
+    }
+}
+@media (max-width: 575px) {
+    :host {
+        max-width: 370px;
+    }
+    :host .aside-pane {
+        max-width: 370px;
+    }
+}
+@media (max-width: 375px) {
+    :host {
+        max-width: 310px;
+    }
+    :host .aside-pane {
+        max-width: 310px;
+    }
+}
+@media (max-width: 320px) {
+    :host {
+        max-width: 280px;
+    }
+    :host .aside-pane {
+        max-width: 280px;
+    }
 }

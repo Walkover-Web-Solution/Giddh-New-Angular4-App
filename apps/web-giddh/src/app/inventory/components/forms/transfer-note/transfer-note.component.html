@@ -1,95 +1,87 @@
 <div class="form-header">
-  <h2 class="">Transfer Note</h2>
+	<h2 class="">Transfer Note</h2>
 </div>
 <div class="form_body witBg clearfix mrBChldLbl">
-  <div class="form_bg clearfix">
-    <form [formGroup]="form" class="form-group">
-      <div class="row">
-        <div class="col-xs-6 form-group">
-          <label>Date <sup>*</sup></label>
-          <input name="dateRange" formControlName="inventoryEntryDate" type="text" autocomplete="off"
-                 class="form-control" bsDatepicker [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
-          <span *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)">
-              <span *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']" class="text-danger">Please select Date.</span>
-                    </span>
-        </div>
+	<div class="form_bg clearfix">
+		<form [formGroup]="form" class="form-group">
+			<div class="row">
+				<div class="col-xs-6 form-group">
+					<label>Date <sup>*</sup></label>
+					<input name="dateRange" formControlName="inventoryEntryDate" type="text" autocomplete="off"
+						class="form-control" bsDatepicker [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
+					<span
+						*ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)">
+						<span *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']"
+							class="text-danger">Please select Date.</span>
+					</span>
+				</div>
 
-        <div class="col-xs-6 form-group">
-          <label>Product Name <sup>*</sup></label>
-          <sh-select [options]="stockListOptions"
-                     [multiple]="false"
-                     [placeholder]="'Select Product'"
-                     (selected)="stockChanged($event)"
-                     [ItemHeight]="'33'"
-                     formControlName="stock"></sh-select>
-          <!-- <span *ngIf="stock.invalid">
+				<div class="col-xs-6 form-group">
+					<label>Product Name <sup>*</sup></label>
+					<sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
+						(selected)="stockChanged($event)" [ItemHeight]="'33'" formControlName="stock"></sh-select>
+					<!-- <span *ngIf="stock.invalid">
               <span *ngIf="stock?.errors && stock?.errors['required']" class="text-danger">Please select Product.</span>
                     </span> -->
-        </div>
-      </div>
+				</div>
+			</div>
 
-      <div class="row">
+			<div class="row">
 
-        <div class="col-xs-6 form-group">
-          <label>Sender's Name <sup>*</sup></label>
-          <sh-select [options]="userListOptions"
-                     [multiple]="false"
-                     [placeholder]="'Select Sender'"
-                     formControlName="inventoryUser"
-                     [ItemHeight]="'33'"></sh-select>
-          <!-- <span *ngIf="inventoryUser.invalid">
+				<div class="col-xs-6 form-group">
+					<label>Sender's Name <sup>*</sup></label>
+					<sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Sender'"
+						formControlName="inventoryUser" [ItemHeight]="'33'"></sh-select>
+					<!-- <span *ngIf="inventoryUser.invalid">
               <span *ngIf="inventoryUser?.errors && inventoryUser?.errors['required']"
                     class="text-danger">Please select Sender.</span>
                     </span> -->
-        </div>
+				</div>
 
-        <div class="col-xs-6 form-group">
-          <label>Receiver's Name <sup>*</sup></label>
-          <sh-select [options]="userListOptions"
-                     [multiple]="false"
-                     [placeholder]="'Select Receiver'"
-                     (selected)="recieverUniqueName = $event.value"
-                     [ItemHeight]="'33'"></sh-select>
-          <!-- <span [hidden]="recieverUniqueName" class="text-danger">Please select Receiver.</span> -->
-        </div>
-      </div>
+				<div class="col-xs-6 form-group">
+					<label>Receiver's Name <sup>*</sup></label>
+					<sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Receiver'"
+						(selected)="recieverUniqueName = $event.value" [ItemHeight]="'33'"></sh-select>
+					<!-- <span [hidden]="recieverUniqueName" class="text-danger">Please select Receiver.</span> -->
+				</div>
+			</div>
 
 
-      <div class="row">
-        <div class="col-xs-6 form-group">
-          <label>Quantity <sup>*</sup></label>
-          <input name="dateRange" type="text" class="form-control" formControlName="quantity"
-                 [placeholder]="'Enter Quantity'"/>
-          <!-- <span *ngIf="quantity?.errors && quantity.errors['required']"
+			<div class="row">
+				<div class="col-xs-6 form-group">
+					<label>Quantity <sup>*</sup></label>
+					<input name="dateRange" type="text" class="form-control" formControlName="quantity"
+						[placeholder]="'Enter Quantity'" />
+					<!-- <span *ngIf="quantity?.errors && quantity.errors['required']"
                 class="text-danger">Please enter quantity.</span> -->
-        </div>
+				</div>
 
-        <div class="col-xs-6 form-group">
-          <label>Unit <sup>*</sup></label>
-          <sh-select [options]="stockUnitsOptions"
-                     [placeholder]="'Choose unit'" formControlName="stockUnit"
-                     [multiple]="false" [ItemHeight]="33"></sh-select>
-          <!-- <span *ngIf="stockUnit?.errors && stockUnit.errors['required']" class="text-danger">Please select Unit.</span> -->
-        </div>
+				<div class="col-xs-6 form-group">
+					<label>Unit <sup>*</sup></label>
+					<sh-select [options]="stockUnitsOptions" [placeholder]="'Choose unit'" formControlName="stockUnit"
+						[multiple]="false" [ItemHeight]="33"></sh-select>
+					<!-- <span *ngIf="stockUnit?.errors && stockUnit.errors['required']" class="text-danger">Please select Unit.</span> -->
+				</div>
 
-      </div>
+			</div>
 
-      <div class="row">
-        <div class="col-lg-8 form-group">
-          <label class="mrB1">Description</label>
-          <input name="dateRange" formControlName="description" type="text" class="form-control">
-          <!-- <textarea formControlName="description" type="text" class="form-control"></textarea> -->
-        </div>
-      </div>
+			<div class="row">
+				<div class="col-lg-8 form-group">
+					<label class="mrB1">Description</label>
+					<input name="dateRange" formControlName="description" type="text" class="form-control">
+					<!-- <textarea formControlName="description" type="text" class="form-control"></textarea> -->
+				</div>
+			</div>
 
-      <div class="row">
-        <div class="col-xs-12 text-left mrT1">
-          <button class="btn btn-default" (click)="onCancel.emit($event)">Cancel</button>
-          <button class="btn btn-success" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">Save</button>
-        </div>
-      </div>
+			<div class="row">
+				<div class="col-xs-12 text-left mrT1">
+					<button class="btn btn-default" (click)="onCancel.emit($event)">Cancel</button>
+					<button class="btn btn-success" [ladda]="isLoading" [disabled]="form.invalid"
+						(click)="save()">Save</button>
+				</div>
+			</div>
 
 
-    </form>
-  </div>
+		</form>
+	</div>
 </div>

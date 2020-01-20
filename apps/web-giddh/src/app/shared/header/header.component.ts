@@ -1,53 +1,25 @@
-import {combineLatest, Observable, of as observableOf, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {AuthService} from '../../theme/ng-social-login-module/index';
-import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
-import {GIDDH_DATE_FORMAT} from './../helpers/defaultDateFormat';
-import {CompanyAddNewUiComponent, ManageGroupsAccountsComponent} from './components';
-import {
-    AfterViewChecked,
-    AfterViewInit,
-    ChangeDetectorRef,
-    Component,
-    ComponentFactoryResolver,
-    ElementRef,
-    EventEmitter,
-    HostListener,
-    NgZone,
-    OnDestroy,
-    OnInit,
-    Output,
-    TemplateRef,
-    ViewChild
-} from '@angular/core';
-import {select, Store} from '@ngrx/store';
-import {
-    BsDropdownDirective,
-    BsModalRef,
-    BsModalService,
-    ModalDirective,
-    ModalOptions,
-    TabsetComponent
-} from 'ngx-bootstrap';
-import {AppState} from '../../store';
-import {LoginActions} from '../../actions/login.action';
-import {CompanyActions} from '../../actions/company.actions';
-import {CommonActions} from '../../actions/common.actions';
-import {
-    ActiveFinancialYear,
-    CompanyCountry,
-    CompanyCreateRequest,
-    CompanyResponse,
-    StatesRequest
-} from '../../models/api-models/Company';
-import {UserDetails} from '../../models/api-models/loginModels';
-import {GroupWithAccountsAction} from '../../actions/groupwithaccounts.actions';
-import {ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router} from '@angular/router';
+import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
+import { AuthService } from '../../theme/ng-social-login-module/index';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
+import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { BsDropdownDirective, BsModalRef, BsModalService, ModalDirective, ModalOptions, TabsetComponent } from 'ngx-bootstrap';
+import { AppState } from '../../store';
+import { LoginActions } from '../../actions/login.action';
+import { CompanyActions } from '../../actions/company.actions';
+import { CommonActions } from '../../actions/common.actions';
+import { ActiveFinancialYear, CompanyCountry, CompanyCreateRequest, CompanyResponse, StatesRequest } from '../../models/api-models/Company';
+import { UserDetails } from '../../models/api-models/loginModels';
+import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
+import { ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import * as _ from 'lodash';
-import {ElementViewContainerRef} from '../helpers/directives/elementViewChild/element.viewchild.directive';
-import {FlyAccountsActions} from '../../actions/fly-accounts.actions';
-import {FormControl} from '@angular/forms';
-import {GeneralActions} from '../../actions/general/general.actions';
-import {createSelector} from 'reselect';
+import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
+import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
+import { FormControl } from '@angular/forms';
+import { GeneralActions } from '../../actions/general/general.actions';
+import { createSelector } from 'reselect';
 import * as moment from 'moment/moment';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
@@ -102,6 +74,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('crossedTxLimitModel') public crossedTxLimitModel: TemplateRef<any>;
     @ViewChild('companyDetailsDropDownWeb') public companyDetailsDropDownWeb: BsDropdownDirective;
 
+    public hideAsDesignChanges: false;
     public title: Observable<string>;
     public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
     public noGroups: boolean;
@@ -298,7 +271,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
         this.isCompanyProifleUpdate$ = this.store.select(p => p.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
 
-        this.selectedCompany = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+        this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
             if (!companies) {
                 return;
             }
@@ -310,7 +283,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.dispatch(this.companyActions.setTotalNumberofCompanies(this.companyList.length));
             let selectedCmp = companies.find(cmp => {
                 if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
+                    return cmp.uniqueName === this._generalService.companyUniqueName;
                 } else {
                     return false;
                 }
@@ -320,6 +293,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
 
             if (selectedCmp) {
+                this.selectedCompany = observableOf(selectedCmp);
                 this.activeFinancialYear = selectedCmp.activeFinancialYear;
                 this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
                 if (selectedCmp.nameAlias) {
@@ -345,13 +319,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
 
             this.selectedCompanyCountry = selectedCmp.country;
-            return selectedCmp;
-        })).pipe(takeUntil(this.destroyed$));
+        });
 
         this.selectedCompany.subscribe((res: any) => {
             if (res) {
                 if (res.countryV2 !== null && res.countryV2 !== undefined) {
                     this.getStates(res.countryV2.alpha2CountryCode);
+                    this.store.dispatch(this.commonActions.resetOnboardingForm());
                 }
                 if (res.subscription) {
                     this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
@@ -649,11 +623,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (!this.isDateRangeSelected) {
                     this.datePickerOptions.startDate = moment(dateObj[0]);
                     this.datePickerOptions.endDate = moment(dateObj[1]);
-                    this.datePickerOptions = {
-                        ...this.datePickerOptions,
-                        startDate: moment(dateObj[0]),
-                        endDate: moment(dateObj[1])
-                    };
+                    this.datePickerOptions = {...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1])};
                     this.isDateRangeSelected = true;
                     const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
                     const to: any = moment().format(GIDDH_DATE_FORMAT);
@@ -1111,12 +1081,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (item.uniqueName.includes('?')) {
                     item.uniqueName = item.uniqueName.split('?')[0];
                 }
-                this.router.navigate([item.uniqueName], {
-                    queryParams: {
-                        tab: item.additional.tab,
-                        tabIndex: item.additional.tabIndex
-                    }
-                });
+                this.router.navigate([item.uniqueName], {queryParams: {tab: item.additional.tab, tabIndex: item.additional.tabIndex}});
             } else {
                 this.router.navigate([item.uniqueName]);
             }
@@ -1179,13 +1144,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public goToSelectPlan(template: TemplateRef<any>) {
         this.modalService.hide(1);
         // this.router.navigate(['billing-detail']);
-        this.router.navigate(['pages', 'user-details'], {
-            queryParams: {
-                tab: 'subscriptions',
-                tabIndex: 3,
-                isPlanPage: true
-            }
-        });
+        this.router.navigate(['pages', 'user-details'], {queryParams: {tab: 'subscriptions', tabIndex: 3, isPlanPage: true}});
         this.modelRefExpirePlan = this.modalService.show(template);
     }
 
@@ -1391,6 +1350,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public getPartyTypeForCreateAccount() {
         this.store.dispatch(this.commonActions.GetPartyType());
     }
+
     public getAllCountries() {
         let countryRequest = new CountryRequest();
         countryRequest.formName = '';
@@ -1434,7 +1394,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(acc => {
             if (acc) {
                 this.isLedgerAccSelected = true;
-                this.selectedLedgerName = this.currentState.substr(this.currentState.indexOf('/') + 1);
+                this.selectedLedgerName = acc.uniqueName;
                 this.selectedPage = 'ledger - ' + acc.name;
                 return this.navigateToUser = false;
             }

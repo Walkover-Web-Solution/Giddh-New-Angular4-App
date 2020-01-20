@@ -1,27 +1,29 @@
 .left-expense {
-  width: 400px;
-  box-shadow: 3px 3px 6px #00000029;
-  background: #fff;
-  position: relative;
+    width: 400px;
+    box-shadow: 3px 3px 6px #00000029;
+    background: #fff;
+    position: relative;
 }
 .main-expense-details {
-  width: 100%;
+    width: 100%;
+    height: calc(100vh - 230px);
+    overflow-y: auto;
 }
 .main-edit-expense {
-  display: flex;
+    display: flex;
 }
 .input-calender {
-  width: 225px;
+    width: 225px;
 }
 .input-calender > span {
-  background: none;
-  border-radius: 0px;
+    background: none;
+    border-radius: 0px;
 }
 @media only screen and (max-width: 767px) {
-  .left-expense {
-    width: 100%;
-  }
-  .main-edit-expense {
-    display: block;
-  }
+    .left-expense {
+        width: 100%;
+    }
+    .main-edit-expense {
+        display: block;
+    }
 }

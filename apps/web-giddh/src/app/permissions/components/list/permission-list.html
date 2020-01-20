@@ -1,46 +1,49 @@
 <div class="container-fluid clearfix" *ngIf="allRoles.length > 0">
 
-  <div class="col-xs-12 mrT2 pd0 role clearfix" *ngFor="let role of allRoles">
-    <div class="col-xs-3 pd0 rolehead cp">
+    <div class="col-xs-12 mrT2 pd0 role clearfix" *ngFor="let role of allRoles">
+        <div class="col-xs-3 pd0 rolehead cp">
             <span class="vcenter">
-        <h1>{{role.name}}</h1>
-        <div class="text-center mrT2 onHover">
-          <button *ngIf="!role.isFixed" class="btn btn-sm btn-primary" (click)="updateRole(role);">Edit</button>
-          <button *ngIf="!role.isFixed" class="btn btn-sm btn-danger" (click)="deleteRole(role);">Delete</button>
-          <button *ngIf="role.isFixed" class="btn btn-sm btn-primary" (click)="updateRole(role);">View</button>
+                <h1>{{role.name}}</h1>
+                <div class="text-center mrT2 onHover">
+                    <button *ngIf="!role.isFixed" class="btn btn-sm btn-primary"
+                        (click)="updateRole(role);">Edit</button>
+                    <button *ngIf="!role.isFixed" class="btn btn-sm btn-danger"
+                        (click)="deleteRole(role);">Delete</button>
+                    <button *ngIf="role.isFixed" class="btn btn-sm btn-primary"
+                        (click)="updateRole(role);">View</button>
+                </div>
+            </span>
         </div>
-      </span>
+        <div class="col-xs-9">
+            <ul>
+                <li *ngFor="let item of role.scopes">{{ item.name | capitalize }}</li>
+            </ul>
+        </div>
     </div>
-    <div class="col-xs-9">
-      <ul>
-        <li *ngFor="let item of role.scopes">{{ item.name | capitalize }}</li>
-      </ul>
-    </div>
-  </div>
 
-  <div class="col-xs-12 mrT2 mrB2 role text-center clearfix pd4 new_box">
-    <h1 class="inline-block cursor-pointer" (click)="openPermissionModal()">+ Add New Role</h1>
-  </div>
+    <div class="col-xs-12 mrT2 mrB2 role text-center clearfix pd4 new_box">
+        <h1 class="inline-block cursor-pointer" (click)="openPermissionModal()">+ Add New Role</h1>
+    </div>
 
 </div>
 
 <!--add and manage role model -->
 <div bsModal #permissionModel="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <permission-model (closeEvent)="closePopupEvent($event)"></permission-model>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <permission-model (closeEvent)="closePopupEvent($event)"></permission-model>
+        </div>
     </div>
-  </div>
 </div>
 
 <!--delete role confirmation model -->
 <div bsModal #permissionConfirmationModel="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-md">
-    <!-- modal-liq90 class is removed for now-->
-    <div class="modal-content">
-      <delete-role-confirmation-model [selectedRoleForDelete]="selectedRoleForDelete"
-                                      (confirmDeleteEvent)="deleteConfirmedRole()"
-                                      (closeModelEvent)="closeConfirmationPopup()"></delete-role-confirmation-model>
+    <div class="modal-dialog modal-md">
+        <!-- modal-liq90 class is removed for now-->
+        <div class="modal-content">
+            <delete-role-confirmation-model [selectedRoleForDelete]="selectedRoleForDelete"
+                (confirmDeleteEvent)="deleteConfirmedRole()" (closeModelEvent)="closeConfirmationPopup()">
+            </delete-role-confirmation-model>
+        </div>
     </div>
-  </div>
 </div>

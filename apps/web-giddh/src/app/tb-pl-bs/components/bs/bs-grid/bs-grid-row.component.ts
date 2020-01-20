@@ -2,8 +2,8 @@ import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges }
 import { ChildGroup } from '../../../../models/api-models/Search';
 
 @Component({
-  selector: '[bs-grid-row]',  // <home></home>
-  template: `
+    selector: '[bs-grid-row]',  // <home></home>
+    template: `
     <div class="row pl-grid-row" [trial-accordion]="groupDetail" *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)" [ngClass]="{'isHidden': !groupDetail.isVisible }">
       <div class="col-xs-4  group" [innerHTML]="groupDetail.groupName | uppercase | highlight:search" [ngStyle]="{'padding-left': padding+'px'}"></div>
       <div class="col-xs-4  group text-right">
@@ -31,38 +31,38 @@ import { ChildGroup } from '../../../../models/api-models/Search';
   `,
 })
 export class BsGridRowComponent implements OnInit, OnChanges {
-  @Input() public groupDetail: ChildGroup;
-  @Input() public search: string;
-  @Input() public padding: string;
-  @Input() public from: string = '';
-  @Input() public to: string = '';
+    @Input() public groupDetail: ChildGroup;
+    @Input() public search: string;
+    @Input() public padding: string;
+    @Input() public from: string = '';
+    @Input() public to: string = '';
 
-  constructor(private cd: ChangeDetectorRef) {
-    //
-  }
-
-  public ngOnChanges(changes: SimpleChanges) {
-    if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
-      this.cd.detectChanges();
-    }
-    if (changes.search && !changes.search.firstChange && changes.search.currentValue !== changes.search.previousValue) {
-      this.cd.detectChanges();
-    }
-  }
-
-  public ngOnInit() {
-    //
-  }
-
-  public entryClicked(acc) {
-    let url = location.href + '?returnUrl=ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
-    if (isElectron) {
-      let ipcRenderer = (window as any).require('electron').ipcRenderer;
-      url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
-      console.log(ipcRenderer.send('open-url', url));
-    }else if(isCordova){}  else {
-      (window as any).open(url);
+    constructor(private cd: ChangeDetectorRef) {
+        //
     }
 
-  }
+    public ngOnChanges(changes: SimpleChanges) {
+        if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
+            this.cd.detectChanges();
+        }
+        if (changes.search && !changes.search.firstChange && changes.search.currentValue !== changes.search.previousValue) {
+            this.cd.detectChanges();
+        }
+    }
+
+    public ngOnInit() {
+        //
+    }
+
+    public entryClicked(acc) {
+        let url = location.href + '?returnUrl=ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
+        if (isElectron) {
+            let ipcRenderer = (window as any).require('electron').ipcRenderer;
+            url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
+            console.log(ipcRenderer.send('open-url', url));
+        } else if(isCordova){} else {
+            (window as any).open(url);
+        }
+
+    }
 }

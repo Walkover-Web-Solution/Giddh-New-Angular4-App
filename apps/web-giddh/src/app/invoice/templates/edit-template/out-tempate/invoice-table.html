@@ -2,392 +2,393 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-  <meta charset="utf-8"/>
-  <meta http-equiv="X-UA-Compatible" design-filters="IE=edge,chrome=1"/>
-  <title>Invoice</title>
-  <meta name="description" design-filters=""/>
-  <meta name="viewport" design-filters="width=device-width, initial-scale=1"/>
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-  <style>
-    @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" design-filters="IE=edge,chrome=1" />
+	<title>Invoice</title>
+	<meta name="description" design-filters="" />
+	<meta name="viewport" design-filters="width=device-width, initial-scale=1" />
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<style>
+		@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
 
-    body {
-      font-family: 'Open Sans', sans-serif;
-      font-size: 15px;
-      font-weight: 400;
-      background: #272c30
-    }
+		body {
+			font-family: 'Open Sans', sans-serif;
+			font-size: 15px;
+			font-weight: 400;
+			background: #272c30
+		}
 
-    .container {
-      padding: 20px 10px;
-      margin: 60px auto;
-      max-width: 900px;
-      border: 1px solid #eee;
-      box-shadow: 0 2px 6px #000;
-      background: #fff
-    }
+		.container {
+			padding: 20px 10px;
+			margin: 60px auto;
+			max-width: 900px;
+			border: 1px solid #eee;
+			box-shadow: 0 2px 6px #000;
+			background: #fff
+		}
 
-    h3 {
-      font-weight: 700;
-      margin-bottom: 20px;
-      font-size: 17px;
-    }
+		h3 {
+			font-weight: 700;
+			margin-bottom: 20px;
+			font-size: 17px;
+		}
 
-    p {
-      margin-bottom: 5px;
-    }
+		p {
+			margin-bottom: 5px;
+		}
 
-    .invHd {
-      display: inline-block;
-      padding: 10px 16px;
-      background: #fff;
-      position: relative;
-      top: -20px;
-      margin: 0
-    }
+		.invHd {
+			display: inline-block;
+			padding: 10px 16px;
+			background: #fff;
+			position: relative;
+			top: -20px;
+			margin: 0
+		}
 
-    table.table {
-      font-size: 13px;
-      margin-top: 30px;
-    }
+		table.table {
+			font-size: 13px;
+			margin-top: 30px;
+		}
 
-    table.table td,
-    table.table th {
-      vertical-align: middle !important;
-      text-align: right;
-    }
+		table.table td,
+		table.table th {
+			vertical-align: middle !important;
+			text-align: right;
+		}
 
-    table.table td:first-child,
-    table.table th:first-child {
-      text-align: left;
-    }
+		table.table td:first-child,
+		table.table th:first-child {
+			text-align: left;
+		}
 
-    table.table td small {
-      color: #777
-    }
+		table.table td small {
+			color: #777
+		}
 
-    .signature {
-      border-top: 1px solid #ccc;
-      margin-top: 60px;
-      padding-top: 8px;
-      width: 260px;
-      float: right
-    }
+		.signature {
+			border-top: 1px solid #ccc;
+			margin-top: 60px;
+			padding-top: 8px;
+			width: 260px;
+			float: right
+		}
 
-    .thankyou {
-      border-bottom: 2px solid #E14926;
-      margin-bottom: 5px
-    }
+		.thankyou {
+			border-bottom: 2px solid #E14926;
+			margin-bottom: 5px
+		}
 
-    .thankyou h3 {
-      margin-bottom: 5px
-    }
+		.thankyou h3 {
+			margin-bottom: 5px
+		}
 
-    @media (max-width: 767px) {
-      .container {
-        margin: 0
-      }
-    }
-  </style>
+		@media (max-width: 767px) {
+			.container {
+				margin: 0
+			}
+		}
+	</style>
 </head>
 
 <body>
-<section class="container" *ngIf="templateId == 'common_template_a'">
+	<section class="container" *ngIf="templateId == 'common_template_a'">
 
-  <div class="clearfix">
-    <div class="col-xs-12">
-      <div class="col-xs-12">
-        <table style="width: 100%;">
-          <tbody>
-          <tr>
-            <td>
-              <h3 style="color:#E14926 !important;">{{this.companyName$| async }}</h3>
-              <table class="with-pd">
-                <tbody>
-                <tr>
-                  <td style="padding-right: 15px;">
-                    <p><b>GSTIN</b></p>
-                    <p><b>Branch</b></p>
-                    <p><b>PAN</b></p>
-                  </td>
-                  <td>
-                    <p>{{this.GSTIN$| async }}</p>
-                    <p>{{this.address$| async }}</p>
-                    <p>{{this.PAN$| async }}</p>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
+		<div class="clearfix">
+			<div class="col-xs-12">
+				<div class="col-xs-12">
+					<table style="width: 100%;">
+						<tbody>
+							<tr>
+								<td>
+									<h3 style="color:#E14926 !important;">{{this.companyName$| async }}</h3>
+									<table class="with-pd">
+										<tbody>
+											<tr>
+												<td style="padding-right: 15px;">
+													<p><b>GSTIN</b></p>
+													<p><b>Branch</b></p>
+													<p><b>PAN</b></p>
+												</td>
+												<td>
+													<p>{{this.GSTIN$| async }}</p>
+													<p>{{this.address$| async }}</p>
+													<p>{{this.PAN$| async }}</p>
+												</td>
+											</tr>
+										</tbody>
+									</table>
 
-            </td>
+								</td>
 
-            <td style="text-align: right">
-              <h3 style="color:#E14926 !important;">Total ₹ 5920.00</h3>
-              <table style="float: right;">
-                <tbody>
-                <tr>
-                  <td style="padding-right: 15px;">
-                    <p><b>Invoice Date</b></p>
-                    <p><b>Invoice No.</b></p>
-                    <p><b>Reference No.</b></p>
-                  </td>
-                  <td>
-                    <p>{{this.invoiceDate$| async }}</p>
-                    <p>{{this.invoiceNo$| async }}</p>
-                    <p>PO-9987</p>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+								<td style="text-align: right">
+									<h3 style="color:#E14926 !important;">Total ₹ 5920.00</h3>
+									<table style="float: right;">
+										<tbody>
+											<tr>
+												<td style="padding-right: 15px;">
+													<p><b>Invoice Date</b></p>
+													<p><b>Invoice No.</b></p>
+													<p><b>Reference No.</b></p>
+												</td>
+												<td>
+													<p>{{this.invoiceDate$| async }}</p>
+													<p>{{this.invoiceNo$| async }}</p>
+													<p>PO-9987</p>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
 
-  </div>
+		</div>
 
-  <div style="border-bottom:2px solid #E14926 !important; margin-top: 10px;">&nbsp;</div>
-  <div class="text-center">
-    <h3 class="invHd" style="background: #fff !important; color:#E14926 !important;">TEXT INVOICE</h3>
-  </div>
+		<div style="border-bottom:2px solid #E14926 !important; margin-top: 10px;">&nbsp;</div>
+		<div class="text-center">
+			<h3 class="invHd" style="background: #fff !important; color:#E14926 !important;">TEXT INVOICE</h3>
+		</div>
 
-  <div class="clearfix">
-    <div class="col-xs-12">
-      <div class="col-xs-12">
-        <table style="width: 100%">
-          <tbody>
-          <tr>
-            <td style="padding-right: 15px;">
-              <p><b>Customer Name</b></p>
-              <p>{{this.customeName$ | async }}</p>
-              <br/>
-              <p><b>Due Date</b></p>
-              <p>{{this.dueDate$| async }}</p>
-            </td>
+		<div class="clearfix">
+			<div class="col-xs-12">
+				<div class="col-xs-12">
+					<table style="width: 100%">
+						<tbody>
+							<tr>
+								<td style="padding-right: 15px;">
+									<p><b>Customer Name</b></p>
+									<p>{{this.customeName$ | async }}</p>
+									<br />
+									<p><b>Due Date</b></p>
+									<p>{{this.dueDate$| async }}</p>
+								</td>
 
-            <td style="padding-right: 15px;">
-              <p><b>Billing Address</b></p>
-              <p>Company Dummy Name</p>
-              <p>24 Building Name</p>
-              <p>3rd Floor</p>
-              <p>15 A.B. Road</p>
-              <p>Indore (M.P.) 452000</p>
-              <br/>
-              <b>GSTIN</b>
-              <p>22BBBBBB000A1Z0</p>
-            </td>
+								<td style="padding-right: 15px;">
+									<p><b>Billing Address</b></p>
+									<p>Company Dummy Name</p>
+									<p>24 Building Name</p>
+									<p>3rd Floor</p>
+									<p>15 A.B. Road</p>
+									<p>Indore (M.P.) 452000</p>
+									<br />
+									<b>GSTIN</b>
+									<p>22BBBBBB000A1Z0</p>
+								</td>
 
-            <td>
-              <p><b>Billing Address</b></p>
-              <p>Company Dummy Name</p>
-              <p>24 Building Name</p>
-              <p>3rd Floor</p>
-              <p>15 A.B. Road</p>
-              <p>Indore (M.P.) 452000</p>
-              <br/>
-              <b>GSTIN</b>
-              <p>22BBBBBB000A1Z0</p>
-            </td>
+								<td>
+									<p><b>Billing Address</b></p>
+									<p>Company Dummy Name</p>
+									<p>24 Building Name</p>
+									<p>3rd Floor</p>
+									<p>15 A.B. Road</p>
+									<p>Indore (M.P.) 452000</p>
+									<br />
+									<b>GSTIN</b>
+									<p>22BBBBBB000A1Z0</p>
+								</td>
 
-          </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 
-  <table class="table" style="width: 100%">
-    <thead style="background: #f5f5f5; width: 100%">
-    <tr>
-      <th width="{{itemWidth + '%' }}">Item</th>
-      <th width="{{itemCodeWidth + '%' }}">HSN/SAC</th>
-      <th ng-style="{ 'width': qtyWidth + '%' }">Item>Qty.</th>
-      <th ng-style="{ 'width': rateWidth + '%' }">Rate/<br/>Item(₹)</th>
-      <th ng-style="{ 'width': discountWidth + '%' }">Discount/<br/>Item(₹)</th>
-      <th ng-style="{ 'width': taxWidth + '%' }">Taxable <br/>Value(₹)</th>
-      <!--<th>SGST<br />₹</th>-->
-      <!--<th>CGST<br />₹</th>-->
-      <!--<th>CESS<br />₹</th>-->
-      <th ng-style="{ 'width': totalWidth + '%' }">Total<br/>₹</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td>Dummy Product<br/>Edition 2</td>
-      <td>123456</td>
-      <td>10 No.</td>
-      <td>1000.00</td>
-      <td>300.00</td>
-      <td>9700.00</td>
-      <!--<td>970.00<br /><small>@10%</small></td>-->
-      <!--<td>970.00<br /><small>@10%</small></td>-->
-      <!--<td>00.00<br /><small>@0%</small></td>-->
-      <td>11000640.00</td>
-    </tr>
+		<table class="table" style="width: 100%">
+			<thead style="background: #f5f5f5; width: 100%">
+				<tr>
+					<th width="{{itemWidth + '%' }}">Item</th>
+					<th width="{{itemCodeWidth + '%' }}">HSN/SAC</th>
+					<th ng-style="{ 'width': qtyWidth + '%' }">Item>Qty.</th>
+					<th ng-style="{ 'width': rateWidth + '%' }">Rate/<br />Item(₹)</th>
+					<th ng-style="{ 'width': discountWidth + '%' }">Discount/<br />Item(₹)</th>
+					<th ng-style="{ 'width': taxWidth + '%' }">Taxable <br />Value(₹)</th>
+					<!--<th>SGST<br />₹</th>-->
+					<!--<th>CGST<br />₹</th>-->
+					<!--<th>CESS<br />₹</th>-->
+					<th ng-style="{ 'width': totalWidth + '%' }">Total<br />₹</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Dummy Product<br />Edition 2</td>
+					<td>123456</td>
+					<td>10 No.</td>
+					<td>1000.00</td>
+					<td>300.00</td>
+					<td>9700.00</td>
+					<!--<td>970.00<br /><small>@10%</small></td>-->
+					<!--<td>970.00<br /><small>@10%</small></td>-->
+					<!--<td>00.00<br /><small>@0%</small></td>-->
+					<td>11000640.00</td>
+				</tr>
 
-    <tr>
-      <td>Dummy Product<br/>Edition 2</td>
-      <td>123456</td>
-      <td>10 No.</td>
-      <td>1000.00</td>
-      <td>300.00</td>
-      <td>9700.00</td>
-      <!--<td>970.00<br /><small>@10%</small></td>-->
-      <!--<td>970.00<br /><small>@10%</small></td>-->
-      <!--<td>00.00<br /><small>@0%</small></td>-->
-      <td>11640.00</td>
-    </tr>
+				<tr>
+					<td>Dummy Product<br />Edition 2</td>
+					<td>123456</td>
+					<td>10 No.</td>
+					<td>1000.00</td>
+					<td>300.00</td>
+					<td>9700.00</td>
+					<!--<td>970.00<br /><small>@10%</small></td>-->
+					<!--<td>970.00<br /><small>@10%</small></td>-->
+					<!--<td>00.00<br /><small>@0%</small></td>-->
+					<td>11640.00</td>
+				</tr>
 
-    <tr>
-      <td>Dummy Product<br/>Edition 2</td>
-      <td>123456</td>
-      <td>10 No.</td>
-      <td>1000.00</td>
-      <td>300.00</td>
-      <td>9700.00</td>
-      <!--<td>970.00<br /><small>@10%</small></td>-->
-      <!--<td>970.00<br /><small>@10%</small></td>-->
-      <!--<td>00.00<br /><small>@0%</small></td>-->
-      <td>11640.00</td>
-    </tr>
+				<tr>
+					<td>Dummy Product<br />Edition 2</td>
+					<td>123456</td>
+					<td>10 No.</td>
+					<td>1000.00</td>
+					<td>300.00</td>
+					<td>9700.00</td>
+					<!--<td>970.00<br /><small>@10%</small></td>-->
+					<!--<td>970.00<br /><small>@10%</small></td>-->
+					<!--<td>00.00<br /><small>@0%</small></td>-->
+					<td>11640.00</td>
+				</tr>
 
-    <tr>
-      <td>Freight Charges</td>
-      <td>--</td>
-      <td>10 No.</td>
-      <td>1000.00</td>
-      <td>--</td>
-      <td>1000.00</td>
-      <!--<td>50.00<br /><small>@10%</small></td>-->
-      <!--<td>50.00<br /><small>@10%</small></td>-->
-      <!--<td>00.00<br /><small>@0%</small></td>-->
-      <td>1100.00</td>
-    </tr>
-    </tbody>
-    <tfoot style="background: #f5f5f5;">
-    <tr>
-      <th colspan="5"></th>
-      <th>30100.00</th>
-      <th>2960.00</th>
-      <th>2960.00</th>
-      <th>00.00</th>
-      <th>36020.00</th>
-    </tr>
-    </tfoot>
-  </table>
+				<tr>
+					<td>Freight Charges</td>
+					<td>--</td>
+					<td>10 No.</td>
+					<td>1000.00</td>
+					<td>--</td>
+					<td>1000.00</td>
+					<!--<td>50.00<br /><small>@10%</small></td>-->
+					<!--<td>50.00<br /><small>@10%</small></td>-->
+					<!--<td>00.00<br /><small>@0%</small></td>-->
+					<td>1100.00</td>
+				</tr>
+			</tbody>
+			<tfoot style="background: #f5f5f5;">
+				<tr>
+					<th colspan="5"></th>
+					<th>30100.00</th>
+					<th>2960.00</th>
+					<th>2960.00</th>
+					<th>00.00</th>
+					<th>36020.00</th>
+				</tr>
+			</tfoot>
+		</table>
 
-  <div class="clearfix text-right">
-    <table style="width: 100%;">
-      <tbody>
-      <tr>
-        <td>
-          <p><b>Taxable Amount</b></p>
-          <p><b>Total Tax*</b></p>
-          <p><b>Invoice Total</b></p>
-          <p><b>Invoice Total (In words)</b></p>
-        </td>
-        <td>
-          <p><b>₹30100.00</b></p>
-          <p><b>₹5920.00</b></p>
-          <p><b>₹36020.00</b></p>
-          <p><b>Thirty Six Thousand Twenty Only</b></p>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+		<div class="clearfix text-right">
+			<table style="width: 100%;">
+				<tbody>
+					<tr>
+						<td>
+							<p><b>Taxable Amount</b></p>
+							<p><b>Total Tax*</b></p>
+							<p><b>Invoice Total</b></p>
+							<p><b>Invoice Total (In words)</b></p>
+						</td>
+						<td>
+							<p><b>₹30100.00</b></p>
+							<p><b>₹5920.00</b></p>
+							<p><b>₹36020.00</b></p>
+							<p><b>Thirty Six Thousand Twenty Only</b></p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
-  <div class="clearfix small" style="margin-top:60px">
-    <div class="clearfix">
-      <div class="col-xs-12">
-        <div class="col-xs-12">
-          <table style="width: 100%;">
-            <tbody>
-            <tr>
-              <td>
-                <p><b>*Tax to be paid on Reverse Charge</b></p>
-                <br/>
-                <p><b>Notes</b></p>
-                <p>All payments to be made in cash</p>
-                <p>Contact us for queries on these quotations.</p>
-              </td>
-              <td style="text-align: center;">
-                <div class="signature">
-                  <p><b>Walkover Web Solutions Private Limited</b></p>
-                  <p><b class="text-muted">(Signature)</b></p>
-                </div>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
+		<div class="clearfix small" style="margin-top:60px">
+			<div class="clearfix">
+				<div class="col-xs-12">
+					<div class="col-xs-12">
+						<table style="width: 100%;">
+							<tbody>
+								<tr>
+									<td>
+										<p><b>*Tax to be paid on Reverse Charge</b></p>
+										<br />
+										<p><b>Notes</b></p>
+										<p>All payments to be made in cash</p>
+										<p>Contact us for queries on these quotations.</p>
+									</td>
+									<td style="text-align: center;">
+										<div class="signature">
+											<p><b>Walkover Web Solutions Private Limited</b></p>
+											<p><b class="text-muted">(Signature)</b></p>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
 
-  <div class="clearfix">
-    <div class="col-sm-12">
-      <div class="col-xs-12 thankyou">
-        <h3 style="color: #E14926 !important;">Thank you for your business</h3>
-      </div>
-    </div>
+		<div class="clearfix">
+			<div class="col-sm-12">
+				<div class="col-xs-12 thankyou">
+					<h3 style="color: #E14926 !important;">Thank you for your business</h3>
+				</div>
+			</div>
 
-    <div class="small text-center">
-      <p><b>Walkover Web Solutions Private Limited</b></p>
-      <p>405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, near Greater Kailash Hospital, Indore 452001(M. P.)</p>
-    </div>
-  </div>
-</section>
-<section class="container" *ngIf="templateId == 'gst_template_a'">
+			<div class="small text-center">
+				<p><b>Walkover Web Solutions Private Limited</b></p>
+				<p>405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, near Greater Kailash Hospital, Indore 452001(M.
+					P.)</p>
+			</div>
+		</div>
+	</section>
+	<section class="container" *ngIf="templateId == 'gst_template_a'">
 
-  <div>
+		<div>
 
-    <h3> Template 2</h3>
+			<h3> Template 2</h3>
 
-    <!--<h2> {{heading}}</h2>-->
+			<!--<h2> {{heading}}</h2>-->
 
-    <!--<h2> {{data.para}}</h2>-->
-  </div>
+			<!--<h2> {{data.para}}</h2>-->
+		</div>
 
-</section>
+	</section>
 
-<section class="container" *ngIf="templateId == 'gst_template_b'">
+	<section class="container" *ngIf="templateId == 'gst_template_b'">
 
-  <div>
+		<div>
 
-    <h3> Template 3</h3>
-  </div>
+			<h3> Template 3</h3>
+		</div>
 
-</section>
-<section class="container" *ngIf="templateId == 'gst_template_c'">
+	</section>
+	<section class="container" *ngIf="templateId == 'gst_template_c'">
 
-  <div>
+		<div>
 
-    <h3> Template 4</h3>
-  </div>
+			<h3> Template 4</h3>
+		</div>
 
-</section>
+	</section>
 
-<section class="container" *ngIf="templateId == 'gst_template_d'">
+	<section class="container" *ngIf="templateId == 'gst_template_d'">
 
-  <div>
+		<div>
 
-    <h3> Template 5</h3>
-  </div>
+			<h3> Template 5</h3>
+		</div>
 
-</section>
-<section class="container" *ngIf="templateId == 'gst_template_e'">
+	</section>
+	<section class="container" *ngIf="templateId == 'gst_template_e'">
 
-  <div>
+		<div>
 
-    <h3> Template 6</h3>
-  </div>
+			<h3> Template 6</h3>
+		</div>
 
-</section>
+	</section>
 
 </body>
 

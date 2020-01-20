@@ -1,24 +1,22 @@
 <div class="pr" [ngClass]="{'open': showTaxPopup}" [attachOutsideOnClick]="true" (clickOutside)="toggleTaxPopup(false)">
     <a id="tax" (click)="toggleTaxPopup(true)" class="clearfix">
         <div class="multi-select adjust">
-            <input type="number" (blur)="taxInputBlur($event)"
-                   (focus)="toggleTaxPopup(true)" readonly name="sum" class="form-control cursor-pointer taxInput"
-                   [(ngModel)]="taxSum" />
+            <input type="number" (blur)="taxInputBlur($event)" (focus)="toggleTaxPopup(true)" readonly name="sum"
+                class="form-control cursor-pointer taxInput" [(ngModel)]="taxSum" />
             <span class="caret"></span>
         </div>
     </a>
-    <ul #taxListUl class="dropdown-menu dropdown-menu-right" *ngIf="showTaxPopup" (click)="$event.stopPropagation()" [style.max-height.px]="102" [style.min-height.px]="40">
+    <ul #taxListUl class="dropdown-menu dropdown-menu-right" *ngIf="showTaxPopup" (click)="$event.stopPropagation()"
+        [style.max-height.px]="102" [style.min-height.px]="40">
         <li *ngIf="taxList.length === 0">
             <p class="pd1 alC">No Taxes Found</p>
         </li>
         <li *ngFor="let tax of taxList;trackBy: trackByFn; let idx = index">
             <label class="checkbox oh width100 bdrB pdB taxItem" (click)="$event.stopPropagation()">
-        <input (blur)="taxInputBlur($event)" class="pull-left" name="tax_{{idx}}"
-               type="checkbox" [(ngModel)]="tax.isChecked" (ngModelChange)="reCalculate()"
-               (click)="$event.stopPropagation()"
-        />
-        <span class="pull-left ellp">{{tax.name}}</span>
-      </label>
-    </li>
-  </ul>
+                <input (blur)="taxInputBlur($event)" class="pull-left" name="tax_{{idx}}" type="checkbox"
+                    [(ngModel)]="tax.isChecked" (ngModelChange)="reCalculate()" (click)="$event.stopPropagation()" />
+                <span class="pull-left ellp">{{tax.name}}</span>
+            </label>
+        </li>
+    </ul>
 </div>

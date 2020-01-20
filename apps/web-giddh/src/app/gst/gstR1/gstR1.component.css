@@ -1,15 +1,12 @@
 .column.list-column.expanded-list-column {
-    
     width: auto;
 }
 .tax-engine .column.list-column {
     display: block;
-   
-   
+
     border-right: 1px solid #ededed;
 }
 .tax-engine .column {
-   
     height: 100%;
 }
 .list-column.expanded-list-column {
@@ -24,10 +21,9 @@
     border-bottom: 0;
 }
 .tax-engine .list-filter {
-    padding: 20px 30px 18px 20px!important;
-    border-bottom: 1px solid #ddd!important;
+    padding: 20px 30px 18px 20px !important;
+    border-bottom: 1px solid #ddd !important;
     height: 80px;
-
 }
 .tax-engine .transactions-list .list-filter .btn-toolbar {
     margin-top: 2px;
@@ -38,23 +34,35 @@ list-header .btn-toolbar .btn-group {
 .list-header .list-filter .btn {
     padding: 2px 9px;
 }
-.btn .caret, .btn-group>.btn:first-child {
+.btn .caret,
+.btn-group > .btn:first-child {
     margin-left: 0;
 }
-.btn-group-vertical>.btn, .btn-group>.btn {
+.btn-group-vertical > .btn,
+.btn-group > .btn {
     position: relative;
     float: left;
 }
-.tax-engine .bottom-action, .tax-engine a, .tax-engine a>.dropdown {
+.tax-engine .bottom-action,
+.tax-engine a,
+.tax-engine a > .dropdown {
     cursor: pointer;
 }
-.btn, .btn-sm, .btn-xs {
+.btn,
+.btn-sm,
+.btn-xs {
     border-radius: 3px;
 }
-.btn-link, .btn-link:active, .btn-link:focus, .btn-link:hover {
+.btn-link,
+.btn-link:active,
+.btn-link:focus,
+.btn-link:hover {
     border-color: transparent;
 }
-.btn-link, .btn-link:active, .btn-link[disabled], fieldset[disabled] .btn-link {
+.btn-link,
+.btn-link:active,
+.btn-link[disabled],
+fieldset[disabled] .btn-link {
     background-color: transparent;
     box-shadow: none;
 }
@@ -78,7 +86,7 @@ list-header .btn-toolbar .btn-group {
     -ms-user-select: none;
     user-select: none;
 }
-.list-header .list-filter .btn [class*=icon] {
+.list-header .list-filter .btn [class*="icon"] {
     position: relative;
     top: 1px;
 }
@@ -118,13 +126,17 @@ svg.icon.icon-sm {
 .text-middle {
     vertical-align: middle;
 }
-.dropdown-menu li .help-text, .modal-header .help-text, .text-muted {
+.dropdown-menu li .help-text,
+.modal-header .help-text,
+.text-muted {
     color: #777;
 }
-.space{margin-top:10px;}
+.space {
+    margin-top: 10px;
+}
 
-.tax-engine .nav-band .nav-tabs>li.active>a::before {
-    content: '';
+.tax-engine .nav-band .nav-tabs > li.active > a::before {
+    content: "";
     display: inline-block;
     width: 6px;
     height: 6px;
@@ -133,7 +145,8 @@ svg.icon.icon-sm {
     margin-right: 5px;
     vertical-align: middle;
 }
-.nav>li, .nav>li>a {
+.nav > li,
+.nav > li > a {
     display: block;
     position: relative;
 }
@@ -141,7 +154,7 @@ svg.icon.icon-sm {
     margin: 0;
     padding: 0;
 }
-.nav-tabs>li a {
+.nav-tabs > li a {
     font-size: 15px;
     color: #555;
     margin-right: 0;
@@ -150,28 +163,23 @@ svg.icon.icon-sm {
     border-radius: 0px;
 }
 
-.nav-tabs>li.active a {
+.nav-tabs > li.active a {
     font-weight: bold;
 }
-.nav-tabs>li {
-    
+.nav-tabs > li {
     margin-bottom: 0;
 }
-
 
 .tax-engine .transactions-list .body {
     padding: 0;
 }
 .tax-engine .scroll-y {
-    
     -webkit-overflow-scrolling: touch;
 }
 .tax-engine .body {
-    
 }
 .content-column .body {
     padding: 0 20px 50px;
-   
 }
 hr {
     margin-top: 20px;
@@ -191,16 +199,25 @@ hr {
     text-transform: uppercase;
 }
 
-.tax-engine .transactions-overview .gstr-transactions-summary .transactions-table {
+.tax-engine
+    .transactions-overview
+    .gstr-transactions-summary
+    .transactions-table {
     border: 1px solid #ededed;
 }
-.tax-engine .table.transactions-table, .tax-engine .transactions-list .zi-table.table-scroll {
+.tax-engine .table.transactions-table,
+.tax-engine .transactions-list .zi-table.table-scroll {
     table-layout: auto;
 }
-.table, address {
+.table,
+address {
     margin-bottom: 20px;
 }
-.tax-engine .table.transactions-table thead:first-child tr:first-child th:first-child {
+.tax-engine
+    .table.transactions-table
+    thead:first-child
+    tr:first-child
+    th:first-child {
     padding-left: 20px;
 }
 .tax-engine .table.transactions-table thead:first-child tr:first-child th {
@@ -211,7 +228,7 @@ hr {
 .tax-engine .table thead:first-child tr:first-child th {
     border-top: 1px solid #ddd;
 }
-.tax-engine .gstr-transactions-summary .table>thead>tr>th {
+.tax-engine .gstr-transactions-summary .table > thead > tr > th {
     padding: 10px;
     font-size: 13px;
     font-weight: 600;
@@ -219,91 +236,122 @@ hr {
 .table thead:first-child tr:first-child th {
     border-top: 1px solid #ddd;
 }
-.table caption+thead tr:first-child td, .table caption+thead tr:first-child th, .table colgroup+thead tr:first-child td, .table colgroup+thead tr:first-child th, .table thead:first-child tr:first-child td, .table thead:first-child tr:first-child th {
+.table caption + thead tr:first-child td,
+.table caption + thead tr:first-child th,
+.table colgroup + thead tr:first-child td,
+.table colgroup + thead tr:first-child th,
+.table thead:first-child tr:first-child td,
+.table thead:first-child tr:first-child th {
     border-top: 0;
 }
-.table thead>tr>th {
-    border-bottom: 1px solid #EEE;
+.table thead > tr > th {
+    border-bottom: 1px solid #eee;
     color: #777;
 }
-.tax-engine .table.transactions-table tbody>tr>td {
+.tax-engine .table.transactions-table tbody > tr > td {
     max-width: 160px;
     font-size: 14px;
     padding: 16px 12px;
     vertical-align: middle;
 }
 
-.table tbody>tr>td, .table tbody>tr>th, .table tfoot>tr>td, .table tfoot>tr>th, .table thead>tr>td, .table thead>tr>th {
+.table tbody > tr > td,
+.table tbody > tr > th,
+.table tfoot > tr > td,
+.table tfoot > tr > th,
+.table thead > tr > td,
+.table thead > tr > th {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
     border-top: 1px solid #eee;
 }
 
-.tax-engine .table.transactions-summary-table>tbody>tr:not(.secondary-row)+tr.secondary-row>td {
+.tax-engine
+    .table.transactions-summary-table
+    > tbody
+    > tr:not(.secondary-row)
+    + tr.secondary-row
+    > td {
     border-top: 1px solid #ededed;
 }
-.tax-engine .table.transactions-summary-table>tbody>tr.secondary-row>td:nth-child(2) {
+.tax-engine
+    .table.transactions-summary-table
+    > tbody
+    > tr.secondary-row
+    > td:nth-child(2) {
     padding-left: 50px;
 }
-.tax-engine .table.transactions-summary-table>tbody>tr.secondary-row>td {
+.tax-engine .table.transactions-summary-table > tbody > tr.secondary-row > td {
     border: none;
-    background-color:#fff;
+    background-color: #fff;
     border-right: 1px solid #ededed;
     font-size: 13px;
     padding: 13px;
 }
-.tax-engine .table.transactions-summary-table>tbody>tr.secondary-row:hover>td {
+.tax-engine
+    .table.transactions-summary-table
+    > tbody
+    > tr.secondary-row:hover
+    > td {
     background-color: transparent;
 }
-.tax-engine .table.transactions-table tbody>tr>td {
+.tax-engine .table.transactions-table tbody > tr > td {
     max-width: 160px;
     font-size: 14px;
     padding: 16px 12px;
     vertical-align: middle;
 }
-.tax-engine .gstr-transactions-summary .table>tbody>tr>td {
+.tax-engine .gstr-transactions-summary .table > tbody > tr > td {
     padding-top: 15px;
     padding-bottom: 15px;
     vertical-align: middle;
 }
-.tax-engine .table.transactions-summary-table>tbody>tr.secondary-row>td:first-child {
+.tax-engine
+    .table.transactions-summary-table
+    > tbody
+    > tr.secondary-row
+    > td:first-child {
     border-right: none;
 }
 .tax-engine .nav-band .nav-tabs {
     white-space: nowrap;
-   
+
     background-color: #f7f7f7;
 }
-.tax-engine .sub-filter-nav-band ul>li {
+.tax-engine .sub-filter-nav-band ul > li {
     display: inline-block;
 }
-.tax-engine .sub-filter-nav-band ul>li>a {
+.tax-engine .sub-filter-nav-band ul > li > a {
     cursor: pointer;
     font-style: italic;
     padding: 14px 25px;
     font-size: 13px;
-	background:none !important;
+    background: none !important;
 }
-.tax-engine .sub-filter-nav-band ul>li.active:after {
-    content: '';
+.tax-engine .sub-filter-nav-band ul > li.active:after {
+    content: "";
     display: block;
     border-bottom: 2px solid #2a85fb;
     width: 55%;
     margin: auto;
 }
-.tax-engine .sub-filter-nav-band ul>li.active>a {
+.tax-engine .sub-filter-nav-band ul > li.active > a {
     color: #222;
     font-weight: 600;
 }
-#subtabs{display:none;}
+#subtabs {
+    display: none;
+}
 .tax-engine .gstr-transactions-summary .gstr-summary-title {
     margin: 0 0 6px;
-	color:#777;
+    color: #777;
 }
-.gstr-transactions-summary p{margin-bottom:10px;}
+.gstr-transactions-summary p {
+    margin-bottom: 10px;
+}
 .tax-engine .half {
-    width: 50%!important;
+    width: 50% !important;
 }
 .tax-engine .filings-empty-state {
     margin: 35px auto;
@@ -325,9 +373,16 @@ svg.icon.icon-xs {
     height: 12px;
     width: 12px;
 }
-.tab1div, .subtabs-box{display:none;}
-.tab1div:first-child{display:block;}
-.subtabs-box:first-child{display:block;}
+.tab1div,
+.subtabs-box {
+    display: none;
+}
+.tab1div:first-child {
+    display: block;
+}
+.subtabs-box:first-child {
+    display: block;
+}
 .tax-engine .transactions-list .filter-band {
     background-color: #f5fafe;
     padding: 20px;
@@ -347,12 +402,13 @@ svg.icon.icon-sm {
 .tax-engine svg.icon.text-top {
     vertical-align: text-top;
 }
-.tax-engine .transactions-list .filter-row+.filter-row {
+.tax-engine .transactions-list .filter-row + .filter-row {
     margin-left: 20px;
 }
 .tax-engine .transactions-list .filter-row {
     display: inline-block;
-	width:auto; box-shadow:none;
+    width: auto;
+    box-shadow: none;
 }
 
 .tax-engine .transactions-list .filter-row .name {
@@ -365,7 +421,9 @@ svg.icon.icon-sm {
     position: relative;
     margin-left: 10px;
 }
-.tax-engine .transactions-list .filter-band .btn, .tax-engine .transactions-list .filter-band .btn:focus, .tax-engine .transactions-list .filter-band .btn:hover {
+.tax-engine .transactions-list .filter-band .btn,
+.tax-engine .transactions-list .filter-band .btn:focus,
+.tax-engine .transactions-list .filter-band .btn:hover {
     color: #2a85fb;
     border-color: #2a85fb;
     background-color: transparent;
@@ -375,7 +433,9 @@ svg.icon.icon-sm {
 .tax-engine .transactions-list .filter-band .btn {
     padding: 2px 12px;
 }
-.tax-engine .transactions-list .filter-band .btn .caret, .tax-engine .transactions-list .filter-band .btn:focus .caret, .tax-engine .transactions-list .filter-band .btn:hover .caret {
+.tax-engine .transactions-list .filter-band .btn .caret,
+.tax-engine .transactions-list .filter-band .btn:focus .caret,
+.tax-engine .transactions-list .filter-band .btn:hover .caret {
     border-top-color: #2a85fb;
 }
 .caret {
@@ -390,30 +450,51 @@ svg.icon.icon-sm {
     border-bottom: 0 dotted;
     content: "";
 }
-#fillterid{display:none;}
-.transactions-summary-table tbody tr{cursor:pointer;}
+#fillterid {
+    display: none;
+}
+.transactions-summary-table tbody tr {
+    cursor: pointer;
+}
 .table-responsive {
     display: table;
     width: 100%;
 }
-.table-striped>tbody>tr:hover{
+.table-striped > tbody > tr:hover {
     cursor: pointer;
     background-color: #fafafa !important;
 }
-.table-striped>tbody>tr:nth-child(odd){
+.table-striped > tbody > tr:nth-child(odd) {
     background-color: #f9f9f9;
 }
 
-.table-striped>tbody>tr:nth-child(even){
+.table-striped > tbody > tr:nth-child(even) {
     background-color: #fff;
 }
 .zi-table.table-hover tbody tr:hover td {
     background-color: #fafafa;
     cursor: pointer;
 }
-.table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table>tbody>tr.active>td, .table>tbody>tr.active>th, .table>tbody>tr>td.active, .table>tbody>tr>th.active, .table>tfoot>tr.active>td, .table>tfoot>tr.active>th, .table>tfoot>tr>td.active, .table>tfoot>tr>th.active, .table>thead>tr.active>td, .table>thead>tr.active>th, .table>thead>tr>td.active, .table>thead>tr>th.active {
+.table-hover > tbody > tr:hover > td,
+.table-hover > tbody > tr:hover > th,
+.table > tbody > tr.active > td,
+.table > tbody > tr.active > th,
+.table > tbody > tr > td.active,
+.table > tbody > tr > th.active,
+.table > tfoot > tr.active > td,
+.table > tfoot > tr.active > th,
+.table > tfoot > tr > td.active,
+.table > tfoot > tr > th.active,
+.table > thead > tr.active > td,
+.table > thead > tr.active > th,
+.table > thead > tr > td.active,
+.table > thead > tr > th.active {
     background-color: #f5f5f5;
 }
-.tax-engine .table.transactions-table thead:first-child tr:first-child th.invisible {
-    padding: 0 72px 0 12px!important;
+.tax-engine
+    .table.transactions-table
+    thead:first-child
+    tr:first-child
+    th.invisible {
+    padding: 0 72px 0 12px !important;
 }

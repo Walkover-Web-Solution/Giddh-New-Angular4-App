@@ -5,10 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, ModalModule],
-  exports: [AccountDetailModalComponent],
-  declarations: [AccountDetailModalComponent],
-  providers: [],
+    imports: [CommonModule, FormsModule, ModalModule],
+    exports: [AccountDetailModalComponent],
+    declarations: [AccountDetailModalComponent],
+    providers: [],
 })
 export class AccountDetailModalModule {
 }

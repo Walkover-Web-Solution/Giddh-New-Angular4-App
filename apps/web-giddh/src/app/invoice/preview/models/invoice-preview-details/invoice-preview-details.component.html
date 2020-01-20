@@ -57,7 +57,7 @@
                                         </div>
 
                                         <div class="invoiceHolderName">
-                                            <p> {{item?.account?.name}}</p>
+                                            <p> {{item?.account?.customerName}}</p>
                                         </div>
 
                                     </div>
@@ -155,7 +155,8 @@
 
                                             <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu" role="menu"
                                                 aria-labelledby="button-basic2">
-                                                <li class="cp" role="menuitem" (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"><a
+                                                <li class="cp" role="menuitem"
+                                                    (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"><a
                                                         class="dropdown-item">Paid</a></li>
 
                                                 <li class="cp" role="menuitem"
@@ -222,7 +223,8 @@
                                         <div class="payment-icon"><img src="assets/images/dollar-icon.svg"></div>
                                         <p class="payment-content"> Receive payments in cash/check and record payments
                                             manually. </p>
-                                        <a href="javascript: void 0" (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()">Receive
+                                        <a href="javascript: void 0"
+                                            (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()">Receive
                                             Payment</a>
                                     </div>
                                 </div>

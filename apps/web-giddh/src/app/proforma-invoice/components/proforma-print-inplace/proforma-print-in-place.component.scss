@@ -1,18 +1,18 @@
 .invoice-image-section {
-  text-align: center;
-  background-color: #fff;
-  margin-bottom: 35px;
-  z-index: -9;
-  height: 73vh;
+    text-align: center;
+    background-color: #fff;
+    margin-bottom: 35px;
+    z-index: -9;
+    height: 73vh;
 
-  .error {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    font-size: 36px;
-    max-width: 60%;
-    margin: 0 auto;
-    color: #ff0d0d;
-  }
+    .error {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        font-size: 36px;
+        max-width: 60%;
+        margin: 0 auto;
+        color: #ff0d0d;
+    }
 }

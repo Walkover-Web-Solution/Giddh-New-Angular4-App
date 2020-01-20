@@ -1,64 +1,67 @@
 <div id="shareModal" class="pdB4 shareGrp">
-  <div class="modal-header">
-    <h3>Share Group</h3>
-    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>
-  </div>
-  <div class="modal-body" id="SharePop">
-    <div class="form-group">
-      <h3 class="pdB1">Share with</h3>
-      <div class="add_mailer">
-
-        <!--share group from-->
-        <form name="shareGroupForm" #shareGroupForm="ngForm" novalidate="" class="form-inline clearfix"
-          autocomplete="off">
-          <div class="input-group form-group col-xs-12">
-            <input name="userEmail" type="email" [(ngModel)]="email" required placeholder="Email ID"
-              class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
-            <div class="input-group-btn">
-              <select name="selectedPermission" class="form-control" [(ngModel)]="selectedPermission" required>
-                <option value="">-Select permission-</option>
-                <option [value]="permission.uniqueName" *ngFor="let permission of allPermissions$ | async">
-                  {{permission.name}}
-                </option>
-              </select>
-              <button class="btn btn-success mrL1 btnShare" type="submit" [disabled]="shareGroupForm.invalid"
-                (click)="shareGroup()">Share
-              </button>
-            </div>
-            <!-- /btn-group -->
-          </div>
-        </form>
-
-        <!--shared with array-->
-        <div class="col-xs-8 pdT1" *ngIf="(activeGroupSharedWith$ | async)?.length">
-          <div class="row">
-            <ul class="shared_list">
-              <li *ngFor="let val of (activeGroupSharedWith$ | async); let i = index" class="clearfix">
-                <span class="pull-left">
-                  <small class="Useremail">{{ val.emailId }}</small>
-                </span>
-                <div class="custom-select pos-rel">
-                  <select name="selectedPermission_{{i}}" class="form-control cp"
-                    (change)="updatePermission(val, $event)">
-                    <option [selected]="val.roleUniqueName === permission.uniqueName" [value]="permission.uniqueName"
-                      *ngFor="let permission of allPermissions$ | async">{{permission.name}}
-                    </option>
-                  </select>
-                  <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-                </div>
-                <span class="form-inline">
-                  <span class="delIcon pull-right">
-                    <i (click)="unShareGroup(val.uniqueName, val.entityUniqueName)" class="fa fa-trash"
-                      aria-hidden="true"></i>
-                  </span>
-                </span>
-              </li>
-
-            </ul>
-          </div>
-        </div>
-      </div>
-      <!-- add mailer -->
+    <div class="modal-header">
+        <h3>Share Group</h3>
+        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>
     </div>
-  </div>
+    <div class="modal-body" id="SharePop">
+        <div class="form-group">
+            <h3 class="pdB1">Share with</h3>
+            <div class="add_mailer">
+
+                <!--share group from-->
+                <form name="shareGroupForm" #shareGroupForm="ngForm" novalidate="" class="form-inline clearfix"
+                    autocomplete="off">
+                    <div class="input-group form-group col-xs-12">
+                        <input name="userEmail" type="email" [(ngModel)]="email" required placeholder="Email ID"
+                            class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                        <div class="input-group-btn">
+                            <select name="selectedPermission" class="form-control" [(ngModel)]="selectedPermission"
+                                required>
+                                <option value="">-Select permission-</option>
+                                <option [value]="permission.uniqueName"
+                                    *ngFor="let permission of allPermissions$ | async">
+                                    {{permission.name}}
+                                </option>
+                            </select>
+                            <button class="btn btn-success mrL1 btnShare" type="submit"
+                                [disabled]="shareGroupForm.invalid" (click)="shareGroup()">Share
+                            </button>
+                        </div>
+                        <!-- /btn-group -->
+                    </div>
+                </form>
+
+                <!--shared with array-->
+                <div class="col-xs-8 pdT1" *ngIf="(activeGroupSharedWith$ | async)?.length">
+                    <div class="row">
+                        <ul class="shared_list">
+                            <li *ngFor="let val of (activeGroupSharedWith$ | async); let i = index" class="clearfix">
+                                <span class="pull-left">
+                                    <small class="Useremail">{{ val.emailId }}</small>
+                                </span>
+                                <div class="custom-select pos-rel">
+                                    <select name="selectedPermission_{{i}}" class="form-control cp"
+                                        (change)="updatePermission(val, $event)">
+                                        <option [selected]="val.roleUniqueName === permission.uniqueName"
+                                            [value]="permission.uniqueName"
+                                            *ngFor="let permission of allPermissions$ | async">{{permission.name}}
+                                        </option>
+                                    </select>
+                                    <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                                </div>
+                                <span class="form-inline">
+                                    <span class="delIcon pull-right">
+                                        <i (click)="unShareGroup(val.uniqueName, val.entityUniqueName)"
+                                            class="fa fa-trash" aria-hidden="true"></i>
+                                    </span>
+                                </span>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- add mailer -->
+        </div>
+    </div>
 </div>

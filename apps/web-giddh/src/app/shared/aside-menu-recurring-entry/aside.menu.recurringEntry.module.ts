@@ -18,9 +18,9 @@ import { LaddaModule } from 'angular2-ladda';
 // import { PopoverModule } from 'ngx-bootstrap/popover';
 
 @NgModule({
-  declarations: [AsideMenuRecurringEntryComponent],
-  imports: [ReactiveFormsModule, BsDatepickerModule.forRoot(), CommonModule, SelectModule, LaddaModule],
-  exports: [AsideMenuRecurringEntryComponent]
+    declarations: [AsideMenuRecurringEntryComponent],
+    imports: [ReactiveFormsModule, BsDatepickerModule.forRoot(), CommonModule, SelectModule, LaddaModule],
+    exports: [AsideMenuRecurringEntryComponent]
 })
 export class AsideMenuRecurringEntryModule {
 }

@@ -1,11 +1,22 @@
 <div class="aside-pane">
-  <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
-
-  <div>
-    <ng-container>
-      <branch-transfer-note [stockList]="stockList$ | async" [userList]="userList$ | async"
-        [stockUnits]="stockUnits$ | async" [branchList]="branches$ | async"  [currentCompany]="currentCompany" [isLoading]="isLoading" (onSave)="onSave($event)" (onCancel)="onCancel()">
-      </branch-transfer-note>
-    </ng-container>
-  </div>
+    <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+    <div>
+        <ng-container>
+            <div class="form-header">
+                <div>
+                    <h3>
+                        <span>Transfer</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="form_body witBg clearfix mrBChldLbl">
+                <div class="branch-transfer">
+                    <button class="btn btn-light-gray" (click)="openBranchTransferPopup('receiptnote')">Receipt
+                        Note</button>
+                    <button class="btn btn-light-gray" (click)="openBranchTransferPopup('deliverynote')">Delivery
+                        Challan</button>
+                </div>
+            </div>
+        </ng-container>
+    </div>
 </div>

@@ -1,4 +1,4 @@
-<div class=" settingPage" id="settingTab">
+<div class=" settingPage" id="settingTab" *ngIf="!isCreateAndSwitchCompanyInProcess">
     <!-- start of tab set -->
     <tabset #staticTabs>
 
@@ -10,15 +10,12 @@
                     <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
                         <div class="form-group col-xs-6">
                             <div class="row">
-                                <input id="authKey" class="form-control" name="userAuthKey" [(ngModel)]="userAuthKey"
-                                    [readonly]="true" />
+                                <input id="authKey" class="form-control" name="userAuthKey" [(ngModel)]="userAuthKey" [readonly]="true" />
                             </div>
                         </div>
                         <div class="form-group clearfix mrB0">
                             <button class="btn btn-default" (click)="regenerateKey()">Regenerate Auth Key</button>
-                            <a class="btn btn-link"
-                                href="https://developers.giddh.com/collection/giddh-api-integration/46/pages/140"
-                                target="_blank">Documentation</a>
+                            <a class="btn btn-link" href="https://developers.giddh.com/collection/giddh-api-integration/46/pages/140" target="_blank">Documentation</a>
                         </div>
                     </form>
                 </div>
@@ -32,11 +29,8 @@
                         <h1 class="section_head">Add/Edit Mobile Number</h1>
                         <div class="mrT">
                             <!-- ng-minlength="10" pattern="/^[0-9]{1,10}$/"  -->
-                            <input decimalDigitsDirective maxlength="10" class="form-control max350 pull-left "
-                                type="text" ng-required="true" placeholder="9998899988" name="mobileForm.phoneNumber"
-                                [(ngModel)]="phoneNumber" />
-                            <button class="btn btn-success btn-sm mrL1" [ladda]="isAddNewMobileNoInProcess$ | async"
-                                (click)="addNumber(phoneNumber)">Add
+                            <input decimalDigitsDirective maxlength="10" class="form-control max350 pull-left " type="text" ng-required="true" placeholder="9998899988" name="mobileForm.phoneNumber" [(ngModel)]="phoneNumber" />
+                            <button class="btn btn-success btn-sm mrL1" [ladda]="isAddNewMobileNoInProcess$ | async" (click)="addNumber(phoneNumber)">Add
                             </button>
                         </div>
                         <p class="mrT1">
@@ -47,11 +41,9 @@
                         <hr>
                         <h1 class="mrT2">Enter verification Code</h1>
                         <div class="max350 mrT">
-                            <input class="form-control" type="text" placeholder="Verification Code"
-                                [(ngModel)]="oneTimePassword" />
+                            <input class="form-control" type="text" placeholder="Verification Code" [(ngModel)]="oneTimePassword" />
                         </div>
-                        <button class="btn btn-success mrT" [ladda]="isVerifyAddNewMobileNoInProcess$ | async"
-                            (click)="verifyNumber()">Verify
+                        <button class="btn btn-success mrT" [ladda]="isVerifyAddNewMobileNoInProcess$ | async" (click)="verifyNumber()">Verify
                         </button>
                     </div>
                     <section class="row">
@@ -73,9 +65,7 @@
                                                     <div class="cases">
                                                         <p>SMS format : Keyword accountName/uniqueName</p>
                                                         <p>Example : Giddh1 federal bank</p>
-                                                        <p>This will return balance details of particular account. With
-                                                            last
-                                                            five transactions.</p>
+                                                        <p>This will return balance details of particular account. With last five transactions.</p>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -96,9 +86,7 @@
                                                     <div class="cases">
                                                         <p>SMS format : Keyword group groupName/uniqueName</p>
                                                         <p>Example : Giddh1 group sundry_debtors</p>
-                                                        <p>This will return balance details of all matched group. And
-                                                            closing balance of all subgroups (with closing balance
-                                                            only).
+                                                        <p>This will return balance details of all matched group. And closing balance of all subgroups (with closing balance only).
                                                         </p>
                                                     </div>
                                                 </li>
@@ -125,10 +113,8 @@
 
                     <div class="mrT2">
                         <!--two way auth-->
-                        <h1 class="section_head"><input type="checkbox" (change)="changeTwoWayAuth()"
-                                [(ngModel)]="twoWayAuth" /> Two Way Authentication</h1>
-                        <p class="grey" *ngIf="twoWayAuth">You will need to enter verification code at the time of
-                            login.
+                        <h1 class="section_head"><input type="checkbox" (change)="changeTwoWayAuth()" [(ngModel)]="twoWayAuth" /> Two Way Authentication</h1>
+                        <p class="grey" *ngIf="twoWayAuth">You will need to enter verification code at the time of login.
                         </p>
                     </div>
                 </div>
@@ -144,11 +130,7 @@
                         <h1 class="section_head pdT0">Activity History</h1>
                         <button class="btn btn-primary " (click)="clearAllSession()">Delete All</button>
                     </div>
-                    <p class="grey_clr max900 ">Access and manage your activity history details from anywhere at
-                        anytime.
-                        This
-                        will
-                        help you to monitor all your account access.</p>
+                    <p class="grey_clr max900 ">Access and manage your activity history details from anywhere at anytime. This will help you to monitor all your account access.</p>
                     <div class="max900  mrT1">
                         <table class="table-bordered basic table">
                             <thead>
@@ -179,9 +161,7 @@
                                     <td> {{ session.userAgent }}</td>
                                     <td class="ico-btn text-center">
                                         <span *ngIf="userSessionId === session.sessionId">Current</span>
-                                        <button type="button" class="btn btn-xs"
-                                            (click)="deleteSession(session.sessionId)"
-                                            *ngIf="userSessionId !== session.sessionId">
+                                        <button type="button" class="btn btn-xs" (click)="deleteSession(session.sessionId)" *ngIf="userSessionId !== session.sessionId">
                                             <i class="icon-trash" aria-hidden="true" tooltip="Delete"></i>
 
                                         </button>
@@ -215,4 +195,14 @@
 
     </tabset>
     <!-- end of tab set -->
+</div>
+
+<div *ngIf="isCreateAndSwitchCompanyInProcess">
+    <div class="no-data mrT2 loader-main">
+        <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+        <div class="spinner2">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
+    </div>
 </div>

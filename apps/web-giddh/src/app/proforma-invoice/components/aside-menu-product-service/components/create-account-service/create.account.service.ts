@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
 import * as _ from '../../../../../lodash-optimized';
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, Input } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AccountsAction } from '../../../../../actions/accounts.actions';
 import { AppState } from '../../../../../store';
@@ -28,6 +28,7 @@ export const SALES_GROUPS = ['revenuefromoperations']; // sales
 export class CreateAccountServiceComponent implements OnInit, OnDestroy {
 
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
+    @Input() public selectedVoucherType: string;
 
     // public
     public addAcForm: FormGroup;
@@ -60,7 +61,6 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-
         // init ac form
         this.initAcForm();
 
@@ -69,12 +69,10 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
             const hsn: AbstractControl = this.addAcForm.get('hsnNumber');
             const sac: AbstractControl = this.addAcForm.get('sacNumber');
             if (a === 'hsn') {
-                // hsn.reset();
                 sac.reset();
                 hsn.enable();
                 sac.disable();
             } else {
-                // sac.reset();
                 hsn.reset();
                 sac.enable();
                 hsn.disable();
@@ -84,13 +82,24 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
         // get groups list
         this._groupService.GetGroupsWithAccounts('').subscribe((res: any) => {
             let result: IOption[] = [];
+            this.flatAccountWGroupsList$ = observableOf([]);
             if (res.status === 'success' && res.body.length > 0) {
-                let revenueGrp = _.find(res.body, { uniqueName: 'revenuefromoperations' });
-                let flatGrps = this._groupService.flattenGroup([revenueGrp], []);
-                if (flatGrps && flatGrps.length) {
-                    flatGrps.filter(f => f.uniqueName !== 'revenuefromoperations').forEach((grp: GroupResponse) => {
-                        result.push({ label: grp.name, value: grp.uniqueName });
-                    });
+                if (this.selectedVoucherType === 'purchase') {
+                    let revenueGrp = _.find(res.body, { uniqueName: 'operatingcost' });
+                    let flatGrps = this._groupService.flattenGroup([revenueGrp], []);
+                    if (flatGrps && flatGrps.length) {
+                        flatGrps.filter(f => f.uniqueName !== 'operatingcost').forEach((grp: GroupResponse) => {
+                            result.push({ label: grp.name, value: grp.uniqueName });
+                        });
+                    }
+                } else {
+                    let revenueGrp = _.find(res.body, { uniqueName: 'revenuefromoperations' });
+                    let flatGrps = this._groupService.flattenGroup([revenueGrp], []);
+                    if (flatGrps && flatGrps.length) {
+                        flatGrps.filter(f => f.uniqueName !== 'revenuefromoperations').forEach((grp: GroupResponse) => {
+                            result.push({ label: grp.name, value: grp.uniqueName });
+                        });
+                    }
                 }
             }
             this.flatAccountWGroupsList$ = observableOf(result);
@@ -135,7 +144,6 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
             if (res.status === 'success') {
                 this._toasty.successToast('A/c created successfully.');
                 this.closeCreateAcModal();
-                // this._store.dispatch(this._salesActions.getFlattenAcOfSales({groupUniqueNames: ['sales']}));
                 this._store.dispatch(this._salesActions.createServiceAcSuccess({ name: res.body.name, uniqueName: res.body.uniqueName }));
             } else {
                 this._toasty.errorToast(res.message, res.code);

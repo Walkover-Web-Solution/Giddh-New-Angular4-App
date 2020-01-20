@@ -1,34 +1,35 @@
 <div id="" class="">
 
-  <div class="modal-header clearfix" style="display: flex;">
-    <span>
-        <!--<button type="button" class="btn btn-md btn-info mrR1" (click)="editButtonClicked()"-->
-                <!--*ngIf="activatedInvoice != 'receipt'">Edit</button>-->
-    </span>
-    <h3 class="modal-title" id="modal-title" style="flex: 1;align-self: center;text-align: center;">
-      {{activatedInvoice | titlecase }}</h3>
-    <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="closeModelEvent.emit()"></i>
+    <div class="modal-header clearfix" style="display: flex;">
+        <span>
+            <!--<button type="button" class="btn btn-md btn-info mrR1" (click)="editButtonClicked()"-->
+            <!--*ngIf="activatedInvoice != 'receipt'">Edit</button>-->
+        </span>
+        <h3 class="modal-title" id="modal-title" style="flex: 1;align-self: center;text-align: center;">
+            {{activatedInvoice | titlecase }}</h3>
+        <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="closeModelEvent.emit()"></i>
 
-  </div>
+    </div>
 
-  <div class="modal-body noPad clearfix" id="export-body">
-    <div *ngIf="isError">
-      <p class="lead alC">Oops! Something went wrong.</p>
+    <div class="modal-body noPad clearfix" id="export-body">
+        <div *ngIf="isError">
+            <p class="lead alC">Oops! Something went wrong.</p>
+        </div>
+        <div class="loader mrT4" *ngIf="isRequestInProcess">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div id="pdf-wrapper" *ngIf="!isRequestInProcess && !isError">
+            <iframe width="100%" height="600px" name="plugin" [src]="base64StringForModel"
+                type="application/pdf"></iframe>
+        </div>
+        <div *ngIf="!isRequestInProcess && isError">
+            <div>
+                <span>No Preview Available</span>
+            </div>
+        </div>
     </div>
-    <div class="loader mrT4" *ngIf="isRequestInProcess">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <div id="pdf-wrapper" *ngIf="!isRequestInProcess && !isError">
-      <iframe width="100%" height="600px" name="plugin" [src]="base64StringForModel" type="application/pdf"></iframe>
-    </div>
-    <div *ngIf="!isRequestInProcess && isError">
-      <div>
-        <span>No Preview Available</span>
-      </div>
-    </div>
-  </div>
 </div>

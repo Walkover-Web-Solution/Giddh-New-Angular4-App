@@ -1,4 +1,5 @@
-<div class="container-fluid settings-bg" [keyboardShortcut]="['alt+right', 'alt+left']" [config]="{ignoreHost:true}" (onShortcutPress)="selectTabByShortcut($event)">
+<div class="container-fluid settings-bg" [keyboardShortcut]="['alt+right', 'alt+left']" [config]="{ignoreHost:true}"
+    (onShortcutPress)="selectTabByShortcut($event)">
     <div class="row">
 
         <div class="settingPage" id="settingTab">
@@ -12,7 +13,8 @@
 
                 </tab>
 
-                <tab heading="Integration" (select)="integrationSelected($event); tabChanged('integration')" [active]="activeTab === 'integration'">
+                <tab heading="Integration" (select)="integrationSelected($event); tabChanged('integration')"
+                    [active]="activeTab === 'integration'">
                     <div class="setting-container">
                         <setting-integration #integrationComponent [selectedTabParent]="selectedChildTab">
                         </setting-integration>
@@ -20,7 +22,8 @@
 
                 </tab>
 
-                <tab heading="Linked Accounts" (select)="linkedAccountSelected($event); tabChanged('linked-accounts')" [active]="activeTab === 'linked-accounts'">
+                <tab heading="Linked Accounts" (select)="linkedAccountSelected($event); tabChanged('linked-accounts')"
+                    [active]="activeTab === 'linked-accounts'">
                     <div class="setting-container">
                         <setting-linked-accounts #eBankComp></setting-linked-accounts>
                     </div>
@@ -28,17 +31,21 @@
 
                 </tab>
 
-                <tab heading="Profile" (select)="profileSelected($event); tabChanged('profile')" [active]="activeTab === 'profile'">
+                <tab heading="Profile" (select)="profileSelected($event); tabChanged('profile')"
+                    [active]="activeTab === 'profile'">
                     <div class="setting-container">
                         <setting-profile #profileComponent></setting-profile>
-                        <span *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)" class="auto_save" style="float: right;"><i
+                        <span *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)" class="auto_save"
+                            style="float: right;"><i
                                 class="glyphicon glyphicon-refresh mrR fs14 rotate"></i>Saving...</span>
-                        <span *ngIf="isCompanyProfileUpdated && !(isUpdateCompanyInProgress$ | async)" class="auto_save" style="float: right;"><i class="glyphicon glyphicon-check mrR fs14"></i>Saved</span>
+                        <span *ngIf="isCompanyProfileUpdated && !(isUpdateCompanyInProgress$ | async)" class="auto_save"
+                            style="float: right;"><i class="glyphicon glyphicon-check mrR fs14"></i>Saved</span>
                     </div>
 
                 </tab>
 
-                <tab heading="Financial Year" (select)="financialYearSelected($event); tabChanged('financial-year')" [active]="activeTab === 'financial-year'">
+                <tab heading="Financial Year" (select)="financialYearSelected($event); tabChanged('financial-year')"
+                    [active]="activeTab === 'financial-year'">
                     <div class="setting-container">
                         <financial-year #financialYearComp></financial-year>
                     </div>
@@ -48,7 +55,8 @@
                 <!-- Arpit: Sagar told me to remove this condition from permission tab -->
                 <!-- *ngIf="isUserSuperAdmin" -->
 
-                <tab (select)="permissionTabSelected($event); tabChanged('permission')" heading="Permission" [active]="activeTab === 'permission'">
+                <tab (select)="permissionTabSelected($event); tabChanged('permission')" heading="Permission"
+                    [active]="activeTab === 'permission'">
                     <div class="setting-container">
                         <setting-permission #permissionComp></setting-permission>
                     </div>
@@ -78,16 +86,16 @@
                         <setting-discount></setting-discount>
                     </div>
                 </tab>
-                <!-- <tab heading="Warehouse" [active]="activeTab === 'warehouse'" (select)="tabChanged('warehouse')">
+                <tab heading="Warehouse" [active]="activeTab === 'warehouse'" (select)="tabChanged('warehouse')">
                     <div class="setting-container">
                         <setting-warehouse></setting-warehouse>
                     </div>
-                </tab> -->
-                <tab heading="" (select)="tagsTabSelected($event)">
+                </tab>
+                <!-- <tab heading="" (select)="tagsTabSelected($event)">
                     <div class="setting-container">
                         <setting-bunch #bunchComp></setting-bunch>
                     </div>
-                </tab>
+                </tab> -->
             </tabset>
 
         </div>

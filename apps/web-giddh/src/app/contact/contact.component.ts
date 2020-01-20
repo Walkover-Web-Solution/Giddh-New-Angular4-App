@@ -29,10 +29,9 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { GeneralService } from '../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 
-
 const CustomerType = [
-    { label: 'Customer', value: 'customer' },
-    { label: 'Vendor', value: 'vendor' }
+    {label: 'Customer', value: 'customer'},
+    {label: 'Vendor', value: 'vendor'}
 ];
 
 export interface PayNowRequest {
@@ -60,7 +59,7 @@ export interface PayNowRequest {
 })
 
 export class ContactComponent implements OnInit, OnDestroy, OnChanges {
-
+    // selected: any;
     public flattenAccounts: any = [];
     public sundryDebtorsAccountsBackup: any = {};
     public sundryDebtorsAccountsForAgingReport: IOption[] = [];
@@ -91,7 +90,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public activeAccountDetails: any;
     public allSelectionModel: boolean = false;
     public LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN = 'showTableColumn';
-    public localStorageKeysForFilters = { customer: 'customerFilterStorage', vendor: 'vendorFilterStorage' };
+    public localStorageKeysForFilters = {customer: 'customerFilterStorage', vendor: 'vendorFilterStorage'};
     public isMobileScreen: boolean = false;
     public modalConfig: ModalOptions = {
         animated: true,
@@ -230,14 +229,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 this.datePickerOptions = a;
             }
         });
-        this.universalDate$.subscribe(a => {
-            if (a) {
-                this.datePickerOptions.startDate = a[0];
-                this.datePickerOptions.endDate = a[1];
-                this.fromDate = moment(a[0]).format('DD-MM-YYYY');
-                this.toDate = moment(a[1]).format('DD-MM-YYYY');
-            }
-        });
+
         if (this.datePickerOptions) {
             this.fromDate = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
             this.toDate = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
@@ -279,6 +271,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                     ...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
                     endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()
                 };
+
+                // this.selected = {startDate: moment(universalDate[0], 'DD-MM-YYYY'), endDate: moment(universalDate[1], 'DD-MM-YYYY')};
+
                 this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
                 this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');
                 this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, this.searchStr);
@@ -302,10 +297,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 let accounts: IOption[] = [];
                 let bankAccounts: IOption[] = [];
                 _.forEach(data, (item) => {
-                    accounts.push({ label: item.name, value: item.uniqueName });
+                    accounts.push({label: item.name, value: item.uniqueName});
                     let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
                     if (findBankIndx !== -1) {
-                        bankAccounts.push({ label: item.name, value: item.uniqueName });
+                        bankAccounts.push({label: item.name, value: item.uniqueName});
                     }
                 });
                 this.bankAccounts$ = observableOf(accounts);
@@ -337,9 +332,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
                 if (params) {
                     if (params['type'] === 'customer') {
-                        this.setActiveTab(params['type'], 'sundrydebtors')
+                        this.setActiveTab(params['type'], 'sundrydebtors');
                     } else if (params['type'] === 'vendor') {
-                        this.setActiveTab(params['type'], 'sundrycreditors')
+                        this.setActiveTab(params['type'], 'sundrycreditors');
                     } else {
                         this.setActiveTab('aging-report', '');
                     }
@@ -450,13 +445,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    // public openUpdatemodel(account: any) {
-    //   console.log(' open', this.fromDate, this.toDate);
-    //   this.modalUniqueName = account.uniqueName;
-    // }
-    // public closeModel(account: any) {
-    //     this.modalUniqueName = '';
-    // }
     public tabSelected(tabName: 'customer' | 'aging-report' | 'vendor') {
         this.searchStr = '';
         this.selectedCheckedContacts = [];
@@ -471,7 +459,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             } else {
                 this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=1`);
             }
-            this.router.navigate(['pages/contact/', tabName], { replaceUrl: true });
+            this.router.navigate(['pages/contact/', tabName], {replaceUrl: true});
         }
     }
 
@@ -512,7 +500,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    public updateCustomerAcc(openFor: 'customer' | 'vendor', account?: any) {
+    public updateCustomerAcc(openFor: 'customer' | 'vendor', account: any) {
         this.activeAccountDetails = account;
         this.isUpdateAccount = true;
         this.selectedGroupForCreateAcc = account ? account.groupUniqueName : openFor === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
@@ -861,7 +849,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(m => {
                     m.isSelected = action;
                     return m;
-                })
+                });
             }
         }
     }
@@ -947,7 +935,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 this.advanceSearchRequestModal[category + 'NotEqual'] = true;
                 break;
         }
-        console.log('advanceSearchRequestModal', this.advanceSearchRequestModal);
         this.isAdvanceSearchApplied = true;
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
             null, 'true', 20, '');
@@ -1009,7 +996,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             byteArrays.push(byteArray);
             offset += sliceSize;
         }
-        return new Blob(byteArrays, { type: contentType });
+        return new Blob(byteArrays, {type: contentType});
     }
 
     /**
@@ -1028,7 +1015,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof ContactComponent
      */
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, refresh?: string, count: number = 20, query?: string,
-        sortBy: string = '', order: string = 'asc'): void {
+                        sortBy: string = '', order: string = 'asc'): void {
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : 'false';
         this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal).subscribe((res) => {
@@ -1049,7 +1036,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                         }
                     });
                     this.sundryDebtorsAccounts = _.cloneDeep(res.body.results);
-                    //  console.log('res.body.results', res.body.results);
 
                 } else {
                     this.Totalcontacts = res.body.totalItems;
@@ -1108,7 +1094,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     * Register Account navigation
     * */
     private registerAccount() {
-        this.router.navigate(['settings'], { queryParams: { tab: 'integration', tabIndex: 1, subTab: 4 } });
+        this.router.navigate(['settings'], {queryParams: {tab: 'integration', tabIndex: 1, subTab: 4}});
     }
 
     private setStateDetails(url) {

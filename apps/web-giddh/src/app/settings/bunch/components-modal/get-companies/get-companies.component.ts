@@ -5,51 +5,51 @@ import { ToasterService } from '../../../../services/toaster.service';
 import { SettingsBunchService } from '../../../../services/settings.bunch.service';
 
 @Component({
-  selector: 'get-companies',
-  templateUrl: './get-companies.component.html',
-  styleUrls: ['./get-companies.component.css']
+    selector: 'get-companies',
+    templateUrl: './get-companies.component.html',
+    styleUrls: ['./get-companies.component.css']
 })
 
 export class GetBunchModalComponent implements OnChanges {
 
-  @Input() public activeBunch: any = {};
-  @Input() public selectedBunch: any = {};
+    @Input() public activeBunch: any = {};
+    @Input() public selectedBunch: any = {};
 
-  @Output() public closeModalEvent: EventEmitter<boolean> = new EventEmitter(false);
-  @Output() public deleteCompanyEvent: EventEmitter<any> = new EventEmitter(null);
-  @Output() public saveDataEvent: EventEmitter<any> = new EventEmitter(null);
+    @Output() public closeModalEvent: EventEmitter<boolean> = new EventEmitter(false);
+    @Output() public deleteCompanyEvent: EventEmitter<any> = new EventEmitter(null);
+    @Output() public saveDataEvent: EventEmitter<any> = new EventEmitter(null);
 
-  constructor(private _fb: FormBuilder,
-              private _toaster: ToasterService,
-              private _settingsBunchService: SettingsBunchService,
-  ) {
+    constructor(private _fb: FormBuilder,
+        private _toaster: ToasterService,
+        private _settingsBunchService: SettingsBunchService,
+    ) {
 
-  }
+    }
 
-  /**
-   * deleteCompany
-   */
-  public deleteCompany(companyUniqueName) {
-    this.deleteCompanyEvent.emit([companyUniqueName]);
-  }
+    /**
+     * deleteCompany
+     */
+    public deleteCompany(companyUniqueName) {
+        this.deleteCompanyEvent.emit([companyUniqueName]);
+    }
 
-  /**
-   * create
-   */
-  public createBunch() {
-    let dataToSend = [];
-    this.saveDataEvent.emit(dataToSend);
-    // this._settingsBunchService.CreateBunch(dataToSend);
-  }
+    /**
+     * create
+     */
+    public createBunch() {
+        let dataToSend = [];
+        this.saveDataEvent.emit(dataToSend);
+        // this._settingsBunchService.CreateBunch(dataToSend);
+    }
 
-  public onCancel() {
-    this.closeModalEvent.emit(true);
-  }
+    public onCancel() {
+        this.closeModalEvent.emit(true);
+    }
 
-  /**
-   * ngOnChanges
-   */
-  public ngOnChanges(s) {
-    //
-  }
+    /**
+     * ngOnChanges
+     */
+    public ngOnChanges(s) {
+        //
+    }
 }

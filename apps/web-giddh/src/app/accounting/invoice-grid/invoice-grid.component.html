@@ -1,36 +1,34 @@
 <div class="col-xs-10">
-  <div class="col-xs-12 bg_wrap">
-    <div class="row">
-      <div class="clearfix pdT2">
+    <div class="col-xs-12 bg_wrap">
+        <div class="row">
+            <div class="clearfix pdT2">
 
-        <div class="d-flex">
-          <span class="btn label isActive">{{data.voucherType}}</span>
+                <div class="d-flex">
+                    <span class="btn label isActive">{{data.voucherType}}</span>
 
-          <input type="text" [(ngModel)]="data.invoiceNumberAgainstVoucher" [disabled]="!isCustomInvoice"
-                 name="invoiceNumberAgainstVoucher" placeholder="Invoice No"
-                 class="text-center appearance_none" style="width: 128px"/>
-        </div>
+                    <input type="text" [(ngModel)]="data.invoiceNumberAgainstVoucher" [disabled]="!isCustomInvoice"
+                        name="invoiceNumberAgainstVoucher" placeholder="Invoice No" class="text-center appearance_none"
+                        style="width: 128px" />
+                </div>
 
-        <div class="pull-right text-right mrB1">
-          <input type="text" onReturn #dateField [textMask]="{mask: dateMask, guide: true}" [(ngModel)]="entryDate"
-                 name="entryDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY"
-                 class="form-control text-right invoice-date-field"/> {{ displayDay
+                <div class="pull-right text-right mrB1">
+                    <input type="text" onReturn #dateField [textMask]="{mask: dateMask, guide: true}"
+                        [(ngModel)]="entryDate" name="entryDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY"
+                        class="form-control text-right invoice-date-field" /> {{ displayDay
           }}
-        </div>
-      </div>
+                </div>
+            </div>
 
-      <!-- invoice num -->
-      <div class="clearfix form-inline mrB">
-        <div class="mx-350 form-group" [hidden]="isSalesInvoiceSelected">
-          <!-- decimalDigitsDirective -->
-          <label>{{ invoiceNoHeading }}:</label> <input type="text" placeholder="Invoice no."
-                                                        [(ngModel)]="data.invoiceNumberAgainstVoucher"
-                                                        class="form-control max-height28 appearance_none"
-                                                        style="max-width:200px" [disabled]="isSalesInvoiceSelected"
-        />
-        </div>
+            <!-- invoice num -->
+            <div class="clearfix form-inline mrB">
+                <div class="mx-350 form-group" [hidden]="isSalesInvoiceSelected">
+                    <!-- decimalDigitsDirective -->
+                    <label>{{ invoiceNoHeading }}:</label> <input type="text" placeholder="Invoice no."
+                        [(ngModel)]="data.invoiceNumberAgainstVoucher" class="form-control max-height28 appearance_none"
+                        style="max-width:200px" [disabled]="isSalesInvoiceSelected" />
+                </div>
 
-        <!-- key not available in request
+                <!-- key not available in request
     <div class="mx-300 form-group" (clickOutside)="showInvoiceDate=false;">
     <span>Date: </span>
     <input type="text" [ngModel]="moment(entryDate).format('DD-MM-YYYY')" decimalDigitsDirective readonly (focus)="showInvoiceDate = true;" class="form-control appearance_none max-height28" />
@@ -38,207 +36,218 @@
         <datepicker [(ngModel)]="entryDate" (selectionDone)="setInvoiceDate($event)" [showWeeks]="false"></datepicker>
     </div>
 </div> -->
-      </div>
-      <!-- /invoice num -->
+            </div>
+            <!-- /invoice num -->
 
 
-      <!-- party acc name -->
-      <div class="mx-350 clearfix form-inline mrB">
-        <div class="form-group">
-          <label>Party A/c Name: <sup>*</sup></label>
-          <!-- #creditor -->
-          <input #partyAccNameInputField name="party_name" type="text" placeholder="Party account"
-                 class="form-control max-height28 appearance_none upper-fields"
-                 (input)="onPartyAccFocusInput($event);selectedField='account';focusedField = 'partyAcc';"
-                 (keyup)="searchAccount($event?.target?.value)" (keydown)="detectKey($event)"
-                 [(ngModel)]="creditorAcc.name"
-                 (focus)="onPartyAccFocus($event);selectedField='account';focusedField = 'partyAcc';"
-                 (blur)="onPartyAccBlur();selectedField=null;focusedField = null;filterByText = ''"
-                 style="max-width:200px;"/>
-        </div>
-        <!-- [hidden]="!isPurchaseInvoiceSelected" -->
-        <div class="form-group" style="margin-top: 5px;" *ngIf="isPurchaseInvoiceSelected">
-          <label>Ledger name:<sup>*</sup></label>
-          <input name="ledger_name" type="text"  placeholder="Ledger name"
-                 class="form-control max-height28 appearance_none upper-fields" style="max-width:200px"
-                 (input)="onPartyAccFocusInput($event, 'purchases');selectedField='account';focusedField = 'ledgerName';"
-                 (keyup)="searchAccount($event?.target?.value)" (keydown)="detectKey($event)"
-                 [(ngModel)]="debtorAcc.name"
-                 (focus)="onPartyAccFocus($event,'purchases');selectedField='account';focusedField = 'ledgerName';"
-                 (blur)="onPartyAccBlur();selectedField=null;focusedField = null;filterByText = ''"/>
-        </div>
-      </div>
-      <!-- /party acc name -->
+            <!-- party acc name -->
+            <div class="mx-350 clearfix form-inline mrB">
+                <div class="form-group">
+                    <label>Party A/c Name: <sup>*</sup></label>
+                    <!-- #creditor -->
+                    <input #partyAccNameInputField name="party_name" type="text" placeholder="Party account"
+                        class="form-control max-height28 appearance_none upper-fields"
+                        (input)="onPartyAccFocusInput($event);selectedField='account';focusedField = 'partyAcc';"
+                        (keyup)="searchAccount($event?.target?.value)" (keydown)="detectKey($event)"
+                        [(ngModel)]="creditorAcc.name"
+                        (focus)="onPartyAccFocus($event);selectedField='account';focusedField = 'partyAcc';"
+                        (blur)="onPartyAccBlur();selectedField=null;focusedField = null;filterByText = ''"
+                        style="max-width:200px;" />
+                </div>
+                <!-- [hidden]="!isPurchaseInvoiceSelected" -->
+                <div class="form-group" style="margin-top: 5px;" *ngIf="isPurchaseInvoiceSelected">
+                    <label>Ledger name:<sup>*</sup></label>
+                    <input name="ledger_name" type="text" placeholder="Ledger name"
+                        class="form-control max-height28 appearance_none upper-fields" style="max-width:200px"
+                        (input)="onPartyAccFocusInput($event, 'purchases');selectedField='account';focusedField = 'ledgerName';"
+                        (keyup)="searchAccount($event?.target?.value)" (keydown)="detectKey($event)"
+                        [(ngModel)]="debtorAcc.name"
+                        (focus)="onPartyAccFocus($event,'purchases');selectedField='account';focusedField = 'ledgerName';"
+                        (blur)="onPartyAccBlur();selectedField=null;focusedField = null;filterByText = ''" />
+                </div>
+            </div>
+            <!-- /party acc name -->
 
-      <!-- operating cost acc only -->
-      <!-- No need for purchase ledger, as discussed with alok
+            <!-- operating cost acc only -->
+            <!-- No need for purchase ledger, as discussed with alok
     <div class="mx-300 clearfix form-inline mrB">
     <div class="form-group">
         <label>Purchase Ledger:<sup>*</sup></label> <input type="text" #debtor placeholder="Purchase account" (focus)="accountType = 'debitor'" [(ngModel)]="debtorAcc.name" (focus)="getFlattenGrpAccounts('purchases', true)" (blur)="showAccountList=false;selectedInput=debtor"
             class="form-control max-height28 appearance_none" style="max-width:200px" />
     </div>
 </div> -->
-      <!-- /operating cost acc only -->
+            <!-- /operating cost acc only -->
 
 
-      <!--  purchase as INVOICE -->
-      <div class="clearfix mrT1" [style.min-height.vh]="61">
-        <div class="table-responsive bdrT">
-          <table class="table entry_table">
-            <thead>
-            <tr>
-              <th style="width:70%;">Name of Item</th>
-              <th class="text-right">Quantity</th>
-              <th class="text-right">Rate</th>
-              <th class="text-left">Per</th>
-              <th class="text-right">Amount</th>
-            </tr>
-            </thead>
-            <br/>
-            <!-- stock entry  -->
-            <tbody (clickOutside)="hideListItems()">
-            <ng-container *ngFor="let transaction of stocksTransaction;let i=index;let l=last">
-              <ng-container>
-                <tr
-                  [ngClass]="{'activeRow': (isSelectedRow && selectedRowIdx === i) || (!selectedRowIdx && !isSelectedRow && i == 0)}">
-                  <!-- (blur)="onStockItemBlur($event, qty);" showStockList.next(false)" -->
-                  <td><input onReturn id="first_element_{{i}}_{{i}}" type="text"
-                             class="form-control select-stock-in-invoice" [(ngModel)]="transaction.inventory.stock.name"
-                             (ngModelChange)="searchStock($event);changeStock(i, transaction?.inventory?.stock?.name)"
-                             [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}"
-                             (focus)="onPartyAccBlur();onStockFocus($event, i)"
-                             (blur)="onStockItemBlur($event, qty);filterByText = ''" (keydown)="detectKey($event)"/>
-                  </td>
-                  <td>
-                    <input onReturn type="text" class="form-control text-right" #qty
-                           [(ngModel)]="transaction.inventory.quantity" (ngModelChange)="changeQuantity(i, $event)"
-                           (focus)="selectRow(true,i, null); hideListItems();"
-                           [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}"
-                           decimalDigitsDirective [DecimalPlaces]="2" [disabled]="!transaction.inventory.stock.name"/>
-                  </td>
-                  <td>
-                    <input onReturn type="text" class="form-control text-right"
-                           [(ngModel)]="transaction.inventory.unit.rate" (ngModelChange)="changePrice(i,$event)"
-                           (focus)="selectRow(true,i,null)" [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}"
-                           decimalDigitsDirective
-                           [DecimalPlaces]="2" [disabled]="!transaction.inventory.stock.name"/>
-                  </td>
-                  <td>
-                    <input type="text" class="form-control text-left"
-                           [(ngModel)]="transaction.inventory.unit.stockUnitCode" [readonly]="true"
-                           (focus)="selectRow(true,i)" [disabled]="!transaction.inventory.stock.name"/>
-                  </td>
-                  <td>
-                    <input onReturn type="text" class="form-control text-right" #toAmountField id="stock_{{i}}"
-                           [(ngModel)]="transaction.inventory.amount" (ngModelChange)="amountChanged(i)"
-                           (focus)="selectRow(true,i);addNewStock(transaction.inventory.amount,transaction, i)"
-                           (keydown.Tab)="addNewStock(transaction.inventory.amount,transaction, i)"
-                           [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}" decimalDigitsDirective
-                           [DecimalPlaces]="2" [disabled]="!transaction.inventory.stock.name"
-                           (blur)="checkIfEnteredAmountIsZero(transaction.inventory.amount, i, 'stock')"/>
-                  </td>
-                </tr>
-              </ng-container>
-            </ng-container>
-            <tr *ngIf="stockTotal">
-              <td colspan="4"></td>
-              <td class>
-                <input type="text" [value]="stockTotal" readonly disabled class="form-control text-right"/>
-                <div class="bdrB"></div>
-              </td>
-            </tr>
-            <br/>
-            <!-- accounts entry -->
-            <!--  -->
-            <ng-container *ngFor="let transaction of accountsTransaction;let i=index;let l=last">
-              <tr [ngClass]="{'activeRow': isSelectedRow && selectedAccIdx === i}">
-                <td colspan="2"><input data-accountlistid="i" onReturn type="text"
-                                       class="form-control invoice-account-field" #particular
-                                       [(ngModel)]="transaction.selectedAccount.account"
-                                       (ngModelChange)="searchAccount($event);"
-                                       (focus)="selectedAccIdx=i; onAccountFocus($event, i)"
-                                       [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
-                                       (keydown)="detectKey($event, i === 0)" (blur)="onAccountBlur(particular)"/></td>
-                <td>
-                  <input onReturn type="text" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2"
-                         [(ngModel)]="transaction.rate" (ngModelChange)="calculateRate(i, transaction?.rate)"
-                         (focus)="selectedAccIdx=i; hideListItems()"
-                         [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
-                         [disabled]="!transaction.selectedAccount.account"/>
-                </td>
-                <td><input onReturn type="text" *ngIf="transaction.rate" class="form-control" [value]="'%'" disabled
-                           readonly/></td>
-                <td>
-                  <!-- (change)="changeTotal(i, transaction.amount)" -->
-                  <input type="text" id="account_{{i}}" class="form-control text-right" decimalDigitsDirective
-                         [DecimalPlaces]="2" [(ngModel)]="transaction.amount"
-                         (keyup.Enter)="selectedAccIdx=i;addNewAccount(transaction.amount, l)"
-                         [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
-                         [disabled]="!transaction.selectedAccount.account"
-                         (blur)="checkIfEnteredAmountIsZero(transaction.amount, i, 'account')" onReturn/>
-                </td>
-              </tr>
-            </ng-container>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <!--  purchase as INVOICE -->
-      <div class="clearfix">
-        <div class="col-xs-4">
-          <div class="form-group">
-            <label>Narration:</label>
-            <textarea #narrationBox onReturn id="invoice-narration" class="form-control appearance_none"
-                      name="narration" (keyup.enter)="openConfirmBox(submitButton)"
-                      (keydown.tab)="openConfirmBox(submitButton)" [(ngModel)]="data.description" resize="false"
-                      rows="6"></textarea>
-          </div>
-        </div>
-
-        <div [hidden]="!showConfirmationBox" class="confirmation_box bdr text-center pd2">
-          <div class="">
-            <h1>Accept?</h1>
-            <div class="pdT2">
-              <button class="btn btn-primary" #submitButton (keyup)="keyUpOnSubmitButton($event)"
-                      (click)="saveEntry();">Yes
-              </button>
-              <button class="btn btn-default" #resetButton (keyup)="keyUpOnResetButton($event)">No</button>
-              <br/>
-              <button class="btn btn-link mrT1" (click)="refreshEntry();">Reset</button>
+            <!--  purchase as INVOICE -->
+            <div class="clearfix mrT1" [style.min-height.vh]="61">
+                <div class="table-responsive bdrT">
+                    <table class="table entry_table">
+                        <thead>
+                            <tr>
+                                <th style="width:70%;">Name of Item</th>
+                                <th class="text-right">Quantity</th>
+                                <th class="text-right">Rate</th>
+                                <th class="text-left">Per</th>
+                                <th class="text-right">Amount</th>
+                            </tr>
+                        </thead>
+                        <br />
+                        <!-- stock entry  -->
+                        <tbody (clickOutside)="hideListItems()">
+                            <ng-container *ngFor="let transaction of stocksTransaction;let i=index;let l=last">
+                                <ng-container>
+                                    <tr
+                                        [ngClass]="{'activeRow': (isSelectedRow && selectedRowIdx === i) || (!selectedRowIdx && !isSelectedRow && i == 0)}">
+                                        <!-- (blur)="onStockItemBlur($event, qty);" showStockList.next(false)" -->
+                                        <td><input onReturn id="first_element_{{i}}_{{i}}" type="text"
+                                                class="form-control select-stock-in-invoice"
+                                                [(ngModel)]="transaction.inventory.stock.name"
+                                                (ngModelChange)="searchStock($event);changeStock(i, transaction?.inventory?.stock?.name)"
+                                                [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}"
+                                                (focus)="onPartyAccBlur();onStockFocus($event, i)"
+                                                (blur)="onStockItemBlur($event, qty);filterByText = ''"
+                                                (keydown)="detectKey($event)" />
+                                        </td>
+                                        <td>
+                                            <input onReturn type="text" class="form-control text-right" #qty
+                                                [(ngModel)]="transaction.inventory.quantity"
+                                                (ngModelChange)="changeQuantity(i, $event)"
+                                                (focus)="selectRow(true,i, null); hideListItems();"
+                                                [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}"
+                                                decimalDigitsDirective [DecimalPlaces]="2"
+                                                [disabled]="!transaction.inventory.stock.name" />
+                                        </td>
+                                        <td>
+                                            <input onReturn type="text" class="form-control text-right"
+                                                [(ngModel)]="transaction.inventory.unit.rate"
+                                                (ngModelChange)="changePrice(i,$event)" (focus)="selectRow(true,i,null)"
+                                                [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}"
+                                                decimalDigitsDirective [DecimalPlaces]="2"
+                                                [disabled]="!transaction.inventory.stock.name" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control text-left"
+                                                [(ngModel)]="transaction.inventory.unit.stockUnitCode" [readonly]="true"
+                                                (focus)="selectRow(true,i)"
+                                                [disabled]="!transaction.inventory.stock.name" />
+                                        </td>
+                                        <td>
+                                            <input onReturn type="text" class="form-control text-right" #toAmountField
+                                                id="stock_{{i}}" [(ngModel)]="transaction.inventory.amount"
+                                                (ngModelChange)="amountChanged(i)"
+                                                (focus)="selectRow(true,i);addNewStock(transaction.inventory.amount,transaction, i)"
+                                                (keydown.Tab)="addNewStock(transaction.inventory.amount,transaction, i)"
+                                                [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}"
+                                                decimalDigitsDirective [DecimalPlaces]="2"
+                                                [disabled]="!transaction.inventory.stock.name"
+                                                (blur)="checkIfEnteredAmountIsZero(transaction.inventory.amount, i, 'stock')" />
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
+                            <tr *ngIf="stockTotal">
+                                <td colspan="4"></td>
+                                <td class>
+                                    <input type="text" [value]="stockTotal" readonly disabled
+                                        class="form-control text-right" />
+                                    <div class="bdrB"></div>
+                                </td>
+                            </tr>
+                            <br />
+                            <!-- accounts entry -->
+                            <!--  -->
+                            <ng-container *ngFor="let transaction of accountsTransaction;let i=index;let l=last">
+                                <tr [ngClass]="{'activeRow': isSelectedRow && selectedAccIdx === i}">
+                                    <td colspan="2"><input data-accountlistid="i" onReturn type="text"
+                                            class="form-control invoice-account-field" #particular
+                                            [(ngModel)]="transaction.selectedAccount.account"
+                                            (ngModelChange)="searchAccount($event);"
+                                            (focus)="selectedAccIdx=i; onAccountFocus($event, i)"
+                                            [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
+                                            (keydown)="detectKey($event, i === 0)" (blur)="onAccountBlur(particular)" />
+                                    </td>
+                                    <td>
+                                        <input onReturn type="text" class="form-control text-right"
+                                            decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.rate"
+                                            (ngModelChange)="calculateRate(i, transaction?.rate)"
+                                            (focus)="selectedAccIdx=i; hideListItems()"
+                                            [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
+                                            [disabled]="!transaction.selectedAccount.account" />
+                                    </td>
+                                    <td><input onReturn type="text" *ngIf="transaction.rate" class="form-control"
+                                            [value]="'%'" disabled readonly /></td>
+                                    <td>
+                                        <!-- (change)="changeTotal(i, transaction.amount)" -->
+                                        <input type="text" id="account_{{i}}" class="form-control text-right"
+                                            decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount"
+                                            (keyup.Enter)="selectedAccIdx=i;addNewAccount(transaction.amount, l)"
+                                            [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
+                                            [disabled]="!transaction.selectedAccount.account"
+                                            (blur)="checkIfEnteredAmountIsZero(transaction.amount, i, 'account')"
+                                            onReturn />
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="total_box text-right pull-right">
-          <span><strong>{{ stockTotal + accountsTotal | number: '1.2-2' }}</strong></span>
-        </div>
-      </div>
-    </div>
-  </div>
+            <!--  purchase as INVOICE -->
+            <div class="clearfix">
+                <div class="col-xs-4">
+                    <div class="form-group">
+                        <label>Narration:</label>
+                        <textarea #narrationBox onReturn id="invoice-narration" class="form-control appearance_none"
+                            name="narration" (keyup.enter)="openConfirmBox(submitButton)"
+                            (keydown.tab)="openConfirmBox(submitButton)" [(ngModel)]="data.description" resize="false"
+                            rows="6"></textarea>
+                    </div>
+                </div>
 
-  <div class="sidebar_list form-control" [hidden]="!showLedgerAccountList">
-    <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
-    <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
-    <!-- (noToggleClick)="toggleSelected($event)" (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight" [dropdownMinHeight]="dropdownMinHeight"-->
-    <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList"
-                             [showList]="showLedgerAccountList" [isFilterEnabled]="true"
-                             (selected)="onItemSelected($event)" [(ngModel)]="currentSelectedValue"
-                             [placeholder]="'Select Option'"
-                             [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [multiple]="false"
-                             [ItemHeight]="33"></accounting-virtual-list>
-  </div>
+                <div [hidden]="!showConfirmationBox" class="confirmation_box bdr text-center pd2">
+                    <div class="">
+                        <h1>Accept?</h1>
+                        <div class="pdT2">
+                            <button class="btn btn-primary" #submitButton (keyup)="keyUpOnSubmitButton($event)"
+                                (click)="saveEntry();">Yes
+                            </button>
+                            <button class="btn btn-default" #resetButton
+                                (keyup)="keyUpOnResetButton($event)">No</button>
+                            <br />
+                            <button class="btn btn-link mrT1" (click)="refreshEntry();">Reset</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="total_box text-right pull-right">
+                    <span><strong>{{ stockTotal + accountsTotal | number: '1.2-2' }}</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar_list form-control" [hidden]="!showLedgerAccountList">
+        <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
+        <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
+        <!-- (noToggleClick)="toggleSelected($event)" (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight" [dropdownMinHeight]="dropdownMinHeight"-->
+        <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList"
+            [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)"
+            [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'" [notFoundLink]="true"
+            (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [ItemHeight]="33"></accounting-virtual-list>
+    </div>
 
 </div>
 
 <!--quick account popup -->
 <div bsModal #quickAccountModal="bs-modal" [config]="{ backdrop: false }" class="modal" role="dialog">
-  <div class="modal-dialog modal-sm" style="width: 298px">
-    <div class="modal-content">
-      <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
+    <div class="modal-dialog modal-sm" style="width: 298px">
+        <div class="modal-content">
+            <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="aside-overlay" (click)="closeCreateStock($event)" *ngIf="asideMenuStateForProductService === 'in'"></div>
 <aside-inventory-stock-group [autoFocus]="autoFocusStockGroupField" (closeAsideEvent)="closeCreateStock()"
-                             [class]="asideMenuStateForProductService"
-                             [@slideInOut]="asideMenuStateForProductService"></aside-inventory-stock-group>
+    [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService">
+</aside-inventory-stock-group>

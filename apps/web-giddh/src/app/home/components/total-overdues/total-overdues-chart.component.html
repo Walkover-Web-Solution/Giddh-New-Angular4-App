@@ -1,61 +1,61 @@
 <div id="live">
-    <div class="panel panel-default">
+	<div class="panel panel-default">
 
-        <div class="panel-heading">
-            <strong>Total Overdues</strong>
-            <i class="glyphicon glyphicon-refresh mrL2" (click)="refreshChart()"></i>
-            <div class="pull-right dashboard-filter">
-                <div class="btn-group" dropdown>
-                    <span id="button-basic" dropdownToggle class="dropdown-toggle monthDropdown"
-                        aria-controls="dropdown-basic">
-                        <datepickeroptions (filterDates)="getFilterDate($event)"></datepickeroptions>
-                    </span>
-                </div>
-            </div>
-        </div>
+		<div class="panel-heading">
+			<strong>Total Overdues</strong>
+			<i class="glyphicon glyphicon-refresh mrL2" (click)="refreshChart()"></i>
+			<div class="pull-right dashboard-filter">
+				<div class="btn-group" dropdown>
+					<span id="button-basic" dropdownToggle class="dropdown-toggle monthDropdown"
+						aria-controls="dropdown-basic">
+						<datepickeroptions (filterDates)="getFilterDate($event)"></datepickeroptions>
+					</span>
+				</div>
+			</div>
+		</div>
 
-        <div class="panel-body pos-rel {{requestInFlight}}">
-            <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
-                    <div class="no-data mrT2 loader-main">
-                            <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-                            <div class="spinner2">
-                                <div class="cube1"></div>
-                                <div class="cube2"></div>
-                            </div>
-                        </div>
-            </div>
-            <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
-                <perfect-scrollbar [scrollIndicators]="true">
-                    <chart [options]="totaloverDueChart" *ngIf="dataFound" #currentRatio></chart>
-                    <div class="noDataAvailable" *ngIf="!dataFound">
-                        <img src="{{imgPath}}noDataChart.svg" alt="no data found">
-                    </div>
-                    <div class="clearfix mrB2">
-                        <div class="">
-                            <span class="mrB1 dueAmount">Customer Due</span>
-                            <span class="total_amt pull-right vendorDueText">
-                                <span>{{amountSettings.baseCurrencySymbol}}</span>
-                                {{ totalRecievable | giddhCurrency }}</span>
-                        </div>
-                        <div class="clearfix">
-                            <small>Pending Invoices</small>
-                            <small class="pull-right">{{ ReceivableDurationAmt | giddhCurrency }}</small>
-                        </div>
-                    </div>
-                    <div class="clearfix mrB2">
-                        <div class="">
-                            <span class="mrB1 dueAmount">Vendor Due</span>
-                            <span
-                                class="total_amt pull-right customerDueText"><span>{{amountSettings.baseCurrencySymbol}}</span>
-                                {{ totalPayable | giddhCurrency }}</span>
-                        </div>
-                        <div class="clearfix">
-                            <small>Pending Invoices</small>
-                            <small class="pull-right">{{ PaybaleDurationAmt | giddhCurrency }}</small>
-                        </div>
-                    </div>
-                </perfect-scrollbar>
-            </div>
-        </div>
-    </div>
+		<div class="panel-body pos-rel {{requestInFlight}}">
+			<div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
+				<div class="no-data mrT2 loader-main">
+					<!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+					<div class="spinner2">
+						<div class="cube1"></div>
+						<div class="cube2"></div>
+					</div>
+				</div>
+			</div>
+			<div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
+				<perfect-scrollbar [scrollIndicators]="true">
+					<chart [options]="totaloverDueChart" *ngIf="dataFound" #currentRatio></chart>
+					<div class="noDataAvailable" *ngIf="!dataFound">
+						<img src="{{imgPath}}noDataChart.svg" alt="no data found">
+					</div>
+					<div class="clearfix mrB2">
+						<div class="">
+							<span class="mrB1 dueAmount">Customer Due</span>
+							<span class="total_amt pull-right vendorDueText">
+								<span>{{amountSettings.baseCurrencySymbol}}</span>
+								{{ totalRecievable | giddhCurrency }}</span>
+						</div>
+						<div class="clearfix">
+							<small>Pending Invoices</small>
+							<small class="pull-right">{{ ReceivableDurationAmt | giddhCurrency }}</small>
+						</div>
+					</div>
+					<div class="clearfix mrB2">
+						<div class="">
+							<span class="mrB1 dueAmount">Vendor Due</span>
+							<span
+								class="total_amt pull-right customerDueText"><span>{{amountSettings.baseCurrencySymbol}}</span>
+								{{ totalPayable | giddhCurrency }}</span>
+						</div>
+						<div class="clearfix">
+							<small>Pending Invoices</small>
+							<small class="pull-right">{{ PaybaleDurationAmt | giddhCurrency }}</small>
+						</div>
+					</div>
+				</perfect-scrollbar>
+			</div>
+		</div>
+	</div>
 </div>

@@ -1,6 +1,6 @@
 <div id="shareModal" class=" shareGrp ">
     <div class="modal-header">
-        <h3>Create New {{onboardingType}}</h3>
+        <h3>Create New {{onBoardingType}}</h3>
         <span aria-hidden="true" class="close" data-dismiss="modal"
             (click)="removeCompanySessionData(); closeModal();">×</span>
     </div>
@@ -22,25 +22,31 @@
 
                         <div class="col-xs-12 m-t-50">
                             <div class="input-group form-group dblock m-b-30">
-                                <p>Enter your {{onboardingType?.toLowerCase()}} name to start hassle free accounting
+                                <p>Enter your {{onBoardingType?.toLowerCase()}} name to start hassle free accounting
                                     with
                                     Giddh.</p>
                             </div>
                         </div>
                         <div class="col-xs-12 mrB3">
-                            <label for="name" class="m-t-40">{{onboardingType}} Name<sup>*</sup></label>
-                            <input name="name" id="name" type="text" required placeholder="Name"
-                                [(ngModel)]="company.name" class="form-control" (blur)="makeMeCaptialize(company.name)">
-                            <!-- /btn-account -->
+                            <label for="name" class="m-t-40">{{onBoardingType}} Name<sup>*</sup></label>
+                            <input name="name" id="name" #itemName type="text" required placeholder="Name"
+                                (input)="handleOnBoardingNameChange($event?.target?.value)" [(ngModel)]="company.name"
+                                class="form-control"
+                                (blur)="makeMeCaptialize(company.name);validateOnBoardingItemName($event?.target?.value);">
+                            <span class="name-error"
+                                *ngIf="companyForm?.form?.controls['name']?.errors?.maxlength">Maximum characters limit:
+                                100</span>
                         </div>
 
                         <div class="col-xs-6 mrB3 ">
                             <span>
                                 <label for="country" class="d-block">Country<sup>*</sup></label>
-                                <sh-select id="country" [options]="countrySource$ | async" [isFilterEnabled]="true"
-                                    name="country" [(ngModel)]="company.country" class="pull-left select-caret"
-                                    [required]='true' (selected)="selectCountry($event)"
-                                    [defaultValue]="selectedCountry" style="width: 100%">
+                                <sh-select id="country"
+                                    [disabled]="(onBoardingType === 'Warehouse') ? 'disabled' : null"
+                                    [options]="countrySource$ | async" [isFilterEnabled]="true" name="country"
+                                    [(ngModel)]="company.country" class="pull-left select-caret" [required]='true'
+                                    (selected)="selectCountry($event)" [defaultValue]="selectedCountry"
+                                    style="width: 100%">
                                 </sh-select>
                             </span>
                         </div>
@@ -48,6 +54,7 @@
                             <label for="">Currency <sup>*</sup></label>
                             <div class="custom-select select-caret pos-rel">
                                 <sh-select name="baseCurrency" [options]="currencySource$ | async" required
+                                    [disabled]="(onBoardingType === 'Warehouse') ? 'disabled' : null"
                                     [isFilterEnabled]="true" [(ngModel)]="company.baseCurrency"
                                     [defaultValue]="company.baseCurrency"></sh-select>
                             </div>
@@ -61,7 +68,7 @@
                                         [options]="countryPhoneCode" [(ngModel)]="company.phoneCode"
                                         [defaultValue]="company.phoneCode">
                                     </sh-select>
-                                    <input type="text" pattern="[0-9]*" class="form-control pull-right mrR1" required
+                                    <input type="text" pattern="[0-9]*" class="form-control pull-right" required
                                         placeholder="9998899988" id="contactNo" autocomplete="off"
                                         (blur)="isValidMobileNumber(mobileNoEl)" [(ngModel)]="company.contactNo"
                                         name="contactNo" #mobileNoEl />

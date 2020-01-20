@@ -4,15 +4,15 @@ import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 
 @NgModule({
-  declarations: [],
-  imports: [
-    TallysyncRoutingModule,
-    NgbTypeaheadModule.forRoot(),
-    DigitsOnlyModule
-  ],
-  exports: [
-    TallysyncRoutingModule
-  ]
+    declarations: [],
+    imports: [
+        TallysyncRoutingModule,
+        NgbTypeaheadModule.forRoot(),
+        DigitsOnlyModule
+    ],
+    exports: [
+        TallysyncRoutingModule
+    ]
 })
 export class TallysyncModule {
 }

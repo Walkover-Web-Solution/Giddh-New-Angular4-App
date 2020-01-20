@@ -1,4 +1,4 @@
-import {NgModuleRef} from '@angular/core';
+import { NgModuleRef } from '@angular/core';
 
 export interface Environment {
     production: boolean;
@@ -10,6 +10,5 @@ export interface Environment {
     isCordova: boolean;
     OtpToken: string;
     APP_FOLDER: string;
-
     decorateModuleRef(modRef: NgModuleRef<any>): NgModuleRef<any>;
 }

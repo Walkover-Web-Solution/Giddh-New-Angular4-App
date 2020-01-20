@@ -1,14 +1,14 @@
 .dropdown-menu li label {
-  padding: 5px 0;
-  display: block;
-  cursor: pointer;
+    padding: 5px 0;
+    display: block;
+    cursor: pointer;
 }
 
 .dropdown-menu {
-  width: 100%;
-  box-shadow: none;
-  border-radius: 0;
-  min-width: 200px;
-  max-height: 180px;
-  overflow: auto;
+    width: 100%;
+    box-shadow: none;
+    border-radius: 0;
+    min-width: 200px;
+    max-height: 180px;
+    overflow: auto;
 }

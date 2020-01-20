@@ -1,34 +1,34 @@
-import {distinct, takeUntil} from 'rxjs/operators';
-import {Observable, ReplaySubject} from 'rxjs';
-import {IOption} from './../../theme/ng-select/option.interface';
-import {GIDDH_DATE_FORMAT} from './../../shared/helpers/defaultDateFormat';
-import {Store} from '@ngrx/store';
-import {AppState} from '../../store';
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ManufacturingActions} from '../../actions/manufacturing/manufacturing.actions';
-import {MfStockSearchRequestClass} from '../manufacturing.utility';
-import {IMfStockSearchRequest} from '../../models/interfaces/manufacturing.interface';
-import {InventoryAction} from '../../actions/inventory/inventory.actions';
+import { distinct, takeUntil } from 'rxjs/operators';
+import { Observable, ReplaySubject } from 'rxjs';
+import { IOption } from './../../theme/ng-select/option.interface';
+import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ManufacturingActions } from '../../actions/manufacturing/manufacturing.actions';
+import { MfStockSearchRequestClass } from '../manufacturing.utility';
+import { IMfStockSearchRequest } from '../../models/interfaces/manufacturing.interface';
+import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import {StocksResponse} from '../../models/api-models/Inventory';
-import {Router} from '@angular/router';
-import {createSelector} from 'reselect';
-import {AuditLogsActions} from "../../actions/audit-logs/audit-logs.actions";
-import {BsDatepickerConfig} from "ngx-bootstrap/datepicker";
+import { StocksResponse } from '../../models/api-models/Inventory';
+import { Router } from '@angular/router';
+import { createSelector } from 'reselect';
+import { AuditLogsActions } from "../../actions/audit-logs/audit-logs.actions";
+import { BsDatepickerConfig } from "ngx-bootstrap/datepicker";
 
 const filter1 = [
-	{label: 'Greater', value: 'greaterThan'},
-	{label: 'Less Than', value: 'lessThan'},
-	{label: 'Greater Than or Equals', value: 'greaterThanOrEquals'},
-	{label: 'Less Than or Equals', value: 'lessThanOrEquals'},
-	{label: 'Equals', value: 'equals'}
+	{ label: 'Greater', value: 'greaterThan' },
+	{ label: 'Less Than', value: 'lessThan' },
+	{ label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
+	{ label: 'Less Than or Equals', value: 'lessThanOrEquals' },
+	{ label: 'Equals', value: 'equals' }
 ];
 
 const filter2 = [
-	{label: 'Quantity Inward', value: 'quantityInward'},
+	{ label: 'Quantity Inward', value: 'quantityInward' },
 	// { name: 'Quantity Outward', uniqueName: 'quantityOutward' },
-	{label: 'Voucher Number', value: 'voucherNumber'}
+	{ label: 'Voucher Number', value: 'voucherNumber' }
 ];
 
 @Component({
@@ -57,9 +57,9 @@ export class MfReportComponent implements OnInit, OnDestroy {
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 	constructor(private store: Store<AppState>,
-	            private manufacturingActions: ManufacturingActions,
-	            private inventoryAction: InventoryAction,
-	            private router: Router, public bsConfig: BsDatepickerConfig) {
+		private manufacturingActions: ManufacturingActions,
+		private inventoryAction: InventoryAction,
+		private router: Router, public bsConfig: BsDatepickerConfig) {
 		this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
 		this.mfStockSearchRequest.product = '';
 		this.mfStockSearchRequest.searchBy = '';

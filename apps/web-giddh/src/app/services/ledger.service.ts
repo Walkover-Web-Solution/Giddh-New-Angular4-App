@@ -86,10 +86,6 @@ export class LedgerService {
     public CreateLedger(model: BlankLedgerVM, accountUniqueName: string): Observable<BaseResponse<LedgerResponse[], BlankLedgerVM>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        //condition added for create ledger exchange rate visual issue
-        let originalExchangeRate = model.exchangeRate;
-        model.exchangeRate = model.exchangeRateForDisplay;
-        model.exchangeRateForDisplay = originalExchangeRate;
 
         return this._http.post(this.config.apiUrl + LEDGER_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
             map((res) => {

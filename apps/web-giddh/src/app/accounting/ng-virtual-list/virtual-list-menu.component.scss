@@ -1,57 +1,56 @@
-@import '../../../assets/css/color.scss';
+@import "../../../assets/css/color.scss";
 
 .menu {
-  margin: 0;
-  padding: 0;
-  position: absolute;
-  background-color: white;
-  width: 100%;
-  overflow: auto;
-  box-sizing: border-box;
-  z-index: 999;
-  box-shadow: 0 2px 3px 0 rgba(34, 36, 38, .15);
-  border-bottom: 1px solid rgba(34, 36, 38, .15);
-  border-left: 1px solid rgba(34, 36, 38, .15);
-  border-right: 1px solid rgba(34, 36, 38, .15);
-  border-radius: 0 0 2px 2px;
-  min-width: max-content;
-  margin-top: 1px;
-  min-height: 100%;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    background-color: white;
+    width: 100%;
+    overflow: auto;
+    box-sizing: border-box;
+    z-index: 999;
+    box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+    border-bottom: 1px solid rgba(34, 36, 38, 0.15);
+    border-left: 1px solid rgba(34, 36, 38, 0.15);
+    border-right: 1px solid rgba(34, 36, 38, 0.15);
+    border-radius: 0 0 2px 2px;
+    min-width: max-content;
+    margin-top: 1px;
+    min-height: 100%;
 }
 
 .item {
-  /* padding: 4px; */
-  cursor: pointer;
-  white-space: normal;
-  word-break: normal;
-  display: table;
-  width: 100%;
-  text-transform: capitalize;
+    /* padding: 4px; */
+    cursor: pointer;
+    white-space: normal;
+    word-break: normal;
+    display: table;
+    width: 100%;
+    text-transform: capitalize;
 }
 
 .item.selected {
-      color: $border-blue !important;
-    background: #EEEFF9 !important;
+    color: $border-blue !important;
+    background: #eeeff9 !important;
 }
 
 .item.hilighted {
-      color: $border-blue !important;
+    color: $border-blue !important;
     background: #e3e4ed !important;
 }
 
-
 .item > a {
-  padding: 6px 10px;
+    padding: 6px 10px;
 }
 
 .no-result-link > a {
-  color: #10aae0 !important;
+    color: #10aae0 !important;
 }
 
 #noresult:hover {
-  background: transparent;
+    background: transparent;
 }
 
 :host ::ng-deep .total-padding {
-  height: calc(100vh - 52px) !important;
+    height: calc(100vh - 52px) !important;
 }

@@ -1,301 +1,513 @@
 <div class="column content-column gst-filing-container navs-list">
 
-  <div class="tax-engine">
+    <div class="tax-engine">
 
-    <div class="column list-column expanded-list-column transactions-list">
+        <div class="column list-column expanded-list-column transactions-list">
 
-      <div class="scroll-y noscroll-x body fill">
+            <div class="scroll-y noscroll-x body fill">
 
-        <div class="reconciliation-type-band">
+                <div class="reconciliation-type-band">
 
-          <tabset class="sub-filter-nav-band">
+                    <tabset class="sub-filter-nav-band">
 
-            <!-- region Missing in GSTN -->
-            <tab (select)="reconcileTabChanged('notfoundonportal')">
+                        <!-- region Missing in GSTN -->
+                        <tab (select)="reconcileTabChanged('notfoundonportal')">
 
-              <ng-template tabHeading>
-                Missing in GSTN <span class="count">{{'(' + (gstNotFoundOnPortalData$ | async)?.count + ')'}}</span>
-              </ng-template>
+                            <ng-template tabHeading>
+                                Missing in GSTN <span
+                                class="count">{{'(' + (gstNotFoundOnPortalData$ | async)?.count + ')'}}</span>
+                            </ng-template>
 
-              <ng-container
-                *ngTemplateOutlet="commonTableTemplate;context:{ $implicit: (gstNotFoundOnPortalData$ | async)}"></ng-container>
+                            <ng-container
+                                *ngTemplateOutlet="commonTableTemplate;context:{ $implicit: (gstNotFoundOnPortalData$ | async), type: 'missingInGstin'}">
+                            </ng-container>
 
-              <ng-container
-                *ngTemplateOutlet="notFoundTmpl;context:{ $implicit:
-                (!(gstNotFoundOnPortalData$ | async)?.count) && (!(gstReconcileInvoiceRequestInProcess$ | async)) }"></ng-container>
+                            <ng-container *ngTemplateOutlet="notFoundTmpl;context:{ $implicit:
+                (!(gstNotFoundOnPortalData$ | async)?.count) && (!(gstReconcileInvoiceRequestInProcess$ | async)) }">
+                            </ng-container>
 
-              <ng-container
-                *ngTemplateOutlet="loaderTmpl;"></ng-container>
+                            <ng-container *ngTemplateOutlet="loaderTmpl;"></ng-container>
 
-              <div class="filings-empty-state" *ngIf="(gstNotFoundOnPortalData$ | async)?.count">
-                <pagination [totalItems]="(gstNotFoundOnPortalData$ | async)?.data?.totalItems"
-                            [itemsPerPage]="(gstNotFoundOnPortalData$ | async)?.data?.count"
-                            [boundaryLinks]="true"
-                            (pageChanged)="reconcilePageChanged($event, 'notfoundonportal')"
-                ></pagination>
-              </div>
+                            <div class="filings-empty-state"
+                                 *ngIf="!(gstReconcileInvoiceRequestInProcess$ | async) && (gstNotFoundOnPortalData$ | async)?.count > 20">
+                                <pagination [totalItems]="(gstNotFoundOnPortalData$ | async)?.data?.totalItems"
+                                            [itemsPerPage]="(gstNotFoundOnPortalData$ | async)?.data?.count"
+                                            [boundaryLinks]="true"
+                                            (pageChanged)="reconcilePageChanged($event, 'notfoundonportal')"></pagination>
+                            </div>
 
-            </tab>
-            <!-- endregion -->
+                        </tab>
+                        <!-- endregion -->
 
-            <!-- region Missing in Giddh -->
-            <tab (select)="reconcileTabChanged('notfoundongiddh')">
-              <ng-template tabHeading>
-                Missing in Giddh <span class="count">{{'(' + (gstNotFoundOnGiddhData$ | async)?.count + ')'}}</span>
-              </ng-template>
+                        <!-- region Missing in Giddh -->
+                        <tab (select)="reconcileTabChanged('notfoundongiddh')">
+                            <ng-template tabHeading>
+                                Missing in Giddh <span
+                                class="count">{{'(' + (gstNotFoundOnGiddhData$ | async)?.count + ')'}}</span>
+                            </ng-template>
 
-              <ng-container
-                *ngTemplateOutlet="commonTableTemplate;context:{ $implicit: (gstNotFoundOnGiddhData$ | async)}"></ng-container>
+                            <ng-container
+                                *ngTemplateOutlet="commonTableTemplate;context:{ $implicit: (gstNotFoundOnGiddhData$ | async), type: 'missingInGiddh'}">
+                            </ng-container>
 
-              <ng-container
-                *ngTemplateOutlet="notFoundTmpl;context:{ $implicit:
-                (!(gstNotFoundOnGiddhData$ | async)?.count) && (!(gstReconcileInvoiceRequestInProcess$ | async)) }"></ng-container>
+                            <ng-container *ngTemplateOutlet="notFoundTmpl;context:{ $implicit:
+                (!(gstNotFoundOnGiddhData$ | async)?.count) && (!(gstReconcileInvoiceRequestInProcess$ | async)) }">
+                            </ng-container>
 
-              <ng-container
-                *ngTemplateOutlet="loaderTmpl;"></ng-container>
+                            <ng-container *ngTemplateOutlet="loaderTmpl;"></ng-container>
 
-              <div class="filings-empty-state">
-                <div element-view-container-ref #pgGstNotFoundOnGiddh=elementviewcontainerref></div>
-              </div>
+                            <div class="filings-empty-state"
+                                 *ngIf="!(gstReconcileInvoiceRequestInProcess$ | async) && (gstNotFoundOnGiddhData$ | async)?.count > 20">
+                                <pagination [totalItems]="(gstNotFoundOnGiddhData$ | async)?.data?.totalItems"
+                                            [itemsPerPage]="(gstNotFoundOnGiddhData$ | async)?.data?.count"
+                                            [boundaryLinks]="true"
+                                            (pageChanged)="reconcilePageChanged($event, 'notfoundongiddh')"></pagination>
+                            </div>
+                        </tab>
+                        <!-- endregion -->
 
-              <div class="filings-empty-state" *ngIf="(gstNotFoundOnGiddhData$ | async)?.count">
-                <pagination [totalItems]="(gstNotFoundOnGiddhData$ | async)?.data?.totalItems"
-                            [itemsPerPage]="(gstNotFoundOnGiddhData$ | async)?.data?.count"
-                            [boundaryLinks]="true"
-                            (pageChanged)="reconcilePageChanged($event, 'notfoundongiddh')"
-                ></pagination>
-              </div>
-            </tab>
-            <!-- endregion -->
+                        <!-- region Partially Matched -->
+                        <tab (select)="reconcileTabChanged('partiallymatched')">
 
-            <!-- region Partially Matched -->
-            <tab (select)="reconcileTabChanged('partiallymatched')">
+                            <ng-template tabHeading>
+                                Partially Matched <span
+                                class="count">{{'(' + (gstPartiallyMatchedData$ | async)?.count + ')'}}</span>
+                            </ng-template>
 
-              <ng-template tabHeading>
-                Partially Matched <span class="count">{{'(' + (gstPartiallyMatchedData$ | async)?.count + ')'}}</span>
-              </ng-template>
+                            <ng-container
+                                *ngTemplateOutlet="commonTableTemplate;context:{ $implicit: (gstPartiallyMatchedData$ | async), type: 'partiallyMatched'}">
+                            </ng-container>
 
-              <ng-container
-                *ngTemplateOutlet="commonTableTemplate;context:{ $implicit: (gstPartiallyMatchedData$ | async)}"></ng-container>
+                            <ng-container *ngTemplateOutlet="notFoundTmpl;context:{ $implicit:
+                (!(gstPartiallyMatchedData$ | async)?.count) && (!(gstReconcileInvoiceRequestInProcess$ | async)) }">
+                            </ng-container>
 
-              <ng-container
-                *ngTemplateOutlet="notFoundTmpl;context:{ $implicit:
-                (!(gstPartiallyMatchedData$ | async)?.count) && (!(gstReconcileInvoiceRequestInProcess$ | async)) }"></ng-container>
+                            <ng-container *ngTemplateOutlet="loaderTmpl;"></ng-container>
 
-              <ng-container
-                *ngTemplateOutlet="loaderTmpl;"></ng-container>
+                            <div class="filings-empty-state"
+                                 *ngIf="!(gstReconcileInvoiceRequestInProcess$ | async) && (gstPartiallyMatchedData$ | async)?.count > 20">
+                                <pagination [totalItems]="(gstPartiallyMatchedData$ | async)?.data?.totalItems"
+                                            [itemsPerPage]="(gstPartiallyMatchedData$ | async)?.data?.count"
+                                            [boundaryLinks]="true"
+                                            (pageChanged)="reconcilePageChanged($event, 'partiallymatched')"></pagination>
+                            </div>
 
-              <div class="filings-empty-state">
-                <div element-view-container-ref #pgPartiallyMatched=elementviewcontainerref></div>
-              </div>
+                        </tab>
+                        <!-- endregion -->
 
-              <div class="filings-empty-state" *ngIf="(gstPartiallyMatchedData$ | async)?.count">
-                <pagination [totalItems]="(gstPartiallyMatchedData$ | async)?.data?.totalItems"
-                            [itemsPerPage]="(gstPartiallyMatchedData$ | async)?.data?.count"
-                            [boundaryLinks]="true"
-                            (pageChanged)="reconcilePageChanged($event, 'partiallymatched')"
-                ></pagination>
-              </div>
+                        <!-- region Matched -->
+                        <tab (select)="reconcileTabChanged('matched')">
 
-            </tab>
-            <!-- endregion -->
+                            <ng-template tabHeading>
+                                Matched <span class="count">{{'(' + (gstMatchedData$ | async)?.count + ')'}}</span>
+                            </ng-template>
 
-            <!-- region Matched -->
-            <tab (select)="reconcileTabChanged('matched')">
+                            <ng-container
+                                *ngTemplateOutlet="commonTableTemplate;context:{ $implicit: (gstMatchedData$ | async), type: 'matched'}">
+                            </ng-container>
 
-              <ng-template tabHeading>
-                Matched <span class="count">{{'(' + (gstMatchedData$ | async)?.count + ')'}}</span>
-              </ng-template>
+                            <ng-container *ngTemplateOutlet="notFoundTmpl;context:{ $implicit:
+                (!(gstMatchedData$ | async)?.count) && (!(gstReconcileInvoiceRequestInProcess$ | async)) }">
+                            </ng-container>
 
-              <ng-container
-                *ngTemplateOutlet="commonTableTemplate;context:{ $implicit: (gstMatchedData$ | async)}"></ng-container>
+                            <ng-container *ngTemplateOutlet="loaderTmpl;"></ng-container>
 
-              <ng-container
-                *ngTemplateOutlet="notFoundTmpl;context:{ $implicit:
-                (!(gstMatchedData$ | async)?.count) && (!(gstReconcileInvoiceRequestInProcess$ | async)) }"></ng-container>
+                            <div class="filings-empty-state"
+                                 *ngIf="!(gstReconcileInvoiceRequestInProcess$ | async) && (gstMatchedData$ | async)?.count && (gstMatchedData$ | async)?.count > 20">
+                                <pagination [totalItems]="(gstMatchedData$ | async)?.data?.totalItems"
+                                            [itemsPerPage]="(gstMatchedData$ | async)?.data?.count"
+                                            [boundaryLinks]="true"
+                                            (pageChanged)="reconcilePageChanged($event, 'matched')"></pagination>
+                            </div>
 
-              <ng-container
-                *ngTemplateOutlet="loaderTmpl;"></ng-container>
+                        </tab>
+                        <!-- endregion -->
 
-              <div class="filings-empty-state">
-                <div element-view-container-ref #pgMatched=elementviewcontainerref></div>
-              </div>
+                    </tabset>
 
-              <div class="filings-empty-state" *ngIf="(gstMatchedData$ | async)?.count">
-                <pagination [totalItems]="(gstMatchedData$ | async)?.data?.totalItems"
-                            [itemsPerPage]="(gstMatchedData$ | async)?.data?.count"
-                            [boundaryLinks]="true"
-                            (pageChanged)="reconcilePageChanged($event, 'matched')"
-                ></pagination>
-              </div>
+                </div>
 
-            </tab>
-            <!-- endregion -->
-
-          </tabset>
+            </div>
 
         </div>
 
-      </div>
-
     </div>
-
-  </div>
 
 </div>
 
-<!-- region partiallyMatched & matched common table template -->
-<ng-template #commonTableTemplate let-list>
+<!-- region common table template -->
+<ng-template #commonTableTemplate let-list let-type="type">
 
-  <ng-container *ngIf="list?.count">
+    <ng-container *ngIf="list?.count">
 
-    <table class="table zi-table table-fixed reconciliations-table table-hover "
-           *ngIf="list?.count">
-      <thead>
-      <tr>
-        <!--        <th id="1" class="cursor-pointer bulk-selection-cell "><input type="checkbox"-->
-        <!--                                                                      class="cursor-pointer "></th>-->
-        <th style="width:250px" id="4" class="text-left">
-          <div style="position: relative">
-            <div data-test-title="Vendor Details" title="Vendor Details" class="pull-left over-flow"> Vendor
-              Details
-            </div>
-            <!---->
-          </div>
-        </th>
-        <th style="width:155px" class="text-left">
-          <div style="position: relative">
-            <div data-test-title="Transaction Date" title="Transaction Date" class="pull-left over-flow">
-              Transaction Date
-            </div>
-            <!---->
-          </div>
-        </th>
-        <th style="width:130px" class="text-left">
-          <div style="position: relative">
-            <div data-test-title="Place of Supply" title="Place of Supply" class="pull-left over-flow">
-              Place of Supply
-            </div>
-            <!---->
-          </div>
-        </th>
-        <th style="width:140px" class="text-right">
-          <div style="position: relative">
-            <div data-test-title="Taxable Amount" title="Taxable Amount" class=" over-flow"> Taxable
-              Amount
-            </div>
-            <!---->
-          </div>
-        </th>
-        <th style="" class="text-right">
-          <div style="position: relative">
-            <div data-test-title="IGST" title="IGST" class=" over-flow"> IGST</div>
-            <!---->
-          </div>
-        </th>
-        <th style="" class="text-right">
-          <div style="position: relative">
-            <div data-test-title="CGST" title="CGST" class=" over-flow"> CGST</div>
-            <!---->
-          </div>
-        </th>
-        <th style="" class="text-right">
-          <div style="position: relative">
-            <div data-test-title="SGST" title="SGST" class=" over-flow"> SGST</div>
-            <!---->
-          </div>
-        </th>
-        <th style="" class="text-right">
-          <div style="position: relative">
-            <div data-test-title="Cess" title="Cess" class=" over-flow"> Cess</div>
-            <!---->
-          </div>
-        </th>
-        <th style="" class="text-right">
-          <div style="position: relative">
-            <div data-test-title="Total Amount" title="Total Amount" class=" over-flow"> Total Amount</div>
-            <!---->
-          </div>
-        </th>
-        <!---->
-      </tr>
-      </thead>
+        <table class="table zi-table table-fixed reconciliations-table table-hover " *ngIf="list?.count">
 
-      <tbody>
+            <thead>
 
-      <ng-container *ngFor="let item of list?.data?.results">
-        <tr class="cursor-pointer ">
-          <!--          <td class="cursor-pointer bulk-selection-cell "><input type="checkbox" class="cursor-pointer ">-->
-          <!--          </td>-->
-          <td class="primary-details">
-            <div> {{item.ctin}}<span
-              class="text-muted font-xxs"> ({{item.invoice_number}})</span>
-            </div>
-            <!-- not to implement now
-        <div class="actions-dropdown">
-            <div data-toggle="dropdown" class="btn btn-xs actions-dropdown-btn dropdown-toggle"> Actions <span class="caret"></span></div>
-            <ul class="dropdown-menu">
-                <li><a>Create &amp; Match</a></li>
-                <li><a>Reject</a></li>
-                <li><a>Mark as Pending</a></li>
-            </ul>
-        </div> -->
-          </td>
-          <td class="">
-            <div class="unrecognized-value"> {{ item.invoice_date ? item.invoice_date : '-' }} </div>
-          </td>
-          <td class="">
-            <div class="unrecognized-value"> {{item.pos ? item.pos : '-'}}</div>
-          </td>
-          <td class="text-right">
-            <div class="unrecognized-value"> {{item.taxable_amount | giddhCurrency}} </div>
-          </td>
-          <td class="text-right">
-            <div class="unrecognized-value"> {{item.igst_amount | giddhCurrency}} </div>
-          </td>
-          <td class="text-right">
-            <div class="unrecognized-value"> {{item.cgst_amount | giddhCurrency}} </div>
-          </td>
-          <td class="text-right">
-            <div class="unrecognized-value"> {{item.sgst_amount | giddhCurrency}} </div>
-          </td>
-          <td class="text-right">
-            <div class="unrecognized-value"> {{item.cess_amount | giddhCurrency}} </div>
-          </td>
-          <td class="text-right">
-            <div class="unrecognized-value"> {{item.grand_total | giddhCurrency}} </div>
-          </td>
-        </tr>
-      </ng-container>
-      </tbody>
-    </table>
-  </ng-container>
+            <ng-container
+                *ngTemplateOutlet="commonHeaderTemplateForReconciliationTable">
+            </ng-container>
+
+            </thead>
+
+            <tbody>
+
+            <ng-container *ngFor="let item of list?.data?.results">
+
+                <ng-container *ngIf="type === 'missingInGstin'">
+                    <ng-container *ngTemplateOutlet="missingInGstinTemplate;context:{ $implicit: item}"></ng-container>
+                </ng-container>
+
+                <ng-container *ngIf="type === 'missingInGiddh'">
+                    <ng-container *ngTemplateOutlet="missingInGiddhTemplate;context:{ $implicit: item}"></ng-container>
+                </ng-container>
+
+                <ng-container *ngIf="type === 'partiallyMatched'">
+                    <ng-container *ngTemplateOutlet="partiallyMatchedTemplate;context:{ $implicit: item}"></ng-container>
+                </ng-container>
+
+                <ng-container *ngIf="type === 'matched'">
+                    <ng-container *ngTemplateOutlet="matchedTemplate;context:{ $implicit: item}"></ng-container>
+                </ng-container>
+
+            </ng-container>
+
+            </tbody>
+        </table>
+    </ng-container>
 
 </ng-template>
 <!--endregion-->
 
+<!-- region common header template for reconciliation table -->
+<ng-template #commonHeaderTemplateForReconciliationTable>
+    <tr>
+
+        <th style="width:250px" id="4" class="text-left">
+            <div style="position: relative">
+                <div data-test-title="Vendor Details" title="Vendor Details" class="pull-left over-flow">
+                    Vendor
+                    Details
+                </div>
+            </div>
+        </th>
+
+        <th style="width:155px" class="text-left">
+            <div style="position: relative">
+                <div data-test-title="Transaction Date" title="Transaction Date"
+                     class="pull-left over-flow">
+                    Transaction Date
+                </div>
+            </div>
+        </th>
+
+        <th style="width:130px" class="text-left">
+            <div style="position: relative">
+                <div data-test-title="Place of Supply" title="Place of Supply" class="pull-left over-flow">
+                    Place of Supply
+                </div>
+            </div>
+        </th>
+
+        <th style="width:140px" class="text-right">
+            <div style="position: relative">
+                <div data-test-title="Taxable Amount" title="Taxable Amount" class=" over-flow"> Taxable
+                    Amount
+                </div>
+            </div>
+        </th>
+
+        <th class="text-right">
+            <div style="position: relative">
+                <div data-test-title="IGST" title="IGST" class=" over-flow"> IGST</div>
+            </div>
+        </th>
+
+        <th class="text-right">
+            <div style="position: relative">
+                <div data-test-title="CGST" title="CGST" class=" over-flow"> CGST</div>
+            </div>
+        </th>
+
+        <th class="text-right">
+            <div style="position: relative">
+                <div data-test-title="SGST" title="SGST" class=" over-flow"> SGST</div>
+            </div>
+        </th>
+
+        <th class="text-right">
+            <div style="position: relative">
+                <div data-test-title="Cess" title="Cess" class=" over-flow"> Cess</div>
+            </div>
+        </th>
+
+        <th class="text-right">
+            <div style="position: relative">
+                <div data-test-title="Total Amount" title="Total Amount" class=" over-flow"> Total Amount
+                </div>
+            </div>
+        </th>
+
+    </tr>
+</ng-template>
+<!-- endregion -->
+
+<!-- region missing in gstin template -->
+<ng-template let-item #missingInGstinTemplate>
+    <tr class="cursor-pointer ">
+
+        <td class="primary-details">
+
+            <div> {{item.ctin}}<span class="text-muted font-xxs"> ({{item.invoice_number}})</span>
+            </div>
+        </td>
+
+        <td>
+            <div> {{ item.invoice_date ? item.invoice_date : '-' }} </div>
+            <div class="unrecognized-value pt-1"> -</div>
+        </td>
+
+        <td>
+            <div> {{item.pos ? item.pos : '-'}}</div>
+            <div class="unrecognized-value pt-1"> -</div>
+        </td>
+
+        <td class="text-right">
+            <div> {{item.taxable_amount | giddhCurrency}} </div>
+            <div class="unrecognized-value pt-1"> -</div>
+        </td>
+
+        <td class="text-right">
+            <div> {{item.igst_amount | giddhCurrency}} </div>
+            <div class="unrecognized-value pt-1"> -</div>
+        </td>
+
+        <td class="text-right">
+            <div> {{item.cgst_amount | giddhCurrency}} </div>
+            <div class="unrecognized-value pt-1"> -</div>
+        </td>
+
+        <td class="text-right">
+            <div> {{item.sgst_amount | giddhCurrency}} </div>
+            <div class="unrecognized-value pt-1"> -</div>
+        </td>
+
+        <td class="text-right">
+            <div> {{item.cess_amount | giddhCurrency}} </div>
+            <div class="unrecognized-value pt-1"> -</div>
+        </td>
+
+        <td class="text-right">
+            <div> {{item.grand_total | giddhCurrency}} </div>
+            <div class="unrecognized-value pt-1"> -</div>
+        </td>
+
+    </tr>
+</ng-template>
+<!-- endregion -->
+
+<!-- region missing in giddh template -->
+<ng-template let-item #missingInGiddhTemplate>
+    <tr class="cursor-pointer ">
+
+        <td class="primary-details">
+
+            <div> {{item.ctin}}<span class="text-muted font-xxs"> ({{item.invoice_number}})</span>
+            </div>
+        </td>
+
+        <td>
+            <div> -</div>
+            <div class="unrecognized-value pt-1"> {{ item.invoice_date ? item.invoice_date : '-' }} </div>
+        </td>
+
+        <td>
+            <div> -</div>
+            <div class="unrecognized-value pt-1"> {{item.pos ? item.pos : '-'}}</div>
+        </td>
+
+        <td class="text-right">
+            <div> -</div>
+            <div class="unrecognized-value pt-1"> {{item.taxable_amount | giddhCurrency}} </div>
+        </td>
+
+        <td class="text-right">
+            <div> -</div>
+            <div class="unrecognized-value pt-1"> {{item.igst_amount | giddhCurrency}} </div>
+        </td>
+
+        <td class="text-right">
+            <div> -</div>
+            <div class="unrecognized-value pt-1"> {{item.cgst_amount | giddhCurrency}} </div>
+        </td>
+
+        <td class="text-right">
+            <div> -</div>
+            <div class="unrecognized-value pt-1"> {{item.sgst_amount | giddhCurrency}} </div>
+        </td>
+
+        <td class="text-right">
+            <div> -</div>
+            <div class="unrecognized-value pt-1"> {{item.cess_amount | giddhCurrency}} </div>
+        </td>
+
+        <td class="text-right">
+            <div> -</div>
+            <div class="unrecognized-value pt-1"> {{item.grand_total | giddhCurrency}} </div>
+        </td>
+
+    </tr>
+</ng-template>
+<!-- endregion -->
+
+<!-- region partially matched template -->
+<ng-template let-item #partiallyMatchedTemplate>
+    <tr class="cursor-pointer ">
+
+        <td class="primary-details">
+
+            <div> {{item.ctin}}<span class="text-muted font-xxs"> ({{item.invoice_number}})</span>
+            </div>
+        </td>
+
+        <td>
+            <div> {{ item.invoice_date ? item.invoice_date : '-' }} </div>
+            <div [ngClass]="{ 'unrecognized-value': item.invoice_date !== item?.data_in_giddh?.invoice_date }" class="pt-1">
+                {{ item?.data_in_giddh?.invoice_date ? item?.data_in_giddh?.invoice_date : '-' }}
+            </div>
+        </td>
+
+        <td>
+            <div> {{item.pos ? item.pos : '-'}}</div>
+            <div [ngClass]="{ 'unrecognized-value': item.pos !== item?.data_in_giddh?.pos }" class="pt-1">
+                {{item?.data_in_giddh?.pos ? item?.data_in_giddh?.pos : '-'}}
+            </div>
+        </td>
+
+        <td class="text-right">
+            <div> {{item.taxable_amount | giddhCurrency}} </div>
+            <div [ngClass]="{ 'unrecognized-value': item.taxable_amount !== item?.data_in_giddh?.taxable_amount }" class="pt-1">
+                {{item?.data_in_giddh?.taxable_amount | giddhCurrency}}
+            </div>
+        </td>
+
+        <td class="text-right">
+            <div> {{item.igst_amount | giddhCurrency}} </div>
+            <div [ngClass]="{ 'unrecognized-value': item.igst_amount !== item?.data_in_giddh?.igst_amount }" class="pt-1">
+                {{item?.data_in_giddh?.igst_amount | giddhCurrency}}
+            </div>
+        </td>
+
+        <td class="text-right">
+            <div> {{item.cgst_amount | giddhCurrency}} </div>
+            <div [ngClass]="{ 'unrecognized-value': item.cgst_amount !== item?.data_in_giddh?.cgst_amount }" class="pt-1">
+                {{item?.data_in_giddh?.cgst_amount | giddhCurrency}}
+            </div>
+        </td>
+
+        <td class="text-right">
+            <div> {{item.sgst_amount | giddhCurrency}} </div>
+            <div [ngClass]="{ 'unrecognized-value': item.sgst_amount !== item?.data_in_giddh?.sgst_amount }" class="pt-1">
+                {{item?.data_in_giddh?.sgst_amount | giddhCurrency}}
+            </div>
+        </td>
+
+        <td class="text-right">
+            <div> {{item.cess_amount | giddhCurrency}} </div>
+            <div [ngClass]="{ 'unrecognized-value': item.cess_amount !== item?.data_in_giddh?.cess_amount }" class="pt-1">
+                {{item?.data_in_giddh?.cess_amount | giddhCurrency}}
+            </div>
+        </td>
+
+        <td class="text-right">
+            <div> {{item.grand_total | giddhCurrency}} </div>
+            <div [ngClass]="{ 'unrecognized-value': item.grand_total !== item?.data_in_giddh?.grand_total }" class="pt-1">
+                {{item?.data_in_giddh?.grand_total | giddhCurrency}}
+            </div>
+        </td>
+
+    </tr>
+</ng-template>
+<!-- endregion -->
+
+<!-- region matched template -->
+<ng-template let-item #matchedTemplate>
+    <tr class="cursor-pointer">
+
+        <td class="primary-details">
+
+            <div> {{item.ctin}}<span class="text-muted font-xxs"> ({{item.invoice_number}})</span>
+            </div>
+        </td>
+
+        <td>
+            <div> {{ item.invoice_date ? item.invoice_date : '-' }} </div>
+            <div class="pt-1"> {{ item?.data_in_giddh?.invoice_date ? item?.data_in_giddh?.invoice_date : '-' }} </div>
+        </td>
+
+        <td>
+            <div> {{item.pos ? item.pos : '-'}}</div>
+            <div class="pt-1"> {{item?.data_in_giddh?.pos ? item?.data_in_giddh?.pos : '-'}}</div>
+        </td>
+
+        <td class="text-right">
+            <div> {{item.taxable_amount | giddhCurrency}} </div>
+            <div class="pt-1"> {{item?.data_in_giddh?.taxable_amount | giddhCurrency}} </div>
+        </td>
+
+        <td class="text-right">
+            <div> {{item.igst_amount | giddhCurrency}} </div>
+            <div class="pt-1"> {{item?.data_in_giddh?.igst_amount | giddhCurrency}} </div>
+        </td>
+
+        <td class="text-right">
+            <div> {{item.cgst_amount | giddhCurrency}} </div>
+            <div class="pt-1"> {{item?.data_in_giddh?.cgst_amount | giddhCurrency}} </div>
+        </td>
+
+        <td class="text-right">
+            <div> {{item.sgst_amount | giddhCurrency}} </div>
+            <div class="pt-1"> {{item?.data_in_giddh?.sgst_amount | giddhCurrency}} </div>
+        </td>
+
+        <td class="text-right">
+            <div> {{item.cess_amount | giddhCurrency}} </div>
+            <div class="pt-1"> {{item?.data_in_giddh?.cess_amount | giddhCurrency}} </div>
+        </td>
+
+        <td class="text-right">
+            <div> {{item.grand_total | giddhCurrency}} </div>
+            <div class="pt-1"> {{item?.data_in_giddh?.grand_total | giddhCurrency}} </div>
+        </td>
+
+    </tr>
+</ng-template>
+<!-- endregion -->
+
 <!-- region loader template-->
 <ng-template #loaderTmpl>
-  <div class="filings-empty-state" *ngIf="(gstReconcileInvoiceRequestInProcess$ | async)">
+    <div class="filings-empty-state" *ngIf="(gstReconcileInvoiceRequestInProcess$ | async)">
 
         <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
         <div class="spinner2">
             <div class="cube1"></div>
             <div class="cube2"></div>
 
-    </div>
+        </div>
 
-    <div class="empty-msg"><span>  Loading Data.  </span></div>
-  </div>
+        <div class="empty-msg"><span> Loading Data. </span></div>
+    </div>
 </ng-template>
 <!--endregion-->
 
 <!--region common not found msg-->
 <ng-template #notFoundTmpl let-show>
-  <div class="filings-empty-state" *ngIf="show">
-    <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" alt="nofound"/>
-    <div class="empty-msg"><span>All transactions in Giddh Books whose vendor GSTIN, invoice number,&nbsp; invoice date, invoice amount and tax amount are same as the transactions in GSTN are displayed in this section.</span>
+    <div class="filings-empty-state" *ngIf="show">
+        <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" alt="nofound"/>
+        <div class="empty-msg"><span>All transactions in Giddh Books whose vendor GSTIN, invoice number,&nbsp; invoice
+                date, invoice amount and tax amount are same as the transactions in GSTN are displayed in this
+                section.</span>
+        </div>
     </div>
-  </div>
 </ng-template>
 <!--endregion-->

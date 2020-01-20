@@ -1,15 +1,15 @@
 <div id="" class="">
-  <div class="modal-header clearfix">
-    <h3>Confirmation</h3>
-    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
-  </div>
-  <div class="modal-body clearfix" id="export-body">
-    <form name="newRole" novalidate class="" autocomplete="off">
-      <h3 [innerHTML]="message"></h3>
-      <div class="text-right mrT4">
-        <button type="button" class="btn btn-sm btn-success" (click)="onConfirmation()">Yes</button>
-        <button type="button" class="btn btn-sm btn-primary" (click)="onCancel()">No</button>
-      </div>
-    </form>
-  </div>
+    <div class="modal-header clearfix">
+        <h3>Confirmation</h3>
+        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
+    </div>
+    <div class="modal-body clearfix" id="export-body">
+        <form name="newRole" novalidate class="" autocomplete="off">
+            <h3 [innerHTML]="message"></h3>
+            <div class="text-right mrT4">
+                <button type="button" class="btn btn-sm btn-success" (click)="onConfirmation()">Yes</button>
+                <button type="button" class="btn btn-sm btn-primary" (click)="onCancel()">No</button>
+            </div>
+        </form>
+    </div>
 </div>

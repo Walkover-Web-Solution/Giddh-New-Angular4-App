@@ -1,6 +1,6 @@
 export enum userLoginStateEnum {
-  notLoggedIn,
-  userLoggedIn,
-  newUserLoggedIn,
-  needTwoWayAuth
+    notLoggedIn,
+    userLoggedIn,
+    newUserLoggedIn,
+    needTwoWayAuth
 }

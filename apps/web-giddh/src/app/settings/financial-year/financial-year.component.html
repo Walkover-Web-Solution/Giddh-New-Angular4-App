@@ -1,102 +1,110 @@
 <div class="box clearfix mrT1">
-  <!--<div>
+    <!--<div>
   {{ financialYearObj | json }}
 </div>-->
-  <form>
-    <div class="row">
-      <div class="col-xs-12">
-        <h1 class="section_head">Financial Year(s) - {{ currentCompanyName }}</h1>
-
+    <form>
         <div class="row">
-          <div class="col-sm-7 col-xs-12 ">
-            <table class="table-bordered basic table financial-year onMobileView">
-              <thead>
-                <tr>
-                  <th>Sr. No.</th>
-                  <th>From</th>
-                  <th>To</th>
-                  <th>Lock Status</th>
-                </tr>
-              </thead>
-              <tbody *ngIf="financialYearObj && financialYearObj.financialYears">
-                <tr *ngFor="let financialYear of financialYearObj.financialYears; let i = index">
-                  <td data-title="#">{{i+1}}</td>
-                  <td data-title="From">{{financialYear.financialYearStarts}}</td>
-                  <td data-title="#To">{{financialYear.financialYearEnds}}</td>
-                  <td data-title="Lock Status" *ngIf="currentCompanyFinancialYearUN != financialYear.uniqueName"
-                    class="status">
-                    <span *ngIf="financialYear.isLocked"><i class="fa fa-toggle-off fa-2x cp" aria-hidden="true"
-                        (click)="lockUnlockFinancialYear(financialYear);"></i> <label>Locked</label></span>
-                    <span *ngIf="!financialYear.isLocked"><i class="fa fa-toggle-on fa-2x cp" aria-hidden="true"
-                        (click)="lockUnlockFinancialYear(financialYear);"></i> <label>Unlocked</label></span>
-                  </td>
-                  <td data-title="Lock Status" *ngIf="currentCompanyFinancialYearUN == financialYear.uniqueName">
-                    Current Financial Year (can not be locked)
-                  </td>
-                </tr>
-              </tbody>
-              <tbody *ngIf="!financialYearObj || !financialYearObj.financialYears.length"
-                class="onMobileView noRecords">
-                <tr>
-                  <td colspan="4" class="text-center empty_table">
-                    <h1>No Record Found !!</h1>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            <div class="col-xs-12">
+                <h1 class="section_head">Financial Year(s) - {{ currentCompanyName }}</h1>
+
+                <div class="row">
+                    <div class="col-sm-7 col-xs-12 ">
+                        <table class="table-bordered basic table financial-year onMobileView">
+                            <thead>
+                                <tr>
+                                    <th>Sr. No.</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Lock Status</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf="financialYearObj && financialYearObj.financialYears">
+                                <tr *ngFor="let financialYear of financialYearObj.financialYears; let i = index">
+                                    <td data-title="#">{{i+1}}</td>
+                                    <td data-title="From">{{financialYear?.financialYearStarts}}</td>
+                                    <td data-title="#To">{{financialYear?.financialYearEnds}}</td>
+                                    <td data-title="Lock Status"
+                                        *ngIf="currentCompanyFinancialYearUN != financialYear?.uniqueName"
+                                        class="status">
+                                        <span *ngIf="financialYear?.isLocked"><i class="fa fa-toggle-off fa-2x cp"
+                                                aria-hidden="true"
+                                                (click)="lockUnlockFinancialYear(financialYear);"></i>
+                                            <label>Locked</label></span>
+                                        <span *ngIf="!financialYear?.isLocked"><i class="fa fa-toggle-on fa-2x cp"
+                                                aria-hidden="true"
+                                                (click)="lockUnlockFinancialYear(financialYear);"></i>
+                                            <label>Unlocked</label></span>
+                                    </td>
+                                    <td data-title="Lock Status"
+                                        *ngIf="currentCompanyFinancialYearUN == financialYear?.uniqueName">
+                                        Current Financial Year (can not be locked)
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="!financialYearObj || !financialYearObj.financialYears.length"
+                                class="onMobileView noRecords">
+                                <tr>
+                                    <td colspan="4" class="text-center empty_table">
+                                        <h1>No Record Found !!</h1>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+
+                <hr class="clearfix">
+
+                <div class="financialYearField row">
+                    <div class="form-group mrT1 col-md-4 col-sm-12 clearfix">
+                        <label>Switch Financial Year</label>
+                        <div class="row">
+                            <span class=" col-sm-7 col-xs-12">
+                                <sh-select placeholder="Select Financial Year" name="currentCompanyFinancialYearUN"
+                                    [ngModel]="currentCompanyFinancialYearUN" [options]="financialOptions"
+                                    (selected)="selectFinancialYearOption($event)" [width]="'100%'"  >
+                                </sh-select>
+                            </span>
+                            <span class="col-sm-4 col-xs-12">
+                                <button class="btn btn-success btn-sm " (click)="switchFY()">Save</button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-4 col-sm-12 mrT1 mrB clearfix">
+                        <label>Add Financial Year</label>
+                        <div class="row">
+                            <span class=" col-sm-7 col-xs-12 ">
+                                <sh-select placeholder="Select Financial Year" [options]="yearOptions"
+                                    (selected)="selectYear($event)">
+                                </sh-select>
+                            </span>
+                            <div class="col-sm-4 col-xs-12">
+                                <button class="btn btn-success btn-sm " (click)="addFY()">Save</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mrT1 col-md-4 col-sm-12 mrB clearfix">
+                        <label>Financial Year Period</label>
+                        <div class="row">
+                            <span class="col-sm-7 col-xs-12 ">
+                                <sh-select name="selectedFYPeriod" [ngModel]="selectedFYPeriod"
+                                    placeholder="Financial Year Period" (selected)="selectFYPeriod($event)"
+                                    [options]="FYPeriodOptions">
+                                </sh-select>
+                            </span>
+                            <div class="col-sm-4 col-xs-12">
+                                <button class="btn btn-success btn-sm " (click)="updateFYPeriod()">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
         </div>
-
-
-
-        <hr class="clearfix">
-
-        <div class="financialYearField row">
-          <div class="form-group mrT1 col-md-4 col-sm-12 clearfix">
-            <label>Switch Financial Year</label>
-            <div class="row">
-              <span class=" col-sm-7 col-xs-12">
-                <sh-select placeholder="Select Financial Year" name="currentCompanyFinancialYearUN"
-                  [ngModel]="currentCompanyFinancialYearUN" [options]="financialOptions"
-                  (selected)="selectFinancialYearOption($event)" [width]="'100%'"  >
-                </sh-select>
-              </span>
-              <span class="col-sm-4 col-xs-12">
-                <button class="btn btn-success btn-sm " (click)="switchFY()">Save</button>
-              </span>
-            </div>
-          </div>
-
-          <div class="form-group col-md-4 col-sm-12 mrT1 mrB clearfix">
-            <label>Add Financial Year</label>
-            <div class="row">
-              <span class=" col-sm-7 col-xs-12 ">
-                <sh-select placeholder="Select Financial Year" [options]="yearOptions" (selected)="selectYear($event)">
-                </sh-select>
-              </span>
-              <div class="col-sm-4 col-xs-12">
-                <button class="btn btn-success btn-sm " (click)="addFY()">Save</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group mrT1 col-md-4 col-sm-12 mrB clearfix">
-            <label>Financial Year Period</label>
-            <div class="row">
-              <span class="col-sm-7 col-xs-12 ">
-                <sh-select name="selectedFYPeriod" [ngModel]="selectedFYPeriod" placeholder="Financial Year Period"
-                  (selected)="selectFYPeriod($event)" [options]="FYPeriodOptions">
-                </sh-select>
-              </span>
-              <div class="col-sm-4 col-xs-12">
-                <button class="btn btn-success btn-sm " (click)="updateFYPeriod()">Save</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-      </div>
-    </div>
-  </form>
+    </form>
 </div>

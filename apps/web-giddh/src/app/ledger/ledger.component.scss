@@ -63,8 +63,7 @@ input {
 }
 .ledgHead input[type="search"] {
     min-width: auto;
-    background: #e6e7e8 !important;
-    border-color: #e6e7e8 !important;
+    padding-left: 27px !important;
 }
 .ledger-head-top i.icon-search.pos-abs {
     background-color: #5b64c9;
@@ -205,12 +204,13 @@ input {
     position: relative;
     z-index: 99;
     cursor: default;
+    top: 1px;
 }
 .inputWrapper {
     display: block !important;
     width: 100% !important;
     position: relative;
-    height: 36px !important;
+    height: 37px !important;
 }
 .inputWrapper:before {
     position: absolute;
@@ -286,10 +286,10 @@ sh-select:focus {
     display: none;
 }
 .ledgHead .icomoon_ico {
-    color: $dark-blue00;
+    color: #999;
     width: 36px;
     height: 36px;
-    border: 1px solid $border-blue;
+    border: 1px solid #d9d9d9;
     padding: 3px;
     display: flex;
     justify-content: center;
@@ -403,6 +403,7 @@ sh-select:focus {
 .advnceSearchFilter {
     justify-content: center;
     align-items: center;
+    margin-right: 7px;
 }
 .subTotal {
     font-size: 14px !important;
@@ -413,6 +414,7 @@ sh-select:focus {
     vertical-align: middle;
     display: flex;
     align-items: center;
+    margin-right: 10px;
 }
 .modal-ledger {
     width: 70%;
@@ -421,7 +423,28 @@ sh-select:focus {
     justify-content: space-between;
 }
 .d-flex.search-ledger-field {
+    align-items: center;
     margin-right: 8px;
+}
+.clear-filter-btn {
+    color: #1a237e;
+    font-size: 14px;
+}
+.clear-filter-btn i {
+    font-size: 12px;
+}
+.search-ledger-field {
+    .btn-danger,
+    .btn-success,
+    .btn-warning {
+        font-size: 16px;
+        width: 36px;
+        padding: 0px;
+        height: 36px;
+    }
+}
+.transaction-in-short {
+    margin-bottom: 80px;
 }
 // reponsive
 @media only screen and (max-width: 1366px) {
@@ -447,7 +470,7 @@ sh-select:focus {
         display: block;
     }
     .ledgHead table td[class*="col-"],
-    .ledgHead table td .select2-container {
+    toggle-switch .ledgHead table td .select2-container {
         min-height: initial;
         height: initial;
         max-height: initial;
@@ -468,9 +491,10 @@ sh-select:focus {
     .daterngoption {
         width: 100% !important;
     }
-    .search-options {
-        padding: 0;
+    .daterngoption {
+        margin-top: 10px;
     }
+
     .advancSearchBlock {
         padding: 0;
     }

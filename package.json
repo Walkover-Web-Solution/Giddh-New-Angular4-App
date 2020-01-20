@@ -1,6 +1,6 @@
 {
     "name": "giddh-workspaces",
-    "version": "6.5.23",
+    "version": "7.0.0",
     "license": "MIT",
     "scripts": {
         "ng": "ng",
@@ -35,6 +35,7 @@
         "postinstall": "electron-rebuild install-app-deps",
         "postinstall.electron": "node tools/electron/postinstall",
         "postinstall.web": "node tools/web/postinstall",
+
         "build.cordova.prod": "node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build giddh-cordova --configuration=prod",
         "build.cordova.stage": "node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build giddh-cordova --configuration=stage",
         "build.electron.giddh": "npm run prepare.electron.giddh && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build electron-giddh --configuration=prod",
@@ -132,7 +133,7 @@
         "cross-env": "^5.2.0",
         "dotenv": "6.2.0",
         "electron": "^4.0.5",
-        "electron-builder": "^20.39.0",
+        "electron-builder": "21.2.0",
         "electron-installer-dmg": "~2.0.0",
         "electron-is-dev": "^1.1.0",
         "electron-log": "^3.0.5",

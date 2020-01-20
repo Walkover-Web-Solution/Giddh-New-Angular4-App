@@ -3,40 +3,40 @@ import { ReplaySubject } from 'rxjs';
 import { B2CSSummary } from '../../../../../../models/api-models/GstReconcile';
 
 @Component({
-  // tslint:disable-next-line:component-selector
-  selector: 'b2cs-summary',
-  templateUrl: './b2cs-summary.component.html',
-  styleUrls: ['./b2cs-summary.component.css'],
+    // tslint:disable-next-line:component-selector
+    selector: 'b2cs-summary',
+    templateUrl: './b2cs-summary.component.html',
+    styleUrls: ['./b2cs-summary.component.css'],
 })
 export class B2csSummaryComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() public brcsSummary: B2CSSummary[] = [];
-  public imgPath: string = '';
+    @Input() public brcsSummary: B2CSSummary[] = [];
+    public imgPath: string = '';
 
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor() {
-    //
-  }
+    constructor() {
+        //
+    }
 
-  public ngOnInit() {
-    this.imgPath = (isElectron|| isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
-  }
+    public ngOnInit() {
+        this.imgPath = (isElectron|| isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+    }
 
-  public pageChanged(event) {
-    // this.request['page'] = event.page;
-    // this._store.dispatch(this.gstrAction.GetReturnSummary(this.selectedGst, this.request));
-  }
+    public pageChanged(event) {
+        // this.request['page'] = event.page;
+        // this._store.dispatch(this.gstrAction.GetReturnSummary(this.selectedGst, this.request));
+    }
 
-  /**
-   * ngOnChnages
-   */
-  public ngOnChanges(s: SimpleChanges) {
-    //
-  }
+    /**
+     * ngOnChnages
+     */
+    public ngOnChanges(s: SimpleChanges) {
+        //
+    }
 
-  public ngOnDestroy() {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
-  }
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 
 }

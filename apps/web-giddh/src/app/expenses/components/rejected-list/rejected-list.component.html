@@ -1,125 +1,126 @@
 <div class="container-fluid" *ngIf="!(getPettycashRejectedReportInprocess$ | async) ">
 
-    <div class="table-responsive">
+	<div class="table-responsive">
 
-        <table class="table basic table-bordered mt-2 onMobileView">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Date
-                    <ng-container class="d-inline-block"
-                                  *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'entry_date'}"></ng-container>
-                </th>
-                <th>Submitted By
-                    <!-- <a class="search-icon" href="javascript:void(0)">
+		<table class="table basic table-bordered mt-2 onMobileView">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Date
+						<ng-container class="d-inline-block"
+							*ngTemplateOutlet="sortingTemplate;context: { $implicit: 'entry_date'}"></ng-container>
+					</th>
+					<th>Submitted By
+						<!-- <a class="search-icon" href="javascript:void(0)">
                         <i class="icon-search"></i>
                     </a> -->
-                </th>
-                <th>Account
-                </th>
-                <th class="text-right">Amount
-                    <ng-container class="d-inline-block ml-1"
-                                  *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
-                </th>
-                <th>Payment/Receipt
-                </th>
-                <th>File</th>
-                <th>Reason of Rejection</th>
-                <th>Action</th>
-            </tr>
-            </thead>
+					</th>
+					<th>Account
+					</th>
+					<th class="text-right">Amount
+						<ng-container class="d-inline-block ml-1"
+							*ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
+					</th>
+					<th>Payment/Receipt
+					</th>
+					<th>File</th>
+					<th>Reason of Rejection</th>
+					<th>Action</th>
+				</tr>
+			</thead>
 
-            <tbody>
+			<tbody>
 
-            <tr *ngFor="let expenses of RejectedItems let i =index">
-                <td data-title="#">{{i + 1}}</td>
+				<tr *ngFor="let expenses of RejectedItems let i =index">
+					<td data-title="#">{{i + 1}}</td>
 
-                <td data-title="Date">{{expenses.entryDate}}</td>
+					<td data-title="Date">{{expenses.entryDate}}</td>
 
-                <td data-title="Submitted By">{{expenses.createdBy.name}} </td>
+					<td data-title="Submitted By">{{expenses.createdBy.name}} </td>
 
-                <td data-title="Account">
-                    <i class="dot-icon dot-warning" *ngIf="expenses.entryType==='sales'"></i>
-                    <i class="dot-icon dot-success" *ngIf="expenses.entryType==='deposit'"></i>
-                    <i class="dot-icon dot-primary"
-                       *ngIf="expenses.entryType==='expense'"></i>{{expenses.particularAccount.name}}
-                </td>
+					<td data-title="Account">
+						<i class="dot-icon dot-warning" *ngIf="expenses.entryType==='sales'"></i>
+						<i class="dot-icon dot-success" *ngIf="expenses.entryType==='deposit'"></i>
+						<i class="dot-icon dot-primary"
+							*ngIf="expenses.entryType==='expense'"></i>{{expenses.particularAccount.name}}
+					</td>
 
-                <td data-title="Amount"
-                    class="text-right pr-2">{{expenses.currencySymbol}} {{ expenses.amount | giddhCurrency}}</td>
+					<td data-title="Amount" class="text-right pr-2">{{expenses.currencySymbol}}
+						{{ expenses.amount | giddhCurrency}}</td>
 
-                <td data-title="Payment/Receipt">
-                    <span *ngIf="expenses.baseAccountCategory==='OTHER'" class="font-12 text-gray">A/c</span>
-                    <span *ngIf="expenses.baseAccountCategory==='BANK'" class="font-12 text-gray icon-atm-card"></span>
-                    <span *ngIf="expenses.baseAccountCategory==='CASH'"
-                          class="font-12 text-gray icon-cash"></span> {{expenses.baseAccount.name}}
-                </td>
+					<td data-title="Payment/Receipt">
+						<span *ngIf="expenses.baseAccountCategory==='OTHER'" class="font-12 text-gray">A/c</span>
+						<span *ngIf="expenses.baseAccountCategory==='BANK'"
+							class="font-12 text-gray icon-atm-card"></span>
+						<span *ngIf="expenses.baseAccountCategory==='CASH'" class="font-12 text-gray icon-cash"></span>
+						{{expenses.baseAccount.name}}
+					</td>
 
-                <td data-title="File">
-<!--                    <a href="javascript:void(0)" class="font-12" *ngIf="!expenses.fileNames">-->
-<!--                        <i class="icon-file-path middle"></i> attach file</a>-->
-                    <i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i> {{expenses.fileNames}}
-                </td>
+					<td data-title="File">
+						<!--                    <a href="javascript:void(0)" class="font-12" *ngIf="!expenses.fileNames">-->
+						<!--                        <i class="icon-file-path middle"></i> attach file</a>-->
+						<i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i> {{expenses.fileNames}}
+					</td>
 
-                <td data-title="Reason of Rejection">{{expenses.statusMessage}}</td>
+					<td data-title="Reason of Rejection">{{expenses.statusMessage}}</td>
 
-                <td data-title="Action">
-                    <a (click)="revertActionClicked(expenses)" class="btn-icon">
-                        <i class="icon-Revert"></i>
-                    </a>
-                    <a (click)="deleteActionClicked(expenses)" class="btn-icon">
-                        <i class="icon-trash"></i>
-                    </a>
-                </td>
+					<td data-title="Action">
+						<a (click)="revertActionClicked(expenses)" class="btn-icon">
+							<i class="icon-Revert"></i>
+						</a>
+						<a (click)="deleteActionClicked(expenses)" class="btn-icon">
+							<i class="icon-trash"></i>
+						</a>
+					</td>
 
-            </tr>
+				</tr>
 
-            </tbody>
+			</tbody>
 
-        </table>
-    </div>
+		</table>
+	</div>
 </div>
 
 <div *ngIf="totalRejectedResponse?.totalItems > 20" class="paginationWrapper">
-    <pagination [totalItems]="totalRejectedResponse?.totalItems" [maxSize]="5" class="pagination-sm"
-                [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;" nextText="&#9658;"
-                (pageChanged)="pageChanged($event)"></pagination>
+	<pagination [totalItems]="totalRejectedResponse?.totalItems" [maxSize]="5" class="pagination-sm"
+		[boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;" nextText="&#9658;"
+		(pageChanged)="pageChanged($event)"></pagination>
 </div>
 
 <div *ngIf="(getPettycashRejectedReportInprocess$ | async) ">
 
-    <div class="no-data mrT2 loader-main">
-        <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-        <div class="spinner2">
-            <div class="cube1"></div>
-            <div class="cube2"></div>
-        </div>
-    </div>
+	<div class="no-data mrT2 loader-main">
+		<!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+		<div class="spinner2">
+			<div class="cube1"></div>
+			<div class="cube2"></div>
+		</div>
+	</div>
 
 </div>
 
 <div class="no-data" *ngIf="!(RejectedItems.length) &&  !(getPettycashRejectedReportInprocess$ | async)">
-    <h1>No entries found within given criteria.</h1>
-    <h1>Do search with some other dates</h1>
+	<h1>No entries found within given criteria.</h1>
+	<h1>Do search with some other dates</h1>
 </div>
 
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
-    <div class="icon-pointer d-inline-block pull-right ml-1 pointer">
+	<div class="icon-pointer d-inline-block pull-right ml-1 pointer">
 
-        <div class="icon-sort-asc" *ngIf="pettycashRequest.sortBy !== col" (click)="sort('asc', col)"
-             [ngClass]="{'activeTextColor': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
-        </div>
+		<div class="icon-sort-asc" *ngIf="pettycashRequest.sortBy !== col" (click)="sort('asc', col)"
+			[ngClass]="{'activeTextColor': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
+		</div>
 
-        <div class="icon-sort-asc" *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'"
-             (click)="sort('desc', col)"
-             [ngClass]="{'activeTextColor': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
-        </div>
+		<div class="icon-sort-asc" *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'"
+			(click)="sort('desc', col)"
+			[ngClass]="{'activeTextColor': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
+		</div>
 
-        <div class="icon-sort-dsc" *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'"
-             (click)="sort('asc', col)"
-             [ngClass]="{'activeTextColor': pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'}">
-        </div>
-    </div>
+		<div class="icon-sort-dsc" *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'"
+			(click)="sort('asc', col)"
+			[ngClass]="{'activeTextColor': pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'}">
+		</div>
+	</div>
 </ng-template>
 <!-- endregion -->

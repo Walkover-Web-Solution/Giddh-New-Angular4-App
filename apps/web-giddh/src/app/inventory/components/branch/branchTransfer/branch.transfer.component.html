@@ -1,186 +1,184 @@
 <div class="aside-pane">
-  <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane()">X</button>
-  <div class="aside-body row">
+    <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane()">X</button>
+    <div class="aside-body row">
 
-    <div class="form-header">
-      <div>
-        <h3 class="">
-          <span>Transfer</span>
-          <span class="pull-right fs14">Multiple
-      <a href="javascript:void(0)" [ngClass]="{'text-link': mode === 'destination' }"
-         (click)="modeChanged('destination')">Destination</a>
-      /
-      <a href="javascript:void(0)" [ngClass]="{'text-link': mode === 'product' }"
-         (click)="modeChanged('product')">Products</a>
-      </span>
-        </h3>
+        <div class="form-header">
+            <div>
+                <h3 class="">
+                    <span>Transfer</span>
+                    <span class="pull-right fs14">Multiple
+                        <a href="javascript:void(0)" [ngClass]="{'text-link': mode === 'destination' }"
+                            (click)="modeChanged('destination')">Destination</a>
+                        /
+                        <a href="javascript:void(0)" [ngClass]="{'text-link': mode === 'product' }"
+                            (click)="modeChanged('product')">Products</a>
+                    </span>
+                </h3>
 
-      </div>
+            </div>
+        </div>
+
+        <div class="form_body witBg clearfix mrBChldLbl">
+            <div class="form_bg clearfix">
+                <form [formGroup]="form" class="form-group">
+
+                    <div class="row">
+                        <div class="col-xs-6 form-group">
+                            <label>Date <sup>*</sup></label>
+                            <input name="dateRange" formControlName="transferDate" type="text" autocomplete="off"
+                                class="form-control" bsDatepicker [minDate]="today"
+                                [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
+                            <span *ngIf="transferDate.invalid && (transferDate.dirty || transferDate.touched)">
+                                <span *ngIf="transferDate?.errors && transferDate?.errors['required']"
+                                    class="text-danger">Please select Date.</span>
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-6 form-group">
+                            <label>Source <sup>*</sup></label>
+                            <sh-select [options]="branches" [multiple]="false" [placeholder]="'Select Source'"
+                                #sourceSelect (selected)="sourceChanged($event)" formControlName="source"></sh-select>
+                            <span *ngIf="source.invalid && (source.dirty || source.touched)">
+                                <span *ngIf="source?.errors && source?.errors['required']" class="text-danger">Please
+                                    select Source.</span>
+                            </span>
+                        </div>
+
+                        <div class="col-xs-6 form-group" *ngIf="mode === 'destination'">
+                            <label>Product Name <sup>*</sup></label>
+                            <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
+                                formControlName="productName" (selected)="productChanged($event)"></sh-select>
+                            <span *ngIf="productName.invalid && (productName.dirty || productName.touched)">
+                                <span *ngIf="productName.errors && productName.errors['required']"
+                                    class="text-danger">Please select Product.</span>
+                            </span>
+                        </div>
+
+                        <div class="col-xs-6 form-group" *ngIf="mode === 'product'">
+                            <label>Destination <sup>*</sup></label>
+                            <sh-select [options]="otherBranches" [multiple]="false" [disabled]="!(source.value)"
+                                [placeholder]="'Select Destination'" formControlName="destination"></sh-select>
+                            <span *ngIf="destination.invalid && (destination.dirty || destination.touched)">
+                                <span *ngIf="destination.errors && destination.errors['required']"
+                                    class="text-danger">Please select Destination.</span>
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="" style="display: flex">
+
+                        <div class="" *ngIf="mode === 'destination'" style="margin-right: 20%">
+                            <label class="fs14">Destination <sup>*</sup></label>
+                        </div>
+                        <div class="" *ngIf="mode === 'product'" style="margin-right: 24%">
+                            <label class="fs14">Product <sup>*</sup></label>
+                        </div>
+
+                        <div class="" style="margin-right: 9%">
+                            <label class="fs14">Qty. <sup>*</sup></label>
+                        </div>
+                        <div class="" style="margin-right: 9%">
+                            <label class="fs14">Unit <sup>*</sup></label>
+                        </div>
+                        <div class="" style="margin-right: 9%">
+                            <label class="fs14">Rate <sup>*</sup></label>
+                        </div>
+                        <div class="">
+                            <label class="fs14">Value <sup>*</sup></label>
+                        </div>
+                    </div>
+
+
+                    <div class="row" formArrayName="transfers"
+                        *ngFor="let item of transfers.controls; let i = index;let first = first;let last = last">
+                        <div [formGroupName]="i">
+
+                            <div class="col-xs-4 form-group" *ngIf="mode === 'destination'">
+                                <sh-select [options]="otherBranches" [multiple]="false"
+                                    [placeholder]="'Select Destination'" [ItemHeight]="'33'"
+                                    formControlName="entityDetails"
+                                    [disabled]="!(source.value) || !(productName.value)"></sh-select>
+                                <span [hidden]="(item.get('entityDetails')?.value)" class="text-danger">Please select
+                                    Destination.</span>
+                            </div>
+
+                            <div class="col-xs-4 form-group" *ngIf="mode === 'product'">
+                                <sh-select [options]="stockListOptions" [multiple]="false"
+                                    [placeholder]="'Select Product'" [ItemHeight]="'33'" formControlName="entityDetails"
+                                    (selected)="productChanged($event, item)"
+                                    [disabled]="!(source.value) || !(destination.value)"></sh-select>
+                                <span [hidden]="(item.get('entityDetails')?.value)" class="text-danger">Please select
+                                    Product.</span>
+                            </div>
+
+                            <div style="display: flex">
+                                <!-- <label class="mrB1">Quantity</label> -->
+                                <!--<div>-->
+                                <div class="form-group" style="margin-right: 2%;">
+                                    <input name="" type="text" formControlName="quantity" decimalDigitsDirective
+                                        [minValue]="1" (change)="valueChanged(item)" class="form-control">
+                                </div>
+
+                                <div class="form-group" style="margin-right: 2%;" *ngIf="mode === 'destination'">
+                                    <input name="" type="text" formControlName="stockUnit" class="form-control">
+                                </div>
+
+                                <div class="form-group" style="margin-right: 2%;" *ngIf="mode === 'product'">
+                                    <input name="" type="text" formControlName="stockUnit" class="form-control">
+                                </div>
+
+
+                                <div class="form-group" style="margin-right: 2%;" *ngIf="mode === 'destination'">
+                                    <input name="" type="text" formControlName="rate" decimalDigitsDirective
+                                        [minValue]="1" (change)="valueChanged(item)" class="form-control">
+                                </div>
+
+                                <div class="form-group" style="margin-right: 2%;" *ngIf="mode === 'product'">
+                                    <input name="" type="text" formControlName="rate" (change)="valueChanged(item)"
+                                        decimalDigitsDirective [minValue]="1" class="form-control">
+                                </div>
+
+                                <div class="form-group" style="margin-right: 2%;">
+                                    <input name="" type="text" formControlName="value" [readonly]="true"
+                                        class="form-control">
+                                </div>
+
+                                <div class="mrT" style="margin-right: 2%;">
+                                    <button class="btn-link" (click)="addEntry(transfers.controls[i])" *ngIf="last">
+                                        <i class="fa fa-plus add_row"></i>
+                                    </button>
+                                    <button class="btn-link" (click)="deleteEntry(i)" *ngIf="!last">
+                                        <i class="fa fa-times dlet"></i>
+                                    </button>
+                                </div>
+                                <!--</div>-->
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12 form-group">
+                            <label>Description</label>
+                            <textarea formControlName="description" type="text" class="form-control"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 text-left mrT1">
+                            <button class="btn btn-default" (click)="closeAsidePane()">Cancel</button>
+                            <button class="btn btn-success" [ladda]="(isBranchCreationInProcess$ | async)"
+                                [disabled]="form.invalid" (click)="save()">Save
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </div>
-
-    <div class="form_body witBg clearfix mrBChldLbl">
-      <div class="form_bg clearfix">
-        <form [formGroup]="form" class="form-group">
-
-          <div class="row">
-            <div class="col-xs-6 form-group">
-              <label>Date <sup>*</sup></label>
-              <input name="dateRange" formControlName="transferDate" type="text" autocomplete="off"
-                     class="form-control" bsDatepicker [minDate]="today" [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
-              <span *ngIf="transferDate.invalid && (transferDate.dirty || transferDate.touched)">
-              <span *ngIf="transferDate?.errors && transferDate?.errors['required']" class="text-danger">Please select Date.</span>
-              </span>
-            </div>
-
-          </div>
-
-          <div class="row">
-            <div class="col-xs-6 form-group">
-              <label>Source <sup>*</sup></label>
-              <sh-select [options]="branches" [multiple]="false" [placeholder]="'Select Source'" #sourceSelect
-                         (selected)="sourceChanged($event)"
-                         formControlName="source"></sh-select>
-              <span
-                *ngIf="source.invalid && (source.dirty || source.touched)">
-              <span
-                *ngIf="source?.errors && source?.errors['required']"
-                class="text-danger">Please select Source.</span>
-              </span>
-            </div>
-
-            <div class="col-xs-6 form-group" *ngIf="mode === 'destination'">
-              <label>Product Name <sup>*</sup></label>
-              <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
-                         formControlName="productName" (selected)="productChanged($event)"></sh-select>
-              <span
-                *ngIf="productName.invalid && (productName.dirty || productName.touched)">
-              <span
-                *ngIf="productName.errors && productName.errors['required']"
-                class="text-danger">Please select Product.</span>
-              </span>
-            </div>
-
-            <div class="col-xs-6 form-group" *ngIf="mode === 'product'">
-              <label>Destination <sup>*</sup></label>
-              <sh-select [options]="otherBranches" [multiple]="false" [disabled]="!(source.value)"
-                         [placeholder]="'Select Destination'" formControlName="destination"></sh-select>
-              <span
-                *ngIf="destination.invalid && (destination.dirty || destination.touched)">
-              <span
-                *ngIf="destination.errors && destination.errors['required']"
-                class="text-danger">Please select Destination.</span>
-              </span>
-            </div>
-
-          </div>
-
-          <div class="" style="display: flex">
-
-            <div class="" *ngIf="mode === 'destination'" style="margin-right: 20%">
-              <label class="fs14">Destination <sup>*</sup></label>
-            </div>
-            <div class="" *ngIf="mode === 'product'" style="margin-right: 24%">
-              <label class="fs14">Product <sup>*</sup></label>
-            </div>
-
-            <div class="" style="margin-right: 9%">
-              <label class="fs14">Qty. <sup>*</sup></label>
-            </div>
-            <div class="" style="margin-right: 9%">
-              <label class="fs14">Unit <sup>*</sup></label>
-            </div>
-            <div class="" style="margin-right: 9%">
-              <label class="fs14">Rate <sup>*</sup></label>
-            </div>
-            <div class="">
-              <label class="fs14">Value <sup>*</sup></label>
-            </div>
-          </div>
-
-
-          <div class="row" formArrayName="transfers"
-               *ngFor="let item of transfers.controls; let i = index;let first = first;let last = last">
-            <div [formGroupName]="i">
-
-              <div class="col-xs-4 form-group" *ngIf="mode === 'destination'">
-                <sh-select [options]="otherBranches" [multiple]="false" [placeholder]="'Select Destination'"
-                           [ItemHeight]="'33'" formControlName="entityDetails"
-                           [disabled]="!(source.value) || !(productName.value)"></sh-select>
-                <span [hidden]="(item.get('entityDetails')?.value)"
-                      class="text-danger">Please select Destination.</span>
-              </div>
-
-              <div class="col-xs-4 form-group" *ngIf="mode === 'product'">
-                <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
-                           [ItemHeight]="'33'" formControlName="entityDetails" (selected)="productChanged($event, item)"
-                           [disabled]="!(source.value) || !(destination.value)"></sh-select>
-                <span [hidden]="(item.get('entityDetails')?.value)"
-                      class="text-danger">Please select Product.</span>
-              </div>
-
-              <div style="display: flex">
-                <!-- <label class="mrB1">Quantity</label> -->
-                <!--<div>-->
-                <div class="form-group" style="margin-right: 2%;">
-                  <input name="" type="text" formControlName="quantity" decimalDigitsDirective [minValue]="1"
-                         (change)="valueChanged(item)" class="form-control">
-                </div>
-
-                <div class="form-group" style="margin-right: 2%;" *ngIf="mode === 'destination'">
-                  <input name="" type="text" formControlName="stockUnit" class="form-control">
-                </div>
-
-                <div class="form-group" style="margin-right: 2%;" *ngIf="mode === 'product'">
-                  <input name="" type="text" formControlName="stockUnit" class="form-control">
-                </div>
-
-
-                <div class="form-group" style="margin-right: 2%;" *ngIf="mode === 'destination'">
-                  <input name="" type="text" formControlName="rate" decimalDigitsDirective [minValue]="1"
-                         (change)="valueChanged(item)" class="form-control">
-                </div>
-
-                <div class="form-group" style="margin-right: 2%;" *ngIf="mode === 'product'">
-                  <input name="" type="text" formControlName="rate" (change)="valueChanged(item)" decimalDigitsDirective
-                         [minValue]="1" class="form-control">
-                </div>
-
-                <div class="form-group" style="margin-right: 2%;">
-                  <input name="" type="text" formControlName="value" [readonly]="true" class="form-control">
-                </div>
-
-                <div class="mrT" style="margin-right: 2%;">
-                  <button class="btn-link" (click)="addEntry(transfers.controls[i])" *ngIf="last">
-                    <i class="fa fa-plus add_row"></i>
-                  </button>
-                  <button class="btn-link" (click)="deleteEntry(i)" *ngIf="!last">
-                    <i class="fa fa-times dlet"></i>
-                  </button>
-                </div>
-                <!--</div>-->
-              </div>
-
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-lg-12 form-group">
-              <label>Description</label>
-              <textarea formControlName="description" type="text" class="form-control"></textarea>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-xs-12 text-left mrT1">
-              <button class="btn btn-default" (click)="closeAsidePane()">Cancel</button>
-              <button class="btn btn-success" [ladda]="(isBranchCreationInProcess$ | async)" [disabled]="form.invalid"
-                      (click)="save()">Save
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-
-  </div>
 </div>

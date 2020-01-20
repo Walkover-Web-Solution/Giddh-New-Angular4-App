@@ -1,0 +1,101 @@
+<section [clickOutsideEnabled]="true" [delayClickOutsideInit]="true" [exclude]="defaultExcludedTags"
+(clickOutside)="handleOutSideClick($event)">
+	<section #wrapper [class.isVisible]="isOpen" class="universal-data-list-wrapper">
+		<!-- header -->
+		<ng-container>
+			<ng-container *ngTemplateOutlet="searchEleTemplate"></ng-container>
+		</ng-container>
+		<!-- end header -->
+
+		<ng-container *ngIf="searchedItems && searchedItems.length > 0">
+			<div #mainEle tabindex="0" class="universal-list-items" [style.width.px]="ItemWidth">
+				<ng-container *ngIf="isOpen">
+					<ng-container>
+						<commandk-virtual-scroll [items]="searchedItems" [childHeight]="ItemHeight" (highLightedItemEmitter)="handleHighLightedItemEvent($event)"
+							[style.max-height.px]="(searchedItems?.length !== 0) ? ItemHeight * (searchedItems && (searchedItems.length < visibleItems ) ? searchedItems.length : visibleItems) : ItemHeight" (scroll)="onScroll($event)">
+							<div class="item" *ngFor="let r of searchedItems; let i = index; trackBy: trackByFn" (mouseover)="highlightItem(i)" (mouseout)="unhighlightItem()" (click)="itemSelected(r)"
+								[ngClass]="{'selected': r.loop === highlightedItem, 'active': r.isSelected }">
+								<a href="javascript:void(0)" class="d-flex flex-row align-items-center">
+									<div class="item-icon">
+										<ng-container [ngSwitch]="r.type">
+											<ng-container *ngSwitchCase="'MENU'">
+												<span class="icon-bar"></span>
+											</ng-container>
+											<ng-container *ngSwitchCase="'GROUP'">
+												<span class="icon-group"></span>
+											</ng-container>
+											<ng-container *ngSwitchDefault>
+												<small class="">A/c</small>
+											</ng-container>
+										</ng-container>
+									</div>
+									<div class="item-details flex-grow-1">
+										<p>{{r.name}}</p>
+										<ng-container [ngSwitch]="r.type">
+											<ng-container *ngSwitchCase="'MENU'">
+												<small>Menu</small>
+											</ng-container>
+										</ng-container>
+										<ng-container *ngIf="r.parentGroups">
+											<p class="smlP">
+												<small>
+													<span *ngFor="let item of r.parentGroups; let idx = index">
+														<ng-container *ngIf="idx > 0">
+															<span>&nbsp;❯&nbsp;</span>
+														</ng-container>
+														{{item.name}}
+													</span>
+												</small>
+											</p>
+										</ng-container>
+										<ng-container *ngIf="r.type === 'ACCOUNT'">
+											<span class="hvrTxt">{{r.uniqueName}}</span>
+										</ng-container>
+									</div>
+								</a>
+							</div>
+						</commandk-virtual-scroll>
+					</ng-container>
+					<!-- end -->
+				</ng-container>
+			</div>
+		</ng-container>
+		<!--  end main list -->
+		<ng-container *ngIf="noResultsFound">
+			<div #mainEle>
+				<div class="p-2" [style.width.px]="ItemWidth">
+					<span>
+						<div class="jumper-results" [ngClass]="{'alC': showChannelCreateBtn}">
+							<p class="block text-center mrB2">No matches found. Did you spell it correctly?</p>
+							<ng-container *ngIf="showChannelCreateBtn">
+								<button class="btn btn-primary mrR2" (click)="triggerAddManage()">Create Group</button>
+								<button class="btn btn-primary" (click)="triggerAddManage()">Create A/c</button>
+							</ng-container>
+						</div>
+					</span>
+				</div>
+			</div>
+		</ng-container>
+	</section>
+	<!-- end main section -->
+</section>
+
+<!-- input box template -->
+<ng-template #searchEleTemplate>
+	<div #searchWrapEle class="search-wrapper" (click)="focusInSearchBox($event)">
+		<span class="searh-ico"><i class="icon-search"></i></span>
+		<span *ngFor="let item of listOfSelectedGroups; let idx = index">
+			<div class="vR">
+				<div class="vN">
+					<div class="vT">{{item.name}}</div>
+					<ng-container>
+						<span>&nbsp;❯&nbsp;</span>
+					</ng-container>
+				</div>
+			</div>
+		</span>
+		<input class="searchEle" #searchEle type="text" placeholder="Search" (focus)="handleFocus()"
+			(keydown)="handleKeydown($event)" (keyup)="initSearch($event, $event.target.value)" />
+	</div>
+	<i class="icon-cross close-navigation" (click)="close()"></i>
+</ng-template>

@@ -176,36 +176,6 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    /**
-     * addNumber
-     */
-    // public addNumber() {
-    //   let model = new SignupWithMobile();
-    //   model.mobileNumber = this.phoneNumber;
-    //   model.countryCode = Number(this.selectedCountry);
-    //   this.store.dispatch(this.verifyActions.verifyNumberRequest(model));
-    // }
-
-    /**
-     * verifyNumber
-     */
-    // public verifyNumber() {
-    //   let model = new VerifyMobileModel();
-    //   model.mobileNumber = this.phoneNumber;
-    //   model.oneTimePassword = this.verificationCode;
-    //   model.countryCode = Number(this.selectedCountry);
-    //   this.store.dispatch(this.verifyActions.verifyNumberCodeRequest(model));
-    // }
-
-    /**
-     * createCompany
-     */
-    // public createCompany() {
-    //   console.log(this.company.nameAlias);
-    //   this.company.uniqueName = this.getRandomString(this.company.name, this.company.city);
-    //   this.company.isBranch = this.createBranch;
-    //   this.store.dispatch(this.companyActions.CreateCompany(this.company));
-    // }
     public createCompany() {
 
         this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
@@ -251,7 +221,6 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
                 if (val) {
                     this.socialAuthService.signOut().then().catch((err) => {
-                        // console.log ('err', err);
                     });
                     this.store.dispatch(this._loginAction.ClearSession());
                     this.store.dispatch(this._loginAction.socialLogoutAttempt());

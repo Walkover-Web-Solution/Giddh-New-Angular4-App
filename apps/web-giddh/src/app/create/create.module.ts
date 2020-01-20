@@ -17,33 +17,33 @@ import { LaddaModule } from 'angular2-ladda';
 import { SampleTemplateComponent } from './components/invoice/templates/sample/sample.template.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    CreateRoutingModule,
-    ModalModule,
-    LaddaModule,
-    ShSelectModule,
-    ElementViewChildModule,
-    CollapseModule,
-    BsDatepickerModule.forRoot(),
-    ContenteditableModule
-  ],
-  declarations: [
-    CreateInvoiceComponent,
-    CreateInvoiceTemplateComponent,
-    CreateInvoiceStepsComponent,
-    CreateInvoiceHeaderComponent,
-    LetterTemplateComponent,
-    SampleTemplateComponent
-  ],
-  entryComponents: [
-    LetterTemplateComponent
-  ],
-  providers: [
-    CreateHttpService
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        CreateRoutingModule,
+        ModalModule,
+        LaddaModule,
+        ShSelectModule,
+        ElementViewChildModule,
+        CollapseModule,
+        BsDatepickerModule.forRoot(),
+        ContenteditableModule
+    ],
+    declarations: [
+        CreateInvoiceComponent,
+        CreateInvoiceTemplateComponent,
+        CreateInvoiceStepsComponent,
+        CreateInvoiceHeaderComponent,
+        LetterTemplateComponent,
+        SampleTemplateComponent
+    ],
+    entryComponents: [
+        LetterTemplateComponent
+    ],
+    providers: [
+        CreateHttpService
+    ]
 })
 export class CreateModule {
 }

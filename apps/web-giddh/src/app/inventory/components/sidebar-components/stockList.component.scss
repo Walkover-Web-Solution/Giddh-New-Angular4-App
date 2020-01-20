@@ -1,22 +1,22 @@
-@import '../../../../assets/css/color.scss';
+@import "../../../../assets/css/color.scss";
 
 .stock-items .active {
-  background-color: #EEEFF9;
+    background-color: #eeeff9;
 }
 .stock-items .active a .span {
-  color: $JacksonsPurple !important;
+    color: $JacksonsPurple !important;
 }
 .span {
-  color: black;
-  font-size: 14px;
+    color: black;
+    font-size: 14px;
 }
 .in-list {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
-.in-list .btn{
-  line-height: 14px!important;
+.in-list .btn {
+    line-height: 14px !important;
 }
-.stock-items .active  .btn-link .fa{
-  color: $JacksonsPurple;
+.stock-items .active .btn-link .fa {
+    color: $JacksonsPurple;
 }

@@ -9,7 +9,8 @@
             <div class="col-sm-10">
                 <div class="">
                     <p>Hi {{logedInuser?.name}} !</p>
-                    <p>Please ensure that all the details entered below are accurate. They cannot be modified after the purchase has been completed.</p>
+                    <p>Please ensure that all the details entered below are accurate. They cannot be modified after the
+                        purchase has been completed.</p>
                 </div>
             </div>
             <div class="col-sm-2">
@@ -30,41 +31,56 @@
                     <form name="form" #billingForm="ngForm" novalidate="" autocomplete="off">
                         <div class="form-group">
                             <label>Billing Name <span class="red-text">*</span></label>
-                            <input type="text" required class="form-control" id="name" name="name" [(ngModel)]="billingDetailsObj.name">
+                            <input type="text" required class="form-control" id="name" name="name"
+                                [(ngModel)]="billingDetailsObj.name">
                         </div>
                         <div class="form-group">
                             <label>Email ID <span class="red-text">*</span></label>
-                            <input type="email" required name="email" id="email" [(ngModel)]="billingDetailsObj.email" class="form-control">
+                            <input type="email" required name="email" id="email" [(ngModel)]="billingDetailsObj.email"
+                                class="form-control">
                         </div>
                         <div class="form-group">
                             <label>Mobile Number</label>
-                            <input type="text" id="contactNo" class="form-control" name="contactNo" [(ngModel)]="billingDetailsObj.contactNo" (blur)="isValidMobileNumber(mobileNoEl)" #mobileNoEl>
+                            <input type="text" id="contactNo" class="form-control" name="contactNo"
+                                [(ngModel)]="billingDetailsObj.contactNo" #mobileNoEl>
                         </div>
 
                         <div class="form-group" *ngIf="formFields['taxName'] !== undefined">
                             <label>{{formFields['taxName'].label}}</label>
-                            <input type="text" class="form-control" name="gstin" id="gstin" autocomplete="false" maxlength="15" [(ngModel)]="billingDetailsObj.gstin" #gstinNumberField (keyup)="getStateCode(gstinNumberField, states); checkGstNumValidation(gstinNumberField);">
+                            <input type="text" class="form-control" name="gstin" id="gstin" autocomplete="false"
+                                maxlength="15" [(ngModel)]="billingDetailsObj.gstin" #gstinNumberField
+                                (keyup)="getStateCode(gstinNumberField, states); checkGstNumValidation(gstinNumberField);">
                         </div>
                         <div class="form-group">
                             <label>State <span class="red-text">*</span></label>
-                            <sh-select #states [options]="statesSource$ | async" required [isFilterEnabled]="true" [disabled]="disableState" [defaultValue]="selectedState" [(ngModel)]="billingDetailsObj.stateCode" id="stateCode" name="stateCode" style="width:100%"></sh-select>
+                            <sh-select #states [options]="statesSource$ | async" required [isFilterEnabled]="true"
+                                [disabled]="disableState" [defaultValue]="selectedState"
+                                [(ngModel)]="billingDetailsObj.stateCode" id="stateCode" name="stateCode"
+                                style="width:100%"></sh-select>
                         </div>
                         <div class="form-group">
                             <label>Address</label>
-                            <textarea class="form-control" name="address" id="address" [(ngModel)]="billingDetailsObj.address" placeholder="Address" rows="5" cols="12"></textarea>
+                            <textarea class="form-control" name="address" id="address"
+                                [(ngModel)]="billingDetailsObj.address" placeholder="Address" rows="5"
+                                cols="12"></textarea>
                         </div>
                         <div class="form-group">
-                            <input type="checkbox" (click)="autoRenewSelected($event)" id="autorenew" name="autorenew" [(ngModel)]="billingDetailsObj.autorenew"><label class="mrL1">Renew subscription automatically</label>
+                            <input type="checkbox" (click)="autoRenewSelected($event)" id="autorenew" name="autorenew"
+                                [(ngModel)]="billingDetailsObj.autorenew"><label class="mrL1">Renew subscription
+                                automatically</label>
                         </div>
                         <div class="form-group">
-                            <button type="button" id="rzp-button1" (click)="payWithRazor(billingForm)" [disabled]="billingForm.invalid || !isMobileNumberValid" class="btn btn-success">Pay Now</button>
+                            <button type="button" id="rzp-button1" (click)="payWithRazor(billingForm)"
+                                [disabled]="billingForm.invalid || !isMobileNumberValid" class="btn btn-success">Pay
+                                Now</button>
                         </div>
                     </form>
                 </div>
             </div>
             <div class="col-sm-6 col-xs-12 pd0">
                 <div class="proffesional-plan">
-                    <p class="plan-title"> {{selectedPlans?.planDetails?.name}} <span class="grey-text"> (Current Plan) </span></p>
+                    <p class="plan-title"> {{selectedPlans?.planDetails?.name}} <span class="grey-text"> (Current Plan)
+                        </span></p>
 
                     <div class="your-account">
 
@@ -85,8 +101,8 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <span>
-                  Subscription Price
-                </span>
+                                    Subscription Price
+                                </span>
                             </div>
                             <div class="col-xs-6">
                                 <p>
@@ -99,8 +115,8 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <span>
-                  Total Companies
-                </span>
+                                    Total Companies
+                                </span>
                             </div>
                             <div class="col-xs-6">
                                 <p>
@@ -112,8 +128,8 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <span>
-                   Transactions Limit
-                </span>
+                                    Transactions Limit
+                                </span>
                             </div>
                             <div class="col-xs-6">
                                 <p>
@@ -125,12 +141,13 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <span>
-                  Subscription Renewal
-                </span>
+                                    Subscription Renewal
+                                </span>
                             </div>
                             <div class="col-xs-6">
                                 <p>
-                                    {{selectedPlans?.planDetails?.duration}} {{selectedPlans?.planDetails?.durationUnit}}(s)
+                                    {{selectedPlans?.planDetails?.duration}}
+                                    {{selectedPlans?.planDetails?.durationUnit}}(s)
                                 </p>
                             </div>
                         </div>

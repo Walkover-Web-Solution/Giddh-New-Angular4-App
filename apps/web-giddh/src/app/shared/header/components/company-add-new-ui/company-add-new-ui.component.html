@@ -1,86 +1,96 @@
 <div id="shareModal" class=" shareGrp ">
-    <div class="modal-header">
-        <h3 *ngIf="!createBranch">Create New Company</h3>
-        <h3 *ngIf="createBranch">Create New Branch</h3>
-        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="removeCompanySessionData(); closeModal();">×</span>
-    </div>
-    <div class="modal-body pd0" id="SharePop">
-        <div class="welcome_wrapper">
-            <div class="giddh_logo_welcome">
-                <img src="{{imgPath}}assets/images/giddh-big-logo.svg">
-            </div>
-            <div class="welcome_header">
-                <h1>Welcome {{ this.logedInuser.name}},</h1>
-            </div>
-        </div>
-        <div class="form-group clearfix add-companyDetail pdB5">
-            <!--<h3 class="pdB1">Share with</h3>-->
-            <div class="add_mailer">
-                <!--create company from-->
-                <form name="form" #companyForm="ngForm" class="clearfix" novalidate="" autocomplete="off">
-                    <div class="company-form-body">
+	<div class="modal-header">
+		<h3 *ngIf="!createBranch">Create New Company</h3>
+		<h3 *ngIf="createBranch">Create New Branch</h3>
+		<span aria-hidden="true" class="close" data-dismiss="modal"
+			(click)="removeCompanySessionData(); closeModal();">×</span>
+	</div>
+	<div class="modal-body pd0" id="SharePop">
+		<div class="welcome_wrapper">
+			<div class="giddh_logo_welcome">
+				<img src="{{imgPath}}assets/images/giddh-big-logo.svg">
+			</div>
+			<div class="welcome_header">
+				<h1>Welcome {{ this.logedInuser.name}},</h1>
+			</div>
+		</div>
+		<div class="form-group clearfix add-companyDetail pdB5">
+			<!--<h3 class="pdB1">Share with</h3>-->
+			<div class="add_mailer">
+				<!--create company from-->
+				<form name="form" #companyForm="ngForm" class="clearfix" novalidate="" autocomplete="off">
+					<div class="company-form-body">
 
-                        <div class="col-xs-12 m-t-50">
-                            <div class="input-group form-group dblock m-b-30">
-                                <p *ngIf="!createBranch">Enter your company name to start hassle free accounting with Giddh.</p>
-                                <p *ngIf="createBranch">Enter your branch name to start hassle free accounting with Giddh.</p>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 mrB3">
-                            <label for="name" class="m-t-40">Company Name<sup>*</sup></label>
-                            <input name="name" id="name" type="text" required placeholder="Name" [(ngModel)]="company.name" class="form-control" (blur)="makeMeCaptialize(company.name)">
-                            <!-- /btn-account -->
-                        </div>
+						<div class="col-xs-12 m-t-50">
+							<div class="input-group form-group dblock m-b-30">
+								<p *ngIf="!createBranch">Enter your company name to start hassle free accounting with
+									Giddh.</p>
+								<p *ngIf="createBranch">Enter your branch name to start hassle free accounting with
+									Giddh.</p>
+							</div>
+						</div>
+						<div class="col-xs-12 mrB3">
+							<label for="name" class="m-t-40">Company Name<sup>*</sup></label>
+							<input name="name" id="name" type="text" required placeholder="Name"
+								[(ngModel)]="company.name" class="form-control" (blur)="makeMeCaptialize(company.name)">
+							<!-- /btn-account -->
+						</div>
 
-                        <div class="col-xs-6 mrB3 ">
-                            <span>
-                                <label for="country" class="d-block">Country<sup>*</sup></label>
-                                <sh-select id="country" [options]="countrySource$ | async" [isFilterEnabled]="true"
-                                    name="country" [(ngModel)]="company.country" class="pull-left select-caret"
-                                    [required]='true' (selected)="selectCountry($event)"
-                                    [defaultValue]="selectedCountry" style="width: 100%">
-                                </sh-select>
-                            </span>
-                        </div>
-                        <div class="col-xs-6 mrB3 ">
-                            <label for="">Currency <sup>*</sup></label>
-                            <div class="custom-select select-caret pos-rel">
-                                <sh-select name="baseCurrency" [options]="currencySource$ | async" required [isFilterEnabled]="true" [(ngModel)]="company.baseCurrency" [defaultValue]="company.baseCurrency"></sh-select>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 mrB3">
-                            <span>
-                                <label for="contactNo" class="d-block">Mobile Number<sup>*</sup></label>
-                                <div class="d-flex welcome-select ">
-                                    <sh-select class="pull-left select-caret" required
-                                        style="width: 85px;margin-right: 28px;" name="phoneCode" [placeholder]="+91"
-                                        [options]="countryPhoneCode" [(ngModel)]="company.phoneCode"
-                                        [defaultValue]="company.phoneCode">
-                                    </sh-select>
-                                    <input type="text" pattern="[0-9]*" class="form-control pull-right mrR1" required
-                                        placeholder="9998899988" id="contactNo" autocomplete="off"
-                                        (blur)="isValidMobileNumber(mobileNoEl)" [(ngModel)]="company.contactNo"
-                                        name="contactNo" #mobileNoEl />
-                                </div>
-                            </span>
-                        </div>
-                        <div class="col-xs-12 mrT1">
-                            <button class="btn btn-pink mrL1" style="margin-left: 0 !important;" type="submit" (click)="createCompany(mobileNoEl)" [disabled]="companyForm.invalid" [ladda]="isCompanyCreationInProcess$ | async">Next
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <!-- add mailer -->
-        </div>
-    </div>
+						<div class="col-xs-6 mrB3 ">
+							<span>
+								<label for="country" class="d-block">Country<sup>*</sup></label>
+								<sh-select id="country" [options]="countrySource$ | async" [isFilterEnabled]="true"
+									name="country" [(ngModel)]="company.country" class="pull-left select-caret"
+									[required]='true' (selected)="selectCountry($event)"
+									[defaultValue]="selectedCountry" style="width: 100%">
+								</sh-select>
+							</span>
+						</div>
+						<div class="col-xs-6 mrB3 ">
+							<label for="">Currency <sup>*</sup></label>
+							<div class="custom-select select-caret pos-rel">
+								<sh-select name="baseCurrency" [options]="currencySource$ | async" required
+									[isFilterEnabled]="true" [(ngModel)]="company.baseCurrency"
+									[defaultValue]="company.baseCurrency"></sh-select>
+							</div>
+						</div>
+						<div class="col-xs-12 mrB3">
+							<span>
+								<label for="contactNo" class="d-block">Mobile Number<sup>*</sup></label>
+								<div class="d-flex welcome-select ">
+									<sh-select class="pull-left select-caret" required
+										style="width: 85px;margin-right: 28px;" name="phoneCode" [placeholder]="+91"
+										[options]="countryPhoneCode" [(ngModel)]="company.phoneCode"
+										[defaultValue]="company.phoneCode">
+									</sh-select>
+									<input type="text" pattern="[0-9]*" class="form-control pull-right mrR1" required
+										placeholder="9998899988" id="contactNo" autocomplete="off"
+										(blur)="isValidMobileNumber(mobileNoEl)" [(ngModel)]="company.contactNo"
+										name="contactNo" #mobileNoEl />
+								</div>
+							</span>
+						</div>
+						<div class="col-xs-12 mrT1">
+							<button class="btn btn-pink mrL1" style="margin-left: 0 !important;" type="submit"
+								(click)="createCompany(mobileNoEl)" [disabled]="companyForm.invalid"
+								[ladda]="isCompanyCreationInProcess$ | async">Next
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!-- add mailer -->
+		</div>
+	</div>
 </div>
 <!--logout modal-->
 <div bsModal #logoutModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <confirm-modal [title]="'Log Out'" [body]="'In order to be able to use Giddh, you must create a company. Are you sure you want to cancel and logout?'" (successCallBack)="logoutUser()" (cancelCallBack)="hideLogoutModal()">
-            </confirm-modal>
-        </div>
-    </div>
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<confirm-modal [title]="'Log Out'"
+				[body]="'In order to be able to use Giddh, you must create a company. Are you sure you want to cancel and logout?'"
+				(successCallBack)="logoutUser()" (cancelCallBack)="hideLogoutModal()">
+			</confirm-modal>
+		</div>
+	</div>
 </div>

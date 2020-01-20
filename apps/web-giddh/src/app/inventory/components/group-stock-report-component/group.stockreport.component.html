@@ -82,10 +82,10 @@
                         </li>
                     </ul>
                 </div>
-                <button class="btn btn-pink" *ngIf="branchAvailable" data-toggle="tooltip" tooltip="Alt+P"
-                    (click)="toggleTransferAsidePane()" hidden>New Transfer
-                </button>
-                <button class="btn btn-pink" data-toggle="tooltip" tooltip="Alt+i" (click)="toggleAsidePane()">Create
+                <button class="btn btn-pink" data-toggle="tooltip" tooltip="Alt+N"
+                    (click)="toggleTransferAsidePane()">New Transfer </button>
+                <button class="btn btn-pink mr-0" data-toggle="tooltip" tooltip="Alt+i"
+                    (click)="toggleAsidePane()">Create
                     New
                 </button>
             </div>
@@ -384,9 +384,12 @@
                 <tr>
                     <td colspan="10" class="text-center empty_table">
                         <!--loading-->
-                        <div class="mrT2 d-flex"
-                            style="justify-content: center;align-items: center; min-height: 200px;">
-                            <div class="giddh-spinner vertical-center-spinner"></div>
+                        <div class="no-data mt-0 loader-main">
+                            <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                            <div class="spinner2">
+                                <div class="cube1"></div>
+                                <div class="cube2"></div>
+                            </div>
                         </div>
                     </td>
                 </tr>
@@ -537,7 +540,8 @@
 <!-- aside inwards/outwards/transfer pane -->
 <div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
 <aside-branch-transfer-pane *ngIf="asideTransferPaneState === 'in'" [class]="asideTransferPaneState"
-    [@slideInOut]="asideTransferPaneState" (closeAsideEvent)="toggleTransferAsidePane()"></aside-branch-transfer-pane>
+    [@slideInOut]="asideTransferPaneState" (transferType)="openBranchTransferPopup($event);"
+    (closeAsideEvent)="toggleTransferAsidePane()"></aside-branch-transfer-pane>
 <!-- aside inwards/outwards/transfer pane -->
 
 
@@ -620,21 +624,12 @@
 </div>
 <!-- Advance  search popup -->
 
-
-<!-- recipt note modal -->
+<!-- branch transfer modal -->
 <ng-template #template>
-
     <div class="recept-modal">
-        <div class="modal-header">
-            <h4 class="modal-title pull-left">Modal</h4>
-            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
         <div class="modal-body">
-            <receipt-note></receipt-note>
+            <new-branch-transfer (hideModal)="hideModal()" [branchTransferMode]="branchTransferMode">
+            </new-branch-transfer>
         </div>
-
     </div>
-
 </ng-template>

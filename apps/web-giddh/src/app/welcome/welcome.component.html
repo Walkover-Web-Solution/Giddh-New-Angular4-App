@@ -25,15 +25,21 @@
                                 Name<sup class="text-danger">*</sup></label>
                         </ng-template>
                         <input name="name" id="name" type="text" required
-                            [disabled]="createNewCompanyPreparedObj.name && !isItemUpdateInProgress" placeholder="Name"
-                            [(ngModel)]="createNewCompanyPreparedObj.name" class="form-control bold">
+                            (input)="handleNameChange($event?.target?.value)"
+                            (blur)="validateName($event?.target?.value)"
+                            [disabled]="(createNewCompanyPreparedObj.name && !isItemUpdateInProgress) ? 'disabled' : null"
+                            placeholder="Name" [(ngModel)]="createNewCompanyPreparedObj.name" class="form-control bold">
+                        <span class="name-error" *ngIf="welcomeForm?.form?.controls['name']?.errors?.maxlength">Maximum
+                            characters limit:
+                            100</span>
                     </div>
                     <div class="col-xs-6 mrB2 ">
                         <span>
                             <label for="country" class="d-block">Country<sup class="text-danger">*</sup></label>
                             <div class="custom-select pos-rel">
                                 <sh-select id="country" [options]="countrySource$ | async" required
-                                    [isFilterEnabled]="true" [disabled]="createNewCompanyPreparedObj.country"
+                                    [isFilterEnabled]="true"
+                                    [disabled]="(createNewCompanyPreparedObj.country) ? 'disabled' : null"
                                     name="country" [(ngModel)]="createNewCompanyPreparedObj.country"
                                     class="pull-left  select-caret" style="width: 100%"
                                     [defaultValue]="selectedCountry">
@@ -46,8 +52,8 @@
                         <label for="">Currency<sup class="text-danger">*</sup></label>
                         <div class="custom-select select-caret pos-rel">
                             <sh-select name="baseCurrency" [options]="currencySource$ | async" required
-                                [disabled]="createNewCompanyPreparedObj.baseCurrency" [isFilterEnabled]="true"
-                                [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"
+                                [disabled]="(createNewCompanyPreparedObj.baseCurrency) ? 'disabled' : null"
+                                [isFilterEnabled]="true" [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"
                                 [defaultValue]="createNewCompanyPreparedObj.baseCurrency"></sh-select>
                         </div>
                     </div>
@@ -55,26 +61,28 @@
                         <span>
                             <label for="contactNo" class="d-block">Mobile Number<sup class="text-danger">*</sup></label>
                             <div class="d-flex">
-                                <sh-select class="pull-left select-caret"
-                                    [disabled]="createNewCompanyPreparedObj.phoneCode && !isItemUpdateInProgress"
+                                <sh-select class="pull-left select-caret" (blur)="isContactNumberValid()"
+                                    [disabled]="(createNewCompanyPreparedObj.phoneCode && !isItemUpdateInProgress) ? 'disabled' : null"
                                     style="width: 90px;margin-right: 16px;" name="phoneCode" [placeholder]="+91"
                                     [options]="callingCodesSource$ | async"
                                     [(ngModel)]="createNewCompanyPreparedObj.phoneCode"
                                     [defaultValue]="createNewCompanyPreparedObj.phoneCode"></sh-select>
                                 <input type="number" class="form-control pull-right  select-caret" required
-                                    [disabled]="createNewCompanyPreparedObj.contactNo && !isItemUpdateInProgress"
+                                    (blur)="isContactNumberValid()"
+                                    [disabled]="(createNewCompanyPreparedObj.contactNo && !isItemUpdateInProgress) ? 'disabled' : null"
                                     placeholder="9998899988" id="contactNo" autocomplete="off"
                                     [(ngModel)]="createNewCompanyPreparedObj.contactNo" name="contactNo" #mobileNoEl />
                             </div>
                         </span>
                     </div>
 
-                    <div class="col-xs-12 mrB2 selectBox">
+                    <div class="col-xs-12 mrB2 selectBox" *ngIf="!isWarehouse">
                         <div class="pos-rel">
                             <label for="businessType">Select Business Type</label>
                             <div class="custom-select pos-rel">
                                 <sh-select placeholder="Select Business Type" name="businessType" id="businessType"
-                                    (onClear)="onClearBusinessType()" autocomplete="false"
+                                    (onClear)="onClearBusinessType()" autocomplete="false" [readonlyInput]="true"
+                                    [disabled]="(companyProfileObj.businessType && isOnBoardingInProgress) ? 'disabled' : null"
                                     (selected)="selectedbusinessType($event)"
                                     [(ngModel)]="companyProfileObj.businessType" [options]="businessTypeList"
                                     [ItemHeight]="33" [defaultValue]="companyProfileObj.businessType">
@@ -82,30 +90,30 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 mrB2 selectBox">
+                    <div class="col-xs-12 mrB2 selectBox" *ngIf="!isWarehouse">
                         <div class="pos-rel">
                             <label for="businessNature">Select Business Nature</label>
                             <div class="custom-select  pos-rel">
                                 <sh-select placeholder="Select Business Nature" name="businessNature"
-                                    (onClear)="onClearBusinessNature()" autocomplete="false" id="businessNature"
-                                    [(ngModel)]="companyProfileObj.businessNature" [options]="businessNatureList"
-                                    [isFilterEnabled]="true" [ItemHeight]="33"
+                                    [readonlyInput]="true" (onClear)="onClearBusinessNature()" autocomplete="false"
+                                    id="businessNature" [(ngModel)]="companyProfileObj.businessNature"
+                                    [options]="businessNatureList" [isFilterEnabled]="true" [ItemHeight]="33"
                                     [defaultValue]="companyProfileObj.businessNature">
                                 </sh-select>
                             </div>
                         </div>
                     </div>
-                    <ng-container *ngIf="selectedBusinesstype === 'Registered'">
-                        <div class="col-xs-12 mrB2 selectBox" *ngIf="formFields['taxName'] !== undefined">
+                    <ng-container *ngIf="selectedBusinesstype === 'Registered' || isWarehouse">
+                        <div class="col-xs-12 mrB2 selectBox"
+                            *ngIf="formFields['taxName'] !== undefined && !isWarehouse">
                             <div class="clearfix">
 
                                 <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}<sup
                                         class="text-danger">*</sup></label>
-                                <input type="text" [ngClass]="{'gstinWidth' : isbranch}" class="form-control"
-                                    autocomplete="false" autocomplete="false" minlength="15" required maxlength="15"
-                                    #gstNumberField
-                                    (change)="getStateCode(gstNumberField, states); checkGstNumValidation(gstNumberField);"
-                                    name="gstNumber" [(ngModel)]="companyProfileObj.taxNumber"
+                                <input type="text" [ngClass]="{'gstinWidth' : isbranch || isOnBoardingInProgress}"
+                                    class="form-control" autocomplete="false" required #gstNumberField
+                                    (change)="handleGstChange(gstNumberField, states)" name="gstNumber"
+                                    [(ngModel)]="companyProfileObj.taxNumber"
                                     placeholder="Enter {{formFields['taxName'].label}}" />
 
                                 <span class="sameAsHead" *ngIf="isbranch || isOnBoardingInProgress"> <input
@@ -117,9 +125,9 @@
                             </div>
                         </div>
                         <div class="col-xs-12 mrB2 selectBox">
-                            <div class=" ">
+                            <div>
                                 <label>State<sup class="text-danger">*</sup></label><br>
-                                <div class=" ">
+                                <div>
                                     <sh-select #states [options]="statesSource$ | async" required
                                         [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" name="state"
                                         [(ngModel)]="companyProfileObj.state" style="width:100%"
@@ -127,7 +135,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 mrB2 selectBox">
+                        <div *ngIf="!(isOnBoardingInProgress && isWarehouse)" class="col-xs-12 mrB2 selectBox">
                             <div class="">
                                 <label for="taxes_dd">Applicable Tax</label>
                                 <div class="btn-group btn-block select-caret invoice-btn" dropdown>
@@ -156,7 +164,8 @@
                         </div>
                     </ng-container>
                     <div class="col-xs-12 mrB2 selectBox">
-                        <div *ngIf="selectedBusinesstype" class="clearfix">
+                        <!-- Show the section if the company/branch is Registered or onboarding of warehouse is going on -->
+                        <div *ngIf="selectedBusinesstype || isWarehouse" class="clearfix">
                             <ng-container
                                 *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else onBoardingItemAddress">
                                 <label for="address" class="d-block">{{isbranch ? 'Branch' : 'Company'}} Address <sup
@@ -165,10 +174,10 @@
                             </ng-container>
                             <ng-template #onBoardingItemAddress>
                                 <label for="address" class="d-block">{{itemOnBoardingDetails?.onBoardingType}} Address
-                                    <sup *ngIf="selectedBusinesstype === 'Registered'"
-                                        class="text-danger">*</sup></label>
+                                    <sup class="text-danger">*</sup></label>
                             </ng-template>
-                            <textarea [attr.required]="selectedBusinesstype === 'Registered'" placeholder="Address"
+                            <textarea #address [required]="selectedBusinesstype === 'Registered' || isWarehouse"
+                                (focus)="isWarehouse ? removeAddressFieldError() : ''" placeholder="Address"
                                 class="form-control mrT1 " name="address" id="address"
                                 [(ngModel)]="companyProfileObj.address" style="min-height:100px; "></textarea>
                         </div>

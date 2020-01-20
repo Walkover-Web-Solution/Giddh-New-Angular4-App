@@ -1,22 +1,22 @@
 <div style="min-height:100%;">
-  <!-- <div class=" col-xs-9 clearfix bdrB">
+    <!-- <div class=" col-xs-9 clearfix bdrB">
   </div> -->
-  <!--sidebar-->
-  <invetory-sidebar></invetory-sidebar>
-  <!--/sidebar-->
-  <section class="rightBar ng-scope">
-    <section class="container-fluid clearfix bdrB">
-      <div class="top_bar clearfix">
-        <h1 class="section_title inline">
-          <strong>Transaction Log</strong></h1>
-        <!-- top row-->
-        <inventory-inout-header></inventory-inout-header>
-        <!-- /top row-->
-      </div>
+    <!--sidebar-->
+    <invetory-sidebar></invetory-sidebar>
+    <!--/sidebar-->
+    <section class="rightBar ng-scope">
+        <section class="container-fluid clearfix bdrB">
+            <div class="top_bar clearfix">
+                <h1 class="section_title inline">
+                    <strong>Transaction Log</strong></h1>
+                <!-- top row-->
+                <inventory-inout-header></inventory-inout-header>
+                <!-- /top row-->
+            </div>
+        </section>
+        <!-- uiView: inventory-detail -->
+        <section class="container-fluid  clearfix pdT2">
+            <router-outlet></router-outlet>
+        </section>
     </section>
-    <!-- uiView: inventory-detail -->
-    <section class="container-fluid  clearfix pdT2">
-      <router-outlet></router-outlet>
-    </section>
-  </section>
 </div>

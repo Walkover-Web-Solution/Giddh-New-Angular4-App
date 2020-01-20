@@ -1,87 +1,77 @@
 <section class="h100">
-  <form class="fb__1-container mrB1 sadik" name="groupReportForm" novalidate (ngSubmit)="applyFilters(1)" #f="ngForm">
-    <div class="form-group">
-      <!-- <label class="d-block">From - To</label> -->
-      <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
-             class="form-control date-range-picker"
-             (applyDaterangepicker)="dateSelected($event)"/>
-    </div>
-    <div class="form-group">
-      <sh-select name="stockName"
-                 [options]="stockOptions"
-                 (selected)="searchChanged($event)"
-                 [placeholder]="'Type to search stock'" [multiple]="false" [ItemHeight]="33"></sh-select>
-    </div>
-    <div class="form-group" *ngIf="type === 'stock'">
-      <!--<label class="d-block">Others</label> -->
-      <sh-select name="entity" [options]="COMPARISON_FILTER"
-                 (selected)="compareChanged($event)"
-                 [placeholder]="'Select'" [multiple]="false"></sh-select>
-    </div>
-    <div class="form-group" *ngIf="type === 'person'">
-      <!--<label class="d-block">Others</label> -->
-      <sh-select name="entity" [options]="PERSON_FILTER"
-                 (selected)="compareChanged($event)"
-                 [placeholder]="'Select'" [multiple]="false" ngModel required></sh-select>
-      <span
-        class="text-danger" style="position: absolute;margin-top: 2px;"
-        *ngIf="f?.controls?.entity?.errors">Please Select Filter.</span>
-    </div>
-    <div class="form-group max100" *ngIf="type === 'stock'">
-      <input name="number" type="text" placeholder="Number" [(ngModel)]="filter.quantity" class="form-control"/>
-    </div>
+    <form class="fb__1-container mrB1 sadik" name="groupReportForm" novalidate (ngSubmit)="applyFilters(1)" #f="ngForm">
+        <div class="form-group">
+            <!-- <label class="d-block">From - To</label> -->
+            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+                class="form-control date-range-picker" (applyDaterangepicker)="dateSelected($event)" />
+        </div>
+        <div class="form-group">
+            <sh-select name="stockName" [options]="stockOptions" (selected)="searchChanged($event)"
+                [placeholder]="'Type to search stock'" [multiple]="false" [ItemHeight]="33"></sh-select>
+        </div>
+        <div class="form-group" *ngIf="type === 'stock'">
+            <!--<label class="d-block">Others</label> -->
+            <sh-select name="entity" [options]="COMPARISON_FILTER" (selected)="compareChanged($event)"
+                [placeholder]="'Select'" [multiple]="false"></sh-select>
+        </div>
+        <div class="form-group" *ngIf="type === 'person'">
+            <!--<label class="d-block">Others</label> -->
+            <sh-select name="entity" [options]="PERSON_FILTER" (selected)="compareChanged($event)"
+                [placeholder]="'Select'" [multiple]="false" ngModel required></sh-select>
+            <span class="text-danger" style="position: absolute;margin-top: 2px;"
+                *ngIf="f?.controls?.entity?.errors">Please Select Filter.</span>
+        </div>
+        <div class="form-group max100" *ngIf="type === 'stock'">
+            <input name="number" type="text" placeholder="Number" [(ngModel)]="filter.quantity" class="form-control" />
+        </div>
 
-    <div class="form-group">
-      <button type="submit" class="btn btn-success" [disabled]="!f.valid">Go</button>
-    </div>
-  </form>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success" [disabled]="!f.valid">Go</button>
+        </div>
+    </form>
 
-  <section style="margin-top: 20px">
-    <table class="table basic">
-      <thead>
-      <tr>
-        <th class="bdrR">Date</th>
-        <th class="bdrR bdrB">Product Name</th>
-        <th class="bdrR bdrB">Sender's Name</th>
-        <th class="bdrR bdrB">Receiver's Name</th>
-        <th class="bdrR bdrB">Qty</th>
-        <th class="bdrR bdrB">Description</th>
-        <th class="bdrR bdrB" *ngIf="type ==='stock'">Closing Balance</th>
-      </tr>
-      </thead>
-      <tbody *ngIf="inventoryReport">
-      <tr *ngFor="let txn of inventoryReport.transactions">
-        <td class="bdrR">{{txn.date}}</td>
-        <td class="bdrR">{{txn.stock.name}}</td>
-        <td class="bdrR">{{txn.sender.name}}</td>
-        <td class="bdrR">{{txn.receiver.name}}</td>
-        <td class="bdrR">{{txn.quantity}}</td>
-        <td class="bdrR">{{txn.description}}</td>
-        <td class="bdrR" *ngIf="type ==='stock'">{{txn.closingQuantity}}</td>
-      </tr>
-      </tbody>
-      <tbody *ngIf="!inventoryReport">
-      <tr>
-        <td colspan="7" class="text-center empty_table">
-          <h1>No Report Found !!</h1>
-        </td>
-      </tr>
-      </tbody>
-      <tfoot>
-      <tr >
-        <td colspan="100%">
-          <div class="alC" *ngIf="inventoryReport?.totalPages > 1">
-            <pagination [maxSize]="5"
-                        [totalItems]="inventoryReport.totalItems"
-                        [itemsPerPage]="10"
-                        (pageChanged)="applyFilters($event.page)"
-                        class="pagination-sm"
-                        [boundaryLinks]="true"
-                        [rotate]="false"></pagination>
-          </div>
-        </td>
-      </tr>
-      </tfoot>
-    </table>
-  </section>
+    <section style="margin-top: 20px">
+        <table class="table basic">
+            <thead>
+                <tr>
+                    <th class="bdrR">Date</th>
+                    <th class="bdrR bdrB">Product Name</th>
+                    <th class="bdrR bdrB">Sender's Name</th>
+                    <th class="bdrR bdrB">Receiver's Name</th>
+                    <th class="bdrR bdrB">Qty</th>
+                    <th class="bdrR bdrB">Description</th>
+                    <th class="bdrR bdrB" *ngIf="type ==='stock'">Closing Balance</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="inventoryReport">
+                <tr *ngFor="let txn of inventoryReport.transactions">
+                    <td class="bdrR">{{txn.date}}</td>
+                    <td class="bdrR">{{txn.stock.name}}</td>
+                    <td class="bdrR">{{txn.sender.name}}</td>
+                    <td class="bdrR">{{txn.receiver.name}}</td>
+                    <td class="bdrR">{{txn.quantity}}</td>
+                    <td class="bdrR">{{txn.description}}</td>
+                    <td class="bdrR" *ngIf="type ==='stock'">{{txn.closingQuantity}}</td>
+                </tr>
+            </tbody>
+            <tbody *ngIf="!inventoryReport">
+                <tr>
+                    <td colspan="7" class="text-center empty_table">
+                        <h1>No Report Found !!</h1>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="100%">
+                        <div class="alC" *ngIf="inventoryReport?.totalPages > 1">
+                            <pagination [maxSize]="5" [totalItems]="inventoryReport.totalItems" [itemsPerPage]="10"
+                                (pageChanged)="applyFilters($event.page)" class="pagination-sm" [boundaryLinks]="true"
+                                [rotate]="false"></pagination>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </section>
 </section>

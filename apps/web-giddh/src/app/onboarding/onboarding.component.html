@@ -1,11 +1,4 @@
 <div id="main" class="welcome-container clearfix">
-    <!-- [ngClass]="{'menu_open':sideMenu.isopen}" -->
-    <!--    <app-header (menuStateChange)="sidebarStatusChange($event)"></app-header>-->
-    <!--    <layout-main>-->
-    <!-- <div class="welcome-header">
-      <h2>Welcome To Giddh! </h2>
-  </div>
-  <hr/> -->
     <div class="">
         <div class=" m-t-35">
             <div class="col-xs-12 col-md-5 col-sm-6">
@@ -22,7 +15,7 @@
                     </li>
                     <li>
                         <!-- <i class="icon-Invite-Accountant"></i> -->
-                        <a [routerLink]="['/pages','settings', 'taxes']"> <img src="{{imgPath}}updateGST.svg" alt="" class="mrR1"> Update your GST settings </a>
+                        <a [routerLink]="['/pages','settings', 'taxes']"> <img src="{{imgPath}}updateGST.svg" alt="" class="mrR1"> Update Taxes </a>
                     </li>
                     <li>
 
@@ -35,21 +28,25 @@
                     Dont worry!<br> Get easily your accounting data on Giddh.
                 </p>
                 <!--<button class="btn btn-sync">Sync with Tally</button>-->
+                <a class="btn btn-sync" target="_blank" href="https://faq.giddh.com/en/articles/1574939-how-to-sync-your-data-from-tally-to-giddh">
+                    Sync With Tally
+                </a>
                 <a class="btn btn-sync" href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp">
-          Sync With Tally
-        </a>
+                Download TCP
+                </a>
 
                 <div class="mt-2 right_section">
                     <h1 class="borderbtm">Have a question to ask?</h1>
                     <span>request a demo:</span>
-                    <button class="btn btn-success m-t-10" (click)="openScheduleModal()">Schedule Now</button>
+                    <button class="btn btn-success m-t-10" (click)="scheduleNow()">Schedule Now</button>
                     <br>
                     <div class="row">
                         <div class="col-xs-12 col-sm-6">
                             <span class="m-t-30">or call:</span>
-                            <a class="text-dark" href="tel:022-68210057">022-68210057</a>
+                            <a class="text-dark" href="tel:8818888764">8818888764</a>,
+                            <a class="text-dark" href="tel:8889500411">8889500411</a>
                             <span class="m-t-30 m-b-10">or visit:</span>
-                            <a href="http://faq.giddh.com" target="_blank" class="text-dark">faq.giddh.com</a>
+                            <a href="https://giddh.com/help" target="_blank" class="text-dark">giddh.com/help</a>
                         </div>
                         <div class="col-xs-6 scheduleImg">
                             <div class="">
@@ -67,15 +64,15 @@
                     <span>Inventory type</span>
                     <div class="pdB1 clearfix">
                         <label class="radio-inline pd0 w100">
-              <input type="radio" class="radio_theme cp"
-                [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory"
-                (change)="updateInventorySetting(true)" name="inventoryType" />Product
-            </label>
+                            <input type="radio" class="radio_theme cp"
+                                [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                                (change)="updateInventorySetting(true)" name="inventoryType" />Product
+                        </label>
                         <label class="radio-inline pd0 mrL2">
-              <input type="radio" class="radio_theme cp"
-                [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory"
-                (change)="updateInventorySetting(false)" name="inventoryType" />Service
-            </label>
+                            <input type="radio" class="radio_theme cp"
+                                [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                                (change)="updateInventorySetting(false)" name="inventoryType" />Service
+                        </label>
                     </div>
                     <br><br><br>
 
@@ -121,31 +118,3 @@
     <!--    </layout-main>-->
     <!-- <app-footer></app-footer> -->
 </div>
-
-<!--delete company modal  -->
-<!--<div bsModal #talkSalesModal="bs-modal" class="modal fade" role="dialog">-->
-<!--  <div class="modal-dialog modal-lg">-->
-<!--    <div class="modal-content">-->
-<!--      <div class="modal-header">-->
-<!--        <h3 class="left">Talk to Sales</h3>-->
-<!--        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>-->
-<!--      </div>-->
-
-<!--      <div class="modal-body custom-body">-->
-<!--        <div class="" id="settingTab">-->
-<!--          <tabset #supportTab>-->
-<!--            <tab heading="Arrange a Demo">-->
-<!--              <div class="argdemo">-->
-<!--                <p>Choose your preferred time to schedule a demo with an expert. </p>-->
-<!--                <button class="btn btn-primary" (click)="scheduleNow()">Click Here</button>-->
-<!--              </div>-->
-<!--            </tab>-->
-<!--            <tab heading="Drop us Mail">-->
-<!--              <div id="Jkvq" class="talktosale-superform"></div>-->
-<!--            </tab>-->
-<!--          </tabset>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->

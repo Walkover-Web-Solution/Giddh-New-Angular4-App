@@ -1,35 +1,35 @@
-import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
-import {take, takeUntil} from 'rxjs/operators';
-import {createSelector} from 'reselect';
-import {Store} from '@ngrx/store';
-import {Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {AppState} from '../../store/roots';
+import { take, takeUntil } from 'rxjs/operators';
+import { createSelector } from 'reselect';
+import { Store } from '@ngrx/store';
+import { Component, ComponentFactoryResolver, OnDestroy, ViewChild } from '@angular/core';
+import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
-import {ToasterService} from '../../services/toaster.service';
-import {SettingsProfileActions} from '../../actions/settings/profile/settings.profile.action';
-import {BsDropdownConfig, ModalDirective} from 'ngx-bootstrap';
-import {CompanyResponse, BranchFilterRequest} from '../../models/api-models/Company';
-import {CompanyActions} from '../../actions/company.actions';
-import {SettingsBranchActions} from '../../actions/settings/branch/settings.branch.action';
-import {SettingsBunchService} from '../../services/settings.bunch.service';
+import { ToasterService } from '../../services/toaster.service';
+import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
+import { BsDropdownConfig, ModalDirective } from 'ngx-bootstrap';
+import { CompanyResponse, BranchFilterRequest } from '../../models/api-models/Company';
+import { CompanyActions } from '../../actions/company.actions';
+import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
+import { SettingsBunchService } from '../../services/settings.bunch.service';
 
 export const IsyncData = [
-	{label: 'Debtors', value: 'debtors'},
-	{label: 'Creditors', value: 'creditors'},
-	{label: 'Inventory', value: 'inventory'},
-	{label: 'Taxes', value: 'taxes'},
-	{label: 'Bank', value: 'bank'}
+	{ label: 'Debtors', value: 'debtors' },
+	{ label: 'Creditors', value: 'creditors' },
+	{ label: 'Inventory', value: 'inventory' },
+	{ label: 'Taxes', value: 'taxes' },
+	{ label: 'Bank', value: 'bank' }
 ];
 
 @Component({
 	selector: 'setting-bunch',
 	templateUrl: './bunch.component.html',
 	styleUrls: ['./bunch.component.css'],
-	providers: [{provide: BsDropdownConfig, useValue: {autoClose: false}}]
+	providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
 })
 
-export class BunchComponent implements OnInit, OnDestroy {
+export class BunchComponent implements OnDestroy {
 	@ViewChild('bunchModal') public bunchModal: ModalDirective;
 	@ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
 	@ViewChild('getBunchCompanyModal') public getBunchCompanyModal: ModalDirective;
@@ -101,10 +101,6 @@ export class BunchComponent implements OnInit, OnDestroy {
 
 	}
 
-	public ngOnInit() {
-		// console.log('bunch component');
-	}
-
 	public openAddCompanyModal(grp) {
 		this.selectedBunch = _.cloneDeep(grp);
 		this.addCompanyModal.show();
@@ -133,10 +129,6 @@ export class BunchComponent implements OnInit, OnDestroy {
 		this.mode = 'create';
 	}
 
-	public onHide() {
-		// console.log('creat company modal is closed.');
-	}
-
 	/**
 	 * getAllBunch
 	 */
@@ -144,7 +136,6 @@ export class BunchComponent implements OnInit, OnDestroy {
 		this._settingsBunchService.GetAllBunches().subscribe(res => {
 			if (res && res.status === 'success') {
 				this.allBunches = _.cloneDeep(res.body.bunchResources);
-				// console.log(res);
 			}
 		});
 	}
@@ -157,7 +148,6 @@ export class BunchComponent implements OnInit, OnDestroy {
 			if (res && res.status === 'success') {
 				this.allBunches.push(res.body);
 				this.hideBunchModal();
-				// console.log(res);
 			}
 		});
 	}
@@ -192,7 +182,6 @@ export class BunchComponent implements OnInit, OnDestroy {
 				this._toasterService.successToast(res.status);
 				this.getAllBunch();
 				this.hideBunchModal();
-				// console.log(res);
 			}
 		});
 	}
@@ -206,7 +195,6 @@ export class BunchComponent implements OnInit, OnDestroy {
 			if (res && res.status === 'success') {
 				this._toasterService.successToast(res.body);
 				this.getAllBunch();
-				// console.log(res);
 			} else {
 				this._toasterService.errorToast(res.message);
 			}

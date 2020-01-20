@@ -4,14 +4,14 @@ import { HomeComponent } from './home.component';
 import { TotalSalesComponent } from './components/total-sales/total-sales.component';
 
 @NgModule({
-  imports: [
-    RouterModule.forChild([
-      { path: '', component: HomeComponent },
-      { path: 'total-sales', component: TotalSalesComponent }
-    ])
-  ],
+    imports: [
+        RouterModule.forChild([
+            { path: '', component: HomeComponent },
+            { path: 'total-sales', component: TotalSalesComponent }
+        ])
+    ],
 
-  exports: [RouterModule]
+    exports: [RouterModule]
 
 
 })

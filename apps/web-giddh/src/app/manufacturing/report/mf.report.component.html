@@ -2,25 +2,33 @@
     <!-- page Title -->
     <div class="top_bar col-xs-12 clearfix bdrB">
         <h1 class="section_title d-inline-block"><strong>Mfg. Journal Register</strong></h1>
-        <button class="btn isActive pull-right" (click)="goToCreateNewPage()" type="button">Create Manufacture</button>
+        <button class="btn isActive pull-right mr-0" (click)="goToCreateNewPage()" type="button">Create
+            Manufacture</button>
     </div>
     <!-- form -->
     <div class="col-xs-12">
         <div class="mfStockSearchRequestForm clearfix">
-            <form #mfStockSearchRequestForm="ngForm" class="col-xs-10 mrT2 mrB" (submit)="getReports()" autocomplete="off">
+            <form #mfStockSearchRequestForm="ngForm" class="col-xs-10 mrT2 mrB" (submit)="getReports()"
+                autocomplete="off">
                 <div class="row">
                     <div class="form-group col-xs-3">
                         <div class="row">
                             <label class="d-block">Final Product</label>
-                            <sh-select placeholder="--Select Product--" name="product" #productList="ngModel" required [(ngModel)]="mfStockSearchRequest.product" [options]="stockListDropDown" [ItemHeight]="33" (selected)="setActiveStockGroup($event)"></sh-select>
+                            <sh-select placeholder="--Select Product--" name="product" #productList="ngModel" required
+                                [(ngModel)]="mfStockSearchRequest.product" [options]="stockListDropDown"
+                                [ItemHeight]="33" (selected)="setActiveStockGroup($event)"></sh-select>
                         </div>
                     </div>
                     <div class="form-group col-xs-3">
                         <label class="d-block">From - To</label>
                         <div class="input-group">
-                            <input name="dateRange" #dp="bsDaterangepicker" placeholder="Date range picker" type="text" class="form-control" [ngModel]="mfStockSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" [bsConfig]="bsConfig" bsDaterangepicker required>
+                            <input name="dateRange" #dp="bsDaterangepicker" placeholder="Date range picker" type="text"
+                                class="form-control" [ngModel]="mfStockSearchRequest.dateRange"
+                                (bsValueChange)="bsValueChange($event)" [bsConfig]="bsConfig" bsDaterangepicker
+                                required>
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" (click)="dp.toggle()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                <button type="button" class="btn btn-default" (click)="dp.toggle()"><i
+                                        class="glyphicon glyphicon-calendar"></i></button>
                             </span>
                         </div>
                     </div>
@@ -28,19 +36,24 @@
                     <div class="form-group col-xs-1">
                         <div class="row">
                             <label class="d-block">Search By</label>
-                            <sh-select placeholder="--Select--" name="searchBy" [(ngModel)]="mfStockSearchRequest.searchBy" [options]="filtersForSearchBy" [ItemHeight]="33"></sh-select>
+                            <sh-select placeholder="--Select--" name="searchBy"
+                                [(ngModel)]="mfStockSearchRequest.searchBy" [options]="filtersForSearchBy"
+                                [ItemHeight]="33"></sh-select>
                         </div>
                     </div>
                     <div class="form-group col-xs-2">
                         <div class="">
                             <label class="d-block">Operation</label>
-                            <sh-select placeholder="--Select--" name="searchOperation" [(ngModel)]="mfStockSearchRequest.searchOperation" [options]="filtersForSearchOperation" [ItemHeight]="33"></sh-select>
+                            <sh-select placeholder="--Select--" name="searchOperation"
+                                [(ngModel)]="mfStockSearchRequest.searchOperation" [options]="filtersForSearchOperation"
+                                [ItemHeight]="33"></sh-select>
                         </div>
                     </div>
                     <div class="form-group col-xs-1">
                         <div class="row">
                             <label class="d-block">Value</label>
-                            <input type="text" decimalDigitsDirective [DecimalPlaces]="4" class="form-control" placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue" />
+                            <input type="text" decimalDigitsDirective [DecimalPlaces]="4" class="form-control"
+                                placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue" />
                         </div>
                     </div>
                     <div class="form-group pull-left mrL2">
@@ -56,7 +69,8 @@
     <section *ngIf="(isReportLoading$ | async)" class="clearfix mart100 col-xs-12">
         <p class="lead alC mrT4">Loading...</p>
     </section>
-    <div class="no-data mart100 col-xs-12" *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length === 0">
+    <div class="no-data mart100 col-xs-12"
+        *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length === 0">
         <h1>No entries found within given criteria.</h1>
         <h1>Do search with some other dates</h1>
     </div>
@@ -84,7 +98,8 @@
                                     <tbody>
                                         <tr>
                                             <td width="40%">&nbsp;</td>
-                                            <td width="20%">{{item.manufacturingQuantity}} {{item.manufacturingUnit}}</td>
+                                            <td width="20%">{{item.manufacturingQuantity}} {{item.manufacturingUnit}}
+                                            </td>
                                             <td width="40%">&nbsp;</td>
                                         </tr>
                                         <tr *ngFor="let row of item.linkedStocks">
@@ -98,13 +113,14 @@
                         </tr>
                     </tbody>
                 </table>
-                    <div *ngIf="reportData?.totalPages > 1" class="paginationWrapper">
-                        <div class="alC">
-                          <pagination [totalItems]="reportData.totalItems" [(ngModel)]="reportData.page" [maxSize]="5" class="pagination-sm"
-                            [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
-                        </div>
-                      </div>
+                <div *ngIf="reportData?.totalPages > 1" class="paginationWrapper">
+                    <div class="alC">
+                        <pagination [totalItems]="reportData.totalItems" [(ngModel)]="reportData.page" [maxSize]="5"
+                            class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false"
+                            (pageChanged)="pageChanged($event)"></pagination>
+                    </div>
+                </div>
             </div>
-        </div>     
+        </div>
     </section>
 </section>

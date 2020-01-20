@@ -1,4 +1,4 @@
-.basic>thead>tr>th {
+.basic > thead > tr > th {
     position: relative;
 }
 
@@ -14,31 +14,32 @@
     font-size: 11px;
     position: absolute;
     right: 10px;
-    color: #A9A9A9;
+    color: #a9a9a9;
     cursor: pointer;
     top: 12px;
 }
 
 .icon-pointer {
     .activeTextColor {
-        color: #757BB9 !important;
+        color: #757bb9 !important;
     }
 }
-.icon-sort-asc, .icon-sort-dsc {
+.icon-sort-asc,
+.icon-sort-dsc {
     display: inline-block;
     cursor: pointer;
     float: left;
     margin-left: 6px;
 }
 .icon-sort-asc.activeTextColor {
-    color: #757BB9 !important;
+    color: #757bb9 !important;
 }
 .td_in_searchBox {
     div {
         display: flex;
         i {
             margin-top: 1px;
-            color: #757BB9;
+            color: #757bb9;
             padding-right: 8px;
             cursor: pointer;
             display: flex;

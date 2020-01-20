@@ -21,8 +21,8 @@ export class UpdateLedgerVm {
     public companyTaxesList$: Observable<TaxResponse[]>;
     public currencyList$: Observable<ICurrencyResponse[]>;
     public selectedLedger: LedgerResponse;
-    public entryTotal: { crTotal: number, drTotal: number } = {drTotal: 0, crTotal: 0};
-    public convertedEntryTotal: { crTotal: number, drTotal: number } = {drTotal: 0, crTotal: 0};
+    public entryTotal: { crTotal: number, drTotal: number } = { drTotal: 0, crTotal: 0 };
+    public convertedEntryTotal: { crTotal: number, drTotal: number } = { drTotal: 0, crTotal: 0 };
     public grandTotal: number = 0;
     public convertedGrandTotal: number = 0;
     public totalAmount: number = 0;
@@ -54,6 +54,8 @@ export class UpdateLedgerVm {
             dr: ''
         }
     };
+    /** True, if advance receipt is present */
+    public isAdvanceReceipt: boolean = false;
 
     // multi-currency variables
     public isMultiCurrencyAvailable: boolean = false;
@@ -202,7 +204,7 @@ export class UpdateLedgerVm {
     }
 
     public isValidCategory(category: string): boolean {
-        return category === 'income' || category === 'expenses' || category === 'fixedassets';
+        return category === 'income' || category === 'expenses' || category === 'fixedassets' || (this.isAdvanceReceipt && category === 'assets');
     }
 
     public isThereStockEntry(uniqueName: string): boolean {
@@ -538,7 +540,7 @@ export class UpdateLedgerVm {
 
     public unitChanged(stockUnitCode: string) {
         let unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitCode === stockUnitCode);
-        this.stockTrxEntry.inventory.unit = {code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode};
+        this.stockTrxEntry.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode };
         this.stockTrxEntry.inventory.rate = this.stockTrxEntry.inventory.unit.rate;
         this.inventoryPriceChanged(Number(this.stockTrxEntry.inventory.unit.rate));
     }

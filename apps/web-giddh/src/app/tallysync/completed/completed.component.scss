@@ -1,81 +1,79 @@
 .panel {
-  box-shadow: none;
+    box-shadow: none;
 
-  .running {
-    color: #0FA6E9;
-  }
-
-  .panel-heading {
-    background: #E6E6E6;
-  }
-
-  .panel-footer {
-    padding: 10px 15px;
-    background-color: transparent;
-  }
-
-  .panel-body {
-    color: #707070;
-    background: transparent;
-    padding: 15px 0px 0px 0px;
-
-    .progress {
-      box-shadow: none;
-      height: 5px;
-      margin-bottom: 0px;
-      border: #DFDFDF 1px solid;
+    .running {
+        color: #0fa6e9;
     }
 
-    .progress-bar {
-      background: #BEBEBE;
-      border: 1px solid #BEBEBE;
-      box-shadow: none;
+    .panel-heading {
+        background: #e6e6e6;
     }
 
-    .list-group {
-      margin-bottom: 0px;
-
-      .list-group {
-        margin-top: 0px;
-        padding-left: 30px;
-      }
+    .panel-footer {
+        padding: 10px 15px;
+        background-color: transparent;
     }
 
-    .list-group-item {
-      border: none;
-      padding-right: 0px;
-      background-color: transparent;
+    .panel-body {
+        color: #707070;
+        background: transparent;
+        padding: 15px 0px 0px 0px;
 
-      .status {
-        margin-top: 9px;
-
-        small {
-          font-size: 14px;
+        .progress {
+            box-shadow: none;
+            height: 5px;
+            margin-bottom: 0px;
+            border: #dfdfdf 1px solid;
         }
-      }
-    }
-  }
 
-  .text-success {
-    color: #63B214;
-  }
+        .progress-bar {
+            background: #bebebe;
+            border: 1px solid #bebebe;
+            box-shadow: none;
+        }
+
+        .list-group {
+            margin-bottom: 0px;
+
+            .list-group {
+                margin-top: 0px;
+                padding-left: 30px;
+            }
+        }
+
+        .list-group-item {
+            border: none;
+            padding-right: 0px;
+            background-color: transparent;
+
+            .status {
+                margin-top: 9px;
+
+                small {
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+
+    .text-success {
+        color: #63b214;
+    }
 }
 
 .form {
-  .company {
-    width: 205px;
-    padding-right: 0px;
-  }
+    .company {
+        width: 205px;
+        padding-right: 0px;
+    }
 
-  .date {
-    width: 115px;
-    padding-right: 0px;
-  }
+    .date {
+        width: 115px;
+        padding-right: 0px;
+    }
 
-  .interval {
-    width: 180px;
-    padding-right: 0px;
-  }
+    .interval {
+        width: 180px;
+        padding-right: 0px;
+    }
 }
-
-

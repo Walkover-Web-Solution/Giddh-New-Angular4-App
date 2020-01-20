@@ -160,7 +160,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
 
         this.manageInProcess$.subscribe(s => {
             if (!s.isOpen) {
-                // console.log('s:', s);
                 this.addGroupForm.reset();
             }
         });

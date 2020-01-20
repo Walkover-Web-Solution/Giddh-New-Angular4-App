@@ -10,12 +10,12 @@ import { KeyboardShortutModule } from '../helpers/directives/keyboardShortcut/ke
 
 
 @NgModule({
-  imports: [
-    CommonModule, FormsModule, ReactiveFormsModule, ShSelectModule, LaddaModule, DecimalDigitsModule, BsDatepickerModule, KeyboardShortutModule
-  ],
-  exports: [AsideMenuCreateTaxComponent],
-  declarations: [AsideMenuCreateTaxComponent],
-  providers: [],
+    imports: [
+        CommonModule, FormsModule, ReactiveFormsModule, ShSelectModule, LaddaModule, DecimalDigitsModule, BsDatepickerModule, KeyboardShortutModule
+    ],
+    exports: [AsideMenuCreateTaxComponent],
+    declarations: [AsideMenuCreateTaxComponent],
+    providers: [],
 })
 export class AsideMenuCreateTaxModule {
 }

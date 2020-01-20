@@ -1,7 +1,7 @@
 /* tslint:disable */
-import {enableProdMode, NgModuleRef} from '@angular/core';
-import {disableDebugTools} from '@angular/platform-browser';
-import {Environment} from './model';
+import { enableProdMode, NgModuleRef } from '@angular/core';
+import { disableDebugTools } from '@angular/platform-browser';
+import { Environment } from './model';
 
 enableProdMode();
 

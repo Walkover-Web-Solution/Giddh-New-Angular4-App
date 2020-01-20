@@ -1,133 +1,137 @@
 <section class="invoice-bg col-xs-12">
-  <nav class="navbar">
-    <div class="container-fluid pdL0">
+    <nav class="navbar">
+        <div class="container-fluid pdL0">
 
-      <form #invoiceForm="ngForm" (ngSubmit)="getInvoiceReceiptByFilters(invoiceForm)" novalidate
-            class="form-inline input-grp-dateRangePicker pr">
+            <form #invoiceForm="ngForm" (ngSubmit)="getInvoiceReceiptByFilters(invoiceForm)" novalidate
+                class="form-inline input-grp-dateRangePicker pr">
 
-        <div class="d-flex mt-2">
+                <div class="d-flex mt-2">
 
-          <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
+                    <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
 
-            <div class="input-group">
-              <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions"
-                     (applyDaterangepicker)="bsValueChange($event)" class="form-control"/>
-              <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
-            </div>
-            <div class="d-flex" style="align-items: center">
-              <a href="javascript:void(0);" class="btn btn-link" (click)="toggleAdvanceSearchPopup()"
-                 style="margin: 0px;padding-right: 8px">Advance search</a>
-              <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="showAdvanceSearchIcon">
-                <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333"
-                   tooltip="Reset Filter"></i>
-              </a>
-            </div>
-          </div>
+                        <div class="input-group">
+                            <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker
+                                [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)"
+                                class="form-control" />
+                            <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
+                        </div>
+                        <div class="d-flex" style="align-items: center">
+                            <a href="javascript:void(0);" class="btn btn-link" (click)="toggleAdvanceSearchPopup()"
+                                style="margin: 0px;padding-right: 8px">Advance search</a>
+                            <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()"
+                                *ngIf="showAdvanceSearchIcon">
+                                <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333"
+                                    tooltip="Reset Filter"></i>
+                            </a>
+                        </div>
+                    </div>
 
-          <div class="d-flex">
+                    <div class="d-flex">
 
-            <div style="height: 30px;" *ngIf="selectedItems.length > 0">
-              <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown"
-                   (mouseleave)="dp.hide()" style="margin-bottom: 10px;display: inline-block !important;">
+                        <div style="height: 30px;" *ngIf="selectedItems.length > 0">
+                            <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown"
+                                (mouseleave)="dp.hide()" style="margin-bottom: 10px;display: inline-block !important;">
 
-                <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
-                        style="margin-right: 0px !important;"
-                        aria-controls="dropdown-basic">
-                  More
-                  <span class="caret"></span>
-                </button>
+                                <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
+                                    style="margin-right: 0px !important;" aria-controls="dropdown-basic">
+                                    More
+                                    <span class="caret"></span>
+                                </button>
 
-                <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                                <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
 
-                  <li role="menuitem">
-                    <a class="dropdown-item cp" href="javascript:void(0)">Bulk Note</a>
-                  </li>
+                                    <li role="menuitem">
+                                        <a class="dropdown-item cp" href="javascript:void(0)">Bulk Note</a>
+                                    </li>
 
-                  <li role="menuitem">
-                    <a class="dropdown-item cp" href="javascript:void(0)">Send Email</a>
-                  </li>
+                                    <li role="menuitem">
+                                        <a class="dropdown-item cp" href="javascript:void(0)">Send Email</a>
+                                    </li>
 
-                  <li role="menuitem">
-                    <a class="dropdown-item cp" href="javascript:void(0)">Print</a>
-                  </li>
+                                    <li role="menuitem">
+                                        <a class="dropdown-item cp" href="javascript:void(0)">Print</a>
+                                    </li>
 
-                  <li role="menuitem">
-                    <a class="dropdown-item cp" href="javascript:void(0)">Export Pdf</a>
+                                    <li role="menuitem">
+                                        <a class="dropdown-item cp" href="javascript:void(0)">Export Pdf</a>
 
-                  </li>
+                                    </li>
 
-                  <li role="menuitem">
-                    <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
+                                    <li role="menuitem">
+                                        <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
 
-                  </li>
+                                    </li>
 
-                  <li role="menuitem" *ngIf="selectedItems.length === 1">
-                    <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
-                  </li>
+                                    <li role="menuitem" *ngIf="selectedItems.length === 1">
+                                        <a class="dropdown-item cp" href="javascript:void(0)"
+                                            (click)="onDeleteBtnClick()">Delete</a>
+                                    </li>
 
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
 
-      <!-- grid -->
-      <table class="table basic table-bordered mrT2">
+            <!-- grid -->
+            <table class="table basic table-bordered mrT2">
 
-        <thead class="t-h-bg1">
-        <tr>
+                <thead class="t-h-bg1">
+                    <tr>
 
-          <th style="width:4%" *ngIf="selectedItems.length > 0">
-            <div class="mh18_img" style="justify-content: center;display: flex">
-              <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
-              <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
-            </div>
-          </th>
+                        <th style="width:4%" *ngIf="selectedItems.length > 0">
+                            <div class="mh18_img" style="justify-content: center;display: flex">
+                                <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
+                                    (click)="toggleAllItems(true)">
+                                <img src="assets/images/checked.png" *ngIf="allItemsSelected"
+                                    (click)="toggleAllItems(false)">
+                            </div>
+                        </th>
 
-          <th *ngIf="selectedItems.length === 0" width="4%">
-            <div class="mh18_img" style="justify-content: center;display: flex">
-              #
-            </div>
-          </th>
+                        <th *ngIf="selectedItems.length === 0" width="4%">
+                            <div class="mh18_img" style="justify-content: center;display: flex">
+                                #
+                            </div>
+                        </th>
 
-          <th width="25%" class="td_in_searchBox" #searchReceiptContainer
-              (clickOutside)="clickedOutside($event, searchReceiptContainer, 'voucherNumber')">
+                        <th width="25%" class="td_in_searchBox" #searchReceiptContainer
+                            (clickOutside)="clickedOutside($event, searchReceiptContainer, 'voucherNumber')">
 
-            <div [hidden]="showVoucherSearch">
-              <span> Receipt No.</span>
-              <i class="icon-search" (click)="toggleSearch('voucherNumber')"></i>
-            </div>
+                            <div [hidden]="showVoucherSearch">
+                                <span> Receipt No.</span>
+                                <i class="icon-search" (click)="toggleSearch('voucherNumber')"></i>
+                            </div>
 
-            <div class="input-container" [hidden]="!showVoucherSearch">
-              <input type="text" placeholder="Search Receipt no." class="w100" #voucherSearch
-                     [formControl]="voucherNumberInput"/>
-              <!--<i class="icon-search" (click)="showReceiptSearch =false"></i>-->
-            </div>
+                            <div class="input-container" [hidden]="!showVoucherSearch">
+                                <input type="text" placeholder="Search Receipt no." class="w100" #voucherSearch
+                                    [formControl]="voucherNumberInput" />
+                                <!--<i class="icon-search" (click)="showReceiptSearch =false"></i>-->
+                            </div>
 
 
-          </th>
+                        </th>
 
-          <th width="25%" class="td_in_searchBox" #searchAccountContainer
-              (clickOutside)="clickedOutside($event, searchAccountContainer, 'accountUniqueName')">
+                        <th width="25%" class="td_in_searchBox" #searchAccountContainer
+                            (clickOutside)="clickedOutside($event, searchAccountContainer, 'accountUniqueName')">
 
-            <div [hidden]="showAccountSearch">
-              <span> Account.</span>
-              <i class="icon-search" (click)="toggleSearch('accountUniqueName')"></i>
-            </div>
+                            <div [hidden]="showAccountSearch">
+                                <span> Account.</span>
+                                <i class="icon-search" (click)="toggleSearch('accountUniqueName')"></i>
+                            </div>
 
-            <div class="input-container" [hidden]="!showAccountSearch">
-              <input type="text" placeholder="Search Account." class="w100" #accountSearch
-                     [formControl]="accountUniqueNameInput"/>
-              <!--<i class="icon-search" (click)="showAmountSearch = false"></i>-->
-            </div>
+                            <div class="input-container" [hidden]="!showAccountSearch">
+                                <input type="text" placeholder="Search Account." class="w100" #accountSearch
+                                    [formControl]="accountUniqueNameInput" />
+                                <!--<i class="icon-search" (click)="showAmountSearch = false"></i>-->
+                            </div>
 
-          </th>
+                        </th>
 
-          <th>
-            <div class="d-flex">
-              <div class="flex-fill">Date</div>
-              <!-- <div class="icon-pointer">
+                        <th>
+                            <div class="d-flex">
+                                <div class="flex-fill">Date</div>
+                                <!-- <div class="icon-pointer">
                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                      (click)="sortButtonClicked('asc', 'voucherDate')"
                      [ngClass]="{'activeTextColor': receiptSearchRequest.sortBy === 'voucherDate' && receiptSearchRequest.sort === 'asc'}"
@@ -137,13 +141,13 @@
                      [ngClass]="{'activeTextColor': receiptSearchRequest.sortBy === 'voucherDate' && receiptSearchRequest.sort === 'desc'}"
                 ></div>
               </div> -->
-            </div>
-          </th>
+                            </div>
+                        </th>
 
-          <th>
-            <div class="d-flex">
-              <div class="flex-fill">Total Amount</div>
-              <!-- <div class="icon-pointer">
+                        <th>
+                            <div class="d-flex">
+                                <div class="flex-fill">Total Amount</div>
+                                <!-- <div class="icon-pointer">
                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                      (click)="sortButtonClicked('asc', 'grandTotal')"
                      [ngClass]="{'activeTextColor': receiptSearchRequest.sortBy === 'grandTotal' && receiptSearchRequest.sort === 'asc'}"
@@ -153,122 +157,124 @@
                      [ngClass]="{'activeTextColor': receiptSearchRequest.sortBy === 'grandTotal' && receiptSearchRequest.sort === 'desc'}"
                 ></div>
               </div> -->
+                            </div>
+                        </th>
+
+                    </tr>
+                </thead>
+
+                <tfoot *ngIf="receiptData && receiptData?.totalPages > 1">
+                    <tr>
+                        <td colspan="100%">
+                            <div class="alC">
+                                <pagination [totalItems]="receiptData.totalPages" [(ngModel)]="receiptData.page"
+                                    [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1"
+                                    [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+
+                <tbody *ngIf="receiptData && receiptData.items.length > 0"
+                    (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+                    (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
+
+                    <tr *ngFor="let item of receiptData.items; let i = index"
+                        (mouseover)="hoveredItemForAction = item.uniqueName">
+
+                        <td
+                            *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedItems.length > 0">
+                            <div class="mh18_img" style="justify-content: center;display: flex">
+                                <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
+                                    (click)="toggleItem(item, true)" />
+                                <img *ngIf="item.isSelected" src="assets/images/checked.png"
+                                    (click)="toggleItem(item, false)" />
+                            </div>
+                        </td>
+
+                        <td
+                            *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedItems.length === 0">
+                            <div style="justify-content: center;display: flex">{{ i + 1}}</div>
+                        </td>
+
+                        <td><a style="cursor: pointer" (click)="downloadVoucherRequest(item.uniqueName, false)">
+                                {{item.voucherNumber }}</a></td>
+
+                        <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
+                            (clickOutside)="modalUniqueName = ''">
+                            {{item.account.name}}
+                            <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
+                                [accountUniqueName]="item.account.uniqueName" [from]="this.receiptSearchRequest.from"
+                                [to]="this.receiptSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
+                            </div>
+                        </td>
+
+                        <td>{{item.voucherDate}}</td>
+                        <td>{{item.grandTotal | giddhCurrency}}</td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+            <div class="no-data mrT2" *ngIf="!receiptData">
+                <h1>No Entry found!</h1>
+                <!--<h1>Have to do some sales before creating invoice</h1>-->
             </div>
-          </th>
 
-        </tr>
-        </thead>
-
-        <tfoot *ngIf="receiptData && receiptData?.totalPages > 1">
-        <tr>
-          <td colspan="100%">
-            <div class="alC">
-              <pagination [totalItems]="receiptData.totalPages" [(ngModel)]="receiptData.page" [maxSize]="5"
-                          class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
-                          (pageChanged)="pageChanged($event)"></pagination>
+            <div class="no-data" *ngIf="receiptData && receiptData.items.length === 0">
+                <h1>No entries found within given criteria.</h1>
+                <h1>Do search with some other filters</h1>
             </div>
-          </td>
-        </tr>
-        </tfoot>
+            <!-- grid -->
 
-        <tbody *ngIf="receiptData && receiptData.items.length > 0"
-               (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
-               (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
-
-        <tr *ngFor="let item of receiptData.items; let i = index" (mouseover)="hoveredItemForAction = item.uniqueName">
-
-          <td *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedItems.length > 0">
-            <div class="mh18_img" style="justify-content: center;display: flex">
-              <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)"/>
-              <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)"/>
+            <!-- Download or Preview Voucher model -->
+            <div bsModal #invoiceReceiptVoucherDetailsModel="bs-modal" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <preview-download-receipt-component (closeModelEvent)="hidePreviewDownloadModal()"
+                            (openUpdateReceiptModel)="onEditBtnClick()" [activatedInvoice]="type"
+                            [request]="downloadVoucherRequestObject"></preview-download-receipt-component>
+                    </div>
+                </div>
             </div>
-          </td>
+            <!-- Download or Preview Voucher model -->
 
-          <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedItems.length === 0">
-            <div style="justify-content: center;display: flex">{{ i + 1}}</div>
-          </td>
-
-          <td><a style="cursor: pointer" (click)="downloadVoucherRequest(item.uniqueName, false)">
-            {{item.voucherNumber }}</a></td>
-
-          <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
-              (clickOutside)="modalUniqueName = ''">
-            {{item.account.name}}
-            <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
-                 [accountUniqueName]="item.account.uniqueName"
-                 [from]="this.receiptSearchRequest.from" [to]="this.receiptSearchRequest.to"
-                 [isModalOpen]="modalUniqueName === item.uniqueName">
+            <!-- Edit Voucher model -->
+            <div bsModal #invoiceReceiptVoucherUpdateModel="bs-modal" class="modal fade" role="dialog">
+                <div class="modal-md">
+                    <div class="modal-content">
+                        <app-receipt-update (closeModelEvent)="hideUpdateModal()" [activatedInvoice]="type"
+                            [selectedReceipt]="selectedReceipt"></app-receipt-update>
+                    </div>
+                </div>
             </div>
-          </td>
+            <!-- Edit Voucher model -->
 
-          <td>{{item.voucherDate}}</td>
-          <td>{{item.grandTotal | giddhCurrency}}</td>
-        </tr>
-        </tbody>
+            <!-- Delete invoice confirmation model -->
+            <div bsModal #invoiceReceiptConfirmationModel="bs-modal" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <delete-role-confirmation-model [selectedInvoiceForDelete]="selectedInvoice"
+                            (confirmDeleteEvent)="deleteConfirmedInvoice()"
+                            (closeModelEvent)="closeConfirmationPopup()"></delete-role-confirmation-model>
+                    </div>
+                </div>
+            </div>
+            <!-- Delete invoice confirmation model -->
 
-      </table>
+            <!--advance_seearch Modal-->
+            <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig"
+                tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <invoice-advance-search-component #advanceSearchComponent [type]="'receipt'"
+                            [request]="advanceSearchFilter" (applyFilterEvent)="applyAdvanceSearch($event)"
+                            (closeModelEvent)="toggleAdvanceSearchPopup()"></invoice-advance-search-component>
+                    </div>
+                </div>
+            </div>
+            <!--advance_seearch Modal-->
 
-      <div class="no-data mrT2" *ngIf="!receiptData">
-        <h1>No Entry found!</h1>
-        <!--<h1>Have to do some sales before creating invoice</h1>-->
-      </div>
-
-      <div class="no-data" *ngIf="receiptData && receiptData.items.length === 0">
-        <h1>No entries found within given criteria.</h1>
-        <h1>Do search with some other filters</h1>
-      </div>
-      <!-- grid -->
-
-      <!-- Download or Preview Voucher model -->
-      <div bsModal #invoiceReceiptVoucherDetailsModel="bs-modal" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <preview-download-receipt-component (closeModelEvent)="hidePreviewDownloadModal()"
-                                                (openUpdateReceiptModel)="onEditBtnClick()" [activatedInvoice]="type"
-                                                [request]="downloadVoucherRequestObject"></preview-download-receipt-component>
-          </div>
         </div>
-      </div>
-      <!-- Download or Preview Voucher model -->
-
-      <!-- Edit Voucher model -->
-      <div bsModal #invoiceReceiptVoucherUpdateModel="bs-modal" class="modal fade" role="dialog">
-        <div class="modal-md">
-          <div class="modal-content">
-            <app-receipt-update (closeModelEvent)="hideUpdateModal()" [activatedInvoice]="type"
-                                [selectedReceipt]="selectedReceipt"></app-receipt-update>
-          </div>
-        </div>
-      </div>
-      <!-- Edit Voucher model -->
-
-      <!-- Delete invoice confirmation model -->
-      <div bsModal #invoiceReceiptConfirmationModel="bs-modal" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-md">
-          <div class="modal-content">
-            <delete-role-confirmation-model [selectedInvoiceForDelete]="selectedInvoice"
-                                            (confirmDeleteEvent)="deleteConfirmedInvoice()"
-                                            (closeModelEvent)="closeConfirmationPopup()"></delete-role-confirmation-model>
-          </div>
-        </div>
-      </div>
-      <!-- Delete invoice confirmation model -->
-
-      <!--advance_seearch Modal-->
-      <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig"
-           tabindex="-1">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <invoice-advance-search-component #advanceSearchComponent
-                                              [type]="'receipt'"
-                                              [request]="advanceSearchFilter"
-                                              (applyFilterEvent)="applyAdvanceSearch($event)"
-                                              (closeModelEvent)="toggleAdvanceSearchPopup()"></invoice-advance-search-component>
-          </div>
-        </div>
-      </div>
-      <!--advance_seearch Modal-->
-
-    </div>
-  </nav>
+    </nav>
 </section>

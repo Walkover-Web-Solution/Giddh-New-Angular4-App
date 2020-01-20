@@ -1,36 +1,23 @@
-import {take, takeUntil} from "rxjs/operators";
-import {LoginActions} from "../actions/login.action";
-import {AppState} from "../store";
-import {Router} from "@angular/router";
-import {Component, Inject, OnDestroy, OnInit, ViewChild} from "@angular/core";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ModalDirective} from "ngx-bootstrap";
-import {Configuration} from "../app.constant";
-import {Store} from "@ngrx/store";
-import {Observable, ReplaySubject} from "rxjs";
-import {
-    LinkedInRequestModel,
-    SignupwithEmaillModel,
-    SignupWithMobile,
-    VerifyEmailModel,
-    VerifyEmailResponseModel,
-    VerifyMobileModel
-} from "../models/api-models/loginModels";
-import {
-    AuthService,
-    GoogleLoginProvider,
-    LinkedinLoginProvider,
-    SocialUser
-} from "../theme/ng-social-login-module/index";
-import {contriesWithCodes} from "../shared/helpers/countryWithCodes";
+import { take, takeUntil } from "rxjs/operators";
+import { LoginActions } from "../actions/login.action";
+import { AppState } from "../store";
+import { Router } from "@angular/router";
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ModalDirective } from "ngx-bootstrap";
+import { Configuration } from "../app.constant";
+import { Store } from "@ngrx/store";
+import { Observable, ReplaySubject } from "rxjs";
+import { LinkedInRequestModel, SignupwithEmaillModel, SignupWithMobile, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel } from "../models/api-models/loginModels";
+import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from "../theme/ng-social-login-module/index";
+import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 
-import {IOption} from "../theme/ng-virtual-select/sh-options.interface";
-import {DOCUMENT} from "@angular/platform-browser";
-import {ToasterService} from "../services/toaster.service";
-import {AuthenticationService} from "../services/authentication.service";
-import {userLoginStateEnum} from "../models/user-login-state";
-import {isCordova, isIOSCordova} from "@giddh-workspaces/utils";
-declare var cordova:any;
+import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
+import { DOCUMENT } from "@angular/platform-browser";
+import { ToasterService } from "../services/toaster.service";
+import { AuthenticationService } from "../services/authentication.service";
+import { userLoginStateEnum } from "../models/user-login-state";
+
 @Component({
     selector: "login",
     templateUrl: "./login.component.html",
@@ -67,12 +54,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     public loginWithPasswdForm: FormGroup;
     public isLoginWithPasswordInProcess$: Observable<boolean>;
     public forgotPasswordForm: FormGroup;
+    public verifyOtpForm: FormGroup;
     public resetPasswordForm: FormGroup;
     public isForgotPasswordInProgress$: Observable<boolean>;
     public isForgotPasswordInSuccess$: Observable<boolean>;
     public isResetPasswordInSuccess$: Observable<boolean>;
     public signupVerifyForm: FormGroup;
     public isLoginWithPasswordSuccessNotVerified$: Observable<boolean>;
+    public isLoginWithPasswordIsShowVerifyOtp$: Observable<boolean>;
+
 
     public showForgotPassword: boolean = false;
     public forgotStep: number = 0;
@@ -87,18 +77,17 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     //Button to hide linkedIn button till functionality is available
     public showLinkedInButton = false;
-
     // tslint:disable-next-line:no-empty
     constructor(private _fb: FormBuilder,
-                private store: Store<AppState>,
-                private router: Router,
-                private loginAction: LoginActions,
-                private authService: AuthService,
-                @Inject(DOCUMENT) private document: Document,
-                private _toaster: ToasterService,
-                private _authService: AuthenticationService
+        private store: Store<AppState>,
+        private router: Router,
+        private loginAction: LoginActions,
+        private authService: AuthService,
+        @Inject(DOCUMENT) private document: Document,
+        private _toaster: ToasterService,
+        private _authService: AuthenticationService
     ) {
-        this.urlPath = (isElectron || isCordova) ? "" : AppUrl + APP_FOLDER;
+        this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = store.select(state => {
             return state.login.isLoginWithEmailInProcess;
         }).pipe(takeUntil(this.destroyed$));
@@ -144,11 +133,13 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isLoginWithPasswordSuccessNotVerified$ = store.select(state => {
             return state.login.isLoginWithPasswordSuccessNotVerified;
         }).pipe(takeUntil(this.destroyed$));
-
+        this.isLoginWithPasswordIsShowVerifyOtp$ = store.select(state => {
+            return state.login.isLoginWithPasswordIsShowVerifyOtp;
+        }).pipe(takeUntil(this.destroyed$));
         this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).pipe(takeUntil(this.destroyed$));
 
         contriesWithCodes.map(c => {
-            this.countryCodeList.push({value: c.countryName, label: c.value});
+            this.countryCodeList.push({ value: c.countryName, label: c.value });
         });
         this.userLoginState$ = this.store.select(p => p.session.userLoginState);
         this.userDetails$ = this.store.select(p => p.session.user);
@@ -159,9 +150,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
 
-        this.emailVerifyModal.config = {backdrop: "static"};
-        this.twoWayAuthModal.config = {backdrop: "static"};
-        this.mobileVerifyModal.config = {backdrop: "static"};
+        this.emailVerifyModal.config = { backdrop: "static" };
+        this.twoWayAuthModal.config = { backdrop: "static" };
+        this.mobileVerifyModal.config = { backdrop: "static" };
 
         this.getElectronAppVersion();
         this.document.body.classList.remove("unresponsive");
@@ -187,6 +178,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.forgotPasswordForm = this._fb.group({
             userId: ["", [Validators.required]]
         });
+        this.verifyOtpForm = this._fb.group({
+            oneTimePassword: ["", [Validators.required]]
+        });
         this.resetPasswordForm = this._fb.group({
             verificationCode: ["", [Validators.required]],
             uniqueKey: ["", [Validators.required]],
@@ -196,10 +190,10 @@ export class LoginComponent implements OnInit, OnDestroy {
             email: ["", [Validators.required, Validators.email]],
             verificationCode: ["", Validators.required]
         });
-        this.setCountryCode({value: "India", label: "India"});
+        this.setCountryCode({ value: "India", label: "India" });
 
         // get user object when google auth is complete
-        if (!Configuration.isElectron && !Configuration.isCordova) {
+        if (!Configuration.isElectron) {
             this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
                 this.isSocialLogoutAttempted$.subscribe((res) => {
                     if (!res && user) {
@@ -261,6 +255,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isLoginWithPasswordSuccessNotVerified$.subscribe(res => {
             if (res) {
                 console.log("isLoginWithPasswordSuccessNotVerified", res);
+            }
+        });
+        this.isLoginWithPasswordIsShowVerifyOtp$.subscribe(res => {
+            if (res) {
+                this.showTwoWayAuthModal();
             }
         });
     }
@@ -355,7 +354,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     public async signInWithProviders(provider: string) {
         if (Configuration.isElectron) {
             // electronOauth2
-            const {ipcRenderer} = (window as any).require("electron");
+            const { ipcRenderer } = (window as any).require("electron");
             if (provider === "google") {
                 // google
                 const t = ipcRenderer.sendSync("authenticate", provider);
@@ -526,7 +525,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public forgotPassword(userId) {
-        this.resetPasswordForm.patchValue({uniqueKey: userId});
+        this.resetPasswordForm.patchValue({ uniqueKey: userId });
         this.userUniqueKey = userId;
         this.store.dispatch(this.loginAction.forgotPasswordRequest(userId));
     }

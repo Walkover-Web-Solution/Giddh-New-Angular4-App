@@ -1,11 +1,12 @@
-<div id="design" class="tabcontent pdT2 pdB2" [hidden]="!design" [attachOutsideOnClick]="true" (clickOutside)="clickedOutside()" (click)="$event.stopPropagation()">
+<div id="design" class="tabcontent pdT2 pdB2" [hidden]="!design" [attachOutsideOnClick]="true"
+    (clickOutside)="clickedOutside()" (click)="$event.stopPropagation()">
 
 
     <div class="clearfix">
         <div class="col-xs-9">
             <div class="row">
                 <label><input type="text" class="form-control" placeholder="My Template Name" name="templateName"
-                      [(ngModel)]="customTemplate.name" (ngModelChange)="onValueChange(null, null)"/></label>
+                        [(ngModel)]="customTemplate.name" (ngModelChange)="onValueChange(null, null)" /></label>
             </div>
         </div>
     </div>
@@ -27,13 +28,15 @@
                     <ul class="templateView">
                         <!-- {{ sampleTemplates | json}} -->
                         <ng-container *ngFor="let template of sampleTemplates">
-                            <li (click)="onDesignChange('uniqueName', template.uniqueName)" *ngIf="template.type === 'invoice' && templateType === 'invoice'">
+                            <li (click)="onDesignChange('uniqueName', template.uniqueName)"
+                                *ngIf="template.type === 'invoice' && templateType === 'invoice'">
                                 <img src="./assets/images/templates/{{template.templateType}}.png" alt="" />
                                 <div class="beta-img">
                                     <img src="./assets/images/templates/beta.png" alt="" />
                                 </div>
                             </li>
-                            <li (click)="onDesignChange('uniqueName', template.uniqueName)" *ngIf="template.type === 'voucher' &&  templateType === 'voucher'">
+                            <li (click)="onDesignChange('uniqueName', template.uniqueName)"
+                                *ngIf="template.type === 'voucher' &&  templateType === 'voucher'">
                                 <img src="./assets/images/templates/{{template.templateType}}.png" alt="" />
                                 <div class="beta-img">
                                     <img src="./assets/images/templates/beta.png" alt="" />
@@ -77,33 +80,42 @@
                 <i class="ico-edit"></i> <label>Make logo edit</label>
                 <div class="clearfix mrT1">
                     <div class="logoTool">
-                        <span class="logo-preview" [class.cursor-disable]="isFileUploaded" >
+                        <span class="logo-preview" [class.cursor-disable]="isFileUploaded">
                             <label class="upload-button" for="logo-edit" [hidden]="logoAttached">
                                 <input type="file" #fileInput accept="image/png, image/jpeg" id="logo-edit"
-                                       [options]="fileUploadOptions" ngFileSelect [disabled]="isFileUploaded"
-                                       (uploadOutput)="onUploadMyFileOutput($event)" [uploadInput]="uploadInput">
+                                    [options]="fileUploadOptions" ngFileSelect [disabled]="isFileUploaded"
+                                    (uploadOutput)="onUploadMyFileOutput($event)" [uploadInput]="uploadInput">
                                 <small>Upload Your Logo</small>
                             </label>
-                            <label for="logo-edit" [class.cursor-disable]="isFileUploaded" >
-                                <img src="" alt="" id="logoImage" [hidden]="!logoAttached"/>
+                            <label for="logo-edit" [class.cursor-disable]="isFileUploaded">
+                                <img src="" alt="" id="logoImage" [hidden]="!logoAttached" />
                             </label>
                         </span>
-                        <button *ngIf="showUploadButton" type="button" class="start-upload-btn btn btn-success" (click)="startUpload()" tooltip="Clicking on Upload, will Upload image on server">Upload</button>
+                        <button *ngIf="showUploadButton" type="button" class="start-upload-btn btn btn-success"
+                            (click)="startUpload()"
+                            tooltip="Clicking on Upload, will Upload image on server">Upload</button>
                         <span class="start-upload-btn" *ngIf="isFileUploadInProgress"><b>Uploading...</b></span>
-                        <button *ngIf="showDeleteButton" type="button" class="start-upload-btn btn btn-danger" (click)="deleteLogo()" tooltip="Clicking on this, will delete image from server">Delete</button>
-                        <div class="pull-left mrL1 mrT1 choose-size" >
-                          <div class="d-block" [class.cursor-disable]="isFileUploaded">
-                            <p>Size</p>
-                                <input name="chooseSize" type="radio" id="fontS" value="S" [disabled]="isFileUploaded"  (click)="onValueChange('logoSize', '40')">
+                        <button *ngIf="showDeleteButton" type="button" class="start-upload-btn btn btn-danger"
+                            (click)="deleteLogo()"
+                            tooltip="Clicking on this, will delete image from server">Delete</button>
+                        <div class="pull-left mrL1 mrT1 choose-size">
+                            <div class="d-block" [class.cursor-disable]="isFileUploaded">
+                                <p>Size</p>
+                                <input name="chooseSize" type="radio" id="fontS" value="S" [disabled]="isFileUploaded"
+                                    (click)="onValueChange('logoSize', '40')">
                                 <label for="fontS">S</label>
-                                <input name="chooseSize" type="radio" id="fontM" value="M" [disabled]="isFileUploaded"  (click)="onValueChange('logoSize', '50')">
+                                <input name="chooseSize" type="radio" id="fontM" value="M" [disabled]="isFileUploaded"
+                                    (click)="onValueChange('logoSize', '50')">
                                 <label for="fontM">M</label>
-                                <input name="chooseSize" type="radio" id="fontL" value="L" [disabled]="isFileUploaded"  (click)="onValueChange('logoSize', '60')">
+                                <input name="chooseSize" type="radio" id="fontL" value="L" [disabled]="isFileUploaded"
+                                    (click)="onValueChange('logoSize', '60')">
                                 <label for="fontL">L</label>
-                          </div>
-                          <div class="d-block">
-                          <a class="primary_clr"  [attr.disabled]="isFileUploaded"  [class.cursor-disable]="isFileUploaded"  [hidden]="!logoAttached" (click)="toogleLogoVisibility()"><span [hidden]="showLogo">Show</span><span
-                            [hidden]="!showLogo">Hide</span> logo</a> </div>
+                            </div>
+                            <div class="d-block">
+                                <a class="primary_clr" [attr.disabled]="isFileUploaded"
+                                    [class.cursor-disable]="isFileUploaded" [hidden]="!logoAttached"
+                                    (click)="toogleLogoVisibility()"><span [hidden]="showLogo">Show</span><span
+                                        [hidden]="!showLogo">Hide</span> logo</a> </div>
                         </div>
                     </div>
                 </div>
@@ -119,7 +131,8 @@
                 <div class="clearfix mrT1">
                     <div class="swatch text-center">
                         <span class="swatch-preview"><span class=""
-                                                           [ngStyle]="{ 'background-color': customTemplate.templateColor}"></span> {{customTemplate.templateColor}}
+                                [ngStyle]="{ 'background-color': customTemplate.templateColor}"></span>
+                            {{customTemplate.templateColor}}
                         </span>
                         <div class="mrL1 pull-left">
                             <ul>
@@ -155,7 +168,8 @@
                 <i class="ico-txt"></i> <label>Select different fonts</label>
                 <div class="col-xs-9 font-selector mrT1 form-group">
                     <div class="row">
-                        <sh-select [options]="presetFonts" (selected)="onFontSelect($event)" [placeholder]="'Choose font'" [multiple]="false" [ItemHeight]="33"></sh-select>
+                        <sh-select [options]="presetFonts" (selected)="onFontSelect($event)"
+                            [placeholder]="'Choose font'" [multiple]="false" [ItemHeight]="33"></sh-select>
                         <!-- <div class="form-control" fxLayout="column" (fontPickerChange)='onFontSelect(font)' fxLayoutAlign="center center" fxFlex [(fontPicker)]="font" [fpWidth]="'auto'" [fpSizeSelect]='false' [fpStyleSelect]='false' [fpPosition]="'bottom'" [fpPositionOffset]="'0%'"
                 [fpPositionRelativeToArrow]="false" [fpPresetLabel]="'Preset fonts'" [fpPresetFonts]="presetFonts">
                 {{font.family}}
@@ -172,7 +186,8 @@
                     <i class="ico-txt"></i> <label>Select different fonts size</label>
                     <div class="col-xs-9 font-selector mrT1 form-group">
                         <div class="row">
-                            <sh-select [options]="presetFontsSize" (selected)="onFontSizeSelect($event)" [placeholder]="'Choose font size'" [multiple]="false" [ItemHeight]="33"></sh-select>
+                            <sh-select [options]="presetFontsSize" (selected)="onFontSizeSelect($event)"
+                                [placeholder]="'Choose font size'" [multiple]="false" [ItemHeight]="33"></sh-select>
                             <!-- <div class="form-control" fxLayout="column" (fontPickerChange)='onFontSelect(font)' fxLayoutAlign="center center" fxFlex [(fontPicker)]="font" [fpWidth]="'auto'" [fpSizeSelect]='false' [fpStyleSelect]='false' [fpPosition]="'bottom'" [fpPositionOffset]="'0%'"
                 [fpPositionRelativeToArrow]="false" [fpPresetLabel]="'Preset fonts'" [fpPresetFonts]="presetFonts">
                 {{font.family}}
@@ -202,15 +217,24 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><input type="text" decimalDigitsDirective [DecimalPlaces]="1" class="form-control" [(ngModel)]='customTemplate.topMargin' (keyup)='onValueChange(null, null);validatePrintSetting(customTemplate.topMargin, 0, "topMargin")'
-                                        /></td>
-                                    <td><input type="text" decimalDigitsDirective [DecimalPlaces]="1" class="form-control" [(ngModel)]='customTemplate.leftMargin' (keyup)='onValueChange(null, null);validatePrintSetting(customTemplate.leftMargin, 1, "leftMargin")'
-                                        /></td>
-                                    <td><input type="text" decimalDigitsDirective [DecimalPlaces]="1" class="form-control" [(ngModel)]='customTemplate.bottomMargin' (keyup)='onValueChange(null, null);validatePrintSetting(customTemplate.bottomMargin, 2, "bottomMargin")'
-                                        /></td>
-                                    <td><input type="text" decimalDigitsDirective [DecimalPlaces]="1" class="form-control" [(ngModel)]='customTemplate.rightMargin' (keyup)='onValueChange(null, null);validatePrintSetting(customTemplate.rightMargin, 3, "rightMargin")'
-                                        /></td>
-                                    <td><a href="javascript:void(0);" class="pdR1" (click)="resetPrintSetting()">Reset</a></td>
+                                    <td><input type="text" decimalDigitsDirective [DecimalPlaces]="1"
+                                            class="form-control" [(ngModel)]='customTemplate.topMargin'
+                                            (keyup)='onValueChange(null, null);validatePrintSetting(customTemplate.topMargin, 0, "topMargin")' />
+                                    </td>
+                                    <td><input type="text" decimalDigitsDirective [DecimalPlaces]="1"
+                                            class="form-control" [(ngModel)]='customTemplate.leftMargin'
+                                            (keyup)='onValueChange(null, null);validatePrintSetting(customTemplate.leftMargin, 1, "leftMargin")' />
+                                    </td>
+                                    <td><input type="text" decimalDigitsDirective [DecimalPlaces]="1"
+                                            class="form-control" [(ngModel)]='customTemplate.bottomMargin'
+                                            (keyup)='onValueChange(null, null);validatePrintSetting(customTemplate.bottomMargin, 2, "bottomMargin")' />
+                                    </td>
+                                    <td><input type="text" decimalDigitsDirective [DecimalPlaces]="1"
+                                            class="form-control" [(ngModel)]='customTemplate.rightMargin'
+                                            (keyup)='onValueChange(null, null);validatePrintSetting(customTemplate.rightMargin, 3, "rightMargin")' />
+                                    </td>
+                                    <td><a href="javascript:void(0);" class="pdR1"
+                                            (click)="resetPrintSetting()">Reset</a></td>
                                 </tr>
                             </tbody>
                         </table>

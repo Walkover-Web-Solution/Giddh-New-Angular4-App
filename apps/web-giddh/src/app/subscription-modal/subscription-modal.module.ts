@@ -6,16 +6,16 @@ import { SubscriptionModalComponent } from './subscription-modal.component';
 import { SubscriptionModalRoutingModule } from './subscription-modal.routing.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SubscriptionModalRoutingModule,
-    ModalModule.forRoot(),
-    
-  ],
-  declarations: [SubscriptionModalComponent]
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        SubscriptionModalRoutingModule,
+        ModalModule.forRoot(),
+
+    ],
+    declarations: [SubscriptionModalComponent]
 })
 export class SubscriptionModalModule {
-  
+
 }

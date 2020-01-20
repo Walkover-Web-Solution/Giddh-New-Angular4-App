@@ -1,10 +1,11 @@
 <div class="modal-header clearfix">
     <span *ngIf="showPdfWrap">
-            <button type="button" class="btn btn-md btn-info mrR1" *ngIf="showEditButton" (click)="goToedit('sales')">Edit</button>
-            <button type="button" class="btn btn-md btn-default mrR1"
-                    (click)="showMore = ! showMore; showEsign= false;">More <span class="caret"></span></button>
-    <!-- <button type="button" class="btn btn-md btn-default mrR1" (click)="showEmailTextarea = !showEmailTextarea; showMore = false;">Send Email</button> -->
-    <!-- <button type="button" class="btn btn-md btn-default mrR1" (click)="showEsign = !showEsign; showMore = false;">E-Signature</button> -->
+        <button type="button" class="btn btn-md btn-info mrR1" *ngIf="showEditButton"
+            (click)="goToedit('sales')">Edit</button>
+        <button type="button" class="btn btn-md btn-default mrR1"
+            (click)="showMore = ! showMore; showEsign= false;">More <span class="caret"></span></button>
+        <!-- <button type="button" class="btn btn-md btn-default mrR1" (click)="showEmailTextarea = !showEmailTextarea; showMore = false;">Send Email</button> -->
+        <!-- <button type="button" class="btn btn-md btn-default mrR1" (click)="showEsign = !showEsign; showMore = false;">E-Signature</button> -->
     </span>
     <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="onCancel('closed')"></i>
     <!-- drop down for email area -->
@@ -30,13 +31,16 @@
 
         <ul class="nav nav-tabs">
             <li class="nav-item" [ngClass]="{'active': emailTabActive}">
-                <a class="nav-link cp" [ngClass]="{'active': emailTabActive}" (click)="emailTabActive = true;downloadTabActive=false;smsTabActive=false">Send Email</a>
+                <a class="nav-link cp" [ngClass]="{'active': emailTabActive}"
+                    (click)="emailTabActive = true;downloadTabActive=false;smsTabActive=false">Send Email</a>
             </li>
             <li class="nav-item" [ngClass]="{'active': downloadTabActive}">
-                <a class="nav-link cp" [ngClass]="{'active': downloadTabActive}" (click)="emailTabActive = false;downloadTabActive=true;smsTabActive=false">Download</a>
+                <a class="nav-link cp" [ngClass]="{'active': downloadTabActive}"
+                    (click)="emailTabActive = false;downloadTabActive=true;smsTabActive=false">Download</a>
             </li>
             <li class="nav-item" [ngClass]="{'active': smsTabActive}" *ngIf="isSendSmsEnabled">
-                <a class="nav-link cp" [ngClass]="{'active': smsTabActive}" (click)="emailTabActive = false;downloadTabActive=false;smsTabActive=true">Send SMS</a>
+                <a class="nav-link cp" [ngClass]="{'active': smsTabActive}"
+                    (click)="emailTabActive = false;downloadTabActive=false;smsTabActive=true">Send SMS</a>
             </li>
         </ul>
         <div class="pd2 clearfix">
@@ -49,22 +53,27 @@
             </div>
             <div class="clearfix" [hidden]="smsTabActive">
                 <h3 class="fs16 mrB">Invoice Copy</h3>
-                <hr/>
+                <hr />
                 <div class="checkbox">
-                    <label><input type="checkbox" value="Transport" (change)="onSelectInvoiceCopy($event)">Transport</label>
+                    <label><input type="checkbox" value="Transport"
+                            (change)="onSelectInvoiceCopy($event)">Transport</label>
                 </div>
                 <div class="checkbox">
-                    <label><input type="checkbox" value="Customer" (change)="onSelectInvoiceCopy($event)">Customer</label>
+                    <label><input type="checkbox" value="Customer"
+                            (change)="onSelectInvoiceCopy($event)">Customer</label>
                 </div>
             </div>
 
             <div class="clearfix">
-                <button [hidden]="!emailTabActive" type="button" class="btn btn-sm btn-success" (click)="onSendInvoiceOnMail(emailList.value)">Send
-          </button>
-                <button type="button" class="btn btn-sm btn-success" (click)="downloadInvoice()" [disabled]="!invoiceType.length" [hidden]="emailTabActive || smsTabActive">Download Invoice
-          </button>
-                <button [hidden]="!smsTabActive" type="button" class="btn btn-sm btn-success" (click)="onSendInvoiceOnSms(smsList.value)">Send
-          </button>
+                <button [hidden]="!emailTabActive" type="button" class="btn btn-sm btn-success"
+                    (click)="onSendInvoiceOnMail(emailList.value)">Send
+                </button>
+                <button type="button" class="btn btn-sm btn-success" (click)="downloadInvoice()"
+                    [disabled]="!invoiceType.length" [hidden]="emailTabActive || smsTabActive">Download Invoice
+                </button>
+                <button [hidden]="!smsTabActive" type="button" class="btn btn-sm btn-success"
+                    (click)="onSendInvoiceOnSms(smsList.value)">Send
+                </button>
 
             </div>
         </div>
@@ -85,8 +94,10 @@
     <div id="pdf-wrapper" *ngIf="showPdfWrap" style="width: 100%; height: 600px;">
         <!-- <webview *ngIf="isElectron" plugins [attr.src]="unSafeBase64StringForModel" type="application/pdf" style="width: 100%; height: 600px;"></webview> -->
         <ng-container *ngIf="isElectron">
-            <ng2-pdfjs-viewer #pdfViewer type="application/pdf" [downloadFileName]="'invoice.pdf'" [openFile]="false" [viewBookmark]="false" [download]="false"></ng2-pdfjs-viewer>
+            <ng2-pdfjs-viewer #pdfViewer type="application/pdf" [downloadFileName]="'invoice.pdf'" [openFile]="false"
+                [viewBookmark]="false" [download]="false"></ng2-pdfjs-viewer>
         </ng-container>
-        <iframe *ngIf="!isElectron" width="100%" height="600px" name="plugin" [src]="base64StringForModel" type="application/pdf"></iframe>
+        <iframe *ngIf="!isElectron" width="100%" height="600px" name="plugin" [src]="base64StringForModel"
+            type="application/pdf"></iframe>
     </div>
 </div>

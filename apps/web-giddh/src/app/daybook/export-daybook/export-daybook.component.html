@@ -1,41 +1,45 @@
 <div id="exportModal" class="" ng-if="ledgerCtrl.LedgerExport">
-  <div class="modal-header">
-    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeExportDaybookModal.emit('close')"
-      aria-label="Close">×</span>
-    <h3>Export Daybook</h3>
-  </div>
-  <div class="modal-body mrB4" id="export-body">
-    <form name="addShareEmailForm" novalidate class="" autocomplete="off">
-      <div class="pdB2 clearfix">
-        <label class="w100">Type: </label>
-        <label class="radio-inline pd0 w100">
-          <input type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected" [value]="emailTypeMini"
-            class="radio_theme cp">Mini
-        </label>
-        <label class="radio-inline pd0 mrL2">
-          <input type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected" [value]="emailTypeDetail"
-            class="radio_theme cp">Detailed
-        </label>
-      </div>
-      <div class="pdB2 clearfix">
-        <label class="w100">Export As: </label>
-        <label class="radio-inline pd0 w100">
-          <input type="radio" name="fileType" [(ngModel)]="fileType" [value]="'pdf'" class="radio_theme cp">PDF
-        </label>
-        <label class="radio-inline pd0 mrL2">
-          <input type="radio" name="fileType" [(ngModel)]="fileType" [value]="'xlsx'" class="radio_theme cp pdL2">Excel
-        </label>
-      </div>
-      <div class="pdB2 clearfix">
-        <label class="w100">Order: </label>
-        <label class="radio-inline pd0">
-          <input type="radio" name="order" [(ngModel)]="order" [value]="'asc'" class="radio_theme cp">Ascending
-        </label>
-        <label class="radio-inline pd0">
-          <input type="radio" name="order" [(ngModel)]="order" [value]="'desc'" class="radio_theme cp">Descending
-        </label>
-      </div>
-      <button class="btn-success btn" (click)="exportLedger()">Download</button>
-    </form>
-  </div>
+    <div class="modal-header">
+        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeExportDaybookModal.emit('close')"
+            aria-label="Close">×</span>
+        <h3>Export Daybook</h3>
+    </div>
+    <div class="modal-body mrB4" id="export-body">
+        <form name="addShareEmailForm" novalidate class="" autocomplete="off">
+            <div class="pdB2 clearfix">
+                <label class="w100">Type: </label>
+                <label class="radio-inline pd0 w100">
+                    <input type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected" [value]="emailTypeMini"
+                        class="radio_theme cp">Mini
+                </label>
+                <label class="radio-inline pd0 mrL2">
+                    <input type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected"
+                        [value]="emailTypeDetail" class="radio_theme cp">Detailed
+                </label>
+            </div>
+            <div class="pdB2 clearfix">
+                <label class="w100">Export As: </label>
+                <label class="radio-inline pd0 w100">
+                    <input type="radio" name="fileType" [(ngModel)]="fileType" [value]="'pdf'"
+                        class="radio_theme cp">PDF
+                </label>
+                <label class="radio-inline pd0 mrL2">
+                    <input type="radio" name="fileType" [(ngModel)]="fileType" [value]="'xlsx'"
+                        class="radio_theme cp pdL2">Excel
+                </label>
+            </div>
+            <div class="pdB2 clearfix">
+                <label class="w100">Order: </label>
+                <label class="radio-inline pd0">
+                    <input type="radio" name="order" [(ngModel)]="order" [value]="'asc'"
+                        class="radio_theme cp">Ascending
+                </label>
+                <label class="radio-inline pd0">
+                    <input type="radio" name="order" [(ngModel)]="order" [value]="'desc'"
+                        class="radio_theme cp">Descending
+                </label>
+            </div>
+            <button class="btn-success btn" (click)="exportLedger()">Download</button>
+        </form>
+    </div>
 </div>

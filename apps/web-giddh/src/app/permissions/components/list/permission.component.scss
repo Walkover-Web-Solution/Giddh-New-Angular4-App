@@ -1,0 +1,185 @@
+@import "../../../../assets/css/color.scss";
+
+.role {
+    background: #f1f1f2;
+    border: 1px solid #c2cdd3;
+}
+
+.role ul {
+    padding: 2rem;
+    float: left;
+    width: 100%;
+}
+
+.role ul li {
+    display: inline-block;
+    float: left;
+    width: 100px;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+#headsList .caret {
+    top: 9px;
+    position: relative;
+}
+
+#single_role table {
+    background: #f1f1f2;
+    outline: 1px solid #c2cdd3;
+}
+
+#single_role td {
+    border-bottom: 1px solid #c2cdd3;
+}
+
+#single_role thead th {
+    color: #010101 !important;
+    font-weight: 400;
+    text-align: center;
+}
+
+#single_role tbody tr td:first-child,
+#single_role thead th:first-child {
+    color: #858585;
+    text-align: left;
+    border-right: 1px solid #c2cdd3;
+}
+
+#single_role tbody tr td:first-child input[type="checkbox"]:checked:after {
+    background: #d4602a;
+    border-color: #d4602a;
+}
+
+.headName {
+    padding: 13px;
+    background: #d4602a;
+    color: #fff;
+    position: relative;
+}
+
+#single_role tbody td,
+#single_role thead td {
+    text-align: center;
+}
+
+#single_role tbody tr:first-child {
+    background: #ffffff;
+}
+
+#single_role thead th:first-child {
+    padding-left: 18px;
+}
+
+.role_title {
+    font-size: 2rem;
+    position: relative;
+    width: calc(100% - 220px);
+    margin: 0 auto;
+    top: 48px;
+    text-align: center;
+}
+
+.new_col {
+    background: #f1f1f2;
+    border: 1px solid #c2cdd3;
+}
+
+.rolehead {
+    background: #fff;
+    min-height: 170px;
+    outline: 1px solid $border-blue;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.rolehead h1 {
+    height: 100%;
+    text-align: center;
+    font-size: 1.5rem;
+    white-space: inherit;
+}
+
+.role ul li {
+    width: 25%;
+    color: #858585;
+    padding: 6px 0;
+}
+
+.not-allowed {
+    color: #c7c9c9 !important;
+}
+
+.new_box h1 {
+    font-size: 2.5rem;
+    color: #858585;
+}
+
+.dropdown_select.open > .dropdown-menu {
+    display: block;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: scroll;
+    border-radius: 0;
+}
+
+.dropdown_select .dropdown-menu li {
+    padding: 6px 0;
+}
+
+#single_role input[type="checkbox"]:checked:after {
+    background: #d4602a;
+    border-color: #d4602a;
+}
+
+#headsList {
+    box-shadow: none;
+}
+
+#single_role tbody tr td:nth-child(1n + 2) input[type="checkbox"]:before {
+    border-color: #000;
+}
+
+#single_role
+    tbody
+    tr
+    td:nth-child(1n + 2)
+    input[type="checkbox"]:checked:after {
+    background: #f1f1f2;
+    border-color: #f1f1f2;
+    content: "";
+}
+
+#single_role
+    tbody
+    tr
+    td:nth-child(1n + 2)
+    input[type="checkbox"]:checked:before {
+    content: "\f00c";
+    font-family: FontAwesome;
+    border: none;
+    -webkit-transition: none;
+    transition: none;
+    -webkit-transform: none;
+    transform: none;
+}
+
+#single_role tbody tr td:nth-child(1n + 2) input[type="checkbox"]:after {
+    content: "\f00d";
+    font-family: FontAwesome;
+    background: #f1f1f2;
+    border-color: #f1f1f2;
+}
+
+.rolehead .vcenter {
+    max-width: 100%;
+    padding: 0 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

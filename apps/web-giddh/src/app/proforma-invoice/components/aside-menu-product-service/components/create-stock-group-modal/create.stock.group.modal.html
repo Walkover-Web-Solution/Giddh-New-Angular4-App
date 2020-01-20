@@ -1,46 +1,50 @@
 <div class="modal-header pd2 pdL2 pdR2 clearfix">
-    <h3 class="modal-title bg" id="modal-title">Create New Group</h3>
-    <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="closeCreateGroupModal()"></i>
+	<h3 class="modal-title bg" id="modal-title">Create New Group</h3>
+	<i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="closeCreateGroupModal()"></i>
 </div>
 <div class="modal-body">
-    <form name="addStockGroupForm" autocomplete="off" [formGroup]="addStockGroupForm" novalidate>
-        <div class="row">
-            <div class="form-group col-xs-6">
-                <label>Name<span class="required">*</span></label>
-                <input type="text" name="name" (change)="generateUniqueName()" class="form-control" formControlName="name" autocomplete="off" style="background-image: url(data:image/png;base64:iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=);">
-            </div>
+	<form name="addStockGroupForm" autocomplete="off" [formGroup]="addStockGroupForm" novalidate>
+		<div class="row">
+			<div class="form-group col-xs-6">
+				<label>Name<span class="required">*</span></label>
+				<input type="text" name="name" (change)="generateUniqueName()" class="form-control"
+					formControlName="name" autocomplete="off"
+					style="background-image: url(data:image/png;base64:iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=);">
+			</div>
 
-            <div class="form-group col-xs-6">
-                <label>Unique Name<span class="required">*</span></label>
-                <input type="text" autocomplete="off" name="uniqueName" UniqueNameDirective formControlName="uniqueName" class="form-control">
-            </div>
-        </div>
+			<div class="form-group col-xs-6">
+				<label>Unique Name<span class="required">*</span></label>
+				<input type="text" autocomplete="off" name="uniqueName" UniqueNameDirective formControlName="uniqueName"
+					class="form-control">
+			</div>
+		</div>
 
-        <div class="row">
-            <div class="form-group col-xs-12">
-                <label>Parent Group</label>
-                <select class="form-control" formControlName="parentStockGroupUniqueName">
-          <option [ngValue]="null">Select</option>
-          <option *ngFor="let unit of stockGroups$ | async;" [ngValue]="unit.value">{{unit.label}}</option>
-        </select>
-            </div>
-        </div>
+		<div class="row">
+			<div class="form-group col-xs-12">
+				<label>Parent Group</label>
+				<select class="form-control" formControlName="parentStockGroupUniqueName">
+					<option [ngValue]="null">Select</option>
+					<option *ngFor="let unit of stockGroups$ | async;" [ngValue]="unit.value">{{unit.label}}</option>
+				</select>
+			</div>
+		</div>
 
-        <div class="row">
-            <div class="form-group col-xs-12">
-                <div class="checkbox">
-                    <label for="isSelfParentUpdt"><input type="checkbox" formControlName="isSelfParent" id="isSelfParentUpdt"
-                                               name="parentStockGroup">Assign as a Parent Group</label>
-                </div>
-            </div>
-        </div>
+		<div class="row">
+			<div class="form-group col-xs-12">
+				<div class="checkbox">
+					<label for="isSelfParentUpdt"><input type="checkbox" formControlName="isSelfParent"
+							id="isSelfParentUpdt" name="parentStockGroup">Assign as a Parent Group</label>
+				</div>
+			</div>
+		</div>
 
-        <div class="row">
-            <div class="form-group col-xs-12 text-right mrT2">
-                <button type="submit" class="btn btn-md btn-success mrR" [ladda]="isAddStockGroupInProcess" (click)="addStockGroupFormSubmit()" [disabled]="addStockGroupForm.invalid">Save
-        </button>
-                <button (click)="addStockGroupFormReset()" class="btn btn-md btn-primary">Cancel</button>
-            </div>
-        </div>
-    </form>
+		<div class="row">
+			<div class="form-group col-xs-12 text-right mrT2">
+				<button type="submit" class="btn btn-md btn-success mrR" [ladda]="isAddStockGroupInProcess"
+					(click)="addStockGroupFormSubmit()" [disabled]="addStockGroupForm.invalid">Save
+				</button>
+				<button (click)="addStockGroupFormReset()" class="btn btn-md btn-primary">Cancel</button>
+			</div>
+		</div>
+	</form>
 </div>

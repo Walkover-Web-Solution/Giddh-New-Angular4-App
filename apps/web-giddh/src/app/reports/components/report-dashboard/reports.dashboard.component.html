@@ -14,8 +14,8 @@
             </div>
             <div class="col-md-4 col-sm-4 mb-2">
                 <p>Transactions Overview</p>
-                <p><a href="javascript:void(0)" (click)="openDetailedSalesReport()">Sales Register</a></p>
-                <p><a href="javascript:void(0)">Purchase Register</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/reports/sales-register']">Sales Register</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/reports/purchase-register']">Purchase Register</a></p>
                 <p><a href="javascript:void(0)">Cash Register</a></p>
             </div>
             <div class="col-md-4 col-sm-4 mb-2">
@@ -23,7 +23,6 @@
                 <p><a href="javascript:void(0)">Aging Report</a></p>
             </div>
         </div>
-
         <div class="row">
             <div class="col-md-4 col-sm-4 mb-2">
                 <p>Custom Report</p>
@@ -39,5 +38,4 @@
             </div>
         </div>
     </div>
-
 </div>
