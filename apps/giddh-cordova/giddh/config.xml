@@ -7,7 +7,10 @@
     <author email="govi2010@gmail.com" href="http://giddh.com">
         Walkover Team
     </author>
+    <!--    uncomment below line for android testing-->
     <content src="http://10.0.2.2:3000" />
+    <!--    uncomment below line for android testing-->
+<!--    <content src="http://localhost:3000" />-->
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -16,6 +19,9 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <!--    uncomment below line for android testing-->
+<!--    <allow-navigation href="http://localhost:3000" />-->
+<!--    uncomment below line for android testing-->
     <allow-navigation href="http://10.0.2.2:3000" />
     <icon src="resources/icon.png" />
     <preference name="OverrideUserAgent" value="Mozilla/5.0 Google" />
