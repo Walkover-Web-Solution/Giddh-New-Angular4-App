@@ -47,6 +47,7 @@ import { AdvanceSearchModelComponent } from './components/advance-search/advance
 import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
+import {download} from "@giddh-workspaces/utils";
 
 @Component({
     selector: 'ledger',
@@ -948,7 +949,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this._ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).subscribe(d => {
             if (d.status === 'success') {
-                debugger;
+                // debugger;
                 let blob = base64ToBlob(d.body, 'application/pdf', 512);
                 download(`${activeAccount.name} - ${invoiceName}.pdf`,blob, 'application/pdf');
             } else {

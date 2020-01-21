@@ -112,7 +112,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         this.getCallingCodes();
 
         this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
-        this.imgPath = isElectron ? '' : AppUrl + APP_FOLDER + '';
+        this.imgPath = (isElectron ||isCordova)  ? '' : AppUrl + APP_FOLDER + '';
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {
             this.company = this._generalService.createNewCompany;
@@ -231,6 +231,8 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         this.closeCompanyModal.emit();
         if (isElectron) {
             this.store.dispatch(this._loginAction.ClearSession());
+        } else if(isCordova){
+            // todo: Logout user in Cordova.
         } else {
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
                 if (val) {

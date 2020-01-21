@@ -164,7 +164,7 @@ export class GstComponent implements OnInit {
             this.store.dispatch(this._gstAction.GetOverView('gstr2', request));
             this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
         }
-        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = (isElectron||isCordova)  ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
 
     }
 

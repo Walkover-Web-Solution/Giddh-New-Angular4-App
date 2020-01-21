@@ -111,6 +111,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                         this.pdfViewer.refresh();
                     }
                     else if (this.isCordova) {
+                        // todo: show PDF
                     }
                     //   this.pdfViewer.pdfSrc =  new Blob([ e.srcElement.result], { type: "application/pdf" }); // pdfSrc can be Blob or Uint8Array
                     //  this.pdfViewer.refresh();

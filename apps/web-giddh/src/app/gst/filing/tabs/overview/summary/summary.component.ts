@@ -81,7 +81,7 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 	}
 
 	public ngOnInit() {
-		this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+		this.imgPath = (isElectron||isCordova)  ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
 
 		this.gstr1OverviewData$.subscribe(data => {
 			if (this.selectedGst === 'gstr1') {

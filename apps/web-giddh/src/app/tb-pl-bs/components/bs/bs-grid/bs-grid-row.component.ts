@@ -60,7 +60,9 @@ export class BsGridRowComponent implements OnInit, OnChanges {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
             url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
             console.log(ipcRenderer.send('open-url', url));
-        } else if(isCordova){} else {
+        } else if(isCordova){
+            // todo: Entry Click need to be handeled in cordova
+        } else {
             (window as any).open(url);
         }
 

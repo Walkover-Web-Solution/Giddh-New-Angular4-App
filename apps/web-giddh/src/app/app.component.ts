@@ -27,7 +27,7 @@ import {reassignNavigationalArray} from './models/defaultMenus'
         './app.component.css'
     ],
     template: `
-      <noscript *ngIf="isProdMode && !isElectron">
+      <noscript *ngIf="isProdMode && !(isElectron || isCordova)">
           <iframe [src]="tagManagerUrl"
                   height="0" width="0" style="display:none;visibility:hidden"></iframe>
       </noscript>
@@ -130,7 +130,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this._cdr.detectChanges();
         this.router.events.subscribe((evt) => {
 
-            if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron) {
+            if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !(isElectron || isCordova())) {
                 // need to save last state
                 const redirectState = this.getLastStateFromUrl(evt.url);
                 localStorage.setItem('lastState', redirectState);

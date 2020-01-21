@@ -1,33 +1,49 @@
-import { CompanyService } from '../services/companyService.service';
-import { BulkEmailRequest } from '../models/api-models/Search';
-import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
+import {CompanyService} from '../services/companyService.service';
+import {BulkEmailRequest} from '../models/api-models/Search';
+import {combineLatest, Observable, of as observableOf, ReplaySubject, Subject} from 'rxjs';
 
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { select, Store } from '@ngrx/store';
-import { AppState } from '../store';
-import { ToasterService } from '../services/toaster.service';
-import { StateDetailsRequest } from '../models/api-models/Company';
-import { CompanyActions } from '../actions/company.actions';
-import { ActivatedRoute, Router } from '@angular/router';
-import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
-import { DashboardService } from '../services/dashboard.service';
-import { ContactService } from '../services/contact.service';
-import { BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent, TabsetComponent } from 'ngx-bootstrap';
-import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
-import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
-import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
+import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
+import {
+    ChangeDetectorRef,
+    Component,
+    ComponentFactoryResolver,
+    ElementRef,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
+import {select, Store} from '@ngrx/store';
+import {AppState} from '../store';
+import {ToasterService} from '../services/toaster.service';
+import {StateDetailsRequest} from '../models/api-models/Company';
+import {CompanyActions} from '../actions/company.actions';
+import {ActivatedRoute, Router} from '@angular/router';
+import {IOption} from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
+import {DashboardService} from '../services/dashboard.service';
+import {ContactService} from '../services/contact.service';
+import {BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent, TabsetComponent} from 'ngx-bootstrap';
+import {CashfreeClass} from '../models/api-models/SettingsIntegraion';
+import {IFlattenAccountsResultItem} from '../models/interfaces/flattenAccountsResultItem.interface';
+import {SettingsIntegrationActions} from '../actions/settings/settings.integration.action';
 import * as _ from 'lodash';
-import { ContactAdvanceSearchCommonModal, ContactAdvanceSearchModal, CustomerVendorFiledFilter, DueAmountReportQueryRequest, DueAmountReportResponse } from '../models/api-models/Contact';
-import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+    ContactAdvanceSearchCommonModal,
+    ContactAdvanceSearchModal,
+    CustomerVendorFiledFilter,
+    DueAmountReportQueryRequest,
+    DueAmountReportResponse
+} from '../models/api-models/Contact';
+import {ElementViewContainerRef} from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 import * as moment from 'moment/moment';
-import { saveAs } from 'file-saver';
-import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
-import { createSelector } from 'reselect';
-import { GeneralActions } from '../actions/general/general.actions';
-import { GeneralService } from '../services/general.service';
-import { BreakpointObserver } from '@angular/cdk/layout';
+import {saveAs} from 'file-saver';
+import {GroupWithAccountsAction} from '../actions/groupwithaccounts.actions';
+import {createSelector} from 'reselect';
+import {GeneralActions} from '../actions/general/general.actions';
+import {GeneralService} from '../services/general.service';
+import {BreakpointObserver} from '@angular/cdk/layout';
 
 const CustomerType = [
     {label: 'Customer', value: 'customer'},
@@ -434,12 +450,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             url = `${url}${additionalParams}`;
         }
 
-        if (isElectron ) {
+        if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
             url = location.origin + location.pathname + `#./pages/${part}/${accUniqueName}`;
             console.log(ipcRenderer.send('open-url', url));
-        } else if(isCordova){
-
+        } else if (isCordova) {
+            // todo: open url in Native mobile
         } else {
             (window as any).open(url);
         }

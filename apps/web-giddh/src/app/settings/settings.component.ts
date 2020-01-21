@@ -1,26 +1,26 @@
-import { take, takeUntil } from 'rxjs/operators';
-import { Observable, ReplaySubject } from 'rxjs';
-import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
-import { SettingPermissionComponent } from './permissions/setting.permission.component';
-import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked.accounts.component';
-import { FinancialYearComponent } from './financial-year/financial-year.component';
-import { SettingProfileComponent } from './profile/setting.profile.component';
-import { SettingIntegrationComponent } from './integration/setting.integration.component';
-import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { TabsetComponent } from 'ngx-bootstrap';
-import { StateDetailsRequest } from '../models/api-models/Company';
-import { CompanyActions } from '../actions/company.actions';
-import { Store } from '@ngrx/store';
-import { AppState } from '../store/roots';
-import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { SettingsTagsComponent } from './tags/tags.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BunchComponent } from './bunch/bunch.component';
-import { AuthenticationService } from '../services/authentication.service';
-import { GeneralActions } from '../actions/general/general.actions';
-import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
-import { WarehouseActions } from './warehouse/action/warehouse.action';
+import {take, takeUntil} from 'rxjs/operators';
+import {Observable, ReplaySubject} from 'rxjs';
+import {ToasterService} from 'apps/web-giddh/src/app/services/toaster.service';
+import {SettingPermissionComponent} from './permissions/setting.permission.component';
+import {SettingLinkedAccountsComponent} from './linked-accounts/setting.linked.accounts.component';
+import {FinancialYearComponent} from './financial-year/financial-year.component';
+import {SettingProfileComponent} from './profile/setting.profile.component';
+import {SettingIntegrationComponent} from './integration/setting.integration.component';
+import {PermissionDataService} from 'apps/web-giddh/src/app/permissions/permission-data.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {TabsetComponent} from 'ngx-bootstrap';
+import {StateDetailsRequest} from '../models/api-models/Company';
+import {CompanyActions} from '../actions/company.actions';
+import {Store} from '@ngrx/store';
+import {AppState} from '../store/roots';
+import {SettingsProfileActions} from '../actions/settings/profile/settings.profile.action';
+import {SettingsTagsComponent} from './tags/tags.component';
+import {ActivatedRoute, Router} from '@angular/router';
+import {BunchComponent} from './bunch/bunch.component';
+import {AuthenticationService} from '../services/authentication.service';
+import {GeneralActions} from '../actions/general/general.actions';
+import {SettingsIntegrationActions} from '../actions/settings/settings.integration.action';
+import {WarehouseActions} from './warehouse/action/warehouse.action';
 
 @Component({
     templateUrl: './settings.component.html',
@@ -122,6 +122,7 @@ export class SettingsComponent implements OnInit {
     public selectTab(id: number) {
         this.staticTabs.tabs[id].active = true;
     }
+
     public assignChildtabForIntegration(childTab: string): number {
         switch (childTab) {
             case 'payment':
@@ -132,6 +133,7 @@ export class SettingsComponent implements OnInit {
                 return 0;
         }
     }
+
     public disableEnable() {
         this.staticTabs.tabs[2].disabled = !this.staticTabs.tabs[2].disabled;
     }
@@ -179,13 +181,13 @@ export class SettingsComponent implements OnInit {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
             this.loadModuleData(tab);
             if (this.integrationtab) {
-                this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
+                this.router.navigate(['pages/settings/', tab, this.integrationtab], {replaceUrl: true});
             }
         } else {
             this.setStateDetails(tab, '');
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
             this.loadModuleData(tab);
-            this.router.navigate(['pages/settings/', tab], { replaceUrl: true });
+            this.router.navigate(['pages/settings/', tab], {replaceUrl: true});
         }
 
     }
@@ -216,7 +218,7 @@ export class SettingsComponent implements OnInit {
     }
 
     private getGoogleCredentials() {
-        if (PRODUCTION_ENV || isElectron) {
+        if (PRODUCTION_ENV || isElectron || isCordova) {
             return {
                 GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
                 GOOGLE_CLIENT_SECRET: 'eWzLFEb_T9VrzFjgE40Bz6_l'
@@ -254,7 +256,7 @@ export class SettingsComponent implements OnInit {
      */
     private loadModuleData(tabName: string): void {
         if (tabName === 'warehouse') {
-            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1 }));
+            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({page: 1}));
         }
     }
 }

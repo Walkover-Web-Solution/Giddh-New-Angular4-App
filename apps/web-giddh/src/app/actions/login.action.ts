@@ -1064,7 +1064,7 @@ export class LoginActions {
         this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
         this._router.navigate([stateDetail.body.lastState]);
-        if (isElectron) {
+        if (isElectron || isCordova) {
             window.location.reload();
         }
         return { type: 'EmptyAction' };

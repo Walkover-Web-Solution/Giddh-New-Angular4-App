@@ -1,20 +1,33 @@
-import { take, takeUntil } from "rxjs/operators";
-import { LoginActions } from "../actions/login.action";
-import { AppState } from "../store";
-import { Router } from "@angular/router";
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ModalDirective } from "ngx-bootstrap";
-import { Configuration } from "../app.constant";
-import { Store } from "@ngrx/store";
-import { Observable, ReplaySubject } from "rxjs";
-import { LinkedInRequestModel, SignupwithEmaillModel, SignupWithMobile, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel } from "../models/api-models/loginModels";
-import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from "../theme/ng-social-login-module/index";
-import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
-import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
-import { DOCUMENT } from "@angular/platform-browser";
-import { ToasterService } from "../services/toaster.service";
-import { userLoginStateEnum } from "../models/user-login-state";
+import {take, takeUntil} from "rxjs/operators";
+import {LoginActions} from "../actions/login.action";
+import {AppState} from "../store";
+import {Router} from "@angular/router";
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from "@angular/core";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ModalDirective} from "ngx-bootstrap";
+import {Configuration} from "../app.constant";
+import {Store} from "@ngrx/store";
+import {Observable, ReplaySubject} from "rxjs";
+import {
+    LinkedInRequestModel,
+    SignupwithEmaillModel,
+    SignupWithMobile,
+    VerifyEmailModel,
+    VerifyEmailResponseModel,
+    VerifyMobileModel
+} from "../models/api-models/loginModels";
+import {
+    AuthService,
+    GoogleLoginProvider,
+    LinkedinLoginProvider,
+    SocialUser
+} from "../theme/ng-social-login-module/index";
+import {contriesWithCodes} from "../shared/helpers/countryWithCodes";
+import {IOption} from "../theme/ng-virtual-select/sh-options.interface";
+import {DOCUMENT} from "@angular/platform-browser";
+import {ToasterService} from "../services/toaster.service";
+import {userLoginStateEnum} from "../models/user-login-state";
+import {isIOSCordova} from "@giddh-workspaces/utils";
 
 @Component({
     selector: "signup",
@@ -60,14 +73,14 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: FormBuilder,
-        private store: Store<AppState>,
-        private router: Router,
-        private loginAction: LoginActions,
-        private authService: AuthService,
-        @Inject(DOCUMENT) private document: Document,
-        private _toaster: ToasterService
+                private store: Store<AppState>,
+                private router: Router,
+                private loginAction: LoginActions,
+                private authService: AuthService,
+                @Inject(DOCUMENT) private document: Document,
+                private _toaster: ToasterService
     ) {
-        this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
+        this.urlPath = (isElectron || isCordova) ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = store.select(state => {
             return state.login.isLoginWithEmailInProcess;
         }).pipe(takeUntil(this.destroyed$));
@@ -114,7 +127,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).pipe(takeUntil(this.destroyed$));
 
         contriesWithCodes.map(c => {
-            this.countryCodeList.push({ value: c.countryName, label: c.value });
+            this.countryCodeList.push({value: c.countryName, label: c.value});
         });
         this.userLoginState$ = this.store.select(p => p.session.userLoginState);
         this.userDetails$ = this.store.select(p => p.session.user);
@@ -300,7 +313,6 @@ export class SignupComponent implements OnInit, OnDestroy {
             }
 
         } else if (Configuration.isCordova) {
-            debugger;
             let iabOpts;
             let webView;
             let useIAB;
@@ -344,6 +356,7 @@ export class SignupComponent implements OnInit, OnDestroy {
                 return encodeURIComponent(key) + '=' + encodeURIComponent(urlParams[key])
             }).join('&');
 
+            // @ts-ignore
             let iab = (cordova as any).InAppBrowser.open(url, '_blank', iabOpts);
 ​
             iab.addEventListener('loadstart', (e) => {
@@ -409,15 +422,6 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-	/**
-	 * setCountryCode
-	 */
-    public setCountryCode(event: IOption) {
-        if (event.value) {
-            let country = this.countryCodeList.filter((obj) => obj.value === event.value);
-            this.selectedCountry = country[0].label;
-        }
-    }
     public generateRandomString(length) {
         let text = "";
         let possible =
@@ -440,14 +444,6 @@ export class SignupComponent implements OnInit, OnDestroy {
         }
     }
 
-	/**
-	 * randomBanner
-	 */
-    public generateRandomBanner() {
-        let bannerArr = ["1", "2", "3"];
-        let selectedSlide = bannerArr[Math.floor(Math.random() * bannerArr.length)];
-        this.selectedBanner = "slide" + selectedSlide;
-    }
     /**
      * randomBanner
      */

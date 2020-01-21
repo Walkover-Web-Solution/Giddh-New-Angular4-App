@@ -50,6 +50,10 @@ import { TaxControlComponent } from '../../../theme/tax-control/tax-control.comp
 import { BlankLedgerVM, TransactionVM } from '../../ledger.vm';
 import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
 import { GeneralService } from '../../../services/general.service';
+import {isAndroidCordova, isIOSCordova} from "@giddh-workspaces/utils";
+import {IOSFilePicker} from "@ionic-native/file-picker/ngx";
+import {FileTransfer} from "@ionic-native/file-transfer/ngx";
+import {FileChooser} from "@ionic-native/file-chooser/ngx";
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
