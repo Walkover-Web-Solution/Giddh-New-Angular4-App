@@ -250,11 +250,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isLedgerAccSelected = false;
             let currentPageResponse = _.clone(response);
             if (currentPageResponse) {
-                if (currentPageResponse && currentPageResponse.currentPageObj && currentPageResponse.currentPageObj.url && currentPageResponse.currentPageObj.url.includes('ledger/')) {
+                if (currentPageResponse && currentPageResponse.url && currentPageResponse.url.includes('ledger/')) {
 
                 } else {
-                    this.currentState = currentPageResponse.currentPageObj.url;
-                    this.selectedPage = currentPageResponse.currentPageObj.name;
+                    this.currentState = currentPageResponse.url;
+                    this.selectedPage = currentPageResponse.name;
                 }
             }
         });
