@@ -169,7 +169,7 @@ export class GeneralActions {
 	public setPageTitle(currentPageObj: CurrentPage) {
 		return {
 			type: GENERAL_ACTIONS.SET_PAGE_HEADER_TITLE,
-			payload: { currentPageObj }
+			payload: currentPageObj
 		}
 	}
 }
