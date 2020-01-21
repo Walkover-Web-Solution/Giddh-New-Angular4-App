@@ -459,6 +459,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.route.params.pipe(takeUntil(this.destroyed$), delay(0)).subscribe(parmas => {
             if (parmas['invoiceType']) {
+                this.selectedVoucherType = parmas['invoiceType'];
                 if (this.invoiceType !== parmas['invoiceType']) {
                     this.invoiceType = decodeURI(parmas['invoiceType']) as VoucherTypeEnum;
                     this.prepareInvoiceTypeFlags();
