@@ -52,7 +52,7 @@
                             <label>Price</label>
                             <input type="text" [(ngModel)]="currentTxn.inventory.unit.rate"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
-                                [mask]="inputMaskFormat" (ngModelChange)="changePrice($event)" name=""
+                                [mask]="inputMaskFormat" (input)="changePrice()" name=""
                                 class="form-control text-right" />
                             <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
