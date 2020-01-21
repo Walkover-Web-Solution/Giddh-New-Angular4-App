@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { WindowRef } from '../shared/helpers/window.object';
-import { ModalDirective, TabsetComponent } from 'ngx-bootstrap';
+import { ModalDirective, TabsetComponent, BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { GeneralService } from '../services/general.service';
 import { take, takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
@@ -29,13 +29,15 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public imgPath: string = '';
     public companyCountry: string;
+    public modalRef: BsModalRef;
+    public activeModel: boolean = false;
 
     constructor(
         private _router: Router, private _window: WindowRef, private _generalService: GeneralService,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
         private companyActions: CompanyActions,
-        private generalActions: GeneralActions
+        private generalActions: GeneralActions, private modalService: BsModalService
     ) {
         this._window.nativeWindow.superformIds = ['Jkvq'];
     }
@@ -69,6 +71,11 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
 
     public ngAfterViewInit() {
         this._generalService.IAmLoaded.next(true);
+        let s = document.createElement('script');
+        let that = this;
+        s.src = 'https://assets.calendly.com/assets/external/widget.js';
+        s.type = 'text/javascript';
+        document.body.appendChild(s);
     }
 
     public selectConfigureBank() {
@@ -93,13 +100,20 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
             // https://app.intercom.io/a/meeting-scheduler/calendar/VEd2SmtLSyt2YisyTUpEYXBCRWg1YXkwQktZWmFwckF6TEtwM3J5Qm00R2dCcE5IWVZyS0JjSXF2L05BZVVWYS0tck81a21EMVZ5Z01SQWFIaG00RlozUT09--c6f3880a4ca63a84887d346889b11b56a82dd98f changed URI card G0-4255
             (window as any).require("electron").shell.openExternal('https://calendly.com/sales-accounting-software/talk-to-sale');
         } else {
-            let newwindow = window.open('https://calendly.com/sales-accounting-software/talk-to-sale', 'scheduleWindow', 'height=650,width=1199,left=200,top=100`');
+            // let newwindow = window.open('https://calendly.com/sales-accounting-software/talk-to-sale', 'scheduleWindow', 'height=650,width=1199,left=200,top=100`');
 
-            if (window.focus) {
-                newwindow.focus();
-            }
+            // if (window.focus) {
+            //     newwindow.focus();
+            // }
+            this.activeModel = true;
         }
         return false;
+    }
+    public openModal(template: TemplateRef<any>) {
+        this.activeModel = true;
+    }
+    public hideScheduleCalendlyModel() {
+        this.activeModel = false;
     }
 
     public openScheduleModal() {
