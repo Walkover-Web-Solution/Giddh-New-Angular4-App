@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
@@ -24,7 +24,7 @@ import { GeneralActions } from '../actions/general/general.actions';
     templateUrl: './userDetails.component.html',
     styleUrls: [`./userDetails.component.scss`],
 })
-export class UserDetailsComponent implements OnInit, OnDestroy {
+export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('staticTabs') public staticTabs: TabsetComponent;
     public userAuthKey: string = '';
     public expandLongCode: boolean = false;
@@ -116,12 +116,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
             }
         });
 
-        this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
-            if (val && val.tab && val.tabIndex) {
-                this.selectTab(val.tabIndex);
-            }
-        });
-
         this.router.events
             .subscribe((event) => {
                 if (event instanceof NavigationEnd) {
@@ -184,6 +178,18 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Lifecycle method that is triggered once all the view child are rendered
+     *
+     * @memberof UserDetailsComponent
+     */
+    public ngAfterViewInit(): void {
+        this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+            if (val && val.tab && val.tabIndex) {
+                this.selectTab(val.tabIndex);
+            }
+        });
+    }
     public addNumber(no: string) {
         this.oneTimePassword = '';
         const mobileRegex = /^[0-9]{1,10}$/;
