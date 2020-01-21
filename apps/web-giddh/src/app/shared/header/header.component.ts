@@ -320,29 +320,31 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             this.selectedCompanyCountry = selectedCmp.country;
         });
-
-        this.selectedCompany.subscribe((res: any) => {
-            if (res) {
-                if (res.countryV2 !== null && res.countryV2 !== undefined) {
-                    this.getStates(res.countryV2.alpha2CountryCode);
-                    this.store.dispatch(this.commonActions.resetOnboardingForm());
-                }
-                if (res.subscription) {
-                    this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
-                    if (res.baseCurrency) {
-                        this.companyCountry.baseCurrency = res.baseCurrency;
-                        this.companyCountry.country = res.country;
-                        this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(this.companyCountry));
-                    }
-
-                    this.CurrentCmpPlanAmount = res.subscription.planDetails.amount;
-                    this.subscribedPlan = res.subscription;
-                    this.isSubscribedPlanHaveAdditnlChrgs = res.subscription.additionalCharges;
-                    this.selectedPlanStatus = res.subscription.status;
-                }
-                this.activeCompany = res;
+if(this.selectedCompany) {
+    this.selectedCompany.subscribe((res: any) => {
+        if (res) {
+            if (res.countryV2 !== null && res.countryV2 !== undefined) {
+                this.getStates(res.countryV2.alpha2CountryCode);
+                this.store.dispatch(this.commonActions.resetOnboardingForm());
             }
-        });
+            if (res.subscription) {
+                this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
+                if (res.baseCurrency) {
+                    this.companyCountry.baseCurrency = res.baseCurrency;
+                    this.companyCountry.country = res.country;
+                    this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(this.companyCountry));
+                }
+
+                this.CurrentCmpPlanAmount = res.subscription.planDetails.amount;
+                this.subscribedPlan = res.subscription;
+                this.isSubscribedPlanHaveAdditnlChrgs = res.subscription.additionalCharges;
+                this.selectedPlanStatus = res.subscription.status;
+            }
+            this.activeCompany = res;
+        }
+    });
+        }
+
 
         this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$));
 
