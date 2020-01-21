@@ -113,7 +113,9 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
         this.activeModel = true;
     }
     public hideScheduleCalendlyModel() {
-        this.activeModel = false;
+        if (this.activeModel) {
+            this.activeModel = false;
+        }
     }
 
     public openScheduleModal() {
