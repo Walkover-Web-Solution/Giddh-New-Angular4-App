@@ -80,8 +80,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
     public noGroups: boolean;
     public languages: any[] = [
-        {name: 'ENGLISH', value: 'en'},
-        {name: 'DUTCH', value: 'nl'}
+        { name: 'ENGLISH', value: 'en' },
+        { name: 'DUTCH', value: 'nl' }
     ];
     public activeFinancialYear: ActiveFinancialYear;
     public datePickerOptions: any = {
@@ -134,8 +134,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         endDate: moment()
     };
 
-    public sideMenu: { isopen: boolean } = {isopen: false};
-    public companyMenu: { isopen: boolean } = {isopen: false};
+    public sideMenu: { isopen: boolean } = { isopen: false };
+    public companyMenu: { isopen: boolean } = { isopen: false };
     public isCompanyRefreshInProcess$: Observable<boolean>;
     public isCompanyCreationSuccess$: Observable<boolean>;
     public isLoggedInWithSocialAccount$: Observable<boolean>;
@@ -320,31 +320,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             this.selectedCompanyCountry = selectedCmp.country;
         });
-if(this.selectedCompany) {
-    this.selectedCompany.subscribe((res: any) => {
-        if (res) {
-            if (res.countryV2 !== null && res.countryV2 !== undefined) {
-                this.getStates(res.countryV2.alpha2CountryCode);
-                this.store.dispatch(this.commonActions.resetOnboardingForm());
-            }
-            if (res.subscription) {
-                this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
-                if (res.baseCurrency) {
-                    this.companyCountry.baseCurrency = res.baseCurrency;
-                    this.companyCountry.country = res.country;
-                    this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(this.companyCountry));
-                }
-
-                this.CurrentCmpPlanAmount = res.subscription.planDetails.amount;
-                this.subscribedPlan = res.subscription;
-                this.isSubscribedPlanHaveAdditnlChrgs = res.subscription.additionalCharges;
-                this.selectedPlanStatus = res.subscription.status;
-            }
-            this.activeCompany = res;
-        }
-    });
-        }
-
 
         this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$));
 
@@ -375,6 +350,30 @@ if(this.selectedCompany) {
         this.sideBarStateChange(true);
         this.getElectronAppVersion();
         this.store.dispatch(this.companyActions.GetApplicationDate());
+        if (this.selectedCompany) {
+            this.selectedCompany.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+                if (res) {
+                    if (res.countryV2 !== null && res.countryV2 !== undefined) {
+                        this.getStates(res.countryV2.alpha2CountryCode);
+                        this.store.dispatch(this.commonActions.resetOnboardingForm());
+                    }
+                    if (res.subscription) {
+                        this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
+                        if (res.baseCurrency) {
+                            this.companyCountry.baseCurrency = res.baseCurrency;
+                            this.companyCountry.country = res.country;
+                            this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(this.companyCountry));
+                        }
+
+                        this.CurrentCmpPlanAmount = res.subscription.planDetails.amount;
+                        this.subscribedPlan = res.subscription;
+                        this.isSubscribedPlanHaveAdditnlChrgs = res.subscription.additionalCharges;
+                        this.selectedPlanStatus = res.subscription.status;
+                    }
+                    this.activeCompany = res;
+                }
+            });
+        }
 
         this.user$.pipe(take(1)).subscribe((u) => {
             if (u) {
@@ -629,7 +628,7 @@ if(this.selectedCompany) {
                 if (!this.isDateRangeSelected) {
                     this.datePickerOptions.startDate = moment(dateObj[0]);
                     this.datePickerOptions.endDate = moment(dateObj[1]);
-                    this.datePickerOptions = {...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1])};
+                    this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                     this.isDateRangeSelected = true;
                     const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
                     const to: any = moment().format(GIDDH_DATE_FORMAT);
@@ -702,7 +701,7 @@ if(this.selectedCompany) {
             }
         });
         if (o) {
-            menu = {...menu, ...o};
+            menu = { ...menu, ...o };
         } else {
             try {
                 menu.name = pageName.split('/pages/')[1].toLowerCase();
@@ -725,7 +724,7 @@ if(this.selectedCompany) {
         this.setCurrentPageTitle(menu);
 
         if (menu.additional) {
-            this.router.navigate([pageName], {queryParams: menu.additional});
+            this.router.navigate([pageName], { queryParams: menu.additional });
         } else {
             this.router.navigate([pageName]);
         }
@@ -1015,7 +1014,7 @@ if(this.selectedCompany) {
         } else {
             this.isTodaysDateSelected = true;
             let today = _.cloneDeep([moment(), moment()]);
-            this.datePickerOptions = {...this.datePickerOptions, startDate: today[0], endDate: today[1]};
+            this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
             let dates = {
                 fromDate: null,
                 toDate: null,
@@ -1087,7 +1086,7 @@ if(this.selectedCompany) {
                 if (item.uniqueName.includes('?')) {
                     item.uniqueName = item.uniqueName.split('?')[0];
                 }
-                this.router.navigate([item.uniqueName], {queryParams: {tab: item.additional.tab, tabIndex: item.additional.tabIndex}});
+                this.router.navigate([item.uniqueName], { queryParams: { tab: item.additional.tab, tabIndex: item.additional.tabIndex } });
             } else {
                 this.router.navigate([item.uniqueName]);
             }
@@ -1150,7 +1149,7 @@ if(this.selectedCompany) {
     public goToSelectPlan(template: TemplateRef<any>) {
         this.modalService.hide(1);
         // this.router.navigate(['billing-detail']);
-        this.router.navigate(['pages', 'user-details'], {queryParams: {tab: 'subscriptions', tabIndex: 3, isPlanPage: true}});
+        this.router.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, isPlanPage: true } });
         this.modelRefExpirePlan = this.modalService.show(template);
     }
 
@@ -1310,7 +1309,7 @@ if(this.selectedCompany) {
         );
 
         this.subscriptions.push(_combine);
-        let config: ModalOptions = {class: 'universal_modal', show: true, keyboard: true, animated: false};
+        let config: ModalOptions = { class: 'universal_modal', show: true, keyboard: true, animated: false };
         this.modelRef = this.modalService.show(this.navigationModal, config);
     }
 
