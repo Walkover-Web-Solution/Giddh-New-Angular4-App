@@ -316,6 +316,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.activeCompanyForDb = new CompAidataModel();
                 this.activeCompanyForDb.name = selectedCmp.name;
                 this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
+                this.setSelectedCompanyData(this.selectedCompany);
             }
 
             this.selectedCompanyCountry = selectedCmp.country;
@@ -350,31 +351,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.sideBarStateChange(true);
         this.getElectronAppVersion();
         this.store.dispatch(this.companyActions.GetApplicationDate());
-        if (this.selectedCompany) {
-            this.selectedCompany.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
-                if (res) {
-                    if (res.countryV2 !== null && res.countryV2 !== undefined) {
-                        this.getStates(res.countryV2.alpha2CountryCode);
-                        this.store.dispatch(this.commonActions.resetOnboardingForm());
-                    }
-                    if (res.subscription) {
-                        this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
-                        if (res.baseCurrency) {
-                            this.companyCountry.baseCurrency = res.baseCurrency;
-                            this.companyCountry.country = res.country;
-                            this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(this.companyCountry));
-                        }
-
-                        this.CurrentCmpPlanAmount = res.subscription.planDetails.amount;
-                        this.subscribedPlan = res.subscription;
-                        this.isSubscribedPlanHaveAdditnlChrgs = res.subscription.additionalCharges;
-                        this.selectedPlanStatus = res.subscription.status;
-                    }
-                    this.activeCompany = res;
-                }
-            });
-        }
-
         this.user$.pipe(take(1)).subscribe((u) => {
             if (u) {
                 let userEmail = u.email;
@@ -593,7 +569,32 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.getPartyTypeForCreateAccount();
         this.getAllCountries();
     }
+    public setSelectedCompanyData(selectedCompany) {
+        if (selectedCompany) {
+            this.selectedCompany.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+                if (res) {
+                    if (res.countryV2 !== null && res.countryV2 !== undefined) {
+                        this.getStates(res.countryV2.alpha2CountryCode);
+                        this.store.dispatch(this.commonActions.resetOnboardingForm());
+                    }
+                    if (res.subscription) {
+                        this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
+                        if (res.baseCurrency) {
+                            this.companyCountry.baseCurrency = res.baseCurrency;
+                            this.companyCountry.country = res.country;
+                            this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(this.companyCountry));
+                        }
 
+                        this.CurrentCmpPlanAmount = res.subscription.planDetails.amount;
+                        this.subscribedPlan = res.subscription;
+                        this.isSubscribedPlanHaveAdditnlChrgs = res.subscription.additionalCharges;
+                        this.selectedPlanStatus = res.subscription.status;
+                    }
+                    this.activeCompany = res;
+                }
+            });
+        }
+    }
     public ngAfterViewInit() {
 
         if (this.selectedPlanStatus === 'expired') {// active expired
