@@ -32,6 +32,7 @@
         "cordova-plugin-file-transfer": "^1.7.1",
         "cordova-plugin-filechooser": "^1.2.0",
         "cordova-plugin-filepicker": "^1.1.6",
+        "cordova-plugin-googleplus": "8.2.1",
         "cordova-plugin-inappbrowser-popup-bridge": "^1.0.22",
         "cordova-plugin-network-information": "^2.0.2",
         "cordova-plugin-splashscreen": "^5.0.3",
@@ -64,7 +65,12 @@
                 "ANDROID_SUPPORT_V4_VERSION": "27.+"
             },
             "cordova-plugin-wkwebview-engine": {},
-            "cordova-plugin-inappbrowser-popup-bridge": {}
+            "cordova-plugin-inappbrowser-popup-bridge": {},
+            "cordova-plugin-googleplus": {
+                "REVERSED_CLIENT_ID": "com.googleusercontent.apps.641015054140-5j1ct1gdkhrkltujn29tsomf4449d01f",
+                "WEB_APPLICATION_CLIENT_ID": "641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com",
+                "PLAY_SERVICES_VERSION": "15.0.1"
+            }
         },
         "platforms": [
             "ios",

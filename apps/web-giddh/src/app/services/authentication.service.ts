@@ -104,12 +104,14 @@ export class AuthenticationService {
     }
 
     public LoginWithGoogle(token: string) {
+        debugger;
         let args: any = { headers: {} };
         args.headers['cache-control'] = 'no-cache';
         args.headers['Content-Type'] = 'application/json';
         args.headers['Accept'] = 'application/json';
         args.headers['Access-Token'] = token;
         args.headers = new HttpHeaders(args.headers);
+        debugger;
         return this._httpClient.get(this.config.apiUrl + LOGIN_API.LOGIN_WITH_GOOGLE, {
             headers: args.headers,
             responseType: 'json'

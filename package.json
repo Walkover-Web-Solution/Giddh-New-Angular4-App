@@ -46,6 +46,8 @@
         "serve.electron.giddh.target": "ng serve electron-giddh",
         "serve.electron.giddh": "wait-on http-get://localhost:4200/ && electron apps/electron-giddh/src --serve",
         "start.electron.giddh": "npm run prepare.electron.giddh && npm-run-all -p serve.electron.giddh.target serve.electron.giddh",
+        "serve.cordova.giddh": "wait-on http-get://localhost:3000/ && electron apps/electron-giddh/src --serve",
+        "start.cordova.giddh": "npm run postinstall.web && ng serve giddh-cordova",
         "release": "npm run build.electron.giddh && cd dist/apps/web-giddh-prod && cross-env AWS_ACCESS_KEY_ID=key_id  AWS_SECRET_ACCESS_KEY=access_key npx electron-builder build  -mwl --x64 --publish always",
         "package": "npm run build.electron.giddh && cd dist/apps/web-giddh-prod && npx  electron-builder build  -mw --x64",
         "package:linux": "npm run build.electron.giddh && cd dist/apps/web-giddh-prod && npx electron-builder  build  --linux --x64",
@@ -113,6 +115,7 @@
         "zone.js": "^0.8.26"
     },
     "devDependencies": {
+        "http-server": "^0.12.1",
         "movefiles": "^1.0.1",
         "@angular-devkit/build-angular": "0.13.1",
         "@angular/cdk": "^6.4.7",
