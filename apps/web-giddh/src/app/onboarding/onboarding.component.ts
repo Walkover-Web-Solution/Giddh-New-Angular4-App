@@ -29,7 +29,6 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public imgPath: string = '';
     public companyCountry: string;
-    public activeModel: boolean = true;
 
     constructor(
         private _router: Router, private _window: WindowRef, private _generalService: GeneralService,
@@ -75,9 +74,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
         s.src = 'https://checkout.razorpay.com/v1/checkout.js';
         s.type = 'text/javascript';
         document.body.appendChild(s);
-        this.activeModel = false;
     }
-
     public selectConfigureBank() {
         if (this.companyCountry) {
             if (this.companyCountry.toLowerCase() === 'india') {
@@ -100,25 +97,14 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
             // https://app.intercom.io/a/meeting-scheduler/calendar/VEd2SmtLSyt2YisyTUpEYXBCRWg1YXkwQktZWmFwckF6TEtwM3J5Qm00R2dCcE5IWVZyS0JjSXF2L05BZVVWYS0tck81a21EMVZ5Z01SQWFIaG00RlozUT09--c6f3880a4ca63a84887d346889b11b56a82dd98f changed URI card G0-4255
             (window as any).require("electron").shell.openExternal('https://calendly.com/sales-accounting-software/talk-to-sale');
         } else {
-            this.activeModel = true;  // to show calendly block
+            this.openScheduleCalendlyModel();  // to show calendly block
         }
         return false;
-    }
-    /**
-     *  to hide calendly block
-     *
-     * @memberof OnboardingComponent
-     */
-    public hideScheduleCalendlyModel() {
-        if (this.activeModel) {
-            this.activeModel = false;
-        }
     }
 
     public openScheduleModal() {
         this._generalService.invokeEvent.next("openschedulemodal");
     }
-
     public loadScript() {
         let isFound = false;
         let scripts = document.getElementsByTagName('script');
@@ -175,5 +161,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
         dataToSaveNew.companyInventorySettings = { manageInventory: data };
 
         this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
+    }
+    public openScheduleCalendlyModel() {
+        this.store.dispatch(this.generalActions.isOpenCalendlyModel(true));
     }
 }
