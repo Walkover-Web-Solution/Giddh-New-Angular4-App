@@ -66,7 +66,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('navigationModal') public navigationModal: TemplateRef<any>; // CMD + K
     @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
     @ViewChild('dropdown') public companyDropdown: BsDropdownDirective;
-    @ViewChild('talkSalesModal') public talkSalesModal: ModalDirective;
+    // @ViewChild('talkSalesModal') public talkSalesModal: ModalDirective;
     @ViewChild('supportTab') public supportTab: TabsetComponent;
     @ViewChild('searchCmpTextBox') public searchCmpTextBox: ElementRef;
     @ViewChild('expiredPlan') public expiredPlan: ModalDirective;
@@ -194,6 +194,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         country: ''
     };
     public currentState: any = '';
+    public isCalendlyModelActivate: boolean = false;
 
     /**
      *
@@ -258,7 +259,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             }
         });
-
+        this.store.pipe(select(s => s.general.isCalendlyModelOpen), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isCalendlyModelActivate = response;
+        });
         this.user$ = this.store.select(createSelector([(state: AppState) => state.session.user], (user) => {
             if (user) {
                 this.loggedInUserEmail = user.user.email;
@@ -338,7 +341,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.totalNumberOfcompanies$ = this.store.select(state => state.session.totalNumberOfcompanies).pipe(takeUntil(this.destroyed$));
         this._generalService.invokeEvent.subscribe(value => {
             if (value === 'openschedulemodal') {
-                this.openScheduleModal();
+                this.openScheduleCalendlyModel();
+                // this.openScheduleModal();
             }
             if (value === 'resetcompanysession') {
                 this.removeCompanySessionData();
@@ -511,12 +515,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.loadScript();
             resolve(true);
         });
+        // TODO : It is commented due to we have implement calendly and its under discussion to remove
 
-        this._generalService.talkToSalesModal.subscribe(a => {
-            if (a) {
-                this.openScheduleModal();
-            }
-        });
+        // this._generalService.talkToSalesModal.subscribe(a => {
+        //     if (a) {
+        //         this.openScheduleCalendlyModel();
+        //     }
+        // });
         // Observes when screen resolution is 1440 or less close navigation bar for few pages...
         this._breakpointObserver
             .observe(['(min-width: 1367px)'])
@@ -1125,14 +1130,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.companyMenu.isopen = false;
     }
 
-    public openScheduleModal() {
-        this.talkSalesModal.show();
-    }
+    // TODO : It is commented due to we have implement calendly and its under discussion to remove
 
-    public closeModal() {
-        this.talkSalesModal.hide();
-        this._generalService.talkToSalesModal.next(false);
-    }
+    // public closeModal() {
+    //     this.talkSalesModal.hide();
+    //     this._generalService.talkToSalesModal.next(false);
+    // }
 
     public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
         if (!this.modalService.getModalsCount()) {
@@ -1402,5 +1405,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 return this.navigateToUser = false;
             }
         });
+    }
+    /**
+     *To hide calendly model
+     *
+     * @memberof HeaderComponent
+     */
+    public hideScheduleCalendlyModel() {
+        this.store.dispatch(this._generalActions.isOpenCalendlyModel(false));
+    }
+    public openScheduleCalendlyModel() {
+        this.store.dispatch(this._generalActions.isOpenCalendlyModel(true));
     }
 }
