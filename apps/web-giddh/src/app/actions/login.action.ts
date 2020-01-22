@@ -322,10 +322,9 @@ export class LoginActions {
                 if (PRODUCTION_ENV && !isElectron) {
                     window.location.href = 'https://giddh.com/login/';
                 } else {
-                    this._router.navigate(['/login']);
+                    window.location.href = AppUrl + 'login/';
                     window.location.reload();
                 }
-                window.location.reload();
                 return { type: 'EmptyAction' };
             }));
 
