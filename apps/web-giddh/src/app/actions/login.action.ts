@@ -323,7 +323,6 @@ export class LoginActions {
                     window.location.href = 'https://giddh.com/login/';
                 } else {
                     window.location.href = AppUrl + 'login/';
-                    window.location.reload();
                 }
                 return { type: 'EmptyAction' };
             }));
