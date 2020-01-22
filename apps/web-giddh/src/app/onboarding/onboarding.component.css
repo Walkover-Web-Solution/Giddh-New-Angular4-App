@@ -1,438 +1,466 @@
-.welcome-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 64px;
-}
-
-.welcome-container hr {
-    border: 0.5px solid #707070;
-    background: transparent;
-    width: 98%;
-    margin: auto;
-}
-
-.m-t-35 {
-    margin-top: 35px;
-}
-
-.borderbtm {
-    font-size: 16px;
-    font-family: "" opensans-semibold "";
-    border-bottom: 1px solid #cccccc;
-    padding: 7px 0;
-    margin-bottom: 10px;
-}
-
-.manage_invoice {
-    list-style: none;
-}
-
-.custom-body {
-    padding: 0;
-}
-
-.argdemo {
-    text-align: center;
-    padding: 20px 20px;
-}
-
-.argdemo .btn {
-    margin-top: 20px;
-}
-
-.custom-body .nav-tabs {
-    padding-top: 0;
-}
-
-.manage_invoice li a {
-    background: #fff;
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-    padding: 9px 15px;
-    color: #10aae0;
-    font-size: 16px;
-    margin-top: 15px;
-    display: block;
-    max-width: 356px;
-}
-
-.manage_invoice li a i {
-    margin-right: 20px;
-    font-size: 23px;
-    color: #535353;
-}
-
-.manage_invoice li a:hover {
-    text-decoration: none;
-}
-
-.m-t-45 {
-    margin-top: 45px;
-}
-
-.btn-sync {
-    color: #125446;
-    margin-top: 12px;
-    background: #c9e6ca;
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.16);
-    font-size: 16px;
-    font-family: "opensans-regular";
-}
-
-p {
-    color: #b1b1b3;
-}
-
-.right_section span {
-    font-size: 14px;
-    color: #b2b2b4;
-    display: block;
-}
-
-.btn-default {
-    background: #e6e6e6;
-    color: #2fab4a;
-    padding: 8px 16px;
-}
-
-.text-dark {
-    color: #707070;
-    font-size: 20px;
-}
-
-a.text-dark {
-    text-decoration: underline;
-}
-
-.your-account span {
-    display: block;
-    font-size: 16px;
-    color: #9b9b9b;
-    margin-bottom: 10px;
-}
-
-.your-account p {
-    color: #2c2c2c;
-    font-size: 16px;
-}
-
-.your-account p.success-text {
-    color: #2fab4a !important;
-}
-
-.importData-blocks .d-inline-flex {
-    display: inline-flex;
-    width: 130px;
-    height: 100px;
-    background-color: #fff;
-    margin-right: 11px;
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 11px;
-    flex-direction: column;
-}
-
-.importData-blocks {
-    padding-top: 30px;
-    padding-bottom: 40px;
-}
-
-.importData-blocks img {
-    width: 60px;
-}
-
-.importData-blocks a p {
-    color: #0c8fe6;
-}
-
-.right_section {
-    background: none !important;
-}
-
-.scheduleImg img {
-    width: 200px;
-}
-
-/* talk to sales modal */
-
-/*modal css*/
-
-@media (min-width: 768px) {
-    .modal-dialog {
-        width: 500px;
-        margin: 30px auto;
+    .welcome-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 64px;
     }
-}
 
-.custom-dialog {
-    overflow: hidden;
-    border-radius: 5px;
-}
+    .welcome-container hr {
+        border: 0.5px solid #707070;
+        background: transparent;
+        width: 98%;
+        margin: auto;
+    }
 
-.custom-dialog .modal-header {
-    padding: 0;
-    border-bottom: none;
-    padding: 15px;
-    border-bottom: 1px solid #e5e5e5;
-    background: #ececec;
-}
+    .m-t-35 {
+        margin-top: 35px;
+    }
 
-.custom-dialog .modal-header h3 {
-    font-family: "CambriaBold";
-    font-size: 20px;
-    color: #333333 !important;
-    margin-bottom: 15px;
-}
+    .borderbtm {
+        font-size: 16px;
+        font-family: "" opensans-semibold "";
+        border-bottom: 1px solid #cccccc;
+        padding: 7px 0;
+        margin-bottom: 10px;
+    }
 
-.brdB.left {
-    margin-left: 26px;
-}
+    .manage_invoice {
+        list-style: none;
+    }
 
-.custom-dialog .modal-header {
-    padding: 0;
-    border-bottom: none;
-}
+    .custom-body {
+        padding: 0;
+    }
 
-.close-glyph {
-    position: absolute;
-    top: 4px;
-    right: 10px;
-    color: #222 !important;
-    cursor: pointer;
-    font-weight: bold;
-    text-decoration: none !important;
-    display: none;
-}
+    .argdemo {
+        text-align: center;
+        padding: 20px 20px;
+    }
 
-#talk_sales {
-    padding-bottom: 2px;
-    border-bottom: 1px solid #c3c3c3;
-    margin-bottom: 0;
-}
+    .argdemo .btn {
+        margin-top: 20px;
+    }
 
-.height42 {
-    height: 42px !important;
-}
+    .custom-body .nav-tabs {
+        padding-top: 0;
+    }
 
-#talk_sales > li {
-    text-align: left;
-    width: 156px;
-}
+    .manage_invoice li a {
+        background: #fff;
+        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        padding: 9px 15px;
+        color: #10aae0;
+        font-size: 16px;
+        margin-top: 15px;
+        display: block;
+        max-width: 356px;
+    }
 
-.nav-tabs-talk {
-    padding-left: 0;
-}
+    .manage_invoice li a i {
+        margin-right: 20px;
+        font-size: 23px;
+        color: #535353;
+    }
 
-.nav-tabs-talk > li {
-    float: left;
-    margin-bottom: -1px;
-    list-style: none;
-}
+    .manage_invoice li a:hover {
+        text-decoration: none;
+    }
 
-#talk_sales > li.active > a {
-    font-weight: 500;
-    position: relative;
-}
+    .m-t-45 {
+        margin-top: 45px;
+    }
 
-#talk_sales > li > a {
-    color: #333;
-    font-family: "CambriaBold";
-    padding-left: 28px !important;
-    line-height: 35px;
-    font-size: 16px;
-}
+    .btn-sync {
+        color: #125446;
+        margin-top: 12px;
+        background: #c9e6ca;
+        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.16);
+        font-size: 16px;
+        font-family: "opensans-regular";
+    }
 
-#talk_sales > li > a:hover,
-#talk_sales > li > a:focus {
-    border-color: transparent;
-    text-decoration: none;
-}
+    p {
+        color: #b1b1b3;
+    }
 
-#talk_sales > li.active > a:after {
-    background: #e34b26;
-    position: absolute;
-    bottom: -14px;
-    content: "";
-    width: 79%;
-    height: 2px;
-    left: 29px;
-}
+    .right_section span {
+        font-size: 14px;
+        color: #b2b2b4;
+        display: block;
+    }
 
-.custom-padding-20 {
-    padding: 0 31px !important;
-}
+    .btn-default {
+        background: #e6e6e6;
+        color: #2fab4a;
+        padding: 8px 16px;
+    }
 
-.height-52 {
-    height: 52vh;
-    width: 100%;
-    overflow-y: auto;
-}
+    .text-dark {
+        color: #707070;
+        font-size: 20px;
+    }
 
-.tab-content-modal {
-    background: #fff;
-    padding: 20px;
-    margin-top: 0;
-    margin-bottom: 0;
-}
+    a.text-dark {
+        text-decoration: underline;
+    }
 
-.nav-tabs-talk.nav-tabs > li.active > a {
-    background: transparent;
-    border: none;
-}
+    .your-account span {
+        display: block;
+        font-size: 16px;
+        color: #9b9b9b;
+        margin-bottom: 10px;
+    }
 
-.talktosale-superform {
-    padding: 20px !important;
-}
+    .your-account p {
+        color: #2c2c2c;
+        font-size: 16px;
+    }
 
-.talktosale-superform input {
-    font-family: "AvenirLTStdMedium" !important;
-}
+    .your-account p.success-text {
+        color: #2fab4a !important;
+    }
 
-.talktosale-superform .sf-header {
-    padding: 20px !important;
-    margin-bottom: 0 !important;
-    margin-top: 0 !important;
-}
+    .importData-blocks .d-inline-flex {
+        display: inline-flex;
+        width: 130px;
+        height: 100px;
+        background-color: #fff;
+        margin-right: 11px;
+        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 11px;
+        flex-direction: column;
+    }
 
-.talktosale-superform .help-block {
-    margin-top: 0 !important;
-    font-size: 13px !important;
-}
+    .importData-blocks {
+        padding-top: 30px;
+        padding-bottom: 40px;
+    }
 
-#sFform-V6Lc input {
-    font-family: "AvenirLTStdMedium" !important;
-}
-@media (max-width: 767px) {
-    .scheduleImg {
+    .importData-blocks img {
+        width: 60px;
+    }
+
+    .importData-blocks a p {
+        color: #0c8fe6;
+    }
+
+    .right_section {
+        background: none !important;
+    }
+
+    .scheduleImg img {
+        width: 200px;
+    }
+    /* talk to sales modal */
+    /*modal css*/
+
+    @media (min-width: 768px) {
+        .modal-dialog {
+            width: 500px;
+            margin: 30px auto;
+        }
+    }
+
+    .custom-dialog {
+        overflow: hidden;
+        border-radius: 5px;
+    }
+
+    .custom-dialog .modal-header {
+        padding: 0;
+        border-bottom: none;
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+        background: #ececec;
+    }
+
+    .custom-dialog .modal-header h3 {
+        font-family: "CambriaBold";
+        font-size: 20px;
+        color: #333333 !important;
+        margin-bottom: 15px;
+    }
+
+    .brdB.left {
+        margin-left: 26px;
+    }
+
+    .custom-dialog .modal-header {
+        padding: 0;
+        border-bottom: none;
+    }
+
+    .close-glyph {
+        position: absolute;
+        top: 4px;
+        right: 10px;
+        color: #222 !important;
+        cursor: pointer;
+        font-weight: bold;
+        text-decoration: none !important;
         display: none;
     }
-}
 
-@media (max-width: 600px) {
-    .white-popup {
-        width: 90%;
+    #talk_sales {
+        padding-bottom: 2px;
+        border-bottom: 1px solid #c3c3c3;
+        margin-bottom: 0;
     }
-    #talk_sales > li {
-        width: auto;
+
+    .height42 {
+        height: 42px !important;
     }
-}
 
-#sFSection-V6Lc {
-    font-family: Roboto;
-    background: #fefdfe;
-}
+    #talk_sales>li {
+        text-align: left;
+        width: 156px;
+    }
 
-.talktosale-superform .sFSection .sFformfield {
-    background: transparent !important;
-    border: none !important;
-    padding: 0 !important;
-    width: 100% !important;
-}
+    .nav-tabs-talk {
+        padding-left: 0;
+    }
 
-.sFSection .sFformfield {
-    padding: 40px;
-    background: #fafafa;
-    border: 1px solid #ccc;
-}
+    .nav-tabs-talk>li {
+        float: left;
+        margin-bottom: -1px;
+        list-style: none;
+    }
 
-.sFSection .fieldset {
-    max-width: 600px;
-    box-sizing: border-box;
-    width: 80%;
-    margin: 0 auto;
-    position: relative;
-}
+    #talk_sales>li.active>a {
+        font-weight: 500;
+        position: relative;
+    }
 
-.panel {
-    box-shadow: none !important;
-    -webkit-box-shadow: none !important;
-}
+    #talk_sales>li>a {
+        color: #333;
+        font-family: "CambriaBold";
+        padding-left: 28px !important;
+        line-height: 35px;
+        font-size: 16px;
+    }
 
-.talktosale-superform .sFSection .sFformfield .form-group {
-    margin-bottom: 10px !important;
-}
+    #talk_sales>li>a:hover,
+    #talk_sales>li>a:focus {
+        border-color: transparent;
+        text-decoration: none;
+    }
 
-.talktosale-superform .sFSection .sFformfield .form-group {
-    margin-bottom: 10px !important;
-}
+    #talk_sales>li.active>a:after {
+        background: #e34b26;
+        position: absolute;
+        bottom: -14px;
+        content: "";
+        width: 79%;
+        height: 2px;
+        left: 29px;
+    }
 
-.talktosale-superform .sFSection .sFformfield label {
-    font-size: 15px !important;
-    color: #333 !important;
-    line-height: 26px !important;
-}
+    .custom-padding-20 {
+        padding: 0 31px !important;
+    }
 
-.talktosale-superform .sFSection {
-    padding: 0 !important;
-    font-family: "CambriaRegular" !important;
-}
+    .height-52 {
+        height: 52vh;
+        width: 100%;
+        overflow-y: auto;
+    }
 
-.talktosale-superform .sFSection .sFform textarea {
-    width: 50% !important;
-    min-height: 100px !important;
-    width: 340px !important;
-}
+    .tab-content-modal {
+        background: #fff;
+        padding: 20px;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
 
-.talktosale-superform .sFSection .form-control {
-    height: 40px !important;
-    border-radius: 2px !important;
-    box-shadow: none !important;
-    font-size: 16px !important;
-}
+    .nav-tabs-talk.nav-tabs>li.active>a {
+        background: transparent;
+        border: none;
+    }
 
-.custom-dialog .tab-pane {
-    padding: 0;
-}
+    .talktosale-superform {
+        padding: 20px !important;
+    }
 
-.talktosale-superform .form-group {
-    margin-top: 20px;
-}
+    .talktosale-superform input {
+        font-family: "AvenirLTStdMedium" !important;
+    }
 
-#sFSection-xZyf {
-    background: transparent !important;
-}
+    .talktosale-superform .sf-header {
+        padding: 20px !important;
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
+    }
 
-#sFform-xZyf input,
-#sFform-xZyf textarea,
-#sFform-xZyf select {
-    border: 1px solid #525265 !important;
-    background: transparent !important;
-    width: 230px !important;
-}
+    .talktosale-superform .help-block {
+        margin-top: 0 !important;
+        font-size: 13px !important;
+    }
 
-#sFform-xZyf textarea {
-    width: 340px !important;
-}
+    #sFform-V6Lc input {
+        font-family: "AvenirLTStdMedium" !important;
+    }
 
-#sFformfield-xZyf label {
-    color: #73737f !important;
-}
+    @media (max-width: 767px) {
+        .scheduleImg {
+            display: none;
+        }
+    }
 
-#sFSection-Jkvq .sFsubmit.btn-primary {
-    background: #28ab00 !important;
-    font-size: 14px;
-}
+    @media (max-width: 600px) {
+        .white-popup {
+            width: 90%;
+        }
+        #talk_sales>li {
+            width: auto;
+        }
+    }
 
-.sFSection .valid-msg,
-.sFSection .error-msg {
-    margin-left: 54px !important;
-}
+    #sFSection-V6Lc {
+        font-family: Roboto;
+        background: #fefdfe;
+    }
 
-.vertical-center {
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-    text-align: center;
-}
+    .talktosale-superform .sFSection .sFformfield {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
 
-.vertical-center p {
-    font-size: 16px;
-}
+    .sFSection .sFformfield {
+        padding: 40px;
+        background: #fafafa;
+        border: 1px solid #ccc;
+    }
 
-@media only screen and (max-width: 1000px) {
+    .sFSection .fieldset {
+        max-width: 600px;
+        box-sizing: border-box;
+        width: 80%;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .panel {
+        box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+    }
+
+    .talktosale-superform .sFSection .sFformfield .form-group {
+        margin-bottom: 10px !important;
+    }
+
+    .talktosale-superform .sFSection .sFformfield .form-group {
+        margin-bottom: 10px !important;
+    }
+
+    .talktosale-superform .sFSection .sFformfield label {
+        font-size: 15px !important;
+        color: #333 !important;
+        line-height: 26px !important;
+    }
+
+    .talktosale-superform .sFSection {
+        padding: 0 !important;
+        font-family: "CambriaRegular" !important;
+    }
+
+    .talktosale-superform .sFSection .sFform textarea {
+        width: 50% !important;
+        min-height: 100px !important;
+        width: 340px !important;
+    }
+
+    .talktosale-superform .sFSection .form-control {
+        height: 40px !important;
+        border-radius: 2px !important;
+        box-shadow: none !important;
+        font-size: 16px !important;
+    }
+
+    .custom-dialog .tab-pane {
+        padding: 0;
+    }
+
+    .talktosale-superform .form-group {
+        margin-top: 20px;
+    }
+
+    #sFSection-xZyf {
+        background: transparent !important;
+    }
+
+    #sFform-xZyf input,
+    #sFform-xZyf textarea,
+    #sFform-xZyf select {
+        border: 1px solid #525265 !important;
+        background: transparent !important;
+        width: 230px !important;
+    }
+
     #sFform-xZyf textarea {
-        width: 240px !important;
+        width: 340px !important;
     }
-}
+
+    #sFformfield-xZyf label {
+        color: #73737f !important;
+    }
+
+    #sFSection-Jkvq .sFsubmit.btn-primary {
+        background: #28ab00 !important;
+        font-size: 14px;
+    }
+
+    .sFSection .valid-msg,
+    .sFSection .error-msg {
+        margin-left: 54px !important;
+    }
+
+    .vertical-center {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        text-align: center;
+    }
+
+    .vertical-center p {
+        font-size: 16px;
+    }
+
+    .overlay-cal {
+        background: #2b262682;
+        width: 100%;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        /* left: 0; */
+        right: 0;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        vertical-align: middle;
+        justify-content: center;
+        /* align-items: center; */
+    }
+
+    .close-2 {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        background: none;
+        color: red;
+        border: 0px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 20px;
+        z-index: 9999;
+    }
+
+    @media only screen and (max-width: 1000px) {
+        #sFform-xZyf textarea {
+            width: 240px !important;
+        }
+    }
