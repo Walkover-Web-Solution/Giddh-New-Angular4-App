@@ -69,8 +69,11 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
 
     public ngAfterViewInit() {
         this._generalService.IAmLoaded.next(true);
+        let scriptTag = document.createElement('script');
+        scriptTag.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        scriptTag.type = 'text/javascript';
+        document.body.appendChild(scriptTag);
     }
-
     public selectConfigureBank() {
         if (this.companyCountry) {
             if (this.companyCountry.toLowerCase() === 'india') {
@@ -95,11 +98,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
         }else if (isCordova) {
             // todo: scheduleNow in cordova
         } else {
-            let newwindow = window.open('https://calendly.com/sales-accounting-software/talk-to-sale', 'scheduleWindow', 'height=650,width=1199,left=200,top=100`');
-
-            if (window.focus) {
-                newwindow.focus();
-            }
+            this.openScheduleCalendlyModel();  // to show calendly block
         }
         return false;
     }
@@ -107,7 +106,6 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
     public openScheduleModal() {
         this._generalService.invokeEvent.next("openschedulemodal");
     }
-
     public loadScript() {
         let isFound = false;
         let scripts = document.getElementsByTagName('script');
@@ -164,5 +162,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
         dataToSaveNew.companyInventorySettings = { manageInventory: data };
 
         this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
+    }
+    public openScheduleCalendlyModel() {
+        this.store.dispatch(this.generalActions.isOpenCalendlyModel(true));
     }
 }
