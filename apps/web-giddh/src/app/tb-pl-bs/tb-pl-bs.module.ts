@@ -33,7 +33,7 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { BsDropdownModule, ModalModule, TooltipModule } from 'ngx-bootstrap';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -79,7 +79,7 @@ import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
         CurrencyModule,
         TooltipModule,
         AccountDetailModalModule,
-        NgxDaterangepickerMd.forRoot()
+        SharedModule
     ],
 })
 export class TBPlBsModule {
