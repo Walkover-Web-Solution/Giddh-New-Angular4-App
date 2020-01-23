@@ -9,8 +9,26 @@
                 <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
                     <div class="input-group">
                         <span class="inputWrapper">
-                            <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
-                                (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
+
+<!--                            <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"-->
+<!--                                (applyDaterangepicker)="bsValueChange($event)" class="form-control" />-->
+
+                            <input type="text"
+                                   [(ngModel)]="selectedDateRange"
+                                   ngxDaterangepickerMd
+                                   [alwaysShowCalendars]="true"
+                                   [ranges]="datePickerOptions.ranges"
+                                   [showClearButton]="false"
+                                   [showCancel]="true"
+                                   [showDropdowns]="true"
+                                   [locale]="{applyLabel: 'Done'}"
+                                   (datesUpdated)="dateRangeChanged($event)"
+                                   [keepCalendarOpeningWithRange]="true"
+                                   [showRangeLabelOnInput]="false"
+                                   name="selectedDateRange"
+                                   class="form-control"
+                                   placeholder="Select please..."/>
+
                         </span>
                     </div>
                     <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
@@ -372,7 +390,7 @@
                         <!-- Customer -->
                         <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
                             (clickOutside)="modalUniqueName = ''">
-                            {{item.account.customerName}}
+                            {{item?.account?.customerName || item?.account?.name}}
                             <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
                                 [voucherType]="selectedVoucher" [accountUniqueName]="item.account.uniqueName"
                                 [from]="invoiceSearchRequest.from" [to]="invoiceSearchRequest.to"
@@ -483,7 +501,7 @@
                         <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
                             (clickOutside)="modalUniqueName = ''">
                             <!-- Customer -->
-                            {{item.account.customerName}}
+                            {{item?.account?.customerName || item?.account?.name}}
                             <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
                                 [voucherType]="selectedVoucher" [accountUniqueName]="item.account.uniqueName"
                                 [from]="invoiceSearchRequest.from" [to]="invoiceSearchRequest.to"
@@ -579,7 +597,7 @@
                             </div>
                             <div (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
                                 (clickOutside)="modalUniqueName = ''">
-                                {{item.account.customerName}}
+                                {{item?.account?.customerName || item?.account?.name}}
                                 <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
                                     [accountUniqueName]="item.account.uniqueName" [voucherType]="selectedVoucher"
                                     [from]="invoiceSearchRequest.from" [to]="invoiceSearchRequest.to"

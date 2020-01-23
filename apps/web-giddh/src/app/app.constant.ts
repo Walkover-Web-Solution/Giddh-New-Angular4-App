@@ -65,6 +65,7 @@ export enum DefaultDateRangePickerRangesEnum {
     ThisMonth = 'This Month',
     LastMonth = 'Last Month',
     ThisWeek = 'This Week',
+    Last14Days = 'Last14Days',
     SunToToday = 'Sun - Today',
     MonToToday = 'Mon - Today',
     ThisQuarterToDate = 'This Quarter to Date',
@@ -101,6 +102,12 @@ export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
         name: DefaultDateRangePickerRangesEnum.ThisWeek, ranges: [{
             name: DefaultDateRangePickerRangesEnum.SunToToday, value: [moment().startOf('week'), moment()]
         }, {name: DefaultDateRangePickerRangesEnum.MonToToday, value: [moment().startOf('week').add(1, 'd'), moment()]}]
+    },
+    {
+        name: DefaultDateRangePickerRangesEnum.Last14Days, value: [
+            moment().subtract(14, 'd'),
+            moment()
+        ]
     },
     {
         name: DefaultDateRangePickerRangesEnum.ThisQuarterToDate, value: [

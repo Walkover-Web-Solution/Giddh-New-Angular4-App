@@ -140,25 +140,24 @@
                     <strong>Due as on </strong>
                     <span class="italic underline">
 
-<!--                        <input type="text"-->
-<!--                               [(ngModel)]="selected"-->
-<!--                               ngxDaterangepickerMd-->
-<!--                               [alwaysShowCalendars]="true"-->
-<!--                               [ranges]="datePickerOptions.ranges"-->
-<!--                               [showClearButton]="false"-->
-<!--                               [showCancel]="true"-->
-<!--                               [showDropdowns]="true"-->
-<!--                               [locale]="{applyLabel: 'Done'}"-->
-<!--                               (rangeClicked)="selectedDate($event)"-->
-<!--                               (datesUpdated)="selectedDate($event)"-->
-<!--                               [keepCalendarOpeningWithRange]="true"-->
-<!--                               [showRangeLabelOnInput]="false"-->
-<!--                               class="form-control"-->
-<!--                               placeholder="Select please..."/>-->
+                        <input type="text"
+                               [(ngModel)]="selectedDateRange" name="selectedDateRange"
+                               ngxDaterangepickerMd
+                               [alwaysShowCalendars]="true"
+                               [ranges]="datePickerOptions.ranges"
+                               [showClearButton]="false"
+                               [showCancel]="true"
+                               [showDropdowns]="true"
+                               [locale]="{applyLabel: 'Done'}"
+                               (datesUpdated)="selectedDate($event)"
+                               [keepCalendarOpeningWithRange]="true"
+                               [showRangeLabelOnInput]="false"
+                               class="form-control"
+                               placeholder="Select please..."/>
 
-                        <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
-                            (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
-                            class="form-control date-range-picker" />
+<!--                        <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"-->
+<!--                            (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"-->
+<!--                            class="form-control date-range-picker" />-->
                     </span>
                 </p>
             </div>
@@ -446,27 +445,27 @@
                             <strong>Due as on </strong>
                             <span class="italic underline">
 
-<!--                                <input type="text" style="width: 250px !important;"-->
-<!--                                       [(ngModel)]="selected"-->
-<!--                                       ngxDaterangepickerMd-->
-<!--                                       [alwaysShowCalendars]="true"-->
-<!--                                       [ranges]="datePickerOptions.ranges"-->
-<!--                                       [showCustomRangeLabel]="true"-->
-<!--                                       [showClearButton]="false"-->
-<!--                                       [showCancel]="true"-->
-<!--                                       [linkedCalendars]="true"-->
-<!--                                       [showDropdowns]="true"-->
-<!--                                       [locale]="{applyLabel: 'Done'}"-->
-<!--                                       (datesUpdated)="selectedDate($event)"-->
-<!--                                       [keepCalendarOpeningWithRange]="false"-->
-<!--                                       [showRangeLabelOnInput]="false"-->
-<!--                                       class="form-control date-range-picker"-->
-<!--                                       placeholder="Select please..."/>-->
+                                <input type="text" style="width: 250px !important;"
+                                       [(ngModel)]="selectedDateRange" name="selectedDateRange"
+                                       ngxDaterangepickerMd
+                                       [alwaysShowCalendars]="true"
+                                       [ranges]="datePickerOptions.ranges"
+                                       [showCustomRangeLabel]="true"
+                                       [showClearButton]="false"
+                                       [showCancel]="true"
+                                       [linkedCalendars]="true"
+                                       [showDropdowns]="true"
+                                       [locale]="{applyLabel: 'Done'}"
+                                       (datesUpdated)="selectedDate($event)"
+                                       [keepCalendarOpeningWithRange]="false"
+                                       [showRangeLabelOnInput]="false"
+                                       class="form-control date-range-picker"
+                                       placeholder="Select please..."/>
 
-                                <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
-                                    (hideDaterangepicker)="selectedDate($event)"
-                                    (applyDaterangepicker)="selectedDate($event)"
-                                    class="form-control date-range-picker" />
+<!--                                <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"-->
+<!--                                    (hideDaterangepicker)="selectedDate($event)"-->
+<!--                                    (applyDaterangepicker)="selectedDate($event)"-->
+<!--                                    class="form-control date-range-picker" />-->
 
                             </span>
                         </p>

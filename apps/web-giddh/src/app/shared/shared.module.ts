@@ -69,6 +69,7 @@ import { NgxMaskModule } from './helpers/directives/ngx-mask';
 import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
 import { LayoutComponent } from './layout/layout.component';
 import { OnBoardingComponent } from './on-boarding/on-boarding.component';
+import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -167,7 +168,8 @@ export function provideConfig() {
         TabsModule,
         CKEditorModule,
         NgxMaskModule,
-        CommandKModule
+        CommandKModule,
+        NgxDaterangepickerMd.forRoot()
     ],
     exports: [
         CommonModule,
@@ -209,7 +211,8 @@ export function provideConfig() {
         BsDropdownModule,
         ElementViewChildModule,
         TooltipModule,
-        BsDatepickerModule
+        BsDatepickerModule,
+        NgxDaterangepickerMd
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
