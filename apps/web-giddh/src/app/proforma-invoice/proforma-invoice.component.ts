@@ -1090,6 +1090,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.isMultiCurrencyAllowed = false;
         }
     }
+
+    /**
+     *
+     * To fetch regex call for onboarding countries (gulf)
+     * @param {*} countryCode
+     * @memberof ProformaInvoiceComponent
+     */
     public getOnboardingForm(countryCode) {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = 'onboarding';
@@ -1231,11 +1238,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }, 500);
         });
     }
-
+    /**
+     * get state code using Tax number to prefill state
+     *
+     * @param {string} type billingDetails || shipping
+     * @param {SalesShSelectComponent} statesEle state input box
+     * @memberof ProformaInvoiceComponent
+     */
     public getStateCode(type: string, statesEle: SalesShSelectComponent) {
-        let gstVal = _.cloneDeep(this.invFormData.accountDetails[type].gstNumber);
+        let gstVal = _.cloneDeep(this.invFormData.accountDetails[type].gstNumber).toString();
         if (gstVal && gstVal.length >= 2) {
-            let selectedState = this.statesSource.find(item => item.stateGstCode === gstVal.substr(0, 2));
+            const selectedState = this.statesSource.find(item => item.stateGstCode === gstVal.substring(0, 2));
             if (selectedState) {
                 this.invFormData.accountDetails[type].stateCode = selectedState.value;
                 this.invFormData.accountDetails[type].state.code = selectedState.value;
@@ -1263,7 +1276,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public checkGstNumValidation(value) {
         let isValid: boolean = false;
         if (value) {
-            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+            if (!this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(value)) {
