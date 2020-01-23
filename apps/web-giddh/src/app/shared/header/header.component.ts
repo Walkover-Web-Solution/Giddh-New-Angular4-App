@@ -10,13 +10,7 @@ import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
 import { CommonActions } from '../../actions/common.actions';
-import {
-    ActiveFinancialYear,
-    CompanyCountry,
-    CompanyCreateRequest,
-    CompanyResponse,
-    StatesRequest
-} from '../../models/api-models/Company';
+import { ActiveFinancialYear, CompanyCountry, CompanyCreateRequest, CompanyResponse, StatesRequest } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
@@ -39,6 +33,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
 import { userLoginStateEnum } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
+import { environment } from 'apps/web-giddh/src/environments/environment';
 import { CountryRequest, CurrentPage } from '../../models/api-models/Common';
 
 @Component({
@@ -276,7 +271,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
         this.isCompanyProifleUpdate$ = this.store.select(p => p.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
 
-        this.selectedCompany = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+        this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
             if (!companies) {
                 return;
             }
@@ -288,7 +283,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.dispatch(this.companyActions.setTotalNumberofCompanies(this.companyList.length));
             let selectedCmp = companies.find(cmp => {
                 if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
+                    return cmp.uniqueName === this._generalService.companyUniqueName;
                 } else {
                     return false;
                 }
@@ -298,6 +293,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
 
             if (selectedCmp) {
+                this.selectedCompany = observableOf(selectedCmp);
                 this.activeFinancialYear = selectedCmp.activeFinancialYear;
                 this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
                 if (selectedCmp.nameAlias) {
@@ -320,33 +316,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.activeCompanyForDb = new CompAidataModel();
                 this.activeCompanyForDb.name = selectedCmp.name;
                 this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
+                this.setSelectedCompanyData(this.selectedCompany);
             }
 
             this.selectedCompanyCountry = selectedCmp.country;
-            return selectedCmp;
-        })).pipe(takeUntil(this.destroyed$));
-
-        this.selectedCompany.subscribe((res: any) => {
-            if (res) {
-                if (res.countryV2 !== null && res.countryV2 !== undefined) {
-                    this.getStates(res.countryV2.alpha2CountryCode);
-                    this.store.dispatch(this.commonActions.resetOnboardingForm());
-                }
-                if (res.subscription) {
-                    this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
-                    if (res.baseCurrency) {
-                        this.companyCountry.baseCurrency = res.baseCurrency;
-                        this.companyCountry.country = res.country;
-                        this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(this.companyCountry));
-                    }
-
-                    this.CurrentCmpPlanAmount = res.subscription.planDetails.amount;
-                    this.subscribedPlan = res.subscription;
-                    this.isSubscribedPlanHaveAdditnlChrgs = res.subscription.additionalCharges;
-                    this.selectedPlanStatus = res.subscription.status;
-                }
-                this.activeCompany = res;
-            }
         });
 
         this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$));
@@ -378,7 +351,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.sideBarStateChange(true);
         this.getElectronAppVersion();
         this.store.dispatch(this.companyActions.GetApplicationDate());
-
         this.user$.pipe(take(1)).subscribe((u) => {
             if (u) {
                 let userEmail = u.email;
@@ -597,7 +569,32 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.getPartyTypeForCreateAccount();
         this.getAllCountries();
     }
+    public setSelectedCompanyData(selectedCompany) {
+        if (selectedCompany) {
+            this.selectedCompany.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+                if (res) {
+                    if (res.countryV2 !== null && res.countryV2 !== undefined) {
+                        this.getStates(res.countryV2.alpha2CountryCode);
+                        this.store.dispatch(this.commonActions.resetOnboardingForm());
+                    }
+                    if (res.subscription) {
+                        this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
+                        if (res.baseCurrency) {
+                            this.companyCountry.baseCurrency = res.baseCurrency;
+                            this.companyCountry.country = res.country;
+                            this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(this.companyCountry));
+                        }
 
+                        this.CurrentCmpPlanAmount = res.subscription.planDetails.amount;
+                        this.subscribedPlan = res.subscription;
+                        this.isSubscribedPlanHaveAdditnlChrgs = res.subscription.additionalCharges;
+                        this.selectedPlanStatus = res.subscription.status;
+                    }
+                    this.activeCompany = res;
+                }
+            });
+        }
+    }
     public ngAfterViewInit() {
 
         if (this.selectedPlanStatus === 'expired') {// active expired
@@ -605,7 +602,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         this.session$.subscribe((s) => {
             if (s === userLoginStateEnum.notLoggedIn) {
-                this.router.navigate(['/login']);
+                if (isElectron) {
+                    this.router.navigate(['/login']);
+                } else {
+                    window.location.href = (environment.production) ? `https://giddh.com/login/?action=logout` : `https://test.giddh.com/login/?action=logout`;
+                }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
                 // this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
                 this.router.navigate(['/new-user']);
@@ -1355,6 +1356,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public getPartyTypeForCreateAccount() {
         this.store.dispatch(this.commonActions.GetPartyType());
     }
+
     public getAllCountries() {
         let countryRequest = new CountryRequest();
         countryRequest.formName = '';

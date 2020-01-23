@@ -7,11 +7,9 @@ import { Router } from "@angular/router";
     styleUrls: ['./reports.dashboard.component.scss']
 })
 export class ReportsDashboardComponent implements OnInit {
-    constructor(private router: Router) { }
-    ngOnInit() {
-    }
 
-    openDetailedSalesReport() {
-        this.router.navigate(['/pages/reports/reports-details']);
+    constructor(private router: Router) { }
+
+    ngOnInit() {
     }
 }

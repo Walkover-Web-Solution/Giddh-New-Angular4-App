@@ -133,7 +133,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public ngOnInit() {
         //logic to switch to payment tab if coming from vedor tabs add payment
-        if (this.selectedTabParent) {
+        if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
             this.selectTab(this.selectedTabParent);
         }
         // getting all page data of integration page
@@ -235,7 +235,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public ngAfterViewInit() {
-        if (this.selectedTabParent) {
+        if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
             this.selectTab(this.selectedTabParent);
         }
     }

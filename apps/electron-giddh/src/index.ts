@@ -1,6 +1,6 @@
-import {app, ipcMain} from "electron";
+import { app, ipcMain } from "electron";
 import setMenu from "./AppMenuManager";
-import {log} from "./util";
+import { log } from "./util";
 import WindowManager from "./WindowManager";
 import {
     AdditionalGoogleLoginParams,
@@ -74,7 +74,7 @@ ipcMain.on("authenticate", (event, arg) => {
         //         console.log(JSON.stringify(token));
         //         // use your token.access_token
         //     });
-    }  else {
+    } else {
         // const electronOauth2 = require("electron-oauth");
         // let config = {};
         // let bodyParams = {};

@@ -49,6 +49,6 @@ exports.LinkedinLoginElectronConfig = {
     authorizationUrl: "https://www.linkedin.com/uas/oauth2/authorization",
     tokenUrl: "https://www.linkedin.com/oauth/v2/accessToken",
     useBasicAuthorizationHeader: false,
-    redirectUri: "http://test.giddh.com/login" || "http://localhost"
+    redirectUri: "https://test.giddh.com/login" || "http://localhost"
 };
 //# sourceMappingURL=main-auth.config.js.map

@@ -120,6 +120,30 @@ export interface SalesRegisteDetailedResponse {
 	to: string;
 }
 
+export class PurchaseReportsModel {
+	public particular: string;
+	public purchase: number = 0;
+	public returns: number = 0;
+	public netPurchase: number = 0;
+	public cumulative: number = 0;
+	public reportType: string;
+	public from?: string;
+	public to?: string;
+}
 
-
-
+export interface PurchaseRegisteDetailedResponse {
+	items: Item[];
+	creditTotal: number;
+	debitTotal: number;
+	discountTotal: number;
+	taxTotal: number;
+	tdsTotal: number;
+	tcsTotal: number;
+	netTotal: NetTotal;
+	page: number;
+	count: number;
+	totalPages: number;
+	totalItems: number;
+	from: string;
+	to: string;
+}

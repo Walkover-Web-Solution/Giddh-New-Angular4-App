@@ -37,41 +37,7 @@ export class TaxControlData {
 @Component({
     selector: 'tax-control',
     templateUrl: 'tax-control.component.html',
-    styles: [`
-    .single-item .dropdown-menu {
-      height: 50px !important;
-    }
-
-    :host .dropdown-menu {
-      min-width: 200px;
-      height: inherit;
-      padding: 0;
-      overflow: auto;
-    }
-
-    .fakeLabel {
-      cursor: pointer;
-      padding: 5px 10px;
-      line-height: 24px;
-    }
-
-    :host .fake-disabled-label {
-      cursor: not-allowed;
-      opacity: .5;
-    }
-
-    .multi-select input.form-control {
-      background-image: unset !important;
-    }
-
-    .multi-select .caret {
-      display: block !important;
-    }
-
-    // #tax-control-multi-select.multi-select input.form-control[readonly] {
-    //   background-image: unset !important;
-    // }
-  `],
+    styleUrls: ['./tax-control.component.scss'],
     providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
 export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
@@ -80,6 +46,10 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public applicableTaxes: string[] = [];
     @Input() public taxRenderData: TaxControlData[];
     @Input() public showHeading: boolean = true;
+    /** Custom heading to be applied to tax control header */
+    @Input() public customHeading: string = '';
+    /** True, if mandatory asterisk needs to be displayed */
+    @Input() public isMandatory: boolean = false;
     @Input() public showTaxPopup: boolean = false;
     @Input() public totalForTax: number = 0;
     @Input() public rootClass: string = 'ledger-panel';
@@ -97,7 +67,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    @ViewChild('taxInptEle') public taxInptEle: ElementRef;
+    @ViewChild('taxInputElement') public taxInputElement: ElementRef;
 
     public taxSum: number = 0;
     public taxTotalAmount: number = 0;
@@ -288,6 +258,17 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         return false;
     }
 
+    /**
+     * Tax input focus handler
+     *
+     * @memberof TaxControlComponent
+     */
+    public handleInputFocus(): void {
+        this.showTaxPopup = true;
+        this.hideOtherPopups.emit(true);
+        this.taxInputElement.nativeElement.classList.remove('error-box');
+    }
+
     private isTaxApplicable(tax): boolean {
         const today = moment(moment().format('DD-MM-YYYY'), 'DD-MM-YYYY', true).valueOf();
         let isApplicable = false;
@@ -318,8 +299,8 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public taxInputBlur(event) {
-        if (event && event.relatedTarget && this.taxInptEle && !this.taxInptEle.nativeElement.contains(event.relatedTarget)) {
-            this.toggleTaxPopup(false);
+        if (event && event.relatedTarget && this.taxInputElement && !this.taxInputElement.nativeElement.contains(event.relatedTarget)) {
+            // this.toggleTaxPopup(false);
         }
     }
 

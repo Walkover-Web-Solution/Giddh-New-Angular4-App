@@ -1330,7 +1330,7 @@ ul.sub-list {
 }
 
 .text-light {
-    color: #a9a9a9 !important;
+    color: #999 !important;
 }
 
 .list-middle li {
@@ -2746,6 +2746,12 @@ input[type="checkbox"]:checked:after {
 .fixed-ng2pdfview iframe {
     height: 1530px !important;
     overflow: hidden;
+}
+
+.mandatory-asterisk {
+    font-size: 14px;
+    top: 0;
+    color: red;
 }
 
 @media only screen and (max-width: 1400px) {
@@ -8049,7 +8055,7 @@ span.red-text {
 
 #invoice-setting .nav > li > a:focus,
 #invoice-setting .nav > li > a:hover {
-    background: transparent !important;
+    background: $White !important;
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
 
@@ -8348,7 +8354,9 @@ ul.dropdown-menu p.lead.pd {
     border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
     font-size: 18px;
 }
-
+#tab-integration .nav-tabs > li a:hover {
+    background-color: $White !important;
+}
 #tab-integration .nav-tabs > li a.active {
     border-bottom: 1px solid $activeTabBorder !important;
     font-family: "opensans-regular";
@@ -8631,6 +8639,11 @@ p.remvBrnchName {
     margin-top: 0;
     border-radius: 0;
 }
+.popover.purchase-invoice-rcm, .update-ledger-rcm {
+    .popover-arrow.arrow {
+        display: none;
+    }
+}
 @media (min-width: 564px) {
     #date-range-picker-parent .daterangepicker {
         width: 100%;
@@ -8664,6 +8677,15 @@ button {
 }
 
 /* radio & checkbox new CSS start */
+input.checkbox-custom[type="checkbox"] {
+    position: absolute;
+    top: 1px;
+    text-align: center;
+    margin: 0 8px 0 0;
+    cursor: pointer;
+    left: 0px;
+    height: 19px;
+}
 .checkbox-custom,
 .radio-custom {
     opacity: 0;
@@ -9164,6 +9186,9 @@ button {
     }
     .list-style ul.list-inline.list-middle.download-drop-down {
         text-align: left;
+    }
+    .checkbox-custom-label, .radio-custom-label{
+        display: inline;
     }
 }
 

@@ -291,7 +291,7 @@ export class SignupComponent implements OnInit, OnDestroy {
             if (provider === "google") {
                 // google
                 const t = ipcRenderer.send("authenticate", provider);
-                ipcRenderer.once('take-your-gmail-token', (sender , arg) => {
+                ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
                     this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                 });
                 //
@@ -299,8 +299,11 @@ export class SignupComponent implements OnInit, OnDestroy {
                 // this.store.dispatch(this.loginAction.signupWithGoogle(t));
             } else {
                 // linked in
-                const t = ipcRenderer.sendSync("authenticate", provider);
-                this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
+                ipcRenderer.send("authenticate", provider);
+                ipcRenderer.once("authenticate-token", (event, res) => {
+                    this.store.dispatch(this.loginAction.LinkedInElectronLogin(res));
+                });
+                // this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
             }
 
         } else {

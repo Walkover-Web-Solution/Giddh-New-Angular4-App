@@ -18,7 +18,6 @@ const TWITTER_CLIENT_ID = 'w64afk3ZflEsdFxd6jyB9wt5j';
 const TWITTER_SECRET_KEY = '62GfvL1A6FcSEJBPnw59pjVklVI4QqkvmA1uDEttNLbUl2ZRpy';
 const LINKEDIN_CLIENT_ID = '75urm0g3386r26';
 const LINKEDIN_SECRET_KEY = '3AJTvaKNOEG4ISJ0';
-
 export const GoogleLoginElectronConfig = {
     clientId: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_SECRET_KEY,
