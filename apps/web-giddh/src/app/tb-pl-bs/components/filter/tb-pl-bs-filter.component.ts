@@ -204,7 +204,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                 let activeFinancialYear = selectedCmp.activeFinancialYear;
                 if (activeFinancialYear) {
                     // assign dates
-                    this.assignStartAndEndDateForDateRangePicker(activeFinancialYear.financialYearStarts);
+                    this.assignStartAndEndDateForDateRangePicker(activeFinancialYear.financialYearStarts, null);
 
                     this.filterForm.patchValue({
                         from: moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day').format('DD-MM-YYYY'),
@@ -323,7 +323,9 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
      * @param from
      * @param to
      */
-    private assignStartAndEndDateForDateRangePicker(from: any = moment().subtract(30, 'days'), to: any = moment()) {
+    private assignStartAndEndDateForDateRangePicker(from, to) {
+        from = from || moment().subtract(30, 'd');
+        to = to || moment();
         this.filterForm.get('selectedDateRange').patchValue({
             startDate: moment(from, GIDDH_DATE_FORMAT),
             endDate: moment(to, GIDDH_DATE_FORMAT)
