@@ -95,6 +95,11 @@
                         </li>
                     </ul>
                 </div>
+                <div *ngIf="selectedVoucher === 'purchases'" class="btn-wrapper">
+                        <button class="btn btn-pink desktop-view-btn" (click)="goToInvoice('credit note')">+
+                            New Purchase
+                        </button>
+                    </div>
                 <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
                     <button class="btn btn-pink desktop-view-btn" (click)="goToInvoice('credit note')">+
                         New Cr. Note
@@ -216,7 +221,7 @@
             <table class="table basic table-bordered mrT2 invoice-table desktopTable table-responsive">
 
                 <!--sales-->
-                <thead class="t-h-bg1" *ngIf="selectedVoucher === 'sales'">
+                <thead class="t-h-bg1" *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchases'">
                     <tr>
                         <th style="min-width:50px; width: 4%" *ngIf="selectedItems.length > 0">
                             <div class="mh18_img" style="justify-content: center;display: flex">
@@ -242,7 +247,7 @@
                         <th width="19%" class="td_in_searchBox" #searchCustomerContainer
                             (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
                             <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, fieldName: 'accountUniqueName',formControl: accountUniqueNameInput,
-            title: 'Customer'}"></ng-container>
+            title: (selectedVoucher === 'purchases') ? 'Vendor' : 'Customer'}"></ng-container>
                         </th>
 
                         <th width="10%">
@@ -265,7 +270,7 @@
                             </div>
                         </th>
 
-                        <th width="12%">
+                        <th width="12%" *ngIf="selectedVoucher !== 'purchases'">
                             <div class="d-flex justify-content-end">
                                 <div class=" text-right"> Balance Due</div>
                                 <div class="icon-pointer">
@@ -285,7 +290,7 @@
                             </div>
                         </th>
 
-                        <th width="10%">
+                        <th width="10%" *ngIf="selectedVoucher !== 'purchases'">
                             <div class="d-flex">
                                 <div class="flex-fill">Status</div>
                             </div>
@@ -294,7 +299,7 @@
                 </thead>
 
                 <!--non sales-->
-                <thead class="t-h-bg1 input-h" *ngIf="selectedVoucher !== 'sales'">
+                <thead class="t-h-bg1 input-h" *ngIf="selectedVoucher !== 'sales' && selectedVoucher !== 'purchases'">
                     <tr>
                         <th style="min-width:50px; width: 4%" *ngIf="selectedItems.length > 0">
                             <div class="mh18_img" style="display: flex;justify-content: center">
@@ -754,7 +759,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <invoice-advance-search-component #advanceSearchComponent
-                    [type]="selectedVoucher === 'debit note' || selectedVoucher === 'credit note' ? 'drcr' : 'invoice'"
+                    [type]="selectedVoucher === 'debit note' || selectedVoucher === 'credit note' ? 'drcr' : (selectedVoucher === 'purchases') ? selectedVoucher : 'invoice'"
                     [request]="advanceSearchFilter" (applyFilterEvent)="applyAdvanceSearch($event)"
                     (closeModelEvent)="toggleAdvanceSearchPopup()">
                 </invoice-advance-search-component>

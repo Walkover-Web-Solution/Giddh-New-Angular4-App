@@ -46,9 +46,11 @@ export class ReceiptService implements OnInit {
     public GetAllReceipt(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
         let requestType = type;
-        let url = this.createQueryString(this.config.apiUrl + RECEIPT_API.GET_ALL, {
-            page: body.page, count: body.count, from: body.from, to: body.to, type: requestType, q: body.q, sort: body.sort, sortBy: body.sortBy
-        });
+        const contextPath = type === 'purchases' ? RECEIPT_API.GET_ALL_PURCHASE_RECORDS : RECEIPT_API.GET_ALL;
+        const requestParameter = {
+            page: body.page, count: body.count, from: body.from, to: body.to, q: body.q, sort: body.sort, sortBy: body.sortBy
+        };
+        let url = this.createQueryString(this.config.apiUrl + contextPath, (type === 'purchases') ? requestParameter : {...requestParameter, type: requestType});
 
         return this._http.post(url
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), body).pipe(
