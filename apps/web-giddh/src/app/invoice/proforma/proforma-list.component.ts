@@ -1,23 +1,38 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { ProformaFilter, ProformaGetRequest, ProformaItem, ProformaResponse, ProformaUpdateActionRequest } from '../../models/api-models/proforma';
-import { select, Store } from '@ngrx/store';
-import { AppState } from '../../store';
-import { ProformaActions } from '../../actions/proforma/proforma.actions';
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { combineLatest, Observable, ReplaySubject } from 'rxjs';
+import {
+    ChangeDetectorRef,
+    Component,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {
+    ProformaFilter,
+    ProformaGetRequest,
+    ProformaItem,
+    ProformaResponse,
+    ProformaUpdateActionRequest
+} from '../../models/api-models/proforma';
+import {select, Store} from '@ngrx/store';
+import {AppState} from '../../store';
+import {ProformaActions} from '../../actions/proforma/proforma.actions';
+import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
+import {combineLatest, Observable, ReplaySubject} from 'rxjs';
 import * as moment from 'moment/moment';
-import { cloneDeep, uniqBy } from '../../lodash-optimized';
-import { ModalDirective, ModalOptions } from 'ngx-bootstrap';
-import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
-import { InvoiceAdvanceSearchComponent } from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
-import { VoucherTypeEnum } from '../../models/api-models/Sales';
-import { ActivatedRoute, Router } from '@angular/router';
-import { createSelector } from "reselect";
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { GeneralService } from '../../services/general.service';
+import {cloneDeep, uniqBy} from '../../lodash-optimized';
+import {ModalDirective, ModalOptions} from 'ngx-bootstrap';
+import {InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm} from '../../models/api-models/Invoice';
+import {InvoiceAdvanceSearchComponent} from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
+import {GIDDH_DATE_FORMAT} from '../../shared/helpers/defaultDateFormat';
+import {InvoiceSetting} from '../../models/interfaces/invoice.setting.interface';
+import {VoucherTypeEnum} from '../../models/api-models/Sales';
+import {ActivatedRoute, Router} from '@angular/router';
+import {createSelector} from "reselect";
+import {BreakpointObserver} from '@angular/cdk/layout';
+import {GeneralService} from '../../services/general.service';
 
 @Component({
     selector: 'app-proforma-list-component',
@@ -299,7 +314,9 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
      * @param from
      * @param to
      */
-    private assignStartAndEndDateForDateRangePicker(from = moment().subtract(30, 'days'), to = moment()) {
+    private assignStartAndEndDateForDateRangePicker(from, to) {
+        from = from || moment().subtract(30, 'd');
+        to = to || moment();
         this.selectedDateRange = {
             startDate: moment(from, GIDDH_DATE_FORMAT),
             endDate: moment(to, GIDDH_DATE_FORMAT)
@@ -435,7 +452,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                     localStorage.setItem('estimateSelectedDate', JSON.stringify(this.estimateSelectedDate));
                 }
             }
-        this.getAll();
+            this.getAll();
         }
     }
 
@@ -471,7 +488,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         }
         // reset dateRangePicker
         // assign start and end date
-        this.assignStartAndEndDateForDateRangePicker();
+        this.assignStartAndEndDateForDateRangePicker(null, null);
 
         this.advanceSearchFilter = new ProformaFilter();
         this.advanceSearchFilter.page = 1;

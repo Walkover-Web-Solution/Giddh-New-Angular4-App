@@ -1,43 +1,61 @@
-import { Observable, of, of as observableOf, ReplaySubject } from 'rxjs';
+import {Observable, of, of as observableOf, ReplaySubject} from 'rxjs';
 
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { createSelector } from 'reselect';
-import { IOption } from './../../theme/ng-select/option.interface';
-import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormControl, NgForm } from '@angular/forms';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { select, Store } from '@ngrx/store';
-import { AppState } from '../../store/roots';
+import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {createSelector} from 'reselect';
+import {IOption} from './../../theme/ng-select/option.interface';
+import {
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
+import {FormControl, NgForm} from '@angular/forms';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {select, Store} from '@ngrx/store';
+import {AppState} from '../../store/roots';
 import * as _ from '../../lodash-optimized';
-import { orderBy } from '../../lodash-optimized';
+import {orderBy} from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { GenBulkInvoiceFinalObj, GenBulkInvoiceGroupByObj, GenerateBulkInvoiceRequest, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass } from '../../models/api-models/Invoice';
-import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { AccountService } from '../../services/account.service';
-import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { ModalDirective } from 'ngx-bootstrap';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
-import { ActivatedRoute } from '@angular/router';
-import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
-import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
-import { GeneralService } from '../../services/general.service';
-import { BreakpointObserver } from '@angular/cdk/layout';
+import {
+    GenBulkInvoiceFinalObj,
+    GenBulkInvoiceGroupByObj,
+    GenerateBulkInvoiceRequest,
+    GetAllLedgersForInvoiceResponse,
+    GetAllLedgersOfInvoicesResponse,
+    ILedgersInvoiceResult,
+    InvoiceFilterClass
+} from '../../models/api-models/Invoice';
+import {InvoiceActions} from '../../actions/invoice/invoice.actions';
+import {AccountService} from '../../services/account.service';
+import {ElementViewContainerRef} from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import {ModalDirective} from 'ngx-bootstrap';
+import {GIDDH_DATE_FORMAT} from '../../shared/helpers/defaultDateFormat';
+import {IFlattenAccountsResultItem} from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
+import {ActivatedRoute} from '@angular/router';
+import {InvoiceReceiptActions} from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
+import {DaterangePickerComponent} from '../../theme/ng2-daterangepicker/daterangepicker.component';
+import {GeneralService} from '../../services/general.service';
+import {BreakpointObserver} from '@angular/cdk/layout';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
-    { label: '12', value: '12' },
-    { label: '25', value: '25' },
-    { label: '50', value: '50' },
-    { label: '100', value: '100' }
+    {label: '12', value: '12'},
+    {label: '25', value: '25'},
+    {label: '50', value: '50'},
+    {label: '100', value: '100'}
 ];
 
 const COMPARISON_FILTER = [
-    { label: 'Greater Than', value: 'greaterThan' },
-    { label: 'Less Than', value: 'lessThan' },
-    { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-    { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-    { label: 'Equals', value: 'equals' }
+    {label: 'Greater Than', value: 'greaterThan'},
+    {label: 'Less Than', value: 'lessThan'},
+    {label: 'Greater Than or Equals', value: 'greaterThanOrEquals'},
+    {label: 'Less Than or Equals', value: 'lessThanOrEquals'},
+    {label: 'Equals', value: 'equals'}
 ];
 
 @Component({
@@ -96,6 +114,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     private isUniversalDateApplicable: boolean = false;
     private isBulkInvoiceGeneratedWithoutErr$: Observable<boolean>;
     public isMobileView = false;
+
     constructor(
         private modalService: BsModalService,
         private store: Store<AppState>,
@@ -136,7 +155,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             _.forEach(data, (item) => {
                 // o.uniqueName === 'sundrydebtors' || o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash' ||  o.uniqueName === 'revenuefromoperations' || o.uniqueName === 'otherincome'
                 if (_.find(item.parentGroups, (o) => _.indexOf(PARENT_GROUP_ARR, o.uniqueName) !== -1)) {
-                    accounts.push({ label: item.name, value: item.uniqueName });
+                    accounts.push({label: item.name, value: item.uniqueName});
                 }
             });
             this.accounts$ = observableOf(orderBy(accounts, 'label'));
@@ -169,10 +188,10 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                 }
                 return true;
             })).subscribe((o: any) => {
-                if (o) {
-                    this.getInvoiceTemplateDetails(o.templateDetails.templateUniqueName);
-                }
-            });
+            if (o) {
+                this.getInvoiceTemplateDetails(o.templateDetails.templateUniqueName);
+            }
+        });
 
         // listen for bulk invoice generate and successfully generate and do the things
         this.isBulkInvoiceGenerated$.subscribe(result => {
@@ -315,7 +334,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         let arr: GenBulkInvoiceGroupByObj[] = [];
         _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult): void => {
             if (item.isSelected) {
-                arr.push({ accUniqueName: item.account.uniqueName, uniqueName: item.uniqueName });
+                arr.push({accUniqueName: item.account.uniqueName, uniqueName: item.uniqueName});
             }
         });
         let res = _.groupBy(arr, 'accUniqueName');
@@ -329,7 +348,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             });
             model.push(obj);
         });
-        this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, model));
+        this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({combined: action}, model));
         this.selectedLedgerItems = [];
     }
 
@@ -540,7 +559,9 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
      * @param from
      * @param to
      */
-    private assignStartAndEndDateForDateRangePicker(from = moment().subtract(30, 'days'), to = moment()) {
+    private assignStartAndEndDateForDateRangePicker(from, to) {
+        from = from || moment().subtract(30, 'd');
+        to = to || moment();
         this.selectedDateRange = {
             startDate: moment(from, GIDDH_DATE_FORMAT),
             endDate: moment(to, GIDDH_DATE_FORMAT)
