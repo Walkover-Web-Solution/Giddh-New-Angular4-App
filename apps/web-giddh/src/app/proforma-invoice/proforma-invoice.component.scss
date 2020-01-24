@@ -170,10 +170,6 @@ $greyClr: #6d6d6d;
         width: 5px;
     }
 
-    textarea.form-control::-webkit-scrollbar-track {
-        // -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    }
-
     textarea.form-control::-webkit-scrollbar-thumb {
         background-color: darkgrey;
         outline: 1px solid slategrey;
@@ -490,10 +486,6 @@ textarea:focus {
                 padding: 10px 8px;
                 white-space: nowrap;
                 position: relative;
-
-                &:first-child {
-                    //  border-left: none !important;
-                }
 
                 &:nth-child(2) {
                     white-space: normal;

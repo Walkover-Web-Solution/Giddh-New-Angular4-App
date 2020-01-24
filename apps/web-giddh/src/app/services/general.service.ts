@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Subject } from 'rxjs';
 
-import { RcmModalButton, RcmModalConfiguration } from '../common/rcm-modal/rcm-modal.interface';
+import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../common/confirmation-modal/confirmation-modal.interface';
 import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
@@ -193,11 +193,11 @@ export class GeneralService {
      * Returns the RCM modal configuration based on 'isRcmSelected' flag value
      *
      * @param {boolean} isRcmSelected True, if user selects the RCM checkbox
-     * @returns {RcmModalConfiguration}
+     * @returns {ConfirmationModalConfiguration} RCM modal configuration
      * @memberof GeneralService
      */
-    getRcmConfiguration(isRcmSelected: boolean): RcmModalConfiguration {
-        const buttons: Array<RcmModalButton> = [{
+    getRcmConfiguration(isRcmSelected: boolean): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [{
             text: 'Yes',
             cssClass: 'btn btn-success'
         },

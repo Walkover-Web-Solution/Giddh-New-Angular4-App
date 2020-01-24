@@ -413,7 +413,7 @@
                 <span class="text-light font-12"> (Tax is compulsory)</span>
             </div>
             <ng-template #rcmTemplate>
-                <rcm-modal [configuration]="rcmConfiguration" (buttonClicked)="handleRcmChange($event)"></rcm-modal>
+                <confirmation-modal [configuration]="rcmConfiguration" (buttonClicked)="handleRcmChange($event)"></confirmation-modal>
             </ng-template>
             <!-- reverse charge transction end  -->
 

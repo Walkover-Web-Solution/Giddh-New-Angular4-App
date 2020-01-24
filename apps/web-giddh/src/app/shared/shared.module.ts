@@ -19,7 +19,7 @@ import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-sc
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
 
 import { LedgerDiscountComponent } from '../../app/ledger/components/ledgerDiscount/ledgerDiscount.component';
-import { RcmModalComponent } from '../common/rcm-modal/rcm-modal.component';
+import { ConfirmationModalComponent } from '../common/confirmation-modal/confirmation-modal.component';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
 import { CommandKModule } from '../theme/command-k/command.k.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
@@ -132,7 +132,7 @@ export function provideConfig() {
         AccountAddNewDetailsComponent,
         AccountUpdateNewDetailsComponent,
         WelcomeComponent,
-        RcmModalComponent
+        ConfirmationModalComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -187,7 +187,7 @@ export function provideConfig() {
         FooterComponent,
         FixedFooterComponent,
         ManageGroupsAccountsComponent,
-        RcmModalComponent,
+        ConfirmationModalComponent,
         AccountFilterPipe,
         SelectModule,
         PaginationModule,
