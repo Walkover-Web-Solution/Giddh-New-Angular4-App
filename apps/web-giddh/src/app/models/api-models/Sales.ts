@@ -397,14 +397,29 @@ interface IPaymentAction {
 }
 
 /**
+ * Generic Request type interface for vouchers and purchase record
+ *
+ * @export
+ * @interface GenericRequest
+ */
+export interface GenericRequest {
+    account?: AccountDetailsClass;
+    number?: string;
+    entries?: any[];
+    date?: string;
+    dueDate?: string;
+    type?: string;
+}
+
+/**
  * Generic request class to generate sales, credit note, debit note
  */
 
-export interface GenericRequestForGenerateSCD {
+export interface GenericRequestForGenerateSCD extends GenericRequest {
     entryUniqueNames?: string[];
     taxes?: string[];
     voucher: VoucherClass;
-    account?: AccountDetailsClass;
+    // account?: AccountDetailsClass;
     updateAccountDetails?: boolean;
     paymentAction?: IPaymentAction;
     depositAccountUniqueName?: string;
@@ -412,16 +427,31 @@ export interface GenericRequestForGenerateSCD {
     validateTax?: boolean;
     applyApplicableTaxes?: boolean;
     action?: string;
-    dueDate?: string;
+    // dueDate?: string;
     oldVersions?: any[];
     entries?: SalesEntryClassMulticurrency[],
-    date?: string,
+    // date?: string,
     exchangeRate?: number,
-    type?: string,
-    number?: string,
+    // type?: string,
+    // number?: string,
     uniqueName?: string,
     templateDetails?: TemplateDetailsClass
     deposit?: AmountClassMulticurrency;
+}
+
+/**
+ * Interface for purchase record request object
+ *
+ * @export
+ * @interface PurchaseRecordRequest
+ * @extends {GenericRequest}
+ */
+export interface PurchaseRecordRequest extends GenericRequest {
+    // TODO: Add additional properties once the update flow is also supported for purchase record
+    updateAccountDetails?: boolean;
+    attachedFiles?: Array<string>;
+    entries?: SalesEntryClass[];
+    templateDetails: TemplateDetailsClass;
 }
 
 export class VoucherDetailsClass {

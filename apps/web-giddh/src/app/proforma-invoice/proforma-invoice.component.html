@@ -227,7 +227,7 @@
                                                                         </label>
                                                                     </div>
 
-                                                                    <div class="col-sm-6 pd ">
+                                                                    <div class="col-sm-6 pd" #billingState>
                                                                         <sales-sh-select [placeholder]="'State'"
                                                                             class="select-bdr-bottom"
                                                                             (selected)="fillShippingBillingDetails($event, true); autoFillShippingDetails()"
@@ -298,8 +298,7 @@
                                                                             </div>
                                                                         </div>
 
-                                                                        <div class="col-sm-6 pd ">
-
+                                                                        <div class="col-sm-6 pd" #shippingState>
                                                                             <sales-sh-select
                                                                                 [disabled]="autoFillShipping"
                                                                                 [placeholder]="'State'"
@@ -559,8 +558,8 @@
                                     </div>
                                 </div>
                                 <ng-template #rcmTemplate>
-                                    <rcm-modal [configuration]="rcmConfiguration"
-                                        (buttonClicked)="handleRcmChange($event)"></rcm-modal>
+                                    <confirmation-modal [configuration]="rcmConfiguration"
+                                        (buttonClicked)="handleRcmChange($event)"></confirmation-modal>
                                 </ng-template>
                             </div> -->
                             <!-- for purchase invoice end -->
@@ -2551,3 +2550,12 @@
 <ng-template #invoiceTypeDisplayRef>
     {{invoiceType | titlecase}}
 </ng-template>
+<div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #purchaseRecordConfirmationPopup="bs-modal"
+    [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <confirmation-modal [configuration]="purchaseRecordConfirmationConfiguration"
+                (buttonClicked)="handlePurchaseRecordConfirmation($event)"></confirmation-modal>
+        </div>
+    </div>
+</div>
