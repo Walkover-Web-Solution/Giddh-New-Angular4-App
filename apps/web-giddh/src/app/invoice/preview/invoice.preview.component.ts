@@ -963,10 +963,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.invoiceSearchRequest.page = 1;
         this.invoiceSearchRequest.count = 20;
         this.invoiceSearchRequest.voucherNumber = '';
+
         let universalDate;
-        if (window.localStorage) {
-            universalDate = localStorage.getItem('universalSelectedDate') ? localStorage.getItem('universalSelectedDate').split(',') : '';
-        }
+        // get application date
+        this.universalDate$.pipe(take(1)).subscribe(date => {
+            universalDate = date;
+        });
+
+        // set date picker date as application date
         if (universalDate.length > 1) {
             this.invoiceSearchRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
             this.invoiceSearchRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
