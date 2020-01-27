@@ -537,7 +537,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             } else {
                 // for edit mode direct from @Input
-                this.invoiceNo = '4001';
                 if (this.accountUniqueName && this.invoiceNo && this.invoiceType) {
                     this.store.dispatch(this._generalActions.setAppTitle('/pages/proforma-invoice/invoice/' + this.invoiceType));
                     this.getVoucherDetailsFromInputs();

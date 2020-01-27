@@ -119,7 +119,7 @@ export class InvoiceReceiptActions {
                 } else {
                     this.showToaster(response.message, 'error');
                 }
-                return this.GetVoucherDetailsResponseV4(response);
+                return this.GetPurchaseRecordDetailsResponse(response);
             }));
 
     constructor(private action$: Actions, private _toasty: ToasterService,
@@ -194,6 +194,14 @@ export class InvoiceReceiptActions {
         };
     }
 
+    /**
+     * Returns the action for fetching particular purchase record
+     *
+     * @param {string} accountUniqueName Account unique name for which purchase record is been made
+     * @param {string} purchaseRecordUniqueName Purchase record unique name
+     * @returns {CustomActions} Action for fetching particular purchase record
+     * @memberof InvoiceReceiptActions
+     */
     public GetPurchaseRecordDetails(accountUniqueName: string, purchaseRecordUniqueName: string): CustomActions {
         return {
             type: INVOICE_RECEIPT_ACTIONS.GET_PURCHASE_RECORD_DETAILS,
@@ -201,6 +209,13 @@ export class InvoiceReceiptActions {
         };
     }
 
+    /**
+     * Returns the action for handling get purchase record API response
+     *
+     * @param {BaseResponse<Voucher, any>} response Response returned by the API
+     * @returns {CustomActions} Action for handling get purchase record API response
+     * @memberof InvoiceReceiptActions
+     */
     public GetPurchaseRecordDetailsResponse(response: BaseResponse<Voucher, any>): CustomActions {
         return {
             type: INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILS_RESPONSEV4,
