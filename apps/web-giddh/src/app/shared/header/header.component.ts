@@ -173,7 +173,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isLargeWindow: boolean = false;
     public isCompanyProifleUpdate$: Observable<boolean> = observableOf(false);
     public selectedPlanStatus: string;
-    public isSubscribedPlanHaveAdditnlChrgs: any;
+    public isSubscribedPlanHaveAdditionalCharges: any;
     public activeCompany: any;
     public createNewCompanyUser: CompanyCreateRequest;
     public totalNumberOfcompanies$: Observable<number>;
@@ -188,7 +188,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private activeCompanyForDb: ICompAidata;
     private smartCombinedList$: Observable<any>;
     public isMobileSite: boolean;
-    public CurrentCmpPlanAmount: any;
+    public currentCompanyPlanAmount: any;
     public companyCountry: CompanyCountry = {
         baseCurrency: '',
         country: ''
@@ -376,7 +376,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
 
-        if (this.isSubscribedPlanHaveAdditnlChrgs) {
+        if (this.isSubscribedPlanHaveAdditionalCharges) {
             this.openCrossedTxLimitModel(this.crossedTxLimitModel);
         }
         this.manageGroupsAccountsModal.onHidden.subscribe(e => {
@@ -590,9 +590,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                             this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(this.companyCountry));
                         }
 
-                        this.CurrentCmpPlanAmount = res.subscription.planDetails.amount;
+                        this.currentCompanyPlanAmount = res.subscription.planDetails.amount;
                         this.subscribedPlan = res.subscription;
-                        this.isSubscribedPlanHaveAdditnlChrgs = res.subscription.additionalCharges;
+                        this.isSubscribedPlanHaveAdditionalCharges = res.subscription.additionalCharges;
                         this.selectedPlanStatus = res.subscription.status;
                     }
                     this.activeCompany = res;
@@ -1414,6 +1414,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public hideScheduleCalendlyModel() {
         this.store.dispatch(this._generalActions.isOpenCalendlyModel(false));
     }
+    /**
+     *To show calendly model
+     *
+     * @memberof HeaderComponent
+     */
     public openScheduleCalendlyModel() {
         this.store.dispatch(this._generalActions.isOpenCalendlyModel(true));
     }
