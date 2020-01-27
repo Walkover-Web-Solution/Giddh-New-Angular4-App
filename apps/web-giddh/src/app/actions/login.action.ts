@@ -319,8 +319,11 @@ export class LoginActions {
     public logoutSuccess$: Observable<Action> = this.actions$
         .ofType(LoginActions.LogOut).pipe(
             map((action: CustomActions) => {
-                this._router.navigate(['/login']);
-                window.location.reload();
+                 if (PRODUCTION_ENV && !isElectron) {
+                    window.location.href = 'https://giddh.com/login/';
+                } else {
+                    window.location.href = AppUrl + 'login/';
+                }
                 return { type: 'EmptyAction' };
             }));
 
