@@ -36,7 +36,7 @@
 
                     <tab *ngIf="selectedGst === 'gstr1'" (select)="selectTab($event, true, '2. Push to GSTN')">
                         <ng-template tabHeading>
-                            2. Push to GSTIN
+                            2. Push to GSTN
                         </ng-template>
                         <div *ngIf="selectedTab === '2. Push to GSTN' || selectedTabId === 1">
                             <push-to-gstin [activeCompanyGstNumber]="activeCompanyGstNumber"
