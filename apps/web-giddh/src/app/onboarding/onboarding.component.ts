@@ -70,10 +70,10 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
 
     public ngAfterViewInit() {
         this._generalService.IAmLoaded.next(true);
-        let s = document.createElement('script');
-        s.src = 'https://checkout.razorpay.com/v1/checkout.js';
-        s.type = 'text/javascript';
-        document.body.appendChild(s);
+        let scriptTag = document.createElement('script');
+        scriptTag.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        scriptTag.type = 'text/javascript';
+        document.body.appendChild(scriptTag);
     }
     public selectConfigureBank() {
         if (this.companyCountry) {
