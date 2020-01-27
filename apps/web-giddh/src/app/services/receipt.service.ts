@@ -13,6 +13,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { LoaderService } from '../loader/loader.service';
 import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from '../models/api-models/Reports';
 import { COMPANY_API } from './apiurls/comapny.api';
+import { VoucherTypeEnum } from '../models/api-models/Sales';
 
 @Injectable()
 export class ReceiptService implements OnInit {
@@ -46,11 +47,11 @@ export class ReceiptService implements OnInit {
     public GetAllReceipt(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
         let requestType = type;
-        const contextPath = type === 'purchases' ? RECEIPT_API.GET_ALL_PURCHASE_RECORDS : RECEIPT_API.GET_ALL;
+        const contextPath = type === VoucherTypeEnum.purchase ? RECEIPT_API.GET_ALL_PURCHASE_RECORDS : RECEIPT_API.GET_ALL;
         const requestParameter = {
             page: body.page, count: body.count, from: body.from, to: body.to, q: body.q, sort: body.sort, sortBy: body.sortBy
         };
-        let url = this.createQueryString(this.config.apiUrl + contextPath, (type === 'purchases') ? requestParameter : {...requestParameter, type: requestType});
+        let url = this.createQueryString(this.config.apiUrl + contextPath, (type === VoucherTypeEnum.purchase) ? requestParameter : {...requestParameter, type: requestType});
 
         return this._http.post(url
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), body).pipe(
@@ -228,5 +229,22 @@ export class ReceiptService implements OnInit {
                     return data;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, InvoiceReceiptFilter>(e, body, { page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf' })));
+    }
+
+    /**
+     * Fetches purchase record detail
+     *
+     * @param {string} accountUniqueName Unique name of account
+     * @param {string} purchaseRecordUniqueName Purchase record unique name
+     * @returns {Observable<BaseResponse<Voucher, any>>} Observable to carry out further operations
+     * @memberof ReceiptService
+     */
+    public GetPurchaseRecordDetails(accountUniqueName: string, purchaseRecordUniqueName: string): Observable<BaseResponse<Voucher, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.get(this.config.apiUrl + RECEIPT_API.GET_PURCHASE_RECORD
+            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            .replace(':accountUniqueName', accountUniqueName)
+            .replace(':purchaseRecordUniqueNumber', purchaseRecordUniqueName)
+        ).pipe(catchError((e) => this.errorHandler.HandleCatch<Voucher, any>(e)));
     }
 }

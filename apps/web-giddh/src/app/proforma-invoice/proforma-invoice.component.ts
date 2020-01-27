@@ -36,7 +36,8 @@ import {
     VoucherClass,
     VoucherDetailsClass,
     VoucherTypeEnum,
-    PurchaseRecordRequest
+    PurchaseRecordRequest,
+    TemplateDetailsClass
 } from '../models/api-models/Sales';
 import { auditTime, delay, filter, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
@@ -44,7 +45,7 @@ import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rx
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { NgForm } from '@angular/forms';
 import { DiscountListComponent } from '../sales/discount-list/discountList.component';
-import { IContentCommon } from '../models/api-models/Invoice';
+import { IContentCommon, InvoicePreviewDetailsVm } from '../models/api-models/Invoice';
 import { StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../models/api-models/Account';
@@ -144,6 +145,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @Input() public accountUniqueName: string = '';
     @Input() public invoiceNo = '';
     @Input() public invoiceType: VoucherTypeEnum = VoucherTypeEnum.sales;
+    @Input() public selectedItem: InvoicePreviewDetailsVm;
 
     @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
     @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
@@ -535,6 +537,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             } else {
                 // for edit mode direct from @Input
+                this.invoiceNo = '4001';
                 if (this.accountUniqueName && this.invoiceNo && this.invoiceType) {
                     this.store.dispatch(this._generalActions.setAppTitle('/pages/proforma-invoice/invoice/' + this.invoiceType));
                     this.getVoucherDetailsFromInputs();
@@ -1495,7 +1498,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 date: data.voucherDetails.voucherDate,
                 dueDate: data.voucherDetails.dueDate,
                 type: this.invoiceType,
-                attachedFiles: [this.invFormData.entries[0].attachedFile],
+                attachedFiles: (this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
                 templateDetails: data.templateDetails
             } as PurchaseRecordRequest;
         }
@@ -2800,6 +2803,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     invoiceNumber: this.invoiceNo,
                     voucherType: this.parseVoucherType(this.invoiceType)
                 }));
+            } else if (this.isPurchaseInvoice) {
+                this.store.dispatch(this.invoiceReceiptActions.GetPurchaseRecordDetails(this.selectedItem.account.uniqueName, this.selectedItem.uniqueName));
             } else {
                 this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
                     invoiceNumber: this.invoiceNo,
@@ -3210,7 +3215,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.entriesListBeforeTax = voucherClassConversion.entries;
         voucherClassConversion.companyDetails = result.company;
-        voucherClassConversion.templateDetails = result.templateDetails;
 
         voucherClassConversion.accountDetails.billingDetails = new GstDetailsClass();
         voucherClassConversion.accountDetails.billingDetails.panNumber = result.account.billingDetails.panNumber;
@@ -3253,11 +3257,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             voucherDetails.voucherNumber = result.number;
         }
         voucherDetails.subTotal = result.subTotal.amountForAccount;
-        voucherDetails.taxesTotal = result.taxTotal.cumulativeAmountForAccount;
-        voucherDetails.totalAsWords = result.totalAsWords.amountForAccount;
+        voucherDetails.taxesTotal = (result.taxTotal) ? result.taxTotal.cumulativeAmountForAccount : 0;
+        voucherDetails.totalAsWords = (result.totalAsWords) ? result.totalAsWords.amountForAccount : '';
 
         voucherClassConversion.voucherDetails = voucherDetails;
-        voucherClassConversion.templateDetails = result.templateDetails;
+        voucherClassConversion.templateDetails = (result.templateDetails) ? result.templateDetails : new TemplateDetailsClass();
 
         if (!this.isLastInvoiceCopied) {
             this.isMulticurrencyAccount = result.multiCurrency;
@@ -3626,7 +3630,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private isMultiCurrencyModule(): boolean {
-        return [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash].includes(this.invoiceType);
+        return [VoucherTypeEnum.sales, VoucherTypeEnum.purchase, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash].includes(this.invoiceType);
     }
 
     /**
