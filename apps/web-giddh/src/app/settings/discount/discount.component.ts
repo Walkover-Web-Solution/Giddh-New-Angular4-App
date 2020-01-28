@@ -146,7 +146,10 @@ export class DiscountComponent implements OnInit, OnDestroy {
 	public getFlattenAccounts() {
 		this._groupService.GetGroupsWithAccounts('').subscribe(result => {
 			if (result) {
-				let oCost = result.body.find(b => b.uniqueName === 'operatingcost');
+                  let oCost = null;
+                if(result.body) {
+                 oCost = result.body.find(b => b.uniqueName === 'operatingcost');
+                }
 				let discount: GroupsWithAccountsResponse = null;
 				if (oCost) {
 					discount = oCost.groups.find(f => f.uniqueName === 'discount');
