@@ -9,6 +9,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { HttpWrapperService } from './httpWrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { PurchaseRecordAttachmentResponse } from '../models/api-models/PurchaseRecord';
 
 @Injectable()
 export class PurchaseRecordService {
@@ -36,6 +37,22 @@ export class PurchaseRecordService {
             `${this.config.apiUrl}${PURCHASE_RECORD_API.GENERATE.replace(':companyUniqueName', this._generalService.companyUniqueName).replace(':accountUniqueName', accountUniqueName)}`;
         // TODO: Add patch integration once the API is ready
         return this._http.post(contextPath, requestObject).pipe(
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
+    }
+
+    /**
+     * Fetches the attached file details for purchase record
+     *
+     * @param {*} requestObject Request object required by the API
+     * @returns {Observable<BaseResponse<PurchaseRecordAttachmentResponse, any>>} Attached file details
+     * @memberof PurchaseRecordService
+     */
+    public downloadAttachedFile(requestObject: any): Observable<BaseResponse<PurchaseRecordAttachmentResponse, any>> {
+        const {accountUniqueName, purchaseRecordUniqueName} = requestObject;
+        const contextPath: string =
+            `${this.config.apiUrl}${PURCHASE_RECORD_API.DOWNLOAD_ATTACHMENT.replace(':companyUniqueName', this._generalService.companyUniqueName)
+                .replace(':accountUniqueName', accountUniqueName)}`;
+        return this._http.get(contextPath, {uniqueName: purchaseRecordUniqueName}).pipe(
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
     }
 }
