@@ -399,111 +399,6 @@ export class LoginComponent implements OnInit, OnDestroy {
                 }
             );
 
-                //
-                // if (PRODUCTION_ENV || isElectron || isCordova) {
-                //     return {
-                //         GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
-                //         GOOGLE_CLIENT_SECRET: 'eWzLFEb_T9VrzFjgE40Bz6_l'
-                //     };
-                // } else {
-                //     return {
-                //         GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com',
-                //         GOOGLE_CLIENT_SECRET: '8htr7iQVXfZp_n87c99-jm7a'
-                //     };
-                // }
-
-            // let iabOpts;
-            // let webView;
-            // let useIAB;
-            // if (isIOSCordova()) {
-            //     iabOpts = 'location=no,toolbar=yes';
-            //     if ((window as any).webkit && (window as any).webkit.messageHandlers) {
-            //         webView = "WKWebView";
-            //     } else {
-            //         webView = "UIWebView";
-            //     }
-            //     useIAB = (window as any).device.version >= 9 && webView === "WKWebView";
-            // } else {
-            //     iabOpts = 'location=no';
-            //     if (navigator.userAgent.toLowerCase().indexOf('crosswalk') > -1) {
-            //         webView = "Crosswalk";
-            //     } else {
-            //         webView = "System";
-            //     }
-            //     useIAB = (window as any).device.version >= 4.4;
-            // }
-
-//             let opts = {scope: ["email"]};
-//             let GOOGLE_CLIENT_ID = "641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com";
-//             let GOOGLE_SECRET_KEY = "eWzLFEb_T9VrzFjgE40Bz6_l";
-//             let config = {
-//                 clientId: GOOGLE_CLIENT_ID,
-//                 clientSecret: GOOGLE_SECRET_KEY,
-//                 authorizationUrl: "https://accounts.google.com/o/oauth2/auth",
-//                 tokenUrl: "https://accounts.google.com/o/oauth2/token",
-//                 useBasicAuthorizationHeader: false,
-//                 redirectUri: "http://localhost"
-//             };
-//             let urlParams = {
-//                 response_type: "code",
-//                 redirect_uri: config.redirectUri,
-//                 client_id: config.clientId,
-//                 state: this.generateRandomString(16),
-//                 scope: opts.scope
-//             };
-//             let url = config.authorizationUrl + "?" + Object.keys(urlParams).map((key) => {
-//                 return encodeURIComponent(key) + '=' + encodeURIComponent(urlParams[key])
-//             }).join('&');
-//
-//             // @ts-ignore
-//             let iab = (cordova as any).InAppBrowser.open(url, '_blank', iabOpts);
-// ​
-//             iab.addEventListener('loadstart', (e) => {
-//                 if (e.url && e.url.startsWith('http://localhost')) {
-//                     let parsedUrl = e.url.slice(e.url.lastIndexOf('code='), e.url.lastIndexOf('&scope'));
-//                     let decodedCode = parsedUrl.replace('code=', '');
-//
-//                     let tokenRequestData = {
-//                         code: decodeURIComponent(decodedCode),
-//                         grant_type: "authorization_code",
-//                         redirect_uri: 'http://localhost'
-//                     };
-//                     tokenRequestData = Object.assign(
-//                         tokenRequestData,
-//                         {scope: ["email"]}
-//                     );
-//
-//                     const header = {
-//                         Accept: "application/json",
-//                         "Content-Type": "application/x-www-form-urlencoded"
-//                     };
-//
-//
-//                     Object.assign(tokenRequestData, {
-//                         client_id: config.clientId,
-//                         client_secret: config.clientSecret
-//                     });
-//
-//
-//                     fetch(config.tokenUrl, {
-//                         method: "POST",
-//                         headers: header,
-//                         body: Object.keys(tokenRequestData).map((key) => {
-//                             return encodeURIComponent(key) + '=' + encodeURIComponent(tokenRequestData[key])
-//                         }).join('&')
-//                     }).then(response => response.json()).then((d) => {
-//
-//                         // debugger;
-//                         this.store.dispatch(this.loginAction.signupWithGoogle(d.access_token));
-//                         // return res.json();
-//                     }).catch(() => {
-//                         // debugger;
-//                     });
-//
-//                     iab.close();
-//                 }
-//             });
-
         } else {
             //  web social authentication
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
@@ -515,17 +410,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
     }
 
-    public generateRandomString(length) {
-        let text = "";
-        let possible =
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-        for (let i = 0; i < length; i++) {
-            text += possible.charAt(Math.floor(Math.random() * possible.length));
-        }
-
-        return text;
-    };
 
     public ngOnDestroy() {
         this.document.body.classList.add("unresponsive");
