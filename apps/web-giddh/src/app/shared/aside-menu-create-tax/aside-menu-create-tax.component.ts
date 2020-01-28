@@ -83,10 +83,10 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
         this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$)).subscribe(res => {
             let arr: IOption[] = [];
             if (res) {
-                res
-                    .filter(f => f.parentGroups.some(s => s.uniqueName === 'dutiestaxes'))
-                    .forEach(r => {
-                        arr.push({ label: `${r.name} - (${r.uniqueName})`, value: r.uniqueName });
+            //  let accountObject =   res.filter(accountObj => accountObj.parentGroups.some(parentGroupObj => parentGroupObj.uniqueName === 'currentassets' || parentGroupObj.uniqueName === 'currentliabilities')); // Include currentliabilities and currentassets group
+             let accountObject =   res.filter(accountObj => (accountObj.parentGroups[0].uniqueName === "currentassets" && (accountObj.parentGroups[1].uniqueName !=="cash" && accountObj.parentGroups[1].uniqueName !=="bankaccounts" && accountObj.parentGroups[1].uniqueName!=="sundrydebtors")) || (accountObj.parentGroups[0].uniqueName === "currentliabilities" && (accountObj.parentGroups[1].uniqueName !=="sundrycreditors")));
+            accountObject.forEach(accountObj=> {
+                        arr.push({ label: `${accountObj.name} - (${accountObj.uniqueName})`, value: accountObj.uniqueName });
                     });
             } else {
                 arr = [];
