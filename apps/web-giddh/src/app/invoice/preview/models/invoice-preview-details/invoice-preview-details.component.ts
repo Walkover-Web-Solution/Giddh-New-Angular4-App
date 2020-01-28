@@ -39,6 +39,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     @ViewChild('downloadVoucherModal') public downloadVoucherModal: ModalDirective;
     @ViewChild('invoiceDetailWrapper') invoiceDetailWrapperView: ElementRef;
     @ViewChild('invoicedetail') invoiceDetailView: ElementRef;
+    /** Attached document preview container instance */
+    @ViewChild('attachedDocumentPreview') attachedDocumentPreview: ElementRef;
 
     @Input() public items: InvoicePreviewDetailsVm[];
     @Input() public selectedItem: InvoicePreviewDetailsVm;
@@ -99,6 +101,19 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         ]).subscribe(result => {
             this.isMobileView = result.matches;
         });
+    }
+
+    /**
+     * Returns true if print button needs to be displayed
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public get shouldShowPrintDocument(): boolean {
+        return this.selectedItem.voucherType !== VoucherTypeEnum.purchase ||
+            (this.selectedItem.voucherType === VoucherTypeEnum.purchase && this.attachedDocumentType &&
+                (this.attachedDocumentType.type === 'pdf' || this.attachedDocumentType.type === 'image'));
     }
 
     ngOnInit() {
@@ -357,6 +372,20 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             this.pdfViewer.startPrint = true;
             this.pdfViewer.refresh();
             this.pdfViewer.startPrint = false;
+        } else if (this.attachedDocumentPreview) {
+            const windowWidth = window.innerWidth
+                || document.documentElement.clientWidth
+                || document.body.clientWidth
+                || 0;
+            const left = (windowWidth / 2) - 450;
+            const printWindow = window.open('', '', `left=${left},top=0,width=900,height=900`);
+            printWindow.document.write((this.attachedDocumentPreview.nativeElement as HTMLElement).innerHTML);
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+            setTimeout(() => {
+                printWindow.close();
+            }, 0);
         }
     }
 
