@@ -267,3 +267,8 @@ export class UpdateAccountRequest {
         accountUniqueName: string;
     }
 }
+export class ShopifyEcommerceUserRequest {
+    authKey: string;
+    domain: string;
+    source: string;
+}
