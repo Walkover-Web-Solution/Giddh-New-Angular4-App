@@ -27,36 +27,41 @@ import {reassignNavigationalArray} from './models/defaultMenus'
         './app.component.css'
     ],
     template: `
-      <noscript *ngIf="isProdMode && !(isElectron || isCordova)">
-          <iframe [src]="tagManagerUrl"
-                  height="0" width="0" style="display:none;visibility:hidden"></iframe>
-      </noscript>
-      <div id="loader-1" *ngIf="!IAmLoaded"><div class="spinner2"><div class="cube1"></div><div class="cube2"></div></div></div>
-      <router-outlet></router-outlet>
-  `,
+        <noscript *ngIf="isProdMode && !(isElectron || isCordova)">
+            <iframe [src]="tagManagerUrl"
+                    height="0" width="0" style="display:none;visibility:hidden"></iframe>
+        </noscript>
+        <div id="loader-1" *ngIf="!IAmLoaded">
+            <div class="spinner2">
+                <div class="cube1"></div>
+                <div class="cube2"></div>
+            </div>
+        </div>
+        <router-outlet></router-outlet>
+    `,
     // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     // tslint:disable-next-line:no-empty
 
-  public sideMenu: { isopen: boolean } = { isopen: true };
-  public companyMenu: { isopen: boolean } = { isopen: false };
-  public isProdMode: boolean = false;
-  public isElectron: boolean = false;
-  public isCordova: boolean = false;
-  public tagManagerUrl: SafeUrl;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  public IAmLoaded: boolean = false;
-  private newVersionAvailableForWebApp: boolean = false;
+    public sideMenu: { isopen: boolean } = {isopen: true};
+    public companyMenu: { isopen: boolean } = {isopen: false};
+    public isProdMode: boolean = false;
+    public isElectron: boolean = false;
+    public isCordova: boolean = false;
+    public tagManagerUrl: SafeUrl;
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public IAmLoaded: boolean = false;
+    private newVersionAvailableForWebApp: boolean = false;
 
     constructor(private store: Store<AppState>,
-        private router: Router,
-        private _generalService: GeneralService,
-        private _cdr: ChangeDetectorRef,
-        private _versionCheckService: VersionCheckService,
-        private sanitizer: DomSanitizer,
-        private breakpointObserver: BreakpointObserver,
-        private dbServices: DbService
+                private router: Router,
+                private _generalService: GeneralService,
+                private _cdr: ChangeDetectorRef,
+                private _versionCheckService: VersionCheckService,
+                private sanitizer: DomSanitizer,
+                private breakpointObserver: BreakpointObserver,
+                private dbServices: DbService
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
@@ -65,7 +70,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             if (ss.user && ss.user.session && ss.user.session.id) {
                 let a = pick(ss.user, ['isNewUser']);
                 a.isNewUser = true;
-                this._generalService.user = { ...ss.user.user, ...a };
+                this._generalService.user = {...ss.user.user, ...a};
                 if (ss.user.statusCode !== 'AUTHENTICATE_TWO_WAY') {
                     this._generalService.sessionId = ss.user.session.id;
                 }
@@ -78,7 +83,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this._generalService.IAmLoaded.subscribe(s => {
             this.IAmLoaded = s;
         });
-
+        if (isCordova()) {
+            document.addEventListener("deviceready", function () {
+                if ((window as any).StatusBar) {
+                    (window as any).StatusBar.overlaysWebView(false);
+                    // (window as any).StatusBar.backgroundColorByName("#1a237e");
+                    (window as any).StatusBar.styleLightContent();
+                }
+            }, false);
+        }
         this.tagManagerUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG');
 
         this.breakpointObserver.observe([
@@ -114,8 +127,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     public ngOnInit() {
         this.sideBarStateChange(true);
         // Need to implement for Web app only
-        debugger;
-        if (!LOCAL_ENV &&  !(isElectron || isCordova)) {
+        // debugger;
+        if (!LOCAL_ENV && !(isElectron || isCordova)) {
             this._versionCheckService.initVersionCheck(AppUrl + '/version.json');
 
             this._versionCheckService.onVersionChange$.subscribe((isChanged: boolean) => {

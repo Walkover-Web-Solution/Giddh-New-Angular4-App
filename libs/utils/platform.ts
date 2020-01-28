@@ -43,7 +43,7 @@ export function download(filename, data, mimeType) {
     const blob = data;
     if (window.cordova && cordova.platformId !== "browser") {
         document.addEventListener("deviceready", () => {
-            debugger;
+            // debugger;
             let storageLocation = "";
 
             switch (device.platform) {
@@ -67,23 +67,23 @@ export function download(filename, data, mimeType) {
                             create: true
                         },
                         (file) => {
-                            debugger;
+                            // debugger;
                             file.createWriter(
                                 (fileWriter) => {
 
                                     fileWriter.write(blob);
 
                                     fileWriter.onwriteend = () => {
-                                        debugger;
+                                        // debugger;
                                         const url = file.toURL();
                                         cordova.plugins.fileOpener2.open(url, mimeType, {
                                             error: (err) => {
-                                                debugger;
+                                                // debugger;
                                                 console.error(err);
                                                 alert("Unable to download");
                                             },
                                             success: () => {
-                                                debugger;
+                                                // debugger;
                                                 console.log("success with opening the file");
                                             }
                                         });
@@ -128,7 +128,7 @@ export function isIOSCordova() {
 //   - "WinCE"
 //   - "Tizen"
 //   - "Mac OS X"
-    debugger;
+//     debugger;
     const devicePlatform = device.platform;
     return isCordova() && device.platform === "iOS";
 }
@@ -145,7 +145,7 @@ export function isAndroidCordova() {
 //   - "WinCE"
 //   - "Tizen"
 //   - "Mac OS X"
-    debugger;
+//     debugger;
     const devicePlatform = device.platform;
     return isCordova() && device.platform === "Android";
 }

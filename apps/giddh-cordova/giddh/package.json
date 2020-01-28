@@ -18,6 +18,7 @@
     "author": "Apache Cordova Team",
     "license": "Apache-2.0",
     "dependencies": {
+        "cordova-plugin-statusbar": "^2.4.3",
         "@ionic-native/file-chooser": "^5.17.0",
         "cordova-android": "^8.1.0",
         "cordova-browser": "^6.0.0",
@@ -66,9 +67,10 @@
             },
             "cordova-plugin-wkwebview-engine": {},
             "cordova-plugin-inappbrowser-popup-bridge": {},
+            "cordova-plugin-statusbar": {},
             "cordova-plugin-googleplus": {
                 "REVERSED_CLIENT_ID": "com.googleusercontent.apps.641015054140-5j1ct1gdkhrkltujn29tsomf4449d01f",
-                "WEB_APPLICATION_CLIENT_ID": "641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com",
+                "WEB_APPLICATION_CLIENT_ID": "641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com",
                 "PLAY_SERVICES_VERSION": "15.0.1"
             }
         },

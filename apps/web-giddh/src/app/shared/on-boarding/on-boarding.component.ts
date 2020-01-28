@@ -233,6 +233,11 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
             this.store.dispatch(this._loginAction.ClearSession());
         } else if(isCordova){
             // todo: Logout user in Cordova.
+            (window as any).plugins.googleplus.logout(
+                (msg) => {
+                    this.store.dispatch(this._loginAction.ClearSession());
+                }
+            );
         } else {
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
                 if (val) {

@@ -31,6 +31,7 @@ import {ToasterService} from "../services/toaster.service";
 import {AuthenticationService} from "../services/authentication.service";
 import {userLoginStateEnum} from "../models/user-login-state";
 import {isIOSCordova} from "@giddh-workspaces/utils";
+import {GeneralService} from "../services/general.service";
 
 @Component({
     selector: "login",
@@ -100,7 +101,8 @@ export class LoginComponent implements OnInit, OnDestroy {
                 private authService: AuthService,
                 @Inject(DOCUMENT) private document: Document,
                 private _toaster: ToasterService,
-                private _authService: AuthenticationService
+                private _authService: AuthenticationService,
+                private _generalService: GeneralService
     ) {
         this.urlPath = (isElectron || isCordova) ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = store.select(state => {
@@ -385,7 +387,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             (window as any).plugins.googleplus.login(
                 {
                     'scopes': 'email', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
-                    'webClientId': '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com', // optional clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
+                    'webClientId': this._generalService.getGoogleCredentials().GOOGLE_CLIENT_ID,
                     'offline': true // optional, but requires the webClientId - if set to true the plugin will also return a serverAuthCode, which can be used to grant offline access to a non-Google server
                 },
                 (obj) => {

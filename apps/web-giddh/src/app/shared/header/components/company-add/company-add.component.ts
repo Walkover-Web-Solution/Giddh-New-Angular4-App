@@ -214,9 +214,15 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.verifyActions.hideVerifyBox());
         this.hideLogoutModal();
         this.closeCompanyModal.emit();
-        if (isElectron||isCordova) {
+        if (isElectron) {
             // this._aunthenticationServer.GoogleProvider.signOut();
             this.store.dispatch(this._loginAction.ClearSession());
+        } else if (isCordova) {
+            (window as any).plugins.googleplus.logout(
+                (msg) => {
+                    this.store.dispatch(this._loginAction.ClearSession());
+                }
+            );
         } else {
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
                 if (val) {
