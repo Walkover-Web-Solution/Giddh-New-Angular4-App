@@ -114,9 +114,8 @@ export class InvoiceReceiptActions {
         .ofType(INVOICE_RECEIPT_ACTIONS.GET_PURCHASE_RECORD_DETAILS).pipe(
             switchMap((action: CustomActions) => this._receiptService.GetPurchaseRecordDetails(action.payload.accountUniqueName, action.payload.purchaseRecordUniqueName)),
             map((response: BaseResponse<Voucher, ReceiptVoucherDetailsRequest>) => {
-                if (response.status === 'success') {
+                if (response.status !== 'success') {
                     // this.showToaster('');
-                } else {
                     this.showToaster(response.message, 'error');
                 }
                 return this.GetPurchaseRecordDetailsResponse(response);
