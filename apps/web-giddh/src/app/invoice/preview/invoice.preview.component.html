@@ -379,7 +379,7 @@
                         <td>
                             <div style="position: relative" class="d-flex">
                                 <a href="javascript:void(0);" class="btn-link-2"
-                                    (click)="onSelectInvoice(item)">{{item.voucherNumber}}</a>
+                                    (click)="onSelectInvoice(item)">{{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
                             </div>
 
                             <span *ngIf="item.dueDays !== null">
@@ -546,9 +546,9 @@
         </perfect-scrollbar>
 
         <ng-container
-            *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher === 'sales' && isMobileView">
+            *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && (selectedVoucher === 'sales' || selectedVoucher === 'purchase') && isMobileView">
             <div class="card mobileTable" *ngFor="let item of voucherData?.items; let i = index">
-                <table class="table basic table-bordered mrT2 invoice-table" *ngIf="selectedVoucher === 'sales'">
+                <table class="table basic table-bordered mrT2 invoice-table" *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
                     <tr>
                         <td class="card-header clearfix">
                             <div class="col-xs-4 p-0">
@@ -578,7 +578,7 @@
                             <div class="col-xs-6 p-0">
                                 <div class="invoiceNameDownload">
                                     <a class="invoiceNumberA" style="cursor: pointer">
-                                        {{item.voucherNumber }}</a>
+                                        {{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
                                     <span class="icon-download"></span>
                                 </div>
                                 <span *ngIf="item.dueDate" class="overDueDate">
@@ -624,7 +624,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-xs-6 p-0">
+                            <div *ngIf="selectedVoucher !== 'purchase'" class="col-xs-6 p-0">
                                 <div class="d-flex">
                                     <div class="flex-fill">
                                         <strong>Status</strong>
@@ -677,7 +677,7 @@
                                     {{item.accountCurrencySymbol}} {{item.grandTotal?.amountForAccount | giddhCurrency}}
                                 </div>
                             </div>
-                            <div class="col-xs-6 p-0">
+                            <div *ngIf="selectedVoucher !== 'purchase'" class="col-xs-6 p-0">
                                 <div class="d-flex">
                                     <div class="flex-fill">
                                         <strong> Balance Due </strong>

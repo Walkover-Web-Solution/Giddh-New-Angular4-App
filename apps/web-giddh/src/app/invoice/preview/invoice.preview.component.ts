@@ -341,9 +341,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
                             // assign dates
                             this.assignStartAndEndDateForDateRangePicker(storedSelectedDate.fromDates, storedSelectedDate.toDates);
-                            this.invoiceSearchRequest.from = storedSelectedDate.fromDates;
-                            this.invoiceSearchRequest.to = storedSelectedDate.toDates;
-                            this.isUniversalDateApplicable = false;
+                            if (storedSelectedDate.fromDates && storedSelectedDate.toDates) {
+                                this.invoiceSearchRequest.from = storedSelectedDate.fromDates;
+                                this.invoiceSearchRequest.to = storedSelectedDate.toDates;
+                                this.isUniversalDateApplicable = false;
+                            }
 
                         } else {
                             // assign dates

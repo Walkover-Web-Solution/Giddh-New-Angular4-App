@@ -3681,7 +3681,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private generatePurchaseRecord(requestObject: PurchaseRecordRequest): void {
         // TODO: If the get API returns true
         this.purchaseRecordConfirmationConfiguration = this.proformaInvoiceUtilityService.getPurchaseRecordConfirmationConfiguration();
-        this.purchaseRecordConfirmationPopup.show();
+        // this.purchaseRecordConfirmationPopup.show();
         if (this.isUpdateMode) {
             // Merge the purchase record (PATCH method)
             this.purchaseRecordService.generatePurchaseRecord(requestObject, 'PATCH');

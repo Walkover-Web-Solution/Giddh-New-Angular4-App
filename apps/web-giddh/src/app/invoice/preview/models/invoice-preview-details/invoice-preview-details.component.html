@@ -49,7 +49,7 @@
 
                                         <div class="invoice-number-date">
                                             <span class="inoviceNumber">
-                                                {{item?.voucherNumber}}
+                                                {{item.voucherNumber ?  item.voucherNumber : '-'}}
                                             </span>
                                             <span class="inoviceDate">
                                                 | {{item?.voucherDate}}
@@ -87,7 +87,7 @@
 
                                 <div class="col-sm-4 col-xs-12 pd0">
                                     <div class="invoice-num-holder">
-                                        <h3 class="invoice-num"> {{selectedItem?.voucherNumber}}</h3>
+                                        <h3 class="invoice-num"> {{selectedItem?.voucherNumber ? selectedItem?.voucherNumber : '-'}}</h3>
                                         <p class="acc-holderName">{{selectedItem?.account.name}}</p>
                                     </div>
                                 </div>
