@@ -1897,17 +1897,17 @@
             <!-- region generate mode -->
             <div class="pull-right pr updateMode" *ngIf="!isUpdateMode">
                 <button type="button" (click)="resetInvoiceForm(invoiceForm)" class="btn btn-danger d-inline-block v-align-middle">Clear
-                            </button>
+                </button>
 
                 <!-- region purchase invoice -->
                 <span class="d-inline-block v-align-middle" *ngIf="isPurchaseInvoice">
-                                <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
-                                    class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c
-                                </button>
-                                <button type="button" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
-                                    class="btn btn-default">Save
-                                </button>
-                            </span>
+                    <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
+                            class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c
+                        </button> -->
+                    <button type="button" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
+                        class="btn btn-default">Save
+                    </button>
+                </span>
                 <!-- endregion -->
 
                 <!-- region non purchase -->

@@ -34,6 +34,13 @@
                                 </div>
                             </tab>
 
+                            <tab heading="Purchase" (select)="tabChanged('purchase', $event);voucherChanged('purchase')"
+                                [active]="activeTab === 'purchase'">
+                                <div *ngIf="activeTab === 'purchase'">
+                                    <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
+                                </div>
+                            </tab>
+
                             <tab heading="Recurring" (select)="tabChanged('recurring', $event)"
                                 [active]="activeTab === 'recurring'">
                                 <div *ngIf="activeTab === 'recurring'">

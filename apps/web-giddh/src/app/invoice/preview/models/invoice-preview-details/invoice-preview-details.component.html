@@ -49,7 +49,7 @@
 
                                         <div class="invoice-number-date">
                                             <span class="inoviceNumber">
-                                                {{item?.voucherNumber}}
+                                                {{item.voucherNumber ?  item.voucherNumber : '-'}}
                                             </span>
                                             <span class="inoviceDate">
                                                 | {{item?.voucherDate}}
@@ -87,7 +87,7 @@
 
                                 <div class="col-sm-4 col-xs-12 pd0">
                                     <div class="invoice-num-holder">
-                                        <h3 class="invoice-num"> {{selectedItem?.voucherNumber}}</h3>
+                                        <h3 class="invoice-num"> {{selectedItem?.voucherNumber ? selectedItem?.voucherNumber : '-'}}</h3>
                                         <p class="acc-holderName">{{selectedItem?.account.name}}</p>
                                     </div>
                                 </div>
@@ -141,7 +141,7 @@
 
                                         <!-- region for invoice -->
                                         <div class="btn-group changeStatus-dropdown pull-right" dropdown
-                                            *ngIf="!only4ProformaEstimates">
+                                            *ngIf="!only4ProformaEstimates && selectedItem.voucherType !== 'purchase'">
 
                                             <label *ngIf="selectedItem.voucherStatus === 'cancel'" class="labeled">
                                                 {{ selectedItem.voucherStatus }}
@@ -181,7 +181,7 @@
                                                     (click)="toggleEditMode()"><i class="fa fa-pencil"></i></a>
                                             </span>
 
-                                            <span class="pos-rel">
+                                            <span class="pos-rel" *ngIf="selectedItem.voucherType !== 'purchase'">
                                                 <a href="javascript:void 0" tooltip="Send Email" placement="top"
                                                     (click)="showEmailSendModal.toggle()"><i
                                                         class="fa fa-envelope-o"></i></a>
@@ -319,7 +319,7 @@
 
             <div class="invoice-editBody">
                 <proforma-invoice-component [accountUniqueName]="selectedItem.account.uniqueName"
-                    [invoiceNo]="selectedItem.voucherNumber" [invoiceType]="voucherType"
+                    [selectedItem]="selectedItem" [invoiceNo]="selectedItem.voucherNumber" [invoiceType]="voucherType"
                     (cancelVoucherUpdate)="toggleEditMode()">
                 </proforma-invoice-component>
             </div>
