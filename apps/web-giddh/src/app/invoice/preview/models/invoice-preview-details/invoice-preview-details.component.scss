@@ -479,10 +479,63 @@ label.labeled {
 .ddl-width-small {
     width: 165px;
 }
-
 .btn-dropdown-ddl-newinv {
     padding: 5px 16px !important;
 }
+
+// test
+.upload-excel {
+    display: flex;
+    height: 320px;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+}
+
+.max500 {
+    max-width: 500px;
+}
+.dashed-bdr {
+    border: 2px dashed #d9d9d9;
+}
+#csv-upload-input {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    z-index: 2;
+}
+.select-file {
+    color: #089328;
+}
+.file-uplod-penal {
+    width: 100%;
+    text-align: left;
+    border: 1px solid gainsboro;
+    padding: 8px;
+    border-radius: 4px;
+    color: #cccccc;
+}
+.file-input-wrapper img {
+    width: 100px;
+}
+
+@media (max-width: 767px) {
+    .center-block .btn-sm {
+        float: none !important;
+        text-align: center !important;
+        display: block;
+        margin: 0 !important;
+        width: 100%;
+        padding: 4px 0;
+    }
+}
+
+
+
 
 /*responsive*/
 @media (max-width: 1024px) {
