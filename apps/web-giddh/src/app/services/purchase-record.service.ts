@@ -55,4 +55,24 @@ export class PurchaseRecordService {
         return this._http.get(contextPath, {uniqueName: purchaseRecordUniqueName}).pipe(
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
     }
+
+    /**
+     * Validates the purchase record being created to avoid redundant data
+     * Returns data of the old purchase record if it matches with the newly created
+     * purchase record according to the contract policy (account unique name, tax number,
+     * invoice date and invoice number) else returns null
+     *
+     * @param {*} requestObject Request object required from the service
+     * @returns {Observable<BaseResponse<any, any>>} Returns data of previous record if found else null
+     * @memberof PurchaseRecordService
+     */
+    public validatePurchaseRecord(requestObject: any): Observable<BaseResponse<any, any>> {
+        const {accountUniqueName} = requestObject;
+        const contextPath: string =
+            `${this.config.apiUrl}${PURCHASE_RECORD_API.VALIDATE_RECORD.replace(':companyUniqueName', this._generalService.companyUniqueName)
+                .replace(':accountUniqueName', accountUniqueName)}`;
+        delete requestObject.accountUniqueName;
+        return this._http.get(contextPath, requestObject).pipe(
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
+    }
 }

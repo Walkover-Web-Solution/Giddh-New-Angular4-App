@@ -294,23 +294,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public rcmConfiguration: ConfirmationModalConfiguration;
     /** Purchase record confirmation popup configuration */
     public purchaseRecordConfirmationConfiguration: ConfirmationModalConfiguration;
-
-    // private below
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    private selectedAccountDetails$: Observable<AccountResponseV2>;
-    private innerEntryIdx: number;
-    private updateAccount: boolean = false;
-    private sundryDebtorsAcList: IOption[] = [];
-    private sundryCreditorsAcList: IOption[] = [];
-    private prdSerAcListForDeb: IOption[] = [];
-    private prdSerAcListForCred: IOption[] = [];
-    private createAccountIsSuccess$: Observable<boolean>;
-    private updateAccountSuccess$: Observable<boolean>;
-    private createdAccountDetails$: Observable<AccountResponseV2>;
-    private updatedAccountDetails$: Observable<AccountResponseV2>;
-    private generateVoucherSuccess$: Observable<boolean>;
-    private updateVoucherSuccess$: Observable<boolean>;
-    private lastGeneratedVoucherNo$: Observable<{ voucherNo: string, accountUniqueName: string }>;
+    public selectedCompany: any;
+    public formFields: any[] = [];
 
     //Multi-currency changes
     public exchangeRate = 1;
@@ -330,6 +315,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public reverseExchangeRate: number;
     public originalReverseExchangeRate: number;
     public countryCode: string = '';
+
+    // private members
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    private selectedAccountDetails$: Observable<AccountResponseV2>;
+    private innerEntryIdx: number;
+    private updateAccount: boolean = false;
+    private sundryDebtorsAcList: IOption[] = [];
+    private sundryCreditorsAcList: IOption[] = [];
+    private prdSerAcListForDeb: IOption[] = [];
+    private prdSerAcListForCred: IOption[] = [];
+    private createAccountIsSuccess$: Observable<boolean>;
+    private updateAccountSuccess$: Observable<boolean>;
+    private createdAccountDetails$: Observable<AccountResponseV2>;
+    private updatedAccountDetails$: Observable<AccountResponseV2>;
+    private generateVoucherSuccess$: Observable<boolean>;
+    private updateVoucherSuccess$: Observable<boolean>;
+    private lastGeneratedVoucherNo$: Observable<{ voucherNo: string, accountUniqueName: string }>;
     private entriesListBeforeTax: SalesEntryClass[];
     /** True, if user has selected custom invoice in Invoice Setting */
     private useCustomInvoiceNumber: boolean;
@@ -337,9 +339,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private isInvoiceRequestedFromPreviousPage: boolean;
     // variable for checking do we really need to show loader, issue ref :- when we open aside pan loader is displayed unnecessary
     private shouldShowLoader: boolean = true;
-    public selectedCompany: any;
-    public formFields: any[] = [];
-
+    /** Stores matching purchase record details */
+    private matchingPurchaseRecord: any;
 
     constructor(
         private store: Store<AppState>,
@@ -809,6 +810,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 obj.accountDetails.currencySymbol = acc.currencySymbol || '';
                             });
 
+                        } else if (this.isPurchaseInvoice) {
+                            let convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
+                            obj = cloneDeep(convertedRes1) as VoucherClass;
                         } else {
                             obj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
                         }
@@ -3154,10 +3158,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         return obj;
     }
 
-    public async modifyMulticurrencyRes(result: any) {
+    public async modifyMulticurrencyRes(result: any, shouldLoadState: boolean = true) {
         let voucherClassConversion = new VoucherClass();
         let voucherDetails = new VoucherDetailsClass();
-        if (!this.isLastInvoiceCopied) {
+        if (!this.isLastInvoiceCopied && shouldLoadState) {
             await this.getUpdatedStateCodes(result.account.billingDetails.countryCode);
         }
         voucherClassConversion.entries = [];
@@ -3621,6 +3625,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public handlePurchaseRecordConfirmation(action: string): void {
         if (action === CONFIRMATION_ACTIONS.YES) {
             // User confirmed to merge the purchase record
+            this.mergePurchaseRecord();
             this.onSubmitInvoiceForm(this.invoiceForm);
         } else {
             // User denied the permission or closed the popup
@@ -3685,7 +3690,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private isMultiCurrencyModule(): boolean {
-        return [VoucherTypeEnum.sales, VoucherTypeEnum.purchase, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash].includes(this.invoiceType);
+        return [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash].includes(this.invoiceType);
     }
 
     /**
@@ -3737,24 +3742,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private generatePurchaseRecord(requestObject: PurchaseRecordRequest): void {
         // TODO: If the get API returns true
         this.purchaseRecordConfirmationConfiguration = this.proformaInvoiceUtilityService.getPurchaseRecordConfirmationConfiguration();
-        // this.purchaseRecordConfirmationPopup.show();
         if (this.isUpdateMode) {
             // Merge the purchase record (PATCH method)
             this.purchaseRecordService.generatePurchaseRecord(requestObject, 'PATCH');
         } else {
-            // Create a new purchase record
-            this.purchaseRecordService.generatePurchaseRecord(requestObject).subscribe((response: BaseResponse<any, PurchaseRecordRequest>) => {
-                this.handleGenerateResponse(response, this.invoiceForm);
-            }, () => {
-                this._toasty.errorToast('Something went wrong! Try again');
-            });
+            this.validatePurchaseRecord().subscribe((data: any) => {
+                console.log('Data: ', data);
+                if (data && data.body) {
+                    this.matchingPurchaseRecord = data.body;
+                    this.purchaseRecordConfirmationPopup.show();
+                } else {
+                    this.matchingPurchaseRecord = null;
+                    // Create a new purchase record
+                    this.purchaseRecordService.generatePurchaseRecord(requestObject).subscribe((response: BaseResponse<any, PurchaseRecordRequest>) => {
+                        this.handleGenerateResponse(response, this.invoiceForm);
+                    }, () => this._toasty.errorToast('Something went wrong! Try again'));
+                }
+            }, () => this._toasty.errorToast('Something went wrong! Try again'));
         }
-        // {
-        //     "accountUniqueName": "",
-        //     "taxNumber": "",
-        //     "invoiceDate": "",
-        //     "number": ""
-        // }
     }
 
     /**
@@ -3790,5 +3795,42 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this._toasty.errorToast(response.message, response.code);
         }
         this.updateAccount = false;
+    }
+
+    /**
+     * Validates the purchase record being created to avoid redundant data
+     * Returns data of the old purchase record if it matches with the newly created
+     * purchase record according to the contract policy (account unique name, tax number,
+     * invoice date and invoice number) else returns null
+     *
+     * @private
+     * @returns {Observable<BaseResponse<any, any>>} Returns data of previous record if found else null
+     * @memberof ProformaInvoiceComponent
+     */
+    private validatePurchaseRecord(): Observable<BaseResponse<any, any>> {
+        const requestObject = {
+            accountUniqueName: this.invFormData.voucherDetails.customerUniquename,
+            taxNumber: this.invFormData.accountDetails.shippingDetails.gstNumber,
+            purchaseDate: moment(this.invFormData.voucherDetails.voucherDate).format('DD-MM-YYYY'),
+            number: this.invFormData.voucherDetails.voucherNumber
+        }
+        return this.purchaseRecordService.validatePurchaseRecord(requestObject);
+    }
+
+    private async mergePurchaseRecord() {
+        const result = (await this.modifyMulticurrencyRes(this.matchingPurchaseRecord, false)) as VoucherClass;
+        if (result.voucherDetails) {
+            let flattenAccounts;
+            this.flattenAccountListStream$.pipe(take(1)).subscribe(data => flattenAccounts = data);
+            if (result.entries.length) {
+                result.entries = this.parseEntriesFromResponse(result.entries, flattenAccounts);
+            }
+            console.log('Merged: ', result);
+            if (result.entries && result.entries.length > 0) {
+                result.entries.forEach((entry) => {
+                    this.invFormData.entries.unshift(entry);
+                });
+            }
+        }
     }
 }
