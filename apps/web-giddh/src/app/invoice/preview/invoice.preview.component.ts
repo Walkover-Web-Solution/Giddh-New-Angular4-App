@@ -631,11 +631,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     public deleteConfirmedInvoice() {
         this.invoiceConfirmationModel.hide();
-        let model = {
-            invoiceNumber: this.selectedInvoice.voucherNumber,
-            voucherType: this.selectedVoucher
-        };
-        this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, this.selectedInvoice.account.uniqueName));
+        if (this.selectedVoucher === VoucherTypeEnum.purchase) {
+            // TODO: Delete purchase record
+        } else {
+            let model = {
+                invoiceNumber: this.selectedInvoice.voucherNumber,
+                voucherType: this.selectedVoucher
+            };
+            this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, this.selectedInvoice.account.uniqueName));
+        }
     }
 
     public closeConfirmationPopup() {

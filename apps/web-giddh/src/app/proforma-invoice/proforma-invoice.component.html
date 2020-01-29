@@ -101,7 +101,7 @@
                                                 <ng-container *ngIf="!isCashInvoice">
                                                     <sales-sh-select style="width:62.7%; float: left;" name="voucherDetails.customerName" #customerNameDropDown [options]="customerAcList$ | async" [(ngModel)]="invFormData.voucherDetails.customerUniquename" [customFilter]="customMoveGroupFilter" (noOptionsFound)="noResultsForCustomer($event)"
                                                         (selected)="onSelectCustomer($event);" [placeholder]="customerPlaceHolder" [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" (noResultsClicked)="addNewAccount()"
-                                                        [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="customerNotFoundText" (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)" [disabled]="isUpdateMode">
+                                                        [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="customerNotFoundText" (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)" [disabled]="(isUpdateMode && !isPurchaseInvoice) ? 'disabled' : null">
 
                                                         <ng-template #optionTemplate let-option="option">
                                                             <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
@@ -358,7 +358,7 @@
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
                                         <!-- Enabled for CR/DR update flow -->
-                                        <input type="text" name="accountDetails.invoiceNum" class="form-control invoiceDate attentionTo" [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [disabled]="isUpdateMode && !(isCreditNote || isDebitNote)" [(ngModel)]="invFormData.voucherDetails.voucherNumber"
+                                        <input type="text" name="accountDetails.invoiceNum" class="form-control invoiceDate attentionTo" [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [disabled]="(isUpdateMode && !(isCreditNote || isDebitNote || isPurchaseInvoice)) ? 'disabled' : null" [(ngModel)]="invFormData.voucherDetails.voucherNumber"
                                         />
                                     </div>
                                     <div class="col-sm-6 invoiceDateDueDate">
@@ -367,7 +367,7 @@
                                             <div class="form-group">
                                                 <label>{{ invoiceDateLabel }}</label>
 
-                                                <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel" name="voucherDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.voucherDate" [disabled]="isUpdateMode"
+                                                <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel" name="voucherDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.voucherDate" [disabled]="(invoiceType !== 'purchase' && isUpdateMode) ? 'disabled' : null"
                                                     [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)" (blur)="onBlurInvoiceDate(0)" (bsValueChange)="onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate)"
                                                 />
                                                 <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">
@@ -538,7 +538,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last" (clickOutside)="handleOutsideClick()" [exclude]="'.entriesTr'">
+                        <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last;" (clickOutside)="handleOutsideClick()" [exclude]="'.entriesTr'">
 
                             <ng-container *ngFor="let transaction of entry.transactions;">
                                 <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature) -->

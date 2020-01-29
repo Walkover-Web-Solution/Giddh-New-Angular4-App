@@ -146,3 +146,10 @@ export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
         ]
     }
 ];
+
+/** File attachment types supported by Giddh */
+export const FILE_ATTACHMENT_TYPE = {
+    IMAGE: ['jpg', 'jpeg', 'gif', 'png'],
+    PDF: ['pdf'],
+    UNSUPPORTED: ['doc', 'docx', 'xls', 'xlsx']
+};

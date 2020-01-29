@@ -9,6 +9,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { HttpWrapperService } from './httpWrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { PurchaseRecordAttachmentResponse } from '../models/api-models/PurchaseRecord';
 
 @Injectable()
 export class PurchaseRecordService {
@@ -30,12 +31,55 @@ export class PurchaseRecordService {
      * @returns {Observable<BaseResponse<any, PurchaseRecordRequest>>} Observable to carry out further operations
      * @memberof PurchaseRecordService
      */
-    public generatePurchaseRecord(requestObject: PurchaseRecordRequest, method: string = 'POST'): Observable<BaseResponse<any, PurchaseRecordRequest>> {
+    public generatePurchaseRecord(requestObject: PurchaseRecordRequest | any, method: string = 'POST'): Observable<BaseResponse<any, PurchaseRecordRequest>> {
         const accountUniqueName = requestObject.account.uniqueName;
-        const contextPath: string =
-            `${this.config.apiUrl}${PURCHASE_RECORD_API.GENERATE.replace(':companyUniqueName', this._generalService.companyUniqueName).replace(':accountUniqueName', accountUniqueName)}`;
         // TODO: Add patch integration once the API is ready
-        return this._http.post(contextPath, requestObject).pipe(
+        if (method === 'POST') {
+            const contextPath: string =
+                `${this.config.apiUrl}${PURCHASE_RECORD_API.GENERATE.replace(':companyUniqueName', this._generalService.companyUniqueName).replace(':accountUniqueName', accountUniqueName)}`;
+            return this._http.post(contextPath, requestObject).pipe(
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
+        } else if (method === 'PATCH') {
+            const contextPath: string =
+                `${this.config.apiUrl}${PURCHASE_RECORD_API.UPDATE.replace(':companyUniqueName', this._generalService.companyUniqueName).replace(':accountUniqueName', accountUniqueName)}`;
+            return this._http.patch(contextPath, requestObject).pipe(
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
+        }
+    }
+
+    /**
+     * Fetches the attached file details for purchase record
+     *
+     * @param {*} requestObject Request object required by the API
+     * @returns {Observable<BaseResponse<PurchaseRecordAttachmentResponse, any>>} Attached file details
+     * @memberof PurchaseRecordService
+     */
+    public downloadAttachedFile(requestObject: any): Observable<BaseResponse<PurchaseRecordAttachmentResponse, any>> {
+        const {accountUniqueName, purchaseRecordUniqueName} = requestObject;
+        const contextPath: string =
+            `${this.config.apiUrl}${PURCHASE_RECORD_API.DOWNLOAD_ATTACHMENT.replace(':companyUniqueName', this._generalService.companyUniqueName)
+                .replace(':accountUniqueName', accountUniqueName)}`;
+        return this._http.get(contextPath, {uniqueName: purchaseRecordUniqueName}).pipe(
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
+    }
+
+    /**
+     * Validates the purchase record being created to avoid redundant data
+     * Returns data of the old purchase record if it matches with the newly created
+     * purchase record according to the contract policy (account unique name, tax number,
+     * invoice date and invoice number) else returns null
+     *
+     * @param {*} requestObject Request object required from the service
+     * @returns {Observable<BaseResponse<any, any>>} Returns data of previous record if found else null
+     * @memberof PurchaseRecordService
+     */
+    public validatePurchaseRecord(requestObject: any): Observable<BaseResponse<any, any>> {
+        const {accountUniqueName} = requestObject;
+        const contextPath: string =
+            `${this.config.apiUrl}${PURCHASE_RECORD_API.VALIDATE_RECORD.replace(':companyUniqueName', this._generalService.companyUniqueName)
+                .replace(':accountUniqueName', accountUniqueName)}`;
+        delete requestObject.accountUniqueName;
+        return this._http.get(contextPath, requestObject).pipe(
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
     }
 }
