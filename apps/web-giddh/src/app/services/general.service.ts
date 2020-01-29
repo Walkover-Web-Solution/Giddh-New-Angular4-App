@@ -1,24 +1,23 @@
 import { Injectable } from '@angular/core';
-import { UserDetails } from '../models/api-models/loginModels';
-import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
-import { IUlist } from '../models/interfaces/ulist.interface';
+import { BehaviorSubject, Subject } from 'rxjs';
+
+import { RcmModalButton, RcmModalConfiguration } from '../common/rcm-modal/rcm-modal.interface';
 import { CompanyCreateRequest } from '../models/api-models/Company';
-import { COMPANY_API } from "./apiurls/comapny.api";
-import { catchError, map } from "rxjs/operators";
-import { BaseResponse } from "../models/api-models/BaseResponse";
-import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from "../models/api-models/Reports";
+import { UserDetails } from '../models/api-models/loginModels';
+import { IUlist } from '../models/interfaces/ulist.interface';
+import * as moment from 'moment';
 
 @Injectable()
 export class GeneralService {
     invokeEvent: Subject<any> = new Subject();
-    public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    // TODO : It is commented due to we have implement calendly and its under discussion to remove
+    // public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public isCurrencyPipeLoaded: boolean = false;
 
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
 
     get user(): UserDetails {
         return this._user;
@@ -190,4 +189,77 @@ export class GeneralService {
     getLastElement(array) {
         return array[array.length - 1];
     };
+
+    /**
+     * Returns the RCM modal configuration based on 'isRcmSelected' flag value
+     *
+     * @param {boolean} isRcmSelected True, if user selects the RCM checkbox
+     * @returns {RcmModalConfiguration}
+     * @memberof GeneralService
+     */
+    getRcmConfiguration(isRcmSelected: boolean): RcmModalConfiguration {
+        const buttons: Array<RcmModalButton> = [{
+            text: 'Yes',
+            cssClass: 'btn btn-success'
+        },
+        {
+            text: 'No',
+            cssClass: 'btn btn-danger'
+        }];
+        const headerText: string = 'Reverse Charge Confirmation';
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mrB1 text-light';
+        const footerCssClass: string = 'mrB1';
+        return (isRcmSelected) ? {
+            headerText,
+            headerCssClass,
+            messageText: `Note: If you check this transaction for Reverse Charge,
+            applied taxes will be considered under Reverse Charge taxes and
+            will be added in GST Report.`,
+            messageCssClass,
+            footerText: 'Are you sure you want to check this transaction for Reverse Charge?',
+            footerCssClass,
+            buttons
+        } : {
+                headerText,
+                headerCssClass,
+                messageText: `Note: If you uncheck this transaction from Reverse Charge, applied
+                taxes will be considered as normal taxes and reverse
+                charge effect will be removed from GST Report.`,
+                messageCssClass,
+                footerText: 'Are you sure you want to uncheck this transaction from Reverse Charge?',
+                footerCssClass,
+                buttons
+            };
+    }
+
+    /**
+     * Decides based on current ledger and selected account details whether the RCM section
+     * needs to be displayed
+     *
+     * @param {*} currentLedgerAccountDetails Current ledger detail
+     * @param {*} selectedAccountDetails User selected particular account
+     * @returns {boolean} True, if the current ledger and user selected particular account belongs to RCM category accounts
+     * @memberof GeneralService
+     */
+    shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any): boolean {
+        if (currentLedgerAccountDetails && selectedAccountDetails) {
+            if (![currentLedgerAccountDetails.uniqueName, selectedAccountDetails.uniqueName].includes('roundoff')) {
+                // List of allowed first level parent groups
+                const allowedFirstLevelUniqueNames = ['operatingcost', 'indirectexpenses', 'fixedassets'];
+                // List of not allowed second level parent groups
+                const disallowedSecondLevelUniqueNames = ['discount', 'exchangeloss'];
+                const currentLedgerFirstParent = currentLedgerAccountDetails.parentGroups[0] ? currentLedgerAccountDetails.parentGroups[0].uniqueName : '';
+                const currentLedgerSecondParent = currentLedgerAccountDetails.parentGroups[1] ? currentLedgerAccountDetails.parentGroups[1].uniqueName : '';
+                const selectedAccountFirstParent = selectedAccountDetails.parentGroups[0] ? selectedAccountDetails.parentGroups[0].uniqueName : '';
+                const selectedAccountSecondParent = selectedAccountDetails.parentGroups[1] ? selectedAccountDetails.parentGroups[1].uniqueName : '';
+                // Both accounts (current ledger and selected account) in order to satisfy RCM MUST have first
+                // level parent group unique name in allowed unique names and MUST NOT have their second level parent
+                // in disallowed unique names
+                return (allowedFirstLevelUniqueNames.some((firstLevelUniqueName: string) => [currentLedgerFirstParent, selectedAccountFirstParent].includes(firstLevelUniqueName)) &&
+                    !disallowedSecondLevelUniqueNames.some((secondLevelUniqueName: string) => [currentLedgerSecondParent, selectedAccountSecondParent].includes(secondLevelUniqueName)));
+            }
+        }
+        return false;
+    }
 }

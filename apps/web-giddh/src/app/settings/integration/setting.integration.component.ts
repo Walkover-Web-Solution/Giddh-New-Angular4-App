@@ -35,38 +35,7 @@ export declare const gapi: any;
 @Component({
     selector: 'setting-integration',
     templateUrl: './setting.integration.component.html',
-    styles: [`
-        #inlnImg img {
-            max-height: 18px;
-        }
-
-        .fs18 {
-            font-weight: bold;
-        }
-
-        .pdBth20 {
-            padding: 0 20px;
-        }
-
-        @media (max-waidth: 768px) {
-
-            .empty-label label, .empty-label br {
-                display: none;
-            }
-        }
-
-        @media (max-width: 767px) {
-            #inlnImg {
-                margin-top: 0;
-            }
-
-            #inlnImg label, .inlnImg label {
-                margin: 0;
-                display: none;
-            }
-
-        }
-    `]
+    styleUrls: ['./setting.integration.component.scss']
 })
 export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
@@ -109,6 +78,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public registeredAccount;
     public openNewRegistration: boolean;
     public selecetdUpdateIndex: number;
+    public isEcommerceShopifyUserVerified: boolean = false;
 
     constructor(
         private router: Router,
@@ -133,7 +103,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public ngOnInit() {
         //logic to switch to payment tab if coming from vedor tabs add payment
-        if (this.selectedTabParent) {
+        if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
             this.selectTab(this.selectedTabParent);
         }
         // getting all page data of integration page
@@ -192,10 +162,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 let accounts: IOption[] = [];
                 let bankAccounts: IOption[] = [];
                 _.forEach(data, (item) => {
-                    accounts.push({label: item.name, value: item.uniqueName});
+                    accounts.push({ label: item.name, value: item.uniqueName });
                     let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
                     if (findBankIndx !== -1) {
-                        bankAccounts.push({label: item.name, value: item.uniqueName});
+                        bankAccounts.push({ label: item.name, value: item.uniqueName });
                     }
                 });
                 this.accounts$ = observableOf(accounts);
@@ -232,10 +202,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 }
             }
         });
+        this.getShopifyEcommerceVerifyStatus();
     }
 
     public ngAfterViewInit() {
-        if (this.selectedTabParent) {
+        if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
             this.selectTab(this.selectedTabParent);
         }
     }
@@ -254,7 +225,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public setDummyData() {
         this.razorPayObj.userName = '';
         this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
-        this.razorPayObj.account = {name: null, uniqueName: null};
+        this.razorPayObj.account = { name: null, uniqueName: null };
         this.razorPayObj.autoCapturePayment = true;
     }
 
@@ -500,7 +471,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     private getGoogleCredentials() {
-        debugger;
         if (PRODUCTION_ENV) {
             return {
                 GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
@@ -552,6 +522,22 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         currentPageObj.name = "Settings > Integration";
         currentPageObj.url = this.router.url;
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+    }
+
+    /**
+     * API call to verify is shopify integrated
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public getShopifyEcommerceVerifyStatus() {
+        const requestObj = { source: "shopify" };
+        this.accountService.getShopifyEcommerceVerify(requestObj).subscribe(response => {
+            if (response) {
+                if (response.status === 'success') {
+                    this.isEcommerceShopifyUserVerified = Boolean(response.body); // TODO need to change response
+                }
+            }
+        })
     }
 
     gmailIntegration(provider: string) {

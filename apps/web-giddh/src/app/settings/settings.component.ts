@@ -36,7 +36,7 @@ export class SettingsComponent implements OnInit {
     @ViewChild('eBankComp') public eBankComp: SettingLinkedAccountsComponent;
     @ViewChild('permissionComp') public permissionComp: SettingPermissionComponent;
     @ViewChild('tagComp') public tagComp: SettingsTagsComponent;
-    // @ViewChild('bunchComp') public bunchComp: BunchComponent;
+    @ViewChild('bunchComp') public bunchComp: BunchComponent;
 
     public isUserSuperAdmin: boolean = false;
     public isUpdateCompanyInProgress$: Observable<boolean>;
@@ -173,7 +173,7 @@ export class SettingsComponent implements OnInit {
 
     public bunchTabSelected(e) {
         if (e.heading === 'bunch') {
-            // this.bunchComp.getAllBunch();
+            this.bunchComp.getAllBunch();
         }
     }
 
@@ -182,12 +182,14 @@ export class SettingsComponent implements OnInit {
             this.setStateDetails(tab, this.integrationtab);
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
             this.loadModuleData(tab);
-            this.router.navigate(['pages/settings/', tab, this.integrationtab], {replaceUrl: true});
+            if (this.integrationtab) {
+                this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
+            }
         } else {
             this.setStateDetails(tab, '');
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
             this.loadModuleData(tab);
-            this.router.navigate(['pages/settings/', tab], {replaceUrl: true});
+            this.router.navigate(['pages/settings/', tab], { replaceUrl: true });
         }
 
     }
@@ -221,7 +223,7 @@ export class SettingsComponent implements OnInit {
                     this._toast.errorToast(res.message, res.code);
                 }
                 this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-                this.router.navigateByUrl('/pages/settings/integration/email');
+                // this.router.navigateByUrl('/pages/settings/integration/email');
                 // this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
             });
         })
@@ -285,7 +287,7 @@ export class SettingsComponent implements OnInit {
      */
     private loadModuleData(tabName: string): void {
         if (tabName === 'warehouse') {
-            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({page: 1}));
+            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1 }));
         }
     }
 }

@@ -41,6 +41,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
     }
 
     public ngOnInit() {
+
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         // this.store.pipe(select(s => s.session.userSelectedSubscriptionPlan), takeUntil(this.destroyed$)).subscribe(res => {
@@ -69,8 +70,11 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
 
     public ngAfterViewInit() {
         this._generalService.IAmLoaded.next(true);
+        let scriptTag = document.createElement('script');
+        scriptTag.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        scriptTag.type = 'text/javascript';
+        document.body.appendChild(scriptTag);
     }
-
     public selectConfigureBank() {
         if (this.companyCountry) {
             if (this.companyCountry.toLowerCase() === 'india') {
@@ -93,10 +97,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
             // https://app.intercom.io/a/meeting-scheduler/calendar/VEd2SmtLSyt2YisyTUpEYXBCRWg1YXkwQktZWmFwckF6TEtwM3J5Qm00R2dCcE5IWVZyS0JjSXF2L05BZVVWYS0tck81a21EMVZ5Z01SQWFIaG00RlozUT09--c6f3880a4ca63a84887d346889b11b56a82dd98f changed URI card G0-4255
             (window as any).require("electron").shell.openExternal('https://calendly.com/sales-accounting-software/talk-to-sale');
         } else {
-            let newwindow = window.open('https://calendly.com/sales-accounting-software/talk-to-sale', 'scheduleWindow', 'height=650,width=1199,left=200,top=100`');
-            if (window.focus) {
-                newwindow.focus();
-            }
+            this.openScheduleCalendlyModel();  // to show calendly block
         }
         return false;
     }
@@ -104,7 +105,6 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
     public openScheduleModal() {
         this._generalService.invokeEvent.next("openschedulemodal");
     }
-
     public loadScript() {
         let isFound = false;
         let scripts = document.getElementsByTagName('script');
@@ -161,5 +161,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
         dataToSaveNew.companyInventorySettings = { manageInventory: data };
 
         this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
+    }
+    public openScheduleCalendlyModel() {
+        this.store.dispatch(this.generalActions.isOpenCalendlyModel(true));
     }
 }

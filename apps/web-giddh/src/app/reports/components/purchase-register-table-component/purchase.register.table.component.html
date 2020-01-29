@@ -1,0 +1,55 @@
+<div class="responsive">
+    <table class="table basic table-bordered">
+        <thead>
+            <tr>
+                <th class="d-flex align-items-center">Particular</th>
+                <th class="width-200px">
+                    <div class="d-flex">
+                        <div class="flex-fill text-right ">
+                            Purchase
+                        </div>
+                    </div>
+                </th>
+                <th class="width-200px">
+                    <div class="d-flex">
+                        <div class="flex-fill text-right ">
+                            Return
+                        </div>
+                    </div>
+                </th>
+                <th class="width-200px">
+                    <div class="d-flex">
+                        <div class="flex-fill text-right ">
+                            Net Purchase
+                        </div>
+                    </div>
+                </th>
+                <th class="width-200px">
+                    <div class="d-flex">
+                        <div class="flex-fill text-right ">
+                            Cumulative
+                        </div>
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of reportRespone" [ngClass]="{'bgChange': item.reportType === 'combined'}">
+                <td><a class="cursor-pointer" (click)="gotoDetailedPurchase(item)">{{item.particular}}</a></td>
+                <td class="text-right">{{item.purchase | giddhCurrency}}</td>
+                <td class="text-right">{{item.returns | giddhCurrency}}</td>
+                <td class="text-right">{{item.cumulative | giddhCurrency}}</td>
+                <td class="text-right">{{item.netPurchase | giddhCurrency}}</td>
+            </tr>
+        </tbody>
+        <tfoot class="bold">
+            <tr>
+                <th><a href="javascript:void(0)">{{purchaseRegisterTotal.particular }}</a></th>
+                <th class="text-right">{{purchaseRegisterTotal.purchase | giddhCurrency}}</th>
+                <th class="text-right">{{purchaseRegisterTotal.returns | giddhCurrency}}</th>
+                <th class="text-right">{{purchaseRegisterTotal.cumulative | giddhCurrency}}</th>
+                <th class="text-right">{{purchaseRegisterTotal.netPurchase | giddhCurrency}}</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
