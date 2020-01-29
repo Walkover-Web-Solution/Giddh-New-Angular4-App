@@ -338,6 +338,14 @@ export class AccountService implements OnInit {
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e)));
     }
+
+    /**
+     *  API call to confirm shopify is integrated or not
+     *
+     * @param {*} model request body
+     * @returns
+     * @memberof AccountService
+     */
     public getShopifyEcommerceVerify(model) {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;

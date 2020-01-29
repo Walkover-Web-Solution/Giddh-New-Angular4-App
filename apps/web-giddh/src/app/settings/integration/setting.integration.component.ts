@@ -514,6 +514,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         currentPageObj.url = this.router.url;
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
+
+    /**
+     * API call to verify is shopify integrated
+     *
+     * @memberof SettingIntegrationComponent
+     */
     public getShopifyEcommerceVerifyStatus() {
         const requestObj = { source: "shopify" };
         this.accountService.getShopifyEcommerceVerify(requestObj).subscribe(response => {
