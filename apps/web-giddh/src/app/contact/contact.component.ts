@@ -28,7 +28,6 @@ import { createSelector } from 'reselect';
 import { GeneralActions } from '../actions/general/general.actions';
 import { GeneralService } from '../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 
 const CustomerType = [
     {label: 'Customer', value: 'customer'},
@@ -60,7 +59,7 @@ export interface PayNowRequest {
 })
 
 export class ContactComponent implements OnInit, OnDestroy, OnChanges {
-    public selectedDateRange: any;
+    // selected: any;
     public flattenAccounts: any = [];
     public sundryDebtorsAccountsBackup: any = {};
     public sundryDebtorsAccountsForAgingReport: IOption[] = [];
@@ -266,7 +265,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
-                this.selectedDateRange = {startDate: moment(universalDate[0], 'DD-MM-YYYY'), endDate: moment(universalDate[1], 'DD-MM-YYYY')};
+                this.datePickerOptions = {
+                    ...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
+                    endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()
+                };
+
+                // this.selected = {startDate: moment(universalDate[0], 'DD-MM-YYYY'), endDate: moment(universalDate[1], 'DD-MM-YYYY')};
 
                 this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
                 this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');
@@ -807,9 +811,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public selectedDate(value: any) {
-        if (value.startDate && value.endDate) {
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+        this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
+        this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
+        if (value.event.type === 'hide') {
             this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, this.searchStr);
             this.detectChanges();
         }

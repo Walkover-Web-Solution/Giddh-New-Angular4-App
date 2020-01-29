@@ -28,29 +28,27 @@
                 <div class="input-group" id="dp-parent" style="margin-right:8px; margin-bottom:0;">
                     <!-- <span class="icon-calender"></span> -->
                     <span class="inputWrapper">
+                        <input type="text" name="dateRangeGenerate" id="dateRangeGenerate" daterangepicker
+                            [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)"
+                            class="form-control" />
 
-<!--                        <input type="text" name="dateRangeGenerate" id="dateRangeGenerate" daterangepicker-->
-<!--                            [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)"-->
-<!--                            class="form-control" />-->
-
-                        <input type="text"
-                               [(ngModel)]="selectedDateRange"
-                               ngxDaterangepickerMd
-                               [alwaysShowCalendars]="true"
-                               [ranges]="datePickerOptions.ranges"
-                               [showClearButton]="false"
-                               [showCancel]="true"
-                               [showDropdowns]="true"
-                               [locale]="{applyLabel: 'Done'}"
-                               (datesUpdated)="dateRangeChanged($event)"
-                               [keepCalendarOpeningWithRange]="true"
-                               [showRangeLabelOnInput]="false"
-                               name="selectedDateRange"
-                               class="form-control"
-                               placeholder="Select please..."/>
+<!--                        <input type="text"-->
+<!--                               [(ngModel)]="selectedDateRange"-->
+<!--                               ngxDaterangepickerMd-->
+<!--                               [alwaysShowCalendars]="true"-->
+<!--                               [ranges]="datePickerOptions.ranges"-->
+<!--                               [showClearButton]="false"-->
+<!--                               [showCancel]="true"-->
+<!--                               [showDropdowns]="true"-->
+<!--                               [locale]="{applyLabel: 'Done'}"-->
+<!--                               (datesUpdated)="dateRangeChanged($event)"-->
+<!--                               [keepCalendarOpeningWithRange]="true"-->
+<!--                               [showRangeLabelOnInput]="false"-->
+<!--                               name="selectedDateRange"-->
+<!--                               class="form-control"-->
+<!--                               placeholder="Select please..."/>-->
 
                     </span>
-                    <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
                 </div>
 
                 <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary"
