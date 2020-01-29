@@ -15,7 +15,7 @@ import {
     ViewChild
 } from '@angular/core';
 import {FormControl, NgForm} from '@angular/forms';
-import {BsModalRef, BsModalService, ModalOptions} from 'ngx-bootstrap/modal';
+import {BsModalRef, ModalOptions} from 'ngx-bootstrap/modal';
 import {select, Store} from '@ngrx/store';
 import {AppState} from '../../store';
 import * as _ from '../../lodash-optimized';
@@ -23,7 +23,6 @@ import {cloneDeep, orderBy, uniqBy} from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import {InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm} from '../../models/api-models/Invoice';
 import {InvoiceActions} from '../../actions/invoice/invoice.actions';
-import {AccountService} from '../../services/account.service';
 import {InvoiceService} from '../../services/invoice.service';
 import {BsDatepickerConfig} from 'ngx-bootstrap/datepicker';
 import {GIDDH_DATE_FORMAT} from '../../shared/helpers/defaultDateFormat';
@@ -32,12 +31,10 @@ import {createSelector} from 'reselect';
 import {IFlattenAccountsResultItem} from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 import {DownloadOrSendInvoiceOnMailComponent} from 'apps/web-giddh/src/app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import {ElementViewContainerRef} from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import {InvoiceTemplatesService} from 'apps/web-giddh/src/app/services/invoice.templates.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {InvoiceReceiptFilter, ReceiptItem, ReciptResponse} from 'apps/web-giddh/src/app/models/api-models/recipt';
 import {InvoiceReceiptActions} from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import {CompanyResponse, ValidateInvoice} from 'apps/web-giddh/src/app/models/api-models/Company';
-import {CompanyActions} from 'apps/web-giddh/src/app/actions/company.actions';
 import {InvoiceAdvanceSearchComponent} from './models/advanceSearch/invoiceAdvanceSearch.component';
 import {ToasterService} from '../../services/toaster.service';
 import {InvoiceSetting} from '../../models/interfaces/invoice.setting.interface';
@@ -45,9 +42,9 @@ import {VoucherTypeEnum} from '../../models/api-models/Sales';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {DaterangePickerComponent} from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import {saveAs} from 'file-saver';
-import {GeneralService} from '../../services/general.service';
 import {ReceiptService} from "../../services/receipt.service";
 import {InvoicePaymentModelComponent} from './models/invoicePayment/invoice.payment.model.component';
+import { PAGINATION_LIMIT } from '../../app.constant';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
@@ -166,27 +163,24 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public baseCurrencySymbol: string = '';
     public baseCurrency: string = '';
     public lastListingFilters: any;
+    /** Pagination limit */
+    public paginationLimit: number = PAGINATION_LIMIT;
 
     constructor(
-        private modalService: BsModalService,
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
-        private _accountService: AccountService,
         private _invoiceService: InvoiceService,
-        private _invoiceTemplatesService: InvoiceTemplatesService,
         private _toaster: ToasterService,
         private componentFactoryResolver: ComponentFactoryResolver,
         private _activatedRoute: ActivatedRoute,
-        private companyActions: CompanyActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private cdr: ChangeDetectorRef,
         private _breakPointObservar: BreakpointObserver,
         private _router: Router,
-        private _generalService: GeneralService,
         private _receiptServices: ReceiptService
     ) {
         this.invoiceSearchRequest.page = 1;
-        this.invoiceSearchRequest.count = 20;
+        this.invoiceSearchRequest.count = PAGINATION_LIMIT;
         this.invoiceSearchRequest.entryTotalBy = '';
         this.invoiceSearchRequest.from = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
         this.invoiceSearchRequest.to = moment().format(GIDDH_DATE_FORMAT);
@@ -217,7 +211,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.advanceSearchFilter.page = 1;
-        this.advanceSearchFilter.count = 20;
+        this.advanceSearchFilter.count = PAGINATION_LIMIT;
         this._activatedRoute.params.subscribe(a => {
             if (!a) {
                 return;
@@ -960,14 +954,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
         this.advanceSearchFilter = new InvoiceFilterClassForInvoicePreview();
         this.advanceSearchFilter.page = 1;
-        this.advanceSearchFilter.count = 20;
+        this.advanceSearchFilter.count = PAGINATION_LIMIT;
 
         this.sortRequestForUi = {sortBy: '', sort: ''};
         this.invoiceSearchRequest.sort = '';
         this.invoiceSearchRequest.sortBy = '';
         this.invoiceSearchRequest.q = '';
         this.invoiceSearchRequest.page = 1;
-        this.invoiceSearchRequest.count = 20;
+        this.invoiceSearchRequest.count = PAGINATION_LIMIT;
         this.invoiceSearchRequest.voucherNumber = '';
 
         let universalDate;

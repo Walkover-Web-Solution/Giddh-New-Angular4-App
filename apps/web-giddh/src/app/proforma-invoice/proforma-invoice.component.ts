@@ -565,7 +565,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             } else {
                 // for edit mode direct from @Input
-                if (this.accountUniqueName && this.invoiceNo && this.invoiceType) {
+                if (this.accountUniqueName && this.invoiceType && (this.invoiceNo || this.isPurchaseInvoice)) {
                     this.store.dispatch(this._generalActions.setAppTitle('/pages/proforma-invoice/invoice/' + this.invoiceType));
                     this.getVoucherDetailsFromInputs();
                 }
@@ -590,7 +590,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         // get account details and set it to local var
         this.selectedAccountDetails$.subscribe(o => {
-            if (o && !this.isUpdateMode) {
+            if (o && (!this.isUpdateMode || this.isPurchaseInvoice)) {
                 this.assignAccountDetailsValuesInForm(o);
             }
         });
@@ -1281,6 +1281,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             setTimeout(() => {
                 this.customerBillingAddress.nativeElement.focus();
+                this._cdr.detectChanges();
             }, 500);
         });
     }
@@ -1391,7 +1392,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // auto fill shipping address
         if (this.autoFillShipping) {
             this.invFormData.accountDetails.shippingDetails = _.cloneDeep(this.invFormData.accountDetails.billingDetails);
-            this.shippingState.nativeElement.classList.remove('error-box');
+            if (this.shippingState && this.shippingState.nativeElement) {
+                this.shippingState.nativeElement.classList.remove('error-box');
+            }
         }
     }
 
@@ -1619,12 +1622,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             if (this.isPurchaseInvoice) {
                 if (this.invFormData.accountDetails.shippingDetails.state.code && this.invFormData.accountDetails.billingDetails.state.code) {
-                    this.generatePurchaseRecord(requestObject);
+                    this.generatePurchaseRecord(updatedData);
                 } else {
-                    if (!this.invFormData.accountDetails.shippingDetails.state.code) {
+                    if (this.shippingState && this.shippingState.nativeElement && !this.invFormData.accountDetails.shippingDetails.state.code) {
                         this.shippingState.nativeElement.classList.add('error-box');
                     }
-                    if (!this.invFormData.accountDetails.billingDetails.state.code) {
+                    if (this.billingState && this.billingState.nativeElement && !this.invFormData.accountDetails.billingDetails.state.code) {
                         this.billingState.nativeElement.classList.add('error-box');
                     }
                     return;
@@ -2537,12 +2540,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     dueDate: data.voucherDetails.dueDate,
                     number: this.invoiceNo,
                     uniqueName: unqName
-                };
+                } as GenericRequestForGenerateSCD;
                 if (this.isCreditNote || this.isDebitNote) {
                     requestObject['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
                 }
 
-                this.salesService.updateVoucherV4(this.updateData(requestObject, requestObject.voucher)).pipe(takeUntil(this.destroyed$))
+                this.salesService.updateVoucherV4(<GenericRequestForGenerateSCD>this.updateData(requestObject, requestObject.voucher)).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
                         this.actionsAfterVoucherUpdate(response, invoiceForm);
                     }, (err) => {
@@ -2600,7 +2603,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.updateAccount = false;
     }
 
-    public prepareDataForApi(): GenericRequestForGenerateSCD {
+    public prepareDataForApi(): GenericRequestForGenerateSCD | PurchaseRecordRequest {
         let data: VoucherClass = _.cloneDeep(this.invFormData);
 
         // special check if gst no filed is visible then and only then check for gst validation
@@ -2771,7 +2774,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             filterRequest.count = 5;
             filterRequest.isLastInvoicesRequest = true;
             this.store.dispatch(this.proformaActions.getAll(filterRequest, this.isProformaInvoice ? 'proformas' : 'estimates'));
-        } else {
+        } else if (!this.isPurchaseInvoice) {
             let request: InvoiceReceiptFilter = new InvoiceReceiptFilter();
             request.sortBy = 'voucherDate';
             request.sort = 'desc';
@@ -3125,9 +3128,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.destroyed$.complete();
     }
 
-    public updateData(obj: GenericRequestForGenerateSCD, data: VoucherClass) {
-        delete obj.voucher;
-        delete obj.depositAccountUniqueName;
+    public updateData(obj: GenericRequestForGenerateSCD | PurchaseRecordRequest, data: VoucherClass) {
+        if ((<GenericRequestForGenerateSCD>obj).voucher) {
+            delete (<GenericRequestForGenerateSCD>obj).voucher;
+        }
+        if ((<GenericRequestForGenerateSCD>obj).depositAccountUniqueName) {
+            delete (<GenericRequestForGenerateSCD>obj).depositAccountUniqueName;
+        }
 
         let salesEntryClassArray: SalesEntryClassMulticurrency[] = [];
         let entries = data.entries;
@@ -3177,7 +3184,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         obj.templateDetails = data.templateDetails;
         obj.entries = salesEntryClassArray;
-        obj.deposit = deposit;
+        if ((<GenericRequestForGenerateSCD>obj).deposit) {
+            (<GenericRequestForGenerateSCD>obj).deposit = deposit;
+        }
 
         obj.account.billingDetails.countryName = this.customerCountryName;
         obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
@@ -3501,14 +3510,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         if (isBilling) {
             // update account details address if it's billing details
-            this.billingState.nativeElement.classList.remove('error-box');
+            if (this.billingState && this.billingState.nativeElement) {
+                this.billingState.nativeElement.classList.remove('error-box');
+            }
             this.invFormData.accountDetails.billingDetails.state.name = stateName;
             this.invFormData.accountDetails.billingDetails.stateName = stateName;
             this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
         } else {
+            if (this.shippingState && this.shippingState.nativeElement) {
+                this.shippingState.nativeElement.classList.remove('error-box');
+            }
             // if it's not billing address then only update shipping details
             // check if it's not auto fill shipping address from billing address then and then only update shipping details
-            this.shippingState.nativeElement.classList.remove('error-box');
             if (!this.autoFillShipping) {
                 this.invFormData.accountDetails.shippingDetails.stateName = stateName;
                 this.invFormData.accountDetails.shippingDetails.stateCode = stateCode;
