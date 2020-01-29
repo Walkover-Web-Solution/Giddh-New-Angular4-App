@@ -2,7 +2,7 @@ import { empty as observableEmpty, Observable } from 'rxjs';
 
 import { catchError, map } from 'rxjs/operators';
 import { ShareRequestForm } from '../models/api-models/Permission';
-import { AccountMergeRequest, AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse, AccountUnMergeRequest, FlattenAccountsResponse, ShareAccountRequest, ShareEntityRequest, ShopifyEcommerceUserRequest } from '../models/api-models/Account';
+import { AccountMergeRequest, AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse, AccountUnMergeRequest, FlattenAccountsResponse, ShareAccountRequest, ShareEntityRequest } from '../models/api-models/Account';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, OnInit, Optional } from '@angular/core';
 import { ACCOUNTS_API, ACCOUNTS_API_V2 } from './apiurls/account.api';
@@ -348,16 +348,5 @@ export class AccountService implements OnInit {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
-    }
-    public getShopifyEcommerceUser(model) {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + SHOPIFY_API.ECOMMERCE_REGISTER_USER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
-            map((res) => {
-                let data: BaseResponse<ShopifyEcommerceUserRequest, any> = res;
-                data.request = model;
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<ShopifyEcommerceUserRequest, any>(e, model)));
     }
 }

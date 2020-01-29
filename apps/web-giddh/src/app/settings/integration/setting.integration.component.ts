@@ -73,7 +73,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public registeredAccount;
     public openNewRegistration: boolean;
     public selecetdUpdateIndex: number;
-    public isEcommerceShopifyUserverified: boolean = false;
+    public isEcommerceShopifyUserVerified: boolean = false;
 
     constructor(
         private router: Router,
@@ -518,9 +518,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         const requestObj = { source: "shopify" };
         this.accountService.getShopifyEcommerceVerify(requestObj).subscribe(response => {
             if (response) {
-                console.log('shopify res', response);
                 if (response.status === 'success') {
-                    this.isEcommerceShopifyUserverified = Boolean(response.body);
+                    this.isEcommerceShopifyUserVerified = Boolean(response.body); // TODO need to change response
                 }
             }
         })
