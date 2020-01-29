@@ -341,6 +341,29 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private shouldShowLoader: boolean = true;
     /** Stores matching purchase record details */
     private matchingPurchaseRecord: any;
+    /** Purchase Record customer unique name */
+    private purchaseRecordCustomerUniqueName: string = '';
+    /** Purchase Record tax number */
+    private purchaseRecordTaxNumber: string = '';
+    /** Purchase Record invoice date */
+    private purchaseRecordInvoiceDate: string = '';
+    /** Purchase Record invoice number */
+    private purchaseRecordInvoiceNumber: string = '';
+
+    /**
+     * Returns true, if Purchase Record creation record is broken
+     *
+     * @readonly
+     * @private
+     * @type {boolean}
+     * @memberof ProformaInvoiceComponent
+     */
+    private get isPurchaseRecordContractBroken(): boolean {
+        return (this.purchaseRecordCustomerUniqueName !== this.invFormData.voucherDetails.customerUniquename) ||
+        (this.purchaseRecordInvoiceDate !== moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT)) ||
+        (this.purchaseRecordTaxNumber !== this.invFormData.accountDetails.shippingDetails.gstNumber ||
+        (this.purchaseRecordInvoiceNumber !== this.invFormData.voucherDetails.voucherNumber));
+    }
 
     constructor(
         private store: Store<AppState>,
@@ -913,6 +936,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.invoiceDataFound = false;
                     }
                     this.isUpdateDataInProcess = false;
+                    if (this.isPurchaseInvoice) {
+                        this.saveCurrentPurchaseRecordDetails();
+                    }
                 }
 
                 // create account success then close sidebar, and add customer details
@@ -1077,6 +1103,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 });
             }
         });
+        this.prepareInvoiceTypeFlags();
     }
 
     private async prepareCompanyCountryAndCurrencyFromProfile(profile) {
@@ -1332,6 +1359,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.selectedFileName = '';
         this.selectedWarehouse = '';
         this.isRcmEntry = false;
+        this.matchingPurchaseRecord = null;
 
         this.assignDates();
         let invoiceSettings: InvoiceSetting = null;
@@ -2485,20 +2513,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param invoiceForm
      */
     public submitUpdateForm(invoiceForm: NgForm) {
-        let result = this.prepareDataForApi();
-        if (!result) {
+        let requestObject: any = this.prepareDataForApi();
+        if (!requestObject) {
             return;
         }
         if (this.isProformaInvoice || this.isEstimateInvoice) {
-            this.store.dispatch(this.proformaActions.updateProforma(result));
+            this.store.dispatch(this.proformaActions.updateProforma(requestObject));
         } else {
-            let data = result.voucher;
+            let data = requestObject.voucher;
             let exRate = this.originalExchangeRate;
             let unqName = this.invoiceUniqueName || this.accountUniqueName;
 
             // sales and cash invoice uses v4 api so need to parse main object to regarding that
             if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
-                result = {
+                requestObject = {
                     account: data.accountDetails,
                     updateAccountDetails: this.updateAccount,
                     voucher: data,
@@ -2511,18 +2539,31 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     uniqueName: unqName
                 };
                 if (this.isCreditNote || this.isDebitNote) {
-                    result['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
+                    requestObject['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
                 }
 
-                this.salesService.updateVoucherV4(this.updateData(result, result.voucher)).pipe(takeUntil(this.destroyed$))
+                this.salesService.updateVoucherV4(this.updateData(requestObject, requestObject.voucher)).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
                         this.actionsAfterVoucherUpdate(response, invoiceForm);
                     }, (err) => {
                         this._toasty.errorToast('Something went wrong! Try again');
                     });
+            } else if (this.isPurchaseInvoice) {
+                requestObject = {
+                    account: data.accountDetails,
+                    number: this.invFormData.voucherDetails.voucherNumber,
+                    entries: data.entries,
+                    date: data.voucherDetails.voucherDate,
+                    dueDate: data.voucherDetails.dueDate,
+                    type: this.invoiceType,
+                    attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
+                    templateDetails: data.templateDetails,
+                    uniqueName: this.selectedItem.uniqueName
+                } as PurchaseRecordRequest;
+                requestObject = this.updateData(requestObject, data);
+                this.generatePurchaseRecord(requestObject);
             } else {
-                // Purchase invoice still uses old api so just pass result to service don't parse it
-                this.salesService.updateVoucher(result).pipe(takeUntil(this.destroyed$))
+                this.salesService.updateVoucher(requestObject).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
                         this.actionsAfterVoucherUpdate(response, invoiceForm);
                     }, (err) => {
@@ -2539,7 +2580,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param response
      * @param invoiceForm
      */
-    private actionsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>, invoiceForm: NgForm) {
+    private actionsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD> | BaseResponse<any, PurchaseRecordRequest>, invoiceForm: NgForm) {
         if (response.status === 'success') {
             // reset form and other
             this.resetInvoiceForm(invoiceForm);
@@ -2788,7 +2829,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             entry.tcsTaxList = [];
             entry.tdsTaxList = [];
         }
-        if (this.activeIndx && !entryObj) {
+        if (this.activeIndx !== undefined && this.activeIndx !== null && !entryObj) {
             this.invFormData.entries = cloneDeep(this.entriesListBeforeTax);
             this.invFormData.entries[this.activeIndx] = entry;
         }
@@ -3624,16 +3665,31 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public handlePurchaseRecordConfirmation(action: string): void {
         if (action === CONFIRMATION_ACTIONS.YES) {
-            // User confirmed to merge the purchase record
+            // User confirmed to merge the purchase record, update the length of the found records
+            this.saveCurrentPurchaseRecordDetails();
             this.mergePurchaseRecord();
-            this.onSubmitInvoiceForm(this.invoiceForm);
+            this.isUpdateMode = true;
         } else {
             // User denied the permission or closed the popup
             this._toasty.errorToast('Please change either purchase invoice number or vendor details.', 'Purchase Record');
+            this.isUpdateMode = false;
         }
         if (this.purchaseRecordConfirmationPopup) {
             this.purchaseRecordConfirmationPopup.hide();
         }
+    }
+
+    /**
+     * Stores the purchase record data
+     *
+     * @private
+     * @memberof ProformaInvoiceComponent
+     */
+    private saveCurrentPurchaseRecordDetails(): void {
+        this.purchaseRecordCustomerUniqueName = this.invFormData.voucherDetails.customerUniquename;
+        this.purchaseRecordInvoiceDate = moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
+        this.purchaseRecordTaxNumber = this.invFormData.accountDetails.shippingDetails.gstNumber;
+        this.purchaseRecordInvoiceNumber = this.invFormData.voucherDetails.voucherNumber;
     }
 
     /**
@@ -3742,10 +3798,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private generatePurchaseRecord(requestObject: PurchaseRecordRequest): void {
         // TODO: If the get API returns true
         this.purchaseRecordConfirmationConfiguration = this.proformaInvoiceUtilityService.getPurchaseRecordConfirmationConfiguration();
-        if (this.isUpdateMode) {
-            // Merge the purchase record (PATCH method)
-            this.purchaseRecordService.generatePurchaseRecord(requestObject, 'PATCH');
-        } else {
+        if (this.isPurchaseRecordContractBroken) {
             this.validatePurchaseRecord().subscribe((data: any) => {
                 console.log('Data: ', data);
                 if (data && data.body) {
@@ -3758,6 +3811,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.handleGenerateResponse(response, this.invoiceForm);
                     }, () => this._toasty.errorToast('Something went wrong! Try again'));
                 }
+            }, () => this._toasty.errorToast('Something went wrong! Try again'));
+        } else {
+            // Merge the purchase record (PATCH method)
+            this.purchaseRecordService.generatePurchaseRecord(requestObject, 'PATCH').subscribe((response: BaseResponse<any, PurchaseRecordRequest>) => {
+                this.actionsAfterVoucherUpdate(response, this.invoiceForm);
             }, () => this._toasty.errorToast('Something went wrong! Try again'));
         }
     }
@@ -3810,25 +3868,29 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private validatePurchaseRecord(): Observable<BaseResponse<any, any>> {
         const requestObject = {
             accountUniqueName: this.invFormData.voucherDetails.customerUniquename,
-            taxNumber: this.invFormData.accountDetails.shippingDetails.gstNumber,
-            purchaseDate: moment(this.invFormData.voucherDetails.voucherDate).format('DD-MM-YYYY'),
+            taxNumber: this.invFormData.accountDetails.billingDetails.gstNumber || this.invFormData.accountDetails.shippingDetails.gstNumber,
+            purchaseDate: moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT),
             number: this.invFormData.voucherDetails.voucherNumber
         }
         return this.purchaseRecordService.validatePurchaseRecord(requestObject);
     }
 
-    private async mergePurchaseRecord() {
+    /**
+     * Merges the record by removing old merged records
+     *
+     * @private
+     * @returns {Promise<any>} Promise to carry out further operations
+     * @memberof ProformaInvoiceComponent
+     */
+    private async mergePurchaseRecord(): Promise<any> {
+        // Confirmation received, delete old merged entries
+        this.invFormData.entries = this.invFormData.entries.filter(entry => !entry['isMergedPurchaseEntry'])
         const result = (await this.modifyMulticurrencyRes(this.matchingPurchaseRecord, false)) as VoucherClass;
         if (result.voucherDetails) {
-            let flattenAccounts;
-            this.flattenAccountListStream$.pipe(take(1)).subscribe(data => flattenAccounts = data);
-            if (result.entries.length) {
-                result.entries = this.parseEntriesFromResponse(result.entries, flattenAccounts);
-            }
-            console.log('Merged: ', result);
             if (result.entries && result.entries.length > 0) {
                 result.entries.forEach((entry) => {
-                    this.invFormData.entries.unshift(entry);
+                    entry['isMergedPurchaseEntry'] = true;
+                    this.invFormData.entries.push(entry);
                 });
             }
         }

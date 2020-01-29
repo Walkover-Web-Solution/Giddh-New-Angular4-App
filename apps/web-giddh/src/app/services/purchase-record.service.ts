@@ -31,13 +31,20 @@ export class PurchaseRecordService {
      * @returns {Observable<BaseResponse<any, PurchaseRecordRequest>>} Observable to carry out further operations
      * @memberof PurchaseRecordService
      */
-    public generatePurchaseRecord(requestObject: PurchaseRecordRequest, method: string = 'POST'): Observable<BaseResponse<any, PurchaseRecordRequest>> {
+    public generatePurchaseRecord(requestObject: PurchaseRecordRequest | any, method: string = 'POST'): Observable<BaseResponse<any, PurchaseRecordRequest>> {
         const accountUniqueName = requestObject.account.uniqueName;
-        const contextPath: string =
-            `${this.config.apiUrl}${PURCHASE_RECORD_API.GENERATE.replace(':companyUniqueName', this._generalService.companyUniqueName).replace(':accountUniqueName', accountUniqueName)}`;
         // TODO: Add patch integration once the API is ready
-        return this._http.post(contextPath, requestObject).pipe(
-            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
+        if (method === 'POST') {
+            const contextPath: string =
+                `${this.config.apiUrl}${PURCHASE_RECORD_API.GENERATE.replace(':companyUniqueName', this._generalService.companyUniqueName).replace(':accountUniqueName', accountUniqueName)}`;
+            return this._http.post(contextPath, requestObject).pipe(
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
+        } else if (method === 'PATCH') {
+            const contextPath: string =
+                `${this.config.apiUrl}${PURCHASE_RECORD_API.UPDATE.replace(':companyUniqueName', this._generalService.companyUniqueName).replace(':accountUniqueName', accountUniqueName)}`;
+            return this._http.patch(contextPath, requestObject).pipe(
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
+        }
     }
 
     /**
