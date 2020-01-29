@@ -12,6 +12,12 @@ import ElectronGoogleOAuth2 from '@getstation/electron-google-oauth2';
 // import ElectronLinkedInOAuth2 from "./sampleLinkedin";
 
 let windowManager: WindowManager = null;
+let STAGING_ENV = false;
+let TEST_ENV = false;
+let LOCAL_ENV = false;
+let PRODUCTION_ENV = false;
+let APP_URL = '';
+let APP_FOLDER = '';
 
 app.on("ready", () => {
     ipcMain.on("log.error", (event: any, arg: any) => {
@@ -25,17 +31,37 @@ app.on("ready", () => {
 ipcMain.on("open-url", (event, arg) => {
     windowManager.openWindows(arg);
 });
+ipcMain.on("take-server-environment", (event, arg) => {
+    process.env.STAGING_ENV = arg.STAGING_ENV;
+    STAGING_ENV = arg.STAGING_ENV;
+    process.env.TEST_ENV = arg.TEST_ENV;
+    TEST_ENV = arg.TEST_ENV;
+    process.env.LOCAL_ENV = arg.LOCAL_ENV;
+    LOCAL_ENV = arg.LOCAL_ENV;
+    process.env.PRODUCTION_ENV = arg.PRODUCTION_ENV;
+    PRODUCTION_ENV = arg.PRODUCTION_ENV;
+    process.env.AppUrl = arg.AppUrl;
+    APP_URL = arg.AppUrl;
+    process.env.APP_FOLDER = arg.APP_FOLDER;
+    APP_FOLDER = arg.APP_FOLDER;
 
+    console.log('STAGING_ENV:' + process.env.STAGING_ENV);
+    console.log('TEST_ENV:' + process.env.TEST_ENV);
+    console.log('LOCAL_ENV:' + process.env.LOCAL_ENV);
+    console.log('PRODUCTION_ENV:' + process.env.PRODUCTION_ENV);
+});
 
 ipcMain.on("authenticate", (event, arg) => {
 
     if (arg === "google") {
-        console.log(GoogleLoginElectronConfig.clientId);
+        console.log('GoogleLoginElectronConfig:' + GoogleLoginElectronConfig.clientId);
+
+
         const myApiOauth = new ElectronGoogleOAuth2(GoogleLoginElectronConfig.clientId,
             GoogleLoginElectronConfig.clientSecret,
             ['https://www.googleapis.com/auth/drive.metadata.readonly', 'https://www.googleapis.com/auth/gmail.send'],
             {
-                successRedirectURL: "http://locahost:3000/appsuccesslogin",
+                successRedirectURL: PRODUCTION_ENV ? 'https://app.giddh.com/app-login-success' : 'https://stage.giddh.com/app-login-success',
                 loopbackInterfaceRedirectionPort: 45587,
                 refocusAfterSuccess: true,
             }
@@ -52,7 +78,8 @@ ipcMain.on("authenticate", (event, arg) => {
                 console.log(JSON.stringify(token));
                 // use your token.access_token
             });
-    } if (arg === "linkedin") {
+    }
+    if (arg === "linkedin") {
         // const myApiOauth = new ElectronLinkedInOAuth2(LinkedinLoginElectronConfig.clientId,
         //     LinkedinLoginElectronConfig.clientSecret,"http://127.0.0.1:45589/callback",
         //     AdditionalLinkedinLoginParams.scope,
@@ -74,7 +101,7 @@ ipcMain.on("authenticate", (event, arg) => {
         //         console.log(JSON.stringify(token));
         //         // use your token.access_token
         //     });
-    }  else {
+    } else {
         // const electronOauth2 = require("electron-oauth");
         // let config = {};
         // let bodyParams = {};
