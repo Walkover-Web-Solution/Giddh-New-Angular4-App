@@ -280,27 +280,29 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 purchaseRecordUniqueName: this.selectedItem.uniqueName
             };
             this.purchaseRecordService.downloadAttachedFile(requestObject).subscribe((data) => {
-                console.log(data);
                 if (data && data.body) {
                     this.shouldShowUploadAttachment = false;
                     if (data.body.fileType) {
                         const fileExtention = data.body.fileType.toLowerCase();
                         if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
                             // Attached file type is image
+                            this.attachedDocumentBlob = base64ToBlob(data.body.uploadedFile, `image/${fileExtention}`, 512);
                             let objectURL = `data:image/${fileExtention};base64,` + data.body.uploadedFile;
                             this.imagePreviewSource = this.sanitizer.bypassSecurityTrustUrl(objectURL);
                             this.attachedDocumentType = { name: data.body.name, type: 'image', value: fileExtention };
                             this.isVoucherDownloadError = false;
-                            this.attachedDocumentBlob = base64ToBlob(data.body.uploadedFile, `image/${fileExtention}`, 512);
                         } else if (FILE_ATTACHMENT_TYPE.PDF.includes(fileExtention)) {
                             // Attached file type is PDF
-                            this.attachedDocumentBlob = base64ToBlob(data.body.uploadedFile, 'application/pdf', 512);
-                            this.selectedItem.blob = this.attachedDocumentBlob;
-                            this.pdfViewer.pdfSrc = this.attachedDocumentBlob;
-                            this.pdfViewer.showSpinner = true;
                             this.attachedDocumentType = { name: data.body.name, type: 'pdf', value: fileExtention };
+                            this.attachedDocumentBlob = base64ToBlob(data.body.uploadedFile, 'application/pdf', 512);
+                            setTimeout(() => {
+                                this.selectedItem.blob = this.attachedDocumentBlob;
+                                this.pdfViewer.pdfSrc = this.attachedDocumentBlob;
+                                this.pdfViewer.showSpinner = true;
+                                this.pdfViewer.refresh();
+                                this.detectChanges();
+                            }, 250);
                             this.isVoucherDownloadError = false;
-                            this.pdfViewer.refresh();
                         } else {
                             // Unsupported type
                             this.isVoucherDownloadError = true;
