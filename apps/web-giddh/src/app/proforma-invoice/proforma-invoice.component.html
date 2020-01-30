@@ -186,7 +186,7 @@
                                                                         </label>
                                                                     </div>
 
-                                                                    <div class="col-sm-6 pd ">
+                                                                    <div class="col-sm-6 pd" #billingState>
                                                                         <sales-sh-select [placeholder]="'State'" class="select-bdr-bottom" (selected)="fillShippingBillingDetails($event, true); autoFillShippingDetails()" #statesBilling [showBottomBorderOnly]="true" [options]="statesSource" name="billingDetails.stateCode" [(ngModel)]="invFormData.accountDetails.billingDetails.state.code">
                                                                         </sales-sh-select>
                                                                     </div>
@@ -237,7 +237,7 @@
                                                                             </div>
                                                                         </div>
 
-                                                                        <div class="col-sm-6 pd ">
+                                                                        <div class="col-sm-6 pd" #shippingState>
 
                                                                             <sales-sh-select [disabled]="autoFillShipping" [placeholder]="'State'" class="select-bdr-bottom" #statesShipping [showBottomBorderOnly]="true" (selected)="fillShippingBillingDetails($event, false)" [options]="statesSource" name="shippingDetails.stateCode"
                                                                                 [(ngModel)]="invFormData.accountDetails.shippingDetails.state.code">

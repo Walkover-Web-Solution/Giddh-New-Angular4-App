@@ -305,13 +305,12 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                             this.isVoucherDownloadError = false;
                         } else {
                             // Unsupported type
-                            this.isVoucherDownloadError = true;
+                            this.attachedDocumentBlob = base64ToBlob(data.body.uploadedFile, '', 512);
                             this.attachedDocumentType = { name: data.body.name, type: 'unsupported', value: fileExtention };
                         }
                     }
                 } else {
                     this.shouldShowUploadAttachment = true;
-                    this.isVoucherDownloadError = true;
                 }
                 this.isVoucherDownloading = false;
                 this.detectChanges();
@@ -424,44 +423,50 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.pagecount = count;
     }
 
-    // public onUploadOutput(output: UploadOutput): void {
-    //     if (output.type === 'allAddedToQueue') {
-    //         let sessionKey = null;
-    //         let companyUniqueName = null;
-    //         this.sessionKey$.pipe(take(1)).subscribe(a => sessionKey = a);
-    //         this.companyName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
-    //         const event: UploadInput = {
-    //             type: 'uploadAll',
-    //             url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
-    //             method: 'POST',
-    //             fieldName: 'file',
-    //             data: { company: companyUniqueName },
-    //             headers: { 'Session-Id': sessionKey },
-    //         };
-    //         this.uploadInput.emit(event);
-    //     } else if (output.type === 'start') {
-    //         this.isFileUploading = true;
-    //     } else if (output.type === 'done') {
-    //         if (output.file.response.status === 'success') {
-    //             this._toasty.successToast('File uploaded successfully');
-    //             const response = output.file.response.body;
-    //             this.isFileUploading = false;
-    //             const requestObject = {
-    //                 account: {
-    //                     uniqueName: this.selectedItem.account.uniqueName
-    //                 },
-    //                 uniqueName: this.selectedItem.uniqueName,
-    //                 attachedFiles: [response.uniqueName]
-    //             };
-    //             this.purchaseRecordService.generatePurchaseRecord(requestObject, 'PATCH').subscribe(() => {
-    //                 this.downloadVoucher('base64');
-    //             }, () => this._toasty.errorToast('Something went wrong! Try again'));
-    //         } else {
-    //             this.isFileUploading = false;
-    //             this._toasty.errorToast(output.file.response.message);
-    //         }
-    //     }
-    // }
+    /**
+     * Upload document handler
+     *
+     * @param {UploadOutput} output Upload output event
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public onUploadOutput(output: UploadOutput): void {
+        if (output.type === 'allAddedToQueue') {
+            let sessionKey = null;
+            let companyUniqueName = null;
+            this.sessionKey$.pipe(take(1)).subscribe(a => sessionKey = a);
+            this.companyName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
+            const event: UploadInput = {
+                type: 'uploadAll',
+                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
+                method: 'POST',
+                fieldName: 'file',
+                data: { company: companyUniqueName },
+                headers: { 'Session-Id': sessionKey },
+            };
+            this.uploadInput.emit(event);
+        } else if (output.type === 'start') {
+            this.isFileUploading = true;
+        } else if (output.type === 'done') {
+            if (output.file.response.status === 'success') {
+                this._toasty.successToast('File uploaded successfully');
+                const response = output.file.response.body;
+                this.isFileUploading = false;
+                const requestObject = {
+                    account: {
+                        uniqueName: this.selectedItem.account.uniqueName
+                    },
+                    uniqueName: this.selectedItem.uniqueName,
+                    attachedFiles: [response.uniqueName]
+                };
+                this.purchaseRecordService.generatePurchaseRecord(requestObject, 'PATCH', true).subscribe(() => {
+                    this.downloadVoucher('base64');
+                }, () => this._toasty.errorToast('Something went wrong! Try again'));
+            } else {
+                this.isFileUploading = false;
+                this._toasty.errorToast(output.file.response.message);
+            }
+        }
+    }
 
     private performActionAfterClose() {
         if (this.voucherNoForDetail && this.voucherDetailAction) {

@@ -213,7 +213,7 @@ export class ReceiptService implements OnInit {
         return url;
     }
 
-    public GetAllReceiptBalanceDue(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
+    public getAllReceiptBalanceDue(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
         let requestType = type;
         let url = this.createQueryString(this.config.apiUrl + RECEIPT_API.GET_ALL_BAL_SALE_DUE, {

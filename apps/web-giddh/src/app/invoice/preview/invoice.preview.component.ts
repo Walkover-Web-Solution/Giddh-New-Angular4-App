@@ -519,7 +519,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 }
 
                 this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
-                this._receiptServices.GetAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).subscribe(res => {
+                this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).subscribe(res => {
                     this.parseBalRes(res);
                 });
             });
@@ -634,10 +634,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 uniqueName: this.selectedInvoiceForDetails.uniqueName
             };
             this.purchaseRecordService.deletePurchaseRecord(requestObject).subscribe((response) => {
+                this.selectedItems = [];
                 if (response.status === 'success') {
-                    this._toaster.successToast(response.body);
+					this._toaster.successToast(response.body);
+					this.selectedInvoiceForDetails = null;
+                    this.getVoucher(this.isUniversalDateApplicable);
                 } else {
-                    this._toaster.errorToast(response.message);
+					this._toaster.errorToast(response.message);
+					this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
+					this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).subscribe(res => {
+						this.parseBalRes(res);
+					});
                 }
             });
         } else {
@@ -761,7 +768,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
             this.lastListingFilters = this.advanceSearchFilter;
             this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.advanceSearchFilter, this.selectedVoucher));
-            this._receiptServices.GetAllReceiptBalanceDue(this.advanceSearchFilter, this.selectedVoucher).subscribe(res => {
+            this._receiptServices.getAllReceiptBalanceDue(this.advanceSearchFilter, this.selectedVoucher).subscribe(res => {
                 this.parseBalRes(res);
             });
         } else {
@@ -779,7 +786,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public getVoucher(isUniversalDateSelected: boolean) {
         this.lastListingFilters = this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected);
         this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected), this.selectedVoucher));
-        this._receiptServices.GetAllReceiptBalanceDue(this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected), this.selectedVoucher).subscribe(res => {
+        this._receiptServices.getAllReceiptBalanceDue(this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected), this.selectedVoucher).subscribe(res => {
             this.parseBalRes(res);
         });
         // this.store.dispatch(this.invoiceActions.GetAllInvoices(this.prepareQueryParamsForInvoiceApi(isUniversalDateSelected), this.prepareModelForInvoiceApi()));
@@ -1048,7 +1055,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
         this.lastListingFilters = request;
         this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
-        this._receiptServices.GetAllReceiptBalanceDue(request, this.selectedVoucher).subscribe(res => {
+        this._receiptServices.getAllReceiptBalanceDue(request, this.selectedVoucher).subscribe(res => {
             this.parseBalRes(res);
         });
     }
