@@ -48,6 +48,7 @@ import {saveAs} from 'file-saver';
 import {GeneralService} from '../../services/general.service';
 import {ReceiptService} from "../../services/receipt.service";
 import {InvoicePaymentModelComponent} from './models/invoicePayment/invoice.payment.model.component';
+import { PurchaseRecordService } from '../../services/purchase-record.service';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
@@ -183,7 +184,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private _breakPointObservar: BreakpointObserver,
         private _router: Router,
         private _generalService: GeneralService,
-        private _receiptServices: ReceiptService
+        private _receiptServices: ReceiptService,
+        private purchaseRecordService: PurchaseRecordService
     ) {
         this.invoiceSearchRequest.page = 1;
         this.invoiceSearchRequest.count = 20;
@@ -534,7 +536,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public deleteConfirmedInvoice() {
         this.invoiceConfirmationModel.hide();
         if (this.selectedVoucher === VoucherTypeEnum.purchase) {
-            // TODO: Delete purchase record
+            const requestObject = {
+                uniqueName: this.selectedInvoiceForDetails.uniqueName
+            };
+            this.purchaseRecordService.deletePurchaseRecord(requestObject).subscribe((response) => {
+                if (response.status === 'success') {
+                    this._toaster.successToast(response.body);
+                } else {
+                    this._toaster.errorToast(response.message);
+                }
+            });
         } else {
             let model = {
                 invoiceNumber: this.selectedInvoice.voucherNumber,

@@ -82,4 +82,18 @@ export class PurchaseRecordService {
         return this._http.get(contextPath, requestObject).pipe(
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
     }
+
+    /**
+     * Deletes purchase record
+     *
+     * @param {*} requestObject Request object for API
+     * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operations
+     * @memberof PurchaseRecordService
+     */
+    public deletePurchaseRecord(requestObject: any): Observable<BaseResponse<any, any>> {
+        const contextPath: string =
+            `${this.config.apiUrl}${PURCHASE_RECORD_API.DELETE.replace(':companyUniqueName', this._generalService.companyUniqueName).replace(':uniqueName', requestObject.uniqueName)}`;
+        return this._http.delete(contextPath).pipe(
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
+    }
 }
