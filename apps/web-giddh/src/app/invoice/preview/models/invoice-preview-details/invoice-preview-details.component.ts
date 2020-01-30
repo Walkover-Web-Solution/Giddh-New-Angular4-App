@@ -210,7 +210,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     public toggleBodyClass() {
         if (!this.showEditMode) {
-            document.querySelector('body').classList.add('fixed', 'mailbox');
+            document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('body').classList.remove('fixed');
         }

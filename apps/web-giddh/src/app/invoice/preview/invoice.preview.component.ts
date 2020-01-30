@@ -541,9 +541,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     public toggleBodyClass() {
         if (this.selectedInvoice) {
-            document.querySelector('body').classList.add('fixed', 'mailbox');
+            document.querySelector('body').classList.add('fixed');
         } else {
-            document.querySelector('body').classList.remove('fixed', 'mailbox');
+            document.querySelector('body').classList.remove('fixed');
         }
     }
 
@@ -631,7 +631,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.invoiceConfirmationModel.hide();
         if (this.selectedVoucher === VoucherTypeEnum.purchase) {
             const requestObject = {
-                uniqueName: this.selectedInvoiceForDetails.uniqueName
+                uniqueName: (this.selectedInvoice) ? this.selectedInvoice.uniqueName : (this.selectedInvoiceForDetails) ? this.selectedInvoiceForDetails.uniqueName : ''
             };
             this.purchaseRecordService.deletePurchaseRecord(requestObject).subscribe((response) => {
                 this.selectedItems = [];
@@ -1135,10 +1135,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 localStorage.setItem('universalSelectedDate', a);
             }
         });
-        /*
-        commented out this because we are moving this logic to invoice create and update component
-        // document.querySelector('body').classList.remove('fixed');
-        */
+        document.querySelector('body').classList.remove('fixed');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

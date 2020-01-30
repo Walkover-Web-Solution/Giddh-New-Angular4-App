@@ -937,6 +937,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                     this.isUpdateDataInProcess = false;
                     if (this.isPurchaseInvoice) {
+                        this.selectedFileName = results[1].attachedFileName;
                         this.saveCurrentPurchaseRecordDetails();
                     }
                 }
@@ -2563,7 +2564,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     type: this.invoiceType,
                     attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
                     templateDetails: data.templateDetails,
-                    uniqueName: this.selectedItem.uniqueName
+                    uniqueName: (this.selectedItem) ? this.selectedItem.uniqueName : (this.matchingPurchaseRecord) ? this.matchingPurchaseRecord.uniqueName : ''
                 } as PurchaseRecordRequest;
                 requestObject = this.updateData(requestObject, data);
                 this.generatePurchaseRecord(requestObject);
@@ -3816,6 +3817,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.validatePurchaseRecord().subscribe((data: any) => {
                 if (data && data.body) {
                     this.matchingPurchaseRecord = data.body;
+                    if (this.isUpdateMode) {
+                        /* Delete the unique name entry of old record if the user is in
+                         UPDATE flow of a purchase record and changes the record such that
+                         an existing entry is found. In this case, if the user accepts to merge
+                         with previous record then those entries of older record will be again recreated
+                         for current purchase record and hence old entries' unique names should be deleted */
+                        this.matchingPurchaseRecord.entries.forEach((entry => delete entry.uniqueName));
+                    }
                     this.purchaseRecordConfirmationPopup.show();
                 } else {
                     this.matchingPurchaseRecord = null;
