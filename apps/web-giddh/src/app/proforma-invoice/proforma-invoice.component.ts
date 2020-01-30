@@ -2278,7 +2278,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 break;
             }
             case ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess: {
-                this.updateVoucherSuccess();
+                if (this.isPurchaseInvoice) {
+                    this.updateVoucherSuccess(voucherNo);
+                } else {
+                    this.updateVoucherSuccess();
+                }
                 break;
             }
             case ActionTypeAfterVoucherGenerateOrUpdate.generateAndRecurring: {
@@ -2595,7 +2599,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.voucherNumber = response.body.number;
             this.invoiceNo = this.voucherNumber;
             this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
-            this.postResponseAction(this.invoiceNo);
+            if (this.isPurchaseInvoice) {
+                this.postResponseAction(response.body.uniqueName);
+            } else {
+                this.postResponseAction(this.invoiceNo);
+            }
 
             this.depositAccountUniqueName = '';
             this.depositAmount = 0;
@@ -3097,8 +3105,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         return voucher;
     }
 
-    private updateVoucherSuccess() {
-        this.fireActionAfterGenOrUpdVoucher(this.invoiceNo, ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
+    private updateVoucherSuccess(voucherNumber?: string) {
+        if (voucherNumber) {
+            this.fireActionAfterGenOrUpdVoucher(voucherNumber, ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
+        } else {
+            this.fireActionAfterGenOrUpdVoucher(this.invoiceNo, ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
+        }
         this.cancelVoucherUpdate.emit(true);
     }
 

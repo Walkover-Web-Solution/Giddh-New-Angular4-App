@@ -343,7 +343,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 // get voucherDetailsNo so we can open that voucher in details mode
                 if (res[0] && res[1] && res[2]) {
                     this.selectedInvoiceForDetails = null;
-                    let voucherIndex = (res[0] as ReciptResponse).items.findIndex(f => f.voucherNumber === res[1]);
+                    let voucherIndex;
+                    if (this.selectedVoucher === VoucherTypeEnum.purchase) {
+                        voucherIndex = (res[0] as ReciptResponse).items.findIndex(f => f.uniqueName === res[1]);
+                    } else {
+                        voucherIndex = (res[0] as ReciptResponse).items.findIndex(f => f.voucherNumber === res[1]);
+                    }
                     if (voucherIndex > -1) {
                         let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
                         allItems = uniqBy([allItems[voucherIndex], ...allItems], 'voucherNumber');
