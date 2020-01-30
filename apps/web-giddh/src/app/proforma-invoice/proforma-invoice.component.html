@@ -398,7 +398,7 @@
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
                                         <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel" name="voucherDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.voucherDate" (blur)="onBlurInvoiceDate(0)"
-                                            (bsValueChange)="onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate)" [disabled]="isUpdateMode" [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)" />
+                                            (bsValueChange)="onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate)" [disabled]="(invoiceType !== 'purchase' && isUpdateMode) ? 'disabled' : null" [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)" />
                                         <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">
                                             Invalid Date
                                         </p>
