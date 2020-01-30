@@ -47,7 +47,7 @@ export enum OnBoardingType {
 }
 
 /** Pagination limit for every module */
-export const PAGINATION_LIMIT = 20;
+export const PAGINATION_LIMIT = 50;
 
 /** Subvoucher type */
 export enum Subvoucher {
