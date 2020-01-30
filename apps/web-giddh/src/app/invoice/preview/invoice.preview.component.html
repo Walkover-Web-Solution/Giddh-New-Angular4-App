@@ -193,8 +193,7 @@
         </div>
         <!-- For mobile screen sizes ends -->
 
-        <perfect-scrollbar class="invoice-preview" [scrollIndicators]="true"
-            [config]="{suppressScrollX: false, suppressScrollY: false}">
+        <div class="invoice-preview  table-responsive">
             <table class="table basic table-bordered mrT2 invoice-table desktopTable table-responsive">
 
                 <!--sales-->
@@ -370,13 +369,16 @@
                         </td>
 
                         <!-- Customer -->
-                        <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
+                        <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select sadik"
                             (clickOutside)="modalUniqueName = ''">
-                            {{item?.account?.customerName || item?.account?.name}}
-                            <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
-                                [voucherType]="selectedVoucher" [accountUniqueName]="item.account.uniqueName"
-                                [from]="invoiceSearchRequest.from" [to]="invoiceSearchRequest.to"
-                                [isModalOpen]="modalUniqueName === item.uniqueName">
+
+                            <div dropdown container="body" class="sadik">
+                                {{item?.account?.customerName || item?.account?.name}}
+                                <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
+                                    [voucherType]="selectedVoucher" [accountUniqueName]="item.account.uniqueName"
+                                    [from]="invoiceSearchRequest.from" [to]="invoiceSearchRequest.to"
+                                    [isModalOpen]="modalUniqueName === item.uniqueName">
+                                </div>
                             </div>
                         </td>
 
@@ -482,13 +484,13 @@
                         <!-- open account details on double click on customer name -->
                         <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
                             (clickOutside)="modalUniqueName = ''">
-                            <!-- Customer -->
-                            {{item?.account?.customerName || item?.account?.name}}
-                            <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
-                                [voucherType]="selectedVoucher" [accountUniqueName]="item.account.uniqueName"
-                                [from]="invoiceSearchRequest.from" [to]="invoiceSearchRequest.to"
-                                [isModalOpen]="modalUniqueName === item.uniqueName">
-                            </div>
+                                <!-- Customer -->
+                                {{item?.account?.customerName || item?.account?.name}}
+                                <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
+                                    [voucherType]="selectedVoucher" [accountUniqueName]="item.account.uniqueName"
+                                    [from]="invoiceSearchRequest.from" [to]="invoiceSearchRequest.to"
+                                    [isModalOpen]="modalUniqueName === item.uniqueName">
+                                </div>
                         </td>
                         <!-- Date -->
                         <td>{{item.voucherDate}}</td>
@@ -520,7 +522,7 @@
                     </tr>
                 </tbody>
             </table>
-        </perfect-scrollbar>
+        </div>
 
         <ng-container
             *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher === 'sales' && isMobileView">
