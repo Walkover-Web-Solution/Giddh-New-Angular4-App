@@ -94,6 +94,11 @@
                                 "glob": "favicon.ico",
                                 "input": "apps/web-giddh/src/",
                                 "output": "/"
+                            },
+                            {
+                                "glob": "apple-developer-domain-association.txt",
+                                "input": "apps/web-giddh/src/.well-known/",
+                                "output": "/"
                             }
                         ],
                         "styles": [
