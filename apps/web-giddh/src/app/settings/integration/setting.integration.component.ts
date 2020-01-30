@@ -525,6 +525,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.accountService.getShopifyEcommerceVerify(requestObj).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
+                    if (Boolean(response.body)) {
+                        this.toasty.successToast("Your company is successfully connected with Shopify.")
+                    }
                     this.isEcommerceShopifyUserVerified = Boolean(response.body); // TODO need to change response
                 }
             }
