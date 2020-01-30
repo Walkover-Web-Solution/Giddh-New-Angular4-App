@@ -98,7 +98,7 @@
                             {
                                 "glob": "apple-developer-domain-association.txt",
                                 "input": "apps/web-giddh/src/.well-known/",
-                                "output": "/"
+                                "output": "/.well-known/"
                             }
                         ],
                         "styles": [
@@ -125,7 +125,7 @@
                             "apps/web-giddh/src/assets/js/lodash.min.js",
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js"
                         ],
-                        ".well-known":"apps/web-giddh/src/.well-known/apple-developer-domain-association.txt",
+
                         "es5BrowserSupport": true,
                         "extraWebpackConfig": "./webpack.partial.js"
                     },
