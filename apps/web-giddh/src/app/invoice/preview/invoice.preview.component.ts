@@ -1135,7 +1135,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 localStorage.setItem('universalSelectedDate', a);
             }
         });
-        document.querySelector('body').classList.remove('fixed', 'mailbox');
+        document.querySelector('body').classList.remove('fixed');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
