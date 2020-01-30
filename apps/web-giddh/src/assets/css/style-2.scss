@@ -5330,6 +5330,7 @@ label {
     height: 50px;
     float: left;
     background: #fff url("../images/designTool.svg") no-repeat;
+    background-size: 65px;
 }
 
 .ico-template {
@@ -7680,6 +7681,9 @@ app-header {
 }
 
 /* my css */
+.new-ledger-text-right .inputWrapper .form-control {
+    text-align: right !important;
+}
 .box .company-box .inner-company-box ul > li .tooltip {
     word-break: break-all;
 }
