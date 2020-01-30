@@ -937,6 +937,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                     this.isUpdateDataInProcess = false;
                     if (this.isPurchaseInvoice) {
+                        this.selectedFileName = results[1].attachedFileName;
                         this.saveCurrentPurchaseRecordDetails();
                     }
                 }
