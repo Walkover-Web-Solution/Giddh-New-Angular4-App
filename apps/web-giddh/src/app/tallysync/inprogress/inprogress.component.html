@@ -135,5 +135,10 @@
                 </div>
             </div>
         </div>
+        <!-- pagination -->
+        <div class="text-center" *ngIf="progressData?.length && progressDataResponse.totalItems>49">
+            <pagination [maxSize]="5" [totalItems]="progressDataResponse?.totalItems" [itemsPerPage]="progressDataResponse.count" [(ngModel)]="paginationRequest.page" (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false">
+            </pagination>
+        </div>
     </div>
 </ng-container>

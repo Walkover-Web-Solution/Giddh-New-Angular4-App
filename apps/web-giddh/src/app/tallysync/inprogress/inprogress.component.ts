@@ -4,6 +4,8 @@ import { TallySyncService } from "../../services/tally-sync.service";
 import { TallySyncData, DownloadTallyErrorLogRequest } from "../../models/api-models/tally-sync";
 import { saveAs } from "file-saver";
 import { GeneralService } from '../../services/general.service';
+import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
+import { PAGINATION_LIMIT } from '../../app.constant';
 @Component({
     selector: "app-inprogress-preview",
     templateUrl: "./inprogress.component.html",
@@ -12,6 +14,7 @@ import { GeneralService } from '../../services/general.service';
 export class InprogressComponent implements OnInit, OnDestroy {
     public imgPath: string = "";
     public progressData: TallySyncData[];
+    public progressDataResponse: any;
     public isPageLoaded = false;
     public MONTHS = [
         "Jan",
@@ -31,6 +34,7 @@ export class InprogressComponent implements OnInit, OnDestroy {
         date: '',
         hour: null
     };
+    public paginationRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
 
     constructor(
         private _toaster: ToasterService,
@@ -40,6 +44,9 @@ export class InprogressComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.isPageLoaded = true;
+
+        this.paginationRequest.page = 1;
+        this.paginationRequest.count = PAGINATION_LIMIT;
         this.getCurrentData();
         setInterval(() => {
             if (this.isPageLoaded) {
@@ -56,8 +63,9 @@ export class InprogressComponent implements OnInit, OnDestroy {
     }
 
     public getCurrentData() {
-        this.tallysyncService.getInProgressSync().subscribe(res => {
+        this.tallysyncService.getInProgressSync(this.paginationRequest).subscribe(res => {
             if (res && res.results && res.results.length > 0) {
+                this.progressDataResponse = res;
                 this.progressData = res.results;
                 this.progressData.forEach(element => {
                     if (element.updatedAt) {
@@ -128,7 +136,7 @@ export class InprogressComponent implements OnInit, OnDestroy {
                     let blobData = this.base64ToBlob(res.body, "application/xlsx", 512);
                     return saveAs(
                         blobData,
-                        `${row.company.name}-error-log.xls`
+                        `${row.company.name}-error-log.xlsx`
                     );
                 } else {
                     this._toaster.errorToast(res.message);
@@ -175,6 +183,12 @@ export class InprogressComponent implements OnInit, OnDestroy {
         date[0] = dateArray[2] + ' ' + this.MONTHS[(dateArray[1] - 1)] + ' ' + dateArray[0] + ' @ ' + dateArray[3] + ':' + dateArray[4] + ':' + dateArray[5];
         date[1] = dateArray[2] + '-' + dateArray[1] + '-' + dateArray[0];
         return date;
+    }
+
+
+    public pageChanged(event) {
+        this.paginationRequest.page = event.page;
+        this.getCurrentData();
     }
 
     /**

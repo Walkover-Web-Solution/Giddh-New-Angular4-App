@@ -19,6 +19,8 @@ import { saveAs } from 'file-saver';
 import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Company';
 import { GeneralService } from '../../services/general.service';
 import { HOUR } from 'ngx-bootstrap/chronos/units/constants';
+import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
+import { PAGINATION_LIMIT } from '../../app.constant';
 @Component({
     selector: 'app-completed-preview',
     templateUrl: './completed.component.html',
@@ -98,7 +100,8 @@ export class CompletedComponent implements OnInit, OnDestroy {
         date: '',
         hour: null
     };
-
+    public paginationRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
+    public completedtallySyncDataResponse: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
@@ -141,6 +144,10 @@ export class CompletedComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         // set current company date
+        this.paginationRequest.sortBy = '';
+        this.paginationRequest.page = 1;
+        this.paginationRequest.count = PAGINATION_LIMIT;
+
         this.companies$.subscribe(a => {
             if (a) {
                 a.forEach((element) => {
@@ -167,8 +174,12 @@ export class CompletedComponent implements OnInit, OnDestroy {
         // api call here
         this.filter.from = this.filter.startDate + ' ' + this.filter.timeRange.split('-')[0];
         this.filter.to = this.filter.startDate + ' ' + this.filter.timeRange.split('-')[1];
-        this.tallysyncService.getCompletedSync(this.filter.from, this.filter.to).subscribe((res) => {
+        this.paginationRequest.from = this.filter.from;
+        this.paginationRequest.to = this.filter.to;
+
+        this.tallysyncService.getCompletedSync(this.paginationRequest).subscribe((res) => {
             if (res && res.results && res.results.length > 0) {
+                this.completedtallySyncDataResponse = res;
                 this.completedData = res.results;
                 this.completedData.forEach((element) => {
                     if (element.updatedAt) {
@@ -197,12 +208,14 @@ export class CompletedComponent implements OnInit, OnDestroy {
                 })
             }
         })
-        // ===============
-
     }
 
-
-    // download
+    /**
+     * Download error log
+     *
+     * @param {TallySyncData} row
+     * @memberof CompletedComponent
+     */
     public downloadLog(row: TallySyncData) {
         this.downloadTallyErrorLogRequest.date = row['dateDDMMYY'] ? row['dateDDMMYY'] : '';
         this.downloadTallyErrorLogRequest.hour = row['hour'] ? row['hour'] : null;
@@ -210,7 +223,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.tallysyncService.getErrorLog(row.company.uniqueName, this.downloadTallyErrorLogRequest).subscribe((res) => {
             if (res.status === 'success') {
                 let blobData = this.base64ToBlob(res.body, 'application/xlsx', 512);
-                return saveAs(blobData, `${row.company.name}-error-log.xls`);
+                return saveAs(blobData, `${row.company.name}-error-log.xlsx`);
             } else {
                 this._toaster.errorToast(res.message);
             }
@@ -292,6 +305,10 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.filter.timeRange = event.value;
     }
 
+ public pageChanged(event) {
+        this.paginationRequest.page = event.page;
+        this.getReport();
+    }
 
     public ngOnDestroy() {
         this.destroyed$.next(true);

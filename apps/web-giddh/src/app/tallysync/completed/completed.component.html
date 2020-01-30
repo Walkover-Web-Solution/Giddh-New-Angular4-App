@@ -127,5 +127,10 @@
             </div>
         </div>
     </div>
-
+    <!-- pagination -->
+    <div class="text-center" *ngIf="completedData?.length && completedtallySyncDataResponse.totalItems>49">
+        <pagination [maxSize]="5" [totalItems]="completedtallySyncDataResponse?.totalItems" [itemsPerPage]="completedtallySyncDataResponse.count" [(ngModel)]="paginationRequest.page" (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true"
+                    [rotate]="false">
+        </pagination>
+    </div>
 </ng-container>
