@@ -167,3 +167,4 @@ xplat/**/*.ngsummary.json
 /apps/giddh-cordova/giddh/package-lock.json
 
 package-lock.json
+/apps/electron-giddh/src/
