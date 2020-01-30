@@ -369,10 +369,10 @@
                         </td>
 
                         <!-- Customer -->
-                        <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select sadik"
+                        <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
                             (clickOutside)="modalUniqueName = ''">
 
-                            <div dropdown container="body" class="sadik">
+                            <div dropdown container="body">
                                 {{item?.account?.customerName || item?.account?.name}}
                                 <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
                                     [voucherType]="selectedVoucher" [accountUniqueName]="item.account.uniqueName"
