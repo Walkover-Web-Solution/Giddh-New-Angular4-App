@@ -305,7 +305,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.filter.timeRange = event.value;
     }
 
- public pageChanged(event) {
+    public pageChanged(event) {
         this.paginationRequest.page = event.page;
         this.getReport();
     }
