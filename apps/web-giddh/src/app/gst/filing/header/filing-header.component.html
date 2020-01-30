@@ -122,7 +122,7 @@
 
             <!-- <button class="btn btn-primary pull-right" (click)="toggleSettingAsidePane(null, 'RECONCILE')" *ngIf="!(gstAuthenticated$ | async)">GST Reconcile</button> -->
             <button class="btn btn-primary pull-right" [disabled]="!gstAuthenticated" (click)="pullFromGstIn($event)"
-                *ngIf="showTaxPro">Pull from GSTIN
+                *ngIf="showTaxPro">Pull from GSTN
             </button>
         </div>
 
