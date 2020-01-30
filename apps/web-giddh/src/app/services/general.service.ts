@@ -262,4 +262,21 @@ export class GeneralService {
         }
         return false;
     }
+
+    /**
+ * Covert UTC time zone( server time zone ) into local system timezone
+ *
+ * @param {*} UTCDateString UTC timezone time string
+ * @returns  coverted date(UTC---> Systme TimeZone)
+ * @memberof CompletedComponent
+ */
+    public ConvertUTCTimeToLocalTime(UTCDateString) {
+        let convertdLocalTime = new Date(UTCDateString);
+
+        let hourOffset = convertdLocalTime.getTimezoneOffset() / 60;
+
+        convertdLocalTime.setHours(convertdLocalTime.getHours() + hourOffset);
+
+        return convertdLocalTime;
+    }
 }
