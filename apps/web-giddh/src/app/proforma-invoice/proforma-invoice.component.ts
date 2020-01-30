@@ -1280,7 +1280,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invFormData.accountDetails = new AccountDetailsClass(data);
 
             setTimeout(() => {
-                this.customerBillingAddress.nativeElement.focus();
+                if (this.customerBillingAddress && this.customerBillingAddress.nativeElement) {
+                    this.customerBillingAddress.nativeElement.focus();
+                }
                 this._cdr.detectChanges();
             }, 500);
         });
@@ -3809,28 +3811,52 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private generatePurchaseRecord(requestObject: PurchaseRecordRequest): void {
-        // TODO: If the get API returns true
         this.purchaseRecordConfirmationConfiguration = this.proformaInvoiceUtilityService.getPurchaseRecordConfirmationConfiguration();
         if (this.isPurchaseRecordContractBroken) {
             this.validatePurchaseRecord().subscribe((data: any) => {
-                console.log('Data: ', data);
                 if (data && data.body) {
                     this.matchingPurchaseRecord = data.body;
                     this.purchaseRecordConfirmationPopup.show();
                 } else {
                     this.matchingPurchaseRecord = null;
-                    // Create a new purchase record
-                    this.purchaseRecordService.generatePurchaseRecord(requestObject).subscribe((response: BaseResponse<any, PurchaseRecordRequest>) => {
-                        this.handleGenerateResponse(response, this.invoiceForm);
-                    }, () => this._toasty.errorToast('Something went wrong! Try again'));
+                    if (this.isUpdateMode) {
+                        this.updatePurchaseRecord(requestObject);
+                    } else {
+                        this.createPurchaseRecord(requestObject);
+                    }
                 }
             }, () => this._toasty.errorToast('Something went wrong! Try again'));
         } else {
-            // Merge the purchase record (PATCH method)
-            this.purchaseRecordService.generatePurchaseRecord(requestObject, 'PATCH').subscribe((response: BaseResponse<any, PurchaseRecordRequest>) => {
-                this.actionsAfterVoucherUpdate(response, this.invoiceForm);
-            }, () => this._toasty.errorToast('Something went wrong! Try again'));
+            this.updatePurchaseRecord(requestObject);
         }
+    }
+
+    /**
+     * Creates a new purchase record
+     *
+     * @private
+     * @param {PurchaseRecordRequest} request Request object required by the service
+     * @memberof ProformaInvoiceComponent
+     */
+    private createPurchaseRecord(request: PurchaseRecordRequest): void {
+        // Create a new purchase record
+        this.purchaseRecordService.generatePurchaseRecord(request).subscribe((response: BaseResponse<any, PurchaseRecordRequest>) => {
+            this.handleGenerateResponse(response, this.invoiceForm);
+        }, () => this._toasty.errorToast('Something went wrong! Try again'));
+    }
+
+    /**
+     * Updates a purchase record
+     *
+     * @private
+     * @param {PurchaseRecordRequest} request Request object required by the service
+     * @memberof ProformaInvoiceComponent
+     */
+    private updatePurchaseRecord(request: PurchaseRecordRequest): void {
+        // Merge the purchase record (PATCH method, UPDATE flow)
+        this.purchaseRecordService.generatePurchaseRecord(request, 'PATCH').subscribe((response: BaseResponse<any, PurchaseRecordRequest>) => {
+            this.actionsAfterVoucherUpdate(response, this.invoiceForm);
+        }, () => this._toasty.errorToast('Something went wrong! Try again'));
     }
 
     /**

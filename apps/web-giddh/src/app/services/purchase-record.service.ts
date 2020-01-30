@@ -31,7 +31,7 @@ export class PurchaseRecordService {
      * @returns {Observable<BaseResponse<any, PurchaseRecordRequest>>} Observable to carry out further operations
      * @memberof PurchaseRecordService
      */
-    public generatePurchaseRecord(requestObject: PurchaseRecordRequest | any, method: string = 'POST'): Observable<BaseResponse<any, PurchaseRecordRequest>> {
+    public generatePurchaseRecord(requestObject: PurchaseRecordRequest | any, method: string = 'POST', updateAttachment?: boolean): Observable<BaseResponse<any, PurchaseRecordRequest>> {
         const accountUniqueName = requestObject.account.uniqueName;
         // TODO: Add patch integration once the API is ready
         if (method === 'POST') {
@@ -40,6 +40,9 @@ export class PurchaseRecordService {
             return this._http.post(contextPath, requestObject).pipe(
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
         } else if (method === 'PATCH') {
+            if (updateAttachment) {
+                delete requestObject.account;
+            }
             const contextPath: string =
                 `${this.config.apiUrl}${PURCHASE_RECORD_API.UPDATE.replace(':companyUniqueName', this._generalService.companyUniqueName).replace(':accountUniqueName', accountUniqueName)}`;
             return this._http.patch(contextPath, requestObject).pipe(

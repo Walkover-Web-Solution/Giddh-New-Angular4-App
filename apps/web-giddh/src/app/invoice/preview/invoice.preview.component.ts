@@ -634,10 +634,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 uniqueName: this.selectedInvoiceForDetails.uniqueName
             };
             this.purchaseRecordService.deletePurchaseRecord(requestObject).subscribe((response) => {
+                this.selectedItems = [];
                 if (response.status === 'success') {
-                    this._toaster.successToast(response.body);
+					this._toaster.successToast(response.body);
+					this.selectedInvoiceForDetails = null;
+                    this.getVoucher(this.isUniversalDateApplicable);
                 } else {
-                    this._toaster.errorToast(response.message);
+					this._toaster.errorToast(response.message);
+					this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
+					this._receiptServices.GetAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).subscribe(res => {
+						this.parseBalRes(res);
+					});
                 }
             });
         } else {
