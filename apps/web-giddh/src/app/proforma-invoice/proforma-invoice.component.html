@@ -101,7 +101,7 @@
                                                 <ng-container *ngIf="!isCashInvoice">
                                                     <sales-sh-select style="width:62.7%; float: left;" name="voucherDetails.customerName" #customerNameDropDown [options]="customerAcList$ | async" [(ngModel)]="invFormData.voucherDetails.customerUniquename" [customFilter]="customMoveGroupFilter" (noOptionsFound)="noResultsForCustomer($event)"
                                                         (selected)="onSelectCustomer($event);" [placeholder]="customerPlaceHolder" [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" (noResultsClicked)="addNewAccount()"
-                                                        [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="customerNotFoundText" (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)" [disabled]="(isUpdateMode && !isPurchaseInvoice) ? 'disabled' : null">
+                                                        [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="customerNotFoundText" (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)" [disabled]="isUpdateMode">
 
                                                         <ng-template #optionTemplate let-option="option">
                                                             <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
@@ -127,7 +127,7 @@
                                                 <!-- endregion -->
 
                                                 <!-- region previous details commented for multicurrency changes-->
-                                                <div class="d-flex cp aquaColor" #copyPreviousEstimate *ngIf="invFormData.voucherDetails.customerName && lastInvoices.length && !isUpdateMode" style="align-items: center;margin-left: 2%">
+                                                <div class="d-flex cp aquaColor" #copyPreviousEstimate *ngIf="!isPurchaseInvoice && invFormData.voucherDetails.customerName && lastInvoices.length && !isUpdateMode" style="align-items: center;margin-left: 2%">
                                                     <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
                                                         <i class="fa fa-files-o"></i> Copy Previous {{ invoiceType | voucherTypeToNamePipe | titlecase}} Invoices
                                                     </a>

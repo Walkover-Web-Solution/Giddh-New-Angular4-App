@@ -83,6 +83,7 @@ import { GeneralService } from '../services/general.service';
 import { ProformaInvoiceUtilityService } from './services/proforma-invoice-utility.service';
 import { PurchaseRecordService } from '../services/purchase-record.service';
 import { CommonActions } from '../actions/common.actions';
+import { PurchaseRecordActions } from '../actions/purchase-record/purchase-record.action';
 
 const THEAD_ARR_READONLY = [
     {
@@ -390,7 +391,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private purchaseRecordService: PurchaseRecordService,
         private settingsUtilityService: SettingsUtilityService,
         private warehouseActions: WarehouseActions,
-        private commonActions: CommonActions
+        private commonActions: CommonActions,
+        private purchaseRecordAction: PurchaseRecordActions
     ) {
         this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
@@ -2587,7 +2589,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param invoiceForm
      */
     private actionsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD> | BaseResponse<any, PurchaseRecordRequest>, invoiceForm: NgForm) {
-        if (response.status === 'success') {
+        if (response.status === 'success' && response.body) {
             // reset form and other
             this.resetInvoiceForm(invoiceForm);
             this._toasty.successToast('Voucher updated Successfully');
@@ -2596,7 +2598,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invoiceNo = this.voucherNumber;
             this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
             this.postResponseAction(this.invoiceNo);
-
+            this.store.dispatch(this.purchaseRecordAction.getUpdatePurchaseRecordSuccessAction({invoiceNumber: response.body.number, purchaseRecordUniqueName: response.body.uniqueName}));
             this.depositAccountUniqueName = '';
             this.depositAmount = 0;
             this.isUpdateMode = false;
@@ -3105,7 +3107,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private fireActionAfterGenOrUpdVoucher(voucherNo: string, action: ActionTypeAfterVoucherGenerateOrUpdate) {
         if (this.isProformaInvoice || this.isEstimateInvoice) {
             this.store.dispatch(this.proformaActions.setVoucherForDetails(voucherNo, action));
-        } else {
+        } else if (!this.isPurchaseInvoice) {
             this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(voucherNo, action));
         }
     }

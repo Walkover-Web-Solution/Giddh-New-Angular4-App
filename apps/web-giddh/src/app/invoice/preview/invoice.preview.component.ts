@@ -47,6 +47,7 @@ import {ReceiptService} from "../../services/receipt.service";
 import {InvoicePaymentModelComponent} from './models/invoicePayment/invoice.payment.model.component';
 import { PurchaseRecordService } from '../../services/purchase-record.service';
 import { PAGINATION_LIMIT } from '../../app.constant';
+import { PurchaseRecordUpdateModel } from '../../purchase/purchase-record/constants/purchase-record.interface';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
@@ -362,6 +363,24 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     }
                 }, 100);
             });
+
+        this.store.pipe(select(store => store.purchaseRecord.updatedRecordDetails), takeUntil(this.destroyed$)).subscribe((record: PurchaseRecordUpdateModel) => {
+            if (record) {
+                this.selectedInvoiceForDetails = null;
+                let voucherIndex = this.voucherData.items.findIndex(item => item.uniqueName === record.purchaseRecordUniqueName);
+                if (voucherIndex > -1) {
+                    let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
+                    allItems[voucherIndex].voucherNumber = record.invoiceNumber;
+                    allItems = uniqBy([allItems[voucherIndex], ...allItems], 'voucherNumber');
+                    this.itemsListForDetails = allItems;
+                    this.toggleBodyClass();
+                    setTimeout(() => {
+                        this.selectedInvoiceForDetails = allItems[0];
+                        this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
+                    }, 1000);
+                }
+            }
+        });
 
         this.store.pipe(select(s => s.invoice.settings), takeUntil(this.destroyed$)).subscribe(settings => {
             this.invoiceSetting = settings;
