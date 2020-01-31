@@ -47,6 +47,8 @@ export class InprogressComponent implements OnInit, OnDestroy {
 
         this.paginationRequest.page = 1;
         this.paginationRequest.count = PAGINATION_LIMIT;
+        this.paginationRequest.count = 5;
+
         this.getCurrentData();
         setInterval(() => {
             if (this.isPageLoaded) {
