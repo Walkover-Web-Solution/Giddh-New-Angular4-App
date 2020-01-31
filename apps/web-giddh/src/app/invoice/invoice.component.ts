@@ -1,15 +1,23 @@
-import { auditTime, take } from 'rxjs/operators';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { select, Store } from '@ngrx/store';
-import { AppState } from '../store';
-import { CompanyActions } from '../actions/company.actions';
-import { StateDetailsRequest } from '../models/api-models/Company';
-import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest, ReplaySubject } from 'rxjs';
-import { TabsetComponent } from 'ngx-bootstrap';
-import { VoucherTypeEnum } from '../models/api-models/Sales';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { GeneralService } from '../services/general.service';
+import {auditTime, take} from 'rxjs/operators';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {select, Store} from '@ngrx/store';
+import {AppState} from '../store';
+import {CompanyActions} from '../actions/company.actions';
+import {StateDetailsRequest} from '../models/api-models/Company';
+import {ActivatedRoute, Router} from '@angular/router';
+import {combineLatest, ReplaySubject} from 'rxjs';
+import {TabsetComponent} from 'ngx-bootstrap';
+import {VoucherTypeEnum} from '../models/api-models/Sales';
+import {BreakpointObserver} from '@angular/cdk/layout';
+import {GeneralService} from '../services/general.service';
+/* TODO:- Code Clean Up-
+*          Very Bad implementation of routing and Active tab.
+*           We need VoucherType and Active TAB as routing param.
+*           We should not used tab and tabindex as our routing Query String. Which make this code Hacky.
+*           Current Code is very much condusing.
+*           2 route should be there { path: 'preview/:voucherType/:activetab', component: InvoiceComponent } and  { path: 'preview/:voucherType', component: InvoiceComponent }
+ */
+
 @Component({
     templateUrl: './invoice.component.html'
 })
@@ -20,10 +28,11 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     public activeTab: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public isMobileView = false;
+
     constructor(private store: Store<AppState>,
-        private companyActions: CompanyActions,
-        private router: Router,
-        private _cd: ChangeDetectorRef, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver, private _generalService: GeneralService) {
+                private companyActions: CompanyActions,
+                private router: Router,
+                private _cd: ChangeDetectorRef, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver, private _generalService: GeneralService) {
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).subscribe(result => {
@@ -40,7 +49,16 @@ export class InvoiceComponent implements OnInit, OnDestroy {
 
                 if (params) {
                     if (params.voucherType) {
-                        this.selectedVoucherType = params.voucherType;
+
+                        debugger;
+                        // this.selectedVoucherType = VoucherTypeEnum[tab];
+                        if (!(params.voucherType === 'pending' || params.voucherType === 'settings')) {
+                            this.selectedVoucherType = params.voucherType;
+                        }
+                        if (!this.selectedVoucherType) {
+                            this.selectedVoucherType = VoucherTypeEnum.sales;
+                        }
+
                     }
 
                     if (queryParams && queryParams.tab) {
@@ -69,9 +87,14 @@ export class InvoiceComponent implements OnInit, OnDestroy {
         this.selectedVoucherType = VoucherTypeEnum[tab];
     }
 
-    public tabChanged(tab: string, e) {
+    public tabChanged(tab: string, e, isPending?: boolean) {
         this.activeTab = tab;
-        this.router.navigate(['pages', 'invoice', 'preview', tab]);
+        if (isPending) {
+
+        } else {
+            this.router.navigate(['pages', 'invoice', 'preview', tab]);
+
+        }
         if (e && !e.target) {
             this.saveLastState(tab);
         }
