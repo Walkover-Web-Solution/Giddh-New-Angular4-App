@@ -260,7 +260,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = PAGINATION_LIMIT;
         this._activatedRoute.params.subscribe(a => {
-            if (!a) {
+            if (!(a && a.voucherType)) {
                 return;
             }
             if (a.voucherType === 'recurring') {
