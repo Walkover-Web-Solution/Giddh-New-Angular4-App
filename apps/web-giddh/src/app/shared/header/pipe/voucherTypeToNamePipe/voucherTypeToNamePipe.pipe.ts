@@ -23,6 +23,10 @@ export class VoucherTypeToNamePipe implements PipeTransform {
                 return 'Proforma';
             case VoucherTypeEnum.sales:
                 return 'Sales';
+            case VoucherTypeEnum.purchase:
+                return 'Purchase';
+            default:
+                return '';
         }
     }
 }

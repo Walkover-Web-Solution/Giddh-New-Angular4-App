@@ -6,7 +6,7 @@ export class TallySyncResponseData {
 
 export class TallySyncData {
     public company: Company;
-    public createdAt: Date;
+    public createdAt: any;
     public updatedAt: Date;
     public tallyErrorEntries: number;
     public tallyErrorGroups: number;
@@ -25,3 +25,9 @@ export class Company {
     public uniqueName: string;
     public name: string;
 }
+
+export class DownloadTallyErrorLogRequest {
+    date: string;
+    hour: any;
+}
+

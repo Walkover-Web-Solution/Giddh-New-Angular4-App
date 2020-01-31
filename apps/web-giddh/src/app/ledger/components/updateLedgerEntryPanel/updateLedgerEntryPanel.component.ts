@@ -25,7 +25,7 @@ import { take, takeUntil } from 'rxjs/operators';
 
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
-import { RCM_ACTIONS, RcmModalConfiguration } from '../../../common/rcm-modal/rcm-modal.interface';
+import { CONFIRMATION_ACTIONS, ConfirmationModalConfiguration } from '../../../common/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
 import { cloneDeep, filter, last, orderBy } from '../../../lodash-optimized';
 import { AccountResponse } from '../../../models/api-models/Account';
@@ -99,7 +99,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** True, if subvoucher is RCM */
     public isRcmEntry: boolean = false;
     /** RCM modal configuration */
-    public rcmConfiguration: RcmModalConfiguration;
+    public rcmConfiguration: ConfirmationModalConfiguration;
     /** True, if RCM should be displayed */
     public shouldShowRcmEntry: boolean;
     /** True, if advance receipt is enabled */
@@ -1163,7 +1163,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public handleRcmChange(action: string): void {
-        if (action === RCM_ACTIONS.YES) {
+        if (action === CONFIRMATION_ACTIONS.YES) {
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.isRcmEntry = !this.isRcmEntry;
         }

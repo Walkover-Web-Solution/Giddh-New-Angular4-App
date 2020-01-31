@@ -319,7 +319,7 @@ export class LoginActions {
     public logoutSuccess$: Observable<Action> = this.actions$
         .ofType(LoginActions.LogOut).pipe(
             map((action: CustomActions) => {
-                 if (PRODUCTION_ENV && !isElectron) {
+                if (PRODUCTION_ENV && !isElectron) {
                     window.location.href = 'https://giddh.com/login/';
                 } else {
                     window.location.href = AppUrl + 'login/';

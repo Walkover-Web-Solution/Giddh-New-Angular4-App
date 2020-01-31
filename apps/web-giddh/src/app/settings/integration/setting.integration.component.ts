@@ -32,37 +32,7 @@ export declare const gapi: any;
 @Component({
     selector: 'setting-integration',
     templateUrl: './setting.integration.component.html',
-    styles: [`
-#inlnImg img {
-max-height: 18px;
-}
-
-.fs18 {
-font-weight: bold;
-}
-
-.pdBth20 {
-padding: 0 20px;
-}
-
-@media(max-waidth:768px){
-
-  .empty-label label , .empty-label br{
-    display:none;
-  }
-}
-
-@media(max-width:767px){
-#inlnImg {
-margin-top: 0;
-}
-#inlnImg label , .inlnImg label {
-margin: 0;
-display: none;
-}
-
-}
-`]
+    styleUrls: ['./setting.integration.component.scss']
 })
 export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
@@ -103,6 +73,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public registeredAccount;
     public openNewRegistration: boolean;
     public selecetdUpdateIndex: number;
+    public isEcommerceShopifyUserVerified: boolean = false;
 
     constructor(
         private router: Router,
@@ -226,6 +197,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 }
             }
         });
+    //TODO:  This will go live in next sprint 23
+        // this.getShopifyEcommerceVerifyStatus();
     }
     public ngAfterViewInit() {
         if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
@@ -542,4 +515,20 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         currentPageObj.url = this.router.url;
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
+    //TODO:  This will go live in next sprint 23
+    /**
+     * API call to verify is shopify integrated
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    // public getShopifyEcommerceVerifyStatus() {
+    //     const requestObj = { source: "shopify" };
+    //     this.accountService.getShopifyEcommerceVerify(requestObj).subscribe(response => {
+    //         if (response) {
+    //             if (response.status === 'success') {
+    //                 this.isEcommerceShopifyUserVerified = Boolean(response.body); // TODO need to change response
+    //             }
+    //         }
+    //     })
+    // }
 }

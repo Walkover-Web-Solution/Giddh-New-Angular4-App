@@ -426,6 +426,7 @@ button.btn.btn-filter span.icon-cross {
     top: 0;
 }
 
+
 /* .invoice-preview {
     padding-bottom: 250px;
 }
@@ -450,6 +451,10 @@ button.btn.btn-filter span.icon-cross {
 
 .addInvoice .btn-group.show {
     display: inline-block !important;
+}
+
+div.remove-capitalize {
+    text-transform: none !important;
 }
 
 
