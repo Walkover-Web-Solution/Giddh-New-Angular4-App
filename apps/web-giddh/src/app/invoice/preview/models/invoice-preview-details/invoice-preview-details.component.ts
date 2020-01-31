@@ -396,9 +396,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             printWindow.document.close();
             printWindow.focus();
             printWindow.print();
-            setTimeout(() => {
-                printWindow.close();
-            }, 0);
         }
     }
 
