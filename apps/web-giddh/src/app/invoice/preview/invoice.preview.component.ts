@@ -396,12 +396,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     if ((moment(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === moment(a[0]).format(GIDDH_DATE_FORMAT)) && (moment(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === moment(a[1]).format(GIDDH_DATE_FORMAT))) {
                         if (window.localStorage && localStorage.getItem('invoiceSelectedDate')) {
                             let storedSelectedDate = JSON.parse(localStorage.getItem('invoiceSelectedDate'));
+
+                            // add a fallback of universal date when from and to date are null or undefined
+                            storedSelectedDate.fromDates = storedSelectedDate.fromDates || a[0];
+                            storedSelectedDate.toDates = storedSelectedDate.toDates || a[1];
+
                             this.showAdvanceSearchIcon = true;
                             this.datePickerOptions = {
                                 ...this.datePickerOptions,
                                 startDate: moment(storedSelectedDate.fromDates, 'DD-MM-YYYY').toDate(),
                                 endDate: moment(storedSelectedDate.toDates, 'DD-MM-YYYY').toDate()
                             };
+
                             // assign dates
                             // this.assignStartAndEndDateForDateRangePicker(storedSelectedDate.fromDates, storedSelectedDate.toDates);
                             if (storedSelectedDate.fromDates && storedSelectedDate.toDates) {
