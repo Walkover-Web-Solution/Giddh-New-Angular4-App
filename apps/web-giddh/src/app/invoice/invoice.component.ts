@@ -10,6 +10,7 @@ import {TabsetComponent} from 'ngx-bootstrap';
 import {VoucherTypeEnum} from '../models/api-models/Sales';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {GeneralService} from '../services/general.service';
+
 /* TODO:- Code Clean Up-
 *          Very Bad implementation of routing and Active tab.
 *           We need VoucherType and Active TAB as routing param.
@@ -86,14 +87,12 @@ export class InvoiceComponent implements OnInit, OnDestroy {
         this.selectedVoucherType = VoucherTypeEnum[tab];
     }
 
-    public tabChanged(tab: string, e, isPending?: boolean) {
+    public tabChanged(tab: string, e) {
         this.activeTab = tab;
-        if (isPending) {
 
-        } else {
-            this.router.navigate(['pages', 'invoice', 'preview', tab]);
+        this.router.navigate(['pages', 'invoice', 'preview', tab]);
 
-        }
+
         if (e && !e.target) {
             this.saveLastState(tab);
         }
