@@ -127,7 +127,7 @@
                                                 <!-- endregion -->
 
                                                 <!-- region previous details commented for multicurrency changes-->
-                                                <div class="d-flex cp aquaColor" #copyPreviousEstimate *ngIf="invFormData.voucherDetails.customerName && lastInvoices.length && !isUpdateMode" style="align-items: center;margin-left: 2%">
+                                                <div class="d-flex cp aquaColor" #copyPreviousEstimate *ngIf="!isPurchaseInvoice && invFormData.voucherDetails.customerName && lastInvoices.length && !isUpdateMode" style="align-items: center;margin-left: 2%">
                                                     <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
                                                         <i class="fa fa-files-o"></i> Copy Previous {{ invoiceType | voucherTypeToNamePipe | titlecase}} Invoices
                                                     </a>
@@ -186,7 +186,7 @@
                                                                         </label>
                                                                     </div>
 
-                                                                    <div class="col-sm-6 pd ">
+                                                                    <div class="col-sm-6 pd" #billingState>
                                                                         <sales-sh-select [placeholder]="'State'" class="select-bdr-bottom" (selected)="fillShippingBillingDetails($event, true); autoFillShippingDetails()" #statesBilling [showBottomBorderOnly]="true" [options]="statesSource" name="billingDetails.stateCode" [(ngModel)]="invFormData.accountDetails.billingDetails.state.code">
                                                                         </sales-sh-select>
                                                                     </div>
@@ -237,7 +237,7 @@
                                                                             </div>
                                                                         </div>
 
-                                                                        <div class="col-sm-6 pd ">
+                                                                        <div class="col-sm-6 pd" #shippingState>
 
                                                                             <sales-sh-select [disabled]="autoFillShipping" [placeholder]="'State'" class="select-bdr-bottom" #statesShipping [showBottomBorderOnly]="true" (selected)="fillShippingBillingDetails($event, false)" [options]="statesSource" name="shippingDetails.stateCode"
                                                                                 [(ngModel)]="invFormData.accountDetails.shippingDetails.state.code">
@@ -358,7 +358,7 @@
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
                                         <!-- Enabled for CR/DR update flow -->
-                                        <input type="text" name="accountDetails.invoiceNum" class="form-control invoiceDate attentionTo" [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [disabled]="isUpdateMode && !(isCreditNote || isDebitNote)" [(ngModel)]="invFormData.voucherDetails.voucherNumber"
+                                        <input type="text" name="accountDetails.invoiceNum" class="form-control invoiceDate attentionTo" [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [disabled]="(isUpdateMode && !(isCreditNote || isDebitNote || isPurchaseInvoice)) ? 'disabled' : null" [(ngModel)]="invFormData.voucherDetails.voucherNumber"
                                         />
                                     </div>
                                     <div class="col-sm-6 invoiceDateDueDate">
@@ -367,7 +367,7 @@
                                             <div class="form-group">
                                                 <label>{{ invoiceDateLabel }}</label>
 
-                                                <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel" name="voucherDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.voucherDate" [disabled]="isUpdateMode"
+                                                <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel" name="voucherDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.voucherDate" [disabled]="(invoiceType !== 'purchase' && isUpdateMode) ? 'disabled' : null"
                                                     [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)" (blur)="onBlurInvoiceDate(0)" (bsValueChange)="onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate)"
                                                 />
                                                 <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">
@@ -398,7 +398,7 @@
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
                                         <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel" name="voucherDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.voucherDate" (blur)="onBlurInvoiceDate(0)"
-                                            (bsValueChange)="onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate)" [disabled]="isUpdateMode" [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)" />
+                                            (bsValueChange)="onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate)" [disabled]="(invoiceType !== 'purchase' && isUpdateMode) ? 'disabled' : null" [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)" />
                                         <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">
                                             Invalid Date
                                         </p>
@@ -438,8 +438,8 @@
                                     </div>
                                 </div>
                                 <ng-template #rcmTemplate>
-                                    <rcm-modal [configuration]="rcmConfiguration"
-                                        (buttonClicked)="handleRcmChange($event)"></rcm-modal>
+                                    <confirmation-modal [configuration]="rcmConfiguration"
+                                        (buttonClicked)="handleRcmChange($event)"></confirmation-modal>
                                 </ng-template>
                             </div> -->
                             <!-- for purchase invoice end -->
@@ -538,7 +538,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last" (clickOutside)="handleOutsideClick()" [exclude]="'.entriesTr'">
+                        <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last;" (clickOutside)="handleOutsideClick()" [exclude]="'.entriesTr'">
 
                             <ng-container *ngFor="let transaction of entry.transactions;">
                                 <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature) -->
@@ -1897,17 +1897,17 @@
             <!-- region generate mode -->
             <div class="pull-right pr updateMode" *ngIf="!isUpdateMode">
                 <button type="button" (click)="resetInvoiceForm(invoiceForm)" class="btn btn-danger d-inline-block v-align-middle">Clear
-                            </button>
+                </button>
 
                 <!-- region purchase invoice -->
                 <span class="d-inline-block v-align-middle" *ngIf="isPurchaseInvoice">
-                                <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
-                                    class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c
-                                </button>
-                                <button type="button" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
-                                    class="btn btn-default">Save
-                                </button>
-                            </span>
+                    <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
+                            class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c
+                        </button> -->
+                    <button type="button" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
+                        class="btn btn-default">Save
+                    </button>
+                </span>
                 <!-- endregion -->
 
                 <!-- region non purchase -->
@@ -2121,3 +2121,10 @@
 <ng-template #invoiceTypeDisplayRef>
     {{invoiceType | titlecase}}
 </ng-template>
+<div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #purchaseRecordConfirmationPopup="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <confirmation-modal [configuration]="purchaseRecordConfirmationConfiguration" (buttonClicked)="handlePurchaseRecordConfirmation($event)"></confirmation-modal>
+        </div>
+    </div>
+</div>

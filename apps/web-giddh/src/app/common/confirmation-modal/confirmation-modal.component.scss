@@ -1,7 +1,6 @@
-.custom-modal-rcm {
+.custom-confirmation-modal {
     display: inline-block;
     max-width: 630px;
-    border: 1px solid #ddd;
     position: relative;
     background-color: #fff;
     width: 100%;
@@ -9,9 +8,6 @@
     font-family: 'Open Sans', sans-serif;
     .modal-header {
         padding: 10px 15px;
-        h3 {
-            font-size: 14px;
-        }
         .close {
             font-size: 18px;
             right: 15px;

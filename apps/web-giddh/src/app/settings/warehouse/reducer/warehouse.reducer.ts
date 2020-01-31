@@ -9,7 +9,7 @@ import { WarehouseActions } from '../action/warehouse.action';
  * @interface WarehouseState
  */
 export interface WarehouseState {
-    warehouseCreated: boolean,
+    warehouseCreated: boolean;
     warehouseUpdated: boolean;
     defaultWarehouseData: number | undefined;
     warehouses: Array<any> | null;

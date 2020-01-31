@@ -41,9 +41,24 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <label>From - To</label>
-                            <input name="DateRangePicker" [bsValue]="dateRangePickerValue"
-                                (bsValueChange)="onSelectDateRange($event)" placeholder="Date range picker" type="text"
-                                class="form-control" bsDaterangepicker>
+
+                            <input type="text"
+                                   formControlName="selectedDateRange"
+                                   ngxDaterangepickerMd
+                                   [alwaysShowCalendars]="true"
+                                   [showClearButton]="false"
+                                   [showCancel]="true"
+                                   [showDropdowns]="true"
+                                   [locale]="{applyLabel: 'Done'}"
+                                   (datesUpdated)="onSelectDateRange($event)"
+                                   [keepCalendarOpeningWithRange]="true"
+                                   [showRangeLabelOnInput]="false"
+                                   class="form-control"
+                                   placeholder="Select Date please..."/>
+
+<!--                            <input name="DateRangePicker" [bsValue]="dateRangePickerValue"-->
+<!--                                (bsValueChange)="onSelectDateRange($event)" placeholder="Date range picker" type="text"-->
+<!--                                class="form-control" bsDaterangepicker>-->
 
                             <!-- <input class="form-control " name="from" formControlName="from" type="text" placeholder="DD-MM-YYYY" /> -->
                         </div>
