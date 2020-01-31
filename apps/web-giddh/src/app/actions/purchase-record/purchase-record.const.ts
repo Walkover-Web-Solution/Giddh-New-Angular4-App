@@ -1,0 +1,5 @@
+/** Purchase Record actions */
+export const PURCHASE_RECORD_ACTIONS = {
+    UPDATE_SUCCESS: 'UPDATE_SUCCESS',
+    RESET_UPDATE_DETAILS: 'RESET_UPDATE_DETAILS'
+};

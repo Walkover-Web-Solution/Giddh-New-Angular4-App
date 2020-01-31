@@ -53,6 +53,7 @@ import { ExpencesAction } from './expences/expence.action';
 import { CommonActions } from './common.actions';
 import { ItemOnBoardingActions } from './item-on-boarding/item-on-boarding.action';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
+import { PurchaseRecordActions } from './purchase-record/purchase-record.action';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -110,7 +111,8 @@ import { WarehouseActions } from '../settings/warehouse/action/warehouse.action'
             ProformaActions,
             CommonActions,
             ItemOnBoardingActions,
-            WarehouseActions
+            WarehouseActions,
+            PurchaseRecordActions
         ])
     ],
     exports: [EffectsModule]
