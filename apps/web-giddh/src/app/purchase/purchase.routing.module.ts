@@ -17,7 +17,7 @@ const INVOICE_ROUTES: Routes = [
         canActivate: [NeedsAuthentication],
         component: PurchaseComponent,
         children: [
-            { path: '', redirectTo: 'invoice', pathMatch: 'full' },
+            { path: '', redirectTo: 'purchase', pathMatch: 'full' },
             { path: 'invoice', component: PurchaseInvoiceComponent },
             { path: 'purchase', component: PurchaseRecordComponent }
         ]
