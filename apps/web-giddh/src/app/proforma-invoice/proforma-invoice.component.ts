@@ -940,6 +940,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.isUpdateDataInProcess = false;
                     if (this.isPurchaseInvoice) {
                         this.selectedFileName = results[1].attachedFileName;
+                        if (this.invFormData && this.invFormData.entries && this.invFormData.entries[0]) {
+                            this.invFormData.entries[0].attachedFile = (results[1].attachedFiles) ? results[1].attachedFiles[0] : '';
+                        }
                         this.saveCurrentPurchaseRecordDetails();
                     }
                 }
@@ -1635,6 +1638,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (this.billingState && this.billingState.nativeElement && !this.invFormData.accountDetails.billingDetails.state.code) {
                         this.billingState.nativeElement.classList.add('error-box');
                     }
+                    this._toasty.errorToast('State is mandatory');
                     return;
                 }
             } else {
