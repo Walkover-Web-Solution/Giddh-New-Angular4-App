@@ -14,6 +14,7 @@ import { LoaderService } from '../loader/loader.service';
 import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from '../models/api-models/Reports';
 import { COMPANY_API } from './apiurls/comapny.api';
 import { VoucherTypeEnum } from '../models/api-models/Sales';
+import { PurchaseRecordAdvanceSearch, PURCHASE_RECORD_DATE_OPERATION, PURCHASE_RECORD_DUE_DATE_OPERATION, PURCHASE_RECORD_GRAND_TOTAL_OPERATION } from '../purchase/purchase-record/constants/purchase-record.interface';
 
 @Injectable()
 export class ReceiptService implements OnInit {
@@ -46,15 +47,15 @@ export class ReceiptService implements OnInit {
 
     public GetAllReceipt(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
-        let requestType = type;
+        const requestPayload = type === VoucherTypeEnum.purchase ? this.getPurchaseRecordPayload(body): body;
         const contextPath = type === VoucherTypeEnum.purchase ? RECEIPT_API.GET_ALL_PURCHASE_RECORDS : RECEIPT_API.GET_ALL;
         const requestParameter = {
             page: body.page, count: body.count, from: body.from, to: body.to, q: body.q, sort: body.sort, sortBy: body.sortBy
         };
-        let url = this.createQueryString(this.config.apiUrl + contextPath, (type === VoucherTypeEnum.purchase) ? requestParameter : {...requestParameter, type: requestType});
+        let url = this.createQueryString(this.config.apiUrl + contextPath, (type === VoucherTypeEnum.purchase) ? requestParameter : {...requestParameter, type});
 
         return this._http.post(url
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), body).pipe(
+            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), requestPayload).pipe(
                 map((res) => {
                     let data: BaseResponse<ReciptResponse, InvoiceReceiptFilter> = res;
                     data.queryString = { page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf' };
@@ -62,6 +63,47 @@ export class ReceiptService implements OnInit {
                     return data;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, InvoiceReceiptFilter>(e, body, { page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf' })));
+    }
+
+    /**
+     * Mapper to map advance search request for Purchase Record
+     *
+     * @private
+     * @param {InvoiceReceiptFilter} request Request to be mapped
+     * @returns {PurchaseRecordAdvanceSearch} Request payload for purchase record advance search
+     * @memberof ReceiptService
+     */
+    private getPurchaseRecordPayload(request: InvoiceReceiptFilter): PurchaseRecordAdvanceSearch {
+        let advanceSearchRequest: PurchaseRecordAdvanceSearch = new PurchaseRecordAdvanceSearch();
+        advanceSearchRequest.purchaseDate = request.invoiceDate;
+        if (request.invoiceDateEqual) {
+            advanceSearchRequest.purchaseDateOperation = PURCHASE_RECORD_DATE_OPERATION.ON;
+        } else if (request.invoiceDateAfter) {
+            advanceSearchRequest.purchaseDateOperation = PURCHASE_RECORD_DATE_OPERATION.AFTER;
+        } else if (request.invoiceDateBefore) {
+            advanceSearchRequest.purchaseDateOperation = PURCHASE_RECORD_DATE_OPERATION.BEFORE;
+        }
+        advanceSearchRequest.dueDate = request.dueDate;
+        if (request.dueDateEqual) {
+            advanceSearchRequest.dueDateOperation = PURCHASE_RECORD_DUE_DATE_OPERATION .ON;
+        } else if (request.dueDateAfter) {
+            advanceSearchRequest.dueDateOperation = PURCHASE_RECORD_DUE_DATE_OPERATION.AFTER;
+        } else if (request.dueDateBefore) {
+            advanceSearchRequest.dueDateOperation = PURCHASE_RECORD_DUE_DATE_OPERATION.BEFORE;
+        }
+        advanceSearchRequest.grandTotal = request.total;
+        if (request.totalEqual && request.totalMoreThan) {
+            advanceSearchRequest.grandTotalOperation = PURCHASE_RECORD_GRAND_TOTAL_OPERATION.GREATER_THAN_OR_EQUALS;
+        } else if (request.totalEqual && request.totalLessThan) {
+            advanceSearchRequest.grandTotalOperation = PURCHASE_RECORD_GRAND_TOTAL_OPERATION.LESS_THAN_OR_EQUALS;
+        } else if (request.totalEqual) {
+            advanceSearchRequest.grandTotalOperation = PURCHASE_RECORD_GRAND_TOTAL_OPERATION.EQUALS;
+        } else if (request.totalMoreThan) {
+            advanceSearchRequest.grandTotalOperation = PURCHASE_RECORD_GRAND_TOTAL_OPERATION.GREATER_THAN;
+        } else if (request.totalLessThan) {
+            advanceSearchRequest.grandTotalOperation = PURCHASE_RECORD_GRAND_TOTAL_OPERATION.LESS_THAN;
+        }
+        return advanceSearchRequest;
     }
 
     public DeleteReceipt(accountUniqueName: string, queryRequest: ReciptDeleteRequest): Observable<BaseResponse<string, ReciptDeleteRequest>> {
