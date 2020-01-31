@@ -50,7 +50,6 @@ export class InvoiceComponent implements OnInit, OnDestroy {
                 if (params) {
                     if (params.voucherType) {
 
-                        debugger;
                         // this.selectedVoucherType = VoucherTypeEnum[tab];
                         if (!(params.voucherType === 'pending' || params.voucherType === 'settings')) {
                             this.selectedVoucherType = params.voucherType;
