@@ -14,9 +14,13 @@ import { IOption } from "../../theme/ng-virtual-select/sh-options.interface";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { TallySyncService } from "../../services/tally-sync.service";
-import { TallySyncData } from "../../models/api-models/tally-sync";
+import { TallySyncData, DownloadTallyErrorLogRequest } from "../../models/api-models/tally-sync";
 import { saveAs } from 'file-saver';
 import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Company';
+import { GeneralService } from '../../services/general.service';
+import { HOUR } from 'ngx-bootstrap/chronos/units/constants';
+import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
+import { PAGINATION_LIMIT } from '../../app.constant';
 @Component({
     selector: 'app-completed-preview',
     templateUrl: './completed.component.html',
@@ -92,7 +96,12 @@ export class CompletedComponent implements OnInit, OnDestroy {
     ];
 
     public companies$: Observable<CompanyResponse[]>;
-
+    public downloadTallyErrorLogRequest: DownloadTallyErrorLogRequest = {
+        date: '',
+        hour: null
+    };
+    public paginationRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
+    public completedtallySyncDataResponse: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
@@ -101,7 +110,8 @@ export class CompletedComponent implements OnInit, OnDestroy {
         private _activatedRoute: ActivatedRoute,
         private cdr: ChangeDetectorRef,
         private fb: FormBuilder,
-        private tallysyncService: TallySyncService
+        private tallysyncService: TallySyncService,
+        private generalService: GeneralService
     ) {
 
         this.filterForm = this.fb.group({
@@ -133,13 +143,13 @@ export class CompletedComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        // set universal date
-        // this.universalDate$.subscribe(a => {
-        //   if (a) {
-        //     this.filterForm.get('filterDate').patchValue(moment(a[1]).format('D-MMM-YYYY'));
-        //   }
-        // });
         // set current company date
+        this.paginationRequest.sortBy = '';
+        this.paginationRequest.page = 1;
+        this.paginationRequest.count = PAGINATION_LIMIT;
+        this.paginationRequest.count = 5;
+
+
         this.companies$.subscribe(a => {
             if (a) {
                 a.forEach((element) => {
@@ -155,6 +165,8 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.getReport();
     }
 
+
+
     public getReport() {
         if (this.filterForm.invalid) {
             this._toaster.errorToast("Please check your filter criteria");
@@ -164,11 +176,22 @@ export class CompletedComponent implements OnInit, OnDestroy {
         // api call here
         this.filter.from = this.filter.startDate + ' ' + this.filter.timeRange.split('-')[0];
         this.filter.to = this.filter.startDate + ' ' + this.filter.timeRange.split('-')[1];
-        this.tallysyncService.getCompletedSync(this.filter.from, this.filter.to).subscribe((res) => {
+        this.paginationRequest.from = this.filter.from;
+        this.paginationRequest.to = this.filter.to;
+
+        this.tallysyncService.getCompletedSync(this.paginationRequest).subscribe((res) => {
             if (res && res.results && res.results.length > 0) {
+                this.completedtallySyncDataResponse = res;
                 this.completedData = res.results;
                 this.completedData.forEach((element) => {
-                    element['dateString'] = this.prepareDate(element.updatedAt);
+                    if (element.updatedAt) {
+                        let preparedDateString = this.prepareDate(element.updatedAt)[0];
+                        element['dateString'] = this.prepareCovertedDate(preparedDateString);
+                    }
+                    if (element.createdAt) {
+                        element['hour'] = this.getHours(element.createdAt);
+                        element['dateDDMMYY'] = this.prepareDate(element.createdAt)[1];
+                    }
                     //completed
                     let tallyGroups = (element.totalSavedGroups * 100) / element.totalTallyGroups;
                     let tallyAccounts = (element.totalSavedAccounts * 100) / element.totalTallyAccounts;
@@ -187,17 +210,22 @@ export class CompletedComponent implements OnInit, OnDestroy {
                 })
             }
         })
-        // ===============
-
     }
 
-
-    // download
+    /**
+     * Download error log
+     *
+     * @param {TallySyncData} row
+     * @memberof CompletedComponent
+     */
     public downloadLog(row: TallySyncData) {
-        this.tallysyncService.getErrorLog(row.id, row.company.uniqueName).subscribe((res) => {
+        this.downloadTallyErrorLogRequest.date = row['dateDDMMYY'] ? row['dateDDMMYY'] : '';
+        this.downloadTallyErrorLogRequest.hour = row['hour'] ? row['hour'] : null;
+
+        this.tallysyncService.getErrorLog(row.company.uniqueName, this.downloadTallyErrorLogRequest).subscribe((res) => {
             if (res.status === 'success') {
-                let blobData = this.base64ToBlob(res.body, 'text/csv', 512);
-                return saveAs(blobData, `${row.company.name}-error-log.csv`);
+                let blobData = this.base64ToBlob(res.body, 'application/xlsx', 512);
+                return saveAs(blobData, `${row.company.name}-error-log.xlsx`);
             } else {
                 this._toaster.errorToast(res.message);
             }
@@ -227,12 +255,44 @@ export class CompletedComponent implements OnInit, OnDestroy {
 
     // download
 
-
+    /**
+     *
+     *
+     * @param {*} dateArray  like [2020, 1, 27, 11, 11, 8, 533]
+     * @returns  array index 0 like 27 Jan 2020 @ 05:11:08 for display only
+     *  1 index like dd-mm-yyy for API
+     *  1 index like hour for API
+     * @memberof CompletedComponent
+     */
     public prepareDate(dateArray: any) {
+        let date = []
         if (dateArray[5] < 10) {
             dateArray[5] = '0' + dateArray[5];
         }
-        return 'Last Import on ' + dateArray[2] + ' ' + this.MONTHS[(dateArray[1] - 1)] + ' ' + dateArray[0] + ' @ ' + dateArray[3] + ':' + dateArray[4] + ':' + dateArray[5];
+        date[0] = dateArray[2] + ' ' + this.MONTHS[(dateArray[1] - 1)] + ' ' + dateArray[0] + ' @ ' + dateArray[3] + ':' + dateArray[4] + ':' + dateArray[5];
+        date[1] = dateArray[2] + '-' + dateArray[1] + '-' + dateArray[0];
+        return date;
+    }
+
+    /**
+     * Prepare date for html render format
+     *
+     * @param {string} UTCtoLocalTime  UTC time string
+     * @returns format date
+     * @memberof CompletedComponent
+     */
+    public prepareCovertedDate(UTCtoLocalTime: string) {
+        let UTCtoLocalTimeZoneDate = this.generalService.ConvertUTCTimeToLocalTime(UTCtoLocalTime);
+        let dateArray = UTCtoLocalTimeZoneDate.toString().split(' '); // ["Mon", "Jan", "27", "2020", "05:11:08", "GMT+0530", "(India", "Standard", "Time)"]
+        return dateArray[2] + ' ' + dateArray[1] + ' ' + dateArray[3] + ' @ ' + dateArray[4];
+    }
+
+    public getHours(dateArray: any) {
+        let hour;
+        if (dateArray.length > 2) {
+            hour = dateArray[3] + 1;
+        }
+        return hour;
     }
 
     public onDDElementCompanySelect(event: IOption) {
@@ -247,6 +307,10 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.filter.timeRange = event.value;
     }
 
+    public pageChanged(event) {
+        this.paginationRequest.page = event.page;
+        this.getReport();
+    }
 
     public ngOnDestroy() {
         this.destroyed$.next(true);

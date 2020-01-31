@@ -216,11 +216,11 @@
                                 </button>
                             </li>
                             <li class="mrT2 text-center mrB2">
-                                <!-- <span><a href="tel:02268210057" target="_blank" class="grey_clr">022-68210057</a></span> -->
+                                <!-- <span><a href="tel:02268210057" target="_blank" class="grey_clr">022-68210057</a></span>  openScheduleModal() -->
                                 <p><a href="mailto:support@giddh.com" target="_blank" class="grey_clr">support@giddh.com</a></p>
                             </li>
                             <li class="row text-center">
-                                <button class="btn btn-link tdUndr" (click)="openScheduleModal()">Talk to Sales</button> |
+                                <button class="btn btn-link tdUndr" (click)="openScheduleCalendlyModel();">Talk to Sales</button> |
                                 <span class="text-center"><a href="http://faq.giddh.com/" target="_blank"
                                         class="btn btn-link tdUndr">FAQs</a></span>
                             </li>
@@ -652,7 +652,7 @@
                                         <p><a href="mailto:support@giddh.com" target="_blank" class="grey_clr">support@giddh.com</a></p>
                                     </li>
                                     <li class="row text-center">
-                                        <button class="btn btn-link tdUndr" (click)="openScheduleModal()">Talk to
+                                        <button class="btn btn-link tdUndr" (click)="openScheduleCalendlyModel()">Talk to
                                             Sales</button> |
                                         <span class="text-center"><a href="http://faq.giddh.com/" target="_blank"
                                                 class="btn btn-link tdUndr">FAQs</a></span>
@@ -751,8 +751,8 @@
     </div>
 
 </ng-template>
-
-<div bsModal #talkSalesModal="bs-modal" class="modal fade" role="dialog">
+<!-- TODO : It is commented due to we have implement calendly and its under discussion to remove   -->
+<!-- <div bsModal #talkSalesModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
@@ -777,7 +777,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 
 <!--  -->
@@ -798,13 +798,13 @@
             <ul class="list-inline upgradePlan">
                 <!-- [routerLink]="['select-plan']" -->
                 <li>
-                    <button class="btn btn-green" *ngIf="CurrentCmpPlanAmount" (click)="goToSelectPlan();">Renew
+                    <button class="btn btn-green" *ngIf="currentCompanyPlanAmount" (click)="goToSelectPlan();">Renew
                         Plan</button>
                 </li>
                 <li>
                     <button class="btn btn-green" (click)="goToSelectPlan();">Change Plan</button>
                 </li>
-                <li><span class="d-inline-block pr-1">Or</span> <a class="cursor-pointer" (click)="openScheduleModal();modelRefExpirePlan.hide();">
+                <li><span class="d-inline-block pr-1">Or</span> <a class="cursor-pointer" (click)="openScheduleCalendlyModel();modelRefExpirePlan.hide();">
                         Contact
                         Us</a></li>
             </ul>
@@ -830,10 +830,20 @@
                 <li>
                     <button class="btn btn-pink" (click)="goToSelectPlan();">Buy Plan</button>
                 </li>
-                <li><span class="d-inline-block pr-1">Or</span> <a class="cursor-pointer" (click)="openScheduleModal();modelRefCrossLimit.hide();">
+                <li><span class="d-inline-block pr-1">Or</span> <a class="cursor-pointer" (click)="openScheduleCalendlyModel();modelRefCrossLimit.hide();">
                         Contact
                         Us</a></li>
             </ul>
         </div>
     </div>
 </ng-template>
+<div class="overlay-cal" *ngIf="isCalendlyModelActivate">
+    <button id="close" class="close-2" (click)="hideScheduleCalendlyModel()"><i class="icon-cross" ></i></button>
+    <div id="scheduleCall" class="tab-pane active vertical-center modal-body">
+        <div class="calendly-box" #reder>
+            <div class="calendly-inline-widget">
+                <object data="https://calendly.com/sales-accounting-software/talk-to-sale"></object>
+            </div>
+        </div>
+    </div>
+</div>

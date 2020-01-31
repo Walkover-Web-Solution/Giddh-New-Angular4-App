@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Subject } from 'rxjs';
 
-import { RcmModalButton, RcmModalConfiguration } from '../common/rcm-modal/rcm-modal.interface';
+import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../common/confirmation-modal/confirmation-modal.interface';
 import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
@@ -11,7 +11,8 @@ import * as moment from 'moment';
 @Injectable()
 export class GeneralService {
     invokeEvent: Subject<any> = new Subject();
-    public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    // TODO : It is commented due to we have implement calendly and its under discussion to remove
+    // public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public isCurrencyPipeLoaded: boolean = false;
 
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
@@ -193,11 +194,11 @@ export class GeneralService {
      * Returns the RCM modal configuration based on 'isRcmSelected' flag value
      *
      * @param {boolean} isRcmSelected True, if user selects the RCM checkbox
-     * @returns {RcmModalConfiguration}
+     * @returns {ConfirmationModalConfiguration} RCM modal configuration
      * @memberof GeneralService
      */
-    getRcmConfiguration(isRcmSelected: boolean): RcmModalConfiguration {
-        const buttons: Array<RcmModalButton> = [{
+    getRcmConfiguration(isRcmSelected: boolean): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [{
             text: 'Yes',
             cssClass: 'btn btn-success'
         },
@@ -260,5 +261,22 @@ export class GeneralService {
             }
         }
         return false;
+    }
+
+    /**
+ * Covert UTC time zone( server time zone ) into local system timezone
+ *
+ * @param {*} UTCDateString UTC timezone time string
+ * @returns  coverted date(UTC---> Systme TimeZone)
+ * @memberof CompletedComponent
+ */
+    public ConvertUTCTimeToLocalTime(UTCDateString) {
+        let convertdLocalTime = new Date(UTCDateString);
+
+        let hourOffset = convertdLocalTime.getTimezoneOffset() / 60;
+
+        convertdLocalTime.setHours(convertdLocalTime.getHours() + hourOffset);
+
+        return convertdLocalTime;
     }
 }

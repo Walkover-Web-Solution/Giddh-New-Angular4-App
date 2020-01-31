@@ -1534,7 +1534,16 @@ modal-container.modal {
 .mb-0 {
     margin-bottom: 0px;
 }
-
+.calendly-inline-widget object {
+    width: 1000px;
+    height: 610px;
+}
+.booking-container {
+    max-width: 100% !important;
+}
+._2LpwQBMGSE._1cMlaUlzrO._1P3WzErELA._22VVVS0E_n {
+    display: none !important;
+}
 /* my css end */
 
 /*input*/
@@ -5321,6 +5330,7 @@ label {
     height: 50px;
     float: left;
     background: #fff url("../images/designTool.svg") no-repeat;
+    background-size: 65px;
 }
 
 .ico-template {
@@ -7665,12 +7675,18 @@ app-header {
 .error-box {
     border: 2px solid red;
 }
+.text-warning {
+    color: #FFA000;
+}
 
 .heightVH-100 {
     height: 100vh;
 }
 
 /* my css */
+.new-ledger-text-right .inputWrapper .form-control {
+    text-align: right !important;
+}
 .box .company-box .inner-company-box ul > li .tooltip {
     word-break: break-all;
 }

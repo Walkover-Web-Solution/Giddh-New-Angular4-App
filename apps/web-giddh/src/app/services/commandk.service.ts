@@ -1,4 +1,4 @@
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { COMMON_API } from './apiurls/common.api';
@@ -6,10 +6,11 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { CommandKRequest } from '../models/api-models/Common';
 import { HttpWrapperService } from "./httpWrapper.service";
 import { Observable } from "rxjs";
+import { ErrorHandler } from './catchManager/catchmanger';
 
 @Injectable()
 export class CommandKService {
-    constructor(private _http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 
     }
 
@@ -23,6 +24,7 @@ export class CommandKService {
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
-            }));
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 }

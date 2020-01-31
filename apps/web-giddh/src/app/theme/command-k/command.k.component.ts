@@ -76,7 +76,6 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$)).subscribe(res => {
             this.activeCompanyUniqueName = res;
         });
-        this.searchCommandK(true);
     }
 
     /**
@@ -92,6 +91,8 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
             this.searchCommandK(true);
             this._cdref.markForCheck();
         });
+
+        this.searchSubject.next("");
     }
 
     /**

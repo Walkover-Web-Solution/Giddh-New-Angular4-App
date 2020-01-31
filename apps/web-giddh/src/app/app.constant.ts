@@ -47,7 +47,7 @@ export enum OnBoardingType {
 }
 
 /** Pagination limit for every module */
-export const PAGINATION_LIMIT = 20;
+export const PAGINATION_LIMIT = 50;
 
 /** Subvoucher type */
 export enum Subvoucher {
@@ -65,6 +65,7 @@ export enum DefaultDateRangePickerRangesEnum {
     ThisMonth = 'This Month',
     LastMonth = 'Last Month',
     ThisWeek = 'This Week',
+    Last14Days = 'Last14Days',
     SunToToday = 'Sun - Today',
     MonToToday = 'Mon - Today',
     ThisQuarterToDate = 'This Quarter to Date',
@@ -103,6 +104,12 @@ export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
         }, {name: DefaultDateRangePickerRangesEnum.MonToToday, value: [moment().startOf('week').add(1, 'd'), moment()]}]
     },
     {
+        name: DefaultDateRangePickerRangesEnum.Last14Days, value: [
+            moment().subtract(14, 'd'),
+            moment()
+        ]
+    },
+    {
         name: DefaultDateRangePickerRangesEnum.ThisQuarterToDate, value: [
             moment().quarter(moment().quarter()).startOf('quarter'),
             moment()
@@ -139,3 +146,10 @@ export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
         ]
     }
 ];
+
+/** File attachment types supported by Giddh */
+export const FILE_ATTACHMENT_TYPE = {
+    IMAGE: ['jpg', 'jpeg', 'gif', 'png'],
+    PDF: ['pdf'],
+    UNSUPPORTED: ['doc', 'docx', 'xls', 'xlsx']
+};

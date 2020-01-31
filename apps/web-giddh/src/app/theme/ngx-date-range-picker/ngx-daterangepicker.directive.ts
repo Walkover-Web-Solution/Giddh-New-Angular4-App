@@ -3,6 +3,7 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as _moment from 'moment';
 import { NgxDaterangepickerComponent } from './ngx-daterangepicker.component';
 import { LocaleConfig } from './ngx-daterangepicker.config';
+import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
 
 const moment = _moment;
 
@@ -80,7 +81,7 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     timePickerSeconds: Boolean = false;
     _locale: LocaleConfig = {};
     @Input() set locale(value) {
-        this._locale = {...value, ...this.localeConfig};
+        this._locale = {...this._localeService.config, ...value};
     }
 
     get locale(): any {
@@ -133,7 +134,7 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         private _el: ElementRef,
         private _renderer: Renderer2,
         private differs: KeyValueDiffers,
-        private localeConfig: LocaleConfig
+        private _localeService: NgxDaterangepickerLocaleService,
     ) {
         this.drops = 'down';
         this.opens = 'right';

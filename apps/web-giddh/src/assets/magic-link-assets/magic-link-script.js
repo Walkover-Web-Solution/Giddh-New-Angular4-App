@@ -163,7 +163,11 @@ var app = new Vue({
                         document.getElementById("app").style.display = 'block';
                     })
                     .catch(e => {
-                        this.$toaster.error('Something went wrong.');
+                        var msg = 'Something Went Wrong';
+                        if (e && e.response && e.response.data) {
+                            msg = e.response.data.message;
+                        }
+                        this.$toaster.error(msg);
                     });
             } else {
                 this.$toaster.error('Magic link ID not found.');

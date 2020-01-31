@@ -54,7 +54,7 @@
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat" (ngModelChange)="changePrice($event)" name=""
                                 class="form-control text-right" />
-                            <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                            <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 {{ currentTxn?.convertedRate | giddhCurrency}}
                             </p>
@@ -72,7 +72,7 @@
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat" [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
                                 (keyup)="amountChanged();calculateTotal()" />
-                            <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                            <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 {{ currentTxn?.convertedAmount | giddhCurrency}}
                             </p>
@@ -86,13 +86,13 @@
 
                         <!--discount-->
                         <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount) || !shouldShowAdvanceReceiptMandatoryFields"
-                            class="pItem text-right price" (click)="$event.stopPropagation()">
+                            class="pItem text-right price new-ledger-text-right" (click)="$event.stopPropagation()">
                             <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts"
                                 [maskInput]="inputMaskFormat" [prefixInput]="selectedPrefixForCurrency"
                                 [suffixInput]="selectedSuffixForCurrency" [ledgerAmount]="currentTxn.amount"
                                 (hideOtherPopups)="hideTax()" (discountTotalUpdated)="calculateDiscount($event);">
                             </ledger-discount>
-                            <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                            <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 {{ currentTxn?.convertedDiscount | giddhCurrency}}
                             </p>
@@ -129,7 +129,7 @@
                             <!-- TODO: After design finalization
                                 <span class="eligible-ITC">Eligible for ITC <span class="icon-edit"></span> </span> -->
 
-                            <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                            <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 {{ currentTxn.convertedTax |giddhCurrency}}
                             </p>
@@ -147,7 +147,7 @@
                             <input type="text" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat" name="" class="form-control text-right"
                                 [(ngModel)]="currentTxn.total" (blur)="calculateAmount()" />
-                            <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                            <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 {{ currentTxn.convertedTotal | giddhCurrency}}
                             </p>
@@ -544,5 +544,5 @@
     </div>
 </ng-template>
 <ng-template #rcmTemplate>
-    <rcm-modal [configuration]="rcmConfiguration" (buttonClicked)="handleRcmChange($event)"></rcm-modal>
+    <confirmation-modal [configuration]="rcmConfiguration" (buttonClicked)="handleRcmChange($event)"></confirmation-modal>
 </ng-template>
