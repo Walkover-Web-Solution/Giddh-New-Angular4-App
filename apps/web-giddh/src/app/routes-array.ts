@@ -93,8 +93,9 @@ export const ROUTES = [
             },
             { path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule' },
             { path: 'reports', loadChildren: './reports/reports.module#ReportsModule' },
+            { path: 'purchase-management', loadChildren: './purchase/purchase.module#PurchaseModule' },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
-            // {path: '**', pathMatch: 'full'},
+
 
         ]
     },

@@ -91,7 +91,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Petty Cash Management > Pending', uniqueName: '/pages/expenses-manager', additional: { tab: 'pending', tabIndex: 0 } },
     { type: 'MENU', name: 'Petty Cash Management > Rejected', uniqueName: '/pages/expenses-manager', additional: { tab: 'rejected', tabIndex: 1 } },
 
-
+    { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase' },
 ];
 export let HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'inventory',
     'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
@@ -169,6 +169,8 @@ export let NAVIGATION_ITEM_LIST_RESPONSIVE: IUlist[] = [
     { type: 'MENU', name: 'Invoice > Proforma', uniqueName: '/pages/invoice/preview/proformas', additional: { tab: 'proformas', tabIndex: 0 } },
     { type: 'MENU', name: 'Onboarding', uniqueName: '/pages/onboarding' },
     { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook' },
+
+    { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase' },
 
 ];
 export let NAVIGATION_ITEM_LIST: IUlist[] = [];
