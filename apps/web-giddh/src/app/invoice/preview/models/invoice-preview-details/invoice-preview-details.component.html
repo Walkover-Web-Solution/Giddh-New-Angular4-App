@@ -194,13 +194,13 @@
                                             </span>
 
                                             <span *ngIf="selectedItem.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')"
-                                                [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading}">
+                                                [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading || shouldShowUploadAttachment}">
                                                 <a href="javascript:void 0" tooltip="Download" placement="top"
                                                     (click)="downloadPdf()"><i class="fa fa-file-pdf-o"></i></a>
                                             </span>
 
                                             <span *ngIf="selectedItem.voucherType === 'purchase' && attachedDocumentType?.type !== 'pdf'"
-                                                [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading}">
+                                                [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading || shouldShowUploadAttachment}">
                                                 <a href="javascript:void 0" tooltip="Download" placement="top"
                                                     (click)="downloadFile()"><i class="icon-download"></i></a>
                                             </span>
@@ -473,7 +473,7 @@
 <div bsModal #receivePaymentPopup="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <invoice-payment-model [selectedInvoiceForPayment]="selectedItem"
+            <invoice-payment-model *ngIf="selectedItem.voucherType !== 'purchase'" [selectedInvoiceForPayment]="selectedItem"
                 (closeModelEvent)="processPaymentEvent.emit($event);receivePaymentPopup.toggle()">
             </invoice-payment-model>
         </div>

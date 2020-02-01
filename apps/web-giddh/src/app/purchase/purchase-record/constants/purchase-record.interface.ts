@@ -5,7 +5,8 @@ import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
  */
 export interface PurchaseRecordUpdateModel {
     invoiceNumber: string,
-    purchaseRecordUniqueName: string
+    purchaseRecordUniqueName: string,
+    mergedRecordUniqueName: string
 };
 
 /**
