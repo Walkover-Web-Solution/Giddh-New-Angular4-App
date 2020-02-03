@@ -1326,7 +1326,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.getAdvanceSearchTxn();
             // this.getTransactionData();
             if (event.advanceSearchData) {
-                if (event.advanceSearchData['dataToSend']['bsRangeValue'] !== undefined) {
+                if (event.advanceSearchData['dataToSend']['bsRangeValue']) {
                     this.datePickerOptions = {
                         ...this.datePickerOptions,
                         startDate: moment(event.advanceSearchData.dataToSend.bsRangeValue[0], 'DD-MM-YYYY').toDate(),
