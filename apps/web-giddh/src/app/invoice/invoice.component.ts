@@ -39,13 +39,14 @@ export class InvoiceComponent implements OnInit, OnDestroy {
                 let queryParams = result[1];
 
                 if (params) {
-
-                    if (params.voucherType === 'sales' || params.voucherType === 'debit note' || params.voucherType === 'credit note') {
-                        this.selectedVoucherType = params.voucherType;
-                    } else if (params.selectedType && params.voucherType) {
-                        this.selectedVoucherType = params.selectedType;
-                    } else if (!params.selectedType && params.voucherType) {
-                        this.selectedVoucherType = params.voucherType;
+                    if (params.voucherType) {
+                        if (params.voucherType === 'sales' || params.voucherType === 'debit note' || params.voucherType === 'credit note') {
+                            this.selectedVoucherType = params.voucherType;
+                        } else if (params.selectedType && params.voucherType) {
+                            this.selectedVoucherType = params.selectedType;
+                        } else if (!params.selectedType && params.voucherType) {
+                            this.selectedVoucherType = params.voucherType;
+                        }
                     }
                 }
                 if (queryParams && queryParams.tab) {
@@ -74,7 +75,15 @@ export class InvoiceComponent implements OnInit, OnDestroy {
         this.selectedVoucherType = VoucherTypeEnum[tab];
     }
 
-    public tabChanged(tab: string, e, type?: string) {
+/**
+ *
+ *
+ * @param {string} tab  this is voucher type
+ * @param {*} e   event to set last state
+ * @param {string} [type]    selected type only to it for Cr/Dr and sales voucher(common tabs like pending, template and settings)
+ * @memberof InvoiceComponent
+ */
+public tabChanged(tab: string, e, type?: string) {
         this.activeTab = tab;
         if (type && tab) {
             this.router.navigate(['pages', 'invoice', 'preview', tab, type]);
