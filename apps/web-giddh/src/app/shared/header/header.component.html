@@ -264,7 +264,7 @@
         <ul class="main-company-name">
 
             <!-- [attachOutsideOnClick]="true" [isOpen]="companyMenu.isopen"  [attachOutsideOnClick]="true" (clickOutside)="closeUserMenu(dropdown)"-->
-            <li class="company-name pos-rel hidden-lg hidden-md hidden-sm" dropdown #dropdown="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="dropdown.isOpen = false">
+            <li *ngIf="isMobileSite" class="company-name pos-rel hidden-lg hidden-md hidden-sm" dropdown #dropdown="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="dropdown.isOpen = false">
 
                 <a href="javascript:void(0)" class="clearfix z1 d-block" dropdownToggle>
                     <ng-template #CompanyBranchnamealias> {{ (selectedCompany | async)?.name }}<span *ngIf="(selectedCompany | async)?.nameAlias"> ( {{  (selectedCompany | async)?.nameAlias }}
