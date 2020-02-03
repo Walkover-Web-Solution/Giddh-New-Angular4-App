@@ -370,6 +370,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 let voucherIndex = this.voucherData.items.findIndex(item => item.uniqueName === record.purchaseRecordUniqueName);
                 if (voucherIndex > -1) {
                     let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
+                    if (record.mergedRecordUniqueName) {
+                        allItems = allItems.filter(item => item.uniqueName !== record.mergedRecordUniqueName);
+                    }
                     allItems[voucherIndex].voucherNumber = record.invoiceNumber;
                     allItems = uniqBy([allItems[voucherIndex], ...allItems], 'voucherNumber');
                     this.itemsListForDetails = allItems;
