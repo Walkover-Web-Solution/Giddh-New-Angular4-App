@@ -199,6 +199,7 @@
     background-color: #fff;
     margin-bottom: 35px;
     z-index: -9;
+    height: 100%;
     .error {
         display: flex;
         justify-content: center;
@@ -215,6 +216,9 @@
     .preview-not-supported-attachment {
         font-size: 18px;
         margin: 16px;
+    }
+    .pdf-preview {
+        height: 100%;
     }
 }
 
