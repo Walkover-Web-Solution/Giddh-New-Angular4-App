@@ -591,9 +591,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         });
 
         // get account details and set it to local var
-        this.selectedAccountDetails$.subscribe(o => {
-            if (o && !this.isUpdateMode) {
-                this.assignAccountDetailsValuesInForm(o);
+        this.selectedAccountDetails$.subscribe(accountDetails => {
+            if (accountDetails && !this.isUpdateMode) {
+                this.assignAccountDetailsValuesInForm(accountDetails);
             }
         });
 
@@ -3729,10 +3729,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private saveCurrentPurchaseRecordDetails(): void {
-        this.purchaseRecordCustomerUniqueName = String(this.invFormData.voucherDetails.customerUniquename);
-        this.purchaseRecordInvoiceDate = moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
-        this.purchaseRecordTaxNumber = String(this.invFormData.accountDetails.shippingDetails.gstNumber);
-        this.purchaseRecordInvoiceNumber = String(this.invFormData.voucherDetails.voucherNumber);
+        try {
+            this.purchaseRecordCustomerUniqueName = String(this.invFormData.voucherDetails.customerUniquename);
+            this.purchaseRecordInvoiceDate = moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
+            this.purchaseRecordTaxNumber = String(this.invFormData.accountDetails.shippingDetails.gstNumber);
+            this.purchaseRecordInvoiceNumber = String(this.invFormData.voucherDetails.voucherNumber);
+        } catch(error) {}
     }
 
     /**
