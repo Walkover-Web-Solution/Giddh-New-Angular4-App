@@ -614,7 +614,7 @@
 
                                             <div *ngIf="isMulticurrencyAccount" class="differ-currency">
                                                 <span>{{baseCurrencySymbol}}</span>
-                                                <span>{{transaction.rate * exchangeRate | giddhCurrency}}</span>
+                                                <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency}}</span>
 
                                             </div>
                                         </div>
@@ -827,7 +827,7 @@
                                             <!-- please add condition for show and hide -->
                                             <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                 <span>{{baseCurrencySymbol}}</span>
-                                                <span>{{transaction.rate * exchangeRate | giddhCurrency}}</span>
+                                                <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency}}</span>
                                             </div>
                                         </div>
                                     </td>
@@ -1276,7 +1276,7 @@
                                         </p>
                                         <div *ngIf="isMulticurrencyAccount" class="differ-currency">
                                             <span>{{baseCurrencySymbol}}</span>
-                                            <span>{{transaction.rate * exchangeRate | giddhCurrency}}</span>
+                                            <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency}}</span>
 
                                         </div>
                                     </div>
@@ -1527,7 +1527,7 @@
                                     <!-- please add condition for show and hide -->
                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                         <span>{{baseCurrencySymbol}}</span>
-                                        <span>{{transaction.rate * exchangeRate | giddhCurrency}}</span>
+                                        <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency}}</span>
                                     </div>
                                 </div>
 
