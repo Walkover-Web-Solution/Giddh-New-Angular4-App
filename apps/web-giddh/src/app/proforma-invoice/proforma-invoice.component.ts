@@ -3211,9 +3211,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         obj.templateDetails = data.templateDetails;
         obj.entries = salesEntryClassArray;
-        if ((<GenericRequestForGenerateSCD>obj).deposit) {
-            (<GenericRequestForGenerateSCD>obj).deposit = deposit;
-        }
 
         obj.account.billingDetails.countryName = this.customerCountryName;
         obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
