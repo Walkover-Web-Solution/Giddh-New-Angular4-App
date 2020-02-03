@@ -44,16 +44,21 @@ ipcMain.on("authenticate", async function (event, arg) {
                 nodeIntegration: false
             }
         });
-        const token = await myApiOauth.getAccessToken(bodyParams);
-        if (arg === "google") {
-            // google
-            event.returnValue = token.access_token;
-            // this.store.dispatch(this.loginAction.signupWithGoogle(token.access_token));
-        } else {
-            // linked in
-            event.returnValue = token.access_token;
-            // this.store.dispatch(this.loginAction.LinkedInElectronLogin(token.access_token));
-        }
+
+        myApiOauth.getAccessToken(bodyParams, (token) => {
+            if (arg === "google") {
+                // google
+                event.returnValue = token.access_token;
+                // this.store.dispatch(this.loginAction.signupWithGoogle(token.access_token));
+            } else {
+                // linked in
+                event.returnValue = token.access_token;
+                // this.store.dispatch(this.loginAction.LinkedInElectronLogin(token.access_token));
+            }
+            event.sender.send('authenticate-token', event.returnValue);
+        });
+
+
     } catch (e) {
         //
     }

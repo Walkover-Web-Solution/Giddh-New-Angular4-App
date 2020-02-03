@@ -4,6 +4,7 @@ import { CanActivate, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { userLoginStateEnum } from '../models/user-login-state';
+import { environment } from '../../environments/environment';
 
 
 @Injectable()

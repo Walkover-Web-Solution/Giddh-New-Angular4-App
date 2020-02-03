@@ -197,7 +197,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 }
             }
         });
-        this.getShopifyEcommerceVerifyStatus();
+    //TODO:  This will go live in next sprint 23
+        // this.getShopifyEcommerceVerifyStatus();
     }
     public ngAfterViewInit() {
         if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
@@ -514,20 +515,20 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         currentPageObj.url = this.router.url;
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
-
+    //TODO:  This will go live in next sprint 23
     /**
      * API call to verify is shopify integrated
      *
      * @memberof SettingIntegrationComponent
      */
-    public getShopifyEcommerceVerifyStatus() {
-        const requestObj = { source: "shopify" };
-        this.accountService.getShopifyEcommerceVerify(requestObj).subscribe(response => {
-            if (response) {
-                if (response.status === 'success') {
-                    this.isEcommerceShopifyUserVerified = Boolean(response.body); // TODO need to change response
-                }
-            }
-        })
-    }
+    // public getShopifyEcommerceVerifyStatus() {
+    //     const requestObj = { source: "shopify" };
+    //     this.accountService.getShopifyEcommerceVerify(requestObj).subscribe(response => {
+    //         if (response) {
+    //             if (response.status === 'success') {
+    //                 this.isEcommerceShopifyUserVerified = Boolean(response.body); // TODO need to change response
+    //             }
+    //         }
+    //     })
+    // }
 }

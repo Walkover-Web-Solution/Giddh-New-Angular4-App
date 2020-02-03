@@ -94,6 +94,11 @@
                                 "glob": "favicon.ico",
                                 "input": "apps/web-giddh/src/",
                                 "output": "/"
+                            },
+                            {
+                                "glob": "apple-developer-domain-association.txt",
+                                "input": "apps/web-giddh/src/.well-known/",
+                                "output": "/.well-known/"
                             }
                         ],
                         "styles": [
@@ -120,6 +125,7 @@
                             "apps/web-giddh/src/assets/js/lodash.min.js",
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js"
                         ],
+
                         "es5BrowserSupport": true,
                         "extraWebpackConfig": "./webpack.partial.js"
                     },
