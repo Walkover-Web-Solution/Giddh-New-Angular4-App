@@ -841,7 +841,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             if (this.isUpdateMode) {
                                 const vendorCurrency = (results[1].account.currency) ? results[1].account.currency.code : this.companyCurrency;
                                 if (vendorCurrency !== this.companyCurrency) {
-                                    this.getCurrencyRate(vendorCurrency, this.companyCurrency);
+                                    this.isMulticurrencyAccount = true;
+                                    this.getCurrencyRate(this.companyCurrency, vendorCurrency);
                                 }
                             }
                         } else {
@@ -3442,6 +3443,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (rate) {
                 this.originalExchangeRate = rate;
                 this.exchangeRate = rate;
+                this._cdr.detectChanges();
+                if (this.isPurchaseInvoice && this.isUpdateMode) {
+                    // TODO: Remove this code once purchase invoice supports multicurrency
+                    this.calculateSubTotal();
+                    this.calculateTotalDiscount();
+                    this.calculateTotalTaxSum();
+                    this.calculateGrandTotal();
+                    this.calculateBalanceDue();
+                }
             }
         }, (error => {
 
