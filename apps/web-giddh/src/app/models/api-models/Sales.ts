@@ -147,6 +147,7 @@ export class AccountDetailsClass {
     public currencySymbol: string = '';
     public customerName: string;
     public mobileNumber?: string;
+    public subVoucher?: string;
 
     constructor(attrs?: any) {
         //this.country = new CountryClass();

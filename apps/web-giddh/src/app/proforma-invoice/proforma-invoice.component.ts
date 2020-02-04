@@ -837,6 +837,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                         } else if (this.isPurchaseInvoice) {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
+                            this.isRcmEntry = (convertedRes1 && convertedRes1.accountDetails) ? convertedRes1.accountDetails.subVoucher === Subvoucher.ReverseCharge : false;
                             obj = cloneDeep(convertedRes1) as VoucherClass;
                             if (this.isUpdateMode) {
                                 const vendorCurrency = (results[1].account.currency) ? results[1].account.currency.code : this.companyCurrency;
@@ -1509,6 +1510,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             data.accountDetails.billingDetails.address = data.accountDetails.billingDetails.address[0].split('<br />');
         }
 
+        if (this.isPurchaseInvoice  && this.isRcmEntry) {
+            data.accountDetails.subVoucher = Subvoucher.ReverseCharge;
+        }
+
         // convert date object
         if (this.invoiceType === VoucherTypeEnum.generateProforma || this.invoiceType === VoucherTypeEnum.proforma) {
             data.voucherDetails.proformaDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
@@ -1524,7 +1529,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // check for valid entries and transactions
         if (data.entries) {
             _.forEach(data.entries, (entry) => {
-                entry['subVoucher'] = (this.isRcmEntry) ? Subvoucher.ReverseCharge : '';
                 _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
                     // convert date object
                     // txn.date = this.convertDateForAPI(txn.date);
@@ -2703,6 +2707,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].replace(/\n/g, '<br />');
             data.accountDetails.billingDetails.address = data.accountDetails.billingDetails.address[0].split('<br />');
         }
+        if (this.isPurchaseInvoice  && this.isRcmEntry) {
+            data.accountDetails.subVoucher = Subvoucher.ReverseCharge;
+        }
 
         // convert date object
         if (this.isProformaInvoice) {
@@ -2766,6 +2773,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             return entry;
         });
+
+        console.log("My data: ", data);
 
         let obj: GenericRequestForGenerateSCD = {
             voucher: data,
