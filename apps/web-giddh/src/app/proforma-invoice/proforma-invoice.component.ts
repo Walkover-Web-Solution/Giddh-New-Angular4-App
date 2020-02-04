@@ -442,6 +442,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.showLoader = true;
             } else {
                 this.showLoader = false;
+                this._cdr.detectChanges();
                 // call focus in customer after loader hides because after loader hider ui re-renders it self
                 this.focusInCustomerName();
             }
