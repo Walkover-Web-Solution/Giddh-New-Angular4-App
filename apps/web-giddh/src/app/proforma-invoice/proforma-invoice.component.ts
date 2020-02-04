@@ -1577,6 +1577,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let exRate = this.originalExchangeRate;
         let requestObject: any;
         if (!this.isPurchaseInvoice) {
+            const deposit = new AmountClassMulticurrency();
+            deposit.accountUniqueName = this.depositAccountUniqueName;
+            deposit.amountForAccount = this.depositAmount;
             requestObject = {
                 account: data.accountDetails,
                 updateAccountDetails: this.updateAccount,
@@ -1585,7 +1588,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 date: data.voucherDetails.voucherDate,
                 type: this.invoiceType,
                 exchangeRate: exRate,
-                dueDate: data.voucherDetails.dueDate
+                dueDate: data.voucherDetails.dueDate,
+                deposit
             } as GenericRequestForGenerateSCD;
             // set voucher type
             requestObject.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
@@ -2376,7 +2380,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.depositCurrSymbol = event.additional && event.additional.currencySymbol || this.baseCurrencySymbol;
                 }
             } else {
-                this.invFormData.accountDetails.currencySymbol = '';
+                this.invFormData.accountDetails.currencySymbol = this.baseCurrencySymbol;
             }
 
             if (this.isCashInvoice) {
@@ -2549,6 +2553,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             // sales and cash invoice uses v4 api so need to parse main object to regarding that
             if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
+                const deposit = new AmountClassMulticurrency();
+                deposit.accountUniqueName = this.depositAccountUniqueName;
+                deposit.amountForAccount = this.depositAmount;
                 requestObject = {
                     account: data.accountDetails,
                     updateAccountDetails: this.updateAccount,
@@ -2559,7 +2566,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     exchangeRate: exRate,
                     dueDate: data.voucherDetails.dueDate,
                     number: this.invoiceNo,
-                    uniqueName: unqName
+                    uniqueName: unqName,
+                    deposit
                 } as GenericRequestForGenerateSCD;
                 if (this.isCreditNote || this.isDebitNote) {
                     requestObject['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
@@ -3205,9 +3213,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         obj.templateDetails = data.templateDetails;
         obj.entries = salesEntryClassArray;
-        if ((<GenericRequestForGenerateSCD>obj).deposit) {
-            (<GenericRequestForGenerateSCD>obj).deposit = deposit;
-        }
 
         obj.account.billingDetails.countryName = this.customerCountryName;
         obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
