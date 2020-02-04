@@ -1621,16 +1621,12 @@ input:-moz-placeholder {
     justify-content: center;
     align-items: center;
     padding: 0;
-    margin-right: 5px;
-        float: left;
+    margin-right: 15px;
+    float: left;
 }
 
 .company-name .cText .fyear {
     font-size: 12px;
-}
-
-.company-name .cText span {
-    color: #fff;
 }
 
 .acntAccordion .title.active {
@@ -2086,9 +2082,10 @@ fieldset[disabled] .btn-primary:hover {
     cursor: pointer;
     position: relative;
     padding-right: 25px;
-    /* max-width: 380px; */
     display: inline-block;
-    width: 100%;
+    background: none;
+    padding: 0px 5px 0 0 !important;
+    color: #fff;
 }
 
 /* #cmpWrp .cText {
@@ -6429,7 +6426,7 @@ table td[class*=col-]:last-child {
     right: 4px;
     padding: 0px;
     border: 1px solid #cccccc;
-    left: 25px;
+    left: -15px !important;
 }
 
 .user_dropdown > li > a {
@@ -9206,6 +9203,16 @@ input.checkbox-custom[type="checkbox"] {
     .checkbox-custom-label, .radio-custom-label{
         display: inline;
     }
+    #cmpWrp {
+        display: block;
+    }
+    .cText span.cName {
+        color: #fff !important;
+    }
+    .user_dropdown {
+        left: 0px !important;
+    }
+
 }
 
 @media (max-width: 575px) {
