@@ -636,7 +636,8 @@
     <div bsModal #performActionOnInvoiceModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
         <div class="modal-dialog modal-md perform-payment">
             <div class="modal-content">
-                <invoice-payment-model [selectedInvoiceForPayment]="selectedInvoice" (closeModelEvent)="closePerformActionPopup($event)"></invoice-payment-model>
+                <invoice-payment-model *ngIf="(selectedVoucher !== 'purchase')" [selectedInvoiceForPayment]="selectedInvoice"
+                    (closeModelEvent)="closePerformActionPopup($event)"></invoice-payment-model>
             </div>
         </div>
     </div>
