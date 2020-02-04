@@ -837,7 +837,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                         } else if (this.isPurchaseInvoice) {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
-                            this.isRcmEntry = (convertedRes1 && convertedRes1.accountDetails) ? convertedRes1.accountDetails.subVoucher === Subvoucher.ReverseCharge : false;
+                            this.isRcmEntry = (results[1]) ? results[1].subVoucher === Subvoucher.ReverseCharge : false;
                             obj = cloneDeep(convertedRes1) as VoucherClass;
                             if (this.isUpdateMode) {
                                 const vendorCurrency = (results[1].account.currency) ? results[1].account.currency.code : this.companyCurrency;
@@ -1510,10 +1510,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             data.accountDetails.billingDetails.address = data.accountDetails.billingDetails.address[0].split('<br />');
         }
 
-        if (this.isPurchaseInvoice  && this.isRcmEntry) {
-            data.accountDetails.subVoucher = Subvoucher.ReverseCharge;
-        }
-
         // convert date object
         if (this.invoiceType === VoucherTypeEnum.generateProforma || this.invoiceType === VoucherTypeEnum.proforma) {
             data.voucherDetails.proformaDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
@@ -1614,7 +1610,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 dueDate: data.voucherDetails.dueDate,
                 type: this.invoiceType,
                 attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
-                templateDetails: data.templateDetails
+                templateDetails: data.templateDetails,
+                subVoucher: (this.isRcmEntry) ? Subvoucher.ReverseCharge : ''
             } as PurchaseRecordRequest;
         }
 
@@ -2708,7 +2705,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             data.accountDetails.billingDetails.address = data.accountDetails.billingDetails.address[0].split('<br />');
         }
         if (this.isPurchaseInvoice  && this.isRcmEntry) {
-            data.accountDetails.subVoucher = Subvoucher.ReverseCharge;
+            data.subVoucher = Subvoucher.ReverseCharge;
         }
 
         // convert date object

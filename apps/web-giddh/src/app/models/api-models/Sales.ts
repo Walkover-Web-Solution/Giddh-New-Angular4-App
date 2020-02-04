@@ -147,7 +147,6 @@ export class AccountDetailsClass {
     public currencySymbol: string = '';
     public customerName: string;
     public mobileNumber?: string;
-    public subVoucher?: string;
 
     constructor(attrs?: any) {
         //this.country = new CountryClass();
@@ -524,6 +523,7 @@ export class VoucherClass {
     public depositAccountUniqueName: string;
     public templateUniqueName?: string;
     public number?: string;
+    public subVoucher?: string;
 
     constructor() {
         this.accountDetails = new AccountDetailsClass();
