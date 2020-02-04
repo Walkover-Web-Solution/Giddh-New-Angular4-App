@@ -58,7 +58,7 @@ export class InvoiceReceiptActions {
     @Effect()
     private GET_VOUCHER_DETAILSV4$: Observable<Action> = this.action$
         .ofType(INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILSV4).pipe(
-            switchMap((action: CustomActions) => this._receiptService.GetVoucherDetailsV4(action.payload.accountUniqueName,
+            switchMap((action: CustomActions) => this._receiptService.getVoucherDetailsV4(action.payload.accountUniqueName,
                 action.payload.model)),
             map((response: BaseResponse<Voucher, ReceiptVoucherDetailsRequest>) => {
                 if (response.status === 'success') {
@@ -185,7 +185,7 @@ export class InvoiceReceiptActions {
             payload: response
         };
     }
-    public GetVoucherDetailsV4(accountUniqueName: string, model: ReceiptVoucherDetailsRequest): CustomActions {
+    public getVoucherDetailsV4(accountUniqueName: string, model: ReceiptVoucherDetailsRequest): CustomActions {
         return {
             type: INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILSV4,
             payload: { accountUniqueName, model }
