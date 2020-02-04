@@ -6427,7 +6427,6 @@ table td[class*=col-]:last-child {
     padding: 0px;
     border: 1px solid #cccccc;
     left: -15px !important;
-    margin-top: 10px;
 }
 
 .user_dropdown > li > a {
@@ -9210,7 +9209,9 @@ input.checkbox-custom[type="checkbox"] {
     .cText span.cName {
         color: #fff !important;
     }
-
+    .user_dropdown {
+        left: 0px !important;
+    }
 
 }
 

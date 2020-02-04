@@ -264,7 +264,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         this.user$ = this.store.select(createSelector([(state: AppState) => state.session.user], (user) => {
             if (user) {
+                let name = user.user.name;
                 this.loggedInUserEmail = user.user.email;
+                if (user.user.name.match(/\s/g)) {
+                    this.userFullName = name;
+                    let tmpName = name.split(' ');
+                    this.userName = tmpName[0][0] + tmpName[1][0];
+                } else {
+                    this.userName = user.user.name[0] + user.user.name[1];
+                    this.userFullName = name;
+                }
                 return user.user;
             }
         })).pipe(takeUntil(this.destroyed$));
@@ -355,7 +364,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.getElectronAppVersion();
         this.store.dispatch(this.companyActions.GetApplicationDate());
 
-        this.user$.pipe(take(1)).subscribe((u) => {
+        this.user$.pipe(takeUntil(this.destroyed$)).subscribe((u) => {
             if (u) {
                 let userEmail = u.email;
                 this.userEmail = _.clone(userEmail);
@@ -374,6 +383,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                 this.store.dispatch(this.loginAction.renewSession());
             }
+
         });
 
         if (this.isSubscribedPlanHaveAdditionalCharges) {
@@ -602,7 +612,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngAfterViewInit() {
-
         if (this.selectedPlanStatus === 'expired') {// active expired
             this.openExpiredPlanModel(this.expiredPlanModel);
         }
