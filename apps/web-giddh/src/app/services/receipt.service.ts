@@ -179,7 +179,7 @@ export class ReceiptService implements OnInit {
             catchError((e) => this.errorHandler.HandleCatch<Voucher, ReceiptVoucherDetailsRequest>(e, model, { accountUniqueName })));
     }
 
-    public GetVoucherDetailsV4(accountUniqueName: string, model: ReceiptVoucherDetailsRequest): Observable<BaseResponse<Voucher, ReceiptVoucherDetailsRequest>> {
+    public getVoucherDetailsV4(accountUniqueName: string, model: ReceiptVoucherDetailsRequest): Observable<BaseResponse<Voucher, ReceiptVoucherDetailsRequest>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.post(this.config.apiUrl + RECEIPT_API.GET_DETAILS_V4
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
