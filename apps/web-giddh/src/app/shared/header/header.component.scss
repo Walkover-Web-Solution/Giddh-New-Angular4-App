@@ -54,7 +54,7 @@
 }
 
 .account-search {
-    margin: 10px 15px 10px 15px;
+    margin: 10px 15px 5px 15px;
     position: relative;
     height: 36px;
 }
@@ -143,6 +143,9 @@ a[vr-item]:focus {
 .left_fixed_header>li {
     text-transform: capitalize;
     position: relative;
+}
+.no-padding {
+    padding: 0px !important;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
