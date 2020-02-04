@@ -733,6 +733,9 @@ ul.sub-list {
     .cText[_ngcontent-ytw-c2] {
         overflow: hidden;
     }
+    .cText.head-nav {
+        display: none;
+    }
 }
 
 @media (min-width: 412px) and (max-width: 840px) {
