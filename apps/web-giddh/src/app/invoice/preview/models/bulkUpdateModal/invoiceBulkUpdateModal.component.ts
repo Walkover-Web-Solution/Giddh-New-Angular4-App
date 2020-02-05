@@ -15,6 +15,9 @@ import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service'
 import { BulkUpdateInvoiceNote, BulkUpdateInvoiceImageSignature, BulkUpdateInvoiceTemplates, BulkUpdateInvoiceDueDates, BulkUpdateInvoiceSlogan, BulkUpdateInvoiceShippingDetails, BulkUpdateInvoiceCustomfields } from 'apps/web-giddh/src/app/models/api-models/Contact';
 import { InvoiceBulkUpdateService } from 'apps/web-giddh/src/app/services/invoice.bulkupdate.service';
 import { NgForm } from '@angular/forms';
+import * as moment from 'moment/moment';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+
 
 @Component({
     selector: 'invoice-bulk-update-modal-component',
@@ -36,7 +39,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         { label: 'Shipping Details', value: 'shippingDetails' },
         { label: 'Custom Fields', value: 'customFields' }
     ];
-    public selectedField: string;
+    public selectedField: string = '';
     public allTemplates$: Observable<CustomTemplateResponse[]>;
     public allTemplatesOptions: IOption[] = [];
     public fileUploadOptions: UploaderOptions;
@@ -56,6 +59,8 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     public updateDueDatesRequest: BulkUpdateInvoiceDueDates = new BulkUpdateInvoiceDueDates();
     public updateShippingDetailsRequest: BulkUpdateInvoiceShippingDetails = new BulkUpdateInvoiceShippingDetails();
     public updateCustomfieldsRequest: BulkUpdateInvoiceCustomfields = new BulkUpdateInvoiceCustomfields();
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+
 
 
 
@@ -130,11 +135,11 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     }
 
     public onCancel() {
-        this.selectedField = null;
+        this.selectedField = '';
+        this.bulkUpdateForm.reset();
         this.closeModelEvent.emit(true);
     }
     public onSelectEntryField(option: IOption) {
-        console.log('selected fild', this.selectedField)
         if (option && option.value) {
             this.bulkUpdateForm.reset();
         }
@@ -142,7 +147,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     }
     public onSelectTemplateType(option: IOption) {
         if (option && option.value) {
-            console.log(option.value);
+            //
         }
     }
 
@@ -210,7 +215,10 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
 
                     break;
                 case 'dueDate':
-                     this.bulkUpdateRequest(this.updateDueDatesRequest, 'duedate');
+                    if (this.updateDueDatesRequest.dueDate) {
+                        this.updateDueDatesRequest.dueDate = moment(this.updateDueDatesRequest.dueDate, this.giddhDateFormat).format(this.giddhDateFormat);
+                    }
+                    this.bulkUpdateRequest(this.updateDueDatesRequest, 'duedate');
 
                     break;
                 case 'shippingDetails':
@@ -218,8 +226,10 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
 
                     break;
                 case 'customFields':
+                    if (this.updateCustomfieldsRequest.customField1) {
+                        this.updateCustomfieldsRequest.customField1 = moment(this.updateCustomfieldsRequest.customField1, this.giddhDateFormat).format();
+                    }
                     this.bulkUpdateRequest(this.updateCustomfieldsRequest, 'customfields');
-
                     break;
             }
         }
@@ -251,11 +261,13 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
                 this._invoiceBulkUpdateService.bulkUpdateInvoice(requestModel, actionType).subscribe(response => {
 
                     if (response.status === "success") {
+
                         this._toaster.successToast(response.body);
+
                     } else {
                         this._toaster.errorToast(response.message);
                     }
-
+                    this.onCancel();
                 });
             }
         }

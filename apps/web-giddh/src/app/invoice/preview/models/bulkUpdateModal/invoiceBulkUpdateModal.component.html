@@ -16,14 +16,14 @@
 
                 <div class="col-md-6 col-sm-6">
                     <div class="form-group" *ngIf="selectedField === 'pdfTemplate'">
-                        <sh-select placeholder="Select" [options]="allTemplatesOptions" [isFilterEnabled]="true" [ItemHeight]="33" name="templateUniqueName" [(ngModel)]="updateTemplatesRequest.templateUniqueName" (selected)="onSelectTemplateType($event)"></sh-select>
+                        <sh-select placeholder="Select" [options]="allTemplatesOptions" required [isFilterEnabled]="true" [ItemHeight]="33" name="templateUniqueName" [(ngModel)]="updateTemplatesRequest.templateUniqueName" (selected)="onSelectTemplateType($event)"></sh-select>
                     </div>
 
                     <div class="form-group" *ngIf="selectedField === 'notes'">
                         <span> Note 1</span>
-                        <textarea class="form-control" name="message1" [(ngModel)]="updateNotesRequest.message1" name="message1"></textarea>
+                        <textarea class="form-control" required name="message1" [(ngModel)]="updateNotesRequest.message1" name="message1"></textarea>
                         <span> Note 2</span>
-                        <textarea class="form-control" name="message2" [(ngModel)]="updateNotesRequest.message2" name="message2"></textarea>
+                        <textarea class="form-control" required name="message2" [(ngModel)]="updateNotesRequest.message2" name="message2"></textarea>
                     </div>
 
                     <div class="form-group" *ngIf="selectedField === 'signature'">
@@ -31,7 +31,7 @@
                     </div>
 
                     <div class="relative form-group" *ngIf="selectedField === 'dueDate'">
-                        <input name="lastInvoiceDate" placeholder="Select Date" type="text" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" [(ngModel)]="updateDueDatesRequest.dueDate" class="form-control" bsDatepicker required>
+                        <input name="lastInvoiceDate" required placeholder="Select Date" type="text" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" [(ngModel)]="updateDueDatesRequest.dueDate" class="form-control" bsDatepicker required>
                         <i class="fa fa-calendar text-light-2 inpute-date"></i>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
             </div>
         </div>
         <div class="modal-footer d-flex" style="justify-content: flex-start">
-            <button class="btn btn-success" (click)="updateBulkInvoice();" [disabled]="!selectedField">Update</button>
+            <button class="btn btn-success" (click)="updateBulkInvoice();" [disabled]="bulkUpdateForm.invalid && !selectedField">Update</button>
             <button class="btn btn-danger" (click)="onCancel()">Cancel</button>
         </div>
     </form>
