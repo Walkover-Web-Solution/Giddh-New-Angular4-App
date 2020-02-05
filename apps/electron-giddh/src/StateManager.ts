@@ -29,8 +29,7 @@ export const DEFAULT_URL = url.format({
 });
 
 function defaultWindows() {
-    console.log('server: ', serve);
-    console.log('debugMode: ', debugMode);
+
     if (serve) {
         require('electron-reload')(__dirname, {
             electron: require(`${__dirname}/../../../node_modules/electron`)

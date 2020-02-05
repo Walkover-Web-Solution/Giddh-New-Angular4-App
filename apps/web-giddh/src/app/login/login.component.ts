@@ -267,7 +267,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         });
         this.isLoginWithPasswordSuccessNotVerified$.subscribe(res => {
             if (res) {
-                console.log("isLoginWithPasswordSuccessNotVerified", res);
+//
             }
         });
         this.isLoginWithPasswordIsShowVerifyOtp$.subscribe(res => {

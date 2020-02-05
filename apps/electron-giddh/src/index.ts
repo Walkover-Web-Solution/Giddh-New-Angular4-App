@@ -44,17 +44,11 @@ ipcMain.on("take-server-environment", (event, arg) => {
     APP_URL = arg.AppUrl;
     process.env.APP_FOLDER = arg.APP_FOLDER;
     APP_FOLDER = arg.APP_FOLDER;
-
-    console.log('STAGING_ENV:' + process.env.STAGING_ENV);
-    console.log('TEST_ENV:' + process.env.TEST_ENV);
-    console.log('LOCAL_ENV:' + process.env.LOCAL_ENV);
-    console.log('PRODUCTION_ENV:' + process.env.PRODUCTION_ENV);
 });
 
 ipcMain.on("authenticate", (event, arg) => {
 
     if (arg === "google") {
-        console.log('GoogleLoginElectronConfig:' + GoogleLoginElectronConfig.clientId);
 
 
         const myApiOauth = new ElectronGoogleOAuth2(GoogleLoginElectronConfig.clientId,
@@ -75,7 +69,6 @@ ipcMain.on("authenticate", (event, arg) => {
                 } else if (event.sender.send) {
                     event.sender.send('take-your-gmail-token', token);
                 }
-                console.log(JSON.stringify(token));
                 // use your token.access_token
             });
     }

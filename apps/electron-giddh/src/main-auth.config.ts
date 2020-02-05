@@ -6,10 +6,7 @@ const debugMode = isEnvSet
     /node_modules[\\/]electron[\\/]/.test(process.execPath);
 
 const getGoogleCredentials = () => {
-    console.log('STAGING_ENV:' + process.env.STAGING_ENV);
-    console.log('TEST_ENV:' + process.env.TEST_ENV);
-    console.log('LOCAL_ENV:' + process.env.LOCAL_ENV);
-    console.log('PRODUCTION_ENV:' + process.env.PRODUCTION_ENV);
+
     if (process.env.PRODUCTION_ENV) {
         return {
             GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
