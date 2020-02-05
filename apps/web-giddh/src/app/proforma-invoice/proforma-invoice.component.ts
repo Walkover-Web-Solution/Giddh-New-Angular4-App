@@ -35,7 +35,9 @@ import {
     VOUCHER_TYPE_LIST,
     VoucherClass,
     VoucherDetailsClass,
-    VoucherTypeEnum
+    VoucherTypeEnum,
+    PurchaseRecordRequest,
+    TemplateDetailsClass
 } from '../models/api-models/Sales';
 import { auditTime, delay, filter, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
@@ -43,7 +45,7 @@ import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rx
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { NgForm } from '@angular/forms';
 import { DiscountListComponent } from '../sales/discount-list/discountList.component';
-import { IContentCommon } from '../models/api-models/Invoice';
+import { IContentCommon, InvoicePreviewDetailsVm } from '../models/api-models/Invoice';
 import { StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../models/api-models/Account';
@@ -76,9 +78,12 @@ import { NAVIGATION_ITEM_LIST } from '../models/defaultMenus';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
 import { SettingsUtilityService } from '../settings/services/settings-utility.service';
 import { WarehouseDetails } from '../ledger/ledger.vm';
-import { RCM_ACTIONS, RcmModalConfiguration } from '../common/rcm-modal/rcm-modal.interface';
+import { CONFIRMATION_ACTIONS, ConfirmationModalConfiguration } from '../common/confirmation-modal/confirmation-modal.interface';
 import { GeneralService } from '../services/general.service';
+import { ProformaInvoiceUtilityService } from './services/proforma-invoice-utility.service';
+import { PurchaseRecordService } from '../services/purchase-record.service';
 import { CommonActions } from '../actions/common.actions';
+import { PurchaseRecordActions } from '../actions/purchase-record/purchase-record.action';
 
 const THEAD_ARR_READONLY = [
     {
@@ -142,6 +147,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @Input() public accountUniqueName: string = '';
     @Input() public invoiceNo = '';
     @Input() public invoiceType: VoucherTypeEnum = VoucherTypeEnum.sales;
+    @Input() public selectedItem: InvoicePreviewDetailsVm;
 
     @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
     @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
@@ -167,6 +173,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     /** RCM popup instance */
     @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
+    /** Purchase record modal instance */
+    @ViewChild('purchaseRecordConfirmationPopup') public purchaseRecordConfirmationPopup: ModalDirective;
+    /** Billing state instance */
+    @ViewChild('billingState') billingState: ElementRef;
+    /** Shipping state instance */
+    @ViewChild('shippingState') shippingState: ElementRef;
 
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -280,24 +292,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /** True, if the entry contains RCM applicable taxes */
     public isRcmEntry: boolean = false;
     /** RCM modal configuration */
-    public rcmConfiguration: RcmModalConfiguration;
-
-    // private below
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    private selectedAccountDetails$: Observable<AccountResponseV2>;
-    private innerEntryIdx: number;
-    private updateAccount: boolean = false;
-    private sundryDebtorsAcList: IOption[] = [];
-    private sundryCreditorsAcList: IOption[] = [];
-    private prdSerAcListForDeb: IOption[] = [];
-    private prdSerAcListForCred: IOption[] = [];
-    private createAccountIsSuccess$: Observable<boolean>;
-    private updateAccountSuccess$: Observable<boolean>;
-    private createdAccountDetails$: Observable<AccountResponseV2>;
-    private updatedAccountDetails$: Observable<AccountResponseV2>;
-    private generateVoucherSuccess$: Observable<boolean>;
-    private updateVoucherSuccess$: Observable<boolean>;
-    private lastGeneratedVoucherNo$: Observable<{ voucherNo: string, accountUniqueName: string }>;
+    public rcmConfiguration: ConfirmationModalConfiguration;
+    /** Purchase record confirmation popup configuration */
+    public purchaseRecordConfirmationConfiguration: ConfirmationModalConfiguration;
+    public selectedCompany: any;
+    public formFields: any[] = [];
 
     //Multi-currency changes
     public exchangeRate = 1;
@@ -317,6 +316,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public reverseExchangeRate: number;
     public originalReverseExchangeRate: number;
     public countryCode: string = '';
+
+    // private members
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    private selectedAccountDetails$: Observable<AccountResponseV2>;
+    private innerEntryIdx: number;
+    private updateAccount: boolean = false;
+    private sundryDebtorsAcList: IOption[] = [];
+    private sundryCreditorsAcList: IOption[] = [];
+    private prdSerAcListForDeb: IOption[] = [];
+    private prdSerAcListForCred: IOption[] = [];
+    private createAccountIsSuccess$: Observable<boolean>;
+    private updateAccountSuccess$: Observable<boolean>;
+    private createdAccountDetails$: Observable<AccountResponseV2>;
+    private updatedAccountDetails$: Observable<AccountResponseV2>;
+    private generateVoucherSuccess$: Observable<boolean>;
+    private updateVoucherSuccess$: Observable<boolean>;
+    private lastGeneratedVoucherNo$: Observable<{ voucherNo: string, accountUniqueName: string }>;
     private entriesListBeforeTax: SalesEntryClass[];
     /** True, if user has selected custom invoice in Invoice Setting */
     private useCustomInvoiceNumber: boolean;
@@ -324,9 +340,31 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private isInvoiceRequestedFromPreviousPage: boolean;
     // variable for checking do we really need to show loader, issue ref :- when we open aside pan loader is displayed unnecessary
     private shouldShowLoader: boolean = true;
-    public selectedCompany: any;
-    public formFields: any[] = [];
+    /** Stores matching purchase record details */
+    private matchingPurchaseRecord: any;
+    /** Purchase Record customer unique name */
+    private purchaseRecordCustomerUniqueName: string = '';
+    /** Purchase Record tax number */
+    private purchaseRecordTaxNumber: string = '';
+    /** Purchase Record invoice date */
+    private purchaseRecordInvoiceDate: string = '';
+    /** Purchase Record invoice number */
+    private purchaseRecordInvoiceNumber: string = '';
 
+    /**
+     * Returns true, if Purchase Record creation record is broken
+     *
+     * @readonly
+     * @private
+     * @type {boolean}
+     * @memberof ProformaInvoiceComponent
+     */
+    private get isPurchaseRecordContractBroken(): boolean {
+        return (this.purchaseRecordCustomerUniqueName !== this.invFormData.voucherDetails.customerUniquename) ||
+        (this.purchaseRecordInvoiceDate !== moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT)) ||
+        (this.purchaseRecordTaxNumber !== this.invFormData.accountDetails.shippingDetails.gstNumber ||
+        (this.purchaseRecordInvoiceNumber !== this.invFormData.voucherDetails.voucherNumber));
+    }
 
     constructor(
         private store: Store<AppState>,
@@ -349,9 +387,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private proformaActions: ProformaActions,
         private _ledgerService: LedgerService,
         private loaderService: LoaderService,
+        private proformaInvoiceUtilityService: ProformaInvoiceUtilityService,
+        private purchaseRecordService: PurchaseRecordService,
         private settingsUtilityService: SettingsUtilityService,
         private warehouseActions: WarehouseActions,
-        private commonActions: CommonActions
+        private commonActions: CommonActions,
+        private purchaseRecordAction: PurchaseRecordActions
     ) {
         this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
@@ -401,6 +442,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.showLoader = true;
             } else {
                 this.showLoader = false;
+                this._cdr.detectChanges();
                 // call focus in customer after loader hides because after loader hider ui re-renders it self
                 this.focusInCustomerName();
             }
@@ -432,7 +474,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public handleRcmChange(action: string): void {
-        if (action === RCM_ACTIONS.YES) {
+        if (action === CONFIRMATION_ACTIONS.YES) {
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.isRcmEntry = !this.isRcmEntry;
         }
@@ -500,20 +542,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.accountUniqueName = parmas['accUniqueName'];
                 this.invoiceNo = parmas['invoiceNo'];
                 this.isUpdateMode = true;
-
-                // add fixed class to body because double scroll showing in invoice update mode
-                document.querySelector('body').classList.add('fixed');
-
                 this.isUpdateDataInProcess = true;
                 this.prepareInvoiceTypeFlags();
 
                 this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
 
                 if (!this.isProformaInvoice && !this.isEstimateInvoice) {
-                    this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
-                        invoiceNumber: this.invoiceNo,
-                        voucherType: this.parseVoucherType(this.invoiceType)
-                    }));
+                    if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
+                        this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.accountUniqueName, {
+                            invoiceNumber: this.invoiceNo,
+                            voucherType: this.parseVoucherType(this.invoiceType)
+                        }));
+                    }
+                    // TODO: Add purchase record get API call once advance receipt is complete
                 } else {
                     let obj: ProformaGetRequest = new ProformaGetRequest();
                     obj.accountUniqueName = this.accountUniqueName;
@@ -526,7 +567,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             } else {
                 // for edit mode direct from @Input
-                if (this.accountUniqueName && this.invoiceNo && this.invoiceType) {
+                if (this.accountUniqueName && this.invoiceType && (this.invoiceNo || this.isPurchaseInvoice)) {
                     this.store.dispatch(this._generalActions.setAppTitle('/pages/proforma-invoice/invoice/' + this.invoiceType));
                     this.getVoucherDetailsFromInputs();
                 }
@@ -550,9 +591,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         });
 
         // get account details and set it to local var
-        this.selectedAccountDetails$.subscribe(o => {
-            if (o && !this.isUpdateMode) {
-                this.assignAccountDetailsValuesInForm(o);
+        this.selectedAccountDetails$.subscribe(accountDetails => {
+            if (accountDetails && !this.isUpdateMode) {
+                this.assignAccountDetailsValuesInForm(accountDetails);
             }
         });
 
@@ -794,6 +835,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 obj.accountDetails.currencySymbol = acc.currencySymbol || '';
                             });
 
+                        } else if (this.isPurchaseInvoice) {
+                            let convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
+                            obj = cloneDeep(convertedRes1) as VoucherClass;
+                            if (this.isUpdateMode) {
+                                const vendorCurrency = (results[1].account.currency) ? results[1].account.currency.code : this.companyCurrency;
+                                if (vendorCurrency !== this.companyCurrency) {
+                                    this.isMulticurrencyAccount = true;
+                                    this.getCurrencyRate(this.companyCurrency, vendorCurrency);
+                                }
+                            }
                         } else {
                             obj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
                         }
@@ -894,6 +945,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.invoiceDataFound = false;
                     }
                     this.isUpdateDataInProcess = false;
+                    if (this.isPurchaseInvoice) {
+                        this.selectedFileName = results[1].attachedFileName;
+                        if (this.invFormData && this.invFormData.entries && this.invFormData.entries[0]) {
+                            this.invFormData.entries[0].attachedFile = (results[1].attachedFiles) ? results[1].attachedFiles[0] : '';
+                        }
+                        this.saveCurrentPurchaseRecordDetails();
+                    }
                 }
 
                 // create account success then close sidebar, and add customer details
@@ -1058,6 +1116,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 });
             }
         });
+        this.prepareInvoiceTypeFlags();
     }
 
     private async prepareCompanyCountryAndCurrencyFromProfile(profile) {
@@ -1234,7 +1293,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invFormData.accountDetails = new AccountDetailsClass(data);
 
             setTimeout(() => {
-                this.customerBillingAddress.nativeElement.focus();
+                if (this.customerBillingAddress && this.customerBillingAddress.nativeElement) {
+                    this.customerBillingAddress.nativeElement.focus();
+                }
+                this._cdr.detectChanges();
             }, 500);
         });
     }
@@ -1313,6 +1375,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.selectedFileName = '';
         this.selectedWarehouse = '';
         this.isRcmEntry = false;
+        this.matchingPurchaseRecord = null;
+        this.purchaseRecordCustomerUniqueName = '';
+        this.purchaseRecordInvoiceDate = '';
+        this.purchaseRecordTaxNumber = '';
+        this.purchaseRecordInvoiceNumber = '';
 
         this.assignDates();
         let invoiceSettings: InvoiceSetting = null;
@@ -1344,6 +1411,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // auto fill shipping address
         if (this.autoFillShipping) {
             this.invFormData.accountDetails.shippingDetails = _.cloneDeep(this.invFormData.accountDetails.billingDetails);
+            if (this.shippingState && this.shippingState.nativeElement) {
+                this.shippingState.nativeElement.classList.remove('error-box');
+            }
         }
     }
 
@@ -1359,7 +1429,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public onSubmitInvoiceForm(f?: NgForm) {
+    public onSubmitInvoiceForm(form?: NgForm) {
         let data: VoucherClass = _.cloneDeep(this.invFormData);
 
         // special check if gst no filed is visible then and only then check for gst validation
@@ -1505,51 +1575,66 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             return entry;
         });
         let exRate = this.originalExchangeRate;
-        let obj: GenericRequestForGenerateSCD = {
-            account: data.accountDetails,
-            updateAccountDetails: this.updateAccount,
-            voucher: data,
-            entries: [],
-            date: data.voucherDetails.voucherDate,
-            type: this.invoiceType,
-            exchangeRate: exRate,
-            dueDate: data.voucherDetails.dueDate
-        };
-
-        // set voucher type
-        obj.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
-
-        // set state details as new request
-        obj.account.billingDetails.countryName = this.customerCountryName;
-        obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
-        obj.account.billingDetails.stateName = obj.account.billingDetails.state.name;
-
-        // set state details as new request
-        obj.account.shippingDetails.countryName = this.customerCountryName;
-        obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
-        obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
+        let requestObject: any;
+        if (!this.isPurchaseInvoice) {
+            const deposit = new AmountClassMulticurrency();
+            deposit.accountUniqueName = this.depositAccountUniqueName;
+            deposit.amountForAccount = this.depositAmount;
+            requestObject = {
+                account: data.accountDetails,
+                updateAccountDetails: this.updateAccount,
+                voucher: data,
+                entries: [],
+                date: data.voucherDetails.voucherDate,
+                type: this.invoiceType,
+                exchangeRate: exRate,
+                dueDate: data.voucherDetails.dueDate,
+                deposit
+            } as GenericRequestForGenerateSCD;
+            // set voucher type
+            requestObject.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
+            // set state details as new request
+            requestObject.account.billingDetails.countryName = this.customerCountryName;
+            requestObject.account.billingDetails.stateCode = requestObject.account.billingDetails.state.code;
+            requestObject.account.billingDetails.stateName = requestObject.account.billingDetails.state.name;
+            // set state details as new request
+            requestObject.account.shippingDetails.countryName = this.customerCountryName;
+            requestObject.account.shippingDetails.stateCode = requestObject.account.shippingDetails.state.code;
+            requestObject.account.shippingDetails.stateName = requestObject.account.shippingDetails.state.name;
+        } else {
+            requestObject = {
+                account: data.accountDetails,
+                number: this.invFormData.voucherDetails.voucherNumber || '',
+                entries: data.entries,
+                date: data.voucherDetails.voucherDate,
+                dueDate: data.voucherDetails.dueDate,
+                type: this.invoiceType,
+                attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
+                templateDetails: data.templateDetails
+            } as PurchaseRecordRequest;
+        }
 
         if (this.isProformaInvoice || this.isEstimateInvoice) {
 
             if (this.depositAmount && this.depositAmount > 0) {
-                obj.paymentAction = {
+                requestObject.paymentAction = {
                     action: 'paid',
                     amount: Number(this.depositAmount) + this.depositAmountAfterUpdate
                 };
                 if (this.isCustomerSelected) {
-                    obj.depositAccountUniqueName = this.depositAccountUniqueName;
+                    requestObject.depositAccountUniqueName = this.depositAccountUniqueName;
                 } else {
-                    obj.depositAccountUniqueName = data.accountDetails.uniqueName;
+                    requestObject.depositAccountUniqueName = data.accountDetails.uniqueName;
                 }
             } else {
-                obj.depositAccountUniqueName = '';
+                requestObject.depositAccountUniqueName = '';
             }
-            this.store.dispatch(this.proformaActions.generateProforma(obj));
+            this.store.dispatch(this.proformaActions.generateProforma(requestObject));
         } else {
-            let updatedData = obj;
+            let updatedData = requestObject;
             let isVoucherV4 = false;
-            if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
-                updatedData = this.updateData(obj, data);
+            if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote || this.isPurchaseInvoice) {
+                updatedData = this.updateData(requestObject, data);
                 isVoucherV4 = true;
                 if (this.useCustomInvoiceNumber) {
                     updatedData['number'] = this.invFormData.voucherDetails.voucherNumber;
@@ -1558,34 +1643,26 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     updatedData['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
                 }
             }
-            this.salesService.generateGenericItem(updatedData, isVoucherV4).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
-                if (response.status === 'success') {
-                    // reset form and other
-                    this.resetInvoiceForm(f);
-
-                    if (response.body.account) {
-                        this.voucherNumber = response.body.number;
-                        this.invoiceNo = this.voucherNumber;
-                        this.accountUniqueName = response.body.account.uniqueName;
-                    } else {
-                        this.voucherNumber = response.body.voucherDetails.voucherNumber;
-                        this.invoiceNo = this.voucherNumber;
-                        this.accountUniqueName = response.body.accountDetails.uniqueName;
-                    }
-
-                    if (this.isPurchaseInvoice) {
-                        this._toasty.successToast(`Entry created successfully`);
-                    } else {
-                        this._toasty.successToast(`Entry created successfully with Voucher Number: ${this.voucherNumber}`);
-                    }
-                    this.postResponseAction(this.invoiceNo);
+            if (this.isPurchaseInvoice) {
+                if (this.invFormData.accountDetails.shippingDetails.state.code && this.invFormData.accountDetails.billingDetails.state.code) {
+                    this.generatePurchaseRecord(updatedData);
                 } else {
-                    this._toasty.errorToast(response.message, response.code);
+                    if (this.shippingState && this.shippingState.nativeElement && !this.invFormData.accountDetails.shippingDetails.state.code) {
+                        this.shippingState.nativeElement.classList.add('error-box');
+                    }
+                    if (this.billingState && this.billingState.nativeElement && !this.invFormData.accountDetails.billingDetails.state.code) {
+                        this.billingState.nativeElement.classList.add('error-box');
+                    }
+                    this._toasty.errorToast('State is mandatory');
+                    return;
                 }
-                this.updateAccount = false;
-            }, (error1 => {
-                this._toasty.errorToast('Something went wrong! Try again');
-            }));
+            } else {
+                this.salesService.generateGenericItem(updatedData, isVoucherV4).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
+                    this.handleGenerateResponse(response, form);
+                }, (error1 => {
+                    this._toasty.errorToast('Something went wrong! Try again');
+                }));
+            }
         }
     }
 
@@ -2303,7 +2380,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.depositCurrSymbol = event.additional && event.additional.currencySymbol || this.baseCurrencySymbol;
                 }
             } else {
-                this.invFormData.accountDetails.currencySymbol = '';
+                this.invFormData.accountDetails.currencySymbol = this.baseCurrencySymbol;
             }
 
             if (this.isCashInvoice) {
@@ -2463,20 +2540,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param invoiceForm
      */
     public submitUpdateForm(invoiceForm: NgForm) {
-        let result = this.prepareDataForApi();
-        if (!result) {
+        let requestObject: any = this.prepareDataForApi();
+        if (!requestObject) {
             return;
         }
         if (this.isProformaInvoice || this.isEstimateInvoice) {
-            this.store.dispatch(this.proformaActions.updateProforma(result));
+            this.store.dispatch(this.proformaActions.updateProforma(requestObject));
         } else {
-            let data = result.voucher;
+            let data = requestObject.voucher;
             let exRate = this.originalExchangeRate;
             let unqName = this.invoiceUniqueName || this.accountUniqueName;
 
             // sales and cash invoice uses v4 api so need to parse main object to regarding that
             if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
-                result = {
+                const deposit = new AmountClassMulticurrency();
+                deposit.accountUniqueName = this.depositAccountUniqueName;
+                deposit.amountForAccount = this.depositAmount;
+                requestObject = {
                     account: data.accountDetails,
                     updateAccountDetails: this.updateAccount,
                     voucher: data,
@@ -2486,21 +2566,35 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     exchangeRate: exRate,
                     dueDate: data.voucherDetails.dueDate,
                     number: this.invoiceNo,
-                    uniqueName: unqName
-                };
+                    uniqueName: unqName,
+                    deposit
+                } as GenericRequestForGenerateSCD;
                 if (this.isCreditNote || this.isDebitNote) {
-                    result['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
+                    requestObject['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
                 }
 
-                this.salesService.updateVoucherV4(this.updateData(result, result.voucher)).pipe(takeUntil(this.destroyed$))
+                this.salesService.updateVoucherV4(<GenericRequestForGenerateSCD>this.updateData(requestObject, requestObject.voucher)).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
                         this.actionsAfterVoucherUpdate(response, invoiceForm);
                     }, (err) => {
                         this._toasty.errorToast('Something went wrong! Try again');
                     });
+            } else if (this.isPurchaseInvoice) {
+                requestObject = {
+                    account: data.accountDetails,
+                    number: this.invFormData.voucherDetails.voucherNumber,
+                    entries: data.entries,
+                    date: data.voucherDetails.voucherDate,
+                    dueDate: data.voucherDetails.dueDate,
+                    type: this.invoiceType,
+                    attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
+                    templateDetails: data.templateDetails,
+                    uniqueName: (this.selectedItem) ? this.selectedItem.uniqueName : (this.matchingPurchaseRecord) ? this.matchingPurchaseRecord.uniqueName : ''
+                } as PurchaseRecordRequest;
+                requestObject = this.updateData(requestObject, data);
+                this.generatePurchaseRecord(requestObject);
             } else {
-                // Purchase invoice still uses old api so just pass result to service don't parse it
-                this.salesService.updateVoucher(result).pipe(takeUntil(this.destroyed$))
+                this.salesService.updateVoucher(requestObject).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
                         this.actionsAfterVoucherUpdate(response, invoiceForm);
                     }, (err) => {
@@ -2517,8 +2611,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param response
      * @param invoiceForm
      */
-    private actionsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>, invoiceForm: NgForm) {
-        if (response.status === 'success') {
+    private actionsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD> | BaseResponse<any, PurchaseRecordRequest>, invoiceForm: NgForm) {
+        if (response.status === 'success' && response.body) {
             // reset form and other
             this.resetInvoiceForm(invoiceForm);
             this._toasty.successToast('Voucher updated Successfully');
@@ -2527,7 +2621,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invoiceNo = this.voucherNumber;
             this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
             this.postResponseAction(this.invoiceNo);
-
+            this.store.dispatch(this.purchaseRecordAction.getUpdatePurchaseRecordSuccessAction(
+                { invoiceNumber: response.body.number, purchaseRecordUniqueName: response.body.uniqueName, mergedRecordUniqueName: (this.matchingPurchaseRecord) ? this.matchingPurchaseRecord.uniqueName : '' }));
             this.depositAccountUniqueName = '';
             this.depositAmount = 0;
             this.isUpdateMode = false;
@@ -2537,7 +2632,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.updateAccount = false;
     }
 
-    public prepareDataForApi(): GenericRequestForGenerateSCD {
+    public prepareDataForApi(): GenericRequestForGenerateSCD | PurchaseRecordRequest {
         let data: VoucherClass = _.cloneDeep(this.invFormData);
 
         // special check if gst no filed is visible then and only then check for gst validation
@@ -2708,7 +2803,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             filterRequest.count = 5;
             filterRequest.isLastInvoicesRequest = true;
             this.store.dispatch(this.proformaActions.getAll(filterRequest, this.isProformaInvoice ? 'proformas' : 'estimates'));
-        } else {
+        } else if (!this.isPurchaseInvoice) {
             let request: InvoiceReceiptFilter = new InvoiceReceiptFilter();
             request.sortBy = 'voucherDate';
             request.sort = 'desc';
@@ -2766,7 +2861,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             entry.tcsTaxList = [];
             entry.tdsTaxList = [];
         }
-        if (this.activeIndx && !entryObj) {
+        if (this.activeIndx !== undefined && this.activeIndx !== null && !entryObj) {
             this.invFormData.entries = cloneDeep(this.entriesListBeforeTax);
             this.invFormData.entries[this.activeIndx] = entry;
         }
@@ -2834,10 +2929,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         if (!this.isProformaInvoice && !this.isEstimateInvoice) {
             if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
-                this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetailsV4(this.accountUniqueName, {
+                this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.accountUniqueName, {
                     invoiceNumber: this.invoiceNo,
                     voucherType: this.parseVoucherType(this.invoiceType)
                 }));
+            } else if (this.isPurchaseInvoice) {
+                this.store.dispatch(this.invoiceReceiptActions.GetPurchaseRecordDetails(this.selectedItem.account.uniqueName, this.selectedItem.uniqueName));
             } else {
                 this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
                     invoiceNumber: this.invoiceNo,
@@ -3034,7 +3131,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private fireActionAfterGenOrUpdVoucher(voucherNo: string, action: ActionTypeAfterVoucherGenerateOrUpdate) {
         if (this.isProformaInvoice || this.isEstimateInvoice) {
             this.store.dispatch(this.proformaActions.setVoucherForDetails(voucherNo, action));
-        } else {
+        } else if (!this.isPurchaseInvoice) {
             this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(voucherNo, action));
         }
     }
@@ -3060,9 +3157,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.destroyed$.complete();
     }
 
-    public updateData(obj: GenericRequestForGenerateSCD, data: VoucherClass) {
-        delete obj.voucher;
-        delete obj.depositAccountUniqueName;
+    public updateData(obj: GenericRequestForGenerateSCD | PurchaseRecordRequest, data: VoucherClass) {
+        if ((<GenericRequestForGenerateSCD>obj).voucher) {
+            delete (<GenericRequestForGenerateSCD>obj).voucher;
+        }
+        if ((<GenericRequestForGenerateSCD>obj).depositAccountUniqueName) {
+            delete (<GenericRequestForGenerateSCD>obj).depositAccountUniqueName;
+        }
 
         let salesEntryClassArray: SalesEntryClassMulticurrency[] = [];
         let entries = data.entries;
@@ -3112,7 +3213,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         obj.templateDetails = data.templateDetails;
         obj.entries = salesEntryClassArray;
-        obj.deposit = deposit;
 
         obj.account.billingDetails.countryName = this.customerCountryName;
         obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
@@ -3134,10 +3234,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         return obj;
     }
 
-    public async modifyMulticurrencyRes(result: any) {
+    public async modifyMulticurrencyRes(result: any, shouldLoadState: boolean = true) {
         let voucherClassConversion = new VoucherClass();
         let voucherDetails = new VoucherDetailsClass();
-        if (!this.isLastInvoiceCopied) {
+        if (!this.isLastInvoiceCopied && shouldLoadState) {
             await this.getUpdatedStateCodes(result.account.billingDetails.countryCode);
         }
         voucherClassConversion.entries = [];
@@ -3248,7 +3348,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.entriesListBeforeTax = voucherClassConversion.entries;
         voucherClassConversion.companyDetails = result.company;
-        voucherClassConversion.templateDetails = result.templateDetails;
 
         voucherClassConversion.accountDetails.billingDetails = new GstDetailsClass();
         voucherClassConversion.accountDetails.billingDetails.panNumber = result.account.billingDetails.panNumber;
@@ -3291,11 +3390,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             voucherDetails.voucherNumber = result.number;
         }
         voucherDetails.subTotal = result.subTotal.amountForAccount;
-        voucherDetails.taxesTotal = result.taxTotal.cumulativeAmountForAccount;
-        voucherDetails.totalAsWords = result.totalAsWords.amountForAccount;
+        voucherDetails.taxesTotal = (result.taxTotal) ? result.taxTotal.cumulativeAmountForAccount : 0;
+        voucherDetails.totalAsWords = (result.totalAsWords) ? result.totalAsWords.amountForAccount : '';
 
         voucherClassConversion.voucherDetails = voucherDetails;
-        voucherClassConversion.templateDetails = result.templateDetails;
+        voucherClassConversion.templateDetails = (result.templateDetails) ? result.templateDetails : new TemplateDetailsClass();
 
         if (!this.isLastInvoiceCopied) {
             this.isMulticurrencyAccount = result.multiCurrency;
@@ -3349,6 +3448,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (rate) {
                 this.originalExchangeRate = rate;
                 this.exchangeRate = rate;
+                this._cdr.detectChanges();
+                if (this.isPurchaseInvoice && this.isUpdateMode) {
+                    // TODO: Remove this code once purchase invoice supports multicurrency
+                    this.calculateSubTotal();
+                    this.calculateTotalDiscount();
+                    this.calculateTotalTaxSum();
+                    this.calculateGrandTotal();
+                    this.calculateBalanceDue();
+                }
             }
         }, (error => {
 
@@ -3437,10 +3545,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         if (isBilling) {
             // update account details address if it's billing details
+            if (this.billingState && this.billingState.nativeElement) {
+                this.billingState.nativeElement.classList.remove('error-box');
+            }
             this.invFormData.accountDetails.billingDetails.state.name = stateName;
             this.invFormData.accountDetails.billingDetails.stateName = stateName;
             this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
         } else {
+            if (this.shippingState && this.shippingState.nativeElement) {
+                this.shippingState.nativeElement.classList.remove('error-box');
+            }
             // if it's not billing address then only update shipping details
             // check if it's not auto fill shipping address from billing address then and then only update shipping details
             if (!this.autoFillShipping) {
@@ -3591,6 +3705,44 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     /**
+     * Purchase record confirmation change handler, triggerreed when the user performs any
+     * action with the confirmation popup
+     *
+     * @param {string} action Action performed by user
+     * @memberof ProformaInvoiceComponent
+     */
+    public handlePurchaseRecordConfirmation(action: string): void {
+        if (action === CONFIRMATION_ACTIONS.YES) {
+            // User confirmed to merge the purchase record, update the length of the found records
+            this.saveCurrentPurchaseRecordDetails();
+            this.mergePurchaseRecord();
+            this.isUpdateMode = true;
+        } else {
+            // User denied the permission or closed the popup
+            this._toasty.errorToast('Please change either purchase invoice number or vendor details.', 'Purchase Record');
+            this.isUpdateMode = false;
+        }
+        if (this.purchaseRecordConfirmationPopup) {
+            this.purchaseRecordConfirmationPopup.hide();
+        }
+    }
+
+    /**
+     * Stores the purchase record data
+     *
+     * @private
+     * @memberof ProformaInvoiceComponent
+     */
+    private saveCurrentPurchaseRecordDetails(): void {
+        try {
+            this.purchaseRecordCustomerUniqueName = String(this.invFormData.voucherDetails.customerUniquename);
+            this.purchaseRecordInvoiceDate = moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
+            this.purchaseRecordTaxNumber = String(this.invFormData.accountDetails.shippingDetails.gstNumber);
+            this.purchaseRecordInvoiceNumber = String(this.invFormData.voucherDetails.voucherNumber);
+        } catch (error) { }
+    }
+
+    /**
      * set current page title as header title
      * @param invoiceType: VoucherTypeEnum
      */
@@ -3683,6 +3835,146 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (!isStockItemPresent) {
             // None of the item were stock item, hide the warehouse section which is applicable only for stocks
             this.shouldShowWarehouse = false;
+        }
+    }
+
+    /**
+     * Generates a purchase record
+     *
+     * @private
+     * @param {PurchaseRecordRequest} requestObject Request object required from the service
+     * @memberof ProformaInvoiceComponent
+     */
+    private generatePurchaseRecord(requestObject: PurchaseRecordRequest): void {
+        this.purchaseRecordConfirmationConfiguration = this.proformaInvoiceUtilityService.getPurchaseRecordConfirmationConfiguration();
+        if (this.isPurchaseRecordContractBroken) {
+            this.validatePurchaseRecord().subscribe((data: any) => {
+                if (data && data.body) {
+                    this.matchingPurchaseRecord = data.body;
+                    if (this.isUpdateMode) {
+                        /* Delete the unique name entry of old record if the user is in
+                         UPDATE flow of a purchase record and changes the record such that
+                         an existing entry is found. In this case, if the user accepts to merge
+                         with previous record then those entries of older record will be again recreated
+                         for current purchase record and hence old entries' OLD unique names should be deleted */
+                        this.matchingPurchaseRecord.entries.forEach((entry => delete entry.uniqueName));
+                    }
+                    this.purchaseRecordConfirmationPopup.show();
+                } else {
+                    this.matchingPurchaseRecord = null;
+                    if (this.isUpdateMode) {
+                        this.updatePurchaseRecord(requestObject);
+                    } else {
+                        this.createPurchaseRecord(requestObject);
+                    }
+                }
+            }, () => this._toasty.errorToast('Something went wrong! Try again'));
+        } else {
+            this.updatePurchaseRecord(requestObject);
+        }
+    }
+
+    /**
+     * Creates a new purchase record
+     *
+     * @private
+     * @param {PurchaseRecordRequest} request Request object required by the service
+     * @memberof ProformaInvoiceComponent
+     */
+    private createPurchaseRecord(request: PurchaseRecordRequest): void {
+        // Create a new purchase record
+        this.purchaseRecordService.generatePurchaseRecord(request).subscribe((response: BaseResponse<any, PurchaseRecordRequest>) => {
+            this.handleGenerateResponse(response, this.invoiceForm);
+        }, () => this._toasty.errorToast('Something went wrong! Try again'));
+    }
+
+    /**
+     * Updates a purchase record
+     *
+     * @private
+     * @param {PurchaseRecordRequest} request Request object required by the service
+     * @memberof ProformaInvoiceComponent
+     */
+    private updatePurchaseRecord(request: PurchaseRecordRequest): void {
+        // Merge the purchase record (PATCH method, UPDATE flow)
+        this.purchaseRecordService.generatePurchaseRecord(request, 'PATCH').subscribe((response: BaseResponse<any, PurchaseRecordRequest>) => {
+            this.actionsAfterVoucherUpdate(response, this.invoiceForm);
+        }, () => this._toasty.errorToast('Something went wrong! Try again'));
+    }
+
+    /**
+     * Handles the operation to be carried out once the generic generate API responds
+     *
+     * @private
+     * @param {BaseResponse<any, GenericRequestForGenerateSCD | PurchaseRecordRequest>} response Response received from the API
+     * @param {NgForm} form Invoice form instance
+     * @memberof ProformaInvoiceComponent
+     */
+    private handleGenerateResponse(response: BaseResponse<any, GenericRequestForGenerateSCD | PurchaseRecordRequest>, form: NgForm): void {
+        if (response.status === 'success') {
+            // reset form and other
+            this.resetInvoiceForm(form);
+
+            if (response.body.account) {
+                this.voucherNumber = response.body.number;
+                this.invoiceNo = this.voucherNumber;
+                this.accountUniqueName = response.body.account.uniqueName;
+            } else {
+                this.voucherNumber = response.body.voucherDetails.voucherNumber;
+                this.invoiceNo = this.voucherNumber;
+                this.accountUniqueName = response.body.accountDetails.uniqueName;
+            }
+
+            if (this.isPurchaseInvoice) {
+                this._toasty.successToast(`Purchase record created successfully`);
+            } else {
+                this._toasty.successToast(`Entry created successfully with Voucher Number: ${this.voucherNumber}`);
+            }
+            this.postResponseAction(this.invoiceNo);
+        } else {
+            this._toasty.errorToast(response.message, response.code);
+        }
+        this.updateAccount = false;
+    }
+
+    /**
+     * Validates the purchase record being created to avoid redundant data
+     * Returns data of the old purchase record if it matches with the newly created
+     * purchase record according to the contract policy (account unique name, tax number,
+     * invoice date and invoice number) else returns null
+     *
+     * @private
+     * @returns {Observable<BaseResponse<any, any>>} Returns data of previous record if found else null
+     * @memberof ProformaInvoiceComponent
+     */
+    private validatePurchaseRecord(): Observable<BaseResponse<any, any>> {
+        const requestObject = {
+            accountUniqueName: this.invFormData.voucherDetails.customerUniquename,
+            taxNumber: this.invFormData.accountDetails.billingDetails.gstNumber || this.invFormData.accountDetails.shippingDetails.gstNumber || '',
+            purchaseDate: moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT),
+            number: this.invFormData.voucherDetails.voucherNumber || ''
+        }
+        return this.purchaseRecordService.validatePurchaseRecord(requestObject);
+    }
+
+    /**
+     * Merges the record by removing old merged records
+     *
+     * @private
+     * @returns {Promise<any>} Promise to carry out further operations
+     * @memberof ProformaInvoiceComponent
+     */
+    private async mergePurchaseRecord(): Promise<any> {
+        // Confirmation received, delete old merged entries
+        this.invFormData.entries = this.invFormData.entries.filter(entry => !entry['isMergedPurchaseEntry'])
+        const result = (await this.modifyMulticurrencyRes(this.matchingPurchaseRecord, false)) as VoucherClass;
+        if (result.voucherDetails) {
+            if (result.entries && result.entries.length > 0) {
+                result.entries.forEach((entry) => {
+                    entry['isMergedPurchaseEntry'] = true;
+                    this.invFormData.entries.push(entry);
+                });
+            }
         }
     }
 }

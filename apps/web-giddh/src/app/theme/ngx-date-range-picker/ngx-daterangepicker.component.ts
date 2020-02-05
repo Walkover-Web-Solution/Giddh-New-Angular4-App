@@ -4,6 +4,7 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as _moment from 'moment';
 import { Moment } from 'moment';
 import { LocaleConfig } from './ngx-daterangepicker.config';
+import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
 
 const moment = _moment;
 
@@ -180,7 +181,7 @@ export class NgxDaterangepickerComponent implements OnInit {
 
     constructor(
         private _ref: ChangeDetectorRef,
-        private localeConfig: LocaleConfig
+        private _localeService: NgxDaterangepickerLocaleService
     ) {
         this.choosedDate = new EventEmitter();
         this.rangeClicked = new EventEmitter();
@@ -196,7 +197,7 @@ export class NgxDaterangepickerComponent implements OnInit {
     }
 
     @Input() set locale(value) {
-        this._locale = {...this.localeConfig, ...value};
+        this._locale = {...this._localeService.config, ...value};
     }
 
     get startDateString(): string {
@@ -214,6 +215,17 @@ export class NgxDaterangepickerComponent implements OnInit {
     }
 
     ngOnInit() {
+        this._buildLocale();
+        const daysOfWeek = [...this.locale.daysOfWeek];
+        if (this.locale.firstDay !== 0) {
+            let iterator = this.locale.firstDay;
+
+            while (iterator > 0) {
+                daysOfWeek.push(daysOfWeek.shift());
+                iterator--;
+            }
+        }
+        this.locale.daysOfWeek = daysOfWeek;
         this.renderRanges();
         this.emptyWeekRowClass = 'hideMe';
         if (this.locale.firstDay !== 0) {
@@ -1413,6 +1425,20 @@ export class NgxDaterangepickerComponent implements OnInit {
         const minute = parseInt(this.timepickerVariables[side].selectedMinute, 10);
         const second = this.timePickerSeconds ? parseInt(this.timepickerVariables[side].selectedSecond, 10) : 0;
         return date.clone().hour(hour).minute(minute).second(second);
+    }
+
+    /**
+     *  build the locale config
+     */
+    private _buildLocale() {
+        this.locale = {...this._localeService.config, ...this.locale};
+        if (!this.locale.format) {
+            if (this.timePicker) {
+                this.locale.format = moment.localeData().longDateFormat('lll');
+            } else {
+                this.locale.format = moment.localeData().longDateFormat('L');
+            }
+        }
     }
 
     private _buildCells(calendar, side: DateType) {

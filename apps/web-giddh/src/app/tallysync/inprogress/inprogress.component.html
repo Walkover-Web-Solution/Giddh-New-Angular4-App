@@ -131,9 +131,14 @@
                         row.tallyErrorGroups > 0
                     ">
                     <span class="m-r-15">Error Report:</span>
-                    <a class="running" (click)="downloadLog(row)">{{ row.company.name }}-error-log.csv</a>
+                    <a class="running" (click)="downloadLog(row)">{{ row.company.name }}-error-log.xlsx</a>
                 </div>
             </div>
+        </div>
+        <!-- pagination -->
+        <div class="text-center" *ngIf="progressData?.length && progressDataResponse.totalItems>paginationRequest?.count-1">
+            <pagination [maxSize]="5" [totalItems]="progressDataResponse?.totalItems" [itemsPerPage]="progressDataResponse.count" [(ngModel)]="paginationRequest.page" (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false">
+            </pagination>
         </div>
     </div>
 </ng-container>

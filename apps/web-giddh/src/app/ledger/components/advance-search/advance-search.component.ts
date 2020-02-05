@@ -41,7 +41,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     @ViewChild('dp') public dateRangePicker: BsDaterangepickerDirective;
     public bsRangeValue: string[];
     @Input() public advanceSearchRequest: AdvanceSearchRequest;
-    @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter(null);
+    @Output() public closeModelEvent: EventEmitter<{advanceSearchData, isClose}> = new EventEmitter(null);
     public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
     public advanceSearchObject: ILedgerAdvanceSearchRequest = null;
     public advanceSearchForm: FormGroup;
@@ -199,8 +199,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public onCancel() {
-        this.closeModelEvent.emit(true);
-        // this.closeModelEvent.emit(_.cloneDeep(this.advanceSearchRequest));
+        this.closeModelEvent.emit({advanceSearchData: this.advanceSearchRequest, isClose: true});
     }
 
     /**
@@ -219,14 +218,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      */
     public onSearch() {
         this.advanceSearchRequest.dataToSend = this.advanceSearchForm.value;
-        this.closeModelEvent.emit(false);
-        // const dataToSend = this.prepareRequest();
-        // this.store.dispatch(this._ledgerActions.doAdvanceSearch(dataToSend, this.accountUniqueName, this.fromDate, this.toDate, 1, 15));
-        // this.closeModelEvent.emit({
-        //   dataToSend, accountUniqueName: this.accountUniqueName,
-        //   fromDate: this.fromDate, toDate: this.toDate
-        // });
-        // this.advanceSearchForm.reset();
+        this.closeModelEvent.emit({advanceSearchData: this.advanceSearchRequest, isClose: false});
     }
 
     public resetAndSearch() {

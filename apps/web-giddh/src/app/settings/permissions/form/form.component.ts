@@ -65,8 +65,9 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         if (this.userdata) {
             let from: any = moment(this.userdata.from, GIDDH_DATE_FORMAT);
             let to: any = moment(this.userdata.to, GIDDH_DATE_FORMAT);
-            this.dateRangePickerValue = [from._d, to._d];
             this.initAcForm(this.userdata);
+
+            this.permissionForm.get('selectedDateRange').patchValue({ startDate: from, endDate: to });
         } else {
             this.initAcForm();
         }
@@ -114,9 +115,9 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
 
     public onSelectDateRange(ev) {
-        if (ev && ev.length) {
-            let from = moment(ev[0]).format(GIDDH_DATE_FORMAT);
-            let to = moment(ev[1]).format(GIDDH_DATE_FORMAT);
+        if (ev && ev.startDate && ev.endDate) {
+            let from = moment(ev.startDate).format(GIDDH_DATE_FORMAT);
+            let to = moment(ev.endDate).format(GIDDH_DATE_FORMAT);
             this.permissionForm.patchValue({ from, to });
         }
     }
@@ -171,7 +172,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 period: [null],
                 ipOptions: this.getIPOptsFromData(data),
                 allowedIps: this._fb.array([]),
-                allowedCidrs: this._fb.array([])
+                allowedCidrs: this._fb.array([]),
+                selectedDateRange: []
             });
             let allowedIps = this.permissionForm.get('allowedIps') as FormArray;
             let allowedCidrs = this.permissionForm.get('allowedCidrs') as FormArray;
@@ -204,7 +206,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 period: [null],
                 ipOptions: [CIDR_RANGE],
                 allowedIps: this._fb.array([]),
-                allowedCidrs: this._fb.array([])
+                allowedCidrs: this._fb.array([]),
+                selectedDateRange: []
             });
             let allowedIps = this.permissionForm.get('allowedIps') as FormArray;
             let allowedCidrs = this.permissionForm.get('allowedCidrs') as FormArray;

@@ -34,7 +34,7 @@ const initialState: CurrentCompanyState = {
     isGetTaxesSuccess: false,
     activeFinancialYear: null,
     dateRangePickerConfig: {
-        opens: 'left',
+        hideOnEsc: true,
         locale: {
             applyClass: 'btn-green',
             applyLabel: 'Go',

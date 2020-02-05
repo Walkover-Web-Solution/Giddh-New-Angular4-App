@@ -441,6 +441,10 @@ button.btn.btn-filter span.icon-cross {
     display: inline-block !important;
 }
 
+div.remove-capitalize {
+    text-transform: none !important;
+}
+
 /* responsive */
 
 @media (max-width: 768px) {
