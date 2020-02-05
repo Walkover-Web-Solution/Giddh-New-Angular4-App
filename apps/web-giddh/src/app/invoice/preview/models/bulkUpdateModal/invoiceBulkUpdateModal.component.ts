@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { IOption } from '../../../../theme/ng-select/option.interface';
 import { Observable, ReplaySubject } from 'rxjs';
 import { select, Store } from '@ngrx/store';
@@ -11,6 +11,10 @@ import { ToasterService } from '../../../../services/toaster.service';
 import { LoaderService } from '../../../../loader/loader.service';
 import { INVOICE_API } from '../../../../services/apiurls/invoice';
 import { Configuration } from '../../../../app.constant';
+import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
+import { BulkUpdateInvoiceNote, BulkUpdateInvoiceImageSignature, BulkUpdateInvoiceTemplates, BulkUpdateInvoiceDueDates, BulkUpdateInvoiceSlogan, BulkUpdateInvoiceShippingDetails, BulkUpdateInvoiceCustomfields } from 'apps/web-giddh/src/app/models/api-models/Contact';
+import { InvoiceBulkUpdateService } from 'apps/web-giddh/src/app/services/invoice.bulkupdate.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
     selector: 'invoice-bulk-update-modal-component',
@@ -18,17 +22,19 @@ import { Configuration } from '../../../../app.constant';
     styleUrls: ['./invoiceBulkUpdateModal.component.scss']
 })
 
-export class InvoiceBulkUpdateModalComponent implements OnInit {
+export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     @Input() public voucherType: string = '';
+    @Input() public selectedInvoices;
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
+    @ViewChild('bulkUpdateForm') public bulkUpdateForm: NgForm;
 
     public fieldOptions: IOption[] = [
-        { label: 'PDF Template', value: 'pdf-template' },
+        { label: 'PDF Template', value: 'pdfTemplate' },
         { label: 'Notes', value: 'notes' },
         { label: 'Signature', value: 'signature' },
-        { label: 'Due Date', value: 'due-date' },
-        { label: 'Shipping Details', value: 'shipping-details' },
-        { label: 'Custom Fields', value: 'custom-fields' }
+        { label: 'Due Date', value: 'dueDate' },
+        { label: 'Shipping Details', value: 'shippingDetails' },
+        { label: 'Custom Fields', value: 'customFields' }
     ];
     public selectedField: string;
     public allTemplates$: Observable<CustomTemplateResponse[]>;
@@ -40,10 +46,23 @@ export class InvoiceBulkUpdateModalComponent implements OnInit {
     public isSignatureAttached: boolean = false;
     public signatureSrc: string;
     public companyUniqueName: string;
+    public customCreatedTemplates: CustomTemplateResponse[];
+    public selectedInvoicesLists: any[] = [];
+
+    public updateNotesRequest: BulkUpdateInvoiceNote = new BulkUpdateInvoiceNote();
+    public updateImageSignatureRequest: BulkUpdateInvoiceImageSignature = new BulkUpdateInvoiceImageSignature();
+    public updateTemplatesRequest: BulkUpdateInvoiceTemplates = new BulkUpdateInvoiceTemplates();
+    public updateSloganRequest: BulkUpdateInvoiceSlogan = new BulkUpdateInvoiceSlogan();
+    public updateDueDatesRequest: BulkUpdateInvoiceDueDates = new BulkUpdateInvoiceDueDates();
+    public updateShippingDetailsRequest: BulkUpdateInvoiceShippingDetails = new BulkUpdateInvoiceShippingDetails();
+    public updateCustomfieldsRequest: BulkUpdateInvoiceCustomfields = new BulkUpdateInvoiceCustomfields();
+
+
+
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private _toaster: ToasterService,
+    constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private _toaster: ToasterService, private _invoiceService: InvoiceService, private _invoiceBulkUpdateService: InvoiceBulkUpdateService,
         private _loaderService: LoaderService) {
         this.fileUploadOptions = { concurrency: 0 };
         this.sessionId$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
@@ -53,18 +72,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit {
 
     public ngOnInit() {
         this.uploadInput = new EventEmitter<UploadInput>();
-        let templateType = this.voucherType === 'debit note' || this.voucherType === 'credit note' ? 'voucher' : 'invoice';
-        this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(templateType));
-        this.allTemplates$.subscribe(templates => {
-            if (templates && templates.length) {
-                this.allTemplatesOptions = [];
-                templates.forEach(tmpl => {
-                    this.allTemplatesOptions.push({
-                        label: tmpl.name, value: tmpl.uniqueName
-                    });
-                });
-            }
-        });
+        this.getTemplates();
     }
 
     public onUploadOutput(output: UploadOutput): void {
@@ -124,5 +132,133 @@ export class InvoiceBulkUpdateModalComponent implements OnInit {
     public onCancel() {
         this.selectedField = null;
         this.closeModelEvent.emit(true);
+    }
+    public onSelectEntryField(option: IOption) {
+        console.log('selected fild', this.selectedField)
+        if (option && option.value) {
+            this.bulkUpdateForm.reset();
+        }
+
+    }
+    public onSelectTemplateType(option: IOption) {
+        if (option && option.value) {
+            console.log(option.value);
+        }
+    }
+
+    /**
+     *  to get all custom templates according to voucher type
+     *
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
+    public getTemplates() {
+        let templateType = this.voucherType === 'debit note' || this.voucherType === 'credit note' ? 'voucher' : 'invoice';
+        this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(templateType));
+        this.allTemplates$.pipe(takeUntil(this.destroyed$)).subscribe(templates => {
+            if (templates && templates.length) {
+                this.allTemplatesOptions = [];
+                templates.forEach(tmpl => {
+                    this.allTemplatesOptions.push({
+                        label: tmpl.name, value: tmpl.uniqueName
+                    });
+                });
+            }
+        });
+
+    }
+
+    /**
+     *  hook to detect input directive changes
+     *
+     * @param {SimpleChanges} simpleChanges params to detect simple changes
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
+    public ngOnChanges(simpleChanges: SimpleChanges) {
+
+        if (simpleChanges) {
+            if (simpleChanges.voucherType && simpleChanges.voucherType.currentValue) {
+
+                this.voucherType = simpleChanges.voucherType.currentValue;
+
+            } else if (simpleChanges.selectedInvoices && simpleChanges.selectedInvoices.currentValue) {
+
+                this.selectedInvoicesLists = simpleChanges.selectedInvoices.currentValue;
+
+            }
+        }
+
+    }
+
+    /**
+     * Call API to update all selected Invoice/Voucher
+     *
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
+    public updateBulkInvoice() {
+        console.log(this.selectedField, this.voucherType, this.selectedInvoicesLists, this.updateNotesRequest);
+        if (this.selectedField && this.voucherType && this.selectedInvoicesLists) {
+
+            switch (this.selectedField) {
+                case 'pdfTemplate':
+                    this.bulkUpdateRequest(this.updateTemplatesRequest, 'templates');
+                    break;
+                case 'notes':
+                    this.bulkUpdateRequest(this.updateNotesRequest, 'notes');
+                    break;
+                case 'signature':
+                    //  this.bulkUpdateRequest(this.updateImageSignatureRequest, 'slogan');
+
+                    break;
+                case 'dueDate':
+                     this.bulkUpdateRequest(this.updateDueDatesRequest, 'duedate');
+
+                    break;
+                case 'shippingDetails':
+                    //  this.bulkUpdateRequest(this.updateShippingDetailsRequest, 'notes');
+
+                    break;
+                case 'customFields':
+                    this.bulkUpdateRequest(this.updateCustomfieldsRequest, 'customfields');
+
+                    break;
+            }
+        }
+    }
+
+    /**
+     * API call for bulk update
+     *
+     * @param {*} requestModel
+     * @param {*} actionType
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
+    public bulkUpdateRequest(requestModel, actionType) {
+
+        if (requestModel && actionType) {
+
+            let invoiceUniqueName = [];
+            if (this.selectedInvoicesLists.length) {
+                this.selectedInvoicesLists.forEach(invoice => {
+                    if (invoice.voucherNumber) {
+                        invoiceUniqueName.push(invoice.voucherNumber)
+                    }
+                })
+            }
+            requestModel.voucherNumbers = invoiceUniqueName;
+            requestModel.voucherType = this.voucherType;
+
+            if (requestModel.voucherNumbers && requestModel.voucherType) {
+                this._invoiceBulkUpdateService.bulkUpdateInvoice(requestModel, actionType).subscribe(response => {
+
+                    if (response.status === "success") {
+                        this._toaster.successToast(response.body);
+                    } else {
+                        this._toaster.errorToast(response.message);
+                    }
+
+                });
+            }
+        }
+
     }
 }

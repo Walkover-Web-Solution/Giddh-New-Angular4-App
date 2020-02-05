@@ -29,15 +29,14 @@ export class InvoiceBulkUpdateService {
         this.companyUniqueName = this._generalService.companyUniqueName;
         let url;
         if(actionType) {
-         url = this.config.apiUrl + BULK_UPDATE_VOUCHER.BULK_UPDATE_VOUCHER_ACTION.replace(':actionType',actionType);
+         url = this.config.apiUrl + BULK_UPDATE_VOUCHER.BULK_UPDATE_VOUCHER_ACTION.replace(':companyUniqueName',this.companyUniqueName).replace(':actionType',actionType);
         }
         return this._http.post(url, model).pipe(
             map(res=>{
-                  let data: BaseResponse<any, any> = res;
+                let data: BaseResponse<any, any> = res;
                 data.request = model;
                 data.queryString = { model, actionType };
                 return data;
-
             }), catchError((e)=> this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 

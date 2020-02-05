@@ -574,6 +574,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public toggleBulkUpdatePopup() {
+        this._invoiceService.selectedInvoicesLists = [];
+        this._invoiceService.VoucherType = this.selectedVoucher;
+        this._invoiceService.setSelectedInvoicesList(this.selectedInvoicesList);
         this.bulkUpdate.toggle();
     }
 
