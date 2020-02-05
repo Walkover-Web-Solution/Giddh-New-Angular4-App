@@ -160,7 +160,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
     private isBulkInvoiceGenerated$: Observable<boolean>;
-    private isUniversalDateApplicable: boolean = false;
+    public isUniversalDateApplicable: boolean = false;
     private isBulkInvoiceGeneratedWithoutErr$: Observable<boolean>;
     public isMobileView = false;
 

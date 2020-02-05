@@ -370,6 +370,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 let voucherIndex = this.voucherData.items.findIndex(item => item.uniqueName === record.purchaseRecordUniqueName);
                 if (voucherIndex > -1) {
                     let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
+                    if (record.mergedRecordUniqueName) {
+                        allItems = allItems.filter(item => item.uniqueName !== record.mergedRecordUniqueName);
+                    }
                     allItems[voucherIndex].voucherNumber = record.invoiceNumber;
                     allItems = uniqBy([allItems[voucherIndex], ...allItems], 'voucherNumber');
                     this.itemsListForDetails = allItems;
@@ -396,7 +399,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     if ((moment(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === moment(a[0]).format(GIDDH_DATE_FORMAT)) && (moment(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === moment(a[1]).format(GIDDH_DATE_FORMAT))) {
                         if (window.localStorage && localStorage.getItem('invoiceSelectedDate')) {
                             let storedSelectedDate = JSON.parse(localStorage.getItem('invoiceSelectedDate'));
-                            this.showAdvanceSearchIcon = true;
+                            // this.showAdvanceSearchIcon = true;
                             this.datePickerOptions = {
                                 ...this.datePickerOptions,
                                 startDate: moment(storedSelectedDate.fromDates, 'DD-MM-YYYY').toDate(),

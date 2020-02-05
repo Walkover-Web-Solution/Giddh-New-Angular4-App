@@ -148,6 +148,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.paginationRequest.page = 1;
         this.paginationRequest.count = PAGINATION_LIMIT;
 
+
         this.companies$.subscribe(a => {
             if (a) {
                 a.forEach((element) => {
