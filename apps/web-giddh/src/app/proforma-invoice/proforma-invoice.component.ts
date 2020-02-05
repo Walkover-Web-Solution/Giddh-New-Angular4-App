@@ -2590,7 +2590,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     type: this.invoiceType,
                     attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
                     templateDetails: data.templateDetails,
-                    uniqueName: (this.selectedItem) ? this.selectedItem.uniqueName : (this.matchingPurchaseRecord) ? this.matchingPurchaseRecord.uniqueName : ''
+                    uniqueName: (this.selectedItem) ? this.selectedItem.uniqueName : (this.matchingPurchaseRecord) ? this.matchingPurchaseRecord.uniqueName : '',
+                    subVoucher: (this.isRcmEntry) ? Subvoucher.ReverseCharge : ''
                 } as PurchaseRecordRequest;
                 requestObject = this.updateData(requestObject, data);
                 this.generatePurchaseRecord(requestObject);
@@ -2703,9 +2704,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (data.accountDetails.billingDetails.address && data.accountDetails.billingDetails.address.length && data.accountDetails.billingDetails.address[0].length > 0) {
             data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].replace(/\n/g, '<br />');
             data.accountDetails.billingDetails.address = data.accountDetails.billingDetails.address[0].split('<br />');
-        }
-        if (this.isPurchaseInvoice  && this.isRcmEntry) {
-            data.subVoucher = Subvoucher.ReverseCharge;
         }
 
         // convert date object
