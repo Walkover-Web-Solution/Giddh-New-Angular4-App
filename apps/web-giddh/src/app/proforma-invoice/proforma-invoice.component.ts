@@ -2581,6 +2581,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this._toasty.errorToast('Something went wrong! Try again');
                     });
             } else if (this.isPurchaseInvoice) {
+                if (this.isRcmEntry && !this.validateTaxes(cloneDeep(data))) {
+                    return;
+                }
                 requestObject = {
                     account: data.accountDetails,
                     number: this.invFormData.voucherDetails.voucherNumber,
@@ -3972,13 +3975,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // Confirmation received, delete old merged entries
         this.invFormData.entries = this.invFormData.entries.filter(entry => !entry['isMergedPurchaseEntry'])
         const result = (await this.modifyMulticurrencyRes(this.matchingPurchaseRecord, false)) as VoucherClass;
+        let flattenAccounts;
+        this.flattenAccountListStream$.pipe(take(1)).subscribe((accounts) => flattenAccounts = accounts);
         if (result.voucherDetails) {
             if (result.entries && result.entries.length > 0) {
+                result.entries = this.parseEntriesFromResponse(result.entries, flattenAccounts);
                 result.entries.forEach((entry) => {
                     entry['isMergedPurchaseEntry'] = true;
                     this.invFormData.entries.push(entry);
                 });
             }
         }
+        this.calculateBalanceDue();
+        this.calculateTotalDiscount();
+        this.calculateTotalTaxSum();
+        this._cdr.detectChanges();
     }
 }
