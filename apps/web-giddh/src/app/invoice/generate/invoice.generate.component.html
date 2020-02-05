@@ -22,6 +22,7 @@
 
 
     <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate class="form-inline">
+        <div class="d-flex">
         <div class="d-flex form-group">
             <div class="form-group date-advanceSearch" style="flex: 1 1 auto;">
 
@@ -80,11 +81,13 @@
 
         </div>
 
-        <div class="clear-filter desktop-view-btn" *ngIf="!isUniversalDateApplicable" (click)="resetDateSearch()">
+        <div class="clear-filter  width-100 align-items-center d-flex justify-content-center" *ngIf="!isUniversalDateApplicable" (click)="resetDateSearch()">
             <button class="btn btn-filter">
                 <span class="icon-cross"></span> Clear Filter
             </button>
         </div>
+    </div>
+
     </form>
 
     <table class="table basic table-bordered pending-tabel onMobileView mrT2">
