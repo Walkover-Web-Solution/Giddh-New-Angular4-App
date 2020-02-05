@@ -198,3 +198,6 @@ button.toast-close-button {
         width: 25em;
     }
 }
+.toast-title {
+    word-break: break-word;
+}
