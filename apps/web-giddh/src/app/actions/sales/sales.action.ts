@@ -110,9 +110,9 @@ export class SalesActions {
                     };
                 } else {
                     this._toasty.successToast('Account Created Successfully');
-                    if (action.payload.body.errorMessageForCashFreeVirtualAccount) {
-                        this._toasty.warningToast('Virtual account could not be created for Account "' + action.payload.body.name + '", ' + action.payload.body.errorMessageForCashFreeVirtualAccount);
-                    }
+                    // if (action.payload.body.errorMessageForCashFreeVirtualAccount) {
+                    //     this._toasty.warningToast('Virtual account could not be created for Account "' + action.payload.body.name + '", ' + action.payload.body.errorMessageForCashFreeVirtualAccount);
+                    // }
                     // if (action.payload.body.errorMessageForBankDetails) {
                     //   this._toasty.warningToast(action.payload.body.errorMessageForBankDetails);
                     // }
