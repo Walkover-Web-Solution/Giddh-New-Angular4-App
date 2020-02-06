@@ -263,7 +263,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isCalendlyModelActivate = response;
         });
         this.user$ = this.store.select(createSelector([(state: AppState) => state.session.user], (user) => {
-            if (user && user.user && user.user.name && user.user.name.length > 1)  {
+            if (user && user.user && user.user.name && user.user.name.length > 1) {
                 let name = user.user.name;
                 this.loggedInUserEmail = user.user.email;
                 if (user.user.name.match(/\s/g)) {
@@ -973,9 +973,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.flyAccountActions.GetflatAccountWGroups(q));
     }
 
+    /**
+     *  sidebar menu toggle
+     *
+     * @param {boolean} event to check side bar menu open or not
+     * @memberof HeaderComponent
+     */
     public sideBarStateChange(event: boolean) {
-        this.sideMenu.isopen = event;
-        this.companyDropdown.isOpen = false;
+        if (this.sideMenu) {
+            this.sideMenu.isopen = event;
+        }
+        if (this.companyDropdown) {
+            this.companyDropdown.isOpen = false;
+        }
         if (this.companyDetailsDropDownWeb) {
             this.companyDetailsDropDownWeb.hide();
         }
