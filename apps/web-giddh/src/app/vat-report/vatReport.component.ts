@@ -170,6 +170,12 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.getVatReport();
     }
 
+    /**
+     * This function will update the visibility of datepicker
+     *
+     * @param {*} visibility
+     * @memberof VatReportComponent
+     */
     public updateDatepickerVisibility(visibility) {
         this.datepickerVisibility = visibility;
 
@@ -180,6 +186,11 @@ export class VatReportComponent implements OnInit, OnDestroy {
         }, 500);
     }
 
+    /**
+     * This function will hide datepicker dropdown if month and datepicker options are closed
+     *
+     * @memberof VatReportComponent
+     */
     public checkIfDatepickerVisible() {
         setTimeout(() => {
             if(this.datepickerVisibility === "hidden") {
@@ -188,6 +199,11 @@ export class VatReportComponent implements OnInit, OnDestroy {
         }, 500);    
     }
 
+    /**
+     * This will hide the datepicker dropdown
+     *
+     * @memberof VatReportComponent
+     */
     public hidePeriodDropdown() {
         this.periodDropdown.hide();
         document.querySelector(".btn-group.dropdown").classList.remove("open");
