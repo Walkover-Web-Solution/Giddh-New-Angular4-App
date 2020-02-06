@@ -40,10 +40,12 @@ export class VatReportComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public allowVatReportAccess: boolean = false;
     @ViewChild('monthWise') public monthWise: BsDropdownDirective;
+    @ViewChild('periodDropdown') public periodDropdown;
     public isMonthSelected: boolean = false;
     public selectedMonth: any = null;
     public currentPeriod: any = {};
     public showCalendar: boolean = false;
+    public datepickerVisibility: any = 'hidden';
 
     constructor(private store: Store<AppState>, private vatService: VatService, private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private cdRef: ChangeDetectorRef, private companyActions: CompanyActions) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
@@ -166,5 +168,29 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.showCalendar = false;
 
         this.getVatReport();
+    }
+
+    public updateDatepickerVisibility(visibility) {
+        this.datepickerVisibility = visibility;
+
+        setTimeout(() => {
+            if(this.datepickerVisibility === "hidden" && this.monthWise.isOpen === false) {
+                this.hidePeriodDropdown();
+            }
+        }, 500);
+    }
+
+    public checkIfDatepickerVisible() {
+        setTimeout(() => {
+            if(this.datepickerVisibility === "hidden") {
+                this.hidePeriodDropdown();
+            }
+        }, 500);    
+    }
+
+    public hidePeriodDropdown() {
+        this.periodDropdown.hide();
+        document.querySelector(".btn-group.dropdown").classList.remove("open");
+        document.querySelector(".btn-group.dropdown").classList.remove("show");
     }
 }
