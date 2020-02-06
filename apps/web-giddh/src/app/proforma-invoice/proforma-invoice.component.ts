@@ -2463,7 +2463,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public cancelUpdate() {
+    /**
+     * Triggered when user clicks the 'Cancel' button of update flow
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public cancelUpdate(): void {
+        if (this.invoiceForm) {
+            this.resetInvoiceForm(this.invoiceForm);
+            this.isUpdateMode = false;
+        }
         this.cancelVoucherUpdate.emit(true);
     }
 
@@ -3451,25 +3460,35 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public getCurrencyRate(to, from, date = moment().format('DD-MM-YYYY')) {
-        this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
-            let rate = response.body;
-            if (rate) {
-                this.originalExchangeRate = rate;
-                this.exchangeRate = rate;
-                this._cdr.detectChanges();
-                if (this.isPurchaseInvoice && this.isUpdateMode) {
-                    // TODO: Remove this code once purchase invoice supports multicurrency
-                    this.calculateSubTotal();
-                    this.calculateTotalDiscount();
-                    this.calculateTotalTaxSum();
-                    this.calculateGrandTotal();
-                    this.calculateBalanceDue();
+    /**
+     * Fetches the currency exchange rate between two countries
+     *
+     * @param {*} to Converted to currency symbol
+     * @param {*} from Converted from currency symbol
+     * @param {string} [date=moment().format('DD-MM-YYYY')] Date on which currency rate is required, default is today's date
+     * @memberof ProformaInvoiceComponent
+     */
+    public getCurrencyRate(to, from, date = moment().format('DD-MM-YYYY')): void {
+        if (from && to) {
+            this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
+                let rate = response.body;
+                if (rate) {
+                    this.originalExchangeRate = rate;
+                    this.exchangeRate = rate;
+                    this._cdr.detectChanges();
+                    if (this.isPurchaseInvoice && this.isUpdateMode) {
+                        // TODO: Remove this code once purchase invoice supports multicurrency
+                        this.calculateSubTotal();
+                        this.calculateTotalDiscount();
+                        this.calculateTotalTaxSum();
+                        this.calculateGrandTotal();
+                        this.calculateBalanceDue();
+                    }
                 }
-            }
-        }, (error => {
+            }, (error => {
 
-        }));
+            }));
+        }
     }
 
     public updateBankAccountObject(accCurr) {
