@@ -1,4 +1,4 @@
-import { auditTime, take } from 'rxjs/operators';
+import { auditTime, take, takeUntil } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
@@ -33,34 +33,40 @@ export class InvoiceComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         combineLatest([this._activatedRoute.params, this._activatedRoute.queryParams])
-            .pipe(auditTime(700))
+            .pipe(takeUntil(this.destroyed$))
             .subscribe(result => {
                 let params = result[0];
                 let queryParams = result[1];
 
                 if (params) {
                     if (params.voucherType) {
-                        this.selectedVoucherType = params.voucherType;
-                    }
-
-                    if (queryParams && queryParams.tab) {
-                        if (queryParams.tab && queryParams.tabIndex) {
-                            if (this.staticTabs && this.staticTabs.tabs) {
-                                /*
-                                  set active tab to null because we want to reload the tab component
-                                  case :-
-                                          when invoice preview details is on then if someone clicks on sidemenu or navigate using cmd + g then we need to
-                                          reload the component
-                                 */
-                                this.activeTab = null;
-                                setTimeout(() => {
-                                    this.tabChanged(queryParams.tab, null);
-                                }, 500);
-                            }
+                        if (params.voucherType === 'sales' || params.voucherType === 'debit note' || params.voucherType === 'credit note') {
+                            this.selectedVoucherType = params.voucherType;
+                        } else if (params.selectedType && params.voucherType) {
+                            this.selectedVoucherType = params.selectedType;
+                        } else if (!params.selectedType && params.voucherType) {
+                            this.selectedVoucherType = params.voucherType;
                         }
-                    } else {
-                        this.activeTab = params.voucherType;
                     }
+                }
+                if (queryParams && queryParams.tab) {
+                    if (queryParams.tab && queryParams.tabIndex) {
+                        if (this.staticTabs && this.staticTabs.tabs) {
+                            /*
+                              set active tab to null because we want to reload the tab component
+                              case :-
+                                      when invoice preview details is on then if someone clicks on sidemenu or navigate using cmd + g then we need to
+                                      reload the component
+                             */
+                            this.activeTab = null;
+                            setTimeout(() => {
+                                this.tabChanged(queryParams.tab, null);
+                            }, 500);
+                        }
+                        this.tabChanged(queryParams.tab, null);
+                    }
+                } else {
+                    this.activeTab = params.voucherType;
                 }
             });
     }
@@ -69,9 +75,21 @@ export class InvoiceComponent implements OnInit, OnDestroy {
         this.selectedVoucherType = VoucherTypeEnum[tab];
     }
 
-    public tabChanged(tab: string, e) {
+/**
+ *
+ *
+ * @param {string} tab  this is voucher type
+ * @param {*} e   event to set last state
+ * @param {string} [type]    selected type only to it for Cr/Dr and sales voucher(common tabs like pending, template and settings)
+ * @memberof InvoiceComponent
+ */
+public tabChanged(tab: string, e, type?: string) {
         this.activeTab = tab;
-        this.router.navigate(['pages', 'invoice', 'preview', tab]);
+        if (type && tab) {
+            this.router.navigate(['pages', 'invoice', 'preview', tab, type]);
+        } else {
+            this.router.navigate(['pages', 'invoice', 'preview', tab]);
+        }
         if (e && !e.target) {
             this.saveLastState(tab);
         }

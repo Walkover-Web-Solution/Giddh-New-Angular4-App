@@ -40,8 +40,11 @@ import { createSelector } from 'reselect';
         ])
     ]
 })
+
 export class GstComponent implements OnInit {
     @ViewChild('monthWise') public monthWise: BsDropdownDirective;
+    @ViewChild('periodDropdown') public periodDropdown;
+
     public showCalendar: boolean = false;
     public period: any = null;
     public companies: CompanyResponse[] = [];
@@ -72,6 +75,7 @@ export class GstComponent implements OnInit {
     public selectedMonth: any = null;
     public userEmail: string = '';
     public returnGstr3B: {} = { via: null };
+    public datepickerVisibility: any = 'hidden';
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -261,4 +265,15 @@ export class GstComponent implements OnInit {
         this.openMonthWiseCalendar(data);
     }
 
+    public updateDatepickerVisibility(visibility) {
+        this.datepickerVisibility = visibility;
+    }
+
+    public checkIfDatepickerVisible() {
+        setTimeout(() => {
+            if(this.datepickerVisibility === "hidden") {
+                this.periodDropdown.hide();
+            }
+        }, 500);    
+    }
 }

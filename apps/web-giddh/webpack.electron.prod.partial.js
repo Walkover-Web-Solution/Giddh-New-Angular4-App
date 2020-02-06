@@ -1,5 +1,4 @@
 const webpack = require('webpack');
-console.log('demo....................');
 module.exports = {
     plugins: [
         new webpack.DefinePlugin({
@@ -22,7 +21,7 @@ module.exports = {
             'process.env.errlyticsKey': JSON.stringify(''),
             'process.env.AppUrl': JSON.stringify('./'),
             'process.env.ApiUrl': JSON.stringify('https://api.giddh.com/'),
-            'process.env.APP_FOLDER': JSON.stringify('')
+            'process.env.APP_FOLDER': JSON.stringify(''),
         }),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ]

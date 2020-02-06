@@ -79,8 +79,7 @@
                         "main": "apps/web-giddh/src/main.ts",
                         "polyfills": "apps/web-giddh/src/polyfills.ts",
                         "tsConfig": "apps/web-giddh/tsconfig.app.json",
-                        "assets": [
-                            {
+                        "assets": [{
                                 "glob": "**/*",
                                 "input": "apps/web-giddh/src/assets/",
                                 "output": "/assets/"
@@ -125,7 +124,6 @@
                             "apps/web-giddh/src/assets/js/lodash.min.js",
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js"
                         ],
-
                         "es5BrowserSupport": true,
                         "extraWebpackConfig": "./webpack.partial.js"
                     },
@@ -135,8 +133,7 @@
                             "extraWebpackConfig": "./webpack.local.partial.js",
                             "baseHref": "http://localhost:3000",
                             "baseUrl": "localhost:3000",
-                            "fileReplacements": [
-                                {
+                            "fileReplacements": [{
                                     "replace": "apps/web-giddh/src/index.html",
                                     "with": "apps/web-giddh/src/index.local.html"
                                 },
@@ -154,21 +151,18 @@
                             "extractLicenses": false,
                             "vendorChunk": false,
                             "buildOptimizer": false,
-                            "budgets": [
-                                {
-                                    "type": "initial",
-                                    "maximumWarning": "2mb",
-                                    "maximumError": "5mb"
-                                }
-                            ]
+                            "budgets": [{
+                                "type": "initial",
+                                "maximumWarning": "2mb",
+                                "maximumError": "5mb"
+                            }]
                         },
                         "stage": {
                             "outputPath": "dist/apps/web-giddh-stage",
                             "extraWebpackConfig": "./webpack.stage.partial.js",
                             "baseHref": "https://stage.giddh.com/",
                             "baseUrl": "stage.giddh.com",
-                            "fileReplacements": [
-                                {
+                            "fileReplacements": [{
                                     "replace": "apps/web-giddh/src/index.html",
                                     "with": "apps/web-giddh/src/index.stage.html"
                                 },
@@ -192,8 +186,7 @@
                             "extraWebpackConfig": "./webpack.prod.partial.js",
                             "baseHref": "https://app.giddh.com/",
                             "baseUrl": "app.giddh.com",
-                            "fileReplacements": [
-                                {
+                            "fileReplacements": [{
                                     "replace": "apps/web-giddh/src/index.html",
                                     "with": "apps/web-giddh/src/index.prod.html"
                                 },
@@ -211,21 +204,18 @@
                             "extractLicenses": true,
                             "vendorChunk": false,
                             "buildOptimizer": true,
-                            "budgets": [
-                                {
-                                    "type": "initial",
-                                    "maximumWarning": "2mb",
-                                    "maximumError": "5mb"
-                                }
-                            ]
+                            "budgets": [{
+                                "type": "initial",
+                                "maximumWarning": "2mb",
+                                "maximumError": "5mb"
+                            }]
                         },
                         "test": {
                             "outputPath": "dist/apps/web-giddh-test",
                             "extraWebpackConfig": "./webpack.test.partial.js",
                             "baseHref": "https://test.giddh.com/",
                             "baseUrl": "test.giddh.com",
-                            "fileReplacements": [
-                                {
+                            "fileReplacements": [{
                                     "replace": "apps/web-giddh/src/index.html",
                                     "with": "apps/web-giddh/src/index.test.html"
                                 },
@@ -243,13 +233,11 @@
                             "extractLicenses": true,
                             "vendorChunk": true,
                             "buildOptimizer": true,
-                            "budgets": [
-                                {
-                                    "type": "initial",
-                                    "maximumWarning": "2mb",
-                                    "maximumError": "5mb"
-                                }
-                            ]
+                            "budgets": [{
+                                "type": "initial",
+                                "maximumWarning": "2mb",
+                                "maximumError": "5mb"
+                            }]
                         }
                     }
                 },
@@ -343,8 +331,7 @@
                         "main": "apps/web-giddh/src/main.electron.ts",
                         "polyfills": "apps/web-giddh/src/polyfills.ts",
                         "tsConfig": "apps/web-giddh/tsconfig.app.json",
-                        "assets": [
-                            {
+                        "assets": [{
                                 "glob": "**/*",
                                 "input": "apps/web-giddh/src/assets/",
                                 "output": "/assets/"
@@ -396,8 +383,7 @@
                         "local": {
                             "outputPath": "dist/apps/web-giddh-local",
                             "extraWebpackConfig": "./webpack.electron.partial.js",
-                            "fileReplacements": [
-                                {
+                            "fileReplacements": [{
                                     "replace": "apps/web-giddh/src/index.html",
                                     "with": "apps/web-giddh/src/index.local.html"
                                 },
@@ -415,20 +401,17 @@
                             "extractLicenses": false,
                             "vendorChunk": false,
                             "buildOptimizer": false,
-                            "budgets": [
-                                {
-                                    "type": "initial",
-                                    "maximumWarning": "2mb",
-                                    "maximumError": "5mb"
-                                }
-                            ]
+                            "budgets": [{
+                                "type": "initial",
+                                "maximumWarning": "2mb",
+                                "maximumError": "5mb"
+                            }]
                         },
                         "stage": {
                             "outputPath": "dist/apps/web-giddh-stage",
                             "extraWebpackConfig": "./webpack.stage.partial.js",
                             "baseUrl": "stage.giddh.com",
-                            "fileReplacements": [
-                                {
+                            "fileReplacements": [{
                                     "replace": "apps/web-giddh/src/index.html",
                                     "with": "apps/web-giddh/src/index.stage.html"
                                 },
@@ -450,8 +433,7 @@
                         "prod": {
                             "outputPath": "dist/apps/web-giddh-prod",
                             "extraWebpackConfig": "./webpack.electron.prod.partial.js",
-                            "fileReplacements": [
-                                {
+                            "fileReplacements": [{
                                     "replace": "apps/web-giddh/src/index.html",
                                     "with": "apps/web-giddh/src/index.electron.prod.html"
                                 },
@@ -469,20 +451,17 @@
                             "extractLicenses": false,
                             "vendorChunk": true,
                             "buildOptimizer": false,
-                            "budgets": [
-                                {
-                                    "type": "initial",
-                                    "maximumWarning": "2mb",
-                                    "maximumError": "5mb"
-                                }
-                            ]
+                            "budgets": [{
+                                "type": "initial",
+                                "maximumWarning": "2mb",
+                                "maximumError": "5mb"
+                            }]
                         },
                         "test": {
                             "outputPath": "dist/apps/web-giddh-test",
                             "extraWebpackConfig": "./webpack.test.partial.js",
                             "baseUrl": "test.giddh.com",
-                            "fileReplacements": [
-                                {
+                            "fileReplacements": [{
                                     "replace": "apps/web-giddh/src/index.html",
                                     "with": "apps/web-giddh/src/index.test.html"
                                 },
@@ -500,13 +479,11 @@
                             "extractLicenses": true,
                             "vendorChunk": true,
                             "buildOptimizer": true,
-                            "budgets": [
-                                {
-                                    "type": "initial",
-                                    "maximumWarning": "2mb",
-                                    "maximumError": "5mb"
-                                }
-                            ]
+                            "budgets": [{
+                                "type": "initial",
+                                "maximumWarning": "2mb",
+                                "maximumError": "5mb"
+                            }]
                         }
                     }
                 },

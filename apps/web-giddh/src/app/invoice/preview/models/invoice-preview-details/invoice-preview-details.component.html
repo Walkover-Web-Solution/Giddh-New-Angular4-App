@@ -102,13 +102,12 @@
                                         <div class="btn-group changeStatus-dropdown pull-right" dropdown
                                             *ngIf="only4ProformaEstimates">
 
-                                            <label *ngIf="selectedItem.voucherStatus === 'invoiced'"
+                                            <label
                                                 class="labeled text-capitalize">
                                                 {{ selectedItem.voucherStatus }}</label>
 
                                             <button id="button-basic" dropdownToggle type="button"
-                                                class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic"
-                                                *ngIf="selectedItem.voucherStatus === 'submitted'">Change Status
+                                                class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic">Change Status
                                                 <span class="caret"></span>
                                             </button>
 

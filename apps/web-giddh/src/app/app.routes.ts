@@ -1,21 +1,23 @@
-import {NeedsAuthorization} from './decorators/needAuthorization';
-import {PageComponent} from './page.component';
-import {Routes} from '@angular/router';
-import {NeedsAuthentication} from './decorators/needsAuthentication';
-import {UserAuthenticated} from './decorators/UserAuthenticated';
-import {DummyComponent} from './dummy.component';
-import {NewUserComponent} from './newUser.component';
-import {NewUserAuthGuard} from './decorators/newUserGuard';
-import {SocialLoginCallbackComponent} from './social-login-callback.component';
-import {PublicPageHandlerComponent} from './public-page-handler.component';
-import {WelcomeComponent} from './welcome/welcome.component';
-import {OnboardingComponent} from './onboarding/onboarding.component';
-import {NotFoundComponent} from './404/404-component';
-import {BrowserSupported} from './decorators/BrowserSupported';
-import {BrowserDetectComponent} from './browser-support/browserDetect.component';
-import {SelectPlanComponent} from './selectPlan/selectPlan.component';
-import {BillingDetailComponent} from './billing-details/billingDetail.component';
-import {TokenVerifyComponent} from './login/token-verify.component';
+// import { MagicLinkComponent } from './magic-link/magic-link.component';
+import { NeedsAuthorization } from './decorators/needAuthorization';
+// import { SuccessComponent } from './settings/linked-accounts/success.component';
+import { PageComponent } from './page.component';
+import { Routes } from '@angular/router';
+import { NeedsAuthentication } from './decorators/needsAuthentication';
+import { UserAuthenticated } from './decorators/UserAuthenticated';
+import { DummyComponent } from './dummy.component';
+import { NewUserComponent } from './newUser.component';
+import { NewUserAuthGuard } from './decorators/newUserGuard';
+import { SocialLoginCallbackComponent } from './social-login-callback.component';
+import { PublicPageHandlerComponent } from './public-page-handler.component';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { OnboardingComponent } from './onboarding/onboarding.component';
+import { NotFoundComponent } from './404/404-component';
+import { BrowserSupported } from './decorators/BrowserSupported';
+import { BrowserDetectComponent } from './browser-support/browserDetect.component';
+import { SelectPlanComponent } from './selectPlan/selectPlan.component';
+import { BillingDetailComponent } from './billing-details/billingDetail.component';
+import { TokenVerifyComponent } from './login/token-verify.component';
 import {AppLoginSuccessComponent} from "./app-login-success/app-login-success";
 
 export const ROUTES: Routes = [
@@ -82,9 +84,16 @@ export const ROUTES: Routes = [
                 canActivate: [NeedsAuthorization]
             },
             // { path: 'sales', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },
-            { path: 'daybook', loadChildren: './daybook/daybook.module#DaybookModule', canActivate: [NeedsAuthorization] },
-            { path: 'purchase', redirectTo: 'purchase-management' },
-            { path: 'about', loadChildren: './about/about.module#AboutModule' },
+            {
+                path: 'daybook',
+                loadChildren: './daybook/daybook.module#DaybookModule',
+                canActivate: [NeedsAuthorization]
+            },
+            {
+                path: 'purchase',
+                redirectTo: 'purchase-management'
+            },
+            {path: 'about', loadChildren: './about/about.module#AboutModule'},
             //{ path: 'aging-report', loadChildren: './aging-report/aging-report.module#AgingReportModule' },
             {
                 path: 'inventory',

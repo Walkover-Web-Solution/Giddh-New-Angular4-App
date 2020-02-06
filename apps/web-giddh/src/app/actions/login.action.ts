@@ -1,6 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { CompanyResponse, ICurrencyResponse, StateDetailsResponse } from '../models/api-models/Company';
-import { Action, Store } from '@ngrx/store';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {CompanyResponse, ICurrencyResponse, StateDetailsResponse} from '../models/api-models/Company';
+import {Action, Store} from '@ngrx/store';
 import {
     LinkedInRequestModel,
     SignupwithEmaillModel,
@@ -11,29 +11,29 @@ import {
     VerifyMobileModel,
     VerifyMobileResponseModel
 } from '../models/api-models/loginModels';
-import { ToasterService } from '../services/toaster.service';
-import { GeneralActions } from './general/general.actions';
-import { CompanyActions } from './company.actions';
-import { BaseResponse } from '../models/api-models/BaseResponse';
-import { ActivatedRoute, Router } from '@angular/router';
-import { sortBy } from '../lodash-optimized';
-import { COMMON_ACTIONS } from './common.const';
-import { AppState } from '../store';
-import { Injectable } from '@angular/core';
-import { map, switchMap, take } from 'rxjs/operators';
-import { userLoginStateEnum } from '../models/user-login-state';
-import { Actions, Effect } from '@ngrx/effects';
-import { DbService } from '../services/db.service';
-import { CompanyService } from '../services/companyService.service';
-import { GeneralService } from '../services/general.service';
-import { Observable, ReplaySubject, zip as observableZip } from 'rxjs';
-import { CustomActions } from '../store/customActions';
-import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
-import { AuthenticationService } from '../services/authentication.service';
-import { AccountService } from '../services/account.service';
-import { Configuration } from '../app.constant';
-import { ROUTES } from '../routes-array';
-import { SettingsProfileActions } from "./settings/profile/settings.profile.action";
+import {ToasterService} from '../services/toaster.service';
+import {GeneralActions} from './general/general.actions';
+import {CompanyActions} from './company.actions';
+import {BaseResponse} from '../models/api-models/BaseResponse';
+import {ActivatedRoute, Router} from '@angular/router';
+import {sortBy} from '../lodash-optimized';
+import {COMMON_ACTIONS} from './common.const';
+import {AppState} from '../store';
+import {Injectable} from '@angular/core';
+import {map, switchMap, take} from 'rxjs/operators';
+import {userLoginStateEnum} from '../models/user-login-state';
+import {Actions, Effect} from '@ngrx/effects';
+import {DbService} from '../services/db.service';
+import {CompanyService} from '../services/companyService.service';
+import {GeneralService} from '../services/general.service';
+import {Observable, ReplaySubject, zip as observableZip} from 'rxjs';
+import {CustomActions} from '../store/customActions';
+import {LoginWithPassword, SignUpWithPassword} from '../models/api-models/login';
+import {AuthenticationService} from '../services/authentication.service';
+import {AccountService} from '../services/account.service';
+import {Configuration} from '../app.constant';
+import {ROUTES} from '../routes-array';
+import {SettingsProfileActions} from "./settings/profile/settings.profile.action";
 
 @Injectable()
 export class LoginActions {
@@ -117,7 +117,7 @@ export class LoginActions {
                 let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
                 if (response.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
-                    return { type: 'EmptyAction' };
+                    return {type: 'EmptyAction'};
                 }
                 if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
@@ -144,7 +144,7 @@ export class LoginActions {
                 let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
                 if (response.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
-                    return { type: 'EmptyAction' };
+                    return {type: 'EmptyAction'};
                 }
                 if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
@@ -171,7 +171,7 @@ export class LoginActions {
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
-                return { type: 'EmptyAction' };
+                return {type: 'EmptyAction'};
             }));
 
     @Effect()
@@ -189,7 +189,7 @@ export class LoginActions {
                 let response: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
                 if (response.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
-                    return { type: 'EmptyAction' };
+                    return {type: 'EmptyAction'};
                 }
                 return this.LoginSuccess();
             }));
@@ -209,7 +209,7 @@ export class LoginActions {
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
-                return { type: 'EmptyAction' };
+                return {type: 'EmptyAction'};
             }));
 
     @Effect()
@@ -242,7 +242,7 @@ export class LoginActions {
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
                     this._router.navigate(['/pages/new-user']);
-                    return { type: 'EmptyAction' };
+                    return {type: 'EmptyAction'};
                 } else {
                     if (stateDetail.body && stateDetail.status === 'success') {
                         this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
@@ -271,8 +271,8 @@ export class LoginActions {
                 return observableZip(this._companyService.getStateDetails(''), this._companyService.CompanyList(), this._companyService.CurrencyList());
             }), map((results: any[]) => {
                 console.log("YES2");
-				/* check if local storage is cleared or not for first time
-				 for application menu set up in localstorage */
+                /* check if local storage is cleared or not for first time
+                 for application menu set up in localstorage */
 
                 let isNewMenuSetted = localStorage.getItem('isNewMenuSetted');
                 let isMenuUpdated = localStorage.getItem('isMenuUpdated');
@@ -293,7 +293,7 @@ export class LoginActions {
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
                     this._router.navigate(['/pages/new-user']);
-                    return { type: 'EmptyAction' };
+                    return {type: 'EmptyAction'};
                 } else {
                     if (stateDetail.body && stateDetail.status === 'success') {
                         this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
@@ -305,11 +305,11 @@ export class LoginActions {
                             return this.doSameStuffs(companies);
                         }
                     } else {
-						/**
-						 * if user is new and signed up by shared entity
-						 * find the entity and redirect user according to terms.
-						 * shared entities [GROUP, COMPANY, ACCOUNT]
-						 */
+                        /**
+                         * if user is new and signed up by shared entity
+                         * find the entity and redirect user according to terms.
+                         * shared entities [GROUP, COMPANY, ACCOUNT]
+                         */
                         return this.doSameStuffs(companies);
                     }
                 }
@@ -321,10 +321,12 @@ export class LoginActions {
             map((action: CustomActions) => {
                 if (PRODUCTION_ENV && !isElectron) {
                     window.location.href = 'https://giddh.com/login/';
+                } else if (isElectron) {
+                    this._router.navigate(['/login']);
                 } else {
                     window.location.href = AppUrl + 'login/';
                 }
-                return { type: 'EmptyAction' };
+                return {type: 'EmptyAction'};
             }));
 
     @Effect()
@@ -342,7 +344,7 @@ export class LoginActions {
                 let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
                 if (response.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
-                    return { type: 'EmptyAction' };
+                    return {type: 'EmptyAction'};
                 }
                 return this.LoginSuccess();
             }));
@@ -362,7 +364,7 @@ export class LoginActions {
                 let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
                 if (response.status === 'error') {
                     this._toaster.errorToast(response.message, response.code);
-                    return { type: 'EmptyAction' };
+                    return {type: 'EmptyAction'};
                 }
                 return this.LoginSuccess();
             }));
@@ -379,7 +381,7 @@ export class LoginActions {
             map(data => {
                 if (data.status === 'error') {
                     this._toaster.errorToast(data.message, data.code);
-                    return { type: 'EmptyAction' };
+                    return {type: 'EmptyAction'};
                 }
                 // return this.LoginSuccess();
                 return this.signupWithGoogleResponse(data);
@@ -389,7 +391,7 @@ export class LoginActions {
     public LinkedInElectronLogin$: Observable<Action> = this.actions$
         .ofType(LoginActions.LinkedInLoginElectron).pipe(
             switchMap((action: CustomActions) => {
-                let args: any = { headers: {} };
+                let args: any = {headers: {}};
                 args.headers['cache-control'] = 'no-cache';
                 args.headers['Content-Type'] = 'application/json';
                 args.headers['Accept'] = 'application/json';
@@ -403,7 +405,7 @@ export class LoginActions {
             map(data => {
                 if (data.status === 'error') {
                     this._toaster.errorToast(data.message, data.code);
-                    return { type: 'EmptyAction' };
+                    return {type: 'EmptyAction'};
                 }
                 // return this.LoginSuccess();
                 return this.signupWithGoogleResponse(data);
@@ -430,14 +432,14 @@ export class LoginActions {
                     dummyResponse.body.companyUniqueName = response.request;
                     dummyResponse.body.lastState = 'sales';
                     dummyResponse.status = 'success';
-                    this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
+                    this._router.navigateByUrl('/dummy', {skipLocationChange: true}).then(() => {
                         this._router.navigate([dummyResponse.body.lastState]);
                     });
                     return this.ChangeCompanyResponse(dummyResponse);
                 }
                 if (response.body.companyUniqueName) {
                     if (response.body.lastState && ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) !== -1) {
-                        this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
+                        this._router.navigateByUrl('/dummy', {skipLocationChange: true}).then(() => {
                             this._router.navigate([response.body.lastState]);
                         });
                     } else {
@@ -448,11 +450,11 @@ export class LoginActions {
                                 this.activatedRoute.firstChild.firstChild.url.pipe(take(1)).subscribe(p => {
                                     if (p.length > 0) {
                                         path = [p[0].path];
-                                        parament = { queryParams: p[0].parameters };
+                                        parament = {queryParams: p[0].parameters};
                                     }
                                 });
                                 if (path.length > 0 && parament) {
-                                    this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
+                                    this._router.navigateByUrl('/dummy', {skipLocationChange: true}).then(() => {
                                         if (ROUTES.findIndex(p => p.path.split('/')[0] === path[0].split('/')[0]) > -1) {
                                             this._router.navigate([path[0]], parament);
                                         } else {
@@ -478,7 +480,7 @@ export class LoginActions {
                     this.store.dispatch(this._generalAction.getFlattenAccount());
                     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                 }
-                return { type: 'EmptyAction' };
+                return {type: 'EmptyAction'};
             }));
 
     @Effect()
@@ -496,7 +498,7 @@ export class LoginActions {
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
-                return { type: 'EmptyAction' };
+                return {type: 'EmptyAction'};
             }));
 
     @Effect()
@@ -514,7 +516,7 @@ export class LoginActions {
                 let response: BaseResponse<string, VerifyMobileModel> = action.payload;
                 if (response.status === 'error') {
                     this._toaster.errorToast(response.message, response.code);
-                    return { type: 'EmptyAction' };
+                    return {type: 'EmptyAction'};
                 }
                 this._toaster.successToast(response.body);
                 return this.FetchUserDetails();
@@ -533,7 +535,7 @@ export class LoginActions {
                 if (action.payload.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
-                return { type: 'EmptyAction' };
+                return {type: 'EmptyAction'};
             }));
 
     @Effect()
@@ -549,7 +551,7 @@ export class LoginActions {
                 if (action.payload.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
-                return { type: 'EmptyAction' };
+                return {type: 'EmptyAction'};
             }));
 
     @Effect()
@@ -557,7 +559,7 @@ export class LoginActions {
         .ofType('REPORT_INVALID_JSON').pipe(
             switchMap((action: CustomActions) => this.auth.ReportInvalidJSON(action.payload)),
             map((res) => {
-                return { type: 'EmptyAction' };
+                return {type: 'EmptyAction'};
             }));
 
     @Effect()
@@ -574,11 +576,11 @@ export class LoginActions {
                     this._toaster.successToast('A verification code has been sent to your email account.');
                     // this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
                     // this._router.navigate(['/pages/new-user']);
-                    return { type: 'EmptyAction' };
+                    return {type: 'EmptyAction'};
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
-                return { type: 'EmptyAction' };
+                return {type: 'EmptyAction'};
             }));
 
     @Effect()
@@ -603,7 +605,7 @@ export class LoginActions {
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
-                return { type: 'EmptyAction' };
+                return {type: 'EmptyAction'};
             }));
 
     @Effect()
@@ -622,7 +624,7 @@ export class LoginActions {
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
-                return { type: 'EmptyAction' };
+                return {type: 'EmptyAction'};
             }));
 
     @Effect()
@@ -641,7 +643,7 @@ export class LoginActions {
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
-                return { type: 'EmptyAction' };
+                return {type: 'EmptyAction'};
             }));
 
     @Effect()
@@ -654,7 +656,7 @@ export class LoginActions {
     public renewSessionResponse$: Observable<Action> = this.actions$
         .ofType(LoginActions.renewSessionResponse).pipe(
             map((action: CustomActions) => {
-                return { type: 'EmptyAction' };
+                return {type: 'EmptyAction'};
             }));
 
     @Effect()
@@ -829,6 +831,7 @@ export class LoginActions {
             payload: null
         };
     }
+
     public LoginSuccessByOtherUrl(): CustomActions {
         console.log("LOGINS");
         return {
@@ -1070,6 +1073,6 @@ export class LoginActions {
         if (isElectron) {
             window.location.reload();
         }
-        return { type: 'EmptyAction' };
+        return {type: 'EmptyAction'};
     }
 }

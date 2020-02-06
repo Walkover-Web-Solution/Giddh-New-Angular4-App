@@ -107,7 +107,7 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoChe
 		try {
 			($(this.input.nativeElement) as any).data("daterangepicker").remove();
 		} catch (e) {
-			console.log(e.message);
+		//
 		}
 	}
 

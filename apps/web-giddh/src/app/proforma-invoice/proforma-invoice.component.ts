@@ -542,20 +542,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.accountUniqueName = parmas['accUniqueName'];
                 this.invoiceNo = parmas['invoiceNo'];
                 this.isUpdateMode = true;
-
-                // add fixed class to body because double scroll showing in invoice update mode
-                document.querySelector('body').classList.add('fixed');
-
                 this.isUpdateDataInProcess = true;
                 this.prepareInvoiceTypeFlags();
 
                 this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
 
                 if (!this.isProformaInvoice && !this.isEstimateInvoice) {
-                    this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
-                        invoiceNumber: this.invoiceNo,
-                        voucherType: this.parseVoucherType(this.invoiceType)
-                    }));
+                    if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
+                        this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.accountUniqueName, {
+                            invoiceNumber: this.invoiceNo,
+                            voucherType: this.parseVoucherType(this.invoiceType)
+                        }));
+                    }
+                    // TODO: Add purchase record get API call once advance receipt is complete
                 } else {
                     let obj: ProformaGetRequest = new ProformaGetRequest();
                     obj.accountUniqueName = this.accountUniqueName;
@@ -1502,10 +1501,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // replace /n to br for (shipping and billing)
 
         if (data.accountDetails.shippingDetails.address && data.accountDetails.shippingDetails.address.length && data.accountDetails.shippingDetails.address[0].length > 0) {
+            data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].trim();
             data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].replace(/\n/g, '<br />');
             data.accountDetails.shippingDetails.address = data.accountDetails.shippingDetails.address[0].split('<br />');
         }
         if (data.accountDetails.billingDetails.address && data.accountDetails.billingDetails.address.length && data.accountDetails.billingDetails.address[0].length > 0) {
+            data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].trim();
             data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].replace(/\n/g, '<br />');
             data.accountDetails.billingDetails.address = data.accountDetails.billingDetails.address[0].split('<br />');
         }
@@ -2697,10 +2698,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // replace /n to br for (shipping and billing)
 
         if (data.accountDetails.shippingDetails.address && data.accountDetails.shippingDetails.address.length && data.accountDetails.shippingDetails.address[0].length > 0) {
+            data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].trim();
             data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].replace(/\n/g, '<br />');
             data.accountDetails.shippingDetails.address = data.accountDetails.shippingDetails.address[0].split('<br />');
         }
         if (data.accountDetails.billingDetails.address && data.accountDetails.billingDetails.address.length && data.accountDetails.billingDetails.address[0].length > 0) {
+            data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].trim();
             data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].replace(/\n/g, '<br />');
             data.accountDetails.billingDetails.address = data.accountDetails.billingDetails.address[0].split('<br />');
         }
@@ -2930,7 +2933,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         if (!this.isProformaInvoice && !this.isEstimateInvoice) {
             if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
-                this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetailsV4(this.accountUniqueName, {
+                this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.accountUniqueName, {
                     invoiceNumber: this.invoiceNo,
                     voucherType: this.parseVoucherType(this.invoiceType)
                 }));
@@ -3740,7 +3743,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.purchaseRecordInvoiceDate = moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
             this.purchaseRecordTaxNumber = String(this.invFormData.accountDetails.shippingDetails.gstNumber);
             this.purchaseRecordInvoiceNumber = String(this.invFormData.voucherDetails.voucherNumber);
-        } catch(error) {}
+        } catch (error) { }
     }
 
     /**

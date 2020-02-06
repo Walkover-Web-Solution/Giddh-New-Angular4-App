@@ -107,6 +107,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         AppComponent,
         PageComponent,
         NoContentComponent,
+        AppLoginSuccessComponent,
         PublicPageHandlerComponent,
         NotFoundComponent,
         TokenVerifyComponent,
