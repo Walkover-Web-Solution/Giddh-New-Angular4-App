@@ -226,7 +226,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
         this.store.dispatch(this._settingsTagActions.GetALLTags());
-        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({page: 1, count: 0}));
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         // get company taxes
         this.store.dispatch(this._companyActions.getTax());
         // reset redirect state from login action
@@ -421,7 +421,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.uploadInput = new EventEmitter<UploadInput>();
-        this.fileUploadOptions = {concurrency: 0};
+        this.fileUploadOptions = { concurrency: 0 };
 
         observableCombineLatest(this.universalDate$, this.route.params, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (!Array.isArray(resp[0])) {
@@ -438,7 +438,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let from = params['from'];
                 let to = params['to'];
 
-                this.datePickerOptions = {...this.datePickerOptions, startDate: moment(from, 'DD-MM-YYYY').toDate(), endDate: moment(to, 'DD-MM-YYYY').toDate()};
+                this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(from, 'DD-MM-YYYY').toDate(), endDate: moment(to, 'DD-MM-YYYY').toDate() };
 
                 this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                     dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
@@ -456,7 +456,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (dateObj && !this.todaySelected) {
                     let universalDate = _.cloneDeep(dateObj);
 
-                    this.datePickerOptions = {...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()};
+                    this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate() };
                     this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                         dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
                             bsRangeValue: [moment(universalDate[0], 'DD-MM-YYYY').toDate(), moment(universalDate[1], 'DD-MM-YYYY').toDate()]
@@ -548,11 +548,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.transactionData$.subscribe((lt: any) => {
             if (lt) {
                 // set date picker to and from date, as what we got from api
-                this.datePickerOptions = {
-                    ...this.datePickerOptions,
-                    startDate: moment(lt.from, 'DD-MM-YYYY').toDate(),
-                    endDate: moment(lt.to, 'DD-MM-YYYY').toDate()
-                };
+                if (lt.from && lt.to) {
+                    this.datePickerOptions = {
+                        ...this.datePickerOptions,
+                        startDate: moment(lt.from, 'DD-MM-YYYY').toDate(),
+                        endDate: moment(lt.to, 'DD-MM-YYYY').toDate()
+                    };
+                }
+
                 if (lt.closingBalance) {
                     this.closingBalanceBeforeReconcile = lt.closingBalance;
                     this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
@@ -665,9 +668,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.isBankOrCashAccount = accountDetails.parentGroups.some((grp) => grp.uniqueName === 'bankaccounts');
                 this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile.baseCurrency;
 
-                this.foreignCurrencyDetails = {code: profile.baseCurrency, symbol: profile.baseCurrencySymbol};
+                this.foreignCurrencyDetails = { code: profile.baseCurrency, symbol: profile.baseCurrencySymbol };
                 if (this.isLedgerAccountAllowsMultiCurrency) {
-                    this.baseCurrencyDetails = {code: accountDetails.currency, symbol: accountDetails.currencySymbol};
+                    this.baseCurrencyDetails = { code: accountDetails.currency, symbol: accountDetails.currencySymbol };
                     this.getCurrencyRate();
                 } else {
                     this.baseCurrencyDetails = this.foreignCurrencyDetails;
@@ -701,7 +704,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     // stocks from ledger account
                     data[1].map(acc => {
                         // normal entry
-                        accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+                        accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
                         // check if taxable or roundoff account then don't assign stocks
                         let notRoundOff = acc.uniqueName === 'roundoff';
                         let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
@@ -712,7 +715,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                                 accountsArray.push({
                                     value: uuid.v4(),
                                     label: `${acc.name}` + ` (${as.name})`,
-                                    additional: Object.assign({}, acc, {stock: as})
+                                    additional: Object.assign({}, acc, { stock: as })
                                 });
                             });
                         }
@@ -722,18 +725,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     data[1].map(acc => {
                         if (acc.stocks) {
                             // normal entry
-                            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+                            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
                             // stock entry
                             acc.stocks.map(as => {
                                 accountsArray.push({
                                     value: uuid.v4(),
                                     // label: acc.name + '(' + as.uniqueName + ')',
                                     label: `${acc.name}` + ` (${as.name})`,
-                                    additional: Object.assign({}, acc, {stock: as})
+                                    additional: Object.assign({}, acc, { stock: as })
                                 });
                             });
                         } else {
-                            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+                            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
                         }
                     });
                 }
@@ -841,9 +844,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public clickUnpaidInvoiceList(e?: boolean) {
         if (e) {
             if (this.accountUniquename === 'cash' || this.accountUniquename === 'bankaccounts' && this.selectedTxnAccUniqueName) {
-                this.getInvoiveLists({accountUniqueName: this.selectedTxnAccUniqueName, status: 'unpaid'});
+                this.getInvoiveLists({ accountUniqueName: this.selectedTxnAccUniqueName, status: 'unpaid' });
             } else {
-                this.getInvoiveLists({accountUniqueName: this.accountUniquename, status: 'unpaid'});
+                this.getInvoiveLists({ accountUniqueName: this.accountUniquename, status: 'unpaid' });
             }
         }
     }
@@ -891,10 +894,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
             let rate = response.body;
             if (rate) {
-                this.lc.blankLedger = {...this.lc.blankLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, this.giddhBalanceDecimalPlaces)};
+                this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, this.giddhBalanceDecimalPlaces) };
             }
         }, (error => {
-            this.lc.blankLedger = {...this.lc.blankLedger, exchangeRate: 1, exchangeRateForDisplay: 1};
+            this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1, exchangeRateForDisplay: 1 };
         }));
     }
 
@@ -914,7 +917,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             const currentlyAddedTransaction = this.lc.currentBlankTxn;
             if (currentlyAddedTransaction.inventory) {
                 // Add the warehouse selected for an item
-                currentlyAddedTransaction.inventory['warehouse'] = {name: '', uniqueName: event.warehouse};
+                currentlyAddedTransaction.inventory['warehouse'] = { name: '', uniqueName: event.warehouse };
             }
             let newTrx = this.lc.addNewTransaction(event.type);
             this.lc.blankLedger.transactions.push(newTrx);
@@ -1319,11 +1322,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * closeAdvanceSearchPopup
      */
-    public closeAdvanceSearchPopup(isCancel) {
+    public closeAdvanceSearchPopup(event) {
         this.advanceSearchModel.hide();
-        if (!isCancel) {
+        if (!event.isClose) {
             this.getAdvanceSearchTxn();
             // this.getTransactionData();
+            if (event.advanceSearchData) {
+                if (event.advanceSearchData['dataToSend']['bsRangeValue'].length) {
+                    this.datePickerOptions = {
+                        ...this.datePickerOptions,
+                        startDate: moment(event.advanceSearchData.dataToSend.bsRangeValue[0], 'DD-MM-YYYY').toDate(),
+                        endDate: moment(event.advanceSearchData.dataToSend.bsRangeValue[1], 'DD-MM-YYYY').toDate()
+                    };
+                }
+
+            }
         }
         // this.advanceSearchRequest = _.cloneDeep(advanceSearchRequest);
     }
@@ -1462,8 +1475,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
                 method: 'POST',
                 fieldName: 'file',
-                data: {entries: _.cloneDeep(this.entryUniqueNamesForBulkAction).join()},
-                headers: {'Session-Id': sessionKey},
+                data: { entries: _.cloneDeep(this.entryUniqueNamesForBulkAction).join() },
+                headers: { 'Session-Id': sessionKey },
             };
             this.uploadInput.emit(event);
         } else if (output.type === 'start') {
@@ -1486,7 +1499,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public onSelectInvoiceGenerateOption(isCombined: boolean) {
         this.bulkActionGenerateVoucherModal.hide();
         this.entryUniqueNamesForBulkAction = _.uniq(this.entryUniqueNamesForBulkAction);
-        this.store.dispatch(this._ledgerActions.GenerateBulkLedgerInvoice({combined: isCombined}, [{accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction)}], 'ledger'));
+        this.store.dispatch(this._ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, [{ accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction) }], 'ledger'));
     }
 
     public onCancelSelectInvoiceModal() {
@@ -1597,7 +1610,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.invoiceList = [];
         this._ledgerService.GetInvoiceList(request).subscribe((res: any) => {
             _.map(res.body.invoiceList, (o) => {
-                this.invoiceList.push({label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false});
+                this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
             });
             _.uniqBy(this.invoiceList, 'value');
         });

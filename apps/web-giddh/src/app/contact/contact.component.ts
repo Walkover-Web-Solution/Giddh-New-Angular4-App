@@ -236,11 +236,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
-        // this.flattenAccountsStream$ = this.store.pipe(select(createSelector([(s: AppState) => s.general.flattenAccounts], (s) => {
 
-        //   return s;
-        // }), (takeUntil(this.destroyed$))));
-        this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
+        // get default datepicker options from store
+        this.store.pipe(select(p => p.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 this.datePickerOptions = a;
             }

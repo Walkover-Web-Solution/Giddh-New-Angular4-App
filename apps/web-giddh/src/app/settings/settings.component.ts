@@ -21,6 +21,7 @@ import {AuthenticationService} from '../services/authentication.service';
 import {GeneralActions} from '../actions/general/general.actions';
 import {SettingsIntegrationActions} from '../actions/settings/settings.integration.action';
 import {WarehouseActions} from './warehouse/action/warehouse.action';
+import { PAGINATION_LIMIT } from '../app.constant';
 
 @Component({
     templateUrl: './settings.component.html',
@@ -256,7 +257,7 @@ export class SettingsComponent implements OnInit {
      */
     private loadModuleData(tabName: string): void {
         if (tabName === 'warehouse') {
-            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({page: 1}));
+            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
         }
     }
 }

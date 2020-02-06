@@ -19,7 +19,7 @@ import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-sc
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
 
 import { LedgerDiscountComponent } from '../../app/ledger/components/ledgerDiscount/ledgerDiscount.component';
-import { RcmModalComponent } from '../common/rcm-modal/rcm-modal.component';
+import { ConfirmationModalComponent } from '../common/confirmation-modal/confirmation-modal.component';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
 import { CommandKModule } from '../theme/command-k/command.k.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
@@ -69,6 +69,7 @@ import { NgxMaskModule } from './helpers/directives/ngx-mask';
 import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
 import { LayoutComponent } from './layout/layout.component';
 import { OnBoardingComponent } from './on-boarding/on-boarding.component';
+import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -131,7 +132,7 @@ export function provideConfig() {
         AccountAddNewDetailsComponent,
         AccountUpdateNewDetailsComponent,
         WelcomeComponent,
-        RcmModalComponent
+        ConfirmationModalComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -167,7 +168,8 @@ export function provideConfig() {
         TabsModule,
         CKEditorModule,
         NgxMaskModule,
-        CommandKModule
+        CommandKModule,
+        NgxDaterangepickerMd.forRoot()
     ],
     exports: [
         CommonModule,
@@ -185,7 +187,7 @@ export function provideConfig() {
         FooterComponent,
         FixedFooterComponent,
         ManageGroupsAccountsComponent,
-        RcmModalComponent,
+        ConfirmationModalComponent,
         AccountFilterPipe,
         SelectModule,
         PaginationModule,
@@ -209,7 +211,8 @@ export function provideConfig() {
         BsDropdownModule,
         ElementViewChildModule,
         TooltipModule,
-        BsDatepickerModule
+        BsDatepickerModule,
+        NgxDaterangepickerMd
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,

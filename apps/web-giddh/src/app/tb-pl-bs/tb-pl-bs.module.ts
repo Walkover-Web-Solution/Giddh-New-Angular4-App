@@ -77,7 +77,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
         BsDropdownModule,
         CurrencyModule,
         TooltipModule,
-        AccountDetailModalModule
+        AccountDetailModalModule,
     ],
 })
 export class TBPlBsModule {

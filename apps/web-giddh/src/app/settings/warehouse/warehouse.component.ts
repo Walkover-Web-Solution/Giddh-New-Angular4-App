@@ -93,7 +93,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.imgPath = (isElectron ||isCordova)  ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.initSubscribers();
-        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1 }));
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
     }
 
     /**
@@ -216,7 +216,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      * @memberof WarehouseComponent
      */
     public pageChanged(event: PageChangedEvent): void {
-        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: event.page }));
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: event.page, count: PAGINATION_LIMIT }));
     }
 
     /**
@@ -265,7 +265,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
                 this.endOnBoarding();
                 this.store.dispatch(this.warehouseActions.resetCreateWarehouse());
                 this.store.dispatch(this.warehouseActions.resetUpdateWarehouse());
-                this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1 }));
+                this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
             }
             if (warehouseState && warehouseState.defaultWarehouseData) {
                 this.resetDefaultWarehouse();

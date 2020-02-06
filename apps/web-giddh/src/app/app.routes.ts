@@ -75,7 +75,7 @@ export const ROUTES: Routes = [
             { path: 'invoice', loadChildren: './invoice/invoice.module#InvoiceModule', canActivate: [NeedsAuthorization] },
             // { path: 'sales', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },
             { path: 'daybook', loadChildren: './daybook/daybook.module#DaybookModule', canActivate: [NeedsAuthorization] },
-            { path: 'purchase', loadChildren: './purchase/purchase.module#PurchaseModule', canActivate: [NeedsAuthorization] },
+            { path: 'purchase', redirectTo: 'purchase-management' },
             { path: 'about', loadChildren: './about/about.module#AboutModule' },
             //{ path: 'aging-report', loadChildren: './aging-report/aging-report.module#AgingReportModule' },
             { path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule', canActivate: [NeedsAuthorization] },
@@ -108,7 +108,7 @@ export const ROUTES: Routes = [
             { path: 'expenses-manager', loadChildren: './expenses/expenses.module#ExpensesModule', canActivate: [NeedsAuthorization] },
 
             { path: 'vat-report', loadChildren: './vat-report/vatReport.module#VarReportModule', canActivate: [NeedsAuthorization] },
-
+            { path: 'purchase-management', loadChildren: './purchase/purchase.module#PurchaseModule', canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
             // {path: '**', pathMatch: 'full', component: NotFoundComponent},
 

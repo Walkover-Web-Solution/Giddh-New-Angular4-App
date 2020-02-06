@@ -1558,6 +1558,9 @@ modal-container.modal {
 ._2LpwQBMGSE._1cMlaUlzrO._1P3WzErELA._22VVVS0E_n {
     display: none !important;
 }
+.justify-content-center {
+    justify-content: center;
+}
 
 /* my css end */
 
@@ -5347,6 +5350,7 @@ a {
     height: 50px;
     float: left;
     background: #fff url("../images/designTool.svg") no-repeat;
+    background-size: 65px;
 }
 
 .ico-template {
@@ -7702,12 +7706,18 @@ app-header {
 .error-box {
     border: 2px solid red;
 }
+.text-warning {
+    color: #FFA000;
+}
 
 .heightVH-100 {
     height: 100vh;
 }
 
 /* my css */
+.new-ledger-text-right .inputWrapper .form-control {
+    text-align: right !important;
+}
 .box .company-box .inner-company-box ul > li .tooltip {
     word-break: break-all;
 }
