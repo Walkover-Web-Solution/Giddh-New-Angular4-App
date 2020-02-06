@@ -364,7 +364,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.getElectronAppVersion();
         this.store.dispatch(this.companyActions.GetApplicationDate());
 
-        this.user$.pipe(takeUntil(this.destroyed$)).subscribe((u) => {
+        this.user$.pipe(take(1)).subscribe((u) => {
             if (u) {
                 let userEmail = u.email;
                 this.userEmail = _.clone(userEmail);
