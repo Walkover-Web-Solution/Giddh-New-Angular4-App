@@ -49,13 +49,16 @@
                 <h3 class="section_head">Gmail Integration</h3>
                 <div class="d-flex">
 
-                    <a *ngIf="!(isGmailIntegrated$ | async) && !isElectron " class="btn btn-primary"
-                       [href]="gmailAuthCodeUrl$ | async">Connect with
-                        Gmail</a>
+                    <ng-container *ngIf="!(isGmailIntegrated$ | async)">
+                        <a *ngIf="!isElectron " class="btn btn-primary"
+                           [href]="gmailAuthCodeUrl$ | async">Connect with
+                            Gmail</a>
 
-                    <a *ngIf="!(isGmailIntegrated$ | async) && isElectron " class="btn btn-primary"
-                       href="javascript:void(0);" (click)="gmailIntegration('google')">Connect with
-                        Gmail</a>
+                        <a *ngIf="isElectron " class="btn btn-primary"
+                           href="javascript:void(0);" (click)="gmailIntegration('google')">Connect with
+                            Gmail</a>
+                    </ng-container>
+
                     <h4 style="align-self: center" *ngIf="(isGmailIntegrated$ | async)" class="text-success">Gmail
                         integrated successfully.</h4>
                     <button style="margin-left: 20px" *ngIf="(isGmailIntegrated$ | async)" class="btn btn-danger"
