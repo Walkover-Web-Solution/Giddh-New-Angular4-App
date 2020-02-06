@@ -2776,8 +2776,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             return entry;
         });
 
-        console.log("My data: ", data);
-
         let obj: GenericRequestForGenerateSCD = {
             voucher: data,
             updateAccountDetails: this.updateAccount
