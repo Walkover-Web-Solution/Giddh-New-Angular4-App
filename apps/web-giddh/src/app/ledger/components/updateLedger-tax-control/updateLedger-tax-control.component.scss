@@ -5,4 +5,9 @@
 }
 .dropdown-menu {
     min-width: 210px;
+    max-width: 100%;
+    width: 100%;
+}
+.dropdown-menu li label {
+    font-size: 14px;
 }
