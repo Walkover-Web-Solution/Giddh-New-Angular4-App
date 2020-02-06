@@ -303,7 +303,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.isCompanyProifleUpdate$ = this.store.select(p => p.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
 
         this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
-            debugger;
             if (!companies) {
                 return;
             }
@@ -653,7 +652,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (s === userLoginStateEnum.notLoggedIn) {
                 this.router.navigate(['/login']);
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
-                debugger;
                 // this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
                 this.zone.run(() => {
                     this.router.navigate(['/new-user']);
