@@ -69,7 +69,6 @@ export default class WindowManager {
             }
             if (!isUrlInvalid(url)) {
                 descriptor.url = url;
-                console.log('all set');
             }
 
             const options: BrowserWindowConstructorOptions = {

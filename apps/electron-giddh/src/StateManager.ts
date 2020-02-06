@@ -75,7 +75,6 @@ export class StateManager {
     }
 
     public restoreWindows(): void {
-        console.log(DEFAULT_URL);
         const data = this.getOrLoadData();
         data.windows = defaultWindows();
         if (debugMode) {

@@ -17,7 +17,6 @@ const isLogEvent = isEnvTrue(process.env.LOG_EVENTS);
 function addHandler(emitter: any, event: string, handler: (...args: any[]) => void) {
     if (isLogEvent) {
         emitter.on(event, (...args: any[]) => {
-            console.log('%s %s', event, args);
             handler.apply(this, args);
         });
     } else {
