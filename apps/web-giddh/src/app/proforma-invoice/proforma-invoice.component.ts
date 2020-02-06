@@ -837,6 +837,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                         } else if (this.isPurchaseInvoice) {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
+                            this.isRcmEntry = (results[1]) ? results[1].subVoucher === Subvoucher.ReverseCharge : false;
                             obj = cloneDeep(convertedRes1) as VoucherClass;
                             if (this.isUpdateMode) {
                                 const vendorCurrency = (results[1].account.currency) ? results[1].account.currency.code : this.companyCurrency;
@@ -1526,7 +1527,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // check for valid entries and transactions
         if (data.entries) {
             _.forEach(data.entries, (entry) => {
-                entry['subVoucher'] = (this.isRcmEntry) ? Subvoucher.ReverseCharge : '';
                 _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
                     // convert date object
                     // txn.date = this.convertDateForAPI(txn.date);
@@ -1612,7 +1612,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 dueDate: data.voucherDetails.dueDate,
                 type: this.invoiceType,
                 attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
-                templateDetails: data.templateDetails
+                templateDetails: data.templateDetails,
+                subVoucher: (this.isRcmEntry) ? Subvoucher.ReverseCharge : ''
             } as PurchaseRecordRequest;
         }
 
@@ -2582,6 +2583,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this._toasty.errorToast('Something went wrong! Try again');
                     });
             } else if (this.isPurchaseInvoice) {
+                if (this.isRcmEntry && !this.validateTaxes(cloneDeep(data))) {
+                    return;
+                }
                 requestObject = {
                     account: data.accountDetails,
                     number: this.invFormData.voucherDetails.voucherNumber,
@@ -2591,7 +2595,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     type: this.invoiceType,
                     attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
                     templateDetails: data.templateDetails,
-                    uniqueName: (this.selectedItem) ? this.selectedItem.uniqueName : (this.matchingPurchaseRecord) ? this.matchingPurchaseRecord.uniqueName : ''
+                    uniqueName: (this.selectedItem) ? this.selectedItem.uniqueName : (this.matchingPurchaseRecord) ? this.matchingPurchaseRecord.uniqueName : '',
+                    subVoucher: (this.isRcmEntry) ? Subvoucher.ReverseCharge : ''
                 } as PurchaseRecordRequest;
                 requestObject = this.updateData(requestObject, data);
                 this.generatePurchaseRecord(requestObject);
@@ -3972,13 +3977,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // Confirmation received, delete old merged entries
         this.invFormData.entries = this.invFormData.entries.filter(entry => !entry['isMergedPurchaseEntry'])
         const result = (await this.modifyMulticurrencyRes(this.matchingPurchaseRecord, false)) as VoucherClass;
+        let flattenAccounts;
+        this.flattenAccountListStream$.pipe(take(1)).subscribe((accounts) => flattenAccounts = accounts);
         if (result.voucherDetails) {
             if (result.entries && result.entries.length > 0) {
+                result.entries = this.parseEntriesFromResponse(result.entries, flattenAccounts);
                 result.entries.forEach((entry) => {
                     entry['isMergedPurchaseEntry'] = true;
                     this.invFormData.entries.push(entry);
                 });
             }
         }
+        this.calculateBalanceDue();
+        this.calculateTotalDiscount();
+        this.calculateTotalTaxSum();
+        this._cdr.detectChanges();
     }
 }

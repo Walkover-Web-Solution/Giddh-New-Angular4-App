@@ -421,8 +421,8 @@
                             </div>
 
                             <!-- reverse charge transction start -->
-                            <!-- for purchase invoice start -->
-                            <!-- <div class="row mTB1" *ngIf="isPurchaseInvoice">
+                            <!-- for purchase record start -->
+                            <div class="row mTB1" *ngIf="isPurchaseInvoice">
                                 <div class="col-sm-2" *ngIf="!isMobileView">
                                     <label></label>
                                 </div>
@@ -441,8 +441,8 @@
                                     <confirmation-modal [configuration]="rcmConfiguration"
                                         (buttonClicked)="handleRcmChange($event)"></confirmation-modal>
                                 </ng-template>
-                            </div> -->
-                            <!-- for purchase invoice end -->
+                            </div>
+                            <!-- for purchase record end -->
                             <!-- reverse charge transction end  -->
 
                             <!-- for sales invoice start -->
@@ -534,7 +534,7 @@
                         <thead>
                             <tr>
                                 <th *ngFor="let item of theadArrReadOnly;" [hidden]="!item.display" class="theadOfSalesInvoice" [ngClass]="item.label">
-                                    {{item.label}} <span class="mandatory-asterisk" *ngIf="item.label === 'Tax' && isRcmEntry">(RCM)<sup>*</sup></span>
+                                    {{item.label}} <span *ngIf="item.label === 'Tax' && isRcmEntry">(RCM)<sup class="mandatory-asterisk" >*</sup></span>
                                 </th>
                             </tr>
                         </thead>
