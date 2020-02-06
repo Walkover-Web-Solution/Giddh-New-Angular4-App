@@ -39,6 +39,11 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         { label: 'Shipping Details', value: 'shippingDetails' },
         { label: 'Custom Fields', value: 'customFields' }
     ];
+    public templateSignaturesOptions: IOption[] = [
+        { label: 'Image', value: 'image' },
+        { label: 'Slogan', value: 'slogan' },
+    ];
+    public signatureOptions: string = 'image'
     public selectedField: string = '';
     public allTemplates$: Observable<CustomTemplateResponse[]>;
     public allTemplatesOptions: IOption[] = [];
@@ -60,9 +65,6 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     public updateShippingDetailsRequest: BulkUpdateInvoiceShippingDetails = new BulkUpdateInvoiceShippingDetails();
     public updateCustomfieldsRequest: BulkUpdateInvoiceCustomfields = new BulkUpdateInvoiceCustomfields();
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-
-
-
 
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -100,9 +102,12 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         } else if (output.type === 'done') {
             this._loaderService.hide();
             if (output.file.response.status === 'success') {
-                this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
-                // this.entryUniqueNamesForBulkAction = [];
-                // this.getTransactionData();
+                this.updateImageSignatureRequest.imageSignatureUniqueName = '';
+
+                if (output.file.response.body && output.file.response.body.uniqueName) {
+                    this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
+                    this.updateImageSignatureRequest.imageSignatureUniqueName = output.file.response.body.uniqueName;
+                }
                 // this.isFileUploading = false;
                 this._toaster.successToast('file uploaded successfully');
             } else {
@@ -136,6 +141,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
 
     public onCancel() {
         this.selectedField = '';
+        this.signatureOptions = '';
         this.bulkUpdateForm.reset();
         this.closeModelEvent.emit(true);
     }
@@ -211,8 +217,11 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
                     this.bulkUpdateRequest(this.updateNotesRequest, 'notes');
                     break;
                 case 'signature':
-                    //  this.bulkUpdateRequest(this.updateImageSignatureRequest, 'slogan');
-
+                    if (this.signatureOptions === 'image') {
+                        this.bulkUpdateRequest(this.updateImageSignatureRequest, 'imagesignature');
+                    } else if (this.signatureOptions === 'slogan') {
+                      this.bulkUpdateRequest(this.updateSloganRequest, 'slogan');
+                    }
                     break;
                 case 'dueDate':
                     if (this.updateDueDatesRequest.dueDate) {
@@ -227,7 +236,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
                     break;
                 case 'customFields':
                     if (this.updateCustomfieldsRequest.customField1) {
-                        this.updateCustomfieldsRequest.customField1 = moment(this.updateCustomfieldsRequest.customField1, this.giddhDateFormat).format();
+                        this.updateCustomfieldsRequest.customField1 = moment(this.updateCustomfieldsRequest.customField1, this.giddhDateFormat).format(this.giddhDateFormat);
                     }
                     this.bulkUpdateRequest(this.updateCustomfieldsRequest, 'customfields');
                     break;

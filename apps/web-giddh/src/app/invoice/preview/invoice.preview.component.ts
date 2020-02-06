@@ -48,6 +48,7 @@ import { InvoicePaymentModelComponent } from './models/invoicePayment/invoice.pa
 import { PurchaseRecordService } from '../../services/purchase-record.service';
 import { PAGINATION_LIMIT } from '../../app.constant';
 import { PurchaseRecordUpdateModel } from '../../purchase/purchase-record/constants/purchase-record.interface';
+import { InvoiceBulkUpdateService } from '../../services/invoice.bulkupdate.service';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
@@ -232,7 +233,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private _breakPointObservar: BreakpointObserver,
         private _router: Router,
         private _receiptServices: ReceiptService,
-        private purchaseRecordService: PurchaseRecordService
+        private purchaseRecordService: PurchaseRecordService,
+        private _invoiceBulkUpdateService: InvoiceBulkUpdateService
     ) {
         this.invoiceSearchRequest.page = 1;
         this.invoiceSearchRequest.count = PAGINATION_LIMIT;
@@ -681,11 +683,38 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 }
             });
         } else {
-            let model = {
-                invoiceNumber: this.selectedInvoice.voucherNumber,
-                voucherType: this.selectedVoucher
-            };
-            this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, this.selectedInvoice.account.uniqueName));
+            //  It will execute when Bulk delete operation
+            if (this.selectedInvoicesList.length > 1) {
+                let selectedinvoicesName = [];
+                this.selectedInvoicesList.forEach(item => {
+                    selectedinvoicesName.push(item.voucherNumber);
+                });
+                let bulkDeleteModel = {
+                    voucherNumbers: selectedinvoicesName,
+                    voucherType: this.selectedVoucher
+                }
+                if (bulkDeleteModel.voucherNumbers && bulkDeleteModel.voucherType) {
+                    this._invoiceBulkUpdateService.bulkUpdateInvoice(bulkDeleteModel, 'delete').subscribe(response => {
+                        if (response) {
+                            if (response.status === "success") {
+                                this._toaster.successToast(response.body);
+                            } else {
+                                this._toaster.errorToast(response.message);
+                            }
+                            this.getVoucher(false);
+                            this.toggleAllItems(false);
+                        }
+                    });
+                }
+
+            } else {
+                let model = {
+                    invoiceNumber: this.selectedInvoice.voucherNumber,
+                    voucherType: this.selectedVoucher
+                };
+                this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, this.selectedInvoice.account.uniqueName));
+            }
+
         }
     }
 

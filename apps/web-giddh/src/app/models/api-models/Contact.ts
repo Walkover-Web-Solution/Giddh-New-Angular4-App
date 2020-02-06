@@ -148,8 +148,8 @@ export interface BulkUpdateShippingDetails {
  * @extends {BulkUpdateInvoice}
  */
 export class BulkUpdateInvoiceNote extends BulkUpdateInvoice {
-    message1: string;
-    message2: string
+    message1: string = '';
+    message2: string = '';
 }
 
 /**
@@ -182,7 +182,7 @@ export class BulkUpdateInvoiceImageSignature extends BulkUpdateInvoice {
  * @extends {BulkUpdateInvoice}
  */
 export class BulkUpdateInvoiceSlogan extends BulkUpdateInvoice {
-    slogan: string;
+    slogan: string = '';
 }
 /**
  * * Bulk update invoices DueDates field in all invoices request model
@@ -211,8 +211,8 @@ export class BulkUpdateInvoiceShippingDetails {
  * @class BulkUpdateInvoiceCustomfields
  */
 export class BulkUpdateInvoiceCustomfields {
-    customField1: string;
-    customField2: string;
-    customField3: string;
+    customField1: string = '';
+    customField2: string = '';
+    customField3: string = '';
 }
 
