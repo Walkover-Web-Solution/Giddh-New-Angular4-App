@@ -215,7 +215,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             this.actionToPerform = 'DeleteAddedBank';
             this.confirmationModal.show();
         } else {
-            console.log('No account found');
+        //
         }
     }
 

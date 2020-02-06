@@ -2,7 +2,7 @@
 
 # build auth related
 default.entitlements.mac.plist
-embedded.provisionprofile
+electron-sign/embedded.provisionprofile
 
 package-lock_*
 
@@ -167,3 +167,4 @@ xplat/**/*.ngsummary.json
 /apps/giddh-cordova/giddh/package-lock.json
 
 package-lock.json
+/apps/electron-giddh/src/

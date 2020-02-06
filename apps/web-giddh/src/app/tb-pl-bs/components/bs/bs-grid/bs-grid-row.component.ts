@@ -59,7 +59,6 @@ export class BsGridRowComponent implements OnInit, OnChanges {
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
             url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
-            console.log(ipcRenderer.send('open-url', url));
         } else {
             (window as any).open(url);
         }

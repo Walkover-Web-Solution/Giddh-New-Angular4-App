@@ -28,5 +28,7 @@ export const LOGIN_API = {
 };
 
 export const GMAIL_API = {
-    GENERATE_GMAIL_TOKEN: 'company/:companyUniqueName/generate-mail-token' // POST
+    GENERATE_GMAIL_TOKEN: 'company/:companyUniqueName/generate-mail-token',// POST
+    SAVE_GMAIL_TOKEN: "company/:companyUniqueName/save-mail-token"
+
 };

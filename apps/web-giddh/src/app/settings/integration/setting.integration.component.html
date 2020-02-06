@@ -15,21 +15,22 @@
                                 <label>Auth Key</label>
                                 <br>
                                 <input type="text" placeholder="Enter auth-key" class="form-control"
-                                    [ngModel]="smsFormObj.authKey" name="authKey" required />
+                                       [ngModel]="smsFormObj.authKey" name="authKey" required/>
 
                             </div>
                             <div class="form-group col-sm-4 col-md-3">
                                 <label>Sender ID</label>
                                 <br>
                                 <input type="text" placeholder="Enter sender Id" class="form-control"
-                                    [ngModel]="smsFormObj.senderId" name="senderId" required />
+                                       [ngModel]="smsFormObj.senderId" name="senderId" required/>
                             </div>
                             <div class="form-group col-sm-4 col-md-3">
                                 <div class="empty-label">
                                     <label>&nbsp;</label>
                                     <br>
                                     <button type="submit" class="btn btn-success mrR1"
-                                        [disabled]="smsFormObjCtrl.invalid">Save</button>
+                                            [disabled]="smsFormObjCtrl.invalid">Save
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -47,13 +48,22 @@
             <div class="box clearfix mb-2">
                 <h3 class="section_head">Gmail Integration</h3>
                 <div class="d-flex">
-                    <a *ngIf="!(isGmailIntegrated$ | async)" class="btn btn-primary"
-                        [href]="gmailAuthCodeUrl$ | async">Connect with
-                        Gmail</a>
+
+                    <ng-container *ngIf="!(isGmailIntegrated$ | async)">
+                        <a *ngIf="!isElectron " class="btn btn-primary"
+                           [href]="gmailAuthCodeUrl$ | async">Connect with
+                            Gmail</a>
+
+                        <a *ngIf="isElectron " class="btn btn-primary"
+                           href="javascript:void(0);" (click)="gmailIntegration('google')">Connect with
+                            Gmail</a>
+                    </ng-container>
+
                     <h4 style="align-self: center" *ngIf="(isGmailIntegrated$ | async)" class="text-success">Gmail
                         integrated successfully.</h4>
                     <button style="margin-left: 20px" *ngIf="(isGmailIntegrated$ | async)" class="btn btn-danger"
-                        (click)="removegmailintegration.toggle()">Remove Account</button>
+                            (click)="removegmailintegration.toggle()">Remove Account
+                    </button>
                 </div>
             </div>
 
@@ -62,13 +72,12 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <confirm-modal [title]="'Remove Gmail Integration'"
-                            [body]="'Are you sure you want to remove gmail account?'"
-                            (cancelCallBack)="removegmailintegration.toggle()"
-                            (successCallBack)="removeGmailAccount();removegmailintegration.toggle()"></confirm-modal>
+                                       [body]="'Are you sure you want to remove gmail account?'"
+                                       (cancelCallBack)="removegmailintegration.toggle()"
+                                       (successCallBack)="removeGmailAccount();removegmailintegration.toggle()"></confirm-modal>
                     </div>
                 </div>
             </div>
-
 
 
             <div class="box clearfix">
@@ -80,21 +89,22 @@
                             <label>Auth Key</label>
                             <br>
                             <input type="text" placeholder="Enter auth-key" class="form-control"
-                                [ngModel]="emailFormObj.authKey" name="authKey" required />
+                                   [ngModel]="emailFormObj.authKey" name="authKey" required/>
 
                         </div>
                         <div class="form-group col-sm-4 col-md-3">
                             <label>Email Subject</label>
                             <br>
                             <input type="text" placeholder="Enter email subject" class="form-control"
-                                [ngModel]="emailFormObj.subject" name="subject" required />
+                                   [ngModel]="emailFormObj.subject" name="subject" required/>
                         </div>
                         <div class="form-group col-sm-4 col-md-3 empty-label">
 
                             <label>&nbsp;</label>
                             <br>
                             <button type="submit" class="btn btn-success mrR1"
-                                [disabled]="emailform.invalid">Save</button>
+                                    [disabled]="emailform.invalid">Save
+                            </button>
 
                         </div>
                     </div>
@@ -110,7 +120,6 @@
             </ng-template>
 
 
-
             <!-- <h3 class="section_head mrT2">Invoice PaymentPaymentPayment</h3> -->
             <div class="box clearfix mb-2">
                 <h3 class="fs20 mrB2">Razorpay Details</h3>
@@ -122,7 +131,7 @@
                                 <span class="required">*</span>
                             </label>
                             <input class="form-control" type="text" placeholder="Key Id" name="razorPayObj.userName"
-                                [(ngModel)]="razorPayObj.userName" required autocomplete="off">
+                                   [(ngModel)]="razorPayObj.userName" required autocomplete="off">
 
                         </div>
                         <div class="form-group col-sm-4 col-xs-12">
@@ -130,8 +139,8 @@
                                 <span class="required">*</span>
                             </label>
                             <input class="form-control" type="password" placeholder="Secret key"
-                                name="razorPayObj.password" [(ngModel)]="razorPayObj.password" required
-                                autocomplete="off">
+                                   name="razorPayObj.password" [(ngModel)]="razorPayObj.password" required
+                                   autocomplete="off">
                         </div>
                     </div>
                     <div class="">
@@ -141,12 +150,13 @@
                                     <label>Link Account</label>
                                     <div class="input-group">
                                         <sh-select *ngIf="razorPayObj.account" placeholder="Link Account"
-                                            name="razorPayObj.account" [(ngModel)]="razorPayObj.account.uniqueName"
-                                            [options]="accounts$ | async" (selected)="selectAccount($event)">
+                                                   name="razorPayObj.account"
+                                                   [(ngModel)]="razorPayObj.account.uniqueName"
+                                                   [options]="accounts$ | async" (selected)="selectAccount($event)">
                                         </sh-select>
                                         <div class="input-group-addon cp">
                                             <span (click)="unlinkAccountFromRazorPay()"
-                                                class="glyphicon glyphicon-trash"></span>
+                                                  class="glyphicon glyphicon-trash"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -155,7 +165,7 @@
                                 <label>&nbsp;</label>
                                 <br>
                                 <input type="checkbox" [(ngModel)]="razorPayObj.autoCapturePayment"
-                                    name="autoCapturePayment" /> Automatic capture on payment
+                                       name="autoCapturePayment"/> Automatic capture on payment
                             </div>
                         </div>
                     </div>
@@ -164,17 +174,18 @@
                     <div class="row">
                         <div class="col-xs-12 form-group ">
                             <button *ngIf="!updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid"
-                                (click)="saveRazorPayDetails()">Save</button>
+                                    (click)="saveRazorPayDetails()">Save
+                            </button>
                             <button *ngIf="updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid"
-                                (click)="updateRazorPayDetails()">Update</button>
+                                    (click)="updateRazorPayDetails()">Update
+                            </button>
                             <button *ngIf="updateRazor" class="btn btn-danger"
-                                (click)="deleteRazorPayDetails()">Delete</button>
+                                    (click)="deleteRazorPayDetails()">Delete
+                            </button>
                         </div>
                     </div>
                 </form>
             </div>
-
-
 
 
             <!-- <h3 class="section_head mrT2">Cashfree Integration</h3> -->
@@ -191,8 +202,8 @@
                                     <span class="required">*</span>
                                 </label>
                                 <input class="form-control" type="text" placeholder="Client Id"
-                                    name="payoutForm.userName" [(ngModel)]="payoutObj.userName" required
-                                    autocomplete="off">
+                                       name="payoutForm.userName" [(ngModel)]="payoutObj.userName" required
+                                       autocomplete="off">
                             </div>
 
                             <div class="form-group col-sm-4 col-xs-12">
@@ -200,8 +211,8 @@
                                     <span class="required">*</span>
                                 </label>
                                 <input class="form-control" type="password" placeholder="Client Secret key"
-                                    name="payoutForm.password" [(ngModel)]="payoutObj.password" required
-                                    autocomplete="off">
+                                       name="payoutForm.password" [(ngModel)]="payoutObj.password" required
+                                       autocomplete="off">
                             </div>
                         </div>
                         <div class="">
@@ -210,8 +221,8 @@
                                     <div class="">
                                         <label>Link Account</label>
                                         <sh-select placeholder="Link Account" name="payoutObj.account"
-                                            [(ngModel)]="payoutObj.fakeAccObj" [options]="bankAccounts$ | async"
-                                            (selected)="selectCashfreeAccount($event, payoutObj)">
+                                                   [(ngModel)]="payoutObj.fakeAccObj" [options]="bankAccounts$ | async"
+                                                   (selected)="selectCashfreeAccount($event, payoutObj)">
                                         </sh-select>
                                     </div>
                                 </div>
@@ -219,8 +230,8 @@
                                     <label>&nbsp;</label>
                                     <br>
                                     <input type="checkbox" [(ngModel)]="payoutObj.autoCapturePayment"
-                                        name="payoutObj.autoCapturePayment"
-                                        [checked]="autoCollectObj.account?.uniqueName" /> Automatic capture on payment
+                                           name="payoutObj.autoCapturePayment"
+                                           [checked]="autoCollectObj.account?.uniqueName"/> Automatic capture on payment
                                 </div>
 
                             </div>
@@ -229,13 +240,14 @@
                         <div class="row">
                             <div class="col-xs-12 form-group ">
                                 <button *ngIf="!payoutAdded" class="btn btn-success" [disabled]="payoutForm.invalid"
-                                    (click)="submitCashfreeDetail(payoutObj)">Save
+                                        (click)="submitCashfreeDetail(payoutObj)">Save
                                 </button>
                                 <button *ngIf="payoutAdded" class="btn btn-success" [disabled]="payoutForm.invalid"
-                                    (click)="updateCashfreeDetail(payoutObj)">Update
+                                        (click)="updateCashfreeDetail(payoutObj)">Update
                                 </button>
                                 <button *ngIf="payoutAdded" class="btn btn-danger"
-                                    (click)="deleteCashFreeAccount()">Delete</button>
+                                        (click)="deleteCashFreeAccount()">Delete
+                                </button>
                                 <!--  -->
                             </div>
                         </div>
@@ -253,8 +265,8 @@
                                     <span class="required">*</span>
                                 </label>
                                 <input class="form-control" type="text" placeholder="Client Id"
-                                    name="autoCollectform.userName" [(ngModel)]="autoCollectObj.userName" required
-                                    autocomplete="off">
+                                       name="autoCollectform.userName" [(ngModel)]="autoCollectObj.userName" required
+                                       autocomplete="off">
 
                             </div>
                             <div class="form-group col-sm-4 col-xs-12">
@@ -262,8 +274,8 @@
                                     <span class="required">*</span>
                                 </label>
                                 <input class="form-control" type="password" placeholder="Client Secret key"
-                                    name="autoCollectform.password" [(ngModel)]="autoCollectObj.password" required
-                                    autocomplete="off">
+                                       name="autoCollectform.password" [(ngModel)]="autoCollectObj.password" required
+                                       autocomplete="off">
                             </div>
                         </div>
                         <div class="">
@@ -272,16 +284,17 @@
                                     <div class="">
                                         <label>Link Account</label>
                                         <sh-select placeholder="Link Account" name="autoCollectObj.account"
-                                            [(ngModel)]="autoCollectObj.fakeAccObj" [options]="bankAccounts$ | async"
-                                            (selected)="selectCashfreeAccount($event, autoCollectObj)"></sh-select>
+                                                   [(ngModel)]="autoCollectObj.fakeAccObj"
+                                                   [options]="bankAccounts$ | async"
+                                                   (selected)="selectCashfreeAccount($event, autoCollectObj)"></sh-select>
                                     </div>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 mrT1 empty-label">
                                     <label>&nbsp;</label>
                                     <br>
                                     <input type="checkbox" [(ngModel)]="autoCollectObj.autoCapturePayment"
-                                        name="autoCollectObj.autoCapturePayment"
-                                        [checked]="autoCollectObj.account?.uniqueName" /> Automatic capture on payment
+                                           name="autoCollectObj.autoCapturePayment"
+                                           [checked]="autoCollectObj.account?.uniqueName"/> Automatic capture on payment
                                 </div>
 
                             </div>
@@ -290,15 +303,15 @@
                         <div class="row">
                             <div class="col-xs-12 form-group ">
                                 <button type="submit" *ngIf="!autoCollectAdded" class="btn btn-success"
-                                    [disabled]="autoCollectform.invalid"
-                                    (click)="submitAutoCollect(autoCollectObj)">Save
+                                        [disabled]="autoCollectform.invalid"
+                                        (click)="submitAutoCollect(autoCollectObj)">Save
                                 </button>
                                 <button type="submit" *ngIf="autoCollectAdded" class="btn btn-success"
-                                    [disabled]="autoCollectform.invalid"
-                                    (click)="updateAutoCollect(autoCollectObj)">Update
+                                        [disabled]="autoCollectform.invalid"
+                                        (click)="updateAutoCollect(autoCollectObj)">Update
                                 </button>
                                 <button type="reset" *ngIf="autoCollectAdded" class="btn btn-danger"
-                                    (click)="deleteAutoCollect()">Delete
+                                        (click)="deleteAutoCollect()">Delete
                                 </button>
                                 <!--  -->
                             </div>
@@ -317,8 +330,8 @@
                                     <span class="required">*</span>
                                 </label>
                                 <input class="form-control" type="text" placeholder="Client Id"
-                                    name="paymentGateway.userName" [(ngModel)]="paymentGateway.userName" required
-                                    autocomplete="off">
+                                       name="paymentGateway.userName" [(ngModel)]="paymentGateway.userName" required
+                                       autocomplete="off">
 
                             </div>
                             <div class="form-group col-sm-4 col-xs-12">
@@ -326,22 +339,22 @@
                                     <span class="required">*</span>
                                 </label>
                                 <input class="form-control" type="password" placeholder="Client Secret key"
-                                    name="paymentGateway.password" [(ngModel)]="paymentGateway.password" required
-                                    autocomplete="off">
+                                       name="paymentGateway.password" [(ngModel)]="paymentGateway.password" required
+                                       autocomplete="off">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12 form-group ">
                                 <button *ngIf="!paymentGatewayAdded" class="btn btn-success"
-                                    [disabled]="paymentGatewayForm.invalid"
-                                    (click)="submitPaymentGateway(paymentGateway)">Save
+                                        [disabled]="paymentGatewayForm.invalid"
+                                        (click)="submitPaymentGateway(paymentGateway)">Save
                                 </button>
                                 <button *ngIf="paymentGatewayAdded" class="btn btn-success"
-                                    [disabled]="paymentGatewayForm.invalid"
-                                    (click)="updatePaymentGateway(paymentGateway)">Update
+                                        [disabled]="paymentGatewayForm.invalid"
+                                        (click)="updatePaymentGateway(paymentGateway)">Update
                                 </button>
                                 <button *ngIf="paymentGatewayAdded" type="reset" class="btn btn-danger"
-                                    (click)="deletePaymentGateway()">
+                                        (click)="deletePaymentGateway()">
                                     Delete
                                 </button>
                                 <!-- *ngIf="autoCollectAdded" -->
@@ -357,8 +370,6 @@
             <ng-template tabHeading>
                 <span class="icon-ecomm"></span> E-Comm
             </ng-template>
-
-
 
 
             <div class="box clearfix">
@@ -377,45 +388,45 @@
 
                                         <label *ngIf="f">Seller Id<span class="required">*</span></label>
                                         <input class="form-control" type="text" placeholder="Seller Id" required
-                                            autocomplete="off" formControlName="sellerId"
-                                            [disabled]="i !== amazonEditItemIdx" />
+                                               autocomplete="off" formControlName="sellerId"
+                                               [disabled]="i !== amazonEditItemIdx"/>
 
                                     </div>
                                     <div class="form-group col-sm-2 col-xs-12">
                                         <label *ngIf="f">Access Key<span class="required">*</span></label>
                                         <input class="form-control" type="text" placeholder="Access key" required
-                                            autocomplete="off" formControlName="accessKey"
-                                            [disabled]="i !== amazonEditItemIdx" />
+                                               autocomplete="off" formControlName="accessKey"
+                                               [disabled]="i !== amazonEditItemIdx"/>
                                     </div>
                                     <div class="form-group col-sm-3 col-xs-12 ">
                                         <label *ngIf="f">AuthToken<span class="required">*</span></label>
                                         <input class="form-control" type="text" placeholder="AuthToken key" required
-                                            autocomplete="off" formControlName="mwsAuthToken"
-                                            [disabled]="i !== amazonEditItemIdx" />
+                                               autocomplete="off" formControlName="mwsAuthToken"
+                                               [disabled]="i !== amazonEditItemIdx"/>
                                     </div>
 
 
                                     <div class="form-group col-sm-3 col-xs-9">
                                         <label *ngIf="f">Secret Key<span class="required">*</span></label>
                                         <input class="form-control" type="text" placeholder="Secret key" required
-                                            autocomplete="off" formControlName="secretKey"
-                                            [disabled]="i !== amazonEditItemIdx" />
+                                               autocomplete="off" formControlName="secretKey"
+                                               [disabled]="i !== amazonEditItemIdx"/>
                                     </div>
                                     <div class="pull-left">
                                         <div [ngClass]="{'mrT3': f}">
                                             <button type="button" class="btn btn-default"
-                                                (click)="saveAmazonSeller(item)" *ngIf="l"><i
-                                                    class="fa fa-check"></i></button>
+                                                    (click)="saveAmazonSeller(item)" *ngIf="l"><i
+                                                class="fa fa-check"></i></button>
                                             <button type="button" class="btn btn-default"
-                                                (click)="updateAmazonSeller(item)"
-                                                *ngIf="i === amazonEditItemIdx && !l"><i
-                                                    class="fa fa-check"></i></button>
+                                                    (click)="updateAmazonSeller(item)"
+                                                    *ngIf="i === amazonEditItemIdx && !l"><i
+                                                class="fa fa-check"></i></button>
                                             <button type="button" class="btn btn-default" (click)="editAmazonSeller(i)"
-                                                *ngIf="i !== amazonEditItemIdx && !l"><i
-                                                    class="fa fa-edit"></i></button>
+                                                    *ngIf="i !== amazonEditItemIdx && !l"><i
+                                                class="fa fa-edit"></i></button>
                                             <button type="button" class="btn btn-danger"
-                                                (click)="deleteAmazonSeller(item.get('sellerId').value, i)"
-                                                *ngIf="!l"><i class="fa fa-trash-o"></i></button>
+                                                    (click)="deleteAmazonSeller(item.get('sellerId').value, i)"
+                                                    *ngIf="!l"><i class="fa fa-trash-o"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -451,36 +462,37 @@
                     <div style="clear: both">
                         <h2 style="float: left; font-size: 20px">ICICI Bank</h2>
                         <button type="button" style="float: right; margin-right: 5px" class="btn btn-danger mrR1"
-                            (click)="deRegisterForm(regAcc)">Remove</button>
+                                (click)="deRegisterForm(regAcc)">Remove
+                        </button>
                     </div>
-                    <br />
-                    <br />
+                    <br/>
+                    <br/>
                     <div class="form-group col-sm-4 col-md-3">
                         <div class="row">
                             <label>Corporate ID <span class="required">*</span></label>
                             <br>
                             <input type="text" placeholder="Enter Corporate ID" class="form-control"
-                                [ngModel]="regAcc.iciciCorporateDetails.corpId" disabled />
+                                   [ngModel]="regAcc.iciciCorporateDetails.corpId" disabled/>
                         </div>
                     </div>
                     <div class="form-group col-sm-4 col-md-3">
                         <label>User ID <span class="required">*</span></label>
                         <br>
                         <input type="text" placeholder="Enter User ID" class="form-control"
-                            [ngModel]="regAcc.iciciCorporateDetails.userId" disabled />
+                               [ngModel]="regAcc.iciciCorporateDetails.userId" disabled/>
                     </div>
                     <div class="form-group col-sm-4 col-md-3">
                         <label>Account Number <span class="required">*</span></label>
                         <br>
                         <input type="text" placeholder="Enter Account Number" class="form-control"
-                            [ngModel]="regAcc.iciciCorporateDetails.accountNo" disabled />
+                               [ngModel]="regAcc.iciciCorporateDetails.accountNo" disabled/>
                     </div>
                     <div class="form-group col-sm-4 col-md-3">
                         <label>Accounts <span class="required">*</span></label>
                         <br>
                         <sh-select [options]="(accounts$ | async)" name="accountUniqueName"
-                            [(ngModel)]="regAcc.account.name" [placeholder]="'Select Account'" [ItemHeight]="33"
-                            autocomplete="off">
+                                   [(ngModel)]="regAcc.account.name" [placeholder]="'Select Account'" [ItemHeight]="33"
+                                   autocomplete="off">
                         </sh-select>
                     </div>
                     <div class="row">
@@ -488,24 +500,26 @@
                             <label>&nbsp;</label>
                             <br>
                             <button type="button" class="btn btn-success mrR1"
-                                (click)="updateICICDetails(regAcc, ind)">Update</button>
+                                    (click)="updateICICDetails(regAcc, ind)">Update
+                            </button>
                         </div>
                     </div>
 
                     <div style="display: inline"
-                        *ngIf="(isPaymentUpdationSuccess$ | async) && ind === selecetdUpdateIndex">
+                         *ngIf="(isPaymentUpdationSuccess$ | async) && ind === selecetdUpdateIndex">
                         <div class="row">
                             <div>Congratulations!! A request has been sent to your account, go to <a
-                                    href="https://www.icicibank.com/" target="_blank">ICICI portal</a> and accept it.
+                                href="https://www.icicibank.com/" target="_blank">ICICI portal</a> and accept it.
                             </div>
                         </div>
                         <div class="row">
                             <div style="color: gray">Once it is done you can link your ICICI account/s and make payment
-                                directly through GIDDH.</div>
+                                directly through GIDDH.
+                            </div>
                         </div>
                     </div>
                 </div>
-                <br />
+                <br/>
             </div>
             <div *ngIf="openNewRegistration" class="box clearfix">
                 <h3 class="fs20 mrB2">ICICI Bank</h3>
@@ -515,27 +529,27 @@
                             <label>Corporate ID <span class="required">*</span></label>
                             <br>
                             <input type="text" placeholder="Enter Corporate ID" class="form-control"
-                                [ngModel]="paymentFormObj.corpId" name="corpId" required autocomplete="off" />
+                                   [ngModel]="paymentFormObj.corpId" name="corpId" required autocomplete="off"/>
                         </div>
                     </div>
                     <div class="form-group col-sm-3 col-md-2">
                         <label>User ID <span class="required">*</span></label>
                         <br>
                         <input type="text" placeholder="Enter User ID" class="form-control"
-                            [ngModel]="paymentFormObj.userId" name="userId" required autocomplete="off" />
+                               [ngModel]="paymentFormObj.userId" name="userId" required autocomplete="off"/>
                     </div>
                     <div class="form-group col-sm-3 col-md-2">
                         <label>Account Number <span class="required">*</span></label>
                         <br>
                         <input type="text" placeholder="Enter Account Number" class="form-control"
-                            [ngModel]="paymentFormObj.accountNo" name="accountNo" required autocomplete="off" />
+                               [ngModel]="paymentFormObj.accountNo" name="accountNo" required autocomplete="off"/>
                     </div>
                     <div class="form-group col-sm-3 col-md-2">
                         <label>Accounts <span class="required">*</span></label>
                         <br>
                         <sh-select #paymentFormAccountName [options]="(accounts$ | async)" name="accountUniqueName"
-                            [(ngModel)]="paymentFormObj.accountUniqueName" [placeholder]="'Select Account'"
-                            [ItemHeight]="33" autocomplete="off">
+                                   [(ngModel)]="paymentFormObj.accountUniqueName" [placeholder]="'Select Account'"
+                                   [ItemHeight]="33" autocomplete="off">
                         </sh-select>
                     </div>
                     <div class="form-group col-sm-3 col-md-3">
@@ -543,7 +557,8 @@
                             <label>&nbsp;</label>
                             <br>
                             <button type="submit" class="btn btn-success mrR1"
-                                [disabled]="paymentForm.invalid">Submit</button>
+                                    [disabled]="paymentForm.invalid">Submit
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -551,7 +566,8 @@
                 <div *ngIf="(isPaymentAdditionSuccess$ | async)">
                     <div style="display: inline-block" class="row">
                         <div>Congratulations!! A request has been sent to your account, go to <a
-                                href="https://www.icicibank.com/" target="_blank">ICICI portal</a> and accept it.</div>
+                            href="https://www.icicibank.com/" target="_blank">ICICI portal</a> and accept it.
+                        </div>
                     </div>
                     <div class="row">
                         <div style="color: gray">Once it is done you can link your ICICI account/s and make payment
@@ -561,8 +577,9 @@
                 </div>
             </div>
             <button type="button" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)"
-                style=" margin-right: 5px" class="btn btn-pink mrR1" (click)="openNewRegistartionForm()">Add More
-                ID</button>
+                    style=" margin-right: 5px" class="btn btn-pink mrR1" (click)="openNewRegistartionForm()">Add More
+                ID
+            </button>
         </tab>
 
     </tabset>

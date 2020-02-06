@@ -99,7 +99,6 @@ export class DecimalDigitsDirective implements OnDestroy {
                 currentCursorPos = this.elemRef.nativeElement.selectionStart;
             } else {
                 // Probably an old IE browser
-                console.log("This browser doesn't support selectionStart");
             }
 
             let dotLength: number = e.target.value.replace(/[^.]/g, '').length;

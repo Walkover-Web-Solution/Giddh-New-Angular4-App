@@ -18,7 +18,6 @@ export class CheckPermissionDirective implements OnInit {
                 let permissionIndex = permissions.findIndex((ele) => ele.name === this.checkPermission[1]);
                 if (!permissions.length || permissionIndex === -1) {
                     this.renderer.setElementStyle(this.el.nativeElement, 'display', 'none');
-                    console.log('not found: ', this.checkPermission[1]);
                 }
             }
         }
