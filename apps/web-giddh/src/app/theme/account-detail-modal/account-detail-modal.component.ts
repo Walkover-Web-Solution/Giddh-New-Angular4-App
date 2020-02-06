@@ -95,12 +95,12 @@ export class AccountDetailModalComponent implements OnChanges {
     }
 
     /**
-     * API call to get account details usning *accountUniqueName*
+     * API call to get account details using *accountUniqueName*
      *
      * @param {string} accountUniqueName account unique name to get account details
      * @memberof AccountDetailModalComponent
      */
-    public getAccountDetails(accountUniqueName: string) {
+    public getAccountDetails(accountUniqueName: string): void {
         this._accountService.GetAccountDetailsV2(accountUniqueName).subscribe(response => {
             if (response.status === 'success') {
                 this.accInfo = response.body;
@@ -229,7 +229,7 @@ export class AccountDetailModalComponent implements OnChanges {
      * @param {string} [additionalParams=''] addition params like date range
      * @memberof AccountDetailModalComponent
      */
-    public goToRoute(part: string, additionalParams: string = '') {
+    public goToRoute(part: string, additionalParams: string = ''): void {
         let url = location.href + `?returnUrl=${part}/${this.accountUniqueName}`;
 
         if (additionalParams) {
