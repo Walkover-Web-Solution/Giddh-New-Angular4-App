@@ -161,7 +161,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             useHash: IS_ELECTRON_WA,
             preloadingStrategy: CustomPreloadingStrategy,
             onSameUrlNavigation: 'reload',
-            enableTracing: true
         }),
         StoreRouterConnectingModule,
         ...CONDITIONAL_IMPORTS,
