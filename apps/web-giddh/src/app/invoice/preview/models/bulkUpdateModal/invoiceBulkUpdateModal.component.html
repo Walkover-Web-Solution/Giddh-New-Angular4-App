@@ -10,7 +10,7 @@
             <div class="row mb-1 mt-2">
                 <div class="col-md-6 col-sm-6">
                     <div class="form-group">
-                        <sh-select placeholder="Select" [options]="fieldOptions" [isFilterEnabled]="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedField" [ItemHeight]="33" (selected)="onSelectEntryField($event)"></sh-select>
+                        <sh-select placeholder="Select" [options]="fieldOptions" required [isFilterEnabled]="true" name="selectedField" [(ngModel)]="selectedField" [ItemHeight]="33" (selected)="onSelectEntryField($event)"></sh-select>
                     </div>
                 </div>
 
@@ -21,9 +21,9 @@
 
                     <div class="form-group" *ngIf="selectedField === 'notes'">
                         <span> Note 1</span>
-                        <textarea class="form-control" required [(ngModel)]="updateNotesRequest.message1" name="message1"></textarea>
+                        <textarea class="form-control" [(ngModel)]="updateNotesRequest.message1" name="message1"></textarea>
                         <span> Note 2</span>
-                        <textarea class="form-control" required [(ngModel)]="updateNotesRequest.message2" name="message2"></textarea>
+                        <textarea class="form-control" [(ngModel)]="updateNotesRequest.message2" name="message2"></textarea>
                     </div>
 
                     <div class="form-group" *ngIf="selectedField === 'signature'">
@@ -111,7 +111,7 @@
             </div>
         </div>
         <div class="modal-footer d-flex" style="justify-content: flex-start">
-            <button class="btn btn-success" (click)="updateBulkInvoice();" [disabled]="bulkUpdateForm.invalid && !selectedField">Update</button>
+            <button class="btn btn-success" (click)="updateBulkInvoice();" [disabled]="bulkUpdateForm.invalid">Update</button>
             <button class="btn btn-danger" (click)="onCancel()">Cancel</button>
         </div>
     </form>

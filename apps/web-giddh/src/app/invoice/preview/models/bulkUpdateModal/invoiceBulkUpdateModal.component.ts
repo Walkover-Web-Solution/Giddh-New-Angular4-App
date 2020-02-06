@@ -44,7 +44,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         { label: 'Slogan', value: 'slogan' },
     ];
     public signatureOptions: string = 'image'
-    public selectedField: string = '';
+    public selectedField: string = ''
     public allTemplates$: Observable<CustomTemplateResponse[]>;
     public allTemplatesOptions: IOption[] = [];
     public fileUploadOptions: UploaderOptions;
@@ -147,6 +147,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     }
     public onSelectEntryField(option: IOption) {
         if (option && option.value) {
+            this.selectedField = option.value;
             this.bulkUpdateForm.reset();
         }
 
@@ -196,6 +197,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
                 this.selectedInvoicesLists = simpleChanges.selectedInvoices.currentValue;
 
             }
+            this.selectedField = '';
         }
 
     }
@@ -206,7 +208,6 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
      * @memberof InvoiceBulkUpdateModalComponent
      */
     public updateBulkInvoice() {
-        console.log(this.selectedField, this.voucherType, this.selectedInvoicesLists, this.updateNotesRequest);
         if (this.selectedField && this.voucherType && this.selectedInvoicesLists) {
 
             switch (this.selectedField) {
@@ -220,7 +221,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
                     if (this.signatureOptions === 'image') {
                         this.bulkUpdateRequest(this.updateImageSignatureRequest, 'imagesignature');
                     } else if (this.signatureOptions === 'slogan') {
-                      this.bulkUpdateRequest(this.updateSloganRequest, 'slogan');
+                        this.bulkUpdateRequest(this.updateSloganRequest, 'slogan');
                     }
                     break;
                 case 'dueDate':
