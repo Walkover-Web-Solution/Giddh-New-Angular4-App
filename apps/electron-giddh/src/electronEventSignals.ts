@@ -1,4 +1,4 @@
-import { app, BrowserWindow, EventEmitter, WebContents } from 'electron';
+import { app, BrowserWindow, WebContents } from 'electron';
 
 export interface WindowEvent {
     sender: BrowserWindow;
@@ -14,10 +14,9 @@ function isEnvTrue(v: string): boolean {
 
 const isLogEvent = isEnvTrue(process.env.LOG_EVENTS);
 
-function addHandler(emitter: EventEmitter, event: string, handler: (...args: any[]) => void) {
+function addHandler(emitter: any, event: string, handler: (...args: any[]) => void) {
     if (isLogEvent) {
         emitter.on(event, (...args: any[]) => {
-            console.log('%s %s', event, args);
             handler.apply(this, args);
         });
     } else {
