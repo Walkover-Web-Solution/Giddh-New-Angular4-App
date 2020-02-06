@@ -973,8 +973,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.flyAccountActions.GetflatAccountWGroups(q));
     }
 
+    /**
+     *  sidebar menu toggle
+     *
+     * @param {boolean} event to check side bar menu open or not
+     * @memberof HeaderComponent
+     */
     public sideBarStateChange(event: boolean) {
-        this.sideMenu.isopen = event;
+        if (this.sideMenu) {
+            this.sideMenu.isopen = event;
+        }
         if (this.companyDropdown) {
             this.companyDropdown.isOpen = false;
         }
