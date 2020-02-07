@@ -404,7 +404,7 @@ export interface WarehouseDetails {
 export enum AvailableItc {
     ImportOfGoods = 'import_of_goods',
     ImportOfServices = 'import_of_services',
-    Others = 'others'
+    Others = 'all_other_itc'
 }
 
 /** List of available ITC */
