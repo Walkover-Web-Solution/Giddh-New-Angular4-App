@@ -169,7 +169,7 @@ export let NAVIGATION_ITEM_LIST_RESPONSIVE: IUlist[] = [
     { type: 'MENU', name: 'Invoice > Proforma', uniqueName: '/pages/invoice/preview/proformas', additional: { tab: 'proformas', tabIndex: 0 } },
     { type: 'MENU', name: 'Onboarding', uniqueName: '/pages/onboarding' },
     { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook' },
-
+    { type: 'MENU', name: 'Purchase Record ', uniqueName: '/pages/proforma-invoice/invoice/purchase' },
     { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase' },
 
 ];
