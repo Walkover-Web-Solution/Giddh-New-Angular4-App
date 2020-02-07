@@ -1704,7 +1704,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (selectedAccountSecondParent === 'dutiestaxes') {
                 /* Particular account belongs to the Duties and taxes then check the country based on which
                     respective sections will be displayed */
-                if (currentCompany === 'United Arab Emirates' || currentCompany === 'Bahrain' || currentCompany === 'Saudi Arabia') {
+                if (currentCompany === 'United Arab Emirates') {
                     this.shouldShowRcmTaxableAmount = true;
                 }
                 if (currentCompany === 'India') {
@@ -1716,7 +1716,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (selectedAccountSecondParent === 'reversecharge') {
                 /* Particular account belongs to the Reverse charge then check the country based on which
                     respective sections will be displayed */
-                if (currentCompany === 'United Arab Emirates' || currentCompany === 'Bahrain' || currentCompany === 'Saudi Arabia') {
+                if (currentCompany === 'United Arab Emirates') {
                     this.shouldShowRcmTaxableAmount = true;
                 }
                 if (currentCompany === 'India') {
