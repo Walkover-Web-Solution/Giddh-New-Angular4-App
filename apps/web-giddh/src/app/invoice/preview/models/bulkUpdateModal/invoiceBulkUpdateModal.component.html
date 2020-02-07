@@ -20,9 +20,11 @@
                     </div>
 
                     <div class="form-group" *ngIf="selectedField === 'notes'">
-                        <span> Note 1</span>
-                        <textarea class="form-control" [(ngModel)]="updateNotesRequest.message1" name="message1"></textarea>
-                        <span> Note 2</span>
+                        <!-- TODO : this note is come from sales module -->
+                        <!-- <span> Note </span>
+                        <textarea class="form-control" [(ngModel)]="updateNotesRequest.message1" name="message1"></textarea> -->
+                        <!--  this note is come from template -->
+                        <span> Note</span>
                         <textarea class="form-control" [(ngModel)]="updateNotesRequest.message2" name="message2"></textarea>
                     </div>
 

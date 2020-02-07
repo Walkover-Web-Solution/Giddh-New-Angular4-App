@@ -148,7 +148,7 @@ export interface BulkUpdateShippingDetails {
  * @extends {BulkUpdateInvoice}
  */
 export class BulkUpdateInvoiceNote extends BulkUpdateInvoice {
-    message1: string = '';
+    message1?: string = '';
     message2: string = '';
 }
 
