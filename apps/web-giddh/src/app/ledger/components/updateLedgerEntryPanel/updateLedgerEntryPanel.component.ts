@@ -49,6 +49,7 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { UpdateLedgerVm } from './updateLedger.vm';
+import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
 
 @Component({
     selector: 'update-ledger-entry-panel',
@@ -106,6 +107,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public isAdvanceReceipt: boolean = false;
     /** True, if advance receipt checkbox is checked, will show the mandatory fields for Advance Receipt */
     public shouldShowAdvanceReceiptMandatoryFields: boolean = false;
+    /** List of available ITC */
+    public availableItcList: Array<any> = AVAILABLE_ITC_LIST;
+    /** True, if RCM taxable amount needs to be displayed in create new ledger component as per criteria */
+    public shouldShowRcmTaxableAmount: boolean = false;
+    /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
+    public shouldShowItcSection: boolean = false;
     public tags$: Observable<TagRequest[]>;
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
@@ -255,6 +262,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.activeAccount = cloneDeep(resp[2].body);
                     // Decides whether to show the RCM entry
                     this.shouldShowRcmEntry = this.isRcmEntryPresent(resp[1].transactions);
+                    this.shouldShowRcmTaxableAmount = resp[1].reverseChargeTaxableAmount !== undefined && resp[1].reverseChargeTaxableAmount !== null;
+                    this.shouldShowItcSection = !!resp[1].itcAvailable;
                     this.profileObj = resp[3];
                     this.vm.giddhBalanceDecimalPlaces = resp[3].balanceDecimalPlaces;
                     this.vm.inputMaskFormat = this.profileObj.balanceDisplayFormat ? this.profileObj.balanceDisplayFormat.toLowerCase() : '';
