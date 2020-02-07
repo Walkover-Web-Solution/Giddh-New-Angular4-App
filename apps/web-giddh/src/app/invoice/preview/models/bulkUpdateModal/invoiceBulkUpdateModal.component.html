@@ -10,7 +10,7 @@
             <div class="row mb-1 mt-2">
                 <div class="col-md-6 col-sm-6">
                     <div class="form-group">
-                        <sh-select placeholder="Select" [options]="fieldOptions" [isFilterEnabled]="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedField" [ItemHeight]="33" (selected)="onSelectEntryField($event)"></sh-select>
+                        <sh-select placeholder="Select" [options]="fieldOptions" [isFilterEnabled]="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedField" [forceClearReactive]="forceClear$ | async" [ItemHeight]="33" (selected)="onSelectEntryField($event)"></sh-select>
                     </div>
                 </div>
 

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { IOption } from '../../../../theme/ng-select/option.interface';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject,  of as observableOf} from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../../store';
 import { CustomTemplateResponse } from '../../../../models/api-models/Invoice';
@@ -17,6 +17,7 @@ import { InvoiceBulkUpdateService } from 'apps/web-giddh/src/app/services/invoic
 import { NgForm } from '@angular/forms';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
 
 
 @Component({
@@ -56,6 +57,8 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     public companyUniqueName: string;
     public customCreatedTemplates: CustomTemplateResponse[];
     public selectedInvoicesLists: any[] = [];
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+
 
     public updateNotesRequest: BulkUpdateInvoiceNote = new BulkUpdateInvoiceNote();
     public updateImageSignatureRequest: BulkUpdateInvoiceImageSignature = new BulkUpdateInvoiceImageSignature();
@@ -163,9 +166,9 @@ public onCancel(): void {
     }
 
     /**
+     * To select bulk update options
      *
-     *
-     * @param {IOption} option
+     * @param {IOption} option bulk update action type
      * @memberof InvoiceBulkUpdateModalComponent
      */
     public onSelectEntryField(option: IOption): void {
@@ -218,6 +221,7 @@ public onCancel(): void {
             }
             this.selectedField = '';
             this.updateInProcess = false;
+            this.forceClear$ = observableOf({ status: true });
 
         }
 
