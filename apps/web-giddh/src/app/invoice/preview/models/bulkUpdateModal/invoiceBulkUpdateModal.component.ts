@@ -77,8 +77,12 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
         this.allTemplates$ = this.store.pipe(select(s => s.invoiceTemplate.customCreatedTemplates), takeUntil(this.destroyed$));
     }
-
-    public ngOnInit() {
+/**
+ * Life cycle hook
+ *
+ * @memberof InvoiceBulkUpdateModalComponent
+ */
+public ngOnInit() {
         this.uploadInput = new EventEmitter<UploadInput>();
         this.getTemplates();
     }
@@ -118,7 +122,13 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         }
     }
 
-    public previewFile(files: any) {
+/**
+ * Preview uploaded file
+ *
+ * @param {*} files
+ * @memberof InvoiceBulkUpdateModalComponent
+ */
+public previewFile(files: any): void {
         let preview: any = document.getElementById('signatureImage');
         let a: any = document.querySelector('input[type=file]');
         let file = a.files[0];
@@ -140,31 +150,39 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         this.isSignatureAttached = false;
     }
 
-    public onCancel() {
+/**
+ * Cancel bulk update
+ *
+ * @memberof InvoiceBulkUpdateModalComponent
+ */
+public onCancel(): void {
         this.selectedField = '';
         this.signatureOptions = '';
         this.bulkUpdateForm.reset();
         this.closeModelEvent.emit(true);
     }
-    public onSelectEntryField(option: IOption) {
+
+    /**
+     *
+     *
+     * @param {IOption} option
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
+    public onSelectEntryField(option: IOption): void {
         if (option && option.value) {
             this.selectedField = option.value;
             this.bulkUpdateForm.reset();
         }
 
     }
-    public onSelectTemplateType(option: IOption) {
-        if (option && option.value) {
-            //
-        }
-    }
+
 
     /**
      *  to get all custom templates according to voucher type
      *
      * @memberof InvoiceBulkUpdateModalComponent
      */
-    public getTemplates() {
+    public getTemplates(): void {
         let templateType = this.voucherType === 'debit note' || this.voucherType === 'credit note' ? 'voucher' : 'invoice';
         this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(templateType));
         this.allTemplates$.pipe(takeUntil(this.destroyed$)).subscribe(templates => {
@@ -186,7 +204,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
      * @param {SimpleChanges} simpleChanges params to detect simple changes
      * @memberof InvoiceBulkUpdateModalComponent
      */
-    public ngOnChanges(simpleChanges: SimpleChanges) {
+    public ngOnChanges(simpleChanges: SimpleChanges): void {
 
         if (simpleChanges) {
             if (simpleChanges.voucherType && simpleChanges.voucherType.currentValue) {
@@ -210,7 +228,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
      *
      * @memberof InvoiceBulkUpdateModalComponent
      */
-    public updateBulkInvoice() {
+    public updateBulkInvoice(): void {
         if (this.selectedField && this.voucherType && this.selectedInvoicesLists) {
 
             switch (this.selectedField) {
@@ -259,7 +277,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
      * @param {*} actionType
      * @memberof InvoiceBulkUpdateModalComponent
      */
-    public bulkUpdateRequest(requestModel, actionType) {
+    public bulkUpdateRequest(requestModel, actionType): void {
 
         if (requestModel && actionType) {
 

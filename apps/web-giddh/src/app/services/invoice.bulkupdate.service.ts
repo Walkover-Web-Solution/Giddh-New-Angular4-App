@@ -21,10 +21,15 @@ export class InvoiceBulkUpdateService {
         _ = config._;
     }
 
-    /*
-       * bulk update Invoice
-       */
-    public bulkUpdateInvoice(model: any, actionType: string) {
+ /**
+  * API call for bulk update Invoice
+  *
+  * @param {*} model
+  * @param {string} actionType
+  * @returns
+  * @memberof InvoiceBulkUpdateService
+  */
+ public bulkUpdateInvoice(model: any, actionType: string) {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         let url;

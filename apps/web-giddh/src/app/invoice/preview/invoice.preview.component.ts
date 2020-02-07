@@ -571,7 +571,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    public toggleAdvanceSearchPopup(isClosed: boolean) {
+/**
+ * Advance search model show hide
+ *
+ * @param {boolean} isClosed  Boolean to check model need to close or not
+ * @memberof InvoicePreviewComponent
+ */
+public toggleAdvanceSearchPopup(isClosed: boolean) {
         if (isClosed) {
             this.toggleAllItems(false);
         }
@@ -579,7 +585,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     }
 
-    public toggleBulkUpdatePopup(isClose: boolean) {
+/**
+ * Bulk update model show hide
+ *
+ * @param {boolean} isClose Boolean to check model need to close or not
+ * @memberof InvoicePreviewComponent
+ */
+public toggleBulkUpdatePopup(isClose: boolean): void {
         if (isClose) {
             this.getVoucher(false);
             this.toggleAllItems(false);

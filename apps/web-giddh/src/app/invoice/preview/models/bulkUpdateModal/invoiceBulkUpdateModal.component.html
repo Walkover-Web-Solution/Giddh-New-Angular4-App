@@ -16,7 +16,7 @@
 
                 <div class="col-md-6 col-sm-6">
                     <div class="form-group" *ngIf="selectedField === 'pdfTemplate'">
-                        <sh-select placeholder="Select" [options]="allTemplatesOptions" required [isFilterEnabled]="true" [ItemHeight]="33" name="templateUniqueName" [(ngModel)]="updateTemplatesRequest.templateUniqueName" (selected)="onSelectTemplateType($event)"></sh-select>
+                        <sh-select placeholder="Select" [options]="allTemplatesOptions" required [isFilterEnabled]="true" [ItemHeight]="33" name="templateUniqueName" [(ngModel)]="updateTemplatesRequest.templateUniqueName"></sh-select>
                     </div>
 
                     <div class="form-group" *ngIf="selectedField === 'notes'">

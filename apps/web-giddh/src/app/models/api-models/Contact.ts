@@ -129,10 +129,23 @@ export class CustomerVendorFiledFilter {
     public closingBalance: boolean = false;
 }
 
+/**
+ * bulk update request
+ *
+ * @export
+ * @class BulkUpdateInvoice
+ */
 export class BulkUpdateInvoice {
     voucherNumbers: string[];
     voucherType: string;
 }
+
+/**
+ * Bulk update invoices shipping details in all invoices request model
+ *
+ * @export
+ * @interface BulkUpdateShippingDetails
+ */
 export interface BulkUpdateShippingDetails {
     gstNumber: string;
     address: string[];
