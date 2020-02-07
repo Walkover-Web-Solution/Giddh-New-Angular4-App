@@ -671,10 +671,6 @@
                             <input type="text" name="taxable-amount" class="form-control text-right" [prefix]="selectedPrefixForCurrency"
                                 [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                 [(ngModel)]="vm.selectedLedger.reverseChargeTaxableAmount" />
-                            <!-- <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                                    <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-                                    {{ currentTxn?.convertedAmount | giddhCurrency}}
-                                </p> -->
                         </div>
                     </ng-container>
                     <ng-container *ngIf="shouldShowItcSection">
