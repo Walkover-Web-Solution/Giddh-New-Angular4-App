@@ -36,7 +36,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         { label: 'Notes', value: 'notes' },
         { label: 'Signature', value: 'signature' },
         { label: 'Due Date', value: 'dueDate' },
-        { label: 'Shipping Details', value: 'shippingDetails' },
+        // { label: 'Shipping Details', value: 'shippingDetails' },
         { label: 'Custom Fields', value: 'customFields' }
     ];
     public templateSignaturesOptions: IOption[] = [
@@ -65,6 +65,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     public updateShippingDetailsRequest: BulkUpdateInvoiceShippingDetails = new BulkUpdateInvoiceShippingDetails();
     public updateCustomfieldsRequest: BulkUpdateInvoiceCustomfields = new BulkUpdateInvoiceCustomfields();
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    public updateInProcess: boolean = false;
 
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -198,6 +199,8 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
 
             }
             this.selectedField = '';
+            this.updateInProcess = false;
+
         }
 
     }
@@ -219,7 +222,11 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
                     break;
                 case 'signature':
                     if (this.signatureOptions === 'image') {
-                        this.bulkUpdateRequest(this.updateImageSignatureRequest, 'imagesignature');
+                        if (this.updateImageSignatureRequest.imageSignatureUniqueName) {
+                            this.bulkUpdateRequest(this.updateImageSignatureRequest, 'imagesignature');
+                        } else {
+                            this._toaster.infoToast('Please upload file');
+                        }
                     } else if (this.signatureOptions === 'slogan') {
                         this.bulkUpdateRequest(this.updateSloganRequest, 'slogan');
                     }
@@ -268,15 +275,17 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
             requestModel.voucherType = this.voucherType;
 
             if (requestModel.voucherNumbers && requestModel.voucherType) {
+                this.updateInProcess = true;
                 this._invoiceBulkUpdateService.bulkUpdateInvoice(requestModel, actionType).subscribe(response => {
 
                     if (response.status === "success") {
-
                         this._toaster.successToast(response.body);
 
                     } else {
                         this._toaster.errorToast(response.message);
                     }
+                    this.updateInProcess = false;
+
                     this.onCancel();
                 });
             }
