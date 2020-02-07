@@ -31,7 +31,7 @@
                         </span>
                     </div>
                     <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
-                        <span class="icon-advance-serch" (click)="toggleAdvanceSearchPopup()"></span>
+                        <span class="icon-advance-serch" (click)="toggleAdvanceSearchPopup(false)"></span>
                     </div>
                 </div>
             </form>
@@ -45,7 +45,7 @@
 
             <div class="d-flex addInvoice">
                 <!-- E-way bill generation and export to excel for a single selected item in invoice sizes -->
-                <div *ngIf="selectedItems.length === 1">
+                <div *ngIf="selectedItems.length">
                     <div class="btn-group" dropdown #dp="bs-dropdown">
                         <button dropdownToggle type="button" class="btn spcl_dropdown desktop-view-btn dropdown-toggle"
                             aria-controls="dropdown-basic">
@@ -55,6 +55,10 @@
                         <ul *dropdownMenu class="dropdown-menu fixedDropdownPlus" role="menu"
                             aria-labelledby="button-basic">
                             <li role="menuitem">
+                                <a class="dropdown-item cp" href="javascript:void(0)"
+                                   (click)="toggleBulkUpdatePopup(false);">Bulk Update</a>
+                            </li>
+                            <li role="menuitem" *ngIf="selectedItems.length === 1">
                                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup()"
                                     *ngIf="selectedVoucher === 'sales'">
                                     Generate E-way Bill</a>
@@ -457,6 +461,7 @@
                                                 <li (click)="onPerformAction(item, 'cancel')">
                                                     <a class="cp" href="javascript:void(0)">Cancel</a>
                                                 </li>
+
                                             </ul>
                                         </div>
                                     </div>
@@ -762,7 +767,7 @@
                 <invoice-advance-search-component #advanceSearchComponent
                     [type]="selectedVoucher === 'debit note' || selectedVoucher === 'credit note' ? 'drcr' : (selectedVoucher === 'purchase') ? selectedVoucher : 'invoice'"
                     [request]="advanceSearchFilter" (applyFilterEvent)="applyAdvanceSearch($event)"
-                    (closeModelEvent)="toggleAdvanceSearchPopup()">
+                    (closeModelEvent)="toggleAdvanceSearchPopup(true)">
                 </invoice-advance-search-component>
             </div>
         </div>
@@ -772,7 +777,7 @@
     <div bsModal #bulkUpdate="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <invoice-bulk-update-modal-component (closeModelEvent)="toggleBulkUpdatePopup()">
+                <invoice-bulk-update-modal-component (closeModelEvent)="toggleBulkUpdatePopup(true)" [voucherType]="selectedVoucher" [selectedInvoices]="selectedInvoicesList">
                 </invoice-bulk-update-modal-component>
             </div>
         </div>

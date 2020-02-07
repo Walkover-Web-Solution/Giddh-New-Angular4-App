@@ -58,3 +58,8 @@ export const EWAYBILL_API = {
     DELETE_TRANSPORTER: COMMON_URL + 'transporters?transporterId=:transporterId',
 
 };
+
+
+export const BULK_UPDATE_VOUCHER = {
+    BULK_UPDATE_VOUCHER_ACTION: COMMON_URL + 'vouchers/bulk-update?action=:actionType'
+}
