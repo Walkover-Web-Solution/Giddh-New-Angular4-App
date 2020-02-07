@@ -197,7 +197,7 @@
                 </div>
             </div>
         </div>
-        <div class="pdB1 inWords" *ngIf="currentTxn.total">
+        <div [class.words-inline]="shouldShowRcmTaxableAmount || shouldShowItcSection" class="pdB1 inWords" *ngIf="currentTxn.total">
             {{ currentTxn.total | myNumberToWordsPipe | lowercase }}
         </div>
         <ng-container *ngIf="shouldShowRcmTaxableAmount">
@@ -211,7 +211,7 @@
         <ng-container *ngIf="shouldShowItcSection">
             <div class="taxable-amount-section">
                 <label class="primary_clr">ITC Available</label>
-                <sh-select #itcSection (selected)="handleItcChange()" [(ngModel)]="currentTxn.itcAvailable" [placeholder]="'ITC Available'" [options]="availableItcList">
+                <sh-select [(ngModel)]="currentTxn.itcAvailable" [placeholder]="'ITC Available'" [options]="availableItcList">
                 </sh-select>
             </div>
         </ng-container>

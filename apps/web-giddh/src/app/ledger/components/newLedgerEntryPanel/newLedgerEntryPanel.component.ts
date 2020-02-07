@@ -117,8 +117,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     /** RCM popup instance */
     @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
-    /** ITC section instance */
-    @ViewChild('itcSection') public itcSection: any;
 
     public sourceWarehouse: true;
     public uploadInput: EventEmitter<UploadInput>;
@@ -371,14 +369,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         }
 
-        if (this.shouldShowItcSection && !this.currentTxn.itcAvailable) {
-            const itcAvailableSection = this.itcSection && this.itcSection.element && this.itcSection.element.nativeElement ? this.itcSection.element.nativeElement : '';
-            if (itcAvailableSection) {
-                // ITC is mandatory and can't be left blank
-                itcAvailableSection.classList.add('error-box');
-                return;
-            }
-        }
         this.changeTransactionType.emit({
             type,
             warehouse: this.selectedWarehouse
@@ -573,14 +563,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
                 // Taxes are mandatory for RCM and Advance Receipt entries
                 this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
-                return;
-            }
-        }
-        if (this.shouldShowItcSection && !this.currentTxn.itcAvailable) {
-            const itcAvailableSection = this.itcSection && this.itcSection.element && this.itcSection.element.nativeElement ? this.itcSection.element.nativeElement : '';
-            if (itcAvailableSection) {
-                // ITC is mandatory and can't be left blank
-                itcAvailableSection.classList.add('error-box');
                 return;
             }
         }
@@ -1002,19 +984,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public handleAdvanceReceiptChange(): void {
         this.currentTxn['subVoucher'] = this.isAdvanceReceipt ? Subvoucher.AdvanceReceipt : '';
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
-    }
-
-    /**
-     * ITC change handler
-     *
-     * @returns {void}
-     * @memberof NewLedgerEntryPanelComponent
-     */
-    public handleItcChange(): void {
-        if (!this.itcSection || !this.itcSection.element || !this.itcSection.element.nativeElement) {
-            return;
-        }
-        this.itcSection.element.nativeElement.classList.remove('error-box');
     }
 
     /**
