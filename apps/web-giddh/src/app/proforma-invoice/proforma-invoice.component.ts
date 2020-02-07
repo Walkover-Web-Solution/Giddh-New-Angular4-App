@@ -3448,24 +3448,26 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public getCurrencyRate(to, from, date = moment().format('DD-MM-YYYY')) {
-        this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
-            let rate = response.body;
-            if (rate) {
-                this.originalExchangeRate = rate;
-                this.exchangeRate = rate;
-                this._cdr.detectChanges();
-                if (this.isPurchaseInvoice && this.isUpdateMode) {
-                    // TODO: Remove this code once purchase invoice supports multicurrency
-                    this.calculateSubTotal();
-                    this.calculateTotalDiscount();
-                    this.calculateTotalTaxSum();
-                    this.calculateGrandTotal();
-                    this.calculateBalanceDue();
+        if (from && to) {
+            this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
+                let rate = response.body;
+                if (rate) {
+                    this.originalExchangeRate = rate;
+                    this.exchangeRate = rate;
+                    this._cdr.detectChanges();
+                    if (this.isPurchaseInvoice && this.isUpdateMode) {
+                        // TODO: Remove this code once purchase invoice supports multicurrency
+                        this.calculateSubTotal();
+                        this.calculateTotalDiscount();
+                        this.calculateTotalTaxSum();
+                        this.calculateGrandTotal();
+                        this.calculateBalanceDue();
+                    }
                 }
-            }
-        }, (error => {
+            }, (error => {
 
-        }));
+            }));
+        }
     }
 
     public updateBankAccountObject(accCurr) {
