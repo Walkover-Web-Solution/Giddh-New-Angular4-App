@@ -1,11 +1,11 @@
 const webpack = require('webpack');
-console.log('demo....................');
+
 module.exports = {
     plugins: [
         new webpack.DefinePlugin({
             "VERSION": JSON.stringify("4711"),
             'ENV': JSON.stringify('production'),
-            'isElectron': JSON.stringify(false),
+            'isElectron': JSON.stringify(true),
             'errlyticsNeeded': JSON.stringify(false),
             'errlyticsKey': JSON.stringify(''),
             'AppUrl': JSON.stringify('http://localhost:4200/'),
