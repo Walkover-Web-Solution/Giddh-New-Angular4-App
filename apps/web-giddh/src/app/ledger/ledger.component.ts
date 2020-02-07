@@ -426,6 +426,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
+        this.shouldShowItcSection = false;
+        this.shouldShowRcmTaxableAmount = false;
 
         observableCombineLatest(this.universalDate$, this.route.params, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (!Array.isArray(resp[0])) {
@@ -995,6 +997,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             baseCurrencyToDisplay: cloneDeep(this.baseCurrencyDetails),
             foreignCurrencyToDisplay: cloneDeep(this.foreignCurrencyDetails)
         };
+        this.shouldShowRcmTaxableAmount = false;
+        this.shouldShowItcSection = false;
         if (this.isLedgerAccountAllowsMultiCurrency) {
             this.getCurrencyRate('blankLedger');
         }
@@ -1672,25 +1676,35 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles the taxable amount and ITC section visibility based on conditions
+     *
+     * @private
+     * @param {TransactionVM} transaction Selected transaction
+     * @returns {void}
+     * @memberof LedgerComponent
+     */
     private handleTaxableAmountVisibility(transaction: TransactionVM): void {
         this.shouldShowRcmTaxableAmount = false;
         this.shouldShowItcSection = false;
         let currentCompany;
         this.store.pipe(select(appState => appState.session), take(1)).subscribe((sessionData) => {
             currentCompany = sessionData.companies.find((company) => company.uniqueName === sessionData.companyUniqueName).country;
-            console.log('Current company: ', currentCompany);
         });
-        if (!this.lc || !this.lc.activeAccount || !this.lc.activeAccount.parentGroups || this.lc.activeAccount.parentGroups.length !== 2) {
+        if (!this.lc || !this.lc.activeAccount || !this.lc.activeAccount.parentGroups || this.lc.activeAccount.parentGroups.length < 2) {
             return;
         }
-        if (!transaction.selectedAccount || !transaction.selectedAccount.parentGroups || transaction.selectedAccount.parentGroups.length !== 2) {
+        if (!transaction.selectedAccount || !transaction.selectedAccount.parentGroups || transaction.selectedAccount.parentGroups.length < 2) {
             return;
         }
         const currentLedgerSecondParent = this.lc.activeAccount.parentGroups[1].uniqueName;
         const selectedAccountSecondParent = transaction.selectedAccount.parentGroups[1].uniqueName;
         if (currentLedgerSecondParent === 'reversecharge' && transaction.type === 'CREDIT') {
+            // Current ledger is of reverse charge and user has entered the transaction on the right side (CREDIT) of the ledger
             if (selectedAccountSecondParent === 'dutiestaxes') {
-                if (currentCompany === 'United Arab Emirates') {
+                /* Particular account belongs to the Duties and taxes then check the country based on which
+                    respective sections will be displayed */
+                if (currentCompany === 'United Arab Emirates' || currentCompany === 'Bahrain' || currentCompany === 'Saudi Arabia') {
                     this.shouldShowRcmTaxableAmount = true;
                 }
                 if (currentCompany === 'India') {
@@ -1698,8 +1712,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         } else if (currentLedgerSecondParent === 'dutiestaxes' && transaction.type === 'DEBIT') {
+            // Current ledger is of Duties and taxes and user has entered the transaction on the left side (DEBIT) of the ledger
             if (selectedAccountSecondParent === 'reversecharge') {
-                if (currentCompany === 'United Arab Emirates') {
+                /* Particular account belongs to the Reverse charge then check the country based on which
+                    respective sections will be displayed */
+                if (currentCompany === 'United Arab Emirates' || currentCompany === 'Bahrain' || currentCompany === 'Saudi Arabia') {
                     this.shouldShowRcmTaxableAmount = true;
                 }
                 if (currentCompany === 'India') {
@@ -1707,8 +1724,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         }
-        console.log('shouldShowItcSection:  ', this.shouldShowItcSection);
-        console.log('shouldShowRcmTaxableAmount: ', this.shouldShowRcmTaxableAmount);
     }
 
 }

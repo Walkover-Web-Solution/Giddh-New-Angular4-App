@@ -367,6 +367,8 @@ export class TransactionVM {
     public convertedAmount?: number = 0;
     public isChecked: boolean = false;
     public showTaxationDiscountBox: boolean = false;
+    public itcAvailable?: string = '';
+    public reverseChargeTaxableAmount?: number = 0;
 }
 
 export interface IInventory {
@@ -392,3 +394,22 @@ export interface WarehouseDetails {
     name: string;
     uniqueName: string;
 }
+
+/**
+ * List of available ITC for India
+ *
+ * @export
+ * @enum {string}
+ */
+export enum AvailableItc {
+    ImportOfGoods = 'import_of_goods',
+    ImportOfServices = 'import_of_services',
+    Others = 'others'
+}
+
+/** List of available ITC */
+export const AVAILABLE_ITC_LIST = [
+    { label: 'Import of goods', value: AvailableItc.ImportOfGoods },
+    { label: 'Import of services', value: AvailableItc.ImportOfServices },
+    { label: 'Others', value: AvailableItc.Others }
+];
