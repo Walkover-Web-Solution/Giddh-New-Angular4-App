@@ -197,7 +197,7 @@ export class GeneralService {
      * @returns {ConfirmationModalConfiguration} RCM modal configuration
      * @memberof GeneralService
      */
-    getRcmConfiguration(isRcmSelected: boolean): ConfirmationModalConfiguration {
+    public getRcmConfiguration(isRcmSelected: boolean): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
             text: 'Yes',
             cssClass: 'btn btn-success'
@@ -242,7 +242,7 @@ export class GeneralService {
      * @returns {boolean} True, if the current ledger and user selected particular account belongs to RCM category accounts
      * @memberof GeneralService
      */
-    shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any): boolean {
+    public shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any): boolean {
         if (currentLedgerAccountDetails && selectedAccountDetails) {
             if (![currentLedgerAccountDetails.uniqueName, selectedAccountDetails.uniqueName].includes('roundoff')) {
                 // List of allowed first level parent groups
@@ -264,12 +264,12 @@ export class GeneralService {
     }
 
     /**
- * Covert UTC time zone( server time zone ) into local system timezone
- *
- * @param {*} UTCDateString UTC timezone time string
- * @returns  coverted date(UTC---> Systme TimeZone)
- * @memberof CompletedComponent
- */
+     * Covert UTC time zone( server time zone ) into local system timezone
+     *
+     * @param {*} UTCDateString UTC timezone time string
+     * @returns  coverted date(UTC---> Systme TimeZone)
+     * @memberof CompletedComponent
+     */
     public ConvertUTCTimeToLocalTime(UTCDateString) {
         let convertdLocalTime = new Date(UTCDateString);
 

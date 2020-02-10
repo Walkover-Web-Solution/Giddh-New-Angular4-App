@@ -626,8 +626,8 @@
             <div class="row d-flex d-sm-block">
                 <div class="col-md-6 pt-1">
                     <!-- make it functional (Developer end) -->
-                    <div class="row mrB1">
-                        <div *ngIf="shouldShowWarehouse" class="col-sm-6 pdR1">
+                    <div *ngIf="shouldShowWarehouse" class="row mrB1">
+                        <div class="col-sm-6 pdR1">
                             <div class="selectWarehouse">
                                 <label class="font-12">Select Warehouse</label>
                                 <sh-select [(ngModel)]="selectedWarehouse" [placeholder]="'Select Warehouse'"
@@ -664,6 +664,22 @@
                         </ng-template> -->
 
                     </div>
+
+                    <ng-container *ngIf="shouldShowRcmTaxableAmount">
+                        <div class="taxable-amount-section">
+                            <label class="primary_clr">Taxable Amount</label>
+                            <input type="text" name="taxable-amount" class="form-control text-right" [prefix]="vm.selectedPrefixForCurrency"
+                                [suffix]="vm.selectedSuffixForCurrency" [mask]="vm.inputMaskFormat"
+                                [(ngModel)]="vm.selectedLedger.reverseChargeTaxableAmount" />
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="shouldShowItcSection">
+                        <div class="taxable-amount-section">
+                            <label class="primary_clr itc-label">ITC Available</label>
+                            <sh-select [(ngModel)]="vm.selectedLedger.itcAvailable" [placeholder]="'ITC Available'" [options]="availableItcList">
+                            </sh-select>
+                        </div>
+                    </ng-container>
 
                     <div class="row">
                         <div class="col-xs-12">
