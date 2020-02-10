@@ -1217,12 +1217,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.hoveredIndx = i;
     }
 
-    public menuScrollEnd(ev) {
-        // let offset = $('#other').position();
-        // if (offset) {
-        //     let exactPosition = offset.top - 100;
-        //     $('#other_sub_menu').css('top', exactPosition);
-        // }
+    public handleAllModulesLeaveEvent(event: any) {
+        const menu = document.getElementById('other_sub_menu');
+        if (menu && !menu.contains(event.toElement)) {
+            // Hide 'All Modules' popover if the mouse points to any element other than sub menu as target
+            this.allModulesPopover.hide();
+        }
     }
 
     public onCompanyShown(sublist, navigator) {
@@ -1234,12 +1234,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public openSubMenu(type: boolean) {
         // this.showOtherMenu = type;
-    }
-
-    public toggleAllmoduleMenu(event) {
-        // this.showOtherMenu = !this.showOtherMenu;
-        // event.stopPropagation();
-        this.allModulesPopover.show();
     }
 
     public switchCompanyMenuShown() {
