@@ -5594,6 +5594,9 @@ datepicker-inner .well table tbody tr td .btn-default:hover {
 datepicker-inner .well table tbody tr td .btn-default:hover span {
     text-decoration: none;
 }
+datepicker-inner .well table tbody tr td .btn-default:hover .text-success {
+    color: #fff;
+}
 datepicker-inner .well {
     background-color: #ffffff;
     border-top: 0;
@@ -7834,6 +7837,9 @@ footer#footer.absoulte-footer {
 
 .fixed.modal-open .modal-backdrop {
     z-index: -1040;
+}
+.modal-open .modal {
+    background: rgba(0,0,0,.6);
 }
 
 section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
