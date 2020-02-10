@@ -63,8 +63,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         if (this.userdata) {
-            let from: any = moment(this.userdata.from, GIDDH_DATE_FORMAT);
-            let to: any = moment(this.userdata.to, GIDDH_DATE_FORMAT);
+            let from: any = this.userdata.from ? moment(this.userdata.from, GIDDH_DATE_FORMAT) : moment().subtract(30, 'days');
+            let to: any = this.userdata.to ? moment(this.userdata.to, GIDDH_DATE_FORMAT) : moment();
             this.dateRangePickerValue = [from._d, to._d];
             this.initAcForm(this.userdata);
         } else {
