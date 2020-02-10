@@ -201,7 +201,7 @@
             {{ currentTxn.total | myNumberToWordsPipe | lowercase }}
         </div>
         <ng-container *ngIf="shouldShowRcmTaxableAmount">
-            <div class="taxable-amount-section">
+            <div class="taxable-amount-section mr-1">
                 <label class="primary_clr">Taxable Amount</label>
                 <input type="text" name="taxable-amount" class="form-control text-right" [prefix]="selectedPrefixForCurrency"
                     [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
