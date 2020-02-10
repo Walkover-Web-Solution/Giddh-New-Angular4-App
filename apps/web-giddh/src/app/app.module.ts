@@ -160,8 +160,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         RouterModule.forRoot(ROUTES, {
             useHash: IS_ELECTRON_WA,
             preloadingStrategy: CustomPreloadingStrategy,
-            onSameUrlNavigation: 'reload',
-            enableTracing: true
+            onSameUrlNavigation: 'reload'
         }),
         StoreRouterConnectingModule,
         ...CONDITIONAL_IMPORTS,
