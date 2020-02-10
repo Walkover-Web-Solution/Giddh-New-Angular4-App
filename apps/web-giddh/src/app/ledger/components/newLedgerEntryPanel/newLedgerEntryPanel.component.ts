@@ -422,7 +422,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         if (this.shouldShowRcmTaxableAmount) {
-            this.currentTxn.reverseChargeTaxableAmount = this.currentTxn.amount * 20;
+            this.currentTxn.reverseChargeTaxableAmount = this.generalService.convertExponentialToNumber(this.currentTxn.amount * 20);;
         }
 
         if (this.isAmountFirst || this.isTotalFirts) {
