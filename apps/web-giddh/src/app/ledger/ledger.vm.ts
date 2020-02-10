@@ -368,7 +368,8 @@ export class TransactionVM {
     public isChecked: boolean = false;
     public showTaxationDiscountBox: boolean = false;
     public itcAvailable?: string = '';
-    public reverseChargeTaxableAmount?: number = 0;
+    public reverseChargeTaxableAmount?: number;
+    public shouldShowRcmEntry?: boolean;
 }
 
 export interface IInventory {

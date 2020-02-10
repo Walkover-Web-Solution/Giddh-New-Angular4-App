@@ -120,7 +120,7 @@ export class LedgerResponse {
     public pettyCashEntryStatus?: PettyCashEntryStatus;
     public attachedFileUniqueNames?: string[];
     public itcAvailable?: string = '';
-    public reverseChargeTaxableAmount?: number = 0;
+    public reverseChargeTaxableAmount?: number;
 }
 
 /*
