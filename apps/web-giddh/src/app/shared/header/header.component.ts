@@ -5,7 +5,7 @@ import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
 import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { BsDropdownDirective, BsModalRef, BsModalService, ModalDirective, ModalOptions, TabsetComponent } from 'ngx-bootstrap';
+import { BsDropdownDirective, BsModalRef, BsModalService, ModalDirective, ModalOptions, TabsetComponent, PopoverDirective } from 'ngx-bootstrap';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
@@ -73,6 +73,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('expiredPlanModel') public expiredPlanModel: TemplateRef<any>;
     @ViewChild('crossedTxLimitModel') public crossedTxLimitModel: TemplateRef<any>;
     @ViewChild('companyDetailsDropDownWeb') public companyDetailsDropDownWeb: BsDropdownDirective;
+    /** All modules popover instance */
+    @ViewChild('allModulesPopover') public allModulesPopover: PopoverDirective;
 
     public hideAsDesignChanges: false;
     public title: Observable<string>;
@@ -1215,11 +1217,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.hoveredIndx = i;
     }
 
-    public menuScrollEnd(ev) {
-        let offset = $('#other').position();
-        if (offset) {
-            let exactPosition = offset.top - 100;
-            $('#other_sub_menu').css('top', exactPosition);
+    /**
+     * Mouse leave handler for all modules label to hide the popover
+     *
+     * @param {*} event Mouse leave event
+     * @memberof HeaderComponent
+     */
+    public handleAllModulesLeaveEvent(event: any): void {
+        const menu = document.getElementById('other_sub_menu');
+        if (menu && !menu.contains(event.toElement)) {
+            // Hide 'All Modules' popover if the mouse points to any element other than sub menu as target
+            this.allModulesPopover.hide();
         }
     }
 
@@ -1228,14 +1236,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             navigator.add(sublist.children[1]);
             navigator.nextVertical();
         }
-    }
-
-    public openSubMenu(type: boolean) {
-        this.showOtherMenu = type;
-    }
-
-    public toggleAllmoduleMenu() {
-        this.showOtherMenu = !this.showOtherMenu;
     }
 
     public switchCompanyMenuShown() {
