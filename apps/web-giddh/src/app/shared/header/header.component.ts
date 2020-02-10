@@ -1222,7 +1222,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.hoveredIndx = i;
     }
 
-    public handleAllModulesLeaveEvent(event: any) {
+    /**
+     * Mouse leave handler for all modules label to hide the popover
+     *
+     * @param {*} event Mouse leave event
+     * @memberof HeaderComponent
+     */
+    public handleAllModulesLeaveEvent(event: any): void {
         const menu = document.getElementById('other_sub_menu');
         if (menu && !menu.contains(event.toElement)) {
             // Hide 'All Modules' popover if the mouse points to any element other than sub menu as target
@@ -1235,10 +1241,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             navigator.add(sublist.children[1]);
             navigator.nextVertical();
         }
-    }
-
-    public openSubMenu(type: boolean) {
-        // this.showOtherMenu = type;
     }
 
     public switchCompanyMenuShown() {
