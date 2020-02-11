@@ -376,7 +376,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         allItems = allItems.filter(item => item.uniqueName !== record.mergedRecordUniqueName);
                     }
                     allItems[voucherIndex].voucherNumber = record.invoiceNumber;
-                    allItems = uniqBy([allItems[voucherIndex], ...allItems], 'voucherNumber');
+                    allItems = uniqBy([allItems[voucherIndex], ...allItems], 'uniqueName');
                     this.itemsListForDetails = allItems;
                     this.toggleBodyClass();
                     setTimeout(() => {
