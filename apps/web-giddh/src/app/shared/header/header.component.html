@@ -305,7 +305,7 @@
 
         <div class="nav_wrapper">
 
-            <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="false" (psYReachEnd)="menuScrollEnd($event)">
+            <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="false">
 
                 <!-- Accounts menu -->
                 <ul class="left_fixed_header mrT1" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
@@ -347,12 +347,91 @@
                             <span class="label">{{menu.name}}</span>
                         </a>
                     </li>
-                    <li id="other" *ngIf="!isMobileSite" (click)="toggleAllmoduleMenu()" (mouseenter)="showOtherMenu = true" (mouseleave)="showOtherMenu = false">
-                        <a (mouseenter)="openSubMenu(true)" (mouseleave)="openSubMenu(false)">All Modules <i
-                                *ngIf="!isMobileSite" tooltip="All Modules" placement="bottom" container="body"
+                    <li id="other" *ngIf="!isMobileSite" (mouseenter)="allModulesPopover.show()" (mouseleave)="handleAllModulesLeaveEvent($event)">
+                        <a #allModulesPopover="bs-popover" [popover]="allModules" placement="right" containerClass="all-modules-popover"
+                            (mouseenter)="allModulesPopover.show()" container="body">All
+                            Modules <i *ngIf="!isMobileSite" tooltip="All Modules" placement="bottom" container="body"
                                 class="fa fa-angle-right cp"></i></a>
                     </li>
+                    <!-- All Modules list -->
+                    <ng-template #allModules>
+                        <ul class="left-sub-menu left_fixed_header open" id="other_sub_menu" (mouseenter)="allModulesPopover.show()"
+                            (mouseleave)="allModulesPopover.hide()" style="height: fit-content">
+                            <li>
+                                <div class="clearfix">
+                                    <ul>
+                                        <li><a href="javascript:void(0)"><strong>General</strong></a></li>
+                                        <li><a (click)="analyzeOtherMenus('contact/customer', {tab: 'customer', tabIndex: 0})">Customer</a>
+                                        </li>
+                                        <li><a (click)="analyzeOtherMenus('contact/vendor', {tab: 'vendor', tabIndex: 0})">Vendor</a>
+                                        </li>
+                                        <li><a (click)="analyzeOtherMenus('accounting-voucher')">Journal Voucher</a>
+                                        </li>
+                                        <li><a (click)="analyzeOtherMenus('daybook')">Daybook</a></li>
+                                        <li><a
+                                                (click)="analyzeOtherMenus('trial-balance-and-profit-loss', { tab: 'trial-balance', tabIndex: 0 })">
+                                                Trial Balance</a></li>
+                                        <li><a
+                                                (click)="analyzeOtherMenus('trial-balance-and-profit-loss', { tab: 'trial-balance', tabIndex: 1 })">P&L,
+                                                B/S</a></li>
+                                    </ul>
 
+                                    <ul>
+                                        <li><a href="javascript:void(0)"><strong>Invoice</strong></a></li>
+                                        <li><a (click)="analyzeOtherMenus('proforma-invoice/invoice/sales')">Sales</a></li>
+                                        <li><a (click)="analyzeOtherMenus('proforma-invoice/invoice/purchase')">Purchase</a></li>
+                                        <li><a (click)="analyzeOtherMenus('proforma-invoice/invoice/cash')">Cash</a></li>
+                                        <li><a
+                                                (click)="analyzeOtherMenus('invoice/preview/credit note', {tab: 'credit note', tabIndex: 1})">Dr/Cr
+                                                Note</a></li>
+                                        <li><a
+                                                (click)="analyzeOtherMenus('invoice/preview/sales', {tab: 'templates', tabIndex: 3})">Template</a>
+                                        </li>
+                                        <li><a (click)="analyzeOtherMenus('invoice/preview/sales', {tab: 'invoice', tabIndex: 0})">Invoice
+                                                Management</a></li>
+                                    </ul>
+
+                                    <ul>
+                                        <li><a href="javascript:void(0)"><strong>Inventory</strong></a></li>
+                                        <li><a (click)="analyzeOtherMenus('inventory')">Inventory</a></li>
+                                        <li><a (click)="analyzeOtherMenus('manufacturing/report')">Manufacturing</a></li>
+                                        <!-- <li><a (click)="analyzeOtherMenus('inventory/jobwork')">Job Work</a></li> -->
+                                        <li><a (click)="analyzeOtherMenus('inventory/report')">Branch Transfer</a></li>
+                                        <li><a (click)="analyzeOtherMenus('settings/warehouse')">Warehouse</a></li>
+                                    </ul>
+
+                                    <ul>
+                                        <li><a href="javascript:void(0)"><strong>Settings</strong></a></li>
+                                        <li><a (click)="analyzeOtherMenus('permissions')">Permission</a></li>
+                                        <li><a (click)="analyzeOtherMenus('import/select-type')">Import Data</a></li>
+                                        <li>
+                                            <a (click)="analyzeOtherMenus('settings/integration', { tab: 'integration', tabIndex: 1 })">Integration
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a (click)="analyzeOtherMenus('settings/taxes', { tab: 'taxes', tabIndex: 0 })">Settings
+                                            </a>
+                                        </li>
+                                    </ul>
+
+                                    <ul>
+                                        <li><a href="#"><strong>Others</strong></a></li>
+                                        <li><a (click)="analyzeOtherMenus('audit-logs')">Audit Log</a></li>
+                                        <li><a (click)="analyzeOtherMenus('search')">Search</a></li>
+                                        <li><a (click)="analyzeOtherMenus('gstfiling')"
+                                                *ngIf="activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode == 'IN'">GSTR</a>
+                                        </li>
+                                        <li><a (click)="analyzeOtherMenus('vat-report')"
+                                                *ngIf="activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode != 'IN'">Vat
+                                                Report</a></li>
+                                        <li><a (click)="analyzeOtherMenus('home')">Dashboard</a></li>
+                                    </ul>
+
+                                </div>
+                            </li>
+
+                        </ul>
+                    </ng-template>
                 </ul>
                 <!-- <app-fixed-footer></app-fixed-footer> -->
 
@@ -360,76 +439,6 @@
 
         </div>
 
-        <!-- All Modules list -->
-        <ul class="left-sub-menu left_fixed_header" id="other_sub_menu" [ngClass]="{'open': showOtherMenu}" (mouseenter)="showOtherMenu = true" (mouseleave)="showOtherMenu = false" style="height: fit-content">
-            <li>
-                <div class="clearfix">
-                    <ul>
-                        <li><a href="javascript:void(0)"><strong>General</strong></a></li>
-                        <li><a (click)="analyzeOtherMenus('contact/customer', {tab: 'customer', tabIndex: 0})">Customer</a>
-                        </li>
-                        <li><a (click)="analyzeOtherMenus('contact/vendor', {tab: 'vendor', tabIndex: 0})">Vendor</a>
-                        </li>
-                        <li><a (click)="analyzeOtherMenus('accounting-voucher')">Journal Voucher</a>
-                        </li>
-                        <li><a (click)="analyzeOtherMenus('daybook')">Daybook</a></li>
-                        <li><a (click)="analyzeOtherMenus('trial-balance-and-profit-loss', { tab: 'trial-balance', tabIndex: 0 })">
-                                Trial Balance</a></li>
-                        <li><a (click)="analyzeOtherMenus('trial-balance-and-profit-loss', { tab: 'trial-balance', tabIndex: 1 })">P&L,
-                                B/S</a></li>
-                    </ul>
-
-                    <ul>
-                        <li><a href="javascript:void(0)"><strong>Invoice</strong></a></li>
-                        <li><a (click)="analyzeOtherMenus('proforma-invoice/invoice/sales')">Sales</a></li>
-                        <li><a (click)="analyzeOtherMenus('proforma-invoice/invoice/purchase')">Purchase</a></li>
-                        <li><a (click)="analyzeOtherMenus('proforma-invoice/invoice/cash')">Cash</a></li>
-                        <li><a (click)="analyzeOtherMenus('invoice/preview/credit note', {tab: 'credit note', tabIndex: 1})">Dr/Cr
-                                Note</a></li>
-                        <li><a (click)="analyzeOtherMenus('invoice/preview/sales', {tab: 'templates', tabIndex: 3})">Template</a>
-                        </li>
-                        <li><a (click)="analyzeOtherMenus('invoice/preview/sales', {tab: 'invoice', tabIndex: 0})">Invoice
-                                Management</a></li>
-                    </ul>
-
-                    <ul>
-                        <li><a href="javascript:void(0)"><strong>Inventory</strong></a></li>
-                        <li><a (click)="analyzeOtherMenus('inventory')">Inventory</a></li>
-                        <li><a (click)="analyzeOtherMenus('manufacturing/report')">Manufacturing</a></li>
-                        <!-- <li><a (click)="analyzeOtherMenus('inventory/jobwork')">Job Work</a></li> -->
-                        <li><a (click)="analyzeOtherMenus('inventory/report')">Branch Transfer</a></li>
-                        <li><a (click)="analyzeOtherMenus('settings/warehouse')">Warehouse</a></li>
-                    </ul>
-
-                    <ul>
-                        <li><a href="javascript:void(0)"><strong>Settings</strong></a></li>
-                        <li><a (click)="analyzeOtherMenus('permissions')">Permission</a></li>
-                        <li><a (click)="analyzeOtherMenus('import/select-type')">Import Data</a></li>
-                        <li>
-                            <a (click)="analyzeOtherMenus('settings/integration', { tab: 'integration', tabIndex: 1 })">Integration
-                            </a>
-                        </li>
-                        <li>
-                            <a (click)="analyzeOtherMenus('settings/taxes', { tab: 'taxes', tabIndex: 0 })">Settings
-                            </a>
-                        </li>
-                    </ul>
-
-                    <ul>
-                        <li><a href="#"><strong>Others</strong></a></li>
-                        <li><a (click)="analyzeOtherMenus('audit-logs')">Audit Log</a></li>
-                        <li><a (click)="analyzeOtherMenus('search')">Search</a></li>
-                        <li><a (click)="analyzeOtherMenus('gstfiling')" *ngIf="activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode == 'IN'">GSTR</a>
-                        </li>
-                        <li><a (click)="analyzeOtherMenus('vat-report')" *ngIf="activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode != 'IN'">Vat
-                                Report</a></li>
-                        <li><a (click)="analyzeOtherMenus('home')">Dashboard</a></li>
-                    </ul>
-
-                </div>
-            </li>
-
-        </ul>
 
 
     </div>
