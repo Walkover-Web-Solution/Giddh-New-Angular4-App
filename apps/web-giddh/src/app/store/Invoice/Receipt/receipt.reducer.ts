@@ -4,7 +4,7 @@ import { InvoiceReceiptFilter, ReciptDeleteRequest, ReciptRequest, ReciptRequest
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { INVOICE_ACTIONS } from 'apps/web-giddh/src/app/actions/invoice/invoice.const';
 import { ILedgersInvoiceResult, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from 'apps/web-giddh/src/app/models/api-models/Invoice';
-import { GenericRequestForGenerateSCD, VoucherClass } from '../../../models/api-models/Sales';
+import { GenericRequestForGenerateSCD, VoucherClass, VoucherTypeEnum } from '../../../models/api-models/Sales';
 import * as _ from '../../../lodash-optimized';
 import { SalesRegisteDetailedResponse, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
 
@@ -120,7 +120,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         }
 
         case INVOICE_RECEIPT_ACTIONS.UPDATE_VOUCHER_DETAILS_AFTER_VOUCHER_UPDATE: {
-            if (state.vouchers) {
+            if (state.vouchers && action.payload.body) {
                 let vouchers = { ...state.vouchers };
                 let result = action.payload;
                 return {
@@ -128,7 +128,8 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
                     vouchers: {
                         ...vouchers,
                         items: vouchers.items.map(m => {
-                            if (m.voucherNumber === result.body.number) {
+                            if (result.body.type !== VoucherTypeEnum.purchase && (m.voucherNumber === result.body.number) ||
+                                result.body.type === VoucherTypeEnum.purchase && (m.uniqueName === result.body.uniqueName)) {
                                 m.grandTotal.amountForAccount = result.body.grandTotal.amountForAccount;
                             } else if (result.body.voucherDetails && m.voucherNumber === result.body.voucherDetails.voucherNumber) {
                                 m.grandTotal.amountForAccount = result.body.voucherDetails.grandTotal;
