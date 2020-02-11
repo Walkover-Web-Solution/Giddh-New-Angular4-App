@@ -120,22 +120,25 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         }
 
         case INVOICE_RECEIPT_ACTIONS.UPDATE_VOUCHER_DETAILS_AFTER_VOUCHER_UPDATE: {
-            let vouchers = { ...state.vouchers };
-            let result = action.payload;
-            return {
-                ...state,
-                vouchers: {
-                    ...vouchers,
-                    items: vouchers.items.map(m => {
-                        if (m.voucherNumber === result.body.number) {
-                            m.grandTotal.amountForAccount = result.body.grandTotal.amountForAccount;
-                        } else if (result.body.voucherDetails && m.voucherNumber === result.body.voucherDetails.voucherNumber) {
-                            m.grandTotal.amountForAccount = result.body.voucherDetails.grandTotal;
-                        }
-                        return m;
-                    })
+            if (state.vouchers) {
+                let vouchers = { ...state.vouchers };
+                let result = action.payload;
+                return {
+                    ...state,
+                    vouchers: {
+                        ...vouchers,
+                        items: vouchers.items.map(m => {
+                            if (m.voucherNumber === result.body.number) {
+                                m.grandTotal.amountForAccount = result.body.grandTotal.amountForAccount;
+                            } else if (result.body.voucherDetails && m.voucherNumber === result.body.voucherDetails.voucherNumber) {
+                                m.grandTotal.amountForAccount = result.body.voucherDetails.grandTotal;
+                            }
+                            return m;
+                        })
+                    }
                 }
             }
+            return state;
         }
 
         case INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILS: {
