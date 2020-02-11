@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { IOption } from '../../../../theme/ng-select/option.interface';
-import { Observable, ReplaySubject,  of as observableOf} from 'rxjs';
+import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../../store';
 import { CustomTemplateResponse } from '../../../../models/api-models/Invoice';
@@ -80,17 +80,18 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
         this.allTemplates$ = this.store.pipe(select(s => s.invoiceTemplate.customCreatedTemplates), takeUntil(this.destroyed$));
     }
-/**
- * Life cycle hook
- *
- * @memberof InvoiceBulkUpdateModalComponent
- */
-public ngOnInit() {
+    /**
+     * Life cycle hook
+     *
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
+    public ngOnInit() {
         this.uploadInput = new EventEmitter<UploadInput>();
         this.getTemplates();
     }
 
     public onUploadOutput(output: UploadOutput): void {
+        this.updateInProcess = true;
         this.isSignatureAttached = true;
         this.previewFile(output.file);
         if (output.type === 'allAddedToQueue') {
@@ -110,8 +111,8 @@ public ngOnInit() {
         } else if (output.type === 'done') {
             this._loaderService.hide();
             if (output.file.response.status === 'success') {
+                this.updateInProcess = false;
                 this.updateImageSignatureRequest.imageSignatureUniqueName = '';
-
                 if (output.file.response.body && output.file.response.body.uniqueName) {
                     this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
                     this.updateImageSignatureRequest.imageSignatureUniqueName = output.file.response.body.uniqueName;
@@ -125,15 +126,15 @@ public ngOnInit() {
         }
     }
 
-/**
- * Preview uploaded file
- *
- * @param {*} files
- * @memberof InvoiceBulkUpdateModalComponent
- */
-public previewFile(files: any): void {
+    /**
+     * Preview uploaded file
+     *
+     * @param {*} files
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
+    public previewFile(files: any): void {
         let preview: any = document.getElementById('signatureImage');
-        let a: any = document.querySelector('input[type=file]');
+        let a: any = document.querySelector('#bulkUploadfileInput');
         let file = a.files[0];
         let reader = new FileReader();
         reader.onloadend = () => {
@@ -141,24 +142,26 @@ public previewFile(files: any): void {
         };
         if (file) {
             reader.readAsDataURL(file);
-            // this.logoAttached = true;
+            // this.isSignatureAttached = true;
         } else {
             preview.src = '';
-            // this.logoAttached = false;
+            // this.isSignatureAttached = false;
         }
     }
 
     public clearImage() {
+        this.updateInProcess = false;
         this.signatureSrc = '';
         this.isSignatureAttached = false;
+        this.updateImageSignatureRequest.imageSignatureUniqueName = '';
     }
 
-/**
- * Cancel bulk update
- *
- * @memberof InvoiceBulkUpdateModalComponent
- */
-public onCancel(): void {
+    /**
+     * Cancel bulk update
+     *
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
+    public onCancel(): void {
         this.selectedField = '';
         this.signatureOptions = '';
         this.bulkUpdateForm.reset();
@@ -201,7 +204,7 @@ public onCancel(): void {
 
     }
 
-    /**
+    /**]
      *  hook to detect input directive changes
      *
      * @param {SimpleChanges} simpleChanges params to detect simple changes
@@ -213,7 +216,9 @@ public onCancel(): void {
             if (simpleChanges.voucherType && simpleChanges.voucherType.currentValue) {
 
                 this.voucherType = simpleChanges.voucherType.currentValue;
-
+                if (this.voucherType === "credit note" || this.voucherType === "debit note") {
+                    this.fieldOptions = this.fieldOptions.filter(item => item.value !== 'dueDate' && item.label !== 'Due Date');
+                }
             } else if (simpleChanges.selectedInvoices && simpleChanges.selectedInvoices.currentValue) {
 
                 this.selectedInvoicesLists = simpleChanges.selectedInvoices.currentValue;
