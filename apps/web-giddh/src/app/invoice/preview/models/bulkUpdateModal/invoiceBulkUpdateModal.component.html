@@ -43,10 +43,10 @@
                 <div *ngIf="selectedField === 'signature' && signatureOptions === 'image'" class="uplode-logo">
                     <div class="form-group">
                         <label [hidden]="isSignatureAttached">
-                        <input type="file" style="display: none;" name="BulkUploadfileInput" id="BulkUploadfileInput"
+                        <input type="file" style="display: none;" name="bulkUploadfileInput" id="bulkUploadfileInput"
                             [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
                             (uploadOutput)="onUploadOutput($event)">
-                        <label class="cp fs16 text-gray font-14" for="BulkUploadfileInput">
+                        <label class="cp fs16 text-gray font-14" for="bulkUploadfileInput">
                             Upload your logo
                         </label>
                         </label>

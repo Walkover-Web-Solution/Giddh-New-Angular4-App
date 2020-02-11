@@ -133,7 +133,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
      */
     public previewFile(files: any): void {
         let preview: any = document.getElementById('signatureImage');
-        let a: any = document.querySelector('input[type=file]');
+        let a: any = document.querySelector('#bulkUploadfileInput');
         let file = a.files[0];
         let reader = new FileReader();
         reader.onloadend = () => {
