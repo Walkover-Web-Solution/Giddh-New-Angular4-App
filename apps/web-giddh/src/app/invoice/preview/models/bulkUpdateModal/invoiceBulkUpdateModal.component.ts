@@ -91,6 +91,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     }
 
     public onUploadOutput(output: UploadOutput): void {
+        this.updateInProcess = true;
         this.isSignatureAttached = true;
         this.previewFile(output.file);
         if (output.type === 'allAddedToQueue') {
@@ -110,8 +111,8 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         } else if (output.type === 'done') {
             this._loaderService.hide();
             if (output.file.response.status === 'success') {
+                this.updateInProcess = false;
                 this.updateImageSignatureRequest.imageSignatureUniqueName = '';
-
                 if (output.file.response.body && output.file.response.body.uniqueName) {
                     this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
                     this.updateImageSignatureRequest.imageSignatureUniqueName = output.file.response.body.uniqueName;
@@ -149,6 +150,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     }
 
     public clearImage() {
+        this.updateInProcess = false;
         this.signatureSrc = '';
         this.isSignatureAttached = false;
         this.updateImageSignatureRequest.imageSignatureUniqueName = '';
