@@ -1230,7 +1230,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public handleAllModulesLeaveEvent(event: any): void {
         const menu = document.getElementById('other_sub_menu');
-        if (menu && !menu.contains(event.toElement)) {
+        const targetElement = event.toElement || event.relatedTarget;
+        if (menu && !menu.contains(targetElement)) {
             // Hide 'All Modules' popover if the mouse points to any element other than sub menu as target
             this.allModulesPopover.hide();
         }
