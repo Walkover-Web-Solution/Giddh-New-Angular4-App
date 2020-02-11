@@ -263,7 +263,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     // Decides whether to show the RCM entry
                     this.shouldShowRcmEntry = this.isRcmEntryPresent(resp[1].transactions);
                     this.shouldShowRcmTaxableAmount = resp[1].reverseChargeTaxableAmount !== undefined && resp[1].reverseChargeTaxableAmount !== null;
-                    this.shouldShowItcSection = !!resp[1].itcAvailable;
+                    if (this.shouldShowRcmTaxableAmount) {
+                        // Received taxable amount is a truthy value
+                        resp[1].reverseChargeTaxableAmount = this.generalService.convertExponentialToNumber(resp[1].reverseChargeTaxableAmount);
+                    }
+                    // Show the ITC section if value of ITC is received (itcAvailable) or it's an old transaction that is eligible for ITC (isItcEligible)
+                    this.shouldShowItcSection = !!resp[1].itcAvailable || resp[1].isItcEligible;
                     this.profileObj = resp[3];
                     this.vm.giddhBalanceDecimalPlaces = resp[3].balanceDecimalPlaces;
                     this.vm.inputMaskFormat = this.profileObj.balanceDisplayFormat ? this.profileObj.balanceDisplayFormat.toLowerCase() : '';
