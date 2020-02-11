@@ -3,7 +3,7 @@
         <h3 class="modal-title bg" id="modal-title">Bulk Update</h3>
         <span class="close" aria-hidden="true" (click)="onCancel()">×</span>
     </div>
-    <form #bulkUpdateForm="ngForm" (ngSubmit)="updateBulkInvoice();">
+    <form #bulkUpdateForm="ngForm" autocomplete="off" (ngSubmit)="updateBulkInvoice();">
         <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
 
             <small>Choose a field from the dropdown and update with new information.</small>
@@ -16,7 +16,7 @@
 
                 <div class="col-md-6 col-sm-6">
                     <div class="form-group" *ngIf="selectedField === 'pdfTemplate'">
-                        <sh-select placeholder="Select" [options]="allTemplatesOptions" required [isFilterEnabled]="true" [ItemHeight]="33" name="templateUniqueName" [(ngModel)]="updateTemplatesRequest.templateUniqueName"></sh-select>
+                        <sh-select placeholder="Select" [options]="allTemplatesOptions" autocomplete="off" required [isFilterEnabled]="true" [ItemHeight]="33" name="templateUniqueName" [(ngModel)]="updateTemplatesRequest.templateUniqueName"></sh-select>
                     </div>
 
                     <div class="form-group" *ngIf="selectedField === 'notes'">
@@ -29,11 +29,11 @@
                     </div>
 
                     <div class="form-group" *ngIf="selectedField === 'signature'">
-                        <sh-select placeholder="Select option" [options]="templateSignaturesOptions" required [isFilterEnabled]="true" name="signatureOptions" [(ngModel)]="signatureOptions" [ItemHeight]="33"></sh-select>
+                        <sh-select placeholder="Select option" [options]="templateSignaturesOptions" autocomplete="off" required [isFilterEnabled]="true" name="signatureOptions" [(ngModel)]="signatureOptions" [ItemHeight]="33"></sh-select>
                     </div>
 
                     <div class="relative form-group" *ngIf="selectedField === 'dueDate'">
-                        <input name="lastInvoiceDate" required placeholder="Select Date" type="text" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" [(ngModel)]="updateDueDatesRequest.dueDate" class="form-control" bsDatepicker required>
+                        <input name="lastInvoiceDate" required placeholder="Select Date" type="text" autocomplete="off" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" [(ngModel)]="updateDueDatesRequest.dueDate" class="form-control" bsDatepicker required>
                         <i class="fa fa-calendar text-light-2 inpute-date"></i>
                     </div>
                 </div>
