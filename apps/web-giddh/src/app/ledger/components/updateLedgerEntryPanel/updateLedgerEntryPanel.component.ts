@@ -156,6 +156,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public selectedPettycashEntry$: Observable<PettyCashResonse>;
     public accountPettyCashStream: any;
 
+    /** True, if all the transactions are of type 'Tax' or 'Reverse Charge' */
+    private taxOnlyTransactions: boolean;
+
     constructor(
         private _accountService: AccountService,
         private _ledgerService: LedgerService,
@@ -269,6 +272,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                     // Show the ITC section if value of ITC is received (itcAvailable) or it's an old transaction that is eligible for ITC (isItcEligible)
                     this.shouldShowItcSection = !!resp[1].itcAvailable || resp[1].isItcEligible;
+                    this.taxOnlyTransactions = resp[1].taxOnlyTransactions;
                     this.profileObj = resp[3];
                     this.vm.giddhBalanceDecimalPlaces = resp[3].balanceDecimalPlaces;
                     this.vm.inputMaskFormat = this.profileObj.balanceDisplayFormat ? this.profileObj.balanceDisplayFormat.toLowerCase() : '';
@@ -938,7 +942,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         requestObj.exchangeRate = (this.vm.selectedCurrencyForDisplay !== this.vm.selectedCurrency) ? (1 / this.vm.selectedLedger.exchangeRate) : this.vm.selectedLedger.exchangeRate;
         requestObj.subVoucher = (this.isRcmEntry) ? Subvoucher.ReverseCharge : (this.isAdvanceReceipt) ? Subvoucher.AdvanceReceipt : '';
         requestObj.transactions = requestObj.transactions.filter(f => !f.isDiscount);
-        requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
+        if (!this.taxOnlyTransactions) {
+            requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
+        }
         requestObj.transactions.map((transaction) => {
             if (transaction.inventory && this.shouldShowWarehouse) {
                 // Update the warehouse details in update ledger flow

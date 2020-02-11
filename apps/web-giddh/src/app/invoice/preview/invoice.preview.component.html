@@ -379,9 +379,10 @@
 
                         <!-- Invoice No. -->
                         <td>
-                            <div [ngClass]="{'remove-capitalize': selectedVoucher === 'purchase'}" style="position: relative" class="d-flex">
+                            <div [ngClass]="{'remove-capitalize': selectedVoucher === 'purchase', 'cp': selectedVoucher === 'purchase' && !item.voucherNumber}"
+                                style="position: relative" class="d-flex">
                                 <a href="javascript:void(0);" class="btn-link-2"
-                                    (click)="onSelectInvoice(item)">{{item.voucherNumber ?  item.voucherNumber : '-&#160;&#160;'}}</a>
+                                    (click)="onSelectInvoice(item)">{{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
                             </div>
 
                             <span *ngIf="item.dueDays !== null">
@@ -395,7 +396,7 @@
                         </td>
 
                         <!-- Customer -->
-                        <td (dblclick)="(selectedVoucher !== 'purchase') ? modalUniqueName = item.uniqueName : ''" class="cp no-dbl-click-select"
+                        <td [ngClass]="{'cp': selectedVoucher !== 'purchase'}" (dblclick)="(selectedVoucher !== 'purchase') ? modalUniqueName = item.uniqueName : ''" class="no-dbl-click-select"
                             (clickOutside)="modalUniqueName = ''">
 
                             <div dropdown container="body">
