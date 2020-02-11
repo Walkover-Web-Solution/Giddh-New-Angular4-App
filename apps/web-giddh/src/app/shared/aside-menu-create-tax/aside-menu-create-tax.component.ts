@@ -82,21 +82,14 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
 
         this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$)).subscribe(res => {
             let arr: IOption[] = [];
-            // TODO: API development under process
-            // if (res) {
-            //     let accountObject = res.filter(accountObj =>
-            //         accountObj.parentGroups && accountObj.parentGroups.length > 1 &&
-            //         ["currentassets", "currentliabilities"].includes(accountObj.parentGroups[0].uniqueName) &&
-            //         !["cash", "bankaccounts", "sundrydebtors", "sundrycreditors"].includes(accountObj.parentGroups[1].uniqueName));
-            //     accountObject.forEach(accountObj => {
-            //         arr.push({ label: `${accountObj.name} - (${accountObj.uniqueName})`, value: accountObj.uniqueName });
-            //     });
-            // }
             if (res) {
-                res.filter(f => f.parentGroups.some(s => s.uniqueName === 'dutiestaxes'))
-                    .forEach(r => {
-                        arr.push({ label: `${r.name} - (${r.uniqueName})`, value: r.uniqueName });
-                    });
+                let accountObject = res.filter(accountObj =>
+                    accountObj.parentGroups && accountObj.parentGroups.length > 1 &&
+                    ["currentassets", "currentliabilities"].includes(accountObj.parentGroups[0].uniqueName) &&
+                    !["cash", "bankaccounts", "sundrydebtors", "sundrycreditors", "reversecharge", "taxonadvance"].includes(accountObj.parentGroups[1].uniqueName));
+                accountObject.forEach(accountObj => {
+                    arr.push({ label: `${accountObj.name} - (${accountObj.uniqueName})`, value: accountObj.uniqueName });
+                });
             } else {
                 arr = [];
             }

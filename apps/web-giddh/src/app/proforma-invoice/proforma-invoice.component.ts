@@ -442,6 +442,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.showLoader = true;
             } else {
                 this.showLoader = false;
+                this._cdr.detectChanges();
                 // call focus in customer after loader hides because after loader hider ui re-renders it self
                 this.focusInCustomerName();
             }
@@ -1500,10 +1501,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // replace /n to br for (shipping and billing)
 
         if (data.accountDetails.shippingDetails.address && data.accountDetails.shippingDetails.address.length && data.accountDetails.shippingDetails.address[0].length > 0) {
+            data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].trim();
             data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].replace(/\n/g, '<br />');
             data.accountDetails.shippingDetails.address = data.accountDetails.shippingDetails.address[0].split('<br />');
         }
         if (data.accountDetails.billingDetails.address && data.accountDetails.billingDetails.address.length && data.accountDetails.billingDetails.address[0].length > 0) {
+            data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].trim();
             data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].replace(/\n/g, '<br />');
             data.accountDetails.billingDetails.address = data.accountDetails.billingDetails.address[0].split('<br />');
         }
@@ -1576,6 +1579,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let exRate = this.originalExchangeRate;
         let requestObject: any;
         if (!this.isPurchaseInvoice) {
+            const deposit = new AmountClassMulticurrency();
+            deposit.accountUniqueName = this.depositAccountUniqueName;
+            deposit.amountForAccount = this.depositAmount;
             requestObject = {
                 account: data.accountDetails,
                 updateAccountDetails: this.updateAccount,
@@ -1584,7 +1590,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 date: data.voucherDetails.voucherDate,
                 type: this.invoiceType,
                 exchangeRate: exRate,
-                dueDate: data.voucherDetails.dueDate
+                dueDate: data.voucherDetails.dueDate,
+                deposit
             } as GenericRequestForGenerateSCD;
             // set voucher type
             requestObject.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
@@ -2375,7 +2382,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.depositCurrSymbol = event.additional && event.additional.currencySymbol || this.baseCurrencySymbol;
                 }
             } else {
-                this.invFormData.accountDetails.currencySymbol = '';
+                this.invFormData.accountDetails.currencySymbol = this.baseCurrencySymbol;
             }
 
             if (this.isCashInvoice) {
@@ -2548,6 +2555,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             // sales and cash invoice uses v4 api so need to parse main object to regarding that
             if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
+                const deposit = new AmountClassMulticurrency();
+                deposit.accountUniqueName = this.depositAccountUniqueName;
+                deposit.amountForAccount = this.depositAmount;
                 requestObject = {
                     account: data.accountDetails,
                     updateAccountDetails: this.updateAccount,
@@ -2558,7 +2568,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     exchangeRate: exRate,
                     dueDate: data.voucherDetails.dueDate,
                     number: this.invoiceNo,
-                    uniqueName: unqName
+                    uniqueName: unqName,
+                    deposit
                 } as GenericRequestForGenerateSCD;
                 if (this.isCreditNote || this.isDebitNote) {
                     requestObject['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
@@ -2687,10 +2698,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // replace /n to br for (shipping and billing)
 
         if (data.accountDetails.shippingDetails.address && data.accountDetails.shippingDetails.address.length && data.accountDetails.shippingDetails.address[0].length > 0) {
+            data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].trim();
             data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].replace(/\n/g, '<br />');
             data.accountDetails.shippingDetails.address = data.accountDetails.shippingDetails.address[0].split('<br />');
         }
         if (data.accountDetails.billingDetails.address && data.accountDetails.billingDetails.address.length && data.accountDetails.billingDetails.address[0].length > 0) {
+            data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].trim();
             data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].replace(/\n/g, '<br />');
             data.accountDetails.billingDetails.address = data.accountDetails.billingDetails.address[0].split('<br />');
         }
@@ -3204,9 +3217,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         obj.templateDetails = data.templateDetails;
         obj.entries = salesEntryClassArray;
-        if ((<GenericRequestForGenerateSCD>obj).deposit) {
-            (<GenericRequestForGenerateSCD>obj).deposit = deposit;
-        }
 
         obj.account.billingDetails.countryName = this.customerCountryName;
         obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
@@ -3437,24 +3447,26 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public getCurrencyRate(to, from, date = moment().format('DD-MM-YYYY')) {
-        this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
-            let rate = response.body;
-            if (rate) {
-                this.originalExchangeRate = rate;
-                this.exchangeRate = rate;
-                this._cdr.detectChanges();
-                if (this.isPurchaseInvoice && this.isUpdateMode) {
-                    // TODO: Remove this code once purchase invoice supports multicurrency
-                    this.calculateSubTotal();
-                    this.calculateTotalDiscount();
-                    this.calculateTotalTaxSum();
-                    this.calculateGrandTotal();
-                    this.calculateBalanceDue();
+        if (from && to) {
+            this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
+                let rate = response.body;
+                if (rate) {
+                    this.originalExchangeRate = rate;
+                    this.exchangeRate = rate;
+                    this._cdr.detectChanges();
+                    if (this.isPurchaseInvoice && this.isUpdateMode) {
+                        // TODO: Remove this code once purchase invoice supports multicurrency
+                        this.calculateSubTotal();
+                        this.calculateTotalDiscount();
+                        this.calculateTotalTaxSum();
+                        this.calculateGrandTotal();
+                        this.calculateBalanceDue();
+                    }
                 }
-            }
-        }, (error => {
+            }, (error => {
 
-        }));
+            }));
+        }
     }
 
     public updateBankAccountObject(accCurr) {

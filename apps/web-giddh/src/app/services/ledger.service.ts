@@ -14,14 +14,21 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { DaybookQueryRequest, DayBookRequestModel } from '../models/api-models/DaybookRequest';
 import { HttpClient } from '@angular/common/http';
+import { ToasterService } from './toaster.service';
 
 @Injectable()
 export class LedgerService {
     private companyUniqueName: string;
     private user: UserDetails;
 
-    constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, private _httpClient: HttpClient, public _router: Router,
-        private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(
+        private errorHandler: ErrorHandler,
+        public _http: HttpWrapperService,
+        private _httpClient: HttpClient,
+        public _router: Router,
+        private _generalService: GeneralService,
+        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
+        private toaster: ToasterService) {
     }
 
     /**
@@ -348,7 +355,10 @@ export class LedgerService {
             .pipe(map((res) => {
                 let data: any = res;
                 return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+            }), catchError((e) => {
+                this.toaster.errorToast(e.error.message);
+                return this.errorHandler.HandleCatch<any, any>(e)
+            }));
     }
 
     /*
