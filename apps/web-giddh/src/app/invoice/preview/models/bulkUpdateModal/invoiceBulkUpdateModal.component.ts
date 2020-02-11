@@ -141,16 +141,17 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         };
         if (file) {
             reader.readAsDataURL(file);
-            // this.logoAttached = true;
+            // this.isSignatureAttached = true;
         } else {
             preview.src = '';
-            // this.logoAttached = false;
+            // this.isSignatureAttached = false;
         }
     }
 
     public clearImage() {
         this.signatureSrc = '';
         this.isSignatureAttached = false;
+        this.updateImageSignatureRequest.imageSignatureUniqueName = '';
     }
 
     /**
