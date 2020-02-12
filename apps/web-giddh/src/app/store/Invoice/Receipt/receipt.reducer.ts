@@ -137,7 +137,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
                             return m;
                         })
                     }
-                }
+                };
             }
             return state;
         }
