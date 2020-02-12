@@ -539,7 +539,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                     this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax);
                     //#endregion
-
+                    if (!this.vm.showNewEntryPanel) {
+                        // Calculate entry total for credit and debit transactions when UI panel at the bottom to update
+                        // transaction is not visible
+                        this.vm.getEntryTotal();
+                        this.vm.generateCompoundTotal();
+                    }
                     this.vm.generatePanelAmount();
                 }
             });
