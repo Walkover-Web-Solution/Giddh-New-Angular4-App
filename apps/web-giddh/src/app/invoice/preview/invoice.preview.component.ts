@@ -49,6 +49,7 @@ import { PurchaseRecordService } from '../../services/purchase-record.service';
 import { PAGINATION_LIMIT } from '../../app.constant';
 import { PurchaseRecordUpdateModel } from '../../purchase/purchase-record/constants/purchase-record.interface';
 import { InvoiceBulkUpdateService } from '../../services/invoice.bulkupdate.service';
+import { PurchaseRecordActions } from '../../actions/purchase-record/purchase-record.action';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
@@ -233,6 +234,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private _breakPointObservar: BreakpointObserver,
         private _router: Router,
         private _receiptServices: ReceiptService,
+        private purchaseRecordActions: PurchaseRecordActions,
         private purchaseRecordService: PurchaseRecordService,
         private _invoiceBulkUpdateService: InvoiceBulkUpdateService
     ) {
@@ -366,10 +368,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 }, 100);
             });
 
-        this.store.pipe(select(store => store.purchaseRecord.updatedRecordDetails), takeUntil(this.destroyed$)).subscribe((record: PurchaseRecordUpdateModel) => {
-            if (record) {
+        combineLatest([
+            this.store.pipe(select(store => store.receipt.vouchers), publishReplay(1), refCount()),
+            this.store.pipe(select(store => store.purchaseRecord.updatedRecordDetails))
+        ]).pipe(takeUntil(this.destroyed$))
+        .subscribe((response) => {
+            const voucherData: ReciptResponse = response[0];
+            const record: PurchaseRecordUpdateModel = response[1];
+            if (voucherData && record) {
                 this.selectedInvoiceForDetails = null;
-                let voucherIndex = this.voucherData.items.findIndex(item => item.uniqueName === record.purchaseRecordUniqueName);
+                let voucherIndex = voucherData.items.findIndex(item => item.uniqueName === record.purchaseRecordUniqueName);
                 if (voucherIndex > -1) {
                     let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
                     if (record.mergedRecordUniqueName) {
@@ -382,6 +390,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     setTimeout(() => {
                         this.selectedInvoiceForDetails = allItems[0];
                         this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
+                        this.store.dispatch(this.purchaseRecordActions.resetUpdatePurchaseRecord());
                     }, 1000);
                 }
             }
