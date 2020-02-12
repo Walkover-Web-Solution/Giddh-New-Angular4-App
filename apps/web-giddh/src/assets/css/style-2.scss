@@ -5,6 +5,27 @@
 /* table css need to removed at last  (start)
    Don't touch this table css (If any body work on that contact me..)
 */
+@font-face {
+    font-family: "opensans-bold";
+    src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot");
+    src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot?#iefix")
+            format("embedded-opentype"),
+        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.svg")
+            format("woff2"),
+        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.woff")
+            format("woff"),
+        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.ttf")
+            format("truetype");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+$font-family: (
+    "bold": "opensans-bold",
+    "regular": "opensans-regular"
+);
+
+ 
 
 .basic > tbody > tr > td,
 .basic > tbody > tr > th,

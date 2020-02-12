@@ -382,6 +382,7 @@ a[vr-item]:focus {
 
 .menu_wrapper {
     max-height: 100%;
+    font-family: map-get($font-family, bold);
 }
 
 .left-sub-menu.open {
