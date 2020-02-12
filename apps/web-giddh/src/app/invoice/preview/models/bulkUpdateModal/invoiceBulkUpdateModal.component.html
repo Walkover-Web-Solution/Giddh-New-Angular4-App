@@ -62,27 +62,32 @@
                 <div *ngIf="selectedField === 'signature' && signatureOptions === 'slogan'">
                     <textarea class="form-control" required [(ngModel)]="updateSloganRequest.slogan" name="slogan"></textarea>
                 </div>
+
                 <!-- TODO: under discussion -->
-                <!-- <div *ngIf="selectedField === 'shippingDetails'" class="row mb-2">
-                    <div class="col-md-4">
+                <div *ngIf="selectedField === 'shippingDetails'">
+
+                    <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="GST Number">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
                         <div class="relative form-group">
-                            <input name="lastInvoiceDate" placeholder="Ship Date" type="text" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker required />
-                            <i class="fa fa-calendar text-light-2 inpute-date"></i>
+                            <sh-select placeholder="State" [options]="allTemplatesOptions" autocomplete="off" required [isFilterEnabled]="true" [ItemHeight]="33" name="templateUniqueName"></sh-select>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Ship Via">
+                            <textarea name="" class="textarea form-control" placeholder="Address" rows="3"></textarea>
                         </div>
                     </div>
-
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Tracking No">
-                        </div>
-                    </div>
-                </div> -->
+                </div>
+                </div>
 
                 <div *ngIf="selectedField === 'customFields'" class="row mb-2">
                     <div class="col-md-4">
