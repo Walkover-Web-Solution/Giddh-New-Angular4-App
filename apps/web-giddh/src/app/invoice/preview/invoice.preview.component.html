@@ -11,21 +11,21 @@
                             <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
                                 (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
 
-<!--                            <input type="text"-->
-<!--                                   [(ngModel)]="selectedDateRange"-->
-<!--                                   ngxDaterangepickerMd-->
-<!--                                   [alwaysShowCalendars]="true"-->
-<!--                                   [ranges]="datePickerOptions.ranges"-->
-<!--                                   [showClearButton]="false"-->
-<!--                                   [showCancel]="true"-->
-<!--                                   [showDropdowns]="true"-->
-<!--                                   [locale]="{applyLabel: 'Done'}"-->
-<!--                                   (datesUpdated)="dateRangeChanged($event)"-->
-<!--                                   [keepCalendarOpeningWithRange]="true"-->
-<!--                                   [showRangeLabelOnInput]="false"-->
-<!--                                   name="selectedDateRange"-->
-<!--                                   class="form-control"-->
-<!--                                   placeholder="Select please..."/>-->
+                            <!--                            <input type="text"-->
+                            <!--                                   [(ngModel)]="selectedDateRange"-->
+                            <!--                                   ngxDaterangepickerMd-->
+                            <!--                                   [alwaysShowCalendars]="true"-->
+                            <!--                                   [ranges]="datePickerOptions.ranges"-->
+                            <!--                                   [showClearButton]="false"-->
+                            <!--                                   [showCancel]="true"-->
+                            <!--                                   [showDropdowns]="true"-->
+                            <!--                                   [locale]="{applyLabel: 'Done'}"-->
+                            <!--                                   (datesUpdated)="dateRangeChanged($event)"-->
+                            <!--                                   [keepCalendarOpeningWithRange]="true"-->
+                            <!--                                   [showRangeLabelOnInput]="false"-->
+                            <!--                                   name="selectedDateRange"-->
+                            <!--                                   class="form-control"-->
+                            <!--                                   placeholder="Select please..."/>-->
 
                         </span>
                     </div>
@@ -88,8 +88,8 @@
                 </div>
                 <div *ngIf="selectedVoucher === 'purchase'" class="btn-wrapper">
                     <button class="btn btn-pink desktop-view-btn" (click)="goToInvoice('purchase')">+
-                            New Purchase
-                        </button>
+                        New Purchase
+                    </button>
                 </div>
                 <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
                     <button class="btn btn-pink desktop-view-btn" (click)="goToInvoice('credit note')">+
@@ -367,7 +367,8 @@
                         </ng-template>
 
                         <!-- Balance Due -->
-                        <td class="text-right" *ngIf="(selectedVoucher !== 'purchase')" [tooltip]="balanceDuePopupTemplate" container="body" containerClass="invoice-preview">{{item.accountCurrencySymbol}} {{item.balanceDue?.amountForAccount | giddhCurrency}}
+                        <td class="text-right" *ngIf="(selectedVoucher !== 'purchase')" [tooltip]="balanceDuePopupTemplate" container="body" containerClass="invoice-preview">
+                            {{item.accountCurrencySymbol}} {{item.balanceDue?.amountForAccount | giddhCurrency}}
                         </td>
                         <ng-template #balanceDuePopupTemplate><span [innerHTML]="item.balanceDueTooltipText"></span>
                         </ng-template>
@@ -641,7 +642,8 @@
     <div bsModal #performActionOnInvoiceModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
         <div class="modal-dialog modal-md perform-payment">
             <div class="modal-content">
-                <invoice-payment-model *ngIf="(selectedVoucher !== 'purchase')" [selectedInvoiceForPayment]="selectedInvoice" (closeModelEvent)="closePerformActionPopup($event)"></invoice-payment-model>
+                <invoice-payment-model *ngIf="(selectedVoucher !== 'purchase')" [selectedInvoiceForPayment]="selectedInvoice" (closeModelEvent)="closePerformActionPopup($event)">
+                </invoice-payment-model>
             </div>
         </div>
     </div>
