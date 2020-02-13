@@ -112,10 +112,10 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
         if (plan.subscriptionId) { // bought plan
             this.SubscriptionRequestObj.subscriptionId = plan.subscriptionId;
-            this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj });
+            this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
         } else if (!plan.subscriptionId) { // free plan
             this.SubscriptionRequestObj.planUniqueName = plan.planDetails.uniqueName;
-            this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj });
+            this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
         }
     }
     public createCompanyViaActivationKey() {
