@@ -37,7 +37,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         { label: 'Notes', value: 'notes' },
         { label: 'Signature', value: 'signature' },
         { label: 'Due Date', value: 'dueDate' },
-        // { label: 'Shipping Details', value: 'shippingDetails' },
+        { label: 'Shipping Address', value: 'shippingDetails' },
         { label: 'Custom Fields', value: 'customFields' }
     ];
     public templateSignaturesOptions: IOption[] = [

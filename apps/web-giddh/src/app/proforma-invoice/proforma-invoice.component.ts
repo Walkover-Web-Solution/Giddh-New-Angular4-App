@@ -701,6 +701,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                         if (item.parentGroups.some(p => p.uniqueName === 'bankaccounts' || p.uniqueName === 'cash')) {
                             bankaccounts.push({ label: item.name, value: item.uniqueName, additional: item });
+                            if (this.isPurchaseInvoice) {
+                                this.sundryCreditorsAcList.push({
+                                    label: item.name,
+                                    value: item.uniqueName,
+                                    additional: item
+                                });
+                            }
                         }
 
                         if (item.parentGroups.some(p => p.uniqueName === 'otherincome' || p.uniqueName === 'revenuefromoperations')) {
@@ -3748,7 +3755,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else {
             // User denied the permission or closed the popup
             this._toasty.errorToast('Please change either purchase invoice number or vendor details.', 'Purchase Record');
-            this.isUpdateMode = false;
         }
         if (this.purchaseRecordConfirmationPopup) {
             this.purchaseRecordConfirmationPopup.hide();
