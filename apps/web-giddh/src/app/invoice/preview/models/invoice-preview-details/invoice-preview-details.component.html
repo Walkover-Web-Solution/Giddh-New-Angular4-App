@@ -102,13 +102,12 @@
                                         <div class="btn-group changeStatus-dropdown pull-right" dropdown
                                             *ngIf="only4ProformaEstimates">
 
-                                            <label *ngIf="selectedItem.voucherStatus === 'invoiced'"
+                                            <label
                                                 class="labeled text-capitalize">
                                                 {{ selectedItem.voucherStatus }}</label>
 
                                             <button id="button-basic" dropdownToggle type="button"
-                                                class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic"
-                                                *ngIf="selectedItem.voucherStatus === 'submitted'">Change Status
+                                                class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic">Change Status
                                                 <span class="caret"></span>
                                             </button>
 
@@ -225,7 +224,7 @@
                                 <div class="col-sm-4 pd0"
                                     *ngIf="(selectedItem.voucherType !== 'credit note' && selectedItem.voucherType !== 'debit note') &&
                                     (selectedItem.voucherStatus !== 'paid' && selectedItem.voucherStatus !== 'cancel')">
-                                    <div class="single-paymentDetail clearfix">
+                                    <div class="single-paymentDetail clearfix pr-4">
                                         <div class="payment-icon"><img src="assets/images/dollar-icon.svg"></div>
                                         <p class="payment-content"> Receive payments in cash/check and record payments
                                             manually. </p>
@@ -461,7 +460,7 @@
     tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <confirm-modal [body]="'Are you sure want to delete this voucher'"
+            <confirm-modal [body]="'You are deleting the voucher / invoice!'"
                 (cancelCallBack)="deleteConfirmationModel.toggle()"
                 (successCallBack)="deleteVoucher.emit(true);deleteConfirmationModel.toggle()"></confirm-modal>
         </div>

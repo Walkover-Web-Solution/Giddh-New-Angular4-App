@@ -1,142 +1,125 @@
 <div>
-
-    <div class="modal-header themeBg pd2 pdL2 pdR2 clearfix" style="background-color: #525252">
+    <div class="modal-header">
         <h3 class="modal-title bg" id="modal-title">Bulk Update</h3>
-        <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="onCancel()"></i>
+        <span class="close" aria-hidden="true" (click)="onCancel()">×</span>
     </div>
+    <form #bulkUpdateForm="ngForm" autocomplete="off" (ngSubmit)="updateBulkInvoice();">
+        <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
 
-    <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
-
-        <small>Choose a field from the dropdown and update with new information.</small>
-
-        <div class="d-flex mb-1">
-
-            <div style="width: 50%;padding: 15px;padding-left: 0;">
-
-                <sh-select placeholder="Select" [options]="fieldOptions" [isFilterEnabled]="true"
-                    [(ngModel)]="selectedField" [ItemHeight]="33"></sh-select>
-
-            </div>
-
-            <div style="width: 50%;padding: 15px;padding-right: 0;">
-
-                <div *ngIf="selectedField === 'pdf-template'">
-                    <sh-select placeholder="Select" [options]="allTemplatesOptions" [isFilterEnabled]="true"
-                        [ItemHeight]="33"></sh-select>
-                </div>
-
-                <div *ngIf="selectedField === 'notes'">
-                    <textarea class="form-control"></textarea>
-                </div>
-
-                <div *ngIf="selectedField === 'signature'">
-                    <sh-select placeholder="Select" [options]="allTemplatesOptions" [isFilterEnabled]="true"
-                        [ItemHeight]="33"></sh-select>
-
-                </div>
-
-                <div *ngIf="selectedField === 'due-date'">
-                    <div style="position: relative">
-                        <input name="lastInvoiceDate" placeholder="Select Date" type="text"
-                            [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker required>
-                        <i class="fa fa-calendar text-light-2" style="position: absolute;top: 9px;right: 8px;"></i>
+            <small>Choose a field from the dropdown and update with new information.</small>
+            <div class="row mb-1 mt-2">
+                <div class="col-md-6 col-sm-6">
+                    <div class="form-group">
+                        <sh-select placeholder="Select" [options]="fieldOptions" [isFilterEnabled]="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedField" [forceClearReactive]="forceClear$ | async" [ItemHeight]="33" (selected)="onSelectEntryField($event)"></sh-select>
                     </div>
                 </div>
 
+                <div class="col-md-6 col-sm-6">
+                    <div class="form-group" *ngIf="selectedField === 'pdfTemplate'">
+                        <sh-select placeholder="Select" [options]="allTemplatesOptions" autocomplete="off" required [isFilterEnabled]="true" [ItemHeight]="33" name="templateUniqueName" [(ngModel)]="updateTemplatesRequest.templateUniqueName"></sh-select>
+                    </div>
 
+                    <div class="form-group" *ngIf="selectedField === 'notes'">
+                        <!-- TODO : this note is come from sales module -->
+                        <!-- <span> Note </span>
+                        <textarea class="form-control" [(ngModel)]="updateNotesRequest.message1" name="message1"></textarea> -->
+                        <!--  this note is come from template -->
+                        <textarea class="form-control" [(ngModel)]="updateNotesRequest.message2" name="message2"></textarea>
+                    </div>
 
+                    <div class="form-group" *ngIf="selectedField === 'signature'">
+                        <sh-select placeholder="Select option" [options]="templateSignaturesOptions" autocomplete="off" required [isFilterEnabled]="true" name="signatureOptions" [(ngModel)]="signatureOptions" [ItemHeight]="33"></sh-select>
+                    </div>
 
-
+                    <div class="relative form-group" *ngIf="selectedField === 'dueDate'">
+                        <input name="lastInvoiceDate" required placeholder="Select Date" type="text" autocomplete="off" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" [(ngModel)]="updateDueDatesRequest.dueDate" class="form-control" bsDatepicker required>
+                        <i class="fa fa-calendar text-light-2 inpute-date"></i>
+                    </div>
+                </div>
             </div>
 
-
-        </div>
-
-        <div style="width: 100%;">
-
-            <div *ngIf="selectedField === 'signature'" class="uplode-logo">
-                <div>
-                    <label [hidden]="isSignatureAttached">
-                        <input type="file" style="display: none;" name="BulkUploadfileInput" id="BulkUploadfileInput"
+            <div class="width-100">
+                <div *ngIf="selectedField === 'signature' && signatureOptions === 'image'" class="uplode-logo">
+                    <div class="form-group">
+                        <label [hidden]="isSignatureAttached">
+                        <input type="file" style="display: none;" name="bulkUploadfileInput" id="bulkUploadfileInput"
                             [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
                             (uploadOutput)="onUploadOutput($event)">
-                        <label class="cp fs16" for="BulkUploadfileInput" style="color: #B3B3B3;font-size: 14px">
+                        <label class="cp fs16 text-gray font-14" for="bulkUploadfileInput">
                             Upload your logo
                         </label>
-                    </label>
+                        </label>
 
-                    <label class="logo-preview" [hidden]="!isSignatureAttached">
-                        <div style="display: flex; max-height: 100px;justify-content: center"><img alt=""
+                        <label class="logo-preview" [hidden]="!isSignatureAttached">
+                        <div class="signature-image"><img alt="" required
                                 id="signatureImage" [src]="signatureSrc" />
                         </div>
-                        <div class="d-flex mt-1" style="justify-content: center"> <button class="btn btn-danger"
+                        <div class="d-flex mt-1 justify-content-center"> <button class="btn btn-danger"
                                 (click)="clearImage()">clear</button></div>
                     </label>
+                    </div>
                 </div>
-            </div>
+                <div *ngIf="selectedField === 'signature' && signatureOptions === 'slogan'">
+                    <textarea class="form-control" required [(ngModel)]="updateSloganRequest.slogan" name="slogan"></textarea>
+                </div>
 
-            <div *ngIf="selectedField === 'shipping-details'" class="row mb-2">
+                <!-- TODO: under discussion -->
+                <div *ngIf="selectedField === 'shippingDetails'">
 
-                <div class="col-md-4">
+                    <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="GST Number">
+                        </div>
+                    </div>
 
-                    <div style="position: relative">
-                        <input name="lastInvoiceDate" placeholder="Ship Date" type="text"
-                            [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker required
-                            style="padding-right: 27px !important;" />
-                        <i class="fa fa-calendar text-light-2" style="position: absolute;top: 9px;right: 8px;"></i>
+                    <div class="col-md-6">
+                        <div class="relative form-group">
+                            <sh-select placeholder="State" [options]="allTemplatesOptions" autocomplete="off" required [isFilterEnabled]="true" [ItemHeight]="33" name="templateUniqueName"></sh-select>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-md-4">
-
-                    <input type="text" class="form-control" placeholder="Ship Via">
-                </div>
-
-                <div class="col-md-4">
-
-                    <input type="text" class="form-control" placeholder="Tracking No">
-                </div>
-
-            </div>
-
-            <div *ngIf="selectedField === 'custom-fields'" class="row mb-2">
-                <div class="col-md-4">
-
-                    <div style="position: relative">
-                        <input name="lastInvoiceDate" placeholder="Custom Field 1" type="text"
-                            [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker required
-                            style="padding-right: 27px !important;" />
-                        <i class="fa fa-calendar text-light-2" style="position: absolute;top: 9px;right: 8px;"></i>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <textarea name="" class="textarea form-control" placeholder="Address" rows="3"></textarea>
+                        </div>
                     </div>
                 </div>
-
-                <div class="col-md-4">
-
-                    <input type="text" class="form-control" placeholder="Custom Field 2">
                 </div>
 
-                <div class="col-md-4">
+                <div *ngIf="selectedField === 'customFields'" class="row mb-2">
+                    <div class="col-md-4">
+                        <div class="relative form-group">
+                            <input name="customField1" placeholder="Custom Field 1" type="text" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker [(ngModel)]="updateCustomfieldsRequest.customField1" />
+                            <i class="fa fa-calendar text-light-2 inpute-date"></i>
+                        </div>
+                    </div>
 
-                    <input type="text" class="form-control" placeholder="Custom Field 3">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Custom Field 2" name="customField2" [(ngModel)]="updateCustomfieldsRequest.customField2">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Custom Field 3" name="customField3" [(ngModel)]="updateCustomfieldsRequest.customField3">
+                        </div>
+                    </div>
                 </div>
-
             </div>
 
-
-
-        </div>
-
-        <div>
-            <small>Note: All the selected invoices will be updated with new information and you cannot undo
+            <div>
+                <small>Note: All the selected invoices will be updated with new information and you cannot undo
                 this.</small>
+            </div>
         </div>
-
-    </div>
-    <div class="modal-footer d-flex" style="justify-content: flex-start">
-
-        <button class="btn btn-success">Update</button>
-        <button class="btn btn-danger" (click)="onCancel()">Cancel</button>
-
-    </div>
+        <div class="modal-footer d-flex" style="justify-content: flex-start">
+            <button class="btn btn-success" (click)="updateBulkInvoice();" [ladda]="updateInProcess" [disabled]="bulkUpdateForm.invalid">Update</button>
+            <button class="btn btn-danger" (click)="onCancel()">Cancel</button>
+        </div>
+    </form>
 
 </div>

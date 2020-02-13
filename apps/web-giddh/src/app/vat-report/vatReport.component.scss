@@ -49,7 +49,7 @@
 .month-picker {
     position: absolute;
     top: 10px !important;
-    left: 185px !important;
+    left: 160px !important;
 }
 .advanceSearchByDate.date-advanceSearch {
     width: 280px;
@@ -65,4 +65,11 @@
 }
 .vat-report .dropdown-menu li label {
     padding-left: 0px !important;
+}
+.daterangePicker {
+    position: absolute;
+    opacity: 0;
+    right: -160px;
+    top: 0;
+    pointer-events: none;
 }

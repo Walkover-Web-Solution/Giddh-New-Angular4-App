@@ -184,6 +184,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public inputMaskFormat: string;
     public giddhBalanceDecimalPlaces: number = 2;
     public activeAccountParentGroupsUniqueName: string = '';
+    /** True, if RCM taxable amount needs to be displayed in create new ledger component as per criteria */
+    public shouldShowRcmTaxableAmount: boolean;
+    /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
+    public shouldShowItcSection: boolean;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
@@ -401,6 +405,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // check if selected account category allows to show taxationDiscountBox in newEntry popup
         txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
         this.handleRcmVisibility(txn);
+        this.handleTaxableAmountVisibility(txn);
         this.newLedPanelCtrl.calculateTotal();
         // this.newLedPanelCtrl.checkForMulitCurrency();
         this.newLedPanelCtrl.detectChanges();
@@ -421,6 +426,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
+        this.shouldShowItcSection = false;
+        this.shouldShowRcmTaxableAmount = false;
 
         observableCombineLatest(this.universalDate$, this.route.params, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (!Array.isArray(resp[0])) {
@@ -990,6 +997,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             baseCurrencyToDisplay: cloneDeep(this.baseCurrencyDetails),
             foreignCurrencyToDisplay: cloneDeep(this.foreignCurrencyDetails)
         };
+        this.shouldShowRcmTaxableAmount = false;
+        this.shouldShowItcSection = false;
         if (this.isLedgerAccountAllowsMultiCurrency) {
             this.getCurrencyRate('blankLedger');
         }
@@ -1639,7 +1648,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @param {*} transaction Transaction details which will decide if transaction is RCM applicable
      * @memberof LedgerComponent
      */
-    private handleRcmVisibility(transaction: any): void {
+    private handleRcmVisibility(transaction: TransactionVM): void {
         this.lc.flattenAccountListStream$.pipe(take(1)).subscribe((accounts) => {
             if (accounts) {
                 let currentLedgerAccountDetails, selectedAccountDetails;
@@ -1667,5 +1676,54 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles the taxable amount and ITC section visibility based on conditions
+     *
+     * @private
+     * @param {TransactionVM} transaction Selected transaction
+     * @returns {void}
+     * @memberof LedgerComponent
+     */
+    private handleTaxableAmountVisibility(transaction: TransactionVM): void {
+        this.shouldShowRcmTaxableAmount = false;
+        this.shouldShowItcSection = false;
+        let currentCompany;
+        this.store.pipe(select(appState => appState.session), take(1)).subscribe((sessionData) => {
+            currentCompany = sessionData.companies.find((company) => company.uniqueName === sessionData.companyUniqueName).country;
+        });
+        if (!this.lc || !this.lc.activeAccount || !this.lc.activeAccount.parentGroups || this.lc.activeAccount.parentGroups.length < 2) {
+            return;
+        }
+        if (!transaction.selectedAccount || !transaction.selectedAccount.parentGroups || transaction.selectedAccount.parentGroups.length < 2) {
+            return;
+        }
+        const currentLedgerSecondParent = this.lc.activeAccount.parentGroups[1].uniqueName;
+        const selectedAccountSecondParent = transaction.selectedAccount.parentGroups[1].uniqueName;
+        if (currentLedgerSecondParent === 'reversecharge' && transaction.type === 'CREDIT') {
+            // Current ledger is of reverse charge and user has entered the transaction on the right side (CREDIT) of the ledger
+            if (selectedAccountSecondParent === 'dutiestaxes') {
+                /* Particular account belongs to the Duties and taxes then check the country based on which
+                    respective sections will be displayed */
+                if (currentCompany === 'United Arab Emirates') {
+                    this.shouldShowRcmTaxableAmount = true;
+                }
+                if (currentCompany === 'India') {
+                    this.shouldShowItcSection = true;
+                }
+            }
+        } else if (currentLedgerSecondParent === 'dutiestaxes' && transaction.type === 'DEBIT') {
+            // Current ledger is of Duties and taxes and user has entered the transaction on the left side (DEBIT) of the ledger
+            if (selectedAccountSecondParent === 'reversecharge') {
+                /* Particular account belongs to the Reverse charge then check the country based on which
+                    respective sections will be displayed */
+                if (currentCompany === 'United Arab Emirates') {
+                    this.shouldShowRcmTaxableAmount = true;
+                }
+                if (currentCompany === 'India') {
+                    this.shouldShowItcSection = true;
+                }
+            }
+        }
+    }
 
 }

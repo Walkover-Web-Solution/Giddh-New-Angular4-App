@@ -160,7 +160,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
     private isBulkInvoiceGenerated$: Observable<boolean>;
-    private isUniversalDateApplicable: boolean = false;
+    public isUniversalDateApplicable: boolean = false;
     private isBulkInvoiceGeneratedWithoutErr$: Observable<boolean>;
     public isMobileView = false;
 
@@ -650,5 +650,13 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         // this.dp.destroyPicker();
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    public resetDateSearch() {
+        this.ledgerSearchRequest.dateRange = this.universalDate;
+        this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate() };
+        this.isUniversalDateApplicable = true;
+        this.getLedgersOfInvoice();
+        this.detectChanges();
     }
 }

@@ -1,19 +1,20 @@
-import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import {NavigationEnd, NavigationStart, Router} from '@angular/router';
 /**
  * Angular 2 decorators and services
  */
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 
-import { Store } from '@ngrx/store';
-import { AppState } from './store/roots';
-import { GeneralService } from './services/general.service';
-import { pick } from './lodash-optimized';
-import { VersionCheckService } from './version-check.service';
-import { ReplaySubject } from 'rxjs';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { DbService } from './services/db.service';
-import { reassignNavigationalArray } from './models/defaultMenus'
+import {Store} from '@ngrx/store';
+import {AppState} from './store/roots';
+import {GeneralService} from './services/general.service';
+import {pick} from './lodash-optimized';
+import {VersionCheckService} from './version-check.service';
+import {ReplaySubject} from 'rxjs';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {BreakpointObserver} from '@angular/cdk/layout';
+import {DbService} from './services/db.service';
+import {reassignNavigationalArray} from './models/defaultMenus'
+import {Configuration} from "./app.constant";
 
 /**
  * App Component
@@ -26,19 +27,24 @@ import { reassignNavigationalArray } from './models/defaultMenus'
         './app.component.css'
     ],
     template: `
-      <noscript *ngIf="isProdMode && !isElectron">
-          <iframe [src]="tagManagerUrl"
-                  height="0" width="0" style="display:none;visibility:hidden"></iframe>
-      </noscript>
-      <div id="loader-1" *ngIf="!IAmLoaded"><div class="spinner2"><div class="cube1"></div><div class="cube2"></div></div></div>
-      <router-outlet></router-outlet>
-  `,
+        <noscript *ngIf="isProdMode && !isElectron">
+            <iframe [src]="tagManagerUrl"
+                    height="0" width="0" style="display:none;visibility:hidden"></iframe>
+        </noscript>
+        <div id="loader-1" *ngIf="!IAmLoaded">
+            <div class="spinner2">
+                <div class="cube1"></div>
+                <div class="cube2"></div>
+            </div>
+        </div>
+        <router-outlet></router-outlet>
+    `,
     // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
-    public sideMenu: { isopen: boolean } = { isopen: true };
-    public companyMenu: { isopen: boolean } = { isopen: false };
+    public sideMenu: { isopen: boolean } = {isopen: true};
+    public companyMenu: { isopen: boolean } = {isopen: false};
     public isProdMode: boolean = false;
     public isElectron: boolean = false;
     public tagManagerUrl: SafeUrl;
@@ -47,13 +53,13 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private newVersionAvailableForWebApp: boolean = false;
 
     constructor(private store: Store<AppState>,
-        private router: Router,
-        private _generalService: GeneralService,
-        private _cdr: ChangeDetectorRef,
-        private _versionCheckService: VersionCheckService,
-        private sanitizer: DomSanitizer,
-        private breakpointObserver: BreakpointObserver,
-        private dbServices: DbService
+                private router: Router,
+                private _generalService: GeneralService,
+                private _cdr: ChangeDetectorRef,
+                private _versionCheckService: VersionCheckService,
+                private sanitizer: DomSanitizer,
+                private breakpointObserver: BreakpointObserver,
+                private dbServices: DbService
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
@@ -61,7 +67,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             if (ss.user && ss.user.session && ss.user.session.id) {
                 let a = pick(ss.user, ['isNewUser']);
                 a.isNewUser = true;
-                this._generalService.user = { ...ss.user.user, ...a };
+                this._generalService.user = {...ss.user.user, ...a};
                 if (ss.user.statusCode !== 'AUTHENTICATE_TWO_WAY') {
                     this._generalService.sessionId = ss.user.session.id;
                 }
@@ -82,6 +88,19 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         ]).subscribe(result => {
             this.changeOnMobileView(result.matches);
         });
+        if (Configuration.isElectron) {
+            // electronOauth2
+            const {ipcRenderer} = (window as any).require("electron");
+            // google
+            const t = ipcRenderer.send("take-server-environment", {
+                STAGING_ENV,
+                LOCAL_ENV,
+                TEST_ENV,
+                PRODUCTION_ENV,
+                AppUrl,
+                APP_FOLDER
+            });
+        }
     }
 
     public sidebarStatusChange(event) {

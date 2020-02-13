@@ -3,7 +3,6 @@ import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
-import { take, takeUntil } from 'rxjs/operators';
 import { ModalDirective } from 'ngx-bootstrap';
 import { BulkEmailRequest } from '../../models/api-models/Search';
 import { CompanyService } from '../../services/companyService.service';
@@ -11,6 +10,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { Router } from '@angular/router';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
+import { AccountService } from '../../services/account.service';
 
 @Component({
     selector: '[account-detail-modal-component]',
@@ -79,25 +79,35 @@ export class AccountDetailModalComponent implements OnChanges {
             value: '%s_AN',
         },
     ];
-    public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
     public accInfo: IFlattenAccountsResultItem;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private _companyServices: CompanyService,
-        private _toaster: ToasterService, private _groupWithAccountsAction: GroupWithAccountsAction,
+        private _toaster: ToasterService, private _groupWithAccountsAction: GroupWithAccountsAction, private _accountService: AccountService,
         private _router: Router) {
-        this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes['accountUniqueName'] && changes['accountUniqueName'].currentValue
             && (changes['accountUniqueName'].currentValue !== changes['accountUniqueName'].previousValue)) {
-            this.flattenAccountsStream$.pipe(take(1)).subscribe(data => {
-                if (data && data.length) {
-                    this.accInfo = data.find(f => f.uniqueName === changes['accountUniqueName'].currentValue);
-                }
-            });
+            this.getAccountDetails(changes['accountUniqueName'].currentValue);
         }
+    }
+
+    /**
+     * API call to get account details using *accountUniqueName*
+     *
+     * @param {string} accountUniqueName account unique name to get account details
+     * @memberof AccountDetailModalComponent
+     */
+    public getAccountDetails(accountUniqueName: string): void {
+        this._accountService.GetAccountDetailsV2(accountUniqueName).subscribe(response => {
+            if (response.status === 'success') {
+                this.accInfo = response.body;
+            } else {
+                this._toaster.errorToast(response.message);
+            }
+        });
     }
 
     public performActions(type: number, event?: any) {
@@ -159,9 +169,14 @@ export class AccountDetailModalComponent implements OnChanges {
     // Add Selected Value to Message Body
     public addValueToMsg(val: any) {
         this.typeInTextarea(val.value);
-        // this.messageBody.msg += ` ${val.value} `;
     }
 
+    /**
+     * Prepare message body
+     *
+     * @param {*} newText Shortcut tags
+     * @memberof AccountDetailModalComponent
+     */
     public typeInTextarea(newText) {
         let el: HTMLInputElement = this.messageBox.nativeElement;
         let start = el.selectionStart;
@@ -207,7 +222,14 @@ export class AccountDetailModalComponent implements OnChanges {
         this.mailModal.hide();
     }
 
-    public goToRoute(part: string, additionalParams: string = '') {
+    /**
+     *  Perform redirection using change routing
+     *
+     * @param {string} part routing url
+     * @param {string} [additionalParams=''] addition params like date range
+     * @memberof AccountDetailModalComponent
+     */
+    public goToRoute(part: string, additionalParams: string = ''): void {
         let url = location.href + `?returnUrl=${part}/${this.accountUniqueName}`;
 
         if (additionalParams) {
@@ -216,7 +238,6 @@ export class AccountDetailModalComponent implements OnChanges {
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
             url = location.origin + location.pathname + `#./pages/${part}/${this.accountUniqueName}`;
-            console.log(ipcRenderer.send('open-url', url));
         } else {
             (window as any).open(url);
         }
