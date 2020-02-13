@@ -303,7 +303,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public originalExchangeRate = 1;
     public isMulticurrencyAccount = false;
     public invoiceUniqueName: string;
-    public showLoader: boolean = false;
+    public showLoader: boolean = true;
     public inputMaskFormat: string = '';
     public isPrefixAppliedForCurrency: boolean;
     public selectedSuffixForCurrency: string = '';
@@ -438,14 +438,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (!this.shouldShowLoader) {
                 return;
             }
-            if (stateLoader.show) {
-                this.showLoader = true;
-            } else {
-                this.showLoader = false;
-                this._cdr.detectChanges();
+            // if (stateLoader.show) {
+            //     this.showLoader = true;
+            // } else {
+            //     this.showLoader = false;
+            //     this._cdr.detectChanges();
                 // call focus in customer after loader hides because after loader hider ui re-renders it self
-                this.focusInCustomerName();
-            }
+                // this.focusInCustomerName();
+            // }
         });
     }
 
@@ -754,7 +754,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 });
                             }
                         }
-
                     });
 
                     this.makeCustomerList();
@@ -791,6 +790,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                     }
                     this.depositAccountUniqueName = 'cash';
+                    this.showLoader = false;
+                    this.focusInCustomerName();
                 }
 
                 // update mode because voucher details is available
@@ -952,6 +953,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                         this.saveCurrentPurchaseRecordDetails();
                     }
+                    this.showLoader = false;
                 }
 
                 // create account success then close sidebar, and add customer details

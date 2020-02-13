@@ -122,7 +122,7 @@
                                                 <!-- endregion -->
                                                 <!-- region if not cashinvoice show customer dropdown -->
                                                 <ng-container *ngIf="isCashInvoice">
-                                                    <input type="text" name="voucherDetails.customerName" #inputCustomerName class="form-control cashInvoiceInput" [(ngModel)]="invFormData.voucherDetails.customerName" (change)="handleCustomerChange($event)" (blur)='selectDefaultbank()' [readOnly]="isUpdateMode">
+                                                    <input type="text" name="voucherDetails.customerName" [autofocus]="true" #inputCustomerName class="form-control cashInvoiceInput" [(ngModel)]="invFormData.voucherDetails.customerName" (change)="handleCustomerChange($event)" (blur)='selectDefaultbank()' [readOnly]="isUpdateMode">
                                                 </ng-container>
                                                 <!-- endregion -->
 
