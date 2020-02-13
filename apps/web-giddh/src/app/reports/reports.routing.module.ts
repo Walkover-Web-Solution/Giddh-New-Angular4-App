@@ -12,7 +12,8 @@ import { ReportsDashboardComponent } from "./components/report-dashboard/reports
 import { SalesRegisterDetailsComponent } from './components/sales-register-details-component/sales.register.details.component';
 import { PurchaseRegisterComponent } from './components/purchase-register-component/purchase.register.component';
 import { PurchaseRegisterExpandComponent } from './components/purchase-register-expand-component/purchase.register.expand.component';
-import { ReverseChargeReport } from './components/reverse-charge-report-component/reverse-charge-report.component'
+import { ReverseChargeReport } from './components/reverse-charge-report-component/reverse-charge-report.component';
+import { AdvanceReceiptReport } from './components/advance-receipt-report/advance-receipt-report.component';
 
 
 
@@ -31,7 +32,8 @@ import { ReverseChargeReport } from './components/reverse-charge-report-componen
                     { path: 'reports-dashboard', component: ReportsDashboardComponent },
                     { path: 'purchase-register', component: PurchaseRegisterComponent},
                     { path: 'purchase-detailed-expand', component: PurchaseRegisterExpandComponent },
-                    { path: 'reverse-charge', component: ReverseChargeReport }
+                    { path: 'reverse-charge', component: ReverseChargeReport },
+                    { path: 'advance-receipt-report', component: AdvanceReceiptReport },
                 ]
             }
         ]),

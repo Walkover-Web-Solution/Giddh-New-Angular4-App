@@ -1,40 +1,78 @@
 <div class="reverse-table-report">
     <div class="container-fluid">
-        <table class="table giddh-table">
-            <!-- add sorting and search box (developer end) -->
-            <thead>
+        <div class="invoice-preview  table-responsive">
+        <table class="table basic table-bordered mrT2 onMobileView">
+            <thead class="t-h-bg1">
                 <tr>
-                    <th>#</th>
-                    <th class="td_in_searchBox">Entry Date </th>
-                    <th>Supplier's Date</th>
+                    <th class="text-center">#</th>
+                    <th class="td_in_searchBox">
+                        <div class="d-flex align-items-center">
+                            Entry Date
+                            <div class="icon-pointer pl-1 pointer">
+                                <div class="icon-sort-asc"></div>
+                            </div>
+                        </div>
+                    </th>
+
+                    <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
+                        (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
+                        <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Suppliers Name', fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
+                    </th>
+
                     <th>Vouchter Type</th>
-                    <th>Invoice No.</th>
+
+                    <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
+                        (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
+                        <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Invoice No.', fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
+                    </th>
+
+
                     <th>Supplier's Invoice Date</th>
-                    <th>Supplier Country</th>
-                    <th>Taxable Value</th>
+
+                    <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
+                        (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
+                        <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Supplier Country', fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
+                    </th>
+
+                    <th>
+                        <div class="d-flex align-items-center">
+                            Taxable Value
+                            <div class="icon-pointer pl-1 pointer">
+                                <div class="icon-sort-asc"></div>
+                            </div>
+                        </div>
+                    </th>
                     <th>Tax Rate</th>
-                    <th>Tax Amount</th>
+                    <th>
+                        <div class="d-flex align-items-center">
+                            Tax Amount
+                            <div class="icon-pointer pl-1 pointer">
+                                <div class="icon-sort-asc"></div>
+                            </div>
+                        </div>
+                </th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let reverseChargeTables of reverseChargeTable">
-                    <td>{{ reverseChargeTables.serialNo }} </td>
-                    <td>{{ reverseChargeTables.entryDate }}</td>
-                    <td>{{ reverseChargeTables.suppliersName }}</td>
-                    <td>{{ reverseChargeTables.voucherType }}</td>
-                    <td>{{ reverseChargeTables.invoiceNo }}</td>
-                    <td>{{ reverseChargeTables.suppliersInvoicDate }}</td>
-                    <td>{{ reverseChargeTables.suppliersCountry }}</td>
-                    <td>{{ reverseChargeTables.taxableBalue }}</td>
-                    <td>{{ reverseChargeTables.taxRate }}</td>
-                    <td>{{ reverseChargeTables.taxAmount }}</td>
+                    <td data-title="#" class="text-center">{{ reverseChargeTables.serialNo }} </td>
+                    <td data-title="Entry Date">{{ reverseChargeTables.entryDate }}</td>
+                    <td data-title="Supplier's Name">{{ reverseChargeTables.suppliersName }}</td>
+                    <td data-title="Vouchter Type">{{ reverseChargeTables.voucherType }}</td>
+                    <td data-title="Invoice No.">{{ reverseChargeTables.invoiceNo }}</td>
+                    <td data-title="Supplier's Invoice Date">{{ reverseChargeTables.suppliersInvoicDate }}</td>
+                    <td data-title="Supplier Country">{{ reverseChargeTables.suppliersCountry }}</td>
+                    <td data-title="Taxable Value">{{ reverseChargeTables.taxableBalue }}</td>
+                    <td data-title="Tax Rate">{{ reverseChargeTables.taxRate }}</td>
+                    <td data-title="Tax Amount">{{ reverseChargeTables.taxAmount }}</td>
                 </tr>
             </tbody>
 
         </table>
     </div>
-
+    </div>
 </div>
+
 <!-- region search template (developer end) -->
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
     <div [hidden]="show">

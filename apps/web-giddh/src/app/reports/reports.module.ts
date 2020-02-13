@@ -26,6 +26,7 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ReverseChargeReport } from './components/reverse-charge-report-component/reverse-charge-report.component';
+import { AdvanceReceiptReport } from './components/advance-receipt-report/advance-receipt-report.component';
 // import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
@@ -42,7 +43,8 @@ import { ReverseChargeReport } from './components/reverse-charge-report-componen
         PurchaseRegisterComponent,
         PurchaseRegisterTableComponent,
         PurchaseRegisterExpandComponent,
-        ReverseChargeReport
+        ReverseChargeReport,
+        AdvanceReceiptReport
     ],
     exports: [
         ReportsComponent,

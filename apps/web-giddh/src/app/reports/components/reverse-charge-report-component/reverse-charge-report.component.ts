@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'reverse-charge-report',
@@ -8,7 +9,13 @@ import { Component, OnInit } from '@angular/core';
 export class ReverseChargeReport implements OnInit {
 
     public showEntryDate = true;
+
+    constructor() { }
+
     ngOnInit() { }
+
+
+
 
     reverseChargeTable = [
         {

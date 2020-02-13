@@ -14,7 +14,7 @@
             </div>
             <div class="col-md-4 col-sm-4 mb-2">
                 <p>Transactions Overview</p>
-                <p><a href="javascript:void(0)" [routerLink]="['/pages/reports/sales-register']">Sales Register</a></p>
+                <!-- <p><a href="javascript:void(0)" [routerLink]="['/pages/reports/sales-register']">Sales Register</a></p> -->
                 <p><a href="javascript:void(0)" [routerLink]="['/pages/reports/purchase-register']">Purchase Register</a></p>
                 <p><a href="javascript:void(0)">Cash Register</a></p>
             </div>
@@ -30,7 +30,7 @@
             </div>
             <div class="col-md-4 col-sm-4 mb-2">
                 <p>Sales</p>
-                <p><a href="javascript:void(0)">Sales Register</a></p>
+                <p><a [routerLink]="['/pages/reports/sales-register']">Sales Register</a></p>
                 <p><a href="javascript:void(0)">Item Wise Sales </a></p>
                 <p><a href="javascript:void(0)">Customer Wise Sales</a></p>
             </div>
@@ -38,7 +38,7 @@
                 <p>Others</p>
                 <p><a href="javascript:void(0)" (click)="openReverseChargeReport()">Reverse Charge</a></p>
                 <p><a href="javascript:void(0)">Input Tax Rebate </a></p>
-                <p><a href="javascript:void(0)">Advance Receipt</a></p>
+                <p><a [routerLink]="['/pages/reports/advance-receipt-report']">Advance Receipt</a></p>
                 <p><a href="javascript:void(0)">Tax on Advance Receipt</a></p>
 
             </div>
