@@ -227,9 +227,9 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
             this.selectedField = '';
             this.updateInProcess = false;
             this.forceClear$ = observableOf({ status: true });
-
+            this.signatureSrc = '';
+            this.isSignatureAttached = false;
         }
-
     }
 
     /**
