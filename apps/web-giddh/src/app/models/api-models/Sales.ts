@@ -523,6 +523,7 @@ export class VoucherClass {
     public depositAccountUniqueName: string;
     public templateUniqueName?: string;
     public number?: string;
+    public subVoucher?: string;
 
     constructor() {
         this.accountDetails = new AccountDetailsClass();

@@ -47,7 +47,7 @@ import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
-import { BlankLedgerVM, TransactionVM } from '../../ledger.vm';
+import { BlankLedgerVM, TransactionVM, AVAILABLE_ITC_LIST } from '../../ledger.vm';
 import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
 import { GeneralService } from '../../../services/general.service';
 
@@ -94,6 +94,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public selectedSuffixForCurrency: string;
     @Input() public inputMaskFormat: string = '';
     @Input() public giddhBalanceDecimalPlaces: number = 2;
+    /** True, if RCM taxable amount needs to be displayed in create new ledger component as per criteria */
+    @Input() public shouldShowRcmTaxableAmount: boolean = false;
+    /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
+    @Input() public shouldShowItcSection: boolean = false;
 
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
@@ -165,6 +169,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isAdvanceReceipt: boolean = false;
     /** True, if advance receipt checkbox is checked, will show the mandatory fields for Advance Receipt */
     public shouldShowAdvanceReceiptMandatoryFields: boolean = false;
+    /** List of available ITC */
+    public availableItcList: Array<any> = AVAILABLE_ITC_LIST;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -356,9 +362,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public addToDrOrCr(type: string, e: Event) {
         e.stopPropagation();
         if ((this.isRcmEntry || this.isAdvanceReceipt) && !this.validateTaxes()) {
-            this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
-            return;
+            if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
+                // Taxes are mandatory for RCM and Advance Receipt entries
+                this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
+                return;
+            }
         }
+
         this.changeTransactionType.emit({
             type,
             warehouse: this.selectedWarehouse
@@ -409,6 +419,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.taxControll.change();
             }
             this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+        }
+
+        if (this.shouldShowRcmTaxableAmount) {
+            this.currentTxn.reverseChargeTaxableAmount = this.generalService.convertExponentialToNumber(this.currentTxn.amount * 20);;
         }
 
         if (this.isAmountFirst || this.isTotalFirts) {
