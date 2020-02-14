@@ -375,7 +375,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         .subscribe((response) => {
             const voucherData: ReciptResponse = response[0];
             const record: PurchaseRecordUpdateModel = response[1];
-            if (voucherData && record) {
+            if (voucherData && voucherData.items && record) {
                 this.selectedInvoiceForDetails = null;
                 let voucherIndex = voucherData.items.findIndex(item => item.uniqueName === record.purchaseRecordUniqueName);
                 if (voucherIndex > -1) {
