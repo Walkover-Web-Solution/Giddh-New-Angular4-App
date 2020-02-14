@@ -20,8 +20,8 @@ module.exports = async function(params) {
         await electronNotarize.notarize({
             appBundleId: appId,
             appPath: appPath,
-            appleId: 'rohit@walkover.in', // enter apple id here
-            appleIdPassword: 'Mac@1234'
+            appleId: '', // enter Credential to generate mac's electron build
+            appleIdPassword: ''
         });
     } catch (error) {
         console.error(error);
