@@ -11,26 +11,26 @@
                             <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
                                 (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
 
-<!--                            <input type="text"-->
-<!--                                   [(ngModel)]="selectedDateRange"-->
-<!--                                   ngxDaterangepickerMd-->
-<!--                                   [alwaysShowCalendars]="true"-->
-<!--                                   [ranges]="datePickerOptions.ranges"-->
-<!--                                   [showClearButton]="false"-->
-<!--                                   [showCancel]="true"-->
-<!--                                   [showDropdowns]="true"-->
-<!--                                   [locale]="{applyLabel: 'Done'}"-->
-<!--                                   (datesUpdated)="dateRangeChanged($event)"-->
-<!--                                   [keepCalendarOpeningWithRange]="true"-->
-<!--                                   [showRangeLabelOnInput]="false"-->
-<!--                                   name="selectedDateRange"-->
-<!--                                   class="form-control"-->
-<!--                                   placeholder="Select please..."/>-->
+                            <!--                            <input type="text"-->
+                            <!--                                   [(ngModel)]="selectedDateRange"-->
+                            <!--                                   ngxDaterangepickerMd-->
+                            <!--                                   [alwaysShowCalendars]="true"-->
+                            <!--                                   [ranges]="datePickerOptions.ranges"-->
+                            <!--                                   [showClearButton]="false"-->
+                            <!--                                   [showCancel]="true"-->
+                            <!--                                   [showDropdowns]="true"-->
+                            <!--                                   [locale]="{applyLabel: 'Done'}"-->
+                            <!--                                   (datesUpdated)="dateRangeChanged($event)"-->
+                            <!--                                   [keepCalendarOpeningWithRange]="true"-->
+                            <!--                                   [showRangeLabelOnInput]="false"-->
+                            <!--                                   name="selectedDateRange"-->
+                            <!--                                   class="form-control"-->
+                            <!--                                   placeholder="Select please..."/>-->
 
                         </span>
                     </div>
                     <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
-                        <span class="icon-advance-serch" (click)="toggleAdvanceSearchPopup()"></span>
+                        <span class="icon-advance-serch" (click)="toggleAdvanceSearchPopup(false)"></span>
                     </div>
                 </div>
             </form>
@@ -44,14 +44,17 @@
 
             <div class="d-flex addInvoice">
                 <!-- E-way bill generation and export to excel for a single selected item in invoice sizes -->
-                <div *ngIf="selectedItems.length === 1">
+                <div *ngIf="selectedItems.length">
                     <div class="btn-group" dropdown #dp="bs-dropdown">
                         <button dropdownToggle type="button" class="btn spcl_dropdown desktop-view-btn dropdown-toggle" aria-controls="dropdown-basic">
                             More
                             <span class="caret"></span>
                         </button>
                         <ul *dropdownMenu class="dropdown-menu fixedDropdownPlus" role="menu" aria-labelledby="button-basic">
-                            <li role="menuitem">
+                            <!-- <li role="menuitem" *ngIf="selectedVoucher !== 'purchase'">
+                                <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleBulkUpdatePopup(false);">Bulk Update</a>
+                            </li> -->
+                            <li role="menuitem" *ngIf="selectedItems.length === 1">
                                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup()" *ngIf="selectedVoucher === 'sales'">
                                     Generate E-way Bill</a>
                             </li>
@@ -85,8 +88,8 @@
                 </div>
                 <div *ngIf="selectedVoucher === 'purchase'" class="btn-wrapper">
                     <button class="btn btn-pink desktop-view-btn" (click)="goToInvoice('purchase')">+
-                            New Purchase
-                        </button>
+                        New Purchase
+                    </button>
                 </div>
                 <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
                     <button class="btn btn-pink desktop-view-btn" (click)="goToInvoice('credit note')">+
@@ -329,8 +332,9 @@
 
                         <!-- Invoice No. -->
                         <td>
-                            <div [ngClass]="{'remove-capitalize': selectedVoucher === 'purchase'}" style="position: relative" class="d-flex">
-                                <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectInvoice(item)">{{item.voucherNumber ?  item.voucherNumber : '-&#160;&#160;'}}</a>
+                            <div (click)="(selectedVoucher === 'purchase' && !item.voucherNumber) ? onSelectInvoice(item) : ''" [ngClass]="{'remove-capitalize': selectedVoucher === 'purchase', 'cp': selectedVoucher === 'purchase' && !item.voucherNumber}" style="position: relative"
+                                class="d-flex">
+                                <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectInvoice(item)">{{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
                             </div>
 
                             <span *ngIf="item.dueDays !== null">
@@ -344,7 +348,7 @@
                         </td>
 
                         <!-- Customer -->
-                        <td (dblclick)="(selectedVoucher !== 'purchase') ? modalUniqueName = item.uniqueName : ''" class="cp no-dbl-click-select" (clickOutside)="modalUniqueName = ''">
+                        <td [ngClass]="{'cp': selectedVoucher !== 'purchase'}" (dblclick)="(selectedVoucher !== 'purchase') ? modalUniqueName = item.uniqueName : ''" class="no-dbl-click-select" (clickOutside)="modalUniqueName = ''">
 
                             <div dropdown container="body">
                                 {{item?.account?.customerName || item?.account?.name}}
@@ -363,7 +367,8 @@
                         </ng-template>
 
                         <!-- Balance Due -->
-                        <td class="text-right" *ngIf="(selectedVoucher !== 'purchase')" [tooltip]="balanceDuePopupTemplate" container="body" containerClass="invoice-preview">{{item.accountCurrencySymbol}} {{item.balanceDue?.amountForAccount | giddhCurrency}}
+                        <td class="text-right" *ngIf="(selectedVoucher !== 'purchase')" [tooltip]="balanceDuePopupTemplate" container="body" containerClass="invoice-preview">
+                            {{item.accountCurrencySymbol}} {{item.balanceDue?.amountForAccount | giddhCurrency}}
                         </td>
                         <ng-template #balanceDuePopupTemplate><span [innerHTML]="item.balanceDueTooltipText"></span>
                         </ng-template>
@@ -397,6 +402,7 @@
                                                 <li (click)="onPerformAction(item, 'cancel')">
                                                     <a class="cp" href="javascript:void(0)">Cancel</a>
                                                 </li>
+
                                             </ul>
                                         </div>
                                     </div>
@@ -636,8 +642,8 @@
     <div bsModal #performActionOnInvoiceModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
         <div class="modal-dialog modal-md perform-payment">
             <div class="modal-content">
-                <invoice-payment-model *ngIf="(selectedVoucher !== 'purchase')" [selectedInvoiceForPayment]="selectedInvoice"
-                    (closeModelEvent)="closePerformActionPopup($event)"></invoice-payment-model>
+                <invoice-payment-model *ngIf="(selectedVoucher !== 'purchase')" [selectedInvoiceForPayment]="selectedInvoice" (closeModelEvent)="closePerformActionPopup($event)">
+                </invoice-payment-model>
             </div>
         </div>
     </div>
@@ -667,7 +673,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <invoice-advance-search-component #advanceSearchComponent [type]="selectedVoucher === 'debit note' || selectedVoucher === 'credit note' ? 'drcr' : (selectedVoucher === 'purchase') ? selectedVoucher : 'invoice'" [request]="advanceSearchFilter" (applyFilterEvent)="applyAdvanceSearch($event)"
-                    (closeModelEvent)="toggleAdvanceSearchPopup()">
+                    (closeModelEvent)="toggleAdvanceSearchPopup(true)">
                 </invoice-advance-search-component>
             </div>
         </div>
@@ -677,7 +683,7 @@
     <div bsModal #bulkUpdate="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <invoice-bulk-update-modal-component (closeModelEvent)="toggleBulkUpdatePopup()">
+                <invoice-bulk-update-modal-component (closeModelEvent)="toggleBulkUpdatePopup(true)" [voucherType]="selectedVoucher" [selectedInvoices]="selectedInvoicesList">
                 </invoice-bulk-update-modal-component>
             </div>
         </div>

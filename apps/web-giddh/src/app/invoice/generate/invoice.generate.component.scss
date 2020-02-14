@@ -245,3 +245,23 @@ tfoot {
         width: 100%;
     }
 }
+button.btn.btn-filter {
+    background: #e4e4e4;
+    border: 1px solid #e4e4e4;
+    font-size: 16px;
+    color: #1a237e;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px !important;
+}
+@media (min-width: 768px) {
+    .form-inline .form-group {
+        display: inline-block;
+        margin-bottom: 0;
+        vertical-align: middle;
+    }
+}
+.clear-filter.desktop-view-btn {
+    display: inline-block;
+}

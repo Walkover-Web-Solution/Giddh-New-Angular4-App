@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
     styleUrls: ['./confirm-modal.component.scss']
 })
 export class ConfirmModalComponent {
-    @Input() public title: string = 'Confirm';
+    @Input() public title: string = 'Confirmation';
     @Input() public body: string = '';
     @Input() public ok: string = 'Yes';
     @Input() public cancel: string = 'No';

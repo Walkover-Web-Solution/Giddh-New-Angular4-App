@@ -15,7 +15,7 @@
                     <li>
                         <div class="btn-group dropdown" dropdown [autoClose]="false"
                             (isOpenChange)="onOpenChange($event)" #periodDropdown="bs-dropdown"
-                            (clickOutside)="periodDropdown.hide()" [attachOutsideOnClick]="true"
+                            (clickOutside)="checkIfDatepickerVisible()" [attachOutsideOnClick]="true"
                             [isDisabled]="((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async)) || !activeCompanyGstNumber">
                             <button id="button-nested" dropdownToggle type="button"
                                 class="dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle pull-left"
@@ -56,7 +56,7 @@
                                 </li>
 
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:void(0)" (click)="monthWise.hide()">
+                                    <a class="dropdown-item" href="javascript:void(0)" (click)="updateDatepickerVisibility('visible'); monthWise.hide()">
                                         <label for="daterangeInput" class="d-block cp">Custom Range
                                             <div class="pull-right">
                                                 <span class="caret rotate-90"></span>
@@ -67,7 +67,7 @@
                                         <input id="daterangeInput" type="text" name="daterangeInput"
                                             [options]="{'autoApply': true}" #dateRangePickerCmp daterangepicker
                                             class="form-control daterangePicker"
-                                            (applyDaterangepicker)="periodChanged($event);" />
+                                            (applyDaterangepicker)="periodChanged($event);" (hideDaterangepicker)="updateDatepickerVisibility('hidden')" />
                                     </a>
                                 </li>
 

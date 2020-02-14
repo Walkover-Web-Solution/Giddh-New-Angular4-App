@@ -183,7 +183,7 @@ export class SettingTriggerComponent implements OnInit {
     public deleteTax(taxToDelete) {
         this.newTriggerObj = taxToDelete;
         this.selectedTax = this.availableTriggers.find((tax) => tax.uniqueName === taxToDelete.uniqueName).name;
-        this.confirmationMessage = `Are you sure want to delete ${this.selectedTax}?`;
+        this.confirmationMessage = `Are you sure you want to delete ${this.selectedTax}?`;
         this.confirmationFor = 'delete';
         this.triggerConfirmationModel.show();
     }
