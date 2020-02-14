@@ -311,7 +311,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                     razorpaySignature: razorPay_response.razorpay_signature,
                     amountPaid: this.ChangePaidPlanAMT,
                     userBillingDetails: this.billingDetailsObj,
-                    country: this.createNewCompany ? this.createNewCompany.country : ''
+                    country: this.createNewCompany ? this.createNewCompany.country : '',
+                    callNewPlanApi: true
                 };
                 this.patchProfile(reQuestob);
             }
