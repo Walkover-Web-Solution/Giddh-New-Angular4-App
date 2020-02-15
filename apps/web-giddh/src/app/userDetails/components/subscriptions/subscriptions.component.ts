@@ -27,6 +27,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     public companyTransactions: any;
     public moment = moment;
     public modalRef: BsModalRef;
+    public isLoading: boolean = true;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -41,24 +42,28 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     public ngOnInit() {
-        // this.getSubscriptionList();
-
         this.subscriptions$.subscribe(userSubscriptions => {
+            this.isLoading = false;
             this.subscriptions = userSubscriptions;
 
             if (this.subscriptions.length > 0) {
+                this.isPlanShow = false;
                 this.seletedUserPlans = this.subscriptions[0];
-                if (this.seletedUserPlans.companiesWithTransactions)
+                if (this.seletedUserPlans.companiesWithTransactions) {
                     this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
+                }
+            } else {
+                this.isPlanShow = true;
             }
         });
+
         this.activeRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val.isPlanPage) {
                 this.isPlanShow = true;
             }
         });
-
     }
+
     public ngAfterViewInit() {
         if (this.subscriptions.length > 0) {
             this.seletedUserPlans = this.subscriptions[0];
@@ -66,7 +71,8 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
                 this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
         }
     }
-    public GoToBillingDetails() {
+
+    public goToBillingDetails() {
         this._route.navigate(['billing-detail', 'buy-plan']);
     }
 
@@ -77,6 +83,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
                 this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
         }
     }
+
     public isSubscriptionPlanShow(event: any) {
         if (event) {
             this.isPlanShow = !event;
@@ -87,6 +94,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
     public filterCompanyList(ev) {
         let companies: CompaniesWithTransaction[] = [];
         companies = this.seletedUserPlans.companiesWithTransactions;
