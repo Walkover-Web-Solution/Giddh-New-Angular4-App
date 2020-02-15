@@ -363,7 +363,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public selectTab(id: number) {
-        this.staticTabs.tabs[id].active = true;
+        if(this.staticTabs) {
+            this.staticTabs.tabs[id].active = true;
+        }
     }
 
     public ngOnDestroy() {
