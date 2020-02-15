@@ -221,9 +221,10 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             if (response.status === 'success') {
                 newState.profile = response.body;
                 newState.profileRequest = true;
+                newState.updateProfileInProgress = false;
                 return Object.assign({}, state, newState);
             }
-            return { ...state, updateProfileInProgress: true };
+            return { ...state, updateProfileInProgress: false };
         }
         case SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
