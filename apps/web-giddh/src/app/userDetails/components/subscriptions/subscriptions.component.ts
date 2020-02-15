@@ -28,6 +28,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     public moment = moment;
     public modalRef: BsModalRef;
     public isLoading: boolean = true;
+    public forceShowChangePlan: boolean = false;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -47,7 +48,9 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
             this.subscriptions = userSubscriptions;
 
             if (this.subscriptions.length > 0) {
-                this.isPlanShow = false;
+                if(!this.forceShowChangePlan) {
+                    this.isPlanShow = false;
+                }
                 this.seletedUserPlans = this.subscriptions[0];
                 if (this.seletedUserPlans.companiesWithTransactions) {
                     this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
@@ -59,6 +62,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
 
         this.activeRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val.isPlanPage) {
+                this.forceShowChangePlan = true;
                 this.isPlanShow = true;
             }
         });
