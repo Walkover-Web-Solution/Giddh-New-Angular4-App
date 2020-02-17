@@ -140,7 +140,7 @@
                             <div class="row">
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label>State</label>
+                                        <label>State <sup class="text-danger" *ngIf="isStateRequired">*</sup> </label>
                                         <div class="custom-select">
                                             <sh-select #states [options]="statesSource$ | async"
                                                 [isFilterEnabled]="true"
