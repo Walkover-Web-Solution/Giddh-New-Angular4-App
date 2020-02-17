@@ -759,26 +759,34 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
 
         if (formObj.enablePurchase) {
-            formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
-                // Aditya: In inventory while creating purchase and sales unit and rate are mandatory error issue
-                // return pr.stockUnitCode && pr.rate;
-                return pr.stockUnitCode || pr.rate;
-            });
-            stockObj.purchaseAccountDetails = {
-                accountUniqueName: formObj.purchaseAccountUniqueName,
-                unitRates: formObj.purchaseUnitRates
-            };
+            if (this.validateStock(formObj.purchaseUnitRates)) {
+                formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
+                    return pr.stockUnitCode || pr.rate;
+                });
+                stockObj.purchaseAccountDetails = {
+                    accountUniqueName: formObj.purchaseAccountUniqueName,
+                    unitRates: formObj.purchaseUnitRates
+                };
+            } else {
+                this._toasty.errorToast('Unit and Rate are mandatory if either of them is provided');
+                return;
+            }
         }
         if (formObj.enableSales) {
-            formObj.saleUnitRates = formObj.saleUnitRates.filter((pr) => {
-                // Aditya: In inventory while creating purchase and sales unit and rate are mandatory error issue
-                // return pr.stockUnitCode && pr.rate;
-                return pr.stockUnitCode || pr.rate;
-            });
-            stockObj.salesAccountDetails = {
-                accountUniqueName: formObj.salesAccountUniqueName,
-                unitRates: formObj.saleUnitRates
-            };
+            if (this.validateStock(formObj.saleUnitRates)) {
+                formObj.saleUnitRates = formObj.saleUnitRates.filter((pr) => {
+                    // Aditya: In inventory while creating purchase and sales unit and rate are mandatory error issue
+                    // return pr.stockUnitCode && pr.rate;
+                    return pr.stockUnitCode || pr.rate;
+                });
+                stockObj.salesAccountDetails = {
+                    accountUniqueName: formObj.salesAccountUniqueName,
+                    unitRates: formObj.saleUnitRates
+                };
+            } else {
+                this._toasty.errorToast('Unit and Rate are mandatory if either of them is provided');
+                return;
+            }
         }
 
         stockObj.isFsStock = formObj.isFsStock;
@@ -861,23 +869,33 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         stockObj.customField2Value = formObj.customField2Value;
 
         if (formObj.enablePurchase) {
-            formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
-                return pr.stockUnitCode && pr.rate;
-            });
-            stockObj.purchaseAccountDetails = {
-                accountUniqueName: formObj.purchaseAccountUniqueName,
-                unitRates: formObj.purchaseUnitRates
-            };
+            if (this.validateStock(formObj.purchaseUnitRates)) {
+                formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
+                    return pr.stockUnitCode || pr.rate;
+                });
+                stockObj.purchaseAccountDetails = {
+                    accountUniqueName: formObj.purchaseAccountUniqueName,
+                    unitRates: formObj.purchaseUnitRates
+                };
+            } else {
+                this._toasty.errorToast('Unit and Rate are mandatory if either of them is provided');
+                return;
+            }
         }
 
         if (formObj.enableSales) {
-            formObj.saleUnitRates = formObj.saleUnitRates.filter((pr) => {
-                return pr.stockUnitCode && pr.rate;
-            });
-            stockObj.salesAccountDetails = {
-                accountUniqueName: formObj.salesAccountUniqueName,
-                unitRates: formObj.saleUnitRates
-            };
+            if (this.validateStock(formObj.saleUnitRates)) {
+                formObj.saleUnitRates = formObj.saleUnitRates.filter((pr) => {
+                    return pr.stockUnitCode || pr.rate;
+                });
+                stockObj.salesAccountDetails = {
+                    accountUniqueName: formObj.salesAccountUniqueName,
+                    unitRates: formObj.saleUnitRates
+                };
+            } else {
+                this._toasty.errorToast('Unit and Rate are mandatory if either of them is provided');
+                return;
+            }
         }
 
         stockObj.isFsStock = formObj.isFsStock;
@@ -1162,5 +1180,24 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public closeAsidePane() {
         this.resetStockForm();
         this.closeAsideEvent.emit();
+    }
+
+    /**
+     * Validates the stock to have both unit and rate if either of them has been provided
+     * The stock to be created is valid if the user has either provided both unit and rate or
+     * has provided none. If the user provides anyone of them then it is invalid entry and method
+     * will return false
+     *
+     * @private
+     * @param {Array<any>} unitRates Array of stockUnitCode and rate keys
+     * @returns {boolean} True, if the stock is valid
+     * @memberof InventoryAddStockComponent
+     */
+    private validateStock(unitRates: Array<any>): boolean {
+        const formEntries = unitRates.filter((unitRate) => {
+			// tslint:disable-next-line: no-bitwise
+			return (unitRate.stockUnitCode && !unitRate.rate) || (!unitRate.stockUnitCode && unitRate.rate);
+		});
+		return formEntries.length === 0;
     }
 }
