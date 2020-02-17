@@ -18,6 +18,7 @@ import { NgForm } from '@angular/forms';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
+import { ModalDirective } from 'ngx-bootstrap';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     @Input() public selectedInvoices;
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
     @ViewChild('bulkUpdateForm') public bulkUpdateForm: NgForm;
+    @ViewChild('bulkUpdateImageSlogan') public bulkUpdateImageSlogan: ModalDirective;
 
     public fieldOptions: IOption[] = [
         { label: 'PDF Template', value: 'pdfTemplate' },
@@ -90,6 +92,12 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         this.getTemplates();
     }
 
+    /**
+     * Upload file output
+     *
+     * @param {UploadOutput} output filter update options type for queue
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
     public onUploadOutput(output: UploadOutput): void {
         this.updateInProcess = true;
         this.isSignatureAttached = true;
@@ -149,6 +157,11 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         }
     }
 
+    /**
+     * To clear Image src and Image modal
+     *
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
     public clearImage() {
         this.updateInProcess = false;
         this.signatureSrc = '';
@@ -167,6 +180,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         this.bulkUpdateForm.reset();
         this.closeModelEvent.emit(true);
     }
+
 
     /**
      * To select bulk update options
@@ -248,15 +262,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
                     this.bulkUpdateRequest(this.updateNotesRequest, 'notes');
                     break;
                 case 'signature':
-                    if (this.signatureOptions === 'image') {
-                        if (this.updateImageSignatureRequest.imageSignatureUniqueName) {
-                            this.bulkUpdateRequest(this.updateImageSignatureRequest, 'imagesignature');
-                        } else {
-                            this._toaster.infoToast('Please upload file');
-                        }
-                    } else if (this.signatureOptions === 'slogan') {
-                        this.bulkUpdateRequest(this.updateSloganRequest, 'slogan');
-                    }
+                    this.bulkUpdateImageSlogan.show();
                     break;
                 case 'dueDate':
                     if (this.updateDueDatesRequest.dueDate) {
@@ -270,13 +276,46 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
 
                     break;
                 case 'customFields':
-                    if (this.updateCustomfieldsRequest.customField1) {
-                        this.updateCustomfieldsRequest.customField1 = moment(this.updateCustomfieldsRequest.customField1, this.giddhDateFormat).format(this.giddhDateFormat);
-                    }
                     this.bulkUpdateRequest(this.updateCustomfieldsRequest, 'customfields');
                     break;
+                default:
+                    break;
+
             }
         }
+    }
+
+    /**
+     * Update Image/Slogan confirmation true
+     *
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
+    public onConfirmationUpdateImageSlogan(): void {
+        this.bulkUpdateImageSlogan.hide();
+        if (this.signatureOptions === 'image') {
+
+            if (this.updateImageSignatureRequest.imageSignatureUniqueName) {
+                this.bulkUpdateRequest(this.updateImageSignatureRequest, 'imagesignature');
+            } else {
+                this._toaster.infoToast('Please upload file');
+            }
+        } else if (this.signatureOptions === 'slogan') {
+            this.bulkUpdateRequest(this.updateSloganRequest, 'slogan');
+        }
+
+
+    }
+
+    /**
+     * Cancel bulk update image slogan info modal
+     *
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
+    public onCancelBulkUpdateImageSloganModal(): void {
+        this.bulkUpdateImageSlogan.hide();
+        this.clearImage();
+        this.forceClear$ = observableOf({ status: true });
+        this.updateSloganRequest.slogan = '';
     }
 
     /**
@@ -307,13 +346,17 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
 
                     if (response.status === "success") {
                         this._toaster.successToast(response.body);
+                        if (actionType === 'imagesignature' || actionType === 'slogan') {
+                            this.onCancel();
+                        }
 
                     } else {
+                        this.onCancel();
                         this._toaster.errorToast(response.message);
                     }
                     this.updateInProcess = false;
 
-                    this.onCancel();
+
                 });
             }
         }
