@@ -24,7 +24,6 @@ import { GeneralActions } from "../../../../actions/general/general.actions";
 import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import * as googleLibphonenumber from 'google-libphonenumber';
 
-
 @Component({
     selector: 'account-add-new-details',
     templateUrl: './account-add-new-details.component.html',
@@ -52,8 +51,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public showOtherDetails: boolean = false;
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
-
-
     public states: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
     public companiesList$: Observable<CompanyResponse[]>;
@@ -81,7 +78,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public GSTIN_OR_TRN: string;
     public selectedCountry: string;
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
-
+    public isStateRequired: boolean = false;
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
         private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
@@ -343,6 +340,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public initialGstDetailsForm(): FormGroup {
+        this.isStateRequired = this.checkActiveGroupCountry();
+
         let gstFields = this._fb.group({
             gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
             address: ['', Validators.maxLength(120)],
@@ -351,7 +350,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 name: [''],
                 stateGstCode: ['']
             }),
-            stateCode: [{ value: '', disabled: false }],
+            stateCode: [{ value: '', disabled: false }, (this.isStateRequired) ? Validators.required : ""],
             isDefault: [false],
             isComposite: [false],
             partyType: ['NOT APPLICABLE']
@@ -607,6 +606,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.isParentDebtorCreditor(parent[1].uniqueName);
             }
             this.isGroupSelected.emit(event.value);
+            this.toggleStateRequired();
         }
     }
     public isParentDebtorCreditor(activeParentgroup: string) {
@@ -734,6 +734,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
     }
+
     public getPartyTypes() {
         this.store.pipe(select(s => s.common.partyTypes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -743,8 +744,46 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
     }
+
     private getStateGSTCode(stateList, code: string) {
         return stateList.find(res => code === res.code);
     }
 
+    /**
+     * This function is used to check if company country is India and Group is sundrydebtors or sundrycreditors
+     *
+     * @returns {void}
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public checkActiveGroupCountry(): boolean {
+        if(this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.countryName === "India" && (this.activeGroupUniqueName === "sundrydebtors" || this.activeGroupUniqueName === "sundrycreditors")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * This functions is used to add/remove required validation to state field
+     *
+     * @returns {void}
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public toggleStateRequired(): void {
+        this.isStateRequired = this.checkActiveGroupCountry();
+        let i = 0;
+        let addresses = this.addAccountForm.get('addresses') as FormArray;
+        for (let control of addresses.controls) {
+            if(this.isStateRequired) {
+                control.get('stateCode').setValidators([Validators.required]);
+                addresses.controls[i].get('stateCode').setValidators([Validators.required]);
+            } else {
+                control.get('stateCode').setValidators(null);
+                addresses.controls[i].get('stateCode').setValidators(null);
+            }
+            control.get('stateCode').updateValueAndValidity();
+            i++;
+        }
+        this.addAccountForm.controls['addresses'].updateValueAndValidity();
+    }
 }
