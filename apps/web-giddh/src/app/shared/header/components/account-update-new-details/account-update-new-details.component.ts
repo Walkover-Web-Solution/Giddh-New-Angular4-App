@@ -67,7 +67,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @ViewChild('deleteMergedAccountModal') public deleteMergedAccountModal: ModalDirective;
     @ViewChild('moveMergedAccountModal') public moveMergedAccountModal: ModalDirective;
 
-
     public activeCompany: CompanyResponse;
     @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
         = new EventEmitter();
@@ -109,7 +108,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selectedTab: string = 'address';
     public moveAccountSuccess$: Observable<boolean>;
     public discountList$: Observable<IDiscountList[]>;
-
     public discountList: any[] = [];
     public setAccountForMove: string;
     public showDeleteMove: boolean = false;
@@ -127,8 +125,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selectedCompanyCountryName: string;
     public selectedCurrency: string;
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
-
     // private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
+    public isStateRequired: boolean = false;
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction,
         private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _dbService: DbService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
@@ -606,6 +604,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public initialGstDetailsForm(val: IAccountAddress = null): FormGroup {
+        this.isStateRequired = this.checkActiveGroupCountry();
+
         let gstFields = this._fb.group({
             gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
             address: [''],
@@ -614,11 +614,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 name: [''],
                 stateGstCode: ['']
             }),
-            stateCode: [{ value: '', disabled: false }],
+            stateCode: [{ value: '', disabled: false }, (this.isStateRequired) ? Validators.required : ""],
             isDefault: [false],
             isComposite: [false],
             partyType: ['NOT APPLICABLE']
         });
+
         if (val) {
             val.stateCode = val.state ? (val.state.code ? val.state.code : val.stateCode) : val.stateCode;
             gstFields.patchValue(val);
@@ -1266,4 +1267,17 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         return stateList.find(res => code === res.code);
     }
 
+    /**
+     * This function is used to check if company country is India and Group is sundrydebtors or sundrycreditors
+     *
+     * @returns {void}
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public checkActiveGroupCountry(): boolean {
+        if(this.activeCompany.countryV2 && this.activeCompany.countryV2.countryName === "India" && (this.activeGroupUniqueName === "sundrydebtors" || this.activeGroupUniqueName === "sundrycreditors")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

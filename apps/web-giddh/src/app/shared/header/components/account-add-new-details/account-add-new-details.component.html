@@ -137,18 +137,17 @@
                                         <textarea name="gstAddr_{{i}}" formControlName="address" rows="4" cols="5"
                                             maxlength="120" class="form-control"></textarea>
                                     </div>
-
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label>State </label>
+                                        <label>State <sup class="text-danger" *ngIf="isStateRequired">*</sup> </label>
                                         <div class="custom-select">
                                             <sh-select #states [options]="statesSource$ | async"
                                                 [isFilterEnabled]="true" (selected)="selectedState(gst, $event)"
                                                 [forceClearReactive]="forceClear$ | async" formControlName="stateCode"
-                                                style="width:100%" [useInBuiltFilterForIOptionTypeItems]="true">
+                                                style="width:100%" [useInBuiltFilterForIOptionTypeItems]="true" [attr.required]="isStateRequired">
                                             </sh-select>
                                         </div>
                                     </div>
