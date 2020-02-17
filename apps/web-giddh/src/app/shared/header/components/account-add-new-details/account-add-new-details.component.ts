@@ -756,7 +756,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
-        if(this.activeCompany.countryV2 && this.activeCompany.countryV2.countryName === "India" && (this.activeGroupUniqueName === "sundrydebtors" || this.activeGroupUniqueName === "sundrycreditors")) {
+        if(this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.countryName === "India" && (this.activeGroupUniqueName === "sundrydebtors" || this.activeGroupUniqueName === "sundrycreditors")) {
             return true;
         } else {
             return false;
