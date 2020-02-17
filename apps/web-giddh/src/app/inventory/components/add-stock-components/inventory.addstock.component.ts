@@ -24,9 +24,7 @@ import { TaxResponse } from '../../../models/api-models/Company';
 import { CompanyActions } from '../../../actions/company.actions';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvViewService } from '../../inv.view.service';
-
-/** Error message to display if the stock is invalid */
-const INVALID_STOCK_ERROR_MESSAGE = 'Both Unit and Rate fields are mandatory if you provide data for either of them.';
+import { INVALID_STOCK_ERROR_MESSAGE } from '../../../app.constant';
 
 @Component({
     selector: 'inventory-add-stock',  // <home></home>
@@ -1198,7 +1196,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
      */
     private validateStock(unitRates: Array<any>): boolean {
         const formEntries = unitRates.filter((unitRate) => {
-			// tslint:disable-next-line: no-bitwise
 			return (unitRate.stockUnitCode && !unitRate.rate) || (!unitRate.stockUnitCode && unitRate.rate);
 		});
 		return formEntries.length === 0;
