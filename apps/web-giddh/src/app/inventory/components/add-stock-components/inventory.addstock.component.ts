@@ -25,6 +25,7 @@ import { CompanyActions } from '../../../actions/company.actions';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvViewService } from '../../inv.view.service';
 
+/** Error message to display if the stock is invalid */
 const INVALID_STOCK_ERROR_MESSAGE = 'Both Unit and Rate fields are mandatory if you provide data for either of them.';
 
 @Component({
