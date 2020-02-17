@@ -768,7 +768,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                     unitRates: formObj.purchaseUnitRates
                 };
             } else {
-                this._toasty.errorToast('Unit and Rate are mandatory if either of them is provided');
+                this._toasty.errorToast('Both Unit and Rate fields are mandatory if you provide data for either of them.');
                 return;
             }
         }
@@ -784,7 +784,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                     unitRates: formObj.saleUnitRates
                 };
             } else {
-                this._toasty.errorToast('Unit and Rate are mandatory if either of them is provided');
+                this._toasty.errorToast('Both Unit and Rate fields are mandatory if you provide data for either of them.');
                 return;
             }
         }
@@ -878,7 +878,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                     unitRates: formObj.purchaseUnitRates
                 };
             } else {
-                this._toasty.errorToast('Unit and Rate are mandatory if either of them is provided');
+                this._toasty.errorToast('Both Unit and Rate fields are mandatory if you provide data for either of them.');
                 return;
             }
         }
@@ -893,7 +893,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                     unitRates: formObj.saleUnitRates
                 };
             } else {
-                this._toasty.errorToast('Unit and Rate are mandatory if either of them is provided');
+                this._toasty.errorToast('Both Unit and Rate fields are mandatory if you provide data for either of them.');
                 return;
             }
         }
