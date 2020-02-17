@@ -92,6 +92,12 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         this.getTemplates();
     }
 
+    /**
+     * Upload file output
+     *
+     * @param {UploadOutput} output filte update options type for queue
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
     public onUploadOutput(output: UploadOutput): void {
         this.updateInProcess = true;
         this.isSignatureAttached = true;
@@ -151,6 +157,11 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         }
     }
 
+    /**
+     * To clear Image src and Image modal
+     *
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
     public clearImage() {
         this.updateInProcess = false;
         this.signatureSrc = '';
@@ -252,16 +263,6 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
                     break;
                 case 'signature':
                     this.bulkUpdateImageSlogan.show();
-                    // if (this.signatureOptions === 'image') {
-
-                    //     if (this.updateImageSignatureRequest.imageSignatureUniqueName) {
-                    //         this.bulkUpdateRequest(this.updateImageSignatureRequest, 'imagesignature');
-                    //     } else {
-                    //         this._toaster.infoToast('Please upload file');
-                    //     }
-                    // } else if (this.signatureOptions === 'slogan') {
-                    //     this.bulkUpdateRequest(this.updateSloganRequest, 'slogan');
-                    // }
                     break;
                 case 'dueDate':
                     if (this.updateDueDatesRequest.dueDate) {
