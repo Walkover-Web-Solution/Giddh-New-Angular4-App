@@ -32,7 +32,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     @Input() public selectedInvoices;
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
     @ViewChild('bulkUpdateForm') public bulkUpdateForm: NgForm;
-    @ViewChild('bulkUpdateImageSlogan') public bulkUpdateImageSlogan: ModalDirective
+    @ViewChild('bulkUpdateImageSlogan') public bulkUpdateImageSlogan: ModalDirective;
 
     public fieldOptions: IOption[] = [
         { label: 'PDF Template', value: 'pdfTemplate' },
@@ -95,7 +95,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     /**
      * Upload file output
      *
-     * @param {UploadOutput} output filte update options type for queue
+     * @param {UploadOutput} output filter update options type for queue
      * @memberof InvoiceBulkUpdateModalComponent
      */
     public onUploadOutput(output: UploadOutput): void {
@@ -290,7 +290,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
      *
      * @memberof InvoiceBulkUpdateModalComponent
      */
-    public onConfirmationUpdateImageSlogan() {
+    public onConfirmationUpdateImageSlogan(): void {
         this.bulkUpdateImageSlogan.hide();
         if (this.signatureOptions === 'image') {
 
@@ -311,7 +311,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
      *
      * @memberof InvoiceBulkUpdateModalComponent
      */
-    public onCancelBulkUpdateImageSloganModal() {
+    public onCancelBulkUpdateImageSloganModal(): void {
         this.bulkUpdateImageSlogan.hide();
         this.clearImage();
         this.forceClear$ = observableOf({ status: true });
@@ -347,7 +347,6 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
                     if (response.status === "success") {
                         this._toaster.successToast(response.body);
                         if (actionType === 'imagesignature' || actionType === 'slogan') {
-                            // this._toaster.infoToast('Image related changes will reflect in only those invoices which have the Image option enabled in their templates.');
                             this.onCancel();
                         }
 
