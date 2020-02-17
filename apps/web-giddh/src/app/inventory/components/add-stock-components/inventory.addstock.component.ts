@@ -25,6 +25,8 @@ import { CompanyActions } from '../../../actions/company.actions';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvViewService } from '../../inv.view.service';
 
+const INVALID_STOCK_ERROR_MESSAGE = 'Both Unit and Rate fields are mandatory if you provide data for either of them.';
+
 @Component({
     selector: 'inventory-add-stock',  // <home></home>
     templateUrl: './inventory.addstock.component.html',
@@ -768,7 +770,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                     unitRates: formObj.purchaseUnitRates
                 };
             } else {
-                this._toasty.errorToast('Both Unit and Rate fields are mandatory if you provide data for either of them.');
+                this._toasty.errorToast(INVALID_STOCK_ERROR_MESSAGE);
                 return;
             }
         }
@@ -784,7 +786,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                     unitRates: formObj.saleUnitRates
                 };
             } else {
-                this._toasty.errorToast('Both Unit and Rate fields are mandatory if you provide data for either of them.');
+                this._toasty.errorToast(INVALID_STOCK_ERROR_MESSAGE);
                 return;
             }
         }
@@ -878,7 +880,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                     unitRates: formObj.purchaseUnitRates
                 };
             } else {
-                this._toasty.errorToast('Both Unit and Rate fields are mandatory if you provide data for either of them.');
+                this._toasty.errorToast(INVALID_STOCK_ERROR_MESSAGE);
                 return;
             }
         }
@@ -893,7 +895,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                     unitRates: formObj.saleUnitRates
                 };
             } else {
-                this._toasty.errorToast('Both Unit and Rate fields are mandatory if you provide data for either of them.');
+                this._toasty.errorToast(INVALID_STOCK_ERROR_MESSAGE);
                 return;
             }
         }
