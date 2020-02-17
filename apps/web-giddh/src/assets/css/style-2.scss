@@ -2171,9 +2171,6 @@ p.table-email {
 .delt {
     text-align: center;
 }
-
-
-
 input[type="checkbox"] {
     position: relative;
     top: 1px;
@@ -2182,14 +2179,8 @@ input[type="checkbox"] {
     cursor: pointer;
     left: 0px;
     height: 19px;
-
-
-
     width: 1em;
     height: 1em;
-
-
-
     -webkit-appearance: none;
     appearance: none;
 }
@@ -2242,21 +2233,6 @@ input[type="checkbox"]:checked:after {
     background-color: $border-blue;
     border-color: $border-blue;
 }
-
-
-
-
-
-//   input[type="checkbox"]::before {
-//     content: "✔";
-//     position: absolute;
-//     font-size: 1.2em;
-//     right: -1px;
-//     top: -0.3em;
-//     visibility: hidden;
-//   }
-
-
 
 .tab-pane .list-inline > li {
     padding-left: 0;

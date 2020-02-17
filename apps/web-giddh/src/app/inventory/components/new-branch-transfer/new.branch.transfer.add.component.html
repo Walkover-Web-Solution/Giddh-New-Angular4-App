@@ -24,19 +24,6 @@
                 Receivers</label>
             </span>
 
-
-                <!-- <span class="mrR1"><input
-                [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'products'}"
-                name="transferType" id="multipleProducts" style="margin-left: 0px !important;" type="radio"
-                (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'products'"><label
-                for="multipleProducts">Multiple Products</label></span>
-
-            <span><input [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'senders'}"
-                name="transferType" id="multipleSenders" style="margin-left: 0px !important;" type="radio"
-                (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'senders'"><label
-                for="multipleSenders" *ngIf="branchTransferMode === 'receiptnote'">Multiple Senders</label><label
-                for="multipleSenders" *ngIf="branchTransferMode === 'deliverynote'">Multiple
-                Receivers</label></span> -->
         </div>
         <div class="mb-2" *ngIf="editBranchTransferUniqueName"></div>
         <div class="multipleProductsWrapper ">

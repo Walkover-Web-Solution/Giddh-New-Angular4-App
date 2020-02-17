@@ -65,15 +65,15 @@
                     <div class="pdB1 clearfix">
 
                         <span class="pd0 mrR3 d-inline-block">
-                            <input id="Product" class="radio-custom cp ml0" type="radio" [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                            <input id="product" class="radio-custom cp ml0" type="radio" [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory"
                             (change)="updateInventorySetting(true)" name="inventoryType">
-                            <label for="Product" class="radio-custom-label">Product</label>
+                            <label for="product" class="radio-custom-label">Product</label>
                         </span>
 
                         <span class="pd0 mrR3 d-inline-block">
-                            <input id="Service" class="radio-custom cp ml0" type="radio" [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                            <input id="service" class="radio-custom cp ml0" type="radio" [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory"
                             (change)="updateInventorySetting(false)" name="inventoryType">
-                            <label for="Service" class="radio-custom-label">Service</label>
+                            <label for="service" class="radio-custom-label">Service</label>
                         </span>
 
                     </div>
