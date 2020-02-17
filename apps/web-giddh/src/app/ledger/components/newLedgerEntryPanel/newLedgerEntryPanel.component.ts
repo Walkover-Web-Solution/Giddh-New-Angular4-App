@@ -26,7 +26,7 @@ import { createSelector } from 'reselect';
 import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
-import { RcmModalConfiguration, RCM_ACTIONS } from '../../../common/rcm-modal/rcm-modal.interface';
+import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../../common/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
 import { forEach, sumBy } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
@@ -47,7 +47,7 @@ import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
-import { BlankLedgerVM, TransactionVM } from '../../ledger.vm';
+import { BlankLedgerVM, TransactionVM, AVAILABLE_ITC_LIST } from '../../ledger.vm';
 import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
 import { GeneralService } from '../../../services/general.service';
 
@@ -94,6 +94,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public selectedSuffixForCurrency: string;
     @Input() public inputMaskFormat: string = '';
     @Input() public giddhBalanceDecimalPlaces: number = 2;
+    /** True, if RCM taxable amount needs to be displayed in create new ledger component as per criteria */
+    @Input() public shouldShowRcmTaxableAmount: boolean = false;
+    /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
+    @Input() public shouldShowItcSection: boolean = false;
 
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
@@ -158,14 +162,20 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** True, if subvoucher is RCM */
     public isRcmEntry: boolean = false;
     /** RCM modal configuration */
-    public rcmConfiguration: RcmModalConfiguration;
+    public rcmConfiguration: ConfirmationModalConfiguration;
     /** True, if the selected voucher type is 'Receipt' */
     public shouldShowAdvanceReceipt: boolean = false;
     /** True, if advance receipt is enabled */
     public isAdvanceReceipt: boolean = false;
+    /** True, if advance receipt checkbox is checked, will show the mandatory fields for Advance Receipt */
+    public shouldShowAdvanceReceiptMandatoryFields: boolean = false;
+    /** List of available ITC */
+    public availableItcList: Array<any> = AVAILABLE_ITC_LIST;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True, if exchange rate is swapped */
+    private isExchangeRateSwapped: boolean = false;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -258,6 +268,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.companyTaxesList = res || [];
         });
 
+        this.shouldShowAdvanceReceipt = (this.blankLedger) ? this.blankLedger.voucherType === 'rcpt' : false;
+        this.isAdvanceReceipt = (this.currentTxn) ? this.currentTxn['subVoucher'] === Subvoucher.AdvanceReceipt : false;
+        this.isRcmEntry = (this.currentTxn) ? this.currentTxn['subVoucher'] === Subvoucher.ReverseCharge : false;
+        this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
         // this.baseCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.baseCurrencyDetails) : cloneDeep(this.foreignCurrencyDetails);
         // this.foreignCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.foreignCurrencyDetails) : cloneDeep(this.baseCurrencyDetails);
     }
@@ -347,10 +361,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public addToDrOrCr(type: string, e: Event) {
         e.stopPropagation();
-        if (this.isRcmEntry && !this.validateTaxes()) {
-            this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
-            return;
+        if ((this.isRcmEntry || this.isAdvanceReceipt) && !this.validateTaxes()) {
+            if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
+                // Taxes are mandatory for RCM and Advance Receipt entries
+                this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
+                return;
+            }
         }
+
         this.changeTransactionType.emit({
             type,
             warehouse: this.selectedWarehouse
@@ -403,6 +421,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
         }
 
+        if (this.shouldShowRcmTaxableAmount) {
+            this.currentTxn.reverseChargeTaxableAmount = this.generalService.convertExponentialToNumber(this.currentTxn.amount * 20);;
+        }
+
         if (this.isAmountFirst || this.isTotalFirts) {
             return;
         } else {
@@ -412,20 +434,22 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public changePrice(val: string) {
-        this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.giddhBalanceDecimalPlaces);
-        this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate);
+        if (!this.isExchangeRateSwapped) {
+            this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.giddhBalanceDecimalPlaces);
+            this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate);
 
-        this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
-        this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
+            this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
 
-        // calculate discount on change of price
-        if (this.discountControl) {
-            this.discountControl.ledgerAmount = this.currentTxn.amount;
-            this.discountControl.change();
+            // calculate discount on change of price
+            if (this.discountControl) {
+                this.discountControl.ledgerAmount = this.currentTxn.amount;
+                this.discountControl.change();
+            }
+
+            this.calculateTotal();
+            this.calculateCompoundTotal();
         }
-
-        this.calculateTotal();
-        this.calculateCompoundTotal();
     }
 
     public changeQuantity(val: string) {
@@ -896,21 +920,30 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public swapEntries(entryKeys: Array<any>): void {
+        this.isExchangeRateSwapped = true;
         if (this.currentTxn.inventory) {
             // Swap the unit rate and converted rate
-            this.currentTxn.inventory.unit.rate = this.currentTxn.inventory.unit.rate - this.currentTxn.convertedRate;
-            this.currentTxn.convertedRate = this.currentTxn.inventory.unit.rate + this.currentTxn.convertedRate;
-            this.currentTxn.inventory.unit.rate = this.currentTxn.convertedRate - this.currentTxn.inventory.unit.rate;
+            let rate = this.currentTxn.inventory.unit.rate;
+            this.currentTxn.inventory.unit.rate = this.currentTxn.convertedRate;
+            this.currentTxn.convertedRate = rate;
         }
 
         // Swap the provided key value pairs
         entryKeys.forEach((entry: any) => {
-            this.currentTxn[entry[0]] = this.currentTxn[entry[0]] - this.currentTxn[entry[1]];
-            this.currentTxn[entry[1]] = this.currentTxn[entry[0]] + this.currentTxn[entry[1]];
-            this.currentTxn[entry[0]] = this.currentTxn[entry[1]] - this.currentTxn[entry[0]];
+            let value = this.currentTxn[entry[0]];
+            this.currentTxn[entry[0]] = this.currentTxn[entry[1]];
+            this.currentTxn[entry[1]] = value;
         });
-        this.discountControl.discountTotal = this.currentTxn.discount;
-        this.taxControll.taxTotalAmount = this.currentTxn.tax;
+        if (this.discountControl) {
+            this.discountControl.discountTotal = this.currentTxn.discount;
+        }
+        if (this.taxControll) {
+            this.taxControll.taxTotalAmount = this.currentTxn.tax;
+        }
+        setTimeout(() => {
+            // Set it to false after some time, done as (ngModelChange) is triggered twice for amount field
+            this.isExchangeRateSwapped = false;
+        }, 300);
     }
 
     /**
@@ -932,7 +965,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public handleRcmChange(action: string): void {
-        if (action === RCM_ACTIONS.YES) {
+        if (action === CONFIRMATION_ACTIONS.YES) {
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.isRcmEntry = !this.isRcmEntry;
         }
@@ -950,6 +983,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public handleAdvanceReceiptChange(): void {
         this.currentTxn['subVoucher'] = this.isAdvanceReceipt ? Subvoucher.AdvanceReceipt : '';
+        this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
     }
 
     /**

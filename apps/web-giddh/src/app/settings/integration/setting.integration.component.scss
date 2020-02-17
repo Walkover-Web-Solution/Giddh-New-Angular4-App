@@ -1,0 +1,29 @@
+#inlnImg img {
+    max-height: 18px;
+}
+
+.fs18 {
+    font-weight: bold;
+}
+
+.pdBth20 {
+    padding: 0 20px;
+}
+
+@media(max-waidth:768px) {
+    .empty-label label,
+    .empty-label br {
+        display: none;
+    }
+}
+
+@media(max-width:767px) {
+    #inlnImg {
+        margin-top: 0;
+    }
+    #inlnImg label,
+    .inlnImg label {
+        margin: 0;
+        display: none;
+    }
+}

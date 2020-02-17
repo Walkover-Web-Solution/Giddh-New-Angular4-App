@@ -22,7 +22,8 @@
 
 
     <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate class="form-inline">
-        <div class="d-flex mb-2">
+        <div class="d-flex">
+        <div class="d-flex form-group">
             <div class="form-group date-advanceSearch" style="flex: 1 1 auto;">
 
                 <div class="input-group" id="dp-parent" style="margin-right:8px; margin-bottom:0;">
@@ -31,8 +32,24 @@
                         <input type="text" name="dateRangeGenerate" id="dateRangeGenerate" daterangepicker
                             [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)"
                             class="form-control" />
+
+<!--                        <input type="text"-->
+<!--                               [(ngModel)]="selectedDateRange"-->
+<!--                               ngxDaterangepickerMd-->
+<!--                               [alwaysShowCalendars]="true"-->
+<!--                               [ranges]="datePickerOptions.ranges"-->
+<!--                               [showClearButton]="false"-->
+<!--                               [showCancel]="true"-->
+<!--                               [showDropdowns]="true"-->
+<!--                               [locale]="{applyLabel: 'Done'}"-->
+<!--                               (datesUpdated)="dateRangeChanged($event)"-->
+<!--                               [keepCalendarOpeningWithRange]="true"-->
+<!--                               [showRangeLabelOnInput]="false"-->
+<!--                               name="selectedDateRange"-->
+<!--                               class="form-control"-->
+<!--                               placeholder="Select please..."/>-->
+
                     </span>
-                    <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
                 </div>
 
                 <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary"
@@ -64,9 +81,16 @@
 
         </div>
 
+        <div class="clear-filter  width-100 align-items-center d-flex justify-content-center" *ngIf="!isUniversalDateApplicable" (click)="resetDateSearch()">
+            <button class="btn btn-filter">
+                <span class="icon-cross"></span> Clear Filter
+            </button>
+        </div>
+    </div>
+
     </form>
 
-    <table class="table basic table-bordered pending-tabel onMobileView">
+    <table class="table basic table-bordered pending-tabel onMobileView mrT2">
 
         <thead class="t-h-bg1">
             <tr>

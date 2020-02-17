@@ -11,15 +11,20 @@
 
             <div class="form-group" *ngIf="selectedService === 'TAXPRO' || selectedService === 'VAYANA' ">
                 <!-- <h3 class="mrB1">Choose Provider (GSP)</h3> -->
-                <label class="mrR1 row pdL1">
-                    <input type="radio" name="serviceType" class="radio_theme" (change)="changeProvider('VAYANA')"
-                        [checked]="selectedService === 'VAYANA'"> VAYANA
-                </label>
 
-                <label>
-                    <input type="radio" name="serviceType" class="radio_theme" (change)="changeProvider('TAXPRO')"
-                        [checked]="selectedService === 'TAXPRO'"> TAX PRO
-                </label>
+
+                <span class="pd0 mrR3">
+                    <input id="VAYANA" class="radio-custom cp ml0" type="radio" name="serviceType" (change)="changeProvider('VAYANA')"
+                    [checked]="selectedService === 'VAYANA'">
+                    <label for="VAYANA" class="radio-custom-label">VAYANA</label>
+                </span>
+
+                <span class="pd0 mrR3">
+                    <input id="taxpro" class="radio-custom cp ml0" type="radio" name="serviceType" (change)="changeProvider('TAXPRO')"
+                    [checked]="selectedService === 'TAXPRO'">
+                    <label for="taxpro" class="radio-custom-label">TAX PRO</label>
+                </span>
+
             </div>
 
             <!-- GIO GST -->

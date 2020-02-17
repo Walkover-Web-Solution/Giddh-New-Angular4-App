@@ -26,14 +26,17 @@
             <section class="dropdown-menu custom_dropdown mrB1" [ngClass]="{'open': showTimeSpan}">
 
                 <div class="clearfix pd1 option_box">
-                    <label class="radio-inline pd0">
-                        <input type="radio" name="periodOptions" formControlName="periodOptions" value="daterange"
-                            class="radio_theme"> Date Range
-                    </label>
-                    <label class="radio-inline pd0">
-                        <input type="radio" name="periodOptions" formControlName="periodOptions" value="pastperiod"
-                            class="radio_theme"> Past Period
-                    </label>
+
+                    <span class="pd0 mrR3">
+                        <input id="DateRange" class="radio-custom cp ml0" type="radio" name="periodOptions" formControlName="periodOptions" value="daterange">
+                        <label for="DateRange" class="radio-custom-label">Date Range</label>
+                    </span>
+
+                    <span class="pd0 mrR3">
+                        <input id="PastPeriod" class="radio-custom cp ml0" type="radio" name="periodOptions" formControlName="periodOptions" value="pastperiod">
+                        <label for="PastPeriod" class="radio-custom-label">Past Period</label>
+                    </span>
+
                 </div>
 
                 <section class="periods container-fluid mrB1"
@@ -82,16 +85,18 @@
             </button>
             <section class="dropdown-menu custom_dropdown" role="menu" [ngClass]="{'open': showIPWrap}">
                 <div class="clearfix option_box pd1">
-                    <label class="radio-inline pd0">
-                        <input type="radio" class="radio_theme" name="ipOptions" formControlName="ipOptions"
-                            value="cidr_range">
-                        CIDR Range
-                    </label>
-                    <label class="radio-inline pd0">
-                        <input type="radio" class="radio_theme" name="ipOptions" formControlName="ipOptions"
-                            value="ip_address"> IP
-                        Address
-                    </label>
+
+                    <span class="pd0 mrR3">
+                        <input id="CIDRRange" class="radio-custom cp ml0" type="radio" name="ipOptions" formControlName="ipOptions"
+                        value="cidr_range">
+                        <label for="CIDRRange" class="radio-custom-label">CIDR Range</label>
+                    </span>
+
+                    <span class="pd0 mrR3">
+                        <input id="Address" class="radio-custom cp ml0" type="radio" name="ipOptions" formControlName="ipOptions" value="ip_address">
+                        <label for="Address" class="radio-custom-label">Address</label>
+                    </span>
+
                 </div>
 
                 <section formArrayName="allowedCidrs" class="iprange container-fluid"

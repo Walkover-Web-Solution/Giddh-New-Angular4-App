@@ -5,18 +5,12 @@ import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
 import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { BsDropdownDirective, BsModalRef, BsModalService, ModalDirective, ModalOptions, TabsetComponent } from 'ngx-bootstrap';
+import { BsDropdownDirective, BsModalRef, BsModalService, ModalDirective, ModalOptions, TabsetComponent, PopoverDirective } from 'ngx-bootstrap';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
 import { CommonActions } from '../../actions/common.actions';
-import {
-    ActiveFinancialYear,
-    CompanyCountry,
-    CompanyCreateRequest,
-    CompanyResponse,
-    StatesRequest
-} from '../../models/api-models/Company';
+import { ActiveFinancialYear, CompanyCountry, CompanyCreateRequest, CompanyResponse, StatesRequest } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
@@ -72,13 +66,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('navigationModal') public navigationModal: TemplateRef<any>; // CMD + K
     @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
     @ViewChild('dropdown') public companyDropdown: BsDropdownDirective;
-    @ViewChild('talkSalesModal') public talkSalesModal: ModalDirective;
+    // @ViewChild('talkSalesModal') public talkSalesModal: ModalDirective;
     @ViewChild('supportTab') public supportTab: TabsetComponent;
     @ViewChild('searchCmpTextBox') public searchCmpTextBox: ElementRef;
     @ViewChild('expiredPlan') public expiredPlan: ModalDirective;
     @ViewChild('expiredPlanModel') public expiredPlanModel: TemplateRef<any>;
     @ViewChild('crossedTxLimitModel') public crossedTxLimitModel: TemplateRef<any>;
     @ViewChild('companyDetailsDropDownWeb') public companyDetailsDropDownWeb: BsDropdownDirective;
+    /** All modules popover instance */
+    @ViewChild('allModulesPopover') public allModulesPopover: PopoverDirective;
 
     public hideAsDesignChanges: false;
     public title: Observable<string>;
@@ -179,7 +175,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isLargeWindow: boolean = false;
     public isCompanyProifleUpdate$: Observable<boolean> = observableOf(false);
     public selectedPlanStatus: string;
-    public isSubscribedPlanHaveAdditnlChrgs: any;
+    public isSubscribedPlanHaveAdditionalCharges: any;
     public activeCompany: any;
     public createNewCompanyUser: CompanyCreateRequest;
     public totalNumberOfcompanies$: Observable<number>;
@@ -194,12 +190,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private activeCompanyForDb: ICompAidata;
     private smartCombinedList$: Observable<any>;
     public isMobileSite: boolean;
-    public CurrentCmpPlanAmount: any;
+    public currentCompanyPlanAmount: any;
     public companyCountry: CompanyCountry = {
         baseCurrency: '',
         country: ''
     };
     public currentState: any = '';
+    public isCalendlyModelActivate: boolean = false;
 
     /**
      *
@@ -256,18 +253,29 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isLedgerAccSelected = false;
             let currentPageResponse = _.clone(response);
             if (currentPageResponse) {
-                if (currentPageResponse && currentPageResponse.currentPageObj && currentPageResponse.currentPageObj.url && currentPageResponse.currentPageObj.url.includes('ledger/')) {
+                if (currentPageResponse && currentPageResponse.url && currentPageResponse.url.includes('ledger/')) {
 
                 } else {
-                    this.currentState = currentPageResponse.currentPageObj.url;
-                    this.selectedPage = currentPageResponse.currentPageObj.name;
+                    this.currentState = currentPageResponse.url;
+                    this.selectedPage = currentPageResponse.name;
                 }
             }
         });
-
+        this.store.pipe(select(s => s.general.isCalendlyModelOpen), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isCalendlyModelActivate = response;
+        });
         this.user$ = this.store.select(createSelector([(state: AppState) => state.session.user], (user) => {
-            if (user) {
+            if (user && user.user && user.user.name && user.user.name.length > 1) {
+                let name = user.user.name;
                 this.loggedInUserEmail = user.user.email;
+                if (user.user.name.match(/\s/g)) {
+                    this.userFullName = name;
+                    let formattedName = name.split(' ');
+                    this.userName = formattedName[0][0] + formattedName[1][0];
+                } else {
+                    this.userName = user.user.name[0] + user.user.name[1];
+                    this.userFullName = name;
+                }
                 return user.user;
             }
         })).pipe(takeUntil(this.destroyed$));
@@ -276,7 +284,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
         this.isCompanyProifleUpdate$ = this.store.select(p => p.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
 
-        this.selectedCompany = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+        this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
             if (!companies) {
                 return;
             }
@@ -288,7 +296,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.dispatch(this.companyActions.setTotalNumberofCompanies(this.companyList.length));
             let selectedCmp = companies.find(cmp => {
                 if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
+                    return cmp.uniqueName === this._generalService.companyUniqueName;
                 } else {
                     return false;
                 }
@@ -298,6 +306,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
 
             if (selectedCmp) {
+                this.selectedCompany = observableOf(selectedCmp);
                 this.activeFinancialYear = selectedCmp.activeFinancialYear;
                 this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
                 if (selectedCmp.nameAlias) {
@@ -320,32 +329,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.activeCompanyForDb = new CompAidataModel();
                 this.activeCompanyForDb.name = selectedCmp.name;
                 this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
+                this.setSelectedCompanyData(this.selectedCompany);
             }
 
             this.selectedCompanyCountry = selectedCmp.country;
-            return selectedCmp;
-        })).pipe(takeUntil(this.destroyed$));
-
-        this.selectedCompany.subscribe((res: any) => {
-            if (res) {
-                if (res.countryV2 !== null && res.countryV2 !== undefined) {
-                    this.getStates(res.countryV2.alpha2CountryCode);
-                }
-                if (res.subscription) {
-                    this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
-                    if (res.baseCurrency) {
-                        this.companyCountry.baseCurrency = res.baseCurrency;
-                        this.companyCountry.country = res.country;
-                        this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(this.companyCountry));
-                    }
-
-                    this.CurrentCmpPlanAmount = res.subscription.planDetails.amount;
-                    this.subscribedPlan = res.subscription;
-                    this.isSubscribedPlanHaveAdditnlChrgs = res.subscription.additionalCharges;
-                    this.selectedPlanStatus = res.subscription.status;
-                }
-                this.activeCompany = res;
-            }
         });
 
         this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$));
@@ -365,7 +352,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.totalNumberOfcompanies$ = this.store.select(state => state.session.totalNumberOfcompanies).pipe(takeUntil(this.destroyed$));
         this._generalService.invokeEvent.subscribe(value => {
             if (value === 'openschedulemodal') {
-                this.openScheduleModal();
+                this.openScheduleCalendlyModel();
+                // this.openScheduleModal();
             }
             if (value === 'resetcompanysession') {
                 this.removeCompanySessionData();
@@ -388,8 +376,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 let name = u.name;
                 if (u.name.match(/\s/g)) {
                     this.userFullName = name;
-                    let tmpName = name.split(' ');
-                    this.userName = tmpName[0][0] + tmpName[1][0];
+                    let formattedName = name.split(' ');
+                    this.userName = formattedName[0][0] + formattedName[1][0];
                 } else {
                     this.userName = u.name[0] + u.name[1];
                     this.userFullName = name;
@@ -397,9 +385,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                 this.store.dispatch(this.loginAction.renewSession());
             }
+
         });
 
-        if (this.isSubscribedPlanHaveAdditnlChrgs) {
+        if (this.isSubscribedPlanHaveAdditionalCharges) {
             this.openCrossedTxLimitModel(this.crossedTxLimitModel);
         }
         this.manageGroupsAccountsModal.onHidden.subscribe(e => {
@@ -538,12 +527,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.loadScript();
             resolve(true);
         });
+        // TODO : It is commented due to we have implement calendly and its under discussion to remove
 
-        this._generalService.talkToSalesModal.subscribe(a => {
-            if (a) {
-                this.openScheduleModal();
-            }
-        });
+        // this._generalService.talkToSalesModal.subscribe(a => {
+        //     if (a) {
+        //         this.openScheduleCalendlyModel();
+        //     }
+        // });
         // Observes when screen resolution is 1440 or less close navigation bar for few pages...
         this._breakpointObserver
             .observe(['(min-width: 1367px)'])
@@ -596,9 +586,34 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.getPartyTypeForCreateAccount();
         this.getAllCountries();
     }
+    public setSelectedCompanyData(selectedCompany) {
+        if (selectedCompany) {
+            this.selectedCompany.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+                if (res) {
+                    if (res.countryV2 !== null && res.countryV2 !== undefined) {
+                        this.getStates(res.countryV2.alpha2CountryCode);
+                        this.store.dispatch(this.commonActions.resetOnboardingForm());
+                    }
+                    if (res.subscription) {
+                        this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
+                        if (res.baseCurrency) {
+                            this.companyCountry.baseCurrency = res.baseCurrency;
+                            this.companyCountry.country = res.country;
+                            this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(this.companyCountry));
+                        }
+
+                        this.currentCompanyPlanAmount = res.subscription.planDetails.amount;
+                        this.subscribedPlan = res.subscription;
+                        this.isSubscribedPlanHaveAdditionalCharges = res.subscription.additionalCharges;
+                        this.selectedPlanStatus = res.subscription.status;
+                    }
+                    this.activeCompany = res;
+                }
+            });
+        }
+    }
 
     public ngAfterViewInit() {
-
         if (this.selectedPlanStatus === 'expired') {// active expired
             this.openExpiredPlanModel(this.expiredPlanModel);
         }
@@ -960,9 +975,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.flyAccountActions.GetflatAccountWGroups(q));
     }
 
+    /**
+     *  sidebar menu toggle
+     *
+     * @param {boolean} event to check side bar menu open or not
+     * @memberof HeaderComponent
+     */
     public sideBarStateChange(event: boolean) {
-        this.sideMenu.isopen = event;
-        this.companyDropdown.isOpen = false;
+        if (this.sideMenu) {
+            this.sideMenu.isopen = event;
+        }
+        if (this.companyDropdown) {
+            this.companyDropdown.isOpen = false;
+        }
         if (this.companyDetailsDropDownWeb) {
             this.companyDetailsDropDownWeb.hide();
         }
@@ -1126,14 +1151,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.companyMenu.isopen = false;
     }
 
-    public openScheduleModal() {
-        this.talkSalesModal.show();
-    }
+    // TODO : It is commented due to we have implement calendly and its under discussion to remove
 
-    public closeModal() {
-        this.talkSalesModal.hide();
-        this._generalService.talkToSalesModal.next(false);
-    }
+    // public closeModal() {
+    //     this.talkSalesModal.hide();
+    //     this._generalService.talkToSalesModal.next(false);
+    // }
 
     public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
         if (!this.modalService.getModalsCount()) {
@@ -1213,11 +1236,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.hoveredIndx = i;
     }
 
-    public menuScrollEnd(ev) {
-        let offset = $('#other').position();
-        if (offset) {
-            let exactPosition = offset.top - 120;
-            $('#other_sub_menu').css('top', exactPosition);
+    /**
+     * Mouse leave handler for all modules label to hide the popover
+     *
+     * @param {*} event Mouse leave event
+     * @memberof HeaderComponent
+     */
+    public handleAllModulesLeaveEvent(event: any): void {
+        const menu = document.getElementById('other_sub_menu');
+        const targetElement = event.toElement || event.relatedTarget;
+        if (menu && !menu.contains(targetElement)) {
+            // Hide 'All Modules' popover if the mouse points to any element other than sub menu as target
+            this.allModulesPopover.hide();
         }
     }
 
@@ -1226,14 +1256,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             navigator.add(sublist.children[1]);
             navigator.nextVertical();
         }
-    }
-
-    public openSubMenu(type: boolean) {
-        this.showOtherMenu = type;
-    }
-
-    public toggleAllmoduleMenu() {
-        this.showOtherMenu = !this.showOtherMenu;
     }
 
     public switchCompanyMenuShown() {
@@ -1354,6 +1376,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public getPartyTypeForCreateAccount() {
         this.store.dispatch(this.commonActions.GetPartyType());
     }
+
     public getAllCountries() {
         let countryRequest = new CountryRequest();
         countryRequest.formName = '';
@@ -1402,5 +1425,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 return this.navigateToUser = false;
             }
         });
+    }
+    /**
+     *To hide calendly model
+     *
+     * @memberof HeaderComponent
+     */
+    public hideScheduleCalendlyModel() {
+        this.store.dispatch(this._generalActions.isOpenCalendlyModel(false));
+    }
+    /**
+     *To show calendly model
+     *
+     * @memberof HeaderComponent
+     */
+    public openScheduleCalendlyModel() {
+        this.store.dispatch(this._generalActions.isOpenCalendlyModel(true));
     }
 }

@@ -18,10 +18,12 @@ import { BrowserDetectComponent } from './browser-support/browserDetect.componen
 import { SelectPlanComponent } from './selectPlan/selectPlan.component';
 import { BillingDetailComponent } from './billing-details/billingDetail.component';
 import { TokenVerifyComponent } from './login/token-verify.component';
+import {AppLoginSuccessComponent} from "./app-login-success/app-login-success";
 
 export const ROUTES: Routes = [
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
-    { path: '404', component: NotFoundComponent },
+    {path: '', redirectTo: 'login', pathMatch: 'full'},
+    {path: '404', component: NotFoundComponent},
+    {path: 'app-login-success', component: AppLoginSuccessComponent, pathMatch: 'full'},
     {
         path: 'token-verify',
         component: TokenVerifyComponent
@@ -74,9 +76,16 @@ export const ROUTES: Routes = [
             { path: 'home', loadChildren: './home/home.module#HomeModule', canActivate: [NeedsAuthorization] },
             { path: 'invoice', loadChildren: './invoice/invoice.module#InvoiceModule', canActivate: [NeedsAuthorization] },
             // { path: 'sales', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },
-            { path: 'daybook', loadChildren: './daybook/daybook.module#DaybookModule', canActivate: [NeedsAuthorization] },
-            { path: 'purchase', loadChildren: './purchase/purchase.module#PurchaseModule', canActivate: [NeedsAuthorization] },
-            { path: 'about', loadChildren: './about/about.module#AboutModule' },
+            {
+                path: 'daybook',
+                loadChildren: './daybook/daybook.module#DaybookModule',
+                canActivate: [NeedsAuthorization]
+            },
+            {
+                path: 'purchase',
+                redirectTo: 'purchase-management'
+            },
+            {path: 'about', loadChildren: './about/about.module#AboutModule'},
             //{ path: 'aging-report', loadChildren: './aging-report/aging-report.module#AgingReportModule' },
             { path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule', canActivate: [NeedsAuthorization] },
             { path: 'inventory-in-out', loadChildren: './inventory-in-out/inventory-in-out.module#InventoryInOutModule', canActivate: [NeedsAuthorization] },
@@ -108,7 +117,7 @@ export const ROUTES: Routes = [
             { path: 'expenses-manager', loadChildren: './expenses/expenses.module#ExpensesModule', canActivate: [NeedsAuthorization] },
 
             { path: 'vat-report', loadChildren: './vat-report/vatReport.module#VarReportModule', canActivate: [NeedsAuthorization] },
-
+            { path: 'purchase-management', loadChildren: './purchase/purchase.module#PurchaseModule', canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
             // {path: '**', pathMatch: 'full', component: NotFoundComponent},
 

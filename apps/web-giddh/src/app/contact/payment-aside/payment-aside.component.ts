@@ -101,7 +101,11 @@ export class PaymentAsideComponent implements OnInit {
             if (res.status === 'success') {
                 this.OTPsent = true;
             } else {
-                this._toaster.errorToast(res.message);
+                if (res.status === 'error' && res.code === 'BANK_ERROR') {
+                    this._toaster.warningToast(res.message);
+                } else {
+                    this._toaster.errorToast(res.message);
+                }
             }
         });
     }
@@ -119,7 +123,11 @@ export class PaymentAsideComponent implements OnInit {
             if (res.status === 'success') {
                 this.OTPsent = true;
             } else {
-                this._toaster.errorToast(res.message);
+                if (res.status === 'error' && res.code === 'BANK_ERROR') {
+                    this._toaster.warningToast(res.message);
+                } else {
+                    this._toaster.errorToast(res.message);
+                }
             }
         });
     }
@@ -140,7 +148,11 @@ export class PaymentAsideComponent implements OnInit {
             if (res.status === 'success') {
                 this.closeAsidePane();
             } else {
-                this._toaster.errorToast(res.message);
+                if (res.status === 'error' && res.code === 'BANK_ERROR') {
+                    this._toaster.warningToast(res.message);
+                } else {
+                    this._toaster.errorToast(res.message);
+                }
             }
         });
     }

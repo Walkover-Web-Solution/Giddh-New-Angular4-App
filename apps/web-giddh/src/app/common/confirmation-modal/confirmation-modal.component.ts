@@ -1,15 +1,15 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { RcmModalConfiguration } from './rcm-modal.interface';
+import { ConfirmationModalConfiguration } from './confirmation-modal.interface';
 
 @Component({
-    selector: 'rcm-modal',
-    styleUrls: ['./rcm-modal.component.scss'],
-    templateUrl: './rcm-modal.component.html'
+    selector: 'confirmation-modal',
+    styleUrls: ['./confirmation-modal.component.scss'],
+    templateUrl: './confirmation-modal.component.html'
 })
-export class RcmModalComponent {
+export class ConfirmationModalComponent {
 
-    /** RCM modal configuration */
-    @Input() configuration: RcmModalConfiguration;
+    /** Confirmation modal configuration */
+    @Input() configuration: ConfirmationModalConfiguration;
     /** Emits clicked button information */
     @Output() buttonClicked: EventEmitter<string> = new EventEmitter();
 
@@ -17,7 +17,7 @@ export class RcmModalComponent {
      * Button click handler
      *
      * @param {string} clickedButtonText Text of the clicked button
-     * @memberof RcmModalComponent
+     * @memberof ConfirmationModalComponent
      */
     public handleButtonClick(clickedButtonText: string): void {
         this.buttonClicked.emit(clickedButtonText);

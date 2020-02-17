@@ -8,5 +8,7 @@ export const RECEIPT_API = {
     DELETE: COMMON_URL_FOR_RECIPT,
     DOWNLOAD_VOUCHER: 'company/:companyUniqueName/accounts/:accountUniqueName/vouchers/download-file?fileType=pdf',
     GET_DETAILS_V4: COMMON_URL_FOR_RECIPT_V4,
-    GET_ALL_BAL_SALE_DUE: 'company/:companyUniqueName/vouchers/get-all-vouchers-balances?'
+    GET_ALL_BAL_SALE_DUE: 'company/:companyUniqueName/vouchers/get-all-vouchers-balances?',
+    GET_ALL_PURCHASE_RECORDS: 'company/:companyUniqueName/purchase-record/get-all?',
+    GET_PURCHASE_RECORD: 'company/:companyUniqueName/accounts/:accountUniqueName/purchase-record/:purchaseRecordUniqueNumber'
 };

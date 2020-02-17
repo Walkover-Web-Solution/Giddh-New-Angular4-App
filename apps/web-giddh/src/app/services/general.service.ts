@@ -2,21 +2,22 @@ import { Injectable } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Subject } from 'rxjs';
 
-import { RcmModalButton, RcmModalConfiguration } from '../common/rcm-modal/rcm-modal.interface';
+import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../common/confirmation-modal/confirmation-modal.interface';
 import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
+import * as moment from 'moment';
 
 @Injectable()
 export class GeneralService {
     invokeEvent: Subject<any> = new Subject();
-    public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    // TODO : It is commented due to we have implement calendly and its under discussion to remove
+    // public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public isCurrencyPipeLoaded: boolean = false;
 
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
 
     get user(): UserDetails {
         return this._user;
@@ -193,11 +194,11 @@ export class GeneralService {
      * Returns the RCM modal configuration based on 'isRcmSelected' flag value
      *
      * @param {boolean} isRcmSelected True, if user selects the RCM checkbox
-     * @returns {RcmModalConfiguration}
+     * @returns {ConfirmationModalConfiguration} RCM modal configuration
      * @memberof GeneralService
      */
-    getRcmConfiguration(isRcmSelected: boolean): RcmModalConfiguration {
-        const buttons: Array<RcmModalButton> = [{
+    public getRcmConfiguration(isRcmSelected: boolean): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [{
             text: 'Yes',
             cssClass: 'btn btn-success'
         },
@@ -214,7 +215,7 @@ export class GeneralService {
             headerCssClass,
             messageText: `Note: If you check this transaction for Reverse Charge,
             applied taxes will be considered under Reverse Charge taxes and
-            will be added in GST Report.`,
+            will be added in tax report.`,
             messageCssClass,
             footerText: 'Are you sure you want to check this transaction for Reverse Charge?',
             footerCssClass,
@@ -224,7 +225,7 @@ export class GeneralService {
                 headerCssClass,
                 messageText: `Note: If you uncheck this transaction from Reverse Charge, applied
                 taxes will be considered as normal taxes and reverse
-                charge effect will be removed from GST Report.`,
+                charge effect will be removed from tax report.`,
                 messageCssClass,
                 footerText: 'Are you sure you want to uncheck this transaction from Reverse Charge?',
                 footerCssClass,
@@ -241,10 +242,8 @@ export class GeneralService {
      * @returns {boolean} True, if the current ledger and user selected particular account belongs to RCM category accounts
      * @memberof GeneralService
      */
-    shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any): boolean {
+    public shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any): boolean {
         if (currentLedgerAccountDetails && selectedAccountDetails) {
-            console.log('Current Ledger: ', currentLedgerAccountDetails);
-            console.log('Selected account: ', selectedAccountDetails);
             if (![currentLedgerAccountDetails.uniqueName, selectedAccountDetails.uniqueName].includes('roundoff')) {
                 // List of allowed first level parent groups
                 const allowedFirstLevelUniqueNames = ['operatingcost', 'indirectexpenses', 'fixedassets'];
@@ -262,5 +261,22 @@ export class GeneralService {
             }
         }
         return false;
+    }
+
+    /**
+     * Covert UTC time zone( server time zone ) into local system timezone
+     *
+     * @param {*} UTCDateString UTC timezone time string
+     * @returns  coverted date(UTC---> Systme TimeZone)
+     * @memberof CompletedComponent
+     */
+    public ConvertUTCTimeToLocalTime(UTCDateString) {
+        let convertdLocalTime = new Date(UTCDateString);
+
+        let hourOffset = convertdLocalTime.getTimezoneOffset() / 60;
+
+        convertdLocalTime.setHours(convertdLocalTime.getHours() + hourOffset);
+
+        return convertdLocalTime;
     }
 }

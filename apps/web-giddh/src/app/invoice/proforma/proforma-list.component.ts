@@ -1,23 +1,38 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { ProformaFilter, ProformaGetRequest, ProformaItem, ProformaResponse, ProformaUpdateActionRequest } from '../../models/api-models/proforma';
-import { select, Store } from '@ngrx/store';
-import { AppState } from '../../store';
-import { ProformaActions } from '../../actions/proforma/proforma.actions';
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { combineLatest, Observable, ReplaySubject } from 'rxjs';
+import {
+    ChangeDetectorRef,
+    Component,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {
+    ProformaFilter,
+    ProformaGetRequest,
+    ProformaItem,
+    ProformaResponse,
+    ProformaUpdateActionRequest
+} from '../../models/api-models/proforma';
+import {select, Store} from '@ngrx/store';
+import {AppState} from '../../store';
+import {ProformaActions} from '../../actions/proforma/proforma.actions';
+import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
+import {combineLatest, Observable, ReplaySubject} from 'rxjs';
 import * as moment from 'moment/moment';
-import { cloneDeep, uniqBy } from '../../lodash-optimized';
-import { ModalDirective, ModalOptions } from 'ngx-bootstrap';
-import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
-import { InvoiceAdvanceSearchComponent } from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
-import { VoucherTypeEnum } from '../../models/api-models/Sales';
-import { ActivatedRoute, Router } from '@angular/router';
-import { createSelector } from "reselect";
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { GeneralService } from '../../services/general.service';
+import {cloneDeep, uniqBy} from '../../lodash-optimized';
+import {ModalDirective, ModalOptions} from 'ngx-bootstrap';
+import {InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm} from '../../models/api-models/Invoice';
+import {InvoiceAdvanceSearchComponent} from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
+import {GIDDH_DATE_FORMAT} from '../../shared/helpers/defaultDateFormat';
+import {InvoiceSetting} from '../../models/interfaces/invoice.setting.interface';
+import {VoucherTypeEnum} from '../../models/api-models/Sales';
+import {ActivatedRoute, Router} from '@angular/router';
+import {createSelector} from "reselect";
+import {BreakpointObserver} from '@angular/cdk/layout';
+import {GeneralService} from '../../services/general.service';
 
 @Component({
     selector: 'app-proforma-list-component',
@@ -30,6 +45,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChild(InvoiceAdvanceSearchComponent) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.proforma;
     public voucherData: ProformaResponse;
+    public selectedDateRange: any;
 
     public showAdvanceSearchModal: boolean = false;
     public showResetAdvanceSearchIcon: boolean = false;
@@ -113,7 +129,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public showCustomerSearch: boolean = false;
     public customerNameInput: FormControl = new FormControl();
 
-    public sortRequestForUi: { sortBy: string, sort: string } = { sortBy: '', sort: '' };
+    public sortRequestForUi: { sortBy: string, sort: string } = {sortBy: '', sort: ''};
     public advanceSearchFilter: ProformaFilter = new ProformaFilter();
     public allItemsSelected: boolean = false;
     public hoveredItemUniqueName: string;
@@ -131,7 +147,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public isMobileView = false;
 
     constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private activatedRouter: ActivatedRoute,
-        private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private _generalService: GeneralService) {
+                private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private _generalService: GeneralService) {
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = 20;
         this.advanceSearchFilter.from = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
@@ -278,6 +294,9 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                                 startDate: moment(storedSelectedDate.fromDates, 'DD-MM-YYYY').toDate(),
                                 endDate: moment(storedSelectedDate.toDates, 'DD-MM-YYYY').toDate()
                             };
+
+                            // assign start and end date
+                            // this.assignStartAndEndDateForDateRangePicker(storedSelectedDate.fromDates, storedSelectedDate.toDates);
                             this.advanceSearchFilter.from = storedSelectedDate.fromDates;
                             this.advanceSearchFilter.to = storedSelectedDate.toDates;
                             this.isUniversalDateApplicable = false;
@@ -287,6 +306,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                                 ...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
                                 endDate: moment(a[1], 'DD-MM-YYYY').toDate()
                             };
+
+                            // assign start and end date
+                            // this.assignStartAndEndDateForDateRangePicker(a[0], a[1]);
+
                             this.advanceSearchFilter.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
                             this.advanceSearchFilter.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
                             this.isUniversalDateApplicable = true;
@@ -296,6 +319,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                             ...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
                             endDate: moment(a[1], 'DD-MM-YYYY').toDate()
                         };
+
+                        // assign start and end date
+                        // this.assignStartAndEndDateForDateRangePicker(a[0], a[1]);
+
                         this.advanceSearchFilter.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
                         this.advanceSearchFilter.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
                         this.isUniversalDateApplicable = true;
@@ -305,12 +332,16 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                         ...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
                         endDate: moment(a[1], 'DD-MM-YYYY').toDate()
                     };
+
+                    // assign start and end date
+                    // this.assignStartAndEndDateForDateRangePicker(a[0], a[1]);
+
                     this.advanceSearchFilter.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
                     this.advanceSearchFilter.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
                     this.isUniversalDateApplicable = true;
                 }
+                this.getAll();
             }
-            this.getAll();
         })).pipe(takeUntil(this.destroyed$)).subscribe();
 
         this.store.pipe(select(s => s.general.sideMenuBarOpen), takeUntil(this.destroyed$))
@@ -374,7 +405,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             } else {
                 this.localStorageSelectedDate = 'estimateSelectedDate';
             }
-            this.getAll();
+            // this.getAll();
             this.selectedVoucher = null;
         }
     }
@@ -496,8 +527,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                     localStorage.setItem('estimateSelectedDate', JSON.stringify(this.estimateSelectedDate));
                 }
             }
+            this.getAll();
         }
-        this.getAll();
     }
 
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
@@ -530,12 +561,30 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         if (window.localStorage) {
             localStorage.removeItem(this.localStorageSelectedDate);
         }
-        // reset dateRangePicker
-        this.datePickerOptions = { ...this.datePickerOptions, startDate: moment().subtract(30, 'days'), endDate: moment() };
+
+        let universalDate;
+        // get application date
+        this.universalDate$.pipe(take(1)).subscribe(date => {
+            universalDate = date;
+        });
 
         this.advanceSearchFilter = new ProformaFilter();
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = 20;
+
+        // set date picker date as application date
+        if (universalDate.length > 1) {
+            this.advanceSearchFilter.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+            this.advanceSearchFilter.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+            this.datePickerOptions = {
+                ...this.datePickerOptions,
+                startDate: moment(new Date(universalDate[0]), 'DD-MM-YYYY').toDate(),
+                endDate: moment(new Date(universalDate[1]), 'DD-MM-YYYY').toDate(),
+            };
+        }
+
+        // assign start and end date
+        // this.assignStartAndEndDateForDateRangePicker(null, null);
 
         this.getAll();
     }
@@ -643,7 +692,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         obj.uniqueName = obj.voucherNumber;
         obj.grandTotal = invoice.grandTotal;
         obj.voucherType = this.voucherType;
-        obj.account = { name: invoice.customerName, uniqueName: invoice.customerUniqueName };
+        obj.account = {name: invoice.customerName, uniqueName: invoice.customerUniqueName};
         obj.voucherStatus = invoice.action;
         return obj;
     }

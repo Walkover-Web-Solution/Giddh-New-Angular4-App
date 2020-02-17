@@ -21,6 +21,8 @@ import { AuthenticationService } from '../services/authentication.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
 import { WarehouseActions } from './warehouse/action/warehouse.action';
+import { PAGINATION_LIMIT } from '../app.constant';
+import {HttpClient} from "@angular/common/http";
 
 @Component({
     templateUrl: './settings.component.html',
@@ -62,7 +64,8 @@ export class SettingsComponent implements OnInit {
         private _toast: ToasterService,
         private _generalActions: GeneralActions,
         private settingsIntegrationActions: SettingsIntegrationActions,
-        private warehouseActions: WarehouseActions
+        private warehouseActions: WarehouseActions,
+        private http: HttpClient
     ) {
         this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
         this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
@@ -122,6 +125,7 @@ export class SettingsComponent implements OnInit {
     public selectTab(id: number) {
         this.staticTabs.tabs[id].active = true;
     }
+
     public assignChildtabForIntegration(childTab: string): number {
         switch (childTab) {
             case 'payment':
@@ -132,6 +136,7 @@ export class SettingsComponent implements OnInit {
                 return 0;
         }
     }
+
     public disableEnable() {
         this.staticTabs.tabs[2].disabled = !this.staticTabs.tabs[2].disabled;
     }
@@ -191,24 +196,53 @@ export class SettingsComponent implements OnInit {
     }
 
     private saveGmailAuthCode(authCode: string) {
-        const dataToSave = {
+        const getAccessTokenData = {
             code: authCode,
             client_secret: this.getGoogleCredentials().GOOGLE_CLIENT_SECRET,
             client_id: this.getGoogleCredentials().GOOGLE_CLIENT_ID,
             grant_type: 'authorization_code',
             redirect_uri: this.getRedirectUrl(AppUrl)
         };
-        this._authenticationService.saveGmailAuthCode(dataToSave).subscribe((res) => {
 
-            if (res.status === 'success') {
-                this._toast.successToast('Gmail account added successfully.', 'Success');
-            } else {
-                this._toast.errorToast(res.message, res.code);
-            }
-            this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-            this.router.navigateByUrl('/pages/settings/integration/email');
-            // this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
-        });
+        let options = {headers: {}};
+        options.headers['Accept'] = 'application/json';
+        options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+
+        options.headers = {} as any;
+
+        this.http.post("https://accounts.google.com/o/oauth2/token", getAccessTokenData, options).subscribe((p: any) => {
+            const dataToSave = {
+                "access_token": p.access_token,
+                "expires_in": p.expires_in,
+                "refresh_token": p.refresh_token
+            };
+            this._authenticationService.saveGmailToken(dataToSave).subscribe((res) => {
+
+                if (res.status === 'success') {
+                    this._toast.successToast('Gmail account added successfully.', 'Success');
+                } else {
+                    this._toast.errorToast(res.message, res.code);
+                }
+                this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
+                // this.router.navigateByUrl('/pages/settings/integration/email');
+                // this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
+            });
+        })
+
+        // debugger;
+
+
+        // this._authenticationService.saveGmailAuthCode(dataToSave).subscribe((res) => {
+        //
+        //     if (res.status === 'success') {
+        //         this._toast.successToast('Gmail account added successfully.', 'Success');
+        //     } else {
+        //         this._toast.errorToast(res.message, res.code);
+        //     }
+        //     this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
+        //     this.router.navigateByUrl('/pages/settings/integration/email');
+        //     // this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
+        // });
     }
 
     private getRedirectUrl(baseHref: string) {
@@ -254,7 +288,7 @@ export class SettingsComponent implements OnInit {
      */
     private loadModuleData(tabName: string): void {
         if (tabName === 'warehouse') {
-            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1 }));
+            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
         }
     }
 }

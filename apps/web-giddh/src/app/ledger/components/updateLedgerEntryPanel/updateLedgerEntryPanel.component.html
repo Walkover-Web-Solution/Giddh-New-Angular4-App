@@ -413,13 +413,13 @@
                 <span class="text-light font-12"> (Tax is compulsory)</span>
             </div>
             <ng-template #rcmTemplate>
-                <rcm-modal [configuration]="rcmConfiguration" (buttonClicked)="handleRcmChange($event)"></rcm-modal>
+                <confirmation-modal [configuration]="rcmConfiguration" (buttonClicked)="handleRcmChange($event)"></confirmation-modal>
             </ng-template>
             <!-- reverse charge transction end  -->
 
             <!-- region amount and discount container -->
             <div class="clearfix">
-                <ng-container *ngIf="vm.showNewEntryPanel">
+                <ng-container *ngIf="vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields">
                     <div class="width100 total-detail-table"
                         [ngClass]="{'add-multicurrency': vm.isMultiCurrencyAvailable}">
                         <!-- <div *ngIf="vm.stockTrxEntry" class="table-amount">
@@ -448,7 +448,7 @@
                           </table>
                         </div> -->
 
-                        <ng-template [ngIf]="vm.stockTrxEntry">
+                        <ng-template [ngIf]="(vm.showNewEntryPanel && vm.stockTrxEntry)">
                             <div [ngClass]="{width40: vm.stockTrxEntry}" class="table-amount text-right pr-1 width-80">
                                 <label class="font-12">Quantity</label>
                                 <input type="text" name="" class="form-control text-right"
@@ -470,11 +470,11 @@
                         </ng-template>
 
 
-                        <div class="icon-box" *ngIf="vm.stockTrxEntry">
+                        <div class="icon-box" *ngIf="(vm.showNewEntryPanel && vm.stockTrxEntry)">
                             <label class="icon-cross"></label>
                         </div>
 
-                        <ng-template [ngIf]="vm.stockTrxEntry">
+                        <ng-template [ngIf]="(vm.showNewEntryPanel && vm.stockTrxEntry)">
                             <div class="text-right table-amount">
                                 <label class="font-12">Price</label>
                                 <input type="text" name=""
@@ -491,11 +491,13 @@
                             </div>
                         </ng-template>
 
-                        <div class="icon-box" *ngIf="vm.stockTrxEntry">
+                        <div class="icon-box"
+                            *ngIf="(vm.showNewEntryPanel && vm.stockTrxEntry)">
                             <label class="fs20">=</label>
                         </div>
 
-                        <div class="text-right table-amount">
+                        <div *ngIf="vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields"
+                            class="text-right table-amount">
                             <label class="font-12">Amount</label>
                             <input type="text" name="" class="form-control text-right" [mask]="vm.inputMaskFormat"
                                 [rawInputValue]="vm.totalAmount" [prefix]="vm.selectedPrefixForCurrency"
@@ -509,11 +511,11 @@
                             </p>
                         </div>
 
-                        <div class="icon-box">
+                        <div *ngIf="vm.showNewEntryPanel" class="icon-box">
                             <label class="icon-minus font-12"></label>
                         </div>
 
-                        <div class="text-right table-amount">
+                        <div *ngIf="vm.showNewEntryPanel || !shouldShowAdvanceReceiptMandatoryFields" class="text-right table-amount">
                             <span auto-close="outsideClick">
                                 <update-ledger-discount #discount [discountAccountsDetails]="vm.discountArray"
                                     [ledgerAmount]="vm.selectedLedger.actualAmount"
@@ -531,18 +533,22 @@
                             </p>
                         </div>
 
-                        <div class="text-center icon-box" *ngIf="(vm.companyTaxesList$ | async)?.length">
+                        <div class="text-center icon-box"
+                            *ngIf="(vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) && (vm.companyTaxesList$ | async)?.length">
                             <label class="icon-plus font-12"></label>
                         </div>
 
-                        <div class="text-center icon-box" *ngIf="!(vm.companyTaxesList$ | async)?.length">
+                        <div class="text-center icon-box"
+                            *ngIf="(vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) && !(vm.companyTaxesList$ | async)?.length">
                             <label class="fs20">=</label>
                         </div>
 
                         <div class="dropdown-container dropdown-left text-right table-amount"
-                            *ngIf="(vm.companyTaxesList$ | async)?.length">
+                            *ngIf="(vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) && (vm.companyTaxesList$ | async)?.length">
                             <span auto-close="outsideClick">
                                 <update-ledger-tax-control #tax [taxes]="vm.companyTaxesList$ | async"
+                                    [customHeading]="shouldShowAdvanceReceiptMandatoryFields ? 'Tax on Advance' : isRcmEntry ? 'Tax (RCM)' : ''"
+                                    [isMandatory]="shouldShowAdvanceReceiptMandatoryFields || isRcmEntry"
                                     [date]="vm.selectedLedger.entryDate" [taxRenderData]="vm.taxRenderData"
                                     [totalForTax]="vm.totalForTax" [prefixInput]="vm.selectedPrefixForCurrency"
                                     [maskInput]="vm.inputMaskFormat" [suffixInput]="vm.selectedSuffixForCurrency"
@@ -561,11 +567,13 @@
                             </p>
                         </div>
 
-                        <div class="text-center icon-box" *ngIf="(vm.companyTaxesList$ | async)?.length">
+                        <div class="text-center icon-box"
+                            *ngIf="(vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) && (vm.companyTaxesList$ | async)?.length">
                             <label class="fs20">=</label>
                         </div>
 
-                        <div class="text-right table-amount" (resized)="onResized($event)">
+                        <div *ngIf="(vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields)"
+                            class="text-right table-amount" (resized)="onResized($event)">
                             <label class="font-12">Total Amt.</label>
                             <input type="text" name="" class="form-control text-right" [(ngModel)]="vm.grandTotal"
                                 [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
@@ -578,7 +586,7 @@
                             </p>
                         </div>
 
-                        <div class="text-right table-amount last-ttable-amount">
+                        <div *ngIf="vm.showNewEntryPanel" class="text-right table-amount last-ttable-amount">
                             <div class="text-right">
 
                                 <div *ngIf="!vm.selectedLedger.isOtherTaxesApplicable" class="other-tax">
@@ -618,9 +626,8 @@
             <div class="row d-flex d-sm-block">
                 <div class="col-md-6 pt-1">
                     <!-- make it functional (Developer end) -->
-                    <div class="row mrB1">
-                        <!-- Warehouse name can be empty therefore check specifically with falsy values -->
-                        <div *ngIf="shouldShowWarehouse" class="col-sm-6 pdR1">
+                    <div *ngIf="shouldShowWarehouse" class="row mrB1">
+                        <div class="col-sm-6 pdR1">
                             <div class="selectWarehouse">
                                 <label class="font-12">Select Warehouse</label>
                                 <sh-select [(ngModel)]="selectedWarehouse" [placeholder]="'Select Warehouse'"
@@ -657,6 +664,22 @@
                         </ng-template> -->
 
                     </div>
+
+                    <ng-container *ngIf="shouldShowRcmTaxableAmount">
+                        <div class="taxable-amount-section">
+                            <label class="primary_clr">Taxable Amount</label>
+                            <input type="text" name="taxable-amount" class="form-control text-right" [prefix]="vm.selectedPrefixForCurrency"
+                                [suffix]="vm.selectedSuffixForCurrency" [mask]="vm.inputMaskFormat"
+                                [(ngModel)]="vm.selectedLedger.reverseChargeTaxableAmount" />
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="shouldShowItcSection">
+                        <div class="taxable-amount-section">
+                            <label class="primary_clr itc-label">ITC Type</label>
+                            <sh-select [(ngModel)]="vm.selectedLedger.itcAvailable" [placeholder]="'ITC Type'" [options]="availableItcList">
+                            </sh-select>
+                        </div>
+                    </ng-container>
 
                     <div class="row">
                         <div class="col-xs-12">
@@ -745,17 +768,23 @@
                                             [style.width.px]="80" />
                                     </div>
                                 </td>
-
-                                <td *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt'" class="pdR1 pt-1 xs-pt-0">
-                                    <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdvanceReceipt"> Advance
-                                    Receipt
-                                </td>
-
                             </tr>
 
                         </table>
 
-                        <table class="mrT1 xs-table-block">
+                        <table>
+                            <tr>
+                                <td *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt'" class="pdR1 pb-1">
+                                    <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdvanceReceipt"
+                                        (change)="handleAdvanceReceiptChange()"> Advance
+                                    Receipt
+                                </td>
+                            </tr>
+                        </table>
+
+
+
+                        <table class="xs-table-block">
 
                             <tbody>
                                 <tr>

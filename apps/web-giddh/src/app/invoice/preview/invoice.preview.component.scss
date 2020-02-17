@@ -415,14 +415,14 @@ button.btn.btn-filter span.icon-cross {
     top: 0;
 }
 
-.invoice-preview {
+/* .invoice-preview {
     padding-bottom: 250px;
 }
 
 .paginationWrapper {
     position: relative;
     top: -220px;
-}
+} */
 
 .invoiceFooter h3 {
     font-size: 16px;
@@ -439,6 +439,10 @@ button.btn.btn-filter span.icon-cross {
 
 .addInvoice .btn-group.show {
     display: inline-block !important;
+}
+
+div.remove-capitalize {
+    text-transform: none !important;
 }
 
 /* responsive */

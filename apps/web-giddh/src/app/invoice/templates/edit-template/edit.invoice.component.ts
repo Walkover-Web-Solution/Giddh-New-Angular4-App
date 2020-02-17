@@ -875,7 +875,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         if (template) {
             this.confirmationFlag = 'deleteConfirmation';
             let selectedTemplate = _.cloneDeep(template);
-            this.deleteTemplateConfirmationMessage = `Are you sure want to delete "<b>${selectedTemplate.name}</b>" template?`;
+            this.deleteTemplateConfirmationMessage = `Are you sure you want to delete "<b>${selectedTemplate.name}</b>" template?`;
             this.selectedTemplateUniqueName = selectedTemplate.uniqueName;
             this.customTemplateConfirmationModal.show();
         }

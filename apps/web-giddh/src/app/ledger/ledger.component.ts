@@ -1,16 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import {
-    ChangeDetectorRef,
-    Component,
-    ComponentFactoryResolver,
-    ElementRef,
-    EventEmitter,
-    OnDestroy,
-    OnInit,
-    QueryList,
-    ViewChild,
-    ViewChildren,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
@@ -25,14 +14,7 @@ import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
-import {
-    BehaviorSubject,
-    combineLatest as observableCombineLatest,
-    Observable,
-    of as observableOf,
-    ReplaySubject,
-    Subject,
-} from 'rxjs';
+import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, } from 'rxjs';
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
 import * as uuid from 'uuid';
 
@@ -47,12 +29,7 @@ import { AccountResponse } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
-import {
-    DownloadLedgerRequest,
-    IELedgerResponse,
-    TransactionsRequest,
-    TransactionsResponse,
-} from '../models/api-models/Ledger';
+import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest, TransactionsResponse, } from '../models/api-models/Ledger';
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
@@ -207,6 +184,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public inputMaskFormat: string;
     public giddhBalanceDecimalPlaces: number = 2;
     public activeAccountParentGroupsUniqueName: string = '';
+    /** True, if RCM taxable amount needs to be displayed in create new ledger component as per criteria */
+    public shouldShowRcmTaxableAmount: boolean;
+    /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
+    public shouldShowItcSection: boolean;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
@@ -423,8 +404,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
         // check if selected account category allows to show taxationDiscountBox in newEntry popup
         txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
-        console.log('Selected Tx: ', txn);
         this.handleRcmVisibility(txn);
+        this.handleTaxableAmountVisibility(txn);
         this.newLedPanelCtrl.calculateTotal();
         // this.newLedPanelCtrl.checkForMulitCurrency();
         this.newLedPanelCtrl.detectChanges();
@@ -445,6 +426,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
+        this.shouldShowItcSection = false;
+        this.shouldShowRcmTaxableAmount = false;
 
         observableCombineLatest(this.universalDate$, this.route.params, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (!Array.isArray(resp[0])) {
@@ -571,11 +554,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.transactionData$.subscribe((lt: any) => {
             if (lt) {
                 // set date picker to and from date, as what we got from api
-                this.datePickerOptions = {
-                    ...this.datePickerOptions,
-                    startDate: moment(lt.from, 'DD-MM-YYYY').toDate(),
-                    endDate: moment(lt.to, 'DD-MM-YYYY').toDate()
-                };
+                if (lt.from && lt.to) {
+                    this.datePickerOptions = {
+                        ...this.datePickerOptions,
+                        startDate: moment(lt.from, 'DD-MM-YYYY').toDate(),
+                        endDate: moment(lt.to, 'DD-MM-YYYY').toDate()
+                    };
+                }
+
                 if (lt.closingBalance) {
                     this.closingBalanceBeforeReconcile = lt.closingBalance;
                     this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
@@ -1011,6 +997,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             baseCurrencyToDisplay: cloneDeep(this.baseCurrencyDetails),
             foreignCurrencyToDisplay: cloneDeep(this.foreignCurrencyDetails)
         };
+        this.shouldShowRcmTaxableAmount = false;
+        this.shouldShowItcSection = false;
         if (this.isLedgerAccountAllowsMultiCurrency) {
             this.getCurrencyRate('blankLedger');
         }
@@ -1341,11 +1329,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * closeAdvanceSearchPopup
      */
-    public closeAdvanceSearchPopup(isCancel) {
+    public closeAdvanceSearchPopup(event) {
         this.advanceSearchModel.hide();
-        if (!isCancel) {
+        if (!event.isClose) {
             this.getAdvanceSearchTxn();
             // this.getTransactionData();
+            if (event.advanceSearchData) {
+                if (event.advanceSearchData['dataToSend']['bsRangeValue'].length) {
+                    this.datePickerOptions = {
+                        ...this.datePickerOptions,
+                        startDate: moment(event.advanceSearchData.dataToSend.bsRangeValue[0], 'DD-MM-YYYY').toDate(),
+                        endDate: moment(event.advanceSearchData.dataToSend.bsRangeValue[1], 'DD-MM-YYYY').toDate()
+                    };
+                }
+
+            }
         }
         // this.advanceSearchRequest = _.cloneDeep(advanceSearchRequest);
     }
@@ -1650,7 +1648,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @param {*} transaction Transaction details which will decide if transaction is RCM applicable
      * @memberof LedgerComponent
      */
-    private handleRcmVisibility(transaction: any): void {
+    private handleRcmVisibility(transaction: TransactionVM): void {
         this.lc.flattenAccountListStream$.pipe(take(1)).subscribe((accounts) => {
             if (accounts) {
                 let currentLedgerAccountDetails, selectedAccountDetails;
@@ -1671,14 +1669,61 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                 }
                 const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails);
-                console.log('RCM: ', shouldShowRcmEntry);
                 if (this.lc && this.lc.currentBlankTxn) {
                     this.lc.currentBlankTxn['shouldShowRcmEntry'] = shouldShowRcmEntry;
-                    console.log('Current: ', this.lc.currentBlankTxn);
                 }
             }
         });
     }
 
+    /**
+     * Handles the taxable amount and ITC section visibility based on conditions
+     *
+     * @private
+     * @param {TransactionVM} transaction Selected transaction
+     * @returns {void}
+     * @memberof LedgerComponent
+     */
+    private handleTaxableAmountVisibility(transaction: TransactionVM): void {
+        this.shouldShowRcmTaxableAmount = false;
+        this.shouldShowItcSection = false;
+        let currentCompany;
+        this.store.pipe(select(appState => appState.session), take(1)).subscribe((sessionData) => {
+            currentCompany = sessionData.companies.find((company) => company.uniqueName === sessionData.companyUniqueName).country;
+        });
+        if (!this.lc || !this.lc.activeAccount || !this.lc.activeAccount.parentGroups || this.lc.activeAccount.parentGroups.length < 2) {
+            return;
+        }
+        if (!transaction.selectedAccount || !transaction.selectedAccount.parentGroups || transaction.selectedAccount.parentGroups.length < 2) {
+            return;
+        }
+        const currentLedgerSecondParent = this.lc.activeAccount.parentGroups[1].uniqueName;
+        const selectedAccountSecondParent = transaction.selectedAccount.parentGroups[1].uniqueName;
+        if (currentLedgerSecondParent === 'reversecharge' && transaction.type === 'CREDIT') {
+            // Current ledger is of reverse charge and user has entered the transaction on the right side (CREDIT) of the ledger
+            if (selectedAccountSecondParent === 'dutiestaxes') {
+                /* Particular account belongs to the Duties and taxes then check the country based on which
+                    respective sections will be displayed */
+                if (currentCompany === 'United Arab Emirates') {
+                    this.shouldShowRcmTaxableAmount = true;
+                }
+                if (currentCompany === 'India') {
+                    this.shouldShowItcSection = true;
+                }
+            }
+        } else if (currentLedgerSecondParent === 'dutiestaxes' && transaction.type === 'DEBIT') {
+            // Current ledger is of Duties and taxes and user has entered the transaction on the left side (DEBIT) of the ledger
+            if (selectedAccountSecondParent === 'reversecharge') {
+                /* Particular account belongs to the Reverse charge then check the country based on which
+                    respective sections will be displayed */
+                if (currentCompany === 'United Arab Emirates') {
+                    this.shouldShowRcmTaxableAmount = true;
+                }
+                if (currentCompany === 'India') {
+                    this.shouldShowItcSection = true;
+                }
+            }
+        }
+    }
 
 }

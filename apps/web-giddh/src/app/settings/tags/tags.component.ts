@@ -69,7 +69,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
 
 	public deleteTag(tag: TagRequest) {
 		this.newTag = tag;
-		this.confirmationMessage = `Are you sure want to delete <b>${tag.name}</b>?`;
+		this.confirmationMessage = `Are you sure you want to delete <b>${tag.name}</b>?`;
 		this.confirmationModal.show();
 	}
 

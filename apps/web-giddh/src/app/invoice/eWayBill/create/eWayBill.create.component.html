@@ -158,13 +158,22 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType" value="R"
-                                [(ngModel)]="generateEwayBillform.vehicleType" type="radio" />Regular </label>
+
+                        <span class="pd0 mrR3">
+                            <input id="Regular" class="radio-custom cp ml0" name="vehicleType" value="R"
+                            [(ngModel)]="generateEwayBillform.vehicleType" type="radio">
+                            <label for="Regular" class="radio-custom-label">Regular</label>
+                        </span>
+
+
                         <ng-container *ngIf="!isTransModeRoad">
-                            <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType"
-                                    value="O" [(ngModel)]="generateEwayBillform.vehicleType" type="radio" />Over
-                                Dimensional Cargo {{isTransModeRoad}}</label>
+                            <span class="pd0 mrR3">
+                                <input id="Regular" class="radio-custom cp ml0" name="vehicleType" value="O" [(ngModel)]="generateEwayBillform.vehicleType" type="radio">
+                                <label for="Regular" class="radio-custom-label">Over
+                                    Dimensional Cargo {{isTransModeRoad}}</label>
+                            </span>
                         </ng-container>
+
                     </div>
                 </div>
 

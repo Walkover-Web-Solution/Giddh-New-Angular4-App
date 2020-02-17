@@ -832,14 +832,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (this.activeGroupUniqueName === 'discount') {
             delete accountRequest['addresses'];
         }
-        this.isShowBankDetails(this.activeGroupUniqueName);
+        // this.isShowBankDetails(this.activeGroupUniqueName);
         if (!this.showVirtualAccount) {
             delete accountRequest['cashFreeVirtualAccountData'];
         }
-
         if (!this.showBankDetail) {
             delete accountRequest['accountBankDetails'];
         }
+
         if (!accountRequest.currency) {
             this.selectedCurrency = this.companyCurrency;
             this.addAccountForm.get('currency').patchValue(this.selectedCurrency);

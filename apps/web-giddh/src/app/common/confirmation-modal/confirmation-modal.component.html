@@ -1,10 +1,10 @@
-<div class="custom-modal-rcm">
+<div class="custom-confirmation-modal">
     <div class="modal-header">
         <span class="close"><span class="icon-cross" (click)="handleButtonClick('Close')"></span></span>
         <h3 [ngClass]="configuration?.headerCssClass">{{configuration?.headerText}}</h3>
     </div>
     <div class="modal-body">
-        <p [ngClass]="configuration?.messageCssClass">{{configuration?.messageText}}</p>
+        <p [ngClass]="configuration?.messageCssClass" [innerHTML]="configuration?.messageText"></p>
         <p [ngClass]="configuration?.footerCssClass">{{configuration?.footerText}}</p>
         <div>
             <button *ngFor="let button of configuration?.buttons" (click)="handleButtonClick(button?.text)"

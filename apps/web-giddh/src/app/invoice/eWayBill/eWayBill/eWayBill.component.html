@@ -367,13 +367,21 @@
 
                         <!-- <span class="mr-1 ">  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Regular</span>
 <span>  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Over Dimensional Cargo</span> -->
-                        <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType" required
-                                [(ngModel)]="updateEwayVehicleform.vehicleType" value="R" type="radio" />Regular
-                        </label>
 
-                        <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType" required
-                                value="O" [(ngModel)]="updateEwayVehicleform.vehicleType" type="radio" />Over
-                            Dimensional Cargo</label>
+
+
+
+                        <span class="pd0 mrR3">
+                            <input id="Regular" class="radio-custom cp ml0" type="radio" name="vehicleType" required
+                            [(ngModel)]="updateEwayVehicleform.vehicleType" value="R">
+                            <label for="Regular" class="radio-custom-label">Regular</label>
+                        </span>
+
+                        <span class="pd0 mrR3">
+                            <input id="DimensionalCargo" class="radio-custom cp ml0" type="radio" name="vehicleType" required
+                            value="O" [(ngModel)]="updateEwayVehicleform.vehicleType">
+                            <label for="DimensionalCargo" class="radio-custom-label">Over Dimensional Cargo</label>
+                        </span>
 
                     </div>
                 </div>

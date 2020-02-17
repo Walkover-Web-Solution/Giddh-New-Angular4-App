@@ -8,36 +8,47 @@
         <form name="addShareEmailForm" novalidate class="" autocomplete="off">
             <div class="pdB2 clearfix">
                 <label class="w100">Type:</label>
-                <label class="radio-inline pd0">
-                    <input type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected" [value]="emailTypeMini"
-                        class="radio_theme cp">Mini
-                </label>
-                <label class="radio-inline pd0">
-                    <input type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected"
-                        [value]="emailTypeDetail" class="radio_theme cp">Detailed
-                </label>
+
+                <span class="pd0 mrR3">
+                    <input id="Mini" class="radio-custom cp ml0" type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected" [value]="emailTypeMini">
+                    <label for="Mini" class="radio-custom-label">Mini</label>
+                </span>
+
+                <span class="pd0 mrR3">
+                    <input id="Detailed" class="radio-custom cp ml0" type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected" [value]="emailTypeDetail">
+                    <label for="Detailed" class="radio-custom-label">Detailed</label>
+                </span>
+
             </div>
             <div class="pdB2 clearfix">
                 <label class="w100">Export As:</label>
-                <label class="radio-inline pd0">
-                    <input type="radio" name="exportAs" [(ngModel)]="exportAs" [value]="'pdf'"
-                        class="radio_theme cp">PDF
-                </label>
-                <label class="radio-inline pd0">
-                    <input type="radio" name="exportAs" [(ngModel)]="exportAs" [value]="'xlsx'"
-                        class="radio_theme cp">Excel
-                </label>
+
+
+                <span class="pd0 mrR3">
+                    <input id="PDF" class="radio-custom cp ml0" type="radio" name="exportAs" [(ngModel)]="exportAs" [value]="'pdf'">
+                    <label for="PDF" class="radio-custom-label">PDF</label>
+                </span>
+
+                <span class="pd0 mrR3">
+                    <input id="Excel" class="radio-custom cp ml0" type="radio" name="exportAs" [(ngModel)]="exportAs" [value]="'xlsx'">
+                    <label for="Excel" class="radio-custom-label">Excel</label>
+                </span>
+
             </div>
             <div class="pdB2 clearfix">
                 <label class="w100">Order:</label>
-                <label class="radio-inline pd0">
-                    <input type="radio" name="order" [(ngModel)]="order" [value]="'asc'"
-                        class="radio_theme cp">Ascending
-                </label>
-                <label class="radio-inline descendingRadioBtn pd0">
-                    <input type="radio" name="order" [(ngModel)]="order" [value]="'desc'"
-                        class="radio_theme cp">Descending
-                </label>
+
+
+                <span class="pd0 mrR3">
+                    <input id="Ascending" class="radio-custom cp ml0" type="radio" name="order" [(ngModel)]="order" [value]="'asc'">
+                    <label for="Ascending" class="radio-custom-label">Ascending</label>
+                </span>
+
+                <span class="pd0 mrR3">
+                    <input id="Descending" class="radio-custom cp ml0" type="radio" name="order" [(ngModel)]="order" [value]="'desc'">
+                    <label for="Descending" class="radio-custom-label">Descending</label>
+                </span>
+
             </div>
             <div class="pdB2 clearfix" [hidden]="emailTypeSelected === 'admin-condensed'">
                 <label class="w100">Invoice no.:</label>

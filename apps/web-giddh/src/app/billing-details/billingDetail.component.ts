@@ -150,7 +150,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         });
         this.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(success => {
             if (success) {
-                this._route.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, isPlanPage: true } });
+                this._route.navigate(['pages', 'user-details', 'subscription']);
             }
         });
         this.cdRef.detectChanges();
@@ -275,7 +275,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     public backToSubscriptions() {
-        this._route.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, isPlanPage: true } });
+        this._route.navigate(['pages', 'user-details', 'subscription']);
     }
 
     public payWithRazor(billingDetail: NgForm) {
@@ -311,7 +311,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                     razorpaySignature: razorPay_response.razorpay_signature,
                     amountPaid: this.ChangePaidPlanAMT,
                     userBillingDetails: this.billingDetailsObj,
-                    country: this.createNewCompany ? this.createNewCompany.country : ''
+                    country: this.createNewCompany ? this.createNewCompany.country : '',
+                    callNewPlanApi: true
                 };
                 this.patchProfile(reQuestob);
             }

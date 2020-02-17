@@ -21,565 +21,572 @@ import { SALES_ACTIONS } from '../../actions/sales/sales.const';
 import { CurrentPage } from '../../models/api-models/Common';
 
 export interface GeneralState {
-	groupswithaccounts: GroupsWithAccountsResponse[];
-	flattenAccounts: IFlattenAccountsResultItem[];
-	states: States;
-	addAndManageClosed: boolean;
-	flattenGroups: IFlattenGroupsAccountsDetail[];
-	smartCombinedList: IUlist[];
-	smartList: IUlist[];
-	sideMenuBarOpen: boolean;
-	headerTitle: { uniqueName: string, additional: { tab: string, tabIndex: number } };
-	currentPage: CurrentPage;
+    groupswithaccounts: GroupsWithAccountsResponse[];
+    flattenAccounts: IFlattenAccountsResultItem[];
+    states: States;
+    addAndManageClosed: boolean;
+    flattenGroups: IFlattenGroupsAccountsDetail[];
+    smartCombinedList: IUlist[];
+    smartList: IUlist[];
+    sideMenuBarOpen: boolean;
+    headerTitle: { uniqueName: string, additional: { tab: string, tabIndex: number } };
+    currentPage: CurrentPage;
+    isCalendlyModelOpen: boolean;
 }
 
 const initialState: GeneralState = {
-	groupswithaccounts: null,
-	flattenAccounts: null,
-	states: null,
-	addAndManageClosed: false,
-	flattenGroups: [],
-	smartCombinedList: [],
-	smartList: [],
-	sideMenuBarOpen: false,
-	headerTitle: null,
-	currentPage: null
+    groupswithaccounts: null,
+    flattenAccounts: null,
+    states: null,
+    addAndManageClosed: false,
+    flattenGroups: [],
+    smartCombinedList: [],
+    smartList: [],
+    sideMenuBarOpen: false,
+    headerTitle: null,
+    currentPage: null,
+    isCalendlyModelOpen: false
 };
 
 export function GeneRalReducer(state: GeneralState = initialState, action: CustomActions): GeneralState {
-	switch (action.type) {
-		case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
-			return Object.assign({}, state, initialState);
-		}
-		case 'EmptyAction': {
-			return state;
-		}
-		case GENERAL_ACTIONS.GENERAL_GET_GROUP_WITH_ACCOUNTS_RESPONSE: {
-			let result: BaseResponse<GroupsWithAccountsResponse[], string> = action.payload;
-			if (result.status === 'success') {
-				return {
-					...state,
-					groupswithaccounts: result.body
-				};
-			}
-			return state;
-		}
-		case GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS_RESPONSE: {
-			let result: BaseResponse<FlattenAccountsResponse, string> = action.payload;
-			if (result.status === 'success') {
-				let arr = result.body.results;
-				arr.map((item: any) => {
-					let o: any = provideStrings(item.parentGroups);
-					item.nameStr = o.nameStr;
-					item.uNameStr = o.uNameStr;
-					return item;
-				});
-				return {
-					...state,
-					flattenAccounts: arr
-				};
-			}
-			return state;
-		}
-		case GENERAL_ACTIONS.GENERAL_GET_ALL_STATES_RESPONSE: {
-			let result: BaseResponse<States, string> = action.payload;
-			if (result.status === 'success') {
-				return {
-					...state,
-					states: result.body
-				};
-			}
-			return state;
-		}
-		case GENERAL_ACTIONS.RESET_STATES_LIST: {
-			return { ...state, states: null };
-		}
-		// NEW LOGIC FOR FLATTEN ACCOUNTS AND GROUPS
-		case GENERAL_ACTIONS.RESET_SMART_LIST: {
-			return { ...state, smartList: [] };
-		}
+    switch (action.type) {
+        case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+            return Object.assign({}, state, initialState);
+        }
+        case 'EmptyAction': {
+            return state;
+        }
+        case GENERAL_ACTIONS.GENERAL_GET_GROUP_WITH_ACCOUNTS_RESPONSE: {
+            let result: BaseResponse<GroupsWithAccountsResponse[], string> = action.payload;
+            if (result.status === 'success') {
+                return {
+                    ...state,
+                    groupswithaccounts: result.body
+                };
+            }
+            return state;
+        }
+        case GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS_RESPONSE: {
+            let result: BaseResponse<FlattenAccountsResponse, string> = action.payload;
+            if (result.status === 'success') {
+                let arr = result.body.results;
+                arr.map((item: any) => {
+                    let o: any = provideStrings(item.parentGroups);
+                    item.nameStr = o.nameStr;
+                    item.uNameStr = o.uNameStr;
+                    return item;
+                });
+                return {
+                    ...state,
+                    flattenAccounts: arr
+                };
+            }
+            return state;
+        }
+        case GENERAL_ACTIONS.GENERAL_GET_ALL_STATES_RESPONSE: {
+            let result: BaseResponse<States, string> = action.payload;
+            if (result.status === 'success') {
+                return {
+                    ...state,
+                    states: result.body
+                };
+            }
+            return state;
+        }
+        case GENERAL_ACTIONS.RESET_STATES_LIST: {
+            return { ...state, states: null };
+        }
+        // NEW LOGIC FOR FLATTEN ACCOUNTS AND GROUPS
+        case GENERAL_ACTIONS.RESET_SMART_LIST: {
+            return { ...state, smartList: [] };
+        }
 
-		case GENERAL_ACTIONS.SET_SMART_LIST: {
-			let data: IUlist[] = action.payload;
-			return { ...state, smartList: data };
-		}
+        case GENERAL_ACTIONS.SET_SMART_LIST: {
+            let data: IUlist[] = action.payload;
+            return { ...state, smartList: data };
+        }
 
-		case GENERAL_ACTIONS.RESET_COMBINED_LIST: {
-			return { ...state, smartCombinedList: [] };
-		}
+        case GENERAL_ACTIONS.RESET_COMBINED_LIST: {
+            return { ...state, smartCombinedList: [] };
+        }
 
-		case GENERAL_ACTIONS.SET_COMBINED_LIST: {
-			let data: IUlist[] = action.payload;
-			return { ...state, smartCombinedList: data };
-		}
+        case GENERAL_ACTIONS.SET_COMBINED_LIST: {
+            let data: IUlist[] = action.payload;
+            return { ...state, smartCombinedList: data };
+        }
 
-		case GENERAL_ACTIONS.FLATTEN_GROUPS_REQ: {
-			return { ...state, flattenGroups: [] };
-		}
+        case GENERAL_ACTIONS.FLATTEN_GROUPS_REQ: {
+            return { ...state, flattenGroups: [] };
+        }
 
-		case GENERAL_ACTIONS.FLATTEN_GROUPS_RES: {
-			let result: BaseResponse<IPaginatedResponse, string> = action.payload;
-			if (result.status === 'success') {
-				let arr = result.body.results;
-				arr.map((item: any) => {
-					let o: any = provideStrings(item.parentGroups);
-					item.nameStr = o.nameStr;
-					item.uNameStr = o.uNameStr;
-					return item;
-				});
-				return { ...state, flattenGroups: arr };
-			}
-			return state;
-		}
+        case GENERAL_ACTIONS.FLATTEN_GROUPS_RES: {
+            let result: BaseResponse<IPaginatedResponse, string> = action.payload;
+            if (result.status === 'success') {
+                let arr = result.body.results;
+                arr.map((item: any) => {
+                    let o: any = provideStrings(item.parentGroups);
+                    item.nameStr = o.nameStr;
+                    item.uNameStr = o.uNameStr;
+                    return item;
+                });
+                return { ...state, flattenGroups: arr };
+            }
+            return state;
+        }
 
-		// END NEW LOGIC
+        // END NEW LOGIC
 
-		// groups with accounts actions
-		case GroupWithAccountsAction.CREATE_GROUP_RESPONSE:
-			let gData: BaseResponse<GroupResponse, GroupCreateRequest> = action.payload;
-			if (gData.status === 'success') {
-				let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-				let myChildElementIsOpen = false;
-				AddAndActiveGroupFunc(groupArray, gData, myChildElementIsOpen);
-				return {
-					...state,
-					groupswithaccounts: groupArray
-				};
-			}
-			return state;
-		case GroupWithAccountsAction.UPDATE_GROUP_RESPONSE: {
-			let activeGrpData: BaseResponse<GroupResponse, GroupUpateRequest> = action.payload;
-			if (activeGrpData.status === 'success') {
-				Object.assign({}, activeGrpData.body, { isOpen: true, isActive: true });
-				let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-				updateActiveGroupFunc(groupArray, activeGrpData.queryString.groupUniqueName, activeGrpData.body, false);
-				return {
-					...state,
-					groupswithaccounts: groupArray
-				};
-			}
-			return state;
-		}
-		case GroupWithAccountsAction.DELETE_GROUP_RESPONSE:
-			let g: BaseResponse<string, string> = action.payload;
-			if (g.status === 'success') {
-				let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-				removeGroupFunc(groupArray, g.request, null);
-				return {
-					...state,
-					groupswithaccounts: groupArray
-				};
-			}
-			return state;
-		case GroupWithAccountsAction.MOVE_GROUP_RESPONSE:
-			let m: BaseResponse<MoveGroupResponse, MoveGroupRequest> = action.payload;
-			if (m.status === 'success') {
-				let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-				let deletedItem = removeGroupFunc(groupArray, m.queryString.groupUniqueName, null);
-				addNewGroupFunc(groupArray, deletedItem, m.request.parentGroupUniqueName, false);
-				return {
-					...state,
-					groupswithaccounts: groupArray
-				};
-			}
-			return state;
+        // groups with accounts actions
+        case GroupWithAccountsAction.CREATE_GROUP_RESPONSE:
+            let gData: BaseResponse<GroupResponse, GroupCreateRequest> = action.payload;
+            if (gData.status === 'success') {
+                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                let myChildElementIsOpen = false;
+                AddAndActiveGroupFunc(groupArray, gData, myChildElementIsOpen);
+                return {
+                    ...state,
+                    groupswithaccounts: groupArray
+                };
+            }
+            return state;
+        case GroupWithAccountsAction.UPDATE_GROUP_RESPONSE: {
+            let activeGrpData: BaseResponse<GroupResponse, GroupUpateRequest> = action.payload;
+            if (activeGrpData.status === 'success') {
+                Object.assign({}, activeGrpData.body, { isOpen: true, isActive: true });
+                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                updateActiveGroupFunc(groupArray, activeGrpData.queryString.groupUniqueName, activeGrpData.body, false);
+                return {
+                    ...state,
+                    groupswithaccounts: groupArray
+                };
+            }
+            return state;
+        }
+        case GroupWithAccountsAction.DELETE_GROUP_RESPONSE:
+            let g: BaseResponse<string, string> = action.payload;
+            if (g.status === 'success') {
+                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                removeGroupFunc(groupArray, g.request, null);
+                return {
+                    ...state,
+                    groupswithaccounts: groupArray
+                };
+            }
+            return state;
+        case GroupWithAccountsAction.MOVE_GROUP_RESPONSE:
+            let m: BaseResponse<MoveGroupResponse, MoveGroupRequest> = action.payload;
+            if (m.status === 'success') {
+                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                let deletedItem = removeGroupFunc(groupArray, m.queryString.groupUniqueName, null);
+                addNewGroupFunc(groupArray, deletedItem, m.request.parentGroupUniqueName, false);
+                return {
+                    ...state,
+                    groupswithaccounts: groupArray
+                };
+            }
+            return state;
 
-		//  accounts actions
-		case AccountsAction.CREATE_ACCOUNT_RESPONSEV2: {
-			let accountData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
-			if (accountData.status === 'success') {
-				let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-				addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
+        //  accounts actions
+        case AccountsAction.CREATE_ACCOUNT_RESPONSEV2: {
+            let accountData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
+            if (accountData.status === 'success') {
+                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
 
-				let flattenItem = cloneDeep(accountData.body);
-				flattenItem.uNameStr = flattenItem.parentGroups.map(mp => mp.uniqueName).join(', ');
+                let flattenItem = cloneDeep(accountData.body);
+                flattenItem.uNameStr = flattenItem.parentGroups.map(mp => mp.uniqueName).join(', ');
 
                 /*
                  check if we account have applicable taxes
                  if yes then parse it because when we create account then we receive applicableTaxes array as INameUniqueName
                  but in flatten accounts we only stores string array [ uniqueName of tax only ]
                  */
-				if (flattenItem.applicableTaxes) {
-					flattenItem.applicableTaxes = flattenItem.applicableTaxes.map(acc => acc.uniqueName);
-				}
+                if (flattenItem.applicableTaxes) {
+                    flattenItem.applicableTaxes = flattenItem.applicableTaxes.map(acc => acc.uniqueName);
+                }
 
-				return {
-					...state,
-					groupswithaccounts: groupArray,
-					flattenAccounts: [...state.flattenAccounts, flattenItem]
-				};
-			}
-			return state;
-		}
-		case AccountsAction.UPDATE_ACCOUNT_RESPONSEV2: {
-			let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
-			if (updatedAccount.status === 'success') {
-				let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-				let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
-				UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
-				let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === updatedAccount.queryString.accountUniqueName);
-				let accResp = cloneDeep(updatedAccount.body);
-				accResp.uNameStr = accResp.parentGroups.map(mp => mp.uniqueName).join(', ');
-				flattenAccountsArray[index] = accResp;
-				return {
-					...state,
-					groupswithaccounts: groupArray,
-					flattenAccounts: flattenAccountsArray
-				};
-			}
-			return state;
-		}
+                return {
+                    ...state,
+                    groupswithaccounts: groupArray,
+                    flattenAccounts: [...state.flattenAccounts, flattenItem]
+                };
+            }
+            return state;
+        }
+        case AccountsAction.UPDATE_ACCOUNT_RESPONSEV2: {
+            let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
+            if (updatedAccount.status === 'success') {
+                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
+                UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
+                let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === updatedAccount.queryString.accountUniqueName);
+                let accResp = cloneDeep(updatedAccount.body);
+                accResp.uNameStr = accResp.parentGroups.map(mp => mp.uniqueName).join(', ');
+                flattenAccountsArray[index] = accResp;
+                return {
+                    ...state,
+                    groupswithaccounts: groupArray,
+                    flattenAccounts: flattenAccountsArray
+                };
+            }
+            return state;
+        }
 
-		//  add item to flatten accounts as we are adding item from side bar account
-		case SALES_ACTIONS.ADD_ACCOUNT_DETAILS_RESPONSE: {
-			let accountData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
-			if (accountData.status === 'success') {
-				let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-				addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
+        //  add item to flatten accounts as we are adding item from side bar account
+        case SALES_ACTIONS.ADD_ACCOUNT_DETAILS_RESPONSE: {
+            let accountData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
+            if (accountData.status === 'success') {
+                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
 
-				let flattenItem = cloneDeep(accountData.body);
-				flattenItem.uNameStr = flattenItem.parentGroups.map(mp => mp.uniqueName).join(', ');
-				return {
-					...state,
-					groupswithaccounts: groupArray,
-					flattenAccounts: [...state.flattenAccounts, flattenItem]
-				};
-			}
-			return state;
-		}
+                let flattenItem = cloneDeep(accountData.body);
+                flattenItem.uNameStr = flattenItem.parentGroups.map(mp => mp.uniqueName).join(', ');
+                return {
+                    ...state,
+                    groupswithaccounts: groupArray,
+                    flattenAccounts: [...state.flattenAccounts, flattenItem]
+                };
+            }
+            return state;
+        }
 
-		// update flatten accounts as because we are updating account through sidebar in sales/ proforma/ estimate module
-		case SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS_RESPONSE: {
-			let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
-			if (updatedAccount.status === 'success') {
-				let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-				let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
-				UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
-				let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === updatedAccount.queryString.accountUniqueName);
-				flattenAccountsArray[index] = updatedAccount.body;
-				return {
-					...state,
-					groupswithaccounts: groupArray,
-					flattenAccounts: flattenAccountsArray
-				};
-			}
-			return state;
-		}
+        // update flatten accounts as because we are updating account through sidebar in sales/ proforma/ estimate module
+        case SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS_RESPONSE: {
+            let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
+            if (updatedAccount.status === 'success') {
+                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
+                UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
+                let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === updatedAccount.queryString.accountUniqueName);
+                flattenAccountsArray[index] = updatedAccount.body;
+                return {
+                    ...state,
+                    groupswithaccounts: groupArray,
+                    flattenAccounts: flattenAccountsArray
+                };
+            }
+            return state;
+        }
 
-		case AccountsAction.DELETE_ACCOUNT_RESPONSE: {
-			let d: BaseResponse<string, any> = action.payload;
-			if (d.status === 'success') {
-				let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-				let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
-				let accountForDelete: IFlattenAccountsResultItem = flattenAccountsArray.find(f => f.uniqueName === d.request.accountUniqueName);
-				let parentGroupsLength = accountForDelete.parentGroups.length;
-				removeAccountFunc(groupArray, accountForDelete.parentGroups[parentGroupsLength - 1].uniqueName, d.request.accountUniqueName, null);
-				let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === accountForDelete.uniqueName);
-				flattenAccountsArray.splice(index, 1);
-				return {
-					...state,
-					groupswithaccounts: groupArray,
-					flattenAccounts: flattenAccountsArray
-				};
-			}
-			return state;
-		}
-		case AccountsAction.MOVE_ACCOUNT_RESPONSE: {
-			let mAcc: BaseResponse<string, AccountMoveRequest> = action.payload;
-			if (mAcc.status === 'success') {
-				let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-				let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
-				let accountForDelete: IFlattenAccountsResultItem = flattenAccountsArray.find(f => f.uniqueName === mAcc.queryString.accountUniqueName);
-				let parentGroupsLength = accountForDelete.parentGroups.length;
-				let deletedItem = removeAccountFunc(groupArray, accountForDelete.parentGroups[parentGroupsLength - 1].uniqueName, mAcc.queryString.accountUniqueName, null);
-				let parentPath = [];
-				addNewAccountFunc(groupArray, deletedItem, mAcc.request.uniqueName, false, parentPath);
-				accountForDelete.parentGroups = parentPath.reverse();
-				flattenAccountsArray.map(fa => {
-					if (fa.uniqueName === accountForDelete.uniqueName) {
-						fa = accountForDelete;
-					}
-					return fa;
-				});
-				return {
-					...state,
-					groupswithaccounts: groupArray,
-					flattenAccounts: flattenAccountsArray
-				};
-			}
-			return state;
-		}
-		case AccountsAction.MERGE_ACCOUNT_RESPONSE: {
-			let dd: BaseResponse<string, AccountMergeRequest[]> = action.payload;
-			if (dd.status === 'success') {
-				let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-				dd.request.forEach(f => {
-					findAndRemoveAccountFunc(groupArray, f.uniqueName, false);
-				});
+        case AccountsAction.DELETE_ACCOUNT_RESPONSE: {
+            let d: BaseResponse<string, any> = action.payload;
+            if (d.status === 'success') {
+                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
+                let accountForDelete: IFlattenAccountsResultItem = flattenAccountsArray.find(f => f.uniqueName === d.request.accountUniqueName);
+                let parentGroupsLength = accountForDelete.parentGroups.length;
+                removeAccountFunc(groupArray, accountForDelete.parentGroups[parentGroupsLength - 1].uniqueName, d.request.accountUniqueName, null);
+                let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === accountForDelete.uniqueName);
+                flattenAccountsArray.splice(index, 1);
+                return {
+                    ...state,
+                    groupswithaccounts: groupArray,
+                    flattenAccounts: flattenAccountsArray
+                };
+            }
+            return state;
+        }
+        case AccountsAction.MOVE_ACCOUNT_RESPONSE: {
+            let mAcc: BaseResponse<string, AccountMoveRequest> = action.payload;
+            if (mAcc.status === 'success') {
+                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
+                let accountForDelete: IFlattenAccountsResultItem = flattenAccountsArray.find(f => f.uniqueName === mAcc.queryString.accountUniqueName);
+                let parentGroupsLength = accountForDelete.parentGroups.length;
+                let deletedItem = removeAccountFunc(groupArray, accountForDelete.parentGroups[parentGroupsLength - 1].uniqueName, mAcc.queryString.accountUniqueName, null);
+                let parentPath = [];
+                addNewAccountFunc(groupArray, deletedItem, mAcc.request.uniqueName, false, parentPath);
+                accountForDelete.parentGroups = parentPath.reverse();
+                flattenAccountsArray.map(fa => {
+                    if (fa.uniqueName === accountForDelete.uniqueName) {
+                        fa = accountForDelete;
+                    }
+                    return fa;
+                });
+                return {
+                    ...state,
+                    groupswithaccounts: groupArray,
+                    flattenAccounts: flattenAccountsArray
+                };
+            }
+            return state;
+        }
+        case AccountsAction.MERGE_ACCOUNT_RESPONSE: {
+            let dd: BaseResponse<string, AccountMergeRequest[]> = action.payload;
+            if (dd.status === 'success') {
+                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                dd.request.forEach(f => {
+                    findAndRemoveAccountFunc(groupArray, f.uniqueName, false);
+                });
 
-				return {
-					...state,
-					groupswithaccounts: groupArray
-				};
-			}
-			return {
-				...state
-			}
-		}
-		case GENERAL_ACTIONS.CLOSE_ADD_AND_MANAGE: {
-			let newState = _.cloneDeep(state);
-			newState.addAndManageClosed = !newState.addAndManageClosed;
-			return Object.assign({}, state, newState);
-		}
+                return {
+                    ...state,
+                    groupswithaccounts: groupArray
+                };
+            }
+            return {
+                ...state
+            }
+        }
+        case GENERAL_ACTIONS.CLOSE_ADD_AND_MANAGE: {
+            let newState = _.cloneDeep(state);
+            newState.addAndManageClosed = !newState.addAndManageClosed;
+            return Object.assign({}, state, newState);
+        }
 
-		case GENERAL_ACTIONS.SET_SIDE_MENU_BAR_STATE: {
-			return {
-				...state, sideMenuBarOpen: action.payload
-			}
-		}
+        case GENERAL_ACTIONS.SET_SIDE_MENU_BAR_STATE: {
+            return {
+                ...state, sideMenuBarOpen: action.payload
+            }
+        }
 
-		case GENERAL_ACTIONS.SET_APP_HEADER_TITLE: {
-			return {
-				...state, headerTitle: { uniqueName: action.payload.uniqueName, additional: action.payload.additional }
-			}
-		}
+        case GENERAL_ACTIONS.SET_APP_HEADER_TITLE: {
+            return {
+                ...state, headerTitle: { uniqueName: action.payload.uniqueName, additional: action.payload.additional }
+            }
+        }
 
-		case GENERAL_ACTIONS.SET_PAGE_HEADER_TITLE: {
-			return {
-				...state, currentPage: action.payload
-			}
-		}
+        case GENERAL_ACTIONS.SET_PAGE_HEADER_TITLE: {
+            return {
+                ...state, currentPage: action.payload
+            }
+        }
+        case GENERAL_ACTIONS.OPEN_CALENDLY_MODEL: {
+            return {
+                ...state, isCalendlyModelOpen: action.payload
+            }
+        }
 
-		default:
-			return state;
-	}
+        default:
+            return state;
+    }
 }
 
 const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseResponse<GroupResponse, GroupCreateRequest>, myChildElementIsOpen: boolean): boolean => {
-	// let myChildElementIsOpen = false;
-	for (let grp of groups) {
-		if (grp.uniqueName === gData.request.parentGroupUniqueName) {
-			let newData = new GroupsWithAccountsResponse();
-			newData.accounts = [];
-			newData.category = grp.category;
-			newData.groups = [];
-			newData.isActive = false;
-			newData.name = gData.body.name;
-			newData.synonyms = gData.body.synonyms;
-			newData.uniqueName = gData.body.uniqueName;
-			grp.isOpen = true;
-			grp.groups.push(newData);
-			myChildElementIsOpen = true;
-			return myChildElementIsOpen;
-		}
-		if (grp.groups) {
-			myChildElementIsOpen = AddAndActiveGroupFunc(grp.groups, gData, myChildElementIsOpen);
-			if (myChildElementIsOpen) {
-				return myChildElementIsOpen;
-			}
-		}
-	}
-	return myChildElementIsOpen;
+    // let myChildElementIsOpen = false;
+    for (let grp of groups) {
+        if (grp.uniqueName === gData.request.parentGroupUniqueName) {
+            let newData = new GroupsWithAccountsResponse();
+            newData.accounts = [];
+            newData.category = grp.category;
+            newData.groups = [];
+            newData.isActive = false;
+            newData.name = gData.body.name;
+            newData.synonyms = gData.body.synonyms;
+            newData.uniqueName = gData.body.uniqueName;
+            grp.isOpen = true;
+            grp.groups.push(newData);
+            myChildElementIsOpen = true;
+            return myChildElementIsOpen;
+        }
+        if (grp.groups) {
+            myChildElementIsOpen = AddAndActiveGroupFunc(grp.groups, gData, myChildElementIsOpen);
+            if (myChildElementIsOpen) {
+                return myChildElementIsOpen;
+            }
+        }
+    }
+    return myChildElementIsOpen;
 };
 
 const updateActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, updatedGroup: GroupResponse, result: boolean): boolean => {
-	if (result) {
-		return result;
-	}
-	for (let grp of groups) {
-		if (grp.uniqueName === uniqueName) {
-			grp.name = updatedGroup.name;
-			grp.uniqueName = updatedGroup.uniqueName;
-			grp.isActive = true;
-			grp.isOpen = false;
-			result = true;
-			break;
-		}
-		if (grp.groups) {
-			result = updateActiveGroupFunc(grp.groups, uniqueName, updatedGroup, result);
-			if (result) {
-				break;
-			}
-		}
-	}
-	return result;
+    if (result) {
+        return result;
+    }
+    for (let grp of groups) {
+        if (grp.uniqueName === uniqueName) {
+            grp.name = updatedGroup.name;
+            grp.uniqueName = updatedGroup.uniqueName;
+            grp.isActive = true;
+            grp.isOpen = false;
+            result = true;
+            break;
+        }
+        if (grp.groups) {
+            result = updateActiveGroupFunc(grp.groups, uniqueName, updatedGroup, result);
+            if (result) {
+                break;
+            }
+        }
+    }
+    return result;
 };
 
 const removeGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: IGroupsWithAccounts) => {
-	for (let i = 0; i < groups.length; i++) {
-		if (groups[i].uniqueName === uniqueName) {
-			result = groups[i];
-			groups.splice(i, 1);
-			return result;
-		}
-		if (groups[i].groups) {
-			result = removeGroupFunc(groups[i].groups, uniqueName, result);
-			if (result) {
-				return result;
-			}
-		}
-	}
+    for (let i = 0; i < groups.length; i++) {
+        if (groups[i].uniqueName === uniqueName) {
+            result = groups[i];
+            groups.splice(i, 1);
+            return result;
+        }
+        if (groups[i].groups) {
+            result = removeGroupFunc(groups[i].groups, uniqueName, result);
+            if (result) {
+                return result;
+            }
+        }
+    }
 };
 
 const addNewGroupFunc = (groups: IGroupsWithAccounts[], gData: IGroupsWithAccounts, parentUniqueName: string, result: boolean): boolean => {
-	if (result) {
-		return result;
-	}
-	for (let grp of groups) {
-		if (grp.uniqueName === parentUniqueName) {
-			grp.groups.push(gData);
-			result = true;
-			return result;
-		}
-		if (grp.groups) {
-			result = addNewGroupFunc(grp.groups, gData, parentUniqueName, result);
-			if (result) {
-				return result;
-			}
-		}
-	}
-	return result;
+    if (result) {
+        return result;
+    }
+    for (let grp of groups) {
+        if (grp.uniqueName === parentUniqueName) {
+            grp.groups.push(gData);
+            result = true;
+            return result;
+        }
+        if (grp.groups) {
+            result = addNewGroupFunc(grp.groups, gData, parentUniqueName, result);
+            if (result) {
+                return result;
+            }
+        }
+    }
+    return result;
 };
 
 const addCreatedAccountFunc = (groups: IGroupsWithAccounts[], aData: AccountResponseV2 | AccountResponse, grpUniqueName: string, result: boolean): boolean => {
-	if (result) {
-		return result;
-	}
-	for (let grp of groups) {
-		if (grp.uniqueName === grpUniqueName) {
-			grp.isOpen = true;
-			grp.accounts.push(
-				{
-					uniqueName: aData.uniqueName,
-					name: aData.name,
-					isActive: true,
-					stocks: aData.stocks,
-					mergedAccounts: aData.mergedAccounts
-				}
-			);
-			result = true;
-			return result;
-		}
-		if (grp.groups) {
-			result = addCreatedAccountFunc(grp.groups, aData, grpUniqueName, result);
-			if (result) {
-				return result;
-			}
-		}
-	}
-	return result;
+    if (result) {
+        return result;
+    }
+    for (let grp of groups) {
+        if (grp.uniqueName === grpUniqueName) {
+            grp.isOpen = true;
+            grp.accounts.push(
+                {
+                    uniqueName: aData.uniqueName,
+                    name: aData.name,
+                    isActive: true,
+                    stocks: aData.stocks,
+                    mergedAccounts: aData.mergedAccounts
+                }
+            );
+            result = true;
+            return result;
+        }
+        if (grp.groups) {
+            result = addCreatedAccountFunc(grp.groups, aData, grpUniqueName, result);
+            if (result) {
+                return result;
+            }
+        }
+    }
+    return result;
 };
 
 const UpdateAccountFunc = (groups: IGroupsWithAccounts[],
-	aData: AccountResponseV2, grpUniqueName: string, accountUniqueName: string, result: boolean): boolean => {
-	if (result) {
-		return result;
-	}
-	for (let grp of groups) {
-		if (grp.uniqueName === grpUniqueName) {
-			grp.isOpen = true;
-			let index = grp.accounts.findIndex(p => p.uniqueName === accountUniqueName);
-			if (index > -1) {
-				grp.accounts[index].uniqueName = aData.uniqueName;
-				grp.accounts[index].name = aData.name;
-				grp.accounts[index].isActive = true;
-				grp.accounts[index].stocks = aData.stocks;
-				grp.accounts[index].mergedAccounts = aData.mergedAccounts;
-				result = true;
-				return result;
-			}
-		}
-		if (grp.groups) {
-			result = UpdateAccountFunc(grp.groups, aData, grpUniqueName, accountUniqueName, result);
-			if (result) {
-				return result;
-			}
-		}
-	}
-	return result;
+    aData: AccountResponseV2, grpUniqueName: string, accountUniqueName: string, result: boolean): boolean => {
+    if (result) {
+        return result;
+    }
+    for (let grp of groups) {
+        if (grp.uniqueName === grpUniqueName) {
+            grp.isOpen = true;
+            let index = grp.accounts.findIndex(p => p.uniqueName === accountUniqueName);
+            if (index > -1) {
+                grp.accounts[index].uniqueName = aData.uniqueName;
+                grp.accounts[index].name = aData.name;
+                grp.accounts[index].isActive = true;
+                grp.accounts[index].stocks = aData.stocks;
+                grp.accounts[index].mergedAccounts = aData.mergedAccounts;
+                result = true;
+                return result;
+            }
+        }
+        if (grp.groups) {
+            result = UpdateAccountFunc(grp.groups, aData, grpUniqueName, accountUniqueName, result);
+            if (result) {
+                return result;
+            }
+        }
+    }
+    return result;
 };
 
 const removeAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, accountUniqueName: string, result: IAccountsInfo): IAccountsInfo => {
-	for (let grp of groups) {
-		if (grp.uniqueName === uniqueName) {
-			let index = grp.accounts.findIndex(a => a.uniqueName === accountUniqueName);
-			result = grp.accounts[index];
-			grp.accounts.splice(index, 1);
-			return result;
-		}
-		if (grp.groups) {
-			result = removeAccountFunc(grp.groups, uniqueName, accountUniqueName, result);
-			if (result) {
-				return result;
-			}
-		}
-	}
+    for (let grp of groups) {
+        if (grp.uniqueName === uniqueName) {
+            let index = grp.accounts.findIndex(a => a.uniqueName === accountUniqueName);
+            result = grp.accounts[index];
+            grp.accounts.splice(index, 1);
+            return result;
+        }
+        if (grp.groups) {
+            result = removeAccountFunc(grp.groups, uniqueName, accountUniqueName, result);
+            if (result) {
+                return result;
+            }
+        }
+    }
 };
 
 const addNewAccountFunc = (groups: IGroupsWithAccounts[], aData: IAccountsInfo, grpUniqueName: string, result: boolean, parentPath = null): boolean => {
-	if (result) {
-		return result;
-	}
-	for (let grp of groups) {
-		if (grp.uniqueName === grpUniqueName) {
-			grp.isOpen = true;
-			grp.accounts.push(aData);
-			if (Array.isArray(parentPath)) {
-				parentPath.push({
-					name: grp.name,
-					uniqueName: grp.uniqueName
-				});
-			}
-			result = true;
-			return result;
-		}
-		if (grp.groups) {
-			result = addNewAccountFunc(grp.groups, aData, grpUniqueName, result, parentPath);
-			if (result) {
-				if (Array.isArray(parentPath)) {
-					parentPath.push({
-						name: grp.name,
-						uniqueName: grp.uniqueName
-					});
-				}
-				return result;
-			}
-		}
-	}
-	return result;
+    if (result) {
+        return result;
+    }
+    for (let grp of groups) {
+        if (grp.uniqueName === grpUniqueName) {
+            grp.isOpen = true;
+            grp.accounts.push(aData);
+            if (Array.isArray(parentPath)) {
+                parentPath.push({
+                    name: grp.name,
+                    uniqueName: grp.uniqueName
+                });
+            }
+            result = true;
+            return result;
+        }
+        if (grp.groups) {
+            result = addNewAccountFunc(grp.groups, aData, grpUniqueName, result, parentPath);
+            if (result) {
+                if (Array.isArray(parentPath)) {
+                    parentPath.push({
+                        name: grp.name,
+                        uniqueName: grp.uniqueName
+                    });
+                }
+                return result;
+            }
+        }
+    }
+    return result;
 };
 
 const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: boolean) => {
-	for (let grp of groups) {
-		let accIndex = grp.accounts.findIndex(f => f.uniqueName === uniqueName);
+    for (let grp of groups) {
+        let accIndex = grp.accounts.findIndex(f => f.uniqueName === uniqueName);
 
-		if (accIndex > -1) {
-			grp.accounts.splice(accIndex, 1);
-			result = true;
-			return result;
-		}
-		if (grp.groups) {
-			result = findAndRemoveAccountFunc(grp.groups, uniqueName, result);
-			if (result) {
-				return result;
-			}
-		}
-	}
+        if (accIndex > -1) {
+            grp.accounts.splice(accIndex, 1);
+            result = true;
+            return result;
+        }
+        if (grp.groups) {
+            result = findAndRemoveAccountFunc(grp.groups, uniqueName, result);
+            if (result) {
+                return result;
+            }
+        }
+    }
 };
 
 // consume array and return array on string
 const provideStrings = (arr: any[]) => {
-	let o = { nameStr: [], uNameStr: [] };
-	let b = { nameStr: '', uNameStr: '' };
-	try {
-		arr.forEach((item: INameUniqueName) => {
-			o.nameStr.push(item.name);
-			o.uNameStr.push(item.uniqueName);
-		});
-		b.nameStr = o.nameStr.join(', ');
-		b.uNameStr = o.uNameStr.join(', ');
-	} catch (error) {
-		//
-	}
-	return b;
+    let o = { nameStr: [], uNameStr: [] };
+    let b = { nameStr: '', uNameStr: '' };
+    try {
+        arr.forEach((item: INameUniqueName) => {
+            o.nameStr.push(item.name);
+            o.uNameStr.push(item.uniqueName);
+        });
+        b.nameStr = o.nameStr.join(', ');
+        b.uNameStr = o.uNameStr.join(', ');
+    } catch (error) {
+        //
+    }
+    return b;
 };

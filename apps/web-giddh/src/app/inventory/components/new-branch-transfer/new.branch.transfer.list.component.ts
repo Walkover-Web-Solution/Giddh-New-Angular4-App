@@ -70,6 +70,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public clearFilter: boolean = false;
+    public selectedVoucherType: string = '';
 
     public branchTransferGetRequestParams: NewBranchTransferListGetRequestParams = {
         from: '',

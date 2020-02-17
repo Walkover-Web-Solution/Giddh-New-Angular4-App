@@ -173,7 +173,7 @@ export class SettingTaxesComponent implements OnInit {
     public deleteTax(taxToDelete) {
         this.newTaxObj = taxToDelete;
         this.selectedTax = this.availableTaxes.find((tax) => tax.uniqueName === taxToDelete.uniqueName);
-        this.confirmationMessage = `Are you sure want to delete ${this.selectedTax.name}?`;
+        this.confirmationMessage = `Are you sure you want to delete ${this.selectedTax.name}?`;
         this.confirmationFor = 'delete';
         this.taxConfirmationModel.show();
     }

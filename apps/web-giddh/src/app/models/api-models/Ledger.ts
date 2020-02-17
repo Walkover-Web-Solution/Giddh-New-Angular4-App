@@ -119,7 +119,8 @@ export class LedgerResponse {
     public subVoucher?: string = '';
     public pettyCashEntryStatus?: PettyCashEntryStatus;
     public attachedFileUniqueNames?: string[];
-
+    public itcAvailable?: string = '';
+    public reverseChargeTaxableAmount?: number;
 }
 
 /*
