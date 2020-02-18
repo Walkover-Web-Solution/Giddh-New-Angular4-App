@@ -25,14 +25,11 @@ export class SubscriptionsService {
 
     }
 
-    public GetSubScribedCompanies(): Observable<BaseResponse<SubscriptionsUser, string>> {
-        let userUniqueName = this._generalService.user.uniqueName;
-
+    public getSubScribedCompanies(): Observable<BaseResponse<SubscriptionsUser, string>> {
         return this._http.get(this.config.apiUrl + SUBSCRIPTIONS_API.SUBSCRIBED_COMPANIES).pipe(map((res) => {
             let data: BaseResponse<SubscriptionsUser, string> = res;
             data.request = '';
             data.queryString = {};
-            // data.response.results.forEach(p => p.isOpen = false);
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<SubscriptionsUser, string>(e, '')));
     }

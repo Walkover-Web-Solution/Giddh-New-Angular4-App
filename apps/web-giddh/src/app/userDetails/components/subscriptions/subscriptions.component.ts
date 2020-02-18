@@ -41,7 +41,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
 
     public ngOnInit() {
         this.isPlanShow = false;
-        this.subscriptionService.GetSubScribedCompanies().subscribe((res) => {
+        this.subscriptionService.getSubScribedCompanies().subscribe((res) => {
             this.isLoading = false;
 
             if(res && res.status === "success") {
