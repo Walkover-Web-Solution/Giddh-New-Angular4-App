@@ -44,7 +44,7 @@
 
             <div class="d-flex addInvoice">
                 <!-- E-way bill generation and export to excel for a single selected item in invoice sizes -->
-                <div *ngIf="selectedItems.length">
+                <div *ngIf="selectedVoucher !== 'purchase' || (selectedItems.length === 1 && selectedVoucher === 'purchase')">
                     <div class="btn-group" dropdown #dp="bs-dropdown">
                         <button dropdownToggle type="button" class="btn spcl_dropdown desktop-view-btn dropdown-toggle" aria-controls="dropdown-basic">
                             More
@@ -58,7 +58,7 @@
                                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup()" *ngIf="selectedVoucher === 'sales'">
                                     Generate E-way Bill</a>
                             </li>
-                            <li role="menuitem" *ngIf="selectedItems.length === 1">
+                            <li role="menuitem" *ngIf="selectedVoucher !== 'purchase' || (selectedItems.length === 1 && selectedVoucher === 'purchase')">
                                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
                             </li>
                         </ul>
