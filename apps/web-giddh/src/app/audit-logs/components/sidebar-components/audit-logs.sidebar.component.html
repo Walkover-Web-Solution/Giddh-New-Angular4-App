@@ -1,63 +1,31 @@
-<h1 class="page-title" style="margin-left:0; margin-bottom:15px;">
-    Apply Log Filters</h1>
-<!-- <div class="clearfix mrT2">
-    <label>Filter By:</label>
-    <sh-select [options]="vm.dateOptions" [isFilterEnabled]="true" [placeholder]="'Select Option'"
-        [(ngModel)]="vm.selectedDateOption"></sh-select>
-</div> -->
+<h1 class="page-title" style="margin-left:0; margin-bottom:15px;">Apply Log Filters</h1>
 <form [formGroup]="auditForm">
     <div class="clearfix mrT2">
         <label>From date <sup class="mandatory-asterisk">*</sup></label>
         <input autocomplete="off" formControlName="fromDate" type="text" name="from" [placeholder]="giddhDateFormat"
             #fromdp="bsDatepicker" bsDatepicker class="form-control" />
-
     </div>
 
     <div class="clearfix mrT2">
         <label>To date <sup class="mandatory-asterisk">*</sup></label>
         <input autocomplete="off" formControlName="toDate" type="text" name="to" [placeholder]="giddhDateFormat"
             #todp="bsDatepicker" bsDatepicker class="form-control" />
-
     </div>
-
-    <!-- <div class="clearfix mrT2" *ngIf="vm.selectedDateOption == '0'">
-        <div class="row" style="margin-left:0">
-            <p class="input-group pull-left" for="entryDate">
-                <label>Entry Date
-                    <input id="entryDate" type="radio" name="entryDate" [(ngModel)]="vm.logOrEntry" value="entryDate" />
-                </label>
-            </p>
-            <p class="input-group pull-left mrL2" for="logDate">
-                <label>Log Date
-                    <input id="logDate" type="radio" name="logDate" [(ngModel)]="vm.logOrEntry" value="logDate" />
-                </label>
-            </p>
-            <br />
-        </div>
-
-        <div class="input-group">
-            <input type="text" name="logdate" [placeholder]="giddhDateFormat" #logdate="bsDatepicker" bsDatepicker
-                [(ngModel)]="vm.selectedLogDate" class="form-control" [placement]="'right'" />
-        </div>
-    </div> -->
 
     <div class="clearfix mrT2">
         <label>Select Operation <sup class="mandatory-asterisk">*</sup></label>
-        <!-- <input type="text" class="form-control" /> -->
         <sh-select [forceClearReactive]="forceClearConfiguration" formControlName="operation" [options]="vm.filters"
             [placeholder]="'Select Option'">
         </sh-select>
-        <!--<select2 [data]="vm.filters" [options]="vm.options" [value]="vm.selectedOperation" (valueChanged)="selectOperationOption($event)"></select2>-->
     </div>
 
     <div class="clearfix mrT2">
         <label>Select Entity <sup class="mandatory-asterisk">*</sup></label>
         <sh-select [forceClearReactive]="forceClearConfiguration" formControlName="entity" [options]="vm.entities"
             [isFilterEnabled]="true" [placeholder]="'Select Option'"></sh-select>
-        <!--<select2 [data]="vm.entities" [options]="vm.options" [value]="vm.selectedEntity" (valueChanged)="selectEntityOption($event)"></select2>-->
     </div>
 
-    <!--
+    <!-- TODO: In future sprints
     <div class="clearfix mrT2">
         <label>Select Account</label>
         <sh-select [options]="vm.accounts$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'"
@@ -74,12 +42,10 @@
         <select2 [data]="vm.groups$ | async" [options]="vm.options" [value]="vm.selectedGroupUnq" (valueChanged)="selectGroup($event)"></select2>
     </div> -->
 
-
     <div class="clearfix mrT2">
         <label>Select User</label>
         <sh-select [forceClearReactive]="forceClearConfiguration" formControlName="user" [options]="vm.users$ | async"
             [customFilter]="customUserFilter" [isFilterEnabled]="true" [placeholder]="'Select Option'"></sh-select>
-        <!--<select2 [data]="vm.users$ | async" [options]="vm.options" [value]="vm.selectedUserUnq" (valueChanged)="selectUser($event)"></select2>-->
     </div>
 
     <button [disabled]="auditForm.invalid" class='btn btn-success pull-left mrT2' [ladda]="vm.getLogsInprocess$ | async"
@@ -87,6 +53,5 @@
         Logs
     </button>
     <button class="btn btn-warning pull-left mrT2 mrL" (click)="resetFilters()">Reset</button>
-
     <br />
 </form>

@@ -8,17 +8,22 @@
     </div>
     <div class="reciptNoteContent">
         <div class="reciptNoteRadioBtn pr-15 pl-15 mb-2" *ngIf="!editBranchTransferUniqueName">
-            <span class="mrR1"><input
-                    [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'products'}"
-                    name="transferType" id="multipleProducts" style="margin-left: 0px !important;" type="radio"
-                    (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'products'"><label
-                    for="multipleProducts">Multiple Products</label></span>
-            <span><input [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'senders'}"
-                    name="transferType" id="multipleSenders" style="margin-left: 0px !important;" type="radio"
-                    (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'senders'"><label
-                    for="multipleSenders" *ngIf="branchTransferMode === 'receiptnote'">Multiple Senders</label><label
-                    for="multipleSenders" *ngIf="branchTransferMode === 'deliverynote'">Multiple
-                    Receivers</label></span>
+            <span class="pd0 mrR3">
+                <input id="multipleProducts" class="radio-custom cp ml0" type="radio" [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'products'}"
+                name="transferType"
+                (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'products'">
+                <label for="multipleProducts" class="radio-custom-label">Multiple Products</label>
+            </span>
+
+            <span class="pd0 mrR3">
+                <input id="multipleSenders" class="radio-custom cp ml0" type="radio" [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'senders'}"
+                name="transferType" type="radio"
+                (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'senders'">
+                <label for="multipleSenders" class="radio-custom-label" *ngIf="branchTransferMode === 'receiptnote'">Multiple Senders</label>
+                <label for="multipleSenders" class="radio-custom-label" *ngIf="branchTransferMode === 'deliverynote'">Multiple
+                Receivers</label>
+            </span>
+
         </div>
         <div class="mb-2" *ngIf="editBranchTransferUniqueName"></div>
         <div class="multipleProductsWrapper ">
