@@ -140,7 +140,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 		this.store.dispatch(this.inventoryAction.GetStock());
 		// this.store.dispatch(this.groupWithAccountsAction.getFlattenGroupsWithAccounts());
 
-		this._accountService.GetFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+		this._accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
 			if (data.status === 'success') {
 				let accounts: IOption[] = [];
 				data.body.results.map(d => {

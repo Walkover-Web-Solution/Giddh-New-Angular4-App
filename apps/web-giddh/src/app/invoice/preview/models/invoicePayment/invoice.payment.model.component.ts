@@ -273,7 +273,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public loadPaymentModes() {
-        this._accountService.GetFlattenAccounts().subscribe((res) => {
+        this._accountService.getFlattenAccounts().subscribe((res) => {
             if (res.status === 'success') {
                 let arr = res.body.results;
                 arr.map((item: any) => {
