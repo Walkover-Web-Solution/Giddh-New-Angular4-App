@@ -1127,7 +1127,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         });
 
-        this.accountService.GetFlattenAccounts().subscribe(a => {
+        this.accountService.getFlattenAccounts().subscribe(a => {
             let accounts: IOption[] = [];
             if (a.status === 'success') {
                 a.body.results.map(acc => {
