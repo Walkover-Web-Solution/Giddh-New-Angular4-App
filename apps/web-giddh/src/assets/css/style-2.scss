@@ -1547,6 +1547,9 @@ modal-container.modal {
 .justify-content-center {
     justify-content: center;
 }
+.color-primary {
+    color: $primaryBtncolror;
+}
 /* my css end */
 
 /*input*/
@@ -2562,7 +2565,9 @@ input[type="checkbox"]:checked:after {
 .font-16 {
     font-size: 16px !important;
 }
-
+.font-20 {
+    font-size: 20px;
+}
 .font-22 {
     font-size: 22px;
 }
@@ -8723,7 +8728,7 @@ input.checkbox-custom[type="checkbox"] {
 .checkbox-custom-label,
 .radio-custom-label {
     position: relative;
-    display: inline-flex;
+    display: inline-flex !important;
     align-items: center;
 
 }
@@ -9073,6 +9078,9 @@ input.checkbox-custom[type="checkbox"] {
     }
     .xs-pr-0 {
         padding-right: 0px;
+    }
+    .xs-pt-0 {
+        padding-top: 0px;
     }
     .xs-width-100 {
         width: 100%;
