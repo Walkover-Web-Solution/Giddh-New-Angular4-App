@@ -1,6 +1,6 @@
 <h1 class="page-title" *ngIf="(logs$ | async).length > 0"> Audit Logs</h1>
 <br />
-<cdk-virtual-scroll-viewport *ngIf="(logs$ | async).length > 0" itemSize="50" class="audit-log-viewport">
+<cdk-virtual-scroll-viewport *ngIf="(logs$ | async).length > 0" itemSize="itemsPerPage" class="audit-log-viewport">
     <section class="audit-log" *cdkVirtualFor="let log of (logs$ | async); let i = index">
         <h1>{{log.operationType}}
             <span *ngIf="log && log.accountName && log.accountName != null"> - {{log.accountName}}
