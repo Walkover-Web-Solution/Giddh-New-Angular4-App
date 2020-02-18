@@ -777,10 +777,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         for (let control of addresses.controls) {
             if(this.isStateRequired) {
                 control.get('stateCode').setValidators([Validators.required]);
-                addresses.controls[i].get('stateCode').setValidators([Validators.required]);
             } else {
                 control.get('stateCode').setValidators(null);
-                addresses.controls[i].get('stateCode').setValidators(null);
             }
             control.get('stateCode').updateValueAndValidity();
             i++;
