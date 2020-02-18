@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NgModule } from '@angular/core';
 import { AuditLogsGridComponent } from './components/audit-logs-grid/audit-logs-grid.component';
 import { AuditLogsSidebarComponent } from './components/sidebar-components/audit-logs.sidebar.component';
@@ -29,7 +30,8 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
         DatepickerModule,
         BsDatepickerModule,
         LaddaModule,
-        ShSelectModule
+        ShSelectModule,
+        ScrollingModule
     ],
 })
 export class AuditLogsModule {
