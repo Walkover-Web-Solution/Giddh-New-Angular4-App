@@ -3,7 +3,7 @@
 <cdk-virtual-scroll-viewport *ngIf="(logs$ | async).length > 0" itemSize="itemsPerPage" class="audit-log-viewport">
     <section class="audit-log" *cdkVirtualFor="let log of (logs$ | async); let i = index">
         <h1>{{log?.operationType}}
-            <span *ngIf="log && log.accountName && log.accountName != null"> - {{log.accountName}}
+            <span *ngIf="log && log.accountName !== undefined && log.accountName !== null"> - {{log.accountName}}
                 ({{log.accountUniqueName}})</span>
         </h1>
         <div class="mrT border-top-btm clearfix">
@@ -19,7 +19,7 @@
                 <label class="pull-left mrL2">User:</label>
                 <p class="pull-left mrL">{{log?.user.name}}</p>
             </div>
-            <div *ngIf="log && log.groupName && log.groupName != null">
+            <div *ngIf="log && log.groupName !== undefined && log.groupName !== null">
                 <label class="pull-left mrL2">Group:</label>
                 <p class="pull-left mrL">{{log.groupName}}</p>
             </div>
@@ -28,22 +28,22 @@
                 <p class="pull-left mrL">{{log?.companyName}}</p>
             </div>
             <div
-                *ngIf="log?.log && log.log.sharedWith && log.log.sharedWith != undefined && log.log.sharedWith.name.length > 0">
+                *ngIf="log?.log && log.log.sharedWith && log.log.sharedWith !== undefined && log.log.sharedWith.name.length > 0">
                 <label class="pull-left mrL2">Shared with:</label>
                 <p class="pull-left mrL">{{log.log.sharedWith.name}}
                     <span
-                        ng-if="log.log.sharedWith.email && log.log.sharedWith.email != null && log.log.sharedWith.email.length > 0">
+                        ng-if="log.log.sharedWith.email && log.log.sharedWith.email !== undefined && log.log.sharedWith.email !== null && log.log.sharedWith.email.length > 0">
                         | {{log.log.sharedWith.email}}</span>
                 </p>
             </div>
-            <div *ngIf="log && log.log && log.log.description != undefined && log.log.description.length > 0">
+            <div *ngIf="log && log.log && log.log.description !== undefined && log.log.description.length > 0">
                 <label class="pull-left mrL2">Description:</label>
                 <p class="pull-left mrL">{{log.log.description}}</p>
             </div>
         </div>
 
         <div class="mrT"
-            *ngIf="log?.log && log.log?.transactions != undefined && log.log.transactions.length > 0">
+            *ngIf="log?.log && log.log?.transactions !== undefined && log.log.transactions.length > 0">
             <table class="table table-bordered ">
                 <thead>
                     <tr>
@@ -66,7 +66,7 @@
             </table>
         </div>
         <div class="mrT text-center"
-            *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined">
+            *ngIf="log && log.log && log.log.old !== undefined && log.log.updated !== undefined && log.log.updated.transactions !== undefined">
             <label>Updated</label>
             <table class="table table-bordered">
                 <thead>
@@ -112,7 +112,7 @@
             </table>
         </div>
         <div class="mrT text-center"
-            *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.old.transactions == undefined && log.log.updated.transactions == undefined">
+            *ngIf="log && log.log && log.log.old !== undefined && log.log.updated !== undefined && log.log.old.transactions === undefined && log.log.updated.transactions === undefined">
             <label>Updated</label>
             <table class="table table-bordered">
                 <thead>
