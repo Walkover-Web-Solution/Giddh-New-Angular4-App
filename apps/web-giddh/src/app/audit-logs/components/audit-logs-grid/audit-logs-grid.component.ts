@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
@@ -31,12 +31,12 @@ export class AuditLogsGridComponent implements OnDestroy {
         private store: Store<AppState>,
         private _auditLogsActions: AuditLogsActions
         ) {
-            this.loadMoreInProcess$ = this.store.select(p => p.auditlog.LoadMoreInProcess).pipe(takeUntil(this.destroyed$));
-            this.logs$ = this.store.select(p => p.auditlog.logs);
-            this.size$ = this.store.select(p => p.auditlog.size);
-            this.totalElements$ = this.store.select(p => p.auditlog.totalElements);
-            this.totalPages$ = this.store.select(p => p.auditlog.totalPages);
-            this.page$ = this.store.select(p => p.auditlog.CurrectPage);
+            this.loadMoreInProcess$ = this.store.pipe(select(p => p.auditlog.LoadMoreInProcess), takeUntil(this.destroyed$));
+            this.logs$ = this.store.pipe(select(p => p.auditlog.logs));
+            this.size$ = this.store.pipe(select(p => p.auditlog.size));
+            this.totalElements$ = this.store.pipe(select(p => p.auditlog.totalElements));
+            this.totalPages$ = this.store.pipe(select(p => p.auditlog.totalPages));
+            this.page$ = this.store.pipe(select(p => p.auditlog.currentPage));
     }
 
     /**
@@ -55,9 +55,9 @@ export class AuditLogsGridComponent implements OnDestroy {
      * @memberof AuditLogsGridComponent
      */
     public loadMoreLogs(): void {
-        this.store.select(p => p.auditlog).pipe(take(1)).subscribe((r) => {
-            let request = _.cloneDeep(r.CurrectLogsRequest);
-            let page = r.CurrectPage + 1;
+        this.store.pipe(select(p => p.auditlog), take(1)).subscribe((details) => {
+            let request = _.cloneDeep(details.currentLogsRequest);
+            let page = details.currentPage + 1;
             this.store.dispatch(this._auditLogsActions.LoadMoreLogs(request, page));
         });
     }

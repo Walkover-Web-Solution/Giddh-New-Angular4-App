@@ -13,8 +13,8 @@ export interface AuditLogsState {
     totalElements: number;
     getLogInProcess: boolean;
     LoadMoreInProcess: boolean;
-    CurrectLogsRequest?: LogsRequest;
-    CurrectPage?: number;
+    currentLogsRequest?: LogsRequest;
+    currentPage?: number;
 }
 
 export const initialState: AuditLogsState = {
@@ -24,8 +24,8 @@ export const initialState: AuditLogsState = {
     size: 20,
     getLogInProcess: false,
     LoadMoreInProcess: false,
-    CurrectLogsRequest: null,
-    CurrectPage: 0
+    currentLogsRequest: null,
+    currentPage: 0
 };
 
 export function auditLogsReducer(state = initialState, action: CustomActions): AuditLogsState {
@@ -44,8 +44,8 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
             data = action.payload as BaseResponse<LogsResponse, LogsRequest>;
             if (data.status === 'success') {
                 newState = _.cloneDeep(state);
-                newState.CurrectPage = 1;
-                newState.CurrectLogsRequest = data.request;
+                newState.currentPage = 1;
+                newState.currentLogsRequest = data.request;
                 newState.getLogInProcess = false;
                 newState.logs = data.body.logs;
                 newState.size = data.body.size;
@@ -64,10 +64,10 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
             data = action.payload as BaseResponse<LogsResponse, LogsRequest>;
             if (data.status === 'success') {
                 newState = _.cloneDeep(state);
-                newState.CurrectPage = data.queryString.page;
+                newState.currentPage = data.queryString.page;
                 newState.getLogInProcess = false;
                 newState.LoadMoreInProcess = false;
-                newState.CurrectLogsRequest = data.request;
+                newState.currentLogsRequest = data.request;
                 newState.logs.push(...data.body.logs);
                 newState.size = data.body.size;
                 newState.totalElements = data.body.totalElements;
