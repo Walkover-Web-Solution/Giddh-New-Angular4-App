@@ -276,6 +276,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     this.addAccountForm.get('mobileCode').patchValue(this.selectedAccountCallingCode);  // if mobile no null then country calling cade will assign
                 }
 
+                this.toggleStateRequired();
             }
 
         });
@@ -542,11 +543,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         let accountCountry = this.addAccountForm.get('country').get('countryCode').value;
         if (accountCountry) {
             if (accountCountry !== 'IN') {
-                // this.addAccountForm.controls['addresses'] = this._fb.array([]);
                 this.isIndia = false;
             } else {
                 this.isIndia = true;
             }
+            this.toggleStateRequired();
         }
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         if (addresses.controls.length === 0) {
@@ -882,7 +883,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.addAccountForm.get('currency').setValue(currencyCode);
             this.getStates(event.value);
             this.getOnboardingForm(event.value);
-
+            this.toggleStateRequired();
         }
     }
 
@@ -1274,10 +1275,32 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountAddNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
-        if(this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.countryName === "India" && (this.activeGroupUniqueName === "sundrydebtors" || this.activeGroupUniqueName === "sundrycreditors")) {
+        if(this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === "sundrydebtors" || this.activeGroupUniqueName === "sundrycreditors")) {
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * This functions is used to add/remove required validation to state field
+     *
+     * @returns {void}
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public toggleStateRequired(): void {
+        this.isStateRequired = this.checkActiveGroupCountry();
+        let i = 0;
+        let addresses = this.addAccountForm.get('addresses') as FormArray;
+        for (let control of addresses.controls) {
+            if(this.isStateRequired) {
+                control.get('stateCode').setValidators([Validators.required]);
+            } else {
+                control.get('stateCode').setValidators(null);
+            }
+            control.get('stateCode').updateValueAndValidity();
+            i++;
+        }
+        this.addAccountForm.controls['addresses'].updateValueAndValidity();
     }
 }
