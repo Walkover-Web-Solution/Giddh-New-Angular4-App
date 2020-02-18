@@ -9,8 +9,8 @@ export interface ILogRequest {
 	toDate?: string;
 	operation: string;
 	userUniqueName: string;
-	accountUniqueName: string;
-	groupUniqueName: string;
+	accountUniqueName?: string;
+	groupUniqueName?: string;
 	entryDate?: string;
 	logDate?: string;
 	entity: string;
