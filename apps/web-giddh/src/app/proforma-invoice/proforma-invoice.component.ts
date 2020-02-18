@@ -240,8 +240,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public calculatedRoundOff: number = 0;
     public selectedVoucherType: string = 'sales';
     public tempDateParams: any = {};
-    //public tempDateParams: any = { dateOfSupply: new Date(), dispatchedDate: '' };
-    // modals related
     public modalConfig: ModalOptions = {
         animated: true,
         keyboard: false,
