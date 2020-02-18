@@ -18,7 +18,7 @@ import { NgForm } from '@angular/forms';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective, ModalOptions } from 'ngx-bootstrap';
 
 
 @Component({
@@ -71,12 +71,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     public updateCustomfieldsRequest: BulkUpdateInvoiceCustomfields = new BulkUpdateInvoiceCustomfields();
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     public updateInProcess: boolean = false;
-    public modalConfig: ModalOptions = {
-        animated: true,
-        keyboard: true,
-        backdrop: 'static',
-        ignoreBackdropClick: true
-    };
+
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
