@@ -301,8 +301,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.addAccountForm.get('currency').setValue('IN');
             this.companyCountry = 'IN';
             this.getOnboardingForm('IN');
-
         }
+
+        this.toggleStateRequired();
     }
 
     public initializeNewForm() {
@@ -586,7 +587,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             let currencyCode = this.countryCurrency[event.value];
             this.addAccountForm.get('currency').setValue(currencyCode);
             this.getStates(event.value);
-
+            this.toggleStateRequired();
         }
     }
 
@@ -756,7 +757,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
-        if(this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.countryName === "India" && (this.activeGroupUniqueName === "sundrydebtors" || this.activeGroupUniqueName === "sundrycreditors")) {
+        if(this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === "sundrydebtors" || this.activeGroupUniqueName === "sundrycreditors")) {
             return true;
         } else {
             return false;
