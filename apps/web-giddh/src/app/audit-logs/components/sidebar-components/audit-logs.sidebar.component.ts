@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
@@ -43,53 +43,53 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         private _accountService: AccountService,
         private _companyService: CompanyService,
         private _auditLogsActions: AuditLogsActions,
-        private bsConfig: BsDatepickerConfig,
-        private changeDetection: ChangeDetectorRef) {
-        this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
-        this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
-        this.bsConfig.showWeekNumbers = false;
+        private bsConfig: BsDatepickerConfig
+        ) {
+            this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
+            this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
+            this.bsConfig.showWeekNumbers = false;
 
-        this.vm = new AuditLogsSidebarVM();
-        this.vm.getLogsInprocess$ = this.store.select(p => p.auditlog.getLogInProcess).pipe(takeUntil(this.destroyed$));
-        this.vm.groupsList$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
-        this.vm.selectedCompany = this.store.select(state => {
-            if (!state.session.companies) {
-                return;
-            }
-            return state.session.companies.find(cmp => {
-                return cmp.uniqueName === state.session.companyUniqueName;
+            this.vm = new AuditLogsSidebarVM();
+            this.vm.getLogsInprocess$ = this.store.select(p => p.auditlog.getLogInProcess).pipe(takeUntil(this.destroyed$));
+            this.vm.groupsList$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
+            this.vm.selectedCompany = this.store.select(state => {
+                if (!state.session.companies) {
+                    return;
+                }
+                return state.session.companies.find(cmp => {
+                    return cmp.uniqueName === state.session.companyUniqueName;
+                });
+            }).pipe(takeUntil(this.destroyed$));
+            this.vm.user$ = this.store.select(state => {
+                if (state.session.user) {
+                    return state.session.user.user;
+                }
+            }).pipe(takeUntil(this.destroyed$));
+            this._accountService.GetFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data.status === 'success') {
+                    let accounts: IOption[] = [];
+                    data.body.results.map(d => {
+                        accounts.push({ label: d.name, value: d.uniqueName });
+                    });
+                    this.vm.accounts$ = observableOf(accounts);
+                }
             });
-        }).pipe(takeUntil(this.destroyed$));
-        this.vm.user$ = this.store.select(state => {
-            if (state.session.user) {
-                return state.session.user.user;
-            }
-        }).pipe(takeUntil(this.destroyed$));
-        this._accountService.GetFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
-                let accounts: IOption[] = [];
-                data.body.results.map(d => {
-                    accounts.push({ label: d.name, value: d.uniqueName });
-                });
-                this.vm.accounts$ = observableOf(accounts);
-            }
-        });
-        let selectedCompany: CompanyResponse = null;
-        let loginUser: UserDetails = null;
-        this.vm.selectedCompany.pipe(take(1)).subscribe((c) => selectedCompany = c);
-        this.vm.user$.pipe(take(1)).subscribe((c) => loginUser = c);
-        this._companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
-                let users: IOption[] = [];
-                data.body.map((d) => {
-                    users.push({ label: d.userName, value: d.userUniqueName, additional: d });
-                });
-                this.vm.canManageCompany = true;
-                this.vm.users$ = observableOf(users);
-            } else {
-                this.vm.canManageCompany = false;
-            }
-        });
+            let selectedCompany: CompanyResponse = null;
+            let loginUser: UserDetails = null;
+            this.vm.selectedCompany.pipe(take(1)).subscribe((c) => selectedCompany = c);
+            this.vm.user$.pipe(take(1)).subscribe((c) => loginUser = c);
+            this._companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data.status === 'success') {
+                    let users: IOption[] = [];
+                    data.body.map((d) => {
+                        users.push({ label: d.userName, value: d.userUniqueName, additional: d });
+                    });
+                    this.vm.canManageCompany = true;
+                    this.vm.users$ = observableOf(users);
+                } else {
+                    this.vm.canManageCompany = false;
+                }
+            });
     }
 
     public ngOnInit() {
