@@ -13,16 +13,16 @@
     </div>
 
     <div class="clearfix mrT2">
-        <label>Select Operation <sup class="mandatory-asterisk">*</sup></label>
-        <sh-select [forceClearReactive]="forceClearConfiguration" formControlName="operation" [options]="vm.filters"
-            [placeholder]="'Select Option'">
-        </sh-select>
+        <label>Select Entity <sup class="mandatory-asterisk">*</sup></label>
+        <sh-select [forceClearReactive]="forceClearConfiguration" formControlName="entity" [options]="entities" (selected)="loadOperationsForEntity($event)"
+            [isFilterEnabled]="true" [placeholder]="'Select Option'"></sh-select>
     </div>
 
     <div class="clearfix mrT2">
-        <label>Select Entity <sup class="mandatory-asterisk">*</sup></label>
-        <sh-select [forceClearReactive]="forceClearConfiguration" formControlName="entity" [options]="vm.entities"
-            [isFilterEnabled]="true" [placeholder]="'Select Option'"></sh-select>
+        <label>Select Operation <sup class="mandatory-asterisk">*</sup></label>
+        <sh-select [forceClearReactive]="forceClearConfiguration" formControlName="operation" [options]="operations"
+            [placeholder]="'Select Option'">
+        </sh-select>
     </div>
 
     <!-- TODO: In future sprints
