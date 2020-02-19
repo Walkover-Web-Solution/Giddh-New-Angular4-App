@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Store, select } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { of as observableOf, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil, filter } from 'rxjs/operators';
 
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import * as _ from '../../../lodash-optimized';
@@ -14,10 +14,13 @@ import { LogsRequest } from '../../../models/api-models/Logs';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { AccountService } from '../../../services/account.service';
 import { CompanyService } from '../../../services/companyService.service';
+import { LogsService } from '../../../services/logs.service';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { AuditLogsSidebarVM } from './Vm';
+import { LogsUtilityService } from '../../services/audit-logs-utility.service';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'audit-logs-sidebar',
@@ -30,7 +33,14 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
     public auditForm: FormGroup;
+    /** Configuration object to clear all the sh-select drop downs on form reset */
     public forceClearConfiguration: IForceClear = { status: false };
+    /** Filters for audit logs, contains entity and operations as key and values */
+    public filters: any;
+    /** Stores the entities filter values */
+    public entities: Array<IOption>;
+    /** Stores the operations filter values */
+    public operations: Array<IOption>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
@@ -39,7 +49,10 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         private _accountService: AccountService,
         private _companyService: CompanyService,
         private _auditLogsActions: AuditLogsActions,
-        private bsConfig: BsDatepickerConfig
+        private bsConfig: BsDatepickerConfig,
+        private logsService: LogsService,
+        private logsUtilityService: LogsUtilityService,
+        private toastService: ToasterService
         ) {
             this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
             this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
@@ -84,6 +97,16 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                     this.vm.users$ = observableOf(users);
                 } else {
                     this.vm.canManageCompany = false;
+                }
+            });
+            this.logsService.getFilters().pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data) {
+                    if (data.status === 'success') {
+                        this.filters = this.logsUtilityService.prepareAuditLogFilters(data.body);
+                        this.entities = this.logsUtilityService.getFormattedEntries(Object.keys(this.filters));
+                    } else {
+                        this.toastService.errorToast(data.message);
+                    }
                 }
             });
     }
@@ -195,5 +218,15 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         this.auditForm.reset();
         this.forceClearConfiguration = { status: true };
         this.store.dispatch(this._auditLogsActions.ResetLogs());
+    }
+
+    /**
+     * Loads operations for a particular entity
+     *
+     * @param {*} selectedEntity Selected entity
+     * @memberof AuditLogsSidebarComponent
+     */
+    public loadOperationsForEntity(selectedEntity: any): void {
+        this.operations = this.logsUtilityService.getFormattedEntries(this.filters[selectedEntity.value]);
     }
 }
