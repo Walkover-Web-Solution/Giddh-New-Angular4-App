@@ -15,7 +15,6 @@ export class LogsUtilityService {
      * @memberof LogsUtilityService
      */
     public prepareAuditLogFilters(filterData: any): any {
-        console.log(filterData);
         const formattedFilterData = {};
         if (filterData) {
             filterData.forEach(data => {
