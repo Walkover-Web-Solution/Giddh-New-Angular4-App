@@ -230,9 +230,10 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
                     }
 
                 });
-                this.defaultTemplates = customDefault[0];
-                this.checkDefaultTemplateSignature(this.defaultTemplates, templateType)
-                console.log(templates, this.defaultTemplates);
+                if (customDefault) {
+                    this.defaultTemplates = customDefault[0];
+                }
+                this.checkDefaultTemplateSignature(this.defaultTemplates, templateType);
                 this.allTemplatesOptions = [];
                 templates.forEach(tmpl => {
                     this.allTemplatesOptions.push({
@@ -298,7 +299,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
                         if (this.isDefaultTemplateSignatureImage) {
                             this.bulkUpdateImageSlogan.show();
                         } else {
-                             this.onConfirmationUpdateImageSlogan();
+                            this.onConfirmationUpdateImageSlogan();
                         }
                     }
                     break;
@@ -411,6 +412,8 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
             if (defaultTemplate.sections.footer.data.imageSignature && defaultTemplate.sections.footer.data.imageSignature.display && defaultTemplate.sections.footer.data.slogan && !defaultTemplate.sections.footer.data.slogan.display) {
                 this.isDefaultTemplateSignatureImage = true;
             } else if (defaultTemplate && defaultTemplate.sections.footer.data.imageSignature && defaultTemplate.sections.footer.data.slogan && defaultTemplate.sections.footer.data.slogan.display && !defaultTemplate.sections.footer.data.imageSignature.display) {
+                this.isDefaultTemplateSignatureImage = false;
+            } else {
                 this.isDefaultTemplateSignatureImage = false;
             }
         }
