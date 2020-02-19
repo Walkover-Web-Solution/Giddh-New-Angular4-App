@@ -12,7 +12,7 @@
   <!-- ranges container -->
   <div class="ranges" *ngIf="ranges?.length"
        style="border-right: 1px solid gainsboro;display: flex;flex-direction: column;">
-
+    <div>{{ranges | json}}</div>
     <!-- loop over ranges -->
     <div style="flex: 1 1 auto;">
       <ul>

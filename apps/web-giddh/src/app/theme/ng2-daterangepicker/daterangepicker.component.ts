@@ -69,7 +69,10 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoChe
 
 		$(this.input.nativeElement).on("apply.daterangepicker",
 			(e: any, picker: any) => {
-				let event = { event: e, picker };
+                let event = { event: e, picker };
+                const ranges = picker.container.find('.ranges li');
+                // document.querySelectorAll('.daterangepicker.dropdown-menu .ranges li');
+                console.log(ranges);
 				this.applyDaterangepicker.emit(event);
 			}
 		);
@@ -83,7 +86,7 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoChe
 
 		$(this.input.nativeElement).on("showCalendar.daterangepicker",
 			(e: any, picker: any) => {
-				let event = { event: e, picker };
+                let event = { event: e, picker };
 				this.showCalendarDaterangepicker.emit(event);
 			}
 		);
@@ -97,7 +100,7 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoChe
 
 		$(this.input.nativeElement).on("show.daterangepicker",
 			(e: any, picker: any) => {
-				let event = { event: e, picker };
+                let event = { event: e, picker };
 				this.showDaterangepicker.emit(event);
 			}
 		);
