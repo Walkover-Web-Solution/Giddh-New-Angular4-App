@@ -60,8 +60,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     public customCreatedTemplates: CustomTemplateResponse[];
     public selectedInvoicesLists: any[] = [];
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
-
-
+    public defaultTemplates: CustomTemplateResponse;
     public updateNotesRequest: BulkUpdateInvoiceNote = new BulkUpdateInvoiceNote();
     public updateImageSignatureRequest: BulkUpdateInvoiceImageSignature = new BulkUpdateInvoiceImageSignature();
     public updateTemplatesRequest: BulkUpdateInvoiceTemplates = new BulkUpdateInvoiceTemplates();
@@ -77,6 +76,8 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         backdrop: 'static',
         ignoreBackdropClick: true
     };
+
+    public isDefaultTemplateSignatureImage: boolean;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -95,6 +96,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     public ngOnInit() {
         this.uploadInput = new EventEmitter<UploadInput>();
         this.getTemplates();
+
     }
 
     /**
@@ -212,6 +214,25 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(templateType));
         this.allTemplates$.pipe(takeUntil(this.destroyed$)).subscribe(templates => {
             if (templates && templates.length) {
+                let customDefault = templates.filter(custom => {
+                    if (templateType === 'invoice') {
+                        if (custom.isDefault === true) {
+                            return custom;
+                        } else {
+                            return;
+                        }
+                    } else {
+                        if (custom.isDefaultForVoucher === true) {
+                            return custom;
+                        } else {
+                            return;
+                        }
+                    }
+
+                });
+                this.defaultTemplates = customDefault[0];
+                this.checkDefaultTemplateSignature(this.defaultTemplates, templateType)
+                console.log(templates, this.defaultTemplates);
                 this.allTemplatesOptions = [];
                 templates.forEach(tmpl => {
                     this.allTemplatesOptions.push({
@@ -267,7 +288,19 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
                     this.bulkUpdateRequest(this.updateNotesRequest, 'notes');
                     break;
                 case 'signature':
-                    this.bulkUpdateImageSlogan.show();
+                    if (this.signatureOptions === 'image') {
+                        if (!this.isDefaultTemplateSignatureImage) {
+                            this.bulkUpdateImageSlogan.show();
+                        } else {
+                            this.onConfirmationUpdateImageSlogan();
+                        }
+                    } else {
+                        if (this.isDefaultTemplateSignatureImage) {
+                            this.bulkUpdateImageSlogan.show();
+                        } else {
+                             this.onConfirmationUpdateImageSlogan();
+                        }
+                    }
                     break;
                 case 'dueDate':
                     if (this.updateDueDatesRequest.dueDate) {
@@ -361,10 +394,26 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
                     }
                     this.updateInProcess = false;
 
-
                 });
             }
         }
-
     }
+
+    /**
+     * To get check default template image signature type
+     *
+     * @param {CustomTemplateResponse} defaultTemplate default template object
+     * @param {string} templateType selected voucher type
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
+    public checkDefaultTemplateSignature(defaultTemplate: CustomTemplateResponse, voucherType: string) {
+        if (defaultTemplate && defaultTemplate.sections && defaultTemplate.sections.footer && defaultTemplate.sections.footer.data) {
+            if (defaultTemplate.sections.footer.data.imageSignature && defaultTemplate.sections.footer.data.imageSignature.display && defaultTemplate.sections.footer.data.slogan && !defaultTemplate.sections.footer.data.slogan.display) {
+                this.isDefaultTemplateSignatureImage = true;
+            } else if (defaultTemplate && defaultTemplate.sections.footer.data.imageSignature && defaultTemplate.sections.footer.data.slogan && defaultTemplate.sections.footer.data.slogan.display && !defaultTemplate.sections.footer.data.imageSignature.display) {
+                this.isDefaultTemplateSignatureImage = false;
+            }
+        }
+    }
+
 }
