@@ -24,7 +24,7 @@ export class SubscriptionsActions {
     @Effect()
     public SubscriptionsActions: Observable<Action> = this.actions$
         .ofType(SubscriptionsActions.SubscribedCompanies).pipe(
-            switchMap((action: CustomActions) => this.subscriptions.GetSubScribedCompanies()),
+            switchMap((action: CustomActions) => this.subscriptions.getSubScribedCompanies()),
             map(response => this.SubscribedCompaniesResponse(response)));
 
     @Effect()

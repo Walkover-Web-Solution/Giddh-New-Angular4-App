@@ -18,6 +18,7 @@ import { NgForm } from '@angular/forms';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
+import { ModalDirective, ModalOptions } from 'ngx-bootstrap';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     @Input() public selectedInvoices;
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
     @ViewChild('bulkUpdateForm') public bulkUpdateForm: NgForm;
+    @ViewChild('bulkUpdateImageSlogan') public bulkUpdateImageSlogan: ModalDirective;
 
     public fieldOptions: IOption[] = [
         { label: 'PDF Template', value: 'pdfTemplate' },
@@ -58,8 +60,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     public customCreatedTemplates: CustomTemplateResponse[];
     public selectedInvoicesLists: any[] = [];
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
-
-
+    public defaultTemplates: CustomTemplateResponse;
     public updateNotesRequest: BulkUpdateInvoiceNote = new BulkUpdateInvoiceNote();
     public updateImageSignatureRequest: BulkUpdateInvoiceImageSignature = new BulkUpdateInvoiceImageSignature();
     public updateTemplatesRequest: BulkUpdateInvoiceTemplates = new BulkUpdateInvoiceTemplates();
@@ -69,7 +70,14 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     public updateCustomfieldsRequest: BulkUpdateInvoiceCustomfields = new BulkUpdateInvoiceCustomfields();
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     public updateInProcess: boolean = false;
+    public modalConfig: ModalOptions = {
+        animated: true,
+        keyboard: true,
+        backdrop: 'static',
+        ignoreBackdropClick: true
+    };
 
+    public isDefaultTemplateSignatureImage: boolean;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -88,8 +96,15 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     public ngOnInit() {
         this.uploadInput = new EventEmitter<UploadInput>();
         this.getTemplates();
+
     }
 
+    /**
+     * Upload file output
+     *
+     * @param {UploadOutput} output filter update options type for queue
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
     public onUploadOutput(output: UploadOutput): void {
         this.updateInProcess = true;
         this.isSignatureAttached = true;
@@ -149,6 +164,11 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         }
     }
 
+    /**
+     * To clear Image src and Image modal
+     *
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
     public clearImage() {
         this.updateInProcess = false;
         this.signatureSrc = '';
@@ -167,6 +187,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         this.bulkUpdateForm.reset();
         this.closeModelEvent.emit(true);
     }
+
 
     /**
      * To select bulk update options
@@ -193,6 +214,26 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(templateType));
         this.allTemplates$.pipe(takeUntil(this.destroyed$)).subscribe(templates => {
             if (templates && templates.length) {
+                let customDefault = templates.filter(custom => {
+                    if (templateType === 'invoice') {
+                        if (custom.isDefault === true) {
+                            return custom;
+                        } else {
+                            return;
+                        }
+                    } else {
+                        if (custom.isDefaultForVoucher === true) {
+                            return custom;
+                        } else {
+                            return;
+                        }
+                    }
+
+                });
+                if (customDefault) {
+                    this.defaultTemplates = customDefault[0];
+                }
+                this.checkDefaultTemplateSignature(this.defaultTemplates, templateType);
                 this.allTemplatesOptions = [];
                 templates.forEach(tmpl => {
                     this.allTemplatesOptions.push({
@@ -249,13 +290,17 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
                     break;
                 case 'signature':
                     if (this.signatureOptions === 'image') {
-                        if (this.updateImageSignatureRequest.imageSignatureUniqueName) {
-                            this.bulkUpdateRequest(this.updateImageSignatureRequest, 'imagesignature');
+                        if (!this.isDefaultTemplateSignatureImage) {
+                            this.bulkUpdateImageSlogan.show();
                         } else {
-                            this._toaster.infoToast('Please upload file');
+                            this.onConfirmationUpdateImageSlogan();
                         }
-                    } else if (this.signatureOptions === 'slogan') {
-                        this.bulkUpdateRequest(this.updateSloganRequest, 'slogan');
+                    } else {
+                        if (this.isDefaultTemplateSignatureImage) {
+                            this.bulkUpdateImageSlogan.show();
+                        } else {
+                            this.onConfirmationUpdateImageSlogan();
+                        }
                     }
                     break;
                 case 'dueDate':
@@ -270,13 +315,46 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
 
                     break;
                 case 'customFields':
-                    if (this.updateCustomfieldsRequest.customField1) {
-                        this.updateCustomfieldsRequest.customField1 = moment(this.updateCustomfieldsRequest.customField1, this.giddhDateFormat).format(this.giddhDateFormat);
-                    }
                     this.bulkUpdateRequest(this.updateCustomfieldsRequest, 'customfields');
                     break;
+                default:
+                    break;
+
             }
         }
+    }
+
+    /**
+     * Update Image/Slogan confirmation true
+     *
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
+    public onConfirmationUpdateImageSlogan(): void {
+        this.bulkUpdateImageSlogan.hide();
+        if (this.signatureOptions === 'image') {
+
+            if (this.updateImageSignatureRequest.imageSignatureUniqueName) {
+                this.bulkUpdateRequest(this.updateImageSignatureRequest, 'imagesignature');
+            } else {
+                this._toaster.infoToast('Please upload file');
+            }
+        } else if (this.signatureOptions === 'slogan') {
+            this.bulkUpdateRequest(this.updateSloganRequest, 'slogan');
+        }
+
+
+    }
+
+    /**
+     * Cancel bulk update image slogan info modal
+     *
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
+    public onCancelBulkUpdateImageSloganModal(): void {
+        this.bulkUpdateImageSlogan.hide();
+        this.clearImage();
+        this.forceClear$ = observableOf({ status: true });
+        this.updateSloganRequest.slogan = '';
     }
 
     /**
@@ -307,16 +385,38 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
 
                     if (response.status === "success") {
                         this._toaster.successToast(response.body);
+                        if (actionType === 'imagesignature' || actionType === 'slogan') {
+                            this.onCancel();
+                        }
 
                     } else {
+                        this.onCancel();
                         this._toaster.errorToast(response.message);
                     }
                     this.updateInProcess = false;
 
-                    this.onCancel();
                 });
             }
         }
-
     }
+
+    /**
+     * To get check default template image signature type
+     *
+     * @param {CustomTemplateResponse} defaultTemplate default template object
+     * @param {string} templateType selected voucher type
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
+    public checkDefaultTemplateSignature(defaultTemplate: CustomTemplateResponse, voucherType: string) {
+        if (defaultTemplate && defaultTemplate.sections && defaultTemplate.sections.footer && defaultTemplate.sections.footer.data) {
+            if (defaultTemplate.sections.footer.data.imageSignature && defaultTemplate.sections.footer.data.imageSignature.display && defaultTemplate.sections.footer.data.slogan && !defaultTemplate.sections.footer.data.slogan.display) {
+                this.isDefaultTemplateSignatureImage = true;
+            } else if (defaultTemplate && defaultTemplate.sections.footer.data.imageSignature && defaultTemplate.sections.footer.data.slogan && defaultTemplate.sections.footer.data.slogan.display && !defaultTemplate.sections.footer.data.imageSignature.display) {
+                this.isDefaultTemplateSignatureImage = false;
+            } else {
+                this.isDefaultTemplateSignatureImage = false;
+            }
+        }
+    }
+
 }
