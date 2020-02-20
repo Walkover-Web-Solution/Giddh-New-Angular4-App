@@ -77,6 +77,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isGstValid: boolean;
     public GSTIN_OR_TRN: string;
     public selectedCountry: string;
+    public selectedCountryCode: string;
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
     public isStateRequired: boolean = false;
 
@@ -288,6 +289,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (result) {
             this.addAccountForm.get('country').get('countryCode').setValue(result.countryflag);
             this.selectedCountry = result.countryflag + ' - ' + result.countryName;
+            this.selectedCountryCode = result.countryflag;
             this.addAccountForm.get('mobileCode').setValue(result.value);
             let stateObj = this.getStateGSTCode(this.stateList, result.countryflag)
             this.addAccountForm.get('currency').setValue(company.baseCurrency);
@@ -298,6 +300,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.addAccountForm.get('country').get('countryCode').setValue('IN');
             this.addAccountForm.get('mobileCode').setValue('91');
             this.selectedCountry = 'IN - India';
+            this.selectedCountryCode = 'IN';
             this.addAccountForm.get('currency').setValue('IN');
             this.companyCountry = 'IN';
             this.getOnboardingForm('IN');
@@ -331,8 +334,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             accountBankDetails: this._fb.array([
                 this._fb.group({
                     bankName: [''],
-                    bankAccountNo: [''],
-                    ifsc: ['']
+                    bankAccountNo: ['', Validators.compose([Validators.maxLength(34)])],
+                    ifsc: [''],
+                    beneficiaryName: [''],
+                    branchName: [''],
+                    swiftCode: ['', Validators.compose([Validators.minLength(8), Validators.maxLength(11)])]
+
                 })
             ]),
             closingBalanceTriggerAmount: [Validators.compose([digitsOnly])],
@@ -367,6 +374,18 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             control.get('stateCode').patchValue(null);
             control.get('state').get('code').patchValue(null);
             control.get('gstNumber').setValue("");
+        }
+    }
+
+    public resetBankDetailsForm() {
+        let accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
+        for (let control of accountBankDetails.controls) {
+            control.get('bankName').patchValue(null);
+            control.get('bankAccountNo').patchValue(null);
+            control.get('beneficiaryName').patchValue(null);
+            control.get('branchName').patchValue(null);
+            control.get('swiftCode').patchValue(null);
+            control.get('ifsc').setValue("");
         }
     }
 
@@ -588,6 +607,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.addAccountForm.get('currency').setValue(currencyCode);
             this.getStates(event.value);
             this.toggleStateRequired();
+            this.resetGstStateForm();
+            this.resetBankDetailsForm();
         }
     }
 
@@ -684,7 +705,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
-
         if (ele.value) {
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
@@ -711,6 +731,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
     public getStates(countryCode) {
+        this.selectedCountryCode = countryCode;
         this.store.dispatch(this._generalActions.resetStatesList());
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -757,7 +778,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
-        if(this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === "sundrydebtors" || this.activeGroupUniqueName === "sundrycreditors")) {
+        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === "sundrydebtors" || this.activeGroupUniqueName === "sundrycreditors")) {
             return true;
         } else {
             return false;
@@ -775,7 +796,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         let i = 0;
         let addresses = this.addAccountForm.get('addresses') as FormArray;
         for (let control of addresses.controls) {
-            if(this.isStateRequired) {
+            if (this.isStateRequired) {
                 control.get('stateCode').setValidators([Validators.required]);
             } else {
                 control.get('stateCode').setValidators(null);
