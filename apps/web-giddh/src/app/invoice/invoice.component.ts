@@ -125,7 +125,7 @@ public tabChanged(tab: string, e, type?: string) {
      * @param {string} title
      * @memberof InvoiceComponent
      */
-    public setCurrentPageTitle(title) {
+    public setCurrentPageTitle(title: string) : void {
         let currentPageObj = new CurrentPage();
         currentPageObj.name = "Invoice > " + title;
         currentPageObj.url = this.router.url;
