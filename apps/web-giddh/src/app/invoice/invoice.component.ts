@@ -9,7 +9,6 @@ import { combineLatest, ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap';
 import { VoucherTypeEnum } from '../models/api-models/Sales';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { GeneralService } from '../services/general.service';
 import { CurrentPage } from '../models/api-models/Common';
 import { GeneralActions } from '../actions/general/general.actions';
 @Component({
@@ -120,6 +119,12 @@ public tabChanged(tab: string, e, type?: string) {
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
+    /**
+     * This function will set the page heading
+     *
+     * @param {string} title
+     * @memberof InvoiceComponent
+     */
     public setCurrentPageTitle(title) {
         let currentPageObj = new CurrentPage();
         currentPageObj.name = "Invoice > " + title;
