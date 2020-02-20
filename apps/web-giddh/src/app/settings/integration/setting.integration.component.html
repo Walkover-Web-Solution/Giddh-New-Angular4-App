@@ -491,10 +491,14 @@
                     <div class="form-group col-sm-4 col-md-3">
                         <label>Accounts <span class="required">*</span></label>
                         <br>
+<<<<<<< HEAD
                         <sh-select [options]="(accounts$ | async)" name="accountUniqueName"
                                    [(ngModel)]="regAcc.account.name" [placeholder]="'Select Account'" [ItemHeight]="33"
                                    autocomplete="off">
                         </sh-select>
+=======
+                        <sh-select *ngIf="accounts$ && regAcc?.account?.uniqueName" [options]="accounts$ | async" name="accountUniqueName" [defaultValue]="regAcc?.account?.name" [(ngModel)]="regAcc.account.uniqueName" [placeholder]="'Select Account'" [ItemHeight]="33" autocomplete="off"></sh-select>
+>>>>>>> ea9119d8d... Added Alias ID field in ICICI integration page
                     </div>
                     <div class="row">
                         <div class="form-group col-sm-3 col-md-3">
