@@ -350,6 +350,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private purchaseRecordInvoiceDate: string = '';
     /** Purchase Record invoice number */
     private purchaseRecordInvoiceNumber: string = '';
+    /** Inventory Settings */
+    public inventorySettings: any;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -394,6 +396,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private commonActions: CommonActions,
         private purchaseRecordAction: PurchaseRecordActions
     ) {
+        this.getInventorySettings();
+
         this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.companyActions.getTax());
@@ -2041,20 +2045,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             txn.sacNumber = null;
             txn.hsnNumber = null;
-            if (txn.stockDetails && txn.stockDetails.hsnNumber) {
+
+            console.log(o);
+
+            if (txn.stockDetails && txn.stockDetails.hsnNumber && this.inventorySettings && this.inventorySettings.manageInventory === true) {
                 txn.hsnNumber = txn.stockDetails.hsnNumber;
                 txn.hsnOrSac = 'hsn';
             }
-            if (txn.stockDetails && txn.stockDetails.sacNumber) {
+            if (txn.stockDetails && txn.stockDetails.sacNumber && this.inventorySettings && this.inventorySettings.manageInventory === false) {
                 txn.sacNumber = txn.stockDetails.sacNumber;
                 txn.hsnOrSac = 'sac';
             }
 
-            if (!o.stock && o.hsnNumber) {
+            if (!o.stock && o.hsnNumber && this.inventorySettings && this.inventorySettings.manageInventory === true) {
                 txn.hsnNumber = o.hsnNumber;
                 txn.hsnOrSac = 'hsn';
             }
-            if (!o.stock && o.sacNumber) {
+            if (!o.stock && o.sacNumber && this.inventorySettings && !this.inventorySettings.manageInventory && this.inventorySettings.manageInventory === false) {
                 txn.sacNumber = o.sacNumber;
                 txn.hsnOrSac = 'sac';
             }
@@ -4021,5 +4028,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateTotalDiscount();
         this.calculateTotalTaxSum();
         this._cdr.detectChanges();
+    }
+
+    /**
+     * This function is used to get inventory settings from store
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public getInventorySettings(): void {
+        this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
+            if(settings && settings.companyInventorySettings) {
+                this.inventorySettings = settings.companyInventorySettings;
+            }
+        });
     }
 }
