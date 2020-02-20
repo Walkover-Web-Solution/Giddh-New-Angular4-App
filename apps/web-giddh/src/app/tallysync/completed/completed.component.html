@@ -32,7 +32,7 @@
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" *ngIf="completedData?.length">
         <div class="panel panel-default" *ngFor="let row of completedData;">
             <div class="panel-heading">
-                <span class="m-r-15">{{row.type}}: {{row.company.name}}</span>
+                <span class="m-r-15">{{row.type === 'TALLY' ? 'Tally:' : row.type === 'COMPANY_JSON_IMPORT' ? 'Import Json:' : ''}} {{row.company.name}}</span>
                 <small class="m-r-15">Last Import on {{row.dateString}}</small>
                 <small class="running"><i class="fa fa-circle"></i> {{row.status}}</small>
             </div>
