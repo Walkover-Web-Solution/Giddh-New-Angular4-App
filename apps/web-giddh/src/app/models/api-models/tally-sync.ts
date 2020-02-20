@@ -29,5 +29,6 @@ export class Company {
 export class DownloadTallyErrorLogRequest {
     date: string;
     hour: any;
+    type: any;
 }
 
