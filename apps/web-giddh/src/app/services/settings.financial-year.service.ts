@@ -122,5 +122,20 @@ export class SettingsFinancialYearService {
 			data.queryString = {};
 			return data;
 		}), catchError((e) => this.errorHandler.HandleCatch<IFinancialYearResponse, string>(e)));
+    }
+    
+    /*
+	* Add Future Financial Year
+	* API: 'company/:companyUniqueName/future-financial-year'
+	* Method: POST
+	*/
+	public AddFutureFinancialYear(fromYear: string): Observable<BaseResponse<IFinancialYearResponse, string>> {
+		this.user = this._generalService.user;
+		this.companyUniqueName = this._generalService.companyUniqueName;
+		return this._http.post(this.config.apiUrl + SETTINGS_FINANCIAL_YEAR_API.ADD_FUTURE_FINANCIAL_YEAR.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), { fromYear }).pipe(map((res) => {
+			let data: BaseResponse<IFinancialYearResponse, string> = res;
+			data.queryString = {};
+			return data;
+		}), catchError((e) => this.errorHandler.HandleCatch<IFinancialYearResponse, string>(e)));
 	}
 }

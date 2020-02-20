@@ -124,6 +124,18 @@ export class SettingsFinancialYearActions {
                 payload: res
             })));
 
+    @Effect()
+    public AddFutureFinancialYear$: Observable<Action> = this.action$
+        .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FUTURE_FINANCIAL_YEAR).pipe(
+            switchMap((action: CustomActions) => this._settingsFinancialYearService.AddFutureFinancialYear(action.payload)),
+            map(res => this.validateResponse<IFinancialYearResponse, string>(res, {
+                type: SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR_RESPONSE,
+                payload: res
+            }, true, {
+                type: SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR_RESPONSE,
+                payload: res
+            })));        
+
     constructor(private action$: Actions,
         private toasty: ToasterService,
         private router: Router,
@@ -193,9 +205,16 @@ export class SettingsFinancialYearActions {
         };
     }
 
-    public AddFinancialYear(fromYear: string): CustomActions {
+    public AddFinancialYear(fromYear: number): CustomActions {
         return {
             type: SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR,
+            payload: fromYear
+        };
+    }
+
+    public AddFutureFinancialYear(fromYear: number): CustomActions {
+        return {
+            type: SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FUTURE_FINANCIAL_YEAR,
             payload: fromYear
         };
     }
