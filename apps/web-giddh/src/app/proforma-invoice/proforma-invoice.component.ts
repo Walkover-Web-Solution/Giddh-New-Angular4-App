@@ -1,6 +1,6 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren, TemplateRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { BsDatepickerDirective, BsModalRef, ModalDirective, ModalOptions, PopoverDirective } from 'ngx-bootstrap';
+import { BsDatepickerDirective, BsModalRef, ModalDirective, ModalOptions, PopoverDirective, BsModalService } from 'ngx-bootstrap';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { SalesActions } from '../actions/sales/sales.action';
@@ -239,7 +239,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public calculatedRoundOff: number = 0;
     public selectedVoucherType: string = 'sales';
-    // modals related
+    public tempDateParams: any = {};
     public modalConfig: ModalOptions = {
         animated: true,
         keyboard: false,
@@ -280,6 +280,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public fetchedConvertedRate: number = 0;
     public isAddBulkItemInProcess: boolean = false;
     public modalRef: BsModalRef;
+    message: string;
+
     public exceptTaxTypes: string[];
     /** Stores warehouses for a company */
     public warehouses: Array<any>;
@@ -392,7 +394,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private settingsUtilityService: SettingsUtilityService,
         private warehouseActions: WarehouseActions,
         private commonActions: CommonActions,
-        private purchaseRecordAction: PurchaseRecordActions
+        private purchaseRecordAction: PurchaseRecordActions,
+        private modalService: BsModalService
     ) {
         this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
@@ -3457,6 +3460,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.originalExchangeRate = this.exchangeRate;
         }
     }
+
+    openModal(adjustPayment: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(
+            adjustPayment,
+            Object.assign({}, { class: 'modal-lg' })
+        );
+    }
+    confirm(): void {
+        this.message = 'Confirmed!';
+        this.modalRef.hide();
+    }
+
+    decline(): void {
+        this.message = 'Declined!';
+        this.modalRef.hide();
+    }
+
 
     /**
      * get currency rate on voucher date changed
