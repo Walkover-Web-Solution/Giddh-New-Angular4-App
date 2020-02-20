@@ -405,7 +405,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
      * @param {CustomTemplateResponse} defaultTemplate default template object
      * @memberof InvoiceBulkUpdateModalComponent
      */
-    public checkDefaultTemplateSignature(defaultTemplate: CustomTemplateResponse) {
+    public checkDefaultTemplateSignature(defaultTemplate: CustomTemplateResponse): void {
         if (defaultTemplate && defaultTemplate.sections && defaultTemplate.sections.footer && defaultTemplate.sections.footer.data) {
             if (defaultTemplate.sections.footer.data.imageSignature && defaultTemplate.sections.footer.data.imageSignature.display && defaultTemplate.sections.footer.data.slogan && !defaultTemplate.sections.footer.data.slogan.display) {
                 this.isDefaultTemplateSignatureImage = true;
