@@ -202,8 +202,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 }
             }
         });
-    //TODO:  This will go live in next sprint 23
-        // this.getShopifyEcommerceVerifyStatus();
+        //this.getShopifyEcommerceVerifyStatus();
     }
 
     public ngAfterViewInit() {
@@ -248,7 +247,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.paymentFormObj = new PaymentClass();
         }
     }
-
 
     public toggleCheckBox() {
         return this.razorPayObj.autoCapturePayment = !this.razorPayObj.autoCapturePayment;
@@ -524,7 +522,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         currentPageObj.url = this.router.url;
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
-    //TODO:  This will go live in next sprint 23
+
     /**
      * API call to verify is shopify integrated
      *
