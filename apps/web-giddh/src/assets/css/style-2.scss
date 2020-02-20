@@ -1547,6 +1547,9 @@ modal-container.modal {
 .justify-content-center {
     justify-content: center;
 }
+.color-primary {
+    color: $primaryBtncolror;
+}
 /* my css end */
 
 /*input*/
@@ -2171,7 +2174,6 @@ p.table-email {
 .delt {
     text-align: center;
 }
-
 input[type="checkbox"] {
     position: relative;
     top: 1px;
@@ -2180,6 +2182,10 @@ input[type="checkbox"] {
     cursor: pointer;
     left: 0px;
     height: 19px;
+    width: 1em;
+    height: 1em;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 input[type="checkbox"]:checked:before {
@@ -2223,6 +2229,7 @@ input[type="checkbox"]:after {
     background: #fff;
     cursor: pointer;
     border-radius: 2px;
+    visibility: visible;
 }
 
 input[type="checkbox"]:checked:after {
@@ -2562,7 +2569,9 @@ input[type="checkbox"]:checked:after {
 .font-16 {
     font-size: 16px !important;
 }
-
+.font-20 {
+    font-size: 20px;
+}
 .font-22 {
     font-size: 22px;
 }
@@ -5468,9 +5477,6 @@ fieldset[disabled] .form-control {
 input[type="checkbox"][disabled] {
     opacity: 2.2;
 }
-
-
-
 .nested_table > tbody tr td {
     border: 0 !important;
     padding: 8px 0;
@@ -8723,7 +8729,7 @@ input.checkbox-custom[type="checkbox"] {
 .checkbox-custom-label,
 .radio-custom-label {
     position: relative;
-    display: inline-flex;
+    display: inline-flex !important;
     align-items: center;
 
 }
@@ -9073,6 +9079,9 @@ input.checkbox-custom[type="checkbox"] {
     }
     .xs-pr-0 {
         padding-right: 0px;
+    }
+    .xs-pt-0 {
+        padding-top: 0px;
     }
     .xs-width-100 {
         width: 100%;

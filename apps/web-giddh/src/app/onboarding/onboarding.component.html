@@ -63,16 +63,19 @@
                     <h1 class="borderbtm">Select Inventory Type</h1>
                     <span>Inventory type</span>
                     <div class="pdB1 clearfix">
-                        <label class="radio-inline pd0 w100">
-                            <input type="radio" class="radio_theme cp"
-                                [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory"
-                                (change)="updateInventorySetting(true)" name="inventoryType" />Product
-                        </label>
-                        <label class="radio-inline pd0 mrL2">
-                            <input type="radio" class="radio_theme cp"
-                                [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory"
-                                (change)="updateInventorySetting(false)" name="inventoryType" />Service
-                        </label>
+
+                        <span class="pd0 mrR3 d-inline-block">
+                            <input id="product" class="radio-custom cp ml0" type="radio" [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                            (change)="updateInventorySetting(true)" name="inventoryType">
+                            <label for="product" class="radio-custom-label">Product</label>
+                        </span>
+
+                        <span class="pd0 mrR3 d-inline-block">
+                            <input id="service" class="radio-custom cp ml0" type="radio" [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                            (change)="updateInventorySetting(false)" name="inventoryType">
+                            <label for="service" class="radio-custom-label">Service</label>
+                        </span>
+
                     </div>
                     <br><br><br>
 

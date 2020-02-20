@@ -491,7 +491,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             }
         });
 
-        this.accountService.GetFlattenAccounts().subscribe(a => {
+        this.accountService.getFlattenAccounts().subscribe(a => {
             let accounts: IOption[] = [];
             if (a.status === 'success') {
                 a.body.results.map(acc => {
