@@ -79,12 +79,14 @@ export class AmazonSellerClass {
 export class PaymentClass {
 	public corpId: string;
 	public userId: string;
-	public accountNo: string;
+    public accountNo: string;
+    public aliasId: string;
 	public accountUniqueName: string;
 	constructor() {
 		this.corpId = '';
 		this.userId = '';
-		this.accountNo = '';
+        this.accountNo = '';
+        this.aliasId = '';
 		this.accountUniqueName = '';
 	}
 }
