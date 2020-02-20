@@ -129,7 +129,7 @@ export class SettingsFinancialYearService {
 	* API: 'company/:companyUniqueName/future-financial-year'
 	* Method: POST
 	*/
-	public AddFutureFinancialYear(fromYear: string): Observable<BaseResponse<IFinancialYearResponse, string>> {
+	public addFutureFinancialYear(fromYear: string): Observable<BaseResponse<IFinancialYearResponse, string>> {
 		this.user = this._generalService.user;
 		this.companyUniqueName = this._generalService.companyUniqueName;
 		return this._http.post(this.config.apiUrl + SETTINGS_FINANCIAL_YEAR_API.ADD_FUTURE_FINANCIAL_YEAR.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), { fromYear }).pipe(map((res) => {
