@@ -581,21 +581,19 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-xs-6 pdL0" *ngIf="transaction.hsnNumber">
+                                                <div class="col-xs-6 pdL0" *ngIf="transaction.hsnNumber || transaction.sacNumber">
                                                     <div class="hsnCode text-right">
                                                         <label>HSN/SAC:</label>
                                                         <span>
-                                                            {{transaction.hsnNumber}}
+                                                            {{(inventorySettings?.manageInventory || !transaction.sacNumber) ? transaction.hsnNumber : transaction.sacNumber}}
                                                             <span class="edit-icon cp">
                                                                 <img src="assets/images/edit-pencilicon.svg">
                                                             </span>
                                                         </span>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
-
                                     </td>
                                     <td class="text-right stockUnit">
                                         <div class="wrap-td-data">
@@ -772,8 +770,8 @@
                                                             <div class="hsnCode text-right" (click)="toggleHsnSacDropDown()">
                                                                 <label>HSN/SAC:</label>
                                                                 <span>
-                                                                    {{transaction.hsnNumber }}
-                                                                    <span *ngIf="!transaction.hsnNumber"
+                                                                    {{(inventorySettings?.manageInventory || !transaction.sacNumber) ? transaction.hsnNumber : transaction.sacNumber }}
+                                                                    <span *ngIf="!transaction.hsnNumber && !transaction.sacNumber"
                                                                         class="updateText">Update
                                                                     </span>
                                                                 <span class="edit-icon cp">
@@ -784,7 +782,7 @@
 
                                                             <div class="hsnCodeDropdown" *ngIf="hsnDropdownShow">
                                                                 <label>HSN/SAC</label>
-                                                                <input type="text" maxLength="10" placeholder="HSN/SAC Number" name="transaction.hsnNumber_{{entryIdx}}" [(ngModel)]="transaction.hsnNumber" />
+                                                                <input type="text" maxLength="10" placeholder="HSN/SAC Number" name="transaction.hsnNumber_{{entryIdx}}" [(ngModel)]="(inventorySettings?.manageInventory || !transaction.sacNumber) ? transaction.hsnNumber : transaction.sacNumber" />
                                                                 <a>
                                                                 </a>
                                                                 <div class="btngroup m-t-10">
@@ -1272,10 +1270,10 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-xs-6 pdL0" *ngIf="transaction.hsnNumber">
+                                        <div class="col-xs-6 pdL0" *ngIf="transaction.hsnNumber || transaction.sacNumber">
                                             <div class="hsnCode text-right">
                                                 <label>HSN/SAC:
-                                                                {{transaction.hsnNumber}}</label>
+                                                                {{(inventorySettings?.manageInventory || !transaction.sacNumber) ? transaction.hsnNumber : transaction.sacNumber}}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -1474,8 +1472,8 @@
                                                         <div class="hsnCode text-right" (click)="toggleHsnSacDropDown()">
                                                             <label>HSN/SAC:</label>
                                                             <span>
-                                                                            {{transaction.hsnNumber }}
-                                                                            <span *ngIf="!transaction.hsnNumber"
+                                                                            {{(inventorySettings?.manageInventory || !transaction.sacNumber) ? transaction.hsnNumber : transaction.sacNumber }}
+                                                                            <span *ngIf="!transaction.hsnNumber && !transaction.sacNumber"
                                                                                 class="updateText">Update
                                                                             </span>
                                                             <span class="edit-icon cp">
@@ -1487,7 +1485,7 @@
 
                                                         <div class="hsnCodeDropdown" *ngIf="hsnDropdownShow">
                                                             <label>HSN/SAC</label>
-                                                            <input type="text" maxLength="10" placeholder="HSN/SAC Number" name="transaction.hsnNumber_{{entryIdx}}" [(ngModel)]="transaction.hsnNumber" />
+                                                            <input type="text" maxLength="10" placeholder="HSN/SAC Number" name="transaction.hsnNumber_{{entryIdx}}" [(ngModel)]="(inventorySettings?.manageInventory || !transaction.sacNumber) ? transaction.hsnNumber : transaction.sacNumber" />
                                                             <a>
                                                             </a>
                                                             <div class="btngroup m-t-10">

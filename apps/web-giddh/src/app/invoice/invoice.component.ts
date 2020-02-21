@@ -9,7 +9,8 @@ import { combineLatest, ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap';
 import { VoucherTypeEnum } from '../models/api-models/Sales';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { GeneralService } from '../services/general.service';
+import { CurrentPage } from '../models/api-models/Common';
+import { GeneralActions } from '../actions/general/general.actions';
 @Component({
     templateUrl: './invoice.component.html'
 })
@@ -23,7 +24,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     constructor(private store: Store<AppState>,
         private companyActions: CompanyActions,
         private router: Router,
-        private _cd: ChangeDetectorRef, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver, private _generalService: GeneralService) {
+        private _cd: ChangeDetectorRef, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver, private _generalActions: GeneralActions) {
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).subscribe(result => {
@@ -93,6 +94,14 @@ public tabChanged(tab: string, e, type?: string) {
         if (e && !e.target) {
             this.saveLastState(tab);
         }
+
+        if(tab === "pending") {
+            this.setCurrentPageTitle("Pending");
+        } else if(tab === "templates") {
+            this.setCurrentPageTitle("Templates");
+        } else if(tab === "settings") {
+            this.setCurrentPageTitle("Settings");
+        }
     }
 
     public ngOnDestroy() {
@@ -108,5 +117,18 @@ public tabChanged(tab: string, e, type?: string) {
         stateDetailsRequest.lastState = `pages/invoice/preview/${state}`;
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+    }
+
+    /**
+     * This function will set the page heading
+     *
+     * @param {string} title
+     * @memberof InvoiceComponent
+     */
+    public setCurrentPageTitle(title: string) : void {
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = "Invoice > " + title;
+        currentPageObj.url = this.router.url;
+        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 }

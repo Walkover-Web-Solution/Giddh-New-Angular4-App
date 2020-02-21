@@ -352,6 +352,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private purchaseRecordInvoiceDate: string = '';
     /** Purchase Record invoice number */
     private purchaseRecordInvoiceNumber: string = '';
+    /** Inventory Settings */
+    public inventorySettings: any;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -397,6 +399,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private purchaseRecordAction: PurchaseRecordActions,
         private modalService: BsModalService
     ) {
+        this.getInventorySettings();
+
         this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.companyActions.getTax());
@@ -2044,20 +2048,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             txn.sacNumber = null;
             txn.hsnNumber = null;
-            if (txn.stockDetails && txn.stockDetails.hsnNumber) {
+
+            if (txn.stockDetails && txn.stockDetails.hsnNumber && this.inventorySettings && this.inventorySettings.manageInventory === true) {
                 txn.hsnNumber = txn.stockDetails.hsnNumber;
                 txn.hsnOrSac = 'hsn';
             }
-            if (txn.stockDetails && txn.stockDetails.sacNumber) {
+            if (txn.stockDetails && txn.stockDetails.sacNumber && this.inventorySettings && this.inventorySettings.manageInventory === false) {
                 txn.sacNumber = txn.stockDetails.sacNumber;
                 txn.hsnOrSac = 'sac';
             }
 
-            if (!o.stock && o.hsnNumber) {
+            if (!o.stock && o.hsnNumber && this.inventorySettings && this.inventorySettings.manageInventory === true) {
                 txn.hsnNumber = o.hsnNumber;
                 txn.hsnOrSac = 'hsn';
             }
-            if (!o.stock && o.sacNumber) {
+            if (!o.stock && o.sacNumber && this.inventorySettings && !this.inventorySettings.manageInventory && this.inventorySettings.manageInventory === false) {
                 txn.sacNumber = o.sacNumber;
                 txn.hsnOrSac = 'sac';
             }
@@ -3002,6 +3007,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 newTrxObj.stockDetails = trx.stockDetails;
                 newTrxObj.taxableValue = trx.taxableValue;
                 newTrxObj.hsnNumber = trx.hsnNumber;
+                newTrxObj.sacNumber = trx.sacNumber;
                 newTrxObj.isStockTxn = trx.isStockTxn;
                 newTrxObj.applicableTaxes = entry.taxList;
 
@@ -3707,10 +3713,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             }, 200);
         } else {
-            let firstElementToFocus: any = document.getElementsByClassName('fristElementToFocus');
-            if (firstElementToFocus[0]) {
-                firstElementToFocus[0].focus();
-            }
+            setTimeout(() => {
+                let firstElementToFocus: any = document.getElementsByClassName('firstElementToFocus');
+                if (firstElementToFocus[0]) {
+                    firstElementToFocus[0].focus();
+                }
+            }, 200);
         }
 
     }
@@ -4039,5 +4047,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateTotalDiscount();
         this.calculateTotalTaxSum();
         this._cdr.detectChanges();
+    }
+
+    /**
+     * This function is used to get inventory settings from store
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public getInventorySettings(): void {
+        this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
+            if(settings && settings.companyInventorySettings) {
+                this.inventorySettings = settings.companyInventorySettings;
+            }
+        });
     }
 }

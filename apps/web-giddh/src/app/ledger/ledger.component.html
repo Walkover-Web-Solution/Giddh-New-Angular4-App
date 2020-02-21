@@ -532,7 +532,7 @@
                                     <span class="download-invoice-ledger d-flex" *ngIf="txn.voucherGenerated"
                                         style="position: unset;align-items: center"
                                         (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
-                                        tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'right'">
+                                        tooltip="Download {{txn.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{txn.voucherNumber}}" [placement]="'right'">
                                         <i class="glyphicon glyphicon-download pull-left"
                                             style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                                     </span>
@@ -787,7 +787,7 @@
                                     <span class="download-invoice-ledger d-flex" *ngIf="txn.voucherGenerated"
                                         style="position: unset;align-items: center"
                                         (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
-                                        tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'right'">
+                                        tooltip="Download {{txn.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{txn.voucherNumber}}" [placement]="'right'">
                                         <i class="glyphicon glyphicon-download pull-left"
                                             style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                                     </span>
