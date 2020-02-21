@@ -127,6 +127,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
     // private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
     public isStateRequired: boolean = false;
+    public selectedCountryCode: string = '';
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction,
         private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _dbService: DbService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
@@ -541,6 +542,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public onViewReady(ev) {
         let accountCountry = this.addAccountForm.get('country').get('countryCode').value;
+        this.selectedCountryCode = accountCountry;
         if (accountCountry) {
             if (accountCountry !== 'IN') {
                 this.isIndia = false;
@@ -554,6 +556,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.addBlankGstForm();
         }
     }
+
     public tabChanged(activeTab: string) {
         if (activeTab) {
             this.selectedTab = activeTab;
@@ -590,8 +593,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             accountBankDetails: this._fb.array([
                 this._fb.group({
                     bankName: [''],
-                    bankAccountNo: [''],
-                    ifsc: ['']
+                    bankAccountNo: ['', Validators.compose([ Validators.maxLength(34)])],
+                    ifsc: [''],
+                    beneficiaryName: [''],
+                    branchName: [''],
+                    swiftCode: ['',Validators.compose([ Validators.minLength(8),Validators.maxLength(11)])]
                 })
             ]),
             cashFreeVirtualAccountData: this._fb.group({
@@ -636,6 +642,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             control.get('stateCode').patchValue(null);
             control.get('state').get('code').patchValue(null);
             control.get('gstNumber').setValue("");
+        }
+    }
+
+     public resetBankDetailsForm() {
+         let accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
+        for (let control of accountBankDetails.controls) {
+            control.get('bankName').patchValue(null);
+            control.get('bankAccountNo').patchValue(null);
+            control.get('beneficiaryName').patchValue(null);
+            control.get('branchName').patchValue(null);
+            control.get('swiftCode').patchValue(null);
+            control.get('ifsc').patchValue("");
         }
     }
 
@@ -875,6 +893,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public selectCountry(event: IOption) {
         if (event) {
+            this.addAccountForm.get('accountBankDetails').reset();
             this.store.dispatch(this._generalActions.resetStatesList());
             this.store.dispatch(this.commonActions.resetOnboardingForm());
             let phoneCode = event.additional;
@@ -884,6 +903,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.getStates(event.value);
             this.getOnboardingForm(event.value);
             this.toggleStateRequired();
+            this.resetGstStateForm();
+            this.resetBankDetailsForm();
         }
     }
 
@@ -955,6 +976,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = '';
         onboardingFormRequest.country = countryCode;
+        this.selectedCountryCode = countryCode;
         this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
     }
 
