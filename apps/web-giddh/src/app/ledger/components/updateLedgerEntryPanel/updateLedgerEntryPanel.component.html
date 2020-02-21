@@ -166,7 +166,7 @@
                                         <span class="download-invoice-ledger "
                                             *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length> 0"
                                             [placement]="'left'" [containerClass]="'col-xs-3'"
-                                            tooltip="Download Invoice : {{vm.selectedLedger.voucherNumber}}"
+                                            tooltip="Download {{vm.selectedLedger.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{vm.selectedLedger.voucherNumber}}"
                                             (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
                                             <i class="glyphicon glyphicon-download pull-left"
                                                 style="font-size:15px;"></i>
@@ -335,7 +335,7 @@
                                         <span class="download-invoice-ledger"
                                             *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length > 0"
                                             [placement]="'left'" [containerClass]="'col-xs-3'"
-                                            tooltip="Download Invoice : {{vm.selectedLedger.voucherNumber}}"
+                                            tooltip="Download {{vm.selectedLedger.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{vm.selectedLedger.voucherNumber}}"
                                             (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
                                             <i class="glyphicon glyphicon-download pull-left"
                                                 style="font-size:15px;"></i>
