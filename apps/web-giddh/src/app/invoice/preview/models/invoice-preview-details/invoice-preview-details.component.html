@@ -460,7 +460,7 @@
     tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <confirm-modal [body]="'You are deleting the voucher / invoice!'"
+            <confirm-modal [body]="'Do you want to delete the voucher / invoice?'"
                 (cancelCallBack)="deleteConfirmationModel.toggle()"
                 (successCallBack)="deleteVoucher.emit(true);deleteConfirmationModel.toggle()"></confirm-modal>
         </div>

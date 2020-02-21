@@ -1,6 +1,6 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren, TemplateRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { BsDatepickerDirective, BsModalRef, ModalDirective, ModalOptions, PopoverDirective } from 'ngx-bootstrap';
+import { BsDatepickerDirective, BsModalRef, ModalDirective, ModalOptions, PopoverDirective, BsModalService } from 'ngx-bootstrap';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { SalesActions } from '../actions/sales/sales.action';
@@ -239,7 +239,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public calculatedRoundOff: number = 0;
     public selectedVoucherType: string = 'sales';
-    // modals related
+    public tempDateParams: any = {};
     public modalConfig: ModalOptions = {
         animated: true,
         keyboard: false,
@@ -280,6 +280,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public fetchedConvertedRate: number = 0;
     public isAddBulkItemInProcess: boolean = false;
     public modalRef: BsModalRef;
+    message: string;
+
     public exceptTaxTypes: string[];
     /** Stores warehouses for a company */
     public warehouses: Array<any>;
@@ -350,6 +352,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private purchaseRecordInvoiceDate: string = '';
     /** Purchase Record invoice number */
     private purchaseRecordInvoiceNumber: string = '';
+    /** Inventory Settings */
+    public inventorySettings: any;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -392,8 +396,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private settingsUtilityService: SettingsUtilityService,
         private warehouseActions: WarehouseActions,
         private commonActions: CommonActions,
-        private purchaseRecordAction: PurchaseRecordActions
+        private purchaseRecordAction: PurchaseRecordActions,
+        private modalService: BsModalService
     ) {
+        this.getInventorySettings();
+
         this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.companyActions.getTax());
@@ -2041,20 +2048,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             txn.sacNumber = null;
             txn.hsnNumber = null;
-            if (txn.stockDetails && txn.stockDetails.hsnNumber) {
+
+            if (txn.stockDetails && txn.stockDetails.hsnNumber && this.inventorySettings && this.inventorySettings.manageInventory === true) {
                 txn.hsnNumber = txn.stockDetails.hsnNumber;
                 txn.hsnOrSac = 'hsn';
             }
-            if (txn.stockDetails && txn.stockDetails.sacNumber) {
+            if (txn.stockDetails && txn.stockDetails.sacNumber && this.inventorySettings && this.inventorySettings.manageInventory === false) {
                 txn.sacNumber = txn.stockDetails.sacNumber;
                 txn.hsnOrSac = 'sac';
             }
 
-            if (!o.stock && o.hsnNumber) {
+            if (!o.stock && o.hsnNumber && this.inventorySettings && this.inventorySettings.manageInventory === true) {
                 txn.hsnNumber = o.hsnNumber;
                 txn.hsnOrSac = 'hsn';
             }
-            if (!o.stock && o.sacNumber) {
+            if (!o.stock && o.sacNumber && this.inventorySettings && !this.inventorySettings.manageInventory && this.inventorySettings.manageInventory === false) {
                 txn.sacNumber = o.sacNumber;
                 txn.hsnOrSac = 'sac';
             }
@@ -2999,6 +3007,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 newTrxObj.stockDetails = trx.stockDetails;
                 newTrxObj.taxableValue = trx.taxableValue;
                 newTrxObj.hsnNumber = trx.hsnNumber;
+                newTrxObj.sacNumber = trx.sacNumber;
                 newTrxObj.isStockTxn = trx.isStockTxn;
                 newTrxObj.applicableTaxes = entry.taxList;
 
@@ -3457,6 +3466,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.originalExchangeRate = this.exchangeRate;
         }
     }
+
+    openModal(adjustPayment: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(
+            adjustPayment,
+            Object.assign({}, { class: 'modal-lg' })
+        );
+    }
+    confirm(): void {
+        this.message = 'Confirmed!';
+        this.modalRef.hide();
+    }
+
+    decline(): void {
+        this.message = 'Declined!';
+        this.modalRef.hide();
+    }
+
 
     /**
      * get currency rate on voucher date changed
@@ -4021,5 +4047,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateTotalDiscount();
         this.calculateTotalTaxSum();
         this._cdr.detectChanges();
+    }
+
+    /**
+     * This function is used to get inventory settings from store
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public getInventorySettings(): void {
+        this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
+            if(settings && settings.companyInventorySettings) {
+                this.inventorySettings = settings.companyInventorySettings;
+            }
+        });
     }
 }
