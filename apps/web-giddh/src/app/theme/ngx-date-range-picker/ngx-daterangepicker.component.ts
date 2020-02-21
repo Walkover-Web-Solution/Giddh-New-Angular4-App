@@ -1242,7 +1242,6 @@ export class NgxDaterangepickerComponent implements OnInit {
      * @param range
      */
     clickRange(e, range) {
-        console.log(this.ranges, range);
         this.selectRange(this.ranges, range.name);
 
         this.chosenRange = range.name;
