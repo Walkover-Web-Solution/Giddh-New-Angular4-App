@@ -216,13 +216,13 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
             if (templates && templates.length) {
                 let customDefault = templates.filter(custom => {
                     if (templateType === 'invoice') {
-                        if (custom.isDefault === true) {
+                        if (custom.isDefault) {
                             return custom;
                         } else {
                             return;
                         }
                     } else {
-                        if (custom.isDefaultForVoucher === true) {
+                        if (custom.isDefaultForVoucher) {
                             return custom;
                         } else {
                             return;
