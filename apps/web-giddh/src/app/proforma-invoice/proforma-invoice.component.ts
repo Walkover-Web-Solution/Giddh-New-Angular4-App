@@ -2049,8 +2049,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             txn.sacNumber = null;
             txn.hsnNumber = null;
 
-            console.log(o);
-
             if (txn.stockDetails && txn.stockDetails.hsnNumber && this.inventorySettings && this.inventorySettings.manageInventory === true) {
                 txn.hsnNumber = txn.stockDetails.hsnNumber;
                 txn.hsnOrSac = 'hsn';
@@ -3009,6 +3007,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 newTrxObj.stockDetails = trx.stockDetails;
                 newTrxObj.taxableValue = trx.taxableValue;
                 newTrxObj.hsnNumber = trx.hsnNumber;
+                newTrxObj.sacNumber = trx.sacNumber;
                 newTrxObj.isStockTxn = trx.isStockTxn;
                 newTrxObj.applicableTaxes = entry.taxList;
 
