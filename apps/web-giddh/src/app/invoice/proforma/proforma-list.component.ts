@@ -292,7 +292,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                             this.datePickerOptions = {
                                 ...this.datePickerOptions,
                                 startDate: moment(storedSelectedDate.fromDates, 'DD-MM-YYYY').toDate(),
-                                endDate: moment(storedSelectedDate.toDates, 'DD-MM-YYYY').toDate()
+                                endDate: moment(storedSelectedDate.toDates, 'DD-MM-YYYY').toDate(),
+                                chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
                             };
 
                             // assign start and end date
@@ -304,7 +305,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                         } else {
                             this.datePickerOptions = {
                                 ...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
-                                endDate: moment(a[1], 'DD-MM-YYYY').toDate()
+                                endDate: moment(a[1], 'DD-MM-YYYY').toDate(),
+                                chosenLabel: a[2]
                             };
 
                             // assign start and end date
@@ -317,7 +319,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                     } else {
                         this.datePickerOptions = {
                             ...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
-                            endDate: moment(a[1], 'DD-MM-YYYY').toDate()
+                            endDate: moment(a[1], 'DD-MM-YYYY').toDate(),
+                            chosenLabel: a[2]
                         };
 
                         // assign start and end date
@@ -330,7 +333,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                 } else {
                     this.datePickerOptions = {
                         ...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
-                        endDate: moment(a[1], 'DD-MM-YYYY').toDate()
+                        endDate: moment(a[1], 'DD-MM-YYYY').toDate(),
+                        chosenLabel: a[2]
                     };
 
                     // assign start and end date
@@ -580,6 +584,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                 ...this.datePickerOptions,
                 startDate: moment(new Date(universalDate[0]), 'DD-MM-YYYY').toDate(),
                 endDate: moment(new Date(universalDate[1]), 'DD-MM-YYYY').toDate(),
+                chosenLabel: universalDate[2]
             };
         }
 

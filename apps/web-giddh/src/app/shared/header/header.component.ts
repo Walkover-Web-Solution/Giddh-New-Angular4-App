@@ -642,7 +642,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (!this.isDateRangeSelected) {
                     this.datePickerOptions.startDate = moment(dateObj[0]);
                     this.datePickerOptions.endDate = moment(dateObj[1]);
-                    this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                    this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1]), chosenLabel: dateObj[2]};
                     this.isDateRangeSelected = true;
                     const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
                     const to: any = moment().format(GIDDH_DATE_FORMAT);
@@ -1021,7 +1021,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (data && data.picker) {
             let dates = {
                 fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
-                toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT)
+                toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT),
+                chosenLabel: data.picker.chosenLabel
             };
             // if (data.picker.chosenLabel === 'This Financial Year to Date') {
             //   data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
