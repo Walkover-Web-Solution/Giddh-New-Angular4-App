@@ -142,7 +142,8 @@ export class ExpensesComponent implements OnInit, OnChanges, OnDestroy {
                 this.datePickerOptions = {
                     ...this.datePickerOptions,
                     startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
-                    endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()
+                    endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate(),
+                    chosenLabel: universalDate[2]
                 };
 
                 if (this.unaiversalFrom && this.unaiversalTo) {
@@ -228,7 +229,8 @@ export class ExpensesComponent implements OnInit, OnChanges, OnDestroy {
             }
             this.datePickerOptions = {
                 ...this.datePickerOptions, startDate: res[0],
-                endDate: res[1]
+                endDate: res[1],
+                chosenLabel: res[2]
             };
         });
         this.pettycashRequest.from = this.unaiversalFrom;
