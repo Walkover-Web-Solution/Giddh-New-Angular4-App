@@ -98,7 +98,8 @@ export class CompletedComponent implements OnInit, OnDestroy {
     public companies$: Observable<CompanyResponse[]>;
     public downloadTallyErrorLogRequest: DownloadTallyErrorLogRequest = {
         date: '',
-        hour: null
+        hour: null,
+        type: ''
     };
     public paginationRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
     public completedtallySyncDataResponse: any;
@@ -220,7 +221,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
     public downloadLog(row: TallySyncData) {
         this.downloadTallyErrorLogRequest.date = row['dateDDMMYY'] ? row['dateDDMMYY'] : '';
         this.downloadTallyErrorLogRequest.hour = row['hour'] ? row['hour'] : null;
-
+        this.downloadTallyErrorLogRequest.type = row['type'];
         this.tallysyncService.getErrorLog(row.company.uniqueName, this.downloadTallyErrorLogRequest).subscribe((res) => {
             if (res.status === 'success') {
                 let blobData = this.base64ToBlob(res.body, 'application/xlsx', 512);

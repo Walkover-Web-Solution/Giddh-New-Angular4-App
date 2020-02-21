@@ -51,7 +51,7 @@ export class FinancialYearComponent implements OnInit {
 	public selectedFYPeriod: string;
 	public selectedFinancialYearOption: string;
 	public selectedFinancialYearUN: string;
-	public selectedYear: string;
+	public selectedYear: number;
 	public options: Select2Options = {
 		multiple: false,
 		width: '300px',
@@ -96,7 +96,7 @@ export class FinancialYearComponent implements OnInit {
 	}
 
 	public setYearRange() {
-		let endYear = moment().year(); // moment().subtract(1, 'year').year();
+		let endYear = moment().add(1, 'year').year(); // moment().subtract(1, 'year').year();
 		let startYear = moment().subtract(7, 'year').year(); // moment().subtract(7, 'year').year();
 		let yearArray = _.range(startYear, endYear);
 		this.yearOptions = yearArray.map(q => {
@@ -169,7 +169,11 @@ export class FinancialYearComponent implements OnInit {
 
 	public addFY() {
 		if (this.selectedYear) {
-			this.store.dispatch(this.settingsFinancialYearActions.AddFinancialYear(this.selectedYear));
+            if(this.selectedYear < moment().year()) {
+                this.store.dispatch(this.settingsFinancialYearActions.addFinancialYear(this.selectedYear));
+            } else {
+                this.store.dispatch(this.settingsFinancialYearActions.addFutureFinancialYear(this.selectedYear));
+            }
 		}
 	}
 
