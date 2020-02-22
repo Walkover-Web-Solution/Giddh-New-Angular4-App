@@ -29,7 +29,7 @@ import {DOCUMENT} from "@angular/platform-browser";
 import {ToasterService} from "../services/toaster.service";
 import {AuthenticationService} from "../services/authentication.service";
 import {userLoginStateEnum} from "../models/user-login-state";
-import {isIOSCordova} from "@giddh-workspaces/utils";
+import {isCordova} from "@giddh-workspaces/utils";
 import {GeneralService} from "../services/general.service";
 
 @Component({
@@ -374,7 +374,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             if (provider === "google") {
                 // google
                 const t = ipcRenderer.send("authenticate", provider);
-                ipcRenderer.once('take-your-gmail-token', (sender , arg) => {
+                ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
                     this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                 });
 
@@ -383,7 +383,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 // const t = ipcRenderer.send("authenticate", provider);
                 // this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
                 const t = ipcRenderer.send("authenticate", provider);
-                ipcRenderer.once('take-your-gmail-token', (sender , arg) => {
+                ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
                     this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                 });
             }

@@ -19,7 +19,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {sortBy} from '../lodash-optimized';
 import {COMMON_ACTIONS} from './common.const';
 import {AppState} from '../store';
-import {Injectable} from '@angular/core';
+import {Injectable, NgZone} from '@angular/core';
 import {map, switchMap, take} from 'rxjs/operators';
 import {userLoginStateEnum} from '../models/user-login-state';
 import {Actions, Effect} from '@ngrx/effects';

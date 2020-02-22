@@ -522,7 +522,7 @@
         }
       }
     },
-  "giddh-cordova": {
+    "giddh-cordova": {
       "root": "apps/web-giddh/",
       "sourceRoot": "apps/web-giddh/src",
       "projectType": "application",
