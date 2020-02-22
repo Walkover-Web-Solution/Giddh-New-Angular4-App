@@ -66,6 +66,13 @@ span.eligible-ITC {
 .rcm-entry {
     padding-left: 4px;
 }
+.taxable-amount-section {
+    display: inline-block;
+    margin-bottom: 12px;
+}
+.inWords.words-inline {
+    float: right;
+}
 @media only screen and (max-width: 767px) {
     .ledger-panel .btn {
         margin-bottom: 13px;
@@ -115,5 +122,4 @@ span.eligible-ITC {
         display: flex;
         flex-direction: column-reverse;
     }
-
 }

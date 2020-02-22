@@ -1,7 +1,7 @@
-import {combineLatest, Observable, of as observableOf, of, ReplaySubject} from 'rxjs';
+import { combineLatest, Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
 
-import {debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil} from 'rxjs/operators';
-import {IOption} from '../../theme/ng-select/option.interface';
+import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
+import { IOption } from '../../theme/ng-select/option.interface';
 import {
     ChangeDetectorRef,
     Component,
@@ -14,40 +14,42 @@ import {
     SimpleChanges,
     ViewChild
 } from '@angular/core';
-import {FormControl, NgForm} from '@angular/forms';
-import {BsModalRef, ModalOptions} from 'ngx-bootstrap/modal';
-import {select, Store} from '@ngrx/store';
-import {AppState} from '../../store';
+import { FormControl, NgForm } from '@angular/forms';
+import { BsModalRef, ModalOptions } from 'ngx-bootstrap/modal';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
-import {cloneDeep, orderBy, uniqBy} from '../../lodash-optimized';
+import { cloneDeep, orderBy, uniqBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import {InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm} from '../../models/api-models/Invoice';
-import {InvoiceActions} from '../../actions/invoice/invoice.actions';
-import {InvoiceService} from '../../services/invoice.service';
-import {BsDatepickerConfig} from 'ngx-bootstrap/datepicker';
-import {GIDDH_DATE_FORMAT} from '../../shared/helpers/defaultDateFormat';
-import {ModalDirective} from 'ngx-bootstrap';
-import {createSelector} from 'reselect';
-import {IFlattenAccountsResultItem} from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
-import {DownloadOrSendInvoiceOnMailComponent} from 'apps/web-giddh/src/app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
-import {ElementViewContainerRef} from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import {ActivatedRoute, Router} from '@angular/router';
-import {InvoiceReceiptFilter, ReceiptItem, ReciptResponse} from 'apps/web-giddh/src/app/models/api-models/recipt';
-import {InvoiceReceiptActions} from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
-import {ActiveFinancialYear, CompanyResponse, ValidateInvoice} from 'apps/web-giddh/src/app/models/api-models/Company';
-import {CompanyActions} from 'apps/web-giddh/src/app/actions/company.actions';
-import {InvoiceAdvanceSearchComponent} from './models/advanceSearch/invoiceAdvanceSearch.component';
-import {ToasterService} from '../../services/toaster.service';
-import {InvoiceSetting} from '../../models/interfaces/invoice.setting.interface';
-import {VoucherTypeEnum} from '../../models/api-models/Sales';
-import {BreakpointObserver} from '@angular/cdk/layout';
-import {DaterangePickerComponent} from '../../theme/ng2-daterangepicker/daterangepicker.component';
-import {saveAs} from 'file-saver';
-import {ReceiptService} from "../../services/receipt.service";
-import {InvoicePaymentModelComponent} from './models/invoicePayment/invoice.payment.model.component';
+import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
+import { InvoiceActions } from '../../actions/invoice/invoice.actions';
+import { InvoiceService } from '../../services/invoice.service';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { ModalDirective } from 'ngx-bootstrap';
+import { createSelector } from 'reselect';
+import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
+import { DownloadOrSendInvoiceOnMailComponent } from 'apps/web-giddh/src/app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
+import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { ActivatedRoute, Router } from '@angular/router';
+import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'apps/web-giddh/src/app/models/api-models/recipt';
+import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
+import { ActiveFinancialYear, CompanyResponse, ValidateInvoice } from 'apps/web-giddh/src/app/models/api-models/Company';
+import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
+import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
+import { ToasterService } from '../../services/toaster.service';
+import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
+import { VoucherTypeEnum } from '../../models/api-models/Sales';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
+import { saveAs } from 'file-saver';
+import { ReceiptService } from "../../services/receipt.service";
+import { InvoicePaymentModelComponent } from './models/invoicePayment/invoice.payment.model.component';
 import { PurchaseRecordService } from '../../services/purchase-record.service';
 import { PAGINATION_LIMIT } from '../../app.constant';
 import { PurchaseRecordUpdateModel } from '../../purchase/purchase-record/constants/purchase-record.interface';
+import { InvoiceBulkUpdateService } from '../../services/invoice.bulkupdate.service';
+import { PurchaseRecordActions } from '../../actions/purchase-record/purchase-record.action';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
@@ -55,11 +57,11 @@ const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperation
 const MULTI_CURRENCY_MODULES = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote];
 
 const COMPARISON_FILTER = [
-    {label: 'Greater Than', value: 'greaterThan'},
-    {label: 'Less Than', value: 'lessThan'},
-    {label: 'Greater Than or Equals', value: 'greaterThanOrEquals'},
-    {label: 'Less Than or Equals', value: 'lessThanOrEquals'},
-    {label: 'Equals', value: 'equals'}
+    { label: 'Greater Than', value: 'greaterThan' },
+    { label: 'Less Than', value: 'lessThan' },
+    { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
+    { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
+    { label: 'Equals', value: 'equals' }
 ];
 
 @Component({
@@ -69,7 +71,7 @@ const COMPARISON_FILTER = [
 })
 export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
-    public validateInvoiceobj: ValidateInvoice = {invoiceNumber: null};
+    public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null };
     @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
     @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
     @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
@@ -80,7 +82,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('bulkUpdate') public bulkUpdate: ModalDirective;
     @ViewChild('eWayBill') public eWayBill: ModalDirective;
     @ViewChild('searchBox') public searchBox: ElementRef;
-    @ViewChild('advanceSearchComponent', {read: InvoiceAdvanceSearchComponent}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
+    @ViewChild('advanceSearchComponent', { read: InvoiceAdvanceSearchComponent }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
     @Input() public selectedVoucher: VoucherTypeEnum = VoucherTypeEnum.sales;
     @ViewChild(InvoicePaymentModelComponent) public invoicePaymentModelComponent: InvoicePaymentModelComponent;
 
@@ -196,7 +198,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public isFabclicked: boolean = false;
     public exportInvoiceType: string = '';
 
-    public sortRequestForUi: { sortBy: string, sort: string } = {sortBy: '', sort: ''};
+    public sortRequestForUi: { sortBy: string, sort: string } = { sortBy: '', sort: '' };
     public showInvoiceGenerateModal: boolean = false;
     public appSideMenubarIsOpen: boolean;
 
@@ -232,7 +234,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private _breakPointObservar: BreakpointObserver,
         private _router: Router,
         private _receiptServices: ReceiptService,
-        private purchaseRecordService: PurchaseRecordService
+        private purchaseRecordActions: PurchaseRecordActions,
+        private purchaseRecordService: PurchaseRecordService,
+        private _invoiceBulkUpdateService: InvoiceBulkUpdateService
     ) {
         this.invoiceSearchRequest.page = 1;
         this.invoiceSearchRequest.count = PAGINATION_LIMIT;
@@ -279,7 +283,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             let accounts: IOption[] = [];
             _.forEach(data, (item) => {
                 if (_.find(item.parentGroups, (o) => _.indexOf(PARENT_GROUP_ARR, o.uniqueName) !== -1)) {
-                    accounts.push({label: item.name, value: item.uniqueName});
+                    accounts.push({ label: item.name, value: item.uniqueName });
                 }
             });
             this.accounts$ = observableOf(orderBy(accounts, 'label'));
@@ -364,22 +368,29 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 }, 100);
             });
 
-        this.store.pipe(select(store => store.purchaseRecord.updatedRecordDetails), takeUntil(this.destroyed$)).subscribe((record: PurchaseRecordUpdateModel) => {
-            if (record) {
+        combineLatest([
+            this.store.pipe(select(store => store.receipt.vouchers), publishReplay(1), refCount()),
+            this.store.pipe(select(store => store.purchaseRecord.updatedRecordDetails))
+        ]).pipe(takeUntil(this.destroyed$))
+        .subscribe((response) => {
+            const voucherData: ReciptResponse = response[0];
+            const record: PurchaseRecordUpdateModel = response[1];
+            if (voucherData && voucherData.items && record) {
                 this.selectedInvoiceForDetails = null;
-                let voucherIndex = this.voucherData.items.findIndex(item => item.uniqueName === record.purchaseRecordUniqueName);
+                let voucherIndex = voucherData.items.findIndex(item => item.uniqueName === record.purchaseRecordUniqueName);
                 if (voucherIndex > -1) {
                     let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
                     if (record.mergedRecordUniqueName) {
                         allItems = allItems.filter(item => item.uniqueName !== record.mergedRecordUniqueName);
                     }
                     allItems[voucherIndex].voucherNumber = record.invoiceNumber;
-                    allItems = uniqBy([allItems[voucherIndex], ...allItems], 'voucherNumber');
+                    allItems = uniqBy([allItems[voucherIndex], ...allItems], 'uniqueName');
                     this.itemsListForDetails = allItems;
                     this.toggleBodyClass();
                     setTimeout(() => {
                         this.selectedInvoiceForDetails = allItems[0];
                         this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
+                        this.store.dispatch(this.purchaseRecordActions.resetUpdatePurchaseRecord());
                     }, 1000);
                 }
             }
@@ -569,12 +580,35 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    public toggleAdvanceSearchPopup() {
+/**
+ * Advance search model show hide
+ *
+ * @param {boolean} isClosed  Boolean to check model need to close or not
+ * @memberof InvoicePreviewComponent
+ */
+public toggleAdvanceSearchPopup(isClosed: boolean) {
+        if (isClosed) {
+            this.toggleAllItems(false);
+        }
         this.advanceSearch.toggle();
+
     }
 
-    public toggleBulkUpdatePopup() {
-        this.bulkUpdate.toggle();
+/**
+ * Bulk update model show hide
+ *
+ * @param {boolean} isClose Boolean to check model need to close or not
+ * @memberof InvoicePreviewComponent
+ */
+public toggleBulkUpdatePopup(isClose: boolean): void {
+        if (isClose) {
+            this.getVoucher(false);
+            this.toggleAllItems(false);
+            this.bulkUpdate.hide();
+        } else {
+            this.bulkUpdate.show();
+        }
+
     }
 
     public toggleEwayBillPopup() {
@@ -612,6 +646,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         if (ev.page === this.invoiceSearchRequest.page) {
             return;
         }
+        this.toggleAllItems(false);
         this.invoiceSearchRequest.page = ev.page;
         this.getVoucher(this.isUniversalDateApplicable);
     }
@@ -658,23 +693,50 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.purchaseRecordService.deletePurchaseRecord(requestObject).subscribe((response) => {
                 this.selectedItems = [];
                 if (response.status === 'success') {
-					this._toaster.successToast(response.body);
-					this.selectedInvoiceForDetails = null;
+                    this._toaster.successToast(response.body);
+                    this.selectedInvoiceForDetails = null;
                     this.getVoucher(this.isUniversalDateApplicable);
                 } else {
-					this._toaster.errorToast(response.message);
-					this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
-					this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).subscribe(res => {
-						this.parseBalRes(res);
-					});
+                    this._toaster.errorToast(response.message);
+                    this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
+                    this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).subscribe(res => {
+                        this.parseBalRes(res);
+                    });
                 }
             });
         } else {
-            let model = {
-                invoiceNumber: this.selectedInvoice.voucherNumber,
-                voucherType: this.selectedVoucher
-            };
-            this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, this.selectedInvoice.account.uniqueName));
+            //  It will execute when Bulk delete operation
+            if (this.selectedInvoicesList.length > 1) {
+                let selectedinvoicesName = [];
+                this.selectedInvoicesList.forEach(item => {
+                    selectedinvoicesName.push(item.voucherNumber);
+                });
+                let bulkDeleteModel = {
+                    voucherNumbers: selectedinvoicesName,
+                    voucherType: this.selectedVoucher
+                }
+                if (bulkDeleteModel.voucherNumbers && bulkDeleteModel.voucherType) {
+                    this._invoiceBulkUpdateService.bulkUpdateInvoice(bulkDeleteModel, 'delete').subscribe(response => {
+                        if (response) {
+                            if (response.status === "success") {
+                                this._toaster.successToast(response.body);
+                            } else {
+                                this._toaster.errorToast(response.message);
+                            }
+                            this.getVoucher(false);
+                            this.toggleAllItems(false);
+                        }
+                    });
+                }
+
+            } else {
+                let model = {
+                    invoiceNumber: this.selectedInvoice.voucherNumber,
+                    voucherType: this.selectedVoucher
+                };
+                this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, this.selectedInvoice.account.uniqueName));
+            }
+
         }
     }
 
@@ -703,7 +765,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
         let newIndex;
         if (this.selectedVoucher === VoucherTypeEnum.purchase) {
-            newIndex = allItems.findIndex(item  => item.uniqueName === invoice.uniqueName);
+            newIndex = allItems.findIndex(item => item.uniqueName === invoice.uniqueName);
         } else {
             newIndex = allItems.findIndex(f => f.voucherNumber === invoice.voucherNumber);
         }
@@ -763,7 +825,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             byteArrays.push(byteArray);
             offset += sliceSize;
         }
-        return new Blob(byteArrays, {type: contentType});
+        return new Blob(byteArrays, { type: contentType });
     }
 
     /**
@@ -780,7 +842,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 voucherType: this.selectedVoucher
             }));
         } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
-            this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, {numbers: userResponse.numbers}, this.selectedInvoice.voucherNumber));
+            this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice.voucherNumber));
         }
     }
 
@@ -1101,7 +1163,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = PAGINATION_LIMIT;
 
-        this.sortRequestForUi = {sortBy: '', sort: ''};
+        this.sortRequestForUi = { sortBy: '', sort: '' };
         this.invoiceSearchRequest.sort = '';
         this.invoiceSearchRequest.sortBy = '';
         this.invoiceSearchRequest.q = '';
@@ -1183,7 +1245,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public exportCsvDownload() {
         this.exportcsvRequest.from = this.invoiceSearchRequest.from;
         this.exportcsvRequest.to = this.invoiceSearchRequest.to;
-        let dataTosend = {accountUniqueName: ''};
+        let dataTosend = { accountUniqueName: '' };
         if (this.selectedInvoicesList.length > 0) {
 
             dataTosend.accountUniqueName = this.allItemsSelected ? '' : this.selectedInvoicesList[0].account.uniqueName;

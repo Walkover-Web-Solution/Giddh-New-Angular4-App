@@ -1,12 +1,12 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {BsDatepickerConfig} from 'ngx-bootstrap/datepicker';
-import {ILedgersInvoiceResult} from "../../../models/api-models/Invoice";
-import {ReportsModel} from "../../../models/api-models/Reports";
-import {Store} from "@ngrx/store";
-import {AppState} from "../../../store";
-import {GroupWithAccountsAction} from "../../../actions/groupwithaccounts.actions";
-import {ModalDirective} from "ngx-bootstrap";
-import {Router} from '@angular/router';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { ILedgersInvoiceResult } from "../../../models/api-models/Invoice";
+import { ReportsModel } from "../../../models/api-models/Reports";
+import { Store } from "@ngrx/store";
+import { AppState } from "../../../store";
+import { GroupWithAccountsAction } from "../../../actions/groupwithaccounts.actions";
+import { ModalDirective } from "ngx-bootstrap";
+import { Router } from '@angular/router';
 
 
 @Component({

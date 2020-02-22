@@ -7,7 +7,7 @@
         <div *ngIf="progressData?.length">
             <div class="panel panel-default" *ngFor="let row of progressData">
                 <div class="panel-heading">
-                    <span class="m-r-15">{{ row.company.name }}</span>
+                    <span class="m-r-15">{{row.type === 'TALLY' ? 'Tally:' : row.type === 'COMPANY_JSON_IMPORT' ? 'Import Json:' : ''}} {{ row.company.name }}</span>
                     <small class="m-r-15">Last Import on {{ row.dateString }}</small>
                     <small class="running"><i class="fa fa-circle"></i> {{ row.status }}</small>
                 </div>
@@ -131,7 +131,7 @@
                         row.tallyErrorGroups > 0
                     ">
                     <span class="m-r-15">Error Report:</span>
-                    <a class="running" (click)="downloadLog(row)">{{ row.company.name }}-error-log.xlsx</a>
+                    <a href="javascript:;" class="running" (click)="downloadLog(row)">{{ row.company.name }}-error-log.xlsx</a>
                 </div>
             </div>
         </div>

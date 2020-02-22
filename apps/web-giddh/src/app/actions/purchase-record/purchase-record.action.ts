@@ -16,4 +16,14 @@ export class PurchaseRecordActions {
     public getUpdatePurchaseRecordSuccessAction(model: PurchaseRecordUpdateModel): CustomActions {
         return { type: PURCHASE_RECORD_ACTIONS.UPDATE_SUCCESS, payload: model };
     }
+
+    /**
+     * Returns the action to reset purchase record update data
+     *
+     * @returns {CustomActions} Action to reset purchase record update data
+     * @memberof PurchaseRecordActions
+     */
+    public resetUpdatePurchaseRecord(): CustomActions {
+        return { type: PURCHASE_RECORD_ACTIONS.RESET_UPDATE_DETAILS };
+    }
 }

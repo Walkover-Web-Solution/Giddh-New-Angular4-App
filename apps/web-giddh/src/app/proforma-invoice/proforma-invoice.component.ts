@@ -303,7 +303,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public originalExchangeRate = 1;
     public isMulticurrencyAccount = false;
     public invoiceUniqueName: string;
-    public showLoader: boolean = false;
+    public showLoader: boolean = true;
     public inputMaskFormat: string = '';
     public isPrefixAppliedForCurrency: boolean;
     public selectedSuffixForCurrency: string = '';
@@ -438,14 +438,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (!this.shouldShowLoader) {
                 return;
             }
-            if (stateLoader.show) {
-                this.showLoader = true;
-            } else {
-                this.showLoader = false;
-                this._cdr.detectChanges();
+            // if (stateLoader.show) {
+            //     this.showLoader = true;
+            // } else {
+            //     this.showLoader = false;
+            //     this._cdr.detectChanges();
                 // call focus in customer after loader hides because after loader hider ui re-renders it self
-                this.focusInCustomerName();
-            }
+                // this.focusInCustomerName();
+            // }
         });
     }
 
@@ -701,6 +701,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                         if (item.parentGroups.some(p => p.uniqueName === 'bankaccounts' || p.uniqueName === 'cash')) {
                             bankaccounts.push({ label: item.name, value: item.uniqueName, additional: item });
+                            if (this.isPurchaseInvoice) {
+                                this.sundryCreditorsAcList.push({
+                                    label: item.name,
+                                    value: item.uniqueName,
+                                    additional: item
+                                });
+                            }
                         }
 
                         if (item.parentGroups.some(p => p.uniqueName === 'otherincome' || p.uniqueName === 'revenuefromoperations')) {
@@ -754,7 +761,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 });
                             }
                         }
-
                     });
 
                     this.makeCustomerList();
@@ -791,6 +797,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                     }
                     this.depositAccountUniqueName = 'cash';
+                    this.showLoader = false;
+                    this.focusInCustomerName();
                 }
 
                 // update mode because voucher details is available
@@ -837,6 +845,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                         } else if (this.isPurchaseInvoice) {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
+                            this.isRcmEntry = (results[1]) ? results[1].subVoucher === Subvoucher.ReverseCharge : false;
                             obj = cloneDeep(convertedRes1) as VoucherClass;
                             if (this.isUpdateMode) {
                                 const vendorCurrency = (results[1].account.currency) ? results[1].account.currency.code : this.companyCurrency;
@@ -952,6 +961,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                         this.saveCurrentPurchaseRecordDetails();
                     }
+                    this.showLoader = false;
                 }
 
                 // create account success then close sidebar, and add customer details
@@ -1526,7 +1536,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // check for valid entries and transactions
         if (data.entries) {
             _.forEach(data.entries, (entry) => {
-                entry['subVoucher'] = (this.isRcmEntry) ? Subvoucher.ReverseCharge : '';
                 _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
                     // convert date object
                     // txn.date = this.convertDateForAPI(txn.date);
@@ -1612,7 +1621,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 dueDate: data.voucherDetails.dueDate,
                 type: this.invoiceType,
                 attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
-                templateDetails: data.templateDetails
+                templateDetails: data.templateDetails,
+                subVoucher: (this.isRcmEntry) ? Subvoucher.ReverseCharge : ''
             } as PurchaseRecordRequest;
         }
 
@@ -2462,7 +2472,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public cancelUpdate() {
+    /**
+     * Triggered when user clicks the 'Cancel' button of update flow
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public cancelUpdate(): void {
+        if (this.invoiceForm) {
+            this.resetInvoiceForm(this.invoiceForm);
+            this.isUpdateMode = false;
+        }
         this.cancelVoucherUpdate.emit(true);
     }
 
@@ -2582,6 +2601,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this._toasty.errorToast('Something went wrong! Try again');
                     });
             } else if (this.isPurchaseInvoice) {
+                if (this.isRcmEntry && !this.validateTaxes(cloneDeep(data))) {
+                    return;
+                }
                 requestObject = {
                     account: data.accountDetails,
                     number: this.invFormData.voucherDetails.voucherNumber,
@@ -2591,7 +2613,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     type: this.invoiceType,
                     attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
                     templateDetails: data.templateDetails,
-                    uniqueName: (this.selectedItem) ? this.selectedItem.uniqueName : (this.matchingPurchaseRecord) ? this.matchingPurchaseRecord.uniqueName : ''
+                    uniqueName: (this.selectedItem) ? this.selectedItem.uniqueName : (this.matchingPurchaseRecord) ? this.matchingPurchaseRecord.uniqueName : '',
+                    subVoucher: (this.isRcmEntry) ? Subvoucher.ReverseCharge : ''
                 } as PurchaseRecordRequest;
                 requestObject = this.updateData(requestObject, data);
                 this.generatePurchaseRecord(requestObject);
@@ -3446,25 +3469,35 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public getCurrencyRate(to, from, date = moment().format('DD-MM-YYYY')) {
-        this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
-            let rate = response.body;
-            if (rate) {
-                this.originalExchangeRate = rate;
-                this.exchangeRate = rate;
-                this._cdr.detectChanges();
-                if (this.isPurchaseInvoice && this.isUpdateMode) {
-                    // TODO: Remove this code once purchase invoice supports multicurrency
-                    this.calculateSubTotal();
-                    this.calculateTotalDiscount();
-                    this.calculateTotalTaxSum();
-                    this.calculateGrandTotal();
-                    this.calculateBalanceDue();
+    /**
+     * Fetches the currency exchange rate between two countries
+     *
+     * @param {*} to Converted to currency symbol
+     * @param {*} from Converted from currency symbol
+     * @param {string} [date=moment().format('DD-MM-YYYY')] Date on which currency rate is required, default is today's date
+     * @memberof ProformaInvoiceComponent
+     */
+    public getCurrencyRate(to, from, date = moment().format('DD-MM-YYYY')): void {
+        if (from && to) {
+            this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
+                let rate = response.body;
+                if (rate) {
+                    this.originalExchangeRate = rate;
+                    this.exchangeRate = rate;
+                    this._cdr.detectChanges();
+                    if (this.isPurchaseInvoice && this.isUpdateMode) {
+                        // TODO: Remove this code once purchase invoice supports multicurrency
+                        this.calculateSubTotal();
+                        this.calculateTotalDiscount();
+                        this.calculateTotalTaxSum();
+                        this.calculateGrandTotal();
+                        this.calculateBalanceDue();
+                    }
                 }
-            }
-        }, (error => {
+            }, (error => {
 
-        }));
+            }));
+        }
     }
 
     public updateBankAccountObject(accCurr) {
@@ -3654,10 +3687,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             }, 200);
         } else {
-            let firstElementToFocus: any = document.getElementsByClassName('fristElementToFocus');
-            if (firstElementToFocus[0]) {
-                firstElementToFocus[0].focus();
-            }
+            setTimeout(() => {
+                let firstElementToFocus: any = document.getElementsByClassName('firstElementToFocus');
+                if (firstElementToFocus[0]) {
+                    firstElementToFocus[0].focus();
+                }
+            }, 200);
         }
 
     }
@@ -3724,7 +3759,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else {
             // User denied the permission or closed the popup
             this._toasty.errorToast('Please change either purchase invoice number or vendor details.', 'Purchase Record');
-            this.isUpdateMode = false;
         }
         if (this.purchaseRecordConfirmationPopup) {
             this.purchaseRecordConfirmationPopup.hide();
@@ -3972,13 +4006,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // Confirmation received, delete old merged entries
         this.invFormData.entries = this.invFormData.entries.filter(entry => !entry['isMergedPurchaseEntry'])
         const result = (await this.modifyMulticurrencyRes(this.matchingPurchaseRecord, false)) as VoucherClass;
+        let flattenAccounts;
+        this.flattenAccountListStream$.pipe(take(1)).subscribe((accounts) => flattenAccounts = accounts);
         if (result.voucherDetails) {
             if (result.entries && result.entries.length > 0) {
+                result.entries = this.parseEntriesFromResponse(result.entries, flattenAccounts);
                 result.entries.forEach((entry) => {
                     entry['isMergedPurchaseEntry'] = true;
                     this.invFormData.entries.push(entry);
                 });
             }
         }
+        this.calculateBalanceDue();
+        this.calculateTotalDiscount();
+        this.calculateTotalTaxSum();
+        this._cdr.detectChanges();
     }
 }

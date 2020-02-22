@@ -1,6 +1,6 @@
 {
     "name": "giddh",
-    "version": "7.0.0",
+    "version": "7.0.1",
     "description": "Accounting Software from Giddh.",
     "main": "index.js",
     "author": "Walkover Technologies<info@walkover.in>",
@@ -11,65 +11,15 @@
     "license": "MIT",
     "dependencies": {
         "angular2-highcharts": "git+https://github.com/mtflynn/angular2-highcharts.git",
-        "configstore": "^4.0.0",
+        "configstore": "^5.0.0",
         "electron-is-dev": "^1.1.0",
-        "electron-log": "^3.0.5",
+        "electron-log": "^4.0.2",
         "electron-oauth": "git+https://github.com/govi2010/electron-oauth2.git",
-        "electron-updater": "4.0.6",
-        "is-cidr": "^3.0.0",
+        "electron-updater": "4.2.0",
+        "is-cidr": "^3.1.0",
         "jquery": "^3.4.1",
-        "moment": "^2.24.0"
-    },
-    "build": {
-        "appId": "com.giddh.prod",
-        "electronVersion": "4.2.12",
-        "publish": [{
-            "provider": "s3",
-            "bucket": "giddh-app-builds"
-        }],
-        "directories": {
-            "buildResources": "resources",
-            "output": "../electrongiddh-packages"
-        },
-        "mac": {
-            "category": "public.app-category.finance",
-            "target": [
-                "dmg",
-                "zip"
-            ],
-            "identity": "Walkover Web Solutions Private Limited (F3U6Z5L2EJ)",
-            "type": "distribution",
-            "entitlements": "default.entitlements.mac.plist",
-            "provisioningProfile": "embedded.provisionprofile",
-            "icon": "icon.png"
-        },
-        "linux": {
-            "icon": "icon.png",
-            "maintainer": "Walkover Technologies Pvt Ltd",
-            "target": [
-                "AppImage",
-                "snap",
-                "zip"
-            ]
-        },
-        "win": {
-            "target": [
-                "nsis",
-                "nsis-web",
-                "zip"
-            ],
-            "icon": "icon.ico",
-            "publisherName": "Walkover Technologies Pvt Ltd",
-            "certificateSubjectName": "Walkover Technologies Pvt Ltd"
-        },
-        "nsis": {
-            "oneClick": true,
-            "createDesktopShortcut": true,
-            "createStartMenuShortcut": true,
-            "menuCategory": "Accounting",
-            "shortcutName": "Giddh",
-            "perMachine": false
-        },
-        "asar": true
+        "moment": "^2.24.0",
+        "@getstation/electron-google-oauth2": "^2.0.0",
+        "tslib": "^1.10.0"
     }
 }

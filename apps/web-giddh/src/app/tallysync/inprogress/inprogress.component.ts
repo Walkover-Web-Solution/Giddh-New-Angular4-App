@@ -32,7 +32,8 @@ export class InprogressComponent implements OnInit, OnDestroy {
     ];
     public downloadTallyErrorLogRequest: DownloadTallyErrorLogRequest = {
         date: '',
-        hour: null
+        hour: null,
+        type: ''
     };
     public paginationRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
 
@@ -128,9 +129,9 @@ export class InprogressComponent implements OnInit, OnDestroy {
 
     // download
     public downloadLog(row: TallySyncData) {
-
         this.downloadTallyErrorLogRequest.date = row['dateDDMMYY'] ? row['dateDDMMYY'] : '';
         this.downloadTallyErrorLogRequest.hour = row['hour'] ? row['hour'] : null;
+        this.downloadTallyErrorLogRequest.type = row['type'];
         this.tallysyncService.getErrorLog(row.company.uniqueName, this.downloadTallyErrorLogRequest)
             .subscribe(res => {
                 if (res.status === "success") {

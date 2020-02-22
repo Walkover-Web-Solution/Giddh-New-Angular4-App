@@ -532,7 +532,7 @@
                                     <span class="download-invoice-ledger d-flex" *ngIf="txn.voucherGenerated"
                                         style="position: unset;align-items: center"
                                         (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
-                                        tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'right'">
+                                        tooltip="Download {{txn.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{txn.voucherNumber}}" [placement]="'right'">
                                         <i class="glyphicon glyphicon-download pull-left"
                                             style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                                     </span>
@@ -663,7 +663,8 @@
                                         (saveBlankLedger)="saveBlankTransaction()"
                                         (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
-                                        [invoiceList]="invoiceList">
+                                        [invoiceList]="invoiceList"
+                                        [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount" [shouldShowItcSection]="shouldShowItcSection">
                                     </new-ledger-entry-panel>
                                 </div>
 
@@ -786,7 +787,7 @@
                                     <span class="download-invoice-ledger d-flex" *ngIf="txn.voucherGenerated"
                                         style="position: unset;align-items: center"
                                         (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
-                                        tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'right'">
+                                        tooltip="Download {{txn.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{txn.voucherNumber}}" [placement]="'right'">
                                         <i class="glyphicon glyphicon-download pull-left"
                                             style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                                     </span>
@@ -917,7 +918,8 @@
                                         (saveBlankLedger)="saveBlankTransaction()"
                                         (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
-                                        [invoiceList]="invoiceList">
+                                        [invoiceList]="invoiceList"
+                                        [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount" [shouldShowItcSection]="shouldShowItcSection">
                                     </new-ledger-entry-panel>
                                 </div>
 
@@ -1256,7 +1258,7 @@
                 <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
                     <form name="newRole" novalidate class="" autocomplete="off">
                         <div class="modal_wrap mrB2">
-                            <h3>Are you sure want to delete?</h3>
+                            <h3>You are deleting the selected entries!</h3>
                         </div>
                         <div class="pull-right">
                             <button type="submit" class="btn btn-md btn-success mrR1"

@@ -197,7 +197,7 @@ export class GeneralService {
      * @returns {ConfirmationModalConfiguration} RCM modal configuration
      * @memberof GeneralService
      */
-    getRcmConfiguration(isRcmSelected: boolean): ConfirmationModalConfiguration {
+    public getRcmConfiguration(isRcmSelected: boolean): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
             text: 'Yes',
             cssClass: 'btn btn-success'
@@ -215,7 +215,7 @@ export class GeneralService {
             headerCssClass,
             messageText: `Note: If you check this transaction for Reverse Charge,
             applied taxes will be considered under Reverse Charge taxes and
-            will be added in GST Report.`,
+            will be added in tax report.`,
             messageCssClass,
             footerText: 'Are you sure you want to check this transaction for Reverse Charge?',
             footerCssClass,
@@ -225,7 +225,7 @@ export class GeneralService {
                 headerCssClass,
                 messageText: `Note: If you uncheck this transaction from Reverse Charge, applied
                 taxes will be considered as normal taxes and reverse
-                charge effect will be removed from GST Report.`,
+                charge effect will be removed from tax report.`,
                 messageCssClass,
                 footerText: 'Are you sure you want to uncheck this transaction from Reverse Charge?',
                 footerCssClass,
@@ -242,7 +242,7 @@ export class GeneralService {
      * @returns {boolean} True, if the current ledger and user selected particular account belongs to RCM category accounts
      * @memberof GeneralService
      */
-    shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any): boolean {
+    public shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any): boolean {
         if (currentLedgerAccountDetails && selectedAccountDetails) {
             if (![currentLedgerAccountDetails.uniqueName, selectedAccountDetails.uniqueName].includes('roundoff')) {
                 // List of allowed first level parent groups
@@ -278,12 +278,12 @@ export class GeneralService {
     }
 
     /**
- * Covert UTC time zone( server time zone ) into local system timezone
- *
- * @param {*} UTCDateString UTC timezone time string
- * @returns  coverted date(UTC---> Systme TimeZone)
- * @memberof CompletedComponent
- */
+     * Covert UTC time zone( server time zone ) into local system timezone
+     *
+     * @param {*} UTCDateString UTC timezone time string
+     * @returns  coverted date(UTC---> Systme TimeZone)
+     * @memberof CompletedComponent
+     */
     public ConvertUTCTimeToLocalTime(UTCDateString) {
         let convertdLocalTime = new Date(UTCDateString);
 

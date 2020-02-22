@@ -3,7 +3,7 @@
     max-height: 500px;
 }
 
-.giddh-logo img {
+.giddh-logo {
     width: 100px;
 }
 
@@ -54,7 +54,7 @@
 }
 
 .account-search {
-    margin: 10px 15px 10px 15px;
+    margin: 10px 15px 5px 15px;
     position: relative;
     height: 36px;
 }
@@ -143,6 +143,9 @@ a[vr-item]:focus {
 .left_fixed_header>li {
     text-transform: capitalize;
     position: relative;
+}
+.no-padding {
+    padding: 0px !important;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
@@ -313,7 +316,7 @@ a[vr-item]:focus {
 .left-sub-menu {
     background: #fff;
     position: absolute;
-    left: 215px;
+    left: -12px;
     bottom: 0;
     width: 570px;
     z-index: -1;
@@ -513,7 +516,7 @@ span.icon-support.dropdown-toggle {
 
 .primary-header li.company-name {
     top: 0;
-    width: 100%;
+    list-style-type: none;
 }
 
 .primary-header .company-name-finance-year {
@@ -531,6 +534,10 @@ span.icon-support.dropdown-toggle {
     display: flex;
     align-items: center;
 }
+.cText {
+    padding: 6px 8px !important;
+    overflow: hidden;
+}
 
 .primary-header ul.main-company-name {
     height: 60px;
@@ -540,10 +547,6 @@ span.icon-support.dropdown-toggle {
 
 .unique-name-financial-year span {
     display: inline-block !important;
-}
-
-.company-name .dropdown-menu {
-    padding-top: 15px;
 }
 
 ul.sub-list {
@@ -563,8 +566,8 @@ ul.sub-list {
 .nav-left-bar .company-name-finance-year {
     display: inline;
     padding-left: 0;
-    float: right;
-    width: 150px;
+    /*float: right;
+    width: 150px;*/
     position: relative;
     top: -3px;
 }
@@ -573,9 +576,6 @@ ul.sub-list {
     display: block !important;
 }
 
-.nav-left-bar .company-name .cText span.alice {
-    color: #fff !important;
-}
 
 .nav-left-bar .company-name .branch-unique-name {
     font-size: 12px;
@@ -613,6 +613,10 @@ ul.sub-list {
     cursor: pointer;
     font-size: 20px;
     z-index: 9999;
+}
+.head-nav {
+    background: #f1f1f1;
+    border-bottom: 1px solid #e4e4e4;
 }
 
 
@@ -727,6 +731,13 @@ ul.sub-list {
     }
     .nav-left-bar .company-name-finance-year {
         width: 200px;
+        float: left;
+    }
+    .cText {
+        overflow: hidden;
+    }
+    .cText.head-nav {
+        display: none;
     }
 }
 

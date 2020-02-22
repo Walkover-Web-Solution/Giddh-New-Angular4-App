@@ -155,3 +155,7 @@ export const FILE_ATTACHMENT_TYPE = {
     PDF: ['pdf'],
     UNSUPPORTED: ['doc', 'docx', 'xls', 'xlsx']
 };
+
+
+/** Error message to display if the stock is invalid */
+export const INVALID_STOCK_ERROR_MESSAGE = 'Both Unit and Rate fields are mandatory if you provide data for either of them.';

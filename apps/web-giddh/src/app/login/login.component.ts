@@ -22,7 +22,6 @@ import {
     LinkedinLoginProvider,
     SocialUser
 } from "../theme/ng-social-login-module/index";
-import {isCordova} from '@giddh-workspaces/utils';
 import {contriesWithCodes} from "../shared/helpers/countryWithCodes";
 
 import {IOption} from "../theme/ng-virtual-select/sh-options.interface";
@@ -271,7 +270,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         });
         this.isLoginWithPasswordSuccessNotVerified$.subscribe(res => {
             if (res) {
-                console.log("isLoginWithPasswordSuccessNotVerified", res);
+//
             }
         });
         this.isLoginWithPasswordIsShowVerifyOtp$.subscribe(res => {
@@ -374,12 +373,19 @@ export class LoginComponent implements OnInit, OnDestroy {
             const {ipcRenderer} = (window as any).require("electron");
             if (provider === "google") {
                 // google
-                const t = ipcRenderer.sendSync("authenticate", provider);
-                this.store.dispatch(this.loginAction.signupWithGoogle(t));
+                const t = ipcRenderer.send("authenticate", provider);
+                ipcRenderer.once('take-your-gmail-token', (sender , arg) => {
+                    this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
+                });
+
             } else {
                 // linked in
-                const t = ipcRenderer.sendSync("authenticate", provider);
-                this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
+                // const t = ipcRenderer.send("authenticate", provider);
+                // this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
+                const t = ipcRenderer.send("authenticate", provider);
+                ipcRenderer.once('take-your-gmail-token', (sender , arg) => {
+                    this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
+                });
             }
 
         } else if (isCordova()) {

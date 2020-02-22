@@ -1,12 +1,12 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
 
-import { takeUntil } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
-import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AppState } from '../../store';
-import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
+import {takeUntil} from 'rxjs/operators';
+import {Store} from '@ngrx/store';
+import {Component, Input, OnInit, ViewChild, AfterViewInit} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, NgForm} from '@angular/forms';
+import {Router} from '@angular/router';
+import {AppState} from '../../store';
+import {SettingsIntegrationActions} from '../../actions/settings/settings.integration.action';
 import * as _ from '../../lodash-optimized';
 import {
     AmazonSellerClass,
@@ -16,16 +16,20 @@ import {
     RazorPayClass,
     SmsKeyClass
 } from '../../models/api-models/SettingsIntegraion';
-import { AccountService } from '../../services/account.service';
-import { ToasterService } from '../../services/toaster.service';
-import { IOption } from '../../theme/ng-select/option.interface';
-import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
-import { TabsetComponent, ModalDirective } from "ngx-bootstrap";
-import { CompanyActions } from "../../actions/company.actions";
-import { IRegistration } from "../../models/interfaces/registration.interface";
-import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
-import { CurrentPage } from '../../models/api-models/Common';
-import { GeneralActions } from '../../actions/general/general.actions';
+import {AccountService} from '../../services/account.service';
+import {ToasterService} from '../../services/toaster.service';
+import {IOption} from '../../theme/ng-select/option.interface';
+import {IFlattenAccountsResultItem} from '../../models/interfaces/flattenAccountsResultItem.interface';
+import {TabsetComponent, ModalDirective} from "ngx-bootstrap";
+import {CompanyActions} from "../../actions/company.actions";
+import {IRegistration} from "../../models/interfaces/registration.interface";
+import {ShSelectComponent} from '../../theme/ng-virtual-select/sh-select.component';
+import {CurrentPage} from '../../models/api-models/Common';
+import {GeneralActions} from '../../actions/general/general.actions';
+import {Configuration} from "../../app.constant";
+import {GoogleLoginProvider, LinkedinLoginProvider} from "../../theme/ng-social-login-module/providers";
+import {AuthenticationService} from "../../services/authentication.service";
+import { IForceClear } from '../../models/api-models/Sales';
 
 export declare const gapi: any;
 
@@ -60,10 +64,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isGmailIntegrated$: Observable<boolean>;
     public isPaymentAdditionSuccess$: Observable<boolean>;
     public isPaymentUpdationSuccess$: Observable<boolean>;
+    public isElectron: boolean = Configuration.isElectron;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
     private isSellerAdded: Observable<boolean> = observableOf(false);
     private isSellerUpdate: Observable<boolean> = observableOf(false);
+
     @Input() private selectedTabParent: number;
     @ViewChild('integrationTab') public integrationTab: TabsetComponent;
     @ViewChild('removegmailintegration') public removegmailintegration: ModalDirective;
@@ -74,6 +80,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public openNewRegistration: boolean;
     public selecetdUpdateIndex: number;
     public isEcommerceShopifyUserVerified: boolean = false;
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
 
     constructor(
         private router: Router,
@@ -82,9 +89,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private accountService: AccountService,
         private toasty: ToasterService,
         private _companyActions: CompanyActions,
+        private _authenticationService: AuthenticationService,
         private _fb: FormBuilder,
-        private _generalActions: GeneralActions
-    ) {
+        private _generalActions: GeneralActions) {
         this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
@@ -199,6 +206,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
         this.getShopifyEcommerceVerifyStatus();
     }
+
     public ngAfterViewInit() {
         if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
             this.selectTab(this.selectedTabParent);
@@ -239,9 +247,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (f.valid) {
             this.store.dispatch(this.settingsIntegrationActions.SavePaymentInfo(f.value));
             this.paymentFormObj = new PaymentClass();
+            this.paymentFormObj.corpId = "";
+            this.paymentFormObj.userId = "";
+            this.paymentFormObj.accountNo = "";
+            this.paymentFormObj.aliasId = "";
+            this.paymentFormObj.accountUniqueName = "";
+            this.forceClear$ = observableOf({ status: true });
         }
     }
-
 
     public toggleCheckBox() {
         return this.razorPayObj.autoCapturePayment = !this.razorPayObj.autoCapturePayment;
@@ -286,7 +299,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public removeGmailAccount() {
         this.store.dispatch(this.settingsIntegrationActions.RemoveGmailIntegration());
     }
-
 
     public selectCashfreeAccount(event: IOption, objToApnd) {
         let accObj = {
@@ -465,13 +477,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     private getGoogleCredentials() {
-        if (PRODUCTION_ENV || isElectron || isCordova) {
+        if (PRODUCTION_ENV || isCordova) {
             return {
-                GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
+                GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
+                GOOGLE_CLIENT_SECRET: 'eWzLFEb_T9VrzFjgE40Bz6_l'
             };
         } else {
             return {
-                GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com'
+                GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com',
+                GOOGLE_CLIENT_SECRET: '8htr7iQVXfZp_n87c99-jm7a'
             };
         }
     }
@@ -508,6 +522,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.dispatch(this.settingsIntegrationActions.UpdatePaymentInfo(requestData));
         this.paymentFormObj = new PaymentClass();
     }
+
     public setCurrentPageTitle() {
         let currentPageObj = new CurrentPage();
         currentPageObj.name = "Settings > Integration";
@@ -529,5 +544,41 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 }
             }
         })
+    }
+
+    gmailIntegration(provider: string) {
+        if (Configuration.isElectron) {
+            // electronOauth2
+            const {ipcRenderer} = (window as any).require("electron");
+            if (provider === "google") {
+                // google
+                const t = ipcRenderer.send("authenticate", provider);
+                ipcRenderer.once('take-your-gmail-token', (sender, arg: any) => {
+                    // this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
+                    const dataToSave = {
+                        "access_token": arg.access_token,
+                        "expires_in": arg.expiry_date,
+                        "refresh_token": arg.refresh_token
+                    };
+                    this._authenticationService.saveGmailToken(dataToSave).subscribe((res) => {
+
+                        if (res.status === 'success') {
+                            this.toasty.successToast('Gmail account added successfully.', 'Success');
+                        } else {
+                            this.toasty.errorToast(res.message, res.code);
+                        }
+                        this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
+                        this.router.navigateByUrl('/pages/settings/integration/email');
+                        // this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
+                    });
+                });
+
+            } else {
+                // linked in
+                const t = ipcRenderer.send("authenticate", provider);
+                // this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
+            }
+
+        }
     }
 }

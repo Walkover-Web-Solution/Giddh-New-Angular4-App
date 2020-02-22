@@ -15,6 +15,7 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {DbService} from './services/db.service';
 import {reassignNavigationalArray} from './models/defaultMenus'
+import {Configuration} from "./app.constant";
 
 /**
  * App Component
@@ -26,23 +27,9 @@ import {reassignNavigationalArray} from './models/defaultMenus'
     styleUrls: [
         './app.component.css'
     ],
-    template: `
-        <noscript *ngIf="isProdMode && !(isElectron || isCordova)">
-            <iframe [src]="tagManagerUrl"
-                    height="0" width="0" style="display:none;visibility:hidden"></iframe>
-        </noscript>
-        <div id="loader-1" *ngIf="!IAmLoaded">
-            <div class="spinner2">
-                <div class="cube1"></div>
-                <div class="cube2"></div>
-            </div>
-        </div>
-        <router-outlet></router-outlet>
-    `,
-    // changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: './app.component.html'
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
-    // tslint:disable-next-line:no-empty
 
     public sideMenu: { isopen: boolean } = {isopen: true};
     public companyMenu: { isopen: boolean } = {isopen: false};
@@ -99,6 +86,19 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         ]).subscribe(result => {
             this.changeOnMobileView(result.matches);
         });
+        if (Configuration.isElectron) {
+            // electronOauth2
+            const {ipcRenderer} = (window as any).require("electron");
+            // google
+            const t = ipcRenderer.send("take-server-environment", {
+                STAGING_ENV,
+                LOCAL_ENV,
+                TEST_ENV,
+                PRODUCTION_ENV,
+                AppUrl,
+                APP_FOLDER
+            });
+        }
     }
 
     public sidebarStatusChange(event) {

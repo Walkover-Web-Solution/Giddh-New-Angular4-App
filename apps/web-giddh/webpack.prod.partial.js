@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-console.log('demo ------Prod ....................');
+
 module.exports = {
     plugins: [
         new webpack.DefinePlugin({

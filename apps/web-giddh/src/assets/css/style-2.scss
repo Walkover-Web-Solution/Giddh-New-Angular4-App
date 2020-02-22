@@ -1639,16 +1639,12 @@ input:-moz-placeholder {
     justify-content: center;
     align-items: center;
     padding: 0;
-    margin-right: 5px;
+    margin-right: 15px;
     float: left;
 }
 
 .company-name .cText .fyear {
     font-size: 12px;
-}
-
-.company-name .cText span {
-    color: #fff;
 }
 
 .acntAccordion .title.active {
@@ -2106,9 +2102,10 @@ fieldset[disabled] .btn-primary:hover {
     cursor: pointer;
     position: relative;
     padding-right: 25px;
-    /* max-width: 380px; */
     display: inline-block;
-    width: 100%;
+    background: none;
+    padding: 0px 5px 0 0 !important;
+    color: #fff;
 }
 
 /* #cmpWrp .cText {
@@ -5612,7 +5609,9 @@ datepicker-inner .well table tbody tr td .btn-default:hover {
 datepicker-inner .well table tbody tr td .btn-default:hover span {
     text-decoration: none;
 }
-
+datepicker-inner .well table tbody tr td .btn-default:hover .text-success {
+    color: #fff;
+}
 datepicker-inner .well {
     background-color: #ffffff;
     border-top: 0;
@@ -6458,7 +6457,7 @@ table td[class*=col-]:last-child {
     right: 4px;
     padding: 0px;
     border: 1px solid #cccccc;
-    left: 25px;
+    left: -15px !important;
 }
 
 .user_dropdown > li > a {
@@ -8711,7 +8710,7 @@ p.remvBrnchName {
     border-radius: 0;
 }
 
-.popover.purchase-invoice-rcm, .update-ledger-rcm {
+.popover.purchase-invoice-rcm, .update-ledger-rcm, .all-modules-popover {
     .popover-arrow.arrow {
         display: none;
     }
@@ -9278,6 +9277,16 @@ input.checkbox-custom[type="checkbox"] {
     .checkbox-custom-label, .radio-custom-label {
         display: inline;
     }
+    #cmpWrp {
+        display: block;
+    }
+    .cText span.cName {
+        color: #fff !important;
+    }
+    .user_dropdown {
+        left: 0px !important;
+    }
+
 }
 
 @media (max-width: 575px) {

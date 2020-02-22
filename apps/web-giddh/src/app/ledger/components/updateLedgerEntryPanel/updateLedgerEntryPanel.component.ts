@@ -49,6 +49,7 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { UpdateLedgerVm } from './updateLedger.vm';
+import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
 
 @Component({
     selector: 'update-ledger-entry-panel',
@@ -106,6 +107,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public isAdvanceReceipt: boolean = false;
     /** True, if advance receipt checkbox is checked, will show the mandatory fields for Advance Receipt */
     public shouldShowAdvanceReceiptMandatoryFields: boolean = false;
+    /** List of available ITC */
+    public availableItcList: Array<any> = AVAILABLE_ITC_LIST;
+    /** True, if RCM taxable amount needs to be displayed in create new ledger component as per criteria */
+    public shouldShowRcmTaxableAmount: boolean = false;
+    /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
+    public shouldShowItcSection: boolean = false;
     public tags$: Observable<TagRequest[]>;
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
@@ -148,6 +155,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public multiCurrencyAccDetails: IFlattenAccountsResultItem = null;
     public selectedPettycashEntry$: Observable<PettyCashResonse>;
     public accountPettyCashStream: any;
+
+    /** True, if all the transactions are of type 'Tax' or 'Reverse Charge' */
+    private taxOnlyTransactions: boolean;
 
     constructor(
         private _accountService: AccountService,
@@ -255,6 +265,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.activeAccount = cloneDeep(resp[2].body);
                     // Decides whether to show the RCM entry
                     this.shouldShowRcmEntry = this.isRcmEntryPresent(resp[1].transactions);
+                    this.shouldShowRcmTaxableAmount = resp[1].reverseChargeTaxableAmount !== undefined && resp[1].reverseChargeTaxableAmount !== null;
+                    if (this.shouldShowRcmTaxableAmount) {
+                        // Received taxable amount is a truthy value
+                        resp[1].reverseChargeTaxableAmount = this.generalService.convertExponentialToNumber(resp[1].reverseChargeTaxableAmount);
+                    }
+                    // Show the ITC section if value of ITC is received (itcAvailable) or it's an old transaction that is eligible for ITC (isItcEligible)
+                    this.shouldShowItcSection = !!resp[1].itcAvailable || resp[1].isItcEligible;
+                    this.taxOnlyTransactions = resp[1].taxOnlyTransactions;
                     this.profileObj = resp[3];
                     this.vm.giddhBalanceDecimalPlaces = resp[3].balanceDecimalPlaces;
                     this.vm.inputMaskFormat = this.profileObj.balanceDisplayFormat ? this.profileObj.balanceDisplayFormat.toLowerCase() : '';
@@ -400,6 +418,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.isRcmEntry = (this.vm.selectedLedger.subVoucher === Subvoucher.ReverseCharge);
                     this.isAdvanceReceipt = (this.vm.selectedLedger.subVoucher === Subvoucher.AdvanceReceipt);
                     this.vm.isAdvanceReceipt = this.isAdvanceReceipt;
+                    this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
 
                     if (this.isPettyCash) {
                         // create missing property for petty cash
@@ -539,7 +558,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                     this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax);
                     //#endregion
-
+                    if (!this.vm.showNewEntryPanel) {
+                        // Calculate entry total for credit and debit transactions when UI panel at the bottom to update
+                        // transaction is not visible
+                        this.vm.getEntryTotal();
+                        this.vm.generateCompoundTotal();
+                    }
                     this.vm.generatePanelAmount();
                 }
             });
@@ -920,7 +944,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         requestObj.exchangeRate = (this.vm.selectedCurrencyForDisplay !== this.vm.selectedCurrency) ? (1 / this.vm.selectedLedger.exchangeRate) : this.vm.selectedLedger.exchangeRate;
         requestObj.subVoucher = (this.isRcmEntry) ? Subvoucher.ReverseCharge : (this.isAdvanceReceipt) ? Subvoucher.AdvanceReceipt : '';
         requestObj.transactions = requestObj.transactions.filter(f => !f.isDiscount);
-        requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
+        if (!this.taxOnlyTransactions) {
+            requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
+        }
         requestObj.transactions.map((transaction) => {
             if (transaction.inventory && this.shouldShowWarehouse) {
                 // Update the warehouse details in update ledger flow

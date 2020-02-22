@@ -1,4 +1,4 @@
-<ng-container *ngIf="this.subscriptions.length">
+<ng-container *ngIf="subscriptions.length && !isLoading">
     <div *ngIf="!isPlanShow">
         <div class="clearfix mrT2">
             <div class="row">
@@ -36,7 +36,7 @@
                 </div>
                 <div class="col-md-9 col-sm-6 text-right xs-left">
                     <!-- *ngIf="seletedUserPlans?.additionalCharges >0" -->
-                    <button type="button" *ngIf="seletedUserPlans?.additionalCharges >0" (click)="GoToBillingDetails();"
+                    <button type="button" *ngIf="seletedUserPlans?.additionalCharges >0" (click)="goToBillingDetails();"
                         class="btn btn-pink mt-2">Pay Now</button>
                     <button type="button" (click)="isPlanShow=true" class="btn btn-green mt-2">Buy New Plan</button>
                 </div>
@@ -150,7 +150,7 @@
         </div>
     </div>
 </ng-container>
-<div *ngIf="!this.subscriptions.length">
+<div *ngIf="isLoading">
     <div class="no-data mrT2 loader-main">
         <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
         <div class="spinner2">
@@ -211,4 +211,4 @@
 <button label="Results" (click)="isOn= true">Results</button> -->
 
 
-<subscriptions-plans *ngIf="isPlanShow" (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)"></subscriptions-plans>
+<subscriptions-plans *ngIf="isPlanShow" [subscriptions]="subscriptions" (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)"></subscriptions-plans>

@@ -5,7 +5,7 @@
 			<p class="mb-3">Please select a subscription for your company <strong>“{{this.currentCompany}}”.</strong>
 			</p>
 		</div>
-		<div class="col-md-3 text-right xs-left">
+		<div class="col-md-3 text-right xs-left" *ngIf="subscriptions && subscriptions.length > 0">
 			<a (click)="backClicked()" class="btn btn-default pr-3 pl-3 mb-2">Back</a>
 		</div>
 	</div>

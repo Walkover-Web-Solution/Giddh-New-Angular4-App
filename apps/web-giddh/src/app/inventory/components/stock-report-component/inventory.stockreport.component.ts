@@ -768,7 +768,6 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
 	}
 
 	public downloadAllInventoryReports(reportType: string, reportFormat: string) {
-		console.log('Called : download', reportType, 'format', reportFormat);
 		let obj = new InventoryDownloadRequest();
 		if (this.stockReportRequest.stockGroupUniqueName) {
 			obj.stockGroupUniqueName = this.stockReportRequest.stockGroupUniqueName;

@@ -27,7 +27,7 @@ import {
     ModalDirective,
     ModalOptions,
     TabsetComponent
-} from 'ngx-bootstrap';
+, PopoverDirective} from 'ngx-bootstrap';
 import {AppState} from '../../store';
 import {LoginActions} from '../../actions/login.action';
 import {CompanyActions} from '../../actions/company.actions';
@@ -101,14 +101,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('expiredPlanModel') public expiredPlanModel: TemplateRef<any>;
     @ViewChild('crossedTxLimitModel') public crossedTxLimitModel: TemplateRef<any>;
     @ViewChild('companyDetailsDropDownWeb') public companyDetailsDropDownWeb: BsDropdownDirective;
+    /** All modules popover instance */
+    @ViewChild('allModulesPopover') public allModulesPopover: PopoverDirective;
 
     public hideAsDesignChanges: false;
     public title: Observable<string>;
     public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
     public noGroups: boolean;
     public languages: any[] = [
-        {name: 'ENGLISH', value: 'en'},
-        {name: 'DUTCH', value: 'nl'}
+        { name: 'ENGLISH', value: 'en' },
+        { name: 'DUTCH', value: 'nl' }
     ];
     public activeFinancialYear: ActiveFinancialYear;
     public datePickerOptions: any = {
@@ -161,8 +163,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         endDate: moment()
     };
 
-    public sideMenu: { isopen: boolean } = {isopen: false};
-    public companyMenu: { isopen: boolean } = {isopen: false};
+    public sideMenu: { isopen: boolean } = { isopen: false };
+    public companyMenu: { isopen: boolean } = { isopen: false };
     public isCompanyRefreshInProcess$: Observable<boolean>;
     public isCompanyCreationSuccess$: Observable<boolean>;
     public isLoggedInWithSocialAccount$: Observable<boolean>;
@@ -292,8 +294,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isCalendlyModelActivate = response;
         });
         this.user$ = this.store.select(createSelector([(state: AppState) => state.session.user], (user) => {
-            if (user) {
+            if (user && user.user && user.user.name && user.user.name.length > 1) {
+                let name = user.user.name;
                 this.loggedInUserEmail = user.user.email;
+                if (user.user.name.match(/\s/g)) {
+                    this.userFullName = name;
+                    let formattedName = name.split(' ');
+                    this.userName = formattedName[0][0] + formattedName[1][0];
+                } else {
+                    this.userName = user.user.name[0] + user.user.name[1];
+                    this.userFullName = name;
+                }
                 return user.user;
             }
         })).pipe(takeUntil(this.destroyed$));
@@ -406,8 +417,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 let name = u.name;
                 if (u.name.match(/\s/g)) {
                     this.userFullName = name;
-                    let tmpName = name.split(' ');
-                    this.userName = tmpName[0][0] + tmpName[1][0];
+                    let formattedName = name.split(' ');
+                    this.userName = formattedName[0][0] + formattedName[1][0];
                 } else {
                     this.userName = u.name[0] + u.name[1];
                     this.userFullName = name;
@@ -415,6 +426,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                 this.store.dispatch(this.loginAction.renewSession());
             }
+
         });
 
         if (this.isSubscribedPlanHaveAdditionalCharges) {
@@ -644,7 +656,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngAfterViewInit() {
-
         if (this.selectedPlanStatus === 'expired') {// active expired
             this.openExpiredPlanModel(this.expiredPlanModel);
         }
@@ -1021,9 +1032,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.flyAccountActions.GetflatAccountWGroups(q));
     }
 
+    /**
+     *  sidebar menu toggle
+     *
+     * @param {boolean} event to check side bar menu open or not
+     * @memberof HeaderComponent
+     */
     public sideBarStateChange(event: boolean) {
-        this.sideMenu.isopen = event;
-        this.companyDropdown.isOpen = false;
+        if (this.sideMenu) {
+            this.sideMenu.isopen = event;
+        }
+        if (this.companyDropdown) {
+            this.companyDropdown.isOpen = false;
+        }
         if (this.companyDetailsDropDownWeb) {
             this.companyDetailsDropDownWeb.hide();
         }
@@ -1211,12 +1232,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public goToSelectPlan(template: TemplateRef<any>) {
         this.modalService.hide(1);
-        // this.router.navigate(['billing-detail']);
+
         this.router.navigate(['pages', 'user-details'], {
             queryParams: {
                 tab: 'subscriptions',
                 tabIndex: 3,
-                isPlanPage: true
+                showPlans: true
             }
         });
         this.modelRefExpirePlan = this.modalService.show(template);
@@ -1283,11 +1304,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.hoveredIndx = i;
     }
 
-    public menuScrollEnd(ev) {
-        let offset = $('#other').position();
-        if (offset) {
-            let exactPosition = offset.top - 100;
-            $('#other_sub_menu').css('top', exactPosition);
+    /**
+     * Mouse leave handler for all modules label to hide the popover
+     *
+     * @param {*} event Mouse leave event
+     * @memberof HeaderComponent
+     */
+    public handleAllModulesLeaveEvent(event: any): void {
+        const menu = document.getElementById('other_sub_menu');
+        const targetElement = event.toElement || event.relatedTarget;
+        if (menu && !menu.contains(targetElement)) {
+            // Hide 'All Modules' popover if the mouse points to any element other than sub menu as target
+            this.allModulesPopover.hide();
         }
     }
 
@@ -1296,14 +1324,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             navigator.add(sublist.children[1]);
             navigator.nextVertical();
         }
-    }
-
-    public openSubMenu(type: boolean) {
-        this.showOtherMenu = type;
-    }
-
-    public toggleAllmoduleMenu() {
-        this.showOtherMenu = !this.showOtherMenu;
     }
 
     public switchCompanyMenuShown() {
