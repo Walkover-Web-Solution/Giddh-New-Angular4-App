@@ -59,6 +59,7 @@
     },
     "private": true,
     "dependencies": {
+        "@ionic-native/user-agent": "^5.21.5",
         "@angular/animations": "^7.0.0",
         "@angular/common": "^7.0.0",
         "@angular/compiler": "^7.0.0",

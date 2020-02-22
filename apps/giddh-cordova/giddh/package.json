@@ -19,6 +19,7 @@
     "license": "Apache-2.0",
     "dependencies": {
         "@ionic-native/file-chooser": "^5.17.0",
+        "@ionic-native/user-agent": "^5.21.5",
         "cordova-android": "^8.1.0",
         "cordova-browser": "^6.0.0",
         "cordova-ios": "^5.1.1",
@@ -37,6 +38,7 @@
         "cordova-plugin-network-information": "^2.0.2",
         "cordova-plugin-splashscreen": "^5.0.3",
         "cordova-plugin-statusbar": "^2.4.3",
+        "cordova-plugin-useragent": "^1.0.6",
         "cordova-plugin-whitelist": "^1.3.4",
         "cordova-plugin-wkwebview-engine": "git+https://github.com/apache/cordova-plugin-wkwebview-engine.git",
         "cordova-plugin-x-socialsharing": "^5.6.3",
@@ -72,7 +74,9 @@
                 "REVERSED_CLIENT_ID": "com.googleusercontent.apps.641015054140-5j1ct1gdkhrkltujn29tsomf4449d01f",
                 "WEB_APPLICATION_CLIENT_ID": "641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com",
                 "PLAY_SERVICES_VERSION": "15.0.1"
-            }
+            },
+            "cordova-plugin-useragent": {},
+            "im.ltdev.cordova.UserAgent": {}
         },
         "platforms": [
             "ios",
