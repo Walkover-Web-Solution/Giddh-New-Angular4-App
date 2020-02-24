@@ -314,6 +314,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     if(loop <= 1) {
                         companyInitials.push(selectedCompanyArray[loop][0]);
                     }
+                    else {
+                        break;
+                    }
                 }
 
                 this.companyInitials = companyInitials.join(" ");
