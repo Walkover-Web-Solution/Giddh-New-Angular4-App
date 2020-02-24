@@ -39,7 +39,12 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
     }
 
-    public ngOnInit() {
+    /**
+     * This function will initialize the component
+     *
+     * @memberof VatReportTransactionsComponent
+     */
+    public ngOnInit(): void {
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
 			this.vatReportTransactionsRequest.from = params['from'];
 			this.vatReportTransactionsRequest.to = params['to'];
@@ -73,12 +78,23 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         });
     }
 
-    public ngOnDestroy() {
+    /**
+     * This function will destroy the subscribers
+     *
+     * @memberof VatReportTransactionsComponent
+     */
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
-    public getVatReportTransactions(resetPage: boolean) {
+    /**
+     * This function will get the data of vat detailed report
+     *
+     * @param {boolean} resetPage
+     * @memberof VatReportTransactionsComponent
+     */
+    public getVatReportTransactions(resetPage: boolean): void {
         this.isLoading = true;
 
         if (resetPage) {
@@ -102,20 +118,32 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This function will change the page of vat report
+     *
+     * @param {*} event
+     * @memberof VatReportTransactionsComponent
+     */
     public pageChanged(event: any): void {
         this.vatReportTransactions.results = [];
         this.vatReportTransactionsRequest.page = event.page;
         this.getVatReportTransactions(false);
     }
 
-    public setCurrentPageTitle(title) {
+    /**
+     * This function will set the page heading
+     *
+     * @param {*} title
+     * @memberof VatReportTransactionsComponent
+     */
+    public setCurrentPageTitle(title): void {
         let currentPageObj = new CurrentPage();
         currentPageObj.name = "Vat Report > " + title;
         currentPageObj.url = this._router.url;
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 
-    // public downloadVatReportTransactions() {
+    // public downloadVatReportTransactions(): void {
     //     let vatReportRequest = new VatReportRequest();
     //     vatReportRequest.from = this.fromDate;
     //     vatReportRequest.to = this.toDate;
