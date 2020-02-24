@@ -35,9 +35,9 @@
             </table>
         </div>
         <div class="paginationWrapper" *ngIf="vatReportTransactions.totalPages > 1">
-            <!-- <pagination [totalItems]="vatReportTransactions.totalPages" [(ngModel)]="vatReportTransactions.page"
+            <pagination [totalItems]="vatReportTransactions.totalPages" [(ngModel)]="vatReportTransactions.page"
                 [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
-                (pageChanged)="pageChanged($event)"></pagination> -->
+                (pageChanged)="pageChanged($event)"></pagination>
         </div>
     </div>
 </div>

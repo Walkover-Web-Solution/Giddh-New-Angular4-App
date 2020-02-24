@@ -46,7 +46,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public showCalendar: boolean = false;
     public datepickerVisibility: any = 'hidden';
 
-    constructor(private store: Store<AppState>, private vatService: VatService, private _generalService: GeneralService, private _toasty: ToasterService, private cdRef: ChangeDetectorRef, private companyActions: CompanyActions) {
+    constructor(private store: Store<AppState>, private vatService: VatService, private _generalService: GeneralService, private _toasty: ToasterService, private cdRef: ChangeDetectorRef, private companyActions: CompanyActions, private _route: Router) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), (takeUntil(this.destroyed$)));
     }
@@ -207,5 +207,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.periodDropdown.hide();
         document.querySelector(".btn-group.dropdown").classList.remove("open");
         document.querySelector(".btn-group.dropdown").classList.remove("show");
+    }
+
+    public viewVatReportTransactions(section) {
+        this._route.navigate(['pages', 'vat-report', 'transactions', section], { queryParams: { from: this.currentPeriod.from, to: this.currentPeriod.to } });
     }
 }

@@ -1,15 +1,14 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { VatReportRoutingModule } from './vatReport.routing.module';
-import { VatReportComponent } from './vatReport.component';
-import { VatReportTransactionsComponent } from './transactions/vatReportTransactions.component';
 import { CommonModule } from '@angular/common';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { TabsModule, BsDatepickerModule, BsDropdownModule, DatepickerModule } from 'ngx-bootstrap';
+import { TabsModule, BsDatepickerModule, BsDropdownModule, DatepickerModule, PaginationComponent, PaginationModule } from 'ngx-bootstrap';
 import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
 import { ClickOutsideModule } from "ng-click-outside";
 import { FormsModule } from "@angular/forms";
 import { Daterangepicker } from "../theme/ng2-daterangepicker/daterangepicker.module";
+import { VatReportRoutingModule } from './vatReport.routing.module';
+import { VatReportComponent } from './vatReport.component';
+import { VatReportTransactionsComponent } from './transactions/vatReportTransactions.component';
 
 @NgModule({
     declarations: [
@@ -30,11 +29,13 @@ import { Daterangepicker } from "../theme/ng2-daterangepicker/daterangepicker.mo
         ClickOutsideModule,
         DatepickerModule,
         FormsModule,
-        Daterangepicker
+        Daterangepicker,
+        PaginationModule
     ],
     exports: [
         VatReportRoutingModule
-    ]
+    ],
+    entryComponents: [PaginationComponent]
 })
-export class VarReportModule {
+export class VatReportModule {
 }

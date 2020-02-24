@@ -107,7 +107,7 @@
                                             <tbody>
                                                 <tr *ngFor="let reportSections of report.sections; let i = index">
                                                     <td>{{reportSections.section}}</td>
-                                                    <td><a href="javascript:;" [routerLink]="['/pages/vat-report/transactions/'+reportSections.section]">{{reportSections.description}}</a></td>
+                                                    <td><a href="javascript:;" (click)="viewVatReportTransactions(reportSections.section)">{{reportSections.description}}</a></td>
                                                     <td class="invoice-preview">
                                                         <a href="javascript:void(0)" class="text-light invoice-preview"
                                                             *ngIf="reportSections.toolTip"

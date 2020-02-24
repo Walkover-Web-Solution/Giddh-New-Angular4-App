@@ -40,6 +40,11 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+			this.vatReportTransactionsRequest.from = params['from'];
+			this.vatReportTransactionsRequest.to = params['to'];
+        });
+        
         this.route.params.pipe(takeUntil(this.destroyed$), delay(0)).subscribe(params => {
             if(params.section) {
                 this.setCurrentPageTitle(params.section);
