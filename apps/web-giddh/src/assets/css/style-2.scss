@@ -1619,8 +1619,8 @@ input:-moz-placeholder {
     font-size: 16px;
     text-transform: capitalize;
     display: inline-flex;
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     background-color: $border-blue;
     text-align: center;
     border-radius: 50%;
@@ -1629,6 +1629,7 @@ input:-moz-placeholder {
     padding: 0;
     margin-right: 15px;
     float: left;
+    letter-spacing: -1px;
 }
 
 .company-name .cText .fyear {
@@ -1641,6 +1642,8 @@ input:-moz-placeholder {
 
 header .navbar {
     background-color: #f7f8fa;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 3px 0;
 }
 
 /* .fyear {
@@ -2603,7 +2606,7 @@ input[type="checkbox"]:checked:after {
 
 .subscription-title {
     font-size: 20px;
-    font-family: "opensans-semibold";
+    font-family: $tableFontSemibold;
 }
 
 .box2 {
@@ -5490,7 +5493,7 @@ input[type="checkbox"][disabled] {
 
 .section_head {
     padding-bottom: 10px;
-    font-family: "" opensans-semibold "";
+    font-family: $tableFontSemibold;
     font-size: 110%;
     color: rgba(0, 0, 0, 0.8);
 }
@@ -6233,7 +6236,7 @@ table td[class*=col-]:last-child {
 
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: "" opensans-semibold "";
+    font-family: $tableFontSemibold;
     text-transform: capitalize;
 }
 
@@ -6458,7 +6461,7 @@ table td[class*=col-]:last-child {
 
 .app_list > ul h6 {
     margin-bottom: 10px;
-    font-family: "opensans-semibold";
+    font-family: $tableFontSemibold;
     font-size: 13px;
 }
 
@@ -6924,6 +6927,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding-right: 10px;
     border: none;
     box-shadow: none;
+    padding: 0 10px 0 0;
 }
 
 .hamburger_menu h4 {
@@ -6931,7 +6935,8 @@ perfect-scrollbar > .ps > .ps-overlay {
     text-transform: capitalize;
     width: auto;
     color: $pageTitleColor;
-    font-family: "opensans-bold";
+    font-family: $tableFontSemibold;
+    vertical-align: middle;
 }
 
 .tax-engine .icon {
@@ -8263,7 +8268,7 @@ ul.dropdown-menu p.lead.pd {
 .invoce-controll .nav-tabs > li.active > a {
     border-bottom: 4px solid $activeIconTh !important;
     padding-bottom: 7px !important;
-    font-family: "opensans-semibold";
+    font-family: $tableFontSemibold;
 }
 .invoce-controll .nav-tabs > li > a {
     border-bottom: 4px solid transparent !important;
