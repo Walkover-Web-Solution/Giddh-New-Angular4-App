@@ -1,0 +1,141 @@
+<div class="clearfix">
+    <div class="modal-header">
+        <h4 class="modal-title bg pull-left">Adjust Amount</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body font-14">
+        <form #generateTransporterForm="ngForm" action="">
+
+            <div class="row mb-3">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label>Customer Name</label>
+                        <input type="text" class="form-control" value="Walkover Web Solutions Pvt Ltd." [(ngModel)]="tempDateParams.customerName" readonly disabled>
+                    </div>
+                </div>
+                <div class="col-md-4 text-right font-14 pt-2 xs-left">
+                    <p>Invoice Total: <i class="icon-rupees font-10"></i>2110</p>
+                    <p>Due <span class="text-light">(Post Adj):</span> <i class="icon-rupees font-10"></i>910</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label for="name">Adjustment Voucher<span class="text-danger">*</span></label>
+                        <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" [(ngModel)]="tempDateParams.adjustmentVoucher" [placeholder]="'Select Account'" [notFoundLink]="false"
+                        [multiple]="false" [ItemHeight]="33">
+                            <ng-template #optionTemplate1 let-option="option">
+                                <a href="javascript:void(0)" class="list-item">
+                                    <div class="item">AR2019374-3</div>
+                                    <div class="item_unq">
+                                        <p class="font-12 text-gray mb-0">(Dated: 20/01/2020)</p>
+                                        <p class="font-12 text-gray mb-0">(Amount: ₹5,000.00)</p>
+                                    </div>
+                                </a>
+                            </ng-template>
+                        </sh-select>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label for="name">Amount<span class="text-danger">* </span> <span class="text-light"> (Inclusive Tax)</span></label>
+                        <input id="name" type="text" class="form-control" value="1200.00" [(ngModel)]="tempDateParams.Amount">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label for="name">Tax</label>
+                        <input id="name" type="text" class="form-control" value="57.14" [(ngModel)]="tempDateParams.Tax" readonly disabled>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <a href="javascript:void(0)" class="font-22 text-light pt-3 d-inline-block"><i class="icon-trash"></i></a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="mb-1">
+                        <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" [(ngModel)]="tempDateParams.adjustmentVoucher" [placeholder]="'Select Voucher'" [notFoundLink]="false"
+                        [multiple]="false" [ItemHeight]="33">
+                            <ng-template #optionTemplate1 let-option="option">
+                                <a href="javascript:void(0)" class="list-item">
+                                    <div class="item">AR2019374-3</div>
+                                    <div class="item_unq">
+                                        <p class="font-12 text-gray mb-0">(Dated: 20/01/2020)</p>
+                                        <p class="font-12 text-gray mb-0">(Amount: ₹5,000.00)</p>
+                                    </div>
+                                </a>
+                            </ng-template>
+                        </sh-select>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="mb-1">
+                        <input id="name" type="text" class="form-control" placeholder="Enter Amount" [(ngModel)]="tempDateParams.Amount">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="mb-1">
+                        <input id="name" type="text" class="form-control" placeholder="00.00" [(ngModel)]="tempDateParams.Tax" readonly disabled>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <a href="javascript:void(0)" class="font-22 text-light pt-05 d-inline-block"><i class="icon-trash"></i></a>
+                </div>
+            </div>
+            <p><a href="javascript:void(0)" class="font-14"><span class="font-16">+</span> Add New Line</a></p>
+
+            <div class="clearfix">
+                <div class="clearfix mb-1 mt-2 row">
+                    <div class="col-md-2 col-sm-3 col-xs-5">
+                        <span class="d-inline-block font-14">Tax Deducted?</span>
+                    </div>
+
+                    <div class="col-md-8 col-sm-8 col-xs-7">
+                        <span class="pd0 mr-2 d-inline-block">
+                            <input name="options" class="radio-custom cp ml0" id="deductedNo" [(ngModel)]="options" type="radio" [value]="true" [checked]="options"/>
+                            <label for="deductedNo" class="radio-custom-label">No</label>
+                        </span>
+
+                        <span class="pd0 mr-2 d-inline-block">
+                            <input name="options" class="radio-custom cp ml0" [(ngModel)]="options" id="deductedYes" type="radio" [value]="false" [checked]="!options"/>
+                            <label for="deductedYes" class="radio-custom-label">Yes</label>
+                        </span>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div *ngIf="options"></div>
+                    <div *ngIf="!options">
+                        <div class="form-group clearfix">
+                            <label class="col-md-2">TDS Account</label>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" placeholder="Select Amount">
+                            </div>
+                        </div>
+
+                        <div class="form-group clearfix">
+                            <label class="col-md-2">Amount</label>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" placeholder="Enter Amount">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="mt-4">
+                    <button type="button" class="btn btn-success mrR1" (click)="confirm()" >Save</button>
+                    <button type="button" class="btn btn-cancel" (click)="decline()" >Cancel</button>
+                </div>
+            </div>
+        </form>
+      </div>
+</div>

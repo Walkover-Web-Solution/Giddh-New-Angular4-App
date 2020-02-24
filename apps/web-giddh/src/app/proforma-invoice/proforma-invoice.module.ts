@@ -42,7 +42,7 @@ import { ProformaPrintInPlaceComponent } from './components/proforma-print-inpla
 import { ProformaInvoiceRendererComponent } from './proforma-invoice-renderer.component';
 import { ProformaInvoiceComponent } from './proforma-invoice.component';
 import { ProformaInvoiceRoutingModule } from './proforma-invoice.routing.module';
-
+import { adjustAmount } from './components/adjust-amount/adjust-amount.component';
 
 @NgModule({
     imports: [
@@ -87,7 +87,8 @@ import { ProformaInvoiceRoutingModule } from './proforma-invoice.routing.module'
         CreateAccountModalComponent,
         CreateAccountServiceComponent,
         AsideMenuProductServiceComponent,
-        ProformaPrintInPlaceComponent
+        ProformaPrintInPlaceComponent,
+        adjustAmount
     ],
     providers: [],
 })
