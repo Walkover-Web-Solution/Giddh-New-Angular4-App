@@ -127,7 +127,7 @@ public tabChanged(tab: string, e, type?: string) {
      */
     public setCurrentPageTitle(title: string) : void {
         let currentPageObj = new CurrentPage();
-        currentPageObj.name = "Invoice > " + title;
+        currentPageObj.name = (this.selectedVoucherType !== 'debit note' && this.selectedVoucherType !== 'credit note') ? "Invoice > " + title : title;
         currentPageObj.url = this.router.url;
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
