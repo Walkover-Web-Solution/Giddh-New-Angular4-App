@@ -631,7 +631,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public deleteVoucher() {
-        if (this.deleteConfirmationModel.isShown) {
+        if (this.deleteConfirmationModel && this.deleteConfirmationModel.isShown) {
             this.deleteConfirmationModel.hide();
         }
         // for deleting voucher which is previewed
@@ -686,17 +686,14 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
      *
      * @memberof ProformaListComponent
      */
-    public openConfirmationModal(): void {
-        this.deleteConfirmationModel.show();
-    }
-
-    /**
-     * Hides the confirmation model
-     *
-     * @memberof ProformaListComponent
-     */
-    public hideConfirmationModal(): void {
-        this.deleteConfirmationModel.hide();
+    public toggleConfirmationModel(shouldOpenModal: boolean = false): void {
+        if (this.deleteConfirmationModel) {
+            if (shouldOpenModal) {
+                this.deleteConfirmationModel.show();
+            } else {
+                this.deleteConfirmationModel.hide();
+            }
+        }
     }
 
     private prepareCommonRequest(): ProformaGetRequest {
