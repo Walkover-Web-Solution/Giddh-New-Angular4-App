@@ -1619,8 +1619,8 @@ input:-moz-placeholder {
     font-size: 16px;
     text-transform: capitalize;
     display: inline-flex;
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     background-color: $border-blue;
     text-align: center;
     border-radius: 50%;
@@ -1629,6 +1629,7 @@ input:-moz-placeholder {
     padding: 0;
     margin-right: 15px;
     float: left;
+    letter-spacing: -1px;
 }
 
 .company-name .cText .fyear {
@@ -1641,6 +1642,8 @@ input:-moz-placeholder {
 
 header .navbar {
     background-color: #f7f8fa;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 3px 0;
 }
 
 /* .fyear {
@@ -6924,6 +6927,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding-right: 10px;
     border: none;
     box-shadow: none;
+    padding: 0 10px 0 0;
 }
 
 .hamburger_menu h4 {
@@ -6932,6 +6936,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     width: auto;
     color: $pageTitleColor;
     font-family: "opensans-bold";
+    vertical-align: middle;
 }
 
 .tax-engine .icon {

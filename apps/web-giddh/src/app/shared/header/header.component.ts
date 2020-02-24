@@ -197,7 +197,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     };
     public currentState: any = '';
     public isCalendlyModelActivate: boolean = false;
-
+    public companyInitials: any = '';
     /**
      *
      */
@@ -307,6 +307,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             if (selectedCmp) {
                 this.selectedCompany = observableOf(selectedCmp);
+
+                let selectedCompanyArray = selectedCmp.name.split(" ");
+                let companyInitials = [];
+                for(let loop = 0; loop < selectedCompanyArray.length; loop++) {
+                    if(loop <= 1) {
+                        companyInitials.push(selectedCompanyArray[loop][0]);
+                    }
+                }
+
+                this.companyInitials = companyInitials.join(" ");
+
                 this.activeFinancialYear = selectedCmp.activeFinancialYear;
                 this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
                 if (selectedCmp.nameAlias) {
