@@ -8,7 +8,6 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
 import { GeneralService } from '../services/general.service';
 import { ToasterService } from '../services/toaster.service';
-import { GeneralActions } from '../actions/general/general.actions';
 import { VatService } from "../services/vat.service";
 import * as moment from 'moment/moment';
 import { createSelector } from "reselect";
@@ -47,7 +46,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public showCalendar: boolean = false;
     public datepickerVisibility: any = 'hidden';
 
-    constructor(private store: Store<AppState>, private vatService: VatService, private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private cdRef: ChangeDetectorRef, private companyActions: CompanyActions) {
+    constructor(private store: Store<AppState>, private vatService: VatService, private _generalService: GeneralService, private _toasty: ToasterService, private cdRef: ChangeDetectorRef, private companyActions: CompanyActions) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), (takeUntil(this.destroyed$)));
     }
@@ -101,7 +100,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
             this.vatReport = [];
 
-            this.vatService.GetVatReport(vatReportRequest).subscribe((res) => {
+            this.vatService.getVatReport(vatReportRequest).subscribe((res) => {
                 if (res.status === 'success') {
                     this.vatReport = res.body.sections;
                     this.cdRef.detectChanges();
@@ -118,7 +117,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         vatReportRequest.to = this.toDate;
         vatReportRequest.taxNumber = this.activeCompany.addresses[0].taxNumber;
 
-        this.vatService.DownloadVatReport(vatReportRequest).subscribe((res) => {
+        this.vatService.downloadVatReport(vatReportRequest).subscribe((res) => {
             if (res.status === "success") {
                 let blob = this._generalService.base64ToBlob(res.body, 'application/xls', 512);
                 return saveAs(blob, `VatReport.xlsx`);

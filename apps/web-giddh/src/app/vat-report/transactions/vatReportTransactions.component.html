@@ -1,0 +1,43 @@
+<div class="branch-transfer-report">
+    <div class="container-fluid">
+        <div class="report-table">
+            <table class="table basic">
+                <thead>
+                    <tr>
+                        <th width="10%">Invoice Date</th>
+                        <th width="10%">Invoice Number</th>
+                        <th width="20%">Customer Name</th>
+                        <th width="20%">Taxable Amount</th>
+                        <th width="10%">VAT Amount</th>
+                        <th width="10%">Reverse Charge</th>
+                        <th width="10%">TRN Number</th>
+                        <th width="10%">Place of Supply</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="vatReportTransactions.results && vatReportTransactions.results.length > 0">
+                    <tr *ngFor="let item of vatReportTransactions.results; let i = index;">
+                        <td>{{ item.voucherDate }}</td>
+                        <td>{{ item.voucherNumber }}</td>
+                        <td>{{ item.customerName }}</td>
+                        <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ item.taxableAmount | giddhCurrency }}</td>
+                        <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ item.vatAmount | giddhCurrency }}</td>
+                        <td>{{ item.reverseCharge }}</td>
+                        <td>{{ item.trnNumber }}</td>
+                        <td>{{ item.placeOfSupply }}</td>
+                    </tr>
+                </tbody>
+                <tbody *ngIf="!vatReportTransactions || !vatReportTransactions.results || vatReportTransactions.results.length === 0">
+                    <tr>
+                        <td *ngIf="!isLoading" colspan="8" align="center">No records found.</td>
+                        <td *ngIf="isLoading" colspan="8">&nbsp;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="paginationWrapper" *ngIf="vatReportTransactions.totalPages > 1">
+            <!-- <pagination [totalItems]="vatReportTransactions.totalPages" [(ngModel)]="vatReportTransactions.page"
+                [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
+                (pageChanged)="pageChanged($event)"></pagination> -->
+        </div>
+    </div>
+</div>
