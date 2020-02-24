@@ -42,6 +42,8 @@ import {GeneralService} from '../../services/general.service';
 
 export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
+    /** Confirmation popup for delete operation */
+    @ViewChild('deleteConfirmationModel') public deleteConfirmationModel: ModalDirective;
     @ViewChild(InvoiceAdvanceSearchComponent) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.proforma;
     public voucherData: ProformaResponse;
@@ -629,6 +631,9 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public deleteVoucher() {
+        if (this.deleteConfirmationModel && this.deleteConfirmationModel.isShown) {
+            this.deleteConfirmationModel.hide();
+        }
         // for deleting voucher which is previewed
         if (this.selectedVoucher) {
             this.store.dispatch(this.proformaActions.deleteProforma(this.prepareCommonRequest(), this.voucherType));
@@ -674,6 +679,22 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         });
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Displays the confirmation model
+     *
+     * @param {boolean} shouldOpenModal True, if the modal needs to opened
+     * @memberof ProformaListComponent
+     */
+    public toggleConfirmationModel(shouldOpenModal: boolean = false): void {
+        if (this.deleteConfirmationModel) {
+            if (shouldOpenModal) {
+                this.deleteConfirmationModel.show();
+            } else {
+                this.deleteConfirmationModel.hide();
+            }
+        }
     }
 
     private prepareCommonRequest(): ProformaGetRequest {
