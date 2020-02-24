@@ -1195,9 +1195,12 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
      * @memberof InventoryAddStockComponent
      */
     private validateStock(unitRates: Array<any>): boolean {
-        const formEntries = unitRates.filter((unitRate) => {
-			return (unitRate.stockUnitCode && !unitRate.rate) || (!unitRate.stockUnitCode && unitRate.rate);
-		});
-		return formEntries.length === 0;
+        if (unitRates) {
+            const formEntries = unitRates.filter((unitRate) => {
+                return (unitRate.stockUnitCode && !unitRate.rate) || (!unitRate.stockUnitCode && unitRate.rate);
+            });
+            return formEntries.length === 0;
+        }
+        return true;
     }
 }
