@@ -31,7 +31,6 @@ import { ToasterService } from '../../../services/toaster.service';
 export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     public vm: AuditLogsSidebarVM;
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
     public auditForm: FormGroup;
     /** Configuration object to clear all the sh-select drop downs on form reset */
     public forceClearConfiguration: IForceClear = { status: false };
@@ -60,33 +59,34 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
 
             this.vm = new AuditLogsSidebarVM();
             this.vm.getLogsInprocess$ = this.store.pipe(select(p => p.auditlog.getLogInProcess), takeUntil(this.destroyed$));
-            this.vm.groupsList$ = this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$));
-            this.vm.selectedCompany = this.store.pipe(select(state =>  {
-                if (!state.session.companies) {
-                    return;
-                }
-                return state.session.companies.find(cmp => {
-                    return cmp.uniqueName === state.session.companyUniqueName;
-                });
-            }), takeUntil(this.destroyed$));
-            this.vm.user$ = this.store.pipe(select(state => {
-                if (state.session.user) {
-                    return state.session.user.user;
-                }
-            }), takeUntil(this.destroyed$));
-            this._accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                if (data.status === 'success') {
-                    let accounts: IOption[] = [];
-                    data.body.results.map(d => {
-                        accounts.push({ label: d.name, value: d.uniqueName });
-                    });
-                    this.vm.accounts$ = observableOf(accounts);
-                }
-            });
-            let selectedCompany: CompanyResponse = null;
-            let loginUser: UserDetails = null;
-            this.vm.selectedCompany.pipe(take(1)).subscribe((c) => selectedCompany = c);
-            this.vm.user$.pipe(take(1)).subscribe((c) => loginUser = c);
+            // TODO: Functionality yet to be implemented
+            // this.vm.groupsList$ = this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$));
+            // this.vm.selectedCompany = this.store.pipe(select(state =>  {
+            //     if (!state.session.companies) {
+            //         return;
+            //     }
+            //     return state.session.companies.find(cmp => {
+            //         return cmp.uniqueName === state.session.companyUniqueName;
+            //     });
+            // }), takeUntil(this.destroyed$));
+            // this.vm.user$ = this.store.pipe(select(state => {
+            //     if (state.session.user) {
+            //         return state.session.user.user;
+            //     }
+            // }), takeUntil(this.destroyed$));
+            // this._accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            //     if (data.status === 'success') {
+            //         let accounts: IOption[] = [];
+            //         data.body.results.map(d => {
+            //             accounts.push({ label: d.name, value: d.uniqueName });
+            //         });
+            //         this.vm.accounts$ = observableOf(accounts);
+            //     }
+            // });
+            // let selectedCompany: CompanyResponse = null;
+            // let loginUser: UserDetails = null;
+            // this.vm.selectedCompany.pipe(take(1)).subscribe((c) => selectedCompany = c);
+            // this.vm.user$.pipe(take(1)).subscribe((c) => loginUser = c);
             this._companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data.status === 'success') {
                     let users: IOption[] = [];
@@ -119,16 +119,17 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
             entity: ['', Validators.required],
             user: ['']
         });
-        this.vm.groupsList$.subscribe(data => {
-            if (data && data.length) {
-                let accountList = this.flattenGroup(data, []);
-                let groups: IOption[] = [];
-                accountList.map((d: any) => {
-                    groups.push({ label: d.name, value: d.uniqueName });
-                });
-                this.vm.groups$ = observableOf(groups);
-            }
-        });
+        // TODO: Functionality yet to be implemented
+        // this.vm.groupsList$.subscribe(data => {
+        //     if (data && data.length) {
+        //         let accountList = this.flattenGroup(data, []);
+        //         let groups: IOption[] = [];
+        //         accountList.map((d: any) => {
+        //             groups.push({ label: d.name, value: d.uniqueName });
+        //         });
+        //         this.vm.groups$ = observableOf(groups);
+        //     }
+        // });
         this.vm.reset();
     }
 
@@ -162,45 +163,23 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public selectDateOption(v) {
-        this.vm.selectedDateOption = v.value || '';
-    }
+    // TODO: Functionality yet to be implemented
+    // public selectAccount(v) {
+    //     this.vm.selectedAccountUnq = v.value || '';
+    // }
 
-    public selectEntityOption(v) {
-        this.vm.selectedEntity = v.value || '';
-    }
-
-    public selectOperationOption(v) {
-        this.vm.selectedOperation = v.value || '';
-    }
-
-    public selectAccount(v) {
-        this.vm.selectedAccountUnq = v.value || '';
-    }
-
-    public clearDate(model: string) {
-        this.vm[model] = '';
-    }
-
-    public setToday(model: string) {
-        this.vm[model] = new Date();
-    }
-
-    public selectGroup(v) {
-        this.vm.selectedGroupUnq = v.value || '';
-    }
-
-    public selectUser(v) {
-        this.vm.selectedUserUnq = v.value || '';
-    }
+    // TODO: Functionality yet to be implemented
+    // public selectGroup(v) {
+    //     this.vm.selectedGroupUnq = v.value || '';
+    // }
 
     public getLogfilters() {
         let reqBody: LogsRequest = new LogsRequest();
-        reqBody.operation = this.auditForm.get('operation').value === 'All' ? '' : this.auditForm.get('operation').value;
-        reqBody.entity = this.auditForm.get('entity').value === 'All' ? '' : this.auditForm.get('entity').value;
+        reqBody.operation = (this.auditForm.get('operation').value) ? this.auditForm.get('operation').value.toLowerCase() : '';
+        reqBody.entity = (this.auditForm.get('entity').value) ? this.auditForm.get('entity').value.toLowerCase() : '';
         reqBody.userUniqueName = this.auditForm.get('user').value;
-        reqBody.fromDate = moment(this.auditForm.get('fromDate').value).format('DD-MM-YYYY');
-        reqBody.toDate = moment(this.auditForm.get('toDate').value).format('DD-MM-YYYY');
+        reqBody.fromDate = moment(this.auditForm.get('fromDate').value).format(GIDDH_DATE_FORMAT);
+        reqBody.toDate = moment(this.auditForm.get('toDate').value).format(GIDDH_DATE_FORMAT);
         this.store.dispatch(this._auditLogsActions.GetLogs(reqBody, 1));
     }
 
@@ -209,12 +188,13 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
             (item.additional && item.additional.userEmail && item.additional.userEmail.toLocaleLowerCase().indexOf(term) > -1));
     }
 
-    public genralCustomFilter(term: string, item: IOption) {
-        return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
-    }
+    // TODO: Functionality yet to be implemented
+    // public genralCustomFilter(term: string, item: IOption) {
+    //     return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
+    // }
 
     public resetFilters() {
-        this.vm.reset();
+        // this.vm.reset();
         this.auditForm.reset();
         this.forceClearConfiguration = { status: true };
         this.store.dispatch(this._auditLogsActions.ResetLogs());
