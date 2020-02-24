@@ -68,7 +68,7 @@
                     <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
 
                         <li role="menuitem">
-                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="deleteVoucher()">Delete</a>
+                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleConfirmationModel(true)">Delete</a>
                         </li>
 
                     </ul>
@@ -462,4 +462,14 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- Delete Proforma/Estimate confirmation model -->
+    <div bsModal #deleteConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <delete-role-confirmation-model (confirmDeleteEvent)="deleteVoucher()" (closeModelEvent)="toggleConfirmationModel()">
+                </delete-role-confirmation-model>
+            </div>
+        </div>
     </div>
