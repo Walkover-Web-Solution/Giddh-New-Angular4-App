@@ -684,6 +684,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     /**
      * Displays the confirmation model
      *
+     * @param {boolean} shouldOpenModal True, if the modal needs to opened
      * @memberof ProformaListComponent
      */
     public toggleConfirmationModel(shouldOpenModal: boolean = false): void {
