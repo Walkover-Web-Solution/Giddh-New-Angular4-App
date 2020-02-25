@@ -30,6 +30,7 @@ import { Configuration } from "../../app.constant";
 import { GoogleLoginProvider, LinkedinLoginProvider } from "../../theme/ng-social-login-module/providers";
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
+import { EcommerceService } from '../../services/ecommerce.service';
 
 export declare const gapi: any;
 
@@ -87,6 +88,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private store: Store<AppState>,
         private settingsIntegrationActions: SettingsIntegrationActions,
         private accountService: AccountService,
+        private ecommerceService: EcommerceService,
         private toasty: ToasterService,
         private _companyActions: CompanyActions,
         private _authenticationService: AuthenticationService,
@@ -549,7 +551,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public getShopifyEcommerceVerifyStatus(ecommerceUniqueName) {
         const requestObj = { source: "shopify" };
-        this.accountService.getShopifyEcommerceVerify(requestObj, ecommerceUniqueName).subscribe(response => {
+        this.ecommerceService.getShopifyEcommerceVerify(requestObj, ecommerceUniqueName).subscribe(response => {
             if (response) {
                 if (response.status === 'success' && response.body === 'VERIFIED') {
                     this.isEcommerceShopifyUserVerified = true;
