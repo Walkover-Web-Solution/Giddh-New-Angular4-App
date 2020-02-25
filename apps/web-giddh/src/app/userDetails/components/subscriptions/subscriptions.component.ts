@@ -47,10 +47,10 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     public ngOnInit() {
-        this.companies$.subscribe(c => {
-            if (c) {
-                this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
-                    this.activeCompany = c.find(p => p.uniqueName === a);
+        this.companies$.subscribe(company => {
+            if (company) {
+                this.activeCompanyUniqueName$.pipe(take(1)).subscribe(active => {
+                    this.activeCompany = company.find(cmp => cmp.uniqueName === active);
                     this.showCurrentCompanyPlan();
                 });
             }
@@ -118,6 +118,11 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         this.selectedPlanCompanies = filterd;
     }
 
+    /**
+     * This function will set the current company plan
+     *
+     * @memberof SubscriptionsComponent
+     */
     public showCurrentCompanyPlan() {
         if(this.activeCompany && this.subscriptions) {
             this.subscriptions.forEach(key => {
