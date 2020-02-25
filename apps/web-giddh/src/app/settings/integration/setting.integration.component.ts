@@ -207,7 +207,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
 
-        this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
+        this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && !_.isEmpty(res)) {
                 if (res && res.ecommerceDetails && res.ecommerceDetails.length > 0) {
                     res.ecommerceDetails.forEach(array => {
@@ -549,7 +549,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      *
      * @memberof SettingIntegrationComponent
      */
-    public getShopifyEcommerceVerifyStatus(ecommerceUniqueName) {
+    public getShopifyEcommerceVerifyStatus(ecommerceUniqueName: string): void {
         const requestObj = { source: "shopify" };
         this.ecommerceService.getShopifyEcommerceVerify(requestObj, ecommerceUniqueName).subscribe(response => {
             if (response) {
