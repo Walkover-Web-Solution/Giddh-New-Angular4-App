@@ -200,6 +200,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private createAccountIsSuccess$: Observable<boolean>;
+    public universalDate: any;
 
     constructor(
         private store: Store<AppState>,
@@ -222,16 +223,18 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
 
         // get default datepicker options from store
-        this.store.pipe(select(p => p.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(a => {
+        this.store.pipe(select(p => p.company.dateRangePickerConfig), take(2)).subscribe(a => {
             if (a) {
                 this.datePickerOptions = a;
+                if(this.universalDate) {
+                    this.datePickerOptions = {
+                        ...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(),
+                        endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()
+                    };
+                }
             }
         });
 
-        if (this.datePickerOptions) {
-            this.fromDate = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
-            this.toDate = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
-        }
         this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
             if (data && data.results) {
@@ -264,16 +267,14 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
         this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
+                this.universalDate = _.cloneDeep(dateObj);
                 this.datePickerOptions = {
-                    ...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
-                    endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()
+                    ...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(),
+                    endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()
                 };
 
-                // this.selected = {startDate: moment(universalDate[0], 'DD-MM-YYYY'), endDate: moment(universalDate[1], 'DD-MM-YYYY')};
-
-                this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
-                this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');
+                this.fromDate = moment(this.universalDate[0]).format('DD-MM-YYYY');
+                this.toDate = moment(this.universalDate[1]).format('DD-MM-YYYY');
                 this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, this.searchStr);
             }
         })).pipe(takeUntil(this.destroyed$)).subscribe();
