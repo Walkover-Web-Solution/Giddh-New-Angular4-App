@@ -682,7 +682,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="trash-icon-delete" *ngIf="isUpdateMode && !isPurchaseInvoice" (click)="removeTransaction(entryIdx)">
+                                        <div class="trash-icon-delete" *ngIf="!isUpdateMode || isUpdateMode && !isPurchaseInvoice" (click)="removeTransaction(entryIdx)">
                                             <span class="cp">
                                                 <i class="icon-trash" aria-hidden="true"></i>
                                             </span>
