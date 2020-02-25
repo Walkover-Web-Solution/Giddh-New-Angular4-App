@@ -545,8 +545,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /**
-     * API call to verify is shopify integrated
+     * API call to get know about ecommerce platform shopify connected or not
      *
+     * @param {string} ecommerceUniqueName ecommerce unique name for shopify
      * @memberof SettingIntegrationComponent
      */
     public getShopifyEcommerceVerifyStatus(ecommerceUniqueName: string): void {
