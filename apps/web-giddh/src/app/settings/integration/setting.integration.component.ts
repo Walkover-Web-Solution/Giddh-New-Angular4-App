@@ -212,7 +212,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 if (res && res.ecommerceDetails && res.ecommerceDetails.length > 0) {
                     res.ecommerceDetails.forEach(item => {
                         if (item && item.ecommerceType && item.ecommerceType.name && item.ecommerceType.name === "shopify") {
-                            this.getShopifyEcommerceVerifyStatus(item.uniqueName);
+                            this.getShopifyVerifyStatus(item.uniqueName);
                         }
                     })
                 }
@@ -550,9 +550,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {string} ecommerceUniqueName ecommerce unique name for shopify
      * @memberof SettingIntegrationComponent
      */
-    public getShopifyEcommerceVerifyStatus(ecommerceUniqueName: string): void {
+    public getShopifyVerifyStatus(ecommerceUniqueName: string): void {
         const requestObj = { source: "shopify" };
-        this.ecommerceService.getShopifyEcommerceVerify(requestObj, ecommerceUniqueName).subscribe(response => {
+        this.ecommerceService.isShopifyConnected(requestObj, ecommerceUniqueName).subscribe(response => {
             if (response) {
                 if (response.status === 'success' && response.body === 'VERIFIED') {
                     this.isEcommerceShopifyUserVerified = true;

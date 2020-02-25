@@ -26,7 +26,7 @@ export class EcommerceService {
      * @returns return API response
      * @memberof EcommerceService
      */
-    public getShopifyEcommerceVerify(model: any, ecommerceUniqueName: string): any {
+    public isShopifyConnected(model: any, ecommerceUniqueName: string): any {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.post(this.config.apiUrl + ECOMMERCE_API.SHOPIFY_VERIFY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':ecommerceUniqueName', ecommerceUniqueName), model).pipe(
