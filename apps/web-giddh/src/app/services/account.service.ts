@@ -15,7 +15,6 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { ApplyDiscountRequest, AssignDiscountRequestForAccount } from '../models/api-models/ApplyDiscount';
 import { APPLY_DISCOUNT_API } from './apiurls/applyDiscount';
-import { SHOPIFY_API } from './apiurls/shopify.api';
 
 @Injectable()
 export class AccountService implements OnInit {

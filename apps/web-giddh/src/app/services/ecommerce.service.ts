@@ -4,7 +4,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { HttpWrapperService } from './httpWrapper.service';
 import { ServiceConfig, IServiceConfigArgs } from './service.config';
 import { GeneralService } from './general.service';
-import { SHOPIFY_API } from './apiurls/shopify.api';
+import { ECOMMERCE_API } from './apiurls/shopify.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { catchError, map } from 'rxjs/operators';
 
@@ -29,7 +29,7 @@ export class EcommerceService {
     public getShopifyEcommerceVerify(model: any, ecommerceUniqueName: string): any {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + SHOPIFY_API.ECOMMERCE_VERIFY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':ecommerceUniqueName', ecommerceUniqueName), model).pipe(
+        return this._http.post(this.config.apiUrl + ECOMMERCE_API.SHOPIFY_VERIFY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':ecommerceUniqueName', ecommerceUniqueName), model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;

@@ -210,9 +210,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && !_.isEmpty(res)) {
                 if (res && res.ecommerceDetails && res.ecommerceDetails.length > 0) {
-                    res.ecommerceDetails.forEach(array => {
-                        if (array && array.ecommerceType && array.ecommerceType.name && array.ecommerceType.name === "shopify") {
-                            this.getShopifyEcommerceVerifyStatus(array.uniqueName);
+                    res.ecommerceDetails.forEach(item => {
+                        if (item && item.ecommerceType && item.ecommerceType.name && item.ecommerceType.name === "shopify") {
+                            this.getShopifyEcommerceVerifyStatus(item.uniqueName);
                         }
                     })
                 }
