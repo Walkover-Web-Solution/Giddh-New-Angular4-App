@@ -346,10 +346,10 @@ export class AccountService implements OnInit {
      * @returns
      * @memberof AccountService
      */
-    public getShopifyEcommerceVerify(model) {
+    public getShopifyEcommerceVerify(model,ecommerceUniqueName) {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + SHOPIFY_API.ECOMMERCE_VERIFY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+        return this._http.post(this.config.apiUrl + SHOPIFY_API.ECOMMERCE_VERIFY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':ecommerceUniqueName',ecommerceUniqueName), model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
