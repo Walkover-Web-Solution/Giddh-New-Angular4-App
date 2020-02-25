@@ -638,7 +638,17 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-        this.voucherTypeChanged('sales');
+        this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(route => {
+            if(route && route.selectedType) {
+                if(route.selectedType === "credit note" || route.selectedType === "debit note") {
+                    this.voucherTypeChanged(route.selectedType);
+                } else {
+                    this.voucherTypeChanged("sales");
+                }
+            } else {
+                this.voucherTypeChanged("sales");
+            }
+        });
         // this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
         //   debugger;
         //   this.voucherType = a.voucherType;
