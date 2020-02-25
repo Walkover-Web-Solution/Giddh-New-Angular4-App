@@ -4,9 +4,9 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { HttpWrapperService } from './httpWrapper.service';
 import { ServiceConfig, IServiceConfigArgs } from './service.config';
 import { GeneralService } from './general.service';
-import { ECOMMERCE_API } from './apiurls/shopify.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { catchError, map } from 'rxjs/operators';
+import { ECOMMERCE_API } from './apiurls/ecommerce.api';
 
 @Injectable()
 export class EcommerceService {
