@@ -14,22 +14,22 @@ export class EcommerceService {
     private user: UserDetails;
     private companyUniqueName: string;
 
-    constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
-        private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: ErrorHandler, private http: HttpWrapperService,
+        private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
     /**
      * API call to confirm shopify is integrated or not
      *
      * @param {*} model request body
-     * @param {string} ecommerceUniqueName ecommerce uniqye name
+     * @param {string} ecommerceUniqueName ecommerce unique name
      * @returns return API response
      * @memberof EcommerceService
      */
     public isShopifyConnected(model: any, ecommerceUniqueName: string): any {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + ECOMMERCE_API.SHOPIFY_VERIFY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':ecommerceUniqueName', ecommerceUniqueName), model).pipe(
+        this.user = this.generalService.user;
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + ECOMMERCE_API.SHOPIFY_VERIFY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':ecommerceUniqueName', ecommerceUniqueName), model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
