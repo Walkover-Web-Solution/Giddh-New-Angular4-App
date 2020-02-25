@@ -28,6 +28,7 @@ import { createSelector } from 'reselect';
 import { GeneralActions } from '../actions/general/general.actions';
 import { GeneralService } from '../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { GIDDH_DATE_FORMAT } from './../shared/helpers/defaultDateFormat';
 
 const CustomerType = [
     {label: 'Customer', value: 'customer'},
@@ -228,8 +229,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 this.datePickerOptions = a;
                 if(this.universalDate) {
                     this.datePickerOptions = {
-                        ...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(),
-                        endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()
+                        ...this.datePickerOptions, startDate: moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(),
+                        endDate: moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate()
                     };
                 }
             }
@@ -269,12 +270,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
                 this.datePickerOptions = {
-                    ...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(),
-                    endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()
+                    ...this.datePickerOptions, startDate: moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(),
+                    endDate: moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate()
                 };
 
-                this.fromDate = moment(this.universalDate[0]).format('DD-MM-YYYY');
-                this.toDate = moment(this.universalDate[1]).format('DD-MM-YYYY');
+                this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, this.searchStr);
             }
         })).pipe(takeUntil(this.destroyed$)).subscribe();
