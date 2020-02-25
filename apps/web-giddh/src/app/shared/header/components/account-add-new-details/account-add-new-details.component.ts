@@ -547,13 +547,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         }
 
-        if (this.showBankDetail) {
-            if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
-                accountRequest['accountBankDetails'] = [];
+        if (!this.showBankDetail) {
+            if (accountRequest['accountBankDetails']) {
+                delete accountRequest['accountBankDetails'];
+                delete this.addAccountForm['accountBankDetails'];
             }
-        } else {
-            delete accountRequest['accountBankDetails'];
-            delete this.addAccountForm['accountBankDetails'];
         }
         if (!this.showVirtualAccount) {
             delete accountRequest['cashFreeVirtualAccountData'];
