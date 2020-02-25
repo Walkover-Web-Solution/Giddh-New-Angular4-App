@@ -24,6 +24,18 @@
 										(blur)="validateUniqueName($event?.target?.value)" formControlName="uniqueName"
 										class="form-control">
 								</div>
+                            </div>
+                            <div class="row">
+								<div class="form-group col-xs-6">
+									<label>HSN Code</label>
+									<input type="text" class="form-control" maxlength="10" decimalDigitsDirective
+                                        formControlName="hsnNumber" />
+								</div>
+								<div class="form-group col-xs-6">
+									<label>SAC Code</label>
+									<input type="text" class="form-control" maxlength="10" formControlName="sacNumber"
+                                        decimalDigitsDirective />
+								</div>
 							</div>
 							<div class="row">
 								<div class="col-xs-6">
