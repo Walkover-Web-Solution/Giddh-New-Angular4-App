@@ -204,7 +204,7 @@ export class UpdateLedgerVm {
     }
 
     public isValidCategory(category: string): boolean {
-        return category === 'income' || category === 'expenses' || category === 'fixedassets' || (this.isAdvanceReceipt && category === 'assets');
+        return category === 'income' || category === 'expenses' || category === 'fixedassets' || this.isAdvanceReceipt;
     }
 
     public isThereStockEntry(uniqueName: string): boolean {
