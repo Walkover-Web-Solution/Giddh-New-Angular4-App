@@ -47,13 +47,15 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
 			this.vatReportTransactionsRequest.from = params['from'];
-			this.vatReportTransactionsRequest.to = params['to'];
+            this.vatReportTransactionsRequest.to = params['to'];
+            this.getVatReportTransactions(true);
         });
         
         this.route.params.pipe(takeUntil(this.destroyed$), delay(0)).subscribe(params => {
             if(params.section) {
                 this.setCurrentPageTitle(params.section);
                 this.vatReportTransactionsRequest.section = params.section;
+                this.getVatReportTransactions(true);
             } else {
                 this._router.navigate(['pages', 'vat-report']);
             }
@@ -68,7 +70,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                     if (cmp.uniqueName === activeCompanyName) {
                         this.activeCompany = cmp;
 
-                        if (this.activeCompany.addresses && this.activeCompany.addresses.length > 0) {
+                        if (this.activeCompany && this.activeCompany.addresses && this.activeCompany.addresses.length > 0) {
                             this.activeCompany.addresses = [_.find(this.activeCompany.addresses, (tax) => tax.isDefault)];
                             this.getVatReportTransactions(true);
                         }
@@ -94,14 +96,14 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @param {boolean} resetPage
      * @memberof VatReportTransactionsComponent
      */
-    public getVatReportTransactions(resetPage: boolean): void {
-        this.isLoading = true;
+    public getVatReportTransactions(resetPage: boolean): void | boolean {
+        if (this.activeCompany && this.activeCompany.addresses && this.activeCompany.addresses.length > 0 && this.vatReportTransactionsRequest.section && !this.isLoading) {
+            this.isLoading = true;
 
-        if (resetPage) {
-            this.vatReportTransactionsRequest.page = 1;
-        }
+            if (resetPage) {
+                this.vatReportTransactionsRequest.page = 1;
+            }
 
-        if (this.activeCompany.addresses && this.activeCompany.addresses.length > 0) {
             this.vatReportTransactionsRequest.taxNumber = this.activeCompany.addresses[0].taxNumber;
 
             this.vatReportTransactions = [];
@@ -125,9 +127,11 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public pageChanged(event: any): void {
-        this.vatReportTransactions.results = [];
-        this.vatReportTransactionsRequest.page = event.page;
-        this.getVatReportTransactions(false);
+        if(this.vatReportTransactionsRequest.page != event.page) {
+            this.vatReportTransactions.results = [];
+            this.vatReportTransactionsRequest.page = event.page;
+            this.getVatReportTransactions(false);
+        }
     }
 
     /**

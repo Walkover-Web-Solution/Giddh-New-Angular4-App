@@ -17,7 +17,7 @@ import { NeedsAuthentication } from '../decorators/needsAuthentication';
                 ]
             },
             {
-                path: 'transactions/:section', 
+                path: 'transactions/section/:section', 
                 component: VatReportTransactionsComponent,
                 canActivate: [NeedsAuthentication]
             }

@@ -2,7 +2,7 @@
     <div class="container-fluid">
 
         <div class="clearfix">
-            <a [routerLink]="['/pages/vat-report']" class="fond-inline-block mr-2"><i class="fa fa-angle-left font-20 middle"></i> Back</a> <span>Standard rated supplies in Abu Dhabi</span>
+            <a [routerLink]="['/pages/vat-report']" class="fond-inline-block mr-2"><i class="fa fa-angle-left font-20 middle"></i> Back</a> <span *ngIf="vatReportTransactions.results && vatReportTransactions.results.length > 0">{{vatReportTransactions.results[0].description}}</span>
         </div>
 
         <div class="invoice-preview table-responsive">
@@ -10,13 +10,13 @@
                 <thead>
                     <tr>
                         <th width="10%">Invoice Date</th>
-                        <th width="10%">Invoice Number</th>
-                        <th width="20%">Customer Name</th>
-                        <th width="20%">Taxable Amount</th>
-                        <th width="10%">VAT Amount</th>
+                        <th width="15%">Invoice Number</th>
+                        <th width="15%">Customer Name</th>
+                        <th width="12%" class="text-right">Taxable Amount</th>
+                        <th width="12%" class="text-right">VAT Amount</th>
                         <th width="10%">Reverse Charge</th>
-                        <th width="10%">TRN Number</th>
-                        <th width="10%">Place of Supply</th>
+                        <th width="15%">TRN Number</th>
+                        <th width="15%">Place of Supply</th>
                     </tr>
                 </thead>
                 <tbody *ngIf="vatReportTransactions.results && vatReportTransactions.results.length > 0">

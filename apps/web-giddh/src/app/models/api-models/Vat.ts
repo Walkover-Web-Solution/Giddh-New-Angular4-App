@@ -36,7 +36,7 @@ export class VatReportTransactionsRequest {
     from: string;
     to: string;
     taxNumber: string;
-    section: string;
+    section: any;
     page: any;
     count: any;
 }
