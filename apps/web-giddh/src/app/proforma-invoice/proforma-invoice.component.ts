@@ -2209,14 +2209,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public removeTransaction(entryIdx: number) {
-        if (this.invFormData.entries.length > 1) {
-            if (this.activeIndx === entryIdx) {
-                this.activeIndx = null;
-            }
-            this.invFormData.entries = this.invFormData.entries.filter((entry, index) => entryIdx !== index);
-            this.calculateAffectedThingsFromOtherTaxChanges();
-        } else {
-            this._toasty.warningToast('Unable to delete a single transaction');
+        if (this.activeIndx === entryIdx) {
+            this.activeIndx = null;
+        }
+        this.invFormData.entries = this.invFormData.entries.filter((entry, index) => entryIdx !== index);
+        this.calculateAffectedThingsFromOtherTaxChanges();
+        if (this.invFormData.entries.length === 0) {
+            this.addBlankRow(null);
         }
         this.handleWarehouseVisibility();
     }
