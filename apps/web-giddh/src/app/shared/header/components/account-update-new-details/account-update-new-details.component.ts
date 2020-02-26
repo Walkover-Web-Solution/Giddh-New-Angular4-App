@@ -1326,23 +1326,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.addAccountForm.controls['addresses'].updateValueAndValidity();
     }
 
-    /**
-     * To make value alphanumeric
-     *
-     * @param {*} element element reference
-     * @memberof AccountUpdateNewDetailsComponent
-     */
-    public bankAccountNumberValidaor(element) {
-        if (element.value) {
-          let trim =  element.value.replace(/[^a-zA-Z0-9]/g, '');
-           let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
-             for (let control of accountBankDetail.controls) {
-                control.get('bankAccountNo').patchValue(trim);
-            }
-
-        }
-    }
-
      /**
     * To make value alphanumeric
     *
