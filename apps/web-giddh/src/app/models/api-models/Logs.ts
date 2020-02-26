@@ -20,6 +20,8 @@ export class LogsRequest implements ILogRequest {
     public entryDate?: string;
     public logDate?: string;
     public entity: string;
+    public accountUniqueName: string;
+    public groupUniqueName: string;
 }
 
 /**
