@@ -120,7 +120,7 @@ export class LoginActions {
                         this._toaster.errorToast(action.payload.message, action.payload.code);
                         return { type: 'EmptyAction' };
                     }
-                    if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
+                    if (response.body && response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
                         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
                         return {
                             type: 'EmptyAction'
