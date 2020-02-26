@@ -51,6 +51,14 @@ export class VatService {
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 
+    /**
+     * This will get the transaction of vat report
+     *
+     * @param {string} companyUniqueName
+     * @param {VatReportTransactionsRequest} request
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof VatService
+     */
     public getVatReportTransactions(companyUniqueName: string, request: VatReportTransactionsRequest): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + VAT_API.VIEW_TRANSACTIONS_REPORT;
         url = url.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));

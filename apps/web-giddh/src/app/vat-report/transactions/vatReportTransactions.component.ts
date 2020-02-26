@@ -35,7 +35,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     };
     public isLoading: boolean = false;
 
-    constructor(private store: Store<AppState>, private vatService: VatService, private _toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private _router: Router, private _generalActions: GeneralActions) {
+    constructor(private store: Store<AppState>, private vatService: VatService, private _toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private generalActions: GeneralActions) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
     }
 
@@ -57,7 +57,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                 this.vatReportTransactionsRequest.section = params.section;
                 this.getVatReportTransactions(true);
             } else {
-                this._router.navigate(['pages', 'vat-report']);
+                this.router.navigate(['pages', 'vat-report']);
             }
         });
         
@@ -96,7 +96,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @param {boolean} resetPage
      * @memberof VatReportTransactionsComponent
      */
-    public getVatReportTransactions(resetPage: boolean): void | boolean {
+    public getVatReportTransactions(resetPage: boolean): void {
         if (this.activeCompany && this.activeCompany.addresses && this.activeCompany.addresses.length > 0 && this.vatReportTransactionsRequest.section && !this.isLoading) {
             this.isLoading = true;
 
@@ -143,8 +143,8 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public setCurrentPageTitle(title): void {
         let currentPageObj = new CurrentPage();
         currentPageObj.name = "Vat Report > " + title;
-        currentPageObj.url = this._router.url;
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+        currentPageObj.url = this.router.url;
+        this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
     }
 
     // public downloadVatReportTransactions(): void {
