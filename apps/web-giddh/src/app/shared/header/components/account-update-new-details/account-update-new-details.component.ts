@@ -1333,7 +1333,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     * @param {*} element element reference
     * @memberof AccountUpdateNewDetailsComponent
     */
-    public bankDetailsValidaor(element, type: string): void {
+    public bankDetailsValidator(element, type: string): void {
         if (element.value && type) {
             let trim = element.value.replace(/[^a-zA-Z0-9]/g, '');
             let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;

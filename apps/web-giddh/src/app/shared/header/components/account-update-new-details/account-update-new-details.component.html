@@ -270,28 +270,28 @@
                             <input type="text" class="form-control" placeholder="Enter Beneficiary Name " name="beneficiaryName_{{i}}" formControlName="beneficiaryName" />
                         </div>
                         <div class="form-group  col-sm-6" [ngClass]="{'col-sm-5': selectedCountryCode !=='AE', 'col-sm-6': selectedCountryCode ==='AE' }">
-                            <label for="">Bank Name</label>
+                            <label>Bank Name</label>
                             <input type="text" class="form-control" placeholder="Enter Bank Name" name="bankName_{{i}}" formControlName="bankName" />
                         </div>
                         <div class="form-group col-sm-4" *ngIf="selectedCountryCode ==='AE'">
-                            <div class="">
-                                <label for="">Branch Name</label>
+                            <div>
+                                <label>Branch Name</label>
                                 <input type="text" class="form-control" placeholder="Enter Branch Name" name="branchName_{{i}}" formControlName="branchName" />
                             </div>
                         </div>
                         <div class="form-group col-sm-4">
-                            <div class="">
-                                <label for=" " *ngIf="selectedCountryCode==='IN' ">Account Number</label>
-                                <label for=" " *ngIf="selectedCountryCode !=='IN' ">IBAN</label>
-                                <input type="text" class="form-control" #bankaccount placeholder="Enter Account No." name="accountNum_{{i}}" (keyup)="bankDetailsValidaor(bankaccount, 'bankAccountNo')" formControlName="bankAccountNo" />
+                            <div>
+                                <label *ngIf="selectedCountryCode==='IN' ">Account Number</label>
+                                <label *ngIf="selectedCountryCode !=='IN' ">IBAN</label>
+                                <input type="text" class="form-control" #bankaccount placeholder="Enter Account No." name="accountNum_{{i}}" (keyup)="bankDetailsValidator(bankaccount, 'bankAccountNo')" formControlName="bankAccountNo" />
                             </div>
                         </div>
                         <div class="form-group col-sm-4" *ngIf="selectedCountryCode ==='AE'">
-                            <label for="">SWIFT Code/BIC</label>
-                            <input type="text" class="form-control" placeholder="Enter SWIFT/BIC Code" #swiftcode name="swiftCode_{{i}}" (keyup)="bankDetailsValidaor(swiftcode, 'swiftCode')" formControlName="swiftCode" />
+                            <label>SWIFT Code/BIC</label>
+                            <input type="text" class="form-control" placeholder="Enter SWIFT/BIC Code" #swiftcode name="swiftCode_{{i}}" (keyup)="bankDetailsValidator(swiftcode, 'swiftCode')" formControlName="swiftCode" />
                         </div>
                         <div *ngIf="selectedCountryCode!=='AE'" class="form-group col-sm-3">
-                            <label for="">IFSC Code</label>
+                            <label>IFSC Code</label>
                             <input type="text" class="form-control" placeholder="Enter IFSC Code" name="ifsc_{{i}}" formControlName="ifsc" />
                         </div>
                     </div>
@@ -311,7 +311,7 @@
                     </div>
 
                     <div class="form-group col-sm-6">
-                        <label for="">Balance for Trigger</label>
+                        <label>Balance for Trigger</label>
                         <div class="input-group" [ngClass]="{'input-group': addAccountForm.get('closingBalanceTriggerAmount').value > 0}">
                             <input type="number" min="0" class="form-control text-right" formControlName="closingBalanceTriggerAmount" placeholder="00.00" />
                             <div class="input-group-addon" (click)="closingBalanceTypeChanged('DEBIT')" [ngClass]="

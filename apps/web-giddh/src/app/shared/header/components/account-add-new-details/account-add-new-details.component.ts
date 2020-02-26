@@ -822,7 +822,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     * @param {*} element element reference
     * @memberof AccountAddNewDetailsComponent
     */
-    public bankDetailsValidaor(element, type: string): void {
+    public bankDetailsValidator(element, type: string): void {
         if (element.value && type) {
             let trim = element.value.replace(/[^a-zA-Z0-9]/g, '');
             let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
