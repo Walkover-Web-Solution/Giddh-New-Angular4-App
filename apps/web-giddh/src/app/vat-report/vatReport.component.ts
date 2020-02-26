@@ -211,6 +211,12 @@ export class VatReportComponent implements OnInit, OnDestroy {
         document.querySelector(".btn-group.dropdown").classList.remove("show");
     }
 
+    /**
+     * This will redirect to vat report detail page
+     *
+     * @param {*} section
+     * @memberof VatReportComponent
+     */
     public viewVatReportTransactions(section) {
         this._route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.currentPeriod.from, to: this.currentPeriod.to } });
     }
