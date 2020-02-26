@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, TemplateRef, OnInit, ViewChild } from '@angular/core';
 import { DaterangePickerComponent } from '../../../theme/ng2-daterangepicker/daterangepicker.component';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 
 @Component({
@@ -9,9 +10,37 @@ import { DaterangePickerComponent } from '../../../theme/ng2-daterangepicker/dat
 })
 export class AdvanceReceiptReport implements OnInit {
 
+    modalRef: BsModalRef;
+    message: string;
+    constructor(private modalService: BsModalService) {}
+
+    // advance modal
+    openModal(advanceSearch: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(advanceSearch, {class: 'modal-lg'});
+    }
+
+    // advance modal
+    adjustModal(adjustInvoiceModal: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(adjustInvoiceModal, {class: 'modal-lg'});
+    }
+
+    // refuns amount modal
+    refundModalOpen(refundAmount: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(refundAmount, {class: 'modal-md'});
+    }
+
+    confirm(): void {
+        this.message = 'Confirmed!';
+        this.modalRef.hide();
+    }
+
+    decline(): void {
+        this.message = 'Declined!';
+        this.modalRef.hide();
+    }
+
     public showEntryDate = true;
     @ViewChild(DaterangePickerComponent) public dp: DaterangePickerComponent;
-
 
     ngOnInit() { }
 
@@ -66,8 +95,6 @@ export class AdvanceReceiptReport implements OnInit {
             totalAmount: "5000",
             unusedAmount: "3000"
         },
-
-
     ]
 
     public toggleSearch(fieldName: string, el: any) {

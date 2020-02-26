@@ -1,0 +1,62 @@
+<div class="clearfix">
+    <div class="modal-header">
+        <h4 class="modal-title bg pull-left">Advance Search</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body font-14">
+          <div class="clearfix pt-1 pb-1 pl-1 pr-1">
+            <form>
+                <div class="row">
+                    <label class="col-md-3">Adjustment Voucher</label>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" [(ngModel)]="tempDateParams.adjustmentVoucher" [placeholder]="'Select Account'" [notFoundLink]="false"
+                            [multiple]="false" [ItemHeight]="33">
+                                <ng-template #optionTemplate1 let-option="option">
+                                    <a href="javascript:void(0)" class="list-item">
+                                        Advance Receipt
+                                    </a>
+                                </ng-template>
+                            </sh-select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-md-3">Total Amount</label>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control" [(ngModel)]="tempDateParams.SelectType" placeholder="Select Type">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control" [(ngModel)]="tempDateParams.UnusedAmount" placeholder="Unused Amount">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-md-3">Unused Amount</label>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control" [(ngModel)]="tempDateParams.SelectType" placeholder="Select Type">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control" [(ngModel)]="tempDateParams.UnusedAmount" placeholder="Unused Amount">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix mt-4">
+                    <button type="button" class="btn btn-success mrR1" (click)="confirm()" >Search</button>
+                    <button type="button" class="btn btn-cancel" (click)="decline()" >Cancel</button>
+                </div>
+            </form>
+        </div>
+      </div>
+</div>

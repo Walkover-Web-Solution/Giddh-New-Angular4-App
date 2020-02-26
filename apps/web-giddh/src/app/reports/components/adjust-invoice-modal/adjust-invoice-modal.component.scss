@@ -1,0 +1,15 @@
+/* ADD BULK ITEM */
+
+@import "../../../../assets/css/color.scss";
+.basic > tbody > tr > td, .basic > thead > tr > th {
+    padding: 7px 10px;
+}
+.basic > tbody > tr > td:first-child, .basic > thead > tr > th:first-child {
+    padding-left: 15px;
+}
+.basic > tbody > tr > td:last-child, .basic > thead > tr > th:last-child {
+    padding-right: 15px;
+}
+.table-no-border tr td {
+    border: 0px;
+}

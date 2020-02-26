@@ -1,0 +1,64 @@
+<div class="clearfix">
+    <div class="modal-header">
+        <h4 class="modal-title bg pull-left">Refund Amount</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body font-14 pt-0">
+            <div class="bb-1 row pl-2 pr-2 pb-2 pt-2 mb-1">
+                <h4><span class="font-14 middle mr-1">Balance Amount</span> <span class="font-20 font-bold middle">Rs. 10,000.00</span></h4>
+            </div>
+          <div class="clearfix pt-1 pb-1 pl-1 pr-1">
+            <form>
+                <div class="row">
+                    <label class="col-md-5">Refund on<span class="text-danger">*</span></label>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="text" class="form-control" [(ngModel)]="tempDateParams.SelectType" placeholder="Select Type">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-md-5">Payment Mode<span class="text-danger">*</span></label>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" [(ngModel)]="tempDateParams.adjustmentVoucher" [placeholder]="'Select Account'" [notFoundLink]="false"
+                            [multiple]="false" [ItemHeight]="33">
+                                <ng-template #optionTemplate1 let-option="option">
+                                    <a href="javascript:void(0)" class="list-item">
+                                        Advance Receipt
+                                    </a>
+                                </ng-template>
+                            </sh-select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-md-5">Amount<span class="text-danger">*</span></label>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="text" class="form-control" [(ngModel)]="tempDateParams.SelectType" value="₹10,000.00" placeholder="Amount">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-md-5">Description<span class="text-danger">*</span></label>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <textarea rows="5" class="form-control" placeholder="Description"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix mt-4">
+                    <button type="button" class="btn btn-success mrR1" (click)="confirm()" >Search</button>
+                    <button type="button" class="btn btn-cancel" (click)="decline()" >Cancel</button>
+                </div>
+            </form>
+        </div>
+      </div>
+</div>

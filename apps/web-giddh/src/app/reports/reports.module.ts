@@ -3,6 +3,7 @@ import { ReportsRoutingModule } from './reports.routing.module';
 import { ReportsComponent } from './reports.component';
 import { ReportsDetailsComponent } from './components/report-details-components/report.details.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { CommonModule } from '@angular/common';
 import { Options } from 'highcharts';
 import { BsDropdownModule, DatepickerModule, TooltipModule, } from 'ngx-bootstrap';
@@ -27,6 +28,9 @@ import { AccountDetailModalModule } from '../theme/account-detail-modal/account-
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ReverseChargeReport } from './components/reverse-charge-report-component/reverse-charge-report.component';
 import { AdvanceReceiptReport } from './components/advance-receipt-report/advance-receipt-report.component';
+import { AdjustInvoiceAdvanceSearchComponent } from './components/adjust-invoice-advance-search/adjust-invoice-advance-search.component';
+import { RefundAmountComponent } from './components/refund-amount/refund-amount.component';
+import { AdjustInvoiceModalComponent } from './components/adjust-invoice-modal/adjust-invoice-modal.component';
 // import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
@@ -44,7 +48,10 @@ import { AdvanceReceiptReport } from './components/advance-receipt-report/advanc
         PurchaseRegisterTableComponent,
         PurchaseRegisterExpandComponent,
         ReverseChargeReport,
-        AdvanceReceiptReport
+        AdvanceReceiptReport,
+        AdjustInvoiceAdvanceSearchComponent,
+        RefundAmountComponent,
+        AdjustInvoiceModalComponent
     ],
     exports: [
         ReportsComponent,
@@ -68,7 +75,8 @@ import { AdvanceReceiptReport } from './components/advance-receipt-report/advanc
         AccountDetailModalModule,
         ReactiveFormsModule,
         ClickOutsideModule,
-        TooltipModule
+        TooltipModule,
+        ModalModule.forRoot(),
     ]
 })
 

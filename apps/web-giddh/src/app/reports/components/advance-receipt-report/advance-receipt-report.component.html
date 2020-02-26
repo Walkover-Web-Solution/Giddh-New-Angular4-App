@@ -1,8 +1,7 @@
 <div class="reverse-table-report">
     <div class="container-fluid">
 
-        <div class="d-flex date-advanceSearch" id="dateRangePickerParent">
-
+        <div class="d-flex date-advanceSearch mrT2" id="dateRangePickerParent">
             <!-- Invoice filter section -->
             <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate
             class="form-inline input-grp-dateRangePicker pr">
@@ -12,12 +11,18 @@
                             <input name="dateRange" daterangepicker class="form-control" />
                         </span>
                     </div>
-                    <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
+                    <div class="advance-icon pointer" tooltip="Advance Search" (click)="openModal(advanceSearch)">
                         <span class="icon-advance-serch"></span>
                     </div>
                 </div>
             </form>
             <!-- Invoice filter section ends -->
+
+
+            <div class="clearfix">
+                <a href="javascript:void(0)" class="btn btn-primary" (click)="refundModalOpen(refundAmount)">Refund amount</a>
+                <a href="javascript:void(0)" class="btn btn-primary" (click)="adjustModal(adjustInvoiceModal)">Adjust invoice modal</a>
+            </div>
         </div>
 
 
@@ -104,3 +109,22 @@
     </div>
 </ng-template>
 <!-- endregion -->
+
+<!-- Adjust Payment modal start -->
+<ng-template #advanceSearch>
+    <adjust-invoice-advance-search></adjust-invoice-advance-search>
+</ng-template>
+<!-- Adjust Payment modal End-->
+
+
+<!-- Adjust invoice modal start -->
+<ng-template #adjustInvoiceModal>
+    <adjust-invoice-modal></adjust-invoice-modal>
+</ng-template>
+<!-- Adjust invoice modal End-->
+
+<!-- Refund Amount modal start -->
+<ng-template #refundAmount>
+    <refund-amount></refund-amount>
+</ng-template>
+<!-- Refund Amount modal End-->
