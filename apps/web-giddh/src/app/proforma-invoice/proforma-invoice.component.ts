@@ -317,7 +317,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public showSwitchedCurr = false;
     public reverseExchangeRate: number;
     public originalReverseExchangeRate: number;
-    public countryCode: string = '';
+    /** to check is tourist scheme applicable(Note true if voucher type will be sales invoice)  */
+    public isTouristScheme: boolean = false;
+
 
     // private members
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -354,6 +356,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private purchaseRecordInvoiceNumber: string = '';
     /** Inventory Settings */
     public inventorySettings: any;
+    public companyCountryCode: string = '';
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -365,9 +368,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     private get isPurchaseRecordContractBroken(): boolean {
         return (this.purchaseRecordCustomerUniqueName !== this.invFormData.voucherDetails.customerUniquename) ||
-        (this.purchaseRecordInvoiceDate !== moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT)) ||
-        (this.purchaseRecordTaxNumber !== this.invFormData.accountDetails.shippingDetails.gstNumber ||
-        (this.purchaseRecordInvoiceNumber !== this.invFormData.voucherDetails.voucherNumber));
+            (this.purchaseRecordInvoiceDate !== moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT)) ||
+            (this.purchaseRecordTaxNumber !== this.invFormData.accountDetails.shippingDetails.gstNumber ||
+                (this.purchaseRecordInvoiceNumber !== this.invFormData.voucherDetails.voucherNumber));
     }
 
     constructor(
@@ -450,8 +453,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             // } else {
             //     this.showLoader = false;
             //     this._cdr.detectChanges();
-                // call focus in customer after loader hides because after loader hider ui re-renders it self
-                // this.focusInCustomerName();
+            // call focus in customer after loader hides because after loader hider ui re-renders it self
+            // this.focusInCustomerName();
             // }
         });
     }
@@ -506,7 +509,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }).pipe(takeUntil(this.destroyed$)).subscribe();
 
         // get user country from his profile
-        this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
+        this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
             await this.prepareCompanyCountryAndCurrencyFromProfile(profile);
         });
 
@@ -1139,7 +1142,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private async prepareCompanyCountryAndCurrencyFromProfile(profile) {
         if (profile) {
             this.customerCountryName = profile.country;
-
             this.showGstAndTrnUsingCountryName(profile.country);
 
             this.companyCurrency = profile.baseCurrency || 'INR';
@@ -1150,12 +1152,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile.countryCode) {
-                this.countryCode = profile.countryCode;
+                this.companyCountryCode = profile.countryCode;
             } else if (profile.countryV2 && profile.countryV2.alpha2CountryCode) {
-                this.countryCode = profile.countryV2.alpha2CountryCode;
+                this.companyCountryCode = profile.countryV2.alpha2CountryCode;
             }
             if (!this.isUpdateMode) {
-                await this.getUpdatedStateCodes(this.countryCode);
+                await this.getUpdatedStateCodes(this.companyCountryCode);
             }
         } else {
             this.customerCountryName = '';
@@ -1619,6 +1621,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             requestObject.account.shippingDetails.countryName = this.customerCountryName;
             requestObject.account.shippingDetails.stateCode = requestObject.account.shippingDetails.state.code;
             requestObject.account.shippingDetails.stateName = requestObject.account.shippingDetails.state.name;
+
+            /** Tourist scheme is applicable only for voucher type 'sales invoice' and company country code 'AE'   */
+            if (this.isSalesInvoice) {
+                if (this.invFormData.touristSchemeApplicable) {
+                    requestObject.touristSchemeApplicable = this.invFormData.touristSchemeApplicable;
+                    requestObject.passportNumber = this.invFormData.passportNumber;
+                } else {
+                    requestObject.touristSchemeApplicable = false;
+                    requestObject.passportNumber = '';
+                }
+            }
         } else {
             requestObject = {
                 account: data.accountDetails,
@@ -2600,6 +2613,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 } as GenericRequestForGenerateSCD;
                 if (this.isCreditNote || this.isDebitNote) {
                     requestObject['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
+                }
+
+                /** Tourist scheme is applicable only for voucher type 'sales invoice' and company country code 'AE'   */
+                if (this.isSalesInvoice) {
+                    if (this.invFormData.touristSchemeApplicable) {
+                        requestObject.touristSchemeApplicable = this.invFormData.touristSchemeApplicable;
+                        requestObject.passportNumber = this.invFormData.passportNumber;
+                    } else {
+                        requestObject.touristSchemeApplicable = false;
+                        requestObject.passportNumber = '';
+                    }
                 }
 
                 this.salesService.updateVoucherV4(<GenericRequestForGenerateSCD>this.updateData(requestObject, requestObject.voucher)).pipe(takeUntil(this.destroyed$))
@@ -4056,9 +4080,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public getInventorySettings(): void {
         this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
-            if(settings && settings.companyInventorySettings) {
+            if (settings && settings.companyInventorySettings) {
                 this.inventorySettings = settings.companyInventorySettings;
             }
         });
     }
+
+    /**
+     * Toggle Tourist scheme checkbox
+     *
+     * @param {*} event Click event
+     * @memberof ProformaInvoiceComponent
+     */
+    public touristSchemeApplicableToggle(event) {
+        this.invFormData.passportNumber = '';
+    }
+
 }
+
