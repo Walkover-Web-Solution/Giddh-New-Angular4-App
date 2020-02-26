@@ -1,6 +1,6 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil, take, delay } from 'rxjs/operators';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ComponentFactoryResolver, } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { VatReportTransactionsRequest } from '../../models/api-models/Vat';
 import * as _ from '../../lodash-optimized';
@@ -13,6 +13,11 @@ import { saveAs } from "file-saver";
 import { PAGINATION_LIMIT } from '../../app.constant';
 import { CurrentPage } from '../../models/api-models/Common';
 import { GeneralActions } from '../../actions/general/general.actions';
+import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
+import { DownloadOrSendInvoiceOnMailComponent } from '../../invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
+import { InvoiceActions } from '../../actions/invoice/invoice.actions';
+import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 
 @Component({
     selector: 'app-vat-report-transactions',
@@ -21,6 +26,10 @@ import { GeneralActions } from '../../actions/general/general.actions';
 })
 
 export class VatReportTransactionsComponent implements OnInit, OnDestroy {
+    @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
+    @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
+    @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
+
     public activeCompanyUniqueName$: Observable<string>;
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -34,8 +43,14 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         section: ''
     };
     public isLoading: boolean = false;
+    public modalConfig = {
+        animated: true,
+        keyboard: false,
+        backdrop: 'static',
+        ignoreBackdropClick: true
+    };
 
-    constructor(private store: Store<AppState>, private vatService: VatService, private _toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private generalActions: GeneralActions) {
+    constructor(private store: Store<AppState>, private vatService: VatService, private _toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceReceiptActions: InvoiceReceiptActions, private invoiceActions: InvoiceActions, private _store: Store<AppState>, private componentFactoryResolver: ComponentFactoryResolver) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
     }
 
@@ -163,4 +178,39 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     //         }
     //     });
     // }
+
+    public onSelectInvoice(invoice) {
+        if(invoice.voucherNumber) {
+            let downloadVoucherRequestObject = {
+                voucherNumber: [invoice.voucherNumber],
+                voucherType: invoice.voucherType,
+                accountUniqueName: invoice.account.uniqueName
+            };
+            this._store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+            this.loadDownloadOrSendMailComponent();
+            this.downloadOrSendMailModel.show();
+        }
+    }
+
+    public loadDownloadOrSendMailComponent() {
+        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(DownloadOrSendInvoiceOnMailComponent);
+        let viewContainerRef = this.downloadOrSendMailComponent.viewContainerRef;
+        viewContainerRef.remove();
+
+        let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+        viewContainerRef.insert(componentInstanceView.hostView);
+
+        let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
+        componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
+    }
+
+    public closeDownloadOrSendMailPopup(userResponse: { action: string }) {
+        this.downloadOrSendMailModel.hide();
+        if (userResponse.action === 'update') {
+            this._store.dispatch(this.invoiceActions.VisitToInvoiceFromPreview());
+            this.invoiceGenerateModel.show();
+        } else if (userResponse.action === 'closed') {
+            this._store.dispatch(this.invoiceActions.ResetInvoiceData());
+        }
+    }
 }
