@@ -593,11 +593,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             accountBankDetails: this._fb.array([
                 this._fb.group({
                     bankName: [''],
-                    bankAccountNo: ['', Validators.compose([Validators.minLength(23), Validators.maxLength(34)])],
+                    bankAccountNo: ['', Validators.compose([Validators.maxLength(34)])],
                     ifsc: [''],
                     beneficiaryName: [''],
                     branchName: [''],
-                    swiftCode: ['', Validators.compose([Validators.minLength(8), Validators.maxLength(11)])]
+                    swiftCode: ['', Validators.compose([Validators.maxLength(11)])]
                 })
             ]),
             cashFreeVirtualAccountData: this._fb.group({
