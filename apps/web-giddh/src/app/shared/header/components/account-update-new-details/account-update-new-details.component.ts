@@ -593,11 +593,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             accountBankDetails: this._fb.array([
                 this._fb.group({
                     bankName: [''],
-                    bankAccountNo: ['', Validators.compose([ Validators.maxLength(34)])],
+                    bankAccountNo: ['', Validators.compose([Validators.minLength(23), Validators.maxLength(34)])],
                     ifsc: [''],
                     beneficiaryName: [''],
                     branchName: [''],
-                    swiftCode: ['',Validators.compose([ Validators.minLength(8),Validators.maxLength(11)])]
+                    swiftCode: ['', Validators.compose([Validators.minLength(8), Validators.maxLength(11)])]
                 })
             ]),
             cashFreeVirtualAccountData: this._fb.group({
@@ -645,8 +645,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
-     public resetBankDetailsForm() {
-         let accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
+    public resetBankDetailsForm() {
+        let accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
         for (let control of accountBankDetails.controls) {
             control.get('bankName').patchValue(null);
             control.get('bankAccountNo').patchValue(null);
@@ -1297,7 +1297,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountAddNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
-        if(this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === "sundrydebtors" || this.activeGroupUniqueName === "sundrycreditors")) {
+        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === "sundrydebtors" || this.activeGroupUniqueName === "sundrycreditors")) {
             return true;
         } else {
             return false;
@@ -1315,7 +1315,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         let i = 0;
         let addresses = this.addAccountForm.get('addresses') as FormArray;
         for (let control of addresses.controls) {
-            if(this.isStateRequired) {
+            if (this.isStateRequired) {
                 control.get('stateCode').setValidators([Validators.required]);
             } else {
                 control.get('stateCode').setValidators(null);
@@ -1324,5 +1324,43 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             i++;
         }
         this.addAccountForm.controls['addresses'].updateValueAndValidity();
+    }
+
+    /**
+     * To make value alphanumeric
+     *
+     * @param {*} element element reference
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public bankAccountNumberValidaor(element) {
+        if (element.value) {
+          let trim =  element.value.replace(/[^a-zA-Z0-9]/g, '');
+           let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
+             for (let control of accountBankDetail.controls) {
+                control.get('bankAccountNo').patchValue(trim);
+            }
+
+        }
+    }
+
+     /**
+    * To make value alphanumeric
+    *
+    * @param {*} type To check Type of bank details field
+    * @param {*} element element reference
+    * @memberof AccountUpdateNewDetailsComponent
+    */
+    public bankDetailsValidaor(element, type: string): void {
+        if (element.value && type) {
+            let trim = element.value.replace(/[^a-zA-Z0-9]/g, '');
+            let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
+            for (let control of accountBankDetail.controls) {
+                if (type === 'bankAccountNo') {
+                    control.get('bankAccountNo').patchValue(trim);
+                } else if (type === 'swiftCode') {
+                    control.get('swiftCode').patchValue(trim);
+                }
+            }
+        }
     }
 }

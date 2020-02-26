@@ -338,7 +338,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     ifsc: [''],
                     beneficiaryName: [''],
                     branchName: [''],
-                    swiftCode: ['', Validators.compose([Validators.minLength(8), Validators.maxLength(11)])]
+                    swiftCode: ['', Validators.compose([Validators.pattern(/[^a-zA-Z0-9]/), Validators.minLength(8), Validators.maxLength(11)])]
 
                 })
             ]),
@@ -730,6 +730,16 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
     public getStates(countryCode) {
         this.selectedCountryCode = countryCode;
+        if (countryCode && this.addAccountForm) {
+            let accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
+            for (let control of accountBankDetails.controls) {
+                if (countryCode === 'IN') {
+                    control.get('bankAccountNo').setValidators([Validators.minLength(0)]);
+                } else {
+                    control.get('bankAccountNo').setValidators([Validators.minLength(23)]);
+                }
+            }
+        }
         this.store.dispatch(this._generalActions.resetStatesList());
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -803,5 +813,26 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             i++;
         }
         this.addAccountForm.controls['addresses'].updateValueAndValidity();
+    }
+
+    /**
+    * To make value alphanumeric
+    *
+    * @param {*} type To check Type of bank details field
+    * @param {*} element element reference
+    * @memberof AccountAddNewDetailsComponent
+    */
+    public bankDetailsValidaor(element, type: string): void {
+        if (element.value && type) {
+            let trim = element.value.replace(/[^a-zA-Z0-9]/g, '');
+            let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
+            for (let control of accountBankDetail.controls) {
+                if (type === 'bankAccountNo') {
+                    control.get('bankAccountNo').patchValue(trim);
+                } else if (type === 'swiftCode') {
+                    control.get('swiftCode').patchValue(trim);
+                }
+            }
+        }
     }
 }
