@@ -1038,6 +1038,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public getStates(countryCode, selectedAcountCurrency?: string) {
         this.store.dispatch(this._generalActions.resetStatesList());
+         if (countryCode && this.addAccountForm) {
+            let accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
+            for (let control of accountBankDetails.controls) {
+                if (countryCode === 'IN') {
+                    control.get('bankAccountNo').setValidators([Validators.minLength(0)]);
+                } else {
+                    control.get('bankAccountNo').setValidators([Validators.minLength(23)]);
+                }
+            }
+        }
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 if (res.country) {
