@@ -195,7 +195,7 @@ export class AccountingComponent implements OnInit, OnDestroy {
 
         this.store.select(p => p.session.companyUniqueName).pipe(take(1)).subscribe(a => {
             if (a && a !== '') {
-                this._accountService.GetFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data.status === 'success') {
                         this.flattenAccounts = data.body.results;
                         this._tallyModuleService.setFlattenAccounts(data.body.results);

@@ -444,7 +444,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let from = params['from'];
                 let to = params['to'];
 
-                this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(from, 'DD-MM-YYYY').toDate(), endDate: moment(to, 'DD-MM-YYYY').toDate() };
+                this.datePickerOptions = {
+                    ...this.datePickerOptions,
+                    startDate: moment(from, 'DD-MM-YYYY').toDate(),
+                    endDate: moment(to, 'DD-MM-YYYY').toDate(),
+                    chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
+                };
 
                 this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                     dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
@@ -462,7 +467,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (dateObj && !this.todaySelected) {
                     let universalDate = _.cloneDeep(dateObj);
 
-                    this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate() };
+                    this.datePickerOptions = {
+                        ...this.datePickerOptions,
+                        startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
+                        endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate(),
+                        chosenLabel: universalDate[2]
+                    };
                     this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                         dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
                             bsRangeValue: [moment(universalDate[0], 'DD-MM-YYYY').toDate(), moment(universalDate[1], 'DD-MM-YYYY').toDate()]
@@ -479,7 +489,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.datePickerOptions = {
                         ...this.datePickerOptions,
                         startDate: moment().toDate(),
-                        endDate: moment().toDate()
+                        endDate: moment().toDate(),
+                        chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
                     };
                     // set advance search bsRangeValue to blank, because we are depending api to give us from and to date
                     this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
@@ -558,7 +569,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.datePickerOptions = {
                         ...this.datePickerOptions,
                         startDate: moment(lt.from, 'DD-MM-YYYY').toDate(),
-                        endDate: moment(lt.to, 'DD-MM-YYYY').toDate()
+                        endDate: moment(lt.to, 'DD-MM-YYYY').toDate(),
+                        chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
                     };
                 }
 
@@ -1339,7 +1351,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.datePickerOptions = {
                         ...this.datePickerOptions,
                         startDate: moment(event.advanceSearchData.dataToSend.bsRangeValue[0], 'DD-MM-YYYY').toDate(),
-                        endDate: moment(event.advanceSearchData.dataToSend.bsRangeValue[1], 'DD-MM-YYYY').toDate()
+                        endDate: moment(event.advanceSearchData.dataToSend.bsRangeValue[1], 'DD-MM-YYYY').toDate(),
+                        chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
                     };
                 }
 

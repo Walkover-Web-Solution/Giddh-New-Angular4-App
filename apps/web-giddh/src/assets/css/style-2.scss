@@ -1547,6 +1547,9 @@ modal-container.modal {
 .justify-content-center {
     justify-content: center;
 }
+.color-primary {
+    color: $primaryBtncolror;
+}
 /* my css end */
 
 /*input*/
@@ -1616,8 +1619,8 @@ input:-moz-placeholder {
     font-size: 16px;
     text-transform: capitalize;
     display: inline-flex;
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     background-color: $border-blue;
     text-align: center;
     border-radius: 50%;
@@ -1626,6 +1629,7 @@ input:-moz-placeholder {
     padding: 0;
     margin-right: 15px;
     float: left;
+    letter-spacing: -1px;
 }
 
 .company-name .cText .fyear {
@@ -1638,6 +1642,8 @@ input:-moz-placeholder {
 
 header .navbar {
     background-color: #f7f8fa;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 3px 0;
 }
 
 /* .fyear {
@@ -2171,7 +2177,6 @@ p.table-email {
 .delt {
     text-align: center;
 }
-
 input[type="checkbox"] {
     position: relative;
     top: 1px;
@@ -2180,6 +2185,10 @@ input[type="checkbox"] {
     cursor: pointer;
     left: 0px;
     height: 19px;
+    width: 1em;
+    height: 1em;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 input[type="checkbox"]:checked:before {
@@ -2223,6 +2232,7 @@ input[type="checkbox"]:after {
     background: #fff;
     cursor: pointer;
     border-radius: 2px;
+    visibility: visible;
 }
 
 input[type="checkbox"]:checked:after {
@@ -2562,7 +2572,9 @@ input[type="checkbox"]:checked:after {
 .font-16 {
     font-size: 16px !important;
 }
-
+.font-20 {
+    font-size: 20px;
+}
 .font-22 {
     font-size: 22px;
 }
@@ -2594,7 +2606,7 @@ input[type="checkbox"]:checked:after {
 
 .subscription-title {
     font-size: 20px;
-    font-family: "opensans-semibold";
+    font-family: $tableFontSemibold;
 }
 
 .box2 {
@@ -5468,9 +5480,6 @@ fieldset[disabled] .form-control {
 input[type="checkbox"][disabled] {
     opacity: 2.2;
 }
-
-
-
 .nested_table > tbody tr td {
     border: 0 !important;
     padding: 8px 0;
@@ -5484,7 +5493,7 @@ input[type="checkbox"][disabled] {
 
 .section_head {
     padding-bottom: 10px;
-    font-family: "" opensans-semibold "";
+    font-family: $tableFontSemibold;
     font-size: 110%;
     color: rgba(0, 0, 0, 0.8);
 }
@@ -6227,7 +6236,7 @@ table td[class*=col-]:last-child {
 
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: "" opensans-semibold "";
+    font-family: $tableFontSemibold;
     text-transform: capitalize;
 }
 
@@ -6452,7 +6461,7 @@ table td[class*=col-]:last-child {
 
 .app_list > ul h6 {
     margin-bottom: 10px;
-    font-family: "opensans-semibold";
+    font-family: $tableFontSemibold;
     font-size: 13px;
 }
 
@@ -6918,6 +6927,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding-right: 10px;
     border: none;
     box-shadow: none;
+    padding: 0 10px 0 0;
 }
 
 .hamburger_menu h4 {
@@ -6925,7 +6935,8 @@ perfect-scrollbar > .ps > .ps-overlay {
     text-transform: capitalize;
     width: auto;
     color: $pageTitleColor;
-    font-family: "opensans-bold";
+    font-family: $tableFontSemibold;
+    vertical-align: middle;
 }
 
 .tax-engine .icon {
@@ -8257,7 +8268,7 @@ ul.dropdown-menu p.lead.pd {
 .invoce-controll .nav-tabs > li.active > a {
     border-bottom: 4px solid $activeIconTh !important;
     padding-bottom: 7px !important;
-    font-family: "opensans-semibold";
+    font-family: $tableFontSemibold;
 }
 .invoce-controll .nav-tabs > li > a {
     border-bottom: 4px solid transparent !important;
@@ -8723,7 +8734,7 @@ input.checkbox-custom[type="checkbox"] {
 .checkbox-custom-label,
 .radio-custom-label {
     position: relative;
-    display: inline-flex;
+    display: inline-flex !important;
     align-items: center;
 
 }
@@ -9073,6 +9084,9 @@ input.checkbox-custom[type="checkbox"] {
     }
     .xs-pr-0 {
         padding-right: 0px;
+    }
+    .xs-pt-0 {
+        padding-top: 0px;
     }
     .xs-width-100 {
         width: 100%;

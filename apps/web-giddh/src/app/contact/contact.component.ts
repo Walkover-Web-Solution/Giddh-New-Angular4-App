@@ -267,7 +267,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 let universalDate = _.cloneDeep(dateObj);
                 this.datePickerOptions = {
                     ...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
-                    endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()
+                    endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate(),
+                    chosenLabel: universalDate[2]
                 };
 
                 // this.selected = {startDate: moment(universalDate[0], 'DD-MM-YYYY'), endDate: moment(universalDate[1], 'DD-MM-YYYY')};

@@ -22,7 +22,7 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
 import { WarehouseActions } from './warehouse/action/warehouse.action';
 import { PAGINATION_LIMIT } from '../app.constant';
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 
 @Component({
     templateUrl: './settings.component.html',
@@ -181,11 +181,14 @@ export class SettingsComponent implements OnInit {
     public tabChanged(tab: string) {
         if (tab === 'integration') {
             this.setStateDetails(tab, this.integrationtab);
-            this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
-            this.loadModuleData(tab);
             if (this.integrationtab) {
-                this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
+                this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
+                 this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
+            } else {
+                this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
+                 this.router.navigate(['pages/settings/', tab], { replaceUrl: true });
             }
+            this.loadModuleData(tab);
         } else {
             this.setStateDetails(tab, '');
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
@@ -204,7 +207,7 @@ export class SettingsComponent implements OnInit {
             redirect_uri: this.getRedirectUrl(AppUrl)
         };
 
-        let options = {headers: {}};
+        let options = { headers: {} };
         options.headers['Accept'] = 'application/json';
         options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 

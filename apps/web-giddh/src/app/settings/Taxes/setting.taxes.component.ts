@@ -228,7 +228,7 @@ export class SettingTaxesComponent implements OnInit {
     public getFlattenAccounts(value) {
         let query = value || '';
         // get flattern accounts
-        this._accountService.GetFlattenAccounts(query, '').pipe(debounceTime(100), takeUntil(this.destroyed$)).subscribe(data => {
+        this._accountService.getFlattenAccounts(query, '').pipe(debounceTime(100), takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let accounts: IOption[] = [];
                 data.body.results.map(d => {

@@ -81,6 +81,7 @@ export class DatepickeroptionsComponent implements OnInit, OnDestroy {
             if (this.isDefault && dateObj) {
                 this.datePickerOptions.startDate = moment(dateObj[0]);
                 this.datePickerOptions.endDate = moment(dateObj[1]);
+                this.datePickerOptions.chosenLabel = dateObj[2];
                 this.isDefault = false;
             }
         });

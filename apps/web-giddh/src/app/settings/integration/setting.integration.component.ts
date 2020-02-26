@@ -1,12 +1,12 @@
-import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
-import {takeUntil} from 'rxjs/operators';
-import {Store} from '@ngrx/store';
-import {Component, Input, OnInit, ViewChild, AfterViewInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, NgForm} from '@angular/forms';
-import {Router} from '@angular/router';
-import {AppState} from '../../store';
-import {SettingsIntegrationActions} from '../../actions/settings/settings.integration.action';
+import { takeUntil } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
+import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AppState } from '../../store';
+import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import * as _ from '../../lodash-optimized';
 import {
     AmazonSellerClass,
@@ -16,19 +16,21 @@ import {
     RazorPayClass,
     SmsKeyClass
 } from '../../models/api-models/SettingsIntegraion';
-import {AccountService} from '../../services/account.service';
-import {ToasterService} from '../../services/toaster.service';
-import {IOption} from '../../theme/ng-select/option.interface';
-import {IFlattenAccountsResultItem} from '../../models/interfaces/flattenAccountsResultItem.interface';
-import {TabsetComponent, ModalDirective} from "ngx-bootstrap";
-import {CompanyActions} from "../../actions/company.actions";
-import {IRegistration} from "../../models/interfaces/registration.interface";
-import {ShSelectComponent} from '../../theme/ng-virtual-select/sh-select.component';
-import {CurrentPage} from '../../models/api-models/Common';
-import {GeneralActions} from '../../actions/general/general.actions';
-import {Configuration} from "../../app.constant";
-import {GoogleLoginProvider, LinkedinLoginProvider} from "../../theme/ng-social-login-module/providers";
-import {AuthenticationService} from "../../services/authentication.service";
+import { AccountService } from '../../services/account.service';
+import { ToasterService } from '../../services/toaster.service';
+import { IOption } from '../../theme/ng-select/option.interface';
+import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { TabsetComponent, ModalDirective } from "ngx-bootstrap";
+import { CompanyActions } from "../../actions/company.actions";
+import { IRegistration } from "../../models/interfaces/registration.interface";
+import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
+import { CurrentPage } from '../../models/api-models/Common';
+import { GeneralActions } from '../../actions/general/general.actions';
+import { Configuration } from "../../app.constant";
+import { GoogleLoginProvider, LinkedinLoginProvider } from "../../theme/ng-social-login-module/providers";
+import { AuthenticationService } from "../../services/authentication.service";
+import { IForceClear } from '../../models/api-models/Sales';
+import { EcommerceService } from '../../services/ecommerce.service';
 
 export declare const gapi: any;
 
@@ -79,25 +81,27 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public openNewRegistration: boolean;
     public selecetdUpdateIndex: number;
     public isEcommerceShopifyUserVerified: boolean = false;
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
 
     constructor(
         private router: Router,
         private store: Store<AppState>,
         private settingsIntegrationActions: SettingsIntegrationActions,
         private accountService: AccountService,
+        private ecommerceService: EcommerceService,
         private toasty: ToasterService,
         private _companyActions: CompanyActions,
         private _authenticationService: AuthenticationService,
         private _fb: FormBuilder,
         private _generalActions: GeneralActions) {
-        this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
+        this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
-        this.isSellerAdded = this.store.select(s => s.settings.amazonState.isSellerSuccess).pipe(takeUntil(this.destroyed$));
-        this.isSellerUpdate = this.store.select(s => s.settings.amazonState.isSellerUpdated).pipe(takeUntil(this.destroyed$));
-        this.isGmailIntegrated$ = this.store.select(s => s.settings.isGmailIntegrated).pipe(takeUntil(this.destroyed$));
-        this.isPaymentAdditionSuccess$ = this.store.select(s => s.settings.isPaymentAdditionSuccess).pipe(takeUntil(this.destroyed$));
-        this.isPaymentUpdationSuccess$ = this.store.select(s => s.settings.isPaymentUpdationSuccess).pipe(takeUntil(this.destroyed$));
+        this.isSellerAdded = this.store.pipe(select(s => s.settings.amazonState.isSellerSuccess), takeUntil(this.destroyed$));
+        this.isSellerUpdate = this.store.pipe(select(s => s.settings.amazonState.isSellerUpdated), takeUntil(this.destroyed$));
+        this.isGmailIntegrated$ = this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$));
+        this.isPaymentAdditionSuccess$ = this.store.pipe(select(s => s.settings.isPaymentAdditionSuccess), takeUntil(this.destroyed$));
+        this.isPaymentUpdationSuccess$ = this.store.pipe(select(s => s.settings.isPaymentUpdationSuccess), takeUntil(this.destroyed$));
         this.setCurrentPageTitle();
     }
 
@@ -107,7 +111,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.selectTab(this.selectedTabParent);
         }
         // getting all page data of integration page
-        this.store.select(p => p.settings.integration).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+        this.store.pipe(select(p => p.settings.integration), takeUntil(this.destroyed$)).subscribe((o) => {
             // set sms form data
             if (o.smsForm) {
                 this.smsFormObj = o.smsForm;
@@ -194,7 +198,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         //logic to get all registered account for integration tab
         this.store.dispatch(this._companyActions.getAllRegistrations());
 
-        this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+        this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.account) {
                 this.registeredAccount = o.account;
                 if (this.registeredAccount && this.registeredAccount.length === 0) {
@@ -202,7 +206,19 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 }
             }
         });
-        this.getShopifyEcommerceVerifyStatus();
+
+        this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res && !_.isEmpty(res)) {
+                if (res && res.ecommerceDetails && res.ecommerceDetails.length > 0) {
+                    res.ecommerceDetails.forEach(item => {
+                        if (item && item.ecommerceType && item.ecommerceType.name && item.ecommerceType.name === "shopify") {
+                            this.getShopifyVerifyStatus(item.uniqueName);
+                        }
+                    })
+                }
+            }
+        });
+
     }
 
     public ngAfterViewInit() {
@@ -245,9 +261,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (f.valid) {
             this.store.dispatch(this.settingsIntegrationActions.SavePaymentInfo(f.value));
             this.paymentFormObj = new PaymentClass();
+            this.paymentFormObj.corpId = "";
+            this.paymentFormObj.userId = "";
+            this.paymentFormObj.accountNo = "";
+            this.paymentFormObj.aliasId = "";
+            this.paymentFormObj.accountUniqueName = "";
+            this.forceClear$ = observableOf({ status: true });
         }
     }
-
 
     public toggleCheckBox() {
         return this.razorPayObj.autoCapturePayment = !this.razorPayObj.autoCapturePayment;
@@ -292,7 +313,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public removeGmailAccount() {
         this.store.dispatch(this.settingsIntegrationActions.RemoveGmailIntegration());
     }
-
 
     public selectCashfreeAccount(event: IOption, objToApnd) {
         let accObj = {
@@ -525,16 +545,17 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /**
-     * API call to verify is shopify integrated
+     * API call to get know about ecommerce platform shopify connected or not
      *
+     * @param {string} ecommerceUniqueName ecommerce unique name for shopify
      * @memberof SettingIntegrationComponent
      */
-    public getShopifyEcommerceVerifyStatus() {
+    public getShopifyVerifyStatus(ecommerceUniqueName: string): void {
         const requestObj = { source: "shopify" };
-        this.accountService.getShopifyEcommerceVerify(requestObj).subscribe(response => {
+        this.ecommerceService.isShopifyConnected(requestObj, ecommerceUniqueName).subscribe(response => {
             if (response) {
-                if (response.status === 'success') {
-                    this.isEcommerceShopifyUserVerified = Boolean(response.body); // TODO need to change response
+                if (response.status === 'success' && response.body === 'VERIFIED') {
+                    this.isEcommerceShopifyUserVerified = true;
                 }
             }
         })
@@ -543,7 +564,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     gmailIntegration(provider: string) {
         if (Configuration.isElectron) {
             // electronOauth2
-            const {ipcRenderer} = (window as any).require("electron");
+            const { ipcRenderer } = (window as any).require("electron");
             if (provider === "google") {
                 // google
                 const t = ipcRenderer.send("authenticate", provider);

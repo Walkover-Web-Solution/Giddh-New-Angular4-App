@@ -256,16 +256,18 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public getCurrencyRate(from, to) {
-        let date = moment().format('DD-MM-YYYY');
-        this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
-            let rate = response.body;
-            if (rate) {
-                this.originalExchangeRate = rate;
-                this.exchangeRate = rate;
-            }
-        }, (error => {
+        if (from && to) {
+            let date = moment().format('DD-MM-YYYY');
+            this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
+                let rate = response.body;
+                if (rate) {
+                    this.originalExchangeRate = rate;
+                    this.exchangeRate = rate;
+                }
+            }, (error => {
 
-        }));
+            }));
+        }
     }
 
     public focusAmountField() {
@@ -273,7 +275,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public loadPaymentModes() {
-        this._accountService.GetFlattenAccounts().subscribe((res) => {
+        this._accountService.getFlattenAccounts().subscribe((res) => {
             if (res.status === 'success') {
                 let arr = res.body.results;
                 arr.map((item: any) => {

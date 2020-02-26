@@ -25,6 +25,7 @@ import { CompanyActions } from '../../../../../actions/company.actions';
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { InvViewService } from '../../../../../inventory/inv.view.service';
 import { GeneralActions } from '../../../../../actions/general/general.actions';
+import { INVALID_STOCK_ERROR_MESSAGE } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'sales-create-stock',
@@ -752,26 +753,36 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         stockObj.customField2Value = formObj.customField2Value;
 
         if (formObj.enablePurchase) {
-            formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
-                // Aditya: In inventory while creating purchase and sales unit and rate are mandatory error issue
-                // return pr.stockUnitCode && pr.rate;
-                return pr.stockUnitCode || pr.rate;
-            });
-            stockObj.purchaseAccountDetails = {
-                accountUniqueName: formObj.purchaseAccountUniqueName,
-                unitRates: formObj.purchaseUnitRates
-            };
+            if (this.validateStock(formObj.purchaseUnitRates)) {
+                formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
+                    // Aditya: In inventory while creating purchase and sales unit and rate are mandatory error issue
+                    // return pr.stockUnitCode && pr.rate;
+                    return pr.stockUnitCode || pr.rate;
+                });
+                stockObj.purchaseAccountDetails = {
+                    accountUniqueName: formObj.purchaseAccountUniqueName,
+                    unitRates: formObj.purchaseUnitRates
+                };
+            } else {
+                this._toasty.errorToast(INVALID_STOCK_ERROR_MESSAGE);
+                return;
+            }
         }
         if (formObj.enableSales) {
-            formObj.saleUnitRates = formObj.saleUnitRates.filter((pr) => {
-                // Aditya: In inventory while creating purchase and sales unit and rate are mandatory error issue
-                // return pr.stockUnitCode && pr.rate;
-                return pr.stockUnitCode || pr.rate;
-            });
-            stockObj.salesAccountDetails = {
-                accountUniqueName: formObj.salesAccountUniqueName,
-                unitRates: formObj.saleUnitRates
-            };
+            if (this.validateStock(formObj.purchaseUnitRates)) {
+                formObj.saleUnitRates = formObj.saleUnitRates.filter((pr) => {
+                    // Aditya: In inventory while creating purchase and sales unit and rate are mandatory error issue
+                    // return pr.stockUnitCode && pr.rate;
+                    return pr.stockUnitCode || pr.rate;
+                });
+                stockObj.salesAccountDetails = {
+                    accountUniqueName: formObj.salesAccountUniqueName,
+                    unitRates: formObj.saleUnitRates
+                };
+            } else {
+                this._toasty.errorToast(INVALID_STOCK_ERROR_MESSAGE);
+                return;
+            }
         }
 
         stockObj.isFsStock = formObj.isFsStock;
@@ -809,7 +820,9 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         if (!formObj.parentGroup) {
             let stockRequest = {
                 name: 'Main Group',
-                uniqueName: 'maingroup'
+                uniqueName: 'maingroup',
+                hsnNumber: '',
+                sacNumber: ''
             };
             formObj.parentGroup = stockRequest.uniqueName;
             this.store.dispatch(this.inventoryAction.addNewGroup(stockRequest));
@@ -1126,5 +1139,26 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         setTimeout(() => {
             this.manufacturingStockUnitCode.show();
         }, 200);
+    }
+
+    /**
+     * Validates the stock to have both unit and rate if either of them has been provided
+     * The stock to be created is valid if the user has either provided both unit and rate or
+     * has provided none. If the user provides anyone of them then it is invalid entry and method
+     * will return false
+     *
+     * @private
+     * @param {Array<any>} unitRates Array of stockUnitCode and rate keys
+     * @returns {boolean} True, if the stock is valid
+     * @memberof SalesAddStockComponent
+     */
+    private validateStock(unitRates: Array<any>): boolean {
+        if (unitRates) {
+            const formEntries = unitRates.filter((unitRate) => {
+                return (unitRate.stockUnitCode && !unitRate.rate) || (!unitRate.stockUnitCode && unitRate.rate);
+            });
+            return formEntries.length === 0;
+        }
+        return true;
     }
 }

@@ -447,6 +447,15 @@ sh-select:focus {
     margin-bottom: 80px;
 }
 // reponsive
+.modal-ledger {
+    width: 70%;
+}
+@media only screen and (max-width: 1540px) {
+    .modal-ledger {
+        width: 85%;
+    }
+}
+
 @media only screen and (max-width: 1366px) {
     .modal-ledger {
         width: 100%;

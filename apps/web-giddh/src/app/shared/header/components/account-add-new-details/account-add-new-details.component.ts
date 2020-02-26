@@ -24,7 +24,6 @@ import { GeneralActions } from "../../../../actions/general/general.actions";
 import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import * as googleLibphonenumber from 'google-libphonenumber';
 
-
 @Component({
     selector: 'account-add-new-details',
     templateUrl: './account-add-new-details.component.html',
@@ -52,8 +51,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public showOtherDetails: boolean = false;
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
-
-
     public states: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
     public companiesList$: Observable<CompanyResponse[]>;
@@ -80,8 +77,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isGstValid: boolean;
     public GSTIN_OR_TRN: string;
     public selectedCountry: string;
+    public selectedCountryCode: string;
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
-
+    public isStateRequired: boolean = false;
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
         private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
@@ -291,6 +289,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (result) {
             this.addAccountForm.get('country').get('countryCode').setValue(result.countryflag);
             this.selectedCountry = result.countryflag + ' - ' + result.countryName;
+            this.selectedCountryCode = result.countryflag;
             this.addAccountForm.get('mobileCode').setValue(result.value);
             let stateObj = this.getStateGSTCode(this.stateList, result.countryflag)
             this.addAccountForm.get('currency').setValue(company.baseCurrency);
@@ -301,11 +300,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.addAccountForm.get('country').get('countryCode').setValue('IN');
             this.addAccountForm.get('mobileCode').setValue('91');
             this.selectedCountry = 'IN - India';
+            this.selectedCountryCode = 'IN';
             this.addAccountForm.get('currency').setValue('IN');
             this.companyCountry = 'IN';
             this.getOnboardingForm('IN');
-
         }
+
+        this.toggleStateRequired();
     }
 
     public initializeNewForm() {
@@ -333,8 +334,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             accountBankDetails: this._fb.array([
                 this._fb.group({
                     bankName: [''],
-                    bankAccountNo: [''],
-                    ifsc: ['']
+                    bankAccountNo: ['', Validators.compose([Validators.maxLength(34)])],
+                    ifsc: [''],
+                    beneficiaryName: [''],
+                    branchName: [''],
+                    swiftCode: ['', Validators.compose([Validators.minLength(8), Validators.maxLength(11)])]
+
                 })
             ]),
             closingBalanceTriggerAmount: [Validators.compose([digitsOnly])],
@@ -343,6 +348,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public initialGstDetailsForm(): FormGroup {
+        this.isStateRequired = this.checkActiveGroupCountry();
+
         let gstFields = this._fb.group({
             gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
             address: ['', Validators.maxLength(120)],
@@ -351,7 +358,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 name: [''],
                 stateGstCode: ['']
             }),
-            stateCode: [{ value: '', disabled: false }],
+            stateCode: [{ value: '', disabled: false }, (this.isStateRequired) ? Validators.required : ""],
             isDefault: [false],
             isComposite: [false],
             partyType: ['NOT APPLICABLE']
@@ -367,6 +374,18 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             control.get('stateCode').patchValue(null);
             control.get('state').get('code').patchValue(null);
             control.get('gstNumber').setValue("");
+        }
+    }
+
+    public resetBankDetailsForm() {
+        let accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
+        for (let control of accountBankDetails.controls) {
+            control.get('bankName').patchValue(null);
+            control.get('bankAccountNo').patchValue(null);
+            control.get('beneficiaryName').patchValue(null);
+            control.get('branchName').patchValue(null);
+            control.get('swiftCode').patchValue(null);
+            control.get('ifsc').setValue("");
         }
     }
 
@@ -528,13 +547,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         }
 
-        if (this.showBankDetail) {
-            if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
-                accountRequest['accountBankDetails'] = [];
+        if (!this.showBankDetail) {
+            if (accountRequest['accountBankDetails']) {
+                delete accountRequest['accountBankDetails'];
+                delete this.addAccountForm['accountBankDetails'];
             }
-        } else {
-            delete accountRequest['accountBankDetails'];
-            delete this.addAccountForm['accountBankDetails'];
         }
         if (!this.showVirtualAccount) {
             delete accountRequest['cashFreeVirtualAccountData'];
@@ -587,7 +604,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             let currencyCode = this.countryCurrency[event.value];
             this.addAccountForm.get('currency').setValue(currencyCode);
             this.getStates(event.value);
-
+            this.toggleStateRequired();
+            this.resetGstStateForm();
+            this.resetBankDetailsForm();
         }
     }
 
@@ -607,6 +626,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.isParentDebtorCreditor(parent[1].uniqueName);
             }
             this.isGroupSelected.emit(event.value);
+            this.toggleStateRequired();
         }
     }
     public isParentDebtorCreditor(activeParentgroup: string) {
@@ -683,7 +703,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
-
         if (ele.value) {
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
@@ -710,6 +729,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
     public getStates(countryCode) {
+        this.selectedCountryCode = countryCode;
         this.store.dispatch(this._generalActions.resetStatesList());
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -734,6 +754,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
     }
+
     public getPartyTypes() {
         this.store.pipe(select(s => s.common.partyTypes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -743,8 +764,44 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
     }
+
     private getStateGSTCode(stateList, code: string) {
         return stateList.find(res => code === res.code);
     }
 
+    /**
+     * This function is used to check if company country is India and Group is sundrydebtors or sundrycreditors
+     *
+     * @returns {void}
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public checkActiveGroupCountry(): boolean {
+        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === "sundrydebtors" || this.activeGroupUniqueName === "sundrycreditors")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * This functions is used to add/remove required validation to state field
+     *
+     * @returns {void}
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public toggleStateRequired(): void {
+        this.isStateRequired = this.checkActiveGroupCountry();
+        let i = 0;
+        let addresses = this.addAccountForm.get('addresses') as FormArray;
+        for (let control of addresses.controls) {
+            if (this.isStateRequired) {
+                control.get('stateCode').setValidators([Validators.required]);
+            } else {
+                control.get('stateCode').setValidators(null);
+            }
+            control.get('stateCode').updateValueAndValidity();
+            i++;
+        }
+        this.addAccountForm.controls['addresses'].updateValueAndValidity();
+    }
 }
