@@ -21,9 +21,11 @@ export class ReverseChargeService {
         url = url.replace(':to', request.to);
         url = url.replace(':sort', request.sort);
         url = url.replace(':sortBy', request.sortBy);
-        url = url.replace(':q', request.q);
         url = url.replace(':page', request.page);
         url = url.replace(':count', request.count);
+        url = url.replace(':supplierName', request.supplierName);
+        url = url.replace(':invoiceNumber', request.invoiceNumber);
+        url = url.replace(':supplierCountry', request.supplierCountry);
         return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;

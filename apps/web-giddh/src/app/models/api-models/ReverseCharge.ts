@@ -3,7 +3,9 @@ export class ReverseChargeReportRequest {
     to: string;
     sort: string;
     sortBy: string;
-    q: any;
     page: any;
     count: any;
+    supplierName: any;
+    invoiceNumber: any;
+    supplierCountry: any;
 }

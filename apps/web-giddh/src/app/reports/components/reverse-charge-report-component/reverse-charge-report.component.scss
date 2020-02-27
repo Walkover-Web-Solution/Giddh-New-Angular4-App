@@ -12,31 +12,31 @@
         }
     }
 }
-.invoiceFooter  {
+.invoiceFooter {
     h3 {
         font-size: 16px;
         color: #999999;
         display: inline-block;
         margin-right: 10px;
     }
-  }
-  .invoiceFooter {
+}
+.invoiceFooter {
     h1 {
         font-size: 28px;
         color: #333;
         display: inline-block;
     }
-  }
-  .td_in_searchBox {
+}
+.td_in_searchBox {
     padding: 0px !important;
-  }
-  .td_in_searchBox div {
+}
+.td_in_searchBox div {
     display: flex;
-  }
-  .td_in_searchBox .input-container {
+}
+.td_in_searchBox .input-container {
     position: relative;
-  }
-  .td_in_searchBox .input-container input {
+}
+.td_in_searchBox .input-container input {
     height: 50px;
     min-width: 100%;
     padding: 11px;
@@ -44,10 +44,13 @@
     color: #1c1c1c;
     border: none;
     background-color: #f2f2f2;
-  }
-  .td_in_searchBox div span {
+}
+.td_in_searchBox div span {
     padding-right: 8px;
-  }
-  .branch-transfer-report .basic > thead > tr > th {
+}
+.branch-transfer-report .basic > thead > tr > th {
     border-top: 1px solid #d9d9d9 !important;
-  }
+}
+.icon-pointer.activeTextColor {
+    color: #01a9f4;
+}

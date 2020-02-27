@@ -16,7 +16,9 @@ import { ReverseChargeService } from '../../../services/reversecharge.service';
 
 export class ReverseChargeReport implements OnInit, OnDestroy {
     public inlineSearch: any = '';
-    //@ViewChild('warehouseNameField') public warehouseNameField;
+    @ViewChild('suppliersNameField') public suppliersNameField;
+    @ViewChild('invoiceNumberField') public invoiceNumberField;
+    @ViewChild('supplierCountryField') public supplierCountryField;
 
     public showEntryDate = true;
     public activeCompanyUniqueName$: Observable<string>;
@@ -27,19 +29,27 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         to: '',
         sort: '',
         sortBy: '',
-        q: '',
         page: 1,
-        count: PAGINATION_LIMIT
+        count: PAGINATION_LIMIT,
+        supplierName: '',
+        invoiceNumber: '',
+        supplierCountry: ''
     };
     public isLoading: boolean = false;
     public reverseChargeReportResults: any = {};
     public paginationLimit: number = PAGINATION_LIMIT;
+    public timeout: any;
 
     constructor(private store: Store<AppState>, private toasty: ToasterService, private cdRef: ChangeDetectorRef, private reverseChargeService: ReverseChargeService) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
     }
 
-    ngOnInit(): void {
+    /**
+     * This function will initialize the component
+     *
+     * @memberof ReverseChargeReport
+     */
+    public ngOnInit(): void {
         this.activeCompanyUniqueName$.pipe(take(1)).subscribe(activeCompanyName => {
             this.store.pipe(select(state => state.session.companies), takeUntil(this.destroyed$)).subscribe(res => {
                 if (!res) {
@@ -55,14 +65,22 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * This will put focus on selected search field
+     *
+     * @param {*} inlineSearch
+     * @memberof ReverseChargeReport
+     */
     public focusOnColumnSearch(inlineSearch) {
         this.inlineSearch = inlineSearch;
 
         setTimeout(() => {
-            if (this.inlineSearch === 'senderReceiver') {
-                //this.senderReceiverField.nativeElement.focus();
-            } else if (this.inlineSearch === 'warehouseName') {
-                //this.warehouseNameField.nativeElement.focus();
+            if (this.inlineSearch === 'suppliersName') {
+                this.suppliersNameField.nativeElement.focus();
+            } else if (this.inlineSearch === 'invoiceNumber') {
+                this.invoiceNumberField.nativeElement.focus();
+            } else if (this.inlineSearch === 'supplierCountry') {
+                this.supplierCountryField.nativeElement.focus();
             }
         }, 200);
     }
@@ -84,7 +102,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public pageChanged(event: any): void {
-        if(this.reverseChargeReportRequest.page != event.page) {
+        if (this.reverseChargeReportRequest.page != event.page) {
             this.reverseChargeReportResults.results = [];
             this.reverseChargeReportRequest.page = event.page;
             this.getReverseChargeReport(false);
@@ -117,5 +135,41 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                 this.isLoading = false;
             });
         }
+    }
+
+    /**
+     * This will initialize the search
+     *
+     * @memberof ReverseChargeReport
+     */
+    public columnSearch(): void {
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+        }
+
+        this.timeout = setTimeout(() => {
+            this.getReverseChargeReport(true);
+        }, 700);
+    }
+
+    /**
+     * This will sort the report
+     *
+     * @param {*} sortBy
+     * @memberof ReverseChargeReport
+     */
+    public sortReverseChargeList(sortBy): void {
+        let sort = "asc";
+
+        if (this.reverseChargeReportRequest.sortBy === sortBy) {
+            sort = (this.reverseChargeReportRequest.sort === "asc") ? "desc" : "asc";
+        } else {
+            sort = "asc";
+        }
+
+        this.reverseChargeReportRequest.sort = sort;
+        this.reverseChargeReportRequest.sortBy = sortBy;
+
+        this.getReverseChargeReport(true);
     }
 }
