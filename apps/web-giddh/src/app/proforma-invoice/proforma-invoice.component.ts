@@ -2212,7 +2212,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.activeIndx === entryIdx) {
             this.activeIndx = null;
         }
-        this.invFormData.entries = this.invFormData.entries.filter((entry, index) => entryIdx !== index);
+        this.invFormData.entries = cloneDeep(this.invFormData.entries.filter((entry, index) => entryIdx !== index));
         this.calculateAffectedThingsFromOtherTaxChanges();
         if (this.invFormData.entries.length === 0) {
             this.addBlankRow(null);
