@@ -1,87 +1,90 @@
 <div class="reverse-table-report">
     <div class="container-fluid">
         <div class="invoice-preview  table-responsive">
-        <table class="table basic table-bordered mrT2 onMobileView">
-            <thead class="t-h-bg1">
-                <tr>
-                    <th class="text-center">#</th>
-                    <th class="td_in_searchBox">
-                        <div class="d-flex align-items-center">
-                            Entry Date
-                            <div class="icon-pointer pl-1 pointer">
-                                <div class="icon-sort-asc"></div>
+            <table class="table basic table-bordered mrT2 onMobileView">
+                <thead class="t-h-bg1">
+                    <tr (clickOutside)="inlineSearch = null">
+                        <th class="text-center">S. No</th>
+                        <th class="td_in_searchBox" (click)="sortReverseChargeList('entryDate')">Entry Date <span
+                            [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : reverseChargeReportRequest.sortBy === 'entryDate', 'icon-sort-asc': !reverseChargeReportRequest.sort || reverseChargeReportRequest.sortBy !== 'entryDate' || (reverseChargeReportRequest.sort === 'asc' && reverseChargeReportRequest.sortBy === 'entryDate'), 'icon-sort-dsc': (reverseChargeReportRequest.sort === 'desc' && reverseChargeReportRequest.sortBy === 'entryDate')}"></span>
+                        </th>
+                        <th width="13%" class="bdrR bdrB td_in_searchBox">
+                            <div [hidden]="inlineSearch == 'suppliersName'">
+                                <span>Supplier's Name</span>
+                                <i class="icon-search" (click)="focusOnColumnSearch('suppliersName');"></i>
                             </div>
-                        </div>
-                    </th>
-
-                    <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
-                        (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
-                        <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Suppliers Name', fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
-                    </th>
-
-                    <th>Vouchter Type</th>
-
-                    <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
-                        (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
-                        <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Invoice No.', fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
-                    </th>
-
-
-                    <th>Supplier's Invoice Date</th>
-
-                    <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
-                        (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
-                        <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Supplier Country', fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
-                    </th>
-
-                    <th>
-                        <div class="d-flex align-items-center">
-                            Taxable Value
-                            <div class="icon-pointer pl-1 pointer">
-                                <div class="icon-sort-asc"></div>
+                            <div class="input-container" [hidden]="inlineSearch !== 'suppliersName'">
+                                <input type="text" placeholder="Suppliers Name" class="w100" #suppliersNameField name="suppliersName" (keypress)="columnSearch()" (keydown)="columnSearch()" [(ngModel)]="reverseChargeReportRequest.supplierName" />
                             </div>
-                        </div>
-                    </th>
-                    <th>Tax Rate</th>
-                    <th>
-                        <div class="d-flex align-items-center">
-                            Tax Amount
-                            <div class="icon-pointer pl-1 pointer">
-                                <div class="icon-sort-asc"></div>
+                        </th>
+                        <th>Voucher Type</th>
+                        <th width="13%" class="bdrR bdrB td_in_searchBox">
+                            <div [hidden]="inlineSearch == 'invoiceNumber'">
+                                <span>Invoice No.</span>
+                                <i class="icon-search" (click)="focusOnColumnSearch('invoiceNumber');"></i>
                             </div>
-                        </div>
-                </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let reverseChargeTables of reverseChargeTable">
-                    <td data-title="#" class="text-center">{{ reverseChargeTables.serialNo }} </td>
-                    <td data-title="Entry Date">{{ reverseChargeTables.entryDate }}</td>
-                    <td data-title="Supplier's Name">{{ reverseChargeTables.suppliersName }}</td>
-                    <td data-title="Vouchter Type">{{ reverseChargeTables.voucherType }}</td>
-                    <td data-title="Invoice No.">{{ reverseChargeTables.invoiceNo }}</td>
-                    <td data-title="Supplier's Invoice Date">{{ reverseChargeTables.suppliersInvoicDate }}</td>
-                    <td data-title="Supplier Country">{{ reverseChargeTables.suppliersCountry }}</td>
-                    <td data-title="Taxable Value">{{ reverseChargeTables.taxableBalue }}</td>
-                    <td data-title="Tax Rate">{{ reverseChargeTables.taxRate }}</td>
-                    <td data-title="Tax Amount">{{ reverseChargeTables.taxAmount }}</td>
-                </tr>
-            </tbody>
-
-        </table>
+                            <div class="input-container" [hidden]="inlineSearch !== 'invoiceNumber'">
+                                <input type="text" placeholder="Invoice No." class="w100" #invoiceNumberField name="invoiceNumber" (keypress)="columnSearch()" (keydown)="columnSearch()" [(ngModel)]="reverseChargeReportRequest.invoiceNumber" />
+                            </div>
+                        </th>
+                        <th class="td_in_searchBox" (click)="sortReverseChargeList('supplierInvoiceDate')">Supplier's Invoice Date <span
+                            [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : reverseChargeReportRequest.sortBy === 'supplierInvoiceDate', 'icon-sort-asc': !reverseChargeReportRequest.sort || reverseChargeReportRequest.sortBy !== 'supplierInvoiceDate' || (reverseChargeReportRequest.sort === 'asc' && reverseChargeReportRequest.sortBy === 'supplierInvoiceDate'), 'icon-sort-dsc': (reverseChargeReportRequest.sort === 'desc' && reverseChargeReportRequest.sortBy === 'supplierInvoiceDate')}"></span>
+                        </th>
+                        <th width="13%" class="bdrR bdrB td_in_searchBox">
+                            <div [hidden]="inlineSearch == 'supplierCountry'">
+                                <span>Supplier's Country</span>
+                                <i class="icon-search" (click)="focusOnColumnSearch('supplierCountry');"></i>
+                            </div>
+                            <div class="input-container" [hidden]="inlineSearch !== 'supplierCountry'">
+                                <input type="text" placeholder="Supplier Country" class="w100" #supplierCountryField name="supplierCountry" (keypress)="columnSearch()" (keydown)="columnSearch()" [(ngModel)]="reverseChargeReportRequest.supplierCountry" />
+                            </div>
+                        </th>
+                        <th class="td_in_searchBox" (click)="sortReverseChargeList('taxableValue')">Taxable Value <span
+                            [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : reverseChargeReportRequest.sortBy === 'taxableValue', 'icon-sort-asc': !reverseChargeReportRequest.sort || reverseChargeReportRequest.sortBy !== 'taxableValue' || (reverseChargeReportRequest.sort === 'asc' && reverseChargeReportRequest.sortBy === 'taxableValue'), 'icon-sort-dsc': (reverseChargeReportRequest.sort === 'desc' && reverseChargeReportRequest.sortBy === 'taxableValue')}"></span>
+                        </th>
+                        <th>Tax Rate</th>
+                        <th class="td_in_searchBox" (click)="sortReverseChargeList('taxAmount')">Tax Amount <span
+                            [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : reverseChargeReportRequest.sortBy === 'taxAmount', 'icon-sort-asc': !reverseChargeReportRequest.sort || reverseChargeReportRequest.sortBy !== 'taxAmount' || (reverseChargeReportRequest.sort === 'asc' && reverseChargeReportRequest.sortBy === 'taxAmount'), 'icon-sort-dsc': (reverseChargeReportRequest.sort === 'desc' && reverseChargeReportRequest.sortBy === 'taxAmount')}"></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="reverseChargeReportResults && reverseChargeReportResults.items && reverseChargeReportResults.items.length > 0">
+                    <tr *ngFor="let reverseCharge of reverseChargeReportResults.items">
+                        <td data-title="S. No" class="text-center">{{ reverseCharge.sno }} </td>
+                        <td data-title="Entry Date">{{ reverseCharge.entryDate }}</td>
+                        <td data-title="Supplier's Name">{{ reverseCharge.supplierName }}</td>
+                        <td data-title="Voucher Type">{{ reverseCharge.voucherType }}</td>
+                        <td data-title="Invoice No.">{{ reverseCharge.invoiceNumber }}</td>
+                        <td data-title="Supplier's Invoice Date">{{ reverseCharge.supplierInvoiceDate }}</td>
+                        <td data-title="Supplier's Country">{{ reverseCharge.suppliersCountry }}</td>
+                        <td data-title="Taxable Value">{{activeCompany.baseCurrencySymbol}} {{ reverseCharge.taxableValue }}</td>
+                        <td data-title="Tax Rate">{{ reverseCharge.taxRate }}%</td>
+                        <td data-title="Tax Amount">{{activeCompany.baseCurrencySymbol}} {{ reverseCharge.taxAmount }}</td>
+                    </tr>
+                </tbody>
+                <tbody *ngIf="!reverseChargeReportResults || !reverseChargeReportResults.items || reverseChargeReportResults.items.length === 0">
+                    <tr>
+                        <td *ngIf="!isLoading" colspan="10" align="center">No records found.</td>
+                        <td *ngIf="isLoading" colspan="10">&nbsp;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="paginationWrapper" *ngIf="reverseChargeReportResults.totalPages > 1">
+            <pagination [totalItems]="reverseChargeReportResults.totalPages" [(ngModel)]="reverseChargeReportResults.page"
+                [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false"
+                (pageChanged)="pageChanged($event)"></pagination>
+        </div>
     </div>
+    <div class=" mt-5 invoiceFooter row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex total-due-sale-wrap">
+            <div class="col-sm-6 totalDueSale"><h3>Total Taxable Value: </h3>
+                <h1>{{activeCompany?.baseCurrencySymbol}} {{reverseChargeReportResults?.totalTaxableValue}}<span>/-</span></h1>
+            </div>
+            <div class="col-sm-6 totalDueSale">
+                <h3>Total Tax Amount:</h3>
+                <h1>{{activeCompany?.baseCurrencySymbol}} {{reverseChargeReportResults?.totalTaxAmount}}<span>/-</span></h1>
+            </div>
+        </div>
     </div>
 </div>
-
-
-<!-- region search template (developer end) -->
-<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
-    <div *ngIf="show">
-        <span> {{ title }}</span>
-        <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
-    </div>
-    <div class="input-container" *ngIf="!show">
-        <input type="text" placeholder="Search {{ title }}" class="form-control" #searchBox [formControl]="formControl" />
-    </div>
-</ng-template>
-<!-- endregion -->
