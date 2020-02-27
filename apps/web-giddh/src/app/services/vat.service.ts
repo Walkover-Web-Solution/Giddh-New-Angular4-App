@@ -5,7 +5,7 @@ import { VAT_API } from './apiurls/vat.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { UserDetails } from "../models/api-models/loginModels";
-import { VatReportRequest, VatReportResponse } from '../models/api-models/Vat';
+import { VatReportRequest, VatReportResponse, VatReportTransactionsRequest } from '../models/api-models/Vat';
 import { ErrorHandler } from "./catchManager/catchmanger";
 import { HttpWrapperService } from "./httpWrapper.service";
 import { Observable } from "rxjs";
@@ -20,11 +20,11 @@ export class VatService {
         this.user = this._generalService.user;
     }
 
-    public GetVatReport(request: VatReportRequest): Observable<BaseResponse<any, any>> {
+    public getVatReport(request: VatReportRequest): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
 
-        let url = this.config.apiUrl + VAT_API.VIEWREPORT;
+        let url = this.config.apiUrl + VAT_API.VIEW_REPORT;
         url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url.replace(':from', request.from);
         url = url.replace(':to', request.to);
@@ -36,11 +36,11 @@ export class VatService {
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 
-    public DownloadVatReport(request: VatReportRequest): Observable<BaseResponse<any, any>> {
+    public downloadVatReport(request: VatReportRequest): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
 
-        let url = this.config.apiUrl + VAT_API.DOWNLOADREPORT;
+        let url = this.config.apiUrl + VAT_API.DOWNLOAD_REPORT;
         url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url.replace(':from', request.from);
         url = url.replace(':to', request.to);
@@ -48,6 +48,30 @@ export class VatService {
         return this._http.get(url).pipe(
             map((res) => {
                 return res;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
+    }
+
+    /**
+     * This will get the transaction of vat report
+     *
+     * @param {string} companyUniqueName
+     * @param {VatReportTransactionsRequest} request
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof VatService
+     */
+    public getVatReportTransactions(companyUniqueName: string, request: VatReportTransactionsRequest): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + VAT_API.VIEW_TRANSACTIONS_REPORT;
+        url = url.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        url = url.replace(':from', request.from);
+        url = url.replace(':to', request.to);
+        url = url.replace(':taxNumber', request.taxNumber);
+        url = url.replace(':section', request.section);
+        url = url.replace(':page', request.page);
+        url = url.replace(':count', request.count);
+        return this._http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                return data;
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 }

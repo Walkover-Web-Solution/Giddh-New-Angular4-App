@@ -167,14 +167,16 @@ export class SettingsProfileActions {
     }
 
     public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-        if (response.status === 'error') {
-            if (showToast) {
-                this.toasty.errorToast(response.message);
-            }
-            return errorAction;
-        } else {
-            if (showToast && typeof response.body === 'string') {
-                this.toasty.successToast(response.body);
+        if (response) {
+            if (response.status === 'error') {
+                if (showToast) {
+                    this.toasty.errorToast(response.message);
+                }
+                return errorAction;
+            } else {
+                if (showToast && typeof response.body === 'string') {
+                    this.toasty.successToast(response.body);
+                }
             }
         }
         return successAction;

@@ -116,7 +116,7 @@ export const ROUTES: Routes = [
 
             { path: 'expenses-manager', loadChildren: './expenses/expenses.module#ExpensesModule', canActivate: [NeedsAuthorization] },
 
-            { path: 'vat-report', loadChildren: './vat-report/vatReport.module#VarReportModule', canActivate: [NeedsAuthorization] },
+            { path: 'vat-report', loadChildren: './vat-report/vatReport.module#VatReportModule', canActivate: [NeedsAuthorization] },
             { path: 'purchase-management', loadChildren: './purchase/purchase.module#PurchaseModule', canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
             // {path: '**', pathMatch: 'full', component: NotFoundComponent},
