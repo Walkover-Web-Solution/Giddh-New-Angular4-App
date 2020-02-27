@@ -12,4 +12,8 @@ export class ReportsDashboardComponent implements OnInit {
 
     ngOnInit() {
     }
+
+    openReverseChargeReport() {
+        this.router.navigate(['/pages/reports/reverse-charge']);
+    }
 }

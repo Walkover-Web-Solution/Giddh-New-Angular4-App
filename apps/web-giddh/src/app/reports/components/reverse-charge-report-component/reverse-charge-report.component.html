@@ -1,0 +1,87 @@
+<div class="reverse-table-report">
+    <div class="container-fluid">
+        <div class="invoice-preview  table-responsive">
+        <table class="table basic table-bordered mrT2 onMobileView">
+            <thead class="t-h-bg1">
+                <tr>
+                    <th class="text-center">#</th>
+                    <th class="td_in_searchBox">
+                        <div class="d-flex align-items-center">
+                            Entry Date
+                            <div class="icon-pointer pl-1 pointer">
+                                <div class="icon-sort-asc"></div>
+                            </div>
+                        </div>
+                    </th>
+
+                    <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
+                        (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
+                        <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Suppliers Name', fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
+                    </th>
+
+                    <th>Vouchter Type</th>
+
+                    <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
+                        (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
+                        <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Invoice No.', fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
+                    </th>
+
+
+                    <th>Supplier's Invoice Date</th>
+
+                    <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
+                        (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
+                        <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Supplier Country', fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
+                    </th>
+
+                    <th>
+                        <div class="d-flex align-items-center">
+                            Taxable Value
+                            <div class="icon-pointer pl-1 pointer">
+                                <div class="icon-sort-asc"></div>
+                            </div>
+                        </div>
+                    </th>
+                    <th>Tax Rate</th>
+                    <th>
+                        <div class="d-flex align-items-center">
+                            Tax Amount
+                            <div class="icon-pointer pl-1 pointer">
+                                <div class="icon-sort-asc"></div>
+                            </div>
+                        </div>
+                </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let reverseChargeTables of reverseChargeTable">
+                    <td data-title="#" class="text-center">{{ reverseChargeTables.serialNo }} </td>
+                    <td data-title="Entry Date">{{ reverseChargeTables.entryDate }}</td>
+                    <td data-title="Supplier's Name">{{ reverseChargeTables.suppliersName }}</td>
+                    <td data-title="Vouchter Type">{{ reverseChargeTables.voucherType }}</td>
+                    <td data-title="Invoice No.">{{ reverseChargeTables.invoiceNo }}</td>
+                    <td data-title="Supplier's Invoice Date">{{ reverseChargeTables.suppliersInvoicDate }}</td>
+                    <td data-title="Supplier Country">{{ reverseChargeTables.suppliersCountry }}</td>
+                    <td data-title="Taxable Value">{{ reverseChargeTables.taxableBalue }}</td>
+                    <td data-title="Tax Rate">{{ reverseChargeTables.taxRate }}</td>
+                    <td data-title="Tax Amount">{{ reverseChargeTables.taxAmount }}</td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+    </div>
+</div>
+
+
+<!-- region search template (developer end) -->
+<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
+    <div *ngIf="show">
+        <span> {{ title }}</span>
+        <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+    </div>
+    <div class="input-container" *ngIf="!show">
+        <input type="text" placeholder="Search {{ title }}" class="form-control" #searchBox [formControl]="formControl" />
+    </div>
+</ng-template>
+<!-- endregion -->
