@@ -62,13 +62,13 @@ export class ReverseChargeReport implements OnInit {
 
     ]
 
-    public toggleSearch(fieldName: string, el: any) {
+    public toggleSearch(fieldName: string, searchElement: any) {
         if (fieldName === 'invoiceNumber') {
             this.showEntryDate = true;
         }
 
         setTimeout(() => {
-            el.focus();
+            searchElement.focus();
         }, 200);
     }
 }

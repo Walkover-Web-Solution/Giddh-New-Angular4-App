@@ -75,11 +75,11 @@
 
 <!-- region search template (developer end) -->
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
-    <div [hidden]="show">
+    <div *ngIf="show">
         <span> {{ title }}</span>
         <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
     </div>
-    <div class="input-container" [hidden]="!show">
+    <div class="input-container" *ngIf="!show">
         <input type="text" placeholder="Search {{ title }}" class="w100" #searchBox [formControl]="formControl" />
     </div>
 </ng-template>
