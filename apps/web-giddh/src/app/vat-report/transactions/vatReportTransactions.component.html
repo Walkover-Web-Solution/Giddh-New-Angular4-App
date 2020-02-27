@@ -22,7 +22,7 @@
                 <tbody *ngIf="vatReportTransactions.results && vatReportTransactions.results.length > 0">
                     <tr *ngFor="let item of vatReportTransactions.results; let i = index;">
                         <td>{{ item.voucherDate }}</td>
-                        <td>{{ item.voucherNumber }}</td>
+                        <td><a href="javascript:;" (click)="onSelectInvoice(item)">{{ (item.voucherNumber) ? item.voucherNumber : '-' }}</a></td>
                         <td>{{ item.customerName }}</td>
                         <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ item.taxableAmount | giddhCurrency }}</td>
                         <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ item.vatAmount | giddhCurrency }}</td>
@@ -43,6 +43,25 @@
             <pagination [totalItems]="vatReportTransactions.totalPages" [(ngModel)]="vatReportTransactions.page"
                 [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
                 (pageChanged)="pageChanged($event)"></pagination>
+        </div>
+    </div>
+</div>
+
+<!-- Download or Send Invoice on mail -->
+<div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div element-view-container-ref #downloadOrSendMailComponent=elementviewcontainerref>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal dialog -->
+<div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
+    <div class="modal-dialog gray modal-liquid">
+        <div class="modal-content">
+            <invoice-generate-model (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>
         </div>
     </div>
 </div>

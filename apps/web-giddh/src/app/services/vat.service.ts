@@ -9,7 +9,6 @@ import { VatReportRequest, VatReportResponse, VatReportTransactionsRequest } fro
 import { ErrorHandler } from "./catchManager/catchmanger";
 import { HttpWrapperService } from "./httpWrapper.service";
 import { Observable } from "rxjs";
-import { GroupCreateRequest, GroupResponse } from "../models/api-models/Group";
 
 @Injectable()
 export class VatService {

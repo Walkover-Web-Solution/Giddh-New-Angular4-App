@@ -8,12 +8,9 @@ import { Router } from "@angular/router";
 })
 export class ReportsDashboardComponent implements OnInit {
 
-    constructor(private router: Router) { }
+    constructor() { }
 
     ngOnInit() {
-    }
 
-    openReverseChargeReport() {
-        this.router.navigate(['/pages/reports/reverse-charge']);
     }
 }
