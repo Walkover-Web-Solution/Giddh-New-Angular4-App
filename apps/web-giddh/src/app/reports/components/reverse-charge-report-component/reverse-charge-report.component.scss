@@ -1,12 +1,16 @@
-.td_in_searchBox div i {
-    margin-top: 1px;
-    color: #757bb9;
-    padding-right: 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    padding-left: 8px;
-}
-.td_in_searchBox div {
-    display: flex;
+.td_in_searchBox {
+    div {
+        .td_in_searchBox {
+            display: flex;
+        }
+        i {
+            margin-top: 1px;
+            color: $iconColorTh;
+            padding-right: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding-left: 8px;
+        }
+    }
 }
