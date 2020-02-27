@@ -3,7 +3,7 @@
         <div class="invoice-preview  table-responsive">
             <table class="table basic table-bordered mrT2 onMobileView">
                 <thead class="t-h-bg1">
-                    <tr>
+                    <tr (clickOutside)="inlineSearch = null">
                         <th class="text-center">#</th>
                         <th class="td_in_searchBox">
                             <div class="d-flex align-items-center">
@@ -13,21 +13,49 @@
                                 </div>
                             </div>
                         </th>
-                        <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
-                            (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
-                            <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Suppliers Name', fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
+
+                        <th width="13%" class="bdrR bdrB td_in_searchBox">
+                            <div [hidden]="inlineSearch == 'suppliersName'">
+                                <span>Suppliers Name</span>
+                                <i class="icon-search" (click)="focusOnColumnSearch('suppliersName');"></i>
+                            </div>
+                            <div class="input-container" [hidden]="inlineSearch !== 'suppliersName'">
+                                <input type="text" placeholder="Suppliers Name" class="w100" #suppliersNameField
+                                    name="suppliersName"
+                                    (keypress)="columnSearch()" (keydown)="columnSearch()" />
+                            </div>
                         </th>
 
                         <th>Voucher Type</th>
-                        <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
-                            (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
-                            <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Invoice No.', fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
+
+
+                        <th width="13%" class="bdrR bdrB td_in_searchBox">
+                            <div [hidden]="inlineSearch == 'invoiceNo'">
+                                <span>Invoice No.</span>
+                                <i class="icon-search" (click)="focusOnColumnSearch('invoiceNo');"></i>
+                            </div>
+                            <div class="input-container" [hidden]="inlineSearch !== 'invoiceNo'">
+                                <input type="text" placeholder="Invoice No." class="w100" #invoiceNoField
+                                    name="invoiceNo"
+                                    (keypress)="columnSearch()" (keydown)="columnSearch()" />
+                            </div>
                         </th>
+
+
                         <th>Supplier's Invoice Date</th>
-                        <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
-                            (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
-                            <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Supplier Country', fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
+
+                        <th width="13%" class="bdrR bdrB td_in_searchBox">
+                            <div [hidden]="inlineSearch == 'supplierCountry'">
+                                <span>Supplier Country</span>
+                                <i class="icon-search" (click)="focusOnColumnSearch('supplierCountry');"></i>
+                            </div>
+                            <div class="input-container" [hidden]="inlineSearch !== 'supplierCountry'">
+                                <input type="text" placeholder="Supplier Country" class="w100" #supplierCountryField
+                                    name="supplierCountry"
+                                    (keypress)="columnSearch()" (keydown)="columnSearch()" />
+                            </div>
                         </th>
+
                         <th>
                             <div class="d-flex align-items-center">
                                 Taxable Value
@@ -75,14 +103,17 @@
                 (pageChanged)="pageChanged($event)"></pagination>
         </div>
     </div>
-</div>
 
-<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
-    <div *ngIf="show">
-        <span> {{ title }}</span>
-        <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
-    </div>
-    <div class="input-container" *ngIf="!show">
-        <input type="text" placeholder="Search {{ title }}" class="form-control" #searchBox [formControl]="formControl" />
-    </div>
-</ng-template>
+
+    <div class=" mt-5 invoiceFooter row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex total-due-sale-wrap">
+            <div class="col-sm-6 totalDueSale"><h3 class=""> Total Sale: </h3>
+                <h1>₹0.00<!----><span>/-</span></h1>
+            </div><!---->
+            <div class="col-sm-6 totalDueSale">
+                <h3>Total Due:</h3>
+                <h1>₹0.00<!----><span>/-</span></h1>
+            </div>
+        </div>
+      </div>
+</div>

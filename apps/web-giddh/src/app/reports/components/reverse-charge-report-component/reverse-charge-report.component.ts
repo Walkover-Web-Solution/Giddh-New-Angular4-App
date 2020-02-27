@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { ReverseChargeReportRequest } from '../../../models/api-models/ReverseCharge';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -15,6 +15,9 @@ import { ReverseChargeService } from '../../../services/reversecharge.service';
 })
 
 export class ReverseChargeReport implements OnInit, OnDestroy {
+    public inlineSearch: any = '';
+    //@ViewChild('warehouseNameField') public warehouseNameField;
+
     public showEntryDate = true;
     public activeCompanyUniqueName$: Observable<string>;
     public activeCompany: any;
@@ -52,10 +55,16 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         });
     }
 
-    public toggleSearch(fieldName: string) {
-        if (fieldName === 'invoiceNumber') {
-            this.showEntryDate = true;
-        }
+    public focusOnColumnSearch(inlineSearch) {
+        this.inlineSearch = inlineSearch;
+
+        setTimeout(() => {
+            if (this.inlineSearch === 'senderReceiver') {
+                //this.senderReceiverField.nativeElement.focus();
+            } else if (this.inlineSearch === 'warehouseName') {
+                //this.warehouseNameField.nativeElement.focus();
+            }
+        }, 200);
     }
 
     /**
