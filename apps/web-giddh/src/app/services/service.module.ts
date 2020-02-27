@@ -63,6 +63,7 @@ import { CommandKService } from './commandk.service';
 import { PurchaseRecordService } from './purchase-record.service';
 import { InvoiceBulkUpdateService } from './invoice.bulkupdate.service';
 import { EcommerceService } from './ecommerce.service';
+import { ReverseChargeService } from './reversecharge.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -133,7 +134,8 @@ export class ServiceModule {
                 VatService,
                 CommandKService,
                 InvoiceBulkUpdateService,
-                EcommerceService
+                EcommerceService,
+                ReverseChargeService
             ]
         };
     }
