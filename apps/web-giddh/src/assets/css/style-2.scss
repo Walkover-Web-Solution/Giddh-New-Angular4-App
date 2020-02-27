@@ -811,7 +811,11 @@ ul.sub-list {
 }
 
 .bold {
-    font-family: "" opensans-semibold "";
+    font-family: $tableFontSemibold;
+}
+
+.font-bold {
+    font-family: $tableFontBold;
 }
 
 .modal-open {
