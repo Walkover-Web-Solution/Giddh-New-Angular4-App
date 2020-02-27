@@ -54,3 +54,30 @@
 .icon-pointer.activeTextColor {
     color: #01a9f4;
 }
+.voucher-type-dropdown {
+    width: 35px;
+    float: right;
+}
+.voucher-type-dropdown .btn {
+    padding: 0 8px;
+    margin-right: 0px;
+}
+.icon-calender {
+    position: absolute;
+    z-index: 9;
+    height: 32px;
+    width: 32px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid #d9d9d9;
+    color: #999999;
+    left: 0;
+}
+.input-grp-dateRangePicker input.form-control {
+    padding-left: 35px !important;
+    width: 210px;
+}
+#dropdown-alignment {
+    margin-top: 25px;
+}
