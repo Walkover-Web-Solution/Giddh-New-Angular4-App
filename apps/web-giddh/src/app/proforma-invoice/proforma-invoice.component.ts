@@ -812,6 +812,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
 
                 // update mode because voucher details is available
+                /** results[1] :- get voucher details response */
                 if (results[0] && results[1]) {
                     let obj;
 
@@ -864,10 +865,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                     this.getCurrencyRate(this.companyCurrency, vendorCurrency);
                                 }
                             }
-                        } else {
+                        }else {
                             obj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
                         }
                     }
+                    /** Tourist scheme added in case of sales invoice  */
+                     if (this.isSalesInvoice) {
+                            if (results[1] && results[1].touristSchemeApplicable) {
+                                obj.touristSchemeApplicable = results[1].touristSchemeApplicable;
+                                obj.passportNumber = results[1].passportNumber;
+                            } else {
+                                obj.touristSchemeApplicable = false;
+                                obj.passportNumber = '';
+                            }
+                        }
 
                     if (obj.voucherDetails) {
 
