@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Arvo:400,700|Inconsolata");
 @font-face {
     font-family: "opensans-regular";
+    font-display: swap;
     src: url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot");
     src: url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot?#iefix")
             format("embedded-opentype"),
@@ -17,6 +18,7 @@
 
 @font-face {
     font-family: "opensans-semibold";
+    font-display: swap;
     src: url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.eot");
     src: url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.eot?#iefix")
             format("embedded-opentype"),
@@ -32,6 +34,7 @@
 }
 @font-face {
     font-family: "opensans-bold";
+    font-display: swap;
     src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot");
     src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot?#iefix")
             format("embedded-opentype"),
@@ -47,6 +50,7 @@
 }
 @font-face {
     font-family: "opensans-extra-bold";
+    font-display: swap;
     src: url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.eot");
     src: url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.eot?#iefix")
             format("embedded-opentype"),

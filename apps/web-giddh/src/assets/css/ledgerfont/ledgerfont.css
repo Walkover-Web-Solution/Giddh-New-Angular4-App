@@ -1,5 +1,8 @@
 @font-face {
     font-family: "ledgerfont";
+    font-display: swap;
+    font-weight: normal;
+    font-style: normal;
     src: url("../../fonts/ledgerfont/ledgerfont.eot?61305536");
     src: url("../../fonts/ledgerfont/ledgerfont.eot?61305536#iefix")
             format("embedded-opentype"),
@@ -8,8 +11,6 @@
         url("../../fonts/ledgerfont/ledgerfont.ttf?61305536") format("truetype"),
         url("../../fonts/ledgerfont/ledgerfont.svg?61305536#ledgerfont")
             format("svg");
-    font-weight: normal;
-    font-style: normal;
 }
 /* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
 /* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
