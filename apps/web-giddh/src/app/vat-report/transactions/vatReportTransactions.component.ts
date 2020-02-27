@@ -184,7 +184,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
             let downloadVoucherRequestObject = {
                 voucherNumber: [invoice.voucherNumber],
                 voucherType: invoice.voucherType,
-                accountUniqueName: invoice.account.uniqueName
+                accountUniqueName: invoice.accountUniqueName
             };
             this._store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
             this.loadDownloadOrSendMailComponent();
