@@ -31,8 +31,6 @@ import { AdvanceReceiptReport } from './components/advance-receipt-report/advanc
 import { AdjustInvoiceAdvanceSearchComponent } from './components/adjust-invoice-advance-search/adjust-invoice-advance-search.component';
 import { RefundAmountComponent } from './components/refund-amount/refund-amount.component';
 import { AdjustInvoiceModalComponent } from './components/adjust-invoice-modal/adjust-invoice-modal.component';
-// import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-
 
 @NgModule({
     declarations: [

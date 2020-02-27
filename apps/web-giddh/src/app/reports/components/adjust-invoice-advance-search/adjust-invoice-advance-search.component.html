@@ -6,13 +6,13 @@
         </button>
       </div>
       <div class="modal-body font-14">
-          <div class="clearfix pt-1 pb-1 pl-1 pr-1">
+          <div class="clearfix pd-1">
             <form>
                 <div class="row">
                     <label class="col-md-3">Adjustment Voucher</label>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" [(ngModel)]="tempDateParams.adjustmentVoucher" [placeholder]="'Select Account'" [notFoundLink]="false"
+                            <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" [(ngModel)]="tempDateParams.adjustmentVoucher" placeholder="Select Account" [notFoundLink]="false"
                             [multiple]="false" [ItemHeight]="33">
                                 <ng-template #optionTemplate1 let-option="option">
                                     <a href="javascript:void(0)" class="list-item">

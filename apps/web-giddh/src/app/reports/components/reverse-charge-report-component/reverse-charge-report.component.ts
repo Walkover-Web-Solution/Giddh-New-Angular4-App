@@ -7,16 +7,9 @@ import { Router } from '@angular/router';
     styleUrls: ['./reverse-charge-report.component.scss']
 })
 export class ReverseChargeReport implements OnInit {
-
     public showEntryDate = true;
-
     constructor() { }
-
     ngOnInit() { }
-
-
-
-
     reverseChargeTable = [
         {
             serialNo: "1",
@@ -29,8 +22,6 @@ export class ReverseChargeReport implements OnInit {
             taxableBalue: "3000",
             taxRate: "5%",
             taxAmount: "190"
-
-
         },
         {
             serialNo: "2",
