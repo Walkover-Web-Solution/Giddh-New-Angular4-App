@@ -8,4 +8,5 @@ export class ReverseChargeReportRequest {
     supplierName: any;
     invoiceNumber: any;
     supplierCountry: any;
+    voucherType: any;
 }

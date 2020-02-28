@@ -4,14 +4,10 @@
         <div class="mt-2 mb-2 input-grp-dateRangePicker">
             <div class="input-group">
                 <div class="form-group">
-                    <!-- <span class="icon-calender" (click)="dp.toggle()"></span> <input type="text" readonly
-                        placeholder="Select Date" class="form-control" #dp="bsDaterangepicker"
-                        [bsValue]="dateRangePickerValue" (bsValueChange)="setFilterDate($event)" bsDaterangepicker> -->
+                    <span class="icon-calender" (click)="dp.toggle()"></span> <input type="text" readonly placeholder="Select Date" class="form-control" #dp="bsDaterangepicker" [(ngModel)]="datePicker" (bsValueChange)="changeFilterDate($event)" bsDaterangepicker>
                 </div>
             </div>
         </div>
-
-
         <div class="invoice-preview  table-responsive">
             <table class="table basic table-bordered onMobileView">
                 <thead class="t-h-bg1">
@@ -29,28 +25,21 @@
                                 <input type="text" placeholder="Suppliers Name" class="w100" #suppliersNameField name="suppliersName" (keypress)="columnSearch()" (keydown)="columnSearch()" [(ngModel)]="reverseChargeReportRequest.supplierName" />
                             </div>
                         </th>
-
                         <th>
                             Voucher Type
-
                             <div class="voucher-type-dropdown">
                                 <div class="btn-group d-inline-block" dropdown container="body" placement="bottom right">
-                                    <a href="javascript:void(0)" id="button-basic" dropdownToggle class="btn dropdown-toggle"
-                                            aria-controls="dropdown-alignment">
-                                        <!-- <i class="fa fa-ellipsis-v" (click)="showMoreBtn=!showMoreBtn;selectedItemForMoreBtn = item.voucherNumber"></i> -->
+                                    <a href="javascript:void(0)" id="button-basic" dropdownToggle class="btn dropdown-toggle" aria-controls="dropdown-alignment">
+                                        <i class="fa fa-ellipsis-v"></i>
                                     </a>
                                     <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
                                         role="menu" aria-labelledby="button-alignment">
-                                      <li role="menuitem"><a class="dropdown-item" href="#">General</a></li>
-                                      <li role="menuitem"><a class="dropdown-item" href="#">Purchase</a></li>
+                                      <li role="menuitem"><a class="dropdown-item" href="javascript:;" (click)="changeVoucherType('Journal');">Journal</a></li>
+                                      <li role="menuitem"><a class="dropdown-item" href="javascript:;" (click)="changeVoucherType('Purchase');">Purchase</a></li>
                                     </ul>
                                 </div>
                             </div>
-
-
-                            </th>
-
-
+                        </th>
                         <th width="13%" class="bdrR bdrB td_in_searchBox">
                             <div [hidden]="inlineSearch == 'invoiceNumber'">
                                 <span>Invoice No.</span>

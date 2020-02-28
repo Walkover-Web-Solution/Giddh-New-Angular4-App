@@ -2,11 +2,14 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@ang
 import { ReverseChargeReportRequest } from '../../../models/api-models/ReverseCharge';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { Observable, ReplaySubject } from 'rxjs';
-import { Store, select } from '@ngrx/store';
+import { Store, select, createSelector } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { take, takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../../services/toaster.service';
 import { ReverseChargeService } from '../../../services/reversecharge.service';
+import { BsDaterangepickerConfig } from 'ngx-bootstrap';
+import * as moment from 'moment/moment';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'reverse-charge-report',
@@ -33,15 +36,20 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         count: PAGINATION_LIMIT,
         supplierName: '',
         invoiceNumber: '',
-        supplierCountry: ''
+        supplierCountry: '',
+        voucherType: ''
     };
     public isLoading: boolean = false;
     public reverseChargeReportResults: any = {};
     public paginationLimit: number = PAGINATION_LIMIT;
     public timeout: any;
+    public bsConfig: Partial<BsDaterangepickerConfig> = { showWeekNumbers: false, dateInputFormat: GIDDH_DATE_FORMAT, rangeInputFormat: GIDDH_DATE_FORMAT };
+    public universalDate$: Observable<any>;
+    public datePicker: any[] = [];
 
     constructor(private store: Store<AppState>, private toasty: ToasterService, private cdRef: ChangeDetectorRef, private reverseChargeService: ReverseChargeService) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
+        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
     }
 
     /**
@@ -63,6 +71,17 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                 });
             });
         });
+
+        this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
+            if (dateObj && !this.datePicker[0]) {
+                let universalDate = _.cloneDeep(dateObj);
+                this.datePicker = [moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(), moment(universalDate[1], GIDDH_DATE_FORMAT).toDate()];
+
+                this.reverseChargeReportRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.reverseChargeReportRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.getReverseChargeReport(false);
+            }
+        })).pipe(takeUntil(this.destroyed$)).subscribe();
     }
 
     /**
@@ -116,7 +135,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public getReverseChargeReport(resetPage: boolean): void {
-        if (this.activeCompany && !this.isLoading) {
+        if (this.activeCompany && this.reverseChargeReportRequest.from && this.reverseChargeReportRequest.to && !this.isLoading) {
             this.isLoading = true;
 
             if (resetPage) {
@@ -170,6 +189,31 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.reverseChargeReportRequest.sort = sort;
         this.reverseChargeReportRequest.sortBy = sortBy;
 
+        this.getReverseChargeReport(true);
+    }
+
+    /**
+     * This will filter the report by date
+     *
+     * @param {*} date
+     * @memberof ReverseChargeReport
+     */
+    public changeFilterDate(date): void {
+        if (date) {
+            this.reverseChargeReportRequest.from = moment(date[0]).format(GIDDH_DATE_FORMAT);
+            this.reverseChargeReportRequest.to = moment(date[1]).format(GIDDH_DATE_FORMAT);
+            this.getReverseChargeReport(true);
+        }
+    }
+
+    /**
+     * This will filter the report by voucher type
+     *
+     * @param {string} voucherType
+     * @memberof ReverseChargeReport
+     */
+    public changeVoucherType(voucherType: string): void {
+        this.reverseChargeReportRequest.voucherType = voucherType;
         this.getReverseChargeReport(true);
     }
 }
