@@ -4,7 +4,7 @@
         <div class="mt-2 mb-2 input-grp-dateRangePicker">
             <div class="input-group">
                 <div class="form-group">
-                    <span class="icon-calender" (click)="dp.toggle()"></span> <input type="text" readonly placeholder="Select Date" class="form-control" #dp="bsDaterangepicker" [(ngModel)]="datePicker" (bsValueChange)="changeFilterDate($event)" bsDaterangepicker>
+                    <span class="icon-calender" (click)="dp.toggle()"></span> <input type="text" placeholder="Select Date" class="form-control" #dp="bsDaterangepicker" [(ngModel)]="datePicker" (bsValueChange)="changeFilterDate($event)" bsDaterangepicker [bsConfig]="bsConfig">
                 </div>
             </div>
         </div>
@@ -14,7 +14,7 @@
                     <tr (clickOutside)="inlineSearch = null">
                         <th class="text-center">S. No</th>
                         <th class="td_in_searchBox" (click)="sortReverseChargeList('entryDate')">Entry Date <span
-                            [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : reverseChargeReportRequest.sortBy === 'entryDate', 'icon-sort-asc': !reverseChargeReportRequest.sort || reverseChargeReportRequest.sortBy !== 'entryDate' || (reverseChargeReportRequest.sort === 'asc' && reverseChargeReportRequest.sortBy === 'entryDate'), 'icon-sort-dsc': (reverseChargeReportRequest.sort === 'desc' && reverseChargeReportRequest.sortBy === 'entryDate')}"></span>
+                            [ngClass]="{'sortingIcon icon-pointer': true, 'activeTextColor' : reverseChargeReportRequest.sortBy === 'entryDate', 'icon-sort-asc': !reverseChargeReportRequest.sort || reverseChargeReportRequest.sortBy !== 'entryDate' || (reverseChargeReportRequest.sort === 'asc' && reverseChargeReportRequest.sortBy === 'entryDate'), 'icon-sort-dsc': (reverseChargeReportRequest.sort === 'desc' && reverseChargeReportRequest.sortBy === 'entryDate')}"></span>
                         </th>
                         <th width="13%" class="bdrR bdrB td_in_searchBox">
                             <div [hidden]="inlineSearch == 'suppliersName'">
@@ -50,7 +50,7 @@
                             </div>
                         </th>
                         <th class="td_in_searchBox" (click)="sortReverseChargeList('supplierInvoiceDate')">Supplier's Invoice Date <span
-                            [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : reverseChargeReportRequest.sortBy === 'supplierInvoiceDate', 'icon-sort-asc': !reverseChargeReportRequest.sort || reverseChargeReportRequest.sortBy !== 'supplierInvoiceDate' || (reverseChargeReportRequest.sort === 'asc' && reverseChargeReportRequest.sortBy === 'supplierInvoiceDate'), 'icon-sort-dsc': (reverseChargeReportRequest.sort === 'desc' && reverseChargeReportRequest.sortBy === 'supplierInvoiceDate')}"></span>
+                            [ngClass]="{'sortingIcon icon-pointer': true, 'activeTextColor' : reverseChargeReportRequest.sortBy === 'supplierInvoiceDate', 'icon-sort-asc': !reverseChargeReportRequest.sort || reverseChargeReportRequest.sortBy !== 'supplierInvoiceDate' || (reverseChargeReportRequest.sort === 'asc' && reverseChargeReportRequest.sortBy === 'supplierInvoiceDate'), 'icon-sort-dsc': (reverseChargeReportRequest.sort === 'desc' && reverseChargeReportRequest.sortBy === 'supplierInvoiceDate')}"></span>
                         </th>
                         <th width="13%" class="bdrR bdrB td_in_searchBox">
                             <div [hidden]="inlineSearch == 'supplierCountry'">
@@ -62,11 +62,11 @@
                             </div>
                         </th>
                         <th class="td_in_searchBox" (click)="sortReverseChargeList('taxableValue')">Taxable Value <span
-                            [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : reverseChargeReportRequest.sortBy === 'taxableValue', 'icon-sort-asc': !reverseChargeReportRequest.sort || reverseChargeReportRequest.sortBy !== 'taxableValue' || (reverseChargeReportRequest.sort === 'asc' && reverseChargeReportRequest.sortBy === 'taxableValue'), 'icon-sort-dsc': (reverseChargeReportRequest.sort === 'desc' && reverseChargeReportRequest.sortBy === 'taxableValue')}"></span>
+                            [ngClass]="{'sortingIcon icon-pointer': true, 'activeTextColor' : reverseChargeReportRequest.sortBy === 'taxableValue', 'icon-sort-asc': !reverseChargeReportRequest.sort || reverseChargeReportRequest.sortBy !== 'taxableValue' || (reverseChargeReportRequest.sort === 'asc' && reverseChargeReportRequest.sortBy === 'taxableValue'), 'icon-sort-dsc': (reverseChargeReportRequest.sort === 'desc' && reverseChargeReportRequest.sortBy === 'taxableValue')}"></span>
                         </th>
                         <th>Tax Rate</th>
                         <th class="td_in_searchBox" (click)="sortReverseChargeList('taxAmount')">Tax Amount <span
-                            [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : reverseChargeReportRequest.sortBy === 'taxAmount', 'icon-sort-asc': !reverseChargeReportRequest.sort || reverseChargeReportRequest.sortBy !== 'taxAmount' || (reverseChargeReportRequest.sort === 'asc' && reverseChargeReportRequest.sortBy === 'taxAmount'), 'icon-sort-dsc': (reverseChargeReportRequest.sort === 'desc' && reverseChargeReportRequest.sortBy === 'taxAmount')}"></span>
+                            [ngClass]="{'sortingIcon icon-pointer': true, 'activeTextColor' : reverseChargeReportRequest.sortBy === 'taxAmount', 'icon-sort-asc': !reverseChargeReportRequest.sort || reverseChargeReportRequest.sortBy !== 'taxAmount' || (reverseChargeReportRequest.sort === 'asc' && reverseChargeReportRequest.sortBy === 'taxAmount'), 'icon-sort-dsc': (reverseChargeReportRequest.sort === 'desc' && reverseChargeReportRequest.sortBy === 'taxAmount')}"></span>
                         </th>
                     </tr>
                 </thead>
@@ -79,9 +79,9 @@
                         <td data-title="Invoice No.">{{ reverseCharge.invoiceNumber }}</td>
                         <td data-title="Supplier's Invoice Date">{{ reverseCharge.supplierInvoiceDate }}</td>
                         <td data-title="Supplier's Country">{{ reverseCharge.suppliersCountry }}</td>
-                        <td data-title="Taxable Value">{{activeCompany.baseCurrencySymbol}} {{ reverseCharge.taxableValue }}</td>
+                        <td data-title="Taxable Value">{{activeCompany.baseCurrencySymbol}} {{ reverseCharge.taxableValue | giddhCurrency }}</td>
                         <td data-title="Tax Rate">{{ reverseCharge.taxRate }}%</td>
-                        <td data-title="Tax Amount">{{activeCompany.baseCurrencySymbol}} {{ reverseCharge.taxAmount }}</td>
+                        <td data-title="Tax Amount">{{activeCompany.baseCurrencySymbol}} {{ reverseCharge.taxAmount | giddhCurrency }}</td>
                     </tr>
                 </tbody>
                 <tbody *ngIf="!reverseChargeReportResults || !reverseChargeReportResults.items || reverseChargeReportResults.items.length === 0">

@@ -43,7 +43,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public reverseChargeReportResults: any = {};
     public paginationLimit: number = PAGINATION_LIMIT;
     public timeout: any;
-    public bsConfig: Partial<BsDaterangepickerConfig> = { showWeekNumbers: false, dateInputFormat: GIDDH_DATE_FORMAT, rangeInputFormat: GIDDH_DATE_FORMAT };
+    public bsConfig: Partial<BsDaterangepickerConfig> = { showWeekNumbers: false, dateInputFormat: "DD-MM-YYYY", rangeInputFormat: "DD-MM-YYYY" };
     public universalDate$: Observable<any>;
     public datePicker: any[] = [];
 
