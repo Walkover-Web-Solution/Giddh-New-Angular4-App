@@ -10,6 +10,9 @@ import { ReverseChargeService } from '../../../services/reversecharge.service';
 import { BsDaterangepickerConfig } from 'ngx-bootstrap';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { CurrentPage } from '../../../models/api-models/Common';
+import { Router } from '@angular/router';
+import { GeneralActions } from '../../../actions/general/general.actions';
 
 @Component({
     selector: 'reverse-charge-report',
@@ -47,7 +50,8 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     public datePicker: any[] = [];
 
-    constructor(private store: Store<AppState>, private toasty: ToasterService, private cdRef: ChangeDetectorRef, private reverseChargeService: ReverseChargeService) {
+    constructor(private store: Store<AppState>, private toasty: ToasterService, private cdRef: ChangeDetectorRef, private reverseChargeService: ReverseChargeService, private router: Router, private generalActions: GeneralActions) {
+        this.setCurrentPageTitle();
         this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
     }
@@ -64,7 +68,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                     return;
                 }
                 res.forEach(cmp => {
-                    if (cmp.uniqueName === activeCompanyName) {
+                    if (!this.activeCompany && cmp.uniqueName === activeCompanyName) {
                         this.activeCompany = cmp;
                         this.getReverseChargeReport(false);
                     }
@@ -73,13 +77,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         });
 
         this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
-            if (dateObj && !this.datePicker[0]) {
+            if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
                 this.datePicker = [moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(), moment(universalDate[1], GIDDH_DATE_FORMAT).toDate()];
-
-                this.reverseChargeReportRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.reverseChargeReportRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                this.getReverseChargeReport(false);
             }
         })).pipe(takeUntil(this.destroyed$)).subscribe();
     }
@@ -188,7 +188,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
 
         this.reverseChargeReportRequest.sort = sort;
         this.reverseChargeReportRequest.sortBy = sortBy;
-
         this.getReverseChargeReport(true);
     }
 
@@ -200,9 +199,11 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      */
     public changeFilterDate(date): void {
         if (date) {
-            this.reverseChargeReportRequest.from = moment(date[0]).format(GIDDH_DATE_FORMAT);
-            this.reverseChargeReportRequest.to = moment(date[1]).format(GIDDH_DATE_FORMAT);
-            this.getReverseChargeReport(true);
+            if(this.reverseChargeReportRequest.from !== moment(date[0]).format(GIDDH_DATE_FORMAT) || this.reverseChargeReportRequest.to !== moment(date[1]).format(GIDDH_DATE_FORMAT)) {
+                this.reverseChargeReportRequest.from = moment(date[0]).format(GIDDH_DATE_FORMAT);
+                this.reverseChargeReportRequest.to = moment(date[1]).format(GIDDH_DATE_FORMAT);
+                this.getReverseChargeReport(true);
+            }
         }
     }
 
@@ -215,5 +216,17 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public changeVoucherType(voucherType: string): void {
         this.reverseChargeReportRequest.voucherType = voucherType;
         this.getReverseChargeReport(true);
+    }
+
+    /**
+     * This will set the page heading
+     *
+     * @memberof ReverseChargeReport
+     */
+    public setCurrentPageTitle() {
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = "Reports > Reverse Charge";
+        currentPageObj.url = this.router.url;
+        this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
     }
 }
