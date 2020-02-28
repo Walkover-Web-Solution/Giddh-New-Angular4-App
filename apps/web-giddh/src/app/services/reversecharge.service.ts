@@ -26,6 +26,7 @@ export class ReverseChargeService {
         url = url.replace(':supplierName', request.supplierName);
         url = url.replace(':invoiceNumber', request.invoiceNumber);
         url = url.replace(':supplierCountry', request.supplierCountry);
+        url = url.replace(':voucherType', request.voucherType);
         return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
