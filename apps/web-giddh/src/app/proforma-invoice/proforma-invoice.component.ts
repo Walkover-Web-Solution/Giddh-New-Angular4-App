@@ -4098,7 +4098,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     /**
-     * Toggle Tourist scheme checkbox
+     * Toggle Tourist scheme checkbox then reset passport number
      *
      * @param {*} event Click event
      * @memberof ProformaInvoiceComponent

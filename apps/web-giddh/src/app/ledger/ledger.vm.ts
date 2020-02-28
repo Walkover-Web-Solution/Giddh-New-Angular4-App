@@ -340,6 +340,8 @@ export class BlankLedgerVM {
     public baseCurrencyToDisplay?: ICurrencyResponse;
     public foreignCurrencyToDisplay?: ICurrencyResponse;
     public selectedCurrencyToDisplay?: 0 | 1 = 0;
+    public passportNumber?: string;
+    public touristSchemeApplicable?: boolean;
 }
 
 export class TransactionVM {

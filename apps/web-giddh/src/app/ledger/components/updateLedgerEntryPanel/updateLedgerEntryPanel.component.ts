@@ -155,6 +155,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public multiCurrencyAccDetails: IFlattenAccountsResultItem = null;
     public selectedPettycashEntry$: Observable<PettyCashResonse>;
     public accountPettyCashStream: any;
+    /**To check tourist scheme applicable or not */
+    public isTouristSchemeApplicable: boolean = false;
+    public allowParentGroup = ['sales', 'cash', 'sundrydebtors', 'bankaccounts'];
+
 
     /** True, if all the transactions are of type 'Tax' or 'Reverse Charge' */
     private taxOnlyTransactions: boolean;
@@ -265,6 +269,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.activeAccount = cloneDeep(resp[2].body);
                     // Decides whether to show the RCM entry
                     this.shouldShowRcmEntry = this.isRcmEntryPresent(resp[1].transactions);
+                    this.isTouristSchemeApplicable = this.checkTouristSchemeApplicable(resp[1]);
                     this.shouldShowRcmTaxableAmount = resp[1].reverseChargeTaxableAmount !== undefined && resp[1].reverseChargeTaxableAmount !== null;
                     if (this.shouldShowRcmTaxableAmount) {
                         // Received taxable amount is a truthy value
@@ -1280,5 +1285,41 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         }
         return false;
+    }
+
+
+    /**
+     *  To check tourist scheme applicable or not
+     *
+     * @private
+     * @param {*} accountDetails Current ledger details
+     * @returns {boolean} True if tourist scheme applicable
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private checkTouristSchemeApplicable(accountDetails: any): boolean {
+        if (accountDetails && accountDetails.touristSchemeApplicable) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Toggle Tourist scheme checkbox then reset passport number
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public touristSchemeApplicableToggle(event) {
+        this.vm.selectedLedger.passportNumber = '';
+        this.vm.selectedLedger.touristSchemeApplicable = event;
+    }
+
+    public checkTouristSchemeApplicableorNot(activeLedgerParentgroup: string, selectedAccountParentGroup: string, transactionType: string) {
+        if (this.profileObj && this.profileObj.countryV2 && this.profileObj.countryV2.alpha2CountryCode && this.profileObj.countryV2.alpha2CountryCode === 'AE' && activeLedgerParentgroup && selectedAccountParentGroup && (this.allowParentGroup.includes(activeLedgerParentgroup)) && ( this.allowParentGroup.includes(selectedAccountParentGroup)) && transactionType && transactionType==='DEBIT') {
+            this.isTouristSchemeApplicable = true;
+        } else {
+            this.isTouristSchemeApplicable = false;
+        }
+
     }
 }

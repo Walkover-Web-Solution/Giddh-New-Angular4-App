@@ -98,6 +98,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public shouldShowRcmTaxableAmount: boolean = false;
     /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
     @Input() public shouldShowItcSection: boolean = false;
+    /** To check Tourist scheme applicable in ledger */
+    @Input() public isTouristSchemeApplicable: boolean = false;
 
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
@@ -140,11 +142,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public activeAccount$: Observable<AccountResponse>;
     public activeAccount: AccountResponse;
     public currentAccountApplicableTaxes: string[] = [];
-    //variable added for storing the selected taxes after the tax component is destroyed for resolution of G0-295 by shehbaz
-    public currentAccountSavedApplicableTaxes: string[] = [];
-    public isMulticurrency: boolean;
-    public accountBaseCurrency: string;
-    public companyCurrency: string;
     public totalForTax: number = 0;
     public taxListForStock = []; // New
     public companyIsMultiCurrency: boolean;
@@ -1009,5 +1006,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private validateTaxes(): boolean {
         const taxes = [...this.currentTxn.taxesVm.filter(p => p.isChecked).map(p => p.uniqueName)];
         return taxes.length > 0;
+    }
+
+    /**
+     * Toggle Tourist scheme checkbox then reset passport number
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public touristSchemeApplicableToggle() {
+        this.blankLedger.passportNumber = '';
     }
 }

@@ -445,7 +445,7 @@
                             <!-- For Tourist Scheme start -->
                             <!-- for sales invoice start (ngModelChange)="touristSchemeApplicableToggle($event)"-->
                             <ng-container *ngIf="companyCountryCode === 'AE'">
-                                <div class="row mTB1" *ngIf="isSalesInvoice">
+                                <div class="row mTB1" *ngIf="isSalesInvoice || isCashInvoice">
                                     <div class="col-sm-2" *ngIf="!isMobileView">
                                         <label></label>
                                     </div>
@@ -460,7 +460,7 @@
                                 </div>
 
                                 <!-- endregion -->
-                                <div class="row mTB1 " *ngIf="isSalesInvoice && invFormData.touristSchemeApplicable ">
+                                <div class="row mTB1 " *ngIf="(isSalesInvoice || isCashInvoice) && invFormData.touristSchemeApplicable ">
                                     <div class="col-sm-2 " *ngIf="!isMobileView ">
                                         <label>Passport Number</label>
                                     </div>
