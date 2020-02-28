@@ -2,7 +2,16 @@
     <div class="col-md-8">
         <label class="col-md-2">Customer Name *</label>
         <div class="colmd-6">
-
+            <div class="form-group">
+                <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" placeholder="Select Account" [notFoundLink]="false"
+                [multiple]="false" [ItemHeight]="33">
+                    <ng-template #optionTemplate1 let-option="option">
+                        <a href="javascript:void(0)" class="list-item">
+                            Advance Receipt
+                        </a>
+                    </ng-template>
+                </sh-select>
+            </div>
         </div>
         <div class="colmd-4">
             <label class="ng-tns-c22-0"><input class="ng-tns-c22-0" type="checkbox">Advance Receipt</label>
