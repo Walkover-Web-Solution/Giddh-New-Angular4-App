@@ -71,8 +71,8 @@
                     </tr>
                 </thead>
                 <tbody *ngIf="reverseChargeReportResults && reverseChargeReportResults.items && reverseChargeReportResults.items.length > 0">
-                    <tr *ngFor="let reverseCharge of reverseChargeReportResults.items">
-                        <td data-title="S. No" class="text-center">{{ reverseCharge.sno }} </td>
+                    <tr *ngFor="let reverseCharge of reverseChargeReportResults.items; let i = index;">
+                        <td data-title="S. No" class="text-center">{{ ((reverseChargeReportRequest.page - 1) * paginationLimit) + (i + 1) }} </td>
                         <td data-title="Entry Date">{{ reverseCharge.entryDate }}</td>
                         <td data-title="Supplier's Name">{{ reverseCharge.supplierName }}</td>
                         <td data-title="Voucher Type">{{ reverseCharge.voucherType }}</td>

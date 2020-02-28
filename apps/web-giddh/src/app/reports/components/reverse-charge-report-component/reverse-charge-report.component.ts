@@ -79,7 +79,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
-                this.datePicker = [moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(), moment(universalDate[1], GIDDH_DATE_FORMAT).toDate()];
+                if(this.reverseChargeReportRequest.from !== moment(universalDate[0]).format(GIDDH_DATE_FORMAT) || this.reverseChargeReportRequest.to !== moment(universalDate[1]).format(GIDDH_DATE_FORMAT)) {
+                    this.datePicker = [moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(), moment(universalDate[1], GIDDH_DATE_FORMAT).toDate()];
+                }
             }
         })).pipe(takeUntil(this.destroyed$)).subscribe();
     }
@@ -199,11 +201,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      */
     public changeFilterDate(date): void {
         if (date) {
-            if(this.reverseChargeReportRequest.from !== moment(date[0]).format(GIDDH_DATE_FORMAT) || this.reverseChargeReportRequest.to !== moment(date[1]).format(GIDDH_DATE_FORMAT)) {
-                this.reverseChargeReportRequest.from = moment(date[0]).format(GIDDH_DATE_FORMAT);
-                this.reverseChargeReportRequest.to = moment(date[1]).format(GIDDH_DATE_FORMAT);
-                this.getReverseChargeReport(true);
-            }
+            this.reverseChargeReportRequest.from = moment(date[0]).format(GIDDH_DATE_FORMAT);
+            this.reverseChargeReportRequest.to = moment(date[1]).format(GIDDH_DATE_FORMAT);
+            this.getReverseChargeReport(true);
         }
     }
 
