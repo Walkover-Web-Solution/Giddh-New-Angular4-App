@@ -76,7 +76,7 @@
                         <td data-title="Entry Date">{{ reverseCharge.entryDate }}</td>
                         <td data-title="Supplier's Name">{{ reverseCharge.supplierName }}</td>
                         <td data-title="Voucher Type">{{ reverseCharge.voucherType }}</td>
-                        <td data-title="Invoice No.">{{ reverseCharge.invoiceNumber }}</td>
+                        <td data-title="Invoice No.">{{ (reverseCharge.invoiceNumber) ? reverseCharge.invoiceNumber : '-' }}</td>
                         <td data-title="Supplier's Invoice Date">{{ reverseCharge.supplierInvoiceDate }}</td>
                         <td data-title="Supplier's Country">{{ reverseCharge.suppliersCountry }}</td>
                         <td data-title="Taxable Value">{{activeCompany.baseCurrencySymbol}} {{ reverseCharge.taxableValue | giddhCurrency }}</td>
