@@ -1633,8 +1633,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             requestObject.account.shippingDetails.stateCode = requestObject.account.shippingDetails.state.code;
             requestObject.account.shippingDetails.stateName = requestObject.account.shippingDetails.state.name;
 
-            /** Tourist scheme is applicable only for voucher type 'sales invoice' and company country code 'AE'   */
-            if (this.isSalesInvoice) {
+            /** Tourist scheme is applicable only for voucher type 'sales invoice' and 'Cash Invoice' and company country code 'AE'   */
+            if (this.isSalesInvoice || this.isCashInvoice) {
                 if (this.invFormData.touristSchemeApplicable) {
                     requestObject.touristSchemeApplicable = this.invFormData.touristSchemeApplicable;
                     requestObject.passportNumber = this.invFormData.passportNumber;
@@ -2626,8 +2626,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     requestObject['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
                 }
 
-                /** Tourist scheme is applicable only for voucher type 'sales invoice' and company country code 'AE'   */
-                if (this.isSalesInvoice) {
+                /** Tourist scheme is applicable only for voucher type 'sales invoice' and 'cash invoice' and company country code 'AE'   */
+                if (this.isSalesInvoice || this.isCashInvoice) {
                     if (this.invFormData.touristSchemeApplicable) {
                         requestObject.touristSchemeApplicable = this.invFormData.touristSchemeApplicable;
                         requestObject.passportNumber = this.invFormData.passportNumber;
