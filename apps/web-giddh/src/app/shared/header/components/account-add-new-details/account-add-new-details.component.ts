@@ -859,15 +859,25 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (type === 'bankAccountNo') {
             if (this.selectedCountryCode === 'IN') {
                 if (element && element.value && element.value.length < 9) {
-                    this._toaster.errorToast('The bank account number must contain 9 to 18 characters')
+                    this._toaster.errorToast('The bank account number must contain 9 to 18 characters');
+                    element.classList.add('error-box');
+                } else {
+                    element.classList.remove('error-box');
                 }
             } else {
-                 if (element && element.value && element.value.length < 23)
-                this._toaster.errorToast('The IBAN must contain 23 to 34 characters.');
+                if (element && element.value && element.value.length < 23) {
+                    this._toaster.errorToast('The IBAN must contain 23 to 34 characters.');
+                    element.classList.add('error-box');
+                } else {
+                     element.classList.remove('error-box');
+                }
             }
         } else if (type === 'swiftCode') {
             if (element && element.value && element.value.length < 8) {
                 this._toaster.errorToast('The SWIFT Code/BIC must contain 8 to 11 characters.');
+                element.classList.add('error-box');
+            } else {
+                 element.classList.remove('error-box');
             }
         }
     }
