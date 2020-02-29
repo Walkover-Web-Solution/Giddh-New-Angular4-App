@@ -108,10 +108,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public ngOnInit() {
         this._route.params.subscribe(params => {
             if (params['type'] && this.activeTab !== params['type']) {
-                // if active tab is null or undefined then it means component initialized for the first time
-                if (!this.activeTab) {
-                    this.setStateDetails(params['type']);
-                }
+                this.setStateDetails(params['type']);
                 this.activeTab = params['type'];
             }
         });
@@ -393,7 +390,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof UserDetailsComponent
      */
     public onTabChanged(tabName: string): void {
-        this.setStateDetails(tabName);
+        //this.setStateDetails(tabName);
         this.store.dispatch(this.generalActions.setAppTitle(`pages/user-details/${tabName}`));
         this.router.navigate(['pages/user-details/', tabName], { replaceUrl: true });
     }
