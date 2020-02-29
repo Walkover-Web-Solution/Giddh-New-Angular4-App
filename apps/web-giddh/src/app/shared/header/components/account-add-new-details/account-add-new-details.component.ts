@@ -80,6 +80,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public selectedCountryCode: string;
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
     public isStateRequired: boolean = false;
+    public bankIbanNumberMaxLength: string = '18';
+    public bankIbanNumberMinLength: string = '9';
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
         private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
@@ -334,11 +336,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             accountBankDetails: this._fb.array([
                 this._fb.group({
                     bankName: [''],
-                    bankAccountNo: ['', Validators.compose([Validators.maxLength(34)])],
+                    bankAccountNo: [''],
                     ifsc: [''],
                     beneficiaryName: [''],
                     branchName: [''],
-                    swiftCode: ['', Validators.compose([Validators.pattern(/[^a-zA-Z0-9]/), Validators.minLength(8), Validators.maxLength(11)])]
+                    swiftCode: ['']
 
                 })
             ]),
@@ -734,9 +736,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             let accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
             for (let control of accountBankDetails.controls) {
                 if (countryCode === 'IN') {
-                    control.get('bankAccountNo').setValidators([Validators.minLength(0)]);
+                    control.get('bankAccountNo').setValidators([Validators.minLength(9), Validators.maxLength(18)]);
+                    this.bankIbanNumberMaxLength = '18';
+                    this.bankIbanNumberMinLength = '9';
                 } else {
-                    control.get('bankAccountNo').setValidators([Validators.minLength(23)]);
+                    control.get('bankAccountNo').setValidators([Validators.minLength(23), Validators.maxLength(34)]);
+                    this.bankIbanNumberMaxLength = '34';
+                    this.bankIbanNumberMinLength = '23';
                 }
             }
         }
@@ -823,8 +829,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     * @memberof AccountAddNewDetailsComponent
     */
     public bankDetailsValidator(element, type: string): void {
+        let trim: string = '';
         if (element.value && type) {
-            let trim = element.value.replace(/[^a-zA-Z0-9]/g, '');
+            if (this.selectedCountryCode === 'IN') {
+                trim = element.value.replace(/[^0-9]/g, '');
+            } else {
+                trim = element.value.replace(/[^a-zA-Z0-9]/g, '');
+            }
+
             let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
             for (let control of accountBankDetail.controls) {
                 if (type === 'bankAccountNo') {
@@ -832,6 +844,30 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 } else if (type === 'swiftCode') {
                     control.get('swiftCode').patchValue(trim);
                 }
+            }
+        }
+    }
+
+    /**
+     * To show bank details validation using toaster
+     *
+     * @param {*} element Edit box value
+     * @param {*} type  To check Type of bank details field
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public showBankDetailsValidation(element: any, type: any) {
+        if (type === 'bankAccountNo') {
+            if (this.selectedCountryCode === 'IN') {
+                if (element && element.value && element.value.length < 9) {
+                    this._toaster.errorToast('The bank account number must contain 9 to 18 characters')
+                }
+            } else {
+                 if (element && element.value && element.value.length < 23)
+                this._toaster.errorToast('The IBAN must contain 23 to 34 characters.');
+            }
+        } else if (type === 'swiftCode') {
+            if (element && element.value && element.value.length < 8) {
+                this._toaster.errorToast('The SWIFT Code/BIC must contain 8 to 11 characters.');
             }
         }
     }
