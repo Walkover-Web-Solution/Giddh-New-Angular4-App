@@ -62,7 +62,8 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     public commandKRequestParams: CommandKRequest = {
         page: 1,
         q: '',
-        group: ''
+        group: '',
+        totalPages: 1
     };
 
     constructor(
@@ -219,15 +220,15 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isLoading = false;
 
             if (res && res.body && res.body.results && res.body.results.length > 0) {
-                let loop = 0;
-                res.body.results.forEach(key => {
-                    key.loop = loop;
+                let length = (this.searchedItems) ? this.searchedItems.length : 0;
+                res.body.results.forEach((key, index) => {
+                    key.loop = length + index;
                     this.searchedItems.push(key);
-                    loop++;
                 });
                 this.highlightedItem = 0;
                 this.noResultsFound = false;
                 this.allowLoadMore = true;
+                this.commandKRequestParams.totalPages = res.body.totalPages;
                 this._cdref.detectChanges();
             } else {
                 if (this.searchedItems.length === 0) {
@@ -455,6 +456,8 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public highlightItem(index: number) {
         this.highlightedItem = index;
+        this.searchedItems.forEach(searchItem => searchItem.isHilighted = false);
+        this.searchedItems[index].isHilighted = true;
     }
 
     /**
@@ -478,8 +481,10 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         // visible height + pixel scrolled >= total height - 200 (deducted 200 to load list little earlier before user reaches to end)
         if (event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 200)) {
             if (this.allowLoadMore && !this.isLoading) {
-                this.commandKRequestParams.page++;
-                this.searchCommandK(false);
+                if (this.commandKRequestParams.page + 1 < this.commandKRequestParams.totalPages) {
+                    this.commandKRequestParams.page++;
+                    this.searchCommandK(false);
+                }
             }
         }
     }
