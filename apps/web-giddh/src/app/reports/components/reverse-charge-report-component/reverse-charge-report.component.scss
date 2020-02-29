@@ -78,3 +78,16 @@
     padding-left: 35px !important;
     width: 210px;
 }
+.basic > thead > tr > th {
+    min-width: 150px;
+}
+@media only screen and (max-width: 1400px) {
+    .basic > thead > tr > th {
+        min-width: 200px;
+    }
+}
+@media only screen and (max-width: 767px) {
+    .basic > thead > tr > th {
+        min-width: initial;
+    }
+}
