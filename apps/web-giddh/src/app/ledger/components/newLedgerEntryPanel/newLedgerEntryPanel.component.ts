@@ -1025,4 +1025,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         return mergedAccountTaxes;
     }
+
+
+    /**
+     * To make value alphanumeric
+     *
+     * @param {*} event Template ref to get value
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public allowAlphanumericChar(event: any) {
+        if (event && event.value) {
+            this.blankLedger.passportNumber = this.generalService.allowAlphanumericChar(event.value)
+        }
+    }
 }

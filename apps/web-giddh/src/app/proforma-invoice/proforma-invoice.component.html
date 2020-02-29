@@ -466,7 +466,8 @@
                                     </div>
                                     <div class="col-sm-9 ">
                                         <div class="col-sm-6 pl-0 ">
-                                            <input type="text" name="passportNumber" placeholder="Passport Number" class="form-control attentionTo" [(ngModel)]="invFormData.passportNumber" />
+                                            <input type="text" name="passportNumber" #passportNumber placeholder="Passport Number" class="form-control attentionTo" (blur)="allowAlphanumericChar(passportNumber)" (keypress)="allowAlphanumericChar(passportNumber)" [(ngModel)]="invFormData.passportNumber"
+                                            />
                                         </div>
                                     </div>
                                 </div>

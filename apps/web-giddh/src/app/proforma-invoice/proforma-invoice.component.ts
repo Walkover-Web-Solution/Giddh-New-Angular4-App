@@ -865,20 +865,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                     this.getCurrencyRate(this.companyCurrency, vendorCurrency);
                                 }
                             }
-                        }else {
+                        } else {
                             obj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
                         }
                     }
                     /** Tourist scheme added in case of sales invoice  */
-                     if (this.isSalesInvoice || this.isCashInvoice) {
-                            if (results[1] && results[1].touristSchemeApplicable) {
-                                obj.touristSchemeApplicable = results[1].touristSchemeApplicable;
-                                obj.passportNumber = results[1].passportNumber;
-                            } else {
-                                obj.touristSchemeApplicable = false;
-                                obj.passportNumber = '';
-                            }
+                    if (this.isSalesInvoice || this.isCashInvoice) {
+                        if (results[1] && results[1].touristSchemeApplicable) {
+                            obj.touristSchemeApplicable = results[1].touristSchemeApplicable;
+                            obj.passportNumber = results[1].passportNumber;
+                        } else {
+                            obj.touristSchemeApplicable = false;
+                            obj.passportNumber = '';
                         }
+                    }
 
                     if (obj.voucherDetails) {
 
@@ -4104,6 +4104,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public touristSchemeApplicableToggle(event) {
         this.invFormData.passportNumber = '';
+    }
+
+    /**
+     *
+     *
+     * @param {*} event
+     * @memberof ProformaInvoiceComponent
+     */
+    public allowAlphanumericChar(event: any) {
+        if (event && event.value) {
+            this.invFormData.passportNumber = this.generalService.allowAlphanumericChar(event.value)
+        }
     }
 
 }

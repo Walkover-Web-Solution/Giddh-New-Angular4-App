@@ -576,7 +576,7 @@
         <div class="col-md-6" *ngIf="blankLedger.touristSchemeApplicable">
             <div class="d-flex align-items-center justify-content-end ml-1 xs-justify-content-start">
                 Passport Number
-                <input type="text" name="passportNumber" placeholder="Passport Number" class="form-control width-115 ml-1" [(ngModel)]="blankLedger.passportNumber" />
+                <input type="text" name="passportNumber" placeholder="Passport Number" class="form-control width-115 ml-1" #passportNumber (blur)="allowAlphanumericChar(passportNumber)" (keypress)="allowAlphanumericChar(passportNumber)"  [(ngModel)]="blankLedger.passportNumber" />
             </div>
         </div>
     </div>

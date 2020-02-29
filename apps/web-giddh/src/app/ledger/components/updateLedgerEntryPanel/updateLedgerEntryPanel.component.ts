@@ -1325,4 +1325,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
 
     }
+
+    /**
+     * To make value alphanumeric
+     *
+     * @param {*} event Template ref to get value
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public allowAlphanumericChar(event: any) {
+        if (event && event.value) {
+            this.vm.selectedLedger.passportNumber = this.generalService.allowAlphanumericChar(event.value)
+        }
+    }
 }
