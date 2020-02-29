@@ -19,7 +19,8 @@ const INVOICE_ROUTES: Routes = [
         children: [
             { path: '', redirectTo: 'purchase', pathMatch: 'full' },
             { path: 'invoice', component: PurchaseInvoiceComponent },
-            { path: 'purchase', component: PurchaseRecordComponent }
+            { path: 'purchase', component: PurchaseRecordComponent },
+            { path: 'purchase/:accountUniqueName/:purchaseRecordUniqueName', component: PurchaseRecordComponent }
         ]
     }
 ];
