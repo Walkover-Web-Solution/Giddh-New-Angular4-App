@@ -390,7 +390,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof UserDetailsComponent
      */
     public onTabChanged(tabName: string): void {
-        //this.setStateDetails(tabName);
         this.store.dispatch(this.generalActions.setAppTitle(`pages/user-details/${tabName}`));
         this.router.navigate(['pages/user-details/', tabName], { replaceUrl: true });
     }
