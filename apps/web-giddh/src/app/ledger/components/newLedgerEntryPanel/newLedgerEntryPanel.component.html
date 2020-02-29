@@ -4,6 +4,9 @@
         <!-- reverse charge transction start (make it functional by developer end) -->
         <ng-container *ngTemplateOutlet="rcmEntryCheckbox"></ng-container>
         <!-- reverse charge transction end  -->
+        <!--  tourist scheme template start      -->
+        <ng-container *ngTemplateOutlet="touristSchemeTemplate"></ng-container>
+        <!--        tourist scheme template end-->
         <div class="basic_detail mrB1" *ngIf="showTaxationDiscountBox || shouldShowAdvanceReceiptMandatoryFields">
             <table class="width100 total-detail-table">
 
@@ -215,6 +218,7 @@
                 </sh-select>
             </div>
         </ng-container>
+
         <div class="clearfix">
             <textarea rows="3" cols="" name="des" class="form-control" placeholder="Description"
                 [(ngModel)]="blankLedger.description"></textarea>
@@ -555,6 +559,26 @@
             Is this transaction applicable for <strong> Reverse Charge? </strong>
         </label>
         <span class="text-light font-12"> (Tax is compulsory)</span>
+    </div>
+</ng-template>
+<ng-template #touristSchemeTemplate>
+    <div class="row font-14 mb-1" *ngIf="isTouristSchemeApplicable">
+        <div class="col-md-6">
+            <div class="d-flex align-items-center">
+                    <span class="pull-left">
+                        <input id="tourist-scheme" type="checkbox" name="touristSchemeApplicable" [(ngModel)]="blankLedger.touristSchemeApplicable" (ngModelChange)="touristSchemeApplicableToggle($event)">
+
+                    </span>
+                <span>Is this transaction applicable for Tourist Scheme?</span>
+            </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="blankLedger.touristSchemeApplicable">
+            <div class="d-flex align-items-center justify-content-end ml-1 xs-justify-content-start">
+                Passport Number
+                <input type="text" name="passportNumber" placeholder="Passport Number" class="form-control width-115 ml-1" #passportNumber (blur)="allowAlphanumericChar(passportNumber)" (keypress)="allowAlphanumericChar(passportNumber)"  [(ngModel)]="blankLedger.passportNumber" />
+            </div>
+        </div>
     </div>
 </ng-template>
 <ng-template #rcmTemplate>

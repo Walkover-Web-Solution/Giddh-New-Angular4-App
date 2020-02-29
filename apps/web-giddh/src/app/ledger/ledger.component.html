@@ -262,7 +262,7 @@
                                                         (saveBlankLedger)="saveBankTransaction()"
                                                         (clickedOutsideEvent)="hideBankLedgerPopup($event)"
                                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
-                                                        [invoiceList]="invoiceList">
+                                                        [invoiceList]="invoiceList"  [isTouristSchemeApplicable]="isTouristSchemeApplicable">
                                                     </new-ledger-entry-panel>
                                                 </div>
                                                 <!-- end  -->
@@ -664,7 +664,7 @@
                                         (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                         [invoiceList]="invoiceList"
-                                        [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount" [shouldShowItcSection]="shouldShowItcSection">
+                                        [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount" [shouldShowItcSection]="shouldShowItcSection" [isTouristSchemeApplicable]="isTouristSchemeApplicable">
                                     </new-ledger-entry-panel>
                                 </div>
 
@@ -919,7 +919,7 @@
                                         (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                         [invoiceList]="invoiceList"
-                                        [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount" [shouldShowItcSection]="shouldShowItcSection">
+                                        [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount" [shouldShowItcSection]="shouldShowItcSection" [isTouristSchemeApplicable]="isTouristSchemeApplicable">
                                     </new-ledger-entry-panel>
                                 </div>
 

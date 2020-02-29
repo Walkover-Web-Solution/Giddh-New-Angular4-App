@@ -188,6 +188,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public shouldShowRcmTaxableAmount: boolean;
     /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
     public shouldShowItcSection: boolean;
+    /** True if company country will UAE and accounts involve Debtors/ Cash / bank / Sales */
+    public isTouristSchemeApplicable: boolean;
+    public allowParentGroup = ['sales', 'cash', 'sundrydebtors', 'bankaccounts'];
+
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
@@ -1711,6 +1715,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         const currentLedgerSecondParent = this.lc.activeAccount.parentGroups[1].uniqueName;
         const selectedAccountSecondParent = transaction.selectedAccount.parentGroups[1].uniqueName;
+        this.checkTouristSchemeApplicable(currentLedgerSecondParent, selectedAccountSecondParent);
         if (currentLedgerSecondParent === 'reversecharge' && transaction.type === 'CREDIT') {
             // Current ledger is of reverse charge and user has entered the transaction on the right side (CREDIT) of the ledger
             if (selectedAccountSecondParent === 'dutiestaxes') {
@@ -1736,6 +1741,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         }
+    }
+
+    /**
+     * To check tourist scheme applicable or not
+     *
+     * @param {string} [activeLedgerParentgroup] active ledger parent group unique name
+     * @param {string} [selectedAccountParentGroup] selected account parent group unique name
+     * @memberof LedgerComponent
+     */
+    public checkTouristSchemeApplicable(activeLedgerParentgroup: string, selectedAccountParentGroup: string): void {
+        if (this.profileObj && this.profileObj.countryV2 && this.profileObj.countryV2.alpha2CountryCode && this.profileObj.countryV2.alpha2CountryCode === 'AE' && activeLedgerParentgroup && selectedAccountParentGroup && (this.allowParentGroup.includes(activeLedgerParentgroup)) && ( this.allowParentGroup.includes(selectedAccountParentGroup))) {
+            this.isTouristSchemeApplicable = true;
+        } else {
+            this.isTouristSchemeApplicable = false;
+        }
+
     }
 
 }

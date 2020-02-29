@@ -522,6 +522,8 @@ export class VoucherClass {
     public depositEntryToBeUpdated?: SalesEntryClass;
     public depositAccountUniqueName: string;
     public templateUniqueName?: string;
+    public touristSchemeApplicable?: boolean;
+    public passportNumber?: string;
     public number?: string;
     public subVoucher?: string;
 
