@@ -1,0 +1,131 @@
+<div class="reverse-table-report">
+    <div class="container-fluid">
+
+        <div class="d-flex date-advanceSearch mrT2" id="dateRangePickerParent">
+            <!-- Invoice filter section -->
+            <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate
+            class="form-inline input-grp-dateRangePicker pr">
+                <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
+                    <div class="input-group">
+                        <span class="inputWrapper">
+                            <input name="dateRange" daterangepicker class="form-control" />
+                        </span>
+                    </div>
+                    <div class="advance-icon pointer" tooltip="Advance Search" (click)="openModal(advanceSearch)">
+                        <span class="icon-advance-serch"></span>
+                    </div>
+                </div>
+            </form>
+            <!-- Invoice filter section ends -->
+
+
+            <!-- not remove this code -->
+                <div class="clearfix">
+                <a href="javascript:void(0)" class="btn btn-primary" (click)="refundModalOpen(refundAmount)">Refund amount</a>
+                <a href="javascript:void(0)" class="btn btn-primary" (click)="adjustModal(adjustInvoiceModal)">Adjust invoice modal</a>
+            </div>
+        </div>
+
+
+        <div class="invoice-preview  table-responsive">
+        <table class="table basic table-bordered mrT2 onMobileView">
+            <thead class="t-h-bg1">
+                <tr>
+                    <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
+                        (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
+                        <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: ' Receipt #', fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
+                    </th>
+
+                    <th class="td_in_searchBox">
+                        <div class="d-flex align-items-center">
+                           Date
+                            <div class="icon-pointer pl-1 pointer">
+                                <div class="icon-sort-asc"></div>
+                            </div>
+                        </div>
+                    </th>
+
+
+
+                    <th>Type</th>
+
+                    <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
+                        (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
+                        <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Customer Name', fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
+                    </th>
+
+                    <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
+                        (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
+                        <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Payment Mode', fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
+                    </th>
+
+                    <th>
+                        Invoice#
+                    </th>
+                    <th>
+                        <div class="d-flex align-items-center">
+                            Total Amount
+                            <div class="icon-pointer pl-1 pointer">
+                                <div class="icon-sort-asc"></div>
+                            </div>
+                        </div>
+                    </th>
+
+                    <th>
+                        <div class="d-flex align-items-center">
+                            Unused Amount
+                            <div class="icon-pointer pl-1 pointer">
+                                <div class="icon-sort-asc"></div>
+                            </div>
+                        </div>
+                </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let advanceReceipt of advanceReceiptReport">
+                    <td data-title="#"><a href="javascript:void(0)">{{ advanceReceipt.receipt }}</a> </td>
+                    <td data-title="Entry Date">{{ advanceReceipt.date }}</td>
+                    <td data-title="Supplier's Name">{{ advanceReceipt.type }}</td>
+                    <td data-title="Vouchter Type">{{ advanceReceipt.customerName }}</td>
+                    <td data-title="Invoice No.">{{ advanceReceipt.paymentMode }}</td>
+                    <td data-title="Supplier's Invoice Date">{{ advanceReceipt.invoice }}</td>
+                    <td data-title="Supplier Country">{{ advanceReceipt.totalAmount }}</td>
+                    <td data-title="Taxable Value">{{ advanceReceipt.unusedAmount }}</td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+    </div>
+</div>
+
+<!-- region search template (developer end) -->
+<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
+    <div [hidden]="show">
+        <span> {{ title }}</span>
+        <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+    </div>
+    <div class="input-container" [hidden]="!show">
+        <input type="text" placeholder="Search {{ title }}" class="w100" #searchBox [formControl]="formControl" />
+    </div>
+</ng-template>
+<!-- endregion -->
+
+<!-- Adjust Payment modal start -->
+<ng-template #advanceSearch>
+    <adjust-invoice-advance-search></adjust-invoice-advance-search>
+</ng-template>
+<!-- Adjust Payment modal End-->
+
+
+<!-- Adjust invoice modal start -->
+<ng-template #adjustInvoiceModal>
+    <adjust-invoice-modal></adjust-invoice-modal>
+</ng-template>
+<!-- Adjust invoice modal End-->
+
+<!-- Refund Amount modal start -->
+<ng-template #refundAmount>
+    <refund-amount></refund-amount>
+</ng-template>
+<!-- Refund Amount modal End-->

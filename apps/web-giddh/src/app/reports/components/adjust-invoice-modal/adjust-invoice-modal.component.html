@@ -1,0 +1,57 @@
+<div class="clearfix">
+    <div class="modal-header">
+        <h4 class="modal-title bg pull-left">Adjust Invoice</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body font-14">
+          <div class="clearfix pd-1">
+
+                <h4><span class="font-14 middle mr-1">Advance Receipt</span> <span class="font-20 font-bold middle">Rs. 30,000.00</span></h4>
+
+            <div class="invoice-preview  table-responsive">
+                <table class="table basic table-bordered mrT2 onMobileView">
+                    <thead class="t-h-bg1">
+                        <tr>
+                            <th>Invoice #</th>
+                            <th>Invoice Date</th>
+                            <th>Invoice Amt.</th>
+                            <th>Balance Due</th>
+                            <th class="text-right">Adjust Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let adjustInvoice of adjustInvoiceReport">
+                            <td data-title="Invoice #"><a href="javascript:void(0)">{{ adjustInvoice.invoice }}</a> </td>
+                            <td data-title="Invoice Date">{{ adjustInvoice.invoiceDate }}</td>
+                            <td data-title="Invoice Amt.">{{ adjustInvoice.invoiceAmount }}</td>
+                            <td data-title="Balance Due">{{ adjustInvoice.BalanceDue }}</td>
+                            <td data-title="Adjust Amount"><input type="text" class="form-control text-right" value="{{ adjustInvoice.AdjustAmount }}" placeholder="{{ adjustInvoice.AdjustAmount }}"> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 pull-right">
+                    <table class="table table-no-border">
+                        <tr>
+                            <td>Adjusted Amount </td>
+                            <td>₹10,000 </td>
+                        </tr>
+                        <tr>
+                            <td>Remaining Advance</td>
+                            <td>₹20,000</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+                <div class="clearfix mt-4">
+                    <button type="button" class="btn btn-success mrR1" (click)="confirm()" >Search</button>
+                    <button type="button" class="btn btn-cancel" (click)="decline()" >Cancel</button>
+                </div>
+        </div>
+      </div>
+</div>
