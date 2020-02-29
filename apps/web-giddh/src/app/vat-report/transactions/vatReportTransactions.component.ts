@@ -175,12 +175,17 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public onSelectInvoice(invoice): void {
         if (invoice.voucherNumber) {
             this.selectedInvoice = invoice;
-            let downloadVoucherRequestObject = {
-                voucherNumber: [invoice.voucherNumber],
-                voucherType: invoice.voucherType,
-                accountUniqueName: invoice.accountUniqueName
-            };
-            this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+
+            if(invoice.voucherType === "purchase") {
+                this.router.navigate(['pages', 'purchase-management', 'purchase', invoice.accountUniqueName, invoice.purchaseRecordUniqueName]);
+            } else {
+                let downloadVoucherRequestObject = {
+                    voucherNumber: [invoice.voucherNumber],
+                    voucherType: invoice.voucherType,
+                    accountUniqueName: invoice.accountUniqueName
+                };
+                this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+            }
             this.loadDownloadOrSendMailComponent();
             this.downloadOrSendMailModel.show();
         }
