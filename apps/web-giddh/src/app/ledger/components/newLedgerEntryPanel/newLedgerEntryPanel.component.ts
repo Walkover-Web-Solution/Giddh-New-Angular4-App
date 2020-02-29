@@ -282,22 +282,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (this.currentTxn && this.currentTxn.selectedAccount) {
+            let activeAccountTaxes = [];
+            if (this.activeAccount && this.activeAccount.applicableTaxes) {
+                activeAccountTaxes = this.activeAccount.applicableTaxes.map((tax) => tax.uniqueName);
+            }
             if (this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length) {
-                this.taxListForStock = this.currentTxn.selectedAccount.stock.stockTaxes;
+                this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.stock.stockTaxes, activeAccountTaxes);
             } else if (this.currentTxn.selectedAccount.parentGroups && this.currentTxn.selectedAccount.parentGroups.length) {
-                let parentAcc = this.currentTxn.selectedAccount.parentGroups[0].uniqueName;
-                let incomeAccArray = ['revenuefromoperations', 'otherincome'];
-                let expensesAccArray = ['operatingcost', 'indirectexpenses'];
-                let assetsAccArray = ['assets'];
-                let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray, ...assetsAccArray];
-
-                if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
-                    let appTaxes = [];
-                    if (this.activeAccount && this.activeAccount.applicableTaxes) {
-                        this.activeAccount.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
-                        this.taxListForStock = appTaxes;
-                    }
-                }
+                this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.applicableTaxes, activeAccountTaxes);
             } else {
                 this.taxListForStock = [];
             }
@@ -330,11 +322,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (this.blankLedger.otherTaxModal.appliedOtherTax && this.blankLedger.otherTaxModal.appliedOtherTax.uniqueName) {
                 this.blankLedger.isOtherTaxesApplicable = true;
             }
-        }
-
-        if ('selectedCurrency' in changes) {
-            // this.baseCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.baseCurrencyDetails) : cloneDeep(this.foreignCurrencyDetails);
-            // this.foreignCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.foreignCurrencyDetails) : cloneDeep(this.baseCurrencyDetails);
         }
     }
 
@@ -1015,5 +1002,27 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public touristSchemeApplicableToggle() {
         this.blankLedger.passportNumber = '';
+    }
+
+     /**
+     * Merges the involved accounts (current ledger account and particular account) taxes
+     *
+     * @private
+     * @param {Array<string>} firstAccountTaxes Taxes array of first account
+     * @param {Array<string>} secondAccountTaxes Taxes array of second account
+     * @returns {Array<string>} Merged taxes array of unique taxes from both accounts
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private mergeInvolvedAccountsTaxes(firstAccountTaxes: Array<string>, secondAccountTaxes: Array<string>): Array<string> {
+        const mergedAccountTaxes = (firstAccountTaxes) ? [...firstAccountTaxes] : [];
+        if (secondAccountTaxes) {
+            secondAccountTaxes.forEach((tax: string) => {
+                if (!mergedAccountTaxes.includes(tax)) {
+                    mergedAccountTaxes.push(tax);
+                }
+            });
+
+        }
+        return mergedAccountTaxes;
     }
 }

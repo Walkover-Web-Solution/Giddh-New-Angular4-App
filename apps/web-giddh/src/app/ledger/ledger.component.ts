@@ -119,7 +119,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public advanceSearchRequest: AdvanceSearchRequest;
     public isLedgerCreateSuccess$: Observable<boolean>;
     public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    @ViewChild('newLedPanel') public newLedPanelCtrl: NewLedgerEntryPanelComponent;
+    @ViewChild('newLedPanel') public newLedgerComponent: NewLedgerEntryPanelComponent;
     @ViewChild('updateLedgerModal') public updateLedgerModal: ModalDirective;
     @ViewChild('exportLedgerModal') public exportLedgerModal: ModalDirective;
     @ViewChild('shareLedgerModal') public shareLedgerModal: ModalDirective;
@@ -410,9 +410,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
         this.handleRcmVisibility(txn);
         this.handleTaxableAmountVisibility(txn);
-        this.newLedPanelCtrl.calculateTotal();
-        // this.newLedPanelCtrl.checkForMulitCurrency();
-        this.newLedPanelCtrl.detectChanges();
+        this.newLedgerComponent.calculateTotal();
+        this.newLedgerComponent.detectChanges();
         this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
     }
 

@@ -422,6 +422,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     // Check the RCM checkbox if API returns subvoucher as Reverse charge
                     this.isRcmEntry = (this.vm.selectedLedger.subVoucher === Subvoucher.ReverseCharge);
                     this.isAdvanceReceipt = (this.vm.selectedLedger.subVoucher === Subvoucher.AdvanceReceipt);
+                    this.vm.isRcmEntry = this.isRcmEntry;
                     this.vm.isAdvanceReceipt = this.isAdvanceReceipt;
                     this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
 

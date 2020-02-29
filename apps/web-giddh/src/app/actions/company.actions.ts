@@ -279,7 +279,7 @@ export class CompanyActions {
         .ofType(CompanyActions.SET_STATE_DETAILS).pipe(
             switchMap((action: CustomActions) => this._companyService.setStateDetails(action.payload)),
             map(response => {
-                if (response.status === 'error') {
+                if (response && response.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
@@ -291,7 +291,7 @@ export class CompanyActions {
         .ofType(CompanyActions.GET_APPLICATION_DATE).pipe(
             switchMap((action: CustomActions) => this._companyService.getApplicationDate()),
             map(response => {
-                if (response.status === 'error') {
+                if (response && response.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }

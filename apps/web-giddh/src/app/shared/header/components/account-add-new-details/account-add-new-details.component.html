@@ -266,31 +266,32 @@
                 <div formArrayName="accountBankDetails">
                     <div class="row" *ngFor="let bank of addAccountForm.get('accountBankDetails')['controls'];let i = index;let f = first; let l = last" [formGroupName]="i">
                         <div class="form-group col-sm-6" *ngIf="selectedCountryCode ==='AE'">
-                            <label for="">Beneficiary Name</label>
-                            <input type="text" class="form-control" placeholder="Enter Beneficiary Name " name="bankName_{{i}}" formControlName="beneficiaryName" />
+                            <label>Beneficiary Name</label>
+                            <input type="text" class="form-control" placeholder="Enter Beneficiary Name " name="beneficiaryName_{{i}}" formControlName="beneficiaryName" />
                         </div>
-                        <div class="form-group col-sm-6">
-                            <label for="">Bank Name</label>
+                        <div class="form-group" [ngClass]="{'col-sm-5': selectedCountryCode !=='AE','col-sm-6': selectedCountryCode ==='AE'}">
+                            <label>Bank Name</label>
                             <input type="text" class="form-control" placeholder="Enter Bank Name" name="bankName_{{i}}" formControlName="bankName" />
                         </div>
                         <div class="form-group col-sm-4" *ngIf="selectedCountryCode ==='AE'">
-                            <div class="">
-                                <label for="">Branch Name</label>
-                                <input type="text" class="form-control" placeholder="Enter Branch Name" name="accountNum_{{i}}" formControlName="branchName" />
+                            <div>
+                                <label>Branch Name</label>
+                                <input type="text" class="form-control" placeholder="Enter Branch Name" name="branchName_{{i}}" formControlName="branchName" />
                             </div>
                         </div>
-                        <div class="form-group col-sm-4">
-                            <div class="">
-                                <label for="">Account No.</label>
-                                <input type="text" class="form-control" placeholder="Enter Account No." name="accountNum_{{i}}" formControlName="bankAccountNo" />
+                        <div class="form-group col-sm-4 ">
+                            <div>
+                                <label *ngIf="selectedCountryCode==='IN' ">Account Number</label>
+                                <label *ngIf="selectedCountryCode !=='IN' ">IBAN</label>
+                                <input type="text" class="form-control " placeholder="Enter Account No. " #bankaccount (keyup)="bankDetailsValidator(bankaccount, 'bankAccountNo')" name="accountNum_{{i}} " formControlName="bankAccountNo" />
                             </div>
                         </div>
-                        <div class="form-group col-sm-3" *ngIf="selectedCountryCode ==='AE'">
-                            <label for="">SWIFT Code/BIC</label>
-                            <input type="text" class="form-control" placeholder="Enter SWIFT/BIC Code" name="ifsc_{{i}}" formControlName="swiftCode" />
+                        <div class="form-group col-sm-4" *ngIf="selectedCountryCode ==='AE'">
+                            <label>SWIFT Code/BIC</label>
+                            <input type="text" class="form-control" placeholder="Enter SWIFT/BIC Code" #swiftcode name="swiftCode_{{i}}" (keyup)="bankDetailsValidator(swiftcode, 'swiftCode')" formControlName="swiftCode" />
                         </div>
                         <div *ngIf="selectedCountryCode!=='AE'" class="form-group col-sm-3">
-                            <label for="">IFSC Code</label>
+                            <label>IFSC Code</label>
                             <input type="text" class="form-control" placeholder="Enter IFSC Code" name="ifsc_{{i}}" formControlName="ifsc" />
                         </div>
                     </div>
