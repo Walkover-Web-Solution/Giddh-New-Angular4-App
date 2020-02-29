@@ -4102,7 +4102,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param {*} event Click event
      * @memberof ProformaInvoiceComponent
      */
-    public touristSchemeApplicableToggle(event) {
+    public touristSchemeApplicableToggle(): void {
         this.invFormData.passportNumber = '';
     }
 
@@ -4112,7 +4112,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param {*} event
      * @memberof ProformaInvoiceComponent
      */
-    public allowAlphanumericChar(event: any) {
+    public allowAlphanumericChar(event: any): void {
         if (event && event.value) {
             this.invFormData.passportNumber = this.generalService.allowAlphanumericChar(event.value)
         }

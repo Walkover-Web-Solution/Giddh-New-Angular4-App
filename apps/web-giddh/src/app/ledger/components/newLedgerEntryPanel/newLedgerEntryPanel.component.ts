@@ -1000,7 +1000,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      *
      * @memberof NewLedgerEntryPanelComponent
      */
-    public touristSchemeApplicableToggle() {
+    public touristSchemeApplicableToggle(): void {
         this.blankLedger.passportNumber = '';
     }
 
@@ -1033,7 +1033,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @param {*} event Template ref to get value
      * @memberof NewLedgerEntryPanelComponent
      */
-    public allowAlphanumericChar(event: any) {
+    public allowAlphanumericChar(event: any): void {
         if (event && event.value) {
             this.blankLedger.passportNumber = this.generalService.allowAlphanumericChar(event.value)
         }

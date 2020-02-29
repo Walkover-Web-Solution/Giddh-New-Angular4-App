@@ -290,6 +290,8 @@ export class GeneralService {
     public allowAlphanumericChar(value: string): string {
         if (value) {
             return value.replace(/[^a-zA-Z0-9]/g, '');
+        } else {
+            return '';
         }
     }
 }

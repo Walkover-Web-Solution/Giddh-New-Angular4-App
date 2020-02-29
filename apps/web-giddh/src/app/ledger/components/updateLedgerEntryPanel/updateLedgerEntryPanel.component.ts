@@ -1312,18 +1312,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      *
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public touristSchemeApplicableToggle(event) {
+    public touristSchemeApplicableToggle(event): void {
         this.vm.selectedLedger.passportNumber = '';
         this.vm.selectedLedger.touristSchemeApplicable = event;
-    }
-
-    public checkTouristSchemeApplicableorNot(activeLedgerParentgroup: string, selectedAccountParentGroup: string, transactionType: string) {
-        if (this.profileObj && this.profileObj.countryV2 && this.profileObj.countryV2.alpha2CountryCode && this.profileObj.countryV2.alpha2CountryCode === 'AE' && activeLedgerParentgroup && selectedAccountParentGroup && (this.allowParentGroup.includes(activeLedgerParentgroup)) && (this.allowParentGroup.includes(selectedAccountParentGroup)) && transactionType && transactionType === 'DEBIT') {
-            this.isTouristSchemeApplicable = true;
-        } else {
-            this.isTouristSchemeApplicable = false;
-        }
-
     }
 
     /**
@@ -1332,7 +1323,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @param {*} event Template ref to get value
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public allowAlphanumericChar(event: any) {
+    public allowAlphanumericChar(event: any): void {
         if (event && event.value) {
             this.vm.selectedLedger.passportNumber = this.generalService.allowAlphanumericChar(event.value)
         }

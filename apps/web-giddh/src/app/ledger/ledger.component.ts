@@ -1750,7 +1750,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @param {string} [selectedAccountParentGroup] selected account parent group unique name
      * @memberof LedgerComponent
      */
-    public checkTouristSchemeApplicable(activeLedgerParentgroup: string, selectedAccountParentGroup: string) {
+    public checkTouristSchemeApplicable(activeLedgerParentgroup: string, selectedAccountParentGroup: string): void {
         if (this.profileObj && this.profileObj.countryV2 && this.profileObj.countryV2.alpha2CountryCode && this.profileObj.countryV2.alpha2CountryCode === 'AE' && activeLedgerParentgroup && selectedAccountParentGroup && (this.allowParentGroup.includes(activeLedgerParentgroup)) && ( this.allowParentGroup.includes(selectedAccountParentGroup))) {
             this.isTouristSchemeApplicable = true;
         } else {
