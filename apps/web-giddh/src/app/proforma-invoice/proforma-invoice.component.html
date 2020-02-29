@@ -1139,33 +1139,35 @@
                                     <p>Deposit</p>
                                     <ul>
 
-                                        <li role="menuitem" class="mrT1 ">
-                                            <div class="clearfix paymentMode">
+                                        <ng-template>
+                                            <li role="menuitem" class="mrT1 ">
+                                                <div class="clearfix paymentMode">
 
-                                                <div class="pull-right balanceDueText">
-                                                    <div class="clearfix mb-1">
-                                                        <span class="pd0 mr-2 d-inline-block">
-                                                            <input class="radio-custom cp ml0" name="advanceReceipt" checked="" id="adjustAmountNo" type="radio">
-                                                            <label class="radio-custom-label" for="adjustAmountNo">No</label>
-                                                        </span>
-                                                        <span class="pd0 d-inline-block">
-                                                            <input class="radio-custom cp ml0" name="advanceReceipt" id="adjustAmountYes" type="radio">
-                                                            <label class="radio-custom-label" for="adjustAmountYes" (click)="openModal(adjustPayment)">Yes</label>
-                                                        </span>
+                                                    <div class="pull-right balanceDueText">
+                                                        <div class="clearfix mb-1">
+                                                            <span class="pd0 mr-2 d-inline-block">
+                                                                <input class="radio-custom cp ml0" name="advanceReceipt" checked="" id="adjustAmountNo" type="radio">
+                                                                <label class="radio-custom-label" for="adjustAmountNo">No</label>
+                                                            </span>
+                                                            <span class="pd0 d-inline-block">
+                                                                <input class="radio-custom cp ml0" name="advanceReceipt" id="adjustAmountYes" type="radio">
+                                                                <label class="radio-custom-label" for="adjustAmountYes" (click)="openModal(adjustPayment)">Yes</label>
+                                                            </span>
+                                                        </div>
+
+                                                        <div class="clearfix">
+                                                            <span class="pull-left">
+                                                                <p class="text-light mb-0">Advance Receipt</p>
+                                                                <p class="text-light">1200.00</p>
+                                                            </span>
+                                                            <a href="javascript:void(0)" (click)="openModal(adjustPayment)" class="font-12 pl-1 color-primary"><i class="icon-edit11"></i></a>
+                                                        </div>
                                                     </div>
 
-                                                    <div class="clearfix">
-                                                        <span class="pull-left">
-                                                            <p class="text-light mb-0">Advance Receipt</p>
-                                                            <p class="text-light">1200.00</p>
-                                                        </span>
-                                                        <a href="javascript:void(0)" (click)="openModal(adjustPayment)" class="font-12 pl-1 color-primary"><i class="icon-edit11"></i></a>
-                                                    </div>
+                                                    <label class="pull-right">Adjust Amount</label>
                                                 </div>
-
-                                                <label class="pull-right">Adjust Amount</label>
-                                            </div>
-                                        </li>
+                                            </li>
+                                        </ng-template>
 
                                         <li role="menuitem" class="mrT1 ">
                                             <div class="clearfix paymentMode">
