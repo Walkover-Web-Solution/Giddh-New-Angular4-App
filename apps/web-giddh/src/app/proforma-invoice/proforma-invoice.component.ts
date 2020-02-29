@@ -870,7 +870,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                     }
                     /** Tourist scheme added in case of sales invoice  */
-                     if (this.isSalesInvoice) {
+                     if (this.isSalesInvoice || this.isCashInvoice) {
                             if (results[1] && results[1].touristSchemeApplicable) {
                                 obj.touristSchemeApplicable = results[1].touristSchemeApplicable;
                                 obj.passportNumber = results[1].passportNumber;

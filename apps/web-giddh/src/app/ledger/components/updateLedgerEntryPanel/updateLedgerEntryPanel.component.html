@@ -974,7 +974,7 @@
 <!-- endregion -->
 <!-- Tourist scheme template block-->
 <ng-template #touristSchemeTemplate>
-    <div class="row font-14 mb-1">
+    <div class="row font-14 mb-1" *ngIf="isTouristSchemeApplicable">
         <div class="col-md-6">
             <div class="d-flex align-items-center">
                 <span class="pull-left">

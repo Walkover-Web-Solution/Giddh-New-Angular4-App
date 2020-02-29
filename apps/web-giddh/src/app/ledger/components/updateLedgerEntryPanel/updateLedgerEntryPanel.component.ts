@@ -269,7 +269,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.activeAccount = cloneDeep(resp[2].body);
                     // Decides whether to show the RCM entry
                     this.shouldShowRcmEntry = this.isRcmEntryPresent(resp[1].transactions);
-                    this.isTouristSchemeApplicable = this.checkTouristSchemeApplicable(resp[1]);
+                    this.isTouristSchemeApplicable = this.checkTouristSchemeApplicable(resp[1], resp[2], resp[3]);
                     this.shouldShowRcmTaxableAmount = resp[1].reverseChargeTaxableAmount !== undefined && resp[1].reverseChargeTaxableAmount !== null;
                     if (this.shouldShowRcmTaxableAmount) {
                         // Received taxable amount is a truthy value
@@ -1296,8 +1296,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @returns {boolean} True if tourist scheme applicable
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    private checkTouristSchemeApplicable(accountDetails: any): boolean {
-        if (accountDetails && accountDetails.touristSchemeApplicable) {
+    private checkTouristSchemeApplicable(baseAccountDetails: any, selectedAccountDetails, companyProfile): boolean {
+        if (baseAccountDetails && baseAccountDetails.touristSchemeApplicable ) {
+            return true;
+        } else if (baseAccountDetails && baseAccountDetails.voucher && (baseAccountDetails.voucher.name ==='sales' || baseAccountDetails.voucher.name ==='cash') &&  selectedAccountDetails && selectedAccountDetails.body && selectedAccountDetails.body.parentGroups && selectedAccountDetails.body.parentGroups.length > 1 && selectedAccountDetails.body.parentGroups[1].uniqueName && this.allowParentGroup.includes(selectedAccountDetails.body.parentGroups[1].uniqueName) && companyProfile && companyProfile.countryV2 && companyProfile.countryV2.alpha2CountryCode && companyProfile.countryV2.alpha2CountryCode === 'AE') {
             return true;
         } else {
             return false;
@@ -1315,7 +1317,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public checkTouristSchemeApplicableorNot(activeLedgerParentgroup: string, selectedAccountParentGroup: string, transactionType: string) {
-        if (this.profileObj && this.profileObj.countryV2 && this.profileObj.countryV2.alpha2CountryCode && this.profileObj.countryV2.alpha2CountryCode === 'AE' && activeLedgerParentgroup && selectedAccountParentGroup && (this.allowParentGroup.includes(activeLedgerParentgroup)) && ( this.allowParentGroup.includes(selectedAccountParentGroup)) && transactionType && transactionType==='DEBIT') {
+        if (this.profileObj && this.profileObj.countryV2 && this.profileObj.countryV2.alpha2CountryCode && this.profileObj.countryV2.alpha2CountryCode === 'AE' && activeLedgerParentgroup && selectedAccountParentGroup && (this.allowParentGroup.includes(activeLedgerParentgroup)) && (this.allowParentGroup.includes(selectedAccountParentGroup)) && transactionType && transactionType === 'DEBIT') {
             this.isTouristSchemeApplicable = true;
         } else {
             this.isTouristSchemeApplicable = false;
