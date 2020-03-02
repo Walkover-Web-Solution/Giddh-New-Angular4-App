@@ -6,12 +6,10 @@
 	<form #discountForm="ngForm" novalidate (submit)="submit()" class="discountFormSettingTab">
 		<div class="row ">
 			<div class="form-group col-sm-2 col-md-2 col-xs-12">
-				<label>Select Discount</label><br>
+				<label>&nbsp;</label><br>
 				<sh-select [options]="discountTypeList" [isFilterEnabled]="false" name="type"
-					[(ngModel)]="createRequest.type" [placeholder]="'Select Type'" [ItemHeight]="33"></sh-select>
+					[(ngModel)]="createRequest.type" [placeholder]="'Select Discount Type'" [ItemHeight]="33"></sh-select>
 			</div>
-
-
 			<ng-container *ngIf="createRequest.type">
 				<div class="form-group col-sm-2 col-md-2 col-xs-12">
 					<label>Name</label>

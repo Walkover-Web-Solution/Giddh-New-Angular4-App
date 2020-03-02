@@ -29,6 +29,7 @@ import {GeneralActions} from '../../actions/general/general.actions';
 import {Configuration} from "../../app.constant";
 import {GoogleLoginProvider, LinkedinLoginProvider} from "../../theme/ng-social-login-module/providers";
 import {AuthenticationService} from "../../services/authentication.service";
+import { IForceClear } from '../../models/api-models/Sales';
 
 export declare const gapi: any;
 
@@ -79,6 +80,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public openNewRegistration: boolean;
     public selecetdUpdateIndex: number;
     public isEcommerceShopifyUserVerified: boolean = false;
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
 
     constructor(
         private router: Router,
@@ -245,6 +247,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (f.valid) {
             this.store.dispatch(this.settingsIntegrationActions.SavePaymentInfo(f.value));
             this.paymentFormObj = new PaymentClass();
+            this.paymentFormObj.corpId = "";
+            this.paymentFormObj.userId = "";
+            this.paymentFormObj.accountNo = "";
+            this.paymentFormObj.aliasId = "";
+            this.paymentFormObj.accountUniqueName = "";
+            this.forceClear$ = observableOf({ status: true });
         }
     }
 
@@ -291,7 +299,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public removeGmailAccount() {
         this.store.dispatch(this.settingsIntegrationActions.RemoveGmailIntegration());
     }
-
 
     public selectCashfreeAccount(event: IOption, objToApnd) {
         let accObj = {

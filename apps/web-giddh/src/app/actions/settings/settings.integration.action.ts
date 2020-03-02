@@ -82,7 +82,7 @@ export class SettingsIntegrationActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    //let responseData = data.body;
+                    this.store.dispatch(this._companyAction.getAllRegistrations());
                     this.toasty.successToast('Account created successfully', '');
                 }
                 return { type: 'EmptyAction' };
@@ -108,6 +108,7 @@ export class SettingsIntegrationActions {
                     this.toasty.errorToast(data.message, data.code);
                     this.store.dispatch(this._companyAction.getAllRegistrations());
                 } else {
+                    this.store.dispatch(this._companyAction.getAllRegistrations());
                     this.toasty.successToast(data.body, '');
                 }
                 return { type: 'EmptyAction' };
