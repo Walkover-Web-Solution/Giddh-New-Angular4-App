@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 import { Observable, ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { Store } from "@ngrx/store";
+import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
 
 @Component({
@@ -15,7 +15,6 @@ import { AppState } from "../../../store";
 
 export class DatepickeroptionsComponent implements OnInit, OnDestroy {
     @Output() public filterDates: EventEmitter<any> = new EventEmitter(null);
-    @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
     public moment = moment;
     public universalDate$: Observable<any>;
     public datePickerOptions: any = {
@@ -69,20 +68,19 @@ export class DatepickeroptionsComponent implements OnInit, OnDestroy {
     };
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public isDefault: boolean = true;
 
     constructor(private store: Store<AppState>) {
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
         // listen for universal date
-        this.universalDate$.subscribe(dateObj => {
-            if (this.isDefault && dateObj) {
-                this.datePickerOptions.startDate = moment(dateObj[0]);
-                this.datePickerOptions.endDate = moment(dateObj[1]);
-                this.datePickerOptions.chosenLabel = dateObj[2];
-                this.isDefault = false;
+        this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
+            if (dateObj) {
+                this.datePickerOptions = {
+                    ...this.datePickerOptions, startDate: moment(dateObj[0], GIDDH_DATE_FORMAT).toDate(),
+                    endDate: moment(dateObj[1], GIDDH_DATE_FORMAT).toDate(), chosenLabel: dateObj[2]
+                };
             }
         });
     }
