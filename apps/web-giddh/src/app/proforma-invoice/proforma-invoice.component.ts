@@ -84,6 +84,7 @@ import { ProformaInvoiceUtilityService } from './services/proforma-invoice-utili
 import { PurchaseRecordService } from '../services/purchase-record.service';
 import { CommonActions } from '../actions/common.actions';
 import { PurchaseRecordActions } from '../actions/purchase-record/purchase-record.action';
+import { AdvanceReceiptAdjustmentComponent } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.component';
 
 const THEAD_ARR_READONLY = [
     {
@@ -179,6 +180,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('billingState') billingState: ElementRef;
     /** Shipping state instance */
     @ViewChild('shippingState') shippingState: ElementRef;
+
+    /**Adjust advance receipts */
+    @ViewChild('adjustPaymentModal') public adjustPaymentModal: ModalDirective;
+    @ViewChild('advanceReceiptComponent') public advanceReceiptComponent: AdvanceReceiptAdjustmentComponent;
+    public showAdvanceReceiptAdjust: boolean = false;
+
 
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -3501,23 +3508,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    openModal(adjustPayment: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(
-            adjustPayment,
-            Object.assign({}, { class: 'modal-lg' })
-        );
-    }
-    confirm(): void {
-        this.message = 'Confirmed!';
-        this.modalRef.hide();
-    }
-
-    decline(): void {
-        this.message = 'Declined!';
-        this.modalRef.hide();
-    }
-
-
     /**
      * get currency rate on voucher date changed
      * @param selectedDate: Date ( date that is selected by user )
@@ -4116,6 +4106,37 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (event && event.value) {
             this.invFormData.passportNumber = this.generalService.allowAlphanumericChar(event.value)
         }
+    }
+
+
+
+    // Advance receipts adjustment start
+
+   public closeAdvanceReciiptModal(event) {
+       this.showAdvanceReceiptAdjust = false;
+       this.adjustPaymentModal.hide();
+   }
+
+       openModal(adjustPayment: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(
+            adjustPayment,
+            Object.assign({}, { class: 'modal-lg' })
+        );
+    }
+
+    public openAdjustPaymentModal() {
+        this.showAdvanceReceiptAdjust = true;
+        this.adjustPaymentModal.show();
+    }
+
+    confirm(): void {
+        this.message = 'Confirmed!';
+        this.modalRef.hide();
+    }
+
+    decline(): void {
+        this.message = 'Declined!';
+        this.modalRef.hide();
     }
 
 }

@@ -1152,8 +1152,7 @@
                                 <div (click)="clickedInside($event)" id="deposit-dropdown" class="form-group pd1">
                                     <p>Deposit</p>
                                     <ul>
-
-                                        <ng-template>
+                                        <ng-container *ngIf="isSalesInvoice">
                                             <li role="menuitem" class="mrT1 ">
                                                 <div class="clearfix paymentMode">
 
@@ -1165,7 +1164,7 @@
                                                             </span>
                                                             <span class="pd0 d-inline-block">
                                                                 <input class="radio-custom cp ml0" name="advanceReceipt" id="adjustAmountYes" type="radio">
-                                                                <label class="radio-custom-label" for="adjustAmountYes" (click)="openModal(adjustPayment)">Yes</label>
+                                                                <label class="radio-custom-label" for="adjustAmountYes" (click)="openAdjustPaymentModal(adjustPayment); getFormData(invoiceForm);">Yes</label>
                                                             </span>
                                                         </div>
 
@@ -1181,7 +1180,7 @@
                                                     <label class="pull-right">Adjust Amount</label>
                                                 </div>
                                             </li>
-                                        </ng-template>
+                                        </ng-container>
 
                                         <li role="menuitem" class="mrT1 ">
                                             <div class="clearfix paymentMode">
@@ -2174,6 +2173,14 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <confirmation-modal [configuration]="purchaseRecordConfirmationConfiguration" (buttonClicked)="handlePurchaseRecordConfirmation($event)"></confirmation-modal>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent [invoiceFormDetails]="invFormData" (closeModelEvent)="closeAdvanceReciiptModal($event)"></advance-receipt-adjustment-component>
         </div>
     </div>
 </div>
