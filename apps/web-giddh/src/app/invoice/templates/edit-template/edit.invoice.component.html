@@ -8,7 +8,7 @@
                 style="margin-bottom: 10px;display: inline-block !important;">
                 <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
                     aria-controls="dropdown-basic">
-                    {{ voucherType | titlecase}}
+                    {{ (voucherType === "debit note" || voucherType === "credit note") ? 'Credit/Debit Note' : voucherType | titlecase}}
                     <span class="caret"></span>
                 </button>
                 <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
@@ -18,11 +18,7 @@
                     </li>
 
                     <li role="menuitem" (click)="voucherTypeChanged('debit note')">
-                        <a class="dropdown-item cp" href="javascript:void(0)">Debit Note</a>
-                    </li>
-
-                    <li role="menuitem" (click)="voucherTypeChanged('credit note')">
-                        <a class="dropdown-item cp" href="javascript:void(0)">Credit Note</a>
+                        <a class="dropdown-item cp" href="javascript:void(0)">Credit/Debit Note</a>
                     </li>
                 </ul>
             </div>
@@ -80,7 +76,7 @@
                     <div class="template_info text-center">
                         <h3 class="primary_clr ellp">{{template.name}}</h3>
 
-                        <span *ngIf="template.isDefaultForVoucher" class="badge btn-warning mrT2"><i
+                        <span *ngIf="template.isDefaultForVoucher" class="badge btn-pink mrT2"><i
                                 class="glyphicon glyphicon-star"></i> Default Template</span>
                         <span *ngIf="!template.isDefaultForVoucher" class="badge btn-success mrT2 cp"
                             (click)="onSetTemplateAsDefault(template,'voucher')"><i

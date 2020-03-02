@@ -46,7 +46,7 @@
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">
                 <input type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" *ngIf="!showLabelOnly"
-                    [tabindex]="tabIndex" class="fristElementToFocus form-control" name="filter2" [(ngModel)]="filter"
+                    [tabindex]="tabIndex" class="firstElementToFocus form-control" name="filter2" [(ngModel)]="filter"
                     (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [value]="filter"
                     style="padding-right: 28px !important;" />
             </ng-container>

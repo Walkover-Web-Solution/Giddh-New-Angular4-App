@@ -12,6 +12,7 @@ import { InvoiceUiDataService } from '../../../services/invoice.ui.data.service'
 import { ToasterService } from '../../../services/toaster.service';
 import { ActivatedRoute } from '@angular/router';
 import { InvoiceTemplateModalComponent } from './modals/template-modal/template-modal.component';
+import { VoucherTypeEnum } from '../../../models/api-models/Sales';
 
 /**
  * Created by kunalsaxena on 6/29/17.
@@ -31,6 +32,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     public voucherType: string;
     @ViewChild(InvoiceTemplateModalComponent) public invoiceTemplateModalComponent: InvoiceTemplateModalComponent;
 
+    public selectedVoucherType: VoucherTypeEnum;
     public templateId: string = 'common_template_a';
     public heading: string = 'Walkover Web Solutions';
     public template: GetInvoiceTemplateDetailsResponse[];
@@ -633,12 +635,21 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     public templateType: any;
 
     constructor(private _toasty: ToasterService, private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceTemplatesService: InvoiceTemplatesService, private _activatedRoute: ActivatedRoute, private _invoiceUiDataService: InvoiceUiDataService) {
-
         this.store.dispatch(this.invoiceActions.getTemplateState());
     }
 
     public ngOnInit() {
-        this.voucherTypeChanged('sales');
+        this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(route => {
+            if(route && route.selectedType) {
+                if(route.selectedType === VoucherTypeEnum.creditNote || route.selectedType === VoucherTypeEnum.debitNote) {
+                    this.voucherTypeChanged(route.selectedType);
+                } else {
+                    this.voucherTypeChanged("sales");
+                }
+            } else {
+                this.voucherTypeChanged("sales");
+            }
+        });
         // this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
         //   debugger;
         //   this.voucherType = a.voucherType;

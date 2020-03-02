@@ -211,20 +211,18 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public onUploadFileOutput(output: UploadOutput): void {
-        if (output.type === 'allAddedToQueue') {
-            // this.logoAttached = true;
-            this.signatureImgAttached = true;
-            this.previewFile(output.file);
-
+        if (output.type === 'allAddedToQueue' || output.type === 'addedToQueue') {
+            if(output.file) {
+                this.signatureImgAttached = true;
+                this.previewFile();
+            }
         } else if (output.type === 'start') {
             this.isSignatureUploadInProgress = true;
         } else if (output.type === 'done') {
             if (output.file.response.status === 'success') {
                 this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
                 this.customTemplate.sections.footer.data.imageSignature.label = output.file.response.body.uniqueName;
-                // this.customTemplate.sections.footer.data.imageSignature.label = this.signatureSrc;
                 this.onChangeFieldVisibility(null, null, null);
-                // this.isFileUploaded = true;
                 this._toasty.successToast('file uploaded successfully.');
                 this.startUpload();
             } else {
@@ -250,22 +248,23 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
         this.uploadInput.emit(event);
     }
 
-    public previewFile(files: any) {
+    public previewFile() {
         let preview: any = document.getElementById('signatureImage');
-        let a: any = document.querySelector('input[type=file]');
+        let a: any = document.getElementById('signatureImg-edit');
         let file = a.files[0];
         let reader = new FileReader();
+
         reader.onloadend = () => {
             preview.src = reader.result;
-            this._invoiceUiDataService.setLogoPath(preview.src);
+            this.startUpload();
+            //this._invoiceUiDataService.setLogoPath(preview.src);
         };
+        
         if (file) {
             reader.readAsDataURL(file);
-            // this.logoAttached = true;
         } else {
             preview.src = '';
-            // this.logoAttached = false;
-            this._invoiceUiDataService.setLogoPath('');
+            //this._invoiceUiDataService.setLogoPath('');
         }
     }
 
@@ -281,22 +280,6 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
         this.uploadInput.emit({ type: 'removeAll' });
     }
 
-
-    /**
-     * deleteLogo
-     */
-    public deleteLogo() {
-        // this.onValueChange('logoUniqueName', null);
-        this._invoiceUiDataService.setLogoPath('');
-        this.files = []; // local uploading files array
-        this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
-        this.humanizeBytes = humanizeBytes;
-        // this.logoAttached = false;
-        this.isFileUploaded = false;
-        this.isFileUploadInProgress = false;
-        this.removeAllFiles();
-    }
-
     /**
      * chooseSigntureType
      */
@@ -305,8 +288,6 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
         if (val === 'slogan') {
             template.sections.footer.data.slogan.display = true;
             template.sections.footer.data.imageSignature.display = false;
-            //  this.signatureImgAttached = false;
-            // this.signatureImgzRef.nativeElement.value = null;
         } else {
             template.sections.footer.data.imageSignature.display = true;
             template.sections.footer.data.slogan.display = false;

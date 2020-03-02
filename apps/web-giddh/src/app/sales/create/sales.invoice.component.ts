@@ -361,16 +361,16 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     }
 
     public ngAfterViewInit() {
-        // fristElementToFocus to focus on customer search box
+        // firstElementToFocus to focus on customer search box
         setTimeout(() => {
             if (!this.isCashInvoice) {
                 if (this.isPurchaseInvoice) {
-                    if ($('.fristElementToFocus')[1]) {
-                        $('.fristElementToFocus')[1].focus();
+                    if ($('.firstElementToFocus')[1]) {
+                        $('.firstElementToFocus')[1].focus();
                     }
                 } else {
-                    if ($('.fristElementToFocus')[0]) {
-                        $('.fristElementToFocus')[0].focus();
+                    if ($('.firstElementToFocus')[0]) {
+                        $('.firstElementToFocus')[0].focus();
                     }
                 }
             } else {
@@ -840,12 +840,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         setTimeout(() => {
             if (!this.isCashInvoice) {
                 if (this.isPurchaseInvoice) {
-                    if ($('.fristElementToFocus')[1]) {
-                        $('.fristElementToFocus')[1].focus();
+                    if ($('.firstElementToFocus')[1]) {
+                        $('.firstElementToFocus')[1].focus();
                     }
                 } else {
-                    if ($('.fristElementToFocus')[0]) {
-                        $('.fristElementToFocus')[0].focus();
+                    if ($('.firstElementToFocus')[0]) {
+                        $('.firstElementToFocus')[0].focus();
                     }
                 }
             } else {

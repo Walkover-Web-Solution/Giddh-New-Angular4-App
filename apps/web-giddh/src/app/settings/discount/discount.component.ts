@@ -32,8 +32,8 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 export class DiscountComponent implements OnInit, OnDestroy {
     @ViewChild('discountConfirmationModel') public discountConfirmationModel: ModalDirective;
     public discountTypeList: IOption[] = [
-        { label: 'as per value', value: 'FIX_AMOUNT' },
-        { label: 'as per percent', value: 'PERCENTAGE' }
+        { label: 'As per value', value: 'FIX_AMOUNT' },
+        { label: 'As per percent', value: 'PERCENTAGE' }
     ];
     public accounts$: IOption[];
     public createRequest: CreateDiscountRequest = new CreateDiscountRequest();

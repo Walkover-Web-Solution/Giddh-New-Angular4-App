@@ -96,6 +96,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     public ngOnInit() {
         this.uploadInput = new EventEmitter<UploadInput>();
         this.getTemplates();
+
     }
 
     /**
@@ -187,6 +188,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         this.closeModelEvent.emit(true);
     }
 
+
     /**
      * To select bulk update options
      *
@@ -230,7 +232,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
                 if (customDefault) {
                     this.defaultTemplates = customDefault[0];
                 }
-                this.checkDefaultTemplateSignature(this.defaultTemplates);
+                this.checkDefaultTemplateSignature(this.defaultTemplates, templateType);
                 this.allTemplatesOptions = [];
                 templates.forEach(tmpl => {
                     this.allTemplatesOptions.push({
@@ -319,10 +321,12 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
                 case 'customFields':
                     this.bulkUpdateRequest(this.updateCustomfieldsRequest, 'customfields');
                     break;
-
                 default:
                     break;
+
             }
+        } else if (this.signatureOptions === 'slogan') {
+            this.bulkUpdateRequest(this.updateSloganRequest, 'slogan');
         }
     }
 
@@ -334,6 +338,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     public onConfirmationUpdateImageSlogan(): void {
         this.bulkUpdateImageSlogan.hide();
         if (this.signatureOptions === 'image') {
+
             if (this.updateImageSignatureRequest.imageSignatureUniqueName) {
                 this.bulkUpdateRequest(this.updateImageSignatureRequest, 'imagesignature');
             } else {
@@ -342,6 +347,8 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         } else if (this.signatureOptions === 'slogan') {
             this.bulkUpdateRequest(this.updateSloganRequest, 'slogan');
         }
+
+
     }
 
     /**
@@ -403,9 +410,10 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
      * To get check default template image signature type
      *
      * @param {CustomTemplateResponse} defaultTemplate default template object
+     * @param {string} templateType selected voucher type
      * @memberof InvoiceBulkUpdateModalComponent
      */
-    public checkDefaultTemplateSignature(defaultTemplate: CustomTemplateResponse): void {
+    public checkDefaultTemplateSignature(defaultTemplate: CustomTemplateResponse, voucherType: string) {
         if (defaultTemplate && defaultTemplate.sections && defaultTemplate.sections.footer && defaultTemplate.sections.footer.data) {
             if (defaultTemplate.sections.footer.data.imageSignature && defaultTemplate.sections.footer.data.imageSignature.display && defaultTemplate.sections.footer.data.slogan && !defaultTemplate.sections.footer.data.slogan.display) {
                 this.isDefaultTemplateSignatureImage = true;
