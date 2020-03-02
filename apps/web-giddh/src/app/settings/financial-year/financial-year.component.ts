@@ -169,11 +169,11 @@ export class FinancialYearComponent implements OnInit {
 
 	public addFY() {
 		if (this.selectedYear) {
-            if(this.selectedYear < moment().year()) {
+            // if(this.selectedYear < moment().year()) {
                 this.store.dispatch(this.settingsFinancialYearActions.addFinancialYear(this.selectedYear));
-            } else {
-                this.store.dispatch(this.settingsFinancialYearActions.addFutureFinancialYear(this.selectedYear));
-            }
+            // } else {
+            //     this.store.dispatch(this.settingsFinancialYearActions.addFutureFinancialYear(this.selectedYear));
+            // }
 		}
 	}
 
