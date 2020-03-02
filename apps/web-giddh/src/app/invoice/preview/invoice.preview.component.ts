@@ -1071,11 +1071,13 @@ public toggleBulkUpdatePopup(isClose: boolean): void {
                 return ele.isSelected;
             });
 
-            this.voucherData.items.forEach((ele) => {
-                this.selectedInvoicesList = this.selectedInvoicesList.filter((s) => {
-                    return ele.uniqueName !== s.uniqueName;
+            if(this.voucherData && this.voucherData.items) {
+                this.voucherData.items.forEach((ele) => {
+                    this.selectedInvoicesList = this.selectedInvoicesList.filter((s) => {
+                        return ele.uniqueName !== s.uniqueName;
+                    });
                 });
-            });
+            }
 
             this.selectedItems = [];
             this.isExported = false;
