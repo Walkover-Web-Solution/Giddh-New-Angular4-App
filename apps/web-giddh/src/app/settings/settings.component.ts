@@ -73,22 +73,16 @@ export class SettingsComponent implements OnInit {
     }
 
     public ngOnInit() {
-
         this._route.params.subscribe(params => {
             if (params['type'] && this.activeTab !== params['type'] && params['referrer']) {
-                if (!this.activeTab) {
-                    this.setStateDetails(params['type'], params['referrer']);
-                }
+                this.setStateDetails(params['type'], params['referrer']);
                 if (params['type'] === 'integration' && params['referrer']) {
                     this.selectedChildTab = this.assignChildtabForIntegration(params['referrer']);
                 }
                 this.integrationtab = params['referrer'];
                 this.activeTab = params['type'];
             } else if (params['type'] && this.activeTab !== params['type']) {
-                // if active tab is null or undefined then it means component initialized for the first time
-                if (!this.activeTab) {
-                    this.setStateDetails(params['type'], params['referrer']);
-                }
+                this.setStateDetails(params['type'], params['referrer']);
                 this.selectedChildTab = 0;
                 this.integrationtab = '';
                 this.activeTab = params['type'];
@@ -180,19 +174,16 @@ export class SettingsComponent implements OnInit {
 
     public tabChanged(tab: string) {
         if (tab === 'integration') {
-            this.setStateDetails(tab, this.integrationtab);
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
             this.loadModuleData(tab);
             if (this.integrationtab) {
                 this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
             }
         } else {
-            this.setStateDetails(tab, '');
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
             this.loadModuleData(tab);
             this.router.navigate(['pages/settings/', tab], { replaceUrl: true });
         }
-
     }
 
     private saveGmailAuthCode(authCode: string) {
@@ -273,7 +264,6 @@ export class SettingsComponent implements OnInit {
         } else {
             stateDetailsRequest.lastState = 'pages/settings/' + type;
         }
-
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }

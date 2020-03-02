@@ -4,7 +4,7 @@
     <div class="form-group" style="margin-left:0;">
         <label *ngIf="isLblShow">Unique Name/Email ID</label>
         <input type="text" name="emailId" formControlName="emailId" placeholder="Unique Name/Email ID"
-            class="form-control " />
+            class="form-control" [attr.readonly]="userdata?.uniqueName" />
     </div>
 
     <div class="form-group">
