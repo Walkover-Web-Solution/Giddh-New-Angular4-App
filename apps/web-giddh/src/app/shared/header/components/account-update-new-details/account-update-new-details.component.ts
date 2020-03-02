@@ -1368,25 +1368,37 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
-        /**
-     * To show bank details validation using toaster
-     *
-     * @param {*} element Edit box value
-     * @param {*} type  To check Type of bank details field
-     * @memberof AccountUpdateNewDetailsComponent
-     */
-    public showBankDetailsValidation(element: any, type: any) {
+    /**
+      * To show bank details validation using toaster
+      *
+      * @param {*} element Edit box value
+      * @param {*} type  To check Type of bank details field
+      * @memberof AccountUpdateNewDetailsComponent
+      */
+    public showBankDetailsValidation(element: any, type: any): void {
         if (type === 'bankAccountNo') {
             if (this.selectedCountryCode === 'IN') {
-                if (element && element.value && element.value.length < 9)
-                    this._toaster.errorToast('The bank account number must contain 9 to 18 characters')
+                if (element && element.value && element.value.length < 9) {
+                    this._toaster.errorToast('The bank account number must contain 9 to 18 characters');
+                    element.classList.add('error-box');
+                } else {
+                    element.classList.remove('error-box');
+                }
             } else {
-                if (element && element.value && element.value.length < 23)
-                this._toaster.errorToast('The IBAN must contain 23 to 34 characters.');
+                if (element && element.value && element.value.length < 23) {
+                    this._toaster.errorToast('The IBAN must contain 23 to 34 characters.');
+                    element.classList.add('error-box');
+                } else {
+                    element.classList.remove('error-box');
+                }
             }
         } else if (type === 'swiftCode') {
-            if (element && element.value && element.value.length < 8)
+            if (element && element.value && element.value.length < 8) {
                 this._toaster.errorToast('The SWIFT Code/BIC must contain 8 to 11 characters.');
+                element.classList.add('error-box');
+            } else {
+                element.classList.remove('error-box');
+            }
         }
     }
 }

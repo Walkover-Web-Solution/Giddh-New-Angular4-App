@@ -27,6 +27,7 @@ import { FILE_ATTACHMENT_TYPE, Configuration } from 'apps/web-giddh/src/app/app.
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { LEDGER_API } from 'apps/web-giddh/src/app/services/apiurls/ledger.api';
 import { BaseResponse } from 'apps/web-giddh/src/app/models/api-models/BaseResponse';
+import { ProformaListComponent } from '../../../proforma/proforma-list.component';
 
 @Component({
     selector: 'invoice-preview-details-component',
@@ -92,6 +93,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     /** True, if attachment upload is to be displayed */
     private shouldShowUploadAttachment: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    private isUpdateVoucherActionSuccess$: Observable<boolean>;
+    public proformaListComponent: ProformaListComponent;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -114,6 +117,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         });
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
+        this.isUpdateVoucherActionSuccess$ = this.store.pipe(select(s => s.proforma.isUpdateProformaActionSuccess), takeUntil(this.destroyed$));
     }
 
     /**
@@ -146,6 +150,12 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this.detectChanges();
             }
         }));
+           this.isUpdateVoucherActionSuccess$.subscribe(res => {
+            if (res) {
+                // get all data again because we are updating action in list page so we have to update data i.e we have to fire this
+               this.proformaListComponent.getAll();
+            }
+        });
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
     }
@@ -153,6 +163,12 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     ngOnChanges(changes: SimpleChanges): void {
         if ('items' in changes && changes.items.currentValue !== changes.items.previousValue) {
             this.filteredData = changes.items.currentValue;
+            if (this.selectedItem && this.selectedItem.uniqueName) {
+                this.selectedItem = this.filteredData.filter(item => {
+                    return item.uniqueName === this.selectedItem.uniqueName;
+                })[0];
+            }
+            this.getVoucherVersions();
         }
 
         if ('invoiceSetting' in changes && changes.invoiceSetting.currentValue && changes.invoiceSetting.currentValue !== changes.invoiceSetting.previousValue) {
