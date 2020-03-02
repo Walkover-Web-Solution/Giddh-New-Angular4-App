@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, createSelector, select } from '@ngrx/store';
 import { DaybookActions } from 'apps/web-giddh/src/app/actions/daybook/daybook.actions';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -14,6 +14,7 @@ import { DayBookResponseModel } from '../models/api-models/Daybook';
 import { DaybookQueryRequest } from '../models/api-models/DaybookRequest';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'daybook',
@@ -178,9 +179,19 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
 
     public initialRequest() {
-        this.daybookQueryRequest.from = this.daybookQueryRequest.from || this.datePickerOptions.startDate.format('DD-MM-YYYY');
-        this.daybookQueryRequest.to = this.daybookQueryRequest.to || this.datePickerOptions.endDate.format('DD-MM-YYYY');
-        this.go();
+        this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
+            if (dateObj) {
+                let universalDate = _.cloneDeep(dateObj);
+                this.datePickerOptions = {
+                    ...this.datePickerOptions, startDate: moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(),
+                    endDate: moment(universalDate[1], GIDDH_DATE_FORMAT).toDate()
+                };
+
+                this.daybookQueryRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.daybookQueryRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.go();
+            }
+        });
     }
 
     public pageChanged(event: any): void {
