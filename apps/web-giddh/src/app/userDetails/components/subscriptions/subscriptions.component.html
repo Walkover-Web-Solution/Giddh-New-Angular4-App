@@ -6,8 +6,7 @@
                     <div class="form-group">
                         <label class="d-block mb-1">Select Subscribed Plan</label>
                         <div class="btn-group d-block subscription-dropdown mb-2" dropdown>
-                            <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
-                                aria-controls="dropdown-basic">
+                            <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle" aria-controls="dropdown-basic">
                                 {{seletedUserPlans?.planDetails?.name}} <span class="caret"></span>
                             </button>
                             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
@@ -16,18 +15,13 @@
                                 <li *ngFor="let item of subscriptions" role="menuitem" class="cursor-pointer">
                                     <a (click)="selectedSubscriptionPlan(item);">
                                         <div class="clearfix">
-                                            <p><strong>{{item?.planDetails?.name}}</strong> </p>
-
+                                            <p><strong>{{item?.planDetails?.name}}</strong></p>
                                             <p>Subscribed on {{item?.startedAt}} </p>
-                                            <p>Companies: {{item?.totalCompanies}} out of
-                                                {{item?.planDetails?.companiesLimit}} </p>
+                                            <p>Companies: {{item?.totalCompanies}} out of {{item?.planDetails?.companiesLimit}} </p>
                                         </div>
-                                        <span class="text-warning"
-                                            *ngIf="item?.status==='trial'">{{item?.status | titlecase}}</span>
-                                        <span class="text-success"
-                                            *ngIf="item?.status==='active'">{{item?.status | titlecase}}</span>
-                                        <span class="text-danger"
-                                            *ngIf="item?.status==='expired'">{{item?.status | titlecase}}</span>
+                                        <span class="text-warning" *ngIf="item?.status==='trial'">{{item?.status | titlecase}}</span>
+                                        <span class="text-success" *ngIf="item?.status==='active'">{{item?.status | titlecase}}</span>
+                                        <span class="text-danger" *ngIf="item?.status==='expired'">{{item?.status | titlecase}}</span>
                                     </a>
                                 </li>
                             </ul>
@@ -35,7 +29,6 @@
                     </div>
                 </div>
                 <div class="col-md-9 col-sm-6 text-right xs-left">
-                    <!-- *ngIf="seletedUserPlans?.additionalCharges >0" -->
                     <button type="button" *ngIf="seletedUserPlans?.additionalCharges >0" (click)="goToBillingDetails();"
                         class="btn btn-pink mt-2">Pay Now</button>
                     <button type="button" (click)="isPlanShow=true" class="btn btn-green mt-2">Buy New Plan</button>
@@ -74,7 +67,7 @@
 
                     <div class="clearfix mb-2">
                         <button type="button" class="btn btn-primary" (click)="isPlanShow=true">Change Plan</button>
-                        <button type="button" (click)="isPlanShow=true" class="btn btn-pink">Payment Log</button>
+                        <!-- <button type="button" (click)="isPlanShow=true" class="btn btn-pink">Payment Log</button> -->
                     </div>
                 </div>
             </div>
@@ -87,7 +80,7 @@
                 <p><small>Please renew your plan or pay now to continue subscription.</small></p>
             </div>
 
-            <h2 class="subscription-title" *ngIf="subscriptions">Professional Plan <span
+            <h2 class="subscription-title" *ngIf="subscriptions">{{seletedUserPlans?.planDetails?.name}} <span
                     *ngIf="seletedUserPlans?.startedAt">({{seletedUserPlans?.startedAt}})</span></h2>
             <div class="row">
                 <div class="col-sm-7 transaction-list">
@@ -138,8 +131,7 @@
                             </div>
                             <div class="campanien-list" *ngIf="subscriptions">
                                 <ul>
-                                    <li *ngFor="let company of selectedPlanCompanies "><a href="javascript:void(0)"
-                                            (click)="openModal(template, company, subscriptions[0])">{{company.name}}<span>{{company.transactions}}</span></a>
+                                    <li *ngFor="let company of selectedPlanCompanies "><a href="javascript:void(0)">{{company.name}}<span>{{company.transactions}}</span></a>
                                     </li>
                                 </ul>
                             </div>
