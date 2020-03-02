@@ -1375,7 +1375,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
       * @param {*} type  To check Type of bank details field
       * @memberof AccountUpdateNewDetailsComponent
       */
-    public showBankDetailsValidation(element: any, type: any) {
+    public showBankDetailsValidation(element: any, type: any): void {
         if (type === 'bankAccountNo') {
             if (this.selectedCountryCode === 'IN') {
                 if (element && element.value && element.value.length < 9) {
