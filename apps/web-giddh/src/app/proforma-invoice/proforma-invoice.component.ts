@@ -2071,6 +2071,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.handleWarehouseVisibility();
             }
             txn.sacNumber = null;
+            txn.sacNumberExists = false;
             txn.hsnNumber = null;
 
             if (txn.stockDetails && txn.stockDetails.hsnNumber && this.inventorySettings && this.inventorySettings.manageInventory === true) {
@@ -2079,6 +2080,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             if (txn.stockDetails && txn.stockDetails.sacNumber && this.inventorySettings && this.inventorySettings.manageInventory === false) {
                 txn.sacNumber = txn.stockDetails.sacNumber;
+                txn.sacNumberExists = true;
                 txn.hsnOrSac = 'sac';
             }
 
@@ -2088,6 +2090,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             if (!o.stock && o.sacNumber && this.inventorySettings && !this.inventorySettings.manageInventory && this.inventorySettings.manageInventory === false) {
                 txn.sacNumber = o.sacNumber;
+                txn.sacNumberExists = true;
                 txn.hsnOrSac = 'sac';
             }
 
@@ -2108,6 +2111,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             txn.total = null;
             txn.rate = null;
             txn.sacNumber = null;
+            txn.sacNumberExists = false;
             txn.taxableValue = 0;
             txn.applicableTaxes = [];
 
@@ -2135,6 +2139,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         txn.taxableValue = null;
         txn.sacNumber = null;
         txn.hsnNumber = null;
+        txn.sacNumberExists = false;
     }
 
     public noResultsForCustomer(e: boolean): void {
@@ -3042,6 +3047,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 newTrxObj.taxableValue = trx.taxableValue;
                 newTrxObj.hsnNumber = trx.hsnNumber;
                 newTrxObj.sacNumber = trx.sacNumber;
+                newTrxObj.sacNumberExists = (trx.sacNumber) ? true : false;
                 newTrxObj.isStockTxn = trx.isStockTxn;
                 newTrxObj.applicableTaxes = entry.taxList;
 
@@ -3326,6 +3332,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 salesTransactionItemClass.amount = t.amount.amountForAccount;
                 salesTransactionItemClass.hsnNumber = t.hsnNumber;
                 salesTransactionItemClass.sacNumber = t.sacNumber;
+                salesTransactionItemClass.sacNumberExists = (t.sacNumber) ? true : false;
                 salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName;
                 salesTransactionItemClass.description = entry.description;
                 salesTransactionItemClass.date = t.date;

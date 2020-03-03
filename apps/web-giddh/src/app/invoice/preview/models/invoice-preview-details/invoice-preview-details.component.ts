@@ -168,7 +168,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     return item.uniqueName === this.selectedItem.uniqueName;
                 })[0];
             }
-            this.getVoucherVersions();
+            if (this.only4ProformaEstimates) {
+                this.getVoucherVersions();
+            }
         }
 
         if ('invoiceSetting' in changes && changes.invoiceSetting.currentValue && changes.invoiceSetting.currentValue !== changes.invoiceSetting.previousValue) {
