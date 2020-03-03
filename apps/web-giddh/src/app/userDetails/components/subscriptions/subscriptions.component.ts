@@ -61,7 +61,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
             this.isLoading = false;
 
             if(res && res.status === "success") {
-                if(!res.body) {
+                if(!res.body || !res.body[0]) {
                     this.isPlanShow = true;
                 }
             } else {
@@ -125,14 +125,23 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
      */
     public showCurrentCompanyPlan() {
         if(this.activeCompany && this.subscriptions) {
+            let planMatched = false;
             this.subscriptions.forEach(key => {
                 if(this.activeCompany.subscription && key.subscriptionId === this.activeCompany.subscription.subscriptionId) {
+                    planMatched = true;
                     this.seletedUserPlans = key;
                     if (this.seletedUserPlans && this.seletedUserPlans.companiesWithTransactions) {
                         this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
                     }
                 }
             });
+
+            if(!planMatched) {
+                this.seletedUserPlans = this.subscriptions[0];
+                if (this.seletedUserPlans && this.seletedUserPlans.companiesWithTransactions) {
+                    this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
+                }
+            }
         }
     }
 
