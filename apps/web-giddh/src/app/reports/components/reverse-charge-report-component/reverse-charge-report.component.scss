@@ -60,6 +60,9 @@
     -webkit-box-align: center;
     align-items: center;
     padding: 6px 10px !important;
+    .icon-cross {
+        margin-right: 5px;
+    }
     &:focus {
         box-shadow: none;
         outline: none;
