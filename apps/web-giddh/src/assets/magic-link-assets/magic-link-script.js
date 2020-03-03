@@ -71,15 +71,17 @@ var app = new Vue({
         },
         ledgerData: {
             account: {},
-            ledgerTransactions: {
-                forwardedBalance: {
-                    amount: '',
-                    type: ''
-                },
+            ledgersTransactions: {
                 balance: {
                     type: ''
                 },
                 ledgers: []
+            }
+        },
+        legderBalanceData : {
+            forwardedBalance: {
+                amount: '',
+                type: ''
             }
         },
         reckoningDebitTotal: 0,
@@ -110,47 +112,17 @@ var app = new Vue({
             var url = '';
             var apiBaseUrl = this.getApi();
             if (from && to) {
-                url = apiBaseUrl + 'magic-link/' + id + '?from=' + from + '&to=' + to;
+                url = apiBaseUrl + 'magic-link-ledger/' + id + '?from=' + from + '&to=' + to;
             } else {
-                url = apiBaseUrl + 'magic-link/' + id;
+                url = apiBaseUrl + 'magic-link-ledger/' + id;
             }
+
             if (id) {
                 axios.get(url)
                     .then(response => {
                         // JSON responses are automatically parsed.
                         if (response.data.status === 'success') {
                             this.ledgerData = response.data.body;
-
-                            if (this.ledgerData && this.ledgerData.ledgerTransactions) {
-                                if (this.ledgerData.ledgerTransactions.forwardedBalance.amount === 0) {
-                                    let recTotal = 0;
-                                    if (this.ledgerData.ledgerTransactions.creditTotal > this.ledgerData.ledgerTransactions.debitTotal) {
-                                        recTotal = this.ledgerData.ledgerTransactions.creditTotal;
-                                    } else {
-                                        recTotal = this.ledgerData.ledgerTransactions.debitTotal;
-                                    }
-                                    this.reckoningCreditTotal = recTotal;
-                                    this.reckoningDebitTotal = recTotal;
-                                } else {
-                                    if (this.ledgerData.ledgerTransactions.forwardedBalance.type === 'DEBIT') {
-                                        if ((this.ledgerData.ledgerTransactions.forwardedBalance.amount + this.ledgerData.ledgerTransactions.debitTotal) <= this.ledgerData.ledgerTransactions.creditTotal) {
-                                            this.reckoningCreditTotal = this.ledgerData.ledgerTransactions.creditTotal;
-                                            this.reckoningDebitTotal = this.ledgerData.ledgerTransactions.creditTotal;
-                                        } else {
-                                            this.reckoningCreditTotal = this.ledgerData.ledgerTransactions.forwardedBalance.amount + this.ledgerData.ledgerTransactions.debitTotal;
-                                            this.reckoningDebitTotal = this.ledgerData.ledgerTransactions.forwardedBalance.amount + this.ledgerData.ledgerTransactions.debitTotal;
-                                        }
-                                    } else {
-                                        if ((this.ledgerData.ledgerTransactions.forwardedBalance.amount + this.ledgerData.ledgerTransactions.creditTotal) <= this.ledgerData.ledgerTransactions.debitTotal) {
-                                            this.reckoningCreditTotal = this.ledgerData.ledgerTransactions.debitTotal;
-                                            this.reckoningDebitTotal = this.ledgerData.ledgerTransactions.debitTotal;
-                                        } else {
-                                            this.reckoningCreditTotal = this.ledgerData.ledgerTransactions.forwardedBalance.amount + this.ledgerData.ledgerTransactions.creditTotal;
-                                            this.reckoningDebitTotal = this.ledgerData.ledgerTransactions.forwardedBalance.amount + this.ledgerData.ledgerTransactions.creditTotal;
-                                        }
-                                    }
-                                }
-                            }
 
                             this.dateRange = {};
                             this.dateRange.startDate = moment(this.ledgerData.fromDate, 'DD-MM-YYYY');
@@ -169,6 +141,57 @@ var app = new Vue({
                         }
                         this.$toaster.error(msg);
                     });
+
+                    if (from && to) {
+                        url = apiBaseUrl + 'magic-link-ledger-balance/' + id + '?from=' + from + '&to=' + to;
+                    } else {
+                        url = apiBaseUrl + 'magic-link-ledger-balance/' + id;
+                    }
+
+                    axios.get(url)
+                    .then(response => {
+                        if (response.data.status === 'success') {
+                            this.legderBalanceData = response.data.body;
+
+                            if (this.legderBalanceData) {
+                                if (this.legderBalanceData.forwardedBalance.amount === 0) {
+                                    let recTotal = 0;
+                                    if (this.legderBalanceData.creditTotal > this.legderBalanceData.debitTotal) {
+                                        recTotal = this.legderBalanceData.creditTotal;
+                                    } else {
+                                        recTotal = this.legderBalanceData.debitTotal;
+                                    }
+                                    this.reckoningCreditTotal = recTotal;
+                                    this.reckoningDebitTotal = recTotal;
+                                } else {
+                                    if (this.legderBalanceData.forwardedBalance.type === 'DEBIT') {
+                                        if ((this.legderBalanceData.forwardedBalance.amount + this.legderBalanceData.debitTotal) <= this.legderBalanceData.creditTotal) {
+                                            this.reckoningCreditTotal = this.legderBalanceData.creditTotal;
+                                            this.reckoningDebitTotal = this.legderBalanceData.creditTotal;
+                                        } else {
+                                            this.reckoningCreditTotal = this.legderBalanceData.forwardedBalance.amount + this.legderBalanceData.debitTotal;
+                                            this.reckoningDebitTotal = this.legderBalanceData.forwardedBalance.amount + this.legderBalanceData.debitTotal;
+                                        }
+                                    } else {
+                                        if ((this.legderBalanceData.forwardedBalance.amount + this.legderBalanceData.creditTotal) <= this.legderBalanceData.debitTotal) {
+                                            this.reckoningCreditTotal = this.legderBalanceData.debitTotal;
+                                            this.reckoningDebitTotal = this.legderBalanceData.debitTotal;
+                                        } else {
+                                            this.reckoningCreditTotal = this.legderBalanceData.forwardedBalance.amount + this.legderBalanceData.creditTotal;
+                                            this.reckoningDebitTotal = this.legderBalanceData.forwardedBalance.amount + this.legderBalanceData.creditTotal;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    })
+                    .catch(e => {
+                        var msg = 'Something Went Wrong';
+                        if (e && e.response && e.response.data) {
+                            msg = e.response.data.message;
+                        }
+                        this.$toaster.error(msg);
+                    });    
             } else {
                 this.$toaster.error('Magic link ID not found.');
             }
@@ -186,7 +209,7 @@ var app = new Vue({
             var unq = ledger.uniqueName;
             ledger.isCompoundEntry = true;
             var ledgerData = this.ledgerData;
-            ledgerData.ledgerTransactions.ledgers.forEach(function (lgr) {
+            ledgerData.ledgersTransactions.ledgers.forEach(function (lgr) {
                 if (unq === lgr.uniqueName) {
                     lgr.isCompoundEntry = true;
                 } else {
@@ -200,7 +223,9 @@ var app = new Vue({
             return txn.particular.name.indexOf(this.searchText) != -1;
         },
         filterBy: function (list, value) {
-            return list.filter(function (txn) {
+            let arrayList = [];
+            arrayList.push(list);
+            return arrayList.filter(function (txn) {
                 return txn.particular.name.toLowerCase().includes(value) || String(txn.amount).includes(value);
             });
         },
