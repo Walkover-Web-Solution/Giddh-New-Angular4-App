@@ -5,6 +5,7 @@
     width: 100%;
     max-width: 100%;
     border-collapse: separate;
+    border: 0;
 
     thead > tr > td,
     thead > tr > th {
@@ -19,6 +20,10 @@
         padding: 15px 11px;
         border-bottom: 1px solid #d9d9d9;
         font-family: $tableFontSemibold;
+    }
+    thead > tr > th {
+        border-top: 1px solid #ddd !important;
+        border-bottom: none !important;
     }
     tbody > tr > td {
         font-weight: 400;

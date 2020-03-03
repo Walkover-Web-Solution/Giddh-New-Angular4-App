@@ -81,7 +81,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
-                if(this.reverseChargeReportGetRequest.from !== moment(universalDate[0]).format(GIDDH_DATE_FORMAT) || this.reverseChargeReportGetRequest.to !== moment(universalDate[1]).format(GIDDH_DATE_FORMAT)) {
+                if (this.reverseChargeReportGetRequest.from !== moment(universalDate[0]).format(GIDDH_DATE_FORMAT) || this.reverseChargeReportGetRequest.to !== moment(universalDate[1]).format(GIDDH_DATE_FORMAT)) {
                     this.datePicker = [moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(), moment(universalDate[1], GIDDH_DATE_FORMAT).toDate()];
                 }
             }
@@ -231,4 +231,5 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         currentPageObj.url = this.router.url;
         this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
     }
+
 }
