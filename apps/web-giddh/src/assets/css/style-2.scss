@@ -3,29 +3,8 @@
 @import "../css/giddh-common.scss";
 
 /* table css need to removed at last  (start)
-   Don't touch this table css (If any body work on that contact me..)
+   Don't touch this table css (If any body work on that contact shalinee..)
 */
-@font-face {
-    font-family: "opensans-bold";
-    src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot");
-    src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot?#iefix")
-            format("embedded-opentype"),
-        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.svg")
-            format("woff2"),
-        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.woff")
-            format("woff"),
-        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.ttf")
-            format("truetype");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-$font-family: (
-    "bold": "opensans-bold",
-    "regular": "opensans-regular"
-);
-
- 
 
 .basic > tbody > tr > td,
 .basic > tbody > tr > th,
@@ -74,7 +53,6 @@ $font-family: (
     background: rgba(221, 225, 230, 0.5);
 }
 
-
 .basic {
     background: #fff;
 }
@@ -90,7 +68,6 @@ $font-family: (
     border-top: 1px solid #cac8c6;
     border-bottom: 1px solid #cac8c6;
 }*/
-
 
 @media (max-width: 768px) {
     .onMobileView tbody tr {
@@ -166,7 +143,7 @@ $font-family: (
     .onMobileView .basic > tbody > tr:hover td {
         background: transparent;
     }
-     .onMobileView.table-bordered {
+    .onMobileView.table-bordered {
         border: none;
         background: transparent;
         margin-top: 0;
@@ -178,17 +155,14 @@ $font-family: (
         text-align: center !important;
         padding: 5px 10px 5px 0% !important;
     }
-     .onMobileView tbody td::first-letter {
+    .onMobileView tbody td::first-letter {
         text-transform: uppercase;
     }
-     .onMobileView,
+    .onMobileView,
     .onMobileView tbody {
         display: block;
     }
-
 }
-
-
 
 @media (max-width: 320px) {
     .onMobileView tbody td {
@@ -1014,7 +988,6 @@ ul.sub-list {
     font-style: italic;
 }
 
-
 .sorting-box {
     position: absolute;
     right: 10px;
@@ -1032,17 +1005,12 @@ ul.sub-list {
     line-height: 0;
     margin: 1px 0;
 }
-.aging-table-top td  {
+.aging-table-top td {
     border: 0px solid !important;
     background: #f7f8fa !important;
 }
 .aging-table-top .top-aging-table-top {
-    background: rgba(
-        49,
-        58,
-        151,
-        0.15
-    ) !important;
+    background: rgba(49, 58, 151, 0.15) !important;
 }
 
 .aging-table-top .top-aging-table-top strong,
@@ -1054,8 +1022,6 @@ ul.sub-list {
     font-family: opensans-semibold;
 }
 
-
-
 .aging-table {
     border: 0px;
     margin-bottom: 0px;
@@ -1065,8 +1031,6 @@ ul.sub-list {
 .aging-table tr > td {
     min-width: 145px;
 }
-
-
 
 .d-none {
     display: none;
@@ -2167,8 +2131,6 @@ fieldset[disabled] .btn-primary:hover {
     color: #fff;
 }
 
-
-
 p.table-email {
     white-space: nowrap;
     width: 200px;
@@ -2186,8 +2148,6 @@ p.table-email {
 .professional-name {
     color: #333333;
 }
-
-
 
 .top-five-cr-dr-table .basic > tbody > tr td:last-child,
 .top-five-cr-dr-table .basic > thead > tr th:last-child {
@@ -5167,8 +5127,6 @@ label {
     border: 1px solid $border-blue;
 }
 
-
-
 .dropdown-container .dropdown-menu {
     display: block;
     height: 200px;
@@ -7715,7 +7673,7 @@ app-header {
     border: 2px solid red;
 }
 .text-warning {
-    color: #FFA000;
+    color: #ffa000;
 }
 
 .heightVH-100 {
@@ -8086,7 +8044,6 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 .welcome-container .selectBox textarea {
     color: #333;
 }
-
 
 .welcome-container input::placeholder {
     color: rgba(0, 0, 0, 0.4) !important;
@@ -8460,9 +8417,6 @@ table.basic td {
     color: #1c1c1c;
 }
 
-
-
-
 .invoice-table td > a {
     color: #1c1c1c;
 }
@@ -8694,7 +8648,9 @@ p.remvBrnchName {
     margin-top: 0;
     border-radius: 0;
 }
-.popover.purchase-invoice-rcm, .update-ledger-rcm, .all-modules-popover {
+.popover.purchase-invoice-rcm,
+.update-ledger-rcm,
+.all-modules-popover {
     .popover-arrow.arrow {
         display: none;
     }
@@ -8761,7 +8717,6 @@ input.checkbox-custom[type="checkbox"] {
     position: relative;
     display: inline-flex !important;
     align-items: center;
-
 }
 .checkbox-custom + .checkbox-custom-label:before,
 .radio-custom + .radio-custom-label:before {
@@ -8777,8 +8732,8 @@ input.checkbox-custom[type="checkbox"] {
     border-radius: 2px;
     text-align: center;
 }
-.checkbox-custom + .checkbox-custom-label:after{
-        transform: rotate(-45deg) scale(0,0);
+.checkbox-custom + .checkbox-custom-label:after {
+    transform: rotate(-45deg) scale(0, 0);
     content: "";
     position: absolute;
     left: 3px;
@@ -8789,10 +8744,10 @@ input.checkbox-custom[type="checkbox"] {
     border: 2px solid #fff;
     border-top-style: none;
     border-right-style: none;
-    transition: transform .4s cubic-bezier(.45,1.8,.5,.75)
+    transition: transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
 }
-.checkbox-custom:checked + .checkbox-custom-label:after{
-    transform: rotate(-45deg) scale(1,1);
+.checkbox-custom:checked + .checkbox-custom-label:after {
+    transform: rotate(-45deg) scale(1, 1);
 }
 .checkbox-custom:checked + .checkbox-custom-label:before {
     background: $border-blue;
@@ -9245,7 +9200,8 @@ input.checkbox-custom[type="checkbox"] {
     .list-style ul.list-inline.list-middle.download-drop-down {
         text-align: left;
     }
-    .checkbox-custom-label, .radio-custom-label{
+    .checkbox-custom-label,
+    .radio-custom-label {
         display: inline;
     }
     #cmpWrp {
@@ -9257,7 +9213,6 @@ input.checkbox-custom[type="checkbox"] {
     .user_dropdown {
         left: 0px !important;
     }
-
 }
 
 @media (max-width: 575px) {
@@ -9339,8 +9294,6 @@ input.checkbox-custom[type="checkbox"] {
         bottom: 0;
     }
 }
-
-
 
 @media only screen and (max-width: 1400px) {
     .template_list {
@@ -9522,4 +9475,3 @@ input.checkbox-custom[type="checkbox"] {
         margin: 70px auto;
     }
 }
-
