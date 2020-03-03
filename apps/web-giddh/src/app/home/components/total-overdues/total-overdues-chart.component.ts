@@ -1,6 +1,5 @@
 import { skipWhile, take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
-import * as Highcharts from 'highcharts';
 import { Options } from 'highcharts';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -10,10 +9,10 @@ import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
 import { isNullOrUndefined } from 'util';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { DashboardService } from '../../../services/dashboard.service';
+import { LocaleService } from '../../../services/locale.service';
 import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
-import { ProfitLossRequest } from "../../../models/api-models/tb-pl-bs";
 import * as _ from "../../../lodash-optimized";
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'toal-overdues-chart',
@@ -110,8 +109,10 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public dataFound: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public toRequest: any = { from: '', to: '', refresh: false };
+    public localeData: any = {};
 
-    constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef) {
+    constructor(private store: Store<AppState>, private _homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private localeService: LocaleService) {
+        this.getLocale("en");
         this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
         this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
         this.totalOverDuesResponse$ = this.store.select(p => p.home.totalOverDues).pipe(takeUntil(this.destroyed$));
@@ -270,4 +271,9 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._homeActions.getTotalOverdues(this.toRequest.from, this.toRequest.to, this.toRequest.refresh));
     }
 
+    public getLocale(language) {
+        this.localeService.getLocale("home/total-overdues-chart", language).subscribe(data => {
+            this.localeData = data;
+        });
+    }
 }
