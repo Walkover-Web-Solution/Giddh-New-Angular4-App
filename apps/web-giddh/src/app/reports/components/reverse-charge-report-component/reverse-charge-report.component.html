@@ -9,12 +9,10 @@
                         (bsValueChange)="changeFilterDate($event)" bsDaterangepicker [bsConfig]="bsConfig">
                 </div>
             </div>
-            <div class="clear-filter width-100 align-items-center d-flex justify-content-center "><button
-                    class="btn btn-filter"><span class="icon-cross"></span> Clear Filter
-                </button></div>
+            <div class="clear-filter width-100 align-items-center d-flex justify-content-center" *ngIf="checkIfFiltersApplied()">
+                <button class="btn btn-filter" (click)="resetFilters()"><span class="icon-cross"></span> Clear Filter</button>
+            </div>
         </div>
-
-
         <div class="invoice-preview  table-responsive">
             <table class="table basic table-bordered giddh-table onMobileView">
                 <thead class="t-h-bg1">
@@ -49,6 +47,8 @@
                                                 (click)="changeVoucherType('Journal');">Journal</a></li>
                                         <li role="menuitem"><a class="dropdown-item" href="javascript:;"
                                                 (click)="changeVoucherType('Purchase');">Purchase</a></li>
+                                        <li role="menuitem"><a class="dropdown-item" href="javascript:;"
+                                                (click)="changeVoucherType('Debit Note');">Debit Note</a></li>        
                                     </ul>
                                 </div>
                             </div>
