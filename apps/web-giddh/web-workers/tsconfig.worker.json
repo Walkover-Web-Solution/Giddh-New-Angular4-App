@@ -1,0 +1,13 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../out-tsc/worker",
+        "types": []
+    },
+    "exclude": [
+        "../src/main.ts",
+        "../src/main.electron.ts",
+        "**/*.spec.ts",
+        "../src/app/**/**/*.ts"
+    ]
+}
