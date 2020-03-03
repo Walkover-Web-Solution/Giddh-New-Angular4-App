@@ -481,7 +481,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         // visible height + pixel scrolled >= total height - 200 (deducted 200 to load list little earlier before user reaches to end)
         if (event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 200)) {
             if (this.allowLoadMore && !this.isLoading) {
-                if (this.commandKRequestParams.page + 1 < this.commandKRequestParams.totalPages) {
+                if (this.commandKRequestParams.page + 1 <= this.commandKRequestParams.totalPages) {
                     this.commandKRequestParams.page++;
                     this.searchCommandK(false);
                 }
