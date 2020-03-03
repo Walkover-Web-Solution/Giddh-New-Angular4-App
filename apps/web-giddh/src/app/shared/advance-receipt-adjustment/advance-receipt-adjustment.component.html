@@ -11,13 +11,13 @@
         <div class="row mb-3">
             <div class="col-md-8">
                 <div class="form-group">
-                    <label>Customer Name</label>
-                    <input type="text" class="form-control" name="customerName" [(ngModel)]="tempDateParams.customerName" readonly disabled>
+                    <label>Customer Name </label>
+                    <input type="text" class="form-control" name="customerName" [(ngModel)]="adjustPayment.customerName" readonly disabled>
                 </div>
             </div>
             <div class="col-md-4 text-right font-14 pt-2 xs-left">
-                <p>Invoice Total: <i class="icon-rupees font-10"></i>2110</p>
-                <p>Due <span class="text-light">(Post Adj):</span> <i class="icon-rupees font-10"></i>910</p>
+                <p>Invoice Total: <i class="icon-rupees font-10"></i>{{adjustPayment?.grandTotal}}</p>
+                <p>Due <span class="text-light">(Post Adj):</span> <i class="icon-rupees font-10"></i>{{adjustPayment?.balanceDue}}</p>
             </div>
         </div>
 
@@ -25,7 +25,7 @@
             <div class="col-sm-3">
                 <div class="form-group">
                     <label for="name">Adjustment Voucher<span class="text-danger">*</span></label>
-                    <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" [(ngModel)]="tempDateParams.adjustmentVoucher" [placeholder]="'Select Account'" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33">
+                    <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" [placeholder]="'Select Account'" [options]="adjustVoucherOptions" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33">
                         <ng-template #optionTemplate1 let-option="option">
                             <a href="javascript:void(0)" class="list-item">
                                 <div class="item">AR2019374-3</div>
@@ -75,12 +75,12 @@
 
             <div class="col-sm-3">
                 <div class="mb-1">
-                    <input id="name" type="text" class="form-control" placeholder="Enter Amount" [(ngModel)]="tempDateParams.Amount">
+                    <input id="name" type="text" class="form-control" placeholder="Enter Amount">
                 </div>
             </div>
             <div class="col-sm-3">
                 <div class="mb-1">
-                    <input id="name" type="text" class="form-control" placeholder="00.00" [(ngModel)]="tempDateParams.Tax" readonly disabled>
+                    <input id="name" type="text" class="form-control" placeholder="00.00" readonly disabled>
                 </div>
             </div>
             <div class="col-sm-3">
