@@ -239,10 +239,8 @@
                                         <div class="col-xs-12">
                                             <div class="form-group">
                                                 <label for="" class="d-block">{{formFields['taxName'].label}}</label>
-                                                <div class="input-group">
+                                                <div class="input-group width-100">
                                                     <div class="input-group-addon">
-
-
                                                         <input id="checkbox-{{i}}" class="checkbox-custom"
                                                             (click)="setGstAsDefault(i, $event)"
                                                             [(ngModel)]="gst.isDefault" name="isDefault+{{i}}"
@@ -271,7 +269,7 @@
                                             <div class="form-group select2-parent">
                                                 <label>State</label><br>
                                                 <sh-select [disabled]="gst.stateCode"
-                                                    (selected)="stateSelected($event, i)" placeholder="Select state"
+                                                    (selected)="stateSelected($event, i)" [defaultValue]="gst.stateCode + ' - ' + gst.stateName" placeholder="Select state"
                                                     name="newstateCode+{{i}}" [options]="statesSource$ | async"
                                                     [(ngModel)]="gst.stateCode"></sh-select>
                                             </div>

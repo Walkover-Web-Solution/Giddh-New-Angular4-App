@@ -95,7 +95,7 @@ var app = new Vue({
         isSmall: false
     },
     mounted: function () {
-        this.folderPath = window.location.hostname === 'localapp.giddh.com' ? '' : 'app/';
+        this.folderPath = window.location.hostname === 'localhost' ? '' : 'app/';
         var id = this.getParameterByName('id');
         this.getMagicLinkData(id)
     },
@@ -163,7 +163,11 @@ var app = new Vue({
                         document.getElementById("app").style.display = 'block';
                     })
                     .catch(e => {
-                        this.$toaster.error('Something went wrong.');
+                        var msg = 'Something Went Wrong';
+                        if (e && e.response && e.response.data) {
+                            msg = e.response.data.message;
+                        }
+                        this.$toaster.error(msg);
                     });
             } else {
                 this.$toaster.error('Magic link ID not found.');
@@ -303,18 +307,18 @@ var app = new Vue({
         getApi: function () {
             var apiBaseUrl = '';
             switch (window.location.hostname) {
-                case 'localapp.giddh.com':
+                case 'localhost':
                 case 'dev.giddh.com':
                 case 'test.giddh.com':
                 case 'stage.giddh.com':
-                    apiBaseUrl = 'http://apitest.giddh.com/';
+                    apiBaseUrl = 'https://apitest.giddh.com/';
                     break;
                 case 'giddh.com':
                 case 'app.giddh.com':
                     apiBaseUrl = 'https://api.giddh.com/';
                     break;
                 default:
-                    apiBaseUrl = 'http://apitest.giddh.com/';
+                    apiBaseUrl = 'https://apitest.giddh.com/';
             }
             return apiBaseUrl;
         }

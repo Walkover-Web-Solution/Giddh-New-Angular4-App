@@ -47,6 +47,10 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     @Input() public showHeading: boolean = true;
     @Input() public showTaxPopup: boolean = false;
     @Input() public totalForTax: number = 0;
+    /** Custom heading to be applied to tax control header */
+    @Input() public customHeading: string = '';
+    /** True, if mandatory asterisk needs to be displayed */
+    @Input() public isMandatory: boolean = false;
 
     @Input() public customTaxTypesForTaxFilter: string[] = [];
     @Input() public exceptTaxTypes: string[] = [];
@@ -243,7 +247,9 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     public handleInputFocus(): void {
         this.showTaxPopup = true;
         this.hideOtherPopups.emit(true);
-        this.taxInputElement.nativeElement.classList.remove('error-box');
+        if (this.taxInputElement && this.taxInputElement.nativeElement) {
+            this.taxInputElement.nativeElement.classList.remove('error-box');
+        }
     }
 
     /**

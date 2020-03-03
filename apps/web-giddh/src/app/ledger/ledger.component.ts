@@ -1,16 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import {
-    ChangeDetectorRef,
-    Component,
-    ComponentFactoryResolver,
-    ElementRef,
-    EventEmitter,
-    OnDestroy,
-    OnInit,
-    QueryList,
-    ViewChild,
-    ViewChildren,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
@@ -25,14 +14,7 @@ import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
-import {
-    BehaviorSubject,
-    combineLatest as observableCombineLatest,
-    Observable,
-    of as observableOf,
-    ReplaySubject,
-    Subject,
-} from 'rxjs';
+import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, } from 'rxjs';
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
 import * as uuid from 'uuid';
 
@@ -47,17 +29,13 @@ import { AccountResponse } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
-import {
-    DownloadLedgerRequest,
-    IELedgerResponse,
-    TransactionsRequest,
-    TransactionsResponse,
-} from '../models/api-models/Ledger';
+import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest, TransactionsResponse, } from '../models/api-models/Ledger';
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
+import { GeneralService } from '../services/general.service';
 import { LedgerService } from '../services/ledger.service';
 import { ToasterService } from '../services/toaster.service';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
@@ -141,7 +119,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public advanceSearchRequest: AdvanceSearchRequest;
     public isLedgerCreateSuccess$: Observable<boolean>;
     public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    @ViewChild('newLedPanel') public newLedPanelCtrl: NewLedgerEntryPanelComponent;
+    @ViewChild('newLedPanel') public newLedgerComponent: NewLedgerEntryPanelComponent;
     @ViewChild('updateLedgerModal') public updateLedgerModal: ModalDirective;
     @ViewChild('exportLedgerModal') public exportLedgerModal: ModalDirective;
     @ViewChild('shareLedgerModal') public shareLedgerModal: ModalDirective;
@@ -206,9 +184,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public inputMaskFormat: string;
     public giddhBalanceDecimalPlaces: number = 2;
     public activeAccountParentGroupsUniqueName: string = '';
+    /** True, if RCM taxable amount needs to be displayed in create new ledger component as per criteria */
+    public shouldShowRcmTaxableAmount: boolean;
+    /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
+    public shouldShowItcSection: boolean;
+    /** True if company country will UAE and accounts involve Debtors/ Cash / bank / Sales */
+    public isTouristSchemeApplicable: boolean;
+    public allowParentGroup = ['sales', 'cash', 'sundrydebtors', 'bankaccounts'];
 
-    /** True, if RCM entry needs to be displayed */
-    public shouldShowRcmEntry: boolean = false;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
@@ -223,6 +206,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private _settingsTagActions: SettingsTagActions,
         private componentFactoryResolver: ComponentFactoryResolver,
         private _generalActions: GeneralActions,
+        private generalService: GeneralService,
         private _loginActions: LoginActions,
         private _loaderService: LoaderService,
         private _settingsDiscountAction: SettingsDiscountActions,
@@ -424,11 +408,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
         // check if selected account category allows to show taxationDiscountBox in newEntry popup
         txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
-        console.log('Selected Tx: ', txn);
-        this.handleRcmVisibility(txn, true);
-        this.newLedPanelCtrl.calculateTotal();
-        // this.newLedPanelCtrl.checkForMulitCurrency();
-        this.newLedPanelCtrl.detectChanges();
+        this.handleRcmVisibility(txn);
+        this.handleTaxableAmountVisibility(txn);
+        this.newLedgerComponent.calculateTotal();
+        this.newLedgerComponent.detectChanges();
         this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
     }
 
@@ -446,6 +429,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
+        this.shouldShowItcSection = false;
+        this.shouldShowRcmTaxableAmount = false;
 
         observableCombineLatest(this.universalDate$, this.route.params, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (!Array.isArray(resp[0])) {
@@ -462,7 +447,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let from = params['from'];
                 let to = params['to'];
 
-                this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(from, 'DD-MM-YYYY').toDate(), endDate: moment(to, 'DD-MM-YYYY').toDate() };
+                this.datePickerOptions = {
+                    ...this.datePickerOptions,
+                    startDate: moment(from, 'DD-MM-YYYY').toDate(),
+                    endDate: moment(to, 'DD-MM-YYYY').toDate(),
+                    chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
+                };
 
                 this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                     dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
@@ -480,7 +470,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (dateObj && !this.todaySelected) {
                     let universalDate = _.cloneDeep(dateObj);
 
-                    this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate() };
+                    this.datePickerOptions = {
+                        ...this.datePickerOptions,
+                        startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
+                        endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate(),
+                        chosenLabel: universalDate[2]
+                    };
                     this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                         dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
                             bsRangeValue: [moment(universalDate[0], 'DD-MM-YYYY').toDate(), moment(universalDate[1], 'DD-MM-YYYY').toDate()]
@@ -497,7 +492,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.datePickerOptions = {
                         ...this.datePickerOptions,
                         startDate: moment().toDate(),
-                        endDate: moment().toDate()
+                        endDate: moment().toDate(),
+                        chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
                     };
                     // set advance search bsRangeValue to blank, because we are depending api to give us from and to date
                     this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
@@ -572,11 +568,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.transactionData$.subscribe((lt: any) => {
             if (lt) {
                 // set date picker to and from date, as what we got from api
-                this.datePickerOptions = {
-                    ...this.datePickerOptions,
-                    startDate: moment(lt.from, 'DD-MM-YYYY').toDate(),
-                    endDate: moment(lt.to, 'DD-MM-YYYY').toDate()
-                };
+                if (lt.from && lt.to) {
+                    this.datePickerOptions = {
+                        ...this.datePickerOptions,
+                        startDate: moment(lt.from, 'DD-MM-YYYY').toDate(),
+                        endDate: moment(lt.to, 'DD-MM-YYYY').toDate(),
+                        chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
+                    };
+                }
+
                 if (lt.closingBalance) {
                     this.closingBalanceBeforeReconcile = lt.closingBalance;
                     this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
@@ -1012,6 +1012,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             baseCurrencyToDisplay: cloneDeep(this.baseCurrencyDetails),
             foreignCurrencyToDisplay: cloneDeep(this.foreignCurrencyDetails)
         };
+        this.shouldShowRcmTaxableAmount = false;
+        this.shouldShowItcSection = false;
         if (this.isLedgerAccountAllowsMultiCurrency) {
             this.getCurrencyRate('blankLedger');
         }
@@ -1104,7 +1106,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.showUpdateLedgerForm = true;
         this.store.dispatch(this._ledgerActions.setTxnForEdit(txn.entryUniqueName));
         this.lc.selectedTxnUniqueName = txn.entryUniqueName;
-        this.handleRcmVisibility(txn)
         this.loadUpdateLedgerComponent();
         this.updateLedgerModal.show();
     }
@@ -1262,8 +1263,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.toggleOtherTaxesAsidePane(res);
         });
 
-        componentInstance.shouldShowRcmEntry = this.shouldShowRcmEntry;
-
         componentInstance.closeUpdateLedgerModal.subscribe(() => {
             this.hideUpdateLedgerModal();
         });
@@ -1345,11 +1344,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * closeAdvanceSearchPopup
      */
-    public closeAdvanceSearchPopup(isCancel) {
+    public closeAdvanceSearchPopup(event) {
         this.advanceSearchModel.hide();
-        if (!isCancel) {
+        if (!event.isClose) {
             this.getAdvanceSearchTxn();
             // this.getTransactionData();
+            if (event.advanceSearchData) {
+                if (event.advanceSearchData['dataToSend']['bsRangeValue'].length) {
+                    this.datePickerOptions = {
+                        ...this.datePickerOptions,
+                        startDate: moment(event.advanceSearchData.dataToSend.bsRangeValue[0], 'DD-MM-YYYY').toDate(),
+                        endDate: moment(event.advanceSearchData.dataToSend.bsRangeValue[1], 'DD-MM-YYYY').toDate(),
+                        chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
+                    };
+                }
+
+            }
         }
         // this.advanceSearchRequest = _.cloneDeep(advanceSearchRequest);
     }
@@ -1652,60 +1662,101 @@ export class LedgerComponent implements OnInit, OnDestroy {
      *
      * @private
      * @param {*} transaction Transaction details which will decide if transaction is RCM applicable
-     * @param {boolean} [isCreateFlow=false] True, if a create new ledger flow is carried out
      * @memberof LedgerComponent
      */
-    private handleRcmVisibility(transaction: any, isCreateFlow: boolean = false): void {
+    private handleRcmVisibility(transaction: TransactionVM): void {
         this.lc.flattenAccountListStream$.pipe(take(1)).subscribe((accounts) => {
-            let currentLedgerAccountDetails, selectedAccountDetails;
-            const transactionUniqueName = (isCreateFlow) ?
-                (transaction.selectedAccount) ? transaction.selectedAccount.uniqueName : '' :
-                transaction.particular.uniqueName;
-            for (let index = 0; index < accounts.length; index++) {
-                const account = accounts[index];
-                if (account.uniqueName === this.lc.accountUnq) {
-                    // Found the current ledger details
-                    currentLedgerAccountDetails = _.cloneDeep(account);
+            if (accounts) {
+                let currentLedgerAccountDetails, selectedAccountDetails;
+                const transactionUniqueName = (transaction.selectedAccount) ? transaction.selectedAccount.uniqueName : '';
+                for (let index = 0; index < accounts.length; index++) {
+                    const account = accounts[index];
+                    if (account.uniqueName === this.lc.accountUnq) {
+                        // Found the current ledger details
+                        currentLedgerAccountDetails = _.cloneDeep(account);
+                    }
+                    if (account.uniqueName === transactionUniqueName) {
+                        // Found the user selected particular account
+                        selectedAccountDetails = _.cloneDeep(account);
+                    }
+                    if (currentLedgerAccountDetails && selectedAccountDetails) {
+                        // Accounts found, break the loop
+                        break;
+                    }
                 }
-                if (account.uniqueName === transactionUniqueName) {
-                    // Found the user selected particular account
-                    selectedAccountDetails = _.cloneDeep(account);
+                const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails);
+                if (this.lc && this.lc.currentBlankTxn) {
+                    this.lc.currentBlankTxn['shouldShowRcmEntry'] = shouldShowRcmEntry;
                 }
-                if (currentLedgerAccountDetails && selectedAccountDetails) {
-                    // Accounts found, break the loop
-                    break;
-                }
-            }
-            this.shouldShowRcmEntry = this.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails);
-            console.log('RCM: ', this.shouldShowRcmEntry);
-            if (this.lc && this.lc.currentBlankTxn) {
-                this.lc.currentBlankTxn['shouldShowRcmEntry'] = this.shouldShowRcmEntry;
-                console.log('Current: ', this.lc.currentBlankTxn);
             }
         });
     }
 
     /**
-     * Decides based on current ledger and selected account details whether the RCM section
-     * needs to be displayed
+     * Handles the taxable amount and ITC section visibility based on conditions
      *
      * @private
-     * @param {*} currentLedgerAccountDetails Current ledger detail
-     * @param {*} selectedAccountDetails User selected particular account
-     * @returns {boolean} True, if the current ledger and user selected particular account belongs to RCM category accounts
+     * @param {TransactionVM} transaction Selected transaction
+     * @returns {void}
      * @memberof LedgerComponent
      */
-    private shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any): boolean {
-        if (currentLedgerAccountDetails && selectedAccountDetails) {
-            console.log('Current Ledger: ', currentLedgerAccountDetails);
-            console.log('Selected account: ', selectedAccountDetails);
-            const rcmUniqueNames = ['fixedassets', 'purchases', 'otherindirectexpenses'];
-
-            return (currentLedgerAccountDetails.parentGroups[0] && rcmUniqueNames.includes(currentLedgerAccountDetails.parentGroups[0].uniqueName)) ||
-                (currentLedgerAccountDetails.parentGroups[1] && rcmUniqueNames.includes(currentLedgerAccountDetails.parentGroups[1].uniqueName)) ||
-                (selectedAccountDetails.parentGroups[0] && rcmUniqueNames.includes(selectedAccountDetails.parentGroups[0].uniqueName)) ||
-                (selectedAccountDetails.parentGroups[1] && rcmUniqueNames.includes(selectedAccountDetails.parentGroups[1].uniqueName));
+    private handleTaxableAmountVisibility(transaction: TransactionVM): void {
+        this.shouldShowRcmTaxableAmount = false;
+        this.shouldShowItcSection = false;
+        let currentCompany;
+        this.store.pipe(select(appState => appState.session), take(1)).subscribe((sessionData) => {
+            currentCompany = sessionData.companies.find((company) => company.uniqueName === sessionData.companyUniqueName).country;
+        });
+        if (!this.lc || !this.lc.activeAccount || !this.lc.activeAccount.parentGroups || this.lc.activeAccount.parentGroups.length < 2) {
+            return;
         }
-        return false;
+        if (!transaction.selectedAccount || !transaction.selectedAccount.parentGroups || transaction.selectedAccount.parentGroups.length < 2) {
+            return;
+        }
+        const currentLedgerSecondParent = this.lc.activeAccount.parentGroups[1].uniqueName;
+        const selectedAccountSecondParent = transaction.selectedAccount.parentGroups[1].uniqueName;
+        this.checkTouristSchemeApplicable(currentLedgerSecondParent, selectedAccountSecondParent);
+        if (currentLedgerSecondParent === 'reversecharge' && transaction.type === 'CREDIT') {
+            // Current ledger is of reverse charge and user has entered the transaction on the right side (CREDIT) of the ledger
+            if (selectedAccountSecondParent === 'dutiestaxes') {
+                /* Particular account belongs to the Duties and taxes then check the country based on which
+                    respective sections will be displayed */
+                if (currentCompany === 'United Arab Emirates') {
+                    this.shouldShowRcmTaxableAmount = true;
+                }
+                if (currentCompany === 'India') {
+                    this.shouldShowItcSection = true;
+                }
+            }
+        } else if (currentLedgerSecondParent === 'dutiestaxes' && transaction.type === 'DEBIT') {
+            // Current ledger is of Duties and taxes and user has entered the transaction on the left side (DEBIT) of the ledger
+            if (selectedAccountSecondParent === 'reversecharge') {
+                /* Particular account belongs to the Reverse charge then check the country based on which
+                    respective sections will be displayed */
+                if (currentCompany === 'United Arab Emirates') {
+                    this.shouldShowRcmTaxableAmount = true;
+                }
+                if (currentCompany === 'India') {
+                    this.shouldShowItcSection = true;
+                }
+            }
+        }
     }
+
+    /**
+     * To check tourist scheme applicable or not
+     *
+     * @param {string} [activeLedgerParentgroup] active ledger parent group unique name
+     * @param {string} [selectedAccountParentGroup] selected account parent group unique name
+     * @memberof LedgerComponent
+     */
+    public checkTouristSchemeApplicable(activeLedgerParentgroup: string, selectedAccountParentGroup: string): void {
+        if (this.profileObj && this.profileObj.countryV2 && this.profileObj.countryV2.alpha2CountryCode && this.profileObj.countryV2.alpha2CountryCode === 'AE' && activeLedgerParentgroup && selectedAccountParentGroup && (this.allowParentGroup.includes(activeLedgerParentgroup)) && ( this.allowParentGroup.includes(selectedAccountParentGroup))) {
+            this.isTouristSchemeApplicable = true;
+        } else {
+            this.isTouristSchemeApplicable = false;
+        }
+
+    }
+
 }

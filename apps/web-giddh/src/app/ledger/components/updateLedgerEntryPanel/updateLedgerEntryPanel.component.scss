@@ -2,6 +2,9 @@
 .pItem {
     padding: 0 4px;
 }
+.height-30 {
+    height: 30px;
+}
 
 .ledgHead.entry-popup table td.select2-ledger > sh-select {
     position: initial;
@@ -149,7 +152,8 @@ ng-select .select_drop i.fa.fa-caret-up::before {
 .icon-box {
     text-align: center;
     display: flex;
-    align-items: center;
+    -webkit-box-align: end;
+    align-items: flex-end;
     padding: 8px 10px 10px;
 }
 
@@ -177,6 +181,13 @@ span.eligible-ITC {
     span {
         color: $btnLink;
         font-size: 10px;
+    }
+}
+.taxable-amount-section {
+    display: inline-block;
+    margin-bottom: 12px;
+    .itc-label {
+        margin-bottom: 4px;
     }
 }
 @media only screen and (max-width: 1024px) {
@@ -300,5 +311,11 @@ span.eligible-ITC {
     }
     .entrypanel .bl-1 {
         border-left: 0;
+    }
+    .advanced input[type="checkbox"] {
+        width: initial !important;
+    }
+    .xs-pt-0 {
+        padding-top: 0px !important;
     }
 }

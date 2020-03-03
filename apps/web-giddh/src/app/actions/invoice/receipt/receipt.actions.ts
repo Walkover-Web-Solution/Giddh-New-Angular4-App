@@ -11,7 +11,7 @@ import { ReceiptService } from '../../../services/receipt.service';
 import { Observable } from 'rxjs';
 import { DownloadVoucherRequest, InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptRequest, ReciptResponse, Voucher } from '../../../models/api-models/recipt';
 import { INVOICE_ACTIONS } from '../invoice.const';
-import { ActionTypeAfterVoucherGenerateOrUpdate, GenericRequestForGenerateSCD, VoucherClass } from '../../../models/api-models/Sales';
+import { ActionTypeAfterVoucherGenerateOrUpdate, GenericRequestForGenerateSCD, VoucherClass, PurchaseRecordRequest } from '../../../models/api-models/Sales';
 import { SalesRegisteDetailedResponse, ReportsDetailedRequestFilter, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
 
 @Injectable()
@@ -58,7 +58,7 @@ export class InvoiceReceiptActions {
     @Effect()
     private GET_VOUCHER_DETAILSV4$: Observable<Action> = this.action$
         .ofType(INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILSV4).pipe(
-            switchMap((action: CustomActions) => this._receiptService.GetVoucherDetailsV4(action.payload.accountUniqueName,
+            switchMap((action: CustomActions) => this._receiptService.getVoucherDetailsV4(action.payload.accountUniqueName,
                 action.payload.model)),
             map((response: BaseResponse<Voucher, ReceiptVoucherDetailsRequest>) => {
                 if (response.status === 'success') {
@@ -87,7 +87,7 @@ export class InvoiceReceiptActions {
             switchMap((action: CustomActions) => this._receiptService.DownloadVoucher(action.payload.model, action.payload.accountUniqueName)),
             map((response: BaseResponse<any, any>) => {
                 if (response) {
-                    
+
                 } else {
                     this.showToaster(response.message, 'error');
                 }
@@ -107,7 +107,18 @@ export class InvoiceReceiptActions {
             switchMap((action: CustomActions) => this._receiptService.getDetailedPurchaseRegister(action.payload)),
             map((response: BaseResponse<any, PurchaseRegisteDetailedResponse>) => {
                 return this.GetPurchaseRegistedDetailsResponse(response);
-            }));     
+            }));
+
+    @Effect()
+    private GetPurchaseRecordDetails$: Observable<Action> = this.action$
+        .ofType(INVOICE_RECEIPT_ACTIONS.GET_PURCHASE_RECORD_DETAILS).pipe(
+            switchMap((action: CustomActions) => this._receiptService.GetPurchaseRecordDetails(action.payload.accountUniqueName, action.payload.purchaseRecordUniqueName)),
+            map((response: BaseResponse<Voucher, ReceiptVoucherDetailsRequest>) => {
+                if (response.status !== 'success') {
+                    this.showToaster(response.message, 'error');
+                }
+                return this.GetPurchaseRecordDetailsResponse(response);
+            }));
 
     constructor(private action$: Actions, private _toasty: ToasterService,
         private store: Store<AppState>, private _receiptService: ReceiptService) {
@@ -174,10 +185,39 @@ export class InvoiceReceiptActions {
             payload: response
         };
     }
-    public GetVoucherDetailsV4(accountUniqueName: string, model: ReceiptVoucherDetailsRequest): CustomActions {
+    public getVoucherDetailsV4(accountUniqueName: string, model: ReceiptVoucherDetailsRequest): CustomActions {
         return {
             type: INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILSV4,
             payload: { accountUniqueName, model }
+        };
+    }
+
+    /**
+     * Returns the action for fetching particular purchase record
+     *
+     * @param {string} accountUniqueName Account unique name for which purchase record is been made
+     * @param {string} purchaseRecordUniqueName Purchase record unique name
+     * @returns {CustomActions} Action for fetching particular purchase record
+     * @memberof InvoiceReceiptActions
+     */
+    public GetPurchaseRecordDetails(accountUniqueName: string, purchaseRecordUniqueName: string): CustomActions {
+        return {
+            type: INVOICE_RECEIPT_ACTIONS.GET_PURCHASE_RECORD_DETAILS,
+            payload: { accountUniqueName, purchaseRecordUniqueName }
+        };
+    }
+
+    /**
+     * Returns the action for handling get purchase record API response
+     *
+     * @param {BaseResponse<Voucher, any>} response Response returned by the API
+     * @returns {CustomActions} Action for handling get purchase record API response
+     * @memberof InvoiceReceiptActions
+     */
+    public GetPurchaseRecordDetailsResponse(response: BaseResponse<Voucher, any>): CustomActions {
+        return {
+            type: INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILS_RESPONSEV4,
+            payload: response
         };
     }
 
@@ -214,7 +254,7 @@ export class InvoiceReceiptActions {
         };
     }
 
-    public updateVoucherDetailsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>): CustomActions {
+    public updateVoucherDetailsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD> | BaseResponse<any, PurchaseRecordRequest>): CustomActions {
         return {
             type: INVOICE_RECEIPT_ACTIONS.UPDATE_VOUCHER_DETAILS_AFTER_VOUCHER_UPDATE,
             payload: response

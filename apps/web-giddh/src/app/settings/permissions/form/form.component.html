@@ -4,7 +4,7 @@
     <div class="form-group" style="margin-left:0;">
         <label *ngIf="isLblShow">Unique Name/Email ID</label>
         <input type="text" name="emailId" formControlName="emailId" placeholder="Unique Name/Email ID"
-            class="form-control " />
+            class="form-control" [attr.readonly]="userdata?.uniqueName" />
     </div>
 
     <div class="form-group">
@@ -26,14 +26,17 @@
             <section class="dropdown-menu custom_dropdown mrB1" [ngClass]="{'open': showTimeSpan}">
 
                 <div class="clearfix pd1 option_box">
-                    <label class="radio-inline pd0">
-                        <input type="radio" name="periodOptions" formControlName="periodOptions" value="daterange"
-                            class="radio_theme"> Date Range
-                    </label>
-                    <label class="radio-inline pd0">
-                        <input type="radio" name="periodOptions" formControlName="periodOptions" value="pastperiod"
-                            class="radio_theme"> Past Period
-                    </label>
+
+                    <span class="pd0 mrR3">
+                        <input id="dateRange" class="radio-custom cp ml0" type="radio" name="periodOptions" formControlName="periodOptions" value="daterange">
+                        <label for="dateRange" class="radio-custom-label">Date Range</label>
+                    </span>
+
+                    <span class="pd0 mrR3">
+                        <input id="pastPeriod" class="radio-custom cp ml0" type="radio" name="periodOptions" formControlName="periodOptions" value="pastperiod">
+                        <label for="pastPeriod" class="radio-custom-label">Past Period</label>
+                    </span>
+
                 </div>
 
                 <section class="periods container-fluid mrB1"
@@ -42,7 +45,7 @@
                         <div class="col-xs-12">
                             <label>From - To</label>
                             <input name="DateRangePicker" [bsValue]="dateRangePickerValue"
-                                (bsValueChange)="onSelectDateRange($event)" placeholder="Date range picker" type="text"
+                                (bsValueChange)="onSelectDateRange($event)" placeholder="Select Date Range" type="text"
                                 class="form-control" bsDaterangepicker>
 
                             <!-- <input class="form-control " name="from" formControlName="from" type="text" placeholder="DD-MM-YYYY" /> -->
@@ -82,16 +85,18 @@
             </button>
             <section class="dropdown-menu custom_dropdown" role="menu" [ngClass]="{'open': showIPWrap}">
                 <div class="clearfix option_box pd1">
-                    <label class="radio-inline pd0">
-                        <input type="radio" class="radio_theme" name="ipOptions" formControlName="ipOptions"
-                            value="cidr_range">
-                        CIDR Range
-                    </label>
-                    <label class="radio-inline pd0">
-                        <input type="radio" class="radio_theme" name="ipOptions" formControlName="ipOptions"
-                            value="ip_address"> IP
-                        Address
-                    </label>
+
+                    <span class="pd0 mrR3">
+                        <input id="cidrRange" class="radio-custom cp ml0" type="radio" name="ipOptions" formControlName="ipOptions"
+                        value="cidr_range">
+                        <label for="cidrRange" class="radio-custom-label">CIDR Range</label>
+                    </span>
+
+                    <span class="pd0 mrR3">
+                        <input id="address" class="radio-custom cp ml0" type="radio" name="ipOptions" formControlName="ipOptions" value="ip_address">
+                        <label for="address" class="radio-custom-label">Address</label>
+                    </span>
+
                 </div>
 
                 <section formArrayName="allowedCidrs" class="iprange container-fluid"

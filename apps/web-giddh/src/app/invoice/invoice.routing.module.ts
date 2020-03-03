@@ -72,6 +72,7 @@ import { SharedModule } from '../shared/shared.module';
 import { VoucherTypeToNamePipeModule } from '../shared/header/pipe/voucherTypeToNamePipe/voucherTypeToNamePipe.module';
 import { SendEmailInvoiceModule } from '../shared/send-email-invoice/send-email-invoice.module';
 import { DownloadVoucherComponent } from './preview/models/download-voucher/download-voucher.component';
+import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 
 // import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
@@ -87,6 +88,7 @@ const INVOICE_ROUTES: Routes = [
         children: [
             { path: '', redirectTo: 'preview/sales', pathMatch: 'full' },
             { path: 'preview/:voucherType', component: InvoiceComponent },
+             { path: 'preview/:voucherType/:selectedType', component: InvoiceComponent },
             { path: 'preview/:voucherType/:voucherNoForDetail/:voucherAction', component: InvoiceComponent },
             { path: 'receipt', component: ReceiptComponent },
             { path: 'ewaybill/create', component: EWayBillCreateComponent },
@@ -177,7 +179,8 @@ const INVOICE_ROUTES: Routes = [
         TooltipModule,
         DownloadOrSendInvoiceOnMailComponent,
         InvoiceGenerateModelComponent,
-        InvoiceCreateComponent
+        InvoiceCreateComponent,
+        InvoicePreviewComponent
     ],
     entryComponents: [DownloadOrSendInvoiceOnMailComponent, PreviewDownloadReceiptComponent,
         ReceiptUpdateComponent],

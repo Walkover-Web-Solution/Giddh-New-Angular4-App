@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
@@ -24,7 +24,7 @@ import { GeneralActions } from '../actions/general/general.actions';
     templateUrl: './userDetails.component.html',
     styleUrls: [`./userDetails.component.scss`],
 })
-export class UserDetailsComponent implements OnInit, OnDestroy {
+export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('staticTabs') public staticTabs: TabsetComponent;
     public userAuthKey: string = '';
     public expandLongCode: boolean = false;
@@ -64,6 +64,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     public userSessionId: any = null;
     public modalRef: BsModalRef;
     public activeTab: string;
+    public isUpdateCompanyInProgress$: Observable<boolean>;
+    public isCreateAndSwitchCompanyInProcess: boolean;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -94,6 +96,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         this.isVerifyAddNewMobileNoInProcess$ = this.store.select(s => s.login.isVerifyAddNewMobileNoInProcess).pipe(takeUntil(this.destroyed$));
         this.isVerifyAddNewMobileNoSuccess$ = this.store.select(s => s.login.isVerifyAddNewMobileNoSuccess).pipe(takeUntil(this.destroyed$));
         this.userSessionResponse$ = this.store.select(s => s.userLoggedInSessions.Usersession).pipe(takeUntil(this.destroyed$));
+        this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
 
         this.authenticateTwoWay$ = this.store.select(s => {
             if (s.session.user) {
@@ -105,17 +108,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this._route.params.subscribe(params => {
             if (params['type'] && this.activeTab !== params['type']) {
-                // if active tab is null or undefined then it means component initialized for the first time
-                if (!this.activeTab) {
-                    this.setStateDetails(params['type']);
-                }
+                this.setStateDetails(params['type']);
                 this.activeTab = params['type'];
-            }
-        });
-
-        this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
-            if (val && val.tab && val.tabIndex) {
-                this.selectTab(val.tabIndex);
             }
         });
 
@@ -174,6 +168,22 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
                 this.userSessionList = s;
             } else {
                 this.store.dispatch(this._sessionAction.getAllSession());
+            }
+        });
+        this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
+            this.isCreateAndSwitchCompanyInProcess = inProcess;
+        });
+    }
+
+    /**
+     * Lifecycle method that is triggered once all the view child are rendered
+     *
+     * @memberof UserDetailsComponent
+     */
+    public ngAfterViewInit(): void {
+        this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+            if (val && val.tab && val.tabIndex) {
+                this.selectTab(val.tabIndex);
             }
         });
     }
@@ -350,7 +360,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     }
 
     public selectTab(id: number) {
-        this.staticTabs.tabs[id].active = true;
+        if(this.staticTabs) {
+            this.staticTabs.tabs[id].active = true;
+        }
     }
 
     public ngOnDestroy() {
@@ -378,7 +390,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
      * @memberof UserDetailsComponent
      */
     public onTabChanged(tabName: string): void {
-        this.setStateDetails(tabName);
         this.store.dispatch(this.generalActions.setAppTitle(`pages/user-details/${tabName}`));
         this.router.navigate(['pages/user-details/', tabName], { replaceUrl: true });
     }

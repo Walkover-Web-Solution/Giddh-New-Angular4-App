@@ -37,6 +37,7 @@ export class PaymentAsideComponent implements OnInit {
     public userDetails$: Observable<VerifyEmailResponseModel>;
     //variable to check whether OTP is sent to show and hide OTP text field
     public OTPsent: boolean = false;
+    public countryCode: string = '';
 
     //Event emitter to close the Aside panel
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -76,6 +77,10 @@ export class PaymentAsideComponent implements OnInit {
         this.activeAccount$.subscribe(acc => {
             if (acc && acc.accountBankDetails) {
                 this.accountDetails = acc;
+                if (acc.country && acc.country.countryCode) {
+                    this.countryCode = this.accountDetails.country.countryCode
+                }
+
             }
         });
     }
@@ -101,7 +106,11 @@ export class PaymentAsideComponent implements OnInit {
             if (res.status === 'success') {
                 this.OTPsent = true;
             } else {
-                this._toaster.errorToast(res.message);
+                if (res.status === 'error' && res.code === 'BANK_ERROR') {
+                    this._toaster.warningToast(res.message);
+                } else {
+                    this._toaster.errorToast(res.message);
+                }
             }
         });
     }
@@ -119,7 +128,11 @@ export class PaymentAsideComponent implements OnInit {
             if (res.status === 'success') {
                 this.OTPsent = true;
             } else {
-                this._toaster.errorToast(res.message);
+                if (res.status === 'error' && res.code === 'BANK_ERROR') {
+                    this._toaster.warningToast(res.message);
+                } else {
+                    this._toaster.errorToast(res.message);
+                }
             }
         });
     }
@@ -140,7 +153,11 @@ export class PaymentAsideComponent implements OnInit {
             if (res.status === 'success') {
                 this.closeAsidePane();
             } else {
-                this._toaster.errorToast(res.message);
+                if (res.status === 'error' && res.code === 'BANK_ERROR') {
+                    this._toaster.warningToast(res.message);
+                } else {
+                    this._toaster.errorToast(res.message);
+                }
             }
         });
     }

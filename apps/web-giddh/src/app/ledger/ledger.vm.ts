@@ -340,6 +340,8 @@ export class BlankLedgerVM {
     public baseCurrencyToDisplay?: ICurrencyResponse;
     public foreignCurrencyToDisplay?: ICurrencyResponse;
     public selectedCurrencyToDisplay?: 0 | 1 = 0;
+    public passportNumber?: string;
+    public touristSchemeApplicable?: boolean;
 }
 
 export class TransactionVM {
@@ -367,6 +369,9 @@ export class TransactionVM {
     public convertedAmount?: number = 0;
     public isChecked: boolean = false;
     public showTaxationDiscountBox: boolean = false;
+    public itcAvailable?: string = '';
+    public reverseChargeTaxableAmount?: number;
+    public shouldShowRcmEntry?: boolean;
 }
 
 export interface IInventory {
@@ -392,3 +397,22 @@ export interface WarehouseDetails {
     name: string;
     uniqueName: string;
 }
+
+/**
+ * List of available ITC for India
+ *
+ * @export
+ * @enum {string}
+ */
+export enum AvailableItc {
+    ImportOfGoods = 'import_of_goods',
+    ImportOfServices = 'import_of_services',
+    Others = 'all_other_itc'
+}
+
+/** List of available ITC */
+export const AVAILABLE_ITC_LIST = [
+    { label: 'Import of goods', value: AvailableItc.ImportOfGoods },
+    { label: 'Import of services', value: AvailableItc.ImportOfServices },
+    { label: 'Others', value: AvailableItc.Others }
+];

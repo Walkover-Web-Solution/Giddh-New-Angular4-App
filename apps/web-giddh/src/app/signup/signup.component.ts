@@ -290,8 +290,13 @@ export class SignupComponent implements OnInit, OnDestroy {
             const { ipcRenderer } = (window as any).require("electron");
             if (provider === "google") {
                 // google
-                const t = ipcRenderer.sendSync("authenticate", provider);
-                this.store.dispatch(this.loginAction.signupWithGoogle(t));
+                const t = ipcRenderer.send("authenticate", provider);
+                ipcRenderer.once('take-your-gmail-token', (sender , arg) => {
+                    this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
+                });
+                //
+                // const t = ipcRenderer.sendSync("authenticate", provider);
+                // this.store.dispatch(this.loginAction.signupWithGoogle(t));
             } else {
                 // linked in
                 const t = ipcRenderer.sendSync("authenticate", provider);

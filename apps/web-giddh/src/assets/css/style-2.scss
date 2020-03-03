@@ -832,7 +832,11 @@ ul.sub-list {
 }
 
 .bold {
-    font-family: "" opensans-semibold "";
+    font-family: $tableFontSemibold;
+}
+
+.font-bold {
+    font-family: $tableFontBold;
 }
 
 .modal-open {
@@ -886,6 +890,7 @@ ul.sub-list {
     box-shadow: 0 6px 7px #cacaca;
     border: 1px solid $dark-blue00 !important;
     color: #333333 !important;
+    border-radius: 3px;
     /* display: block; */
 }
 
@@ -1554,7 +1559,22 @@ modal-container.modal {
 .mb-0 {
     margin-bottom: 0px;
 }
-
+.calendly-inline-widget object {
+    width: 1000px;
+    height: 610px;
+}
+.booking-container {
+    max-width: 100% !important;
+}
+._2LpwQBMGSE._1cMlaUlzrO._1P3WzErELA._22VVVS0E_n {
+    display: none !important;
+}
+.justify-content-center {
+    justify-content: center;
+}
+.color-primary {
+    color: $primaryBtncolror;
+}
 /* my css end */
 
 /*input*/
@@ -1624,24 +1644,21 @@ input:-moz-placeholder {
     font-size: 16px;
     text-transform: capitalize;
     display: inline-flex;
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     background-color: $border-blue;
     text-align: center;
     border-radius: 50%;
     justify-content: center;
     align-items: center;
     padding: 0;
-    margin-right: 5px;
-        float: left;
+    margin-right: 15px;
+    float: left;
+    letter-spacing: -1px;
 }
 
 .company-name .cText .fyear {
     font-size: 12px;
-}
-
-.company-name .cText span {
-    color: #fff;
 }
 
 .acntAccordion .title.active {
@@ -1650,6 +1667,8 @@ input:-moz-placeholder {
 
 header .navbar {
     background-color: #f7f8fa;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 3px 0;
 }
 
 /* .fyear {
@@ -2097,9 +2116,10 @@ fieldset[disabled] .btn-primary:hover {
     cursor: pointer;
     position: relative;
     padding-right: 25px;
-    /* max-width: 380px; */
     display: inline-block;
-    width: 100%;
+    background: none;
+    padding: 0px 5px 0 0 !important;
+    color: #fff;
 }
 
 /* #cmpWrp .cText {
@@ -2182,7 +2202,6 @@ p.table-email {
 .delt {
     text-align: center;
 }
-
 input[type="checkbox"] {
     position: relative;
     top: 1px;
@@ -2191,6 +2210,10 @@ input[type="checkbox"] {
     cursor: pointer;
     left: 0px;
     height: 19px;
+    width: 1em;
+    height: 1em;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 input[type="checkbox"]:checked:before {
@@ -2234,6 +2257,7 @@ input[type="checkbox"]:after {
     background: #fff;
     cursor: pointer;
     border-radius: 2px;
+    visibility: visible;
 }
 
 input[type="checkbox"]:checked:after {
@@ -2573,7 +2597,9 @@ input[type="checkbox"]:checked:after {
 .font-16 {
     font-size: 16px !important;
 }
-
+.font-20 {
+    font-size: 20px;
+}
 .font-22 {
     font-size: 22px;
 }
@@ -2605,7 +2631,7 @@ input[type="checkbox"]:checked:after {
 
 .subscription-title {
     font-size: 20px;
-    font-family: "opensans-semibold";
+    font-family: $tableFontSemibold;
 }
 
 .box2 {
@@ -2766,6 +2792,12 @@ input[type="checkbox"]:checked:after {
 .fixed-ng2pdfview iframe {
     height: 1530px !important;
     overflow: hidden;
+}
+
+.mandatory-asterisk {
+    font-size: 14px;
+    top: 0;
+    color: red;
 }
 
 @media only screen and (max-width: 1400px) {
@@ -5335,6 +5367,7 @@ label {
     height: 50px;
     float: left;
     background: #fff url("../images/designTool.svg") no-repeat;
+    background-size: 65px;
 }
 
 .ico-template {
@@ -5472,9 +5505,6 @@ fieldset[disabled] .form-control {
 input[type="checkbox"][disabled] {
     opacity: 2.2;
 }
-
-
-
 .nested_table > tbody tr td {
     border: 0 !important;
     padding: 8px 0;
@@ -5488,7 +5518,7 @@ input[type="checkbox"][disabled] {
 
 .section_head {
     padding-bottom: 10px;
-    font-family: "" opensans-semibold "";
+    font-family: $tableFontSemibold;
     font-size: 110%;
     color: rgba(0, 0, 0, 0.8);
 }
@@ -5594,6 +5624,9 @@ datepicker-inner .well table tbody tr td .btn-default:hover {
 }
 datepicker-inner .well table tbody tr td .btn-default:hover span {
     text-decoration: none;
+}
+datepicker-inner .well table tbody tr td .btn-default:hover .text-success {
+    color: #fff;
 }
 datepicker-inner .well {
     background-color: #ffffff;
@@ -6228,7 +6261,7 @@ table td[class*=col-]:last-child {
 
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: "" opensans-semibold "";
+    font-family: $tableFontSemibold;
     text-transform: capitalize;
 }
 
@@ -6433,7 +6466,7 @@ table td[class*=col-]:last-child {
     right: 4px;
     padding: 0px;
     border: 1px solid #cccccc;
-    left: 25px;
+    left: -15px !important;
 }
 
 .user_dropdown > li > a {
@@ -6453,7 +6486,7 @@ table td[class*=col-]:last-child {
 
 .app_list > ul h6 {
     margin-bottom: 10px;
-    font-family: "opensans-semibold";
+    font-family: $tableFontSemibold;
     font-size: 13px;
 }
 
@@ -6591,7 +6624,7 @@ table td[class*=col-]:last-child {
 .illustration_box img {
     /* max-width: 85%; */
     opacity: 0.7;
-    /* max-width: 300px; */
+    max-width: 600px;
 }
 
 .cursor-pointer {
@@ -6919,6 +6952,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding-right: 10px;
     border: none;
     box-shadow: none;
+    padding: 0 10px 0 0;
 }
 
 .hamburger_menu h4 {
@@ -6926,7 +6960,8 @@ perfect-scrollbar > .ps > .ps-overlay {
     text-transform: capitalize;
     width: auto;
     color: $pageTitleColor;
-    font-family: "opensans-bold";
+    font-family: $tableFontSemibold;
+    vertical-align: middle;
 }
 
 .tax-engine .icon {
@@ -7679,12 +7714,18 @@ app-header {
 .error-box {
     border: 2px solid red;
 }
+.text-warning {
+    color: #FFA000;
+}
 
 .heightVH-100 {
     height: 100vh;
 }
 
 /* my css */
+.new-ledger-text-right .inputWrapper .form-control {
+    text-align: right !important;
+}
 .box .company-box .inner-company-box ul > li .tooltip {
     word-break: break-all;
 }
@@ -8069,7 +8110,7 @@ span.red-text {
 
 #invoice-setting .nav > li > a:focus,
 #invoice-setting .nav > li > a:hover {
-    background: transparent !important;
+    background: $White !important;
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
 
@@ -8252,7 +8293,7 @@ ul.dropdown-menu p.lead.pd {
 .invoce-controll .nav-tabs > li.active > a {
     border-bottom: 4px solid $activeIconTh !important;
     padding-bottom: 7px !important;
-    font-family: "opensans-semibold";
+    font-family: $tableFontSemibold;
 }
 .invoce-controll .nav-tabs > li > a {
     border-bottom: 4px solid transparent !important;
@@ -8368,7 +8409,9 @@ ul.dropdown-menu p.lead.pd {
     border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
     font-size: 18px;
 }
-
+#tab-integration .nav-tabs > li a:hover {
+    background-color: $White !important;
+}
 #tab-integration .nav-tabs > li a.active {
     border-bottom: 1px solid $activeTabBorder !important;
     font-family: "opensans-regular";
@@ -8651,7 +8694,7 @@ p.remvBrnchName {
     margin-top: 0;
     border-radius: 0;
 }
-.popover.purchase-invoice-rcm, .update-ledger-rcm {
+.popover.purchase-invoice-rcm, .update-ledger-rcm, .all-modules-popover {
     .popover-arrow.arrow {
         display: none;
     }
@@ -8716,7 +8759,7 @@ input.checkbox-custom[type="checkbox"] {
 .checkbox-custom-label,
 .radio-custom-label {
     position: relative;
-    display: inline-flex;
+    display: inline-flex !important;
     align-items: center;
 
 }
@@ -9067,6 +9110,9 @@ input.checkbox-custom[type="checkbox"] {
     .xs-pr-0 {
         padding-right: 0px;
     }
+    .xs-pt-0 {
+        padding-top: 0px;
+    }
     .xs-width-100 {
         width: 100%;
     }
@@ -9202,6 +9248,16 @@ input.checkbox-custom[type="checkbox"] {
     .checkbox-custom-label, .radio-custom-label{
         display: inline;
     }
+    #cmpWrp {
+        display: block;
+    }
+    .cText span.cName {
+        color: #fff !important;
+    }
+    .user_dropdown {
+        left: 0px !important;
+    }
+
 }
 
 @media (max-width: 575px) {

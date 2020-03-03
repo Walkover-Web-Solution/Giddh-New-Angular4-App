@@ -294,7 +294,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
 
 		this.universalDate$.subscribe(a => {
 			if (a) {
-				this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1] };
+				this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
 				this.startDate = moment(a[0]).format(this._DDMMYYYY);
 				this.endDate = moment(a[1]).format(this._DDMMYYYY);
 				this.applyFilters(1, true);
@@ -490,7 +490,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
 		//Reset Date
 		this.universalDate$.pipe(take(1)).subscribe(a => {
 			if (a) {
-				this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1] };
+				this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
 				this.startDate = moment(a[0]).format(this._DDMMYYYY);
 				this.endDate = moment(a[1]).format(this._DDMMYYYY);
 			}

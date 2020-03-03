@@ -1,6 +1,6 @@
 <span class="pr tax-control-cmp" (clickOutside)="showTaxPopup = false; taxInputBlur($event)"
     (click)="$event.stopPropagation()">
-    <label *ngIf="showHeading">Tax</label>
+    <label class="font-12" *ngIf="showHeading">{{ customHeading ? customHeading : 'Tax' }} <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label>
 
     <a id="tax" class="clearfix">
 

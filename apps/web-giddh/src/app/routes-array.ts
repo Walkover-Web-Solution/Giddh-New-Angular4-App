@@ -26,7 +26,7 @@ export const ROUTES = [
     { path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full' },
     { path: 'sales', redirectTo: 'pages/sales' },
     { path: 'daybook', redirectTo: 'pages/daybook', pathMatch: 'full' },
-    { path: 'purchase', redirectTo: 'pages/purchase', pathMatch: 'full' },
+    { path: 'purchase', redirectTo: 'pages/purchase-management', pathMatch: 'full' },
     { path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full' },
     { path: 'accounting-voucher', redirectTo: 'pages/accounting', pathMatch: 'full' },
     { path: 'contact', redirectTo: 'pages/contact' },
@@ -93,8 +93,9 @@ export const ROUTES = [
             },
             { path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule' },
             { path: 'reports', loadChildren: './reports/reports.module#ReportsModule' },
+            { path: 'purchase-management', loadChildren: './purchase/purchase.module#PurchaseModule' },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
-            // {path: '**', pathMatch: 'full'},
+
 
         ]
     },

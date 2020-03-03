@@ -115,17 +115,23 @@ export class LoginActions {
         .ofType(LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE).pipe(
             map((action: CustomActions) => {
                 let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
-                if (response.status === 'error') {
-                    this._toaster.errorToast(action.payload.message, action.payload.code);
-                    return { type: 'EmptyAction' };
-                }
-                if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
-                    this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
+                if(response) {
+                    if (response.status === 'error') {
+                        this._toaster.errorToast(action.payload.message, action.payload.code);
+                        return { type: 'EmptyAction' };
+                    }
+                    if (response.body && response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
+                        this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
+                        return {
+                            type: 'EmptyAction'
+                        };
+                    } else {
+                        return this.LoginSuccess();
+                    }
+                } else {
                     return {
                         type: 'EmptyAction'
                     };
-                } else {
-                    return this.LoginSuccess();
                 }
             }));
 
@@ -271,8 +277,8 @@ export class LoginActions {
                 return observableZip(this._companyService.getStateDetails(''), this._companyService.CompanyList(), this._companyService.CurrencyList());
             }), map((results: any[]) => {
                 console.log("YES2");
-				/* check if local storage is cleared or not for first time
-				 for application menu set up in localstorage */
+                /* check if local storage is cleared or not for first time
+                 for application menu set up in localstorage */
 
                 let isNewMenuSetted = localStorage.getItem('isNewMenuSetted');
                 let isMenuUpdated = localStorage.getItem('isMenuUpdated');
@@ -305,11 +311,11 @@ export class LoginActions {
                             return this.doSameStuffs(companies);
                         }
                     } else {
-						/**
-						 * if user is new and signed up by shared entity
-						 * find the entity and redirect user according to terms.
-						 * shared entities [GROUP, COMPANY, ACCOUNT]
-						 */
+                        /**
+                         * if user is new and signed up by shared entity
+                         * find the entity and redirect user according to terms.
+                         * shared entities [GROUP, COMPANY, ACCOUNT]
+                         */
                         return this.doSameStuffs(companies);
                     }
                 }
@@ -319,8 +325,13 @@ export class LoginActions {
     public logoutSuccess$: Observable<Action> = this.actions$
         .ofType(LoginActions.LogOut).pipe(
             map((action: CustomActions) => {
-                this._router.navigate(['/login']);
-                window.location.reload();
+                if (PRODUCTION_ENV && !isElectron) {
+                    window.location.href = 'https://giddh.com/login/';
+                } else if (isElectron) {
+                    this._router.navigate(['/login']);
+                } else {
+                    window.location.href = AppUrl + 'login/';
+                }
                 return { type: 'EmptyAction' };
             }));
 
@@ -527,7 +538,7 @@ export class LoginActions {
     public FectchUserDetailsResponse$: Observable<Action> = this.actions$
         .ofType(LoginActions.FetchUserDetailsResponse).pipe(
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload && action.payload.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
@@ -826,6 +837,7 @@ export class LoginActions {
             payload: null
         };
     }
+
     public LoginSuccessByOtherUrl(): CustomActions {
         console.log("LOGINS");
         return {

@@ -1,0 +1,602 @@
+<div class="md-drppicker" #pickerContainer
+     [ngClass]="{
+    ltr: locale.direction === 'ltr',
+    rtl: this.locale.direction === 'rtl',
+    'shown': isShown || inline,
+    'hidden': !isShown && !inline,
+    'inline': inline,
+    'double': !singleDatePicker && showCalInRanges,
+    'show-ranges': ranges?.length
+}" [class]="'drops-' + drops + '-' + opens">
+
+  <!-- ranges container -->
+  <div class="ranges" *ngIf="ranges?.length"
+       style="border-right: 1px solid gainsboro;display: flex;flex-direction: column;">
+    <!-- loop over ranges -->
+    <div style="flex: 1 1 auto;">
+      <ul>
+
+        <li *ngFor="let range of ranges; let i = index" style="position: relative" class="menu-li">
+          <button type="button" class="btn-angle-down"
+                  (click)="clickRange($event, range)"
+                  (dblclick)="dblClickRange($event, range)"
+                  [disabled]="disableRange(ranges, range)"
+                  [ngClass]="{'active': range.isSelected}">{{range.name}}
+
+            <span *ngIf="range.ranges.length" class="available prev angle-down"></span>
+          </button>
+
+
+          <ul *ngIf="range.ranges.length" class="sub-ranges-cal menu-drawer">
+            <li *ngFor="let subRange of range.ranges">
+              <button type="button"
+                      (click)="clickRange($event,subRange)"
+                      (dblclick)="dblClickRange($event, subRange)"
+                      [disabled]="disableRange(range.ranges, subRange)"
+                      [ngClass]="{'active': subRange.isSelected}">{{subRange.name}}
+              </button>
+            </li>
+          </ul>
+
+        </li>
+      </ul>
+
+    </div>
+    <!-- loop over ranges -->
+
+    <!-- days up to today/ yesterday input -->
+    <div style="border-bottom: 1px solid gainsboro;border-top: 1px solid gainsboro;">
+      <ul>
+        <li>
+          <button><input type="text"
+                         style="width: 28px;height: 17px;margin-right: 3px;font-size: 12px;margin-bottom: 0;" (keyup)="uptoInputKeyUp($event)"
+                         (change)="uptoToday($event,$event.target.value)"> days up
+            to today
+          </button>
+        </li>
+        <li>
+          <button><input type="text" (change)="uptoYesterday($event,$event.target.value)" (keyup)="uptoInputKeyUp($event)"
+                         style="width: 28px;height: 17px;margin-right: 3px;font-size: 12px;margin-bottom: 0;"> days up
+            to yesterday
+          </button>
+        </li>
+      </ul>
+    </div>
+    <!-- days up to today/ yesterday input -->
+
+  </div>
+  <!-- ranges container -->
+
+  <!-- calender container -->
+  <div style="display: flex;flex-direction: column;" (mousewheel)="mouseUp($event)">
+
+    <div style="flex:1 1 auto;overflow: auto;">
+
+      <div style="display: flex ;flex-direction: column;" (mouseout)="hoveredDate = null">
+        <div>
+
+          <!-- start date/ end date inputs container -->
+          <div style="display: flex;justify-content: space-around;padding-top: 10px">
+            <input placeholder="start date" #startDateElement
+                   [value]="startDateString" (change)="setStartDate($event.target.value)"
+                   (click)="ActiveDate =0"
+                   style="width: 100px;height:30px;font-size: 12px;"
+                   [class]="ActiveDate ===0 ?ActiveSelectedDateClass :''">
+            <span style="display: flex;align-items: flex-start">
+              _
+            </span>
+            <input placeholder="end date" #endDateElement
+                   [value]="endDateString" (change)="setEndDate($event.target.value)"
+                   (click)="ActiveDate =1"
+                   style="width: 100px;height: 30px;font-size: 12px;"
+                   [class]="ActiveDate ===1 ?ActiveSelectedDateClass :''">
+          </div>
+          <!-- start date/ end date inputs container -->
+
+          <!-- month name -->
+          <div style="display: flex;justify-content: space-between;padding:10px  12px">
+            <!-- month name and month dropdown -->
+            <div>
+              <span style="font-weight: 700;cursor: pointer" (click)="monthPickerClick()">
+
+                <ng-container *ngIf="showDropdowns && calendarVariables.start.dropdowns">
+                    <!--<div>-->
+
+                  {{this.locale.monthNames[calendarVariables?.start?.calendar[1][1].month()]}}
+
+                  <select class="monthselect" (change)="monthChanged($event, sideEnum.start)">
+                    <option
+                      [disabled]="(calendarVariables.start.dropdowns.inMinYear && m < calendarVariables.start.minDate.month()) || (calendarVariables.start.dropdowns.inMaxYear && m > calendarVariables.start.maxDate.month())"
+                      *ngFor="let m of calendarVariables.start.dropdowns.monthArrays" [value]="m"
+                      [selected]="calendarVariables.start.dropdowns.currentMonth == m">
+                      {{locale.monthNames[m]}}
+                    </option>
+                  </select>
+
+                  <!--</div>-->
+
+                  <!--<div style="padding-start: 5px">-->
+                  {{ calendarVariables?.start?.calendar[1][1].format(" YYYY")}}
+                  <select class="yearselect" (change)="yearChanged($event, sideEnum.start)">
+                    <option *ngFor="let y of calendarVariables.start.dropdowns.yearArrays"
+                            [selected]="y === calendarVariables.start.dropdowns.currentYear">
+                      {{y}}
+                    </option>
+                  </select>
+                  <!--</div>-->
+
+                  </ng-container>
+
+                  <ng-container *ngIf="!showDropdowns || !calendarVariables.start.dropdowns">
+                    {{this.locale.monthNames[calendarVariables?.start?.calendar[1][1].month()]}}  {{ calendarVariables?.start?.calendar[1][1].format(" YYYY")}}
+                  </ng-container>
+
+              </span>
+            </div>
+            <!-- month name and month dropdown -->
+
+            <!-- navigate to previous and next month buttons -->
+            <div style="width: 100px;display: flex;justify-content: space-around">
+
+              <button (click)="goToPrevMonth()"
+                      [disabled]="goToPreviousMonthDisabled"
+                      class="prev available"></button>
+
+              <button class="next available"
+                      [disabled]="goToNextMonthDisabled"
+                      (click)="goToNextMonth()"></button>
+
+            </div>
+            <!-- navigate to previous and next month buttons -->
+
+          </div>
+          <!-- month name -->
+
+          <!-- month selection -->
+          <div class="d-container" *ngIf="showMonthPicker" (mousewheel)="mouseUpYear($event)">
+            <div>
+              <h2 style="position: relative;padding-left: 24px;font-size: 13px;color: rgba(0,0,0,.54);margin: 9px 0;;">
+                {{ calendarVariables?.start?.calendar[1][1].format(" YYYY")}}</h2>
+              <div class="dropdown-containt">
+                <div class="d-month" (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),0)">Jan
+                </div>
+                <div class="d-month" (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),1)">Feb
+                </div>
+                <div class="d-month" (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),2)">Mar
+                </div>
+                <div class="d-month" (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),3)">Apr
+                </div>
+                <div class="d-month" (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),4)">May
+                </div>
+                <div class="d-month" (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),5)">June
+                </div>
+                <div class="d-month" (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),6)">July
+                </div>
+                <div class="d-month" (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),7)">Aug
+                </div>
+                <div class="d-month" (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),8)">Sept
+                </div>
+                <div class="d-month" (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),9)">Oct
+                </div>
+                <div class="d-month" (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),10)">Nov
+                </div>
+                <div class="d-month" (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),11)">Dec
+                </div>
+              </div>
+            </div>
+            <div>
+              <h2 style="position: relative;padding-left: 24px;font-size: 13px;color: rgba(0,0,0,.54);margin: 9px 0;;">
+                {{ calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').format(" YYYY")}}</h2>
+              <div class="dropdown-containt">
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),0)">Jan
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),1)">Feb
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),2)">Mar
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),3)">Apr
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),4)">May
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),5)">June
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),6)">July
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),7)">Aug
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),8)">Sept
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),9)">Oct
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),10)">Nov
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),11)">Dec
+                </div>
+              </div>
+            </div>
+            <div>
+              <h2 style="position: relative;padding-left: 24px;font-size: 13px;color: rgba(0,0,0,.54);margin: 16px 0;;">
+                {{ calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').format(" YYYY")}}</h2>
+              <div class="dropdown-containt">
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),00)">Jan
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),01)">Feb
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),02)">Mar
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),03)">Apr
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),04)">May
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),05)">June
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),06)">July
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),07)">Aug
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),08)">Sept
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),09)">Oct
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),10)">Nov
+                </div>
+                <div class="d-month"
+                     (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),11)">Dec
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- month selection -->
+
+        </div>
+
+        <!-- start date calendar container -->
+        <div class="calendar" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}"
+             *ngIf="showCalInRanges && !showMonthPicker">
+
+          <div class="calendar-table" *ngIf="calendarVariables">
+
+            <table class="table-condensed">
+              <thead>
+
+              <tr>
+                <th *ngIf="showWeekNumbers || showISOWeekNumbers"></th>
+
+                <ng-container
+                  *ngIf="!calendarVariables.start.minDate || calendarVariables.start.minDate.isBefore(calendarVariables.start.calendar.firstDay) && (!this.linkedCalendars || true)">
+                  <th>
+                  </th>
+                </ng-container>
+
+                <ng-container
+                  *ngIf="!(!calendarVariables.start.minDate || calendarVariables.start.minDate.isBefore(calendarVariables.start.calendar.firstDay) && (!this.linkedCalendars || true))">
+                  <th></th>
+                </ng-container>
+
+                <th colspan="5" class="month drp-animate">
+                  <ng-container *ngIf="showDropdowns && calendarVariables.start.dropdowns">
+                    <div>
+
+                      {{this.locale.monthNames[calendarVariables?.start?.calendar[1][1].month()]}}
+
+                      <select class="monthselect" (change)="monthChanged($event, sideEnum.start)">
+                        <option
+                          [disabled]="(calendarVariables.start.dropdowns.inMinYear && m < calendarVariables.start.minDate.month()) || (calendarVariables.start.dropdowns.inMaxYear && m > calendarVariables.start.maxDate.month())"
+                          *ngFor="let m of calendarVariables.start.dropdowns.monthArrays" [value]="m"
+                          [selected]="calendarVariables.start.dropdowns.currentMonth == m">
+                          {{locale.monthNames[m]}}
+                        </option>
+                      </select>
+
+                    </div>
+
+                    <div style="padding-left: 5px">
+                      {{ calendarVariables?.start?.calendar[1][1].format(" YYYY")}}
+                      <select class="yearselect" (change)="yearChanged($event, sideEnum.start)">
+                        <option *ngFor="let y of calendarVariables.start.dropdowns.yearArrays"
+                                [selected]="y === calendarVariables.start.dropdowns.currentYear">
+                          {{y}}
+                        </option>
+                      </select>
+                    </div>
+
+                  </ng-container>
+
+                  <ng-container *ngIf="!showDropdowns || !calendarVariables.start.dropdowns">
+                    {{this.locale.monthNames[calendarVariables?.start?.calendar[1][1].month()]}}  {{ calendarVariables?.start?.calendar[1][1].format(" YYYY")}}
+                  </ng-container>
+
+                </th>
+                <th></th>
+
+                <!-- commented because we have moved next and previous month switcher at top -->
+                <!--                <ng-container-->
+                <!--                  *ngIf="(!calendarVariables.start.maxDate || calendarVariables.start.maxDate.isAfter(calendarVariables.start.calendar.lastDay)) && (!linkedCalendars || singleDatePicker )">-->
+                <!--                  <th class="next available" (click)="goToNextMonth()">-->
+                <!--                  </th>-->
+                <!--                </ng-container>-->
+                <!-- commented because we are always going to show go to next and previous month -->
+
+                <!--                <ng-container-->
+                <!--                  *ngIf="!((!calendarVariables.start.maxDate || calendarVariables.start.maxDate.isAfter(calendarVariables.start.calendar.lastDay)) && (!linkedCalendars || singleDatePicker ))">-->
+                <!--                  <th></th>-->
+                <!--                </ng-container>-->
+
+              </tr>
+
+              <tr>
+                <th *ngIf="showWeekNumbers || showISOWeekNumbers" class="week"><span>{{this.locale.weekLabel}}</span>
+                </th>
+                <th *ngFor="let dayofweek of locale.daysOfWeek"><span>{{dayofweek}}</span></th>
+              </tr>
+
+              </thead>
+
+              <tbody class="drp-animate">
+
+              <ng-container *ngFor="let row of calendarVariables.start.calRows">
+                <tr [class]="calendarVariables.start.classes[row].classList">
+
+                  <!-- add week number -->
+                  <td class="week" *ngIf="showWeekNumbers">
+                    <span>{{calendarVariables.start.calendar[row][0].week()}}</span>
+                  </td>
+
+                  <td class="week" *ngIf="showISOWeekNumbers">
+                    <span>{{calendarVariables.start.calendar[row][0].isoWeek()}}</span>
+                  </td>
+
+                  <!-- cal -->
+                  <!--<td *ngFor="let col of calendarVariables.start.calCols"-->
+                  <!--[class]="calendarVariables.start.classes[row][col]"-->
+                  <!--(click)="clickDate($event, sideEnum.start, row, col)"-->
+                  <!--(mouseenter)="hoveredDate = calendarVariables.start.calendar[row][col]"-->
+                  <!--[ngClass]="{'in-range-hovered': calendarVariables.start.calendar[row][col].isBetween(startDate, hoveredDate)}">-->
+                  <!--<span-->
+                  <!--*ngIf="!(calendarVariables.start.classes[row][col].indexOf('off')>-1)">{{calendarVariables.start.calendar[row][col].date()}}</span>-->
+                  <!--</td>-->
+
+                  <td *ngFor="let col of calendarVariables.start.calCols"
+                      [class]="calendarVariables.start.classes[row][col]"
+                      [style.backgroundColor]="!(calendarVariables.end.calendar[1][1].month() ==calendarVariables.end.calendar[row][col].month())?'white':'inherit'"
+                      (mouseenter)="mouseEnter(row,col,sideEnum.start)"
+                      [ngClass]="{'in-range-hovered': (calendarVariables.start.calendar[row][col].isBetween(startDate, hoveredDate)
+                      && (calendarVariables.end.calendar[1][1].month() ==calendarVariables.end.calendar[row][col].month())),
+                      'activatedDate': (calendarVariables.start.calendar[row][col].format('YYYY-MM-DD')===startDate.format('YYYY-MM-DD')
+                      || calendarVariables.start.calendar[row][col].format('YYYY-MM-DD')===endDate.format('YYYY-MM-DD')) &&
+                      ((calendarVariables.start.calendar[row][col].format('YYYY-MM-DD')===startDate.format('YYYY-MM-DD') && ActiveDate === 1) ||
+                      (calendarVariables.start.calendar[row][col].format('YYYY-MM-DD')===endDate.format('YYYY-MM-DD') && ActiveDate === 0))}"
+                      (click)="clickDate($event, sideEnum.start, row, col)">
+                  <span
+                    *ngIf="(calendarVariables.start.calendar[1][1].month() ==calendarVariables.start.calendar[row][col].month())">{{calendarVariables.start.calendar[row][col].date()}}</span>
+                  </td>
+
+
+                </tr>
+              </ng-container>
+
+              </tbody>
+            </table>
+          </div>
+
+          <div class="calendar-time" *ngIf="timePicker">
+
+            <select class="hourselect" [disabled]="!endDate" [(ngModel)]="timepickerVariables.start.selectedHour"
+                    (ngModelChange)="timeChanged($event, sideEnum.start)">
+              <option *ngFor="let i of timepickerVariables.start.hours"
+                      [value]="i"
+                      [disabled]="timepickerVariables.start.disabledHours.indexOf(i) > -1">{{i}}</option>
+            </select>
+
+            <select class="minuteselect" [disabled]="!endDate" [(ngModel)]="timepickerVariables.start.selectedMinute"
+                    (ngModelChange)="timeChanged($event, sideEnum.start)">
+              <option *ngFor="let i of timepickerVariables.start.minutes; let index = index;"
+                      [value]="i"
+                      [disabled]="timepickerVariables.start.disabledMinutes.indexOf(i) > -1">{{timepickerVariables.start.minutesLabel[index]}}</option>
+            </select>
+
+            <select *ngIf="timePickerSeconds" class="secondselect" [disabled]="!endDate"
+                    [(ngModel)]="timepickerVariables.start.selectedSecond"
+                    (ngModelChange)="timeChanged($event, sideEnum.start)">
+              <option *ngFor="let i of timepickerVariables.start.seconds; let index = index;"
+                      [value]="i"
+                      [disabled]="timepickerVariables.start.disabledSeconds.indexOf(i) > -1">{{timepickerVariables.start.secondsLabel[index]}}</option>
+            </select>
+
+            <select *ngIf="!timePicker24Hour" class="ampmselect" [(ngModel)]="timepickerVariables.start.ampmModel"
+                    (ngModelChange)="timeChanged($event, sideEnum.start)">
+              <option value="AM" [disabled]="timepickerVariables.start.amDisabled">AM</option>
+              <option value="PM" [disabled]="timepickerVariables.start.pmDisabled">PM</option>
+            </select>
+
+          </div>
+        </div>
+        <!-- start date calendar container -->
+
+        <!-- end date calendar container -->
+        <div class="calendar right" *ngIf="showCalInRanges && !singleDatePicker && !showMonthPicker">
+
+          <div class="calendar-table">
+            <table class="table-condensed" *ngIf="calendarVariables">
+              <thead>
+              <tr>
+                <th *ngIf="showWeekNumbers || showISOWeekNumbers"></th>
+                <ng-container
+                  *ngIf="(!calendarVariables.end.minDate || calendarVariables.end.minDate.isBefore(calendarVariables.end.calendar.firstDay)) && (!this.linkedCalendars)">
+                  <th class="available">
+                  </th>
+                </ng-container>
+                <ng-container
+                  *ngIf="!((!calendarVariables.end.minDate || calendarVariables.end.minDate.isBefore(calendarVariables.end.calendar.firstDay)) && (!this.linkedCalendars))">
+                  <th></th>
+                </ng-container>
+                <th colspan="5" class="month">
+                  <ng-container *ngIf="showDropdowns && calendarVariables.end.dropdowns">
+                    <div>
+                      {{this.locale.monthNames[calendarVariables?.end?.calendar[1][1].month()]}}
+                      <select class="monthselect" (change)="monthChanged($event, sideEnum.end)">
+                        <option
+                          [disabled]="(calendarVariables.end.dropdowns.inMinYear && m < calendarVariables.end.minDate.month()) || (calendarVariables.end.dropdowns.inMaxYear && m > calendarVariables.end.maxDate.month())"
+                          *ngFor="let m of calendarVariables.end.dropdowns.monthArrays" [value]="m"
+                          [selected]="calendarVariables.end.dropdowns.currentMonth == m">
+                          {{locale.monthNames[m] }}
+                        </option>
+                      </select>
+                    </div>
+                    <div style="padding-left: 5px">
+                      {{ calendarVariables?.end?.calendar[1][1].format(" YYYY")}}
+                      <select class="yearselect" (change)="yearChanged($event, sideEnum.end)">
+                        <option *ngFor="let y of calendarVariables.end.dropdowns.yearArrays"
+                                [selected]="y === calendarVariables.end.dropdowns.currentYear">
+                          {{' ' + y}}
+                        </option>
+                      </select>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="!showDropdowns || !calendarVariables.end.dropdowns">
+                    {{this.locale.monthNames[calendarVariables?.end?.calendar[1][1].month()]}}  {{ calendarVariables?.end?.calendar[1][1].format(" YYYY")}}
+                  </ng-container>
+                </th>
+                <ng-container
+                  *ngIf="!calendarVariables.end.maxDate || calendarVariables.end.maxDate.isAfter(calendarVariables.end.calendar.lastDay) && (!linkedCalendars || singleDatePicker || true)">
+                  <th>
+                  </th>
+                </ng-container>
+                <ng-container
+                  *ngIf="!(!calendarVariables.end.maxDate || calendarVariables.end.maxDate.isAfter(calendarVariables.end.calendar.lastDay) && (!linkedCalendars || singleDatePicker || true))">
+                  <th></th>
+                </ng-container>
+              </tr>
+
+              <tr>
+                <th *ngIf="showWeekNumbers || showISOWeekNumbers" class="week"><span>{{this.locale.weekLabel}}</span>
+                </th>
+                <th *ngFor="let dayofweek of locale.daysOfWeek"><span>{{dayofweek}}</span></th>
+              </tr>
+              </thead>
+
+              <tbody>
+
+              <ng-container *ngFor="let row of calendarVariables.end.calRows">
+                <tr [class]="calendarVariables.end.classes[row].classList">
+                  <td class="week" *ngIf="showWeekNumbers">
+                    <span>{{calendarVariables.end.calendar[row][0].week()}}</span>
+                  </td>
+
+                  <td class="week" *ngIf="showISOWeekNumbers">
+                    <span>{{calendarVariables.end.calendar[row][0].isoWeek()}}</span>
+                  </td>
+
+                  <td *ngFor="let col of calendarVariables.end.calCols"
+                      [class]="calendarVariables.end.classes[row][col]"
+                      [style.backgroundColor]="!(calendarVariables.end.calendar[1][1].month() ==calendarVariables.end.calendar[row][col].month())?'white':'inherit'"
+                      (mouseenter)="mouseEnter(row,col,sideEnum.end)"
+                      [ngClass]="{'in-range-hovered': (calendarVariables.end.calendar[row][col].isBetween(startDate, hoveredDate)&&
+                      (calendarVariables.end.calendar[1][1].month() ==calendarVariables.end.calendar[row][col].month())),
+                      'activatedDate': (calendarVariables.end.calendar[row][col].format('YYYY-MM-DD')===startDate.format('YYYY-MM-DD')
+                      || calendarVariables.end.calendar[row][col].format('YYYY-MM-DD')===endDate.format('YYYY-MM-DD')) &&
+                      ((calendarVariables.end.calendar[row][col].format('YYYY-MM-DD')===startDate.format('YYYY-MM-DD') && ActiveDate === 1) ||
+                      (calendarVariables.end.calendar[row][col].format('YYYY-MM-DD')===endDate.format('YYYY-MM-DD') && ActiveDate === 0))}"
+                      (click)="clickDate($event, sideEnum.end, row, col)">
+                  <span
+                    *ngIf="(calendarVariables.end.calendar[1][1].month() ==calendarVariables.end.calendar[row][col].month())">{{calendarVariables.end.calendar[row][col].date()}}</span>
+                  </td>
+
+                </tr>
+              </ng-container>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="calendar-time" *ngIf="timePicker">
+
+            <select class="hourselect" [disabled]="!endDate" [(ngModel)]="timepickerVariables.end.selectedHour"
+                    (ngModelChange)="timeChanged($event, sideEnum.end)">
+              <option *ngFor="let i of timepickerVariables.end.hours"
+                      [value]="i"
+                      [disabled]="timepickerVariables.end.disabledHours.indexOf(i) > -1">{{i}}</option>
+            </select>
+
+            <select class="minuteselect" [disabled]="!endDate" [(ngModel)]="timepickerVariables.end.selectedMinute"
+                    (ngModelChange)="timeChanged($event, sideEnum.end)">
+              <option *ngFor="let i of timepickerVariables.end.minutes; let index = index;"
+                      [value]="i"
+                      [disabled]="timepickerVariables.end.disabledMinutes.indexOf(i) > -1">{{timepickerVariables.end.minutesLabel[index]}}</option>
+            </select>
+
+            <select *ngIf="timePickerSeconds" class="secondselect" [disabled]="!endDate"
+                    [(ngModel)]="timepickerVariables.end.selectedSecond"
+                    (ngModelChange)="timeChanged($event, sideEnum.end)">
+              <option *ngFor="let i of timepickerVariables.end.seconds; let index = index;"
+                      [value]="i"
+                      [disabled]="timepickerVariables.end.disabledSeconds.indexOf(i) > -1">{{timepickerVariables.end.secondsLabel[index]}}</option>
+            </select>
+
+            <select *ngIf="!timePicker24Hour" class="ampmselect" [(ngModel)]="timepickerVariables.end.ampmModel"
+                    (ngModelChange)="timeChanged($event, sideEnum.end)">
+              <option value="AM" [disabled]="timepickerVariables.end.amDisabled">AM</option>
+              <option value="PM" [disabled]="timepickerVariables.end.pmDisabled">PM</option>
+            </select>
+
+          </div>
+        </div>
+        <!-- end date calendar container -->
+      </div>
+
+    </div>
+
+    <!-- buttons -->
+    <div class="buttons" *ngIf="!autoApply && ( !ranges?.length || (showCalInRanges && !singleDatePicker))">
+
+      <div class="buttons_input">
+
+        <!-- clear button -->
+        <button *ngIf="showClearButton" class="btn btn-default clear" type="button" (click)="clear()"
+                title="clear the date">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 -5 24 24">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+          </svg>
+        </button>
+        <!-- clear button -->
+
+        <!-- cancel button -->
+        <button class="btn btn-default" *ngIf="showCancel" type="button"
+                (click)="clickCancel($event)">{{locale.cancelLabel}}</button>
+        <!-- cancel button -->
+
+        <!-- apply button -->
+        <button class="btn" [disabled]="applyBtn.disabled" type="button"
+                (click)="clickApply($event)">{{locale.applyLabel}}</button>
+        <!-- apply button -->
+
+      </div>
+
+    </div>
+    <!-- buttons -->
+
+  </div>
+  <!-- calender container -->
+</div>

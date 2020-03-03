@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 export const Configuration = {
     AppUrl,
     ApiUrl,
@@ -45,10 +47,113 @@ export enum OnBoardingType {
 }
 
 /** Pagination limit for every module */
-export const PAGINATION_LIMIT = 20;
+export const PAGINATION_LIMIT = 50;
 
 /** Subvoucher type */
 export enum Subvoucher {
     ReverseCharge = 'REVERSE_CHARGE',
-    AdvanceReceipt = 'ADVANCED_RECEIPT'
+    AdvanceReceipt = 'ADVANCE_RECEIPT'
 }
+
+/**
+ * enums for default date range picker
+ */
+export enum DefaultDateRangePickerRangesEnum {
+    Today = 'Today',
+    Yesterday = 'Yesterday',
+    Last7Days = 'Last 7 Days',
+    ThisMonth = 'This Month',
+    LastMonth = 'Last Month',
+    ThisWeek = 'This Week',
+    Last14Days = 'Last14Days',
+    SunToToday = 'Sun - Today',
+    MonToToday = 'Mon - Today',
+    ThisQuarterToDate = 'This Quarter to Date',
+    ThisFinancialYearToDate = 'This Financial Year to Date',
+    ThisYearToDate = 'This Year to Date',
+    LastQuarter = 'Last Quarter',
+    LastFinancialYear = 'Last Financial Year',
+    LastYear = 'Last Year'
+}
+
+/**
+ * default ranges for date range picker
+ */
+export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
+    {
+        name: DefaultDateRangePickerRangesEnum.Today, value: [moment(), moment()]
+    },
+    {
+        name: DefaultDateRangePickerRangesEnum.Yesterday, value: [moment().subtract(1, 'days'), moment().subtract(1, 'days')]
+    },
+    {
+        name: DefaultDateRangePickerRangesEnum.Last7Days, value: [moment().subtract(6, 'days'), moment()]
+    },
+    {
+        name: DefaultDateRangePickerRangesEnum.ThisMonth, value: [moment().startOf('month'), moment().endOf('month')]
+    },
+    {
+        name: DefaultDateRangePickerRangesEnum.LastMonth, value: [
+            moment().subtract(1, 'month').startOf('month'),
+            moment().subtract(1, 'month').endOf('month')
+        ]
+    },
+    {
+        name: DefaultDateRangePickerRangesEnum.ThisWeek, ranges: [{
+            name: DefaultDateRangePickerRangesEnum.SunToToday, value: [moment().startOf('week'), moment()]
+        }, {name: DefaultDateRangePickerRangesEnum.MonToToday, value: [moment().startOf('week').add(1, 'd'), moment()]}]
+    },
+    {
+        name: DefaultDateRangePickerRangesEnum.Last14Days, value: [
+            moment().subtract(14, 'd'),
+            moment()
+        ]
+    },
+    {
+        name: DefaultDateRangePickerRangesEnum.ThisQuarterToDate, value: [
+            moment().quarter(moment().quarter()).startOf('quarter'),
+            moment()
+        ]
+    },
+    {
+        name: DefaultDateRangePickerRangesEnum.ThisFinancialYearToDate, value: [
+            moment().startOf('year').subtract(9, 'year'),
+            moment()
+        ]
+    },
+    {
+        name: DefaultDateRangePickerRangesEnum.ThisYearToDate, value: [
+            moment().startOf('year'),
+            moment()
+        ]
+    },
+    {
+        name: DefaultDateRangePickerRangesEnum.LastQuarter, value: [
+            moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
+            moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+        ]
+    },
+    {
+        name: DefaultDateRangePickerRangesEnum.LastFinancialYear, value: [
+            moment().startOf('year').subtract(10, 'year'),
+            moment().endOf('year').subtract(10, 'year')
+        ]
+    },
+    {
+        name: DefaultDateRangePickerRangesEnum.LastYear, value: [
+            moment().subtract(1, 'year').startOf('year'),
+            moment().subtract(1, 'year').endOf('year')
+        ]
+    }
+];
+
+/** File attachment types supported by Giddh */
+export const FILE_ATTACHMENT_TYPE = {
+    IMAGE: ['jpg', 'jpeg', 'gif', 'png'],
+    PDF: ['pdf'],
+    UNSUPPORTED: ['doc', 'docx', 'xls', 'xlsx']
+};
+
+
+/** Error message to display if the stock is invalid */
+export const INVALID_STOCK_ERROR_MESSAGE = 'Both Unit and Rate fields are mandatory if you provide data for either of them.';

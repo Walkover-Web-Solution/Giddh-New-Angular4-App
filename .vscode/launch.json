@@ -5,7 +5,7 @@
             "name": "Launch Chrome against localhost, with sourcemaps",
             "type": "chrome",
             "request": "launch",
-            "url": "http://localapp.giddh.com:3000/*",
+            "url": "http://localhost:3000/*",
             "runtimeArgs": [
               "--user-data-dir",
               "--remote-debugging-port=9222"
@@ -17,7 +17,7 @@
             "name": "Attach to Chrome, with sourcemaps",
             "type": "chrome",
             "request": "attach",
-            "url": "http://localapp.giddh.com:3000/*",
+            "url": "http://localhost:3000/*",
             "port": 9222,
             "sourceMaps": true,
             "webRoot": "${workspaceRoot}"

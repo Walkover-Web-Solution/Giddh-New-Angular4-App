@@ -8,7 +8,6 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
 import { GeneralService } from '../services/general.service';
 import { ToasterService } from '../services/toaster.service';
-import { GeneralActions } from '../actions/general/general.actions';
 import { VatService } from "../services/vat.service";
 import * as moment from 'moment/moment';
 import { createSelector } from "reselect";
@@ -40,12 +39,14 @@ export class VatReportComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public allowVatReportAccess: boolean = false;
     @ViewChild('monthWise') public monthWise: BsDropdownDirective;
+    @ViewChild('periodDropdown') public periodDropdown;
     public isMonthSelected: boolean = false;
     public selectedMonth: any = null;
     public currentPeriod: any = {};
     public showCalendar: boolean = false;
+    public datepickerVisibility: any = 'hidden';
 
-    constructor(private store: Store<AppState>, private vatService: VatService, private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private cdRef: ChangeDetectorRef, private companyActions: CompanyActions) {
+    constructor(private store: Store<AppState>, private vatService: VatService, private _generalService: GeneralService, private _toasty: ToasterService, private cdRef: ChangeDetectorRef, private companyActions: CompanyActions, private _route: Router) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), (takeUntil(this.destroyed$)));
     }
@@ -99,12 +100,14 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
             this.vatReport = [];
 
-            this.vatService.GetVatReport(vatReportRequest).subscribe((res) => {
-                if (res.status === 'success') {
-                    this.vatReport = res.body.sections;
-                    this.cdRef.detectChanges();
-                } else {
-                    this._toasty.errorToast(res.message);
+            this.vatService.getVatReport(vatReportRequest).subscribe((res) => {
+                if(res) {
+                    if (res.status === 'success') {
+                        this.vatReport = res.body.sections;
+                        this.cdRef.detectChanges();
+                    } else {
+                        this._toasty.errorToast(res.message);
+                    }
                 }
             });
         }
@@ -116,7 +119,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         vatReportRequest.to = this.toDate;
         vatReportRequest.taxNumber = this.activeCompany.addresses[0].taxNumber;
 
-        this.vatService.DownloadVatReport(vatReportRequest).subscribe((res) => {
+        this.vatService.downloadVatReport(vatReportRequest).subscribe((res) => {
             if (res.status === "success") {
                 let blob = this._generalService.base64ToBlob(res.body, 'application/xls', 512);
                 return saveAs(blob, `VatReport.xlsx`);
@@ -166,5 +169,55 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.showCalendar = false;
 
         this.getVatReport();
+    }
+
+    /**
+     * This function will update the visibility of datepicker
+     *
+     * @param {*} visibility
+     * @memberof VatReportComponent
+     */
+    public updateDatepickerVisibility(visibility) {
+        this.datepickerVisibility = visibility;
+
+        setTimeout(() => {
+            if(this.datepickerVisibility === "hidden" && this.monthWise.isOpen === false) {
+                this.hidePeriodDropdown();
+            }
+        }, 500);
+    }
+
+    /**
+     * This function will hide datepicker dropdown if month and datepicker options are closed
+     *
+     * @memberof VatReportComponent
+     */
+    public checkIfDatepickerVisible() {
+        setTimeout(() => {
+            if(this.datepickerVisibility === "hidden") {
+                this.hidePeriodDropdown();
+            }
+        }, 500);    
+    }
+
+    /**
+     * This will hide the datepicker dropdown
+     *
+     * @memberof VatReportComponent
+     */
+    public hidePeriodDropdown() {
+        this.periodDropdown.hide();
+        document.querySelector(".btn-group.dropdown").classList.remove("open");
+        document.querySelector(".btn-group.dropdown").classList.remove("show");
+    }
+
+    /**
+     * This will redirect to vat report detail page
+     *
+     * @param {*} section
+     * @memberof VatReportComponent
+     */
+    public viewVatReportTransactions(section) {
+        this._route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.currentPeriod.from, to: this.currentPeriod.to } });
     }
 }

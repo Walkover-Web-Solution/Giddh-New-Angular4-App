@@ -542,6 +542,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             return state;
         case CompanyActions.SET_APPLICATION_DATE_RESPONSE:
             let dateResponse: BaseResponse<string, any> = action.payload;
+            const chosenLabel = dateResponse['chosenLabel'];
             if (dateResponse.status === 'success') {
                 let latestState = _.cloneDeep(state);
                 let data: any = dateResponse.body;
@@ -552,7 +553,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 }
                 let fromDate: any = data.fromDate ? moment(data.fromDate, GIDDH_DATE_FORMAT) : moment().subtract(30, 'days');
                 let toDate: any = data.toDate ? moment(data.toDate, GIDDH_DATE_FORMAT) : moment();
-                latestState.applicationDate = [fromDate._d, toDate._d];
+                latestState.applicationDate = [fromDate._d, toDate._d, chosenLabel];
                 return Object.assign({}, state, latestState);
             }
             return state;

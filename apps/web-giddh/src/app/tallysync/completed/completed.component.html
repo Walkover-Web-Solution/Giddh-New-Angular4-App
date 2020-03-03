@@ -32,7 +32,7 @@
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" *ngIf="completedData?.length">
         <div class="panel panel-default" *ngFor="let row of completedData;">
             <div class="panel-heading">
-                <span class="m-r-15">{{row.company.name}}</span>
+                <span class="m-r-15">{{row.type === 'TALLY' ? 'Tally:' : row.type === 'COMPANY_JSON_IMPORT' ? 'Import Json:' : ''}} {{row.company.name}}</span>
                 <small class="m-r-15">Last Import on {{row.dateString}}</small>
                 <small class="running"><i class="fa fa-circle"></i> {{row.status}}</small>
             </div>
@@ -123,9 +123,14 @@
             <div class="panel-footer"
                 *ngIf="row.tallyErrorEntries>0 || row.tallyErrorAccounts>0 || row.tallyErrorGroups>0">
                 <span class="m-r-15">Error Report:</span>
-                <a class="running" (click)="downloadLog(row)">{{row.company.name}}-error-log.csv</a>
+                <a href="javascript:;" class="running" (click)="downloadLog(row)">{{row.company.name}}-error-log.xlsx</a>
             </div>
         </div>
     </div>
-
+    <!-- pagination -->
+    <div class="text-center" *ngIf="completedData?.length && completedtallySyncDataResponse.totalItems>paginationRequest?.count-1">
+        <pagination [maxSize]="5" [totalItems]="completedtallySyncDataResponse?.totalItems" [itemsPerPage]="completedtallySyncDataResponse.count" [(ngModel)]="paginationRequest.page" (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true"
+                    [rotate]="false">
+        </pagination>
+    </div>
 </ng-container>

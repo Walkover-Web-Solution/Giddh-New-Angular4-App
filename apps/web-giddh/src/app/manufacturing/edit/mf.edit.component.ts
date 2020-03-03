@@ -101,7 +101,7 @@ export class MfEditComponent implements OnInit {
         this.groupsList$.subscribe(data => {
             if (data && data.length) {
                 let GroupWithAccResponse = _.cloneDeep(data);
-                this._accountService.GetFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this._accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response.status === 'success') {
                         let flattenGroupResponse = _.cloneDeep(response.body.results);
 

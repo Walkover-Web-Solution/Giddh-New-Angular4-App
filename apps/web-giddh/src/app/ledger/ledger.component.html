@@ -6,7 +6,7 @@
         <!-- region ledger header -->
         <div class="clearfix row">
             <!-- region currency toggle -->
-            <div class="col-sm-4 col-xs-12 xs-pl-0 xs-pr-0">
+            <div class="col-sm-4 col-xs-12">
 
                 <div class="d-flex search-ledger-field">
 
@@ -51,7 +51,6 @@
 
             </div>
             <div class="col-sm-4  text-center col-xs-12 daterngoption">
-                <div class="row">
                     <!-- (hideDaterangepicker)="selectedDate($event)"  -->
                     <div class="advanceSearchByDate date-advanceSearch">
                         <!-- <span class="icon-calender "></span> -->
@@ -64,11 +63,10 @@
                     <!--<input date-range-picker="" id="daterange3" name="daterange3"-->
                     <!--class="form-control date-picker date-range-picker ng-pristine ng-untouched ng-valid ng-isolate-scope ng-valid-required"-->
                     <!--type="text" ng-model="cDate" options="opts" required="">-->
-                </div>
             </div>
             <!-- endregion -->
 
-            <div class="col-sm-4 col-xs-12 text-right C-flex-end xs-pl-0 xs-pr-0 search-options">
+            <div class="col-sm-4 col-xs-12 text-right C-flex-end search-options">
                 <div class="d-flex xs-width-100 ledger-head-top">
 
                     <div *ngIf="isLedgerAccountAllowsMultiCurrency" class="advancSearchBlock">
@@ -264,7 +262,7 @@
                                                         (saveBlankLedger)="saveBankTransaction()"
                                                         (clickedOutsideEvent)="hideBankLedgerPopup($event)"
                                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
-                                                        [invoiceList]="invoiceList">
+                                                        [invoiceList]="invoiceList"  [isTouristSchemeApplicable]="isTouristSchemeApplicable">
                                                     </new-ledger-entry-panel>
                                                 </div>
                                                 <!-- end  -->
@@ -534,7 +532,7 @@
                                     <span class="download-invoice-ledger d-flex" *ngIf="txn.voucherGenerated"
                                         style="position: unset;align-items: center"
                                         (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
-                                        tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'right'">
+                                        tooltip="Download {{txn.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{txn.voucherNumber}}" [placement]="'right'">
                                         <i class="glyphicon glyphicon-download pull-left"
                                             style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                                     </span>
@@ -665,7 +663,8 @@
                                         (saveBlankLedger)="saveBlankTransaction()"
                                         (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
-                                        [invoiceList]="invoiceList">
+                                        [invoiceList]="invoiceList"
+                                        [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount" [shouldShowItcSection]="shouldShowItcSection" [isTouristSchemeApplicable]="isTouristSchemeApplicable">
                                     </new-ledger-entry-panel>
                                 </div>
 
@@ -788,7 +787,7 @@
                                     <span class="download-invoice-ledger d-flex" *ngIf="txn.voucherGenerated"
                                         style="position: unset;align-items: center"
                                         (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
-                                        tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'right'">
+                                        tooltip="Download {{txn.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{txn.voucherNumber}}" [placement]="'right'">
                                         <i class="glyphicon glyphicon-download pull-left"
                                             style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                                     </span>
@@ -919,7 +918,8 @@
                                         (saveBlankLedger)="saveBlankTransaction()"
                                         (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
-                                        [invoiceList]="invoiceList">
+                                        [invoiceList]="invoiceList"
+                                        [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount" [shouldShowItcSection]="shouldShowItcSection" [isTouristSchemeApplicable]="isTouristSchemeApplicable">
                                     </new-ledger-entry-panel>
                                 </div>
 
@@ -1258,7 +1258,8 @@
                 <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
                     <form name="newRole" novalidate class="" autocomplete="off">
                         <div class="modal_wrap mrB2">
-                            <h3>Are you sure want to delete?</h3>
+                            <h3>Do you want to delete the selected entries? </h3>
+                            <p class="text-gray font-14 mt-05">All their corresponding vouchers and invoices will be deleted permanently and will no longer be accessible from other modules.</p>
                         </div>
                         <div class="pull-right">
                             <button type="submit" class="btn btn-md btn-success mrR1"

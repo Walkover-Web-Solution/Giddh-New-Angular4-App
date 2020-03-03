@@ -70,6 +70,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public clearFilter: boolean = false;
+    public selectedVoucherType: string = '';
 
     public branchTransferGetRequestParams: NewBranchTransferListGetRequestParams = {
         from: '',
@@ -102,7 +103,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
                 this.activeCompany = companyInfo;
             }
         });
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit(): void {
@@ -116,15 +117,15 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
             this.amountOperators.push({ label: amountOperator.label, value: amountOperator.value });
         });
 
-        this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
-            if (dateObj && !this.datePicker[0]) {
+        this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
+            if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
                 this.datePicker = [moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(), moment(universalDate[1], GIDDH_DATE_FORMAT).toDate()];
 
                 this.branchTransferGetRequestParams.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.branchTransferGetRequestParams.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        });
     }
 
     public ngOnDestroy(): void {

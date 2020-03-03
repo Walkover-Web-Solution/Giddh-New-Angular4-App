@@ -138,7 +138,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
                         this.needsToRedirectToLedger$.pipe(take(1)).subscribe(result => {
                             if (result) {
-                                this._accountService.GetFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                                this._accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
                                     if (data.status === 'success' && data.body.results.length > 0) {
                                         this._router.navigate([`ledger/${data.body.results[0].uniqueName}`]);
                                     }
@@ -169,7 +169,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     }
 
                     if (activeCmpUniqueName) {
-                        this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, false, CHART_CALLED_FROM.PAGEINIT, [API_TO_CALL.PL]));
+                        // this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, false, CHART_CALLED_FROM.PAGEINIT, [API_TO_CALL.PL]));
                         this.cdRef.detectChanges();
                     }
                 }
@@ -178,74 +178,74 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     }
 
-    public hardRefresh() {
-        let API = [API_TO_CALL.PL];
-        if (this.activeFinancialYear) {
-            //this.expence.refresh = true;
-            this.compare.requestInFlight = true;
-            //this.history.requestInFlight = true;
-            //this.networth.requestInFlight = true;
-            //this.expence.fetchChartData();
+    // public hardRefresh() {
+    //     let API = [API_TO_CALL.PL];
+    //     if (this.activeFinancialYear) {
+    //         //this.expence.refresh = true;
+    //         this.compare.requestInFlight = true;
+    //         //this.history.requestInFlight = true;
+    //         //this.networth.requestInFlight = true;
+    //         //this.expence.fetchChartData();
 
-            this.revenue.refreshChart();
-            if (this.compare.showProfitLoss) {
-                API.push(API_TO_CALL.PL);
-            }
-            if (this.compare.showExpense) {
-                API.push(API_TO_CALL.EXPENCE);
-            }
-            if (this.compare.showRevenue) {
-                API.push(API_TO_CALL.REVENUE);
-            }
+    //         this.revenue.refreshChart();
+    //         if (this.compare.showProfitLoss) {
+    //             API.push(API_TO_CALL.PL);
+    //         }
+    //         if (this.compare.showExpense) {
+    //             API.push(API_TO_CALL.EXPENCE);
+    //         }
+    //         if (this.compare.showRevenue) {
+    //             API.push(API_TO_CALL.REVENUE);
+    //         }
 
-            if (this.history.showProfitLoss) {
-                API.push(API_TO_CALL.PL);
-            }
-            if (this.history.showExpense) {
-                API.push(API_TO_CALL.EXPENCE);
-            }
-            if (this.history.showRevenue) {
-                API.push(API_TO_CALL.REVENUE);
-            }
+    //         if (this.history.showProfitLoss) {
+    //             API.push(API_TO_CALL.PL);
+    //         }
+    //         if (this.history.showExpense) {
+    //             API.push(API_TO_CALL.EXPENCE);
+    //         }
+    //         if (this.history.showRevenue) {
+    //             API.push(API_TO_CALL.REVENUE);
+    //         }
 
-            let unique = API.filter((elem, index, self) => {
-                return index === self.indexOf(elem);
-            });
+    //         let unique = API.filter((elem, index, self) => {
+    //             return index === self.indexOf(elem);
+    //         });
 
-            this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
-                this.activeFinancialYear.financialYearStarts,
-                this.activeFinancialYear.financialYearEnds, true, CHART_CALLED_FROM.PAGEINIT, unique));
-            API = [];
-            if (this.compare.showProfitLoss && this.compare.showLastYear) {
-                API.push(API_TO_CALL.PL);
-            }
-            if (this.compare.showExpense && this.compare.showLastYear) {
-                API.push(API_TO_CALL.EXPENCE);
-            }
-            if (this.compare.showRevenue && this.compare.showLastYear) {
-                API.push(API_TO_CALL.REVENUE);
-            }
+    //         this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
+    //             this.activeFinancialYear.financialYearStarts,
+    //             this.activeFinancialYear.financialYearEnds, true, CHART_CALLED_FROM.PAGEINIT, unique));
+    //         API = [];
+    //         if (this.compare.showProfitLoss && this.compare.showLastYear) {
+    //             API.push(API_TO_CALL.PL);
+    //         }
+    //         if (this.compare.showExpense && this.compare.showLastYear) {
+    //             API.push(API_TO_CALL.EXPENCE);
+    //         }
+    //         if (this.compare.showRevenue && this.compare.showLastYear) {
+    //             API.push(API_TO_CALL.REVENUE);
+    //         }
 
-            if (this.history.showProfitLoss && this.history.showLastYear) {
-                API.push(API_TO_CALL.PL);
-            }
-            if (this.history.showExpense && this.history.showLastYear) {
-                API.push(API_TO_CALL.EXPENCE);
-            }
-            if (this.history.showRevenue && this.history.showLastYear) {
-                API.push(API_TO_CALL.REVENUE);
-            }
+    //         if (this.history.showProfitLoss && this.history.showLastYear) {
+    //             API.push(API_TO_CALL.PL);
+    //         }
+    //         if (this.history.showExpense && this.history.showLastYear) {
+    //             API.push(API_TO_CALL.EXPENCE);
+    //         }
+    //         if (this.history.showRevenue && this.history.showLastYear) {
+    //             API.push(API_TO_CALL.REVENUE);
+    //         }
 
-            unique = API.filter((elem, index, self) => {
-                return index === self.indexOf(elem);
-            });
-            if (this.lastFinancialYear && this.history.showLastYear && this.compare.showLastYear) {
-                this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
-                    this.lastFinancialYear.financialYearStarts,
-                    this.lastFinancialYear.financialYearEnds, true, CHART_CALLED_FROM.HISTORY, unique));
-            }
-        }
-    }
+    //         unique = API.filter((elem, index, self) => {
+    //             return index === self.indexOf(elem);
+    //         });
+    //         if (this.lastFinancialYear && this.history.showLastYear && this.compare.showLastYear) {
+    //             this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
+    //                 this.lastFinancialYear.financialYearStarts,
+    //                 this.lastFinancialYear.financialYearEnds, true, CHART_CALLED_FROM.HISTORY, unique));
+    //         }
+    //     }
+    // }
 
     public ngOnDestroy() {
         this.store.dispatch(this._homeActions.ResetHomeState());

@@ -38,7 +38,8 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 let universalDate = _.cloneDeep(dateObj);
                 this.datePickerOptions = {
                     ...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
-                    endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()
+                    endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate(),
+                    chosenLabel: universalDate[2]
                 };
                 this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
                 this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');

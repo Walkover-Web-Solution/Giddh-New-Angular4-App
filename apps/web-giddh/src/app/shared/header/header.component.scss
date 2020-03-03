@@ -1,11 +1,12 @@
 @import "../../../assets/css/color.scss";
-
 .ddMaxHeight {
     max-height: 500px;
 }
-.giddh-logo img {
+
+.giddh-logo {
     width: 100px;
 }
+
 .nav-left-bar {
     position: fixed;
     top: 61px;
@@ -16,9 +17,11 @@
     left: -215px;
     z-index: 990;
 }
+
 .nav-left-bar.open {
     box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2);
 }
+
 .account-search .input-group-addon {
     border-color: $inputBorderColor;
     border-radius: 2px 0 0 2px;
@@ -51,7 +54,7 @@
 }
 
 .account-search {
-    margin: 10px 15px 10px 15px;
+    margin: 10px 15px 5px 15px;
     position: relative;
     height: 36px;
 }
@@ -115,6 +118,7 @@ a[vr-item]:focus {
     position: relative;
     top: -2px;
 }
+
 .account-search .form-control::-webkit-input-placeholder,
 .account-search .form-control::-webkit-input-placeholder,
 .account-search .form-control::-moz-placeholder,
@@ -127,18 +131,21 @@ a[vr-item]:focus {
     cursor: pointer;
 }
 
-.main-company-name > li > a {
+.main-company-name>li>a {
     padding: 7px 15px !important;
 }
 
-.main-company-name > li > a:hover .cText .cName,
-.main-company-name > li > a:hover .icon-dots-three-vertical {
+.main-company-name>li>a:hover .cText .cName,
+.main-company-name>li>a:hover .icon-dots-three-vertical {
     color: #fff;
 }
 
-.left_fixed_header > li {
+.left_fixed_header>li {
     text-transform: capitalize;
     position: relative;
+}
+.no-padding {
+    padding: 0px !important;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
@@ -147,13 +154,14 @@ a[vr-item]:focus {
     }
 }
 
-.left_fixed_header > li > a {
+.left_fixed_header>li>a {
     display: block;
     padding: 7px 15px;
     color: #1c1c1c;
     position: relative;
 }
-.left_fixed_header > li > a:before {
+
+.left_fixed_header>li>a:before {
     position: absolute;
     content: "";
     width: 4px;
@@ -162,25 +170,27 @@ a[vr-item]:focus {
     background-color: transparent;
     top: 0;
 }
-.left_fixed_header > li > a:hover {
+
+.left_fixed_header>li>a:hover {
     color: #262626;
 }
 
-.left_fixed_header > li > a:hover .label > span,
-.left_fixed_header > li > a:hover .label {
+.left_fixed_header>li>a:hover .label>span,
+.left_fixed_header>li>a:hover .label {
     color: #01a9f4;
 }
-.left_fixed_header > li a.active {
+
+.left_fixed_header>li a.active {
     background: $menuHoverColor;
 }
 
-.left_fixed_header > li > a.active .label,
-.left_fixed_header > li > a.active .label > span {
+.left_fixed_header>li>a.active .label,
+.left_fixed_header>li>a.active .label>span {
     color: #1c1c1c;
     font-family: "opensans-semibold";
 }
 
-.left_fixed_header > li > a .label {
+.left_fixed_header>li>a .label {
     display: table-cell;
     font-size: 14px;
     vertical-align: middle;
@@ -201,9 +211,9 @@ a[vr-item]:focus {
     line-height: 1.3;
 }
 
-.left_fixed_header > li:hover a,
-.left_fixed_header > li > a:hover span,
-.left_fixed_header > li:hover a span {
+.left_fixed_header>li:hover a,
+.left_fixed_header>li>a:hover span,
+.left_fixed_header>li:hover a span {
     color: #fff;
 }
 
@@ -224,34 +234,13 @@ a[vr-item]:focus {
     justify-content: space-between;
 }
 
-:host
-    ::ng-deep
-    .left_fixed_header
-    perfect-scrollbar
-    > .ps.ps--scrolling-y
-    > .ps__rail-y {
+:host ::ng-deep .left_fixed_header perfect-scrollbar>.ps.ps--scrolling-y>.ps__rail-y {
     opacity: 0;
 }
 
-:host
-    ::ng-deep
-    .left_fixed_header
-    perfect-scrollbar.ps-show-active
-    > .ps.ps--active-y
-    > .ps-overlay:not(.ps-at-top)
-    .ps-indicator-top,
-:host
-    ::ng-deep
-    .left_fixed_header
-    perfect-scrollbar.ps-show-active
-    > .ps.ps--active-y
-    > .ps-overlay:not(.ps-at-bottom)
-    .ps-indicator-bottom {
-    background: linear-gradient(
-        to bottom,
-        rgb(43, 42, 42) 0,
-        rgba(0, 0, 0, 0) 100%
-    );
+:host ::ng-deep .left_fixed_header perfect-scrollbar.ps-show-active>.ps.ps--active-y>.ps-overlay:not(.ps-at-top) .ps-indicator-top,
+:host ::ng-deep .left_fixed_header perfect-scrollbar.ps-show-active>.ps.ps--active-y>.ps-overlay:not(.ps-at-bottom) .ps-indicator-bottom {
+    background: linear-gradient( to bottom, rgb(43, 42, 42) 0, rgba(0, 0, 0, 0) 100%);
 }
 
 .left_fixed_header h6 {
@@ -262,7 +251,7 @@ a[vr-item]:focus {
     font-family: "opensans-semibold";
 }
 
-.left_fixed_header > h6 > i {
+.left_fixed_header>h6>i {
     float: right;
     font-size: 10px;
     background: $sidebarHeading;
@@ -291,7 +280,7 @@ a[vr-item]:focus {
     margin-top: 1px;
 }
 
-.left_fixed_header > h6 > i:hover {
+.left_fixed_header>h6>i:hover {
     color: #fff;
     background: #6b73c8;
 }
@@ -304,7 +293,7 @@ a[vr-item]:focus {
     left: 0;
 }
 
-.left-sub-menu ul > li > a {
+.left-sub-menu ul>li>a {
     font-size: 14px;
     color: dimgray;
     display: block;
@@ -313,7 +302,7 @@ a[vr-item]:focus {
     line-height: 16px;
 }
 
-.left-sub-menu ul > li > a:hover {
+.left-sub-menu ul>li>a:hover {
     color: #01a9f4;
 }
 
@@ -327,7 +316,7 @@ a[vr-item]:focus {
 .left-sub-menu {
     background: #fff;
     position: absolute;
-    left: 215px;
+    left: -12px;
     bottom: 0;
     width: 570px;
     z-index: -1;
@@ -344,7 +333,7 @@ a[vr-item]:focus {
     z-index: 9;
 }
 
-.sub-menu > a > i {
+.sub-menu>a>i {
     font-size: 13px;
     vertical-align: middle;
     text-align: right;
@@ -353,22 +342,22 @@ a[vr-item]:focus {
     top: 6px;
 }
 
-.sub-menu > li {
+.sub-menu>li {
     position: relative;
 }
 
-.sub-menu > li > a {
+.sub-menu>li>a {
     display: block;
     padding: 8px 20px;
     color: #b7b7b7;
 }
 
-.left_fixed_header > li > a > i {
+.left_fixed_header>li>a>i {
     position: relative;
     top: 3px;
 }
 
-.left_fixed_header > li:hover .left-sub-menu {
+.left_fixed_header>li:hover .left-sub-menu {
     opacity: 1;
     z-index: 9;
     visibility: visible;
@@ -376,7 +365,6 @@ a[vr-item]:focus {
 
 .nav_wrapper {
     position: relative;
-
     height: calc(100vh - 145px);
 }
 
@@ -421,9 +409,11 @@ a[vr-item]:focus {
     border: 1px solid $headerBtnColor;
     text-align: left;
 }
+
 .universal_date li input:focus {
     border: 1px solid $headerBtnColor !important;
 }
+
 .header-date {
     background: $headerBtnColor !important;
     padding: 5px 11px;
@@ -431,6 +421,7 @@ a[vr-item]:focus {
     color: #fff;
     padding-left: 0;
 }
+
 .mobile_menu_icon {
     display: none;
 }
@@ -444,11 +435,13 @@ a[vr-item]:focus {
     border-radius: 2px 0 0 2px;
     display: inline-flex;
 }
+
 .notToday .calender-addone {
     position: absolute;
     border: 1px solid $headerBtnColor;
     padding: 8px 8px;
 }
+
 #AddManage.btn-gray {
     background: $headerBtnColor;
     color: #fff;
@@ -459,6 +452,7 @@ a[vr-item]:focus {
     padding-right: 12px;
     border: 1px solid $headerBtnColor;
 }
+
 #AddManage .icon-edit-ico {
     position: absolute;
     left: 0px;
@@ -469,6 +463,7 @@ a[vr-item]:focus {
     display: inline-flex;
     color: #fff;
 }
+
 span.icon-support.dropdown-toggle {
     background-color: $headerBtnColor;
     color: #fff;
@@ -479,6 +474,7 @@ span.icon-support.dropdown-toggle {
     position: relative;
     top: 1px;
 }
+
 .notToday .date-range-picker {
     height: 32px;
 }
@@ -493,10 +489,12 @@ span.icon-support.dropdown-toggle {
     font-size: 14px;
     padding: 0 15px;
 }
+
 // top header css
 .paddingTopFixed {
     padding-top: 60px;
 }
+
 .primary-header {
     background-color: $top_header;
     min-height: 60px;
@@ -512,12 +510,14 @@ span.icon-support.dropdown-toggle {
     align-items: center;
     height: 60px;
 }
+
 .primary-header .right-details {
     transform: translateY(14px);
 }
+
 .primary-header li.company-name {
     top: 0;
-    width: 100%;
+    list-style-type: none;
 }
 
 .primary-header .company-name-finance-year {
@@ -525,13 +525,19 @@ span.icon-support.dropdown-toggle {
     padding-left: 10px;
     width: 90%;
 }
+
 .primary-header .company-name-finance-year span {
     display: block;
     vertical-align: middle;
 }
+
 .primary-header .cText {
     display: flex;
     align-items: center;
+}
+.cText {
+    padding: 6px 8px 6px 0 !important;
+    overflow: hidden;
 }
 
 .primary-header ul.main-company-name {
@@ -539,37 +545,39 @@ span.icon-support.dropdown-toggle {
     display: flex;
     align-items: center;
 }
+
 .unique-name-financial-year span {
     display: inline-block !important;
 }
-.company-name .dropdown-menu {
-    padding-top: 15px;
-}
+
 ul.sub-list {
     min-height: 50px;
     max-height: 400px;
 }
-.upgradePlan.list-inline > li {
+
+.upgradePlan.list-inline>li {
     padding-left: 0 !important;
 }
+
 .nav-left-bar .company-name .cText span {
     color: #1c1c1c;
+    word-break: break-all;
 }
+
 .nav-left-bar .company-name-finance-year {
     display: inline;
     padding-left: 0;
-    float: right;
-    width: 150px;
+    /*float: right;
+    width: 150px;*/
     position: relative;
     top: -3px;
 }
+
 .nav-left-bar .unique-name-financial-year span {
     display: block !important;
 }
 
-.nav-left-bar .company-name .cText span.alice {
-    color: #fff !important;
-}
+
 .nav-left-bar .company-name .branch-unique-name {
     font-size: 12px;
     color: #01a9f4 !important;
@@ -580,13 +588,51 @@ ul.sub-list {
     white-space: inherit;
     font-size: 14px;
 }
+
+.overlay-cal {
+    background: rgba(43, 38, 38, 0.6901960784313725);
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    vertical-align: middle;
+    align-items: center;
+}
+
+.close-2 {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: none;
+    color: red;
+    border: 0px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 20px;
+    z-index: 9999;
+}
+.head-nav {
+    background: #f1f1f1;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+
 /* responsive */
+
+@media (max-height: 800px) {
+    .nav_wrapper {
+        height: calc(100vh - 235px);
+    }
+}
 
 @media (max-width: 1023px) {
     .modal-liq90 {
         width: 100% !important;
     }
-
     .logo-hide-ipad {
         display: none;
     }
@@ -623,11 +669,11 @@ ul.sub-list {
         padding-bottom: 0;
         font-size: 18px;
     }
-
     .primary-header .btn-group.cp.mrL1.d-inline-block {
         height: 34px;
     }
 }
+
 @media (max-width: 767px) {
     .nav-left-bar {
         width: 270px;
@@ -639,7 +685,6 @@ ul.sub-list {
     .paddingTopFixed {
         display: none;
     }
-
     .nav-left-bar {
         top: 0;
     }
@@ -687,8 +732,16 @@ ul.sub-list {
     }
     .nav-left-bar .company-name-finance-year {
         width: 200px;
+        float: left;
+    }
+    .cText {
+        overflow: hidden;
+    }
+    .cText.head-nav {
+        display: none;
     }
 }
+
 @media (min-width: 412px) and (max-width: 840px) {
     ul.sub-list {
         min-height: 30px;
@@ -698,6 +751,7 @@ ul.sub-list {
         top: -60px;
     }
 }
+
 @media (max-width: 411px) {
     ul.sub-list {
         min-height: 50px;
@@ -712,7 +766,6 @@ ul.sub-list {
     .universal_date .header-date {
         display: inline-block;
     }
-
     button#AddManage {
         position: absolute;
         right: 0;

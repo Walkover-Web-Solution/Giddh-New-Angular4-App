@@ -1,6 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, TemplateRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, Output, EventEmitter, Input } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { UserDetails } from '../../../models/api-models/loginModels';
@@ -21,7 +21,7 @@ import { FormControl } from '@angular/forms';
 })
 
 export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
-
+    @Input() public subscriptions: any;
     public logedInUser: UserDetails;
     public SubscriptionPlans: CreateCompanyUsersPlan[] = [];
     public currentCompany: any;
@@ -35,6 +35,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isUpdateCompanySuccess$: Observable<boolean>;
     public isSwitchPlanInProcess: boolean = false;
+    public selectNewPlan: boolean = false;
 
     @Output() public isSubscriptionPlanShow = new EventEmitter<boolean>();
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -63,16 +64,17 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         if (this._generalService.user) {
             this.logedInUser = this._generalService.user;
         }
-        // this.isUpdateCompanySuccess$.subscribe(p => {
-        //   if (p) {
-        //     this._toast.successToast("Plan changed successfully");
-        //   }
-        // });
+
         this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
             if (inProcess) {
                 this.isSwitchPlanInProcess = inProcess;
             } else {
                 this.isSwitchPlanInProcess = false;
+
+                if(this.selectNewPlan) {
+                    this.backClicked();
+                    this.selectNewPlan = false;
+                }
             }
         });
     }
@@ -103,6 +105,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     }
 
     public choosePlan(plan: CreateCompanyUsersPlan) {
+        this.selectNewPlan = true;
         let activationKey = this.licenceKey.value;
         if (activationKey) {
             this.SubscriptionRequestObj.licenceKey = activationKey;
@@ -112,10 +115,10 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
         if (plan.subscriptionId) { // bought plan
             this.SubscriptionRequestObj.subscriptionId = plan.subscriptionId;
-            this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj });
+            this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
         } else if (!plan.subscriptionId) { // free plan
             this.SubscriptionRequestObj.planUniqueName = plan.planDetails.uniqueName;
-            this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj });
+            this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
         }
     }
     public createCompanyViaActivationKey() {

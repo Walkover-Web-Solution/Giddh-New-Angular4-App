@@ -1,10 +1,10 @@
 <div (clickOutside)="hideDiscountMenu()">
-	<label>Discount</label>
+	<label class="font-12">Discount</label>
 
 	<a id="discount">
-		<div class="multi-select adjust">
+		<div class="multi-select adjust text-right">
 			<input type="text" [prefix]="prefixInput" [suffix]="suffixInput" [mask]="maskInput" name=""
-				class="form-control cursor-pointer" (focus)="discountMenu = true;hideOtherPopups.emit(true)"
+				class="form-control cursor-pointer text-right" (focus)="discountMenu = true;hideOtherPopups.emit(true)"
 				[(ngModel)]="discountTotal" readonly />
 			<span class="caret"></span>
 		</div>

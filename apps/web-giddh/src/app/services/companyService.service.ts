@@ -218,10 +218,18 @@ export class CompanyService {
         }
     }
 
-    public setApplicationDate(dateObj: { fromDate?: string, toDate?: string, duration?: number, period?: string }): Observable<BaseResponse<string, any>> {
+    /**
+     * Makes API call to set the application date (universal date)
+     *
+     * @param {{ fromDate?: string, toDate?: string, duration?: number, period?: string, chosenLabel?: string }} dateObj Request object for the API
+     * @returns {Observable<BaseResponse<string, any>>} Response observable to carry out further operations
+     * @memberof CompanyService
+     */
+    public setApplicationDate(dateObj: { fromDate?: string, toDate?: string, duration?: number, period?: string, chosenLabel?: string }): Observable<BaseResponse<string, any>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.put(this.config.apiUrl + COMPANY_API.UNIVERSAL_DATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), dateObj).pipe(map((res) => {
             let data: BaseResponse<string, any> = res;
+            data['chosenLabel'] = dateObj.chosenLabel;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, dateObj)));
     }

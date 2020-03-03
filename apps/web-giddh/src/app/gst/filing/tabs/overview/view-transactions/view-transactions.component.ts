@@ -15,7 +15,7 @@ import { DownloadOrSendInvoiceOnMailComponent } from '../../../../../invoice/pre
 export const Gstr1TransactionType = [
     { label: 'Invoices', value: 'invoices' },
     { label: 'Credit Notes', value: 'credit-notes' },
-    { label: 'Advance Payments', value: 'advance-payments' },
+    { label: 'Advance Receipt', value: 'advance-receipt' },
     // {label: 'Refund Vouchers', value: 'refund-vouchers'},
     { label: 'Debit Notes', value: 'debit-notes' },
 ];
@@ -42,8 +42,9 @@ export const Gstr2InvoiceType = [
 ];
 
 export const Entitytype = [
+    { label: 'All', value: 'all' },
     { label: 'Registered', value: 'registered' },
-    { label: 'Unregistered', value: 'unregistered' },
+    { label: 'Unregistered', value: 'unregistered' }
 ];
 
 // export const Status = [
@@ -207,7 +208,11 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
         if (this.filterParam.type) {
             let selected;
             if (this.selectedGst === 'gstr1') {
-                selected = _.find(InvoiceType, o => o.value === filters.type);
+                if (this.filterParam.entityType === 'advance-receipt') {
+                    selected = _.find(Entitytype, o => o.value === filters.type)
+                } else {
+                    selected = _.find(InvoiceType, o => o.value === filters.type);
+                }
             } else {
                 selected = _.find(Gstr2InvoiceType, o => o.value === filters.type);
             }
