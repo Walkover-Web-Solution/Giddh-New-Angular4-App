@@ -47,6 +47,9 @@ import { AdvanceSearchModelComponent } from './components/advance-search/advance
 import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
+import { WorkerService } from '../worker.service';
+import { WorkerMessage } from 'apps/web-giddh/web-workers/model/web-worker.class';
+import { WORKER_MODULES, WORKER_MODULES_OPERATIONS } from 'apps/web-giddh/web-workers/model/web-worker.constant';
 
 @Component({
     selector: 'ledger',
@@ -207,7 +210,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private _loaderService: LoaderService,
         private _settingsDiscountAction: SettingsDiscountActions,
         private warehouseActions: WarehouseActions,
-        private _cdRf: ChangeDetectorRef
+        private _cdRf: ChangeDetectorRef,
+        private workerService: WorkerService
     ) {
 
         this.lc = new LedgerVM();
@@ -428,6 +432,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.fileUploadOptions = { concurrency: 0 };
         this.shouldShowItcSection = false;
         this.shouldShowRcmTaxableAmount = false;
+        this.workerService.workerUpdate$.subscribe((data) => console.log('Data from web worker: ', data));
 
         observableCombineLatest(this.universalDate$, this.route.params, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (!Array.isArray(resp[0])) {
@@ -858,18 +863,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public saveBankTransaction() {
-        // Api llama para mover la transacción bancaria al libro mayor
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject();
         blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
         delete blankTransactionObj['voucherType'];
         if (blankTransactionObj.transactions.length > 0) {
             this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
-            // let transactonId = blankTransactionObj.transactionId;
-            // this.isLedgerCreateSuccess$.subscribe(s => {
-            //   if (s && transactonId) {
-            //     this.deleteBankTxn(transactonId);
-            //   }
-            // });
         } else {
             this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
         }
@@ -1120,7 +1118,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public saveBlankTransaction() {
-        this._loaderService.show();
+        /*this._loaderService.show();
 
         if (this.lc.blankLedger.entryDate) {
             if (!moment(this.lc.blankLedger.entryDate, 'DD-MM-YYYY').isValid()) {
@@ -1153,7 +1151,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         } else {
             this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
             this._loaderService.hide();
-        }
+        }*/
+
+        console.log('Starting worker...');
+        const message = new WorkerMessage(WORKER_MODULES.LEDGER, WORKER_MODULES_OPERATIONS.LEDGER.VOUCHER_CALCULATION, 9);
+        this.workerService.doWork(message);
     }
 
     public blankLedgerAmountClick() {
