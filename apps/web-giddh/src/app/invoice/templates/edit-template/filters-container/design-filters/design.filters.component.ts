@@ -123,20 +123,22 @@ export class DesignFiltersContainerComponent implements OnInit {
         this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
             this.customTemplate = _.cloneDeep(template);
 
-            if (this.customTemplate && this.customTemplate.font) {
-                this.presetFonts.map(font => {
-                    if (font.value === this.customTemplate.font) {
-                        this.selectedFont = font.label;
-                    }
-                });
-            }
+            if (this.customTemplate) {
+                if (this.customTemplate.font) {
+                    this.presetFonts.map(font => {
+                        if (font.value === this.customTemplate.font) {
+                            this.selectedFont = font.label;
+                        }
+                    });
+                }
 
-            if (this.customTemplate && this.customTemplate.fontSize) {
-                this.presetFontsSize.map(fontSize => {
-                    if (fontSize.value === this.customTemplate.fontSize) {
-                        this.selectedFontSize = fontSize.label;
-                    }
-                });
+                if (this.customTemplate.fontSize) {
+                    this.presetFontsSize.map(fontSize => {
+                        if (fontSize.value === this.customTemplate.fontSize) {
+                            this.selectedFontSize = fontSize.label;
+                        }
+                    });
+                }
             }
 
             let op = {
