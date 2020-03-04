@@ -248,17 +248,9 @@
                     }
                 },
                 "build-worker": {
-                    "builder": "@angular-builders/custom-webpack:server",
+                    "builder": "@angular-devkit/build-webpack:webpack",
                     "options": {
-                        "customWebpackConfig": {
-                            "path": "./webpack.webworker.config.js",
-                            "mergeStrategies": {
-                                "externals": "append"
-                            }
-                        },
-                        "outputPath": "apps/web-giddh/src/assets/workers",
-                        "main": "apps/web-giddh/web-workers/main.worker.ts",
-                        "tsConfig": "apps/web-giddh/web-workers/tsconfig.worker.json"
+                        "webpackConfig": "./webpack.webworker.config.js"
                     }
                 },
                 "serve": {
@@ -280,17 +272,9 @@
                     }
                 },
                 "serve-worker": {
-                    "builder": "@angular-builders/custom-webpack:server",
+                    "builder": "@angular-devkit/build-webpack:webpack",
                     "options": {
-                        "customWebpackConfig": {
-                            "path": "./webpack.webworker.config.js",
-                            "mergeStrategies": {
-                                "externals": "append"
-                            }
-                        },
-                        "outputPath": "apps/web-giddh/src/assets/workers",
-                        "main": "apps/web-giddh/web-workers/main.worker.ts",
-                        "tsConfig": "apps/web-giddh/web-workers/tsconfig.worker.json"
+                        "webpackConfig": "./webpack.webworker.config.js"
                     }
                 },
                 "lint": {

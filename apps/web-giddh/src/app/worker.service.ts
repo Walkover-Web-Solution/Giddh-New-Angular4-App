@@ -6,7 +6,7 @@ import { WorkerMessage } from 'apps/web-giddh/web-workers/model/web-worker.class
     providedIn: 'root'
 })
 export class WorkerService {
-    public readonly workerPath = 'assets/workers/main.js';
+    public readonly workerPath = 'assets/main.js';
     workerUpdate$: Observable<WorkerMessage>;
 
     private worker: Worker;

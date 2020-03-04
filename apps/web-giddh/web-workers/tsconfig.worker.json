@@ -1,11 +1,13 @@
 {
     "extends": "../tsconfig.json",
     "compilerOptions": {
-        "baseUrl": "./web-worker",
-        "outDir": "./dist/out-tsc/worker",
+        "outDir": "../out-tsc/worker",
+        "types": []
     },
     "exclude": [
-        "test.ts",
-        "**/*.spec.ts"
+        "../src/main.ts",
+        "../src/main.electron.ts",
+        "**/*.spec.ts",
+        "../src/app/**/**/*.ts"
     ]
 }
