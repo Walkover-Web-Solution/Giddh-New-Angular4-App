@@ -20,7 +20,7 @@ module.exports = {
         ]
     },
     'entry': {
-        './apps/web-giddh/src/assets/main': [
+        './apps/web-giddh/src/assets/worker': [
             './apps/web-giddh/web-workers/main.worker.ts'
         ]
     },
