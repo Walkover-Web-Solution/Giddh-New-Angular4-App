@@ -213,7 +213,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             label: 'Debit Note',
             value: 'debit note'
         }, {
-            label: 'Credit Note',
+            label: 'credit Note',
             value: 'credit note'
         }]);
     }

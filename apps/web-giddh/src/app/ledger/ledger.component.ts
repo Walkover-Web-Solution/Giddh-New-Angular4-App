@@ -194,6 +194,104 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
+    private voucherData: any = [
+        {
+            "default": [
+                "receipt",
+                "payment",
+                "sales",
+                "credit note",
+                "purchase",
+                "debit note",
+                "journal"
+            ],
+            "groups": [
+                {
+                    "group": "sundrydebtors",
+                    "vouchers": [
+                        "receipt",
+                        "payment",
+                        "sales",
+                        "credit note",
+                        "purchase",
+                        "debit note",
+                        "journal"
+                    ],
+                    "credit": [
+                        "receipt",
+                        "purchase",
+                        "credit note",
+                        "journal"
+                    ],
+                    "debit": [
+                        "payment",
+                        "sales",
+                        "debit note",
+                        "journal"
+                    ]
+                },
+                {
+                    "group": "cash",
+                    "vouchers": [
+                        "receipt",
+                        "payment",
+                        "sales",
+                        "credit note",
+                        "purchase",
+                        "debit note",
+                        "contra"
+                    ],
+                    "credit": [
+                        "purchase",
+                        "payment",
+                        "credit note",
+                        "contra"
+                    ],
+                    "debit": [
+                        "sales",
+                        "receipt",
+                        "debit note",
+                        "contra"
+                    ]
+                }
+            ],
+            "vouchers": false,
+            "group": "currentassets"
+        },
+        {
+            "default": [
+                "receipt",
+                "payment",
+                "sales",
+                "credit note",
+                "journal"
+            ],
+            "groups": [
+                {
+                    "group": "sales",
+                    "vouchers": [
+                        "receipt",
+                        "payment",
+                        "sales",
+                        "credit note",
+                        "journal"
+                    ],
+                    "credit": [
+                        "sales",
+                        "receipt",
+                        "journal"
+                    ],
+                    "debit": [
+                        "credit note",
+                        "payment",
+                        "journal"
+                    ]
+                }
+            ],
+            "vouchers": false,
+            "group": "revenuefromoperations"
+        }
+    ];
 
     constructor(
         private store: Store<AppState>,
@@ -408,12 +506,54 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
         // check if selected account category allows to show taxationDiscountBox in newEntry popup
         txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
+        if (typeof Worker !== 'undefined') {
+            console.log('Starting worker...');
+            const currentLedgerAccount = _.cloneDeep(this.lc.activeAccount),
+            particularAccount = _.cloneDeep(txn), voucherData = this.voucherData;
+            const currentLedgerApplicableVouchers = this.findVouchers(particularAccount.type, currentLedgerAccount.parentGroups, voucherData);
+            const particularAccountApplicableVouchers = this.findVouchers(particularAccount.type,
+                particularAccount.selectedAccount ? particularAccount.selectedAccount.parentGroups : [],
+                voucherData);
+            console.log(currentLedgerApplicableVouchers, particularAccountApplicableVouchers);
+
+            // const voucherResult = {
+            //     currentLedgerAccount: _.cloneDeep(this.lc.activeAccount),
+            //     particularAccount: _.cloneDeep(txn),
+            //     voucherData: this.voucherData
+            // };
+            // const message = new WorkerMessage(WORKER_MODULES.LEDGER, WORKER_MODULES_OPERATIONS.LEDGER.VOUCHER_CALCULATION, voucherResult);
+            // this.workerService.doWork(message);
+        }
         this.handleRcmVisibility(txn);
         this.handleTaxableAmountVisibility(txn);
         this.newLedPanelCtrl.calculateTotal();
         // this.newLedPanelCtrl.checkForMulitCurrency();
         this.newLedPanelCtrl.detectChanges();
         this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
+    }
+
+    private findVouchers(transactionType: string, parentGroups: Array<any>, voucherData: Array<any>): Array<string> {
+        if (parentGroups && voucherData) {
+            console.log('ParentGroups: ', parentGroups);
+            console.log('Voucher data: ', voucherData);
+            let i = 0;
+            let voucherDetailsByCategory = [...voucherData];
+            while (parentGroups[i]) {
+                console.log('Parent group: ', parentGroups[i]);
+                let categoryVoucherDetails: any = voucherDetailsByCategory.filter(category => category.group === parentGroups[i].uniqueName);
+                categoryVoucherDetails = categoryVoucherDetails.length ? categoryVoucherDetails.pop() : categoryVoucherDetails;
+                console.log('categoryVoucherDetails: ', categoryVoucherDetails);
+                if (categoryVoucherDetails.vouchers) {
+                    return transactionType === 'CREDIT' ? categoryVoucherDetails.credit : categoryVoucherDetails.debit;
+                } else if (categoryVoucherDetails.groups) {
+                    i++;
+                    console.log('New parent: ', parentGroups[i]);
+                    voucherDetailsByCategory = [...(categoryVoucherDetails.groups)];
+                } else {
+                    return categoryVoucherDetails.default;
+                }
+            }
+        }
     }
 
     public hideEledgerWrap() {
