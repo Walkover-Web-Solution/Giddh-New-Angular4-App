@@ -81,8 +81,8 @@ export class DesignFiltersContainerComponent implements OnInit {
     public showUploadButton: boolean = false;
     public showDeleteButton: boolean = false;
     @ViewChild('fileInput') logoFile: ElementRef;
-    public selectedFont: any;
-    public selectedFontSize: any;
+    public selectedFont: string = "";
+    public selectedFontSize: string = "";
 
     constructor(
         private _invoiceUiDataService: InvoiceUiDataService,
