@@ -22,7 +22,7 @@
                 <tbody *ngIf="vatReportTransactions.results && vatReportTransactions.results.length > 0">
                     <tr *ngFor="let item of vatReportTransactions.results; let i = index;">
                         <td>{{ (item.voucherDate) ? item.voucherDate : '-' }}</td>
-                        <td><a href="javascript:;" [ngClass]="{'noclick': !item.voucherNumber}" (click)="onSelectInvoice(item)">{{ (item.voucherNumber) ? item.voucherNumber : '-' }}</a></td>
+                        <td><a href="javascript:;" [ngClass]="{'noclick': !item.voucherNumber && item.voucherType !== 'purchase'}" (click)="onSelectInvoice(item)">{{ (item.voucherNumber) ? item.voucherNumber : '-' }}</a></td>
                         <td>{{ (item.customerName) ? item.customerName : '-' }}</td>
                         <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ item.taxableAmount | giddhCurrency }}</td>
                         <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ item.vatAmount | giddhCurrency }}</td>
