@@ -2,7 +2,7 @@
 	<div class="panel panel-default">
 
 		<div class="panel-heading">
-			<strong>Total Overdues</strong>
+			<strong>{{localeData?.chart_title}}</strong>
 			<i class="glyphicon glyphicon-refresh mrL2" (click)="refreshChart()"></i>
 			<div class="pull-right dashboard-filter">
 				<div class="btn-group" dropdown>
@@ -32,25 +32,25 @@
 					</div>
 					<div class="clearfix mrB2">
 						<div class="">
-							<span class="mrB1 dueAmount">Customer Due</span>
+							<span class="mrB1 dueAmount">{{localeData?.customer_due}}</span>
 							<span class="total_amt pull-right vendorDueText">
 								<span>{{amountSettings.baseCurrencySymbol}}</span>
 								{{ totalRecievable | giddhCurrency }}</span>
 						</div>
 						<div class="clearfix">
-							<small>Pending Invoices</small>
+							<small>{{localeData?.pending_invoices}}</small>
 							<small class="pull-right">{{ ReceivableDurationAmt | giddhCurrency }}</small>
 						</div>
 					</div>
 					<div class="clearfix mrB2">
 						<div class="">
-							<span class="mrB1 dueAmount">Vendor Due</span>
+							<span class="mrB1 dueAmount">{{localeData?.vendor_due}}</span>
 							<span
 								class="total_amt pull-right customerDueText"><span>{{amountSettings.baseCurrencySymbol}}</span>
 								{{ totalPayable | giddhCurrency }}</span>
 						</div>
 						<div class="clearfix">
-							<small>Pending Invoices</small>
+							<small>{{localeData?.pending_invoices}}</small>
 							<small class="pull-right">{{ PaybaleDurationAmt | giddhCurrency }}</small>
 						</div>
 					</div>
