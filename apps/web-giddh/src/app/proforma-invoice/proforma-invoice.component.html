@@ -2178,7 +2178,7 @@
 </div>
 
 <div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent [invoiceFormDetails]="invFormData" (closeModelEvent)="closeAdvanceReciiptModal($event)"></advance-receipt-adjustment-component>
         </div>

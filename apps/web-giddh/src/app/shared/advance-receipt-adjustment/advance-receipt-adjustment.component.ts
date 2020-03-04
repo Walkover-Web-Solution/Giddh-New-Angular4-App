@@ -19,6 +19,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
     public tempDateParams: {};
     public adjustVoucherOptions: IOption[];
     public allAdvanceReceiptResponse: Adjustment[] = [];
+    public isTaxDeducted: boolean = false;
     public adjustPayment: AdjustAdvancePaymentModal = {
         customerName: '',
         customerUniquename: '',
@@ -31,7 +32,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
         totalTaxableValue: 0
     }
 
-    public advanceReceiptAdjustmentRequest: AdvanceReceiptAdjustment;
+    public adjustVoucherForm: AdvanceReceiptAdjustment;
     public getAllAdvanceReceiptsRequest: AdvanceReceiptRequest = {
         accountUniqueName: '',
         invoiceDate: ''
@@ -42,6 +43,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
 
     }
     ngOnInit() {
+        this.adjustVoucherForm = new AdvanceReceiptAdjustment();
         this.assignVoucherDetails();
         this.getAllAdvanceReceipts();
     }
@@ -82,14 +84,35 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
                 if (res.status === 'success') {
                     this.allAdvanceReceiptResponse = res.body
                     if (res.body && res.body.length) {
-                          this.adjustVoucherOptions = [];
+                        this.adjustVoucherOptions = [];
                         this.allAdvanceReceiptResponse.forEach(item => {
                             this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                         });
                     }
-                    console.log('options',this.adjustVoucherOptions);
+                    console.log('options', this.adjustVoucherOptions);
                 }
             })
+        }
+    }
+
+    /**
+     * To add new blank entry in advance receipt adjustment
+     *
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    public addNewBlankAdjustVoucherRow() {
+        this.adjustVoucherForm.adjustments.push(new Adjustment());
+    }
+
+    /**
+     *  To remove entry from advance receipt adjustment by given index
+     *
+     * @param {number} index Index number
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    public deleteAdjustVoucherRow(index: number) {
+        if (index) {
+            this.adjustVoucherForm.adjustments.splice(index, 1);
         }
     }
 }
