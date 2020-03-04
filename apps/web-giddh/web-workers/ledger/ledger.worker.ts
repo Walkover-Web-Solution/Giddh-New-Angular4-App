@@ -38,25 +38,27 @@ export class LedgerIntensiveWorker {
             particularAccount.selectedAccount ? particularAccount.selectedAccount.parentGroups : [],
             voucherData);
         console.log(currentLedgerApplicableVouchers, particularAccountApplicableVouchers);
-        return new WorkerMessage('ledger', data.operationType, 0);
+        // Find common vouchers in both accounts and return
+        const voucherList = currentLedgerApplicableVouchers.filter((currentLedgerVoucher: string) => particularAccountApplicableVouchers.indexOf(currentLedgerVoucher) > -1);
+        return new WorkerMessage('ledger', data.operationType, voucherList);
     }
 
     private static findVouchers(transactionType: string, parentGroups: Array<any>, voucherData: Array<any>): Array<string> {
         if (parentGroups && voucherData) {
             console.log('ParentGroups: ', parentGroups);
             console.log('Voucher data: ', voucherData);
-            let i = 0;
+            let index = 0;
             let voucherDetailsByCategory = [...voucherData];
-            while (parentGroups[i]) {
-                console.log('Parent group: ', parentGroups[i]);
-                let categoryVoucherDetails: any = voucherDetailsByCategory.filter(category => category.group === parentGroups[i].uniqueName);
+            while (parentGroups[index]) {
+                console.log('Parent group: ', parentGroups[index]);
+                let categoryVoucherDetails: any = voucherDetailsByCategory.filter(category => category.group === parentGroups[index].uniqueName);
                 categoryVoucherDetails = categoryVoucherDetails.length ? categoryVoucherDetails.pop() : categoryVoucherDetails;
                 console.log('categoryVoucherDetails: ', categoryVoucherDetails);
                 if (categoryVoucherDetails.vouchers) {
                     return transactionType === 'CREDIT' ? categoryVoucherDetails.credit : categoryVoucherDetails.debit;
                 } else if (categoryVoucherDetails.groups) {
-                    i++;
-                    console.log('New parent: ', parentGroups[i]);
+                    index++;
+                    console.log('New parent: ', parentGroups[index]);
                     voucherDetailsByCategory = [...(categoryVoucherDetails.groups)];
                 } else {
                     return categoryVoucherDetails.default;

@@ -23,7 +23,7 @@ import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Accoun
 import { BsDatepickerDirective, ModalDirective, PopoverDirective } from 'ngx-bootstrap';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
-import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
 import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../../common/confirmation-modal/confirmation-modal.interface';
@@ -98,6 +98,32 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public shouldShowRcmTaxableAmount: boolean = false;
     /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
     @Input() public shouldShowItcSection: boolean = false;
+    /** Stores the list of voucher type */
+    @Input() public voucherTypeList: IOption[] = [{
+        label: 'Sales',
+        value: 'sal'
+    }, {
+        label: 'Purchases',
+        value: 'pur'
+    }, {
+        label: 'Receipt',
+        value: 'rcpt'
+    }, {
+        label: 'Payment',
+        value: 'pay'
+    }, {
+        label: 'Journal',
+        value: 'jr'
+    }, {
+        label: 'Contra',
+        value: 'cntr'
+    }, {
+        label: 'Debit Note',
+        value: 'debit note'
+    }, {
+        label: 'credit Note',
+        value: 'credit note'
+    }];
 
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
@@ -125,7 +151,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public companyTaxesList$: Observable<TaxResponse[]>;
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
-    public voucherTypeList: Observable<IOption[]>;
     public showAdvanced: boolean;
     public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
     public isFileUploading: boolean = false;
@@ -191,31 +216,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
         this.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
         this.isLedgerCreateInProcess$ = this.store.select(p => p.ledger.ledgerCreateInProcess).pipe(takeUntil(this.destroyed$));
-        this.voucherTypeList = observableOf([{
-            label: 'Sales',
-            value: 'sal'
-        }, {
-            label: 'Purchases',
-            value: 'pur'
-        }, {
-            label: 'Receipt',
-            value: 'rcpt'
-        }, {
-            label: 'Payment',
-            value: 'pay'
-        }, {
-            label: 'Journal',
-            value: 'jr'
-        }, {
-            label: 'Contra',
-            value: 'cntr'
-        }, {
-            label: 'Debit Note',
-            value: 'debit note'
-        }, {
-            label: 'credit Note',
-            value: 'credit note'
-        }]);
     }
 
     public ngOnInit() {

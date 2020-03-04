@@ -50,6 +50,7 @@ import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { WorkerService } from '../worker.service';
 import { WorkerMessage } from 'apps/web-giddh/web-workers/model/web-worker.class';
 import { WORKER_MODULES, WORKER_MODULES_OPERATIONS } from 'apps/web-giddh/web-workers/model/web-worker.constant';
+import { LedgerUtilityService } from './services/ledger-utility.service';
 
 @Component({
     selector: 'ledger',
@@ -191,6 +192,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public shouldShowRcmTaxableAmount: boolean;
     /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
     public shouldShowItcSection: boolean;
+    /** Stores the list of voucher type */
+    public voucherTypeList: IOption[];
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
@@ -225,6 +228,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     ],
                     "debit": [
                         "payment",
+                        "receipt",
                         "sales",
                         "debit note",
                         "journal"
@@ -245,12 +249,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         "purchase",
                         "payment",
                         "credit note",
+                        "receipt",
                         "contra"
                     ],
                     "debit": [
                         "sales",
                         "receipt",
                         "debit note",
+                        "receipt",
                         "contra"
                     ]
                 }
@@ -284,6 +290,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     "debit": [
                         "credit note",
                         "payment",
+                        "receipt",
                         "journal"
                     ]
                 }
@@ -298,6 +305,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private _ledgerActions: LedgerActions,
         private route: ActivatedRoute,
         private _ledgerService: LedgerService,
+        private ledgerUtilityService: LedgerUtilityService,
         private _toaster: ToasterService,
         private _companyActions: CompanyActions,
         private _settingsTagActions: SettingsTagActions,
@@ -506,24 +514,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
         // check if selected account category allows to show taxationDiscountBox in newEntry popup
         txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
-        if (typeof Worker !== 'undefined') {
-            console.log('Starting worker...');
-            const currentLedgerAccount = _.cloneDeep(this.lc.activeAccount),
-            particularAccount = _.cloneDeep(txn), voucherData = this.voucherData;
-            const currentLedgerApplicableVouchers = this.findVouchers(particularAccount.type, currentLedgerAccount.parentGroups, voucherData);
-            const particularAccountApplicableVouchers = this.findVouchers(particularAccount.type,
-                particularAccount.selectedAccount ? particularAccount.selectedAccount.parentGroups : [],
-                voucherData);
-            console.log(currentLedgerApplicableVouchers, particularAccountApplicableVouchers);
-
-            // const voucherResult = {
-            //     currentLedgerAccount: _.cloneDeep(this.lc.activeAccount),
-            //     particularAccount: _.cloneDeep(txn),
-            //     voucherData: this.voucherData
-            // };
-            // const message = new WorkerMessage(WORKER_MODULES.LEDGER, WORKER_MODULES_OPERATIONS.LEDGER.VOUCHER_CALCULATION, voucherResult);
-            // this.workerService.doWork(message);
-        }
+        this.calculateApplicableVoucherTypes(txn);
         this.handleRcmVisibility(txn);
         this.handleTaxableAmountVisibility(txn);
         this.newLedPanelCtrl.calculateTotal();
@@ -532,27 +523,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
     }
 
-    private findVouchers(transactionType: string, parentGroups: Array<any>, voucherData: Array<any>): Array<string> {
-        if (parentGroups && voucherData) {
-            console.log('ParentGroups: ', parentGroups);
-            console.log('Voucher data: ', voucherData);
-            let i = 0;
-            let voucherDetailsByCategory = [...voucherData];
-            while (parentGroups[i]) {
-                console.log('Parent group: ', parentGroups[i]);
-                let categoryVoucherDetails: any = voucherDetailsByCategory.filter(category => category.group === parentGroups[i].uniqueName);
-                categoryVoucherDetails = categoryVoucherDetails.length ? categoryVoucherDetails.pop() : categoryVoucherDetails;
-                console.log('categoryVoucherDetails: ', categoryVoucherDetails);
-                if (categoryVoucherDetails.vouchers) {
-                    return transactionType === 'CREDIT' ? categoryVoucherDetails.credit : categoryVoucherDetails.debit;
-                } else if (categoryVoucherDetails.groups) {
-                    i++;
-                    console.log('New parent: ', parentGroups[i]);
-                    voucherDetailsByCategory = [...(categoryVoucherDetails.groups)];
-                } else {
-                    return categoryVoucherDetails.default;
-                }
-            }
+    private calculateApplicableVoucherTypes(transaction: TransactionVM) {
+        const voucherRequest = {
+            currentLedgerAccount: _.cloneDeep(this.lc.activeAccount),
+            particularAccount: _.cloneDeep(transaction),
+            voucherData: this.voucherData
+        };
+        if (typeof Worker !== 'undefined') {
+            // Web worker is supported
+            console.log('Starting worker...');
+            const message = new WorkerMessage(WORKER_MODULES.LEDGER, WORKER_MODULES_OPERATIONS.LEDGER.VOUCHER_CALCULATION, voucherRequest);
+            this.workerService.doWork(message);
+        } else {
+            // Web worker not supported by the environment
+            this.voucherTypeList = this.ledgerUtilityService.calculateApplicableVoucherType(voucherRequest).map(voucher => ({label: voucher, value: voucher}));
         }
     }
 
@@ -572,7 +556,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.fileUploadOptions = { concurrency: 0 };
         this.shouldShowItcSection = false;
         this.shouldShowRcmTaxableAmount = false;
-        this.workerService.workerUpdate$.subscribe((data) => console.log('Data from web worker: ', data));
+        this.workerService.workerUpdate$.pipe(takeUntil(this.destroyed$)).subscribe((response: WorkerMessage) => {
+            this.voucherTypeList = response.data.map(voucher => ({label: voucher, value: voucher}));
+            console.log('Data from web worker: ', response);
+        });
 
         observableCombineLatest(this.universalDate$, this.route.params, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (!Array.isArray(resp[0])) {
