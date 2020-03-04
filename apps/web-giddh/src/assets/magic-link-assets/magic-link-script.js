@@ -125,8 +125,8 @@ var app = new Vue({
                             this.ledgerData = response.data.body;
 
                             this.dateRange = {};
-                            this.dateRange.startDate = moment(this.ledgerData.fromDate, 'DD-MM-YYYY');
-                            this.dateRange.endDate = moment(this.ledgerData.toDate, 'DD-MM-YYYY');
+                            this.dateRange.startDate = moment(this.ledgerData.ledgersTransactions.from, 'DD-MM-YYYY');
+                            this.dateRange.endDate = moment(this.ledgerData.ledgersTransactions.to, 'DD-MM-YYYY');
                             $('tr').tooltip('hide');
                         }
 
@@ -225,8 +225,13 @@ var app = new Vue({
         filterBy: function (list, value) {
             let arrayList = [];
             arrayList.push(list);
+
+            if(!value) {
+                value = "";
+            }
+
             return arrayList.filter(function (txn) {
-                return txn.particular.name.toLowerCase().includes(value) || String(txn.amount).includes(value);
+                return txn.particular.name.toLowerCase().includes(value.toLowerCase()) || String(txn.amount).includes(value.toLowerCase());
             });
         },
         onDateRangeChanged: function (picker) {

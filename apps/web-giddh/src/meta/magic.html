@@ -122,7 +122,40 @@
                                                         <tbody>
                                                             <!-- ng-if="txn.type == 'DEBIT'" -->
                                                             <!-- | filter: searchText -->
-                                                            <template v-for="txn in filterBy(ledger, searchText)"></template>
+                                                            <template v-for="txn in filterBy(ledger, searchText)">
+                                                                    <tr class="text-left magicTable bdrB">
+                                                                        <td class="col-xs-3">{{ledger.entryDate}}</td>
+                                                                        <td class="col-xs-6 bdrL">{{txn.particular.name}}</td>
+                                                                        <td class="col-xs-3 bdrL pos-rel"
+                                                                            v-bind:class="{'pdR25imp': ledger.voucherGenerated}"
+                                                                            align="right">
+                                                                            {{txn.amount}}
+                                                                            <template
+                                                                                v-if="ledger.voucherGenerated && ledger.voucherNumber">
+                                                                                <!-- tooltip="Download Invoice : {{ledger.voucherNumber}}" -->
+                                                                                <!-- [placement]="'top'" -->
+                                                                                <span class="download-invoice-ledger"
+                                                                                    v-tooltip="'Download Invoice : '+ledger.voucherNumber"
+                                                                                    v-on:click="downloadInvoice(ledger.voucherNumber)"
+                                                                                    container="body">
+                                                                                    <i class="glyphicon glyphicon-download"
+                                                                                        style="font-size:15px;"></i>
+                                                                                </span>
+                                                                            </template>
+                                                                            <template v-if="ledger.voucherGenerated && ledger.voucherNumber">
+                                                                                <!-- tooltip="Download Invoice : {{ledger.voucherNumber}}" -->
+                                                                                <!-- [placement]="'top'" -->
+                                                                                <span class="download-invoice-ledger"
+                                                                                    v-tooltip="'Download Invoice : '+ledger.voucherNumber"
+                                                                                    v-on:click="downloadInvoice(ledger.voucherNumber)"
+                                                                                    container="body">
+                                                                                    <i class="glyphicon glyphicon-download"
+                                                                                        style="font-size:15px;"></i>
+                                                                                </span>
+                                                                            </template>
+                                                                        </td>
+                                                                    </tr>
+                                                                </template>
                                                         </tbody>
                                                     </table>
                                                 </td>
@@ -163,7 +196,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="ledger-row" v-if="legderBalanceData.forwardedBalance.amount > 0 && legderBalanceData.forwardedBalance.type === 'CREDIT'">
+                                            <tr class="ledger-row" v-if="legderBalanceData.forwardedBalance && legderBalanceData.forwardedBalance.amount > 0 && legderBalanceData.forwardedBalance.type === 'CREDIT'">
                                                 <td class="col-xs-3"></td>
                                                 <td class="col-xs-6">B/F Balance</td>
                                                 <td class="col-xs-3 text-right">
@@ -188,8 +221,7 @@
                                                             <template v-for="txn in filterBy(ledger, searchText)">
                                                                 <tr class="text-left magicTable bdrB">
                                                                     <td class="col-xs-3">{{ledger.entryDate}}</td>
-                                                                    <td class="col-xs-6 bdrL">{{txn.particular.name}}
-                                                                    </td>
+                                                                    <td class="col-xs-6 bdrL">{{txn.particular.name}}</td>
                                                                     <td class="col-xs-3 bdrL pos-rel"
                                                                         v-bind:class="{'pdR25imp': ledger.voucherGenerated}"
                                                                         align="right">
@@ -206,7 +238,7 @@
                                                                                     style="font-size:15px;"></i>
                                                                             </span>
                                                                         </template>
-                                                            <template v-if="ledger.voucherGenerated && ledger.voucherNumber">
+                                                                        <template v-if="ledger.voucherGenerated && ledger.voucherNumber">
                                                                             <!-- tooltip="Download Invoice : {{ledger.voucherNumber}}" -->
                                                                             <!-- [placement]="'top'" -->
                                                                             <span class="download-invoice-ledger"
@@ -217,12 +249,12 @@
                                                                                     style="font-size:15px;"></i>
                                                                             </span>
                                                                         </template>
+                                                                    </td>
+                                                                </tr>
+                                                            </template>
+                                                        </tbody>
+                                                    </table>
                                                 </td>
-                                            </tr>
-                                            </template>
-                                            </tbody>
-                                            </table>
-                                            </td>
                                             </tr>
                                             <tr v-if="legderBalanceData.forwardedBalance.type === 'DEBIT' && isResponsive">
                                                 <td colspan="12" class="col-xs-12 text-right h32">
@@ -255,7 +287,7 @@
                                             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
                                                 <!-- [tooltip]="'(-) Asset ( ohh no!)'" -->
                                                 <!-- [placement]="'top'" -->
-                                                <span v-if="legderBalanceData.forwardedBalance.type === 'CREDIT'" v-tooltip="'(-) Asset ( ohh no!)'">
+                                                <span v-if="legderBalanceData.forwardedBalance && legderBalanceData.forwardedBalance.type === 'CREDIT'" v-tooltip="'(-) Asset ( ohh no!)'">
                                                     <!-- | number: '1.2-2'  -->
                                                     C/F: Cr
                                                     {{ legderBalanceData.forwardedBalance.amount | currency }}
@@ -275,7 +307,7 @@
                                         <tr class="total_col">
                                             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
                                                 <!-- tooltip="" [placement]="'top'" -->
-                                                <span v-if="legderBalanceData.forwardedBalance.type === 'DEBIT'">
+                                                <span v-if="legderBalanceData.forwardedBalance && legderBalanceData.forwardedBalance.type === 'DEBIT'">
                                                     C/F: Dr
                                                     <!-- | number: '1.2-2' -->
                                                     <span
@@ -312,7 +344,7 @@
                     <div class="col-xs-3">
                         <h1>Opening Balance</h1>
                         <!-- | number:'1.2-2' -->
-                        <h3>{{legderBalanceData.forwardedBalance.amount | currency }} {{ legderBalanceData.forwardedBalance.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
+                        <h3 v0if="legderBalanceData.forwardedBalance">{{legderBalanceData.forwardedBalance.amount | currency }} {{ legderBalanceData.forwardedBalance.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
                     </div>
                     <div class="col-xs-3">
                         <h1 class="primary_clr">Net Total
@@ -335,7 +367,7 @@
                     <div class="col-xs-3">
                         <h1>Closing Balance</h1>
                         <!-- | number:'1.2-2' -->
-                        <h3>{{legderBalanceData.closingBalance.amount | currency}} {{ legderBalanceData.closingBalance.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
+                        <h3 v-if="legderBalanceData.closingBalance">{{legderBalanceData.closingBalance.amount | currency}} {{ legderBalanceData.closingBalance.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
                     </div>
                 </div>
             </section>
