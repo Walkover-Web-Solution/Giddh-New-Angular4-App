@@ -161,10 +161,10 @@
                 <!-- edit color end -->
             </li>
 
-            <li [hidden]="templateUISectionVisibility.font" (click)="onChangeVisibility('font')">
+            <li *ngIf="!templateUISectionVisibility.font" (click)="onChangeVisibility('font')">
                 <i class="ico-txt"></i> <label>Select different fonts</label>
             </li>
-            <li [hidden]="!templateUISectionVisibility.font">
+            <li *ngIf="templateUISectionVisibility.font">
                 <i class="ico-txt"></i> <label>Select different fonts</label>
                 <div class="col-xs-9 font-selector mrT1 form-group">
                     <div class="row">
@@ -174,10 +174,10 @@
                 </div>
             </li>
             <ng-container>
-                <li [hidden]="templateUISectionVisibility.fontSize" (click)="onChangeVisibility('fontSize')">
+                <li *ngIf="!templateUISectionVisibility.fontSize" (click)="onChangeVisibility('fontSize')">
                     <i class="ico-txt"></i> <label>Select different fonts size</label>
                 </li>
-                <li [hidden]="!templateUISectionVisibility.fontSize">
+                <li *ngIf="templateUISectionVisibility.fontSize">
                     <i class="ico-txt"></i> <label>Select different fonts size</label>
                     <div class="col-xs-9 font-selector mrT1 form-group">
                         <div class="row">

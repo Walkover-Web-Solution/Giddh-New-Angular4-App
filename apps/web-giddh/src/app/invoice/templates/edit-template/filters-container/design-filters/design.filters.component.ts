@@ -123,23 +123,7 @@ export class DesignFiltersContainerComponent implements OnInit {
         this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
             this.customTemplate = _.cloneDeep(template);
 
-            if (this.customTemplate) {
-                if (this.customTemplate.font) {
-                    this.presetFonts.map(font => {
-                        if (font.value === this.customTemplate.font) {
-                            this.selectedFont = font.label;
-                        }
-                    });
-                }
-
-                if (this.customTemplate.fontSize) {
-                    this.presetFontsSize.map(fontSize => {
-                        if (fontSize.value === this.customTemplate.fontSize) {
-                            this.selectedFontSize = fontSize.label;
-                        }
-                    });
-                }
-            }
+            this.setFontAndFontSize();
 
             let op = {
                 header: {},
@@ -244,6 +228,7 @@ export class DesignFiltersContainerComponent implements OnInit {
         template.leftMargin = 10;
         template.rightMargin = 10;
         this.customTemplate = _.cloneDeep(template);
+        this.setFontAndFontSize();
         this.onValueChange(null, null);
     }
 
@@ -442,4 +427,23 @@ export class DesignFiltersContainerComponent implements OnInit {
         }
     }
 
+    public setFontAndFontSize() {
+        if (this.customTemplate) {
+            if (this.customTemplate.font) {
+                this.presetFonts.map(font => {
+                    if (font.value === this.customTemplate.font) {
+                        this.selectedFont = font.label;
+                    }
+                });
+            }
+
+            if (this.customTemplate.fontSize) {
+                this.presetFontsSize.map(fontSize => {
+                    if (fontSize.value == this.customTemplate.fontSize) {
+                        this.selectedFontSize = fontSize.label;
+                    }
+                });
+            }
+        }
+    }
 }
