@@ -112,9 +112,9 @@ var app = new Vue({
             var url = '';
             var apiBaseUrl = this.getApi();
             if (from && to) {
-                url = apiBaseUrl + 'magic-link-ledger/' + id + '?from=' + from + '&to=' + to;
+                url = apiBaseUrl + 'magic-link-ledger/' + id + '?sort=asc&from=' + from + '&to=' + to;
             } else {
-                url = apiBaseUrl + 'magic-link-ledger/' + id;
+                url = apiBaseUrl + 'magic-link-ledger/' + id + '?sort=asc';
             }
 
             if (id) {
