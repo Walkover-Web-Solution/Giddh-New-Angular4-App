@@ -1118,7 +1118,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public saveBlankTransaction() {
-        /*this._loaderService.show();
+        this._loaderService.show();
 
         if (this.lc.blankLedger.entryDate) {
             if (!moment(this.lc.blankLedger.entryDate, 'DD-MM-YYYY').isValid()) {
@@ -1151,11 +1151,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         } else {
             this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
             this._loaderService.hide();
-        }*/
-
-        console.log('Starting worker...');
-        const message = new WorkerMessage(WORKER_MODULES.LEDGER, WORKER_MODULES_OPERATIONS.LEDGER.VOUCHER_CALCULATION, 9);
-        this.workerService.doWork(message);
+        }
     }
 
     public blankLedgerAmountClick() {
