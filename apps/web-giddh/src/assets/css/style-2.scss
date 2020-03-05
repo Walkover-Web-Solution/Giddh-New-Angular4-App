@@ -9213,6 +9213,12 @@ input.checkbox-custom[type="checkbox"] {
     .user_dropdown {
         left: 0px !important;
     }
+    .xs-d-block {
+        display: block;
+    }
+    .xs-mr-0 {
+        margin-right: 0px;
+    }
 }
 
 @media (max-width: 575px) {
