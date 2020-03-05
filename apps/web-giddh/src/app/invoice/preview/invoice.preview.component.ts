@@ -269,9 +269,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if(a && a.accountUniqueName && a.purchaseRecordUniqueName) {
                 this._receiptServices.GetPurchaseRecordDetails(a.accountUniqueName, a.purchaseRecordUniqueName).subscribe((res: any) => {
                     if(res && res.body) {
-                        this.invoiceSearchRequest.from = res.body.date;
-                        this.invoiceSearchRequest.to = res.body.date;
-                        this.getVoucher(false);
+                        if(res.body.date) {
+                            this.invoiceSearchRequest.from = res.body.date;
+                            this.invoiceSearchRequest.to = res.body.date;
+                            this.getVoucher(false);
+                        }
 
                         this.purchaseRecord = {
                             balanceStatus: '',
