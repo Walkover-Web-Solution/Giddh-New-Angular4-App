@@ -696,7 +696,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="trash-icon-delete" *ngIf="!isUpdateMode || (isUpdateMode && (entry.isNewEntryInUpdateMode || (!isPurchaseInvoice && !isEstimateInvoice && !isProformaInvoice)))" (click)="removeTransaction(entryIdx)">
+                                        <div class="trash-icon-delete" (click)="removeTransaction(entryIdx)">
                                             <span class="cp">
                                                 <i class="icon-trash" aria-hidden="true"></i>
                                             </span>
@@ -940,7 +940,7 @@
 
     </div>
 
-    <div class="trash-icon-delete" *ngIf="!isUpdateMode || (isUpdateMode && (entry.isNewEntryInUpdateMode || (!isPurchaseInvoice && !isEstimateInvoice && !isProformaInvoice)))" (click)="removeTransaction(entryIdx)">
+    <div class="trash-icon-delete" (click)="removeTransaction(entryIdx)">
         <span class="cp">
                                                 <i class="icon-trash" aria-hidden="true"></i>
                                             </span>
@@ -1399,7 +1399,7 @@
                         <img src="assets/images/edit-pencilicon.svg">
                     </div>
 
-                    <div class="del-card" (click)="removeTransaction(entryIdx)" *ngIf="!isUpdateMode || (isUpdateMode && (entry.isNewEntryInUpdateMode || (!isPurchaseInvoice && !isEstimateInvoice && !isProformaInvoice)))">
+                    <div class="del-card" (click)="removeTransaction(entryIdx)">
                         <i class="icon-trash" aria-hidden="true"></i>
                     </div>
 
@@ -1706,7 +1706,7 @@
                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
                 </div>
 
-                <div class="del-card pointer" (click)="removeTransaction(entryIdx)" *ngIf="!isUpdateMode || (isUpdateMode && (entry.isNewEntryInUpdateMode || (!isPurchaseInvoice && !isEstimateInvoice && !isProformaInvoice)))">
+                <div class="del-card pointer" (click)="removeTransaction(entryIdx)">
                     <i class="icon-trash" aria-hidden="true"></i>
                 </div>
 

@@ -1,4 +1,3 @@
-import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -33,7 +32,6 @@ import { AuditLogsServiceModule } from './services/audit-logs.service.module';
         BsDatepickerModule,
         LaddaModule,
         ShSelectModule,
-        ScrollingModule,
         AuditLogsServiceModule
     ],
 })
