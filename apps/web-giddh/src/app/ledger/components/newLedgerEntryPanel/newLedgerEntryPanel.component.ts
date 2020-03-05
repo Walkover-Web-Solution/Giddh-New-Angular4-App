@@ -32,7 +32,7 @@ import { forEach, sumBy } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
-import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, IForceClear } from '../../../models/api-models/Sales';
 import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
@@ -196,6 +196,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public shouldShowAdvanceReceiptMandatoryFields: boolean = false;
     /** List of available ITC */
     public availableItcList: Array<any> = AVAILABLE_ITC_LIST;
+    /** True, if the voucher type needs to be cleared */
+    public clearVoucherType: IForceClear = { status: false };
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -334,10 +336,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.blankLedger.isOtherTaxesApplicable = true;
             }
         }
-
-        if ('selectedCurrency' in changes) {
-            // this.baseCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.baseCurrencyDetails) : cloneDeep(this.foreignCurrencyDetails);
-            // this.foreignCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.foreignCurrencyDetails) : cloneDeep(this.baseCurrencyDetails);
+        if (changes.voucherTypeList && changes.voucherTypeList.previousValue !== changes.voucherTypeList.currentValue && !changes.voucherTypeList.firstChange) {
+            this.clearVoucherType = { status: true };
         }
     }
 

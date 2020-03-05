@@ -197,114 +197,115 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
-    private voucherData: any = [
-        {
-            "default": [
-                "receipt",
-                "payment",
-                "sales",
-                "credit note",
-                "purchase",
-                "debit note",
-                "journal"
-            ],
-            "groups": [
-                {
-                    "group": "sundrydebtors",
-                    "vouchers": [
-                        "receipt",
-                        "payment",
-                        "sales",
-                        "credit note",
-                        "purchase",
-                        "debit note",
-                        "journal"
-                    ],
-                    "credit": [
-                        "receipt",
-                        "purchase",
-                        "credit note",
-                        "journal"
-                    ],
-                    "debit": [
-                        "payment",
-                        "receipt",
-                        "sales",
-                        "debit note",
-                        "journal"
-                    ]
-                },
-                {
-                    "group": "cash",
-                    "vouchers": [
-                        "receipt",
-                        "payment",
-                        "sales",
-                        "credit note",
-                        "purchase",
-                        "debit note",
-                        "contra"
-                    ],
-                    "credit": [
-                        "purchase",
-                        "payment",
-                        "credit note",
-                        "receipt",
-                        "contra"
-                    ],
-                    "debit": [
-                        "sales",
-                        "receipt",
-                        "debit note",
-                        "receipt",
-                        "contra"
-                    ]
-                }
-            ],
-            "vouchers": false,
-            "group": "currentassets"
-        },
-        {
-            "default": [
-                "receipt",
-                "payment",
-                "sales",
-                "credit note",
-                "journal"
-            ],
-            "groups": [
-                {
-                    "group": "sales",
-                    "vouchers": [
-                        "receipt",
-                        "payment",
-                        "sales",
-                        "credit note",
-                        "journal"
-                    ],
-                    "credit": [
-                        "sales",
-                        "receipt",
-                        "journal"
-                    ],
-                    "debit": [
-                        "credit note",
-                        "payment",
-                        "receipt",
-                        "journal"
-                    ]
-                }
-            ],
-            "vouchers": false,
-            "group": "revenuefromoperations"
-        }
-    ];
+    // private voucherData: any = [
+    //     {
+    //         "default": [
+    //             "receipt",
+    //             "payment",
+    //             "sales",
+    //             "credit note",
+    //             "purchase",
+    //             "debit note",
+    //             "journal"
+    //         ],
+    //         "groups": [
+    //             {
+    //                 "group": "sundrydebtors",
+    //                 "vouchers": [
+    //                     "receipt",
+    //                     "payment",
+    //                     "sales",
+    //                     "credit note",
+    //                     "purchase",
+    //                     "debit note",
+    //                     "journal"
+    //                 ],
+    //                 "credit": [
+    //                     "receipt",
+    //                     "purchase",
+    //                     "credit note",
+    //                     "journal"
+    //                 ],
+    //                 "debit": [
+    //                     "payment",
+    //                     "receipt",
+    //                     "sales",
+    //                     "debit note",
+    //                     "journal"
+    //                 ]
+    //             },
+    //             {
+    //                 "group": "cash",
+    //                 "vouchers": [
+    //                     "receipt",
+    //                     "payment",
+    //                     "sales",
+    //                     "credit note",
+    //                     "purchase",
+    //                     "debit note",
+    //                     "contra"
+    //                 ],
+    //                 "credit": [
+    //                     "purchase",
+    //                     "payment",
+    //                     "credit note",
+    //                     "receipt",
+    //                     "contra"
+    //                 ],
+    //                 "debit": [
+    //                     "sales",
+    //                     "receipt",
+    //                     "debit note",
+    //                     "receipt",
+    //                     "contra"
+    //                 ]
+    //             }
+    //         ],
+    //         "vouchers": false,
+    //         "group": "currentassets"
+    //     },
+    //     {
+    //         "default": [
+    //             "receipt",
+    //             "payment",
+    //             "sales",
+    //             "credit note",
+    //             "journal"
+    //         ],
+    //         "groups": [
+    //             {
+    //                 "group": "sales",
+    //                 "vouchers": [
+    //                     "receipt",
+    //                     "payment",
+    //                     "sales",
+    //                     "credit note",
+    //                     "journal"
+    //                 ],
+    //                 "credit": [
+    //                     "sales",
+    //                     "receipt",
+    //                     "journal"
+    //                 ],
+    //                 "debit": [
+    //                     "credit note",
+    //                     "payment",
+    //                     "receipt",
+    //                     "journal"
+    //                 ]
+    //             }
+    //         ],
+    //         "vouchers": false,
+    //         "group": "revenuefromoperations"
+    //     }
+    // ];
+    private voucherData: any = [];
 
     constructor(
         private store: Store<AppState>,
         private _ledgerActions: LedgerActions,
         private route: ActivatedRoute,
-        private _ledgerService: LedgerService,
+        private ledgerService: LedgerService,
         private ledgerUtilityService: LedgerUtilityService,
         private _toaster: ToasterService,
         private _companyActions: CompanyActions,
@@ -524,19 +525,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     private calculateApplicableVoucherTypes(transaction: TransactionVM) {
-        const voucherRequest = {
-            currentLedgerAccount: _.cloneDeep(this.lc.activeAccount),
-            particularAccount: _.cloneDeep(transaction),
-            voucherData: this.voucherData
-        };
-        if (typeof Worker !== 'undefined') {
-            // Web worker is supported
-            console.log('Starting worker...');
-            const message = new WorkerMessage(WORKER_MODULES.LEDGER, WORKER_MODULES_OPERATIONS.LEDGER.VOUCHER_CALCULATION, voucherRequest);
-            this.workerService.doWork(message);
-        } else {
-            // Web worker not supported by the environment
-            this.voucherTypeList = this.ledgerUtilityService.calculateApplicableVoucherType(voucherRequest).map(voucher => ({label: voucher, value: voucher}));
+        if (this.voucherData && this.voucherData.length) {
+            const voucherRequest = {
+                currentLedgerAccount: _.cloneDeep(this.lc.activeAccount),
+                particularAccount: _.cloneDeep(transaction),
+                voucherData: this.voucherData
+            };
+            // if (typeof Worker !== 'undefined') {
+            //     // Web worker is supported
+            //     console.log('Starting worker...');
+            //     const message = new WorkerMessage(WORKER_MODULES.LEDGER, WORKER_MODULES_OPERATIONS.LEDGER.VOUCHER_CALCULATION, voucherRequest);
+            //     this.workerService.doWork(message);
+            // } else {
+                // Web worker not supported by the environment
+                this.voucherTypeList = this.ledgerUtilityService.calculateApplicableVoucherType(voucherRequest)
+                    .map(voucher => ({label: this.generalService.toProperCase(voucher), value: voucher}));
+            // }
         }
     }
 
@@ -556,6 +560,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.fileUploadOptions = { concurrency: 0 };
         this.shouldShowItcSection = false;
         this.shouldShowRcmTaxableAmount = false;
+
+        this.ledgerService.getAccountsWithVouchers().subscribe((response) => {
+            if (response && response.status === 'success' && response.body && response.body.length) {
+                this.voucherData = response.body;
+            }
+        })
+
         this.workerService.workerUpdate$.pipe(takeUntil(this.destroyed$)).subscribe((response: WorkerMessage) => {
             this.voucherTypeList = response.data.map(voucher => ({label: voucher, value: voucher}));
             console.log('Data from web worker: ', response);
@@ -944,7 +955,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // && this.advanceSearchRequest.from
         if (this.trxRequest.accountUniqueName) {
             this.isBankTransactionLoading = true;
-            this._ledgerService.GetBankTranscationsForLedger(this.trxRequest.accountUniqueName, this.trxRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
+            this.ledgerService.GetBankTranscationsForLedger(this.trxRequest.accountUniqueName, this.trxRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
                 this.isBankTransactionLoading = false;
                 if (res.status === 'success') {
                     this.lc.getReadyBankTransactionsForUI(res.body);
@@ -1022,7 +1033,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             to = this.selectedCurrency === 0 ? this.foreignCurrencyDetails.code : this.baseCurrencyDetails.code;
         }
         let date = moment().format('DD-MM-YYYY');
-        this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
+        this.ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
             let rate = response.body;
             if (rate) {
                 this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, this.giddhBalanceDecimalPlaces) };
@@ -1063,7 +1074,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public downloadAttachedFile(fileName: string, e: Event) {
         e.stopPropagation();
-        this._ledgerService.DownloadAttachement(fileName).subscribe(d => {
+        this.ledgerService.DownloadAttachement(fileName).subscribe(d => {
             if (d.status === 'success') {
                 let blob = base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
                 return saveAs(blob, d.body.name);
@@ -1081,7 +1092,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         downloadRequest.invoiceNumber = [invoiceName];
         downloadRequest.voucherType = voucherType;
 
-        this._ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).subscribe(d => {
+        this.ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).subscribe(d => {
             if (d.status === 'success') {
                 let blob = base64ToBlob(d.body, 'application/pdf', 512);
                 return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
@@ -1687,7 +1698,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * deleteBankTxn
      */
     public deleteBankTxn(transactionId) {
-        this._ledgerService.DeleteBankTransaction(transactionId).subscribe((res: BaseResponse<any, string>) => {
+        this.ledgerService.DeleteBankTransaction(transactionId).subscribe((res: BaseResponse<any, string>) => {
             if (res.status === 'success') {
                 this._toaster.successToast('Bank transaction deleted Successfully');
             }
@@ -1740,7 +1751,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public getInvoiveLists(request) {
         this.invoiceList = [];
-        this._ledgerService.GetInvoiceList(request).subscribe((res: any) => {
+        this.ledgerService.GetInvoiceList(request).subscribe((res: any) => {
             _.map(res.body.invoiceList, (o) => {
                 this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
             });

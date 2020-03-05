@@ -253,10 +253,10 @@
                             <td class="select2-parent pdR1">
                                 <div class="form-group">
                                     <label class="default_clr">Voucher Type</label>
-                                    <sh-select class="txtCpc" #sh [options]="voucherTypeList" [isFilterEnabled]="true"
+                                    <sh-select #sh [options]="voucherTypeList" [isFilterEnabled]="true"
                                         (selected)="getInvoiveListsData($event)" [placeholder]="'Select Vouchers'"
                                         [(ngModel)]="blankLedger.voucherType" [ItemHeight]="'auto'"
-                                        [style.width.px]="161"></sh-select>
+                                        [style.width.px]="161" [forceClearReactive]="clearVoucherType"></sh-select>
                                 </div>
                             </td>
                             <!-- <td class="pdL1">

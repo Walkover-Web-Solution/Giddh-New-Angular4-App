@@ -8,17 +8,22 @@ export class LedgerUtilityService {
 
     public calculateApplicableVoucherType(voucherRequest: any): Array<string> {
         const { currentLedgerAccount, particularAccount, voucherData } = voucherRequest;
-        const currentLedgerApplicableVouchers = this.findVouchers(particularAccount.type, currentLedgerAccount.parentGroups, voucherData);
+        const currentLedgerApplicableVouchers = this.findVouchers(particularAccount.type, currentLedgerAccount.parentGroups, voucherData, true);
         const particularAccountApplicableVouchers = this.findVouchers(particularAccount.type,
             particularAccount.selectedAccount ? particularAccount.selectedAccount.parentGroups : [],
             voucherData);
         console.log(currentLedgerApplicableVouchers, particularAccountApplicableVouchers);
-        // Find common vouchers in both accounts and return
-        const voucherList = currentLedgerApplicableVouchers.filter((currentLedgerVoucher) => particularAccountApplicableVouchers.indexOf(currentLedgerVoucher) > -1);
+        let voucherList;
+        if (currentLedgerApplicableVouchers && particularAccountApplicableVouchers) {
+            // Find common vouchers in both accounts and return
+            voucherList = currentLedgerApplicableVouchers.filter((currentLedgerVoucher) => particularAccountApplicableVouchers.indexOf(currentLedgerVoucher) > -1);
+        } else {
+            voucherList = [];
+        }
         return voucherList;
     }
 
-    private findVouchers(transactionType: string, parentGroups: Array<any>, voucherData: Array<any>): Array<string> {
+    private findVouchers(transactionType: string, parentGroups: Array<any>, voucherData: Array<any>, isCurrentLedgerAccount?: boolean): Array<string> {
         if (parentGroups && voucherData) {
             console.log('ParentGroups: ', parentGroups);
             console.log('Voucher data: ', voucherData);
@@ -29,8 +34,12 @@ export class LedgerUtilityService {
                 let categoryVoucherDetails: any = voucherDetailsByCategory.filter(category => category.group === parentGroups[index].uniqueName);
                 categoryVoucherDetails = categoryVoucherDetails.length ? categoryVoucherDetails.pop() : categoryVoucherDetails;
                 console.log('categoryVoucherDetails: ', categoryVoucherDetails);
-                if (categoryVoucherDetails.vouchers) {
-                    return transactionType === 'CREDIT' ? categoryVoucherDetails.credit : categoryVoucherDetails.debit;
+                if (categoryVoucherDetails.hasVouchers) {
+                    if (transactionType === 'CREDIT') {
+                        return (isCurrentLedgerAccount) ? categoryVoucherDetails.debit : categoryVoucherDetails.credit;
+                    } else if (transactionType === 'DEBIT') {
+                        return (isCurrentLedgerAccount) ? categoryVoucherDetails.credit : categoryVoucherDetails.debit;
+                    }
                 } else if (categoryVoucherDetails.groups) {
                     index++;
                     console.log('New parent: ', parentGroups[index]);
