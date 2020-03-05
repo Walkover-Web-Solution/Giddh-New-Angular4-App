@@ -425,7 +425,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
     }
 
-    private calculateApplicableVoucherType(transaction: TransactionVM) {
+    /**
+     * Calculates the applicable voucher type based on the accounts involved
+     *
+     * @private
+     * @param {TransactionVM} transaction Currently selected transaction by the user
+     * @memberof LedgerComponent
+     */
+    private calculateApplicableVoucherType(transaction: TransactionVM): void {
         if (this.voucherData && this.voucherData.length) {
             const voucherRequest = {
                 currentLedgerAccount: _.cloneDeep(this.lc.activeAccount),
