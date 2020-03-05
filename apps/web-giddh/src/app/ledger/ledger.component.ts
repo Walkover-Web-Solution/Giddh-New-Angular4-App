@@ -413,7 +413,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
         // check if selected account category allows to show taxationDiscountBox in newEntry popup
         txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
-        this.calculateApplicableVoucherTypes(txn);
+        this.calculateApplicableVoucherType(txn);
         this.handleRcmVisibility(txn);
         this.handleTaxableAmountVisibility(txn);
         this.newLedPanelCtrl.calculateTotal();
@@ -422,7 +422,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
     }
 
-    private calculateApplicableVoucherTypes(transaction: TransactionVM) {
+    private calculateApplicableVoucherType(transaction: TransactionVM) {
         if (this.voucherData && this.voucherData.length) {
             const voucherRequest = {
                 currentLedgerAccount: _.cloneDeep(this.lc.activeAccount),
@@ -466,8 +466,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
 
         this.workerService.workerUpdate$.pipe(takeUntil(this.destroyed$)).subscribe((response: WorkerMessage) => {
-            this.voucherTypeList = response.data.map(voucher => ({label: voucher, value: voucher}));
-            console.log('Data from web worker: ', response);
+            if (response.data) {
+                this.voucherTypeList = response.data.map(voucher => ({label: voucher, value: voucher}));
+            } else {
+                this.voucherTypeList = [];
+            }
         });
 
         observableCombineLatest(this.universalDate$, this.route.params, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {

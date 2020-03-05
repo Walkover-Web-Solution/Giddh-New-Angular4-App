@@ -62,8 +62,6 @@
         "@angular/http": "^7.0.0",
         "@angular/platform-browser": "^7.0.0",
         "@angular/platform-browser-dynamic": "^7.0.0",
-        "@angular/platform-webworker": "^9.0.4",
-        "@angular/platform-webworker-dynamic": "^9.0.4",
         "@angular/router": "^7.0.0",
         "@getstation/electron-google-oauth2": "^2.0.0",
         "@giddh-workspaces/scss": "file:libs/scss",
@@ -113,7 +111,6 @@
         "zone.js": "^0.8.26"
     },
     "devDependencies": {
-        "@angular-builders/custom-webpack": "~7.4.3",
         "@angular-devkit/build-angular": "0.13.1",
         "@angular/cdk": "^6.4.7",
         "@angular/cli": "7.3.1",
@@ -159,7 +156,6 @@
         "npx": "10.2.0",
         "prettier": "1.15.2",
         "protractor": "~5.4.0",
-        "replace-in-file-webpack-plugin": "^1.0.6",
         "ts-node": "~7.0.0",
         "tslint": "~5.11.0",
         "typescript": "3.2.2",
