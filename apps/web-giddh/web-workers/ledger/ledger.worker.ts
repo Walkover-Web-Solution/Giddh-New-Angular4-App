@@ -15,6 +15,7 @@ export class LedgerIntensiveWorker {
         switch (data.operationType) {
             case WORKER_MODULES_OPERATIONS.LEDGER.VOUCHER_CALCULATION:
                 return this.calculateApplicableVoucherType(data);
+            default: break;
         }
     }
 

@@ -23,6 +23,7 @@ export class AppWorkers {
             case WORKER_MODULES.LEDGER:
                 this.postWorkerResult(LedgerIntensiveWorker.doWork(data));
                 break;
+            default: break;
         }
     }
 
