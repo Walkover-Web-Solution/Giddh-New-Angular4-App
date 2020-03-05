@@ -2,7 +2,7 @@ export class AdvanceReceiptAdjustment {
     tdsTaxUniqueName: string;
     tdsAmount: TdsAmount;
     description: string;
-    adjustments: Adjustment[] = [new Adjustment()];
+    adjustments: Adjustment[];
 }
 
 export class Adjustment {
@@ -12,6 +12,7 @@ export class Adjustment {
     taxRate: number;
     uniqueName: string;
     taxUniqueName: string;
+    calculatedTaxAmount?: number;
 
     constructor() {
         this.voucherNumber = '';
@@ -21,6 +22,7 @@ export class Adjustment {
         this.taxUniqueName = '';
         // tslint:disable-next-line: no-use-before-declare
         this.dueAmount = new DueAmount();
+        this.calculatedTaxAmount = 0;
     }
 }
 
@@ -34,7 +36,7 @@ export class DueAmount {
 }
 
 export interface TdsAmount {
-    amountForAccount?: any;
+    amountForAccount?: number;
 }
 
 

@@ -18,28 +18,31 @@
             <p>Due <span class="text-light">(Post Adj):</span> <i class="icon-rupees font-10"></i>{{adjustPayment?.balanceDue}}</p>
         </div>
     </div>
-    <form #generateTransporterForm="ngForm" action="">
+    <form #adjustAdvancePaymentForm="ngForm" autocomplete="off">
         <ng-container *ngFor="let entry of adjustVoucherForm.adjustments; let entryIdx = index; let first = first; let last = last">
             <div class="row">
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label for="name">Adjustment Voucher {{entryIdx}}<span class="text-danger">*</span></label>
-                        <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" [placeholder]="'Select Account'" [options]="adjustVoucherOptions" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33">
+                        <sh-select [class.error-box]="entry.dueAmount.amountForAccount > 0 && !entry.voucherNumber" class="text-left dropdown-arrow" name="uniqueName_{{entryIdx}}" [placeholder]="'Select Voucher'" [(ngModel)]="entryIdx" (selected)="selectVoucher($event, entry, entryIdx)"
+                            [options]="adjustVoucherOptions" [notFoundLink]="false" [multiple]="false">
                         </sh-select>
                     </div>
                 </div>
 
                 <div class="col-sm-3">
                     <div class="form-group">
-                        <label for="amount">Amount<span class="text-danger">* </span> <span class="text-light">
+                        <label for="amount_{{entryIdx}}">Amount<span class="text-danger">* </span> <span class="text-light">
                                 (Inclusive Tax)</span></label>
-                        <input id="amount" decimalDigitsDirective type="text" class="form-control" name="dueAmount.amountForAccount" [(ngModel)]="entry.dueAmount.amountForAccount">
+                        <!-- decimalDigitsDirective -->
+                        <input id="amount_{{entryIdx}}" [class.error-box]="entry.dueAmount.amountForAccount === 0" decimalDigitsDirective type="text" class="form-control" placeholder="Enter Amount" name="dueAmount.amountForAccount_{{entryIdx}}" [(ngModel)]="entry.dueAmount.amountForAccount"
+                            (ngModelChange)="calculateTax(entry, entryIdx )">
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
-                        <label for="name">Tax</label>
-                        <input id="name" type="text" class="form-control" name="dueAmount.amountForAccount" [(ngModel)]="entry.dueAmount.amountForAccount" readonly disabled>
+                        <label for="name_{{entryIdx}}">Tax</label>
+                        <input id="name_{{entryIdx}}" type="text" class="form-control" name="calculatedTaxAmount_{{entryIdx}}" [(ngModel)]="entry.calculatedTaxAmount" placeholder="00.00" disabled>
                     </div>
                 </div>
                 <div class="col-sm-3">
@@ -59,51 +62,50 @@
 
                 <div class="col-md-8 col-sm-8 col-xs-7">
                     <span class="pd0 mr-2 d-inline-block">
-                        <input  class="radio-custom cp ml0" id="deductedNo" name="isTaxDeducted" value="false"  [(ngModel)]="isTaxDeducted"
-                            type="radio" />
+                        <input class="radio-custom cp ml0" type="radio" id="deductedNo" name="isTaxDeducted"
+                            [value]="false" [(ngModel)]="isTaxDeducted" />
                         <label for="deductedNo" class="radio-custom-label">No</label>
                     </span>
 
                     <span class="pd0 mr-2 d-inline-block">
-                        <input class="radio-custom cp ml0" name="isTaxDeducted"  id="deductedYes" value="true"  [(ngModel)]="isTaxDeducted"
-                            type="radio" />
+                        <input class="radio-custom cp ml0" type="radio" name="isTaxDeducted" id="deductedYes"
+                            [value]="true" [(ngModel)]="isTaxDeducted" />
                         <label for="deductedYes" class="radio-custom-label">Yes</label>
                     </span>
                 </div>
             </div>
 
-
-            <div class="row">
-                <div *ngIf="isTaxDeducted"></div>
-                <div *ngIf="!isTaxDeducted">
-                    <div class="form-group clearfix">
-                        <label class="col-md-2">TDS</label>
-                        <div class="col-md-3">
-                            <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" [placeholder]="'Select Account'" [options]="adjustVoucherOptions" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33">
-                            </sh-select>
-
+            <ng-container *ngIf="isTaxDeducted">
+                <div class="row">
+                    <div>
+                        <div class="form-group clearfix">
+                            <label class="col-md-2">TDS</label>
+                            <div class="col-md-3">
+                                <sh-select class="text-left dropdown-arrow" name="tdsTaxUniqueName" [placeholder]="'Select Tax'" [options]="availableTdsTaxes" (selected)="tdsTaxSelected($event)" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33">
+                                </sh-select>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group clearfix">
-                        <label class="col-md-2">Amount</label>
-                        <div class="col-md-3">
-                            <input type="text" class="form-control" placeholder="Enter Amount">
+                        <div class="form-group clearfix">
+                            <label class="col-md-2">Amount</label>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" name="tdsAmount" [(ngModel)]="tdsAmount" placeholder="Amount">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="form-group">
-                        <label>Description </label>
-                        <textarea type="text" placeholder="Description" name="description" [(ngModel)]="adjustVoucherForm.description" class="form-control"></textarea>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label>Description </label>
+                            <textarea type="text" placeholder="Description" name="description" [(ngModel)]="adjustVoucherForm.description" class="form-control"></textarea>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </ng-container>
 
             <div class="mt-4">
-                <button type="button" class="btn btn-success mrR1" (click)="confirm()">Save</button>
+                <button type="button" class="btn btn-success mrR1" (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)">Save</button>
                 <button type="button" class="btn btn-cancel" (click)="decline()">Cancel</button>
             </div>
 
