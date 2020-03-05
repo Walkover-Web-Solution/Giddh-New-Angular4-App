@@ -197,108 +197,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
-    // private voucherData: any = [
-    //     {
-    //         "default": [
-    //             "receipt",
-    //             "payment",
-    //             "sales",
-    //             "credit note",
-    //             "purchase",
-    //             "debit note",
-    //             "journal"
-    //         ],
-    //         "groups": [
-    //             {
-    //                 "group": "sundrydebtors",
-    //                 "vouchers": [
-    //                     "receipt",
-    //                     "payment",
-    //                     "sales",
-    //                     "credit note",
-    //                     "purchase",
-    //                     "debit note",
-    //                     "journal"
-    //                 ],
-    //                 "credit": [
-    //                     "receipt",
-    //                     "purchase",
-    //                     "credit note",
-    //                     "journal"
-    //                 ],
-    //                 "debit": [
-    //                     "payment",
-    //                     "receipt",
-    //                     "sales",
-    //                     "debit note",
-    //                     "journal"
-    //                 ]
-    //             },
-    //             {
-    //                 "group": "cash",
-    //                 "vouchers": [
-    //                     "receipt",
-    //                     "payment",
-    //                     "sales",
-    //                     "credit note",
-    //                     "purchase",
-    //                     "debit note",
-    //                     "contra"
-    //                 ],
-    //                 "credit": [
-    //                     "purchase",
-    //                     "payment",
-    //                     "credit note",
-    //                     "receipt",
-    //                     "contra"
-    //                 ],
-    //                 "debit": [
-    //                     "sales",
-    //                     "receipt",
-    //                     "debit note",
-    //                     "receipt",
-    //                     "contra"
-    //                 ]
-    //             }
-    //         ],
-    //         "vouchers": false,
-    //         "group": "currentassets"
-    //     },
-    //     {
-    //         "default": [
-    //             "receipt",
-    //             "payment",
-    //             "sales",
-    //             "credit note",
-    //             "journal"
-    //         ],
-    //         "groups": [
-    //             {
-    //                 "group": "sales",
-    //                 "vouchers": [
-    //                     "receipt",
-    //                     "payment",
-    //                     "sales",
-    //                     "credit note",
-    //                     "journal"
-    //                 ],
-    //                 "credit": [
-    //                     "sales",
-    //                     "receipt",
-    //                     "journal"
-    //                 ],
-    //                 "debit": [
-    //                     "credit note",
-    //                     "payment",
-    //                     "receipt",
-    //                     "journal"
-    //                 ]
-    //             }
-    //         ],
-    //         "vouchers": false,
-    //         "group": "revenuefromoperations"
-    //     }
-    // ];
     private voucherData: any = [];
 
     constructor(
@@ -531,16 +429,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 particularAccount: _.cloneDeep(transaction),
                 voucherData: this.voucherData
             };
-            // if (typeof Worker !== 'undefined') {
-            //     // Web worker is supported
-            //     console.log('Starting worker...');
-            //     const message = new WorkerMessage(WORKER_MODULES.LEDGER, WORKER_MODULES_OPERATIONS.LEDGER.VOUCHER_CALCULATION, voucherRequest);
-            //     this.workerService.doWork(message);
-            // } else {
+            if (typeof Worker !== 'undefined') {
+                // Web worker is supported
+                console.log('Starting worker...');
+                const message = new WorkerMessage(WORKER_MODULES.LEDGER, WORKER_MODULES_OPERATIONS.LEDGER.VOUCHER_CALCULATION, voucherRequest);
+                this.workerService.doWork(message);
+            } else {
                 // Web worker not supported by the environment
                 this.voucherTypeList = this.ledgerUtilityService.calculateApplicableVoucherType(voucherRequest)
                     .map(voucher => ({label: this.generalService.toProperCase(voucher), value: voucher}));
-            // }
+            }
         }
     }
 
@@ -565,7 +463,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (response && response.status === 'success' && response.body && response.body.length) {
                 this.voucherData = response.body;
             }
-        })
+        });
 
         this.workerService.workerUpdate$.pipe(takeUntil(this.destroyed$)).subscribe((response: WorkerMessage) => {
             this.voucherTypeList = response.data.map(voucher => ({label: voucher, value: voucher}));
