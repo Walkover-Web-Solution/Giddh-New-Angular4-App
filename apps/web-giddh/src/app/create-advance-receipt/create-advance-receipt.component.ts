@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class CreateAdvanceReceiptComponent implements OnInit {
 
     public tempDateParams: any = {};
+    isDropup = true;
 
     constructor() {
     }

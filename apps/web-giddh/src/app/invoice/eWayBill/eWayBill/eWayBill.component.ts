@@ -227,23 +227,21 @@ export class EWayBillComponent implements OnInit {
                     return data;
                 }));
         };
+
         // Refresh report data according to universal date
-        this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+        this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
-                // this.invoiceSearchRequest.dateRange = this.universalDate;
                 this.datePickerOptions = {
-                    ...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
-                    endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate(),
+                    ...this.datePickerOptions, startDate: moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(),
+                    endDate: moment(universalDate[1], GIDDH_DATE_FORMAT).toDate(),
                     chosenLabel: universalDate[2]
                 };
                 this.EwayBillfilterRequest.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.EwayBillfilterRequest.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                // this.isUniversalDateApplicable = true;
                 this.getAllFilteredInvoice();
-
             }
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        });
 
         this.voucherNumberInput.valueChanges.pipe(
             debounceTime(700),

@@ -283,12 +283,14 @@
                             <div>
                                 <label *ngIf="selectedCountryCode==='IN' ">Account Number</label>
                                 <label *ngIf="selectedCountryCode !=='IN' ">IBAN</label>
-                                <input type="text" class="form-control " placeholder="Enter Account No. " #bankaccount (keyup)="bankDetailsValidator(bankaccount, 'bankAccountNo')" name="accountNum_{{i}} " formControlName="bankAccountNo" />
+                                <input type="text" class="form-control " placeholder="Enter Account No. " [maxlength]="bankIbanNumberMaxLength" [minlength]="bankIbanNumberMinLength" #bankaccount (blur)="showBankDetailsValidation(bankaccount,'bankAccountNo')" (keyup)="bankDetailsValidator(bankaccount, 'bankAccountNo')"
+                                    name="accountNum_{{i}} " formControlName="bankAccountNo" />
                             </div>
                         </div>
                         <div class="form-group col-sm-4" *ngIf="selectedCountryCode ==='AE'">
                             <label>SWIFT Code/BIC</label>
-                            <input type="text" class="form-control" placeholder="Enter SWIFT/BIC Code" #swiftcode name="swiftCode_{{i}}" (keyup)="bankDetailsValidator(swiftcode, 'swiftCode')" formControlName="swiftCode" />
+                            <input type="text" class="form-control" maxlength="11" minlength="8" placeholder="Enter SWIFT/BIC Code" #swiftcode name="swiftCode_{{i}}" (blur)="showBankDetailsValidation(swiftcode,'swiftCode')" (keyup)="bankDetailsValidator(swiftcode, 'swiftCode')"
+                                formControlName="swiftCode" />
                         </div>
                         <div *ngIf="selectedCountryCode!=='AE'" class="form-group col-sm-3">
                             <label>IFSC Code</label>

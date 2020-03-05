@@ -1,10 +1,10 @@
 <div class="clearfix mt-2">
-    <div class="col-md-8">
+    <div class="col-sm-8 font-14">
         <div class="row">
             <label class="col-md-2 pt-05">Customer Name<span class="text-danger">*</span></label>
             <div class="col-md-4">
                 <div class="form-group">
-                    <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" placeholder="Select Account" [notFoundLink]="false"
+                    <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" placeholder="Customer Name" [notFoundLink]="false"
                     [multiple]="false" [ItemHeight]="33">
                         <ng-template #optionTemplate1 let-option="option">
                             <a href="javascript:void(0)" class="list-item">
@@ -12,13 +12,13 @@
                             </a>
                         </ng-template>
                     </sh-select>
-                    <div class="clearfix font-12">
-                        <a href="javascript:void(0)">Unregistered Business</a>
+                    <div class="clearfix font-12 mt-05 line-height-12">
+                        <a href="javascript:void(0)" class="d-inline-block br-1 pr-1 mr-1">Unregistered Business</a>
                         <a href="javascript:void(0)">Customer Details</a>
                     </div>
                 </div>
             </div>
-            <div class="colmd-4 pt-05">
+            <div class="col-md-4 pt-05">
                 <label><input type="checkbox">Advance Receipt</label>
             </div>
         </div>
@@ -36,7 +36,7 @@
             <label class="col-md-2 pt-05">Receipt Date<span class="text-danger">*</span></label>
             <div class="col-md-3">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Enter Name">
+                    <input type="text" class="form-control" placeholder="Receipt Date">
                 </div>
             </div>
         </div>
@@ -46,7 +46,7 @@
             <label class="col-md-2 pt-05">Amount Received<span class="text-danger">*</span></label>
             <div class="col-md-3">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Enter Name">
+                    <input type="text" class="form-control" placeholder="Amount Received">
                 </div>
             </div>
         </div>
@@ -57,7 +57,7 @@
                     <label class="col-md-5 pt-05">Receipt Mode</label>
                     <div class="col-md-7 pl-05">
                         <div class="form-group">
-                            <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" placeholder="Select Account" [notFoundLink]="false"
+                            <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" placeholder="Receipt Mode" [notFoundLink]="false"
                         [multiple]="false" [ItemHeight]="33">
                             <ng-template #optionTemplate1 let-option="option">
                                 <a href="javascript:void(0)" class="list-item">
@@ -74,7 +74,7 @@
                 <label class="col-md-3 pt-05">Cheque#<span class="text-danger">*</span></label>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Enter Name">
+                        <input type="text" class="form-control" placeholder="Cheque">
                     </div>
                 </div>
             </div>
@@ -82,10 +82,10 @@
 
 
         <div class="row mb-4">
-            <label class="col-md-2 pt-05">Tax on Advance<span class="text-danger">*</span></label>
+            <label class="col-md-2 pt-05">Tax on Advance</label>
             <div class="col-md-3">
                 <div class="form-group">
-                    <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" placeholder="Select Account" [notFoundLink]="false"
+                    <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" placeholder="Tax on Advance" [notFoundLink]="false"
                     [multiple]="false" [ItemHeight]="33">
                         <ng-template #optionTemplate1 let-option="option">
                             <a href="javascript:void(0)" class="list-item">
@@ -120,8 +120,11 @@
         </div>
 
     </div>
-    <div class="col-md-4">
-
+    <div class="col-sm-4">
+        <div class="text-right mb-3">
+            <p>Amount Received</p>
+            <h2 class="font-26 bold mt-05">Rs. 0.00</h2>
+        </div>
     </div>
 </div>
 
@@ -131,7 +134,7 @@
         <div class="pull-right pr updateMode">
             <button class="btn btn-danger d-inline-block v-align-middle" type="button">Clear </button>
             <span class="d-inline-block v-align-middle relative">
-                <div class="btn-group dropup" dropdown="">
+                <div class="btn-group dropup" dropdown [dropup]="isDropup">
                     <button class="btn btn-default generateInvoie" type="button" >Generate  Sales
                     </button>
                 <button aria-controls="dropdown-split" id="button-basic" class="btn btn-default dropdown-toggle dropdown-toggle-split"  dropdown-toggle dropdownToggle type="button">

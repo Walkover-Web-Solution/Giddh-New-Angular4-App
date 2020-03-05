@@ -21,14 +21,14 @@
                 </thead>
                 <tbody *ngIf="vatReportTransactions.results && vatReportTransactions.results.length > 0">
                     <tr *ngFor="let item of vatReportTransactions.results; let i = index;">
-                        <td>{{ item.voucherDate }}</td>
-                        <td><a href="javascript:;" (click)="onSelectInvoice(item)">{{ (item.voucherNumber) ? item.voucherNumber : '-' }}</a></td>
-                        <td>{{ item.customerName }}</td>
+                        <td>{{ (item.voucherDate) ? item.voucherDate : '-' }}</td>
+                        <td><a href="javascript:;" [ngClass]="{'noclick': !item.voucherNumber}" (click)="onSelectInvoice(item)">{{ (item.voucherNumber) ? item.voucherNumber : '-' }}</a></td>
+                        <td>{{ (item.customerName) ? item.customerName : '-' }}</td>
                         <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ item.taxableAmount | giddhCurrency }}</td>
                         <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ item.vatAmount | giddhCurrency }}</td>
-                        <td>{{ item.reverseCharge }}</td>
-                        <td>{{ item.trnNumber }}</td>
-                        <td>{{ item.placeOfSupply }}</td>
+                        <td>{{ (item.reverseCharge) ? item.reverseCharge : '-' }}</td>
+                        <td>{{ (item.trnNumber) ? item.trnNumber : '-' }}</td>
+                        <td>{{ (item.placeOfSupply) ? item.placeOfSupply : '-' }}</td>
                     </tr>
                 </tbody>
                 <tbody *ngIf="!vatReportTransactions || !vatReportTransactions.results || vatReportTransactions.results.length === 0">

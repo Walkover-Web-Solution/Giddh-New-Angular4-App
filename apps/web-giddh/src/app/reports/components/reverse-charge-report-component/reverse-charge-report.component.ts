@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { ReverseChargeReportRequest } from '../../../models/api-models/ReverseCharge';
+import { ReverseChargeReportGetRequest, ReverseChargeReportPostRequest } from '../../../models/api-models/ReverseCharge';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select, createSelector } from '@ngrx/store';
@@ -30,13 +30,15 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public activeCompanyUniqueName$: Observable<string>;
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public reverseChargeReportRequest: ReverseChargeReportRequest = {
+    public reverseChargeReportGetRequest: ReverseChargeReportGetRequest = {
         from: '',
         to: '',
         sort: '',
         sortBy: '',
         page: 1,
-        count: PAGINATION_LIMIT,
+        count: PAGINATION_LIMIT
+    };
+    public reverseChargeReportPostRequest: ReverseChargeReportPostRequest = {
         supplierName: '',
         invoiceNumber: '',
         supplierCountry: '',
@@ -49,6 +51,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public bsConfig: Partial<BsDaterangepickerConfig> = { showWeekNumbers: false, dateInputFormat: "DD-MM-YYYY", rangeInputFormat: "DD-MM-YYYY" };
     public universalDate$: Observable<any>;
     public datePicker: any[] = [];
+    public universalDate: any[] = [];
 
     constructor(private store: Store<AppState>, private toasty: ToasterService, private cdRef: ChangeDetectorRef, private reverseChargeService: ReverseChargeService, private router: Router, private generalActions: GeneralActions) {
         this.setCurrentPageTitle();
@@ -78,9 +81,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
 
         this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
-                if(this.reverseChargeReportRequest.from !== moment(universalDate[0]).format(GIDDH_DATE_FORMAT) || this.reverseChargeReportRequest.to !== moment(universalDate[1]).format(GIDDH_DATE_FORMAT)) {
-                    this.datePicker = [moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(), moment(universalDate[1], GIDDH_DATE_FORMAT).toDate()];
+                this.universalDate = _.cloneDeep(dateObj);
+                if (this.reverseChargeReportGetRequest.from !== moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.reverseChargeReportGetRequest.to !== moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT)) {
+                    this.datePicker = [moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(), moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate()];
                 }
             }
         })).pipe(takeUntil(this.destroyed$)).subscribe();
@@ -123,9 +126,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public pageChanged(event: any): void {
-        if (this.reverseChargeReportRequest.page != event.page) {
+        if (this.reverseChargeReportGetRequest.page != event.page) {
             this.reverseChargeReportResults.results = [];
-            this.reverseChargeReportRequest.page = event.page;
+            this.reverseChargeReportGetRequest.page = event.page;
             this.getReverseChargeReport(false);
         }
     }
@@ -137,16 +140,16 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public getReverseChargeReport(resetPage: boolean): void {
-        if (this.activeCompany && this.reverseChargeReportRequest.from && this.reverseChargeReportRequest.to && !this.isLoading) {
+        if (this.activeCompany && this.reverseChargeReportGetRequest.from && this.reverseChargeReportGetRequest.to) {
             this.isLoading = true;
 
             if (resetPage) {
-                this.reverseChargeReportRequest.page = 1;
+                this.reverseChargeReportGetRequest.page = 1;
             }
 
             this.reverseChargeReportResults = [];
 
-            this.reverseChargeService.getReverseChargeReport(this.activeCompany.uniqueName, this.reverseChargeReportRequest).subscribe((res) => {
+            this.reverseChargeService.getReverseChargeReport(this.activeCompany.uniqueName, this.reverseChargeReportGetRequest, this.reverseChargeReportPostRequest).subscribe((res) => {
                 if (res.status === 'success') {
                     this.reverseChargeReportResults = res.body;
                     this.cdRef.detectChanges();
@@ -182,14 +185,14 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public sortReverseChargeList(sortBy): void {
         let sort = "asc";
 
-        if (this.reverseChargeReportRequest.sortBy === sortBy) {
-            sort = (this.reverseChargeReportRequest.sort === "asc") ? "desc" : "asc";
+        if (this.reverseChargeReportGetRequest.sortBy === sortBy) {
+            sort = (this.reverseChargeReportGetRequest.sort === "asc") ? "desc" : "asc";
         } else {
             sort = "asc";
         }
 
-        this.reverseChargeReportRequest.sort = sort;
-        this.reverseChargeReportRequest.sortBy = sortBy;
+        this.reverseChargeReportGetRequest.sort = sort;
+        this.reverseChargeReportGetRequest.sortBy = sortBy;
         this.getReverseChargeReport(true);
     }
 
@@ -201,8 +204,8 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      */
     public changeFilterDate(date): void {
         if (date) {
-            this.reverseChargeReportRequest.from = moment(date[0]).format(GIDDH_DATE_FORMAT);
-            this.reverseChargeReportRequest.to = moment(date[1]).format(GIDDH_DATE_FORMAT);
+            this.reverseChargeReportGetRequest.from = moment(date[0]).format(GIDDH_DATE_FORMAT);
+            this.reverseChargeReportGetRequest.to = moment(date[1]).format(GIDDH_DATE_FORMAT);
             this.getReverseChargeReport(true);
         }
     }
@@ -214,7 +217,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public changeVoucherType(voucherType: string): void {
-        this.reverseChargeReportRequest.voucherType = voucherType;
+        this.reverseChargeReportPostRequest.voucherType = voucherType;
         this.getReverseChargeReport(true);
     }
 
@@ -228,5 +231,42 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         currentPageObj.name = "Reports > Reverse Charge";
         currentPageObj.url = this.router.url;
         this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
+    }
+
+    /**
+     * This function is used to check if filters are applied
+     *
+     * @returns {boolean}
+     * @memberof ReverseChargeReport
+     */
+    public checkIfFiltersApplied(): boolean {
+        if(this.reverseChargeReportPostRequest.invoiceNumber || this.reverseChargeReportPostRequest.supplierCountry || this.reverseChargeReportPostRequest.supplierName || this.reverseChargeReportPostRequest.voucherType || this.reverseChargeReportGetRequest.from !== moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.reverseChargeReportGetRequest.to !== moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * This function is used to reset filters
+     *
+     * @memberof ReverseChargeReport
+     */
+    public resetFilters(): void {
+        this.reverseChargeReportPostRequest = {
+            supplierName: '',
+            invoiceNumber: '',
+            supplierCountry: '',
+            voucherType: ''
+        };
+
+        this.reverseChargeReportGetRequest.sort = "";
+        this.reverseChargeReportGetRequest.sortBy = "";
+
+        if(this.reverseChargeReportGetRequest.from !== moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.reverseChargeReportGetRequest.to !== moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT)) {
+            this.datePicker = [moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(), moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate()];
+        } else {
+            this.getReverseChargeReport(true);
+        }
     }
 }
