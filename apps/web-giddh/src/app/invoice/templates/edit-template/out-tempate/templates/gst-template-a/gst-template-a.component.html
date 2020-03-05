@@ -236,7 +236,7 @@
                             </th>
                             <th *ngIf="fieldsAndVisibility.table.item?.display || fieldsAndVisibility.table.date?.display"
                                 class="text-left " [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">
-                                {{(fieldsAndVisibility.table.item?.display && fieldsAndVisibility.table.item?.label?.length > 0) ? fieldsAndVisibility.table.item?.label : (fieldsAndVisibility.table.date?.display && fieldsAndVisibility.table.date?.label?.length > 0) ? fieldsAndVisibility.table.date?.label : 'Item'}}
+                                {{(fieldsAndVisibility.table.item?.display && fieldsAndVisibility.table.item?.label?.length > 0) ? fieldsAndVisibility.table.item?.label : (fieldsAndVisibility.table.date?.display && fieldsAndVisibility.table.date?.label?.length > 0) ? fieldsAndVisibility.table.date?.label : (fieldsAndVisibility.table.item?.display) ? 'Item' : 'Date'}}
                             </th>
                             <th *ngIf="fieldsAndVisibility.table.hsnSac?.display " class="text-right "
                                 [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">

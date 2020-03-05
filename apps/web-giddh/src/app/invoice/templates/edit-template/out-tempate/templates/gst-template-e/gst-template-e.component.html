@@ -124,7 +124,7 @@
                         {{(fieldsAndVisibility.table.sNo?.label?.length > 0) ? fieldsAndVisibility.table.sNo?.label : 'S No'}}
                     </th>
                     <th *ngIf="fieldsAndVisibility.table.item?.display || fieldsAndVisibility.table.date?.display" class="text-left">
-                            {{(fieldsAndVisibility.table.item?.display && fieldsAndVisibility.table.item?.label?.length > 0) ? fieldsAndVisibility.table.item?.label : (fieldsAndVisibility.table.date?.display && fieldsAndVisibility.table.date?.label?.length > 0) ? fieldsAndVisibility.table.date?.label : 'Item'}}
+                            {{(fieldsAndVisibility.table.item?.display && fieldsAndVisibility.table.item?.label?.length > 0) ? fieldsAndVisibility.table.item?.label : (fieldsAndVisibility.table.date?.display && fieldsAndVisibility.table.date?.label?.length > 0) ? fieldsAndVisibility.table.date?.label : (fieldsAndVisibility.table.item?.display) ? 'Item' : 'Date'}}
                     </th>
                     <th [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right">
                         {{(fieldsAndVisibility.table.hsnSac?.label?.length > 0) ? fieldsAndVisibility.table.hsnSac?.label : 'HSN/SAC'}}
