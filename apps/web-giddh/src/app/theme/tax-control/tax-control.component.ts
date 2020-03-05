@@ -57,7 +57,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public customTaxTypesForTaxFilter: string[] = [];
     @Input() public exceptTaxTypes: string[] = [];
     @Input() public allowedSelection: number = 0;
-    @Input() public allowedSelectionOfAType: Array<{ type: string[], count: number }>;
+    @Input() public allowedSelectionOfAType: { type: string[], count: number };
     @Input() public maskInput: string;
     @Input() public prefixInput: string;
     @Input() public suffixInput: string;
@@ -195,20 +195,20 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             }
         }
 
-        if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.length) {
-            this.allowedSelectionOfAType.forEach(ast => {
-                let selectedTaxes = this.taxRenderData.filter(f => f.isChecked).filter(t => ast.type.includes(t.type));
+        if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.type.length) {
+            this.allowedSelectionOfAType.type.forEach(taxType => {
+                let selectedTaxes = this.taxRenderData.filter(appliedTaxes => (appliedTaxes.isChecked && taxType === appliedTaxes.type));
 
-                if (selectedTaxes.length >= ast.count) {
+                if (selectedTaxes.length >= this.allowedSelectionOfAType.count) {
                     this.taxRenderData.map((m => {
-                        if (ast.type.includes(m.type) && !m.isChecked) {
+                        if (taxType === m.type && !m.isChecked) {
                             m.isDisabled = true;
                         }
                         return m;
                     }));
                 } else {
                     this.taxRenderData.map((m => {
-                        if (ast.type.includes(m.type) && m.isDisabled) {
+                        if (taxType === m.type && m.isDisabled) {
                             m.isDisabled = false;
                         }
                         return m;

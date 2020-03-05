@@ -862,7 +862,7 @@
                                     <td class="pos-rel dropdown-container item-tax" style="height:1px;">
                                         <div class="td_Wrapper">
                                             <div class="text-right" style="flex:1;">
-                                                <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="[{ type: ['GST', 'commongst', 'InputGST'], count:1 }]"
+                                                <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="allowedSelectionOfAType"
                                                     [showHeading]="false" [rootClass]="'salseInvoicetable'" (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)" (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat" [prefixInput]="invFormData.accountDetails.currencySymbol"
                                                     [suffixInput]="selectedSuffixForCurrency">
                                                 </tax-control>
@@ -1590,7 +1590,7 @@
                                     <label class="card-label text-right">Tax</label>
 
                                     <div class="text-right" style="flex:1;">
-                                        <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="[{ type: ['GST', 'commongst', 'InputGST'], count:1 }]"
+                                        <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="allowedSelectionOfAType"
                                             [showHeading]="false" [rootClass]="'salseInvoicetable'" (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)" (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat" [prefixInput]="invFormData.accountDetails.currencySymbol"
                                             [suffixInput]="selectedSuffixForCurrency">
                                         </tax-control>
