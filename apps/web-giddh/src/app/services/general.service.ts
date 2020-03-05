@@ -292,4 +292,18 @@ export class GeneralService {
             return value.replace(/\w\S*/g, (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase());
         }
     }
+    /**
+     * Trim string allow only alphanumeric string
+     *
+     * @param {string} value String that need to be trim by special characters
+     * @returns {string} Trimed value
+     * @memberof GeneralService
+     */
+    public allowAlphanumericChar(value: string): string {
+        if (value) {
+            return value.replace(/[^a-zA-Z0-9]/g, '');
+        } else {
+            return '';
+        }
+    }
 }

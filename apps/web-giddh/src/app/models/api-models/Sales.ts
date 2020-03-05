@@ -215,6 +215,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public hsnOrSac: string;
     public hsnNumber: string;
     public sacNumber: string;
+    public sacNumberExists?: boolean;
     public description: string;
     public quantity: number;
     public stockUnit: string;
@@ -522,6 +523,8 @@ export class VoucherClass {
     public depositEntryToBeUpdated?: SalesEntryClass;
     public depositAccountUniqueName: string;
     public templateUniqueName?: string;
+    public touristSchemeApplicable?: boolean;
+    public passportNumber?: string;
     public number?: string;
     public subVoucher?: string;
 

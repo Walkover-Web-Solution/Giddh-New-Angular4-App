@@ -1,6 +1,6 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren, TemplateRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { BsDatepickerDirective, BsModalRef, ModalDirective, ModalOptions, PopoverDirective } from 'ngx-bootstrap';
+import { BsDatepickerDirective, BsModalRef, ModalDirective, ModalOptions, PopoverDirective, BsModalService } from 'ngx-bootstrap';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { SalesActions } from '../actions/sales/sales.action';
@@ -239,7 +239,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public calculatedRoundOff: number = 0;
     public selectedVoucherType: string = 'sales';
-    // modals related
+    public tempDateParams: any = {};
     public modalConfig: ModalOptions = {
         animated: true,
         keyboard: false,
@@ -280,6 +280,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public fetchedConvertedRate: number = 0;
     public isAddBulkItemInProcess: boolean = false;
     public modalRef: BsModalRef;
+    message: string;
+
     public exceptTaxTypes: string[];
     /** Stores warehouses for a company */
     public warehouses: Array<any>;
@@ -315,7 +317,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public showSwitchedCurr = false;
     public reverseExchangeRate: number;
     public originalReverseExchangeRate: number;
-    public countryCode: string = '';
+    /** to check is tourist scheme applicable(Note true if voucher type will be sales invoice)  */
+    public isTouristScheme: boolean = false;
+
 
     // private members
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -350,6 +354,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private purchaseRecordInvoiceDate: string = '';
     /** Purchase Record invoice number */
     private purchaseRecordInvoiceNumber: string = '';
+    /** Inventory Settings */
+    public inventorySettings: any;
+    public companyCountryCode: string = '';
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -361,9 +368,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     private get isPurchaseRecordContractBroken(): boolean {
         return (this.purchaseRecordCustomerUniqueName !== this.invFormData.voucherDetails.customerUniquename) ||
-        (this.purchaseRecordInvoiceDate !== moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT)) ||
-        (this.purchaseRecordTaxNumber !== this.invFormData.accountDetails.shippingDetails.gstNumber ||
-        (this.purchaseRecordInvoiceNumber !== this.invFormData.voucherDetails.voucherNumber));
+            (this.purchaseRecordInvoiceDate !== moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT)) ||
+            (this.purchaseRecordTaxNumber !== this.invFormData.accountDetails.shippingDetails.gstNumber ||
+                (this.purchaseRecordInvoiceNumber !== this.invFormData.voucherDetails.voucherNumber));
     }
 
     constructor(
@@ -392,8 +399,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private settingsUtilityService: SettingsUtilityService,
         private warehouseActions: WarehouseActions,
         private commonActions: CommonActions,
-        private purchaseRecordAction: PurchaseRecordActions
+        private purchaseRecordAction: PurchaseRecordActions,
+        private modalService: BsModalService
     ) {
+        this.getInventorySettings();
+
         this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.companyActions.getTax());
@@ -443,8 +453,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             // } else {
             //     this.showLoader = false;
             //     this._cdr.detectChanges();
-                // call focus in customer after loader hides because after loader hider ui re-renders it self
-                // this.focusInCustomerName();
+            // call focus in customer after loader hides because after loader hider ui re-renders it self
+            // this.focusInCustomerName();
             // }
         });
     }
@@ -499,7 +509,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }).pipe(takeUntil(this.destroyed$)).subscribe();
 
         // get user country from his profile
-        this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
+        this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
             await this.prepareCompanyCountryAndCurrencyFromProfile(profile);
         });
 
@@ -802,6 +812,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
 
                 // update mode because voucher details is available
+                /** results[1] :- get voucher details response */
                 if (results[0] && results[1]) {
                     let obj;
 
@@ -856,6 +867,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             }
                         } else {
                             obj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
+                        }
+                    }
+                    /** Tourist scheme added in case of sales invoice  */
+                    if (this.isSalesInvoice || this.isCashInvoice) {
+                        if (results[1] && results[1].touristSchemeApplicable) {
+                            obj.touristSchemeApplicable = results[1].touristSchemeApplicable;
+                            obj.passportNumber = results[1].passportNumber;
+                        } else {
+                            obj.touristSchemeApplicable = false;
+                            obj.passportNumber = '';
                         }
                     }
 
@@ -1132,7 +1153,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private async prepareCompanyCountryAndCurrencyFromProfile(profile) {
         if (profile) {
             this.customerCountryName = profile.country;
-
             this.showGstAndTrnUsingCountryName(profile.country);
 
             this.companyCurrency = profile.baseCurrency || 'INR';
@@ -1143,12 +1163,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile.countryCode) {
-                this.countryCode = profile.countryCode;
+                this.companyCountryCode = profile.countryCode;
             } else if (profile.countryV2 && profile.countryV2.alpha2CountryCode) {
-                this.countryCode = profile.countryV2.alpha2CountryCode;
+                this.companyCountryCode = profile.countryV2.alpha2CountryCode;
             }
             if (!this.isUpdateMode) {
-                await this.getUpdatedStateCodes(this.countryCode);
+                await this.getUpdatedStateCodes(this.companyCountryCode);
             }
         } else {
             this.customerCountryName = '';
@@ -1612,6 +1632,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             requestObject.account.shippingDetails.countryName = this.customerCountryName;
             requestObject.account.shippingDetails.stateCode = requestObject.account.shippingDetails.state.code;
             requestObject.account.shippingDetails.stateName = requestObject.account.shippingDetails.state.name;
+
+            /** Tourist scheme is applicable only for voucher type 'sales invoice' and 'Cash Invoice' and company country code 'AE'   */
+            if (this.isSalesInvoice || this.isCashInvoice) {
+                if (this.invFormData.touristSchemeApplicable) {
+                    requestObject.touristSchemeApplicable = this.invFormData.touristSchemeApplicable;
+                    requestObject.passportNumber = this.invFormData.passportNumber;
+                } else {
+                    requestObject.touristSchemeApplicable = false;
+                    requestObject.passportNumber = '';
+                }
+            }
         } else {
             requestObject = {
                 account: data.accountDetails,
@@ -2040,22 +2071,26 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.handleWarehouseVisibility();
             }
             txn.sacNumber = null;
+            txn.sacNumberExists = false;
             txn.hsnNumber = null;
-            if (txn.stockDetails && txn.stockDetails.hsnNumber) {
+
+            if (txn.stockDetails && txn.stockDetails.hsnNumber && this.inventorySettings && this.inventorySettings.manageInventory === true) {
                 txn.hsnNumber = txn.stockDetails.hsnNumber;
                 txn.hsnOrSac = 'hsn';
             }
-            if (txn.stockDetails && txn.stockDetails.sacNumber) {
+            if (txn.stockDetails && txn.stockDetails.sacNumber && this.inventorySettings && this.inventorySettings.manageInventory === false) {
                 txn.sacNumber = txn.stockDetails.sacNumber;
+                txn.sacNumberExists = true;
                 txn.hsnOrSac = 'sac';
             }
 
-            if (!o.stock && o.hsnNumber) {
+            if (!o.stock && o.hsnNumber && this.inventorySettings && this.inventorySettings.manageInventory === true) {
                 txn.hsnNumber = o.hsnNumber;
                 txn.hsnOrSac = 'hsn';
             }
-            if (!o.stock && o.sacNumber) {
+            if (!o.stock && o.sacNumber && this.inventorySettings && !this.inventorySettings.manageInventory && this.inventorySettings.manageInventory === false) {
                 txn.sacNumber = o.sacNumber;
+                txn.sacNumberExists = true;
                 txn.hsnOrSac = 'sac';
             }
 
@@ -2076,6 +2111,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             txn.total = null;
             txn.rate = null;
             txn.sacNumber = null;
+            txn.sacNumberExists = false;
             txn.taxableValue = 0;
             txn.applicableTaxes = [];
 
@@ -2103,6 +2139,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         txn.taxableValue = null;
         txn.sacNumber = null;
         txn.hsnNumber = null;
+        txn.sacNumberExists = false;
     }
 
     public noResultsForCustomer(e: boolean): void {
@@ -2201,14 +2238,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public removeTransaction(entryIdx: number) {
-        if (this.invFormData.entries.length > 1) {
-            if (this.activeIndx === entryIdx) {
-                this.activeIndx = null;
-            }
-            this.invFormData.entries = this.invFormData.entries.filter((entry, index) => entryIdx !== index);
-            this.calculateAffectedThingsFromOtherTaxChanges();
-        } else {
-            this._toasty.warningToast('Unable to delete a single transaction');
+        if (this.activeIndx === entryIdx) {
+            this.activeIndx = null;
+        }
+        this.invFormData.entries = cloneDeep(this.invFormData.entries.filter((entry, index) => entryIdx !== index));
+        this.calculateAffectedThingsFromOtherTaxChanges();
+        if (this.invFormData.entries.length === 0) {
+            this.addBlankRow(null);
         }
         this.handleWarehouseVisibility();
     }
@@ -2592,6 +2628,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 } as GenericRequestForGenerateSCD;
                 if (this.isCreditNote || this.isDebitNote) {
                     requestObject['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
+                }
+
+                /** Tourist scheme is applicable only for voucher type 'sales invoice' and 'cash invoice' and company country code 'AE'   */
+                if (this.isSalesInvoice || this.isCashInvoice) {
+                    if (this.invFormData.touristSchemeApplicable) {
+                        requestObject.touristSchemeApplicable = this.invFormData.touristSchemeApplicable;
+                        requestObject.passportNumber = this.invFormData.passportNumber;
+                    } else {
+                        requestObject.touristSchemeApplicable = false;
+                        requestObject.passportNumber = '';
+                    }
                 }
 
                 this.salesService.updateVoucherV4(<GenericRequestForGenerateSCD>this.updateData(requestObject, requestObject.voucher)).pipe(takeUntil(this.destroyed$))
@@ -2999,6 +3046,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 newTrxObj.stockDetails = trx.stockDetails;
                 newTrxObj.taxableValue = trx.taxableValue;
                 newTrxObj.hsnNumber = trx.hsnNumber;
+                newTrxObj.sacNumber = trx.sacNumber;
+                newTrxObj.sacNumberExists = (trx.sacNumber) ? true : false;
                 newTrxObj.isStockTxn = trx.isStockTxn;
                 newTrxObj.applicableTaxes = entry.taxList;
 
@@ -3283,6 +3332,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 salesTransactionItemClass.amount = t.amount.amountForAccount;
                 salesTransactionItemClass.hsnNumber = t.hsnNumber;
                 salesTransactionItemClass.sacNumber = t.sacNumber;
+                salesTransactionItemClass.sacNumberExists = (t.sacNumber) ? true : false;
                 salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName;
                 salesTransactionItemClass.description = entry.description;
                 salesTransactionItemClass.date = t.date;
@@ -3457,6 +3507,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.originalExchangeRate = this.exchangeRate;
         }
     }
+
+    openModal(adjustPayment: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(
+            adjustPayment,
+            Object.assign({}, { class: 'modal-lg' })
+        );
+    }
+    confirm(): void {
+        this.message = 'Confirmed!';
+        this.modalRef.hide();
+    }
+
+    decline(): void {
+        this.message = 'Declined!';
+        this.modalRef.hide();
+    }
+
 
     /**
      * get currency rate on voucher date changed
@@ -4022,4 +4089,41 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateTotalTaxSum();
         this._cdr.detectChanges();
     }
+
+    /**
+     * This function is used to get inventory settings from store
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public getInventorySettings(): void {
+        this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
+            if (settings && settings.companyInventorySettings) {
+                this.inventorySettings = settings.companyInventorySettings;
+            }
+        });
+    }
+
+    /**
+     * Toggle Tourist scheme checkbox then reset passport number
+     *
+     * @param {*} event Click event
+     * @memberof ProformaInvoiceComponent
+     */
+    public touristSchemeApplicableToggle(): void {
+        this.invFormData.passportNumber = '';
+    }
+
+    /**
+     *
+     *
+     * @param {*} event
+     * @memberof ProformaInvoiceComponent
+     */
+    public allowAlphanumericChar(event: any): void {
+        if (event && event.value) {
+            this.invFormData.passportNumber = this.generalService.allowAlphanumericChar(event.value)
+        }
+    }
+
 }
+

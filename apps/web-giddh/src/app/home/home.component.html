@@ -48,7 +48,7 @@
                 </div>
                 <!-- Debtors / Creditors table -->
                 <div class="col-xs-12" *ngIf="!hideallcharts">
-                    <cr-dr-list></cr-dr-list>
+                    <cr-dr-list [initializeDateWithUniversalDate]="true"></cr-dr-list>
                 </div>
             </div>
         </div>

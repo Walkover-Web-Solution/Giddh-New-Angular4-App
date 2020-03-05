@@ -166,7 +166,7 @@
                                         <span class="download-invoice-ledger "
                                             *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length> 0"
                                             [placement]="'left'" [containerClass]="'col-xs-3'"
-                                            tooltip="Download Invoice : {{vm.selectedLedger.voucherNumber}}"
+                                            tooltip="Download {{vm.selectedLedger.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{vm.selectedLedger.voucherNumber}}"
                                             (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
                                             <i class="glyphicon glyphicon-download pull-left"
                                                 style="font-size:15px;"></i>
@@ -335,7 +335,7 @@
                                         <span class="download-invoice-ledger"
                                             *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length > 0"
                                             [placement]="'left'" [containerClass]="'col-xs-3'"
-                                            tooltip="Download Invoice : {{vm.selectedLedger.voucherNumber}}"
+                                            tooltip="Download {{vm.selectedLedger.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{vm.selectedLedger.voucherNumber}}"
                                             (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
                                             <i class="glyphicon glyphicon-download pull-left"
                                                 style="font-size:15px;"></i>
@@ -416,7 +416,9 @@
                 <confirmation-modal [configuration]="rcmConfiguration" (buttonClicked)="handleRcmChange($event)"></confirmation-modal>
             </ng-template>
             <!-- reverse charge transction end  -->
-
+            <!--  tourist scheme template start      -->
+            <ng-container *ngTemplateOutlet="touristSchemeTemplate"></ng-container>
+            <!--        tourist scheme template end-->
             <!-- region amount and discount container -->
             <div class="clearfix">
                 <ng-container *ngIf="vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields">
@@ -970,3 +972,25 @@
 
 </ng-template>
 <!-- endregion -->
+<!-- Tourist scheme template block-->
+<ng-template #touristSchemeTemplate>
+    <div class="font-14 mb-1 d-flex align-items-center xs-d-block" *ngIf="isTouristSchemeApplicable">
+        <div class="mr-3 xs-mr-0 mb-1">
+            <div class="d-flex align-items-center">
+                <span class="pull-left">
+                        <input id="tourist-scheme" type="checkbox" name="touristSchemeApplicable" [(ngModel)]="vm.selectedLedger.touristSchemeApplicable" (ngModelChange)="touristSchemeApplicableToggle($event)">
+
+                    </span>
+                <span>Is this transaction applicable for Tourist Scheme?</span>
+            </div>
+        </div>
+
+        <div *ngIf="vm.selectedLedger.touristSchemeApplicable">
+            <div class="d-flex align-items-center justify-content-end ml-1 xs-justify-content-start">
+                <span class="nowrap">Passport Number  </span>
+                <input type="text" name="selectedLedger.passportNumber" placeholder="Passport Number" #passportNumber (blur)="allowAlphanumericChar(passportNumber)" (keypress)="allowAlphanumericChar(passportNumber)"  class="form-control width-115 ml-1" [(ngModel)]="vm.selectedLedger.passportNumber" />
+            </div>
+        </div>
+    </div>
+</ng-template>
+<!-- Tourist scheme template block end-->
