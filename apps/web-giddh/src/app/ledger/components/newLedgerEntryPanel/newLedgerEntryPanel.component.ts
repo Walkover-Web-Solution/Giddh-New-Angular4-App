@@ -23,7 +23,7 @@ import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Accoun
 import { BsDatepickerDirective, ModalDirective, PopoverDirective } from 'ngx-bootstrap';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
-import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, of } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
 import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../../common/confirmation-modal/confirmation-modal.interface';
@@ -112,7 +112,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public clickedOutsideEvent: EventEmitter<any> = new EventEmitter();
     @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
     @ViewChild('entryContent') public entryContent: ElementRef;
-    @ViewChild('sh') public sh: ShSelectComponent;
+    @ViewChild('voucherList') public voucherList: ShSelectComponent;
     @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
 
     @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
@@ -170,7 +170,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** List of available ITC */
     public availableItcList: Array<any> = AVAILABLE_ITC_LIST;
     /** True, if the voucher type needs to be cleared */
-    public clearVoucherType: IForceClear = { status: false };
+    public clearVoucherType: Observable<IForceClear> = of({ status: false });
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -253,8 +253,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     @HostListener('click', ['$event'])
     public clicked(e) {
-        if (this.sh && !this.sh.ele.nativeElement.contains(e.path[3])) {
-            this.sh.hide();
+        if (this.voucherList && !this.voucherList.ele.nativeElement.contains(e.path[3])) {
+            this.voucherList.hide();
         }
     }
 
@@ -302,7 +302,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         }
         if (changes.voucherTypeList && changes.voucherTypeList.previousValue !== changes.voucherTypeList.currentValue && !changes.voucherTypeList.firstChange) {
-            this.clearVoucherType = { status: true };
+            // Clear the old value of voucher type
+            this.clearVoucherType = of({ status: true });
+            setTimeout(() => {
+                if (this.voucherTypeList && this.voucherTypeList.length === 1) {
+                    this.blankLedger.voucherType = this.voucherTypeList[0].value;
+                }
+                this.detectChanges();
+            }, 200);
         }
     }
 
