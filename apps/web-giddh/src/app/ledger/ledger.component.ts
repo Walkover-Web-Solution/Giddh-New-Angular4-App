@@ -477,7 +477,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.workerService.workerUpdate$.pipe(takeUntil(this.destroyed$)).subscribe((response: WorkerMessage) => {
             if (response.data) {
-                this.voucherTypeList = response.data.map(voucher => ({label: voucher, value: voucher}));
+                this.voucherTypeList = response.data.map(voucher => ({label: this.generalService.toProperCase(voucher), value: voucher}));
             } else {
                 this.voucherTypeList = [];
             }
