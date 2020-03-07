@@ -27,6 +27,10 @@ export class LedgerUtilityService {
         } else {
             voucherList = [];
         }
+        if (voucherList.length === 0) {
+            // If no common voucher has been found then show the vouchers of current ledger
+            voucherList = currentLedgerApplicableVouchers;
+        }
         return voucherList;
     }
 
