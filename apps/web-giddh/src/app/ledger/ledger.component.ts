@@ -464,6 +464,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        if (typeof Worker !== 'undefined') {
+            this.workerService.initWorker();
+        }
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
         this.shouldShowItcSection = false;
@@ -475,13 +478,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.workerService.workerUpdate$.pipe(takeUntil(this.destroyed$)).subscribe((response: WorkerMessage) => {
-            if (response.data) {
-                this.voucherTypeList = response.data.map(voucher => ({label: this.generalService.toProperCase(voucher), value: voucher}));
-            } else {
-                this.voucherTypeList = [];
-            }
-        });
+        if (typeof Worker !== 'undefined') {
+            this.workerService.workerUpdate$.pipe(takeUntil(this.destroyed$)).subscribe((response: WorkerMessage) => {
+                if (response.operationType === WORKER_MODULES_OPERATIONS.LEDGER.VOUCHER_CALCULATION && response.data) {
+                    this.voucherTypeList = response.data.map(voucher => ({ label: this.generalService.toProperCase(voucher), value: voucher }));
+                } else {
+                    this.voucherTypeList = [];
+                }
+            });
+        }
 
         observableCombineLatest(this.universalDate$, this.route.params, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (!Array.isArray(resp[0])) {
@@ -1286,6 +1291,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this.store.dispatch(this._ledgerActions.ResetLedger());
+        if (typeof Worker !== 'undefined') {
+            this.workerService.terminateWorker();
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

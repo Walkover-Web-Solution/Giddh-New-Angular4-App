@@ -20,9 +20,7 @@ export class WorkerService {
     private workerMessageSubscription: Subscription;
 
     /** @ignore */
-    constructor() {
-        this.initWorker();
-    }
+    constructor() {}
 
     /**
      * Initializes the web worker

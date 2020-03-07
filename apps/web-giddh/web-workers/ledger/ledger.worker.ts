@@ -1,5 +1,5 @@
 import { WorkerMessage } from '../model/web-worker.class';
-import { WORKER_MODULES_OPERATIONS } from '../model/web-worker.constant';
+import { WORKER_MODULES_OPERATIONS, WORKER_MODULES } from '../model/web-worker.constant';
 
 export class LedgerIntensiveWorker {
 
@@ -50,7 +50,7 @@ export class LedgerIntensiveWorker {
             // If no common voucher has been found then show the vouchers of current ledger
             voucherList = currentLedgerApplicableVouchers;
         }
-        return new WorkerMessage('ledger', data.operationType, voucherList);
+        return new WorkerMessage(WORKER_MODULES.LEDGER, data.operationType, voucherList);
     }
 
     private static findVouchers(transactionType: string, parentGroups: Array<any>, voucherData: Array<any>, isCurrentLedgerAccount?: boolean): Array<string> {
