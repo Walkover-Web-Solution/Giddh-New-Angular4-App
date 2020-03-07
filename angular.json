@@ -516,6 +516,12 @@
                         }
                     }
                 },
+                "build-worker": {
+                    "builder": "@angular-devkit/build-webpack:webpack",
+                    "options": {
+                        "webpackConfig": "./webpack.webworker.config.js"
+                    }
+                },
                 "serve": {
                     "builder": "ngx-build-plus:dev-server",
                     "options": {
@@ -530,6 +536,12 @@
                         "prod": {
                             "browserTarget": "electron-giddh:build:prod"
                         }
+                    }
+                },
+                "serve-worker": {
+                    "builder": "@angular-devkit/build-webpack:webpack",
+                    "options": {
+                        "webpackConfig": "./webpack.webworker.config.js"
                     }
                 }
             }
