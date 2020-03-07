@@ -165,18 +165,7 @@
 
                                     <!-- SKU Code -->
                                     <div class="form-group col-xs-4">
-                                        <label>
-                                            <span
-                                                *ngIf="!editSKUlabel && !addStockForm.controls['skuCodeHeading'].value">SKU
-                                                Code</span>
-                                            <span
-                                                *ngIf="!editSKUlabel">{{addStockForm.controls['skuCodeHeading'].value}}</span>
-                                            <input type="text" placeholder="Enter" class="label-input"
-                                                *ngIf="editSKUlabel" formControlName="skuCodeHeading"
-                                                (blur)="editSKUlabel=!editSKUlabel">
-                                            <i *ngIf="!editSKUlabel" class="fa fa-pencil"
-                                                (click)="editSKUlabel=!editSKUlabel"></i>
-                                        </label>
+                                        <label>SKU Code</label>
                                         <input type="text" name="skuCode" class="form-control" maxlength="20"
                                             (keyup)="validateSKU($event)" formControlName="skuCode">
                                     </div>

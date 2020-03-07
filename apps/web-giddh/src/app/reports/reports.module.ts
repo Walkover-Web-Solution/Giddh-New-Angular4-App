@@ -3,6 +3,7 @@ import { ReportsRoutingModule } from './reports.routing.module';
 import { ReportsComponent } from './reports.component';
 import { ReportsDetailsComponent } from './components/report-details-components/report.details.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { CommonModule } from '@angular/common';
 import { Options } from 'highcharts';
 import { BsDropdownModule, DatepickerModule, TooltipModule, } from 'ngx-bootstrap';
@@ -25,6 +26,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { ReverseChargeReport } from './components/reverse-charge-report-component/reverse-charge-report.component';
 
 @NgModule({
     declarations: [
@@ -38,7 +40,8 @@ import { ClickOutsideModule } from 'ng-click-outside';
         ReportsDashboardComponent,
         PurchaseRegisterComponent,
         PurchaseRegisterTableComponent,
-        PurchaseRegisterExpandComponent
+        PurchaseRegisterExpandComponent,
+        ReverseChargeReport,
     ],
     exports: [
         ReportsComponent,
@@ -62,7 +65,8 @@ import { ClickOutsideModule } from 'ng-click-outside';
         AccountDetailModalModule,
         ReactiveFormsModule,
         ClickOutsideModule,
-        TooltipModule
+        TooltipModule,
+        ModalModule.forRoot(),
     ]
 })
 
