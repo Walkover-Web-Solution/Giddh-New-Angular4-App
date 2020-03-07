@@ -24,19 +24,30 @@
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label for="name">Adjustment Voucher {{entryIdx}}<span class="text-danger">*</span></label>
-                        <sh-select [class.error-box]="entry.dueAmount.amountForAccount > 0 && !entry.voucherNumber" class="text-left dropdown-arrow" name="uniqueName_{{entryIdx}}" [placeholder]="'Select Voucher'" [(ngModel)]="entryIdx" (selected)="selectVoucher($event, entry, entryIdx)"
-                            [options]="adjustVoucherOptions" [notFoundLink]="false" [multiple]="false">
-                        </sh-select>
+                        <div [class.error-box]="entry.uniqueName === ''">
+                            <sh-select class="text-left dropdown-arrow" name="uniqueName" defaultValue="{{entry.voucherNumber}}" required [placeholder]="'Select Voucher'" [(ngModel)]="entry.uniqueName" (selected)="selectVoucher($event, entry, entryIdx);" [options]="adjustVoucherOptions"
+                                [notFoundLink]="true" [multiple]="false">
+                                <ng-template #optionTemplate let-option="option">
+                                    <a href="javascript:void(0)" class="list-item">
+                                        <div class="item">{{option.label}}</div>
+                                        <div class="item_unq">
+                                            <p class="font-12 text-gray mb-0">(Dated: {{option.additional.voucherDate}})</p>
+                                            <p class="font-12 text-gray mb-0">(Amount: {{currencySymbol}}{{option.additional.dueAmount.amountForAccount}})</p>
+                                        </div>
+                                    </a>
+                                </ng-template>
+                            </sh-select>
+                        </div>
                     </div>
                 </div>
 
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label for="amount_{{entryIdx}}">Amount<span class="text-danger">* </span> <span class="text-light">
-                                (Inclusive Tax)</span></label>
+                                (Inclusive Tax){{invoiceFormDetails.accountDetails.currencySymbol}}</span></label>
                         <!-- decimalDigitsDirective -->
-                        <input id="amount_{{entryIdx}}" [class.error-box]="entry.dueAmount.amountForAccount === 0" decimalDigitsDirective type="text" class="form-control" placeholder="Enter Amount" name="dueAmount.amountForAccount_{{entryIdx}}" [(ngModel)]="entry.dueAmount.amountForAccount"
-                            (ngModelChange)="calculateTax(entry, entryIdx )">
+                        <input id="amount_{{entryIdx}}" [class.error-box]="entry.dueAmount.amountForAccount === 0" required decimalDigitsDirective type="text" class="form-control" placeholder="Enter Amount" name="dueAmount.amountForAccount_{{entryIdx}}" [(ngModel)]="entry.dueAmount.amountForAccount"
+                            (ngModelChange)="calculateTax(entry, entryIdx )" [prefix]="currencySymbol" [mask]="inputMaskFormat">
                     </div>
                 </div>
                 <div class="col-sm-3">
@@ -63,13 +74,13 @@
                 <div class="col-md-8 col-sm-8 col-xs-7">
                     <span class="pd0 mr-2 d-inline-block">
                         <input class="radio-custom cp ml0" type="radio" id="deductedNo" name="isTaxDeducted"
-                            [value]="false" [(ngModel)]="isTaxDeducted" />
+                            [value]="false" [(ngModel)]="isTaxDeducted" (ngModelChange)="isTdsSelected($event )" />
                         <label for="deductedNo" class="radio-custom-label">No</label>
                     </span>
 
                     <span class="pd0 mr-2 d-inline-block">
                         <input class="radio-custom cp ml0" type="radio" name="isTaxDeducted" id="deductedYes"
-                            [value]="true" [(ngModel)]="isTaxDeducted" />
+                            [value]="true" [(ngModel)]="isTaxDeducted" (ngModelChange)="isTdsSelected($event )" />
                         <label for="deductedYes" class="radio-custom-label">Yes</label>
                     </span>
                 </div>
@@ -81,15 +92,18 @@
                         <div class="form-group clearfix">
                             <label class="col-md-2">TDS</label>
                             <div class="col-md-3">
-                                <sh-select class="text-left dropdown-arrow" name="tdsTaxUniqueName" [placeholder]="'Select Tax'" [options]="availableTdsTaxes" (selected)="tdsTaxSelected($event)" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33">
-                                </sh-select>
+                                <div #tdsTypeBox>
+                                    <sh-select class="text-left dropdown-arrow" name="tdsTaxUniqueName" [placeholder]="'Select Tax'" [(ngModel)]="adjustVoucherForm.tdsTaxUniqueName" [options]="availableTdsTaxes" (selected)="tdsTaxSelected($event)" [notFoundLink]="false" [multiple]="false"
+                                        [ItemHeight]="33">
+                                    </sh-select>
+                                </div>
                             </div>
                         </div>
 
                         <div class="form-group clearfix">
-                            <label class="col-md-2">Amount</label>
+                            <label class="col-md-2">Amount <span class="text-danger">* </span></label>
                             <div class="col-md-3">
-                                <input type="text" class="form-control" name="tdsAmount" [(ngModel)]="tdsAmount" placeholder="Amount">
+                                <input type="text" class="form-control" required #tdsAmountBox name="tdsAmount.amountForAccount" (ngModelChange)="changeTdsAmount($event)" [(ngModel)]="adjustVoucherForm.tdsAmount.amountForAccount" placeholder="Amount">
                             </div>
                         </div>
                     </div>

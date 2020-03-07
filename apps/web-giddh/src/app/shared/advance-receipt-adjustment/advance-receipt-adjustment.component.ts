@@ -1,16 +1,17 @@
-import { Component, OnInit, OnChanges, SimpleChanges, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges, EventEmitter, Output, Input, ViewChild, ElementRef } from '@angular/core';
 import { AdvanceReceiptAdjustment, AdjustAdvancePaymentModal, AdvanceReceiptRequest, Adjustment } from '../../models/api-models/AdvanceReceiptsAdjust';
 import { GIDDH_DATE_FORMAT_UI } from '../helpers/defaultDateFormat';
 import * as moment from 'moment/moment';
 import { SalesService } from '../../services/sales.service';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { AppState } from '../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { NgForOf } from '@angular/common';
 import { NgForm } from '@angular/forms';
 import { copyStyles } from '@angular/animations/browser/src/util';
+import { ToasterService } from '../../services/toaster.service';
 
 
 @Component({
@@ -23,12 +24,24 @@ import { copyStyles } from '@angular/animations/browser/src/util';
 
 
 export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
-    public tempDateParams: {};
+
+    public newAdjustVoucherOptions: IOption[];
     public adjustVoucherOptions: IOption[];
     public allAdvanceReceiptResponse: Adjustment[] = [];
     public isTaxDeducted: boolean = false;
     public availableTdsTaxes: IOption[] = [];
     public tdsAmount: number;
+    public balanceDueAmount: number = 0;
+    public offset: number = 0;
+    public companyCurrency: string;
+    public baseCurrencySymbol: string;
+    public currencySymbol: string;
+    public inputMaskFormat: string = '';
+
+    @ViewChild('tdsTypeBox') public tdsTypeBox: ElementRef;
+    @ViewChild('tdsAmountBox') public tdsAmountBox: ElementRef;
+
+
     public adjustPayment: AdjustAdvancePaymentModal = {
         customerName: '',
         customerUniquename: '',
@@ -39,6 +52,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
         gstTaxesTotal: 0,
         subTotal: 0,
         totalTaxableValue: 0,
+        totalAdjustedAmount: 0
     }
 
     public adjustVoucherForm: AdvanceReceiptAdjustment;
@@ -48,25 +62,44 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
     };
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     @Input() public invoiceFormDetails;
+    @Input() public advanceReceiptAdjustmentUpdatedData: AdvanceReceiptAdjustment;
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
-    constructor(private store: Store<AppState>, private salesService: SalesService) {
+    @Output() public submitClicked: EventEmitter<{ adjustVoucherData: AdvanceReceiptAdjustment, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
+
+    constructor(private store: Store<AppState>, private salesService: SalesService, private toaster: ToasterService) {
 
     }
     ngOnInit() {
         this.adjustVoucherForm = new AdvanceReceiptAdjustment();
-        this.adjustVoucherForm.adjustments = [
-            {
-                voucherNumber: '',
-                dueAmount: {
-                    amountForAccount: 0,
-                    amountForCompany: 0
-                },
-                voucherDate: '',
-                taxRate: 0,
-                uniqueName: '',
-                taxUniqueName: '',
+
+        this.adjustVoucherForm = {
+            tdsTaxUniqueName: '',
+            tdsAmount: {
+                amountForAccount: null
+            },
+            description: '',
+            adjustments: [
+                {
+                    voucherNumber: '',
+                    dueAmount: {
+                        amountForAccount: null,
+                        amountForCompany: null
+                    },
+                    voucherDate: '',
+                    taxRate: 0,
+                    uniqueName: '',
+                    taxUniqueName: '',
+                }
+            ]
+        };
+         if (this.advanceReceiptAdjustmentUpdatedData) {
+            this.adjustVoucherForm = this.advanceReceiptAdjustmentUpdatedData;
+            if(this.advanceReceiptAdjustmentUpdatedData && this.advanceReceiptAdjustmentUpdatedData.adjustments && this.advanceReceiptAdjustmentUpdatedData.adjustments.length && this.advanceReceiptAdjustmentUpdatedData.tdsTaxUniqueName) {
+              this.isTaxDeducted = true;
+            } else {
+                this.isTaxDeducted = false;
             }
-        ];
+        }
         this.assignVoucherDetails();
         this.getAllAdvanceReceipts();
         this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
@@ -77,17 +110,26 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
                         this.availableTdsTaxes.push({ value: item.uniqueName, label: item.name, additional: item })
                     }
                 });
-                console.log(obj);
-                console.log(this.availableTdsTaxes);
-
             }
         });
+        this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
+            this.companyCurrency = profile.baseCurrency || 'INR';
+            this.baseCurrencySymbol = profile.baseCurrencySymbol;
+            this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+        });
+
+        if (this.invoiceFormDetails && this.invoiceFormDetails.accountDetails && this.invoiceFormDetails.accountDetails.currencySymbol) {
+            this.currencySymbol = this.invoiceFormDetails.accountDetails.currencySymbol;
+        }
     }
     public onCancel() {
         this.closeModelEvent.emit(true);
     }
-    public ngOnChanges(s: SimpleChanges) {
-        console.log('advance reciept comp', this.invoiceFormDetails)
+    public ngOnChanges(simplechange: SimpleChanges) {
+        console.log(' simplechange===', this.invoiceFormDetails, simplechange);
+        console.log(' simplechange advanceRece Update dData===', this.advanceReceiptAdjustmentUpdatedData);
+
+        console.log(' update adjustVoucherForm', this.adjustVoucherForm);
 
     }
 
@@ -102,11 +144,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
             subTotal: this.invoiceFormDetails.voucherDetails.subTotal
 
         });
+        this.balanceDueAmount = this.invoiceFormDetails.voucherDetails.balanceDue;
+        this.offset = this.adjustPayment.balanceDue;
 
         // this.adjustPayment.balanceDue = this.invoiceFormDetails.voucherDetails.balanceDue;
         // this.adjustPayment.grandTotal = this.invoiceFormDetails.voucherDetails.grandTotal;
 
-        console.log('advance %%%%%%%', this.adjustPayment);
+        console.log('advance adjustPayment%%%%%%%', this.adjustPayment);
         console.log('invoiceFormDetails %%%%%%%', this.invoiceFormDetails)
 
 
@@ -128,12 +172,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
                         this.adjustVoucherOptions = [];
                         this.allAdvanceReceiptResponse.forEach(item => {
                             if (item) {
-
+                                item.voucherDate = item.voucherDate.replace(/-/g, '/');
+                                this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                             }
-                            this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                         });
+                        this.newAdjustVoucherOptions = [];
+                        this.newAdjustVoucherOptions = this.adjustVoucherOptions;
                     }
-                    console.log('options', this.adjustVoucherOptions);
                 }
             })
         }
@@ -145,7 +190,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public addNewBlankAdjustVoucherRow() {
-        this.adjustVoucherForm.adjustments.push(new Adjustment());
+        if (this.adjustPayment.balanceDue > 0) {
+            this.adjustVoucherForm.adjustments.push(new Adjustment());
+        } else {
+            this.toaster.errorToast('Adjust amount can\'t be greater than due amount');
+        }
     }
 
     /**
@@ -158,6 +207,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
         if (this.adjustVoucherForm.adjustments.length > 1) {
             this.adjustVoucherForm.adjustments.splice(index, 1);
         }
+        this.calculateBalanceDue();
     }
 
     /**
@@ -167,12 +217,36 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public tdsTaxSelected(event: IOption) {
-        console.log(event);
         if (event && event.additional && event.additional && event.additional.taxDetail && event.additional.taxDetail[0].taxValue && this.adjustPayment && this.adjustPayment.subTotal) {
             this.tdsAmount = this.calculateTdsAmount(Number(this.adjustPayment.subTotal), Number(event.additional.taxDetail[0].taxValue));
+            this.adjustVoucherForm.tdsTaxUniqueName = event.value;
+            this.adjustVoucherForm.tdsAmount.amountForAccount = this.tdsAmount;
+            this.changeTdsAmount(this.tdsAmount);
+            this.tdsTypeBox.nativeElement.classList.remove('error-box');
         }
     }
 
+    public changeTdsAmount(event) {
+        if (!Number(event)) {
+            this.tdsAmountBox.nativeElement.classList.add('error-box');
+        } else {
+            this.tdsAmountBox.nativeElement.classList.remove('error-box');
+        }
+    }
+
+    public isTdsSelected(event: any) {
+        if (event) {
+            this.adjustVoucherForm.tdsAmount = {
+                amountForAccount: null
+            };
+            this.adjustVoucherForm.tdsTaxUniqueName = '';
+            this.adjustVoucherForm.description = '';
+        } else {
+            delete this.adjustVoucherForm['tdsAmount'];
+            delete this.adjustVoucherForm['description'];
+            delete this.adjustVoucherForm['tdsTaxUniqueName'];
+        }
+    }
 
     /**
      *  Calculate inclusive tax amount based on tax rate
@@ -203,38 +277,107 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
         return Number(taxAmount.toFixed(2));
     }
 
+    /**
+     * To save advance receipt adjustment
+     *
+     * @param {NgForm} formData
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
     public saveAdjustAdvanceReceipt(formData: NgForm) {
-        console.log(formData.value, this.adjustVoucherForm);
+        if (this.isTaxDeducted) {
+            if (this.adjustVoucherForm.tdsTaxUniqueName === '') {
+                if (this.tdsTypeBox && this.tdsTypeBox.nativeElement)
+                    this.tdsTypeBox.nativeElement.classList.add('error-box');
+                return;
+            } else if (this.adjustVoucherForm.tdsAmount === '') {
+                if (this.tdsAmountBox && this.tdsAmountBox.nativeElement) {
+                    this.tdsAmountBox.nativeElement.classList.add('error-box');
+                    return;
+                }
+            }
+        } else {
+            delete this.adjustVoucherForm['tdsAmount'];
+            delete this.adjustVoucherForm['description'];
+            delete this.adjustVoucherForm['tdsTaxUniqueName'];
+        }
+        if (this.adjustPayment.balanceDue < 0) {
+            this.toaster.errorToast('Adjust amount can\'t be greater than due amount');
+            return;
+        }
+        if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length) {
+            this.adjustVoucherForm.adjustments.forEach(item => {
+                if (!item.voucherNumber) {
+                    this.toaster.errorToast('please select voucher');
+                    return;
+                } else if (!item.dueAmount.amountForAccount) {
+                    this.toaster.errorToast('please enter amount');
+                    return;
+                }
+            });
+        }
+        console.log('adjustVoucherForm', this.adjustVoucherForm);
+        console.log('form &&&', formData);
+        console.log('form &&&', formData.valid);
+
+        this.submitClicked.emit({
+            adjustVoucherData: this.adjustVoucherForm,
+            adjustPaymentData: this.adjustPayment
+        });
 
     }
 
-/**
- * Select voucher type
- *
- * @param {IOption} event
- * @param {number} index
- * @memberof AdvanceReceiptAdjustmentComponent
- */
-public selectVoucher(event: IOption, entry: Adjustment, index:number) {
-        if (event) {
+    /**
+     * Select voucher type
+     *
+     * @param {IOption} event
+     * @param {number} index
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    public selectVoucher(event: IOption, entry: Adjustment, index: number) {
+        if (event && entry) {
+            this.adjustVoucherOptions = this.newAdjustVoucherOptions;
             entry = event.additional;
-            this.adjustVoucherForm.adjustments.splice(index, 0, entry);
+            this.adjustVoucherForm.adjustments.forEach(
+                item => {
+                    if (item.voucherNumber === event.label.trim()) {
+                        let indexNo = this.adjustVoucherOptions.indexOf(event);
+                        this.adjustVoucherOptions.splice(indexNo, 1);
+                    }
+                });
+            this.adjustVoucherForm.adjustments.splice(index, 1, entry);
+            this.calculateTax(entry, index);
         }
     }
 
-/**
- * To calculate Tax field on amount change
- *
- * @param {Adjustment} entry Adjust amount entry
- * @param {number} index index number
- * @memberof AdvanceReceiptAdjustmentComponent
- */
-public calculateTax(entry: Adjustment, index: number) {
+    /**
+     * To calculate Tax field on amount change
+     *
+     * @param {Adjustment} entry Adjust amount entry
+     * @param {number} index index number
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    public calculateTax(entry: Adjustment, index: number) {
         if (entry && entry.taxRate && entry.dueAmount.amountForAccount) {
             let taxAmount = this.calculateInclusiveTaxAmount(entry.dueAmount.amountForAccount, entry.taxRate);
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = Number(taxAmount);
         } else {
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = 0.0;
+        }
+        this.calculateBalanceDue();
+    }
+
+    public calculateBalanceDue() {
+        if (this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length) {
+            this.adjustPayment.balanceDue = this.invoiceFormDetails.voucherDetails.balanceDue;
+            let totalAmount: number = 0;
+            this.adjustVoucherForm.adjustments.forEach(item => {
+
+                if (item && item.dueAmount && item.dueAmount.amountForAccount) {
+                    totalAmount += Number(item.dueAmount.amountForAccount);
+                }
+            });
+            this.adjustPayment.balanceDue = Number(this.adjustPayment.balanceDue) - Number(totalAmount);
+            this.adjustPayment.totalAdjustedAmount = Number(totalAmount);
         }
     }
 }

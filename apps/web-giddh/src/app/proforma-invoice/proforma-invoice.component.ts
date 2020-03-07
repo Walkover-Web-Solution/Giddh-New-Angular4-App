@@ -85,6 +85,7 @@ import { PurchaseRecordService } from '../services/purchase-record.service';
 import { CommonActions } from '../actions/common.actions';
 import { PurchaseRecordActions } from '../actions/purchase-record/purchase-record.action';
 import { AdvanceReceiptAdjustmentComponent } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.component';
+import { AdvanceReceiptAdjustment, AdjustAdvancePaymentModal } from '../models/api-models/AdvanceReceiptsAdjust';
 
 const THEAD_ARR_READONLY = [
     {
@@ -364,6 +365,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /** Inventory Settings */
     public inventorySettings: any;
     public companyCountryCode: string = '';
+    public advanceReceiptAdjustmentData: AdvanceReceiptAdjustment;
+    public adjustPaymentBalanceDueData: number = 0;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -1467,6 +1470,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public onSubmitInvoiceForm(form?: NgForm) {
+
+        if (this.isSalesInvoice && this.adjustPaymentBalanceDueData && this.invFormData && this.invFormData.voucherDetails) {
+            this.invFormData.voucherDetails.balanceDue = this.adjustPaymentBalanceDueData;
+        }
+
         let data: VoucherClass = _.cloneDeep(this.invFormData);
 
         // special check if gst no filed is visible then and only then check for gst validation
@@ -1649,6 +1657,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     requestObject.touristSchemeApplicable = false;
                     requestObject.passportNumber = '';
                 }
+            }
+            /** Advance receipts adjustment for sales invoice*/
+            if (this.isSalesInvoice && this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
+                requestObject.advanceReceiptAdjustment = this.advanceReceiptAdjustmentData;
+                requestObject.advanceReceiptAdjustment.adjustments.map(item => {
+                    if (item && item.voucherDate) {
+                        item.voucherDate = item.voucherDate.replace(/\//g, '-');
+                    }
+                });
             }
         } else {
             requestObject = {
@@ -4112,12 +4129,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     // Advance receipts adjustment start
 
-   public closeAdvanceReciiptModal(event) {
-       this.showAdvanceReceiptAdjust = false;
-       this.adjustPaymentModal.hide();
-   }
+    public closeAdvanceReciiptModal(event) {
+        this.showAdvanceReceiptAdjust = false;
+        this.adjustPaymentModal.hide();
+    }
 
-       openModal(adjustPayment: TemplateRef<any>) {
+    openModal(adjustPayment: TemplateRef<any>) {
         this.modalRef = this.modalService.show(
             adjustPayment,
             Object.assign({}, { class: 'modal-lg' })
@@ -4137,6 +4154,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     decline(): void {
         this.message = 'Declined!';
         this.modalRef.hide();
+    }
+
+    public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: AdvanceReceiptAdjustment, adjustPaymentData: AdjustAdvancePaymentModal }) {
+
+        this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
+        // this.invFormData.voucherDetails.balanceDue = advanceReceiptsAdjustEvent.adjustPaymentData.balanceDue;
+        this.adjustPaymentBalanceDueData = advanceReceiptsAdjustEvent.adjustPaymentData.balanceDue;
+        console.log('after adv', advanceReceiptsAdjustEvent);
     }
 
 }

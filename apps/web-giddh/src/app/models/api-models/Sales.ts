@@ -526,6 +526,7 @@ export class VoucherClass {
     public passportNumber?: string;
     public number?: string;
     public subVoucher?: string;
+    public advanceReceiptAdjustment?: any;
 
     constructor() {
         this.accountDetails = new AccountDetailsClass();

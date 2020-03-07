@@ -51,6 +51,7 @@ export class AdjustAdvancePaymentModal {
     gstTaxesTotal: number;
     subTotal: number;
     totalTaxableValue: number;
+    totalAdjustedAmount: number;
 }
 
 export class AdvanceReceiptRequest {

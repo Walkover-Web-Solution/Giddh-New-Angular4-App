@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgxMaskModule } from '../helpers/directives/ngx-mask';
 
 @NgModule({
     declarations: [AdvanceReceiptAdjustmentComponent],
@@ -16,10 +17,11 @@ import { CommonModule } from '@angular/common';
         CommonModule,
         LaddaModule,
         SelectModule,
-        SharedModule
+        SharedModule,
+        NgxMaskModule.forRoot()
     ],
     exports: [AdvanceReceiptAdjustmentComponent]
 })
-export class AdvanceReceiptAdjustmentModule{
+export class AdvanceReceiptAdjustmentModule {
 
 }
