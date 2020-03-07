@@ -25,7 +25,7 @@ import { ToasterService } from '../../services/toaster.service';
 
 export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
 
-    public newAdjustVoucherOptions: IOption[];
+    public newAdjustVoucherOptions: IOption[] = [];
     public adjustVoucherOptions: IOption[];
     public allAdvanceReceiptResponse: Adjustment[] = [];
     public isTaxDeducted: boolean = false;
@@ -92,10 +92,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
                 }
             ]
         };
-         if (this.advanceReceiptAdjustmentUpdatedData) {
+        if (this.advanceReceiptAdjustmentUpdatedData) {
             this.adjustVoucherForm = this.advanceReceiptAdjustmentUpdatedData;
-            if(this.advanceReceiptAdjustmentUpdatedData && this.advanceReceiptAdjustmentUpdatedData.adjustments && this.advanceReceiptAdjustmentUpdatedData.adjustments.length && this.advanceReceiptAdjustmentUpdatedData.tdsTaxUniqueName) {
-              this.isTaxDeducted = true;
+            if (this.advanceReceiptAdjustmentUpdatedData && this.advanceReceiptAdjustmentUpdatedData.adjustments && this.advanceReceiptAdjustmentUpdatedData.adjustments.length && this.advanceReceiptAdjustmentUpdatedData.tdsTaxUniqueName) {
+                this.isTaxDeducted = true;
             } else {
                 this.isTaxDeducted = false;
             }
@@ -174,10 +174,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
                             if (item) {
                                 item.voucherDate = item.voucherDate.replace(/-/g, '/');
                                 this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                                this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+
                             }
                         });
-                        this.newAdjustVoucherOptions = [];
-                        this.newAdjustVoucherOptions = this.adjustVoucherOptions;
                     }
                 }
             })
@@ -204,6 +204,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public deleteAdjustVoucherRow(index: number) {
+        this.adjustVoucherOptions.push({ value: this.adjustVoucherForm.adjustments[index].uniqueName, label: this.adjustVoucherForm.adjustments[index].voucherNumber, additional: this.adjustVoucherForm.adjustments[index] });
+        this.adjustVoucherOptions = _.uniqBy(this.adjustVoucherOptions, (item) => {
+            return item.value && item.label.trim();
+        });
         if (this.adjustVoucherForm.adjustments.length > 1) {
             this.adjustVoucherForm.adjustments.splice(index, 1);
         }
@@ -335,27 +339,71 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
      */
     public selectVoucher(event: IOption, entry: Adjustment, index: number) {
         if (event && entry) {
-            this.adjustVoucherOptions = this.newAdjustVoucherOptions;
+            // this.adjustVoucherOptions = this.newAdjustVoucherOptions;
             entry = event.additional;
-            this.adjustVoucherForm.adjustments.forEach(
-                item => {
-                    if (item.voucherNumber === event.label.trim()) {
-                        let indexNo = this.adjustVoucherOptions.indexOf(event);
-                        this.adjustVoucherOptions.splice(indexNo, 1);
-                    }
-                });
+            // this.adjustVoucherForm.adjustments.forEach(
+            //     item => {
+            //         if (item.voucherNumber === event.label.trim()) {
+            //             let indexNo = this.adjustVoucherOptions.indexOf(event);
+            //             this.adjustVoucherOptions.splice(indexNo, 1);
+            //         }
+            //     });
             this.adjustVoucherForm.adjustments.splice(index, 1, entry);
             this.calculateTax(entry, index);
         }
     }
 
     /**
-     * To calculate Tax field on amount change
+     *  To handle click event of selected voucher sh-select
      *
-     * @param {Adjustment} entry Adjust amount entry
-     * @param {number} index index number
      * @memberof AdvanceReceiptAdjustmentComponent
      */
+    public clickSelectVoucher(index: number) {
+        if (this.adjustVoucherForm.adjustments.length && this.adjustVoucherForm.adjustments[index] && this.adjustVoucherForm.adjustments[index].voucherNumber) {
+            this.adjustVoucherOptions.push({ value: this.adjustVoucherForm.adjustments[index].uniqueName, label: this.adjustVoucherForm.adjustments[index].voucherNumber, additional: this.adjustVoucherForm.adjustments[index] });
+        } {
+            this.adjustVoucherOptions = this.getAdvanceReceiptUnselectedVoucher();
+        }
+        this.adjustVoucherOptions = _.uniq(this.adjustVoucherOptions, (item) => {
+            return item.value;
+        });
+    }
+
+    /**
+     * To handle removed selected voucher from vouhcer array
+     *
+     * @returns {IOption[]}  return filtered selected voucher sh-select options
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    public getAdvanceReceiptUnselectedVoucher(): IOption[] {
+        let options: IOption[] = [];
+        let adjustVoucherAdjustment = [];
+        this.newAdjustVoucherOptions.forEach(item => {
+            options.push(item);
+        });
+        adjustVoucherAdjustment = this.adjustVoucherForm.adjustments;
+
+        for (let i = options.length - 1; i >= 0; i--) {
+            for (let j = 0; j < adjustVoucherAdjustment.length; j++) {
+                if (options[i] && (options[i].label.trim() === adjustVoucherAdjustment[j].voucherNumber.trim())) {
+                    options.splice(i, 1);
+                }
+
+            }
+        }
+        options.forEach(item => {
+            if (item) {
+                delete item['isHilighted'];
+            }
+        });
+
+        options = _.uniqBy(options, (item) => {
+            return item.value && item.label.trim();
+        });
+        return options;
+    }
+
+
     public calculateTax(entry: Adjustment, index: number) {
         if (entry && entry.taxRate && entry.dueAmount.amountForAccount) {
             let taxAmount = this.calculateInclusiveTaxAmount(entry.dueAmount.amountForAccount, entry.taxRate);

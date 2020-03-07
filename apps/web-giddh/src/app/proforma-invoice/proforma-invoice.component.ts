@@ -367,6 +367,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public companyCountryCode: string = '';
     public advanceReceiptAdjustmentData: AdvanceReceiptAdjustment;
     public adjustPaymentBalanceDueData: number = 0;
+    public isAdjustAmount = false;
+     public adjustPaymentData: AdjustAdvancePaymentModal = {
+        customerName: '',
+        customerUniquename: '',
+        voucherDate: '',
+        balanceDue: '',
+        dueDate: '',
+        grandTotal: '',
+        gstTaxesTotal: 0,
+        subTotal: 0,
+        totalTaxableValue: 0,
+        totalAdjustedAmount: 0
+    }
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -4125,43 +4138,75 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-
-
     // Advance receipts adjustment start
 
-    public closeAdvanceReciiptModal(event) {
+/**
+ * To close advance reciipt modal
+ *
+ * @memberof ProformaInvoiceComponent
+ */
+public closeAdvanceReciiptModal() {
         this.showAdvanceReceiptAdjust = false;
         this.adjustPaymentModal.hide();
+        if(this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments ) {
+         this.isAdjustAmount = this.advanceReceiptAdjustmentData.adjustments.length? true: false;
+        } else {
+         this.isAdjustAmount =  false;
+        }
     }
 
-    openModal(adjustPayment: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(
-            adjustPayment,
-            Object.assign({}, { class: 'modal-lg' })
-        );
-    }
 
+    /**
+     * To open advance receipts adjustment pop up
+     *
+     * @memberof ProformaInvoiceComponent
+     */
     public openAdjustPaymentModal() {
         this.showAdvanceReceiptAdjust = true;
+        this.isAdjustAmount = true;
         this.adjustPaymentModal.show();
     }
 
-    confirm(): void {
-        this.message = 'Confirmed!';
-        this.modalRef.hide();
+    /**
+     * Toggle advance receipts option
+     *
+     * @param {*} event True, if Advance receipt adjust option enabled
+     * @memberof ProformaInvoiceComponent
+     */
+    public clickAdjustAmount(event) {
+        if (event) {
+            this.isAdjustAmount = true;
+            this.openAdjustPaymentModal();
+        } else {
+            this.isAdjustAmount = false;
+            this.adjustPaymentBalanceDueData = 0;
+            this.advanceReceiptAdjustmentData = null;
+        }
     }
 
-    decline(): void {
-        this.message = 'Declined!';
-        this.modalRef.hide();
-    }
+    // confirm(): void {
+    //     this.message = 'Confirmed!';
+    //     this.modalRef.hide();
+    // }
 
+    // decline(): void {
+    //     this.message = 'Declined!';
+    //     this.modalRef.hide();
+    // }
+
+    /**
+     * To get all advance adjusted data
+     *
+     * @param {{ adjustVoucherData: AdvanceReceiptAdjustment, adjustPaymentData: AdjustAdvancePaymentModal }} advanceReceiptsAdjustEvent event that contains advance receipts adjusted data
+     * @memberof ProformaInvoiceComponent
+     */
     public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: AdvanceReceiptAdjustment, adjustPaymentData: AdjustAdvancePaymentModal }) {
 
         this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
         // this.invFormData.voucherDetails.balanceDue = advanceReceiptsAdjustEvent.adjustPaymentData.balanceDue;
         this.adjustPaymentBalanceDueData = advanceReceiptsAdjustEvent.adjustPaymentData.balanceDue;
-        console.log('after adv', advanceReceiptsAdjustEvent);
+        this.adjustPaymentData = advanceReceiptsAdjustEvent.adjustPaymentData;
+        console.log('Proforma get  advanceReceiptsAdjustEvent', advanceReceiptsAdjustEvent);
     }
 
 }

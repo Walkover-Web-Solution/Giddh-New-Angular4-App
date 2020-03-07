@@ -25,8 +25,8 @@
                     <div class="form-group">
                         <label for="name">Adjustment Voucher {{entryIdx}}<span class="text-danger">*</span></label>
                         <div [class.error-box]="entry.uniqueName === ''">
-                            <sh-select class="text-left dropdown-arrow" name="uniqueName" defaultValue="{{entry.voucherNumber}}" required [placeholder]="'Select Voucher'" [(ngModel)]="entry.uniqueName" (selected)="selectVoucher($event, entry, entryIdx);" [options]="adjustVoucherOptions"
-                                [notFoundLink]="true" [multiple]="false">
+                            <sh-select class="text-left dropdown-arrow" name="uniqueName" [defaultValue]="entry.voucherNumber" (click)="clickSelectVoucher(entryIdx);" required [placeholder]="'Select Voucher'" [(ngModel)]="entry.uniqueName" (selected)="selectVoucher($event, entry, entryIdx);"
+                                [options]="adjustVoucherOptions" [notFoundLink]="true" [multiple]="false">
                                 <ng-template #optionTemplate let-option="option">
                                     <a href="javascript:void(0)" class="list-item">
                                         <div class="item">{{option.label}}</div>
