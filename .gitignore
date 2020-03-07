@@ -168,3 +168,4 @@ xplat/**/*.ngsummary.json
 
 package-lock.json
 /apps/electron-giddh/src/
+apps/web-giddh/src/assets/worker.js
