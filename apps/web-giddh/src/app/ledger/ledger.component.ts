@@ -47,6 +47,10 @@ import { AdvanceSearchModelComponent } from './components/advance-search/advance
 import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
+import { WorkerService } from '../worker.service';
+import { WorkerMessage } from 'apps/web-giddh/web-workers/model/web-worker.class';
+import { WORKER_MODULES, WORKER_MODULES_OPERATIONS } from 'apps/web-giddh/web-workers/model/web-worker.constant';
+import { LedgerUtilityService } from './services/ledger-utility.service';
 
 @Component({
     selector: 'ledger',
@@ -188,6 +192,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public shouldShowRcmTaxableAmount: boolean;
     /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
     public shouldShowItcSection: boolean;
+    /** Stores the list of voucher type */
+    public voucherTypeList: IOption[];
     /** True if company country will UAE and accounts involve Debtors/ Cash / bank / Sales */
     public isTouristSchemeApplicable: boolean;
     public allowParentGroup = ['sales', 'cash', 'sundrydebtors', 'bankaccounts'];
@@ -195,12 +201,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
+    private voucherData: any = [];
 
     constructor(
         private store: Store<AppState>,
         private _ledgerActions: LedgerActions,
         private route: ActivatedRoute,
-        private _ledgerService: LedgerService,
+        private ledgerService: LedgerService,
+        private ledgerUtilityService: LedgerUtilityService,
         private _toaster: ToasterService,
         private _companyActions: CompanyActions,
         private _settingsTagActions: SettingsTagActions,
@@ -211,7 +219,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private _loaderService: LoaderService,
         private _settingsDiscountAction: SettingsDiscountActions,
         private warehouseActions: WarehouseActions,
-        private _cdRf: ChangeDetectorRef
+        private _cdRf: ChangeDetectorRef,
+        private workerService: WorkerService
     ) {
 
         this.lc = new LedgerVM();
@@ -408,11 +417,39 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
         // check if selected account category allows to show taxationDiscountBox in newEntry popup
         txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
+        this.calculateApplicableVoucherType(txn);
         this.handleRcmVisibility(txn);
         this.handleTaxableAmountVisibility(txn);
         this.newLedgerComponent.calculateTotal();
         this.newLedgerComponent.detectChanges();
         this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
+    }
+
+    /**
+     * Calculates the applicable voucher type based on the accounts involved
+     *
+     * @private
+     * @param {TransactionVM} transaction Currently selected transaction by the user
+     * @memberof LedgerComponent
+     */
+    private calculateApplicableVoucherType(transaction: TransactionVM): void {
+        if (this.voucherData && this.voucherData.length) {
+            const voucherRequest = {
+                currentLedgerAccount: _.cloneDeep(this.lc.activeAccount),
+                particularAccount: _.cloneDeep(transaction),
+                voucherData: this.voucherData
+            };
+            if (typeof Worker !== 'undefined') {
+                // Web worker is supported
+                console.log('Starting worker...');
+                const message = new WorkerMessage(WORKER_MODULES.LEDGER, WORKER_MODULES_OPERATIONS.LEDGER.VOUCHER_CALCULATION, voucherRequest);
+                this.workerService.doWork(message);
+            } else {
+                // Web worker not supported by the environment
+                this.voucherTypeList = this.ledgerUtilityService.calculateApplicableVoucherType(voucherRequest)
+                    .map(voucher => ({label: this.generalService.toProperCase(voucher), value: voucher}));
+            }
+        }
     }
 
     public hideEledgerWrap() {
@@ -427,10 +464,29 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        if (typeof Worker !== 'undefined') {
+            this.workerService.initWorker();
+        }
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
         this.shouldShowItcSection = false;
         this.shouldShowRcmTaxableAmount = false;
+
+        this.ledgerService.getAccountsWithVouchers().subscribe((response) => {
+            if (response && response.status === 'success' && response.body && response.body.length) {
+                this.voucherData = response.body;
+            }
+        });
+
+        if (typeof Worker !== 'undefined') {
+            this.workerService.workerUpdate$.pipe(takeUntil(this.destroyed$)).subscribe((response: WorkerMessage) => {
+                if (response.operationType === WORKER_MODULES_OPERATIONS.LEDGER.VOUCHER_CALCULATION && response.data) {
+                    this.voucherTypeList = response.data.map(voucher => ({ label: this.generalService.toProperCase(voucher), value: voucher }));
+                } else {
+                    this.voucherTypeList = [];
+                }
+            });
+        }
 
         observableCombineLatest(this.universalDate$, this.route.params, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (!Array.isArray(resp[0])) {
@@ -823,7 +879,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // && this.advanceSearchRequest.from
         if (this.trxRequest.accountUniqueName) {
             this.isBankTransactionLoading = true;
-            this._ledgerService.GetBankTranscationsForLedger(this.trxRequest.accountUniqueName, this.trxRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
+            this.ledgerService.GetBankTranscationsForLedger(this.trxRequest.accountUniqueName, this.trxRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
                 this.isBankTransactionLoading = false;
                 if (res.status === 'success') {
                     this.lc.getReadyBankTransactionsForUI(res.body);
@@ -869,18 +925,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public saveBankTransaction() {
-        // Api llama para mover la transacción bancaria al libro mayor
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject();
         blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
         delete blankTransactionObj['voucherType'];
         if (blankTransactionObj.transactions.length > 0) {
             this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
-            // let transactonId = blankTransactionObj.transactionId;
-            // this.isLedgerCreateSuccess$.subscribe(s => {
-            //   if (s && transactonId) {
-            //     this.deleteBankTxn(transactonId);
-            //   }
-            // });
         } else {
             this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
         }
@@ -908,7 +957,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             to = this.selectedCurrency === 0 ? this.foreignCurrencyDetails.code : this.baseCurrencyDetails.code;
         }
         let date = moment().format('DD-MM-YYYY');
-        this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
+        this.ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
             let rate = response.body;
             if (rate) {
                 this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, this.giddhBalanceDecimalPlaces) };
@@ -949,7 +998,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public downloadAttachedFile(fileName: string, e: Event) {
         e.stopPropagation();
-        this._ledgerService.DownloadAttachement(fileName).subscribe(d => {
+        this.ledgerService.DownloadAttachement(fileName).subscribe(d => {
             if (d.status === 'success') {
                 let blob = base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
                 return saveAs(blob, d.body.name);
@@ -967,7 +1016,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         downloadRequest.invoiceNumber = [invoiceName];
         downloadRequest.voucherType = voucherType;
 
-        this._ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).subscribe(d => {
+        this.ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).subscribe(d => {
             if (d.status === 'success') {
                 let blob = base64ToBlob(d.body, 'application/pdf', 512);
                 return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
@@ -1242,6 +1291,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this.store.dispatch(this._ledgerActions.ResetLedger());
+        if (typeof Worker !== 'undefined') {
+            this.workerService.terminateWorker();
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1574,7 +1626,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * deleteBankTxn
      */
     public deleteBankTxn(transactionId) {
-        this._ledgerService.DeleteBankTransaction(transactionId).subscribe((res: BaseResponse<any, string>) => {
+        this.ledgerService.DeleteBankTransaction(transactionId).subscribe((res: BaseResponse<any, string>) => {
             if (res.status === 'success') {
                 this._toaster.successToast('Bank transaction deleted Successfully');
             }
@@ -1627,7 +1679,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public getInvoiveLists(request) {
         this.invoiceList = [];
-        this._ledgerService.GetInvoiceList(request).subscribe((res: any) => {
+        this.ledgerService.GetInvoiceList(request).subscribe((res: any) => {
             _.map(res.body.invoiceList, (o) => {
                 this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
             });

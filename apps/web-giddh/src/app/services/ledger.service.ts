@@ -23,7 +23,7 @@ export class LedgerService {
 
     constructor(
         private errorHandler: ErrorHandler,
-        public _http: HttpWrapperService,
+        public http: HttpWrapperService,
         private _httpClient: HttpClient,
         public _router: Router,
         private _generalService: GeneralService,
@@ -37,7 +37,7 @@ export class LedgerService {
     public GetBankTranscationsForLedger(accountUniqueName: string, from: string = '') {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + LEDGER_API.GET_BANK_TRANSACTIONS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from)).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + LEDGER_API.GET_BANK_TRANSACTIONS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from)).pipe(map((res) => {
             let data: BaseResponse<IELedgerResponse[], string> = res;
             data.request = accountUniqueName;
             data.queryString = { accountUniqueName };
@@ -51,7 +51,7 @@ export class LedgerService {
     public MapBankTransactions(model: { uniqueName: string }, unqObj: { accountUniqueName: string, transactionId: string }): Observable<BaseResponse<string, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.put(this.config.apiUrl + LEDGER_API.MAP_BANK_TRANSACTIONS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(unqObj.accountUniqueName)).replace(':transactionId', unqObj.transactionId), model).pipe(
+        return this.http.put(this.config.apiUrl + LEDGER_API.MAP_BANK_TRANSACTIONS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(unqObj.accountUniqueName)).replace(':transactionId', unqObj.transactionId), model).pipe(
             map((res) => {
                 let data: BaseResponse<string, any> = res;
                 data.request = model;
@@ -69,7 +69,7 @@ export class LedgerService {
         this.companyUniqueName = this._generalService.companyUniqueName;
 
         // tslint:disable-next-line:max-line-length
-        return this._http.get(this.config.apiUrl + LEDGER_API.NEW_GET_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        return this.http.get(this.config.apiUrl + LEDGER_API.NEW_GET_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':q', encodeURIComponent(request.q || ''))
             .replace(':page', request.page.toString())
             .replace(':count', encodeURIComponent(request.count.toString()))
@@ -94,7 +94,7 @@ export class LedgerService {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
 
-        return this._http.post(this.config.apiUrl + LEDGER_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
+        return this.http.post(this.config.apiUrl + LEDGER_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<LedgerResponse[], BlankLedgerVM> = res;
                 data.request = model;
@@ -110,7 +110,7 @@ export class LedgerService {
     public UpdateLedgerTransactions(model: LedgerUpdateRequest, accountUniqueName: string, entryUniqueName: string): Observable<BaseResponse<LedgerResponse, LedgerUpdateRequest>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.put(this.config.apiUrl + LEDGER_API.UNIVERSAL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':entryUniqueName', entryUniqueName), model).pipe(
+        return this.http.put(this.config.apiUrl + LEDGER_API.UNIVERSAL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':entryUniqueName', entryUniqueName), model).pipe(
             map((res) => {
                 let data: BaseResponse<LedgerResponse, LedgerUpdateRequest> = res;
                 data.request = model;
@@ -126,7 +126,7 @@ export class LedgerService {
     public DeleteLedgerTransaction(accountUniqueName: string, entryUniqueName: string): Observable<BaseResponse<string, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.delete(this.config.apiUrl + LEDGER_API.DELETE_LEDGER_ENTRY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':entryUniqueName', entryUniqueName)).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + LEDGER_API.DELETE_LEDGER_ENTRY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':entryUniqueName', entryUniqueName)).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
             data.queryString = { accountUniqueName, entryUniqueName };
             return data;
@@ -139,7 +139,7 @@ export class LedgerService {
     public GetLedgerTransactionDetails(accountUniqueName: string, entryUniqueName: string): Observable<BaseResponse<LedgerResponse, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + LEDGER_API.GET_TRANSACTION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':entryUniqueName', entryUniqueName)).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + LEDGER_API.GET_TRANSACTION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':entryUniqueName', entryUniqueName)).pipe(map((res) => {
             let data: BaseResponse<LedgerResponse, string> = res;
             data.queryString = { accountUniqueName, entryUniqueName };
             return data;
@@ -155,7 +155,7 @@ export class LedgerService {
     public GetReconcile(accountUniqueName: string = '', from: string = '', to: string = '', chequeNumber: string = ''): Observable<BaseResponse<ReconcileResponse[], string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + LEDGER_API.RECONCILE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from).replace(':to', to).replace(':chequeNumber', chequeNumber)).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + LEDGER_API.RECONCILE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from).replace(':to', to).replace(':chequeNumber', chequeNumber)).pipe(map((res) => {
             let data: BaseResponse<ReconcileResponse[], string> = res;
             data.queryString = { accountUniqueName, from, to, chequeNumber };
             return data;
@@ -165,7 +165,7 @@ export class LedgerService {
     public DownloadAttachement(fileName: string): Observable<BaseResponse<DownloadLedgerAttachmentResponse, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + LEDGER_API.DOWNLOAD_ATTACHMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        return this.http.get(this.config.apiUrl + LEDGER_API.DOWNLOAD_ATTACHMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':fileName', fileName)).pipe(
                 map((res) => {
                     let data: BaseResponse<DownloadLedgerAttachmentResponse, string> = res;
@@ -180,7 +180,7 @@ export class LedgerService {
         let dataToSend = { voucherNumber: model.invoiceNumber, voucherType: model.voucherType };
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + LEDGER_API.DOWNLOAD_INVOICE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), dataToSend).pipe(
+        return this.http.post(this.config.apiUrl + LEDGER_API.DOWNLOAD_INVOICE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), dataToSend).pipe(
             map((res) => {
                 let data: BaseResponse<string, DownloadLedgerRequest> = res;
                 data.request = model;
@@ -193,7 +193,7 @@ export class LedgerService {
     public GenerateMagicLink(model: MagicLinkRequest, accountUniqueName: string): Observable<BaseResponse<MagicLinkResponse, MagicLinkRequest>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + LEDGER_API.MAGIC_LINK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        return this.http.post(this.config.apiUrl + LEDGER_API.MAGIC_LINK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
             .replace(':from', model.from).replace(':to', model.to), model).pipe(
                 map((res) => {
@@ -209,7 +209,7 @@ export class LedgerService {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         let API = exportByInvoiceNumber ? this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_WITH_INVOICE_NUMBER : this.config.apiUrl + LEDGER_API.EXPORT_LEDGER;
-        return this._http.post(API.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        return this.http.post(API.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
             .replace(':from', model.from).replace(':to', model.to).replace(':type', encodeURIComponent(model.type)).replace(':format', encodeURIComponent(model.format)).replace(':sort', encodeURIComponent(model.sort)), body).pipe(
                 map((res) => {
@@ -244,7 +244,7 @@ export class LedgerService {
         }
         request += '&withInvoice=' + emailRequestParams.withInvoice; // emailRequestParams.withInvoice is a boolean so in case of false need to send false as well that will be default
 
-        return this._http.post(this.config.apiUrl + LEDGER_API.MAIL_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        return this.http.post(this.config.apiUrl + LEDGER_API.MAIL_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)) + request, model).pipe(
                 map((res) => {
                     let data: BaseResponse<string, MailLedgerRequest> = res;
@@ -276,7 +276,7 @@ export class LedgerService {
         if (q) {
             request += '&q=' + q;
         }
-        return this._http.post(this.config.apiUrl + LEDGER_API.ADVANCE_SEARCH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        return this.http.post(this.config.apiUrl + LEDGER_API.ADVANCE_SEARCH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)) + request, model).pipe(
                 map((res) => {
                     let data: BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest> = res;
@@ -290,7 +290,7 @@ export class LedgerService {
     public GetReconciliation(model: any, accountUniqueName: string): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + LEDGER_API.RECONCILIATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
+        return this.http.post(this.config.apiUrl + LEDGER_API.RECONCILIATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
@@ -303,7 +303,7 @@ export class LedgerService {
     public GroupExportLedger(groupUniqueName: string, queryRequest: DaybookQueryRequest): Observable<BaseResponse<any, DayBookRequestModel>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + LEDGER_API.GET_GROUP_EXPORT_LEDGER
+        return this.http.get(this.config.apiUrl + LEDGER_API.GET_GROUP_EXPORT_LEDGER
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':groupUniqueName', encodeURIComponent(groupUniqueName))
             .replace(':page', queryRequest.page.toString())
@@ -338,7 +338,7 @@ export class LedgerService {
 
     public GetCurrencyRate(fromCurrency: string, toCurrency: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + LEDGER_API.CURRENCY_CONVERTER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':fromCurrency', encodeURIComponent(fromCurrency)).replace(':toCurrency', encodeURIComponent(toCurrency))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + LEDGER_API.CURRENCY_CONVERTER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':fromCurrency', encodeURIComponent(fromCurrency)).replace(':toCurrency', encodeURIComponent(toCurrency))).pipe(map((res) => {
             let data: any = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
@@ -346,7 +346,7 @@ export class LedgerService {
 
     public GetCurrencyRateNewApi(fromCurrency: string, toCurrency: string, date: string) {
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + LEDGER_API.GET_CURRENCY_RATE
+        return this.http.get(this.config.apiUrl + LEDGER_API.GET_CURRENCY_RATE
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':from', encodeURIComponent(fromCurrency))
             .replace(':to', encodeURIComponent(toCurrency))
@@ -367,7 +367,7 @@ export class LedgerService {
     public DeleteBankTransaction(transactionId: string): Observable<BaseResponse<string, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.delete(this.config.apiUrl + LEDGER_API.DELETE_BANK_TRANSACTION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':transactionId', transactionId)).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + LEDGER_API.DELETE_BANK_TRANSACTION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':transactionId', transactionId)).pipe(map((res) => {
             let data: any = res;
             data.queryString = { transactionId };
             return data;
@@ -377,7 +377,7 @@ export class LedgerService {
     public GetLedgerBalance(model: TransactionsRequest): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + LEDGER_API.GET_BALANCE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        return this.http.get(this.config.apiUrl + LEDGER_API.GET_BALANCE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
             .replace(':from', model.from).replace(':to', model.to)
             .replace(':accountCurrency', model.accountCurrency.toString())
@@ -393,7 +393,7 @@ export class LedgerService {
 
     public GetInvoiceList(model: any) {
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + LEDGER_API.GET_UNPAID_INVOICE_LIST
+        return this.http.get(this.config.apiUrl + LEDGER_API.GET_UNPAID_INVOICE_LIST
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
             .replace(':accStatus', encodeURIComponent(model.status))
@@ -405,5 +405,15 @@ export class LedgerService {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
+     * Returns the observable with accounts and their voucher details
+     *
+     * @returns {Observable<BaseResponse<any, any>>} Observable of response to carry out further operations
+     * @memberof LedgerService
+     */
+    public getAccountsWithVouchers(): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.config.apiUrl + LEDGER_API.GET_ACCOUNTS_WITH_VOUCHERS).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 }

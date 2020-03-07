@@ -45,6 +45,7 @@ import { SalesModule } from '../sales/sales.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { SettingsServiceModule } from '../settings/settings-service.module';
+import { LedgerServiceModule } from './services/ledger.service.module';
 
 @NgModule({
     declarations: [
@@ -101,7 +102,8 @@ import { SettingsServiceModule } from '../settings/settings-service.module';
         AngularResizedEventModule,
         NgxMaskModule.forRoot(),
         NgbTooltipModule,
-        SettingsServiceModule
+        SettingsServiceModule,
+        LedgerServiceModule
     ],
 })
 export class LedgerModule {

@@ -281,6 +281,19 @@ export class GeneralService {
     }
 
     /**
+     * Returns the capitalized text format
+     *
+     * @param {string} value Value to converted
+     * @returns {string} Capitalized value
+     * @memberof GeneralService
+     */
+    public toProperCase(value: string): string {
+        if (value) {
+            return value.replace(/\w\S*/g, (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase());
+        }
+    }
+
+    /**
      * Trim string allow only alphanumeric string
      *
      * @param {string} value String that need to be trim by special characters

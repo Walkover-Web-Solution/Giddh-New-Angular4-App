@@ -23,7 +23,7 @@ import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Accoun
 import { BsDatepickerDirective, ModalDirective, PopoverDirective } from 'ngx-bootstrap';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
-import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, of } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
 import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../../common/confirmation-modal/confirmation-modal.interface';
@@ -32,7 +32,7 @@ import { forEach, sumBy } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
-import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, IForceClear } from '../../../models/api-models/Sales';
 import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
@@ -98,6 +98,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public shouldShowRcmTaxableAmount: boolean = false;
     /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
     @Input() public shouldShowItcSection: boolean = false;
+    /** Stores the list of voucher type */
+    @Input() public voucherTypeList: IOption[] = [];
     /** To check Tourist scheme applicable in ledger */
     @Input() public isTouristSchemeApplicable: boolean = false;
 
@@ -110,7 +112,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public clickedOutsideEvent: EventEmitter<any> = new EventEmitter();
     @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
     @ViewChild('entryContent') public entryContent: ElementRef;
-    @ViewChild('sh') public sh: ShSelectComponent;
+    @ViewChild('voucherList') public voucherList: ShSelectComponent;
     @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
 
     @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
@@ -127,7 +129,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public companyTaxesList$: Observable<TaxResponse[]>;
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
-    public voucherTypeList: Observable<IOption[]>;
     public showAdvanced: boolean;
     public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
     public isFileUploading: boolean = false;
@@ -168,6 +169,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public shouldShowAdvanceReceiptMandatoryFields: boolean = false;
     /** List of available ITC */
     public availableItcList: Array<any> = AVAILABLE_ITC_LIST;
+    /** True, if the voucher type needs to be cleared */
+    public clearVoucherType: Observable<IForceClear> = of({ status: false });
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -188,31 +191,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
         this.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
         this.isLedgerCreateInProcess$ = this.store.select(p => p.ledger.ledgerCreateInProcess).pipe(takeUntil(this.destroyed$));
-        this.voucherTypeList = observableOf([{
-            label: 'Sales',
-            value: 'sal'
-        }, {
-            label: 'Purchases',
-            value: 'pur'
-        }, {
-            label: 'Receipt',
-            value: 'rcpt'
-        }, {
-            label: 'Payment',
-            value: 'pay'
-        }, {
-            label: 'Journal',
-            value: 'jr'
-        }, {
-            label: 'Contra',
-            value: 'cntr'
-        }, {
-            label: 'Debit Note',
-            value: 'debit note'
-        }, {
-            label: 'Credit Note',
-            value: 'credit note'
-        }]);
     }
 
     public ngOnInit() {
@@ -275,8 +253,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     @HostListener('click', ['$event'])
     public clicked(e) {
-        if (this.sh && !this.sh.ele.nativeElement.contains(e.path[3])) {
-            this.sh.hide();
+        if (this.voucherList && e.path && !this.voucherList.ele.nativeElement.contains(e.path[3])) {
+            this.voucherList.hide();
         }
     }
 
@@ -322,6 +300,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (this.blankLedger.otherTaxModal.appliedOtherTax && this.blankLedger.otherTaxModal.appliedOtherTax.uniqueName) {
                 this.blankLedger.isOtherTaxesApplicable = true;
             }
+        }
+        if (changes.voucherTypeList && changes.voucherTypeList.previousValue !== changes.voucherTypeList.currentValue && !changes.voucherTypeList.firstChange) {
+            // Clear the old value of voucher type
+            this.clearVoucherType = of({ status: true });
+            setTimeout(() => {
+                if (this.voucherTypeList && this.voucherTypeList.length === 1) {
+                    this.blankLedger.voucherType = this.voucherTypeList[0].value;
+                }
+                this.detectChanges();
+            }, 200);
         }
     }
 
