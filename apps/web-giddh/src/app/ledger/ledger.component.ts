@@ -568,10 +568,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 // this.advanceSearchComp.resetAdvanceSearchModal();
                 this.lc.accountUnq = params['accountUniqueName'];
                 this.needToShowLoader = true;
-                // this.showLoader = false; // need to enable loder
-                // if (this.ledgerSearchTerms) {
-                //   this.ledgerSearchTerms.nativeElement.value = '';
-                // }
                 this.searchText = '';
                 // this.searchTermStream.next('');
                 this.resetBlankTransaction();
