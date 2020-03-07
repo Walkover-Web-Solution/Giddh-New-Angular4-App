@@ -31,7 +31,7 @@ export class LedgerIntensiveWorker {
     private static calculateApplicableVoucherType(data: WorkerMessage): WorkerMessage {
         console.log('Data received: ', data);
         if (!data || !data.data || !data.data.currentLedgerAccount || !data.data.particularAccount || !data.data.voucherData) {
-            return new WorkerMessage('ledger', data.operationType, 0);
+            return new WorkerMessage(WORKER_MODULES.LEDGER, data.operationType, 0);
         }
         const { currentLedgerAccount, particularAccount, voucherData } = data.data;
         const currentLedgerApplicableVouchers = this.findVouchers(particularAccount.type, currentLedgerAccount.parentGroups, voucherData, true);
