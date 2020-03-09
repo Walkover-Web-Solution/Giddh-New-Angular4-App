@@ -5586,6 +5586,15 @@ datepicker-inner .well table tbody tr td .btn-default:hover span {
 datepicker-inner .well table tbody tr td .btn-default:hover .text-success {
     color: #fff;
 }
+datepicker-inner .well table tbody tr td button.btn.btn-default.btn-info .text-success {
+    color: #3C763F !important;
+}
+datepicker-inner .well table tbody tr td button.btn.btn-default.btn-info:hover .text-success, datepicker-inner .well table tbody tr td button.btn.btn-default.btn-link:hover .text-success {
+    color: #fff !important;
+}
+.dropdown-menu.month-picker li a:hover {
+    color: initial !important;
+}
 datepicker-inner .well {
     background-color: #ffffff;
     border-top: 0;
