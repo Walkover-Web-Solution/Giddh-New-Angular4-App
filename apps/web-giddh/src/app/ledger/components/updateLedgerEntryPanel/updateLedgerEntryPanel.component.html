@@ -690,7 +690,7 @@
                         </div>
                     </div>
 
-
+                    <ng-template>
                         <div class="clearfix adjust-receipt font-14">
                             <p class="bold">Adjusted Receipts <a href="javascript:void(0)"><i class="icon-edit11 font-10"></i></a></p>
                             <p class="font-12 text-light mb-1">₹2400.00</p>
@@ -723,6 +723,7 @@
                             </div>
                             <p class="font-12 text-light">Excess amount: ₹2000 <i class="icon-info pointer" tooltip="adjustment amount is more than receipts."></i></p>
                         </div>
+                    </ng-template>
 
                 </div>
 
@@ -941,9 +942,10 @@
                         </div>
 
                         <div class="col-xs-12 pdT1 d-flex align-items-center xs-d-block" *ngIf="!isPettyCash">
-
                                 <div class="width-100 mb-05">
+                                    <ng-template>
                                     <p>Note: The adjusted amount of the linked invoice/s is more than the receipt; update them first and try again.</p>
+                                </ng-template>
                                 </div>
 
                             <div class="d-flex">
