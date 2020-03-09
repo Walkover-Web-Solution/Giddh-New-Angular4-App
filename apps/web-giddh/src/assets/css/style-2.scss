@@ -42,7 +42,7 @@
     padding: 15px 11px !important;
     font-weight: 400;
     border-bottom: 1px solid #d1d1d1;
-    font-family: opensans-semibold;
+    font-family: $tableFontSemibold;
     font-size: 14px;
     border-top: 1px solid #d1d1d1; // position: sticky !important;
     // top: 60px;
@@ -811,7 +811,7 @@ ul.sub-list {
 }
 
 .bold {
-    font-family: "" opensans-semibold "";
+    font-family: $tableFontSemibold;
 }
 
 .modal-open {
@@ -835,7 +835,7 @@ ul.sub-list {
 
 .top-heading > h4 {
     font-size: 18px;
-    font-family: "" opensans-semibold "";
+    font-family: $tableFontSemibold;
     line-height: 28px;
     text-transform: capitalize;
 }
@@ -1026,22 +1026,16 @@ ul.sub-list {
 }
 
 .aging-table-top .top-aging-table-top span .date-range-picker {
-    font-family: opensans-semibold;
+    font-family: $tableFontSemibold;
 }
-
-
-
 .aging-table {
     border: 0px;
     margin-bottom: 0px;
 }
-
 .aging-table > thead > tr > th,
 .aging-table tr > td {
     min-width: 145px;
 }
-
-
 
 .d-none {
     display: none;
@@ -2605,7 +2599,7 @@ input[type="checkbox"]:checked:after {
     background: #e5e5e5;
     padding: 11px 20px;
     font-size: 14px;
-    font-family: "" opensans-semibold "";
+    font-family: $tableFontSemibold;
     border: 1px solid #ddd;
 }
 
@@ -2655,7 +2649,7 @@ input[type="checkbox"]:checked:after {
     display: inline-block;
     min-width: 150px;
     font-size: 18px;
-    font-family: "" opensans-semibold "";
+    font-family: $tableFontSemibold;
 }
 
 .modal-list ul > li {
@@ -5484,7 +5478,7 @@ input[type="checkbox"][disabled] {
 
 .section_head {
     padding-bottom: 10px;
-    font-family: "" opensans-semibold "";
+    font-family: $tableFontSemibold;
     font-size: 110%;
     color: rgba(0, 0, 0, 0.8);
 }
@@ -6234,7 +6228,7 @@ table td[class*=col-]:last-child {
 
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: "" opensans-semibold "";
+    font-family: $tableFontSemibold;
     text-transform: capitalize;
 }
 
