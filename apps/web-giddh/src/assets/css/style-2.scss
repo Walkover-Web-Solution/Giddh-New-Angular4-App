@@ -3,7 +3,7 @@
 @import "../css/giddh-common.scss";
 
 /* table css need to removed at last  (start)
-   Don't touch this table css (If any body work on that contact shalinee..)
+   Don't touch this table css (If any body work on that contact me..)
 */
 
 .basic > tbody > tr > td,
@@ -53,6 +53,7 @@
     background: rgba(221, 225, 230, 0.5);
 }
 
+
 .basic {
     background: #fff;
 }
@@ -68,6 +69,7 @@
     border-top: 1px solid #cac8c6;
     border-bottom: 1px solid #cac8c6;
 }*/
+
 
 @media (max-width: 768px) {
     .onMobileView tbody tr {
@@ -143,7 +145,7 @@
     .onMobileView .basic > tbody > tr:hover td {
         background: transparent;
     }
-    .onMobileView.table-bordered {
+     .onMobileView.table-bordered {
         border: none;
         background: transparent;
         margin-top: 0;
@@ -155,14 +157,17 @@
         text-align: center !important;
         padding: 5px 10px 5px 0% !important;
     }
-    .onMobileView tbody td::first-letter {
+     .onMobileView tbody td::first-letter {
         text-transform: uppercase;
     }
-    .onMobileView,
+     .onMobileView,
     .onMobileView tbody {
         display: block;
     }
+
 }
+
+
 
 @media (max-width: 320px) {
     .onMobileView tbody td {
@@ -806,11 +811,7 @@ ul.sub-list {
 }
 
 .bold {
-    font-family: $tableFontSemibold;
-}
-
-.font-bold {
-    font-family: $tableFontBold;
+    font-family: "" opensans-semibold "";
 }
 
 .modal-open {
@@ -988,6 +989,7 @@ ul.sub-list {
     font-style: italic;
 }
 
+
 .sorting-box {
     position: absolute;
     right: 10px;
@@ -1005,12 +1007,17 @@ ul.sub-list {
     line-height: 0;
     margin: 1px 0;
 }
-.aging-table-top td {
+.aging-table-top td  {
     border: 0px solid !important;
     background: #f7f8fa !important;
 }
 .aging-table-top .top-aging-table-top {
-    background: rgba(49, 58, 151, 0.15) !important;
+    background: rgba(
+        49,
+        58,
+        151,
+        0.15
+    ) !important;
 }
 
 .aging-table-top .top-aging-table-top strong,
@@ -1022,6 +1029,8 @@ ul.sub-list {
     font-family: opensans-semibold;
 }
 
+
+
 .aging-table {
     border: 0px;
     margin-bottom: 0px;
@@ -1031,6 +1040,8 @@ ul.sub-list {
 .aging-table tr > td {
     min-width: 145px;
 }
+
+
 
 .d-none {
     display: none;
@@ -1536,9 +1547,6 @@ modal-container.modal {
 .justify-content-center {
     justify-content: center;
 }
-.color-primary {
-    color: $primaryBtncolror;
-}
 /* my css end */
 
 /*input*/
@@ -1608,8 +1616,8 @@ input:-moz-placeholder {
     font-size: 16px;
     text-transform: capitalize;
     display: inline-flex;
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
     background-color: $border-blue;
     text-align: center;
     border-radius: 50%;
@@ -1618,7 +1626,6 @@ input:-moz-placeholder {
     padding: 0;
     margin-right: 15px;
     float: left;
-    letter-spacing: -1px;
 }
 
 .company-name .cText .fyear {
@@ -1631,8 +1638,6 @@ input:-moz-placeholder {
 
 header .navbar {
     background-color: #f7f8fa;
-    border-bottom: 1px solid #e0e0e0;
-    padding: 3px 0;
 }
 
 /* .fyear {
@@ -2131,6 +2136,8 @@ fieldset[disabled] .btn-primary:hover {
     color: #fff;
 }
 
+
+
 p.table-email {
     white-space: nowrap;
     width: 200px;
@@ -2149,6 +2156,8 @@ p.table-email {
     color: #333333;
 }
 
+
+
 .top-five-cr-dr-table .basic > tbody > tr td:last-child,
 .top-five-cr-dr-table .basic > thead > tr th:last-child {
     border-right: none !important;
@@ -2162,6 +2171,7 @@ p.table-email {
 .delt {
     text-align: center;
 }
+
 input[type="checkbox"] {
     position: relative;
     top: 1px;
@@ -2170,10 +2180,6 @@ input[type="checkbox"] {
     cursor: pointer;
     left: 0px;
     height: 19px;
-    width: 1em;
-    height: 1em;
-    -webkit-appearance: none;
-    appearance: none;
 }
 
 input[type="checkbox"]:checked:before {
@@ -2217,7 +2223,6 @@ input[type="checkbox"]:after {
     background: #fff;
     cursor: pointer;
     border-radius: 2px;
-    visibility: visible;
 }
 
 input[type="checkbox"]:checked:after {
@@ -2557,9 +2562,7 @@ input[type="checkbox"]:checked:after {
 .font-16 {
     font-size: 16px !important;
 }
-.font-20 {
-    font-size: 20px;
-}
+
 .font-22 {
     font-size: 22px;
 }
@@ -2591,7 +2594,7 @@ input[type="checkbox"]:checked:after {
 
 .subscription-title {
     font-size: 20px;
-    font-family: $tableFontSemibold;
+    font-family: "opensans-semibold";
 }
 
 .box2 {
@@ -5127,6 +5130,8 @@ label {
     border: 1px solid $border-blue;
 }
 
+
+
 .dropdown-container .dropdown-menu {
     display: block;
     height: 200px;
@@ -5463,6 +5468,9 @@ fieldset[disabled] .form-control {
 input[type="checkbox"][disabled] {
     opacity: 2.2;
 }
+
+
+
 .nested_table > tbody tr td {
     border: 0 !important;
     padding: 8px 0;
@@ -5476,7 +5484,7 @@ input[type="checkbox"][disabled] {
 
 .section_head {
     padding-bottom: 10px;
-    font-family: $tableFontSemibold;
+    font-family: "" opensans-semibold "";
     font-size: 110%;
     color: rgba(0, 0, 0, 0.8);
 }
@@ -5583,8 +5591,15 @@ datepicker-inner .well table tbody tr td .btn-default:hover {
 datepicker-inner .well table tbody tr td .btn-default:hover span {
     text-decoration: none;
 }
-datepicker-inner .well table tbody tr td .btn-default:hover .text-success {
-    color: #fff;
+
+datepicker-inner .well table tbody tr td button.btn.btn-default.btn-info .text-success {
+    color: #3C763F !important;
+}
+datepicker-inner .well table tbody tr td button.btn.btn-default.btn-info:hover .text-success, datepicker-inner .well table tbody tr td button.btn.btn-default.btn-link:hover .text-success {
+    color: #fff !important;
+}
+.dropdown-menu.month-picker li a:hover {
+    color: initial !important;
 }
 datepicker-inner .well {
     background-color: #ffffff;
@@ -6219,7 +6234,7 @@ table td[class*=col-]:last-child {
 
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: $tableFontSemibold;
+    font-family: "" opensans-semibold "";
     text-transform: capitalize;
 }
 
@@ -6444,7 +6459,7 @@ table td[class*=col-]:last-child {
 
 .app_list > ul h6 {
     margin-bottom: 10px;
-    font-family: $tableFontSemibold;
+    font-family: "opensans-semibold";
     font-size: 13px;
 }
 
@@ -6910,7 +6925,6 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding-right: 10px;
     border: none;
     box-shadow: none;
-    padding: 0 10px 0 0;
 }
 
 .hamburger_menu h4 {
@@ -6918,8 +6932,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     text-transform: capitalize;
     width: auto;
     color: $pageTitleColor;
-    font-family: $tableFontSemibold;
-    vertical-align: middle;
+    font-family: "opensans-bold";
 }
 
 .tax-engine .icon {
@@ -7673,7 +7686,7 @@ app-header {
     border: 2px solid red;
 }
 .text-warning {
-    color: #ffa000;
+    color: #FFA000;
 }
 
 .heightVH-100 {
@@ -8045,6 +8058,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     color: #333;
 }
 
+
 .welcome-container input::placeholder {
     color: rgba(0, 0, 0, 0.4) !important;
 }
@@ -8250,7 +8264,7 @@ ul.dropdown-menu p.lead.pd {
 .invoce-controll .nav-tabs > li.active > a {
     border-bottom: 4px solid $activeIconTh !important;
     padding-bottom: 7px !important;
-    font-family: $tableFontSemibold;
+    font-family: "opensans-semibold";
 }
 .invoce-controll .nav-tabs > li > a {
     border-bottom: 4px solid transparent !important;
@@ -8416,6 +8430,9 @@ ul.dropdown-menu p.lead.pd {
 table.basic td {
     color: #1c1c1c;
 }
+
+
+
 
 .invoice-table td > a {
     color: #1c1c1c;
@@ -8648,9 +8665,7 @@ p.remvBrnchName {
     margin-top: 0;
     border-radius: 0;
 }
-.popover.purchase-invoice-rcm,
-.update-ledger-rcm,
-.all-modules-popover {
+.popover.purchase-invoice-rcm, .update-ledger-rcm, .all-modules-popover {
     .popover-arrow.arrow {
         display: none;
     }
@@ -8715,8 +8730,9 @@ input.checkbox-custom[type="checkbox"] {
 .checkbox-custom-label,
 .radio-custom-label {
     position: relative;
-    display: inline-flex !important;
+    display: inline-flex;
     align-items: center;
+
 }
 .checkbox-custom + .checkbox-custom-label:before,
 .radio-custom + .radio-custom-label:before {
@@ -8732,8 +8748,8 @@ input.checkbox-custom[type="checkbox"] {
     border-radius: 2px;
     text-align: center;
 }
-.checkbox-custom + .checkbox-custom-label:after {
-    transform: rotate(-45deg) scale(0, 0);
+.checkbox-custom + .checkbox-custom-label:after{
+        transform: rotate(-45deg) scale(0,0);
     content: "";
     position: absolute;
     left: 3px;
@@ -8744,10 +8760,10 @@ input.checkbox-custom[type="checkbox"] {
     border: 2px solid #fff;
     border-top-style: none;
     border-right-style: none;
-    transition: transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
+    transition: transform .4s cubic-bezier(.45,1.8,.5,.75)
 }
-.checkbox-custom:checked + .checkbox-custom-label:after {
-    transform: rotate(-45deg) scale(1, 1);
+.checkbox-custom:checked + .checkbox-custom-label:after{
+    transform: rotate(-45deg) scale(1,1);
 }
 .checkbox-custom:checked + .checkbox-custom-label:before {
     background: $border-blue;
@@ -9065,9 +9081,6 @@ input.checkbox-custom[type="checkbox"] {
     .xs-pr-0 {
         padding-right: 0px;
     }
-    .xs-pt-0 {
-        padding-top: 0px;
-    }
     .xs-width-100 {
         width: 100%;
     }
@@ -9200,8 +9213,7 @@ input.checkbox-custom[type="checkbox"] {
     .list-style ul.list-inline.list-middle.download-drop-down {
         text-align: left;
     }
-    .checkbox-custom-label,
-    .radio-custom-label {
+    .checkbox-custom-label, .radio-custom-label{
         display: inline;
     }
     #cmpWrp {
@@ -9213,12 +9225,7 @@ input.checkbox-custom[type="checkbox"] {
     .user_dropdown {
         left: 0px !important;
     }
-    .xs-d-block {
-        display: block;
-    }
-    .xs-mr-0 {
-        margin-right: 0px;
-    }
+
 }
 
 @media (max-width: 575px) {
@@ -9300,6 +9307,8 @@ input.checkbox-custom[type="checkbox"] {
         bottom: 0;
     }
 }
+
+
 
 @media only screen and (max-width: 1400px) {
     .template_list {

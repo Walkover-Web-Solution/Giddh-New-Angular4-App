@@ -190,6 +190,33 @@ span.eligible-ITC {
         margin-bottom: 4px;
     }
 }
+.adjust-receipt {
+    padding: 10px;
+    border: 1px solid #D9D9D9;
+    margin-top: 10px;
+}
+.pr-05 {
+    padding-right: 5px;
+}
+.pl-05 {
+    padding-left: 5px;
+}
+.adjustment-filed {
+    max-height: 160px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 160px;
+}
+.ledger-bottom {
+    display: flex;
+}
+@media only screen and (max-width: 1359px) {
+    .ledger-bottom {
+        display: block;
+    }
+}
+
+
 @media only screen and (max-width: 1024px) {
     .ledger_book {
         display: block;
@@ -317,5 +344,11 @@ span.eligible-ITC {
     }
     .xs-pt-0 {
         padding-top: 0px !important;
+    }
+    .adjustment-filed .pr-05 {
+        padding-right: 15px;
+    }
+    .adjustment-filed .pl-05 {
+        padding-left: 15px;
     }
 }
