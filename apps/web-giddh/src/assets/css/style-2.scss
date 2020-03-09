@@ -3,7 +3,7 @@
 @import "../css/giddh-common.scss";
 
 /* table css need to removed at last  (start)
-   Don't touch this table css (If any body work on that contact me..)
+   Don't touch this table css (If any body work on that contact shalinee..)
 */
 
 .basic > tbody > tr > td,
@@ -536,6 +536,7 @@ input {
 }
 
 /**/
+
 .dropdown-arrow {
     position: relative;
 }
@@ -809,6 +810,9 @@ ul.sub-list {
     border-left: 1px solid #d2d2d2;
     cursor: pointer;
 }
+.font-bold {
+    font-family: $tableFontBold;
+}
 
 .bold {
     font-family: $tableFontSemibold;
@@ -1007,17 +1011,12 @@ ul.sub-list {
     line-height: 0;
     margin: 1px 0;
 }
-.aging-table-top td  {
+.aging-table-top td {
     border: 0px solid !important;
     background: #f7f8fa !important;
 }
 .aging-table-top .top-aging-table-top {
-    background: rgba(
-        49,
-        58,
-        151,
-        0.15
-    ) !important;
+    background: rgba(49, 58, 151, 0.15) !important;
 }
 
 .aging-table-top .top-aging-table-top strong,
@@ -1026,7 +1025,7 @@ ul.sub-list {
 }
 
 .aging-table-top .top-aging-table-top span .date-range-picker {
-    font-family: $tableFontSemibold;
+    font-family: opensans-semibold;
 }
 .aging-table {
     border: 0px;
@@ -1538,6 +1537,9 @@ modal-container.modal {
 ._2LpwQBMGSE._1cMlaUlzrO._1P3WzErELA._22VVVS0E_n {
     display: none !important;
 }
+.color-primary {
+    color: $primaryBtncolror;
+}
 .justify-content-center {
     justify-content: center;
 }
@@ -1610,12 +1612,13 @@ input:-moz-placeholder {
     font-size: 16px;
     text-transform: capitalize;
     display: inline-flex;
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     background-color: $border-blue;
     text-align: center;
     border-radius: 50%;
     justify-content: center;
+    letter-spacing: -1px;
     align-items: center;
     padding: 0;
     margin-right: 15px;
@@ -1632,6 +1635,8 @@ input:-moz-placeholder {
 
 header .navbar {
     background-color: #f7f8fa;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 3px 0;
 }
 
 /* .fyear {
