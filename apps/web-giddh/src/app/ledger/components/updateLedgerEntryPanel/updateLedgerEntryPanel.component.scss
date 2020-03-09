@@ -41,21 +41,21 @@ table.width100 {
 
 .modal-header ng-select div a.ng-star-inserted {
     font-size: 18px;
-    color: #fff;
+    color: $White;
 }
 
 .modal-header ng-select div i.fa.fa-caret-up::before {
-    color: #fff;
+    color: $White;
     font-size: 24px;
 }
 
 ng-select > div i.fa.fa-caret-down::before {
-    color: #fff;
+    color: $White;
     font-size: 20px;
 }
 
 ng-select > div a.ng-star-inserted {
-    color: #fff;
+    color: $White;
     text-transform: uppercase;
     font-size: 16px;
 }
@@ -66,7 +66,7 @@ ng-select > div {
 }
 
 ng-select .select_drop i.fa.fa-caret-up::before {
-    color: #fff;
+    color: $White;
     font-size: 20px;
 }
 
@@ -111,7 +111,7 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     height: 26px;
 } */
 .ledger-main .form-control {
-    background: #fff !important;
+    background: $White !important;
     height: 45px;
     padding-right: 12px !important;
     padding-left: 12px !important;
@@ -192,7 +192,7 @@ span.eligible-ITC {
 }
 .adjust-receipt {
     padding: 10px;
-    border: 1px solid #D9D9D9;
+    border: 1px solid $inputBorderColor;
     margin-top: 10px;
 }
 .pr-05 {
@@ -201,7 +201,7 @@ span.eligible-ITC {
 .pl-05 {
     padding-left: 5px;
 }
-.adjustment-filed {
+.adjustment-field {
     max-height: 160px;
     overflow-y: auto;
     overflow-x: hidden;
@@ -345,10 +345,10 @@ span.eligible-ITC {
     .xs-pt-0 {
         padding-top: 0px !important;
     }
-    .adjustment-filed .pr-05 {
+    .adjustment-field .pr-05 {
         padding-right: 15px;
     }
-    .adjustment-filed .pl-05 {
+    .adjustment-field .pl-05 {
         padding-left: 15px;
     }
 }
