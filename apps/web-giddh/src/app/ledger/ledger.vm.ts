@@ -73,7 +73,6 @@ export class LedgerVM {
                     type: 'DEBIT',
                     discounts: [this.staticDefaultDiscount()],
                     selectedAccount: null,
-                    applyApplicableTaxes: true,
                     isInclusiveTax: true,
                 },
                 {
@@ -82,7 +81,6 @@ export class LedgerVM {
                     type: 'CREDIT',
                     discounts: [this.staticDefaultDiscount()],
                     selectedAccount: null,
-                    applyApplicableTaxes: true,
                     isInclusiveTax: true,
                 }],
             voucherType: 'sal',
@@ -209,7 +207,6 @@ export class LedgerVM {
             type,
             discounts: [this.staticDefaultDiscount()],
             selectedAccount: null,
-            applyApplicableTaxes: true,
             isInclusiveTax: true
         };
     }
