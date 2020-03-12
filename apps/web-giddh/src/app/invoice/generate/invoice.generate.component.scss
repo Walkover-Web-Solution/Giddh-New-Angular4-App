@@ -219,6 +219,13 @@ tfoot {
     #centerAlign td {
         padding: 0 !important;
     }
+    .inputWrapper {
+        width: 100% !important;
+    }
+    .clear-filter.btn.btn-filter {
+        justify-content: center !important;
+        margin-bottom: 10px !important;
+    }
 }
 
 @media (max-width: 550px) {

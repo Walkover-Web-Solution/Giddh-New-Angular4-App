@@ -5586,10 +5586,32 @@ datepicker-inner .well table tbody tr td .btn-default:hover span {
 datepicker-inner .well table tbody tr td .btn-default:hover .text-success {
     color: $White;
 }
-datepicker-inner .well table tbody tr td button.btn.btn-default.btn-info .text-success {
+datepicker-inner
+    .well
+    table
+    tbody
+    tr
+    td
+    button.btn.btn-default.btn-info
+    .text-success {
     color: $green !important;
 }
-datepicker-inner .well table tbody tr td button.btn.btn-default.btn-info:hover .text-success, datepicker-inner .well table tbody tr td button.btn.btn-default.btn-link:hover .text-success {
+datepicker-inner
+    .well
+    table
+    tbody
+    tr
+    td
+    button.btn.btn-default.btn-info:hover
+    .text-success,
+datepicker-inner
+    .well
+    table
+    tbody
+    tr
+    td
+    button.btn.btn-default.btn-link:hover
+    .text-success {
     color: $White !important;
 }
 .dropdown-menu.month-picker li a:hover {
@@ -8777,6 +8799,10 @@ input.checkbox-custom[type="checkbox"] {
 }
 
 /* radio & checkbox new CSS end */
+
+.modal-invoice-preview .modal-body {
+    padding: 0;
+}
 
 /* responsive */
 
