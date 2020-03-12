@@ -5,7 +5,7 @@ import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/gr
 import { InventoryDownloadRequest, StockReportRequest, StockReportResponse } from '../../../models/api-models/Inventory';
 import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
 import { AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 
 import {
 	AfterViewInit,
@@ -15,7 +15,10 @@ import {
 	HostListener,
 	OnDestroy,
 	OnInit,
-	ViewChild
+	ViewChild,
+    Input,
+    OnChanges,
+    SimpleChanges
 } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -51,12 +54,15 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 		]),
 	]
 })
-export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterViewInit {
+export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestroy, AfterViewInit {
 	@ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
 	@ViewChild('accountName') public accountName: ElementRef;
 	@ViewChild('shCategory') public shCategory: ShSelectComponent;
 	@ViewChild('shCategoryType') public shCategoryType: ShSelectComponent;
-	@ViewChild('shValueCondition') public shValueCondition: ShSelectComponent;
+    @ViewChild('shValueCondition') public shValueCondition: ShSelectComponent;
+
+    /** Stores the branch details along with their warehouses */
+    @Input() public currentBranchAndWarehouse: any;
 
 	public today: Date = new Date();
 	public activeStock$: string;
@@ -232,7 +238,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
 	public selectedCompany$: Observable<any>;
 	public selectedCmp: CompanyResponse;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-	public advanceSearchModalShow: boolean = false;
+    public advanceSearchModalShow: boolean = false;
 
 	/**
 	 * TypeScript public modifiers
@@ -243,14 +249,16 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
 		private inventoryService: InventoryService, private fb: FormBuilder, private inventoryAction: InventoryAction,
 		private settingsBranchActions: SettingsBranchActions,
 		private invViewService: InvViewService,
-		private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef
 	) {
 		this.stockReport$ = this.store.select(p => p.inventory.stockReport).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount());
 		this.stockReportRequest = new StockReportRequest();
 		this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
 		this.entityAndInventoryTypeForm = this.fb.group({
 			selectedEntity: ['allEntity'],
-			selectedTransactionType: ['all']
+            selectedTransactionType: ['all'],
+            selectedWarehouse: '',
+            selectedBranch: ''
 		});
 	}
 
@@ -286,9 +294,6 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
 	}
 
 	public ngOnInit() {
-
-
-
 		if (this.route.firstChild) {
 			this.route.firstChild.params.pipe(take(1)).subscribe(s => {
 				if (s) {
@@ -297,7 +302,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
 					this.initReport();
 				}
 			});
-		}
+        }
 
 		// get view from sidebar while clicking on group/stock
 		this.invViewService.getActiveView().subscribe(v => {
@@ -305,7 +310,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
 			this.groupUniqueName = v.groupUniqueName;
 			this.stockUniqueName = v.stockUniqueName;
 			this.selectedEntity = 'allEntity';
-			this.selectedTransactionType = 'all';
+            this.selectedTransactionType = 'all';
 			if (this.groupUniqueName) {
 				this.store.dispatch(this.sideBarAction.SetActiveStock(this.stockUniqueName));
 				if (this.groupUniqueName && this.stockUniqueName) {
@@ -373,7 +378,26 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
 			filterValueCondition: ['']
 		});
 		this.resetFilter(false);
-	}
+    }
+
+    /**
+     * Lifecycle hook to fetch records based on warehouse and branch selected
+     *
+     * @param {SimpleChanges} changes SimpleChanges object
+     * @memberof InventoryStockReportComponent
+     */
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes.currentBranchAndWarehouse && !_.isEqual(changes.currentBranchAndWarehouse.previousValue, changes.currentBranchAndWarehouse.currentValue)) {
+            if (this.currentBranchAndWarehouse) {
+                this.stockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouse.warehouse !== 'all-entities') ? this.currentBranchAndWarehouse.warehouse : null;
+                this.stockReportRequest.branchUniqueName = this.currentBranchAndWarehouse.branch;
+                if (!changes.currentBranchAndWarehouse.firstChange) {
+                    // Make a manual service call only when it is not first change
+                    this.getStockReport(true);
+                }
+            }
+        }
+    }
 
 	@HostListener('document:keyup', ['$event'])
 	public handleKeyboardEvent(event: KeyboardEvent) {
@@ -395,11 +419,11 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
 		this.stockReportRequest.stockUniqueName = this.stockUniqueName;
 		this.stockReportRequest.transactionType = 'all';
 		this.store.dispatch(this.stockReportActions.GetStocksReport(_.cloneDeep(this.stockReportRequest)));
-	}
+    }
 
 	public getStockReport(resetPage: boolean) {
 		this.stockReportRequest.from = this.fromDate || null;
-		this.stockReportRequest.to = this.toDate || null;
+        this.stockReportRequest.to = this.toDate || null;
 		this.invViewService.setActiveDate(this.stockReportRequest.from, this.stockReportRequest.to);
 		if (resetPage) {
 			this.stockReportRequest.page = 1;
@@ -778,7 +802,9 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
 		obj.format = reportFormat;
 		obj.reportType = reportType;
 		obj.from = this.fromDate;
-		obj.to = this.toDate;
+        obj.to = this.toDate;
+        obj.warehouseUniqueName = this.currentBranchAndWarehouse.warehouse;
+        obj.branchUniqueName = this.currentBranchAndWarehouse.branch;
 		this.inventoryService.downloadAllInventoryReports(obj)
 			.subscribe(res => {
 				if (res.status === 'success') {
