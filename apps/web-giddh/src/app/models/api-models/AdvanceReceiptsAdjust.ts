@@ -45,9 +45,9 @@ export class AdjustAdvancePaymentModal {
     customerName: string;
     customerUniquename: string;
     voucherDate: string;
-    balanceDue: any;
+    balanceDue: number;
     dueDate: string;
-    grandTotal: any = 0;
+    grandTotal: number;
     gstTaxesTotal: number;
     subTotal: number;
     totalTaxableValue: number;

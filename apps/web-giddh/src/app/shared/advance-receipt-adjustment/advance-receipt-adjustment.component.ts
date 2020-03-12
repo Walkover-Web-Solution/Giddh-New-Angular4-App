@@ -22,7 +22,6 @@ import { ToasterService } from '../../services/toaster.service';
 
 
 
-
 export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
 
     public newAdjustVoucherOptions: IOption[] = [];
@@ -46,9 +45,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
         customerName: '',
         customerUniquename: '',
         voucherDate: '',
-        balanceDue: '',
+        balanceDue: 0,
         dueDate: '',
-        grandTotal: '',
+        grandTotal: 0,
         gstTaxesTotal: 0,
         subTotal: 0,
         totalTaxableValue: 0,
@@ -62,6 +61,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
     };
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     @Input() public invoiceFormDetails;
+    @Input() public isUpdateMode;
     @Input() public advanceReceiptAdjustmentUpdatedData: AdvanceReceiptAdjustment;
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public submitClicked: EventEmitter<{ adjustVoucherData: AdvanceReceiptAdjustment, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
@@ -71,7 +71,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
     }
     ngOnInit() {
         this.adjustVoucherForm = new AdvanceReceiptAdjustment();
-
+console.log('isUpdateMode', this.isUpdateMode);
         this.adjustVoucherForm = {
             tdsTaxUniqueName: '',
             tdsAmount: {
@@ -135,13 +135,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
 
     public assignVoucherDetails() {
         this.adjustPayment = Object.assign(this.adjustPayment, {
-            balanceDue: this.invoiceFormDetails.voucherDetails.balanceDue,
-            grandTotal: this.invoiceFormDetails.voucherDetails.grandTotal,
+            balanceDue: Number(this.invoiceFormDetails.voucherDetails.balanceDue),
+            grandTotal: Number(this.invoiceFormDetails.voucherDetails.grandTotal),
             customerName: this.invoiceFormDetails.voucherDetails.customerName,
             customerUniquename: this.invoiceFormDetails.voucherDetails.customerUniquename,
             voucherDate: moment(this.invoiceFormDetails.voucherDetails.voucherDate).format('DD-MM-YYYY'),
-            totalTaxableValue: this.invoiceFormDetails.voucherDetails.totalTaxableValue,
-            subTotal: this.invoiceFormDetails.voucherDetails.subTotal
+            totalTaxableValue: Number(this.invoiceFormDetails.voucherDetails.totalTaxableValue),
+            subTotal: Number(this.invoiceFormDetails.voucherDetails.subTotal)
 
         });
         this.balanceDueAmount = this.invoiceFormDetails.voucherDetails.balanceDue;
@@ -424,7 +424,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
                     totalAmount += Number(item.dueAmount.amountForAccount);
                 }
             });
-            this.adjustPayment.balanceDue = Number(this.adjustPayment.balanceDue) - Number(totalAmount);
+            // this.adjustPayment.balanceDue = Number(this.adjustPayment.balanceDue) - Number(totalAmount);
             this.adjustPayment.totalAdjustedAmount = Number(totalAmount);
         }
     }

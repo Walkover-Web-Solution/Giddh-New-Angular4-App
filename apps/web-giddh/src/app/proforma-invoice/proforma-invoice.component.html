@@ -272,9 +272,9 @@
 
                             <div class="text-right">
                                 <p class="fs20 b pbR1">
-                                    <span class="balance-due">{{isProformaInvoice || isEstimateInvoice ? 'Total Amount' : 'Balance Due'}}</span>
+                                    <span class="balance-due">{{isProformaInvoice || isEstimateInvoice ? 'Total Amount' : 'Balance Due2'}}</span>
                                     <span class="sp-rupees" *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}
-                                        <strong>{{adjustPaymentBalanceDueData? adjustPaymentBalanceDueData:invFormData.voucherDetails.balanceDue - adjustPaymentBalanceDueData| giddhCurrency}}</strong></span>
+                                        <strong>{{adjustPaymentBalanceDueData? adjustPaymentBalanceDueData:invFormData.voucherDetails.balanceDue| giddhCurrency}}</strong></span>
                                     <!-- added multicurrency feature make it functional to change into appropriate currency -->
                                     <span class="sp-rupees" *ngIf='isMulticurrencyAccount'>
                                         <span *ngIf="isMulticurrencyAccount">{{baseCurrencySymbol}}</span>
@@ -2201,7 +2201,8 @@
 <div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent [invoiceFormDetails]="invFormData" [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData" (closeModelEvent)="closeAdvanceReciiptModal()" (submitClicked)="getAdvanceReceiptAdjustData($event)"></advance-receipt-adjustment-component>
+            <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent [isUpdateMode]="isUpdateMode" [invoiceFormDetails]="invFormData" [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData" (closeModelEvent)="closeAdvanceReciiptModal()"
+                (submitClicked)="getAdvanceReceiptAdjustData($event)"></advance-receipt-adjustment-component>
         </div>
     </div>
 </div>

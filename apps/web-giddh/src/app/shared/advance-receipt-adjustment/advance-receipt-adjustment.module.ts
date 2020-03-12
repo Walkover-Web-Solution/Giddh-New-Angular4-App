@@ -7,6 +7,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxMaskModule } from '../helpers/directives/ngx-mask';
+import { CurrencyModule } from '../helpers/pipes/currencyPipe/currencyType.module';
 
 @NgModule({
     declarations: [AdvanceReceiptAdjustmentComponent],
@@ -18,7 +19,8 @@ import { NgxMaskModule } from '../helpers/directives/ngx-mask';
         LaddaModule,
         SelectModule,
         SharedModule,
-        NgxMaskModule.forRoot()
+        NgxMaskModule.forRoot(),
+        CurrencyModule
     ],
     exports: [AdvanceReceiptAdjustmentComponent]
 })

@@ -367,14 +367,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public companyCountryCode: string = '';
     public advanceReceiptAdjustmentData: AdvanceReceiptAdjustment;
     public adjustPaymentBalanceDueData: number = 0;
+    public totalAdvanceReceiptsAdjustedAmount: number = 0;
     public isAdjustAmount = false;
-     public adjustPaymentData: AdjustAdvancePaymentModal = {
+    public adjustPaymentData: AdjustAdvancePaymentModal = {
         customerName: '',
         customerUniquename: '',
         voucherDate: '',
-        balanceDue: '',
+        balanceDue: 0,
         dueDate: '',
-        grandTotal: '',
+        grandTotal: 0,
         gstTaxesTotal: 0,
         subTotal: 0,
         totalTaxableValue: 0,
@@ -486,6 +487,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (!this.isUpdateMode) {
             this.toggleBodyClass();
         }
+        console.log(this.invFormData, this.adjustPaymentBalanceDueData);
     }
 
     /**
@@ -901,6 +903,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             obj.touristSchemeApplicable = false;
                             obj.passportNumber = '';
                         }
+                    }
+                    if (this.isSalesInvoice) {
+                        this.calculateAdjustedVoucherTotal(results[1]);
                     }
 
                     if (obj.voucherDetails) {
@@ -1884,6 +1889,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateOtherTaxes(entry.otherTaxModal, entry);
         this.calculateTcsTdsTotal();
         this.calculateBalanceDue();
+         /** In case of sales invoice if invoice amount less with advance receipts adjusted amount then open Advane receipts adjust modal */
+        if (this.isSalesInvoice && this.totalAdvanceReceiptsAdjustedAmount && this.isUpdateMode) {
+            if (this.invFormData.voucherDetails.grandTotal < this.totalAdvanceReceiptsAdjustedAmount) {
+                this.isAdjustAdvanceReceiptModalOpen();
+            }
+        }
     }
 
     public calculateTotalDiscount() {
@@ -1945,7 +1956,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.invFormData.voucherDetails.balanceDue =
             ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - depositAmount - Number(this.depositAmountAfterUpdate);
-        this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff;
+        this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff - this.totalAdvanceReceiptsAdjustedAmount;
     }
 
     public calculateSubTotal() {
@@ -1987,6 +1998,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
         this.grandTotalMulDum = calculatedGrandTotal * this.exchangeRate;
+    }
+
+    /**
+     * To check invoice amount less with advance receipts adjusted amount then open Advane receipts adjust modal
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public isAdjustAdvanceReceiptModalOpen() {
+        this.openAdjustPaymentModal();
     }
 
     public generateTotalAmount(txns: SalesTransactionItemClass[]) {
@@ -4140,18 +4160,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     // Advance receipts adjustment start
 
-/**
- * To close advance reciipt modal
- *
- * @memberof ProformaInvoiceComponent
- */
-public closeAdvanceReciiptModal() {
+    /**
+     * To close advance reciipt modal
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public closeAdvanceReciiptModal() {
         this.showAdvanceReceiptAdjust = false;
         this.adjustPaymentModal.hide();
-        if(this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments ) {
-         this.isAdjustAmount = this.advanceReceiptAdjustmentData.adjustments.length? true: false;
+        if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
+            this.isAdjustAmount = this.advanceReceiptAdjustmentData.adjustments.length ? true : false;
         } else {
-         this.isAdjustAmount =  false;
+            this.isAdjustAmount = false;
         }
     }
 
@@ -4204,9 +4224,32 @@ public closeAdvanceReciiptModal() {
 
         this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
         // this.invFormData.voucherDetails.balanceDue = advanceReceiptsAdjustEvent.adjustPaymentData.balanceDue;
-        this.adjustPaymentBalanceDueData = advanceReceiptsAdjustEvent.adjustPaymentData.balanceDue;
+        this.adjustPaymentBalanceDueData = advanceReceiptsAdjustEvent.adjustPaymentData.grandTotal - advanceReceiptsAdjustEvent.adjustPaymentData.totalAdjustedAmount;
         this.adjustPaymentData = advanceReceiptsAdjustEvent.adjustPaymentData;
-        console.log('Proforma get  advanceReceiptsAdjustEvent', advanceReceiptsAdjustEvent);
+        console.log('Proforma get  getAdvanceReceiptAdjustData', advanceReceiptsAdjustEvent);
+    }
+
+    /**
+     * To calculate advance receipt adjusted amount is case of update invoice
+     *
+     * @param {*} voucherObject voucher response in case of update
+     * @memberof ProformaInvoiceComponent
+     */
+    public calculateAdjustedVoucherTotal(voucherObject: any) {
+        this.totalAdvanceReceiptsAdjustedAmount = 0;
+        if (voucherObject && voucherObject.advanceReceiptAdjustment && voucherObject.advanceReceiptAdjustment && voucherObject.advanceReceiptAdjustment.adjustments && voucherObject.advanceReceiptAdjustment.adjustments.length) {
+            this.advanceReceiptAdjustmentData = voucherObject.advanceReceiptAdjustment
+            let adjustments = voucherObject.advanceReceiptAdjustment.adjustments;
+            let totalAmount = 0;
+            if (adjustments) {
+                adjustments.forEach((item) => {
+                    totalAmount += Number(item.dueAmount ? item.dueAmount.amountForAccount : 0);
+                });
+            }
+            this.totalAdvanceReceiptsAdjustedAmount = totalAmount;
+        } else {
+           this.advanceReceiptAdjustmentData = null;
+        }
     }
 
 }

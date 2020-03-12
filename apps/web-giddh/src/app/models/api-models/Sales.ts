@@ -6,6 +6,7 @@ import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { TaxControlData } from '../../theme/tax-control/tax-control.component';
 import * as moment from 'moment';
+import { AdvanceReceiptAdjustment } from './AdvanceReceiptsAdjust';
 
 export enum VoucherTypeEnum {
     'sales' = 'sales',
@@ -526,7 +527,7 @@ export class VoucherClass {
     public passportNumber?: string;
     public number?: string;
     public subVoucher?: string;
-    public advanceReceiptAdjustment?: any;
+    public advanceReceiptAdjustment?: AdvanceReceiptAdjustment;
 
     constructor() {
         this.accountDetails = new AccountDetailsClass();
