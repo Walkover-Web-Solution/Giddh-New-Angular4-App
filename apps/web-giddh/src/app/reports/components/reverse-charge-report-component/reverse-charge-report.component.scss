@@ -1,17 +1,5 @@
 @import "../../../../assets/css/color.scss";
-.td_in_searchBox {
-    div {
-        .td_in_searchBox {
-            display: flex;
-        }
-        i {
-            margin-top: 3px;
-            color: $iconColorTh;
-            padding-right: 8px;
-            cursor: pointer;
-        }
-    }
-}
+
 .invoiceFooter {
     h3 {
         font-size: 16px;
@@ -27,36 +15,15 @@
         display: inline-block;
     }
 }
-.td_in_searchBox {
-    padding: 0px !important;
-}
-.td_in_searchBox div {
-    display: flex;
-}
-.td_in_searchBox .input-container {
-    position: relative;
-}
-.td_in_searchBox .input-container input {
-    height: 50px;
-    min-width: 100%;
-    padding: 11px;
-    padding-right: 0;
-    color: #1c1c1c;
-    border: none;
-    background-color: #f2f2f2;
-}
-.td_in_searchBox div span {
-    padding-right: 8px;
-}
+
 .branch-transfer-report .basic > thead > tr > th {
-    border-top: 1px solid #d9d9d9 !important;
+    border-top: 1px solid $tableBorderColor !important;
 }
 .icon-pointer.activeTextColor {
     color: #01a9f4;
 }
 .voucher-type-dropdown {
-    width: 35px;
-    float: right;
+    display: inline-block;
 }
 .voucher-type-dropdown .btn {
     padding: 0 8px;
@@ -65,27 +32,46 @@
 .icon-calender {
     position: absolute;
     z-index: 9;
-    height: 32px;
-    width: 32px;
+    height: 36px;
+    width: 36px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid #d9d9d9;
+    border-right: 1px solid $tableBorderColor;
     color: #999999;
     left: 0;
+    font-size: 18px;
 }
 .input-grp-dateRangePicker input.form-control {
-    padding-left: 35px !important;
+    padding-left: 45px !important;
     width: 210px;
-}
-.basic > thead > tr > th {
-    min-width: 150px;
-}
-@media only screen and (max-width: 1400px) {
-    .basic > thead > tr > th {
-        min-width: 200px;
+    &:focus {
+        border-color: $tableBorderColor !important;
     }
 }
+.btn-filter {
+    background: $whisperColor;
+    border: 1px solid $whisperColor;
+    font-size: 16px;
+    color: $pageTitleColor;
+    display: inline-flex;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    align-items: center;
+    padding: 6px 10px !important;
+    .icon-cross {
+        margin-right: 5px;
+    }
+    &:focus {
+        box-shadow: none;
+        outline: none;
+    }
+    &:active {
+        box-shadow: none;
+        outline: none;
+    }
+}
+
 @media only screen and (max-width: 767px) {
     .basic > thead > tr > th {
         min-width: initial;

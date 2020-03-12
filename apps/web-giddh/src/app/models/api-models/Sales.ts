@@ -216,6 +216,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public hsnOrSac: string;
     public hsnNumber: string;
     public sacNumber: string;
+    public sacNumberExists?: boolean;
     public description: string;
     public quantity: number;
     public stockUnit: string;

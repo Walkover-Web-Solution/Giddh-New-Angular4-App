@@ -8,18 +8,18 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ToasterService } from '../../services/toaster.service';
 import { VatService } from "../../services/vat.service";
-import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { saveAs } from "file-saver";
 import { PAGINATION_LIMIT } from '../../app.constant';
 import { CurrentPage } from '../../models/api-models/Common';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap';
 import { DownloadOrSendInvoiceOnMailComponent } from '../../invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { InvoiceService } from '../../services/invoice.service';
 import { GeneralService } from '../../services/general.service';
+import { VoucherTypeEnum } from '../../models/api-models/Sales';
 
 @Component({
     selector: 'app-vat-report-transactions',
@@ -173,21 +173,22 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public onSelectInvoice(invoice): void {
-        if (invoice.voucherNumber) {
-            this.selectedInvoice = invoice;
+        if(invoice.voucherType === VoucherTypeEnum.purchase) {
+            this.router.navigate(['pages', 'purchase-management', 'purchase', invoice.accountUniqueName, invoice.purchaseRecordUniqueName]);
+        } else {
+            if (invoice.voucherNumber) {
+                this.selectedInvoice = invoice;
 
-            if(invoice.voucherType === "purchase") {
-                this.router.navigate(['pages', 'purchase-management', 'purchase', invoice.accountUniqueName, invoice.purchaseRecordUniqueName]);
-            } else {
                 let downloadVoucherRequestObject = {
                     voucherNumber: [invoice.voucherNumber],
                     voucherType: invoice.voucherType,
                     accountUniqueName: invoice.accountUniqueName
                 };
                 this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+                
+                this.loadDownloadOrSendMailComponent();
+                this.downloadOrSendMailModel.show();
             }
-            this.loadDownloadOrSendMailComponent();
-            this.downloadOrSendMailModel.show();
         }
     }
 

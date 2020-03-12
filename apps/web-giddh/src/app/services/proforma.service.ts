@@ -211,7 +211,8 @@ export class ProformaService {
 	    this.companyUniqueName = this._generalService.companyUniqueName;
     	let url = this._generalService.createQueryString(this.config.apiUrl + ESTIMATES_API.getVersions, {
 			page: request.page, count: request.count
-		});
+        });
+        this.companyUniqueName = this._generalService.companyUniqueName;
 		return this._http.post(url
 			.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
 			.replace(':vouchers', voucherType)
