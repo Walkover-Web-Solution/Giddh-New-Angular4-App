@@ -594,10 +594,10 @@
                                                     [showClear]="false" (keydown.enter)="onEnter(select,txn)"
                                                     (onShow)="isSelectOpen=true;bs.hide();" (onHide)="onSelectHide()"
                                                     (selected)="selectAccount($event,txn)"
-                                                    (keydown)="keydownPressed($event)"
-                                                    [placeholder]="'To Select Accounts'" [notFoundLink]="true"
-                                                    (noResultsClicked)="toggleAsidePane()" [multiple]="false"
-                                                    [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
+                                                    (keydown)="keydownPressed($event)" placeholder="To Select Accounts"
+                                                    [notFoundLink]="true" (noResultsClicked)="toggleAsidePane()"
+                                                    [multiple]="false" [ItemHeight]="67"
+                                                    [useInBuiltFilterForFlattenAc]="true">
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
                                                             <a href="javascript:void(0)" class="list-item"
@@ -856,7 +856,7 @@
                                                     #select (keydown.enter)="onEnter(shCredit,txn)"
                                                     (onShow)="isSelectOpen=true;bsd.hide()" (onHide)="onSelectHide()"
                                                     [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
-                                                    [showClear]="false" [placeholder]="'By Select Accounts'"
+                                                    [showClear]="false" placeholder="By Select Accounts"
                                                     (keydown)="keydownPressed($event)" [notFoundLink]="true"
                                                     (noResultsClicked)="toggleAsidePane()" [multiple]="false"
                                                     [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
