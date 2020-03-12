@@ -51,18 +51,18 @@
 
             </div>
             <div class="col-sm-4  text-center col-xs-12 daterngoption">
-                    <!-- (hideDaterangepicker)="selectedDate($event)"  -->
-                    <div class="advanceSearchByDate date-advanceSearch">
-                        <!-- <span class="icon-calender "></span> -->
-                        <span class="inputWrapper">
-                            <input type="text" class="form-control daterange_picker_ledger" daterangepicker
-                                [options]="datePickerOptions" (applyDaterangepicker)="selectedDate($event)"
-                                name="daterangeInput" />
-                        </span>
-                    </div>
-                    <!--<input date-range-picker="" id="daterange3" name="daterange3"-->
-                    <!--class="form-control date-picker date-range-picker ng-pristine ng-untouched ng-valid ng-isolate-scope ng-valid-required"-->
-                    <!--type="text" ng-model="cDate" options="opts" required="">-->
+                <!-- (hideDaterangepicker)="selectedDate($event)"  -->
+                <div class="advanceSearchByDate date-advanceSearch">
+                    <!-- <span class="icon-calender "></span> -->
+                    <span class="inputWrapper">
+                        <input type="text" class="form-control daterange_picker_ledger" daterangepicker
+                            [options]="datePickerOptions" (applyDaterangepicker)="selectedDate($event)"
+                            name="daterangeInput" />
+                    </span>
+                </div>
+                <!--<input date-range-picker="" id="daterange3" name="daterange3"-->
+                <!--class="form-control date-picker date-range-picker ng-pristine ng-untouched ng-valid ng-isolate-scope ng-valid-required"-->
+                <!--type="text" ng-model="cDate" options="opts" required="">-->
             </div>
             <!-- endregion -->
 
@@ -262,7 +262,8 @@
                                                         (saveBlankLedger)="saveBankTransaction()"
                                                         (clickedOutsideEvent)="hideBankLedgerPopup($event)"
                                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
-                                                        [invoiceList]="invoiceList"  [isTouristSchemeApplicable]="isTouristSchemeApplicable">
+                                                        [invoiceList]="invoiceList"
+                                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable">
                                                     </new-ledger-entry-panel>
                                                 </div>
                                                 <!-- end  -->
@@ -405,10 +406,10 @@
             <thead>
                 <tr>
                     <th [ngClass]="Shown ? 'active' : ''" class="col-xs-6 hidden-xs">
-                        <b>{{lc.ledgerUnderStandingObj.text.dr}}</b>
+                        <b>To {{lc.ledgerUnderStandingObj.text.dr}}</b>
                     </th>
-                    <th [ngClass]="!Shown ? 'active' : ''" class="col-xs-6 hidden-xs">
-                        <b>{{lc.ledgerUnderStandingObj.text.cr}}</b>
+                    <th [ngClass]="!Shown ? 'active' : ''" class="col-xs-6 hidden-xs text-right">
+                        <b>By {{lc.ledgerUnderStandingObj.text.cr}}</b>
                     </th>
                 </tr>
             </thead>
@@ -532,7 +533,8 @@
                                     <span class="download-invoice-ledger d-flex" *ngIf="txn.voucherGenerated"
                                         style="position: unset;align-items: center"
                                         (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
-                                        tooltip="Download {{txn.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{txn.voucherNumber}}" [placement]="'right'">
+                                        tooltip="Download {{txn.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{txn.voucherNumber}}"
+                                        [placement]="'right'">
                                         <i class="glyphicon glyphicon-download pull-left"
                                             style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                                     </span>
@@ -664,7 +666,9 @@
                                         (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                         [invoiceList]="invoiceList"
-                                        [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount" [shouldShowItcSection]="shouldShowItcSection" [isTouristSchemeApplicable]="isTouristSchemeApplicable">
+                                        [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
+                                        [shouldShowItcSection]="shouldShowItcSection"
+                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable">
                                     </new-ledger-entry-panel>
                                 </div>
 
@@ -787,7 +791,8 @@
                                     <span class="download-invoice-ledger d-flex" *ngIf="txn.voucherGenerated"
                                         style="position: unset;align-items: center"
                                         (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
-                                        tooltip="Download {{txn.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{txn.voucherNumber}}" [placement]="'right'">
+                                        tooltip="Download {{txn.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{txn.voucherNumber}}"
+                                        [placement]="'right'">
                                         <i class="glyphicon glyphicon-download pull-left"
                                             style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                                     </span>
@@ -919,7 +924,9 @@
                                         (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                         [invoiceList]="invoiceList"
-                                        [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount" [shouldShowItcSection]="shouldShowItcSection" [isTouristSchemeApplicable]="isTouristSchemeApplicable">
+                                        [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
+                                        [shouldShowItcSection]="shouldShowItcSection"
+                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable">
                                     </new-ledger-entry-panel>
                                 </div>
 
@@ -1259,7 +1266,8 @@
                     <form name="newRole" novalidate class="" autocomplete="off">
                         <div class="modal_wrap mrB2">
                             <h3>Do you want to delete the selected entries? </h3>
-                            <p class="text-gray font-14 mt-05">All their corresponding vouchers and invoices will be deleted permanently and will no longer be accessible from other modules.</p>
+                            <p class="text-gray font-14 mt-05">All their corresponding vouchers and invoices will be
+                                deleted permanently and will no longer be accessible from other modules.</p>
                         </div>
                         <div class="pull-right">
                             <button type="submit" class="btn btn-md btn-success mrR1"
