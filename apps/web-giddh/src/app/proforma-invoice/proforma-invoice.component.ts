@@ -316,6 +316,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public reverseExchangeRate: number;
     public originalReverseExchangeRate: number;
     public countryCode: string = '';
+    public isValidGstinNumber: boolean= false;
 
     // private members
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -1346,19 +1347,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public checkGstNumValidation(value) {
-        let isValid: boolean = false;
+        this.isValidGstinNumber = false;
         if (value) {
-            if (!this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
+            if (this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(value)) {
-                        isValid = true;
+                        this.isValidGstinNumber = true;
                     }
                 }
             } else {
-                isValid = true;
+                this.isValidGstinNumber = true;
             }
-            if (!isValid) {
+            if (!this.isValidGstinNumber) {
                 this._toasty.errorToast('Invalid ' + this.formFields['taxName'].label);
             }
         }
@@ -1443,16 +1444,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let data: VoucherClass = _.cloneDeep(this.invFormData);
 
         // special check if gst no filed is visible then and only then check for gst validation
-        if (data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
-            if (!this.isValidGstIn(data.accountDetails.billingDetails.gstNumber)) {
-                this._toasty.errorToast('Invalid gst no in Billing Address! Please fix and try again');
+        if (data.accountDetails && data.accountDetails.billingDetails && data.accountDetails.shippingDetails &&  data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
+            this.checkGstNumValidation(data.accountDetails.billingDetails.gstNumber);
+            this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber);
+            if (!this.isValidGstinNumber) {
                 return;
-            }
-            if (!this.autoFillShipping) {
-                if (!this.isValidGstIn(data.accountDetails.shippingDetails.gstNumber)) {
-                    this._toasty.errorToast('Invalid gst no in Shipping Address! Please fix and try again');
-                    return;
-                }
             }
         }
 
