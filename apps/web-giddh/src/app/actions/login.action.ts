@@ -19,7 +19,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {sortBy} from '../lodash-optimized';
 import {COMMON_ACTIONS} from './common.const';
 import {AppState} from '../store';
-import {Injectable} from '@angular/core';
+import {Injectable, NgZone} from '@angular/core';
 import {map, switchMap, take} from 'rxjs/operators';
 import {userLoginStateEnum} from '../models/user-login-state';
 import {Actions, Effect} from '@ngrx/effects';
@@ -241,7 +241,9 @@ export class LoginActions {
                 }
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
-                    this._router.navigate(['/pages/new-user']);
+                    this.zone.run(() => {
+                        this._router.navigate(['/pages/new-user']);
+                    });
                     return {type: 'EmptyAction'};
                 } else {
                     if (stateDetail.body && stateDetail.status === 'success') {
@@ -292,7 +294,9 @@ export class LoginActions {
                 }
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
-                    this._router.navigate(['/pages/new-user']);
+                    this.zone.run(() => {
+                        this._router.navigate(['/pages/new-user']);
+                    });
                     return {type: 'EmptyAction'};
                 } else {
                     if (stateDetail.body && stateDetail.status === 'success') {
@@ -319,10 +323,13 @@ export class LoginActions {
     public logoutSuccess$: Observable<Action> = this.actions$
         .ofType(LoginActions.LogOut).pipe(
             map((action: CustomActions) => {
-                if (PRODUCTION_ENV && !isElectron) {
+                if (PRODUCTION_ENV && !(isElectron || isCordova)) {
                     window.location.href = 'https://giddh.com/login/';
-                } else if (isElectron) {
-                    this._router.navigate(['/login']);
+                } else if (isCordova) {
+                    this.zone.run(() => {
+                        this._generalService.invokeEvent.next('logoutCordova');
+                        this._router.navigate(['login']);
+                    });
                 } else {
                     window.location.href = AppUrl + 'login/';
                 }
@@ -680,7 +687,8 @@ export class LoginActions {
         private activatedRoute: ActivatedRoute,
         private _generalAction: GeneralActions,
         private _dbService: DbService,
-        private settingsProfileActions: SettingsProfileActions
+        private settingsProfileActions: SettingsProfileActions,
+        private zone: NgZone
     ) {
     }
 
@@ -1070,7 +1078,7 @@ export class LoginActions {
         this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
         this._router.navigate([stateDetail.body.lastState]);
-        if (isElectron) {
+        if (isElectron || isCordova) {
             window.location.reload();
         }
         return {type: 'EmptyAction'};
