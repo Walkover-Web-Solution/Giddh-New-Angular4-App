@@ -254,6 +254,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public goToSelectPlan() {
-        this._router.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, isPlanPage: true } });
+        this._router.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, showPlans: true } });
     }
 }

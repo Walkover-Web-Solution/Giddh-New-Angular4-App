@@ -546,6 +546,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(s => s.receipt.isDeleteSuccess), takeUntil(this.destroyed$))
             .subscribe(result => {
                 this.selectedItems = [];
+                this.selectedInvoicesList = [];
                 if (result && this.selectedInvoiceForDetails) {
                     this.selectedInvoiceForDetails = null;
                     this.getVoucher(this.isUniversalDateApplicable);
@@ -1034,11 +1035,13 @@ public toggleBulkUpdatePopup(isClose: boolean): void {
                 return ele.isSelected;
             });
 
-            this.voucherData.items.forEach((ele) => {
-                this.selectedInvoicesList = this.selectedInvoicesList.filter((s) => {
-                    return ele.uniqueName !== s.uniqueName;
+            if(this.voucherData && this.voucherData.items) {
+                this.voucherData.items.forEach((ele) => {
+                    this.selectedInvoicesList = this.selectedInvoicesList.filter((s) => {
+                        return ele.uniqueName !== s.uniqueName;
+                    });
                 });
-            });
+            }
 
             this.selectedItems = [];
             this.isExported = false;

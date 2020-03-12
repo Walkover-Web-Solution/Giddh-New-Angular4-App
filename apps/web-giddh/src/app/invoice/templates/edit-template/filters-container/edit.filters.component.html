@@ -1,9 +1,8 @@
 <div class="btn-group btn-group-lg" role="group" aria-label="">
-    <button type="button" class="btn btn-default" [ngClass]="{'active': ifDesignSelected}" (click)="openTab('design')"
+    <button type="button" class="btn btn-default" [ngClass]="{'active-tab': ifDesignSelected, 'inactive-tab': ifContentSelected}" (click)="openTab('design')"
         id="defaultOpen">Design
     </button>
-    <button type="button" class="btn btn-default" [ngClass]="{'active': ifContentSelected}"
-        (click)="openTab('content')">
+    <button type="button" class="btn btn-default" [ngClass]="{'active-tab': ifContentSelected, 'inactive-tab': ifDesignSelected}" (click)="openTab('content')">
         Content
     </button>
     <!--<button type="button" class="btn btn-default" (click)="openTab('email')">Email</button>-->

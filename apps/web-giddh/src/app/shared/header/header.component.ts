@@ -1230,7 +1230,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.modelRefCrossLimit = this.modalService.show(template);
     }
 
-    public goToSelectPlan(template: TemplateRef<any>) {
+    /**
+     * Navigates to user details' subscription tab
+     *
+     * @memberof HeaderComponent
+     */
+    public goToSelectPlan(): void {
         this.modalService.hide(1);
 
         this.router.navigate(['pages', 'user-details'], {
@@ -1241,6 +1246,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
         this.modelRefExpirePlan = this.modalService.show(template);
+
     }
 
     public onRight(nodes) {
