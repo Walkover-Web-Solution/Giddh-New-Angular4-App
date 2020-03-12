@@ -406,10 +406,13 @@
             <thead>
                 <tr>
                     <th [ngClass]="Shown ? 'active' : ''" class="col-xs-6 hidden-xs">
-                        <b>To {{lc.ledgerUnderStandingObj.text.dr}}</b>
+                        <b> {{lc.ledgerUnderStandingObj.text.dr}}</b>
+
+                        <span class="dr-cr-category text-gray">Dr</span>
                     </th>
-                    <th [ngClass]="!Shown ? 'active' : ''" class="col-xs-6 hidden-xs text-right">
-                        <b>By {{lc.ledgerUnderStandingObj.text.cr}}</b>
+                    <th [ngClass]="!Shown ? 'active' : ''" class="col-xs-6 hidden-xs ">
+                        <b> {{lc.ledgerUnderStandingObj.text.cr}}</b>
+                        <span class="dr-cr-category text-gray">Cr</span>
                     </th>
                 </tr>
             </thead>
@@ -457,7 +460,7 @@
                                     *ngIf="checkedTrxWhileHovering.length > 0"
                                     (click)="selectAllEntries($event, 'debit')">
                             </td>
-                            <td data-title="Particular" class="col-xs-6">B/F Balance</td>
+                            <td data-title="Particular" class="col-xs-6">To Balance B/F</td>
                             <td data-title="Amount" class="col-xs-3 text-right">
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'" class="">
                                     {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.forwardedBalance?.amount  | giddhCurrency }}
@@ -520,6 +523,7 @@
                                 <div class="d-flex align-items-center justify-content-between">
 
                                     <div class="ellp">
+                                        To
                                         {{ txn.inventory ? txn.particular.name + ' (' + txn.inventory.stock.name + ')' : txn.particular.name }}
                                     </div>
 
@@ -590,10 +594,10 @@
                                                     [showClear]="false" (keydown.enter)="onEnter(select,txn)"
                                                     (onShow)="isSelectOpen=true;bs.hide();" (onHide)="onSelectHide()"
                                                     (selected)="selectAccount($event,txn)"
-                                                    (keydown)="keydownPressed($event)" [placeholder]="'Select Accounts'"
-                                                    [notFoundLink]="true" (noResultsClicked)="toggleAsidePane()"
-                                                    [multiple]="false" [ItemHeight]="67"
-                                                    [useInBuiltFilterForFlattenAc]="true">
+                                                    (keydown)="keydownPressed($event)"
+                                                    [placeholder]="'To Select Accounts'" [notFoundLink]="true"
+                                                    (noResultsClicked)="toggleAsidePane()" [multiple]="false"
+                                                    [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
                                                             <a href="javascript:void(0)" class="list-item"
@@ -714,7 +718,7 @@
                                     *ngIf="checkedTrxWhileHovering.length > 0"
                                     (click)="selectAllEntries($event,'credit')">
                             </td>
-                            <td data-title="B/F Balance" class="col-xs-6">B/F Balance</td>
+                            <td data-title="B/F Balance" class="col-xs-6">By Balance B/F</td>
                             <td data-title="Amount" class="col-xs-3 text-right">
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
                                     {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.forwardedBalance?.amount | giddhCurrency}}
@@ -778,6 +782,7 @@
 
                                 <div class="d-flex align-items-center" style="justify-content: space-between">
                                     <div class="ellp">
+                                        By
                                         {{ txn.inventory ? txn.particular.name + ' (' + txn.inventory.stock.name + ')' : txn.particular.name }}
                                     </div>
 
@@ -851,7 +856,7 @@
                                                     #select (keydown.enter)="onEnter(shCredit,txn)"
                                                     (onShow)="isSelectOpen=true;bsd.hide()" (onHide)="onSelectHide()"
                                                     [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
-                                                    [showClear]="false" [placeholder]="'Select Accounts'"
+                                                    [showClear]="false" [placeholder]="'By Select Accounts'"
                                                     (keydown)="keydownPressed($event)" [notFoundLink]="true"
                                                     (noResultsClicked)="toggleAsidePane()" [multiple]="false"
                                                     [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
@@ -952,8 +957,11 @@
 
                                 <span *ngIf="ledgerTxnBalance?.closingBalance?.type === 'CREDIT'"
                                     [tooltip]="lc.ledgerUnderStandingObj.balanceText.cr" [placement]="'left'">
-                                    C/F: Cr
-                                    {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.closingBalance?.amount  | giddhCurrency }}
+                                    To Balance C/F:
+                                    <span class="digitBlue">
+                                        {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.closingBalance?.amount  | giddhCurrency }}
+                                    </span>
+
                                 </span>
 
                             </td>
@@ -992,7 +1000,7 @@
                                 style="padding-right:10px !important">
                                 <span *ngIf="ledgerTxnBalance?.closingBalance?.type === 'DEBIT'"
                                     [tooltip]="lc.ledgerUnderStandingObj.balanceText.dr" [placement]="'left'">
-                                    C/F: Dr
+                                    By Balance C/F:
                                     <span class="digitBlue">
                                         {{ ledgerTxnBalance?.currencySymbol }}{{ledgerTxnBalance?.closingBalance?.amount  | giddhCurrency}}
                                     </span>
