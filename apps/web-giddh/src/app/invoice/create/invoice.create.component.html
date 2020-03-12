@@ -201,7 +201,7 @@
 <form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm()" novalidate class="clearfix mrB2"
     *ngIf="invoiceDataFound && templateHeader" autocomplete="off">
     <div class="clearfix ">
-        <div class="clearfix wrapperCustomerTable  pdT2">
+        <div class="clearfix wrapperCustomerTable ">
             <table class="table customerInvoiceTable">
                 <tr>
                     <td width="150px">
@@ -240,14 +240,14 @@
                                                         rows="3" autocomplete="off" autofocus="off"
                                                         aria-autocomplete="none"></textarea>
                                                     <div class="">
-                                                        <div class="col-sm-3 pd mrB1">
+                                                        <div class="col-sm-6 pd mrB1">
 
                                                             <sales-sh-select [placeholder]="'Country'" [disabled]="true"
                                                                 [showBottomBorderOnly]="true" [width]="'100%'"
                                                                 class="select-bdr-bottom"></sales-sh-select>
 
                                                         </div>
-                                                        <div class="col-sm-5 pd mrB1">
+                                                        <div class="col-sm-6 pd mrB1">
 
                                                             <sales-sh-select [placeholder]="'State'"
                                                                 class="select-bdr-bottom"
@@ -259,7 +259,7 @@
                                                             </sales-sh-select>
 
                                                         </div>
-                                                        <div class="col-sm-4 pd mrB1">
+                                                        <div class="col-sm-12 pd mrB1">
 
                                                             <input maxLength="15" type="text"
                                                                 name="billingDetails.gstNumber"
@@ -274,10 +274,11 @@
                                         </div>
                                         <div class="col-xs-6">
                                             <div class="form-group p0 width100">
-                                                <label>
+                                                <label class="d-flex justify-content-center align-items-center">
                                                     <input type="checkbox" (change)="autoFillShippingDetails()"
                                                         name="autoFillShipping" [attr.checked]="true"
-                                                        [(ngModel)]="autoFillShipping"> Shipping Address Same as Billing
+                                                        [(ngModel)]="autoFillShipping" class="shipping-checkbox">
+                                                    Shipping Address Same as Billing
                                                     Address</label>
                                                 <div class="billing-address" [ngClass]="{'disabled': autoFillShipping}">
                                                     <textarea [readonly]="autoFillShipping"
@@ -286,7 +287,7 @@
                                                         rows="3" autocomplete="off"></textarea>
                                                     <div class="clearfix">
                                                         <div class="form-group">
-                                                            <div class="col-sm-3 pd mrB1">
+                                                            <div class="col-sm-6 pd mrB1">
                                                                 <div class="form-group">
 
                                                                     <sales-sh-select [disabled]="true"
@@ -295,7 +296,7 @@
                                                                         class="select-bdr-bottom"></sales-sh-select>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-sm-5 pd mrB1">
+                                                            <div class="col-sm-6 pd mrB1">
 
                                                                 <sales-sh-select [disabled]="autoFillShipping"
                                                                     [placeholder]="'State'" class="select-bdr-bottom"
@@ -305,7 +306,7 @@
                                                                     [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode">
                                                                 </sales-sh-select>
                                                             </div>
-                                                            <div class="col-sm-4 pd mrB1">
+                                                            <div class="col-sm-12 pd mrB1">
 
                                                                 <input [readonly]="autoFillShipping" maxLength="15"
                                                                     type="text" name="shippingDetails.gstNumber"
@@ -329,37 +330,37 @@
                     </td>
                     <td></td>
                 </tr>
-                <tr>
-                    <td>
-                        <label>Attention to</label>
-                    </td>
-                    <td>
-                        <div class="form-group pl0 m-r-15 col-xs-6">
 
-
-                            <input type="text" name="attention" placeholder="Attention to"
-                                class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.attentionTo" />
-                        </div>
-                    </td>
-                    <td></td>
-                </tr>
 
 
             </table>
             <table class="innerTable table  customerInvoiceTable bg-white">
+                <tr>
+                    <td>
+                        <label>Attention to</label>
+                    </td>
+                    <td width="65%">
+                        <div class="col-xs-6 pl-0">
+                            <input type="text" name="attention" placeholder="Attention to"
+                                class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.attentionTo" />
+                        </div>
+
+                    </td>
+                    <td>
+                    </td>
+
+                </tr>
                 <tr>
                     <td width="150px">
                         <label>Email Id</label>
                     </td>
                     <td width="65%">
                         <div class="col-xs-6 pl-0">
-
                             <input type="email" placeholder="someone@example.com" name="accountDetails.email"
                                 class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.email"
                                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" #customeremail="ngModel"
                                 [class.invalid-inp]="customeremail.errors && (customeremail.dirty || customeremail.touched)" />
                         </div>
-
                     </td>
                     <td></td>
                 </tr>
@@ -380,7 +381,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <label> Invoice No.</label>
+                        <label> Invoice #</label>
                     </td>
                     <td style="position:relative">
                         <div class="col-xs-6 pl-0">
@@ -918,7 +919,7 @@
 
 
     </section>
-    <section class="row">
+    <section>
         <section id="actionPane" class="text-center mrB4">
             <div class="col-xs-12">
                 <div class="pull-right pr">
