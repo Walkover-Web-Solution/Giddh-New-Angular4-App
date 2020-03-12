@@ -443,10 +443,15 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     private loadBranchWithWarehouse(): void {
         if (this.branchesWithWarehouse && this.branchesWithWarehouse.length) {
-            this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: branch.name, value: branch.uniqueName }));
             let currentCompanyUniqueName;
             this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(uniqueName => currentCompanyUniqueName = uniqueName);
             let currentCompanyDetails: any = this.branchesWithWarehouse.filter((branch) => branch.uniqueName === currentCompanyUniqueName);
+            const headQuarterIndex = this.branchesWithWarehouse.findIndex(branch => branch.isHeadQuarter);
+            if (headQuarterIndex > -1 && this.branchesWithWarehouse[headQuarterIndex].uniqueName !== currentCompanyUniqueName) {
+                this.branchesWithWarehouse.splice(headQuarterIndex, 1);
+            }
+            this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: branch.name, value: branch.uniqueName }));
+
             if (currentCompanyDetails.length) {
                 currentCompanyDetails = currentCompanyDetails.pop();
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(currentCompanyDetails.warehouses);
