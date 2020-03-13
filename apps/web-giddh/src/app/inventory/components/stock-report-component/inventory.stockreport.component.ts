@@ -323,14 +323,16 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
 		});
 
 		this.stockReport$.subscribe((res: any) => {
-            if (res.isStockNotFound) {
-                this.stockReport = undefined;
-                this.stockNotFoundMessage = res.message;
-            } else {
-                this.stockReport = res;
-                this.stockNotFoundMessage = '';
+            if (res) {
+                if (res.isStockNotFound) {
+                    this.stockReport = undefined;
+                    this.stockNotFoundMessage = res.message;
+                } else {
+                    this.stockReport = res;
+                    this.stockNotFoundMessage = '';
+                }
+                this.cdr.detectChanges();
             }
-            this.cdr.detectChanges();
 		});
 
 		this.universalDate$.subscribe(a => {
