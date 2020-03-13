@@ -1,5 +1,4 @@
 /************ login page start *****************/
-@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900");
 
 /*typography styles*/
 
@@ -215,31 +214,18 @@ button.close {
 }
 
 :host ::ng-deep .btn-success {
-    background: #e34b26;
+    background: #19237e;
     color: #fff;
+    border-color: #19237e;
 }
 
 :host ::ng-deep .btn-success:hover {
-    background: #2c2c43;
-    /*  */
+    background: #040858;
+    border-color: #040858;
+    color: #fff;
 }
 
 strong {
-    font-family: "Roboto", sans-serif;
-}
-
-.flex-container {
-    display: flex;
-    height: 100%;
-    align-items: center;
-    font-family: "Roboto", sans-serif;
-    justify-content: flex-start;
-}
-
-.flex-container > div {
-    align-items: center;
-    height: 100%;
-    display: flex;
     font-family: "Roboto", sans-serif;
 }
 
@@ -255,7 +241,7 @@ h1 {
     font-size: 24px;
 }
 
-.slide_content {
+.slide-content {
     padding: 80px 100px;
     color: #fff;
     background: #2c2c43;
@@ -264,17 +250,17 @@ h1 {
     justify-content: center;
 }
 
-.login_box {
+/* .login-box {
     background: #fff8ea url("/assets/images/new/banner-grid-design.png") repeat;
     padding: 20px 70px;
-}
+} */
 
-.login_box h1 {
+.login-box h1 {
     color: #0f0f27;
     font-weight: 500;
 }
 
-.form_wrapper {
+.form-wrapper {
     display: flex;
     margin-bottom: 40px;
     flex-direction: column;
@@ -284,24 +270,25 @@ small {
     color: #333;
 }
 
-.form_wrapper form {
+.form-wrapper form {
     width: 300px;
 }
 
-/* social_login */
+/* social-login */
 
-.social_login {
+.social-login {
     overflow: hidden;
     display: flex;
+    margin-bottom: 20px;
 }
 
-.social_login li {
+.social-login li {
     list-style: none;
     display: inline-block;
     margin-right: 15px;
 }
 
-.social_login li a {
+.social-login li a {
     display: inline-block;
     height: 40px;
     border: 1px solid;
@@ -309,25 +296,26 @@ small {
     line-height: 40px;
     text-align: center;
     position: relative;
+    font-size: 14px;
 }
 
-.google_ico a {
+.google-ico a {
     color: #fff;
     padding-left: 40px !important;
 }
 
-.google_ico span {
+.google-ico span {
     padding: 0 15px;
 }
 
 /* social icon */
 
-.linkedin_ico a {
+.linkedin-ico a {
     color: #0d83b3;
     border-color: #0d83b3;
 }
 
-.google_ico a {
+.google-ico a {
     background: #5092f3;
     border-color: #5092f3 !important;
     color: #fff;
@@ -348,29 +336,29 @@ small {
     height: 18px;
 }
 
-.login_option,
-.login_option a {
+.login-option,
+.login-option a {
     color: #0c5fc1;
     margin-top: 55px;
     font-weight: 500;
 }
 
-.login_option a {
+.login-option a {
     border-bottom: 2px dotted #0c5fc1;
 }
 
-.slide_content h1 {
+.slide-content h1 {
     font-size: 24px;
     font-weight: 400;
     text-align: center;
     line-height: 34px;
 }
 
-.hash_tag {
+.hash-tag {
     color: #e34b26;
 }
 
-.slide_content .btn {
+.slide-content .btn {
     font-size: 18px;
     font-weight: 500;
     margin-top: 55px;
@@ -378,50 +366,50 @@ small {
     padding: 4px 18px;
 }
 
-.slide_content .btn-white {
+.slide-content .btn-white {
     color: #fff7eb;
     border: 1px solid #fff;
 }
 
-.slide_content .btn-white:hover {
+.slide-content .btn-white:hover {
     color: #0f0f27;
     background: #fff;
 }
 
-.slide_content > div > img {
+.slide-content > div > img {
     max-width: 400px;
     margin-bottom: 40px;
 }
 
-.app_ico,
-.download_app {
+.app-ico,
+.download-app {
     display: flex;
     width: 100%;
     justify-content: space-evenly;
 }
 
-.app_ico ul h1 {
+.app-ico ul h1 {
     margin-top: 10px;
 }
 
-.app_ico ul li,
-.download_app ul li {
+.app-ico ul li,
+.download-app ul li {
     display: inline-block;
     list-style: none;
     /* margin-right: 20px; */
     border-radius: 2px;
 }
 
-.app_ico ul li {
+.app-ico ul li {
     height: 40px;
 }
 
-.download_app ul li {
+.download-app ul li {
     margin-right: 0;
 }
 
-.app_ico ul li a,
-.download_app ul li a {
+.app-ico ul li a,
+.download-app ul li a {
     display: inline-block;
     height: 40px;
     border: 1px solid;
@@ -433,82 +421,142 @@ small {
     overflow: hidden;
 }
 
-.app_ico ul li a:hover,
-.download_app ul li a:hover {
+.app-ico ul li a:hover,
+.download-app ul li a:hover {
     background: #fff;
     color: #2c2d43;
 }
 
-.download_app ul li a:hover i {
+.download-app ul li a:hover i {
     border-color: #2c2d43;
 }
 
-.img_hover:hover img:last-child {
+.img-hover:hover img:last-child {
     display: block !important;
 }
 
-.img_hover:hover img:first-child {
+.img-hover:hover img:first-child {
     display: none;
 }
-
+/* new theme login page css start */
+.login-box {
+    position: relative;
+}
+.login-left {
+    background-color: #1a237e;
+    position: absolute;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+}
+.login-right {
+    background-image: url("../../assets/images/Login-Page-Image.png");
+    height: 100vh;
+    justify-content: flex-start;
+    background-position: top right;
+    background-size: cover;
+}
+.px-0 {
+    padding: 0;
+}
+.mx-0 {
+    margin: 0;
+}
+.giddh-login {
+    margin-left: -245px;
+    width: 495px;
+}
+.giddh-login-inner {
+    max-width: 476px;
+    width: 90%;
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.logo-login {
+    background-color: #040a58;
+    height: 98px;
+    display: flex;
+    align-items: center;
+    padding: 35px;
+    position: relative;
+}
+.accounting-space {
+    padding: 30px;
+    border-radius: 0;
+    background-color: #fff;
+}
+.accounting-space h4 {
+    color: #36396e;
+    font-weight: 600;
+    font-size: 20px;
+}
+.btn-outline-primary {
+    background-color: #01a9f4;
+    border-radius: 3px;
+    min-width: 160px;
+    border-radius: 5px;
+    color: #fff;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+    background-color: #0492d2;
+    box-shadow: none;
+    outline: none;
+}
+.login-with {
+    color: #36396e;
+    font-size: 0.9em;
+}
+.login-with a {
+    color: #36396e;
+    text-decoration: none;
+}
+.btn-secondary {
+    background-color: #fff;
+    color: #000962;
+    border: 1px solid #5b64c9;
+    border-radius: 5px;
+}
+.btn-secondary:hover {
+    color: #fff !important;
+    background-color: #5b64c9;
+    border-color: #5b64c9;
+}
+.forgotStep {
+    display: none;
+}
 @media only screen and (max-width: 768px) {
-    .flex-container {
-        background: #fff8ea url("/assets/images/banner-grid-design.png") repeat;
-        display: block;
-    }
-
-    .slide_content {
-        display: none !important;
-        padding: 110px 20px;
-    }
-
-    .login_box {
-        padding: 80px 20px;
-    }
-
-    .on_mobile {
-        display: block !important;
-    }
-
-    .flex-container > div {
-        display: block;
-        height: auto;
-        text-align: center;
-        overflow: hidden;
-    }
-
-    .social_login {
-        display: block;
-    }
-
-    .logo {
-        left: 20px;
-        top: 20px;
-    }
-
-    .logo img {
-        max-width: 130px;
-    }
-
-    .download_app ul li a {
-        height: 50px;
-        line-height: 50px;
-        padding: 0 16px;
-        border-radius: 2px;
-        display: flex;
-    }
-
-    .download_app ul li a i {
-        border-right: 1px solid #fff;
-        padding-right: 16px;
-        font-size: 28px;
-        position: relative;
-        margin-right: 16px;
-        height: 49px;
-        line-height: 49px;
-    }
-
-    .form_wrapper form {
+    .giddh-login {
         margin: 0 auto;
+    }
+}
+@media only screen and (max-width: 375px) {
+    .forget-pw {
+        margin: 5px 0;
+    }
+    .social-login {
+        flex-direction: column;
+        width: 100%;
+    }
+    .social-login li {
+        display: block;
+        margin-right: 0px;
+        margin-bottom: 10px;
+    }
+    .social-login li:first-child a {
+        display: block;
+        width: 100%;
+    }
+    .btn-secondary {
+        margin-left: 0;
+        margin-top: 8px;
+    }
+    .account {
+        display: flex;
+        flex-direction: column;
+        align-items: baseline;
     }
 }
