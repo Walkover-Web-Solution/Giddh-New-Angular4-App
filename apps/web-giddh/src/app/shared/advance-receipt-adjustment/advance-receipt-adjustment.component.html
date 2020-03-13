@@ -38,7 +38,7 @@
                                         <div class="item_unq">
                                             <p class="font-12 text-gray mb-0">(Dated: {{option.additional.voucherDate}})
                                             </p>
-                                            <p class="font-12 text-gray mb-0">(Amount: {{currencySymbol}}{{option.additional.dueAmount.amountForAccount}})
+                                            <p class="font-12 text-gray mb-0">(Amount: {{currencySymbol}}{{option?.additional?.dueAmount?.amountForAccount}})
                                             </p>
                                         </div>
                                     </a>
@@ -129,8 +129,8 @@
                 Excess amount: {{invoiceFormDetails.accountDetails.currencySymbol}}{{adjustPayment.totalAdjustedAmount- adjustPayment.grandTotal | giddhCurrency}}
             </span>
             <div class="mt-4">
-                <button *ngIf="!isUpdateMode" type="button" class="btn btn-success mrR1" (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)">Save</button>
-                <button *ngIf="isUpdateMode" type="button" class="btn btn-success mrR1" (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)">Update</button>
+                <button *ngIf="!isUpdateMode" type="button" class="btn btn-success mrR1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)">Save</button>
+                <button *ngIf="isUpdateMode" type="button" class="btn btn-success mrR1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)">Update</button>
                 <button type="button" class="btn btn-cancel" (click)="decline()">Cancel</button>
             </div>
         </div>

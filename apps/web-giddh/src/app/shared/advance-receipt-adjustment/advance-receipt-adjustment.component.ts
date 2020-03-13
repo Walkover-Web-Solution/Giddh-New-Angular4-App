@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, SimpleChanges, EventEmitter, Output, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, ViewChild, ElementRef } from '@angular/core';
 import { AdvanceReceiptAdjustment, AdjustAdvancePaymentModal, AdvanceReceiptRequest, Adjustment } from '../../models/api-models/AdvanceReceiptsAdjust';
 import { GIDDH_DATE_FORMAT_UI } from '../helpers/defaultDateFormat';
 import * as moment from 'moment/moment';
@@ -12,6 +12,7 @@ import { NgForOf } from '@angular/common';
 import { NgForm } from '@angular/forms';
 import { copyStyles } from '@angular/animations/browser/src/util';
 import { ToasterService } from '../../services/toaster.service';
+import { cloneDeep } from '../../lodash-optimized';
 
 
 @Component({
@@ -22,7 +23,7 @@ import { ToasterService } from '../../services/toaster.service';
 
 
 
-export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
+export class AdvanceReceiptAdjustmentComponent implements OnInit {
 
     public newAdjustVoucherOptions: IOption[] = [];
     public adjustVoucherOptions: IOption[];
@@ -36,10 +37,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
     public baseCurrencySymbol: string;
     public currencySymbol: string;
     public inputMaskFormat: string = '';
+    public isInvalidForm: boolean = false;
+
 
     @ViewChild('tdsTypeBox') public tdsTypeBox: ElementRef;
     @ViewChild('tdsAmountBox') public tdsAmountBox: ElementRef;
-
 
     public adjustPayment: AdjustAdvancePaymentModal = {
         customerName: '',
@@ -71,7 +73,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnChanges {
     }
     ngOnInit() {
         this.adjustVoucherForm = new AdvanceReceiptAdjustment();
-console.log('isUpdateMode', this.isUpdateMode);
         this.adjustVoucherForm = {
             tdsTaxUniqueName: '',
             tdsAmount: {
@@ -126,14 +127,6 @@ console.log('isUpdateMode', this.isUpdateMode);
         this.closeModelEvent.emit(true);
     }
 
-    public ngOnChanges(simplechange: SimpleChanges) {
-        console.log(' simplechange===', this.invoiceFormDetails, simplechange);
-        console.log(' simplechange advanceRece Update dData===', this.advanceReceiptAdjustmentUpdatedData);
-
-        console.log(' update adjustVoucherForm', this.adjustVoucherForm);
-
-    }
-
     public assignVoucherDetails() {
         this.adjustPayment = Object.assign(this.adjustPayment, {
             balanceDue: Number(this.invoiceFormDetails.voucherDetails.balanceDue),
@@ -145,6 +138,9 @@ console.log('isUpdateMode', this.isUpdateMode);
             subTotal: Number(this.invoiceFormDetails.voucherDetails.subTotal)
 
         });
+        if (this.adjustPayment.grandTotal - this.adjustPayment.totalAdjustedAmount > 0) {
+            this.isInvalidForm = true;
+        }
         this.balanceDueAmount = this.invoiceFormDetails.voucherDetails.balanceDue;
         this.offset = this.adjustPayment.balanceDue;
 
@@ -191,10 +187,12 @@ console.log('isUpdateMode', this.isUpdateMode);
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public addNewBlankAdjustVoucherRow() {
-        if (this.adjustPayment.balanceDue > 0) {
+        if (this.adjustPayment.grandTotal - this.adjustPayment.totalAdjustedAmount >= 0) {
             this.adjustVoucherForm.adjustments.push(new Adjustment());
+            this.isInvalidForm = false;
         } else {
             this.toaster.errorToast('Adjust amount can\'t be greater than due amount');
+            this.isInvalidForm = true;
         }
     }
 
@@ -305,8 +303,8 @@ console.log('isUpdateMode', this.isUpdateMode);
             delete this.adjustVoucherForm['description'];
             delete this.adjustVoucherForm['tdsTaxUniqueName'];
         }
-        if (this.adjustPayment.balanceDue < 0) {
-            this.toaster.errorToast('Adjust amount can\'t be greater than due amount');
+        if ((Number(this.adjustPayment.grandTotal) - Number(this.adjustPayment.totalAdjustedAmount)) < 0) {
+            this.toaster.errorToast('The adjusted amount of the linked invoice\'s is more than this receipt');
             return;
         }
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length) {
@@ -321,8 +319,6 @@ console.log('isUpdateMode', this.isUpdateMode);
             });
         }
         console.log('adjustVoucherForm', this.adjustVoucherForm);
-        console.log('form &&&', formData);
-        console.log('form &&&', formData.valid);
 
         this.submitClicked.emit({
             adjustVoucherData: this.adjustVoucherForm,
@@ -341,7 +337,7 @@ console.log('isUpdateMode', this.isUpdateMode);
     public selectVoucher(event: IOption, entry: Adjustment, index: number) {
         if (event && entry) {
             // this.adjustVoucherOptions = this.newAdjustVoucherOptions;
-            entry = event.additional;
+            entry = cloneDeep(event.additional);
             // this.adjustVoucherForm.adjustments.forEach(
             //     item => {
             //         if (item.voucherNumber === event.label.trim()) {
@@ -360,13 +356,17 @@ console.log('isUpdateMode', this.isUpdateMode);
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public clickSelectVoucher(index: number) {
+        this.adjustVoucherOptions = this.getAdvanceReceiptUnselectedVoucher();
         if (this.adjustVoucherForm.adjustments.length && this.adjustVoucherForm.adjustments[index] && this.adjustVoucherForm.adjustments[index].voucherNumber) {
-            this.adjustVoucherOptions.push({ value: this.adjustVoucherForm.adjustments[index].uniqueName, label: this.adjustVoucherForm.adjustments[index].voucherNumber, additional: this.adjustVoucherForm.adjustments[index] });
-        } {
-            this.adjustVoucherOptions = this.getAdvanceReceiptUnselectedVoucher();
+            let selectedItem = this.newAdjustVoucherOptions.find(item => item.value === this.adjustVoucherForm.adjustments[index].uniqueName);
+            delete selectedItem['isHilighted'];
+            this.adjustVoucherOptions.splice(0, 0, { value: selectedItem.value, label: selectedItem.label, additional: selectedItem.additional })
         }
-        this.adjustVoucherOptions = _.uniq(this.adjustVoucherOptions, (item) => {
-            return item.value;
+        // else {
+        //     this.adjustVoucherOptions = this.getAdvanceReceiptUnselectedVoucher();
+        // }
+        this.adjustVoucherOptions = _.uniqBy(this.adjustVoucherOptions, (item) => {
+            return item.value && item.label.trim();
         });
     }
 
@@ -382,7 +382,7 @@ console.log('isUpdateMode', this.isUpdateMode);
         this.newAdjustVoucherOptions.forEach(item => {
             options.push(item);
         });
-        adjustVoucherAdjustment = this.adjustVoucherForm.adjustments;
+        adjustVoucherAdjustment = cloneDeep(this.adjustVoucherForm.adjustments);
 
         for (let i = options.length - 1; i >= 0; i--) {
             for (let j = 0; j < adjustVoucherAdjustment.length; j++) {
@@ -427,6 +427,11 @@ console.log('isUpdateMode', this.isUpdateMode);
             });
             // this.adjustPayment.balanceDue = Number(this.adjustPayment.balanceDue) - Number(totalAmount);
             this.adjustPayment.totalAdjustedAmount = Number(totalAmount);
+            if (this.adjustPayment.grandTotal - this.adjustPayment.totalAdjustedAmount < 0) {
+                this.isInvalidForm = true;
+            } else {
+                this.isInvalidForm = false;
+            }
         }
     }
 }

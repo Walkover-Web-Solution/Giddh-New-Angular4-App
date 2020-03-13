@@ -274,7 +274,7 @@
                                 <p class="fs20 b pbR1">
                                     <span class="balance-due">{{isProformaInvoice || isEstimateInvoice ? 'Total Amount' : 'Balance Due2'}}</span>
                                     <span class="sp-rupees" *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}
-                                        <strong>{{adjustPaymentBalanceDueData? adjustPaymentBalanceDueData:invFormData.voucherDetails.balanceDue| giddhCurrency}}</strong></span>
+                                        <strong>{{adjustPaymentBalanceDueData? adjustPaymentBalanceDueData:invFormData.voucherDetails.balanceDue | giddhCurrency}}</strong></span>
                                     <!-- added multicurrency feature make it functional to change into appropriate currency -->
                                     <span class="sp-rupees" *ngIf='isMulticurrencyAccount'>
                                         <span *ngIf="isMulticurrencyAccount">{{baseCurrencySymbol}}</span>
@@ -1189,7 +1189,7 @@
                                                             <span class="pull-left">
                                                                                     <p class="text-light mb-0">Advance Receipt</p>
                                                                                     <p class="text-light">
-                                                                                        {{adjustPaymentData.totalAdjustedAmount}}
+                                                                                        {{adjustPaymentData.totalAdjustedAmount | giddhCurrency}}
                                                                                     </p>
                                                                                 </span>
                                                             <a href="javascript:void(0)" (click)="clickAdjustAmount(true)" class="font-12 pl-1 color-primary"><i
@@ -1237,7 +1237,7 @@
                                         <li class="clearfix mrT1 biggerDollar" *ngIf="isSalesInvoice ">
                                             <strong class="pull-right balanceDueText"> <span
                                                                         *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>
-                                                                    {{adjustPaymentBalanceDueData? adjustPaymentBalanceDueData: invFormData.voucherDetails.balanceDue| giddhCurrency}}
+                                                                    {{adjustPaymentBalanceDueData? adjustPaymentBalanceDueData: invFormData.voucherDetails.balanceDue | giddhCurrency}}
                                                                 </strong>
                                             <strong class="pull-right">Balance Due</strong>
                                         </li>

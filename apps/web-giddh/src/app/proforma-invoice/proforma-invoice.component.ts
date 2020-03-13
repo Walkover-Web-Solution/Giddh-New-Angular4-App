@@ -427,7 +427,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private modalService: BsModalService
     ) {
         this.getInventorySettings();
-
+        this.advanceReceiptAdjustmentData = null;
         this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.companyActions.getTax());
@@ -2696,6 +2696,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         requestObject.touristSchemeApplicable = false;
                         requestObject.passportNumber = '';
                     }
+                }
+
+                if(this.isSalesInvoice && this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
+                 console.log('updateeee', requestObject);
+                 return;
                 }
 
                 this.salesService.updateVoucherV4(<GenericRequestForGenerateSCD>this.updateData(requestObject, requestObject.voucher)).pipe(takeUntil(this.destroyed$))
