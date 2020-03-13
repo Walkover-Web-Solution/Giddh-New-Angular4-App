@@ -532,14 +532,14 @@ small {
 }
 .btn-secondary {
     background-color: $White;
-    color: #000962;
-    border: 1px solid $lightTextBlue;
+    color: $navy;
+    border: 1px solid $light-text-blue;
     border-radius: 5px;
 }
 .btn-secondary:hover {
     color: $White !important;
-    background-color: $lightTextBlue;
-    border-color: $lightTextBlue;
+    background-color: $light-text-blue;
+    border-color: $light-text-blue;
 }
 .forgotStep {
     display: none;

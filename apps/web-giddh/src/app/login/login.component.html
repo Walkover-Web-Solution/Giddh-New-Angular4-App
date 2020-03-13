@@ -110,21 +110,7 @@
                                             href="javascript:;"
                                             (click)="loginUsing = 'userName';resetForgotPasswordProcess()">
                                             email and password</a></p>
-                                    <!-- <form id="demo" class="collapse">
-                                        <div class="form-group">
-                                            <input autocomplete="off" type="email" id="email" class="form-control"
-                                                placeholder="Email Id">
-                                        </div>
-                                        <div class="form-group">
-                                            <input autocomplete="off" type="password" id="password" class="form-control"
-                                                placeholder="Password">
-                                        </div>
-                                        <button type="submit" class="btn btn-block btn-primary">Login</button>
-                                        <div class="d-flex justify-content-end mt-2">
-                                            <a href="javascript:;" onclick="showForgotPasswordStep1()">Forgot
-                                                password?</a>
-                                        </div>
-                                    </form> -->
+
                                     <div class="d-flex align-items-center account mt-1">
                                         <p class="mb-0 mr-2">Don't have an account?</p>
                                         <!-- https://giddh.com -->
@@ -132,46 +118,7 @@
                                     </div>
                                 </section>
                                 <!-- end of full view -->
-                                <!-- start forgot password -->
-                                <section id="forgotStep-1" class="forgotStep">
-                                    <nav aria-label="breadcrumb">
-                                        <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="javascript:;"
-                                                    onclick="hideForgotPasswordSteps()">Back</a>
-                                            </li>
-                                        </ol>
-                                    </nav>
-                                    <form id="forgotFormStep1" class="">
-                                        <div class="form-group">
-                                            <input autocomplete="off" type="email" id="userId" class="form-control"
-                                                placeholder="Email Id">
-                                        </div>
-                                        <button type="submit" class="btn btn-block btn-primary">Reset Password</button>
-                                    </form>
-                                </section>
-                                <section id="forgotStep-2" class="forgotStep">
-                                    <nav aria-label="breadcrumb">
-                                        <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a onclick="hideForgotPasswordStep2()"
-                                                    href="javascript:;">Reset
-                                                    Password</a></li>
-                                            <li class="breadcrumb-item active" aria-current="page">Verification</li>
-                                        </ol>
-                                    </nav>
-                                    <form id="forgotFormStep2" class="">
-                                        <div class="form-group">
-                                            <input autocomplete="off" type="text" name="verificationCode"
-                                                id="verificationCode" class="form-control"
-                                                placeholder="Verification Code" required="">
-                                        </div>
-                                        <div class="form-group">
-                                            <input autocomplete="off" type="text" id="newPassword" name="newPassword"
-                                                class="form-control" placeholder="New Password" required="">
-                                        </div>
-                                        <button type="submit" class="btn btn-block btn-primary">Submit</button>
-                                    </form>
-                                </section>
-                                <!-- end forgot password -->
+
                             </div>
                         </div>
                     </div>
