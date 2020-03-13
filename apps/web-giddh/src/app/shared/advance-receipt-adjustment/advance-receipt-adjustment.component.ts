@@ -71,7 +71,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     constructor(private store: Store<AppState>, private salesService: SalesService, private toaster: ToasterService) {
 
     }
-    ngOnInit() {
+
+    /**
+     * Life cycle hook
+     *
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    public ngOnInit() {
         this.adjustVoucherForm = new AdvanceReceiptAdjustment();
         this.adjustVoucherForm = {
             tdsTaxUniqueName: '',
@@ -123,11 +129,22 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.currencySymbol = this.invoiceFormDetails.accountDetails.currencySymbol;
         }
     }
-    public onCancel() {
+
+    /**
+     * To close adjust payment modal
+     *
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    public onCancel(): void {
         this.closeModelEvent.emit(true);
     }
 
-    public assignVoucherDetails() {
+    /**
+     * Assign all voucher details which get from parent component
+     *
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    public assignVoucherDetails(): void {
         this.adjustPayment = Object.assign(this.adjustPayment, {
             balanceDue: Number(this.invoiceFormDetails.voucherDetails.balanceDue),
             grandTotal: Number(this.invoiceFormDetails.voucherDetails.grandTotal),
@@ -158,7 +175,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      *
      * @memberof AdvanceReceiptAdjustmentComponent
      */
-    public getAllAdvanceReceipts() {
+    public getAllAdvanceReceipts(): void {
         if (this.adjustPayment && this.adjustPayment.customerUniquename && this.adjustPayment.voucherDate) {
             this.getAllAdvanceReceiptsRequest.accountUniqueName = this.adjustPayment.customerUniquename;
             this.getAllAdvanceReceiptsRequest.invoiceDate = this.adjustPayment.voucherDate;
@@ -186,12 +203,12 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      *
      * @memberof AdvanceReceiptAdjustmentComponent
      */
-    public addNewBlankAdjustVoucherRow() {
+    public addNewBlankAdjustVoucherRow(): void {
         if (this.adjustPayment.grandTotal - this.adjustPayment.totalAdjustedAmount >= 0) {
             this.adjustVoucherForm.adjustments.push(new Adjustment());
             this.isInvalidForm = false;
         } else {
-            this.toaster.errorToast('Adjust amount can\'t be greater than due amount');
+            this.toaster.errorToast('The adjusted amount of the linked invoice\'s is more than this receipt');
             this.isInvalidForm = true;
         }
     }
@@ -202,7 +219,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @param {number} index Index number
      * @memberof AdvanceReceiptAdjustmentComponent
      */
-    public deleteAdjustVoucherRow(index: number) {
+    public deleteAdjustVoucherRow(index: number): void {
         this.adjustVoucherOptions.push({ value: this.adjustVoucherForm.adjustments[index].uniqueName, label: this.adjustVoucherForm.adjustments[index].voucherNumber, additional: this.adjustVoucherForm.adjustments[index] });
         this.adjustVoucherOptions = _.uniqBy(this.adjustVoucherOptions, (item) => {
             return item.value && item.label.trim();
@@ -219,7 +236,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @param {IOption} event Select Tax event
      * @memberof AdvanceReceiptAdjustmentComponent
      */
-    public tdsTaxSelected(event: IOption) {
+    public tdsTaxSelected(event: IOption): void {
         if (event && event.additional && event.additional && event.additional.taxDetail && event.additional.taxDetail[0].taxValue && this.adjustPayment && this.adjustPayment.subTotal) {
             this.tdsAmount = this.calculateTdsAmount(Number(this.adjustPayment.subTotal), Number(event.additional.taxDetail[0].taxValue));
             this.adjustVoucherForm.tdsTaxUniqueName = event.value;
@@ -229,7 +246,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         }
     }
 
-    public changeTdsAmount(event) {
+    /**
+     * To add error box in case of amount 0
+     *
+     * @param {*} event Value of amount
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    public changeTdsAmount(event): void {
         if (!Number(event)) {
             this.tdsAmountBox.nativeElement.classList.add('error-box');
         } else {
@@ -237,7 +260,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         }
     }
 
-    public isTdsSelected(event: any) {
+    /**
+     * To check TDS section selected or not
+     *
+     * @param {*} event Click event
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    public isTdsSelected(event: any): void {
         if (event) {
             this.adjustVoucherForm.tdsAmount = {
                 amountForAccount: null
@@ -283,10 +312,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     /**
      * To save advance receipt adjustment
      *
-     * @param {NgForm} formData
      * @memberof AdvanceReceiptAdjustmentComponent
      */
-    public saveAdjustAdvanceReceipt(formData: NgForm) {
+    public saveAdjustAdvanceReceipt(): void {
         if (this.isTaxDeducted) {
             if (this.adjustVoucherForm.tdsTaxUniqueName === '') {
                 if (this.tdsTypeBox && this.tdsTypeBox.nativeElement)
@@ -318,8 +346,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                 }
             });
         }
-        console.log('adjustVoucherForm', this.adjustVoucherForm);
-
         this.submitClicked.emit({
             adjustVoucherData: this.adjustVoucherForm,
             adjustPaymentData: this.adjustPayment
@@ -334,17 +360,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @param {number} index
      * @memberof AdvanceReceiptAdjustmentComponent
      */
-    public selectVoucher(event: IOption, entry: Adjustment, index: number) {
+    public selectVoucher(event: IOption, entry: Adjustment, index: number): void {
         if (event && entry) {
-            // this.adjustVoucherOptions = this.newAdjustVoucherOptions;
             entry = cloneDeep(event.additional);
-            // this.adjustVoucherForm.adjustments.forEach(
-            //     item => {
-            //         if (item.voucherNumber === event.label.trim()) {
-            //             let indexNo = this.adjustVoucherOptions.indexOf(event);
-            //             this.adjustVoucherOptions.splice(indexNo, 1);
-            //         }
-            //     });
             this.adjustVoucherForm.adjustments.splice(index, 1, entry);
             this.calculateTax(entry, index);
         }
@@ -355,16 +373,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      *
      * @memberof AdvanceReceiptAdjustmentComponent
      */
-    public clickSelectVoucher(index: number) {
+    public clickSelectVoucher(index: number): void {
         this.adjustVoucherOptions = this.getAdvanceReceiptUnselectedVoucher();
         if (this.adjustVoucherForm.adjustments.length && this.adjustVoucherForm.adjustments[index] && this.adjustVoucherForm.adjustments[index].voucherNumber) {
             let selectedItem = this.newAdjustVoucherOptions.find(item => item.value === this.adjustVoucherForm.adjustments[index].uniqueName);
             delete selectedItem['isHilighted'];
             this.adjustVoucherOptions.splice(0, 0, { value: selectedItem.value, label: selectedItem.label, additional: selectedItem.additional })
         }
-        // else {
-        //     this.adjustVoucherOptions = this.getAdvanceReceiptUnselectedVoucher();
-        // }
         this.adjustVoucherOptions = _.uniqBy(this.adjustVoucherOptions, (item) => {
             return item.value && item.label.trim();
         });
@@ -404,8 +419,14 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         return options;
     }
 
-
-    public calculateTax(entry: Adjustment, index: number) {
+    /**
+     * To calculate Tax value depends on selected voucher
+     *
+     * @param {Adjustment} entry Advance receipts adjuste amount object
+     * @param {number} index Index number
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    public calculateTax(entry: Adjustment, index: number): void {
         if (entry && entry.taxRate && entry.dueAmount.amountForAccount) {
             let taxAmount = this.calculateInclusiveTaxAmount(entry.dueAmount.amountForAccount, entry.taxRate);
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = Number(taxAmount);
@@ -415,7 +436,12 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         this.calculateBalanceDue();
     }
 
-    public calculateBalanceDue() {
+    /**
+     * To calculate balance due
+     *
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    public calculateBalanceDue(): void {
         if (this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length) {
             this.adjustPayment.balanceDue = this.invoiceFormDetails.voucherDetails.balanceDue;
             let totalAmount: number = 0;
