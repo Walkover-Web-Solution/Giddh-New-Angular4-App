@@ -907,7 +907,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                     }
                     if (this.isSalesInvoice) {
-                        this.calculateAdjustedVoucherTotal(results[1]);
+                        if (results[1] && results[1].advanceReceiptAdjustment && results[1].advanceReceiptAdjustment && results[1].advanceReceiptAdjustment.adjustments && results[1].advanceReceiptAdjustment.adjustments.length) {
+                            this.calculateAdjustedVoucherTotal(results[1].advanceReceiptAdjustment.adjustments);
+                            this.advanceReceiptAdjustmentData = results[1].advanceReceiptAdjustment;
+                        }
+
                     }
 
                     if (obj.voucherDetails) {
@@ -4224,6 +4228,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // this.invFormData.voucherDetails.balanceDue = advanceReceiptsAdjustEvent.adjustPaymentData.balanceDue;
         this.adjustPaymentBalanceDueData = advanceReceiptsAdjustEvent.adjustPaymentData.grandTotal - advanceReceiptsAdjustEvent.adjustPaymentData.totalAdjustedAmount;
         this.adjustPaymentData = advanceReceiptsAdjustEvent.adjustPaymentData;
+        if (this.isUpdateMode) {
+            this.calculateAdjustedVoucherTotal(advanceReceiptsAdjustEvent.adjustVoucherData.adjustments)
+        }
         this.closeAdvanceReciiptModal();
     }
 
@@ -4233,11 +4240,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param {*} voucherObject voucher response in case of update
      * @memberof ProformaInvoiceComponent
      */
-    public calculateAdjustedVoucherTotal(voucherObject: any) {
+    public calculateAdjustedVoucherTotal(voucherObjectArray: any[]) {
         this.totalAdvanceReceiptsAdjustedAmount = 0;
-        if (voucherObject && voucherObject.advanceReceiptAdjustment && voucherObject.advanceReceiptAdjustment && voucherObject.advanceReceiptAdjustment.adjustments && voucherObject.advanceReceiptAdjustment.adjustments.length) {
-            this.advanceReceiptAdjustmentData = voucherObject.advanceReceiptAdjustment
-            let adjustments = voucherObject.advanceReceiptAdjustment.adjustments;
+        if (voucherObjectArray) {
+            let adjustments = cloneDeep(voucherObjectArray);
             let totalAmount = 0;
             if (adjustments) {
                 adjustments.forEach((item) => {
