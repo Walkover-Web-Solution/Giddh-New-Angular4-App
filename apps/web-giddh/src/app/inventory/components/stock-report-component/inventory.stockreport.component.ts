@@ -258,9 +258,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
 		this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
 		this.entityAndInventoryTypeForm = this.fb.group({
 			selectedEntity: ['allEntity'],
-            selectedTransactionType: ['all'],
-            selectedWarehouse: '',
-            selectedBranch: ''
+            selectedTransactionType: ['all']
 		});
 	}
 
