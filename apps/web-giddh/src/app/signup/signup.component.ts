@@ -19,7 +19,7 @@ import { userLoginStateEnum } from "../models/user-login-state";
 @Component({
     selector: "signup",
     templateUrl: "./signup.component.html",
-    styleUrls: ["./signup.component.css"]
+    styleUrls: ["./signup.component.scss"]
 })
 export class SignupComponent implements OnInit, OnDestroy {
     public isLoginWithMobileSubmited$: Observable<boolean>;
@@ -291,7 +291,7 @@ export class SignupComponent implements OnInit, OnDestroy {
             if (provider === "google") {
                 // google
                 const t = ipcRenderer.send("authenticate", provider);
-                ipcRenderer.once('take-your-gmail-token', (sender , arg) => {
+                ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
                     this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                 });
                 //

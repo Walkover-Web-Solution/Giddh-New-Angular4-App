@@ -1,5 +1,5 @@
 /************ login page start *****************/
-
+@import "../../assets/css/color.scss";
 /*typography styles*/
 
 body.ununresponsive {
@@ -213,15 +213,15 @@ button.close {
     right: 6px !important;
 }
 
-:host ::ng-deep .btn-success {
-    background: #19237e;
+.btn-success {
+    background: $midnightBlue;
     color: #fff;
-    border-color: #19237e;
+    border-color: $midnightBlue;
 }
 
-:host ::ng-deep .btn-success:hover {
-    background: #040858;
-    border-color: #040858;
+.btn-success:hover {
+    background: $midnightBlueHover;
+    border-color: $midnightBlueHover;
     color: #fff;
 }
 
@@ -311,13 +311,13 @@ small {
 /* social icon */
 
 .linkedin-ico a {
-    color: #0d83b3;
-    border-color: #0d83b3;
+    color: $cerulean;
+    border-color: $cerulean;
 }
 
 .google-ico a {
-    background: #5092f3;
-    border-color: #5092f3 !important;
+    background: $cornflowerBlue;
+    border-color: $cornflowerBlue !important;
     color: #fff;
 }
 
@@ -474,7 +474,7 @@ small {
     overflow: hidden;
 }
 .logo-login {
-    background-color: #040a58;
+    background-color: $darkMidnightBlue;
     height: 98px;
     display: flex;
     align-items: center;
@@ -487,12 +487,12 @@ small {
     background-color: #fff;
 }
 .accounting-space h4 {
-    color: #36396e;
+    color: $pageTitleColor;
     font-weight: 600;
     font-size: 20px;
 }
 .btn-outline-primary {
-    background-color: #01a9f4;
+    background-color: $primaryBtncolror;
     border-radius: 3px;
     min-width: 160px;
     border-radius: 5px;
@@ -502,28 +502,28 @@ small {
 }
 .btn-outline-primary:hover,
 .btn-outline-primary:focus {
-    background-color: #0492d2;
+    background-color: $primaryBtnHovercolror;
     box-shadow: none;
     outline: none;
 }
 .login-with {
-    color: #36396e;
+    color: $pageTitleColor;
     font-size: 0.9em;
 }
 .login-with a {
-    color: #36396e;
+    color: $pageTitleColor;
     text-decoration: none;
 }
 .btn-secondary {
     background-color: #fff;
     color: #000962;
-    border: 1px solid #5b64c9;
+    border: 1px solid $lightTextBlue;
     border-radius: 5px;
 }
 .btn-secondary:hover {
     color: #fff !important;
-    background-color: #5b64c9;
-    border-color: #5b64c9;
+    background-color: $lightTextBlue;
+    border-color: $lightTextBlue;
 }
 .forgotStep {
     display: none;
