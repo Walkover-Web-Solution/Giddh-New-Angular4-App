@@ -169,6 +169,10 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         // get view from sidebar while clicking on group/stock
         this.invViewService.getActiveView().subscribe(v => {
             this.activeView = v.view;
+            if (this.branchesWithWarehouse && this.branchesWithWarehouse.length === 0) {
+                // First time initialization (when first stock is created in a new company), load the filter values
+                this.loadBranchAndWarehouseDetails();
+            }
         });
     }
 
@@ -218,13 +222,9 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.firstDefaultActiveGroupName = firstElement.name;
                     if (this.activeTabIndex === 0) {
                         // Selected tab is Inventory
-                        this.loadInventoryTab(() => {
-                            this.loadBranchWithWarehouse();
-                            this.GroupStockReportRequest.branchUniqueName = this.currentBranchAndWarehouseFilterValues.branch;
-                            this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouseFilterValues.warehouse !== 'all-entities') ? this.currentBranchAndWarehouseFilterValues.warehouse : null;;
-                            this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
-                            this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest))); // open first default group
-                        });
+                        this.loadBranchAndWarehouseDetails();
+                        this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
+                        this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest))); // open first default group
                     } else {
                         this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
                         this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest))); // open first default group
@@ -252,9 +252,9 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
             switch (type) {
                 case 'inventory':
+                    this.navigateToInventoryTab();
                     this.loadInventoryTab(() => {
                         this.loadBranchWithWarehouse();
-                        this.navigateToInventoryTab();
                     });
                     break;
                 case 'jobwork':
@@ -363,19 +363,20 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * Loads the report by selected warehouse
      *
-     * @param {*} selectedWarehouse User selected warehouse
+     * @param {string} selectedWarehouse User selected warehouse
      * @memberof InventoryGroupStockReportComponent
      */
-    public loadReportByWarehouse(selectedWarehouse: any): void {
+    public loadReportByWarehouse(selectedWarehouse: string): void {
         this.currentBranchAndWarehouseFilterValues = { ...this.currentBranchAndWarehouseFilterValues, warehouse: selectedWarehouse };
     }
     /**
      * Loads the report by selected branch
      *
-     * @param {*} selectedBranch User selected branch
+     * @param {string} selectedBranch User selected branch
      * @memberof InventoryComponent
      */
-    public loadReportByBranch(selectedBranch: any): void {
+    public loadReportByBranch(selectedBranch: string): void {
+        this.loadBranchWarehouse(selectedBranch);
         this.currentBranchAndWarehouseFilterValues = { ...this.currentBranchAndWarehouseFilterValues, branch: selectedBranch };
     }
 
@@ -398,6 +399,20 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         stateDetailsRequest.lastState = `/pages/${state}`;
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+    }
+
+    /**
+     * Loads the branch and their warehouse details for filters
+     *
+     * @private
+     * @memberof InventoryComponent
+     */
+    private loadBranchAndWarehouseDetails(): void {
+        this.loadInventoryTab(() => {
+            this.loadBranchWithWarehouse();
+            this.GroupStockReportRequest.branchUniqueName = this.currentBranchAndWarehouseFilterValues.branch;
+            this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouseFilterValues.warehouse !== 'all-entities') ? this.currentBranchAndWarehouseFilterValues.warehouse : null;;
+        });
     }
 
     /**
@@ -436,6 +451,34 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
+     * Loads the particular branch's warehouse in drop down
+     *
+     * @private
+     * @param {string} selectedBranchUniqueName Selected branch unique name
+     * @memberof InventoryComponent
+     */
+    private loadBranchWarehouse(selectedBranchUniqueName: string): void {
+        let branchDetails: any = this.branchesWithWarehouse.filter((branch) => branch.uniqueName === selectedBranchUniqueName);
+        if (branchDetails && branchDetails.length > 0) {
+            branchDetails = branchDetails.pop();
+            const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(branchDetails.warehouses);
+            if (warehouseData.formattedWarehouses && warehouseData.formattedWarehouses.length) {
+                const allEntity = { label: 'All Entity', value: 'all-entities' };
+                let warehouse;
+                if (warehouseData.formattedWarehouses.length > 1) {
+                    warehouseData.formattedWarehouses.unshift(allEntity);
+                    // Select 'All Entity' as default if warehouse count is more than 1
+                    warehouse = 'all-entities';
+                } else {
+                    warehouse = warehouseData.formattedWarehouses[0].uniqueName;
+                }
+                this.currentBranchAndWarehouseFilterValues = { warehouse, branch: branchDetails.uniqueName };
+            }
+            this.warehouses = warehouseData.formattedWarehouses;
+        }
+    }
+
+    /**
      * Parses the response received from linked sources API
      *
      * @private
@@ -445,30 +488,13 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.branchesWithWarehouse && this.branchesWithWarehouse.length) {
             let currentCompanyUniqueName;
             this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(uniqueName => currentCompanyUniqueName = uniqueName);
-            let currentCompanyDetails: any = this.branchesWithWarehouse.filter((branch) => branch.uniqueName === currentCompanyUniqueName);
             const headQuarterIndex = this.branchesWithWarehouse.findIndex(branch => branch.isHeadQuarter);
             if (headQuarterIndex > -1 && this.branchesWithWarehouse[headQuarterIndex].uniqueName !== currentCompanyUniqueName) {
+                // Remove the head quarter if the current company is a branch as branches don't have access to view head quarter details
                 this.branchesWithWarehouse.splice(headQuarterIndex, 1);
             }
             this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: branch.name, value: branch.uniqueName }));
-
-            if (currentCompanyDetails.length) {
-                currentCompanyDetails = currentCompanyDetails.pop();
-                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(currentCompanyDetails.warehouses);
-                if (warehouseData.formattedWarehouses && warehouseData.formattedWarehouses.length) {
-                    const allEntity = { label: 'All Entity', value: 'all-entities' };
-                    let warehouse;
-                    if (warehouseData.formattedWarehouses.length > 1) {
-                        warehouseData.formattedWarehouses.unshift(allEntity);
-                        // Select 'All Entity' as default if warehouse count is more than 1
-                        warehouse = 'all-entities';
-                    } else {
-                        warehouse = warehouseData.formattedWarehouses[0].uniqueName;
-                    }
-                    this.currentBranchAndWarehouseFilterValues = { warehouse, branch: currentCompanyDetails.uniqueName };
-                }
-                this.warehouses = warehouseData.formattedWarehouses;
-            }
+            this.loadBranchWarehouse(currentCompanyUniqueName);
         }
     }
 }

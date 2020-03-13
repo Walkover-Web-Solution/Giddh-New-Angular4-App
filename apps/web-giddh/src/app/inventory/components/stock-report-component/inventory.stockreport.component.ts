@@ -66,7 +66,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
 
 	public today: Date = new Date();
 	public activeStock$: string;
-	public stockReport$: Observable<StockReportResponse>;
+    public stockReport$: Observable<StockReportResponse>;
+    /** Stores the message when particular stock is not found */
+    public stockNotFoundMessage: string;
 	public sub: Subscription;
 	public groupUniqueName: string;
 	public stockUniqueName: string;
@@ -322,9 +324,15 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
 			}
 		});
 
-		this.stockReport$.subscribe(res => {
-			this.stockReport = res;
-			this.cdr.detectChanges();
+		this.stockReport$.subscribe((res: any) => {
+            if (res.isStockNotFound) {
+                this.stockReport = undefined;
+                this.stockNotFoundMessage = res.message;
+            } else {
+                this.stockReport = res;
+                this.stockNotFoundMessage = '';
+            }
+            this.cdr.detectChanges();
 		});
 
 		this.universalDate$.subscribe(a => {

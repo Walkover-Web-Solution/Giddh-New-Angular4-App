@@ -202,6 +202,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         endDate: moment()
     };
     public groupStockReport: GroupStockReportResponse;
+    /** Stores the message when particular group is not found */
+    public groupNotFoundMessage: string;
     public groupStockReportInProcess: boolean = false;
     public universalDate$: Observable<any>;
     public showAdvanceSearchModal: boolean = false;
@@ -282,9 +284,17 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
             }
         });
 
-        this.groupStockReport$.subscribe(res => {
-            this.groupStockReport = res;
-            this.cdr.detectChanges();
+        this.groupStockReport$.subscribe((res: any) => {
+            if (res) {
+                if (res.isGroupNotFound) {
+                    this.groupStockReport = undefined;
+                    this.groupNotFoundMessage = res.message;
+                } else {
+                    this.groupStockReport = res;
+                    this.groupNotFoundMessage = '';
+                    this.cdr.detectChanges();
+                }
+            }
         });
 
         this.store.pipe(select(s => s.inventory.groupStockReportInProcess), takeUntil(this.destroyed$)).subscribe(res => {
