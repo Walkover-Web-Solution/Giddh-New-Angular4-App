@@ -1,8 +1,8 @@
-import {combineLatest, Observable, of as observableOf, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {AuthService} from '../../theme/ng-social-login-module/index';
-import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
-import {GIDDH_DATE_FORMAT} from './../helpers/defaultDateFormat';
-import {CompanyAddNewUiComponent, ManageGroupsAccountsComponent} from './components';
+import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
+import { AuthService } from '../../theme/ng-social-login-module/index';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
+import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
 import {
     AfterViewChecked,
     AfterViewInit,
@@ -19,7 +19,7 @@ import {
     TemplateRef,
     ViewChild
 } from '@angular/core';
-import {select, Store} from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import {
     BsDropdownDirective,
     BsModalRef,
@@ -27,11 +27,12 @@ import {
     ModalDirective,
     ModalOptions,
     TabsetComponent
-, PopoverDirective} from 'ngx-bootstrap';
-import {AppState} from '../../store';
-import {LoginActions} from '../../actions/login.action';
-import {CompanyActions} from '../../actions/company.actions';
-import {CommonActions} from '../../actions/common.actions';
+    , PopoverDirective
+} from 'ngx-bootstrap';
+import { AppState } from '../../store';
+import { LoginActions } from '../../actions/login.action';
+import { CompanyActions } from '../../actions/company.actions';
+import { CommonActions } from '../../actions/common.actions';
 import {
     ActiveFinancialYear,
     CompanyCountry,
@@ -39,29 +40,29 @@ import {
     CompanyResponse,
     StatesRequest
 } from '../../models/api-models/Company';
-import {UserDetails} from '../../models/api-models/loginModels';
-import {GroupWithAccountsAction} from '../../actions/groupwithaccounts.actions';
-import {ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router} from '@angular/router';
+import { UserDetails } from '../../models/api-models/loginModels';
+import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
+import { ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import * as _ from 'lodash';
-import {ElementViewContainerRef} from '../helpers/directives/elementViewChild/element.viewchild.directive';
-import {FlyAccountsActions} from '../../actions/fly-accounts.actions';
-import {FormControl} from '@angular/forms';
-import {GeneralActions} from '../../actions/general/general.actions';
-import {createSelector} from 'reselect';
+import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
+import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
+import { FormControl } from '@angular/forms';
+import { GeneralActions } from '../../actions/general/general.actions';
+import { createSelector } from 'reselect';
 import * as moment from 'moment/moment';
-import {AuthenticationService} from '../../services/authentication.service';
-import {ICompAidata, IUlist} from '../../models/interfaces/ulist.interface';
-import {cloneDeep, concat, orderBy, sortBy} from '../../lodash-optimized';
-import {DbService} from '../../services/db.service';
-import {CompAidataModel} from '../../models/db';
-import {WindowRef} from '../helpers/window.object';
-import {AccountResponse} from 'apps/web-giddh/src/app/models/api-models/Account';
-import {GeneralService} from 'apps/web-giddh/src/app/services/general.service';
-import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
-import {DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST} from '../../models/defaultMenus';
-import {userLoginStateEnum} from '../../models/user-login-state';
-import {SubscriptionsUser} from '../../models/api-models/Subscriptions';
-import {CountryRequest, CurrentPage} from '../../models/api-models/Common';
+import { AuthenticationService } from '../../services/authentication.service';
+import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
+import { cloneDeep, concat, orderBy, sortBy } from '../../lodash-optimized';
+import { DbService } from '../../services/db.service';
+import { CompAidataModel } from '../../models/db';
+import { WindowRef } from '../helpers/window.object';
+import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
+import { userLoginStateEnum } from '../../models/user-login-state';
+import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
+import { CountryRequest, CurrentPage } from '../../models/api-models/Common';
 
 @Component({
     selector: 'app-header',
@@ -674,7 +675,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.store.dispatch(this._generalActions.getFlattenGroupsReq());
             }
         });
-        console.log(this.route.snapshot.url.toString() + "  snapshot.url");
         if (this.route.snapshot.url.toString() === 'new-user') {
             this.showAddCompanyModal();
         }
@@ -763,7 +763,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
         if (o) {
-            menu = {...menu, ...o};
+            menu = { ...menu, ...o };
         } else {
             try {
                 menu.name = pageName.split('/pages/')[1].toLowerCase();
@@ -786,7 +786,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.setCurrentPageTitle(menu);
 
         if (menu.additional) {
-            this.router.navigate([pageName], {queryParams: menu.additional});
+            this.router.navigate([pageName], { queryParams: menu.additional });
         } else {
             this.router.navigate([pageName]);
         }
@@ -1095,7 +1095,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         } else {
             this.isTodaysDateSelected = true;
             let today = _.cloneDeep([moment(), moment()]);
-            this.datePickerOptions = {...this.datePickerOptions, startDate: today[0], endDate: today[1]};
+            this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
             let dates = {
                 fromDate: null,
                 toDate: null,
@@ -1237,16 +1237,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public goToSelectPlan(): void {
         this.modalService.hide(1);
-
-        this.router.navigate(['pages', 'user-details'], {
-            queryParams: {
-                tab: 'subscriptions',
-                tabIndex: 3,
-                showPlans: true
-            }
-        });
-        this.modelRefExpirePlan = this.modalService.show(template);
-
+        setTimeout(() => {
+            this.router.navigate(['/pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, showPlans: true } });
+        }, 200);
     }
 
     public onRight(nodes) {
@@ -1404,7 +1397,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         );
 
         this.subscriptions.push(_combine);
-        let config: ModalOptions = {class: 'universal_modal', show: true, keyboard: true, animated: false};
+        let config: ModalOptions = { class: 'universal_modal', show: true, keyboard: true, animated: false };
         this.modelRef = this.modalService.show(this.navigationModal, config);
     }
 
