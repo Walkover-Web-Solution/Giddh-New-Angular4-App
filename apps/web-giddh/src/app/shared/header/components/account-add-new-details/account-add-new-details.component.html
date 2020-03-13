@@ -245,7 +245,7 @@
                             <label>Mobile Number</label>
                             <div class="d-flex">
                                 <sh-select [placeholder]="'+91'" [options]="countryPhoneCode"
-                                    formControlName="mobileCode" class="mobile-no-sh-select"></sh-select>
+                                    formControlName="mobileCode" class="mobile-number-sh-select"></sh-select>
                                 <input type="text" pattern="[0-9]*" class="form-control pull-right"
                                     placeholder="98XXXXXXXX" formControlName="mobileNo" id="contactNo"
                                     autocomplete="off" (blur)="isValidMobileNumber(mobileNoEl)" #mobileNoEl />
