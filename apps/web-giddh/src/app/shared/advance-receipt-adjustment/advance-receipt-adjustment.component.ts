@@ -82,15 +82,15 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         this.adjustVoucherForm = {
             tdsTaxUniqueName: '',
             tdsAmount: {
-                amountForAccount: null
+                amountForAccount: 0
             },
             description: '',
             adjustments: [
                 {
                     voucherNumber: '',
                     dueAmount: {
-                        amountForAccount: null,
-                        amountForCompany: null
+                        amountForAccount: 0,
+                        amountForCompany: 0
                     },
                     voucherDate: '',
                     taxRate: 0,
@@ -109,6 +109,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         }
         this.assignVoucherDetails();
         this.getAllAdvanceReceipts();
+        if(this.isUpdateMode) {
+           this.calculateBalanceDue()
+        }
         this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
             if (obj && obj.taxes) {
                 this.availableTdsTaxes = [];
@@ -205,8 +208,21 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      */
     public addNewBlankAdjustVoucherRow(): void {
         if (this.adjustPayment.grandTotal - this.adjustPayment.totalAdjustedAmount >= 0) {
-            this.adjustVoucherForm.adjustments.push(new Adjustment());
-            this.isInvalidForm = false;
+            let isAnyblankEntry: boolean;
+            this.adjustVoucherForm.adjustments.forEach(item => {
+                if (!item.uniqueName || !item.voucherNumber) {
+                    isAnyblankEntry = true;
+                } else {
+                    isAnyblankEntry = false;
+                }
+            });
+            if (isAnyblankEntry) {
+                this.isInvalidForm = false;
+                return;
+            } else {
+                this.adjustVoucherForm.adjustments.push(new Adjustment());
+                this.isInvalidForm = false;
+            }
         } else {
             this.toaster.errorToast('The adjusted amount of the linked invoice\'s is more than this receipt');
             this.isInvalidForm = true;
@@ -220,7 +236,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public deleteAdjustVoucherRow(index: number): void {
-        this.adjustVoucherOptions.push({ value: this.adjustVoucherForm.adjustments[index].uniqueName, label: this.adjustVoucherForm.adjustments[index].voucherNumber, additional: this.adjustVoucherForm.adjustments[index] });
+        let selectedItem = this.newAdjustVoucherOptions.find(item => item.value === this.adjustVoucherForm.adjustments[index].uniqueName);
+        this.adjustVoucherOptions.push({ value: selectedItem.value, label: selectedItem.label, additional: selectedItem.additional });
         this.adjustVoucherOptions = _.uniqBy(this.adjustVoucherOptions, (item) => {
             return item.value && item.label.trim();
         });
@@ -238,9 +255,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      */
     public tdsTaxSelected(event: IOption): void {
         if (event && event.additional && event.additional && event.additional.taxDetail && event.additional.taxDetail[0].taxValue && this.adjustPayment && this.adjustPayment.subTotal) {
-            this.tdsAmount = this.calculateTdsAmount(Number(this.adjustPayment.subTotal), Number(event.additional.taxDetail[0].taxValue));
-            this.adjustVoucherForm.tdsTaxUniqueName = event.value;
-            this.adjustVoucherForm.tdsAmount.amountForAccount = this.tdsAmount;
+            this.tdsAmount = cloneDeep(this.calculateTdsAmount(Number(this.adjustPayment.subTotal), Number(event.additional.taxDetail[0].taxValue)));
+            this.adjustVoucherForm.tdsTaxUniqueName = cloneDeep(event.value);
+            this.adjustVoucherForm.tdsAmount.amountForAccount = cloneDeep(this.tdsAmount);
             this.changeTdsAmount(this.tdsAmount);
             this.tdsTypeBox.nativeElement.classList.remove('error-box');
         }
@@ -290,7 +307,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      */
     public calculateInclusiveTaxAmount(productAmount: number, rate: number): number {
         let taxAmount: number = 0;
-        taxAmount = Number((productAmount * rate) / (rate + 100));
+        let amount: number = 0;
+        amount = cloneDeep(Number(productAmount));
+        taxAmount = Number((amount * rate) / (rate + 100));
         return Number(taxAmount.toFixed(2));
     }
 
@@ -305,7 +324,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      */
     public calculateTdsAmount(productAmount: number, rate: number): number {
         let taxAmount: number = 0;
-        taxAmount = Number((productAmount * rate) / 100);
+        let amount: number = 0;
+        amount = cloneDeep(Number(productAmount));
+        taxAmount = Number((amount * rate) / 100);
         return Number(taxAmount.toFixed(2));
     }
 
@@ -350,7 +371,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             adjustVoucherData: this.adjustVoucherForm,
             adjustPaymentData: this.adjustPayment
         });
-
     }
 
     /**
@@ -426,7 +446,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @param {number} index Index number
      * @memberof AdvanceReceiptAdjustmentComponent
      */
-    public calculateTax(entry: Adjustment, index: number): void {
+    public calculateTax(entryData: Adjustment, index: number): void {
+        let entry: Adjustment = cloneDeep(entryData);
         if (entry && entry.taxRate && entry.dueAmount.amountForAccount) {
             let taxAmount = this.calculateInclusiveTaxAmount(entry.dueAmount.amountForAccount, entry.taxRate);
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = Number(taxAmount);
@@ -442,16 +463,15 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public calculateBalanceDue(): void {
-        if (this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length) {
+        if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length) {
             this.adjustPayment.balanceDue = this.invoiceFormDetails.voucherDetails.balanceDue;
             let totalAmount: number = 0;
             this.adjustVoucherForm.adjustments.forEach(item => {
-
                 if (item && item.dueAmount && item.dueAmount.amountForAccount) {
                     totalAmount += Number(item.dueAmount.amountForAccount);
                 }
             });
-            // this.adjustPayment.balanceDue = Number(this.adjustPayment.balanceDue) - Number(totalAmount);
+            // this.adjustPayment.balanceDue = Number(this.adjustPayment.grandTotal.) - Number(totalAmount);
             this.adjustPayment.totalAdjustedAmount = Number(totalAmount);
             if (this.adjustPayment.grandTotal - this.adjustPayment.totalAdjustedAmount < 0) {
                 this.isInvalidForm = true;

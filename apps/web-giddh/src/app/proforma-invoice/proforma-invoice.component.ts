@@ -329,7 +329,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public isTouristScheme: boolean = false;
 
     public countryCode: string = '';
-    public isValidGstinNumber: boolean= false;
+    public isValidGstinNumber: boolean = false;
 
     // private members
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -1498,7 +1498,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let data: VoucherClass = _.cloneDeep(this.invFormData);
 
         // special check if gst no filed is visible then and only then check for gst validation
-        if (data.accountDetails && data.accountDetails.billingDetails && data.accountDetails.shippingDetails &&  data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
+        if (data.accountDetails && data.accountDetails.billingDetails && data.accountDetails.shippingDetails && data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
             this.checkGstNumValidation(data.accountDetails.billingDetails.gstNumber);
             this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber);
             if (!this.isValidGstinNumber) {
@@ -1886,7 +1886,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateOtherTaxes(entry.otherTaxModal, entry);
         this.calculateTcsTdsTotal();
         this.calculateBalanceDue();
-         /** In case of sales invoice if invoice amount less with advance receipts adjusted amount then open Advane receipts adjust modal */
+        /** In case of sales invoice if invoice amount less with advance receipts adjusted amount then open Advane receipts adjust modal */
         if (this.isSalesInvoice && this.totalAdvanceReceiptsAdjustedAmount && this.isUpdateMode) {
             if (this.invFormData.voucherDetails.grandTotal < this.totalAdvanceReceiptsAdjustedAmount) {
                 this.isAdjustAdvanceReceiptModalOpen();
@@ -2694,10 +2694,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         requestObject.passportNumber = '';
                     }
                 }
-
-                if(this.isSalesInvoice && this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
-                 console.log('updateeee', requestObject);
-                 return;
+                /** Advance receipts adjustment for sales invoice*/
+                if (this.isSalesInvoice && this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
+                    requestObject.advanceReceiptAdjustment = this.advanceReceiptAdjustmentData;
                 }
 
                 this.salesService.updateVoucherV4(<GenericRequestForGenerateSCD>this.updateData(requestObject, requestObject.voucher)).pipe(takeUntil(this.destroyed$))
@@ -4225,7 +4224,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // this.invFormData.voucherDetails.balanceDue = advanceReceiptsAdjustEvent.adjustPaymentData.balanceDue;
         this.adjustPaymentBalanceDueData = advanceReceiptsAdjustEvent.adjustPaymentData.grandTotal - advanceReceiptsAdjustEvent.adjustPaymentData.totalAdjustedAmount;
         this.adjustPaymentData = advanceReceiptsAdjustEvent.adjustPaymentData;
-        console.log('Proforma get  getAdvanceReceiptAdjustData', advanceReceiptsAdjustEvent);
+        this.closeAdvanceReciiptModal();
     }
 
     /**
@@ -4247,7 +4246,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             this.totalAdvanceReceiptsAdjustedAmount = totalAmount;
         } else {
-           this.advanceReceiptAdjustmentData = null;
+            this.advanceReceiptAdjustmentData = null;
         }
     }
 
