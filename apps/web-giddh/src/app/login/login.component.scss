@@ -31,7 +31,7 @@ body.ununresponsive {
 }
 
 .modal-header h3 {
-    color: #fff;
+    color: $White;
     font-size: 1.3rem;
 }
 
@@ -46,7 +46,7 @@ body.ununresponsive {
 }
 
 #box {
-    background-color: #fff;
+    background-color: $White;
     padding: 20px 30px;
     margin: 0 auto;
     width: 360px;
@@ -77,7 +77,7 @@ body.ununresponsive {
 
 #box .btn:hover,
 #box .btn:hover {
-    color: #fff;
+    color: $White;
 }
 
 .mrB1 {
@@ -102,7 +102,7 @@ body.ununresponsive {
 
 .btn-login {
     text-transform: uppercase;
-    color: #fff;
+    color: $White;
     margin-bottom: 10px;
     display: inline-block;
     vertical-align: middle;
@@ -133,7 +133,7 @@ body.ununresponsive {
     background: #221f1f none repeat scroll 0 0;
     border: 7px solid #c63b13;
     border-radius: 50%;
-    box-shadow: 0 -10px 0 14px #fff inset;
+    box-shadow: 0 -10px 0 14px $White inset;
     box-sizing: border-box;
     height: 60px;
     width: 60px;
@@ -156,13 +156,13 @@ body.ununresponsive {
 
 .btn-login.btn-default {
     color: #333;
-    background-color: #fff;
+    background-color: $White;
     border-color: #ccc;
 }
 
 .btn-login.btn-default:hover {
     color: #000 !important;
-    background-color: #fff;
+    background-color: $White;
     border-color: #ccc;
     box-shadow: none;
 }
@@ -215,14 +215,14 @@ button.close {
 
 .btn-success {
     background: $midnightBlue;
-    color: #fff;
+    color: $White;
     border-color: $midnightBlue;
 }
 
 .btn-success:hover {
     background: $midnightBlueHover;
     border-color: $midnightBlueHover;
-    color: #fff;
+    color: $White;
 }
 
 strong {
@@ -243,17 +243,12 @@ h1 {
 
 .slide-content {
     padding: 80px 100px;
-    color: #fff;
+    color: $White;
     background: #2c2c43;
     text-align: center;
     flex-direction: column;
     justify-content: center;
 }
-
-/* .login-box {
-    background: #fff8ea url("/assets/images/new/banner-grid-design.png") repeat;
-    padding: 20px 70px;
-} */
 
 .login-box h1 {
     color: #0f0f27;
@@ -300,7 +295,7 @@ small {
 }
 
 .google-ico a {
-    color: #fff;
+    color: $White;
     padding-left: 40px !important;
 }
 
@@ -318,7 +313,7 @@ small {
 .google-ico a {
     background: $cornflowerBlue;
     border-color: $cornflowerBlue !important;
-    color: #fff;
+    color: $White;
 }
 
 .ico-google {
@@ -368,12 +363,12 @@ small {
 
 .slide-content .btn-white {
     color: #fff7eb;
-    border: 1px solid #fff;
+    border: 1px solid $White;
 }
 
 .slide-content .btn-white:hover {
     color: #0f0f27;
-    background: #fff;
+    background: $White;
 }
 
 .slide-content > div > img {
@@ -415,7 +410,7 @@ small {
     border: 1px solid;
     min-width: 40px;
     line-height: 40px;
-    color: #fff;
+    color: $White;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -423,7 +418,7 @@ small {
 
 .app-ico ul li a:hover,
 .download-app ul li a:hover {
-    background: #fff;
+    background: $White;
     color: #2c2d43;
 }
 
@@ -484,7 +479,7 @@ small {
 .accounting-space {
     padding: 30px;
     border-radius: 0;
-    background-color: #fff;
+    background-color: $White;
 }
 .accounting-space h4 {
     color: $pageTitleColor;
@@ -496,7 +491,7 @@ small {
     border-radius: 3px;
     min-width: 160px;
     border-radius: 5px;
-    color: #fff;
+    color: $White;
     margin-bottom: 10px;
     font-size: 14px;
 }
@@ -515,13 +510,13 @@ small {
     text-decoration: none;
 }
 .btn-secondary {
-    background-color: #fff;
+    background-color: $White;
     color: #000962;
     border: 1px solid $lightTextBlue;
     border-radius: 5px;
 }
 .btn-secondary:hover {
-    color: #fff !important;
+    color: $White !important;
     background-color: $lightTextBlue;
     border-color: $lightTextBlue;
 }

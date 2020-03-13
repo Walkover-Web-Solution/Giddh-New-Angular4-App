@@ -6,10 +6,9 @@
                 </div>
             </div>
             <div class="col-md-6 col-lg-6 col-sm-6 col-12 px-0">
-                <div class="login-right d-flex align-items-center ">
+                <div class="login-right d-flex align-items-center">
                     <div class="giddh-login">
                         <div class="giddh-login-inner">
-                            <div id="infoSpan"></div>
                             <!-- dynamic content inserted -->
                             <div class="logo-login">
                                 <a href="https://giddh.com">
@@ -17,9 +16,10 @@
                                 </a>
                             </div>
                             <div class="accounting-space bg-white">
-                                <section id="fullView">
-                                    <h4 class="mrB3">Login to your secure accounting space</h4>
-                                    <form class="pos-rel mt-2 mb-2" id="loginWithPwd" [formGroup]="loginWithPasswdForm"
+                                <section id="full-view">
+                                    <h4 class="mb-3">Login to your secure accounting space</h4>
+                                    <form class="pos-rel mt-2 mb-2" id="login-with-pwd"
+                                        [formGroup]="loginWithPasswdForm"
                                         (ngSubmit)="loginWithPasswd(loginWithPasswdForm)"
                                         *ngIf="loginUsing === 'userName'"
                                         [hidden]="isLoginWithPasswordSuccessNotVerified$ | async">

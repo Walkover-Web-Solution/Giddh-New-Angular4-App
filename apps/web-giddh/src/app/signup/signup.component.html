@@ -6,10 +6,9 @@
                 </div>
             </div>
             <div class="col-md-6 col-lg-6 col-sm-6 col-12 px-0">
-                <div class="login-right d-flex align-items-center ">
+                <div class="login-right d-flex align-items-center">
                     <div class="giddh-login">
                         <div class="giddh-login-inner">
-                            <div id="infoSpan"></div>
                             <div class="logo-login">
                                 <a href="https://giddh.com">
                                     <img src="./assets/images/giddh-white-logo.svg" alt="" width="141px">
@@ -17,7 +16,7 @@
                             </div>
                             <!-- dynamic content inserted -->
                             <div class="accounting-space bg-white">
-                                <h4 class="mrB3">Signup to the new world of accounting</h4>
+                                <h4 class="mb-3">Signup to the new world of accounting</h4>
                                 <div class="form-wrapper" *ngIf="loginUsing">
 
                                     <!-- login with email form -->
@@ -25,7 +24,7 @@
                                         *ngIf="loginUsing === 'email'">
                                         <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix">
 
-                                            <input class="form-control mrB1" formControlName="email" type="email"
+                                            <input class="form-control mb-1" formControlName="email" type="email"
                                                 placeholder="Email address" required>
                                             <button [disabled]="!emailVerifyForm.controls['email'].valid"
                                                 [ladda]="isLoginWithEmailInProcess$ | async"
@@ -35,7 +34,7 @@
 
                                         </div>
                                         <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix">
-                                            <input class="form-control mrB1" formControlName="token" type="text"
+                                            <input class="form-control mb-1" formControlName="token" type="text"
                                                 placeholder="Enter verification code here" required>
                                             <div class="clearfix mrB2">
                                                 <button [disabled]="!emailVerifyForm.controls['token'].valid"
@@ -63,7 +62,7 @@
                                         *ngIf="loginUsing === 'userName'"
                                         [hidden]="isSignupWithPasswordSuccess$ | async" autocomplete="off">
                                         <div class="clearfix form-group">
-                                            <input class="form-control mrB1" type="text" formControlName="email"
+                                            <input class="form-control mb-1" type="text" formControlName="email"
                                                 placeholder="Email Id" />
                                             <input class="form-control" type="password"
                                                 (ngModelChange)="validatePwd($event)" formControlName="password"
@@ -87,8 +86,8 @@
                                     <form class="" *ngIf="isSignupWithPasswordSuccess$ | async" id="signupVerifyForm"
                                         [formGroup]="signupVerifyForm" autocomplete="off">
                                         <div class="clearfix">
-                                            <!-- <input class="form-control mrB1" formControlName="email" type="text" placeholder="Email Id" required> -->
-                                            <input class="form-control mrB1" formControlName="verificationCode"
+                                            <!-- <input class="form-control mb-1" formControlName="email" type="text" placeholder="Email Id" required> -->
+                                            <input class="form-control mb-1" formControlName="verificationCode"
                                                 type="text" placeholder="Enter verification code here" required>
                                             <div class="clearfix mrB2">
                                                 <button
