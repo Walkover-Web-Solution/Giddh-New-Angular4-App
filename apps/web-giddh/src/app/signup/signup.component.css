@@ -16,7 +16,9 @@ body.ununresponsive {
     width: 100%;
     display: table;
 }
-
+.middle {
+    vertical-align: middle;
+}
 .btn-lg {
     padding: 10px 16px;
     font-size: 16px;
@@ -215,6 +217,9 @@ button.close {
 }
 
 :host ::ng-deep .btn-success {
+    background-color: #36396d;
+    margin-bottom: 15px;
+    border-radius: 0;
     color: #fff;
 }
 
@@ -288,8 +293,9 @@ small {
 /* social_login */
 
 .social_login {
-    overflow: hidden;
+    margin-bottom: 20px;
     display: flex;
+    overflow: hidden;
 }
 
 .social_login li {
@@ -311,10 +317,16 @@ small {
 .google_ico a {
     color: #fff;
     padding-left: 40px !important;
+    background-color: #5192F1 !important;
+    width: 240px !important;
+    border-radius: 1px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.25);
+    border: 0px !important;
 }
 
 .google_ico span {
-    padding: 0 15px;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 /* social icon */
@@ -331,13 +343,13 @@ small {
 }
 
 .ico-google {
-    height: 38px;
+    height: 40px;
     position: absolute;
     width: 40px;
     left: 0;
-    background: #fff8eb;
     line-height: 38px;
     vertical-align: middle;
+    background: #fff;
 }
 
 .ico-google img {
@@ -347,9 +359,10 @@ small {
 
 .login_option,
 .login_option a {
-    color: #0c5fc1;
-    margin-top: 55px;
-    font-weight: 500;
+    margin-top: 15px;
+    font-weight: bold;
+    color: #36396e;
+    font-size: .9em;
 }
 
 .login_option a {
@@ -472,6 +485,68 @@ small {
     right: inherit;
 }
 
+.login {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.login_left {
+    height: 100vh;
+    width: 100%;
+    background: #36396f;
+}
+.login_right {
+    width: 100%;
+    background-image: url(http://staginglabs.in/v2giddh/wp-content/uploads/2019/11/Login-Page-Image.png);
+    height: 100vh;
+    justify-content: flex-start;
+    background-position: top right;
+    display: flex;
+    align-items: center;
+}
+.giddh_login {
+    margin-left: -245px;
+    width: 495px;
+}
+.giddh_login_inner {
+    max-width: 476px;
+    width: 90%;
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.logo_login {
+    background-color: #36396e;
+    height: 98px;
+    display: flex;
+    align-items: center;
+    padding: 35px;
+    position: relative;
+}
+.accounting_space {
+    padding: 30px;
+    border-radius: 10px 10px 0 0;
+    background: #fff;
+}
+.accounting_space h1 {
+    color: #36396e;
+    font-weight: 500;
+    font-size: 20px;
+    font-weight: bold;
+}
+.account {
+    background-color: #e6e7e9;
+    font-family: opensans-semibold;
+    border-radius: 0;
+    font-size: 14px;
+    width: 108px;
+    margin-left: 15px;
+    color: #000;
+    font-weight: 500;
+}
+
+
 @media only screen and (max-width: 1200px) {
     .slide_content {
         padding: 0 55px;
@@ -485,60 +560,73 @@ small {
 }
 
 @media only screen and (max-width: 767px) {
-    .flex-container {
-        background: #fff8ea url("/assets/images/banner-grid-design.png") repeat;
-        display: block;
-    }
+  .flex-container {
+    background: #FFF8EA url('/assets/images/banner-grid-design.png') repeat;
+    display: block;
+  }
 
-    .login_box,
-    .slide_content {
-        padding: 80px 20px;
-    }
+  .login_box,
+  .slide_content {
+    padding: 80px 20px;
+  }
 
-    .slide_content .logo {
+  .slide_content .logo {
+    display: none;
+  }
+
+  .flex-container > div {
+    display: block;
+    height: auto;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .social_login {
+    display: block;
+  }
+
+  .logo img {
+    max-width: 130px;
+  }
+
+  .form_wrapper form {
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .client_testimonial {
+    margin: 0 auto;
+  }
+
+  .hint ul {
+    text-align: left
+  }
+
+  .hint {
+    bottom: -74px;
+  }
+
+  .hint:before {
+    left: 6px;
+    top: -12px;
+    transform: rotate(-90deg);
+    right: inherit;
+  }
+  .account {
+    margin-left: 0px;
+  }
+
+  .linkedin_ico {
+    margin-top: 15px;
+  }
+}
+@media only screen and (max-width: 576px) {
+    .login_left {
         display: none;
     }
-
-    .flex-container > div {
-        display: block;
-        height: auto;
-        text-align: center;
-        overflow: hidden;
-    }
-
-    .social_login {
-        display: block;
-    }
-
-    .logo {
-        padding: 20px;
-        float: left;
-    }
-
-    .logo img {
-        max-width: 130px;
-    }
-
-    .form_wrapper form {
-        margin: 0 auto;
-    }
-
-    .client_testimonial {
-        margin: 0 auto;
-    }
-
-    .hint ul {
-        text-align: left;
-    }
-
-    .hint {
-        bottom: -74px;
-    }
-
-    .hint:before {
-        left: 6px;
-        top: -12px;
-        transform: rotate(-90deg);
-        right: inherit;
+    .giddh_login {
+        margin-left: 0px;
+        width: 495px;
+        max-width: 100%;
     }
 }

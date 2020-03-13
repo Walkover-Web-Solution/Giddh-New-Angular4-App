@@ -17,6 +17,7 @@
     word-break: break-word;
     white-space: nowrap;
 }
+
 .basic > tbody > tr > td,
 .basic > thead > tr > th {
     font-weight: 400;
@@ -35,6 +36,7 @@
 .basic > thead > tr th:first-child {
     border-left: 1px solid #ddd !important;
 }
+
 .basic > thead > tr > th {
     background: $White;
     color: #000000;
@@ -460,12 +462,14 @@ input {
     -webkit-animation-delay: -0.16s;
     animation-delay: -0.16s;
 }
+
 .spinner2 {
     margin: 100px auto;
     width: 40px;
     height: 40px;
     position: relative;
 }
+
 .cube1,
 .cube2 {
     background-color: #1a237e;
@@ -491,8 +495,7 @@ input {
         -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
     }
     75% {
-        -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg)
-            scale(0.5);
+        -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
     }
     100% {
         -webkit-transform: rotate(-360deg);
@@ -514,14 +517,14 @@ input {
     }
     75% {
         transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-        -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg)
-            scale(0.5);
+        -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
     }
     100% {
         transform: rotate(-360deg);
         -webkit-transform: rotate(-360deg);
     }
 }
+
 .loader-main {
     display: flex;
     justify-content: center;
@@ -534,6 +537,7 @@ input {
 .dropdown-arrow {
     position: relative;
 }
+
 .dropdown-arrow:after {
     width: 0px;
     height: 0px;
@@ -546,6 +550,7 @@ input {
     border-left: 5px solid transparent;
     border-bottom: 5px solid transparent;
 }
+
 .invoce-controll .nav.nav-tabs {
     margin-bottom: 20px;
     padding: 0 0px 0 15px !important;
@@ -567,9 +572,11 @@ input {
     min-height: auto;
     margin-bottom: 10px;
 }
+
 .invoice-bg {
     padding-top: 15px;
 }
+
 .invoce-controll .nav > li > a {
     padding: 10px 0px !important;
     margin-right: 25px !important;
@@ -673,6 +680,7 @@ input {
 .mb-5 {
     margin-bottom: 50px;
 }
+
 .mb-15 {
     margin-bottom: 15px;
 }
@@ -1009,6 +1017,7 @@ ul.sub-list {
     border: 0px solid !important;
     background: #f7f8fa !important;
 }
+
 .aging-table-top .top-aging-table-top {
     background: rgba(49, 58, 151, 0.15) !important;
 }
@@ -1329,11 +1338,13 @@ ul.sub-list {
 modal-container.modal.fade.show {
     opacity: 1;
 }
+
 modal-container.modal {
     .warehouse-welcome-modal {
         margin: 0;
         width: 100%;
         height: 100%;
+
         .modal-content {
             height: 100%;
             overflow: scroll;
@@ -1517,19 +1528,24 @@ modal-container.modal {
 .dot-success {
     background: #2daa4a;
 }
+
 .pt-85 {
     padding-top: 85px !important;
 }
+
 .mb-0 {
     margin-bottom: 0px;
 }
+
 .calendly-inline-widget object {
     width: 1000px;
     height: 610px;
 }
+
 .booking-container {
     max-width: 100% !important;
 }
+
 ._2LpwQBMGSE._1cMlaUlzrO._1P3WzErELA._22VVVS0E_n {
     display: none !important;
 }
@@ -1727,6 +1743,7 @@ header .navbar {
     color: $White;
     border-color: $border-blue;
 }
+
 .btn-primary.disabled.focus,
 .btn-primary.disabled:focus,
 .btn-primary.disabled:hover,
@@ -1740,6 +1757,7 @@ fieldset[disabled] .btn-primary:hover {
     color: $White;
     border-color: $border-blue;
 }
+
 .btn {
     padding: 7px 16px;
     border-radius: 2px;
@@ -2185,8 +2203,7 @@ input[type="checkbox"]:checked:before {
 }
 
 input[type="checkbox"]:before {
-    -webkit-transition: -webkit-transform 0.4s
-        cubic-bezier(0.45, 1.8, 0.5, 0.75);
+    -webkit-transition: -webkit-transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
     -moz-transition: -moz-transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
     transition: transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
     -webkit-transform: rotate(-45deg) scale(0, 0);
@@ -2254,14 +2271,17 @@ input[type="checkbox"]:checked:after {
 .lh33 {
     line-height: 33px;
 }
+
 .btn-success-outline {
     border: 1px solid #0cb1af;
     color: #0cb1af;
 }
+
 .btn-success-outline:hover {
     color: $White;
     background: #0cb1af;
 }
+
 .btn-success {
     background: #0cb1af;
     color: $White;
@@ -2534,6 +2554,7 @@ input[type="checkbox"]:checked:after {
 .pointer {
     cursor: pointer;
 }
+
 .pt-05 {
     padding-top: 5px;
 }
@@ -4972,13 +4993,13 @@ label {
 }
 
 .select2-container--default
-    .select2-selection--single
-    .select2-selection__rendered {
+.select2-selection--single
+.select2-selection__rendered {
     line-height: inherit !important;
 }
 
 .select2-container--default
-    .select2-results__option--highlighted[aria-selected] {
+.select2-results__option--highlighted[aria-selected] {
     background-color: #333 !important;
 }
 
@@ -5576,10 +5597,12 @@ datepicker-inner .well table tbody tr td .btn-default {
     border: 0;
     background: none;
 }
+
 datepicker-inner .well table tbody tr td .btn-default:hover {
     background: $border-blue !important;
     color: $White;
 }
+
 datepicker-inner .well table tbody tr td .btn-default:hover span {
     text-decoration: none;
 }
@@ -5623,6 +5646,7 @@ datepicker-inner .well {
     box-shadow: none;
     margin: 0;
 }
+
 datepicker-inner .well table button.btn.btn-default.btn-sm {
     line-height: 1;
     background-color: transparent !important;
@@ -5836,10 +5860,10 @@ input[type="checkbox"][disabled]:after {
 }
 
 #verifyMobile
-    .select2-parent
-    .select2-container--default
-    .select2-selection--single
-    .select2-selection__arrow {
+.select2-parent
+.select2-container--default
+.select2-selection--single
+.select2-selection__arrow {
     height: 44px;
 }
 
@@ -5861,7 +5885,9 @@ ng-select > div > div.single > div.clear:hover {
 .input-group .input-group-btn .btn {
     /*background: $White;*/
     border-left: 0px;
-} // .input-group .input-group-btn .btn:hover {
+}
+
+// .input-group .input-group-btn .btn:hover {
 //     color: #28ab00 !important;
 //     background: $White;
 // }
@@ -6103,9 +6129,11 @@ typeahead-container .dropdown-menu li.active > a > a {
     padding: 0 7px;
     height: 34px;
 }
+
 .square-switch > label > span {
     height: 34px;
 }
+
 .square-switch input[type="checkbox"]:checked ~ label {
     background: #28ab00;
     color: $White;
@@ -6344,7 +6372,9 @@ table td[class*=col-]:last-child {
 
 .dropdown-left .dropdown-menu {
     left: auto !important;
-} // .entrypanel:before {
+}
+
+// .entrypanel:before {
 //     content: ' ';
 //     position: absolute;
 //     top: 0;
@@ -6905,9 +6935,11 @@ GST filing
     position: relative;
     top: 1px;
 }
+
 .list-style ul.list-inline.list-middle.download-drop-down {
     text-align: right;
 }
+
 .menu_open {
     padding-left: 215px;
 }
@@ -7072,9 +7104,9 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine
-    .transactions-overview
-    .gstr-transactions-summary
-    .transactions-table {
+.transactions-overview
+.gstr-transactions-summary
+.transactions-table {
     border: 1px solid #ededed;
 }
 
@@ -7089,10 +7121,10 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine
-    .table.transactions-table
-    thead:first-child
-    tr:first-child
-    th:first-child {
+.table.transactions-table
+thead:first-child
+tr:first-child
+th:first-child {
     padding-left: 20px;
 }
 
@@ -7155,19 +7187,19 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine
-    .table.transactions-summary-table
-    > tbody
-    > tr:not(.secondary-row)
-    + tr.secondary-row
-    > td {
+.table.transactions-summary-table
+> tbody
+> tr:not(.secondary-row)
++ tr.secondary-row
+> td {
     border-top: 1px solid #ededed;
 }
 
 .tax-engine
-    .table.transactions-summary-table
-    > tbody
-    > tr.secondary-row
-    > td:nth-child(1) {
+.table.transactions-summary-table
+> tbody
+> tr.secondary-row
+> td:nth-child(1) {
     padding-left: 50px;
 }
 
@@ -7193,10 +7225,10 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine
-    .table.transactions-summary-table
-    > tbody
-    > tr.secondary-row
-    > td:first-child {
+.table.transactions-summary-table
+> tbody
+> tr.secondary-row
+> td:first-child {
     border-right: none;
 }
 
@@ -7528,19 +7560,19 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine
-    .table.reconciliations-table
-    tbody
-    > tr:hover
-    .actions-dropdown-btn {
+.table.reconciliations-table
+tbody
+> tr:hover
+.actions-dropdown-btn {
     border: 1px solid #2a85fb;
 }
 
 .tax-engine .table.reconciliations-table .actions-dropdown-btn,
 .tax-engine
-    .table.reconciliations-table
-    tbody
-    > tr:hover
-    .reconcile-row-action {
+.table.reconciliations-table
+tbody
+> tr:hover
+.reconcile-row-action {
     color: #2a85fb;
 }
 
@@ -7642,10 +7674,10 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine
-    .table.transactions-summary-table
-    > tbody
-    > tr.secondary-row:hover
-    > td {
+.table.transactions-summary-table
+> tbody
+> tr.secondary-row:hover
+> td {
     background-color: transparent;
 }
 
@@ -7718,6 +7750,7 @@ app-header {
 .box .company-box .inner-company-box ul > li .tooltip {
     word-break: break-all;
 }
+
 .radius-none {
     border-radius: 0px !important;
 }
@@ -8283,6 +8316,7 @@ ul.dropdown-menu p.lead.pd {
     padding-bottom: 7px !important;
     font-family: $tableFontSemibold;
 }
+
 .invoce-controll .nav-tabs > li > a {
     border-bottom: 4px solid transparent !important;
 }
@@ -8352,9 +8386,11 @@ ul.dropdown-menu p.lead.pd {
     border-radius: 0px;
     border-color: #5b64c9;
 }
+
 .asidePanelLedger button.btn.btn-lg.btn-primary {
     min-width: 170px;
 }
+
 .settingPage ul.nav.nav-tabs {
     margin-bottom: 15px;
     padding: 0 0px 0 15px !important;
@@ -8397,9 +8433,11 @@ ul.dropdown-menu p.lead.pd {
     border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
     font-size: 18px;
 }
+
 #tab-integration .nav-tabs > li a:hover {
     background-color: $White !important;
 }
+
 #tab-integration .nav-tabs > li a.active {
     border-bottom: 1px solid $activeTabBorder !important;
     font-family: "opensans-regular";
@@ -8517,7 +8555,9 @@ button.btn.btn-filter {
 
 .aside-pane-form #asidePaneFormTabs .nav > li > a {
     padding-bottom: 10px !important;
-} // .custom-tabs#asidePaneFormTabs .nav.nav-tabs > li {
+}
+
+// .custom-tabs#asidePaneFormTabs .nav.nav-tabs > li {
 //     padding-right: 0;
 // }
 .mangeAccountPopup .modal-dialog.modal-lg {
@@ -8585,6 +8625,7 @@ button.ladda-button .ladda-label {
 .custom-tabs .nav > li > a {
     padding-top: 0;
 }
+
 #incomeChart chart,
 #leftIncomeChart chart {
     width: 100%;
@@ -8592,13 +8633,16 @@ button.ladda-button .ladda-label {
     flex: 1 1 0 !important;
     flex-shrink: 1 !important;
 }
+
 #incomeChart #highcharts-ufrwew1-29 {
     display: block;
     width: 100%;
 }
+
 .panel {
     border-radius: 2px;
 }
+
 .invoice-modal-content .app-aside-menu-other-taxes:host {
     top: 60px !important;
 }
@@ -8610,14 +8654,17 @@ button.ladda-button .ladda-label {
 #top0 app-aside-menu-other-taxes {
     top: 0 !important;
 }
+
 .invoice-modal-content #top0 app-aside-menu-other-taxes {
     top: 60px !important;
 }
+
 p.remvBrnchName {
     word-break: break-all;
     white-space: normal;
     display: inline;
 }
+
 .asidePanelLedger {
     display: flex !important;
     vertical-align: middle;
@@ -8628,36 +8675,44 @@ p.remvBrnchName {
     top: 0 !important;
     transform: translate(0) !important;
 }
+
 .asidePanelLedger .btn-lg:hover {
     background-color: #5b64c9 !important;
     border-color: #5b64c9 !important;
     color: $White !important;
 }
+
 .daterangepicker td.active,
 .daterangepicker td.active:hover {
     background-color: #5864c9 !important;
 }
+
 .theme-green .bs-datepicker-head {
     background-color: #5864c9;
 }
+
 .theme-green .bs-datepicker-body table td span.selected,
 .theme-green .bs-datepicker-body table td.selected span,
 .theme-green .bs-datepicker-body table td span[class*="select-"]:after,
 .theme-green .bs-datepicker-body table td[class*="select-"] span:after {
     background-color: #5864c9;
 }
+
 .bs-datepicker-body table.days td.active:not(.select-start):before,
 .bs-datepicker-body table.days td.in-range:not(.select-start):before,
 .bs-datepicker-body table.days span.active:not(.select-start):before,
 .bs-datepicker-body table.days span.in-range:not(.select-start):before {
     background: #ebedff;
 }
+
 .theme-green .bs-datepicker-body table td.week span {
     color: #5864c9;
 }
+
 .mobileNumberWidth .menu {
     min-width: 90px !important;
 }
+
 #asidePaneFormTabs.custom-tabs .nav.nav-tabs {
     border-bottom: 1px solid #e0e0e0;
     padding: 0 0px 0 0 !important;
@@ -8667,13 +8722,16 @@ p.remvBrnchName {
     top: -4px;
     margin-bottom: 10px;
 }
+
 .contactForm .mobileNumberWidth input {
     padding-right: 0 !important;
 }
+
 .reciptNoteModal {
     width: 100% !important;
     top: 0;
 }
+
 .inventorypage .modal,
 .inventorypage .reciptNoteModal {
     margin-top: 0;
@@ -8686,18 +8744,22 @@ p.remvBrnchName {
         display: none;
     }
 }
+
 @media (min-width: 564px) {
     #date-range-picker-parent .daterangepicker {
         width: 100%;
     }
 }
+
 .dayBookAdvanceSearch input {
     width: 100%;
 }
+
 .createAccForm li.highlighted.selected,
 .createAccForm li.highlighted {
     background-color: #eeeff9 !important;
 }
+
 .createAccForm li.highlighted.selected .account-list-item,
 .createAccForm li.highlighted .account-list-item {
     color: $lightTextBlue !important;
@@ -8706,6 +8768,7 @@ p.remvBrnchName {
 button {
     transition: none !important;
 }
+
 .aside-pane-form label {
     font-size: 14px;
 }
@@ -8714,6 +8777,7 @@ button {
     color: inherit !important;
     background: inherit !important;
 }
+
 .disable-select-group .toggle {
     display: none;
 }
@@ -8728,11 +8792,13 @@ input.checkbox-custom[type="checkbox"] {
     left: 0px;
     height: 19px;
 }
+
 .checkbox-custom,
 .radio-custom {
     opacity: 0;
     position: absolute;
 }
+
 .checkbox-custom,
 .checkbox-custom-label,
 .radio-custom,
@@ -8743,12 +8809,14 @@ input.checkbox-custom[type="checkbox"] {
     cursor: pointer;
     padding-bottom: 0;
 }
+
 .checkbox-custom-label,
 .radio-custom-label {
     position: relative;
     display: inline-flex !important;
     align-items: center;
 }
+
 .checkbox-custom + .checkbox-custom-label:before,
 .radio-custom + .radio-custom-label:before {
     content: "";
@@ -8780,20 +8848,24 @@ input.checkbox-custom[type="checkbox"] {
 .checkbox-custom:checked + .checkbox-custom-label:after {
     transform: rotate(-45deg) scale(1, 1);
 }
+
 .checkbox-custom:checked + .checkbox-custom-label:before {
     background: $border-blue;
 
     border: 2px solid $border-blue;
 }
+
 .radio-custom + .radio-custom-label:before {
     border-radius: 50%;
     border: 1px solid $border-blue;
 }
+
 .radio-custom:checked + :before {
     background: $border-blue;
     border: 1px solid $border-blue;
     box-shadow: inset 0px 0px 0px 4px $White;
 }
+
 .checkbox-custom:focus + .checkbox-custom-label:before {
     border: 1px solid $border-blue;
 }
@@ -8938,8 +9010,8 @@ input.checkbox-custom[type="checkbox"] {
 
 @media (max-width: 840px) {
     .card-invoiceTable
-        #tax-control-multi-select.multi-select
-        input.form-control[readonly],
+    #tax-control-multi-select.multi-select
+    input.form-control[readonly],
     .card-invoiceTable .multi-select input.form-control {
         background-position: 98% !important;
     }
@@ -9037,9 +9109,9 @@ input.checkbox-custom[type="checkbox"] {
         background: transparent;
     }
     .tax-engine
-        .transactions-overview
-        .gstr-transactions-summary
-        .transactions-table {
+    .transactions-overview
+    .gstr-transactions-summary
+    .transactions-table {
         border: none;
     }
     .tax-engine .table-striped > tbody > tr:nth-child(odd) > td,
@@ -9502,7 +9574,8 @@ input.checkbox-custom[type="checkbox"] {
 @media only screen and (max-width: 480px) {
     td.pItem.price .my-dropdown-menu {
         width: 180px !important;
-    } /* manage group account*/
+    }
+    /* manage group account*/
     .addManageGroupAcc .getGroupModal .breadcrumbs .col-xs-8,
     .addManageGroupAcc .getGroupModal .breadcrumbs .col-xs-4 {
         width: 100%;
@@ -9511,8 +9584,55 @@ input.checkbox-custom[type="checkbox"] {
         margin-top: 5px;
     }
 }
+
 @media (min-width: 768px) {
     .invoice-modal-content .modal-dialog {
         margin: 70px auto;
+    }
+}
+
+
+/*** iPhone and iOS Form Input Zoom Fixes ***/
+/* Fix Input Zoom on devices older than iPhone 5: */
+@media screen and (device-aspect-ratio: 2/3) {
+    select, textarea, input[type="text"], input[type="password"],
+    input[type="datetime"], input[type="datetime-local"],
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+    input[type="url"] {
+        font-size: 16px;
+    }
+}
+
+/* Fix Input Zoom on iPhone 5, 5C, 5S, iPod Touch 5g */
+@media screen and (device-aspect-ratio: 40/71) {
+    select, textarea, input[type="text"], input[type="password"],
+    input[type="datetime"], input[type="datetime-local"],
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+    input[type="url"] {
+        font-size: 16px;
+    }
+}
+
+/* Fix Input Zoom on iPhone 6, iPhone 6s, iPhone 7  */
+@media screen and (device-aspect-ratio: 375/667) {
+    select, textarea, input[type="text"], input[type="password"],
+    input[type="datetime"], input[type="datetime-local"],
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+    input[type="url"] {
+        font-size: 16px;
+    }
+}
+
+/* Fix Input Zoom on iPhone 6 Plus, iPhone 6s Plus, iPhone 7 Plus, iPhone 8, iPhone X, XS, XS Max  */
+@media screen and (device-aspect-ratio: 9/16) {
+    select, textarea, input[type="text"], input[type="password"],
+    input[type="datetime"], input[type="datetime-local"],
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+    input[type="url"] {
+        font-size: 16px;
     }
 }

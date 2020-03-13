@@ -1,7 +1,7 @@
 /* tslint:disable */
-import { enableProdMode, NgModuleRef } from '@angular/core';
-import { disableDebugTools } from '@angular/platform-browser';
-import { Environment } from './model';
+import {enableProdMode, NgModuleRef} from '@angular/core';
+import {disableDebugTools} from '@angular/platform-browser';
+import {Environment} from './model';
 
 enableProdMode();
 
@@ -11,6 +11,7 @@ export const environment: Environment = {
     AppUrl: 'https://stage.giddh.com/',
     ApiUrl: 'https://apitest.giddh.com/',
     isElectron: false,
+    isCordova: false,
     OtpToken: '73k6G_GDzvhy4XE33EQCaKUnC0PHwEZBvf0qsZ3Q9S3ZBcXH-f_6JT_4fH-Qx1Y5LxIIwzqy7cFQVMoyUSXBfLL5WBX6oQWifweWIQlJQ8YkRZ1lAmu3oqwvNJXP1Y5ZTXDHO1IV5-Q63zwNbzxTFw==',
     APP_FOLDER: '',
     /** Angular debug tools in the dev console

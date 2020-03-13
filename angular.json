@@ -521,6 +521,165 @@
           }
         }
       }
+    },
+    "giddh-cordova": {
+      "root": "apps/web-giddh/",
+      "sourceRoot": "apps/web-giddh/src",
+      "projectType": "application",
+      "prefix": "foo",
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "style": "scss"
+        }
+      },
+      "architect": {
+        "build": {
+          "builder": "ngx-build-plus:build",
+          "options": {
+            "index": "apps/web-giddh/src/index.html",
+            "main": "apps/web-giddh/src/main.cordova.ts",
+            "polyfills": "apps/web-giddh/src/polyfills.ts",
+            "tsConfig": "apps/web-giddh/tsconfig.app.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "apps/web-giddh/src/assets/",
+                "output": "/assets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "apps/web-giddh/src/meta/",
+                "output": "/"
+              },
+              {
+                "glob": "favicon.ico",
+                "input": "apps/web-giddh/src/",
+                "output": "/"
+              }
+            ],
+            "styles": [
+              "xplat/web/scss/_index.scss",
+              "apps/web-giddh/src/assets/css/bootstrap.css",
+              "apps/web-giddh/src/assets/css/ngx-bootstrap/bs-datepicker.css",
+              "apps/web-giddh/src/assets/css/font-awesome.css",
+              "apps/web-giddh/src/assets/fonts/icomoon/icomoon.css",
+              "apps/web-giddh/src/assets/css/ledgerfont/ledgerfont.css",
+              "apps/web-giddh/src/assets/css/style-1.scss",
+              "apps/web-giddh/src/assets/css/style-2.scss",
+              "apps/web-giddh/src/assets/css/aside.css",
+              "apps/web-giddh/src/assets/css/ladda-themeless.min.css",
+              "apps/web-giddh/src/assets/css/style-bootstrap.css",
+              "apps/web-giddh/src/assets/css/perfect-scrollbar.component.css",
+              "apps/web-giddh/src/assets/css/toastr.css",
+              "apps/web-giddh/src/assets/css/busy.css",
+              "apps/web-giddh/src/styles.scss",
+              "apps/web-giddh/src/assets/css/color.scss"
+            ],
+            "scripts": [
+              "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
+              "apps/web-giddh/src/assets/jQuery.electron.js",
+              "node_modules/bootstrap-daterangepicker/moment.js",
+              "apps/web-giddh/src/assets/js/lodash.min.js",
+              "node_modules/bootstrap-daterangepicker/daterangepicker.js"
+            ],
+            "es5BrowserSupport": true
+          },
+          "configurations": {
+            "local": {
+              "outputPath": "apps/giddh-cordova/giddh/www",
+              "extraWebpackConfig": "./webpack.cordova.local.partial.js",
+              "fileReplacements": [
+                {
+                  "replace": "apps/web-giddh/src/index.html",
+                  "with": "apps/web-giddh/src/index.cordova.local.html"
+                },
+                {
+                  "replace": "apps/web-giddh/src/environments/environment.ts",
+                  "with": "apps/web-giddh/src/environments/environment.local.cordova.ts"
+                }
+              ],
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "extractCss": false,
+              "namedChunks": true,
+              "aot": false,
+              "extractLicenses": false,
+              "vendorChunk": false,
+              "buildOptimizer": false
+            },
+            "stage": {
+              "outputPath": "apps/giddh-cordova/giddh/www",
+              "extraWebpackConfig": "./webpack.cordova.stage.partial.js",
+              "fileReplacements": [
+                {
+                  "replace": "apps/web-giddh/src/index.html",
+                  "with": "apps/web-giddh/src/index.cordova.stage.html"
+                },
+                {
+                  "replace": "apps/web-giddh/src/environments/environment.ts",
+                  "with": "apps/web-giddh/src/environments/environment.stage.cordova.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": true,
+              "aot": true,
+              "extractLicenses": false,
+              "vendorChunk": false,
+              "buildOptimizer": true
+            },
+            "prod": {
+              "outputPath": "apps/giddh-cordova/giddh/www",
+              "extraWebpackConfig": "./webpack.cordova.prod.partial.js",
+              "fileReplacements": [
+                {
+                  "replace": "apps/web-giddh/src/index.html",
+                  "with": "apps/web-giddh/src/index.cordova.prod.html"
+                },
+                {
+                  "replace": "apps/web-giddh/src/environments/environment.ts",
+                  "with": "apps/web-giddh/src/environments/environment.prod.cordova.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": true,
+              "aot": true,
+              "extractLicenses": false,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "ngx-build-plus:dev-server",
+          "options": {
+            "host": "localhost",
+            "port": 3000,
+            "baseUrl": "10.0.2.2:3000",
+            "browserTarget": "giddh-cordova:build:local",
+            "extraWebpackConfig": "./webpack.cordova.local.partial.js",
+            "plugin": "./hook.js"
+          },
+          "configurations": {
+            "prod": {
+              "browserTarget": "giddh-cordova:build:prod"
+            }
+          }
+        }
+      }
     }
   },
   "cli": {

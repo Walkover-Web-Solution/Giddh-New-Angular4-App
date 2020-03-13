@@ -1,4 +1,5 @@
 import {NavigationEnd, NavigationStart, Router} from '@angular/router';
+import {isCordova} from '@giddh-workspaces/utils';
 /**
  * Angular 2 decorators and services
  */
@@ -34,6 +35,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     public companyMenu: { isopen: boolean } = {isopen: false};
     public isProdMode: boolean = false;
     public isElectron: boolean = false;
+    public isCordova: boolean = false;
     public tagManagerUrl: SafeUrl;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public IAmLoaded: boolean = false;
@@ -50,6 +52,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
+        this.isCordova = isCordova();
         this.store.select(s => s.session).subscribe(ss => {
             if (ss.user && ss.user.session && ss.user.session.id) {
                 let a = pick(ss.user, ['isNewUser']);
@@ -67,7 +70,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this._generalService.IAmLoaded.subscribe(s => {
             this.IAmLoaded = s;
         });
-
+        if (isCordova()) {
+            document.addEventListener("deviceready", function () {
+                if ((window as any).StatusBar) {
+                    (window as any).StatusBar.overlaysWebView(false);
+                    // (window as any).StatusBar.backgroundColorByName("#1a237e");
+                    (window as any).StatusBar.styleLightContent();
+                }
+            }, false);
+        }
         this.tagManagerUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG');
 
         this.breakpointObserver.observe([
@@ -116,7 +127,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     public ngOnInit() {
         this.sideBarStateChange(true);
         // Need to implement for Web app only
-        if (!LOCAL_ENV && !isElectron) {
+        // debugger;
+        if (!LOCAL_ENV && !(isElectron || isCordova)) {
             this._versionCheckService.initVersionCheck(AppUrl + '/version.json');
 
             this._versionCheckService.onVersionChange$.subscribe((isChanged: boolean) => {
@@ -132,7 +144,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this._cdr.detectChanges();
         this.router.events.subscribe((evt) => {
 
-            if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron) {
+            if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !(isElectron || isCordova())) {
                 // need to save last state
                 const redirectState = this.getLastStateFromUrl(evt.url);
                 localStorage.setItem('lastState', redirectState);
@@ -154,7 +166,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         if (location.href.includes('returnUrl')) {
             let tUrl = location.href.split('returnUrl=');
             if (tUrl[1]) {
-                if (!isElectron) {
+                if (!isElectron || !isCordova) {
                     this.router.navigate(['pages/' + tUrl[1]]);
                 }
             }

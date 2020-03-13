@@ -1,20 +1,34 @@
-import { take, takeUntil } from "rxjs/operators";
-import { LoginActions } from "../actions/login.action";
-import { AppState } from "../store";
-import { Router } from "@angular/router";
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ModalDirective } from "ngx-bootstrap";
-import { Configuration } from "../app.constant";
-import { Store } from "@ngrx/store";
-import { Observable, ReplaySubject } from "rxjs";
-import { LinkedInRequestModel, SignupwithEmaillModel, SignupWithMobile, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel } from "../models/api-models/loginModels";
-import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from "../theme/ng-social-login-module/index";
-import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
-import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
-import { DOCUMENT } from "@angular/platform-browser";
-import { ToasterService } from "../services/toaster.service";
-import { userLoginStateEnum } from "../models/user-login-state";
+import {take, takeUntil} from "rxjs/operators";
+import {LoginActions} from "../actions/login.action";
+import {AppState} from "../store";
+import {Router} from "@angular/router";
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from "@angular/core";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ModalDirective} from "ngx-bootstrap";
+import {Configuration} from "../app.constant";
+import {Store} from "@ngrx/store";
+import {Observable, ReplaySubject} from "rxjs";
+import {
+    LinkedInRequestModel,
+    SignupwithEmaillModel,
+    SignupWithMobile,
+    VerifyEmailModel,
+    VerifyEmailResponseModel,
+    VerifyMobileModel
+} from "../models/api-models/loginModels";
+import {
+    AuthService,
+    GoogleLoginProvider,
+    LinkedinLoginProvider,
+    SocialUser
+} from "../theme/ng-social-login-module/index";
+import {contriesWithCodes} from "../shared/helpers/countryWithCodes";
+import {IOption} from "../theme/ng-virtual-select/sh-options.interface";
+import {DOCUMENT} from "@angular/platform-browser";
+import {ToasterService} from "../services/toaster.service";
+import {userLoginStateEnum} from "../models/user-login-state";
+import {isIOSCordova} from "@giddh-workspaces/utils";
+import {GeneralService} from "../services/general.service";
 
 @Component({
     selector: "signup",
@@ -57,17 +71,19 @@ export class SignupComponent implements OnInit, OnDestroy {
     private name: string;
     private token: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public showLinkedInButton: boolean = false;
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: FormBuilder,
-        private store: Store<AppState>,
-        private router: Router,
-        private loginAction: LoginActions,
-        private authService: AuthService,
-        @Inject(DOCUMENT) private document: Document,
-        private _toaster: ToasterService
+                private store: Store<AppState>,
+                private router: Router,
+                private loginAction: LoginActions,
+                private authService: AuthService,
+                @Inject(DOCUMENT) private document: Document,
+                private _toaster: ToasterService,
+                private _generalService: GeneralService
     ) {
-        this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
+        this.urlPath = (isElectron || isCordova) ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = store.select(state => {
             return state.login.isLoginWithEmailInProcess;
         }).pipe(takeUntil(this.destroyed$));
@@ -114,7 +130,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).pipe(takeUntil(this.destroyed$));
 
         contriesWithCodes.map(c => {
-            this.countryCodeList.push({ value: c.countryName, label: c.value });
+            this.countryCodeList.push({value: c.countryName, label: c.value});
         });
         this.userLoginState$ = this.store.select(p => p.session.userLoginState);
         this.userDetails$ = this.store.select(p => p.session.user);
@@ -147,10 +163,10 @@ export class SignupComponent implements OnInit, OnDestroy {
             email: ["", [Validators.required, Validators.email]],
             verificationCode: ["", Validators.required]
         });
-        this.setCountryCode({ value: "India", label: "India" });
+        this.setCountryCode({value: "India", label: "India"});
 
         // get user object when google auth is complete
-        if (!Configuration.isElectron) {
+        if (!Configuration.isElectron && !Configuration.isCordova) {
             this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
                 this.isSocialLogoutAttempted$.subscribe((res) => {
                     if (!res && user) {
@@ -192,6 +208,7 @@ export class SignupComponent implements OnInit, OnDestroy {
 
         this.signupVerifyEmail$.subscribe(a => {
             if (a) {
+
                 this.signupVerifyForm.get("email").patchValue(a);
             }
         });
@@ -274,9 +291,9 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.loginAction.SignupWithMobileRequest(data));
     }
 
-	/**
-	 * Getting data from browser's local storage
-	 */
+    /**
+     * Getting data from browser's local storage
+     */
     public getData() {
         this.token = localStorage.getItem("token");
         this.imageURL = localStorage.getItem("image");
@@ -287,7 +304,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     public async signInWithProviders(provider: string) {
         if (Configuration.isElectron) {
 
-            const { ipcRenderer } = (window as any).require("electron");
+            const {ipcRenderer} = (window as any).require("electron");
             if (provider === "google") {
                 // google
                 const t = ipcRenderer.send("authenticate", provider);
@@ -302,6 +319,22 @@ export class SignupComponent implements OnInit, OnDestroy {
                 const t = ipcRenderer.sendSync("authenticate", provider);
                 this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
             }
+
+        } else if (Configuration.isCordova) {
+            (window as any).plugins.googleplus.login(
+                {
+                    'scopes': 'email', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
+                    'webClientId': this._generalService.getGoogleCredentials().GOOGLE_CLIENT_ID,
+                    'offline': true // optional, but requires the webClientId - if set to true the plugin will also return a serverAuthCode, which can be used to grant offline access to a non-Google server
+                },
+                (obj) => {
+                    this.store.dispatch(this.loginAction.signupWithGoogle(obj.accessToken));
+                    // console.log(JSON.stringify(obj)); // do something useful instead of alerting
+                },
+                (msg) => {
+                    console.log(('error: ' + msg));
+                }
+            );
 
         } else {
             //  web social authentication
@@ -320,9 +353,10 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-	/**
-	 * setCountryCode
-	 */
+
+    /**
+     * setCountryCode
+     */
     public setCountryCode(event: IOption) {
         if (event.value) {
             let country = this.countryCodeList.filter((obj) => obj.value === event.value);
@@ -330,9 +364,9 @@ export class SignupComponent implements OnInit, OnDestroy {
         }
     }
 
-	/**
-	 * randomBanner
-	 */
+    /**
+     * randomBanner
+     */
     public generateRandomBanner() {
         let bannerArr = ["1", "2", "3"];
         let selectedSlide = bannerArr[Math.floor(Math.random() * bannerArr.length)];
