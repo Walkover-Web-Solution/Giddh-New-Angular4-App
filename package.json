@@ -49,7 +49,7 @@
         "start.cordova.giddh.android": " npm run postinstall.web   && npm run serve:cordova:web ",
         "serve:cordova:web": " ng serve giddh-cordova",
         "serve:cordova:android": "http-server ./platforms/android/platform_www",
-        "cordov:android": "cd ./apps/giddh-cordova/giddh && cordova run android",
+        "cordova:android": "cd ./apps/giddh-cordova/giddh && cordova run android",
         "start.cordova.giddh.ios": "npm run postinstall.web && ng serve giddh-cordova && cd ./apps/giddh-cordova/giddh && cordova run android && http-server ./platforms/ios/platform_www",
         "release": "npm run build.electron.giddh && cd dist/apps/web-giddh-prod && cross-env AWS_ACCESS_KEY_ID=key_id  AWS_SECRET_ACCESS_KEY=access_key npx electron-builder build --config ./../../../electron-sign/electron-builder.json -mwl --x64 --publish always",
         "package": "npm run build.electron.giddh && cd dist/apps/web-giddh-prod && npx  electron-builder build --config ./../../../electron-sign/electron-builder.json  -mw --x64",
