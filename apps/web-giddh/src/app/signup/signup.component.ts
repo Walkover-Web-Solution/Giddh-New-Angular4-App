@@ -33,7 +33,7 @@ import {GeneralService} from "../services/general.service";
 @Component({
     selector: "signup",
     templateUrl: "./signup.component.html",
-    styleUrls: ["./signup.component.css"]
+    styleUrls: ["./signup.component.scss"]
 })
 export class SignupComponent implements OnInit, OnDestroy {
     public isLoginWithMobileSubmited$: Observable<boolean>;
@@ -72,6 +72,8 @@ export class SignupComponent implements OnInit, OnDestroy {
     private token: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public showLinkedInButton: boolean = false;
+    /** Used only to refer in the template */
+    public isCordova: boolean = isCordova;
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: FormBuilder,

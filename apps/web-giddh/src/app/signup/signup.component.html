@@ -1,252 +1,556 @@
-<div class="login">
+<ng-container *ngIf="isCordova">
+    <div class="login cordova">
 
-    <div class="login_left"></div>
+        <div class="login_left"></div>
 
-    <div class="login_right">
+        <div class="login_right">
 
-        <div class="giddh_login">
+            <div class="giddh_login">
 
-            <div class="giddh_login_inner">
+                <div class="giddh_login_inner">
 
-                <div class="logo_login">
-                    <a href="/" class="logo"><img src="./assets/images/logo-white.png" width="141px" /> </a>
-                </div>
+                    <div class="logo_login">
+                        <a href="/" class="logo"><img src="./assets/images/logo-white.png" width="141px" /> </a>
+                    </div>
 
-                <div class="accounting_space">
+                    <div class="accounting_space">
 
-                    <div class="clearfix">
-                        <h1 class="mrB3">Signup to the new world of accounting</h1>
-                        <div class="form_wrapper" *ngIf="loginUsing">
+                        <div class="clearfix">
+                            <h1 class="mrB3">Signup to the new world of accounting</h1>
+                            <div class="form_wrapper" *ngIf="loginUsing">
 
-                            <!-- login with email form -->
-                            <form class="" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm"
-                                  *ngIf="loginUsing === 'email'">
-                                <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix">
+                                <!-- login with email form -->
+                                <form class="" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm"
+                                    *ngIf="loginUsing === 'email'">
+                                    <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix">
 
-                                    <input class="form-control mrB1" formControlName="email" type="email"
-                                           placeholder="Email address" required>
-                                    <button [disabled]="!emailVerifyForm.controls['email'].valid"
+                                        <input class="form-control mrB1" formControlName="email" type="email"
+                                            placeholder="Email address" required>
+                                        <button [disabled]="!emailVerifyForm.controls['email'].valid"
                                             [ladda]="isLoginWithEmailInProcess$ | async"
                                             class="btn btn-success btn-block btn-lg"
                                             (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Submit
-                                    </button>
+                                        </button>
 
-                                </div>
-                                <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix">
-                                    <input class="form-control mrB1" formControlName="token" type="text"
-                                           placeholder="Enter verification code here" required>
-                                    <div class="clearfix mrB2">
-                                        <button [disabled]="!emailVerifyForm.controls['token'].valid"
+                                    </div>
+                                    <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix">
+                                        <input class="form-control mrB1" formControlName="token" type="text"
+                                            placeholder="Enter verification code here" required>
+                                        <div class="clearfix mrB2">
+                                            <button [disabled]="!emailVerifyForm.controls['token'].valid"
                                                 class="btn btn-success btn-block btn-lg"
                                                 [ladda]="isVerifyEmailInProcess$ | async"
                                                 (click)="VerifyEmail(emailVerifyForm.controls['email'].value,emailVerifyForm.controls['token'].value)">
-                                            Verify Email
-                                        </button>
-                                        <a class="btn btn-link cp pull-right"
-                                           (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Resend
-                                            code</a>
-                                    </div>
+                                                Verify Email
+                                            </button>
+                                            <a class="btn btn-link cp pull-right"
+                                                (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Resend
+                                                code</a>
+                                        </div>
 
-                                    <!-- <div class="clearfix">
+                                        <!-- <div class="clearfix">
                             <small class="">We have sent a verification code to your registered email.</small>
                         </div> -->
-                                </div>
-                            </form>
-                            <!-- form end/ -->
-
-
-                            <!-- login with userName form -->
-                            <form class="pos-rel" id="signUpWithPwd" [formGroup]="signUpWithPasswdForm"
-                                  (ngSubmit)="SignupWithPasswd(signUpWithPasswdForm)" *ngIf="loginUsing === 'userName'"
-                                  [hidden]="isSignupWithPasswordSuccess$ | async" autocomplete="off">
-                                <div class="clearfix form-group">
-                                    <input class="form-control mrB1" type="text" formControlName="email"
-                                           placeholder="Email Id"/>
-                                    <input class="form-control" type="password" (ngModelChange)="validatePwd($event)"
-                                           formControlName="password" name="password" placeholder="Password"
-                                           [minlength]="8" [maxlength]="20" autocomplete="false"/>
-                                    <div class="hint" [hidden]="!showPwdHint">
-                                        <ul>
-                                            <li>Provide minimum 8 and maximum 20 characters.</li>
-                                            <li>1 number and 1 special character (@$!%*?&_).</li>
-                                            <!-- <li>1 uppercase letter.</li>
-                            <li>1 lowercase letter.</li> -->
-                                        </ul>
                                     </div>
-                                    <button class="btn btn-success btn-lg btn-block mrT1" type="submit"
+                                </form>
+                                <!-- form end/ -->
+
+
+                                <!-- login with userName form -->
+                                <form class="pos-rel" id="signUpWithPwd" [formGroup]="signUpWithPasswdForm"
+                                    (ngSubmit)="SignupWithPasswd(signUpWithPasswdForm)"
+                                    *ngIf="loginUsing === 'userName'" [hidden]="isSignupWithPasswordSuccess$ | async"
+                                    autocomplete="off">
+                                    <div class="clearfix form-group">
+                                        <input class="form-control mrB1" type="text" formControlName="email"
+                                            placeholder="Email Id" />
+                                        <input class="form-control" type="password"
+                                            (ngModelChange)="validatePwd($event)" formControlName="password"
+                                            name="password" placeholder="Password" [minlength]="8" [maxlength]="20"
+                                            autocomplete="false" />
+                                        <div class="hint" [hidden]="!showPwdHint">
+                                            <ul>
+                                                <li>Provide minimum 8 and maximum 20 characters.</li>
+                                                <li>1 number and 1 special character (@$!%*?&_).</li>
+                                                <!-- <li>1 uppercase letter.</li>
+                            <li>1 lowercase letter.</li> -->
+                                            </ul>
+                                        </div>
+                                        <button class="btn btn-success btn-lg btn-block mrT1" type="submit"
                                             [disabled]="!signUpWithPasswdForm.controls['email'].valid || !signUpWithPasswdForm.controls['password'].value">
-                                        Signup
-                                    </button>
-                                </div>
-                            </form>
-                            <!-- form end/ -->
-                            <form class="" *ngIf="isSignupWithPasswordSuccess$ | async" id="signupVerifyForm"
-                                  [formGroup]="signupVerifyForm" autocomplete="off">
-                                <div class="clearfix">
-                                    <!-- <input class="form-control mrB1" formControlName="email" type="text" placeholder="Email Id" required> -->
-                                    <input class="form-control mrB1" formControlName="verificationCode" type="text"
-                                           placeholder="Enter verification code here" required>
-                                    <div class="clearfix mrB2">
-                                        <button [disabled]="!signupVerifyForm.controls['verificationCode'].valid"
+                                            Signup
+                                        </button>
+                                    </div>
+                                </form>
+                                <!-- form end/ -->
+                                <form class="" *ngIf="isSignupWithPasswordSuccess$ | async" id="signupVerifyForm"
+                                    [formGroup]="signupVerifyForm" autocomplete="off">
+                                    <div class="clearfix">
+                                        <!-- <input class="form-control mrB1" formControlName="email" type="text" placeholder="Email Id" required> -->
+                                        <input class="form-control mrB1" formControlName="verificationCode" type="text"
+                                            placeholder="Enter verification code here" required>
+                                        <div class="clearfix mrB2">
+                                            <button [disabled]="!signupVerifyForm.controls['verificationCode'].valid"
                                                 class="btn btn-success btn-block btn-lg"
                                                 (click)="VerifyEmail(signupVerifyForm.controls['email'].value,signupVerifyForm.controls['verificationCode'].value)">
-                                            Verify Email
-                                        </button>
-                                        <a class="btn btn-link cp pull-right"
-                                           (click)="LoginWithEmail(signupVerifyForm.controls['email'].value)">Resend
-                                            code</a>
+                                                Verify Email
+                                            </button>
+                                            <a class="btn btn-link cp pull-right"
+                                                (click)="LoginWithEmail(signupVerifyForm.controls['email'].value)">Resend
+                                                code</a>
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
-                        </div>
+                                </form>
+                            </div>
 
 
-                        <ul class="social_login">
-                            <li class="google_ico"><a href="javascript:void(0);"
-                                                      (click)="signInWithProviders('google')"><i
-                                class="ico-google">
-                                <img src="./assets/images/new/google_ico.svg"/>
-                            </i><span>Signup with Google</span></a></li>
-                            <li class="linkedin_ico" *ngIf="showLinkedInButton"><a href="javascript:void(0);"
-                                                        (click)="signInWithProviders('linkedin')"><i
-                                class="fa fa-linkedin"></i></a></li>
+                            <ul class="social_login">
+                                <li class="google_ico"><a href="javascript:void(0);"
+                                        (click)="signInWithProviders('google')"><i class="ico-google">
+                                            <img src="./assets/images/new/google_ico.svg" />
+                                        </i><span>Signup with Google</span></a></li>
+                                <li class="linkedin_ico" *ngIf="showLinkedInButton"><a href="javascript:void(0);"
+                                        (click)="signInWithProviders('linkedin')"><i class="fa fa-linkedin"></i></a>
+                                </li>
 
-                        </ul>
-                        <div class="login_option" *ngIf="loginUsing !== 'userName'">
-                            <!--  -->
-                            Signup with <a href="javascript:void(0);" (click)="loginUsing = 'userName'">email and
-                            password</a>
-                            <!-- ,<a href="javascript:void(0);" (click)="loginUsing = 'email'">Email</a> -->
-                        </div>
-                        <div class="mt-2">
-                            <span class="bold middle pr-1"> Already have an account?</span> <a routerLink="/login"
-                                                                                   class="btn account middle">Login</a>
+                            </ul>
+                            <div class="login_option" *ngIf="loginUsing !== 'userName'">
+                                <!--  -->
+                                Signup with <a href="javascript:void(0);" (click)="loginUsing = 'userName'">email and
+                                    password</a>
+                                <!-- ,<a href="javascript:void(0);" (click)="loginUsing = 'email'">Email</a> -->
+                            </div>
+                            <div class="mt-2">
+                                <span class="bold middle pr-1"> Already have an account?</span> <a routerLink="/login"
+                                    class="btn account middle">Login</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 
-<!--email varify modal  -->
-<div class="modal fade" tabindex="-1" bsModal #emailVerifyModal="bs-modal" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="noBrdRdsModal">
+    <!--email varify modal  -->
+    <div class="modal fade" tabindex="-1" bsModal #emailVerifyModal="bs-modal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="noBrdRdsModal">
 
-                <div class="modal-header">
-                    <h3>Sign Up with Giddh</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideEmailModal()">×</span>
-                </div>
-                <div class="modal-body clearfix">
-                    <form class="col-xs-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
-                        <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix form-group form-group-lg">
+                    <div class="modal-header">
+                        <h3>Sign Up with Giddh</h3>
+                        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideEmailModal()">×</span>
+                    </div>
+                    <div class="modal-body clearfix">
+                        <form class="col-xs-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
+                            <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix form-group form-group-lg">
 
-                            <input class="form-control mrT1" formControlName="email" type="email"
-                                   placeholder="Enter your email address" required>
-                            <button [disabled]="!emailVerifyForm.controls['email'].valid"
+                                <input class="form-control mrT1" formControlName="email" type="email"
+                                    placeholder="Enter your email address" required>
+                                <button [disabled]="!emailVerifyForm.controls['email'].valid"
                                     [ladda]="isLoginWithEmailInProcess$ | async"
                                     class="btn sharp btn-block btn-success btn-lg mrT1"
                                     (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Submit
-                            </button>
+                                </button>
 
-                        </div>
-                        <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix form-group form-group-lg">
+                            </div>
+                            <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix form-group form-group-lg">
 
-                            <input class="form-control mrT1" formControlName="token" type="text"
-                                   placeholder="Enter verification code here" required>
-                            <small>We have sent a verification code to your registered email.</small>
-                            <button [disabled]="!emailVerifyForm.controls['token'].valid"
+                                <input class="form-control mrT1" formControlName="token" type="text"
+                                    placeholder="Enter verification code here" required>
+                                <small>We have sent a verification code to your registered email.</small>
+                                <button [disabled]="!emailVerifyForm.controls['token'].valid"
                                     class="btn sharp btn-block btn-success btn-lg mrT1"
                                     [ladda]="isVerifyEmailInProcess$ | async"
                                     (click)="VerifyEmail(emailVerifyForm.controls['email'].value,emailVerifyForm.controls['token'].value)">
-                                Last step to go
-                            </button>
-                            <a class="btn btn-link cp pull-right"
-                               (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Resend
-                                code</a>
-                        </div>
-                    </form>
+                                    Last step to go
+                                </button>
+                                <a class="btn btn-link cp pull-right"
+                                    (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Resend
+                                    code</a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!--email varify modal  -->
+    <!--email varify modal  -->
 
-<!--mobile varify form  -->
-<div class="modal fade" tabindex="-1" bsModal #mobileVerifyModal="bs-modal" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="noBrdRdsModal">
-                <div class="modal-header">
-                    <h3>Sign Up with Giddh</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideMobileModal()">×</span>
-                </div>
-                <div class="modal-body clearfix">
-                    <form class="col-xs-12" id="verifyMobile" name="verifyEmailForm" novalidate
-                          [formGroup]="mobileVerifyForm">
-                        <div class="clearfix form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
-                            <sh-select [options]="countryCodeList" class="form-inline"
-                                       (selected)="setCountryCode($event)" [placeholder]="'CC'"
-                                       formControlName="country" class="pull-left" style="width: 80px;"></sh-select>
-                            <input class="form-control" formControlName="mobileNumber" type="text"
-                                   placeholder="Enter your Mobile No" required style="width: calc(100% - 80px);"/>
-                        </div>
-                        <button *ngIf="!(isLoginWithMobileSubmited$ | async)"
+    <!--mobile varify form  -->
+    <div class="modal fade" tabindex="-1" bsModal #mobileVerifyModal="bs-modal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="noBrdRdsModal">
+                    <div class="modal-header">
+                        <h3>Sign Up with Giddh</h3>
+                        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideMobileModal()">×</span>
+                    </div>
+                    <div class="modal-body clearfix">
+                        <form class="col-xs-12" id="verifyMobile" name="verifyEmailForm" novalidate
+                            [formGroup]="mobileVerifyForm">
+                            <div class="clearfix form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
+                                <sh-select [options]="countryCodeList" class="form-inline"
+                                    (selected)="setCountryCode($event)" [placeholder]="'CC'" formControlName="country"
+                                    class="pull-left" style="width: 80px;"></sh-select>
+                                <input class="form-control" formControlName="mobileNumber" type="text"
+                                    placeholder="Enter your Mobile No" required style="width: calc(100% - 80px);" />
+                            </div>
+                            <button *ngIf="!(isLoginWithMobileSubmited$ | async)"
                                 class="btn sharp btn-block btn-success btn-lg mrT1"
                                 (click)="getOtp(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['country'].value)"
                                 [ladda]="isLoginWithMobileInProcess$ | async"
                                 [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid">{{ !(isLoginWithMobileInProcess$ |
                             async) ? 'Get Otp' : 'Resend' }}
-                        </button>
-                        <div class="clearfix form-group form-group-lg" *ngIf="(isLoginWithMobileSubmited$ | async)">
-                            <hr class="mrtb10">
-                            <input class="form-control" placeholder="Enter OTP" style="border-radius:0"
-                                   formControlName="otp">
-                            <button type="login" class="btn sharp btn-block btn-success btn-lg mrT1"
+                            </button>
+                            <div class="clearfix form-group form-group-lg" *ngIf="(isLoginWithMobileSubmited$ | async)">
+                                <hr class="mrtb10">
+                                <input class="form-control" placeholder="Enter OTP" style="border-radius:0"
+                                    formControlName="otp">
+                                <button type="login" class="btn sharp btn-block btn-success btn-lg mrT1"
                                     [ladda]="isVerifyMobileInProcess$ | async"
                                     (click)="VerifyCode(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['otp'].value)"
                                     [disabled]="!mobileVerifyForm.controls['otp'].valid">Login
-                            </button>
-                        </div>
-                    </form>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!--mobile verify form  -->
+    <!--mobile verify form  -->
 
-<!-- two way auth popup -->
-<div class="modal fade" tabindex="-1" bsModal #twoWayAuthModal="bs-modal" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="noBrdRdsModal">
-                <div class="modal-header">
-                    <h3>Sign Up with Giddh</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal"
-                          (click)="resetTwoWayAuthModal()">×</span>
-                </div>
-                <div class="modal-body clearfix">
-                    <form class="col-xs-12" id="authModal" name="verifyEmailForm" novalidate
-                          [formGroup]="twoWayOthForm">
-                        <div class="clearfix form-group form-group-lg">
-                            <hr class="mrtb10">
-                            <input class="form-control" placeholder="Enter OTP" style="border-radius:0"
-                                   formControlName="otp">
-                            <small>We have sent an OTP to your registered mobile number.</small>
-                            <button type="login" class="btn sharp btn-block btn-success btn-lg mrT1"
+    <!-- two way auth popup -->
+    <div class="modal fade" tabindex="-1" bsModal #twoWayAuthModal="bs-modal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="noBrdRdsModal">
+                    <div class="modal-header">
+                        <h3>Sign Up with Giddh</h3>
+                        <span aria-hidden="true" class="close" data-dismiss="modal"
+                            (click)="resetTwoWayAuthModal()">×</span>
+                    </div>
+                    <div class="modal-body clearfix">
+                        <form class="col-xs-12" id="authModal" name="verifyEmailForm" novalidate
+                            [formGroup]="twoWayOthForm">
+                            <div class="clearfix form-group form-group-lg">
+                                <hr class="mrtb10">
+                                <input class="form-control" placeholder="Enter OTP" style="border-radius:0"
+                                    formControlName="otp">
+                                <small>We have sent an OTP to your registered mobile number.</small>
+                                <button type="login" class="btn sharp btn-block btn-success btn-lg mrT1"
                                     [ladda]="isTwoWayAuthInProcess$ | async" (click)="verifyTwoWayCode()"
                                     [disabled]="twoWayOthForm.get('otp').invalid">Submit
-                            </button>
-                        </div>
-                    </form>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- two way auth popup -->
+    <!-- two way auth popup -->
+</ng-container>
+
+<ng-container *ngIf="!isCordova">
+    <!-- Web -->
+    <div class="flex-container">
+        <a href="/" class="logo"><img src="./assets/images/new/giddh-logo.png" class="hidden-md" /> </a>
+
+        <div class="login_box flex col-md-5 col-xs-12">
+
+            <div class="">
+                <h1 class="mrB3">Signup to the new world of accounting</h1>
+                <div class="form_wrapper" *ngIf="loginUsing">
+
+                    <!-- login with email form -->
+                    <form class="" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm"
+                        *ngIf="loginUsing === 'email'">
+                        <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix">
+
+                            <input class="form-control mrB1" formControlName="email" type="email"
+                                placeholder="Email address" required>
+                            <button [disabled]="!emailVerifyForm.controls['email'].valid"
+                                [ladda]="isLoginWithEmailInProcess$ | async" class="btn btn-success btn-block btn-lg"
+                                (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Submit
+                            </button>
+
+                        </div>
+                        <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix">
+                            <input class="form-control mrB1" formControlName="token" type="text"
+                                placeholder="Enter verification code here" required>
+                            <div class="clearfix mrB2">
+                                <button [disabled]="!emailVerifyForm.controls['token'].valid"
+                                    class="btn btn-success btn-block btn-lg" [ladda]="isVerifyEmailInProcess$ | async"
+                                    (click)="VerifyEmail(emailVerifyForm.controls['email'].value,emailVerifyForm.controls['token'].value)">
+                                    Verify Email
+                                </button>
+                                <a class="btn btn-link cp pull-right"
+                                    (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Resend
+                                    code</a>
+                            </div>
+
+                            <!-- <div class="clearfix">
+                <small class="">We have sent a verification code to your registered email.</small>
+            </div> -->
+                        </div>
+                    </form>
+                    <!-- form end/ -->
+
+
+                    <!-- login with userName form -->
+                    <form class="pos-rel" id="signUpWithPwd" [formGroup]="signUpWithPasswdForm"
+                        (ngSubmit)="SignupWithPasswd(signUpWithPasswdForm)" *ngIf="loginUsing === 'userName'"
+                        [hidden]="isSignupWithPasswordSuccess$ | async" autocomplete="off">
+                        <div class="clearfix form-group">
+                            <input class="form-control mrB1" type="text" formControlName="email"
+                                placeholder="Email Id" />
+                            <input class="form-control" type="password" (ngModelChange)="validatePwd($event)"
+                                formControlName="password" name="password" placeholder="Password" [minlength]="8"
+                                [maxlength]="20" autocomplete="false" />
+                            <div class="hint" [hidden]="!showPwdHint">
+                                <ul>
+                                    <li>Provide minimum 8 and maximum 20 characters.</li>
+                                    <li>1 number and 1 special character (@$!%*?&_).</li>
+                                    <!-- <li>1 uppercase letter.</li>
+                <li>1 lowercase letter.</li> -->
+                                </ul>
+                            </div>
+                            <button class="btn btn-success btn-lg btn-block mrT1" type="submit"
+                                [disabled]="!signUpWithPasswdForm.controls['email'].valid || !signUpWithPasswdForm.controls['password'].value">
+                                Signup
+                            </button>
+                        </div>
+                    </form>
+                    <!-- form end/ -->
+                    <form class="" *ngIf="isSignupWithPasswordSuccess$ | async" id="signupVerifyForm"
+                        [formGroup]="signupVerifyForm" autocomplete="off">
+                        <div class="clearfix">
+                            <!-- <input class="form-control mrB1" formControlName="email" type="text" placeholder="Email Id" required> -->
+                            <input class="form-control mrB1" formControlName="verificationCode" type="text"
+                                placeholder="Enter verification code here" required>
+                            <div class="clearfix mrB2">
+                                <button [disabled]="!signupVerifyForm.controls['verificationCode'].valid"
+                                    class="btn btn-success btn-block btn-lg"
+                                    (click)="VerifyEmail(signupVerifyForm.controls['email'].value,signupVerifyForm.controls['verificationCode'].value)">
+                                    Verify Email
+                                </button>
+                                <a class="btn btn-link cp pull-right"
+                                    (click)="LoginWithEmail(signupVerifyForm.controls['email'].value)">Resend
+                                    code</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+                <ul class="social_login">
+                    <li class="google_ico"><a href="javascript:void(0);" (click)="signInWithProviders('google')"><i
+                                class="ico-google">
+                                <img src="./assets/images/new/google_ico.svg" />
+                            </i><span>Signup with Google</span></a></li>
+                    <li class="linkedin_ico"><a href="javascript:void(0);" (click)="signInWithProviders('linkedin')"><i
+                                class="fa fa-linkedin"></i></a></li>
+
+                </ul>
+                <div class="login_option" *ngIf="loginUsing !== 'userName'">
+                    <!--  -->
+                    Signup with <a href="javascript:void(0);" (click)="loginUsing = 'userName'">email and password</a>
+                    <!-- ,<a href="javascript:void(0);" (click)="loginUsing = 'email'">Email</a> -->
+                </div>
+                <div class="mrT4">
+                    Already have an account? <a routerLink="/login" class="btn btn-sm btn-primary mrL">Login</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide_content col-md-7 col-xs-12">
+            <a href="/" class="logo"><img src="./assets/images/new/giddh-logo-white.png" /> </a>
+            <ul class="feature_list" [hidden]="selectedBanner !== 'slide1'">
+                <li>
+                    <span class="signup-ico"><img src="./assets/images/signup/icon-Easy.svg" /></span>
+                    <h1>Easy Access</h1>
+                    <p>of your financial statements Trial Balance, P&L and B/S.</p>
+                </li>
+                <li>
+                    <span class="signup-ico"><img src="./assets/images/signup/icon-import.svg" /></span>
+                    <h1>Import from Tally</h1>
+                    <p>either sync or import all your financial data to Giddh.</p>
+                </li>
+                <li>
+                    <span class="signup-ico"><img src="./assets/images/signup/icon-secured.svg" /></span>
+                    <h1>Secured</h1>
+                    <p>everything is backed up automatically & stored on the AWS cloud.</p>
+                </li>
+            </ul>
+
+            <ul class="feature_list" [hidden]="selectedBanner !== 'slide2'">
+                <li>
+                    <span class="signup-ico"><img src="./assets/images/signup/icon-Easy.svg" /></span>
+                    <h1>Simple</h1>
+                    <p>a beautiful design to make your accounting easy.</p>
+                </li>
+                <li>
+                    <span class="signup-ico"><img src="./assets/images/signup/icon-import.svg" /></span>
+                    <h1>Tax Compliance</h1>
+                    <p>File your taxes on time.</p>
+                </li>
+                <li>
+                    <span class="signup-ico"><img src="./assets/images/signup/icon-secured.svg" /></span>
+                    <h1>Everywhere</h1>
+                    <p>a mobile app, API integration & dedicated support for your custom needs.</p>
+                </li>
+            </ul>
+
+            <ul class="feature_list" [hidden]="selectedBanner !== 'slide3'">
+                <li>
+                    <span class="signup-ico"><img src="./assets/images/signup/icon-Easy.svg" /></span>
+                    <h1>Simple</h1>
+                    <p>a beautiful design to make your accounting easy.</p>
+                </li>
+                <li>
+                    <span class="signup-ico"><img src="./assets/images/signup/icon-import.svg" /></span>
+                    <h1>Tax Compliance</h1>
+                    <p>File your taxes on time.</p>
+                </li>
+                <li>
+                    <span class="signup-ico"><img src="./assets/images/signup/icon-secured.svg" /></span>
+                    <h1>Team Management</h1>
+                    <p>add all your team mates, accountants and CAs with the permissions they need.</p>
+                </li>
+            </ul>
+
+            <div class="client_testimonial">
+                <div class="content">
+                    <span class="blockquote-ico"><img src="./assets/images/signup/icon-testimonial.svg" /> </span>
+                    <p>Giddh has helped me immensely in creating and sending invoices automatically.</p>
+                    <h4>-Ishan Vyas</h4>
+                    <img src="./assets/images/signup/instacar.png" class="client_logo mrT" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--email varify modal  -->
+    <div class="modal fade" tabindex="-1" bsModal #emailVerifyModal="bs-modal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="noBrdRdsModal">
+
+                    <div class="modal-header">
+                        <h3>Sign Up with Giddh</h3>
+                        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideEmailModal()">×</span>
+                    </div>
+                    <div class="modal-body clearfix">
+                        <form class="col-xs-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
+                            <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix form-group form-group-lg">
+
+                                <input class="form-control mrT1" formControlName="email" type="email"
+                                    placeholder="Enter your email address" required>
+                                <button [disabled]="!emailVerifyForm.controls['email'].valid"
+                                    [ladda]="isLoginWithEmailInProcess$ | async"
+                                    class="btn sharp btn-block btn-success btn-lg mrT1"
+                                    (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Submit
+                                </button>
+
+                            </div>
+                            <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix form-group form-group-lg">
+
+                                <input class="form-control mrT1" formControlName="token" type="text"
+                                    placeholder="Enter verification code here" required>
+                                <small>We have sent a verification code to your registered email.</small>
+                                <button [disabled]="!emailVerifyForm.controls['token'].valid"
+                                    class="btn sharp btn-block btn-success btn-lg mrT1"
+                                    [ladda]="isVerifyEmailInProcess$ | async"
+                                    (click)="VerifyEmail(emailVerifyForm.controls['email'].value,emailVerifyForm.controls['token'].value)">
+                                    Last step to go
+                                </button>
+                                <a class="btn btn-link cp pull-right"
+                                    (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Resend
+                                    code</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--email varify modal  -->
+
+    <!--mobile varify form  -->
+    <div class="modal fade" tabindex="-1" bsModal #mobileVerifyModal="bs-modal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="noBrdRdsModal">
+                    <div class="modal-header">
+                        <h3>Sign Up with Giddh</h3>
+                        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideMobileModal()">×</span>
+                    </div>
+                    <div class="modal-body clearfix">
+                        <form class="col-xs-12" id="verifyMobile" name="verifyEmailForm" novalidate
+                            [formGroup]="mobileVerifyForm">
+                            <div class="clearfix form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
+                                <sh-select [options]="countryCodeList" class="form-inline"
+                                    (selected)="setCountryCode($event)" [placeholder]="'CC'" formControlName="country"
+                                    class="pull-left" style="width: 80px;"></sh-select>
+                                <input class="form-control" formControlName="mobileNumber" type="text"
+                                    placeholder="Enter your Mobile No" required style="width: calc(100% - 80px);" />
+                            </div>
+                            <button *ngIf="!(isLoginWithMobileSubmited$ | async)"
+                                class="btn sharp btn-block btn-success btn-lg mrT1"
+                                (click)="getOtp(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['country'].value)"
+                                [ladda]="isLoginWithMobileInProcess$ | async"
+                                [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid">{{ !(isLoginWithMobileInProcess$ |
+              async) ? 'Get Otp' : 'Resend' }}
+                            </button>
+                            <div class="clearfix form-group form-group-lg" *ngIf="(isLoginWithMobileSubmited$ | async)">
+                                <hr class="mrtb10">
+                                <input class="form-control" placeholder="Enter OTP" style="border-radius:0"
+                                    formControlName="otp">
+                                <button type="login" class="btn sharp btn-block btn-success btn-lg mrT1"
+                                    [ladda]="isVerifyMobileInProcess$ | async"
+                                    (click)="VerifyCode(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['otp'].value)"
+                                    [disabled]="!mobileVerifyForm.controls['otp'].valid">Login
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--mobile verify form  -->
+
+    <!-- two way auth popup -->
+    <div class="modal fade" tabindex="-1" bsModal #twoWayAuthModal="bs-modal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="noBrdRdsModal">
+                    <div class="modal-header">
+                        <h3>Sign Up with Giddh</h3>
+                        <span aria-hidden="true" class="close" data-dismiss="modal"
+                            (click)="resetTwoWayAuthModal()">×</span>
+                    </div>
+                    <div class="modal-body clearfix">
+                        <form class="col-xs-12" id="authModal" name="verifyEmailForm" novalidate
+                            [formGroup]="twoWayOthForm">
+                            <div class="clearfix form-group form-group-lg">
+                                <hr class="mrtb10">
+                                <input class="form-control" placeholder="Enter OTP" style="border-radius:0"
+                                    formControlName="otp">
+                                <small>We have sent an OTP to your registered mobile number.</small>
+                                <button type="login" class="btn sharp btn-block btn-success btn-lg mrT1"
+                                    [ladda]="isTwoWayAuthInProcess$ | async" (click)="verifyTwoWayCode()"
+                                    [disabled]="twoWayOthForm.get('otp').invalid">Submit
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- two way auth popup -->
+</ng-container>
