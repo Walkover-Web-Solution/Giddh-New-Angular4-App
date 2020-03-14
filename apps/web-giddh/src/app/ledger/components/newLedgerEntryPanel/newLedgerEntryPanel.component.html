@@ -463,20 +463,19 @@
                     </ul>
                 </div>
 
-                <div class="pull-right">
-                    <label class="upload_div pr-15"
-                        [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}">
-                        <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions"
-                            ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
-                        <label for="invoiceFile" class="cp fs16">
-                            <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
-                    </label>
-                    <div class="file_attached clearfix text-right pr-15" *ngIf="blankLedger.attachedFile.length > 0">
-                        <span>{{ blankLedger.attachedFileName }}</span>
-                        <label class="remove cp text-danger pl-1"
-                            (click)="showDeleteAttachedFileModal()">(remove)</label>
-                    </div>
-                </div>
+        <div class="pull-right">
+            <input type="file" [hidden]="true" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect
+                   [uploadInput]="uploadInput" (uploadOutput)="onWebUpload($event)" #webFileInput>
+          <label class="upload_div pr-15" [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}" (click)="onUploadOutput()">
+
+            <label for="invoiceFile" class="cp fs16">
+              <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
+          </label>
+          <div class="file_attached clearfix text-right pr-15" *ngIf="blankLedger.attachedFile.length > 0">
+            <span>{{ blankLedger.attachedFileName }}</span>
+            <label class="remove cp text-danger pl-1" (click)="showDeleteAttachedFileModal()">(remove)</label>
+          </div>
+        </div>
 
 
             </div>

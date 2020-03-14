@@ -91,7 +91,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      * @memberof WarehouseComponent
      */
     public ngOnInit(): void {
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron ||isCordova)  ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.initSubscribers();
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
     }
