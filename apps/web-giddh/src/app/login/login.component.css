@@ -227,9 +227,7 @@ button.close {
 strong {
     font-family: "Roboto", sans-serif;
 }
-.middle {
-    vertical-align: middle;
-}
+
 .flex-container {
     display: flex;
     height: 100%;
@@ -266,69 +264,20 @@ h1 {
     justify-content: center;
 }
 
-/* .login_box {
-  background: #FFF8EA url('/assets/images/new/banner-grid-design.png') repeat;
-  padding: 20px 70px;
+.login_box {
+    background: #fff8ea url("/assets/images/new/banner-grid-design.png") repeat;
+    padding: 20px 70px;
 }
 
 .login_box h1 {
-  color: #0f0f27;
-  font-weight: 500;
-} */
-.login {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    color: #0f0f27;
+    font-weight: 500;
 }
-.login_left {
-    height: 100vh;
-    width: 100%;
-    background: #36396f;
-  }
+
 .form_wrapper {
     display: flex;
     margin-bottom: 40px;
     flex-direction: column;
-}
-.login_right {
-    width: 100%;
-    background-image: url(http://staginglabs.in/v2giddh/wp-content/uploads/2019/11/Login-Page-Image.png);
-    height: 100vh;
-    justify-content: flex-start;
-    background-position: top right;
-    display: flex;
-    align-items: center;
-}
-.giddh_login {
-    margin-left: -245px;
-    width: 495px;
-}
-.giddh_login_inner {
-    max-width: 476px;
-    width: 90%;
-    margin: 0 auto;
-    border-radius: 8px;
-    overflow: hidden;
-}
-.accounting_space {
-    padding: 30px;
-    border-radius: 10px 10px 0 0;
-    background: #fff;
-}
-.logo_login {
-    background-color: #36396e;
-    height: 98px;
-    display: flex;
-    align-items: center;
-    padding: 35px;
-    position: relative;
-}
-.accounting_space h1 {
-    color: #36396e;
-    font-weight: 500;
-    font-size: 20px;
-    font-weight: bold;
 }
 
 small {
@@ -342,9 +291,8 @@ small {
 /* social_login */
 
 .social_login {
-    display: flex;
-    margin-bottom: 20px;
     overflow: hidden;
+    display: flex;
 }
 
 .social_login li {
@@ -354,17 +302,22 @@ small {
 }
 
 .social_login li a {
-  display: inline-block;
-  height: 40px;
-  min-width: 40px;
-  line-height: 40px;
-  text-align: center;
-  position: relative;
+    display: inline-block;
+    height: 40px;
+    border: 1px solid;
+    min-width: 40px;
+    line-height: 40px;
+    text-align: center;
+    position: relative;
+}
+
+.google_ico a {
+    color: #fff;
+    padding-left: 40px !important;
 }
 
 .google_ico span {
-    font-size: 14px;
-    font-weight: bold;
+    padding: 0 15px;
 }
 
 /* social icon */
@@ -375,22 +328,19 @@ small {
 }
 
 .google_ico a {
+    background: #5092f3;
+    border-color: #5092f3 !important;
     color: #fff;
-    padding-left: 40px !important;
-    background-color: #5192F1 !important;
-    width: 240px !important;
-    border-radius: 1px;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,.25);
 }
 
 .ico-google {
-  height: 40px;
-  position: absolute;
-  width: 40px;
-  left: 0;
-  line-height: 38px;
-  vertical-align: middle;
-  background: #fff;
+    height: 38px;
+    position: absolute;
+    width: 40px;
+    left: 0;
+    background: #fff8eb;
+    line-height: 38px;
+    vertical-align: middle;
 }
 
 .ico-google img {
@@ -400,11 +350,15 @@ small {
 
 .login_option,
 .login_option a {
-    margin-top: 15px;
-    font-weight: bold;
-    color: #36396e;
-    font-size: .9em;
+    color: #0c5fc1;
+    margin-top: 55px;
+    font-weight: 500;
 }
+
+.login_option a {
+    border-bottom: 2px dotted #0c5fc1;
+}
+
 .slide_content h1 {
     font-size: 24px;
     font-weight: 400;
@@ -497,93 +451,64 @@ small {
     display: none;
 }
 
-.account {
-    background-color: #e6e7e9;
-    font-family: opensans-semibold;
-    border-radius: 0;
-    font-size: 14px;
-    width: 108px;
-    margin-left: 15px;
-    color: #000;
-    font-weight: 500;
-}
-
-@media (max-width: 576px) {
-  .login_right {
-    width: 100%;
-  }
-  .login_left {
-    display: none;
-  }
-  .giddh_login {
-    margin-left: 0px;
-    width: 495px;
-    max-width: 100%;
-  }
-}
-
 @media only screen and (max-width: 768px) {
-  .flex-container {
-    background: #FFF8EA url('/assets/images/banner-grid-design.png') repeat;
-    display: block;
-  }
+    .flex-container {
+        background: #fff8ea url("/assets/images/banner-grid-design.png") repeat;
+        display: block;
+    }
 
-  .slide_content {
-    display: none !important;
-    padding: 110px 20px;
-  }
+    .slide_content {
+        display: none !important;
+        padding: 110px 20px;
+    }
 
-  /* .login_box {
-    padding: 80px 20px;
-  } */
+    .login_box {
+        padding: 80px 20px;
+    }
 
-  .on_mobile {
-    display: block !important;
-  }
+    .on_mobile {
+        display: block !important;
+    }
 
-  .flex-container > div {
-    display: block;
-    height: auto;
-    text-align: center;
-    overflow: hidden;
-  }
+    .flex-container > div {
+        display: block;
+        height: auto;
+        text-align: center;
+        overflow: hidden;
+    }
 
-  .social_login {
-    display: block;
-  }
+    .social_login {
+        display: block;
+    }
 
-  .logo {
-    left: 20px;
-    top: 20px;
-  }
+    .logo {
+        left: 20px;
+        top: 20px;
+    }
 
-  .logo img {
-    max-width: 130px;
-  }
+    .logo img {
+        max-width: 130px;
+    }
 
-  .download_app ul li a {
-    height: 50px;
-    line-height: 50px;
-    padding: 0 16px;
-    border-radius: 2px;
-    display: flex;
-  }
+    .download_app ul li a {
+        height: 50px;
+        line-height: 50px;
+        padding: 0 16px;
+        border-radius: 2px;
+        display: flex;
+    }
 
-  .download_app ul li a i {
-    border-right: 1px solid #fff;
-    padding-right: 16px;
-    font-size: 28px;
-    position: relative;
-    margin-right: 16px;
-    height: 49px;
-    line-height: 49px;
-  }
+    .download_app ul li a i {
+        border-right: 1px solid #fff;
+        padding-right: 16px;
+        font-size: 28px;
+        position: relative;
+        margin-right: 16px;
+        height: 49px;
+        line-height: 49px;
+    }
 
-  .form_wrapper form {
-    margin: 0 auto;
-    width: 100%;
-  }
-  .account {
-    margin-left: 0px;
-  }
+    .form_wrapper form {
+        margin: 0 auto;
+    }
 }
