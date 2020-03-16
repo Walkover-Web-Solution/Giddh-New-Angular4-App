@@ -60,7 +60,7 @@ export class MapExcelDataComponent implements OnInit {
 	}
 
 	public ngOnInit() {
-		this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
+		this.imgPath = (isElectron||isCordova)  ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
 	}
 
 	public mapExcelData() {

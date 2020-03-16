@@ -6,6 +6,7 @@ module.exports = {
             "VERSION": JSON.stringify("4711"),
             'ENV': JSON.stringify('production'),
             'isElectron': JSON.stringify(true),
+            'isCordova': JSON.stringify(false),
             'errlyticsNeeded': JSON.stringify(false),
             'errlyticsKey': JSON.stringify(''),
             'AppUrl': JSON.stringify('http://localhost:4200/'),

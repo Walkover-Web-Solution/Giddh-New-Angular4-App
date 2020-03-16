@@ -37,6 +37,7 @@ export class PaymentAsideComponent implements OnInit {
     public userDetails$: Observable<VerifyEmailResponseModel>;
     //variable to check whether OTP is sent to show and hide OTP text field
     public OTPsent: boolean = false;
+    public countryCode: string = '';
 
     //Event emitter to close the Aside panel
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -76,6 +77,10 @@ export class PaymentAsideComponent implements OnInit {
         this.activeAccount$.subscribe(acc => {
             if (acc && acc.accountBankDetails) {
                 this.accountDetails = acc;
+                if (acc.country && acc.country.countryCode) {
+                    this.countryCode = this.accountDetails.country.countryCode
+                }
+
             }
         });
     }

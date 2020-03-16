@@ -302,8 +302,9 @@ span.inputAddon {
 .aging-table .btn-small {
     min-width: 140px;
 }
-.aging-table.basic > thead > tr > th {
+.aging-table thead tr th {
     border-top: 1px solid $tableBorderColor;
+    border-bottom: 1px solid $tableBorderColor !important;
     position: relative;
     padding-right: 10px !important;
 }

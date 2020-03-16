@@ -155,6 +155,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public multiCurrencyAccDetails: IFlattenAccountsResultItem = null;
     public selectedPettycashEntry$: Observable<PettyCashResonse>;
     public accountPettyCashStream: any;
+    /**To check tourist scheme applicable or not */
+    public isTouristSchemeApplicable: boolean = false;
+    public allowParentGroup = ['sales', 'cash', 'sundrydebtors', 'bankaccounts'];
+
 
     /** True, if all the transactions are of type 'Tax' or 'Reverse Charge' */
     private taxOnlyTransactions: boolean;
@@ -265,6 +269,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.activeAccount = cloneDeep(resp[2].body);
                     // Decides whether to show the RCM entry
                     this.shouldShowRcmEntry = this.isRcmEntryPresent(resp[1].transactions);
+                    this.isTouristSchemeApplicable = this.checkTouristSchemeApplicable(resp[1], resp[2], resp[3]);
                     this.shouldShowRcmTaxableAmount = resp[1].reverseChargeTaxableAmount !== undefined && resp[1].reverseChargeTaxableAmount !== null;
                     if (this.shouldShowRcmTaxableAmount) {
                         // Received taxable amount is a truthy value
@@ -417,6 +422,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     // Check the RCM checkbox if API returns subvoucher as Reverse charge
                     this.isRcmEntry = (this.vm.selectedLedger.subVoucher === Subvoucher.ReverseCharge);
                     this.isAdvanceReceipt = (this.vm.selectedLedger.subVoucher === Subvoucher.AdvanceReceipt);
+                    this.vm.isRcmEntry = this.isRcmEntry;
                     this.vm.isAdvanceReceipt = this.isAdvanceReceipt;
                     this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
 
@@ -1280,5 +1286,46 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         }
         return false;
+    }
+
+
+    /**
+     *  To check tourist scheme applicable or not
+     *
+     * @private
+     * @param {*} accountDetails Current ledger details
+     * @returns {boolean} True if tourist scheme applicable
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private checkTouristSchemeApplicable(baseAccountDetails: any, selectedAccountDetails, companyProfile): boolean {
+        if (baseAccountDetails && baseAccountDetails.touristSchemeApplicable ) {
+            return true;
+        } else if (baseAccountDetails && baseAccountDetails.voucher && (baseAccountDetails.voucher.name ==='sales' || baseAccountDetails.voucher.name ==='cash') &&  selectedAccountDetails && selectedAccountDetails.body && selectedAccountDetails.body.parentGroups && selectedAccountDetails.body.parentGroups.length > 1 && selectedAccountDetails.body.parentGroups[1].uniqueName && this.allowParentGroup.includes(selectedAccountDetails.body.parentGroups[1].uniqueName) && companyProfile && companyProfile.countryV2 && companyProfile.countryV2.alpha2CountryCode && companyProfile.countryV2.alpha2CountryCode === 'AE') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Toggle Tourist scheme checkbox then reset passport number
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public touristSchemeApplicableToggle(event): void {
+        this.vm.selectedLedger.passportNumber = '';
+        this.vm.selectedLedger.touristSchemeApplicable = event;
+    }
+
+    /**
+     * To make value alphanumeric
+     *
+     * @param {*} event Template ref to get value
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public allowAlphanumericChar(event: any): void {
+        if (event && event.value) {
+            this.vm.selectedLedger.passportNumber = this.generalService.allowAlphanumericChar(event.value)
+        }
     }
 }

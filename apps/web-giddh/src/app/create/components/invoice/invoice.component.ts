@@ -18,7 +18,7 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/templates/' : AppUrl + APP_FOLDER + 'assets/images/templates/';
+        this.imgPath = (isElectron||isCordova)  ? 'assets/images/templates/' : AppUrl + APP_FOLDER + 'assets/images/templates/';
         this._router.navigate(['/create-invoice/invoice/t001']); // Remove this line when you have multiple templates
     }
 

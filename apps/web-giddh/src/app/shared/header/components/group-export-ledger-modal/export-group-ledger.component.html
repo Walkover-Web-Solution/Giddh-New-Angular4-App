@@ -16,37 +16,48 @@
 				</div>
 			</div>
 			<div class="pdB2 clearfix">
-				<label class="w100">Type: </label>
-				<label class="radio-inline pd0 w100">
-					<input type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected" [value]="emailTypeMini"
-						class="radio_theme cp">Mini
-				</label>
-				<label class="radio-inline pd0 mrL2">
-					<input type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected"
-						[value]="emailTypeDetail" class="radio_theme cp">Detailed
-				</label>
+                <label class="w100">Type: </label>
+
+                <span class="pd0 mrR3 w100">
+                    <input id="mini" class="radio-custom cp ml0" type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected" [value]="emailTypeMini">
+                    <label for="mini" class="radio-custom-label">Mini</label>
+                </span>
+
+                <span class="pd0 mrR3 w100">
+                    <input id="detailed" class="radio-custom cp ml0" type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected"
+                    [value]="emailTypeDetail">
+                    <label for="detailed" class="radio-custom-label">Detailed</label>
+                </span>
+
 			</div>
 			<div class="pdB2 clearfix">
-				<label class="w100">Export As: </label>
-				<label class="radio-inline pd0 w100">
-					<input type="radio" name="fileType" [(ngModel)]="fileType" [value]="'pdf'"
-						class="radio_theme cp">PDF
-				</label>
-				<label class="radio-inline pd0 mrL2">
-					<input type="radio" name="fileType" [(ngModel)]="fileType" [value]="'xls'"
-						class="radio_theme cp pdL2">Excel
-				</label>
+                <label class="w100">Export As: </label>
+
+
+                <span class="pd0 mrR3 w100">
+                    <input id="pdf" class="radio-custom cp ml0" type="radio" name="fileType" [(ngModel)]="fileType" [value]="'pdf'">
+                    <label for="pdf" class="radio-custom-label">PDF</label>
+                </span>
+
+                <span class="pd0 mrR3 w100">
+                    <input id="excel" class="radio-custom cp ml0" type="radio" name="fileType" [(ngModel)]="fileType" [value]="'xls'">
+                    <label for="excel" class="radio-custom-label">Excel</label>
+                </span>
+
 			</div>
 			<div class="pdB2 clearfix">
-				<label class="w100">Order: </label>
-				<label class="radio-inline pd0">
-					<input type="radio" name="order" [(ngModel)]="order" [value]="'asc'"
-						class="radio_theme cp">Ascending
-				</label>
-				<label class="radio-inline pd0">
-					<input type="radio" name="order" [(ngModel)]="order" [value]="'desc'"
-						class="radio_theme cp">Descending
-				</label>
+                <label class="w100">Order: </label>
+
+                <span class="pd0 mrR3">
+                    <input id="ascending" class="radio-custom cp ml0" type="radio" name="order" [(ngModel)]="order" [value]="'asc'">
+                    <label for="ascending" class="radio-custom-label">Ascending</label>
+                </span>
+
+                <span class="pd0 mrR3">
+                    <input id="descending" class="radio-custom cp ml0" type="radio" name="order" [(ngModel)]="order" [value]="'desc'">
+                    <label for="descending" class="radio-custom-label">Descending</label>
+                </span>
+
 			</div>
 			<button class="btn-success btn" style="min-width:100px;" (click)="exportLedger()">Export</button>
 		</form>

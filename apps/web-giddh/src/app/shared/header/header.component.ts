@@ -3,14 +3,43 @@ import { AuthService } from '../../theme/ng-social-login-module/index';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
 import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import {
+    AfterViewChecked,
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    ComponentFactoryResolver,
+    ElementRef,
+    EventEmitter,
+    HostListener,
+    NgZone,
+    OnDestroy,
+    OnInit,
+    Output,
+    TemplateRef,
+    ViewChild
+} from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { BsDropdownDirective, BsModalRef, BsModalService, ModalDirective, ModalOptions, TabsetComponent, PopoverDirective } from 'ngx-bootstrap';
+import {
+    BsDropdownDirective,
+    BsModalRef,
+    BsModalService,
+    ModalDirective,
+    ModalOptions,
+    TabsetComponent
+    , PopoverDirective
+} from 'ngx-bootstrap';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
 import { CommonActions } from '../../actions/common.actions';
-import { ActiveFinancialYear, CompanyCountry, CompanyCreateRequest, CompanyResponse, StatesRequest } from '../../models/api-models/Company';
+import {
+    ActiveFinancialYear,
+    CompanyCountry,
+    CompanyCreateRequest,
+    CompanyResponse,
+    StatesRequest
+} from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
@@ -153,6 +182,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public userName: string;
     public userEmail: string;
     public isElectron: boolean = isElectron;
+    public isCordova: boolean = isCordova;
     public isTodaysDateSelected: boolean = false;
     public isDateRangeSelected: boolean = false;
     public userFullName: string;
@@ -198,7 +228,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     };
     public currentState: any = '';
     public isCalendlyModelActivate: boolean = false;
-
+    public companyInitials: any = '';
     /**
      *
      */
@@ -289,6 +319,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (!companies) {
                 return;
             }
+            if (companies.length === 0) {
+                return;
+            }
 
             let orderedCompanies = _.orderBy(companies, 'name');
             this.companies$ = observableOf(orderedCompanies);
@@ -308,6 +341,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             if (selectedCmp) {
                 this.selectedCompany = observableOf(selectedCmp);
+
+                let selectedCompanyArray = selectedCmp.name.split(" ");
+                let companyInitials = [];
+                for(let loop = 0; loop < selectedCompanyArray.length; loop++) {
+                    if(loop <= 1) {
+                        companyInitials.push(selectedCompanyArray[loop][0]);
+                    }
+                    else {
+                        break;
+                    }
+                }
+
+                this.companyInitials = companyInitials.join(" ");
+
                 this.activeFinancialYear = selectedCmp.activeFinancialYear;
                 this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
                 if (selectedCmp.nameAlias) {
@@ -363,6 +410,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        this._generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
+            if (value === 'logoutCordova') {
+                this.zone.run(() => {
+                    this.router.navigate(['login']);
+                    this.changeDetection.detectChanges();
+                });
+            }
+        });
+
         this.sideBarStateChange(true);
         this.getElectronAppVersion();
         this.store.dispatch(this.companyActions.GetApplicationDate());
@@ -501,7 +557,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         // endregion
 
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.router.events
             .pipe(takeUntil(this.destroyed$))
@@ -586,6 +642,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.getPartyTypeForCreateAccount();
         this.getAllCountries();
     }
+
     public setSelectedCompanyData(selectedCompany) {
         if (selectedCompany) {
             this.selectedCompany.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
@@ -627,8 +684,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
                 // this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
-                this.router.navigate(['/new-user']);
-                // });
+                this.zone.run(() => {
+                    this.router.navigate(['/new-user']);
+                });                // });
             } else {
                 // get groups with accounts for general use
                 this.store.dispatch(this._generalActions.getGroupWithAccounts());
@@ -647,7 +705,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (!this.isDateRangeSelected) {
                     this.datePickerOptions.startDate = moment(dateObj[0]);
                     this.datePickerOptions.endDate = moment(dateObj[1]);
-                    this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                    this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1]), chosenLabel: dateObj[2]};
                     this.isDateRangeSelected = true;
                     const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
                     const to: any = moment().format(GIDDH_DATE_FORMAT);
@@ -920,6 +978,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (isElectron) {
             // this._aunthenticationServer.GoogleProvider.signOut();
             this.store.dispatch(this.loginAction.ClearSession());
+
+        } else if (isCordova) {
+            (window as any).plugins.googleplus.logout(
+                (msg) => {
+                    this.store.dispatch(this.loginAction.ClearSession());
+                    // this.store.pipe(select(p=>p.session.user))
+                    // alert(msg); // do something useful instead of alerting
+                }
+            );
         } else {
             // check if logged in via social accounts
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
@@ -1026,7 +1093,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (data && data.picker) {
             let dates = {
                 fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
-                toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT)
+                toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT),
+                chosenLabel: data.picker.chosenLabel
             };
             // if (data.picker.chosenLabel === 'This Financial Year to Date') {
             //   data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
@@ -1115,7 +1183,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (item.uniqueName.includes('?')) {
                     item.uniqueName = item.uniqueName.split('?')[0];
                 }
-                this.router.navigate([item.uniqueName], { queryParams: { tab: item.additional.tab, tabIndex: item.additional.tabIndex } });
+                this.router.navigate([item.uniqueName], {
+                    queryParams: {
+                        tab: item.additional.tab,
+                        tabIndex: item.additional.tabIndex
+                    }
+                });
             } else {
                 this.router.navigate([item.uniqueName]);
             }
@@ -1436,6 +1509,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
     }
+
     /**
      *To hide calendly model
      *
@@ -1444,6 +1518,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public hideScheduleCalendlyModel() {
         this.store.dispatch(this._generalActions.isOpenCalendlyModel(false));
     }
+
     /**
      *To show calendly model
      *

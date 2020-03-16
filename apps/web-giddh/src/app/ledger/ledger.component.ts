@@ -47,6 +47,7 @@ import { AdvanceSearchModelComponent } from './components/advance-search/advance
 import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
+import {download} from "@giddh-workspaces/utils";
 
 @Component({
     selector: 'ledger',
@@ -119,7 +120,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public advanceSearchRequest: AdvanceSearchRequest;
     public isLedgerCreateSuccess$: Observable<boolean>;
     public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    @ViewChild('newLedPanel') public newLedPanelCtrl: NewLedgerEntryPanelComponent;
+    @ViewChild('newLedPanel') public newLedgerComponent: NewLedgerEntryPanelComponent;
     @ViewChild('updateLedgerModal') public updateLedgerModal: ModalDirective;
     @ViewChild('exportLedgerModal') public exportLedgerModal: ModalDirective;
     @ViewChild('shareLedgerModal') public shareLedgerModal: ModalDirective;
@@ -188,6 +189,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public shouldShowRcmTaxableAmount: boolean;
     /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
     public shouldShowItcSection: boolean;
+    /** True if company country will UAE and accounts involve Debtors/ Cash / bank / Sales */
+    public isTouristSchemeApplicable: boolean;
+    public allowParentGroup = ['sales', 'cash', 'sundrydebtors', 'bankaccounts'];
+
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
@@ -406,9 +411,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
         this.handleRcmVisibility(txn);
         this.handleTaxableAmountVisibility(txn);
-        this.newLedPanelCtrl.calculateTotal();
-        // this.newLedPanelCtrl.checkForMulitCurrency();
-        this.newLedPanelCtrl.detectChanges();
+        this.newLedgerComponent.calculateTotal();
+        this.newLedgerComponent.detectChanges();
         this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
     }
 
@@ -444,7 +448,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let from = params['from'];
                 let to = params['to'];
 
-                this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(from, 'DD-MM-YYYY').toDate(), endDate: moment(to, 'DD-MM-YYYY').toDate() };
+                this.datePickerOptions = {
+                    ...this.datePickerOptions,
+                    startDate: moment(from, 'DD-MM-YYYY').toDate(),
+                    endDate: moment(to, 'DD-MM-YYYY').toDate(),
+                    chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
+                };
 
                 this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                     dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
@@ -462,7 +471,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (dateObj && !this.todaySelected) {
                     let universalDate = _.cloneDeep(dateObj);
 
-                    this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate() };
+                    this.datePickerOptions = {
+                        ...this.datePickerOptions,
+                        startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
+                        endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate(),
+                        chosenLabel: universalDate[2]
+                    };
                     this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                         dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
                             bsRangeValue: [moment(universalDate[0], 'DD-MM-YYYY').toDate(), moment(universalDate[1], 'DD-MM-YYYY').toDate()]
@@ -479,7 +493,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.datePickerOptions = {
                         ...this.datePickerOptions,
                         startDate: moment().toDate(),
-                        endDate: moment().toDate()
+                        endDate: moment().toDate(),
+                        chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
                     };
                     // set advance search bsRangeValue to blank, because we are depending api to give us from and to date
                     this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
@@ -503,10 +518,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 // this.advanceSearchComp.resetAdvanceSearchModal();
                 this.lc.accountUnq = params['accountUniqueName'];
                 this.needToShowLoader = true;
-                // this.showLoader = false; // need to enable loder
-                // if (this.ledgerSearchTerms) {
-                //   this.ledgerSearchTerms.nativeElement.value = '';
-                // }
                 this.searchText = '';
                 // this.searchTermStream.next('');
                 this.resetBlankTransaction();
@@ -558,7 +569,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.datePickerOptions = {
                         ...this.datePickerOptions,
                         startDate: moment(lt.from, 'DD-MM-YYYY').toDate(),
-                        endDate: moment(lt.to, 'DD-MM-YYYY').toDate()
+                        endDate: moment(lt.to, 'DD-MM-YYYY').toDate(),
+                        chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
                     };
                 }
 
@@ -941,7 +953,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this._ledgerService.DownloadAttachement(fileName).subscribe(d => {
             if (d.status === 'success') {
                 let blob = base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
-                return saveAs(blob, d.body.name);
+                download(d.body.name, blob, `image/${d.body.fileType}`)
             } else {
                 this._toaster.errorToast(d.message);
             }
@@ -958,8 +970,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this._ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).subscribe(d => {
             if (d.status === 'success') {
+                // debugger;
                 let blob = base64ToBlob(d.body, 'application/pdf', 512);
-                return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
+                download(`${activeAccount.name} - ${invoiceName}.pdf`,blob, 'application/pdf');
             } else {
                 this._toaster.errorToast(d.message);
             }
@@ -1339,7 +1352,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.datePickerOptions = {
                         ...this.datePickerOptions,
                         startDate: moment(event.advanceSearchData.dataToSend.bsRangeValue[0], 'DD-MM-YYYY').toDate(),
-                        endDate: moment(event.advanceSearchData.dataToSend.bsRangeValue[1], 'DD-MM-YYYY').toDate()
+                        endDate: moment(event.advanceSearchData.dataToSend.bsRangeValue[1], 'DD-MM-YYYY').toDate(),
+                        chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
                     };
                 }
 
@@ -1699,6 +1713,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         const currentLedgerSecondParent = this.lc.activeAccount.parentGroups[1].uniqueName;
         const selectedAccountSecondParent = transaction.selectedAccount.parentGroups[1].uniqueName;
+        this.checkTouristSchemeApplicable(currentLedgerSecondParent, selectedAccountSecondParent);
         if (currentLedgerSecondParent === 'reversecharge' && transaction.type === 'CREDIT') {
             // Current ledger is of reverse charge and user has entered the transaction on the right side (CREDIT) of the ledger
             if (selectedAccountSecondParent === 'dutiestaxes') {
@@ -1724,6 +1739,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         }
+    }
+
+    /**
+     * To check tourist scheme applicable or not
+     *
+     * @param {string} [activeLedgerParentgroup] active ledger parent group unique name
+     * @param {string} [selectedAccountParentGroup] selected account parent group unique name
+     * @memberof LedgerComponent
+     */
+    public checkTouristSchemeApplicable(activeLedgerParentgroup: string, selectedAccountParentGroup: string): void {
+        if (this.profileObj && this.profileObj.countryV2 && this.profileObj.countryV2.alpha2CountryCode && this.profileObj.countryV2.alpha2CountryCode === 'AE' && activeLedgerParentgroup && selectedAccountParentGroup && (this.allowParentGroup.includes(activeLedgerParentgroup)) && ( this.allowParentGroup.includes(selectedAccountParentGroup))) {
+            this.isTouristSchemeApplicable = true;
+        } else {
+            this.isTouristSchemeApplicable = false;
+        }
+
     }
 
 }

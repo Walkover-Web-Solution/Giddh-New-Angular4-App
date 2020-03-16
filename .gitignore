@@ -1,5 +1,7 @@
 # @AngularClass
-
+apps/giddh-cordova/giddh/node_modules/
+apps/giddh-cordova/giddh/platforms/
+apps/giddh-cordova/giddh/plugins/
 # build auth related
 default.entitlements.mac.plist
 electron-sign/embedded.provisionprofile
@@ -168,3 +170,8 @@ xplat/**/*.ngsummary.json
 
 package-lock.json
 /apps/electron-giddh/src/
+
+
+/apps/giddh-cordova/giddh/www/
+/giddh-cordova-prod/dist/apps/giddh-cordova-prod/www/app-cordova/
+/apps/giddh-cordova/giddh/package-lock.json
