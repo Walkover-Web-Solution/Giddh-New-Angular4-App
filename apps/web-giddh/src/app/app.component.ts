@@ -164,7 +164,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         if (location.href.includes('returnUrl')) {
             let tUrl = location.href.split('returnUrl=');
             if (tUrl[1]) {
-                if (!isElectron || !isCordova) {
+                if (!(isElectron || isCordova)) {
                     this.router.navigate(['pages/' + tUrl[1]]);
                 }
             }
