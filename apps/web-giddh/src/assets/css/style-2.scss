@@ -3,7 +3,7 @@
 @import "../css/giddh-common.scss";
 
 /* table css need to removed at last  (start)
-   Don't touch this table css (If any body work on that contact me..)
+   Don't touch this table css (If any body work on that contact shalinee..)
 */
 
 .basic > tbody > tr > td,
@@ -38,7 +38,7 @@
 }
 
 .basic > thead > tr > th {
-    background: #fff;
+    background: $White;
     color: #000000;
     border-right: 1px solid #d1d1d1;
     padding: 15px 11px !important;
@@ -55,9 +55,8 @@
     background: rgba(221, 225, 230, 0.5);
 }
 
-
 .basic {
-    background: #fff;
+    background: $White;
 }
 
 /*
@@ -72,11 +71,10 @@
     border-bottom: 1px solid #cac8c6;
 }*/
 
-
 @media (max-width: 768px) {
     .onMobileView tbody tr {
         box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
-        background: #fff;
+        background: $White;
         border-bottom: 1px solid #dfdfdf;
         cursor: pointer;
         display: block;
@@ -166,9 +164,7 @@
     .onMobileView tbody {
         display: block;
     }
-
 }
-
 
 @media (max-width: 320px) {
     .onMobileView tbody td {
@@ -418,7 +414,7 @@ input {
     padding: 0;
     line-height: 15px;
     font-size: 12px;
-    color: white;
+    color: $White;
     font-family: Trebuchet, Arial, sans-serif;
     font-weight: bold;
     box-sizing: border-box;
@@ -565,11 +561,11 @@ input {
 }
 
 .invoce-controll .invoice-nav.navbar-nav > li > a:hover {
-    color: #fff;
+    color: $White;
 }
 
 .invoce-controll .invoice-nav.navbar-nav > li > a.active {
-    background-color: #fff;
+    background-color: $White;
 }
 
 .navbar {
@@ -619,7 +615,7 @@ input {
 }
 
 .white-box {
-    background: #fff;
+    background: $White;
     padding: 20px;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 15px;
@@ -635,7 +631,7 @@ input {
     z-index: 99;
     background: black;
     font-size: 12px;
-    color: #fff !important;
+    color: $White !important;
     padding: 2px 5px;
     border-radius: 4px;
     right: 0;
@@ -769,7 +765,7 @@ input {
 }
 
 .company-list button.btn-link:hover {
-    color: #fff;
+    color: $White;
     background: $dark-blue00;
     text-decoration: none;
 }
@@ -818,7 +814,11 @@ ul.sub-list {
 }
 
 .bold {
-    font-family: "opensans-semibold";
+    font-family: $tableFontSemibold;
+}
+
+.font-bold {
+    font-family: $tableFontBold;
 }
 
 .modal-open {
@@ -857,7 +857,7 @@ ul.sub-list {
 .tab-integraton .nav-tabs > li > a {
     width: 120px;
     height: 120px;
-    background: #fff;
+    background: $White;
     display: flex;
     flex-direction: column;
     vertical-align: middle;
@@ -868,7 +868,7 @@ ul.sub-list {
 }
 
 .tab-integraton .nav-tabs > li.active a {
-    background: #fff !important;
+    background: $White !important;
     box-shadow: 0 6px 7px #cacaca;
     border: 1px solid $dark-blue00 !important;
     color: #333333 !important;
@@ -906,7 +906,7 @@ ul.sub-list {
 }
 
 .customer-right {
-    background: #fff;
+    background: $White;
     padding: 0 15px;
     float: right;
 }
@@ -965,14 +965,14 @@ ul.sub-list {
 .btn-pink {
     background: $primaryBtncolror;
     border: 1px solid $primaryBtncolror;
-    color: #fff;
+    color: $White;
 }
 
 .btn-pink:hover,
 .btn-pink:focus {
     background: $primaryBtnHovercolror !important;
     border-color: $primaryBtnHovercolror;
-    color: #fff;
+    color: $White;
 }
 
 .btn-light-gray {
@@ -984,7 +984,7 @@ ul.sub-list {
 .btn-light-gray:hover {
     background: $primaryBtncolror;
     border-color: $primaryBtncolror;
-    color: #fff;
+    color: $White;
 }
 
 .top-aging-table-top {
@@ -995,7 +995,6 @@ ul.sub-list {
 .italic {
     font-style: italic;
 }
-
 
 .sorting-box {
     position: absolute;
@@ -1014,19 +1013,13 @@ ul.sub-list {
     line-height: 0;
     margin: 1px 0;
 }
-
 .aging-table-top td {
     border: 0px solid !important;
     background: #f7f8fa !important;
 }
 
 .aging-table-top .top-aging-table-top {
-    background: rgba(
-            49,
-            58,
-            151,
-            0.15
-    ) !important;
+    background: rgba(49, 58, 151, 0.15) !important;
 }
 
 .aging-table-top .top-aging-table-top strong,
@@ -1038,7 +1031,6 @@ ul.sub-list {
     font-family: opensans-semibold;
 }
 
-
 .aging-table {
     border: 0px;
     margin-bottom: 0px;
@@ -1048,7 +1040,6 @@ ul.sub-list {
 .aging-table tr > td {
     min-width: 145px;
 }
-
 
 .d-none {
     display: none;
@@ -1066,7 +1057,7 @@ ul.sub-list {
 }
 
 .top-aging-table-top1 {
-    background: #ffffff;
+    background: $White;
     position: absolute;
     left: 0;
     right: 0;
@@ -1129,14 +1120,14 @@ ul.sub-list {
 }
 
 .pagination > li > a {
-    background: #fff !important;
+    background: $White !important;
     color: #484848 !important;
     border: 1px solid $JacksonsPurple !important;
 }
 
 .pagination > li.active > a {
     background: $JacksonsPurple !important;
-    color: #fff !important;
+    color: $White !important;
     border: 1px solid $JacksonsPurple !important;
 }
 
@@ -1170,7 +1161,7 @@ ul.sub-list {
 }
 
 /* .pagination-main {
-    background: #fff;
+    background: $White;
 } */
 
 .invoice-btn.show {
@@ -1250,7 +1241,7 @@ ul.sub-list {
     border: 1px solid #d6d6d6;
     /* height: 32px; */
     border-radius: 2px;
-    background: #fff;
+    background: $White;
     font-size: 14px;
     cursor: pointer;
 }
@@ -1266,11 +1257,11 @@ ul.sub-list {
 
 .btn-green {
     background: $primaryBtncolror;
-    color: #fff;
+    color: $White;
 }
 
 .btn-green:hover {
-    color: #fff;
+    color: $White;
     background: $primaryBtnHovercolror;
 }
 
@@ -1363,7 +1354,7 @@ modal-container.modal {
 }
 
 .sales-invoice-modal .modal-header h4 {
-    color: #fff !important;
+    color: $White !important;
     font-size: 22px !important;
 }
 
@@ -1380,7 +1371,7 @@ modal-container.modal {
 }
 
 .sales-invoice-modal .modal-body {
-    background: #fff;
+    background: $White;
 }
 
 .sales-invoice-modal .ps__thumb-y {
@@ -1440,7 +1431,7 @@ modal-container.modal {
 }
 
 .list-icon-group input:checked + label {
-    background-color: white;
+    background-color: $White;
     box-shadow: 2px 2px 5px gainsboro;
 }
 
@@ -1479,7 +1470,7 @@ modal-container.modal {
 .price-input {
     border: 1px solid #ccc;
     font-size: 14px;
-    background: #fff;
+    background: $White;
     padding: 1px 2px;
     display: inline-block;
     max-width: 90px;
@@ -1487,7 +1478,7 @@ modal-container.modal {
 }
 
 .input-search .input-group-addon {
-    background: #fff;
+    background: $White;
     border-right: 0px;
     border-color: #c6c6c6;
     color: #a9a9a9;
@@ -1498,14 +1489,14 @@ modal-container.modal {
 }
 
 .input-search .form-control {
-    background: #fff;
+    background: $White;
     border-radius: 0px 2px 2px 0px !important;
     border-left: 0px;
     border-color: $inputBorderColor;
 }
 
 .btn-filter {
-    background: #fff;
+    background: $White;
     border: 1px solid #cbcbcb;
     font-size: 16px;
     padding: 4px 8px;
@@ -1561,13 +1552,15 @@ modal-container.modal {
 .justify-content-center {
     justify-content: center;
 }
-
+.color-primary {
+    color: $primaryBtncolror;
+}
 /* my css end */
 
 /*input*/
 
 .form-control {
-    background: #fff !important;
+    background: $White !important;
     border: 1px solid $inputBorderColor;
     border-radius: 2px !important;
     padding: 6px !important;
@@ -1631,8 +1624,8 @@ input:-moz-placeholder {
     font-size: 16px;
     text-transform: capitalize;
     display: inline-flex;
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     background-color: $border-blue;
     text-align: center;
     border-radius: 50%;
@@ -1641,6 +1634,7 @@ input:-moz-placeholder {
     padding: 0;
     margin-right: 15px;
     float: left;
+    letter-spacing: -1px;
 }
 
 .company-name .cText .fyear {
@@ -1653,6 +1647,8 @@ input:-moz-placeholder {
 
 header .navbar {
     background-color: #f7f8fa;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 3px 0;
 }
 
 /* .fyear {
@@ -1660,7 +1656,7 @@ header .navbar {
 } */
 
 .t-h-bg1 th {
-    background: #fff;
+    background: $White;
     color: #4d4d4d;
     padding: 11px !important;
     font-weight: 400;
@@ -1730,7 +1726,7 @@ header .navbar {
 /*btn*/
 
 .btn-primary {
-    background: #fff;
+    background: $White;
     border-color: $border-blue;
     color: $dark-blue00;
 }
@@ -1744,7 +1740,7 @@ header .navbar {
 .btn-primary:active:focus,
 .btn-primary:active:hover {
     background: $border-blue;
-    color: #fff;
+    color: $White;
     border-color: $border-blue;
 }
 
@@ -1758,7 +1754,7 @@ fieldset[disabled] .btn-primary.focus,
 fieldset[disabled] .btn-primary:focus,
 fieldset[disabled] .btn-primary:hover {
     background: $border-blue;
-    color: #fff;
+    color: $White;
     border-color: $border-blue;
 }
 
@@ -1777,7 +1773,7 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .btn-default {
-    background: #fff;
+    background: $White;
     border-color: $border-blue;
     color: $dark-blue00;
 }
@@ -1792,7 +1788,7 @@ fieldset[disabled] .btn-primary:hover {
 .btn-default:active:focus,
 .open > .dropdown-toggle.btn-default {
     background: $border-blue;
-    color: #fff;
+    color: $White;
     border-color: $border-blue;
 }
 
@@ -1805,12 +1801,12 @@ fieldset[disabled] .btn-primary:hover {
 /*btn end*/
 
 .ledger-main .form-control {
-    background: #fff !important;
+    background: $White !important;
     height: 45px;
 }
 
 .ledger-header thead th {
-    background: #fff;
+    background: $White;
     border-right: 1px solid #c4c6c7;
 }
 
@@ -1820,7 +1816,7 @@ fieldset[disabled] .btn-primary:hover {
 
 .compoundEntry td,
 .compoundEntry td .form-control {
-    /* background: #fff0bc !important; */
+    /* background: $White0bc !important; */
     border: 0;
 }
 
@@ -1865,7 +1861,7 @@ fieldset[disabled] .btn-primary:hover {
     min-height: 28px;
     border: 0;
     background: transparent;
-    color: #fff;
+    color: $White;
     padding: 7px 35px 7px 10px !important;
     border: 1px solid #5f6e7e;
 }
@@ -1876,12 +1872,12 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .ledger_search i {
-    color: #fff;
+    color: $White;
 }
 
 .ledger_search .input-group-addon {
     background: #333;
-    color: #fff;
+    color: $White;
     border: 0;
     border-top: 0;
     border-bottom: 0;
@@ -1951,7 +1947,7 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .export-ledger-options .list-unstyled {
-    background: #fff;
+    background: $White;
     left: -80px;
     width: 151px;
 }
@@ -1993,13 +1989,13 @@ fieldset[disabled] .btn-primary:hover {
 
 .btn-gray {
     background: #666666;
-    color: #fff;
+    color: $White;
     /* font-size: 10px;
     padding: 7px 10px; */
 }
 
 .btn-gray:hover {
-    color: #fff;
+    color: $White;
 }
 
 .p-t-5 {
@@ -2088,7 +2084,7 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .danger-btn {
-    color: #fff;
+    color: $White;
     text-shadow: none;
     background-image: none;
     padding: 12px 25px;
@@ -2105,7 +2101,7 @@ fieldset[disabled] .btn-primary:hover {
     display: inline-block;
     background: none;
     padding: 0px 5px 0 0 !important;
-    color: #fff;
+    color: $White;
 }
 
 /* #cmpWrp .cText {
@@ -2115,7 +2111,7 @@ fieldset[disabled] .btn-primary:hover {
 } */
 
 #companyList {
-    background: #fff;
+    background: $White;
     padding-bottom: 4px;
 }
 
@@ -2140,7 +2136,7 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 #companyList li.selected-company a:focus span {
-    color: #fff !important;
+    color: $White !important;
 }
 
 .company-name .icon-dots-three-vertical {
@@ -2150,9 +2146,8 @@ fieldset[disabled] .btn-primary:hover {
     bottom: 0;
     transform: translateY(-50%);
     right: 16px;
-    color: #fff;
+    color: $White;
 }
-
 
 p.table-email {
     white-space: nowrap;
@@ -2172,7 +2167,6 @@ p.table-email {
     color: #333333;
 }
 
-
 .top-five-cr-dr-table .basic > tbody > tr td:last-child,
 .top-five-cr-dr-table .basic > thead > tr th:last-child {
     border-right: none !important;
@@ -2186,7 +2180,6 @@ p.table-email {
 .delt {
     text-align: center;
 }
-
 input[type="checkbox"] {
     position: relative;
     top: 1px;
@@ -2195,6 +2188,10 @@ input[type="checkbox"] {
     cursor: pointer;
     left: 0px;
     height: 19px;
+    width: 1em;
+    height: 1em;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 input[type="checkbox"]:checked:before {
@@ -2221,7 +2218,7 @@ input[type="checkbox"]:before {
     z-index: 1;
     width: 12px;
     height: 7px;
-    border: 2px solid #fff;
+    border: 2px solid $White;
     border-top-style: none;
     border-right-style: none;
 }
@@ -2234,9 +2231,10 @@ input[type="checkbox"]:after {
     border: 1px solid #cccccc;
     width: 18px;
     height: 18px;
-    background: #fff;
+    background: $White;
     cursor: pointer;
     border-radius: 2px;
+    visibility: visible;
 }
 
 input[type="checkbox"]:checked:after {
@@ -2280,13 +2278,13 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-success-outline:hover {
-    color: #fff;
+    color: $White;
     background: #0cb1af;
 }
 
 .btn-success {
     background: #0cb1af;
-    color: #fff;
+    color: $White;
     border: 1px solid #0cb1af;
 }
 
@@ -2295,7 +2293,7 @@ input[type="checkbox"]:checked:after {
 .btn-success:active:hover,
 .btn-success:focus {
     background: #087e7d;
-    color: #fff;
+    color: $White;
     border: 1px solid #087e7d;
 }
 
@@ -2379,7 +2377,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .thumbnail.active {
-    background: #ffffff;
+    background: $White;
     box-shadow: 0 5px 34px 0 rgba(211, 95, 41, 0.18);
 }
 
@@ -2388,7 +2386,7 @@ input[type="checkbox"]:checked:after {
     float: left;
     overflow: hidden;
     padding: 0;
-    background: #ffffff;
+    background: $White;
     border-color: #fbc2a8 !important;
 }
 
@@ -2406,7 +2404,7 @@ input[type="checkbox"]:checked:after {
 
 .switch.wide.checked small {
     left: 31px;
-    background: #fff;
+    background: $White;
 }
 
 .switch.wide {
@@ -2580,7 +2578,9 @@ input[type="checkbox"]:checked:after {
 .font-16 {
     font-size: 16px !important;
 }
-
+.font-20 {
+    font-size: 20px;
+}
 .font-22 {
     font-size: 22px;
 }
@@ -2612,11 +2612,11 @@ input[type="checkbox"]:checked:after {
 
 .subscription-title {
     font-size: 20px;
-    font-family: "opensans-semibold";
+    font-family: $tableFontSemibold;
 }
 
 .box2 {
-    background: #fff;
+    background: $White;
 }
 
 .head-title {
@@ -2922,7 +2922,7 @@ input[type="checkbox"]:checked:after {
 .daterangepicker td.active:hover {
     background-color: #5864c9 !important;
     border-color: transparent;
-    color: #fff;
+    color: $White;
 }
 
 .daterangepicker td.in-range {
@@ -2945,7 +2945,7 @@ input[type="checkbox"]:checked:after {
 }
 
 #user-dropdown {
-    color: #fff;
+    color: $White;
     background: #333;
     width: 50px;
     text-align: center;
@@ -2972,7 +2972,7 @@ input[type="checkbox"]:checked:after {
 .ranges li:hover {
     background: $border-blue !important;
     border: 1px solid $border-blue !important;
-    color: #fff !important;
+    color: $White !important;
 }
 
 .download-invoice-ledger {
@@ -2987,7 +2987,7 @@ input[type="checkbox"]:checked:after {
     border-top-width: 0;
     top: 1px;
     border-right: 15px solid transparent;
-    border-bottom: 15px solid #fff;
+    border-bottom: 15px solid $White;
     border-left: 15px solid transparent;
     left: -15px;
     z-index: 9;
@@ -3012,27 +3012,27 @@ button:focus {
 /*placeholder webkit css*/
 
 #accountSearch::-webkit-input-placeholder {
-    color: #fff;
+    color: $White;
 }
 
 #accountSearch::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
-    color: #fff;
+    color: $White;
 }
 
 #accountSearch::-moz-placeholder {
     /* Firefox 19+ */
-    color: #fff;
+    color: $White;
 }
 
 #accountSearch:-ms-input-placeholder {
     /* IE 10+ */
-    color: #fff;
+    color: $White;
 }
 
 #accountSearch:-moz-placeholder {
     /* Firefox 18- */
-    color: #fff;
+    color: $White;
 }
 
 input[type="number"]::-webkit-outer-spin-button,
@@ -3046,7 +3046,7 @@ input[type="number"]::-webkit-inner-spin-button {
     height: 0;
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-bottom: 8px solid #fff;
+    border-bottom: 8px solid $White;
     position: absolute;
     top: 2px;
     left: -6px;
@@ -3066,10 +3066,10 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .datePickr .dropdown-menu table {
-    border: 1px solid #fff;
+    border: 1px solid $White;
     padding: 4px;
     border-radius: 4px;
-    background-color: #fff;
+    background-color: $White;
 }
 
 .datePickr .dropdown-menu table th,
@@ -3095,7 +3095,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .active.end-date.in-range.available,
 .daterangepicker td.start-date {
     background: $border-blue !important;
-    color: #fff;
+    color: $White;
     border-radius: 2px;
 }
 
@@ -3168,7 +3168,7 @@ footer > div > a {
 
 footer > div > a:hover {
     text-decoration: none;
-    color: #fff;
+    color: $White;
 }
 
 footer > div > a:first-child {
@@ -3242,7 +3242,7 @@ footer small a {
 }
 
 .form-theme .form-control {
-    background: #fff !important;
+    background: $White !important;
 }
 
 .form-theme .form-control[disabled],
@@ -3258,7 +3258,7 @@ footer small a {
 .form_title {
     padding: 12px 20px;
     background: #525252;
-    color: #fff;
+    color: $White;
 }
 
 .form_title label {
@@ -3484,7 +3484,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .today.weekend.off.active.end-date.in-range.available {
-    background: #fff !important;
+    background: $White !important;
     color: #999;
 }
 
@@ -3499,7 +3499,7 @@ a.btn.btn-xs.btn-link.pull-right {
     float: left;
     border-radius: 4px;
     transform: translateY(-50%);
-    color: #fff;
+    color: $White;
 }
 
 .dlt_btn .glyphicon.glyphicon-remove {
@@ -3574,7 +3574,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .popover.bottom > .arrow {
     right: 13%;
     left: auto;
-    border-bottom-color: #fff;
+    border-bottom-color: $White;
 }
 
 .default_clr {
@@ -3594,7 +3594,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 /* .form-control[readonly] {
-  background: #fff !important;
+  background: $White !important;
 } */
 
 .multi-select input.form-control {
@@ -3602,7 +3602,7 @@ a.btn.btn-xs.btn-link.pull-right {
     background-size: 10px !important;
     background-position: 96% !important;
     background-repeat: no-repeat !important;
-    background-color: #fff !important;
+    background-color: $White !important;
     padding-right: 24px !important;
 }
 
@@ -3611,7 +3611,7 @@ a.btn.btn-xs.btn-link.pull-right {
     background-size: 12px !important;
     background-position: 94% !important;
     background-repeat: no-repeat !important;
-    background-color: #fff !important;
+    background-color: $White !important;
     padding-right: 32px !important;
 }
 
@@ -3686,7 +3686,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 /* #shareModalh3 {
     font-size: 18px;
-    color: #fff;
+    color: $White;
 } */
 
 .emailInput {
@@ -3789,7 +3789,7 @@ a.btn.btn-xs.btn-link.pull-right {
     top: 50%;
     transform: translateY(-50%);
     right: 15px;
-    color: #fff;
+    color: $White;
     opacity: 1;
     text-shadow: none;
     cursor: pointer;
@@ -3817,7 +3817,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .modal-title.bg {
-    color: #fff !important;
+    color: $White !important;
 }
 
 .modal-title {
@@ -3964,7 +3964,7 @@ select.form-control {
 }
 
 .addStockTbl .form-control {
-    background-color: #fff !important;
+    background-color: $White !important;
 }
 
 .linkStockTbl {
@@ -4028,7 +4028,7 @@ select.form-control {
 }
 
 .modal-header > h3 {
-    color: #fff;
+    color: $White;
     font-size: 18px;
 }
 
@@ -4044,7 +4044,7 @@ select.form-control {
     min-width: 160px;
     font-size: 14px;
     text-align: left;
-    background-color: #fff;
+    background-color: $White;
     background-clip: padding-box;
     border: 1px solid #ccc;
     border: 1px solid rgba(0, 0, 0, 0.15);
@@ -4127,7 +4127,7 @@ select.form-control {
 
 /* .searchBar .form-control {
     background: #6b6a6a !important;
-    color: #fff;
+    color: $White;
 } */
 
 .searchBar .form-control {
@@ -4168,7 +4168,7 @@ label {
 
 .btn-add:hover,
 .btn-add:focus {
-    color: #fff !important;
+    color: $White !important;
 }
 
 .ledger-panel .bdrB {
@@ -4268,25 +4268,25 @@ label {
 }
 
 .isActive {
-    color: #fff !important;
+    color: $White !important;
     background: $primaryBtncolror;
     border-color: $primaryBtncolror;
 }
 
 .isActive:hover {
-    color: #fff !important;
+    color: $White !important;
     background: $primaryBtnHovercolror;
     border-color: $primaryBtnHovercolror;
 }
 
 .isParent.isActive {
-    color: #fff !important;
+    color: $White !important;
     background: $primaryBtncolror !important;
     border-color: $primaryBtncolror;
 }
 
 .isParent.isActive:hover {
-    color: #fff !important;
+    color: $White !important;
     background: $primaryBtnHovercolror !important;
     border-color: $primaryBtnHovercolror;
 }
@@ -4366,7 +4366,7 @@ label {
 
 .btn-add:hover,
 .btn-add:focus {
-    color: #fff !important;
+    color: $White !important;
 }
 
 .ledger-panel .bdrB {
@@ -4506,7 +4506,7 @@ label {
 }
 
 .accmerge li > a.isActive > span {
-    color: #fff;
+    color: $White;
 }
 
 #getGroupModal hr {
@@ -4549,7 +4549,7 @@ label {
 
 .new_btn {
     position: absolute;
-    background: #fff;
+    background: $White;
     top: 0;
     padding: 4px 0;
     width: 100%;
@@ -4571,7 +4571,7 @@ label {
     position: absolute;
     height: 100%;
     z-index: 99;
-    background: #fff;
+    background: $White;
     width: 100%;
     left: 0;
     display: table;
@@ -4961,7 +4961,7 @@ label {
 .pagination > .active > span,
 .pagination > .active > span:focus,
 .pagination > .active > span:hover {
-    color: #fff;
+    color: $White;
 }
 
 .pagination > li > a:focus,
@@ -5050,7 +5050,7 @@ label {
 
 #single_role .panel-heading {
     background: #ccc;
-    color: #fff;
+    color: $White;
     border-radius: 0;
 }
 
@@ -5073,7 +5073,7 @@ label {
 }
 
 #single_role .panel-body tbody tr:nth-child(1) td {
-    background: #fff;
+    background: $White;
     border-right: 0;
 }
 
@@ -5122,7 +5122,7 @@ label {
     position: absolute;
     width: 18px;
     height: 18px;
-    background: #fff;
+    background: $White;
     /* top: -2px;
     right: -2px; */
     top: 0;
@@ -5147,7 +5147,6 @@ label {
 .radio_theme:checked:before {
     border: 1px solid $border-blue;
 }
-
 
 .dropdown-container .dropdown-menu {
     display: block;
@@ -5174,11 +5173,11 @@ label {
 }
 
 .ledger-row
-td
-.select2-container--default
-.select2-results__option--highlighted[aria-selected]
-a {
-    color: #fff !important;
+    td
+    .select2-container--default
+    .select2-results__option--highlighted[aria-selected]
+    a {
+    color: $White !important;
 }
 
 .ledger-row td .select2-results ul li a {
@@ -5245,7 +5244,7 @@ a {
 }
 
 #customInvoice .templateEditor .btn-group-lg > .btn:hover {
-    background: #fff;
+    background: $White;
 }
 
 #customInvoice {
@@ -5266,7 +5265,7 @@ a {
 #customInvoice .templateEditor .form-control,
 #customInvoice .templateEditor .table > tbody > tr > td .form-control {
     margin: 7px 0;
-    background: #fff;
+    background: $White;
     border-color: $inputBorderColor;
     border-radius: 2px;
 }
@@ -5346,7 +5345,7 @@ a {
     width: 50px;
     height: 50px;
     float: left;
-    background: #fff url("../images/designTool.svg") no-repeat;
+    background: $White url("../images/designTool.svg") no-repeat;
     background-size: 65px;
 }
 
@@ -5381,7 +5380,7 @@ a {
 }
 
 .templateView li img {
-    background: #fff;
+    background: $White;
     height: 100%;
     width: 100%;
     object-fit: contain;
@@ -5398,7 +5397,7 @@ a {
     width: 100px;
     height: 100px;
     float: left;
-    background: #fff;
+    background: $White;
     object-fit: contain;
 }
 
@@ -5485,8 +5484,6 @@ fieldset[disabled] .form-control {
 input[type="checkbox"][disabled] {
     opacity: 2.2;
 }
-
-
 .nested_table > tbody tr td {
     border: 0 !important;
     padding: 8px 0;
@@ -5500,7 +5497,7 @@ input[type="checkbox"][disabled] {
 
 .section_head {
     padding-bottom: 10px;
-    font-family: "" opensans-semibold "";
+    font-family: $tableFontSemibold;
     font-size: 110%;
     color: rgba(0, 0, 0, 0.8);
 }
@@ -5582,7 +5579,7 @@ input[type="checkbox"][disabled] {
 }
 
 .ledger-row .select2-ledger .select2-container--open .select2-search__field {
-    background: #fff0bc !important;
+    background: $White0bc !important;
     border: 0;
     height: 34px;
 }
@@ -5603,17 +5600,48 @@ datepicker-inner .well table tbody tr td .btn-default {
 
 datepicker-inner .well table tbody tr td .btn-default:hover {
     background: $border-blue !important;
-    color: #fff;
+    color: $White;
 }
 
 datepicker-inner .well table tbody tr td .btn-default:hover span {
     text-decoration: none;
 }
 datepicker-inner .well table tbody tr td .btn-default:hover .text-success {
-    color: #fff;
+    color: $White;
+}
+datepicker-inner
+    .well
+    table
+    tbody
+    tr
+    td
+    button.btn.btn-default.btn-info
+    .text-success {
+    color: $green !important;
+}
+datepicker-inner
+    .well
+    table
+    tbody
+    tr
+    td
+    button.btn.btn-default.btn-info:hover
+    .text-success,
+datepicker-inner
+    .well
+    table
+    tbody
+    tr
+    td
+    button.btn.btn-default.btn-link:hover
+    .text-success {
+    color: $White !important;
+}
+.dropdown-menu.month-picker li a:hover {
+    color: initial !important;
 }
 datepicker-inner .well {
-    background-color: #ffffff;
+    background-color: $White;
     border-top: 0;
     box-shadow: none;
     margin: 0;
@@ -5641,7 +5669,7 @@ datepicker-inner .well table tbody .btn:active {
 
 datepicker-inner .well table tbody .btn.active .text-info,
 datepicker-inner .well table tbody .btn:active .text-info {
-    color: #fff !important;
+    color: $White !important;
 }
 
 datepicker-inner .well table thead tr th .btn-secondary,
@@ -5658,7 +5686,7 @@ datepicker-inner .well table thead tr:nth-child(2) {
 
 datepicker-inner .well table tbody .btn-info .text-muted,
 datepicker-inner .well table tbody .btn-default.active {
-    color: #fff;
+    color: $White;
 }
 
 .my-dropdown-menu datepicker-inner .well {
@@ -5707,7 +5735,7 @@ input[type="checkbox"][disabled]:after {
 }
 
 .table-container {
-    background: #fff;
+    background: $White;
 }
 
 .table-container section div .group {
@@ -5751,7 +5779,7 @@ input[type="checkbox"][disabled]:after {
 }
 
 .active-toggle-btn {
-    color: white;
+    color: $White;
     background-color: $border-blue;
     border-color: $border-blue;
 }
@@ -5765,7 +5793,7 @@ input[type="checkbox"][disabled]:after {
     position: absolute;
     width: 18px;
     height: 18px;
-    background: #fff;
+    background: $White;
     top: -1px;
     right: -2px;
     border: 1px solid #999;
@@ -5855,13 +5883,13 @@ ng-select > div > div.single > div.clear:hover {
 }
 
 .input-group .input-group-btn .btn {
-    /*background: #fff;*/
+    /*background: $White;*/
     border-left: 0px;
 }
 
 // .input-group .input-group-btn .btn:hover {
 //     color: #28ab00 !important;
-//     background: #fff;
+//     background: $White;
 // }
 ng-select .select_drop {
     position: initial;
@@ -5943,7 +5971,7 @@ typeahead-container .dropdown-menu li.active > a > a {
     right: 20px;
     top: 4px;
     line-height: 48px;
-    color: #fff;
+    color: $White;
     opacity: 1;
     font-weight: 100;
     text-shadow: none;
@@ -5953,7 +5981,7 @@ typeahead-container .dropdown-menu li.active > a > a {
 /**new modal design**/
 
 .welcome_header {
-    background: #fff url("../images/Welcome.png") no-repeat center center;
+    background: $White url("../images/Welcome.png") no-repeat center center;
     text-align: center;
     padding: 0px 0 30px;
     position: relative;
@@ -6069,7 +6097,7 @@ typeahead-container .dropdown-menu li.active > a > a {
 .btn-share:hover,
 .btn-share:focus {
     background: $primaryBtncolror;
-    color: #fff;
+    color: $White;
 }
 
 .entry-modal {
@@ -6082,7 +6110,7 @@ typeahead-container .dropdown-menu li.active > a > a {
 
 .square-switch {
     width: 100%;
-    background: #fff;
+    background: $White;
     height: 34px;
     line-height: 32px;
     margin: 0;
@@ -6108,7 +6136,7 @@ typeahead-container .dropdown-menu li.active > a > a {
 
 .square-switch input[type="checkbox"]:checked ~ label {
     background: #28ab00;
-    color: #fff;
+    color: $White;
 }
 
 .square-switch > input[type="checkbox"] {
@@ -6233,7 +6261,7 @@ table td[class*=col-]:last-child {
 
 .ledger-stat {
     padding: 50px 0;
-    background: #fff;
+    background: $White;
     color: #808080;
     font-size: 18px;
     margin: 100px 0;
@@ -6250,7 +6278,7 @@ table td[class*=col-]:last-child {
 
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: "" opensans-semibold "";
+    font-family: $tableFontSemibold;
     text-transform: capitalize;
 }
 
@@ -6277,7 +6305,7 @@ table td[class*=col-]:last-child {
     width: 50%;
     left: 25%;
     bottom: 100px;
-    background: #fff;
+    background: $White;
     padding: 5px;
     font-size: 12px;
 }
@@ -6319,10 +6347,10 @@ table td[class*=col-]:last-child {
     clear: both;
     /* // overflow: hidden; */
     position: relative;
-    background: #fff;
+    background: $White;
     float: left;
     width: 100%;
-    background: #fff;
+    background: $White;
 }
 
 .Width600 {
@@ -6390,7 +6418,7 @@ table td[class*=col-]:last-child {
 .form-header {
     padding: 20px 15px;
     background: $top_header;
-    color: #fff;
+    color: $White;
 }
 
 .form-header h3 {
@@ -6399,16 +6427,16 @@ table td[class*=col-]:last-child {
 }
 
 .form_body {
-    background: #fff;
+    background: $White;
     /* padding: 15px; */
 }
 
 .noHover:hover td {
-    background: #fff !important;
+    background: $White !important;
 }
 
 /* .universal_date label {
-    color: #fff;
+    color: $White;
 } */
 
 .universal_date .btn-link {
@@ -6477,7 +6505,7 @@ table td[class*=col-]:last-child {
 
 .app_list > ul h6 {
     margin-bottom: 10px;
-    font-family: "opensans-semibold";
+    font-family: $tableFontSemibold;
     font-size: 13px;
 }
 
@@ -6533,7 +6561,7 @@ table td[class*=col-]:last-child {
     display: inline-block;
     text-align: center;
     line-height: 30px;
-    color: #fff;
+    color: $White;
     font-size: 14px;
     border: 1px solid var(--dark-blue);
     text-transform: uppercase;
@@ -6796,7 +6824,7 @@ panel.sFthanks.fieldset {
 
 .unit_action .isSelected {
     opacity: 1;
-    background-color: #fff !important;
+    background-color: $White !important;
 }
 
 /* ===============================================================
@@ -6945,6 +6973,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding-right: 10px;
     border: none;
     box-shadow: none;
+    padding: 0 10px 0 0;
 }
 
 .hamburger_menu h4 {
@@ -6952,7 +6981,8 @@ perfect-scrollbar > .ps > .ps-overlay {
     text-transform: capitalize;
     width: auto;
     color: $pageTitleColor;
-    font-family: "opensans-bold";
+    font-family: $tableFontSemibold;
+    vertical-align: middle;
 }
 
 .tax-engine .icon {
@@ -7175,7 +7205,7 @@ th:first-child {
 
 .tax-engine .table.transactions-summary-table > tbody > tr.secondary-row > td {
     border: none;
-    background-color: #fff;
+    background-color: $White;
     border-right: 1px solid #ededed;
     font-size: 13px;
     padding: 13px;
@@ -7560,7 +7590,7 @@ tbody
 
 .zi-table.table thead > tr > th {
     color: #263035;
-    background: #fff;
+    background: $White;
     font-weight: 700;
     font-size: 12px;
     text-transform: uppercase;
@@ -7574,7 +7604,7 @@ tbody
 }
 
 .transactions-overview {
-    background: #fff;
+    background: $White;
 }
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a .count {
@@ -7588,7 +7618,7 @@ tbody
 
 .tax-engine .table-striped > tbody > tr:nth-child(even) > td,
 .tax-engine .table-striped > tbody > tr:nth-child(even) > th {
-    background-color: #fff;
+    background-color: $White;
 }
 
 .tax-engine .sub-filter-nav-band .nav-tabs > li.active > a::before {
@@ -7596,7 +7626,7 @@ tbody
 }
 
 .tax-engine {
-    background: #fff;
+    background: $White;
 }
 
 .tax-engine .header-band {
@@ -7630,7 +7660,7 @@ tbody
 }
 
 .push-gstin .nav.nav-tabs {
-    background: #fff;
+    background: $White;
 }
 
 .push-gstin .nav.nav-tabs > li > a:hover,
@@ -7706,7 +7736,7 @@ app-header {
     border: 2px solid red;
 }
 .text-warning {
-    color: #FFA000;
+    color: #ffa000;
 }
 
 .heightVH-100 {
@@ -7748,7 +7778,7 @@ app-header {
 /* sticky footer css merged */
 
 .sticky-footer.stickyFooterSaleAmount {
-    background: #fff;
+    background: $White;
     padding: 10px;
     box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.16);
     text-align: right !important;
@@ -7822,7 +7852,7 @@ app-header {
 }
 
 .selection-none *::selection {
-    background: #fff;
+    background: $White;
 }
 
 .selection-none-header *::selection {
@@ -7973,7 +8003,7 @@ div#getGroupModal {
 .invoiceFooter {
     display: flex;
     padding: 20px;
-    background: white;
+    background: $White;
     margin-top: 60px;
     position: fixed;
     width: 100%;
@@ -7987,7 +8017,7 @@ div#getGroupModal {
     left: 215px;
     display: flex;
     padding: 20px;
-    background: white;
+    background: $White;
     margin-top: 60px;
     position: fixed;
     width: 100%;
@@ -8078,7 +8108,6 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 .welcome-container .selectBox textarea {
     color: #333;
 }
-
 
 .welcome-container input::placeholder {
     color: rgba(0, 0, 0, 0.4) !important;
@@ -8256,7 +8285,7 @@ span.red-text {
 }
 
 .dashboard-container input[type="checkbox"]:checked:before {
-    border-color: #fff;
+    border-color: $White;
 }
 
 .dashboard-container input[type="checkbox"]:after {
@@ -8285,7 +8314,7 @@ ul.dropdown-menu p.lead.pd {
 .invoce-controll .nav-tabs > li.active > a {
     border-bottom: 4px solid $activeIconTh !important;
     padding-bottom: 7px !important;
-    font-family: "opensans-semibold";
+    font-family: $tableFontSemibold;
 }
 
 .invoce-controll .nav-tabs > li > a {
@@ -8344,7 +8373,7 @@ ul.dropdown-menu p.lead.pd {
 
 .btn-lg.btn-primary {
     min-width: 155px;
-    background: #fff;
+    background: $White;
     color: #5b64c9;
     border-radius: 0px;
     box-shadow: none;
@@ -8352,7 +8381,7 @@ ul.dropdown-menu p.lead.pd {
 
 .btn-lg.btn-primary:hover {
     background: #5b64c9;
-    color: #ffffff;
+    color: $White;
     box-shadow: 0px 4px 4px -3px #afabab;
     border-radius: 0px;
     border-color: #5b64c9;
@@ -8457,7 +8486,6 @@ table.basic td {
     color: #1c1c1c;
 }
 
-
 .invoice-table td > a {
     color: #1c1c1c;
 }
@@ -8522,7 +8550,7 @@ button.btn.btn-filter {
 
 .aside-pane-form #asidePaneFormTabs ul.nav.nav-tabs {
     padding: 0 !important;
-    background-color: #fff !important;
+    background-color: $White !important;
 }
 
 .aside-pane-form #asidePaneFormTabs .nav > li > a {
@@ -8576,7 +8604,7 @@ button.ladda-button .ladda-label {
     border: 0;
     border-radius: 0;
     background: transparent;
-    color: #fff;
+    color: $White;
 }
 
 .ng-select-wrap.liq.selectGroup .below {
@@ -8651,7 +8679,7 @@ p.remvBrnchName {
 .asidePanelLedger .btn-lg:hover {
     background-color: #5b64c9 !important;
     border-color: #5b64c9 !important;
-    color: #fff !important;
+    color: $White !important;
 }
 
 .daterangepicker td.active,
@@ -8709,8 +8737,9 @@ p.remvBrnchName {
     margin-top: 0;
     border-radius: 0;
 }
-
-.popover.purchase-invoice-rcm, .update-ledger-rcm, .all-modules-popover {
+.popover.purchase-invoice-rcm,
+.update-ledger-rcm,
+.all-modules-popover {
     .popover-arrow.arrow {
         display: none;
     }
@@ -8784,15 +8813,14 @@ input.checkbox-custom[type="checkbox"] {
 .checkbox-custom-label,
 .radio-custom-label {
     position: relative;
-    display: inline-flex;
+    display: inline-flex !important;
     align-items: center;
-
 }
 
 .checkbox-custom + .checkbox-custom-label:before,
 .radio-custom + .radio-custom-label:before {
     content: "";
-    background: #fff;
+    background: $White;
     border: 1px solid #ccc;
     display: inline-block;
     vertical-align: middle;
@@ -8803,7 +8831,6 @@ input.checkbox-custom[type="checkbox"] {
     border-radius: 2px;
     text-align: center;
 }
-
 .checkbox-custom + .checkbox-custom-label:after {
     transform: rotate(-45deg) scale(0, 0);
     content: "";
@@ -8813,12 +8840,11 @@ input.checkbox-custom[type="checkbox"] {
     z-index: 1;
     width: 12px;
     height: 7px;
-    border: 2px solid #fff;
+    border: 2px solid $White;
     border-top-style: none;
     border-right-style: none;
-    transition: transform .4s cubic-bezier(.45, 1.8, .5, .75)
+    transition: transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
 }
-
 .checkbox-custom:checked + .checkbox-custom-label:after {
     transform: rotate(-45deg) scale(1, 1);
 }
@@ -8837,7 +8863,7 @@ input.checkbox-custom[type="checkbox"] {
 .radio-custom:checked + :before {
     background: $border-blue;
     border: 1px solid $border-blue;
-    box-shadow: inset 0px 0px 0px 4px #fff;
+    box-shadow: inset 0px 0px 0px 4px $White;
 }
 
 .checkbox-custom:focus + .checkbox-custom-label:before {
@@ -8845,6 +8871,10 @@ input.checkbox-custom[type="checkbox"] {
 }
 
 /* radio & checkbox new CSS end */
+
+.modal-invoice-preview .modal-body {
+    padding: 0;
+}
 
 /* responsive */
 
@@ -8942,7 +8972,7 @@ input.checkbox-custom[type="checkbox"] {
     .left-account-opration {
         height: initial !important;
         width: 100%;
-        background: #fff;
+        background: $White;
     }
     .usesr-last-list > li {
         display: inline-block;
@@ -8964,7 +8994,7 @@ input.checkbox-custom[type="checkbox"] {
     .stock-lists {
         position: absolute;
         box-shadow: 0 3px 6px #ccc;
-        background: #fff;
+        background: $White;
         min-width: 200px;
         display: inline-block;
         z-index: 9;
@@ -9086,10 +9116,10 @@ input.checkbox-custom[type="checkbox"] {
     }
     .tax-engine .table-striped > tbody > tr:nth-child(odd) > td,
     .tax-engine .table-striped > tbody > tr:nth-child(odd) > th {
-        background-color: #fff;
+        background-color: $White;
     }
     .tax-engine .table-striped > tbody > tr:nth-of-type(odd) {
-        background-color: #fff;
+        background-color: $White;
     }
 }
 
@@ -9121,11 +9151,11 @@ input.checkbox-custom[type="checkbox"] {
         /*border-bottom: 2px solid #e6e7e8;*/
     }
     header .hamburger_menu h4 {
-        color: #fff;
+        color: $White;
         font-size: 16px;
     }
     header .hamburger_menu i.icon-bar {
-        color: #fff;
+        color: $White;
     }
     .dropdown-width ul.dropdown-menu.pd {
         min-width: 150px !important;
@@ -9141,6 +9171,9 @@ input.checkbox-custom[type="checkbox"] {
     }
     .xs-pr-0 {
         padding-right: 0px;
+    }
+    .xs-pt-0 {
+        padding-top: 0px;
     }
     .xs-width-100 {
         width: 100%;
@@ -9274,19 +9307,25 @@ input.checkbox-custom[type="checkbox"] {
     .list-style ul.list-inline.list-middle.download-drop-down {
         text-align: left;
     }
-    .checkbox-custom-label, .radio-custom-label {
+    .checkbox-custom-label,
+    .radio-custom-label {
         display: inline;
     }
     #cmpWrp {
         display: block;
     }
     .cText span.cName {
-        color: #fff !important;
+        color: $White !important;
     }
     .user_dropdown {
         left: 0px !important;
     }
-
+    .xs-d-block {
+        display: block;
+    }
+    .xs-mr-0 {
+        margin-right: 0px;
+    }
 }
 
 @media (max-width: 575px) {
@@ -9302,7 +9341,7 @@ input.checkbox-custom[type="checkbox"] {
         overflow-x: hidden;
     }
     #companyList {
-        background: #fff;
+        background: $White;
         padding-bottom: 4px;
         left: 0px;
         top: 30px;
@@ -9368,7 +9407,6 @@ input.checkbox-custom[type="checkbox"] {
         bottom: 0;
     }
 }
-
 
 @media only screen and (max-width: 1400px) {
     .template_list {
@@ -9483,7 +9521,7 @@ input.checkbox-custom[type="checkbox"] {
         padding: 4px 15px !important;
     }
     .bgWhiteMo {
-        background-color: #fff;
+        background-color: $White;
     }
     .breadcrumbs {
         border-top: 1px solid #ccc;
@@ -9502,7 +9540,7 @@ input.checkbox-custom[type="checkbox"] {
         position: relative;
     }
     .grp_list:nth-child(2) {
-        background-color: #fff;
+        background-color: $White;
     }
     .col_wrapper.left-account-opration:nth-child(3),
     .col_wrapper.left-account-opration:nth-child(2),

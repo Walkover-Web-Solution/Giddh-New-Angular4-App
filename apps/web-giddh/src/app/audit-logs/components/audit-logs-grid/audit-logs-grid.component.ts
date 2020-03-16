@@ -29,7 +29,7 @@ export class AuditLogsGridComponent implements OnInit, OnDestroy {
         this.size$ = this.store.select(p => p.auditlog.size);
         this.totalElements$ = this.store.select(p => p.auditlog.totalElements);
         this.totalPages$ = this.store.select(p => p.auditlog.totalPages);
-        this.page$ = this.store.select(p => p.auditlog.CurrectPage);
+        this.page$ = this.store.select(p => p.auditlog.currentPage);
         //
     }
 
@@ -44,8 +44,8 @@ export class AuditLogsGridComponent implements OnInit, OnDestroy {
 
     public loadMoreLogs() {
         this.store.select(p => p.auditlog).pipe(take(1)).subscribe((r) => {
-            let request = _.cloneDeep(r.CurrectLogsRequest);
-            let page = r.CurrectPage + 1;
+            let request = _.cloneDeep(r.currentLogsRequest);
+            let page = r.currentPage + 1;
             this.store.dispatch(this._auditLogsActions.LoadMoreLogs(request, page));
         });
     }

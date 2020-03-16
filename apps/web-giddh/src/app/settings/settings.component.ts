@@ -22,7 +22,7 @@ import {GeneralActions} from '../actions/general/general.actions';
 import {SettingsIntegrationActions} from '../actions/settings/settings.integration.action';
 import {WarehouseActions} from './warehouse/action/warehouse.action';
 import { PAGINATION_LIMIT } from '../app.constant';
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 
 @Component({
     templateUrl: './settings.component.html',
@@ -195,7 +195,7 @@ export class SettingsComponent implements OnInit {
             redirect_uri: this.getRedirectUrl(AppUrl)
         };
 
-        let options = {headers: {}};
+        let options = { headers: {} };
         options.headers['Accept'] = 'application/json';
         options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 

@@ -138,7 +138,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
                         this.needsToRedirectToLedger$.pipe(take(1)).subscribe(result => {
                             if (result) {
-                                this._accountService.GetFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                                this._accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
                                     if (data.status === 'success' && data.body.results.length > 0) {
                                         this._router.navigate([`ledger/${data.body.results[0].uniqueName}`]);
                                     }

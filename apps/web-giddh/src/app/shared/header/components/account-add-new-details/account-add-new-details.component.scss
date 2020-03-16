@@ -98,6 +98,10 @@ form.gstinForm {
     flex-direction: row-reverse;
     justify-content: flex-end;
 }
+.mobile-number-sh-select {
+    width: 90px;
+    margin-right: 10px;
+}
 
 @media (max-width: 767px) {
     .upper-form .selectGroup {

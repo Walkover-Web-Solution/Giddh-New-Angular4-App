@@ -825,7 +825,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         if (!formObj.parentGroup) {
             let stockRequest = {
                 name: 'Main Group',
-                uniqueName: 'maingroup'
+                uniqueName: 'maingroup',
+                hsnNumber: '',
+                sacNumber: ''
             };
             formObj.parentGroup = stockRequest.uniqueName;
             this.store.dispatch(this.inventoryAction.addNewGroup(stockRequest));

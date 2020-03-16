@@ -255,7 +255,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
                 this.ledgerSearchRequest.dateRange = this.universalDate;
-                this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate() };
+                this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate(), chosenLabel: this.universalDate[2] };
 
                 // assign date
                 // this.assignStartAndEndDateForDateRangePicker(dateObj[0], dateObj[1]);
@@ -297,7 +297,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
         this.universalDate$.subscribe(a => {
             if (a) {
-                this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1] };
+                this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
 
                 // assign date
                 // this.assignStartAndEndDateForDateRangePicker(a[0], a[1]);

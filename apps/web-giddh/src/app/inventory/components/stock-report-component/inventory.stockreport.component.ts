@@ -324,7 +324,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
 
 		this.universalDate$.subscribe(a => {
 			if (a) {
-				this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1] };
+				this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
 				this.fromDate = moment(a[0]).format(this._DDMMYYYY);
 				this.toDate = moment(a[1]).format(this._DDMMYYYY);
 				this.getStockReport(true);
@@ -663,7 +663,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
 		//Reset Date with universal date
 		this.universalDate$.subscribe(a => {
 			if (a) {
-				this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1] };
+				this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
 				this.fromDate = moment(a[0]).format(this._DDMMYYYY);
 				this.toDate = moment(a[1]).format(this._DDMMYYYY);
 			}

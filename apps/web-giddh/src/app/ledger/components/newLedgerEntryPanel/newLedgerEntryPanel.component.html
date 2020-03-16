@@ -4,6 +4,9 @@
         <!-- reverse charge transction start (make it functional by developer end) -->
         <ng-container *ngTemplateOutlet="rcmEntryCheckbox"></ng-container>
         <!-- reverse charge transction end  -->
+        <!--  tourist scheme template start      -->
+        <ng-container *ngTemplateOutlet="touristSchemeTemplate"></ng-container>
+        <!--        tourist scheme template end-->
         <div class="basic_detail mrB1" *ngIf="showTaxationDiscountBox || shouldShowAdvanceReceiptMandatoryFields">
             <table class="width100 total-detail-table">
 
@@ -197,24 +200,27 @@
                 </div>
             </div>
         </div>
-        <div [class.words-inline]="shouldShowRcmTaxableAmount || shouldShowItcSection" class="pdB1 inWords" *ngIf="currentTxn.total">
+        <div [class.words-inline]="shouldShowRcmTaxableAmount || shouldShowItcSection" class="pdB1 inWords"
+            *ngIf="currentTxn.total">
             {{ currentTxn.total | myNumberToWordsPipe | lowercase }}
         </div>
         <ng-container *ngIf="shouldShowRcmTaxableAmount">
             <div class="taxable-amount-section mr-1">
                 <label class="primary_clr">Taxable Amount</label>
-                <input type="text" name="taxable-amount" class="form-control text-right" [prefix]="selectedPrefixForCurrency"
-                    [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
-                    [(ngModel)]="currentTxn.reverseChargeTaxableAmount"/>
+                <input type="text" name="taxable-amount" class="form-control text-right"
+                    [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
+                    [(ngModel)]="currentTxn.reverseChargeTaxableAmount" />
             </div>
         </ng-container>
         <ng-container *ngIf="shouldShowItcSection">
             <div class="taxable-amount-section">
                 <label class="primary_clr">ITC Type</label>
-                <sh-select [(ngModel)]="currentTxn.itcAvailable" [placeholder]="'ITC Type'" [options]="availableItcList">
+                <sh-select [(ngModel)]="currentTxn.itcAvailable" [placeholder]="'ITC Type'"
+                    [options]="availableItcList">
                 </sh-select>
             </div>
         </ng-container>
+
         <div class="clearfix">
             <textarea rows="3" cols="" name="des" class="form-control" placeholder="Description"
                 [(ngModel)]="blankLedger.description"></textarea>
@@ -312,8 +318,8 @@
                             </td>
 
                             <td *ngIf="shouldShowAdvanceReceipt" class="pdR1 pt-2 hidden-xs">
-                                <input type="checkbox" name="advanceReceipt"
-                                    (change)="handleAdvanceReceiptChange()" [(ngModel)]="isAdvanceReceipt">
+                                <input type="checkbox" name="advanceReceipt" (change)="handleAdvanceReceiptChange()"
+                                    [(ngModel)]="isAdvanceReceipt">
                                 Advance Receipt
                             </td>
 
@@ -556,6 +562,31 @@
         <span class="text-light font-12"> (Tax is compulsory)</span>
     </div>
 </ng-template>
+<ng-template #touristSchemeTemplate>
+    <div class="row font-14 mb-1" *ngIf="isTouristSchemeApplicable">
+        <div class="col-md-6">
+            <div class="d-flex align-items-center">
+                <span class="pull-left">
+                    <input id="tourist-scheme" type="checkbox" name="touristSchemeApplicable"
+                        [(ngModel)]="blankLedger.touristSchemeApplicable"
+                        (ngModelChange)="touristSchemeApplicableToggle($event)">
+
+                </span>
+                <span>Is this transaction applicable for Tourist Scheme?</span>
+            </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="blankLedger.touristSchemeApplicable">
+            <div class="d-flex align-items-center justify-content-end ml-1 xs-justify-content-start">
+                Passport Number
+                <input type="text" name="passportNumber" placeholder="Passport Number"
+                    class="form-control width-115 ml-1" #passportNumber (blur)="allowAlphanumericChar(passportNumber)"
+                    (keypress)="allowAlphanumericChar(passportNumber)" [(ngModel)]="blankLedger.passportNumber" />
+            </div>
+        </div>
+    </div>
+</ng-template>
 <ng-template #rcmTemplate>
-    <confirmation-modal [configuration]="rcmConfiguration" (buttonClicked)="handleRcmChange($event)"></confirmation-modal>
+    <confirmation-modal [configuration]="rcmConfiguration" (buttonClicked)="handleRcmChange($event)">
+    </confirmation-modal>
 </ng-template>

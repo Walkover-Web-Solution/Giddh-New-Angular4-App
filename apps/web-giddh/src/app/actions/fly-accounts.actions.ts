@@ -24,7 +24,7 @@ export class FlyAccountsActions {
                 return this._groupService.GetFlattenGroupsAccounts(action.payload.q, action.payload.page, action.payload.count, action.payload.showEmptyGroups).pipe(
                     map((r) => this.validateResponse<FlattenGroupsAccountsResponse, string>(r, {
                         type: FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_RESPONSE,
-                        payload: r.body
+                        payload: (r) ? r.body : []
                     }, true, {
                         type: FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_RESPONSE,
                         payload: []
@@ -53,7 +53,7 @@ export class FlyAccountsActions {
     }
 
     private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-        if (response.status === 'error') {
+        if (response && response.status === 'error') {
             if (showToast) {
                 this._toasty.errorToast(response.message);
             }

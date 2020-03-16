@@ -2,7 +2,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../../store/roots';
 import * as _ from '../../../lodash-optimized';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment/moment';
 import { SearchRequest } from '../../../models/api-models/Search';
@@ -10,6 +10,7 @@ import { SearchActions } from '../../../actions/search.actions';
 import { GroupService } from '../../../services/group.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
 	selector: 'search-sidebar',  // <home></home>
@@ -78,8 +79,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 	public ngOnInit() {
 		this.fromDate = moment().add(-1, 'month').format('DD-MM-YYYY');
 		this.toDate = moment().format('DD-MM-YYYY');
-		// this.fromDate = moment().subtract(1, 'month').toDate();
-		//
+	
 		// Get source for Group Name Input selection
 		this.groupsList$.subscribe(data => {
 			if (data && data.length) {
@@ -90,7 +90,20 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 				});
 				this.dataSource = groups;
 			}
-		});
+        });
+        
+        this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
+            if (dateObj) {
+                let universalDate = _.cloneDeep(dateObj);
+                this.datePickerOptions = {
+                    ...this.datePickerOptions, startDate: moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(),
+                    endDate: moment(universalDate[1], GIDDH_DATE_FORMAT).toDate(),
+                    chosenLabel: universalDate[2]
+                };
+                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+            }
+        });
 	}
 
 	public ngOnChanges(changes: any) {

@@ -12,6 +12,7 @@ import { ReportsDashboardComponent } from "./components/report-dashboard/reports
 import { SalesRegisterDetailsComponent } from './components/sales-register-details-component/sales.register.details.component';
 import { PurchaseRegisterComponent } from './components/purchase-register-component/purchase.register.component';
 import { PurchaseRegisterExpandComponent } from './components/purchase-register-expand-component/purchase.register.expand.component';
+import { ReverseChargeReport } from './components/reverse-charge-report-component/reverse-charge-report.component';
 
 @NgModule({
     imports: [
@@ -22,19 +23,20 @@ import { PurchaseRegisterExpandComponent } from './components/purchase-register-
                 component: ReportsComponent,
                 children: [
                     { path: '', redirectTo: 'reports-dashboard', pathMatch: 'full' },
-                    { path: 'sales-register', component: ReportsDetailsComponent }, // working
+                    { path: 'sales-register', component: ReportsDetailsComponent },
                     { path: 'sales-detailed', component: SalesRegisterDetailsComponent },
                     { path: 'sales-detailed-expand', component: SalesRegisterExpandComponent },
                     { path: 'reports-dashboard', component: ReportsDashboardComponent },
                     { path: 'purchase-register', component: PurchaseRegisterComponent},
-                    { path: 'purchase-detailed-expand', component: PurchaseRegisterExpandComponent }
+                    { path: 'purchase-detailed-expand', component: PurchaseRegisterExpandComponent },
+                    { path: 'reverse-charge', component: ReverseChargeReport }
                 ]
             }
         ]),
     ],
     exports: [RouterModule]
 })
+
 export class ReportsRoutingModule {
 
 }
-

@@ -36,4 +36,15 @@ export class LogsService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<LogsResponse, LogsRequest>(e, model, { page })));
     }
+
+    /**
+     * Returns the observable of get filters service call to carry out further operations
+     *
+     * @returns {Observable<BaseResponse<LogsResponse, LogsRequest>>} Observable of service call to carry out further operations
+     * @memberof LogsService
+     */
+    public getFilters(): Observable<BaseResponse<LogsResponse, LogsRequest>> {
+        return this._http.get(`${this.config.apiUrl}${LOGS_API.GET_FILTERS}`, {}).pipe(
+            catchError((error) => this.errorHandler.HandleCatch<LogsResponse, LogsRequest>(error)));
+    }
 }
