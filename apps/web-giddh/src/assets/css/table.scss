@@ -1,24 +1,27 @@
 .giddh-table {
     background: #fff;
     font-family: $tableFontSemibold;
-    border: 1px solid #d9d9d9;
+    border: 1px solid $tableBorderColor;
     width: 100%;
     max-width: 100%;
     border-collapse: separate;
+    border: 0;
 
     thead > tr > td,
     thead > tr > th {
         vertical-align: middle;
         font-size: 14px;
-        word-break: break-word;
-        white-space: nowrap;
         color: #1c1c1c;
         border-left: none;
         border-right: none;
         background: #fff;
         padding: 15px 11px;
-        border-bottom: 1px solid #d9d9d9;
+        border-bottom: 1px solid $tableBorderColor;
         font-family: $tableFontSemibold;
+    }
+    thead > tr > th {
+        border-top: 1px solid $tableBorderColor !important;
+        border-bottom: none !important;
     }
     tbody > tr > td {
         font-weight: 400;
@@ -28,18 +31,18 @@
         vertical-align: middle !important;
         font-size: 14px;
         word-break: break-word;
-        white-space: nowrap;
+        white-space: inherit !important;
         border-left: none;
         border-right: none;
         font-family: $tableFontRegular;
     }
     thead > tr > th:first-child,
     tbody > tr > td:first-child {
-        border-left: 1px solid #d9d9d9;
+        border-left: 1px solid $tableBorderColor;
     }
     thead > tr > th:last-child,
     tbody > tr > td:last-child {
-        border-right: 1px solid #d9d9d9;
+        border-right: 1px solid $tableBorderColor;
     }
     tfoot > tr > td {
         vertical-align: middle !important;
@@ -51,7 +54,7 @@
         background: rgba(221, 225, 230, 0.5);
     }
     tbody tr:last-child td {
-        border-bottom: 1px solid #d9d9d9;
+        border-bottom: 1px solid $tableBorderColor;
     }
     .icon-sort-asc,
     .icon-sort-dsc {
@@ -67,6 +70,9 @@
 
         div {
             display: flex;
+            span {
+                padding: 8px 0 8px 10px;
+            }
         }
         div i {
             margin-top: 1px;

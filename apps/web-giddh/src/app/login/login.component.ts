@@ -29,6 +29,8 @@ import {DOCUMENT} from "@angular/platform-browser";
 import {ToasterService} from "../services/toaster.service";
 import {AuthenticationService} from "../services/authentication.service";
 import {userLoginStateEnum} from "../models/user-login-state";
+import {isCordova} from "@giddh-workspaces/utils";
+import {GeneralService} from "../services/general.service";
 
 @Component({
     selector: "login",
@@ -98,9 +100,10 @@ export class LoginComponent implements OnInit, OnDestroy {
                 private authService: AuthService,
                 @Inject(DOCUMENT) private document: Document,
                 private _toaster: ToasterService,
-                private _authService: AuthenticationService
+                private _authService: AuthenticationService,
+                private _generalService: GeneralService
     ) {
-        this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
+        this.urlPath = (isElectron || isCordova) ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = store.select(state => {
             return state.login.isLoginWithEmailInProcess;
         }).pipe(takeUntil(this.destroyed$));
@@ -206,7 +209,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.setCountryCode({value: "India", label: "India"});
 
         // get user object when google auth is complete
-        if (!Configuration.isElectron) {
+        if (!(Configuration.isElectron || Configuration.isCordova)) {
             this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
                 this.isSocialLogoutAttempted$.subscribe((res) => {
                     if (!res && user) {
@@ -371,7 +374,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             if (provider === "google") {
                 // google
                 const t = ipcRenderer.send("authenticate", provider);
-                ipcRenderer.once('take-your-gmail-token', (sender , arg) => {
+                ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
                     this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                 });
 
@@ -380,10 +383,27 @@ export class LoginComponent implements OnInit, OnDestroy {
                 // const t = ipcRenderer.send("authenticate", provider);
                 // this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
                 const t = ipcRenderer.send("authenticate", provider);
-                ipcRenderer.once('take-your-gmail-token', (sender , arg) => {
+                ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
                     this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                 });
             }
+
+        } else if (isCordova()) {
+
+            (window as any).plugins.googleplus.login(
+                {
+                    'scopes': 'email', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
+                    'webClientId': this._generalService.getGoogleCredentials().GOOGLE_CLIENT_ID,
+                    'offline': true // optional, but requires the webClientId - if set to true the plugin will also return a serverAuthCode, which can be used to grant offline access to a non-Google server
+                },
+                (obj) => {
+                    this.store.dispatch(this.loginAction.signupWithGoogle(obj.accessToken));
+                    // console.log((JSON.stringify(obj))); // do something useful instead of alerting
+                },
+                (msg) => {
+                    console.log(('error: ' + msg));
+                }
+            );
 
         } else {
             //  web social authentication
@@ -395,6 +415,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
         }
     }
+
 
     public ngOnDestroy() {
         this.document.body.classList.add("unresponsive");

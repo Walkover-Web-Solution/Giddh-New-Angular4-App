@@ -39,10 +39,10 @@ export class GeneralActions {
             }));
 
     @Effect()
-    public GetFlattenAccounts$: Observable<Action> = this.action$
+    public getFlattenAccounts$: Observable<Action> = this.action$
         .ofType(GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS).pipe(
             switchMap((action: CustomActions) =>
-                this._accountService.GetFlattenAccounts(action.payload)
+                this._accountService.getFlattenAccounts(action.payload)
             ),
             map(response => {
                 return this.getFlattenAccountResponse(response);

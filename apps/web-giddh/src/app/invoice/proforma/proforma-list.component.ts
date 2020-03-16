@@ -42,6 +42,8 @@ import {GeneralService} from '../../services/general.service';
 
 export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
+    /** Confirmation popup for delete operation */
+    @ViewChild('deleteConfirmationModel') public deleteConfirmationModel: ModalDirective;
     @ViewChild(InvoiceAdvanceSearchComponent) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.proforma;
     public voucherData: ProformaResponse;
@@ -292,7 +294,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                             this.datePickerOptions = {
                                 ...this.datePickerOptions,
                                 startDate: moment(storedSelectedDate.fromDates, 'DD-MM-YYYY').toDate(),
-                                endDate: moment(storedSelectedDate.toDates, 'DD-MM-YYYY').toDate()
+                                endDate: moment(storedSelectedDate.toDates, 'DD-MM-YYYY').toDate(),
+                                chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
                             };
 
                             // assign start and end date
@@ -304,7 +307,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                         } else {
                             this.datePickerOptions = {
                                 ...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
-                                endDate: moment(a[1], 'DD-MM-YYYY').toDate()
+                                endDate: moment(a[1], 'DD-MM-YYYY').toDate(),
+                                chosenLabel: a[2]
                             };
 
                             // assign start and end date
@@ -317,7 +321,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                     } else {
                         this.datePickerOptions = {
                             ...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
-                            endDate: moment(a[1], 'DD-MM-YYYY').toDate()
+                            endDate: moment(a[1], 'DD-MM-YYYY').toDate(),
+                            chosenLabel: a[2]
                         };
 
                         // assign start and end date
@@ -330,7 +335,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                 } else {
                     this.datePickerOptions = {
                         ...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
-                        endDate: moment(a[1], 'DD-MM-YYYY').toDate()
+                        endDate: moment(a[1], 'DD-MM-YYYY').toDate(),
+                        chosenLabel: a[2]
                     };
 
                     // assign start and end date
@@ -361,7 +367,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         });
 
         this.isUpdateVoucherActionSuccess$.subscribe(res => {
-            if (res && !this.selectedVoucher) {
+            if (res) {
                 // get all data again because we are updating action in list page so we have to update data i.e we have to fire this
                 this.getAll();
             }
@@ -580,6 +586,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                 ...this.datePickerOptions,
                 startDate: moment(new Date(universalDate[0]), 'DD-MM-YYYY').toDate(),
                 endDate: moment(new Date(universalDate[1]), 'DD-MM-YYYY').toDate(),
+                chosenLabel: universalDate[2]
             };
         }
 
@@ -624,6 +631,9 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public deleteVoucher() {
+        if (this.deleteConfirmationModel && this.deleteConfirmationModel.isShown) {
+            this.deleteConfirmationModel.hide();
+        }
         // for deleting voucher which is previewed
         if (this.selectedVoucher) {
             this.store.dispatch(this.proformaActions.deleteProforma(this.prepareCommonRequest(), this.voucherType));
@@ -669,6 +679,22 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         });
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Displays the confirmation model
+     *
+     * @param {boolean} shouldOpenModal True, if the modal needs to opened
+     * @memberof ProformaListComponent
+     */
+    public toggleConfirmationModel(shouldOpenModal: boolean = false): void {
+        if (this.deleteConfirmationModel) {
+            if (shouldOpenModal) {
+                this.deleteConfirmationModel.show();
+            } else {
+                this.deleteConfirmationModel.hide();
+            }
+        }
     }
 
     private prepareCommonRequest(): ProformaGetRequest {

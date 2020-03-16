@@ -1136,7 +1136,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 	private refreshAccountListData(groupUniqueName: string = null, needToFocusSelectedInputField: boolean = false) {
 		this.store.select(p => p.session.companyUniqueName).subscribe(a => {
 			if (a && a !== '') {
-				this._accountService.GetFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+				this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
 					if (data.status === 'success') {
 						this.allFlattenAccounts = _.cloneDeep(data.body.results);
 						if (groupUniqueName) {

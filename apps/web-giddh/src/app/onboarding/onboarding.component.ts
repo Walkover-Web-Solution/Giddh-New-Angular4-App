@@ -41,8 +41,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
     }
 
     public ngOnInit() {
-
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath =  (isElectron||isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         // this.store.pipe(select(s => s.session.userSelectedSubscriptionPlan), takeUntil(this.destroyed$)).subscribe(res => {
         //   this.selectedPlans = res;
@@ -96,6 +95,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
         if (isElectron) {
             // https://app.intercom.io/a/meeting-scheduler/calendar/VEd2SmtLSyt2YisyTUpEYXBCRWg1YXkwQktZWmFwckF6TEtwM3J5Qm00R2dCcE5IWVZyS0JjSXF2L05BZVVWYS0tck81a21EMVZ5Z01SQWFIaG00RlozUT09--c6f3880a4ca63a84887d346889b11b56a82dd98f changed URI card G0-4255
             (window as any).require("electron").shell.openExternal('https://calendly.com/sales-accounting-software/talk-to-sale');
+        }else if (isCordova) {
+            // todo: scheduleNow in cordova
         } else {
             this.openScheduleCalendlyModel();  // to show calendly block
         }

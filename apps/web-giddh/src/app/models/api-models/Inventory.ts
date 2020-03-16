@@ -18,6 +18,8 @@ export class StockGroupRequest implements INameUniqueName {
     public isSelfParent?: boolean;
     public name: string;
     public uniqueName: string;
+    public hsnNumber: string;
+    public sacNumber: string;
     public parentStockGroupUniqueName?: string;
     public isSubGroup?: boolean;
 }
@@ -29,6 +31,8 @@ export class StockGroupRequest implements INameUniqueName {
 export class StockGroupResponse {
     public childStockGroups?: INameUniqueName[];
     public name: string;
+    public hsnNumber: string;
+    public sacNumber: string;
     public parentStockGroup?: INameUniqueName;
     public parentStockGroupNames: string[];
     public stocks: INameUniqueName[];

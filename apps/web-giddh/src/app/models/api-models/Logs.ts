@@ -17,11 +17,11 @@ export class LogsRequest implements ILogRequest {
     public toDate?: string;
     public operation: string;
     public userUniqueName: string;
-    public accountUniqueName: string;
-    public groupUniqueName: string;
     public entryDate?: string;
     public logDate?: string;
     public entity: string;
+    public accountUniqueName: string;
+    public groupUniqueName: string;
 }
 
 /**

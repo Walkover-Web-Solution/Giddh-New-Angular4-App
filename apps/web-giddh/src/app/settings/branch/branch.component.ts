@@ -62,7 +62,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public filters: any[] = [];
     public formFields: any[] = [];
     public universalDate$: Observable<any>;
-    public isDefault: boolean = true;
     public dateRangePickerValue: Date[] = [];
 
     constructor(
@@ -76,7 +75,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     ) {
         this.getOnboardingForm();
 
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
         this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && !_.isEmpty(o)) {
@@ -87,14 +86,13 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         // listen for universal date
-        this.universalDate$.subscribe(dateObj => {
-            if (this.isDefault && dateObj) {
+        this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
+            if (dateObj) {
                 this.filters['from'] = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
                 this.filters['to'] = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
 
                 this.dateRangePickerValue = [dateObj[0], dateObj[1]];
                 this.getAllBranches();
-                this.isDefault = false;
             }
         });
 

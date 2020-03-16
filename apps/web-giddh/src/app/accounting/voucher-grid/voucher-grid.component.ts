@@ -1087,7 +1087,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     private refreshAccountListData(needToFocusAccountInputField: boolean = false) {
         this.store.select(p => p.session.companyUniqueName).subscribe(a => {
             if (a && a !== '') {
-                this._accountService.GetFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data.status === 'success') {
                         this._tallyModuleService.setFlattenAccounts(data.body.results);
                         if (needToFocusAccountInputField) {

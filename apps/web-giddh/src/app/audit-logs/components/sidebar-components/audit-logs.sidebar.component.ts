@@ -57,7 +57,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                 return state.session.user.user;
             }
         }).pipe(takeUntil(this.destroyed$));
-        this._accountService.GetFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this._accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let accounts: IOption[] = [];
                 data.body.results.map(d => {

@@ -1,10 +1,10 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { PurchaseReportsModel } from "../../../models/api-models/Reports";
-import { Store } from "@ngrx/store";
-import { AppState } from "../../../store";
-import { GroupWithAccountsAction } from "../../../actions/groupwithaccounts.actions";
-import { ModalDirective } from "ngx-bootstrap";
-import { Router } from '@angular/router';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {PurchaseReportsModel} from "../../../models/api-models/Reports";
+import {Store} from "@ngrx/store";
+import {AppState} from "../../../store";
+import {GroupWithAccountsAction} from "../../../actions/groupwithaccounts.actions";
+import {ModalDirective} from "ngx-bootstrap";
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'purchase-register-table-component',
@@ -42,7 +42,7 @@ export class PurchaseRegisterTableComponent implements OnInit {
     }
 
     ngOnInit() {
-        
+
     }
 
     public performActions(type: number, account: any, event?: any) {
@@ -81,6 +81,7 @@ export class PurchaseRegisterTableComponent implements OnInit {
                 break;
         }
     }
+
     public goToRoute(part: string, additionalParams: string = '', accUniqueName: string) {
         let url = location.href + `?returnUrl=${part}/${accUniqueName}`;
 
@@ -92,10 +93,13 @@ export class PurchaseRegisterTableComponent implements OnInit {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
             url = location.origin + location.pathname + `#./pages/${part}/${accUniqueName}`;
             console.log(ipcRenderer.send('open-url', url));
+        } else if (isCordova) {
+            // todo: gotoroute in cordova
         } else {
             (window as any).open(url);
         }
     }
+
     // Open Modal for SMS
     public openSmsDialog() {
         this.messageBody.msg = '';
@@ -121,7 +125,12 @@ export class PurchaseRegisterTableComponent implements OnInit {
         let aa = this.activeFinacialYr;
 
         if (from != null && to != null) {
-            this._router.navigate(['pages', 'reports', 'purchase-detailed-expand'], { queryParams: { from: from, to: to } });
+            this._router.navigate(['pages', 'reports', 'purchase-detailed-expand'], {
+                queryParams: {
+                    from: from,
+                    to: to
+                }
+            });
         }
     }
 }
