@@ -8,32 +8,32 @@ import {
     OnInit,
     Output,
     ViewChild,
-    ElementRef,
+    ElementRef, NgZone,
 } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
-import { select, Store } from '@ngrx/store';
-import { ModalOptions } from 'ngx-bootstrap';
-import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import {NgForm} from '@angular/forms';
+import {Router} from '@angular/router';
+import {select, Store} from '@ngrx/store';
+import {ModalOptions} from 'ngx-bootstrap';
+import {combineLatest, Observable, of as observableOf, ReplaySubject} from 'rxjs';
+import {take, takeUntil} from 'rxjs/operators';
 import * as googleLibPhoneNumber from 'google-libphonenumber';
 
-import { CommonActions } from '../actions/common.actions';
-import { CompanyActions } from '../actions/company.actions';
-import { GeneralActions } from '../actions/general/general.actions';
-import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { OnBoardingType } from '../app.constant';
+import {CommonActions} from '../actions/common.actions';
+import {CompanyActions} from '../actions/company.actions';
+import {GeneralActions} from '../actions/general/general.actions';
+import {SettingsProfileActions} from '../actions/settings/profile/settings.profile.action';
+import {OnBoardingType} from '../app.constant';
 import * as _ from '../lodash-optimized';
-import { CountryRequest, OnboardingFormRequest } from '../models/api-models/Common';
-import { Addresses, CompanyCreateRequest, StatesRequest } from '../models/api-models/Company';
-import { IForceClear } from '../models/api-models/Sales';
-import { CompanyService } from '../services/companyService.service';
-import { GeneralService } from '../services/general.service';
-import { ToasterService } from '../services/toaster.service';
-import { AppState } from '../store';
-import { ItemOnBoardingState } from '../store/item-on-boarding/item-on-boarding.reducer';
-import { IOption } from '../theme/ng-select/option.interface';
-import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
+import {CountryRequest, OnboardingFormRequest} from '../models/api-models/Common';
+import {Addresses, CompanyCreateRequest, StatesRequest} from '../models/api-models/Company';
+import {IForceClear} from '../models/api-models/Sales';
+import {CompanyService} from '../services/companyService.service';
+import {GeneralService} from '../services/general.service';
+import {ToasterService} from '../services/toaster.service';
+import {AppState} from '../store';
+import {ItemOnBoardingState} from '../store/item-on-boarding/item-on-boarding.reducer';
+import {IOption} from '../theme/ng-select/option.interface';
+import {ShSelectComponent} from '../theme/ng-virtual-select/sh-select.component';
 
 @Component({
     selector: 'welcome-component',
@@ -119,7 +119,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public businessType: IOption[] = [];
     public formFields: any[] = [];
-    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    public forceClear$: Observable<IForceClear> = observableOf({status: false});
     public isTaxNumberSameAsHeadQuarter: number = 0;
     public activeCompany: any;
     public currentTaxList: any[] = [];
@@ -174,7 +174,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         private companyActions: CompanyActions,
         private _companyService: CompanyService,
         private _generalActions: GeneralActions,
-        private commonActions: CommonActions
+        private commonActions: CommonActions,
+        private zone: NgZone
     ) {
         this.companyProfileObj = {};
         this.store.dispatch(this._generalActions.resetStatesList());
@@ -224,10 +225,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 this._companyService.GetAllBusinessNatureList()
             ]).subscribe(([businessTypeResponse, businessNatureResponse]) => {
                 _.map(businessTypeResponse.body, (businessType) => {
-                    this.businessTypeList.push({ label: businessType, value: businessType });
+                    this.businessTypeList.push({label: businessType, value: businessType});
                 });
                 _.map(businessNatureResponse.body, (businessNature) => {
-                    this.businessNatureList.push({ label: businessNature, value: businessNature });
+                    this.businessNatureList.push({label: businessNature, value: businessNature});
                 });
                 this.reFillForm();
             });
@@ -340,7 +341,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 const addressField = this.welcomeForm.form.controls['address'];
                 addressField.setValue(addressField.value.trim());
                 if (!this.isAddressValid(addressField.value)) {
-                    addressField.setErrors({ 'required': true });
+                    addressField.setErrors({'required': true});
                     if (this.addressField) {
                         (this.addressField.nativeElement as HTMLElement).classList.add('error-box');
                     }
@@ -457,7 +458,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.companyProfileObj.taxType = '';
             this.companyProfileObj.selectedState = '';
             this.companyProfileObj.state = '';
-            this.forceClear$ = observableOf({ status: true });
+            this.forceClear$ = observableOf({status: true});
             this.isTaxNumberSameAsHeadQuarter = 0;
 
             if (this.selectedBusinesstype === 'Unregistered') {
@@ -491,7 +492,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             if (isbranch) {
                 this._router.navigate(['pages', 'settings', 'branch']); // <!-- pages/settings/branch -->
             } else {
-                this._router.navigate(['new-user']);
+                this.zone.run(() => {
+                    this._router.navigate(['/new-user']);
+                });
             }
         }
         this.backButtonClicked.emit();
@@ -543,7 +546,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
-                    this.currencies.push({ label: res[key].code, value: res[key].code });
+                    this.currencies.push({label: res[key].code, value: res[key].code});
                 });
                 this.currencySource$ = observableOf(this.currencies);
             } else {
@@ -556,7 +559,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res.callingCodes).forEach(key => {
-                    this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
+                    this.countryPhoneCode.push({label: res.callingCodes[key], value: res.callingCodes[key]});
                 });
                 this.callingCodesSource$ = observableOf(this.countryPhoneCode);
             } else {
@@ -666,7 +669,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 gstNo.value = '';
                 this.companyProfileObj.selectedState = '';
                 this.companyProfileObj.state = '';
-                this.forceClear$ = observableOf({ status: true });
+                this.forceClear$ = observableOf({status: true});
 
                 if (this.selectedBusinesstype === 'Unregistered') {
                     this.isGstValid = true;
@@ -680,7 +683,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             gstNo.value = '';
             this.companyProfileObj.selectedState = '';
             this.companyProfileObj.state = '';
-            this.forceClear$ = observableOf({ status: true });
+            this.forceClear$ = observableOf({status: true});
 
             if (this.selectedBusinesstype === 'Unregistered') {
                 this.isGstValid = true;
@@ -743,7 +746,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public handleNameChange(itemName: string = ''): void {
         if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
             if (itemName.length > 100) {
-                this.welcomeForm.form.controls['name'].setErrors({ 'maxlength': true });
+                this.welcomeForm.form.controls['name'].setErrors({'maxlength': true});
             }
         }
     }
@@ -760,10 +763,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (itemName) {
                     itemName = itemName.trim();
                     if (!itemName) {
-                        this.welcomeForm.form.controls['name'].setErrors({ 'required': true });
+                        this.welcomeForm.form.controls['name'].setErrors({'required': true});
                     }
                     if (itemName.length > 100) {
-                        this.welcomeForm.form.controls['name'].setErrors({ 'maxlength': true });
+                        this.welcomeForm.form.controls['name'].setErrors({'maxlength': true});
                     }
                 }
             });
@@ -801,7 +804,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     }
                     break;
                 case 'DEFAULT_COMPANY':
-                    const { address: autoFillAddress = '', stateCode } = this.getDefaultCompanyDetails();
+                    const {address: autoFillAddress = '', stateCode} = this.getDefaultCompanyDetails();
                     const defaultCompany = {
                         address: autoFillAddress,
                         stateCode
@@ -810,7 +813,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     // Check the 'Same as HQ' checkbox
                     this.isTaxNumberSameAsHeadQuarter = 1;
                     break;
-                default: break;
+                default:
+                    break;
             }
         }
     }

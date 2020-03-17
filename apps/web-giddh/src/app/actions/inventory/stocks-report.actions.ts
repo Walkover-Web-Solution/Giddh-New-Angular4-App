@@ -29,12 +29,19 @@ export class StockReportActions {
                 //   this.store.dispatch()
                 // }
                 return this._inventoryService.GetStocksReport_v2(action.payload).pipe(
-                    map((r) => {
-                        if (r) {
-                            return this.validateResponse<StockReportResponse, StockReportRequest>(r, {
+                    map((response) => {
+                        const isStockNotFound = response && response.status === 'error' && response.code === 'STOCK_NOT_FOUND';
+                        if (response) {
+                            return this.validateResponse<StockReportResponse, StockReportRequest>(response, {
                                 type: STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT_RESPONSE,
-                                payload: r.body
-                            }, true);
+                                payload: response.body
+                            }, !isStockNotFound, {
+                                type: STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT_RESPONSE,
+                                payload: (isStockNotFound) ? {
+                                    isStockNotFound,
+                                    message: response.message
+                                } : response.body
+                            });
                         } else {
                             return { type: 'EmptyAction' };
                         }
@@ -46,13 +53,19 @@ export class StockReportActions {
         .ofType(STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT).pipe(
             switchMap((action: CustomActions) => {
                 return this._inventoryService.GetGroupStocksReport_V3(action.payload).pipe(
-                    map((r) => {
-                        return this.validateResponse<GroupStockReportResponse, GroupStockReportRequest>(r, {
+                    map((response) => {
+                        const isGroupNotFound = response && response.status === 'error' && response.code === 'STOCK_GROUP_NOT_FOUND';
+                        return this.validateResponse<GroupStockReportResponse, GroupStockReportRequest>(response, {
                             type: STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT_RESPONSE,
-                            payload: r.body
-                        }, true);
+                            payload: response.body
+                        }, !isGroupNotFound, {
+                            type: STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT_RESPONSE,
+                            payload: (isGroupNotFound) ? {
+                                isGroupNotFound,
+                                message: response.message
+                            } : response.body
+                        });
                     }));
-
             }));
 
     constructor(private action$: Actions,

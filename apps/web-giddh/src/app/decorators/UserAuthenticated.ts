@@ -1,6 +1,6 @@
 import { AppState } from '../store';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-import { Injectable } from '@angular/core';
+import {Injectable, NgZone} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import { userLoginStateEnum } from '../models/user-login-state';
@@ -8,7 +8,7 @@ import { ROUTES } from '../routes-array';
 
 @Injectable()
 export class UserAuthenticated implements CanActivate {
-    constructor(public _router: Router, private store: Store<AppState>) {
+    constructor(public _router: Router, private store: Store<AppState>, private zone:NgZone) {
     }
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
@@ -35,7 +35,9 @@ export class UserAuthenticated implements CanActivate {
                 }
             }
             if (p.userLoginState === userLoginStateEnum.newUserLoggedIn) {
-                this._router.navigate(['/new-user']);
+                this.zone.run(() => {
+                    this._router.navigate(['/new-user']);
+                });
             }
             return !(p.userLoginState === userLoginStateEnum.userLoggedIn || p.userLoginState === userLoginStateEnum.newUserLoggedIn);
         }));

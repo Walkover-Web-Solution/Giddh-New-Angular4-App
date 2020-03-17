@@ -55,6 +55,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public smsTabActive: boolean = false;
     public isSendSmsEnabled: boolean = false;
     public isElectron = isElectron;
+    public isCordova = isCordova;
     public voucherRequest = null;
     public voucherDetailsInProcess$: Observable<boolean> = of(true);
     public accountUniqueName: string = '';
@@ -108,6 +109,9 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                     if (this.isElectron) {
                         this.pdfViewer.pdfSrc = blob; // pdfSrc can be Blob or Uint8Array
                         this.pdfViewer.refresh();
+                    }
+                    else if (this.isCordova) {
+                        // todo: show PDF
                     }
                     //   this.pdfViewer.pdfSrc =  new Blob([ e.srcElement.result], { type: "application/pdf" }); // pdfSrc can be Blob or Uint8Array
                     //  this.pdfViewer.refresh();

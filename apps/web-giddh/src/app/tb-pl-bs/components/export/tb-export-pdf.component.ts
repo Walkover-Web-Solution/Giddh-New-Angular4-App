@@ -138,7 +138,7 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/pdf-icon.png' : AppUrl + APP_FOLDER + 'assets/images/pdf-icon.png';
+        this.imgPath =  (isElectron|| isCordova)  ? 'assets/images/pdf-icon.png' : AppUrl + APP_FOLDER + 'assets/images/pdf-icon.png';
     }
 
     public ngOnDestroy() {

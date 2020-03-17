@@ -345,7 +345,7 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
-                                        <sh-select name="warehouse" [placeholder]="'Select Warehouse'" [(ngModel)]="selectedWarehouse" [options]="warehouses">
+                                        <sh-select class="multi-select" name="warehouse" [placeholder]="'Select Warehouse'" [(ngModel)]="selectedWarehouse" [options]="warehouses">
                                         </sh-select>
                                     </div>
                                 </div>
@@ -696,7 +696,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="trash-icon-delete" *ngIf="!isUpdateMode || (isUpdateMode && (entry.isNewEntryInUpdateMode || (!isPurchaseInvoice && !isEstimateInvoice && !isProformaInvoice)))" (click)="removeTransaction(entryIdx)">
+                                        <div class="trash-icon-delete" (click)="removeTransaction(entryIdx)">
                                             <span class="cp">
                                                 <i class="icon-trash" aria-hidden="true"></i>
                                             </span>
@@ -875,7 +875,7 @@
                                     <td class="pos-rel dropdown-container item-tax" style="height:1px;">
                                         <div class="td_Wrapper">
                                             <div class="text-right" style="flex:1;">
-                                                <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="[{ type: ['GST', 'commongst', 'InputGST'], count:1 }]"
+                                                <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="allowedSelectionOfAType"
                                                     [showHeading]="false" [rootClass]="'salseInvoicetable'" (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)" (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat" [prefixInput]="invFormData.accountDetails.currencySymbol"
                                                     [suffixInput]="selectedSuffixForCurrency">
                                                 </tax-control>
@@ -940,7 +940,7 @@
 
     </div>
 
-    <div class="trash-icon-delete" *ngIf="!isUpdateMode || (isUpdateMode && (entry.isNewEntryInUpdateMode || (!isPurchaseInvoice && !isEstimateInvoice && !isProformaInvoice)))" (click)="removeTransaction(entryIdx)">
+    <div class="trash-icon-delete" (click)="removeTransaction(entryIdx)">
         <span class="cp">
                                                 <i class="icon-trash" aria-hidden="true"></i>
                                             </span>
@@ -1399,7 +1399,7 @@
                         <img src="assets/images/edit-pencilicon.svg">
                     </div>
 
-                    <div class="del-card" (click)="removeTransaction(entryIdx)" *ngIf="!isUpdateMode || (isUpdateMode && (entry.isNewEntryInUpdateMode || (!isPurchaseInvoice && !isEstimateInvoice && !isProformaInvoice)))">
+                    <div class="del-card" (click)="removeTransaction(entryIdx)">
                         <i class="icon-trash" aria-hidden="true"></i>
                     </div>
 
@@ -1636,7 +1636,7 @@
                                     <label class="card-label text-right">Tax</label>
 
                                     <div class="text-right" style="flex:1;">
-                                        <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="[{ type: ['GST', 'commongst', 'InputGST'], count:1 }]"
+                                        <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="allowedSelectionOfAType"
                                             [showHeading]="false" [rootClass]="'salseInvoicetable'" (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)" (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat" [prefixInput]="invFormData.accountDetails.currencySymbol"
                                             [suffixInput]="selectedSuffixForCurrency">
                                         </tax-control>
@@ -1706,7 +1706,7 @@
                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
                 </div>
 
-                <div class="del-card pointer" (click)="removeTransaction(entryIdx)" *ngIf="!isUpdateMode || (isUpdateMode && (entry.isNewEntryInUpdateMode || (!isPurchaseInvoice && !isEstimateInvoice && !isProformaInvoice)))">
+                <div class="del-card pointer" (click)="removeTransaction(entryIdx)">
                     <i class="icon-trash" aria-hidden="true"></i>
                 </div>
 

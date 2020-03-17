@@ -23,8 +23,7 @@
     color: #01a9f4;
 }
 .voucher-type-dropdown {
-    width: 35px;
-    float: right;
+    display: inline-block;
 }
 .voucher-type-dropdown .btn {
     padding: 0 8px;
@@ -73,11 +72,6 @@
     }
 }
 
-@media only screen and (max-width: 1400px) {
-    .basic > thead > tr > th {
-        min-width: 200px;
-    }
-}
 @media only screen and (max-width: 767px) {
     .basic > thead > tr > th {
         min-width: initial;

@@ -61,7 +61,7 @@ export class PurchaseRegisterExpandComponent implements OnInit {
 
     ngOnInit() {
         this.setCurrentPageTitle();
-        this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
+        this.imgPath = (isElectron||isCordova)  ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         this.getDetailedPurchaseRequestFilter.page = 1;
         this.getDetailedPurchaseRequestFilter.count = 50;
         this.getDetailedPurchaseRequestFilter.q = '';

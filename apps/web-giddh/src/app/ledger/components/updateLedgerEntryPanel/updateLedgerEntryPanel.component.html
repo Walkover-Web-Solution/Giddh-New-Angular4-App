@@ -625,7 +625,7 @@
 
             <!-- region more details and total section -->
 
-            <div class="row d-flex d-sm-block">
+            <div class="row ledger-bottom">
                 <div class="col-md-6 pt-1">
                     <!-- make it functional (Developer end) -->
                     <div *ngIf="shouldShowWarehouse" class="row mrB1">
@@ -689,6 +689,42 @@
                                 placeholder="Description"></textarea>
                         </div>
                     </div>
+
+                    <ng-template>
+                        <div class="clearfix adjust-receipt font-14">
+                            <p class="bold">Adjusted Receipts <a href="javascript:void(0)"><i class="icon-edit11 font-10"></i></a></p>
+                            <p class="font-12 text-light mb-1">₹2400.00</p>
+                            <div class="clearfix adjustment-field">
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-5 pr-05">
+                                        <div class="form-group">
+                                            <label>Adjustment Voucher<span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control mb-1" value="INV2019374-3" disabled>
+                                            <input type="text" class="form-control mb-1" value="INV2019374-3" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 col-sm-5 pl-05 pr-05">
+                                        <div class="form-group">
+                                            <label>Amount<span class="text-danger">*</span> <span class="text-light font-12 ml-05">(Inclusive Tax)</span></label>
+                                            <input type="text" class="form-control mb-1" value="₹4,000.00" disabled>
+                                            <input type="text" class="form-control mb-1" value="₹4,000.00" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-2 pl-05">
+                                        <div class="form-group">
+                                            <label>Tax</label>
+                                            <input type="text" class="form-control mb-1" value="₹150.00" disabled>
+                                            <input type="text" class="form-control mb-1" value="₹150.00" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="font-12 text-light">Excess amount: ₹2000 <i class="icon-info pointer" tooltip="adjustment amount is more than receipts."></i></p>
+                        </div>
+                    </ng-template>
+
                 </div>
 
                 <div class="col-md-6 font-14 pt-1 bl-1 remove-border-left-onmo">
@@ -905,14 +941,19 @@
 
                         </div>
 
-                        <div class="col-xs-12 pdT1" *ngIf="!isPettyCash">
-                            <div class="pull-right">
+                        <div class="col-xs-12 pdT1 d-flex align-items-center xs-d-block" *ngIf="!isPettyCash">
+                                <div class="width-100 mb-05">
+                                    <ng-template>
+                                    <p>Note: The adjusted amount of the linked invoice/s is more than the receipt; update them first and try again.</p>
+                                </ng-template>
+                                </div>
+
+                            <div class="d-flex">
                                 <button class="btn btn-danger" (click)="showDeleteEntryModal()">Delete</button>
                                 <button class="btn btn-success" [ladda]="isTxnUpdateInProcess$ | async"
                                     (click)="saveLedgerTransaction()">Update
                                 </button>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -974,8 +1015,8 @@
 <!-- endregion -->
 <!-- Tourist scheme template block-->
 <ng-template #touristSchemeTemplate>
-    <div class="row font-14 mb-1 height-30" *ngIf="isTouristSchemeApplicable">
-        <div class="col-md-4 mrT1">
+    <div class="font-14 mb-1 d-flex align-items-center xs-d-block" *ngIf="isTouristSchemeApplicable">
+        <div class="mr-3 xs-mr-0 mb-1">
             <div class="d-flex align-items-center">
                 <span class="pull-left">
                         <input id="tourist-scheme" type="checkbox" name="touristSchemeApplicable" [(ngModel)]="vm.selectedLedger.touristSchemeApplicable" (ngModelChange)="touristSchemeApplicableToggle($event)">
@@ -985,7 +1026,7 @@
             </div>
         </div>
 
-        <div class="col-md-3" *ngIf="vm.selectedLedger.touristSchemeApplicable">
+        <div *ngIf="vm.selectedLedger.touristSchemeApplicable">
             <div class="d-flex align-items-center justify-content-end ml-1 xs-justify-content-start">
                 <span class="nowrap">Passport Number  </span>
                 <input type="text" name="selectedLedger.passportNumber" placeholder="Passport Number" #passportNumber (blur)="allowAlphanumericChar(passportNumber)" (keypress)="allowAlphanumericChar(passportNumber)"  class="form-control width-115 ml-1" [(ngModel)]="vm.selectedLedger.passportNumber" />
