@@ -18,20 +18,19 @@
                             <table>
                                 <tbody>
                                     <tr>
-                                        <td class="text-right width-70"
-                                            ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}">
+                                        <td class="text-right width-70" ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}">
                                             <label class="mr-05 font-12">Qty</label>
                                             <input type="text" name="" class="form-control text-right"
-                                                (change)="changeQuantity($event.target.value)"
-                                                [(ngModel)]="currentTxn?.inventory.quantity" decimalDigitsDirective
-                                                [DecimalPlaces]="4" />
+                                                [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
+                                                (change)="changeQuantity($event.target.value)" [(ngModel)]="currentTxn?.inventory.quantity"
+                                                decimalDigitsDirective [DecimalPlaces]="4" />
                                         </td>
 
                                         <td *ngIf="currentTxn?.unitRate">
                                             <label class="font-12">Unit</label>
                                             <select class="form-control" style="width: 78px;"
-                                                (change)="unitChanged($event.target.value)"
-                                                [value]="currentTxn?.inventory.unit.code">
+                                                [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
+                                                (change)="unitChanged($event.target.value)" [value]="currentTxn?.inventory.unit.code">
                                                 <option *ngFor="let item of currentTxn.unitRate" [value]="item.code">
                                                     {{item.stockUnitCode}}
                                                 </option>
@@ -55,6 +54,7 @@
                             <label class="font-12">Price</label>
                             <input type="text" [(ngModel)]="currentTxn.inventory.unit.rate"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
+                                [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
                                 [mask]="inputMaskFormat" (ngModelChange)="changePrice($event)" name=""
                                 class="form-control text-right" />
                             <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
@@ -73,6 +73,7 @@
                             <label class="primary_clr font-12">Amount</label>
                             <input type="text" name="" class="form-control text-right"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
+                                [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
                                 [mask]="inputMaskFormat" [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
                                 (keyup)="amountChanged();calculateTotal()" />
                             <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
@@ -81,14 +82,14 @@
                             </p>
                         </td>
 
-                        <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount)"
+                        <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount) && !shouldShowAdvanceReceiptMandatoryFields"
                             class="text-center table-minus">
                             <label class="d-block">&nbsp;</label>
                             <label class="fs20">-</label>
                         </td>
 
                         <!--discount-->
-                        <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount) || !shouldShowAdvanceReceiptMandatoryFields"
+                        <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount) && !shouldShowAdvanceReceiptMandatoryFields"
                             class="pItem text-right price new-ledger-text-right" (click)="$event.stopPropagation()">
                             <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts"
                                 [maskInput]="inputMaskFormat" [prefixInput]="selectedPrefixForCurrency"
