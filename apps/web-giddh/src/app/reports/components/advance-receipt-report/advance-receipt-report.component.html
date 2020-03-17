@@ -1,39 +1,44 @@
 <div class="reverse-table-report">
     <div class="container-fluid">
 
-        <div class="d-flex date-advanceSearch mrT2" id="dateRangePickerParent">
+        <div class="mt-2 mb-2 input-grp-dateRangePicker d-flex">
             <!-- Invoice filter section -->
-            <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate
-            class="form-inline input-grp-dateRangePicker pr">
-                <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
+                <div class="mrR1 d-flex" style="flex: 1 1 auto;">
                     <div class="input-group">
-                        <span class="inputWrapper">
-                            <input name="dateRange" daterangepicker class="form-control" />
-                        </span>
+                        <div class="form-group">
+                            <span class="icon-calender" (click)="dp.toggle()"></span> <input type="text"
+                                placeholder="Select Date" class="form-control" #dp="bsDaterangepicker" [(ngModel)]="datePicker"
+                                (bsValueChange)="changeFilterDate($event)" bsDaterangepicker [bsConfig]="bsConfig">
+                        </div>
                     </div>
                     <div class="advance-icon pointer" tooltip="Advance Search" (click)="openModal(advanceSearch)">
                         <span class="icon-advance-serch"></span>
                     </div>
                 </div>
-            </form>
             <!-- Invoice filter section ends -->
 
 
-            <!-- not remove this code -->
+            <!-- not remove this code
                 <div class="clearfix">
-                <a href="javascript:void(0)" class="btn btn-primary" (click)="refundModalOpen(refundAmount)">Refund amount</a>
-                <a href="javascript:void(0)" class="btn btn-primary" (click)="adjustModal(adjustInvoiceModal)">Adjust invoice modal</a>
-            </div>
+                    <a href="javascript:void(0)" class="btn btn-primary" (click)="refundModalOpen(refundAmount)">Refund amount</a>
+                    <a href="javascript:void(0)" class="btn btn-primary" (click)="adjustModal(adjustInvoiceModal)">Adjust invoice modal</a>
+                </div>-->
         </div>
 
 
         <div class="invoice-preview  table-responsive">
-        <table class="table basic table-bordered mrT2 onMobileView">
+        <table class="table basic giddh-table onMobileView">
             <thead class="t-h-bg1">
                 <tr>
-                    <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
-                        (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
-                        <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: ' Receipt #', fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
+
+                    <th width="13%" class="bdrR bdrB td_in_searchBox">
+                        <div [hidden]="inlineSearch == 'Receipt'">
+                            <span>Receipt</span>
+                            <i class="icon-search" (click)="focusOnColumnSearch('Receipt');"></i>
+                        </div>
+                        <div class="input-container" [hidden]="inlineSearch !== 'Receipt'">
+                            <input type="text" placeholder="Receipt" class="w100" #ReceiptField />
+                        </div>
                     </th>
 
                     <th class="td_in_searchBox">
@@ -45,18 +50,48 @@
                         </div>
                     </th>
 
-
-
-                    <th>Type</th>
-
-                    <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
-                        (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
-                        <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Customer Name', fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
+                    <th width="15%">
+                        Type
+                        <div class="voucher-type-dropdown">
+                            <div class="btn-group d-inline-block" dropdown container="body"
+                                placement="bottom right">
+                                <a href="javascript:void(0)" id="button-basic" dropdownToggle
+                                    class="btn dropdown-toggle text-light-2" aria-controls="dropdown-alignment">
+                                    <i class="fa fa-ellipsis-v"></i>
+                                </a>
+                                <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
+                                    role="menu" aria-labelledby="button-alignment">
+                                    <li role="menuitem"><a class="dropdown-item" href="javascript:;"
+                                            (click)="changeVoucherType('Journal');">Journal</a></li>
+                                    <li role="menuitem"><a class="dropdown-item" href="javascript:;"
+                                            (click)="changeVoucherType('Purchase');">Purchase</a></li>
+                                    <li role="menuitem"><a class="dropdown-item" href="javascript:;"
+                                            (click)="changeVoucherType('Debit Note');">Debit Note</a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </th>
 
-                    <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
-                        (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
-                        <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Payment Mode', fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
+
+                    <th width="13%" class="bdrR bdrB td_in_searchBox">
+                        <div [hidden]="inlineSearch == 'customerName'">
+                            <span>Customer Name</span>
+                            <i class="icon-search" (click)="focusOnColumnSearch('customerName');"></i>
+                        </div>
+                        <div class="input-container" [hidden]="inlineSearch !== 'customerName'">
+                            <input type="text" placeholder="Invoice No." class="w100" #customerNameField
+                                name="customerName" />
+                        </div>
+                    </th>
+
+                    <th width="13%" class="bdrR bdrB td_in_searchBox">
+                        <div [hidden]="inlineSearch == 'paymentMode'">
+                            <span>Payment Mode</span>
+                            <i class="icon-search" (click)="focusOnColumnSearch('paymentMode');"></i>
+                        </div>
+                        <div class="input-container" [hidden]="inlineSearch !== 'paymentMode'">
+                            <input type="text" placeholder="Supplier Country" class="w100" #paymentModeField />
+                        </div>
                     </th>
 
                     <th>
@@ -87,15 +122,52 @@
                     <td data-title="Entry Date">{{ advanceReceipt.date }}</td>
                     <td data-title="Supplier's Name">{{ advanceReceipt.type }}</td>
                     <td data-title="Vouchter Type">{{ advanceReceipt.customerName }}</td>
-                    <td data-title="Invoice No.">{{ advanceReceipt.paymentMode }}</td>
-                    <td data-title="Supplier's Invoice Date">{{ advanceReceipt.invoice }}</td>
-                    <td data-title="Supplier Country">{{ advanceReceipt.totalAmount }}</td>
+                    <td data-title="Payment Mode">{{ advanceReceipt.paymentMode }}</td>
+                    <td data-title="Invoice#">{{ advanceReceipt.invoice }}</td>
+                    <td data-title="Supplier Country">{{ advanceReceipt.totalAmount }}
+                        <p class="font-12 text-gray">₹5,000</p>
+                    </td>
                     <td data-title="Taxable Value">{{ advanceReceipt.unusedAmount }}</td>
                 </tr>
-            </tbody>
 
+                <tr>
+                    <td></td>
+                    <td data-title="Entry Date"></td>
+                    <td data-title="Supplier's Name"></td>
+                    <td data-title="Vouchter Type"></td>
+                    <td data-title="Payment Mode">ICIC</td>
+                    <td data-title="Invoice#">2018-19/INV/256</td>
+                    <td data-title="Supplier Country"></td>
+                    <td data-title="Taxable Value"></td>
+                </tr>
+
+            </tbody>
         </table>
     </div>
+    </div>
+
+    <div class=" mt-5 invoiceFooter invoice-footer row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 total-due-sale-wrap">
+            <div class="col-md-3 col-sm-6 total-due-sale">
+                <h3>Advance Receipts</h3>
+                <h1>₹10,000</h1>
+            </div>
+
+            <div class="col-md-3 col-sm-6 total-due-sale">
+                <h3>Normal Receipts</h3>
+                <h1>₹30,000</h1>
+            </div>
+
+            <div class="col-md-3 col-sm-6 total-due-sale">
+                <h3>Total Receipts</h3>
+                <h1>₹40,000</h1>
+            </div>
+
+            <div class="col-md-3 col-sm-6 total-due-sale">
+                <h3>Unused Receipts</h3>
+                <h1>₹5,000</h1>
+            </div>
+        </div>
     </div>
 </div>
 

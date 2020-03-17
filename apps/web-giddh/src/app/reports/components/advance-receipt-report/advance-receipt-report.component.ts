@@ -10,6 +10,12 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 })
 export class AdvanceReceiptReport implements OnInit {
 
+    public inlineSearch: any = '';
+    @ViewChild('customerNameField') public customerNameField;
+    @ViewChild('ReceiptField') public ReceiptField;
+    @ViewChild('paymentModeField') public paymentModeField;
+
+
     modalRef: BsModalRef;
     message: string;
     constructor(private modalService: BsModalService) {}
@@ -97,13 +103,24 @@ export class AdvanceReceiptReport implements OnInit {
         },
     ]
 
-    public toggleSearch(fieldName: string, el: any) {
-        if (fieldName === 'invoiceNumber') {
-            this.showEntryDate = true;
-        }
+
+    /**
+     * This will put focus on selected search field
+     *
+     * @param {*} inlineSearch
+     * @memberof ReverseChargeReport
+     */
+    public focusOnColumnSearch(inlineSearch) {
+        this.inlineSearch = inlineSearch;
 
         setTimeout(() => {
-            el.focus();
+            if (this.inlineSearch === 'Receipt') {
+                this.ReceiptField.nativeElement.focus();
+            } else if (this.inlineSearch === 'invoiceNumber') {
+                this.customerNameField.nativeElement.focus();
+            } else if (this.inlineSearch === 'paymentMode') {
+                this.paymentModeField.nativeElement.focus();
+            }
         }, 200);
     }
 }

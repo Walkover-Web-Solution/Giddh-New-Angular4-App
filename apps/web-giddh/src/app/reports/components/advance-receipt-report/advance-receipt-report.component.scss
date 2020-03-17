@@ -16,9 +16,6 @@
 .td_in_searchBox div {
     display: flex;
 }
-.basic > tbody > tr td:first-child, .basic > thead > tr th:first-child {
-    padding-left: 20px !important;
-}
 .d-flex {
     display: flex;
 }
@@ -42,17 +39,6 @@
     z-index: 100;
     top: 0;
 }
-.input-group input.form-control {
-    padding-left: 45px !important;
-    position: relative;
-    z-index: 99;
-    cursor: default;
-    width: 100%;
-    background-image: url(../../../../assets/images/calender.svg) !important;
-    background-color: #fff !important;
-    background-repeat: no-repeat !important;
-    background-position: 10px 9px !important;
-}
 .advance-icon {
     width: 32px;
     height: 32px;
@@ -65,4 +51,42 @@
     border-radius: 2px;
     color: #1a237e;
     background: #fff;
+}
+.icon-calender {
+    position: absolute;
+    z-index: 9;
+    height: 36px;
+    width: 36px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid $tableBorderColor;
+    color: #999999;
+    left: 0;
+    font-size: 18px;
+}
+.input-grp-dateRangePicker input.form-control {
+    padding-left: 45px !important;
+    width: 220px;
+}
+.voucher-type-dropdown {
+    display: inline-block;
+}
+.voucher-type-dropdown .btn {
+    padding: 0 8px;
+    margin-right: 0px;
+}
+.basic > tbody > tr > td, .basic > thead > tr > th {
+    padding: 8px 10px;
+}
+.invoice-footer h3 {
+    font-size: 16px;
+    color: #999999;
+    display: inline-block;
+    margin-right: 10px;
+}
+.invoice-footer h1 {
+    font-size: 28px;
+    color: #333;
+    display: inline-block;
 }
