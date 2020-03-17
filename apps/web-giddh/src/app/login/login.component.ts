@@ -1,13 +1,13 @@
-import {take, takeUntil} from "rxjs/operators";
-import {LoginActions} from "../actions/login.action";
-import {AppState} from "../store";
-import {Router} from "@angular/router";
-import {Component, Inject, OnDestroy, OnInit, ViewChild} from "@angular/core";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ModalDirective} from "ngx-bootstrap";
-import {Configuration} from "../app.constant";
-import {Store} from "@ngrx/store";
-import {Observable, ReplaySubject} from "rxjs";
+import { take, takeUntil } from "rxjs/operators";
+import { LoginActions } from "../actions/login.action";
+import { AppState } from "../store";
+import { Router } from "@angular/router";
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ModalDirective } from "ngx-bootstrap";
+import { Configuration } from "../app.constant";
+import { Store } from "@ngrx/store";
+import { Observable, ReplaySubject } from "rxjs";
 import {
     LinkedInRequestModel,
     SignupwithEmaillModel,
@@ -22,20 +22,20 @@ import {
     LinkedinLoginProvider,
     SocialUser
 } from "../theme/ng-social-login-module/index";
-import {contriesWithCodes} from "../shared/helpers/countryWithCodes";
+import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 
-import {IOption} from "../theme/ng-virtual-select/sh-options.interface";
-import {DOCUMENT} from "@angular/platform-browser";
-import {ToasterService} from "../services/toaster.service";
-import {AuthenticationService} from "../services/authentication.service";
-import {userLoginStateEnum} from "../models/user-login-state";
-import {isCordova} from "@giddh-workspaces/utils";
-import {GeneralService} from "../services/general.service";
+import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
+import { DOCUMENT } from "@angular/platform-browser";
+import { ToasterService } from "../services/toaster.service";
+import { AuthenticationService } from "../services/authentication.service";
+import { userLoginStateEnum } from "../models/user-login-state";
+import { isCordova } from "@giddh-workspaces/utils";
+import { GeneralService } from "../services/general.service";
 
 @Component({
     selector: "login",
     templateUrl: "./login.component.html",
-    styleUrls: ["./login.component.css"]
+    styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent implements OnInit, OnDestroy {
 
@@ -94,14 +94,14 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: FormBuilder,
-                private store: Store<AppState>,
-                private router: Router,
-                private loginAction: LoginActions,
-                private authService: AuthService,
-                @Inject(DOCUMENT) private document: Document,
-                private _toaster: ToasterService,
-                private _authService: AuthenticationService,
-                private _generalService: GeneralService
+        private store: Store<AppState>,
+        private router: Router,
+        private loginAction: LoginActions,
+        private authService: AuthService,
+        @Inject(DOCUMENT) private document: Document,
+        private _toaster: ToasterService,
+        private _authService: AuthenticationService,
+        private _generalService: GeneralService
     ) {
         this.urlPath = (isElectron || isCordova) ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = store.select(state => {
@@ -155,7 +155,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).pipe(takeUntil(this.destroyed$));
 
         contriesWithCodes.map(c => {
-            this.countryCodeList.push({value: c.countryName, label: c.value});
+            this.countryCodeList.push({ value: c.countryName, label: c.value });
         });
         this.userLoginState$ = this.store.select(p => p.session.userLoginState);
         this.userDetails$ = this.store.select(p => p.session.user);
@@ -166,9 +166,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
 
-        this.emailVerifyModal.config = {backdrop: "static"};
-        this.twoWayAuthModal.config = {backdrop: "static"};
-        this.mobileVerifyModal.config = {backdrop: "static"};
+        this.emailVerifyModal.config = { backdrop: "static" };
+        this.twoWayAuthModal.config = { backdrop: "static" };
+        this.mobileVerifyModal.config = { backdrop: "static" };
 
         this.getElectronAppVersion();
         this.document.body.classList.remove("unresponsive");
@@ -206,7 +206,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             email: ["", [Validators.required, Validators.email]],
             verificationCode: ["", Validators.required]
         });
-        this.setCountryCode({value: "India", label: "India"});
+        this.setCountryCode({ value: "India", label: "India" });
 
         // get user object when google auth is complete
         if (!(Configuration.isElectron || Configuration.isCordova)) {
@@ -270,7 +270,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         });
         this.isLoginWithPasswordSuccessNotVerified$.subscribe(res => {
             if (res) {
-//
+                //
             }
         });
         this.isLoginWithPasswordIsShowVerifyOtp$.subscribe(res => {
@@ -370,7 +370,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     public async signInWithProviders(provider: string) {
         if (Configuration.isElectron) {
             // electronOauth2
-            const {ipcRenderer} = (window as any).require("electron");
+            const { ipcRenderer } = (window as any).require("electron");
             if (provider === "google") {
                 // google
                 const t = ipcRenderer.send("authenticate", provider);
@@ -461,7 +461,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public forgotPassword(userId) {
-        this.resetPasswordForm.patchValue({uniqueKey: userId});
+        this.resetPasswordForm.patchValue({ uniqueKey: userId });
         this.userUniqueKey = userId;
         this.store.dispatch(this.loginAction.forgotPasswordRequest(userId));
     }
