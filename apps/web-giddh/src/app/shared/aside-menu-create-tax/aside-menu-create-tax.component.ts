@@ -36,7 +36,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     ];
     public allTaxes: IOption[] = [];
     public selectedTaxType: string = '';
-    public chkIfTDSOrTcs: boolean = false;
+    public checkIfTdsOrTcs: boolean = false;
     public days: IOption[] = [];
     public newTaxObj: TaxResponse = new TaxResponse();
     public flattenAccountsOptions: IOption[] = [];
@@ -119,9 +119,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
 
     public ngOnChanges(changes: SimpleChanges): void {
         if ('tax' in changes && changes.tax.currentValue && (changes.tax.currentValue !== changes.tax.previousValue)) {
-            this.chkIfTDSOrTcs = this.tax.taxType.includes('tcs') || this.tax.taxType.includes('tds');
+            this.checkIfTdsOrTcs = this.tax.taxType.includes('tcs') || this.tax.taxType.includes('tds');
             let subTyp;
-            if (this.chkIfTDSOrTcs) {
+            if (this.checkIfTdsOrTcs) {
                 subTyp = this.tax.taxType.includes('rc') ? 'rc' : 'pay';
             }
 

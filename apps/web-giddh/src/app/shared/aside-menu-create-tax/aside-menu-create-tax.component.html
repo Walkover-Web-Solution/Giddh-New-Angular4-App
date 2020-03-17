@@ -50,7 +50,7 @@
                             <label>Select Type <span class="text-danger">*</span> </label><br>
                             <sh-select [options]="taxNameTypesMapping[newTaxObj.taxType]" name="tdsTcsTaxSubTypes"
                                 [(ngModel)]="newTaxObj.tdsTcsTaxSubTypes" [defaultValue]="selectedTaxType" placeholder="{{selectedTaxType ? selectedTaxType : 'Select Type'}}" [ngClass]="{'placeholder-black': selectedTaxType}"
-                                [ItemHeight]="33" required [forceClearReactive]="forceClear$ | async" [disabled]="chkIfTDSOrTcs"></sh-select>
+                                [ItemHeight]="33" required [forceClearReactive]="forceClear$ | async" [disabled]="checkIfTdsOrTcs"></sh-select>
                         </div>
 
                     </div>
