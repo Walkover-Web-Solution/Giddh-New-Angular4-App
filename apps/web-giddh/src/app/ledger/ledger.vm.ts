@@ -215,7 +215,13 @@ export class LedgerVM {
     }
 
     public getUnderstandingText(selectedLedgerAccountType, accountName) {
-        let data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
+        let data;
+        if(accountName === "Reverse Charge") {
+            data = _.cloneDeep(underStandingTextData.find(p => p.accountType === accountName));
+        } else {
+            data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
+        }
+
         if (data) {
             data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
             data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);

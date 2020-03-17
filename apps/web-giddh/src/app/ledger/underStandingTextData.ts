@@ -46,8 +46,8 @@ export const underStandingTextData = [
     {
         accountType: 'Asset',
         text: {
-            cr: '<accountName> is decreasing (-)',
-            dr: '<accountName> is increasing (+)'
+            cr: '<accountName> is Going out (-)',
+            dr: '<accountName> is Coming in (+)'
         },
         balanceText: {
             cr: '(-) Asset ( ohh no!)',
@@ -63,6 +63,17 @@ export const underStandingTextData = [
         balanceText: {
             cr: 'Liability Payable',
             dr: 'Liabilities paid in advance (hurrey!)'
+        }
+    },
+    {
+        accountType: 'Reverse Charge',
+        text: {
+            cr: `<accountName> is increasing ↑`,
+            dr: '<accountName> is decreasing ↓'
+        },
+        balanceText: {
+            cr: '(-) Reverse Charge ( ohh no!)',
+            dr: 'Reverse Charge value'
         }
     },
     {
