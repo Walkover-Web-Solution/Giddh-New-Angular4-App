@@ -13,7 +13,7 @@ export enum VoucherTypeEnum {
     'debitNote' = 'debit note',
     'creditNote' = 'credit note',
     'proforma' = 'proforma',
-    'generateProforma' = 'proformas',
+    'generateProforma' = 'proforma',
     'estimate' = 'estimate',
     'generateEstimate' = 'estimates',
     'cash' = 'cash'
@@ -65,9 +65,9 @@ export const VOUCHER_TYPE_LIST: any[] = [
     },
     {
         value: VoucherTypeEnum.generateProforma,
-        label: 'Proformas',
+        label: 'Proforma',
         additional: {
-            label: 'Proformas'
+            label: 'Proforma'
         }
     },
     {

@@ -10,7 +10,7 @@ const routes: Routes = [
         component: ProformaInvoiceRendererComponent,
         children: [
             {
-                path: '', redirectTo: 'invoice/proformas', pathMatch: 'full'
+                path: '', redirectTo: 'invoice/proforma', pathMatch: 'full'
             },
             {
                 path: 'invoice/:invoiceType', component: ProformaInvoiceComponent, canActivate: [NeedsAuthentication]

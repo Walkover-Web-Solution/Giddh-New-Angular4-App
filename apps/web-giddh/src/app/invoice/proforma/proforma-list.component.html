@@ -77,8 +77,8 @@
             </div>
             <!-- endregion -->
 
-            <div *ngIf="voucherType === 'proformas'" class="btn-wrapper mb-1">
-                <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
+            <div *ngIf="voucherType === 'proforma'" class="btn-wrapper mb-1">
+                <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('proforma')">+ New
                     Proforma
                 </button>
             </div>
@@ -97,7 +97,7 @@
             <div class="col-sm-6 col-xs-6 full-width-on-mobile">
                 <div class="input-container">
                     <input type="text"
-                        placeholder="{{voucherType === 'proformas' ? 'Serach Proforma #' : 'Search Estimate #'}}"
+                        placeholder="{{voucherType === 'proforma' ? 'Serach Proforma #' : 'Search Estimate #'}}"
                         class=" form-control" #searchBox [formControl]="voucherNumberInput" />
                 </div>
             </div>
@@ -139,7 +139,7 @@
                             (clickOutside)="clickedOutside($event, searchVoucherNumberContainer, 'voucherNumber')">
 
                             <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showVoucherNoSearch,
-          title: voucherType === 'proformas' ? 'Proforma No.' : 'Estimate No.',
+          title: voucherType === 'proforma' ? 'Proforma No.' : 'Estimate No.',
           fieldName: 'voucherNumber',
            formControl: voucherNumberInput}"></ng-container>
 
@@ -155,7 +155,7 @@
 
                         <th width="10%">
                             <div class="d-flex">
-                                <div class="">{{ voucherType === 'proformas' ? 'Proforma' : 'Estimate' }} Date</div>
+                                <div class="">{{ voucherType === 'proforma' ? 'Proforma' : 'Estimate' }} Date</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'proformaDate'}">
                                     </ng-container>
@@ -234,7 +234,7 @@
       </td> -->
 
 
-                        <td attr.data-title="{{voucherType === 'proformas' ? 'Proforma No.' : 'Estimates No.'}} ">
+                        <td attr.data-title="{{voucherType === 'proforma' ? 'Proforma No.' : 'Estimates No.'}} ">
                             <div style="position: relative" class="d-flex">
                                 <a href="javascript:void(0);" class="btn-link-2"
                                     (click)="onSelectInvoice(item)">{{item.uniqueName}}</a>
@@ -259,7 +259,7 @@
                             </div>
                         </td>
 
-                        <td attr.data-title="{{ voucherType === 'proformas' ? 'Proforma' : 'Estimate' }} Date">
+                        <td attr.data-title="{{ voucherType === 'proforma' ? 'Proforma' : 'Estimate' }} Date">
                             {{item.invoiceDate}}
                         </td>
                         <td class="text-right" data-title="Total Amt.">{{item.grandTotal | giddhCurrency}}</td>

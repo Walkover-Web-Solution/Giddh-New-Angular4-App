@@ -253,7 +253,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
         ).subscribe(s => {
-            if (this.voucherType === 'proformas') {
+            if (this.voucherType === 'proforma') {
                 this.advanceSearchFilter.proformaNumber = s;
             } else {
                 this.advanceSearchFilter.estimateNumber = s;
@@ -406,7 +406,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         if ('voucherType' in changes && changes.voucherType.currentValue && (changes.voucherType.currentValue !== changes.voucherType.previousValue)) {
-            if (this.voucherType === 'proformas') {
+            if (this.voucherType === 'proforma') {
                 this.localStorageSelectedDate = 'proformaSelectedDate';
             } else {
                 this.localStorageSelectedDate = 'estimateSelectedDate';
@@ -508,7 +508,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
     public onSelectInvoice(invoice: ProformaItem) {
         let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
-        let newIndex = allItems.findIndex(f => f.voucherNumber === (this.voucherType === 'proformas' ? invoice.proformaNumber : invoice.estimateNumber));
+        let newIndex = allItems.findIndex(f => f.voucherNumber === (this.voucherType === 'proforma' ? invoice.proformaNumber : invoice.estimateNumber));
         let removedItem = allItems.splice(newIndex, 1);
         allItems = [...removedItem, ...allItems];
         this.itemsListForDetails = allItems;
@@ -523,7 +523,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             this.advanceSearchFilter.from = moment(event.picker.startDate).format(GIDDH_DATE_FORMAT);
             this.advanceSearchFilter.to = moment(event.picker.endDate).format(GIDDH_DATE_FORMAT);
             if (window.localStorage) {
-                if (this.voucherType === 'proformas') {
+                if (this.voucherType === 'proforma') {
                     this.proformaSelectedDate.fromDates = this.advanceSearchFilter.from;
                     this.proformaSelectedDate.toDates = this.advanceSearchFilter.to;
                     localStorage.setItem('proformaSelectedDate', JSON.stringify(this.proformaSelectedDate));
@@ -622,7 +622,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             this.store.dispatch(this.proformaActions.generateInvoice(request, this.voucherType));
             return;
         } else if (action === 'ConvertToSalesOrder') {
-            this.store.dispatch(this.proformaActions.generateProformaFromEstimate(request, 'proformas'));
+            this.store.dispatch(this.proformaActions.generateProformaFromEstimate(request, 'proforma'));
             return;
         }
 
@@ -713,8 +713,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
     private parseItemForVm(invoice: ProformaItem): InvoicePreviewDetailsVm {
         let obj: InvoicePreviewDetailsVm = new InvoicePreviewDetailsVm();
-        obj.voucherDate = this.voucherType === 'proformas' ? invoice.proformaDate : invoice.estimateDate;
-        obj.voucherNumber = this.voucherType === 'proformas' ? invoice.proformaNumber : invoice.estimateNumber;
+        obj.voucherDate = this.voucherType === 'proforma' ? invoice.proformaDate : invoice.estimateDate;
+        obj.voucherNumber = this.voucherType === 'proforma' ? invoice.proformaNumber : invoice.estimateNumber;
         obj.uniqueName = obj.voucherNumber;
         obj.grandTotal = invoice.grandTotal;
         obj.voucherType = this.voucherType;

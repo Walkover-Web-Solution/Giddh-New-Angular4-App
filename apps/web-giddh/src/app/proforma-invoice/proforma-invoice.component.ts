@@ -2887,7 +2887,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             filterRequest.sort = 'desc';
             filterRequest.count = 5;
             filterRequest.isLastInvoicesRequest = true;
-            this.store.dispatch(this.proformaActions.getAll(filterRequest, this.isProformaInvoice ? 'proformas' : 'estimates'));
+            this.store.dispatch(this.proformaActions.getAll(filterRequest, this.isProformaInvoice ? 'proforma' : 'estimates'));
         } else if (!this.isPurchaseInvoice) {
             let request: InvoiceReceiptFilter = new InvoiceReceiptFilter();
             request.sortBy = 'voucherDate';

@@ -127,7 +127,7 @@ export class ProformaService {
 
 	public generateInvoice(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
 		this.companyUniqueName = this._generalService.companyUniqueName;
-		return this._http.post(this.config.apiUrl + (voucherType === 'proformas' ? PROFORMA_API.generateInvoice : ESTIMATES_API.generateInvoice)
+		return this._http.post(this.config.apiUrl + (voucherType === 'proforma' ? PROFORMA_API.generateInvoice : ESTIMATES_API.generateInvoice)
 			.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
 			.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
 			request

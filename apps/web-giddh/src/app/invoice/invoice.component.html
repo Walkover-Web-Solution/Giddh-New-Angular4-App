@@ -57,8 +57,8 @@
                                 </div>
                             </tab>
 
-                            <tab heading="Proformas" (select)="tabChanged('proformas', $event);voucherChanged('generateProforma')" [active]="activeTab === 'proformas'">
-                                <div *ngIf="activeTab === 'proformas'">
+                            <tab heading="Proformas" (select)="tabChanged('proforma', $event);voucherChanged('generateProforma')" [active]="activeTab === 'proforma'">
+                                <div *ngIf="activeTab === 'proforma'">
                                     <app-proforma-list-component [voucherType]="selectedVoucherType">
                                     </app-proforma-list-component>
                                 </div>

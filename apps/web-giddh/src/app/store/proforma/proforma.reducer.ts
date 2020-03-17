@@ -71,7 +71,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
 			if (response.status === 'success') {
 				let no: string;
 				switch (response.request.voucher.voucherDetails.voucherType) {
-					case 'proformas':
+					case 'proforma':
 						no = response.body.voucher.voucherDetails.proformaNumber;
 						break;
 					case 'estimates':
