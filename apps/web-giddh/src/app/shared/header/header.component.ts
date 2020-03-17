@@ -1247,10 +1247,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public goToSelectPlan(): void {
-        this.modalService.hide(1);
-        setTimeout(() => {
-            this.router.navigate(['/pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, showPlans: true } });
-        }, 200);
+        if (this.modelRefExpirePlan) {
+            this.modelRefExpirePlan.hide();
+        }
+        if (this.modelRefCrossLimit) {
+            this.modelRefCrossLimit.hide();
+        }
+        this.router.navigate(['/pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, showPlans: true } });
     }
 
     public onRight(nodes) {
