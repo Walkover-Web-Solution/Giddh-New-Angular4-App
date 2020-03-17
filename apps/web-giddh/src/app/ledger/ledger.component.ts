@@ -670,7 +670,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let accountDetails: AccountResponse = data[0];
                 let parentOfAccount = accountDetails.parentGroups[0];
 
-                this.lc.getUnderstandingText(accountDetails.accountType, accountDetails.name);
+                this.lc.getUnderstandingText(accountDetails.accountType, accountDetails.name, accountDetails.parentGroups);
                 this.accountUniquename = accountDetails.uniqueName;
 
                 if (this.advanceSearchComp) {

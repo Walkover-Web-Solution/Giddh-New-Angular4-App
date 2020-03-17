@@ -214,10 +214,20 @@ export class LedgerVM {
         };
     }
 
-    public getUnderstandingText(selectedLedgerAccountType, accountName) {
+    public getUnderstandingText(selectedLedgerAccountType, accountName, parentGroups) {
         let data;
-        if(accountName === "Reverse Charge") {
-            data = _.cloneDeep(underStandingTextData.find(p => p.accountType === accountName));
+        let isReverseChargeAccount = false;
+
+        if(parentGroups) {
+            parentGroups.forEach(key => {
+                if(key.uniqueName === "reversecharge") {
+                    isReverseChargeAccount = true;
+                }
+            });
+        }
+
+        if(isReverseChargeAccount) {
+            data = _.cloneDeep(underStandingTextData.find(p => p.accountType === "ReverseCharge"));
         } else {
             data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
         }
