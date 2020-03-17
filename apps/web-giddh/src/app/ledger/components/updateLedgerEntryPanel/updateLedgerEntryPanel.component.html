@@ -43,8 +43,13 @@
                 <thead>
                     <tr>
                         <th [ngClass]="Shown ? 'active' : ''" class="col-xs-6 hidden-xs">
-                            {{vm.ledgerUnderStandingObj.text.dr}}</th>
-                        <th class="col-xs-6 hidden-xs">{{vm.ledgerUnderStandingObj.text.cr}}</th>
+
+                            {{vm.ledgerUnderStandingObj.text.dr}}
+                            <span class="dr-cr-category pull-right text-gray">Dr</span>
+                        </th>
+                        <th class="col-xs-6 hidden-xs">{{vm.ledgerUnderStandingObj.text.cr}}
+                            <span class="dr-cr-category pull-right text-gray">Cr</span>
+                        </th>
                     </tr>
                 </thead>
             </table>
@@ -85,7 +90,7 @@
 
                         <tbody class="ledger-main">
                             <tr class="debit-blank-row"
-                                *ngFor="let txn of vm.selectedLedger.transactions; let i = index">
+                                *ngFor="let txn of vm.selectedLedger.transactions; let i = index; ">
                                 <ng-container *ngIf="txn.type === 'DEBIT'">
 
                                     <td class="col-xs-2" data-title="Date">
@@ -99,57 +104,68 @@
                                         [ngClass]="{ 'otherAccountEntry': txn.particular.uniqueName === 'others' }"
                                         class="col-xs-6 pos-rel select2-parent select2-ledger">
 
+
                                         <ng-template [ngIf]="!txn.isDiscount">
-                                            <sh-select id="dbtID" [notFoundLink]="true"
-                                                (noResultsClicked)="showQuickAccountModal()"
-                                                (keydown)="keydownPressed($event)"
-                                                [options]="vm.flatternAccountList4Select | async" #dbtSelect
-                                                (click)="addBlankTrx('DEBIT', txn, $event)"
-                                                (selected)="selectAccount($event,txn, dbtSelect)" [showClear]="false"
-                                                [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67"
-                                                (onShow)="dbs.hide()" [useInBuiltFilterForFlattenAc]="true">
+                                            <div class="d-flex update-ledger-account">
+                                                <span *ngIf="(
+                                                        (!dbtSelect.isOpen && txn.particular.uniqueName) ||
+                                                        (dbtSelect.isOpen && dbtSelect.filter))">To</span>
+                                                <sh-select id="dbtID" [notFoundLink]="true"
+                                                    (noResultsClicked)="showQuickAccountModal()"
+                                                    (keydown)="keydownPressed($event)"
+                                                    [options]="vm.flatternAccountList4Select | async" #dbtSelect
+                                                    (click)="addBlankTrx('DEBIT', txn, $event)"
+                                                    (selected)="selectAccount($event,txn, dbtSelect)"
+                                                    [showClear]="false" [(ngModel)]="txn.particular.uniqueName"
+                                                    [ItemHeight]="67" (onShow)="dbs.hide()"
+                                                    [useInBuiltFilterForFlattenAc]="true"
+                                                    [defaultValue]="txn.particular.name"
+                                                    [placeholder]="'To Select Accounts'">
 
-                                                <ng-template #optionTemplate let-option="option">
+                                                    <ng-template #optionTemplate let-option="option">
 
-                                                    <ng-container *ngIf="!option.additional?.stock">
-                                                        <a href="javascript:void(0)" class="list-item"
-                                                            style="border-bottom: 1px solid #ccc;">
-                                                            <div class="item">{{ option.label }}</div>
-                                                            <div class="item_unq">{{ option.additional?.uniqueName }}
-                                                            </div>
+                                                        <ng-container *ngIf="!option.additional?.stock">
+                                                            <a href="javascript:void(0)" class="list-item"
+                                                                style="border-bottom: 1px solid #ccc;">
+                                                                <div class="item">{{ option.label }}</div>
+                                                                <div class="item_unq">
+                                                                    {{ option.additional?.uniqueName }}
+                                                                </div>
+                                                            </a>
+                                                        </ng-container>
+
+                                                        <ng-container *ngIf="option.additional?.stock">
+                                                            <a href="javascript:void(0)" class="list-item"
+                                                                style="border-bottom: 1px solid #ccc;">
+                                                                <div class="item">{{ option.label }}</div>
+                                                                <div class="item_unq">
+                                                                    {{ option.additional?.uniqueName }}
+                                                                </div>
+                                                                <div class="item_stock">
+                                                                    Stock: {{ option.additional?.stock.name }}</div>
+                                                            </a>
+                                                        </ng-container>
+
+                                                    </ng-template>
+
+                                                    <ng-template #notFoundLinkTemplate>
+
+                                                        <a id="createNewId" [ngClass]="{'active': keydownClassAdded}"
+                                                            class="notfound-option" [keyboardShortcut]="'alt+c'"
+                                                            (onShortcutPress)="toggleAsidePaneOpen()">
+                                                            <span [ngClass]="{'active': keydownClassAdded}">Create
+                                                                New</span>
+                                                            <span [ngClass]="{'active': keydownClassAdded}"
+                                                                class="pull-right">Alt+C</span>
                                                         </a>
-                                                    </ng-container>
+                                                    </ng-template>
 
-                                                    <ng-container *ngIf="option.additional?.stock">
-                                                        <a href="javascript:void(0)" class="list-item"
-                                                            style="border-bottom: 1px solid #ccc;">
-                                                            <div class="item">{{ option.label }}</div>
-                                                            <div class="item_unq">{{ option.additional?.uniqueName }}
-                                                            </div>
-                                                            <div class="item_stock">
-                                                                Stock: {{ option.additional?.stock.name }}</div>
-                                                        </a>
-                                                    </ng-container>
-
-                                                </ng-template>
-
-                                                <ng-template #notFoundLinkTemplate>
-
-                                                    <a id="createNewId" [ngClass]="{'active': keydownClassAdded}"
-                                                        class="notfound-option" [keyboardShortcut]="'alt+c'"
-                                                        (onShortcutPress)="toggleAsidePaneOpen()">
-                                                        <span [ngClass]="{'active': keydownClassAdded}">Create
-                                                            New</span>
-                                                        <span [ngClass]="{'active': keydownClassAdded}"
-                                                            class="pull-right">Alt+C</span>
-                                                    </a>
-                                                </ng-template>
-
-                                            </sh-select>
-
+                                                </sh-select>
+                                            </div>
                                         </ng-template>
 
                                         <ng-template [ngIf]="txn.isDiscount">
+                                            To
                                             <input [disabled]="true" [(ngModel)]="txn.particular.name"
                                                 class="trxFakeInput" />
                                         </ng-template>
@@ -258,7 +274,7 @@
 
                         <tbody class="ledger-main">
 
-                            <tr *ngFor="let txn of vm.selectedLedger.transactions" class="credit-blank-row">
+                            <tr *ngFor="let txn of vm.selectedLedger.transactions;" class="credit-blank-row">
                                 <ng-container *ngIf="txn.type == 'CREDIT'">
 
                                     <td data-title="Date" class="col-xs-2">
@@ -273,49 +289,64 @@
                                         [ngClass]="{ otherAccountEntry: txn.particular.uniqueName === 'others' }">
 
                                         <ng-template [ngIf]="!txn?.isDiscount">
-                                            <sh-select id="crdID" [notFoundLink]="true"
-                                                (noResultsClicked)="showQuickAccountModal()"
-                                                (keydown)="keydownPressed($event)"
-                                                [options]="vm.flatternAccountList4Select | async" #crdSelect
-                                                (click)="addBlankTrx('CREDIT', txn, $event)"
-                                                (selected)="selectAccount($event,txn, crdSelect)" (onShow)="cbs.hide()"
-                                                [showClear]="false" [(ngModel)]="txn.particular.uniqueName"
-                                                [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
+                                            <div class="d-flex update-ledger-account">
+                                                <span *ngIf="(
+                                                        (!crdSelect.isOpen && txn.particular.uniqueName) ||
+                                                        (crdSelect.isOpen && crdSelect.filter))">By</span>
+                                                <sh-select id="crdID" [notFoundLink]="true"
+                                                    (noResultsClicked)="showQuickAccountModal()"
+                                                    (keydown)="keydownPressed($event)"
+                                                    [options]="vm.flatternAccountList4Select | async" #crdSelect
+                                                    (click)="addBlankTrx('CREDIT', txn, $event)"
+                                                    (selected)="selectAccount($event,txn, crdSelect)"
+                                                    (onShow)="cbs.hide()" [showClear]="false"
+                                                    [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67"
+                                                    [useInBuiltFilterForFlattenAc]="true"
+                                                    [defaultValue]="txn.particular.name"
+                                                    [placeholder]="'By Select Accounts'">
 
-                                                <ng-template #optionTemplate let-option="option">
-                                                    <ng-container *ngIf="!option.additional?.stock">
-                                                        <a href="javascript:void(0)" class="list-item"
-                                                            style="border-bottom: 1px solid #ccc;">
-                                                            <div class="item">{{ option.label }}</div>
-                                                            <div class="item_unq">{{ option.additional?.uniqueName }}
-                                                            </div>
+                                                    <ng-template #optionTemplate let-option="option">
+                                                        <ng-container *ngIf="!option.additional?.stock">
+                                                            <a href="javascript:void(0)" class="list-item"
+                                                                style="border-bottom: 1px solid #ccc;">
+                                                                <div class="item">{{ option.label }}</div>
+                                                                <div class="item_unq">
+                                                                    {{ option.additional?.uniqueName }}
+                                                                </div>
+                                                            </a>
+                                                        </ng-container>
+
+                                                        <ng-container *ngIf="option.additional?.stock">
+                                                            <a href="javascript:void(0)" class="list-item"
+                                                                style="border-bottom: 1px solid #ccc;">
+                                                                <div class="item">{{ option.label }}</div>
+                                                                <div class="item_unq">
+                                                                    {{ option.additional?.uniqueName }}
+                                                                </div>
+                                                                <div class="item_stock">
+                                                                    Stock: {{ option.additional?.stock.name }}</div>
+                                                            </a>
+                                                        </ng-container>
+
+                                                    </ng-template>
+
+                                                    <ng-template #notFoundLinkTemplate>
+                                                        <a id="createNewId2" [ngClass]="{'active': keydownClassAdded}"
+                                                            class="notfound-option" [keyboardShortcut]="'alt+c'"
+                                                            (onShortcutPress)="toggleAsidePaneOpen()">
+                                                            <span [ngClass]="{'active': keydownClassAdded}">Create
+                                                                New</span>
+                                                            <span [ngClass]="{'active': keydownClassAdded}"
+                                                                class="pull-right">Alt+C</span>
                                                         </a>
-                                                    </ng-container>
+                                                    </ng-template>
+                                                </sh-select>
+                                            </div>
 
-                                                    <ng-container *ngIf="option.additional?.stock">
-                                                        <a href="javascript:void(0)" class="list-item"
-                                                            style="border-bottom: 1px solid #ccc;">
-                                                            <div class="item">{{ option.label }}</div>
-                                                            <div class="item_unq">{{ option.additional?.uniqueName }}
-                                                            </div>
-                                                            <div class="item_stock">
-                                                                Stock: {{ option.additional?.stock.name }}</div>
-                                                        </a>
-                                                    </ng-container>
 
-                                                </ng-template>
 
-                                                <ng-template #notFoundLinkTemplate>
-                                                    <a id="createNewId2" [ngClass]="{'active': keydownClassAdded}"
-                                                        class="notfound-option" [keyboardShortcut]="'alt+c'"
-                                                        (onShortcutPress)="toggleAsidePaneOpen()">
-                                                        <span [ngClass]="{'active': keydownClassAdded}">Create
-                                                            New</span>
-                                                        <span [ngClass]="{'active': keydownClassAdded}"
-                                                            class="pull-right">Alt+C</span>
-                                                    </a>
-                                                </ng-template>
-                                            </sh-select>
+
+
                                         </ng-template>
 
                                         <ng-template [ngIf]="txn?.isDiscount">
@@ -413,7 +444,8 @@
                 <span class="text-light font-12"> (Tax is compulsory)</span>
             </div>
             <ng-template #rcmTemplate>
-                <confirmation-modal [configuration]="rcmConfiguration" (buttonClicked)="handleRcmChange($event)"></confirmation-modal>
+                <confirmation-modal [configuration]="rcmConfiguration" (buttonClicked)="handleRcmChange($event)">
+                </confirmation-modal>
             </ng-template>
             <!-- reverse charge transction end  -->
             <!--  tourist scheme template start      -->
@@ -493,8 +525,7 @@
                             </div>
                         </ng-template>
 
-                        <div class="icon-box"
-                            *ngIf="(vm.showNewEntryPanel && vm.stockTrxEntry)">
+                        <div class="icon-box" *ngIf="(vm.showNewEntryPanel && vm.stockTrxEntry)">
                             <label class="fs20">=</label>
                         </div>
 
@@ -517,7 +548,8 @@
                             <label class="icon-minus font-12"></label>
                         </div>
 
-                        <div *ngIf="vm.showNewEntryPanel || !shouldShowAdvanceReceiptMandatoryFields" class="text-right table-amount">
+                        <div *ngIf="vm.showNewEntryPanel || !shouldShowAdvanceReceiptMandatoryFields"
+                            class="text-right table-amount">
                             <span auto-close="outsideClick">
                                 <update-ledger-discount #discount [discountAccountsDetails]="vm.discountArray"
                                     [ledgerAmount]="vm.selectedLedger.actualAmount"
@@ -670,15 +702,17 @@
                     <ng-container *ngIf="shouldShowRcmTaxableAmount">
                         <div class="taxable-amount-section">
                             <label class="primary_clr">Taxable Amount</label>
-                            <input type="text" name="taxable-amount" class="form-control text-right" [prefix]="vm.selectedPrefixForCurrency"
-                                [suffix]="vm.selectedSuffixForCurrency" [mask]="vm.inputMaskFormat"
+                            <input type="text" name="taxable-amount" class="form-control text-right"
+                                [prefix]="vm.selectedPrefixForCurrency" [suffix]="vm.selectedSuffixForCurrency"
+                                [mask]="vm.inputMaskFormat"
                                 [(ngModel)]="vm.selectedLedger.reverseChargeTaxableAmount" />
                         </div>
                     </ng-container>
                     <ng-container *ngIf="shouldShowItcSection">
                         <div class="taxable-amount-section">
                             <label class="primary_clr itc-label">ITC Type</label>
-                            <sh-select [(ngModel)]="vm.selectedLedger.itcAvailable" [placeholder]="'ITC Type'" [options]="availableItcList">
+                            <sh-select [(ngModel)]="vm.selectedLedger.itcAvailable" [placeholder]="'ITC Type'"
+                                [options]="availableItcList">
                             </sh-select>
                         </div>
                     </ng-container>
@@ -692,7 +726,8 @@
 
                     <ng-template>
                         <div class="clearfix adjust-receipt font-14">
-                            <p class="bold">Adjusted Receipts <a href="javascript:void(0)"><i class="icon-edit11 font-10"></i></a></p>
+                            <p class="bold">Adjusted Receipts <a href="javascript:void(0)"><i
+                                        class="icon-edit11 font-10"></i></a></p>
                             <p class="font-12 text-light mb-1">₹2400.00</p>
                             <div class="clearfix adjustment-field">
                                 <div class="row">
@@ -706,7 +741,8 @@
 
                                     <div class="col-md-4 col-sm-5 pl-05 pr-05">
                                         <div class="form-group">
-                                            <label>Amount<span class="text-danger">*</span> <span class="text-light font-12 ml-05">(Inclusive Tax)</span></label>
+                                            <label>Amount<span class="text-danger">*</span> <span
+                                                    class="text-light font-12 ml-05">(Inclusive Tax)</span></label>
                                             <input type="text" class="form-control mb-1" value="₹4,000.00" disabled>
                                             <input type="text" class="form-control mb-1" value="₹4,000.00" disabled>
                                         </div>
@@ -721,7 +757,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="font-12 text-light">Excess amount: ₹2000 <i class="icon-info pointer" tooltip="adjustment amount is more than receipts."></i></p>
+                            <p class="font-12 text-light">Excess amount: ₹2000 <i class="icon-info pointer"
+                                    tooltip="adjustment amount is more than receipts."></i></p>
                         </div>
                     </ng-template>
 
@@ -942,11 +979,12 @@
                         </div>
 
                         <div class="col-xs-12 pdT1 d-flex align-items-center xs-d-block" *ngIf="!isPettyCash">
-                                <div class="width-100 mb-05">
-                                    <ng-template>
-                                    <p>Note: The adjusted amount of the linked invoice/s is more than the receipt; update them first and try again.</p>
+                            <div class="width-100 mb-05">
+                                <ng-template>
+                                    <p>Note: The adjusted amount of the linked invoice/s is more than the receipt;
+                                        update them first and try again.</p>
                                 </ng-template>
-                                </div>
+                            </div>
 
                             <div class="d-flex">
                                 <button class="btn btn-danger" (click)="showDeleteEntryModal()">Delete</button>
@@ -1019,17 +1057,21 @@
         <div class="mr-3 xs-mr-0 mb-1">
             <div class="d-flex align-items-center">
                 <span class="pull-left">
-                        <input id="tourist-scheme" type="checkbox" name="touristSchemeApplicable" [(ngModel)]="vm.selectedLedger.touristSchemeApplicable" (ngModelChange)="touristSchemeApplicableToggle($event)">
+                    <input id="tourist-scheme" type="checkbox" name="touristSchemeApplicable"
+                        [(ngModel)]="vm.selectedLedger.touristSchemeApplicable"
+                        (ngModelChange)="touristSchemeApplicableToggle($event)">
 
-                    </span>
+                </span>
                 <span>Is this transaction applicable for Tourist Scheme?</span>
             </div>
         </div>
 
         <div *ngIf="vm.selectedLedger.touristSchemeApplicable">
             <div class="d-flex align-items-center justify-content-end ml-1 xs-justify-content-start">
-                <span class="nowrap">Passport Number  </span>
-                <input type="text" name="selectedLedger.passportNumber" placeholder="Passport Number" #passportNumber (blur)="allowAlphanumericChar(passportNumber)" (keypress)="allowAlphanumericChar(passportNumber)"  class="form-control width-115 ml-1" [(ngModel)]="vm.selectedLedger.passportNumber" />
+                <span class="nowrap">Passport Number </span>
+                <input type="text" name="selectedLedger.passportNumber" placeholder="Passport Number" #passportNumber
+                    (blur)="allowAlphanumericChar(passportNumber)" (keypress)="allowAlphanumericChar(passportNumber)"
+                    class="form-control width-115 ml-1" [(ngModel)]="vm.selectedLedger.passportNumber" />
             </div>
         </div>
     </div>

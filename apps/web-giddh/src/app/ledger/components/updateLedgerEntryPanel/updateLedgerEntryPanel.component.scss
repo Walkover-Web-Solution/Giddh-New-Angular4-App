@@ -210,12 +210,26 @@ span.eligible-ITC {
 .ledger-bottom {
     display: flex;
 }
+.ledger-head th {
+    color: #313a97;
+    padding-left: 0;
+    padding-bottom: 10px;
+}
+.update-ledger-account {
+    align-items: center;
+    span {
+        padding-left: 10px;
+    }
+    sh-select {
+        width: 100%;
+    }
+}
+/* responsive */
 @media only screen and (max-width: 1359px) {
     .ledger-bottom {
         display: block;
     }
 }
-
 
 @media only screen and (max-width: 1024px) {
     .ledger_book {

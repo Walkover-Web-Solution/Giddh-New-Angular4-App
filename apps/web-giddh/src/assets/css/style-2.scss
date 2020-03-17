@@ -495,7 +495,8 @@ input {
         -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
     }
     75% {
-        -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+        -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg)
+            scale(0.5);
     }
     100% {
         -webkit-transform: rotate(-360deg);
@@ -517,7 +518,8 @@ input {
     }
     75% {
         transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-        -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+        -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg)
+            scale(0.5);
     }
     100% {
         transform: rotate(-360deg);
@@ -2203,7 +2205,8 @@ input[type="checkbox"]:checked:before {
 }
 
 input[type="checkbox"]:before {
-    -webkit-transition: -webkit-transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
+    -webkit-transition: -webkit-transform 0.4s
+        cubic-bezier(0.45, 1.8, 0.5, 0.75);
     -moz-transition: -moz-transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
     transition: transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
     -webkit-transform: rotate(-45deg) scale(0, 0);
@@ -4993,13 +4996,13 @@ label {
 }
 
 .select2-container--default
-.select2-selection--single
-.select2-selection__rendered {
+    .select2-selection--single
+    .select2-selection__rendered {
     line-height: inherit !important;
 }
 
 .select2-container--default
-.select2-results__option--highlighted[aria-selected] {
+    .select2-results__option--highlighted[aria-selected] {
     background-color: #333 !important;
 }
 
@@ -5860,10 +5863,10 @@ input[type="checkbox"][disabled]:after {
 }
 
 #verifyMobile
-.select2-parent
-.select2-container--default
-.select2-selection--single
-.select2-selection__arrow {
+    .select2-parent
+    .select2-container--default
+    .select2-selection--single
+    .select2-selection__arrow {
     height: 44px;
 }
 
@@ -7104,9 +7107,9 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine
-.transactions-overview
-.gstr-transactions-summary
-.transactions-table {
+    .transactions-overview
+    .gstr-transactions-summary
+    .transactions-table {
     border: 1px solid #ededed;
 }
 
@@ -7121,10 +7124,10 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine
-.table.transactions-table
-thead:first-child
-tr:first-child
-th:first-child {
+    .table.transactions-table
+    thead:first-child
+    tr:first-child
+    th:first-child {
     padding-left: 20px;
 }
 
@@ -7187,19 +7190,19 @@ th:first-child {
 }
 
 .tax-engine
-.table.transactions-summary-table
-> tbody
-> tr:not(.secondary-row)
-+ tr.secondary-row
-> td {
+    .table.transactions-summary-table
+    > tbody
+    > tr:not(.secondary-row)
+    + tr.secondary-row
+    > td {
     border-top: 1px solid #ededed;
 }
 
 .tax-engine
-.table.transactions-summary-table
-> tbody
-> tr.secondary-row
-> td:nth-child(1) {
+    .table.transactions-summary-table
+    > tbody
+    > tr.secondary-row
+    > td:nth-child(1) {
     padding-left: 50px;
 }
 
@@ -7225,10 +7228,10 @@ th:first-child {
 }
 
 .tax-engine
-.table.transactions-summary-table
-> tbody
-> tr.secondary-row
-> td:first-child {
+    .table.transactions-summary-table
+    > tbody
+    > tr.secondary-row
+    > td:first-child {
     border-right: none;
 }
 
@@ -7560,19 +7563,19 @@ th:first-child {
 }
 
 .tax-engine
-.table.reconciliations-table
-tbody
-> tr:hover
-.actions-dropdown-btn {
+    .table.reconciliations-table
+    tbody
+    > tr:hover
+    .actions-dropdown-btn {
     border: 1px solid #2a85fb;
 }
 
 .tax-engine .table.reconciliations-table .actions-dropdown-btn,
 .tax-engine
-.table.reconciliations-table
-tbody
-> tr:hover
-.reconcile-row-action {
+    .table.reconciliations-table
+    tbody
+    > tr:hover
+    .reconcile-row-action {
     color: #2a85fb;
 }
 
@@ -7674,10 +7677,10 @@ tbody
 }
 
 .tax-engine
-.table.transactions-summary-table
-> tbody
-> tr.secondary-row:hover
-> td {
+    .table.transactions-summary-table
+    > tbody
+    > tr.secondary-row:hover
+    > td {
     background-color: transparent;
 }
 
@@ -8876,6 +8879,22 @@ input.checkbox-custom[type="checkbox"] {
     padding: 0;
 }
 
+.select2-parent.select2-ledger .update-ledger-account input {
+    padding-left: 4px !important;
+}
+.select2-parent.select2-ledger
+    .update-ledger-account
+    input.form-control.focused {
+    padding-left: 10px !important;
+}
+.select2-parent.select2-ledger .ledger-account-label input.form-control {
+    padding-left: 1px !important;
+}
+.select2-parent.select2-ledger
+    .ledger-account-label
+    input.form-control.focused {
+    padding-left: 10px !important;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9010,8 +9029,8 @@ input.checkbox-custom[type="checkbox"] {
 
 @media (max-width: 840px) {
     .card-invoiceTable
-    #tax-control-multi-select.multi-select
-    input.form-control[readonly],
+        #tax-control-multi-select.multi-select
+        input.form-control[readonly],
     .card-invoiceTable .multi-select input.form-control {
         background-position: 98% !important;
     }
@@ -9109,9 +9128,9 @@ input.checkbox-custom[type="checkbox"] {
         background: transparent;
     }
     .tax-engine
-    .transactions-overview
-    .gstr-transactions-summary
-    .transactions-table {
+        .transactions-overview
+        .gstr-transactions-summary
+        .transactions-table {
         border: none;
     }
     .tax-engine .table-striped > tbody > tr:nth-child(odd) > td,
@@ -9591,14 +9610,21 @@ input.checkbox-custom[type="checkbox"] {
     }
 }
 
-
 /*** iPhone and iOS Form Input Zoom Fixes ***/
 /* Fix Input Zoom on devices older than iPhone 5: */
 @media screen and (device-aspect-ratio: 2/3) {
-    select, textarea, input[type="text"], input[type="password"],
-    input[type="datetime"], input[type="datetime-local"],
-    input[type="date"], input[type="month"], input[type="time"],
-    input[type="week"], input[type="number"], input[type="email"],
+    select,
+    textarea,
+    input[type="text"],
+    input[type="password"],
+    input[type="datetime"],
+    input[type="datetime-local"],
+    input[type="date"],
+    input[type="month"],
+    input[type="time"],
+    input[type="week"],
+    input[type="number"],
+    input[type="email"],
     input[type="url"] {
         font-size: 16px;
     }
@@ -9606,10 +9632,18 @@ input.checkbox-custom[type="checkbox"] {
 
 /* Fix Input Zoom on iPhone 5, 5C, 5S, iPod Touch 5g */
 @media screen and (device-aspect-ratio: 40/71) {
-    select, textarea, input[type="text"], input[type="password"],
-    input[type="datetime"], input[type="datetime-local"],
-    input[type="date"], input[type="month"], input[type="time"],
-    input[type="week"], input[type="number"], input[type="email"],
+    select,
+    textarea,
+    input[type="text"],
+    input[type="password"],
+    input[type="datetime"],
+    input[type="datetime-local"],
+    input[type="date"],
+    input[type="month"],
+    input[type="time"],
+    input[type="week"],
+    input[type="number"],
+    input[type="email"],
     input[type="url"] {
         font-size: 16px;
     }
@@ -9617,10 +9651,18 @@ input.checkbox-custom[type="checkbox"] {
 
 /* Fix Input Zoom on iPhone 6, iPhone 6s, iPhone 7  */
 @media screen and (device-aspect-ratio: 375/667) {
-    select, textarea, input[type="text"], input[type="password"],
-    input[type="datetime"], input[type="datetime-local"],
-    input[type="date"], input[type="month"], input[type="time"],
-    input[type="week"], input[type="number"], input[type="email"],
+    select,
+    textarea,
+    input[type="text"],
+    input[type="password"],
+    input[type="datetime"],
+    input[type="datetime-local"],
+    input[type="date"],
+    input[type="month"],
+    input[type="time"],
+    input[type="week"],
+    input[type="number"],
+    input[type="email"],
     input[type="url"] {
         font-size: 16px;
     }
@@ -9628,10 +9670,18 @@ input.checkbox-custom[type="checkbox"] {
 
 /* Fix Input Zoom on iPhone 6 Plus, iPhone 6s Plus, iPhone 7 Plus, iPhone 8, iPhone X, XS, XS Max  */
 @media screen and (device-aspect-ratio: 9/16) {
-    select, textarea, input[type="text"], input[type="password"],
-    input[type="datetime"], input[type="datetime-local"],
-    input[type="date"], input[type="month"], input[type="time"],
-    input[type="week"], input[type="number"], input[type="email"],
+    select,
+    textarea,
+    input[type="text"],
+    input[type="password"],
+    input[type="datetime"],
+    input[type="datetime-local"],
+    input[type="date"],
+    input[type="month"],
+    input[type="time"],
+    input[type="week"],
+    input[type="number"],
+    input[type="email"],
     input[type="url"] {
         font-size: 16px;
     }
