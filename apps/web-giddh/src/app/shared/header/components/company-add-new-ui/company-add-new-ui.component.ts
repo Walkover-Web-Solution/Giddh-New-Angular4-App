@@ -1,18 +1,18 @@
-import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit, ViewChild } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
-import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
-import { LocationService } from '../../../../services/location.service';
-import { CompanyActions } from '../../../../actions/company.actions';
-import { GeneralActions } from '../../../../actions/general/general.actions';
-import { LoginActions } from '../../../../actions/login.action';
-import { CommonActions } from '../../../../actions/common.actions';
-import { select, Store } from '@ngrx/store';
-import { Router } from '@angular/router';
-import { AuthService } from '../../../../theme/ng-social-login-module/index';
-import { GeneralService } from '../../../../services/general.service';
-import { AuthenticationService } from '../../../../services/authentication.service';
-import { AppState } from '../../../../store';
+import {take, takeUntil, distinctUntilChanged} from 'rxjs/operators';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit, ViewChild} from '@angular/core';
+import {ModalDirective} from 'ngx-bootstrap';
+import {VerifyMobileActions} from '../../../../actions/verifyMobile.actions';
+import {LocationService} from '../../../../services/location.service';
+import {CompanyActions} from '../../../../actions/company.actions';
+import {GeneralActions} from '../../../../actions/general/general.actions';
+import {LoginActions} from '../../../../actions/login.action';
+import {CommonActions} from '../../../../actions/common.actions';
+import {select, Store} from '@ngrx/store';
+import {Router} from '@angular/router';
+import {AuthService} from '../../../../theme/ng-social-login-module/index';
+import {GeneralService} from '../../../../services/general.service';
+import {AuthenticationService} from '../../../../services/authentication.service';
+import {AppState} from '../../../../store';
 import {
     CompanyRequest,
     CompanyResponse,
@@ -20,15 +20,14 @@ import {
     StateDetailsRequest,
     CompanyCreateRequest
 } from '../../../../models/api-models/Company';
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import { CompanyService } from '../../../../services/companyService.service';
-import { ToasterService } from '../../../../services/toaster.service';
-import { CommonService } from '../../../../services/common.service';
-import { userLoginStateEnum } from '../../../../models/user-login-state';
-import { UserDetails } from 'apps/web-giddh/src/app/models/api-models/loginModels';
-import { NgForm } from '@angular/forms';
-import { CountryRequest } from "../../../../models/api-models/Common";
+import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
+import {IOption} from '../../../../theme/ng-virtual-select/sh-options.interface';
+import {CompanyService} from '../../../../services/companyService.service';
+import {ToasterService} from '../../../../services/toaster.service';
+import {userLoginStateEnum} from '../../../../models/user-login-state';
+import {UserDetails} from 'apps/web-giddh/src/app/models/api-models/loginModels';
+import {NgForm} from '@angular/forms';
+import {CountryRequest} from "../../../../models/api-models/Common";
 import * as googleLibphonenumber from 'google-libphonenumber';
 
 @Component({
@@ -97,16 +96,17 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public countryCurrency: any[] = [];
     public isMobileNumberValid: boolean = false;
+
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public isNewUser: boolean = false;
     public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public selectedCountry: string = '';
 
     constructor(private socialAuthService: AuthService,
-        private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-        private _location: LocationService, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService,
-        private _aunthenticationService: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService,
-        private _toaster: ToasterService, private commonActions: CommonActions
+                private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
+                private _location: LocationService, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService,
+                private _aunthenticationService: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService,
+                private _toaster: ToasterService, private commonActions: CommonActions
     ) {
         this.getCountry();
         this.getCurrency();
@@ -116,7 +116,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? '' : AppUrl + APP_FOLDER + '';
+        this.imgPath = (isElectron || isCordova) ? '' : AppUrl + APP_FOLDER + '';
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {
             this.company = this._generalService.createNewCompany;
@@ -174,9 +174,9 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         });
     }
 
-	/**
-	 * createCompany
-	 */
+    /**
+     * createCompany
+     */
     public createCompany(mobileNoEl) {
         this.checkMobileNo(mobileNoEl);
 
@@ -259,6 +259,12 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.closeCompanyModal.emit();
         if (isElectron) {
             this.store.dispatch(this._loginAction.ClearSession());
+        } else if (isCordova) {
+            (window as any).plugins.googleplus.logout(
+                (msg) => {
+                    this.store.dispatch(this._loginAction.ClearSession());
+                }
+            );
         } else {
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
                 if (val) {
@@ -376,7 +382,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
-                    this.currencies.push({ label: res[key].code, value: res[key].code });
+                    this.currencies.push({label: res[key].code, value: res[key].code});
                 });
                 this.currencySource$ = observableOf(this.currencies);
             } else {
@@ -389,7 +395,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res.callingCodes).forEach(key => {
-                    this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
+                    this.countryPhoneCode.push({label: res.callingCodes[key], value: res.callingCodes[key]});
                 });
                 this.callingCodesSource$ = observableOf(this.countryPhoneCode);
             } else {

@@ -3,12 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 @Component({
     selector: 'edit-template-filters',
     templateUrl: 'edit.filters.component.html',
-    styles: [`
-    .active {
-      background: #fff !important;
-
-    }
-  `]
+    styleUrls: ['edit.filters.component.scss']
 })
 
 export class EditFiltersContainersComponent implements OnChanges {

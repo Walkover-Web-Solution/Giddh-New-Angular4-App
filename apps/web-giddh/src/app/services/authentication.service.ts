@@ -2,10 +2,8 @@ import {catchError, map} from 'rxjs/operators';
 import {Inject, Injectable, Optional} from '@angular/core';
 
 import {Observable} from 'rxjs';
-import {Configuration, URLS} from '../app.constants';
 import {Router} from '@angular/router';
 import {HttpWrapperService} from './httpWrapper.service';
-import {LoaderService} from './loader.service';
 import {GMAIL_API, LOGIN_API} from './apiurls/login.api';
 import {BaseResponse} from '../models/api-models/BaseResponse';
 import {
@@ -23,6 +21,8 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {GeneralService} from './general.service';
 import {IServiceConfigArgs, ServiceConfig} from './service.config';
 import {LoginWithPassword, SignUpWithPassword} from '../models/api-models/login';
+import {isCordova} from "@giddh-workspaces/utils";
+import {UserAgent} from "@ionic-native/user-agent/ngx";
 
 @Injectable()
 export class AuthenticationService {
@@ -32,8 +32,12 @@ export class AuthenticationService {
                 public _http: HttpWrapperService,
                 public _router: Router,
                 private _generalService: GeneralService,
-                @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
-
+                @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs, private userAgent: UserAgent) {
+        if (isCordova()) {
+            this.userAgent.set('Mozilla/5.0 (Linux; U; Android 2.2) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1')
+                .then((res: any) => console.log(res))
+                .catch((error: any) => console.error(error));
+        }
     }
 
     public SignupWithEmail(datatoSend: any): Observable<BaseResponse<string, string>> {
@@ -113,6 +117,7 @@ export class AuthenticationService {
     }
 
     public LoginWithGoogle(token: string) {
+        // debugger;
         let args: any = {headers: {}};
         args.headers['cache-control'] = 'no-cache';
         args.headers['Content-Type'] = 'application/json';

@@ -24,7 +24,8 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        //this.imgPath = (isElectron||isCordova)  ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = (isElectron|| isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
     }
 
     /**
@@ -40,6 +41,7 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
         this.filteredTransactions = orderBy(this.filteredTransactions, [col], [order]);
     }
 
+
     public pageChanged(event: PageChangedEvent) {
         let startIndex = (event.page - 1) * this.itemsPerPage;
         let endIndex = Math.min(startIndex + this.itemsPerPage - 1, this.failedTransactions.length - 1);
@@ -50,5 +52,4 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
 }

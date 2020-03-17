@@ -161,38 +161,28 @@
                 <!-- edit color end -->
             </li>
 
-            <li [hidden]="templateUISectionVisibility.font" (click)="onChangeVisibility('font')">
+            <li *ngIf="!templateUISectionVisibility.font" (click)="onChangeVisibility('font')">
                 <i class="ico-txt"></i> <label>Select different fonts</label>
             </li>
-            <li [hidden]="!templateUISectionVisibility.font">
+            <li *ngIf="templateUISectionVisibility.font">
                 <i class="ico-txt"></i> <label>Select different fonts</label>
                 <div class="col-xs-9 font-selector mrT1 form-group">
                     <div class="row">
-                        <sh-select [options]="presetFonts" (selected)="onFontSelect($event)"
+                        <sh-select [defaultValue]="selectedFont" [options]="presetFonts" (selected)="onFontSelect($event)"
                             [placeholder]="'Choose font'" [multiple]="false" [ItemHeight]="33"></sh-select>
-                        <!-- <div class="form-control" fxLayout="column" (fontPickerChange)='onFontSelect(font)' fxLayoutAlign="center center" fxFlex [(fontPicker)]="font" [fpWidth]="'auto'" [fpSizeSelect]='false' [fpStyleSelect]='false' [fpPosition]="'bottom'" [fpPositionOffset]="'0%'"
-                [fpPositionRelativeToArrow]="false" [fpPresetLabel]="'Preset fonts'" [fpPresetFonts]="presetFonts">
-                {{font.family}}
-                <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
-            </div> -->
                     </div>
                 </div>
             </li>
             <ng-container>
-                <li [hidden]="templateUISectionVisibility.fontSize" (click)="onChangeVisibility('fontSize')">
+                <li *ngIf="!templateUISectionVisibility.fontSize" (click)="onChangeVisibility('fontSize')">
                     <i class="ico-txt"></i> <label>Select different fonts size</label>
                 </li>
-                <li [hidden]="!templateUISectionVisibility.fontSize">
+                <li *ngIf="templateUISectionVisibility.fontSize">
                     <i class="ico-txt"></i> <label>Select different fonts size</label>
                     <div class="col-xs-9 font-selector mrT1 form-group">
                         <div class="row">
-                            <sh-select [options]="presetFontsSize" (selected)="onFontSizeSelect($event)"
+                            <sh-select [defaultValue]="selectedFontSize" [options]="presetFontsSize" (selected)="onFontSizeSelect($event)"
                                 [placeholder]="'Choose font size'" [multiple]="false" [ItemHeight]="33"></sh-select>
-                            <!-- <div class="form-control" fxLayout="column" (fontPickerChange)='onFontSelect(font)' fxLayoutAlign="center center" fxFlex [(fontPicker)]="font" [fpWidth]="'auto'" [fpSizeSelect]='false' [fpStyleSelect]='false' [fpPosition]="'bottom'" [fpPositionOffset]="'0%'"
-                [fpPositionRelativeToArrow]="false" [fpPresetLabel]="'Preset fonts'" [fpPresetFonts]="presetFonts">
-                {{font.family}}
-                <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
-            </div> -->
                         </div>
                     </div>
                 </li>
