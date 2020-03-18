@@ -29,6 +29,7 @@ export class ExportLedgerComponent implements OnInit {
     public order: string = 'asc';
     public emailTypeMini: string = '';
     public emailTypeDetail: string;
+    public emailTypeColumnar: string;
     public emailData: string = '';
     public withInvoiceNumber: boolean = false;
     public universalDate$: Observable<any>;
@@ -45,6 +46,7 @@ export class ExportLedgerComponent implements OnInit {
                 this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
                 this.emailTypeMini = isAdmin ? 'admin-condensed' : 'view-condensed';
                 this.emailTypeDetail = isAdmin ? 'admin-detailed' : 'view-detailed';
+                this.emailTypeColumnar = isAdmin ? 'admin-columnr' : 'view-columnr';
             }
         });
     }
