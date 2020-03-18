@@ -95,10 +95,15 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     public ngOnChanges(changes: SimpleChanges) {
         this.previousStart = undefined;
         this.previousEnd = undefined;
-        if (this.items[0]) {
+        let currentItemIndex = -1;
+        if (this.selectedValues && this.selectedValues.length > 0) {
+            currentItemIndex = this.items.findIndex(item => item.value === this.selectedValues[0].value);
+            this.items[currentItemIndex].isHilighted = true;
+        }
+        if (currentItemIndex === -1 && this.items[0]) {
+            // Selected value not found highlight first item as default
             this.items[0].isHilighted = true;
         }
-
         this.refresh();
     }
 

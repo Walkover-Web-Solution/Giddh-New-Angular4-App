@@ -274,13 +274,23 @@
                                 <p class="fs20 b pbR1">
                                     <span class="balance-due">{{isProformaInvoice || isEstimateInvoice ? 'Total Amount' : 'Balance Due'}}</span>
                                     <span class="sp-rupees" *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}
-                                        <strong>{{invFormData.voucherDetails.balanceDue | giddhCurrency}}</strong></span>
+                                        <strong>
+                                            <ng-container *ngIf="adjustPaymentBalanceDueData">
+                                                {{adjustPaymentBalanceDueData | giddhCurrency}}</ng-container>
+                                            <ng-container *ngIf="!adjustPaymentBalanceDueData">
+                                                {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</ng-container>
+                                        </strong></span>
                                     <!-- added multicurrency feature make it functional to change into appropriate currency -->
                                     <span class="sp-rupees" *ngIf='isMulticurrencyAccount'>
                                         <span *ngIf="isMulticurrencyAccount">{{baseCurrencySymbol}}</span>
-                                    <span>{{invFormData.voucherDetails.balanceDue * exchangeRate | giddhCurrency}}</span>
+                                    <span>{{invFormData.voucherDetails.balanceDue * exchangeRate - adjustPaymentBalanceDueData | giddhCurrency}}</span>
                                     </span>
-                                    <span class="sp-rupees" *ngIf='!isMulticurrencyAccount'>{{invFormData.voucherDetails.balanceDue | giddhCurrency}}</span>
+                                    <span class="sp-rupees" *ngIf='!isMulticurrencyAccount'>
+                                        <ng-container *ngIf="adjustPaymentBalanceDueData">
+                                            {{adjustPaymentBalanceDueData | giddhCurrency}}</ng-container>
+                                        <ng-container *ngIf="!adjustPaymentBalanceDueData">
+                                            {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</ng-container>
+                                    </span>
                                 </p>
                             </div>
 
@@ -345,7 +355,7 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
-                                        <sh-select name="warehouse" [placeholder]="'Select Warehouse'" [(ngModel)]="selectedWarehouse" [options]="warehouses">
+                                        <sh-select class="multi-select" name="warehouse" [placeholder]="'Select Warehouse'" [(ngModel)]="selectedWarehouse" [options]="warehouses">
                                         </sh-select>
                                     </div>
                                 </div>
@@ -453,8 +463,8 @@
                                         <div class="col-sm-6 pl-0">
                                             <input id="tourist-scheme" type="checkbox" name="touristSchemeApplicable" class="checkbox-custom" [(ngModel)]="invFormData.touristSchemeApplicable" (ngModelChange)="touristSchemeApplicableToggle()">
                                             <label for="tourist-scheme" class="checkbox-custom-label">
-                                            Is this transaction applicable for Tourist Scheme?
-                                        </label>
+                                                Is this transaction applicable for Tourist Scheme?
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -548,7 +558,8 @@
                         <thead>
                             <tr>
                                 <th *ngFor="let item of theadArrReadOnly;" [hidden]="!item.display" class="theadOfSalesInvoice" [ngClass]="item.label">
-                                    {{item.label}} <span *ngIf="item.label === 'Tax' && isRcmEntry">(RCM)<sup class="mandatory-asterisk" >*</sup></span>
+                                    {{item.label}} <span *ngIf="item.label === 'Tax' && isRcmEntry">(RCM)<sup
+                                            class="mandatory-asterisk">*</sup></span>
                                 </th>
                             </tr>
                         </thead>
@@ -784,8 +795,9 @@
                                                             <div class="hsnCode text-right" (click)="toggleHsnSacDropDown()">
                                                                 <label>HSN/SAC:</label>
                                                                 <span>
-                                                                    {{(inventorySettings?.manageInventory || !transaction.sacNumberExists) ? transaction.hsnNumber : transaction.sacNumber }}
-                                                                    <span *ngIf="!transaction.hsnNumber && !transaction.sacNumber"
+                                                                    {{(inventorySettings?.manageInventory || !transaction.sacNumber) ? transaction.hsnNumber : transaction.sacNumber }}
+                                                                    <span
+                                                                        *ngIf="!transaction.hsnNumber && !transaction.sacNumber"
                                                                         class="updateText">Update
                                                                     </span>
                                                                 <span class="edit-icon cp">
@@ -875,7 +887,7 @@
                                     <td class="pos-rel dropdown-container item-tax" style="height:1px;">
                                         <div class="td_Wrapper">
                                             <div class="text-right" style="flex:1;">
-                                                <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="[{ type: ['GST', 'commongst', 'InputGST'], count:1 }]"
+                                                <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="allowedSelectionOfAType"
                                                     [showHeading]="false" [rootClass]="'salseInvoicetable'" (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)" (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat" [prefixInput]="invFormData.accountDetails.currencySymbol"
                                                     [suffixInput]="selectedSuffixForCurrency">
                                                 </tax-control>
@@ -1152,36 +1164,57 @@
                                 <div (click)="clickedInside($event)" id="deposit-dropdown" class="form-group pd1">
                                     <p>Deposit</p>
                                     <ul>
-
-                                        <ng-template>
+                                        <ng-container *ngIf="isSalesInvoice">
                                             <li role="menuitem" class="mrT1 ">
                                                 <div class="clearfix paymentMode">
 
                                                     <div class="pull-right balanceDueText">
                                                         <div class="clearfix mb-1">
                                                             <span class="pd0 mr-2 d-inline-block">
-                                                                <input class="radio-custom cp ml0" name="advanceReceipt" checked="" id="adjustAmountNo" type="radio">
-                                                                <label class="radio-custom-label" for="adjustAmountNo">No</label>
-                                                            </span>
+                                                                                    <input class="radio-custom cp ml0"
+                                                                                        name="advanceReceipt"
+                                                                                        [value]="false"
+                                                                                        name="isAdjustAmount"
+                                                                                        [(ngModel)]="isAdjustAmount"
+                                                                                        (ngModelChange)="clickAdjustAmount($event)"
+                                                                                        id="adjustAmountNo"
+                                                                                        type="radio">
+                                                                                    <label class="radio-custom-label"
+                                                                                        for="adjustAmountNo"
+                                                                                        (click)="clickAdjustAmount(false)">No</label>
+                                                                                </span>
                                                             <span class="pd0 d-inline-block">
-                                                                <input class="radio-custom cp ml0" name="advanceReceipt" id="adjustAmountYes" type="radio">
-                                                                <label class="radio-custom-label" for="adjustAmountYes" (click)="openModal(adjustPayment)">Yes</label>
-                                                            </span>
+                                                                                    <input class="radio-custom cp ml0"
+                                                                                        name="advanceReceipt"
+                                                                                        [value]="true"
+                                                                                        name="isAdjustAmount"
+                                                                                        (ngModelChange)="clickAdjustAmount($event)"
+                                                                                        [(ngModel)]="isAdjustAmount"
+                                                                                        id="adjustAmountYes"
+                                                                                        type="radio">
+                                                                                    <label class="radio-custom-label"
+                                                                                        for="adjustAmountYes"
+                                                                                        (click)="clickAdjustAmount(true)">Yes</label>
+                                                                                </span>
                                                         </div>
 
                                                         <div class="clearfix">
                                                             <span class="pull-left">
-                                                                <p class="text-light mb-0">Advance Receipt</p>
-                                                                <p class="text-light">1200.00</p>
-                                                            </span>
-                                                            <a href="javascript:void(0)" (click)="openModal(adjustPayment)" class="font-12 pl-1 color-primary"><i class="icon-edit11"></i></a>
+                                                                                    <p class="text-light mb-0">Advance
+                                                                                        Receipt</p>
+                                                                                    <p class="text-light">
+                                                                                        {{adjustPaymentData.totalAdjustedAmount | giddhCurrency}}
+                                                                                    </p>
+                                                                                </span>
+                                                            <a href="javascript:void(0)" (click)="clickAdjustAmount(true)" class="font-12 pl-1 color-primary"><i
+                                                                                        class="icon-edit11"></i></a>
                                                         </div>
                                                     </div>
 
                                                     <label class="pull-right">Adjust Amount</label>
                                                 </div>
                                             </li>
-                                        </ng-template>
+                                        </ng-container>
 
                                         <li role="menuitem" class="mrT1 ">
                                             <div class="clearfix paymentMode">
@@ -1218,7 +1251,12 @@
                                         <li class="clearfix mrT1 biggerDollar" *ngIf="isSalesInvoice ">
                                             <strong class="pull-right balanceDueText"> <span
                                                                         *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>
-                                                                    {{invFormData.voucherDetails.balanceDue | giddhCurrency}}
+                                                                    <ng-container *ngIf="adjustPaymentBalanceDueData">
+                                                                        {{adjustPaymentBalanceDueData | giddhCurrency }}
+                                                                    </ng-container>
+                                                                    <ng-container *ngIf="!adjustPaymentBalanceDueData">
+                                                                        {{invFormData.voucherDetails.balanceDue | giddhCurrency }}
+                                                                    </ng-container>
                                                                 </strong>
                                             <strong class="pull-right">Balance Due</strong>
                                         </li>
@@ -1490,8 +1528,9 @@
                                                         <div class="hsnCode text-right" (click)="toggleHsnSacDropDown()">
                                                             <label>HSN/SAC:</label>
                                                             <span>
-                                                                            {{(inventorySettings?.manageInventory || !transaction.sacNumberExists) ? transaction.hsnNumber : transaction.sacNumber }}
-                                                                            <span *ngIf="!transaction.hsnNumber && !transaction.sacNumber"
+                                                                            {{(inventorySettings?.manageInventory || !transaction.sacNumber) ? transaction.hsnNumber : transaction.sacNumber }}
+                                                                            <span
+                                                                                *ngIf="!transaction.hsnNumber && !transaction.sacNumber"
                                                                                 class="updateText">Update
                                                                             </span>
                                                             <span class="edit-icon cp">
@@ -1636,7 +1675,7 @@
                                     <label class="card-label text-right">Tax</label>
 
                                     <div class="text-right" style="flex:1;">
-                                        <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="[{ type: ['GST', 'commongst', 'InputGST'], count:1 }]"
+                                        <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="allowedSelectionOfAType"
                                             [showHeading]="false" [rootClass]="'salseInvoicetable'" (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)" (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat" [prefixInput]="invFormData.accountDetails.currencySymbol"
                                             [suffixInput]="selectedSuffixForCurrency">
                                         </tax-control>
@@ -1946,17 +1985,17 @@
             <!-- region generate mode -->
             <div class="pull-right pr updateMode" *ngIf="!isUpdateMode">
                 <button type="button" (click)="resetInvoiceForm(invoiceForm)" class="btn btn-danger d-inline-block v-align-middle">Clear
-                </button>
+                            </button>
 
                 <!-- region purchase invoice -->
                 <span class="d-inline-block v-align-middle" *ngIf="isPurchaseInvoice">
-                    <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
+                                <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
                             class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c
                         </button> -->
-                    <button type="button" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
-                        class="btn btn-default">Save
-                    </button>
-                </span>
+                                <button type="button" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
+                                    class="btn btn-default">Save
+                                </button>
+                            </span>
                 <!-- endregion -->
 
                 <!-- region non purchase -->
@@ -2178,15 +2217,25 @@
     </div>
 </div>
 
+<div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent [isUpdateMode]="isUpdateMode" [invoiceFormDetails]="invFormData" [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData" (closeModelEvent)="closeAdvanceReceiptModal()"
+                (submitClicked)="getAdvanceReceiptAdjustData($event)">
+            </advance-receipt-adjustment-component>
+        </div>
+    </div>
+</div>
 
 
-<!-- Adjust Payment modal start -->
-<ng-template #adjustPayment>
+
+<!-- Need to remove  -->
+<!-- <ng-template>
     <div class="modal-header">
         <h4 class="modal-title bg pull-left">Adjust Payment</h4>
         <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-      <span aria-hidden="true">&times;</span>
-    </button>
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="modal-body font-14">
         <form #generateTransporterForm="ngForm" action="">
@@ -2224,7 +2273,8 @@
 
                 <div class="col-sm-3">
                     <div class="form-group">
-                        <label for="name">Amount<span class="text-danger">* </span> <span class="text-light"> (Inclusive Tax)</span></label>
+                        <label for="name">Amount<span class="text-danger">* </span> <span class="text-light"> (Inclusive
+                                Tax)</span></label>
                         <input id="name" type="text" class="form-control" value="1200.00" [(ngModel)]="tempDateParams.Amount">
                     </div>
                 </div>
@@ -2235,7 +2285,8 @@
                     </div>
                 </div>
                 <div class="col-sm-3">
-                    <a href="javascript:void(0)" class="font-22 text-light pt-3 d-inline-block"><i class="icon-trash"></i></a>
+                    <a href="javascript:void(0)" class="font-22 text-light pt-3 d-inline-block"><i
+                            class="icon-trash"></i></a>
                 </div>
             </div>
 
@@ -2267,7 +2318,8 @@
                     </div>
                 </div>
                 <div class="col-sm-3">
-                    <a href="javascript:void(0)" class="font-22 text-light pt-05 d-inline-block"><i class="icon-trash"></i></a>
+                    <a href="javascript:void(0)" class="font-22 text-light pt-05 d-inline-block"><i
+                            class="icon-trash"></i></a>
                 </div>
             </div>
             <p><a href="javascript:void(0)" class="font-14"><span class="font-16">+</span> Add New Line</a></p>
@@ -2280,14 +2332,16 @@
 
                     <div class="col-md-8 col-sm-8 col-xs-7">
                         <span class="pd0 mr-2 d-inline-block">
-                        <input name="options" class="radio-custom cp ml0" id="deductedNo" [(ngModel)]="options" type="radio" [value]="true" [checked]="options"/>
-                        <label for="deductedNo" class="radio-custom-label">No</label>
-                    </span>
+                            <input name="options" class="radio-custom cp ml0" id="deductedNo" [(ngModel)]="options"
+                                type="radio" [value]="true" [checked]="options" />
+                            <label for="deductedNo" class="radio-custom-label">No</label>
+                        </span>
 
                         <span class="pd0 mr-2 d-inline-block">
-                        <input name="options" class="radio-custom cp ml0" [(ngModel)]="options" id="deductedYes" type="radio" [value]="false" [checked]="!options"/>
-                        <label for="deductedYes" class="radio-custom-label">Yes</label>
-                    </span>
+                            <input name="options" class="radio-custom cp ml0" [(ngModel)]="options" id="deductedYes"
+                                type="radio" [value]="false" [checked]="!options" />
+                            <label for="deductedYes" class="radio-custom-label">Yes</label>
+                        </span>
                     </div>
                 </div>
 
@@ -2321,5 +2375,5 @@
 
         </form>
     </div>
-</ng-template>
+</ng-template> -->
 <!-- Adjust Payment modal start -->

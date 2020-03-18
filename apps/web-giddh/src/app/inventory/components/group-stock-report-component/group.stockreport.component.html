@@ -395,7 +395,7 @@
                 </tr>
             </tbody>
 
-            <tbody *ngIf="groupStockReport && groupStockReport.count < 1 && !groupStockReportInProcess">
+            <tbody *ngIf="(groupStockReport && groupStockReport.count < 1 && !groupStockReportInProcess) || groupNotFoundMessage">
                 <tr>
                     <!-- in case of all entity with group -->
                     <td colspan="10" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'"
@@ -404,7 +404,7 @@
                         class="text-center empty_table">
                         <!-- in case of all entity with group -->
                         <img src="assets/images/search-data-not-found.svg" />
-                        <h1>No Report Found !!</h1>
+                        <h1 [class.group-not-found]="groupNotFoundMessage">{{ (groupNotFoundMessage) ? groupNotFoundMessage : 'No Report Found !!' }}</h1>
                     </td>
                 </tr>
             </tbody>

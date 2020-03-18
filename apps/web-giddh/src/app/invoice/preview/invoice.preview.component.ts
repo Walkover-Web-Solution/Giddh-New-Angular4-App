@@ -590,6 +590,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(s => s.receipt.isDeleteSuccess), takeUntil(this.destroyed$))
             .subscribe(result => {
                 this.selectedItems = [];
+                this.selectedInvoicesList = [];
                 if (result && this.selectedInvoiceForDetails) {
                     this.selectedInvoiceForDetails = null;
                     this.getVoucher(this.isUniversalDateApplicable);

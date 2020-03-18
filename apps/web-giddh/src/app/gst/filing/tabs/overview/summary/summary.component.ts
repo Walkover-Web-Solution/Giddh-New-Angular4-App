@@ -51,26 +51,26 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 	@Input() public isTransactionSummary: boolean = false;
 	@Output() public SelectTxn: EventEmitter<any> = new EventEmitter(null);
 
-	public gstr1OverviewData$: Observable<GstOverViewResult>;
+    public gstr1OverviewData$: Observable<GstOverViewResult>;
 
-	public gstr2OverviewData$: Observable<GstOverViewResult>;
+    public gstr2OverviewData$: Observable<GstOverViewResult>;
 
-	public gstrOverviewData: GstOverViewResult = new GstOverViewResult();
+    public gstrOverviewData: GstOverViewResult = new GstOverViewResult();
 
-	public companyGst$: Observable<string> = of('');
-	public imgPath: string = '';
-	public gstFoundOnGiddh$: Observable<boolean>;
-	public gstNotFoundOnGiddhData$: Observable<ReconcileActionState>;
-	public gstNotFoundOnPortalData$: Observable<ReconcileActionState>;
-	public gstMatchedData$: Observable<ReconcileActionState>;
-	public gstPartiallyMatchedData$: Observable<ReconcileActionState>;
+    public companyGst$: Observable<string> = of('');
+    public imgPath: string = '';
+    public gstFoundOnGiddh$: Observable<boolean>;
+    public gstNotFoundOnGiddhData$: Observable<ReconcileActionState>;
+    public gstNotFoundOnPortalData$: Observable<ReconcileActionState>;
+    public gstMatchedData$: Observable<ReconcileActionState>;
+    public gstPartiallyMatchedData$: Observable<ReconcileActionState>;
 
-	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-	constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute) {
-		this.gstr1OverviewData$ = this._store.pipe(select(p => p.gstR.gstr1OverViewData), takeUntil(this.destroyed$));
+    constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute) {
+        this.gstr1OverviewData$ = this._store.pipe(select(p => p.gstR.gstr1OverViewData), takeUntil(this.destroyed$));
 
-		this.gstr2OverviewData$ = this._store.pipe(select(p => p.gstR.gstr2OverViewData), takeUntil(this.destroyed$));
+        this.gstr2OverviewData$ = this._store.pipe(select(p => p.gstR.gstr2OverViewData), takeUntil(this.destroyed$));
 
 		this.companyGst$ = this._store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
 		this.gstFoundOnGiddh$ = this._store.pipe(select(p => p.gstReconcile.gstFoundOnGiddh), takeUntil(this.destroyed$));
@@ -81,7 +81,7 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 	}
 
 	public ngOnInit() {
-		this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+		this.imgPath = (isElectron||isCordova)  ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
 
 		this.gstr1OverviewData$.subscribe(data => {
 			if (this.selectedGst === 'gstr1') {

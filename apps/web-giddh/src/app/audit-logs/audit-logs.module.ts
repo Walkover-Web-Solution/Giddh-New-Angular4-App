@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
-
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { AuditLogsComponent } from './audit-logs.component';
 import { AuditLogsRoutingModule } from './audit-logs.routing.module';
