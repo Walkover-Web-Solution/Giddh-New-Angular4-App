@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Output, Input, ViewChild, ElementRef } from '@angular/core';
 import { AdvanceReceiptAdjustment, AdjustAdvancePaymentModal, AdvanceReceiptRequest, Adjustment } from '../../models/api-models/AdvanceReceiptsAdjust';
-import { GIDDH_DATE_FORMAT_UI } from '../helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import * as moment from 'moment/moment';
 import { SalesService } from '../../services/sales.service';
 import { IOption } from '../../theme/ng-select/ng-select';
@@ -153,7 +153,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             grandTotal: Number(this.invoiceFormDetails.voucherDetails.grandTotal),
             customerName: this.invoiceFormDetails.voucherDetails.customerName,
             customerUniquename: this.invoiceFormDetails.voucherDetails.customerUniquename,
-            voucherDate: moment(this.invoiceFormDetails.voucherDetails.voucherDate).format('DD-MM-YYYY'),
+            voucherDate: moment(this.invoiceFormDetails.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT),
             totalTaxableValue: Number(this.invoiceFormDetails.voucherDetails.totalTaxableValue),
             subTotal: Number(this.invoiceFormDetails.voucherDetails.subTotal)
 
@@ -163,14 +163,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         }
         this.balanceDueAmount = this.invoiceFormDetails.voucherDetails.balanceDue;
         this.offset = this.adjustPayment.balanceDue;
-
-        // this.adjustPayment.balanceDue = this.invoiceFormDetails.voucherDetails.balanceDue;
-        // this.adjustPayment.grandTotal = this.invoiceFormDetails.voucherDetails.grandTotal;
-
-        console.log('advance adjustPayment%%%%%%%', this.adjustPayment);
-        console.log('invoiceFormDetails %%%%%%%', this.invoiceFormDetails)
-
-
     }
 
     /**
@@ -208,15 +200,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      */
     public addNewBlankAdjustVoucherRow(): void {
         if (this.adjustPayment.grandTotal - this.adjustPayment.totalAdjustedAmount >= 0) {
-            let isAnyblankEntry: boolean;
+            let isAnyBlankEntry: boolean;
             this.adjustVoucherForm.adjustments.forEach(item => {
                 if (!item.uniqueName || !item.voucherNumber) {
-                    isAnyblankEntry = true;
-                } else {
-                    isAnyblankEntry = false;
+                    isAnyBlankEntry = true;
                 }
             });
-            if (isAnyblankEntry) {
+            if (isAnyBlankEntry) {
                 this.isInvalidForm = false;
                 return;
             } else {

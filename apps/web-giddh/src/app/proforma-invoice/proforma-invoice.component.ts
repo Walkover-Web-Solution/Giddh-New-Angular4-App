@@ -489,7 +489,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (!this.isUpdateMode) {
             this.toggleBodyClass();
         }
-        console.log(this.invFormData, this.adjustPaymentBalanceDueData);
     }
 
     /**
@@ -4177,7 +4176,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      *
      * @memberof ProformaInvoiceComponent
      */
-    public closeAdvanceReciiptModal() {
+    public closeAdvanceReceiptModal() {
         this.showAdvanceReceiptAdjust = false;
         this.adjustPaymentModal.hide();
         if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
@@ -4231,7 +4230,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.isUpdateMode) {
             this.calculateAdjustedVoucherTotal(advanceReceiptsAdjustEvent.adjustVoucherData.adjustments)
         }
-        this.closeAdvanceReciiptModal();
+        this.closeAdvanceReceiptModal();
     }
 
     /**
