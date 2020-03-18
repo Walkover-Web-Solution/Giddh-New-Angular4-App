@@ -60,14 +60,13 @@ export enum Subvoucher {
 /**
  * enums for default date range picker
  */
-export enum DefaultDateRangePickerRangesEnum {
+export enum DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM {
     Today = 'Today',
     Yesterday = 'Yesterday',
     Last7Days = 'Last 7 Days',
     ThisMonth = 'This Month',
     LastMonth = 'Last Month',
     ThisWeek = 'This Week',
-    Last14Days = 'Last14Days',
     SunToToday = 'Sun - Today',
     MonToToday = 'Mon - Today',
     ThisQuarterToDate = 'This Quarter to Date',
@@ -83,66 +82,60 @@ export enum DefaultDateRangePickerRangesEnum {
  */
 export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
     {
-        name: DefaultDateRangePickerRangesEnum.Today, value: [moment(), moment()]
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.Today, value: [moment(), moment()]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.Yesterday, value: [moment().subtract(1, 'days'), moment().subtract(1, 'days')]
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.Yesterday, value: [moment().subtract(1, 'days'), moment().subtract(1, 'days')]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.Last7Days, value: [moment().subtract(6, 'days'), moment()]
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.Last7Days, value: [moment().subtract(6, 'days'), moment()]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.ThisMonth, value: [moment().startOf('month'), moment().endOf('month')]
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.ThisMonth, value: [moment().startOf('month'), moment().endOf('month')]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.LastMonth, value: [
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.LastMonth, value: [
             moment().subtract(1, 'month').startOf('month'),
             moment().subtract(1, 'month').endOf('month')
         ]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.ThisWeek, ranges: [{
-            name: DefaultDateRangePickerRangesEnum.SunToToday, value: [moment().startOf('week'), moment()]
-        }, {name: DefaultDateRangePickerRangesEnum.MonToToday, value: [moment().startOf('week').add(1, 'd'), moment()]}]
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.ThisWeek, ranges: [{
+            name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.SunToToday, value: [moment().startOf('week'), moment()]
+        }, { name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.MonToToday, value: [moment().startOf('week').add(1, 'd'), moment()] }]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.Last14Days, value: [
-            moment().subtract(14, 'd'),
-            moment()
-        ]
-    },
-    {
-        name: DefaultDateRangePickerRangesEnum.ThisQuarterToDate, value: [
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.ThisQuarterToDate, value: [
             moment().quarter(moment().quarter()).startOf('quarter'),
             moment()
         ]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.ThisFinancialYearToDate, value: [
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.ThisFinancialYearToDate, value: [
             moment().startOf('year').subtract(9, 'year'),
             moment()
         ]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.ThisYearToDate, value: [
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.ThisYearToDate, value: [
             moment().startOf('year'),
             moment()
         ]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.LastQuarter, value: [
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.LastQuarter, value: [
             moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
             moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
         ]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.LastFinancialYear, value: [
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.LastFinancialYear, value: [
             moment().startOf('year').subtract(10, 'year'),
             moment().endOf('year').subtract(10, 'year')
         ]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.LastYear, value: [
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.LastYear, value: [
             moment().subtract(1, 'year').startOf('year'),
             moment().subtract(1, 'year').endOf('year')
         ]

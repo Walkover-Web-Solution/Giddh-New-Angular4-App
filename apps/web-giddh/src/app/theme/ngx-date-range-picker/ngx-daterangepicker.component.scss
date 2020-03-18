@@ -1,6 +1,8 @@
 /*
 *  variables
 */
+
+@import "../../../assets/css/color.scss";
 $md-drppicker-color: inherit !default;
 $md-drppicker-bg-color: #fff !default;
 
@@ -57,7 +59,7 @@ $md-drppicker-control-active-border-radius: $md-drppicker-control-border-radius 
 $md-drppicker-control-disabled-color: #ccc !default;
 // Select
 $select-border: 1px solid #f2f2f2 !default;
-$select-background: rgba(255, 255, 255, 0.90) !default;
+$select-background: rgba(255, 255, 255, 0.9) !default;
 $select-padding: 5px !default;
 $select-radius: 2px !default;
 $input-height: 3rem !default;
@@ -89,14 +91,14 @@ $input-height: 3rem !default;
         display: inline-block;
     }
 
-    &:before, &:after {
+    &:before,
+    &:after {
         position: absolute;
         display: inline-block;
 
         border-bottom-color: rgba(0, 0, 0, 0.2);
-        content: '';
+        content: "";
     }
-
 
     &.openscenter {
         &:before {
@@ -117,7 +119,8 @@ $input-height: 3rem !default;
     }
 
     &.single {
-        .ranges, .calendar {
+        .ranges,
+        .calendar {
             float: none;
         }
     }
@@ -214,11 +217,13 @@ $input-height: 3rem !default;
 
         th {
             font-size: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
             font: 400 11px system-ui;
         }
 
-        th, td {
+        th,
+        td {
             padding: 0;
             white-space: nowrap;
             text-align: center;
@@ -232,7 +237,8 @@ $input-height: 3rem !default;
     }
 
     .calendar-table {
-        border: $md-drppicker-calendar-border-size solid $md-drppicker-calendar-border-color;
+        border: $md-drppicker-calendar-border-size solid
+            $md-drppicker-calendar-border-color;
         padding: $md-drppicker-calendar-margin;
         border-radius: $md-drppicker-calendar-border-radius;
         background-color: $md-drppicker-calendar-bg-color;
@@ -249,12 +255,14 @@ $input-height: 3rem !default;
         color: #988c8c;
     }
 
-    td, th {
+    td,
+    th {
         text-align: center;
         width: $md-drppicker-cell-width;
         height: $md-drppicker-cell-height;
 
-        border: $md-drppicker-cell-border-size solid $md-drppicker-cell-border-color;
+        border: $md-drppicker-cell-border-size solid
+            $md-drppicker-cell-border-color;
         white-space: nowrap;
         cursor: pointer;
         height: 2em;
@@ -265,10 +273,10 @@ $input-height: 3rem !default;
                 display: block;
                 background-image: url("data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgMy43IDYiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDMuNyA2IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxwYXRoIGQ9Ik0zLjcsMC43TDEuNCwzbDIuMywyLjNMMyw2TDAsM2wzLTNMMy43LDAuN3oiLz4NCjwvZz4NCjwvc3ZnPg0K");
                 background-repeat: no-repeat;
-                background-size: .5em;
+                background-size: 0.5em;
                 background-position: center;
-                opacity: .8;
-                transition: background-color .2s ease;
+                opacity: 0.8;
+                transition: background-color 0.2s ease;
                 //border-radius: 2em;
 
                 &:hover {
@@ -281,10 +289,10 @@ $input-height: 3rem !default;
                 display: block;
                 background-image: url("data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgMy43IDYiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDMuNyA2IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxwYXRoIGQ9Ik0zLjcsMC43TDEuNCwzbDIuMywyLjNMMyw2TDAsM2wzLTNMMy43LDAuN3oiLz4NCjwvZz4NCjwvc3ZnPg0K");
                 background-repeat: no-repeat;
-                background-size: .5em;
+                background-size: 0.5em;
                 background-position: center;
-                opacity: .8;
-                transition: background-color .2s ease;
+                opacity: 0.8;
+                transition: background-color 0.2s ease;
                 border-radius: 2em;
 
                 &:hover {
@@ -298,16 +306,14 @@ $input-height: 3rem !default;
                 border-color: $md-drppicker-cell-hover-border-color;
                 color: $md-drppicker-cell-hover-color;
                 background-repeat: no-repeat;
-                background-size: .5em;
+                background-size: 0.5em;
                 background-position: center;
-                margin: .25em 0;
-                opacity: .8;
-                transition: background-color .2s ease;
-
+                margin: 0.25em 0;
+                opacity: 0.8;
+                transition: background-color 0.2s ease;
 
                 //transform: scale(1);
                 //transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
-
             }
         }
 
@@ -318,15 +324,18 @@ $input-height: 3rem !default;
     }
 
     td {
-        margin: .25em 0;
-        opacity: .8;
-        transition: background-color .2s ease;
+        margin: 0.25em 0;
+        opacity: 0.8;
+        transition: background-color 0.2s ease;
         //border-radius: 2em;
         transform: scale(1);
         //transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
 
         &.off {
-            &, &.in-range, &.start-date, &.end-date {
+            &,
+            &.in-range,
+            &.start-date,
+            &.end-date {
                 background-color: $md-drppicker-unselected-bg-color;
                 border-color: $md-drppicker-unselected-border-color;
                 color: $md-drppicker-unselected-color;
@@ -345,8 +354,6 @@ $input-height: 3rem !default;
             border-radius: 0;
             z-index: 999;
             position: relative;
-
-
         }
 
         &.in-range::before {
@@ -358,7 +365,6 @@ $input-height: 3rem !default;
             top: -1px;
             position: absolute;
             display: inline-block;
-
         }
 
         &.in-range.end-date::before {
@@ -370,7 +376,6 @@ $input-height: 3rem !default;
             top: -1px;
             position: absolute;
             display: inline-block;
-
         }
 
         &.start-date::before {
@@ -420,7 +425,7 @@ $input-height: 3rem !default;
             border-top: 1px dashed gray !important;
             border-left: 0;
             border-right: 0;
-            border-radius: 0 !important;;
+            border-radius: 0 !important;
         }
 
         &.start-date {
@@ -439,7 +444,8 @@ $input-height: 3rem !default;
             transition: background 300ms ease-out;
             background: rgba(0, 0, 0, 0.1);
 
-            &, &:hover {
+            &,
+            &:hover {
                 background-color: $md-drppicker-active-bg-color;
                 border-color: $md-drppicker-active-border-color;
                 color: $md-drppicker-active-color;
@@ -454,7 +460,8 @@ $input-height: 3rem !default;
     }
 
     // disabled controls
-    td, option {
+    td,
+    option {
         &.disabled {
             color: #999;
             cursor: not-allowed;
@@ -471,7 +478,8 @@ $input-height: 3rem !default;
         border-radius: $select-radius;
         height: $input-height;
 
-        &.monthselect, &.yearselect {
+        &.monthselect,
+        &.yearselect {
             font-size: 12px;
             padding: 1px;
             height: auto;
@@ -502,7 +510,6 @@ $input-height: 3rem !default;
             margin: 0;
             padding: 0;
         }
-
     }
 
     th.month > div {
@@ -523,7 +530,8 @@ $input-height: 3rem !default;
     }
 
     .label-input {
-        border: $md-drppicker-control-border-size solid $md-drppicker-control-border-color;
+        border: $md-drppicker-control-border-size solid
+            $md-drppicker-control-border-color;
         border-radius: $md-drppicker-control-border-radius;
         color: $md-drppicker-control-color;
         height: $md-drppicker-control-line-height;
@@ -535,7 +543,8 @@ $input-height: 3rem !default;
         width: 100%;
 
         &.active {
-            border: $md-drppicker-control-active-border-size solid $md-drppicker-control-active-border-color;
+            border: $md-drppicker-control-active-border-size solid
+                $md-drppicker-control-active-border-color;
             border-radius: $md-drppicker-control-active-border-radius;
         }
     }
@@ -544,7 +553,8 @@ $input-height: 3rem !default;
         position: relative;
         padding: 0 30px 0 0;
 
-        i, svg {
+        i,
+        svg {
             position: absolute;
             left: 8px;
             top: 8px;
@@ -557,7 +567,8 @@ $input-height: 3rem !default;
             padding-left: 6px;
         }
 
-        .md-drppicker_input i, .md-drppicker_input svg {
+        .md-drppicker_input i,
+        .md-drppicker_input svg {
             left: auto;
             right: 8px;
         }
@@ -582,8 +593,6 @@ $input-height: 3rem !default;
             width: 193px;
 
             li {
-                font-size: 12px;
-
                 button {
                     padding: 8px 12px;
                     width: 100%;
@@ -591,6 +600,7 @@ $input-height: 3rem !default;
                     border: none;
                     text-align: left;
                     cursor: pointer;
+                    font-size: 12px;
 
                     .drop-down {
                         position: absolute;
@@ -664,16 +674,17 @@ $input-height: 3rem !default;
         padding: 0px 6px;
         cursor: pointer;
         border-radius: 2px;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
         background-color: #3f51b5;
         color: #ecf0f1;
-        transition: background-color .4s;
+        transition: background-color 0.4s;
         height: auto;
         text-transform: uppercase;
         line-height: 36px;
         border: none;
 
-        &:hover, &:focus {
+        &:hover,
+        &:focus {
             background-color: #3f51b5;
         }
 
@@ -696,7 +707,7 @@ $input-height: 3rem !default;
             width: 0;
             padding-top: 0;
             border-radius: 100%;
-            background-color: rgba(236, 240, 241, .3);
+            background-color: rgba(236, 240, 241, 0.3);
             -webkit-transform: translate(-50%, -50%);
             -moz-transform: translate(-50%, -50%);
             -ms-transform: translate(-50%, -50%);
@@ -708,7 +719,7 @@ $input-height: 3rem !default;
             &:before {
                 width: 120%;
                 padding-top: 120%;
-                transition: width .2s ease-out, padding-top .2s ease-out;
+                transition: width 0.2s ease-out, padding-top 0.2s ease-out;
             }
         }
 
@@ -782,7 +793,8 @@ $input-height: 3rem !default;
                 padding-right: 12px;
             }
 
-            .ranges, .calendar {
+            .ranges,
+            .calendar {
                 float: left;
             }
         }
@@ -822,7 +834,8 @@ $input-height: 3rem !default;
                 padding-left: 12px;
             }
 
-            .ranges, .calendar {
+            .ranges,
+            .calendar {
                 text-align: right;
                 float: right;
             }
@@ -830,8 +843,7 @@ $input-height: 3rem !default;
     }
     .drp-animate {
         transform: translate(0);
-        transition: transform .2s ease,
-        opacity .2s ease;
+        transition: transform 0.2s ease, opacity 0.2s ease;
 
         &.drp-picker-site-this {
             transition-timing-function: linear;
@@ -879,7 +891,6 @@ $input-height: 3rem !default;
 }
 
 .in-range.available {
-
     border-radius: 0 !important;
 }
 
@@ -890,7 +901,7 @@ td:hover span {
 
 .off.in-range {
     &::before {
-        content: '';
+        content: "";
         background-color: unset !important;
     }
 }
@@ -918,7 +929,6 @@ td:hover span {
 
     .available:hover {
         background-color: unset !important;
-
     }
 }
 
@@ -931,7 +941,6 @@ td span {
     align-items: center;
     justify-content: center;
     border-radius: 100%;
-
 }
 
 //td.start-date::after {
@@ -987,10 +996,10 @@ td span {
     display: block;
     background-image: url("data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgMy43IDYiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDMuNyA2IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxwYXRoIGQ9Ik0zLjcsMC43TDEuNCwzbDIuMywyLjNMMyw2TDAsM2wzLTNMMy43LDAuN3oiLz4NCjwvZz4NCjwvc3ZnPg0K");
     background-repeat: no-repeat;
-    background-size: .5em;
+    background-size: 0.5em;
     background-position: center;
-    opacity: .8;
-    transition: background-color .2s ease;
+    opacity: 0.8;
+    transition: background-color 0.2s ease;
     height: 21px;
     width: 21px;
     cursor: pointer;
@@ -1008,10 +1017,10 @@ td span {
     display: block;
     background-image: url("data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgMy43IDYiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDMuNyA2IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxwYXRoIGQ9Ik0zLjcsMC43TDEuNCwzbDIuMywyLjNMMyw2TDAsM2wzLTNMMy43LDAuN3oiLz4NCjwvZz4NCjwvc3ZnPg0K");
     background-repeat: no-repeat;
-    background-size: .5em;
+    background-size: 0.5em;
     background-position: center;
-    opacity: .8;
-    transition: background-color .2s ease;
+    opacity: 0.8;
+    transition: background-color 0.2s ease;
     //border-radius: 2em;
     height: 21px;
     background-color: unset !important;
@@ -1065,7 +1074,6 @@ td span {
 
 .menu-li {
     cursor: pointer;
-
 }
 
 .menu-li:hover .menu-drawer {
@@ -1077,12 +1085,29 @@ td span {
     box-shadow: 4px 5px 3px #0000003d;
 }
 
-.yearselect, .monthselect {
+.yearselect,
+.monthselect {
     display: none !important;
 }
 
-
-.md-drppicker .calendar th, .md-drppicker .calendar td {
+.md-drppicker .calendar th,
+.md-drppicker .calendar td {
     height: 30px;
     border: 1px dashed transparent;
+}
+.select-date-range {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 10px;
+    input {
+        width: 100px;
+        height: auto;
+        font-size: 12px;
+        padding: 6px 0;
+        border: none;
+        border-bottom: 1px solid $inputBorderColor;
+    }
+    .activeSelectedDate {
+        border-bottom-color: $btnLink;
+    }
 }

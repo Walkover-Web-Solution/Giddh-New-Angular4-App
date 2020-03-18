@@ -76,7 +76,7 @@ export interface PayNowRequest {
 })
 
 export class ContactComponent implements OnInit, OnDestroy, OnChanges {
-    // selected: any;
+    public selectedDateRange: any;
     public flattenAccounts: any = [];
     public sundryDebtorsAccountsBackup: any = {};
     public sundryDebtorsAccountsForAgingReport: IOption[] = [];
@@ -217,7 +217,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private createAccountIsSuccess$: Observable<boolean>;
-    public universalDate: any;
 
     constructor(
         private store: Store<AppState>,
@@ -238,19 +237,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
-
-        // get default datepicker options from store
-        this.store.pipe(select(p => p.company.dateRangePickerConfig), take(2)).subscribe(a => {
-            if (a) {
-                this.datePickerOptions = a;
-                if(this.universalDate) {
-                    this.datePickerOptions = {
-                        ...this.datePickerOptions, startDate: moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(),
-                        endDate: moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate()
-                    };
-                }
-            }
-        });
 
         this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
@@ -273,6 +259,15 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
     public ngOnInit() {
 
+        // get default datepicker options from store
+        this.store.pipe(select(p => p.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(a => {
+            if (a) {
+                this.datePickerOptions = a;
+                this.fromDate = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
+                this.toDate = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
+            }
+        });
+
         // localStorage supported
         if (window.localStorage) {
             let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer']));
@@ -284,14 +279,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
         this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj) {
-                this.universalDate = _.cloneDeep(dateObj);
-                this.datePickerOptions = {
-                    ...this.datePickerOptions, startDate: moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(),
-                    endDate: moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate()
-                };
+                let universalDate = _.cloneDeep(dateObj);
+                this.selectedDateRange = {startDate: moment(universalDate[0], 'DD-MM-YYYY'), endDate: moment(universalDate[1], 'DD-MM-YYYY')};
 
-                this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
+                this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');
                 this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, this.searchStr);
             }
         })).pipe(takeUntil(this.destroyed$)).subscribe();
@@ -454,8 +446,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
             url = location.origin + location.pathname + `#./pages/${part}/${accUniqueName}`;
             console.log(ipcRenderer.send('open-url', url));
-        } else if (isCordova) {
-            // todo: open url in Native mobile
         } else {
             (window as any).open(url);
         }
@@ -831,9 +821,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public selectedDate(value: any) {
-        this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
-        this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
-        if (value.event.type === 'hide') {
+        if (value.startDate && value.endDate) {
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
             this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, this.searchStr);
             this.detectChanges();
         }
