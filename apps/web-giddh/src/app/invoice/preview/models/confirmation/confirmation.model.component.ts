@@ -1,23 +1,38 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { ILedgersInvoiceResult } from '../../../../models/api-models/Invoice';
+import { confirmationMessages } from "../../../../shared/helpers/confirmationMessages";
 
 @Component({
-	selector: 'delete-role-confirmation-model',
-	templateUrl: './confirmation.model.component.html'
+    selector: 'delete-role-confirmation-model',
+    templateUrl: './confirmation.model.component.html'
 })
 
-export class DeleteInvoiceConfirmationModelComponent {
+export class DeleteInvoiceConfirmationModelComponent implements OnInit {
+    @Input() public module: string = '';
+    @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
+    @Output() public confirmDeleteEvent: EventEmitter<boolean> = new EventEmitter(true);
+    @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
 
-	@Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
-	@Output() public confirmDeleteEvent: EventEmitter<boolean> = new EventEmitter(true);
-	@Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
+    public message: string = '';
+    public confirmationMessages: any[] = [];
 
-	public onConfirmation() {
-		this.confirmDeleteEvent.emit(true);
-	}
+    constructor() {
 
-	public onCancel() {
-		this.closeModelEvent.emit(true);
-	}
+    }
+
+    public ngOnInit() {
+        confirmationMessages.map(c => {
+            this.confirmationMessages[c.module] = c;
+        });
+        console.log(this.confirmationMessages);
+        console.log(this.module);
+    }
+
+    public onConfirmation() {
+        this.confirmDeleteEvent.emit(true);
+    }
+
+    public onCancel() {
+        this.closeModelEvent.emit(true);
+    }
 }

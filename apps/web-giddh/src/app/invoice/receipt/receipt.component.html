@@ -254,7 +254,7 @@
             <div bsModal #invoiceReceiptConfirmationModel="bs-modal" class="modal fade" role="dialog">
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">
-                        <delete-role-confirmation-model [selectedInvoiceForDelete]="selectedInvoice"
+                        <delete-role-confirmation-model [module]="'receipt'" [selectedInvoiceForDelete]="selectedInvoice"
                             (confirmDeleteEvent)="deleteConfirmedInvoice()"
                             (closeModelEvent)="closeConfirmationPopup()"></delete-role-confirmation-model>
                     </div>

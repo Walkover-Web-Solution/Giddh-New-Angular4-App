@@ -617,7 +617,7 @@
     <div bsModal #invoiceConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
-                <delete-role-confirmation-model [selectedInvoiceForDelete]="selectedInvoice" (confirmDeleteEvent)="deleteConfirmedInvoice()" (closeModelEvent)="closeConfirmationPopup()">
+                <delete-role-confirmation-model [module]="selectedVoucher" [selectedInvoiceForDelete]="selectedInvoice" (confirmDeleteEvent)="deleteConfirmedInvoice()" (closeModelEvent)="closeConfirmationPopup()">
                 </delete-role-confirmation-model>
             </div>
         </div>
