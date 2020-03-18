@@ -207,17 +207,17 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
 
-        this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res && !_.isEmpty(res)) {
-                if (res && res.ecommerceDetails && res.ecommerceDetails.length > 0) {
-                    res.ecommerceDetails.forEach(item => {
-                        if (item && item.ecommerceType && item.ecommerceType.name && item.ecommerceType.name === "shopify") {
-                            this.getShopifyVerifyStatus(item.uniqueName);
-                        }
-                    })
-                }
-            }
-        });
+        // this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
+        //     if (res && !_.isEmpty(res)) {
+        //         if (res && res.ecommerceDetails && res.ecommerceDetails.length > 0) {
+        //             res.ecommerceDetails.forEach(item => {
+        //                 if (item && item.ecommerceType && item.ecommerceType.name && item.ecommerceType.name === "shopify") {
+        //                     this.getShopifyVerifyStatus(item.uniqueName);
+        //                 }
+        //             })
+        //         }
+        //     }
+        // });
 
     }
 
@@ -491,7 +491,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     private getGoogleCredentials() {
-        if (PRODUCTION_ENV) {
+        if (PRODUCTION_ENV || isCordova) {
             return {
                 GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
                 GOOGLE_CLIENT_SECRET: 'eWzLFEb_T9VrzFjgE40Bz6_l'

@@ -6,6 +6,7 @@ module.exports = {
             "VERSION": JSON.stringify("4711"),
             'ENV': JSON.stringify('production'),
             'isElectron': JSON.stringify(false),
+            'isCordova': JSON.stringify(false),
             'errlyticsNeeded': JSON.stringify(true),
             'errlyticsKey': JSON.stringify('eTrTpSiedQC4tLUYVDup3RJpc_wFL2QhCaIc0vzpsQA'),
             'AppUrl': JSON.stringify('https://app.giddh.com/'),

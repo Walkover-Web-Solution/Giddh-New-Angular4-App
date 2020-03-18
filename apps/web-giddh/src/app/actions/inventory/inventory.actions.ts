@@ -243,7 +243,7 @@ export class InventoryAction {
     @Effect()
     public GetLinkedStocks$: Observable<Action> = this.action$
         .ofType(INVENTORY_LINKED_STOCKS.GET_LINKED_STOCKS).pipe(
-            switchMap(() => this._inventoryService.GetLinkedStocks()),
+            switchMap(() => this._inventoryService.getLinkedStocks()),
             map((res: BaseResponse<LinkedStocksResponse, string>) => {
                 if (res.status === 'error') {
                     this._toasty.errorToast(res.message);

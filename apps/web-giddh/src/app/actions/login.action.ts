@@ -11,29 +11,29 @@ import {
     VerifyMobileModel,
     VerifyMobileResponseModel
 } from '../models/api-models/loginModels';
-import { ToasterService } from '../services/toaster.service';
-import { GeneralActions } from './general/general.actions';
-import { CompanyActions } from './company.actions';
-import { BaseResponse } from '../models/api-models/BaseResponse';
-import { ActivatedRoute, Router } from '@angular/router';
-import { sortBy } from '../lodash-optimized';
-import { COMMON_ACTIONS } from './common.const';
-import { AppState } from '../store';
-import { Injectable } from '@angular/core';
-import { map, switchMap, take } from 'rxjs/operators';
-import { userLoginStateEnum } from '../models/user-login-state';
-import { Actions, Effect } from '@ngrx/effects';
-import { DbService } from '../services/db.service';
-import { CompanyService } from '../services/companyService.service';
-import { GeneralService } from '../services/general.service';
-import { Observable, ReplaySubject, zip as observableZip } from 'rxjs';
-import { CustomActions } from '../store/customActions';
-import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
-import { AuthenticationService } from '../services/authentication.service';
-import { AccountService } from '../services/account.service';
-import { Configuration } from '../app.constant';
-import { ROUTES } from '../routes-array';
-import { SettingsProfileActions } from "./settings/profile/settings.profile.action";
+import {ToasterService} from '../services/toaster.service';
+import {GeneralActions} from './general/general.actions';
+import {CompanyActions} from './company.actions';
+import {BaseResponse} from '../models/api-models/BaseResponse';
+import {ActivatedRoute, Router} from '@angular/router';
+import {sortBy} from '../lodash-optimized';
+import {COMMON_ACTIONS} from './common.const';
+import {AppState} from '../store';
+import {Injectable, NgZone} from '@angular/core';
+import {map, switchMap, take} from 'rxjs/operators';
+import {userLoginStateEnum} from '../models/user-login-state';
+import {Actions, Effect} from '@ngrx/effects';
+import {DbService} from '../services/db.service';
+import {CompanyService} from '../services/companyService.service';
+import {GeneralService} from '../services/general.service';
+import {Observable, ReplaySubject, zip as observableZip} from 'rxjs';
+import {CustomActions} from '../store/customActions';
+import {LoginWithPassword, SignUpWithPassword} from '../models/api-models/login';
+import {AuthenticationService} from '../services/authentication.service';
+import {AccountService} from '../services/account.service';
+import {Configuration} from '../app.constant';
+import {ROUTES} from '../routes-array';
+import {SettingsProfileActions} from "./settings/profile/settings.profile.action";
 
 @Injectable()
 export class LoginActions {
@@ -247,8 +247,10 @@ export class LoginActions {
                 }
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
-                    this._router.navigate(['/pages/new-user']);
-                    return { type: 'EmptyAction' };
+                    this.zone.run(() => {
+                        this._router.navigate(['/pages/new-user']);
+                    });
+                    return {type: 'EmptyAction'};
                 } else {
                     if (stateDetail.body && stateDetail.status === 'success') {
                         this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
@@ -298,8 +300,10 @@ export class LoginActions {
                 }
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
-                    this._router.navigate(['/pages/new-user']);
-                    return { type: 'EmptyAction' };
+                    this.zone.run(() => {
+                        this._router.navigate(['/pages/new-user']);
+                    });
+                    return {type: 'EmptyAction'};
                 } else {
                     if (stateDetail.body && stateDetail.status === 'success') {
                         this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
@@ -325,10 +329,13 @@ export class LoginActions {
     public logoutSuccess$: Observable<Action> = this.actions$
         .ofType(LoginActions.LogOut).pipe(
             map((action: CustomActions) => {
-                if (PRODUCTION_ENV && !isElectron) {
+                if (PRODUCTION_ENV && !(isElectron || isCordova)) {
                     window.location.href = 'https://giddh.com/login/';
-                } else if (isElectron) {
-                    this._router.navigate(['/login']);
+                } else if (isCordova) {
+                    this.zone.run(() => {
+                        this._generalService.invokeEvent.next('logoutCordova');
+                        this._router.navigate(['login']);
+                    });
                 } else {
                     window.location.href = AppUrl + 'login/';
                 }
@@ -686,7 +693,8 @@ export class LoginActions {
         private activatedRoute: ActivatedRoute,
         private _generalAction: GeneralActions,
         private _dbService: DbService,
-        private settingsProfileActions: SettingsProfileActions
+        private settingsProfileActions: SettingsProfileActions,
+        private zone: NgZone
     ) {
     }
 
@@ -1076,7 +1084,7 @@ export class LoginActions {
         this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
         this._router.navigate([stateDetail.body.lastState]);
-        if (isElectron) {
+        if (isElectron || isCordova) {
             window.location.reload();
         }
         return { type: 'EmptyAction' };

@@ -330,6 +330,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public countryCode: string = '';
     public isValidGstinNumber: boolean = false;
+    /** Allowed taxes list contains the unique name of all
+     * tax types within a company and count upto which they are allowed
+     */
+    public allowedSelectionOfAType: any = { type: [], count: 1 };
 
     // private members
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -646,8 +650,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             }
                             return item;
                         });
+                        this.companyTaxesList.forEach((tax) => {
+                            if (!this.allowedSelectionOfAType.type.includes(tax.taxType)) {
+                                this.allowedSelectionOfAType.type.push(tax.taxType);
+                            }
+                        });
                     } else {
                         this.companyTaxesList = [];
+                        this.allowedSelectionOfAType.type = [];
                     }
                 });
             }

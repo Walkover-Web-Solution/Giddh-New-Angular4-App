@@ -1,6 +1,5 @@
 /************ login page start *****************/
-@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900");
-
+@import "../../assets/css/color.scss";
 /*typography styles*/
 
 body.ununresponsive {
@@ -32,7 +31,7 @@ body.ununresponsive {
 }
 
 .modal-header h3 {
-    color: #fff;
+    color: $White;
     font-size: 1.3rem;
 }
 
@@ -47,7 +46,7 @@ body.ununresponsive {
 }
 
 #box {
-    background-color: #fff;
+    background-color: $White;
     padding: 20px 30px;
     margin: 0 auto;
     width: 360px;
@@ -78,7 +77,7 @@ body.ununresponsive {
 
 #box .btn:hover,
 #box .btn:hover {
-    color: #fff;
+    color: $White;
 }
 
 .mrB1 {
@@ -103,7 +102,7 @@ body.ununresponsive {
 
 .btn-login {
     text-transform: uppercase;
-    color: #fff;
+    color: $White;
     margin-bottom: 10px;
     display: inline-block;
     vertical-align: middle;
@@ -126,7 +125,17 @@ body.ununresponsive {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
 }
+.btn-success {
+    background: $midnightBlue;
+    color: $White;
+    border-color: $midnightBlue;
+}
 
+.btn-success:hover {
+    background: $midnightBlueHover;
+    border-color: $midnightBlueHover;
+    color: $White;
+}
 /*giddh loader*/
 
 .giddh-spinner {
@@ -134,7 +143,7 @@ body.ununresponsive {
     background: #221f1f none repeat scroll 0 0;
     border: 7px solid #c63b13;
     border-radius: 50%;
-    box-shadow: 0 -10px 0 14px #fff inset;
+    box-shadow: 0 -10px 0 14px $White inset;
     box-sizing: border-box;
     height: 60px;
     width: 60px;
@@ -157,13 +166,13 @@ body.ununresponsive {
 
 .btn-login.btn-default {
     color: #333;
-    background-color: #fff;
+    background-color: $White;
     border-color: #ccc;
 }
 
 .btn-login.btn-default:hover {
     color: #000 !important;
-    background-color: #fff;
+    background-color: $White;
     border-color: #ccc;
     box-shadow: none;
 }
@@ -215,31 +224,10 @@ button.close {
 }
 
 :host ::ng-deep .btn-success {
-    color: #fff;
-}
-
-:host ::ng-deep .btn-success:hover {
-    background: #2c2c43;
-    /*  */
+    color: $White;
 }
 
 strong {
-    font-family: "Roboto", sans-serif;
-}
-
-.flex-container {
-    display: flex;
-    height: 100%;
-    align-items: center;
-    font-family: "Roboto", sans-serif;
-    justify-content: flex-start;
-    flex-direction: row-reverse;
-}
-
-.flex-container > div {
-    align-items: center;
-    height: 100%;
-    display: flex;
     font-family: "Roboto", sans-serif;
 }
 
@@ -251,9 +239,9 @@ h1 {
     font-size: 24px;
 }
 
-.slide_content {
+.slide-content {
     padding: 0 100px;
-    color: #fff;
+    color: $White;
     background: #2c2c43;
     justify-content: space-evenly;
     text-align: left;
@@ -261,19 +249,14 @@ h1 {
     justify-content: space-evenly;
 }
 
-.login_box {
-    background: #fff8ea url("/assets/images/banner-grid-design.png") repeat;
-    padding: 20px 70px;
-}
-
-.login_box h1 {
+.login-box h1 {
     color: #0f0f27;
     font-weight: 500;
 }
 
-.form_wrapper {
+.form-wrapper {
     display: flex;
-    margin-bottom: 40px;
+    margin-bottom: 0;
     flex-direction: column;
 }
 
@@ -281,24 +264,21 @@ small {
     color: #333;
 }
 
-.form_wrapper form {
-    width: 300px;
-}
+/* social-login */
 
-/* social_login */
-
-.social_login {
+.social-login {
     overflow: hidden;
     display: flex;
+    margin-bottom: 20px;
 }
 
-.social_login li {
+.social-login li {
     list-style: none;
     display: inline-block;
     margin-right: 15px;
 }
 
-.social_login li a {
+.social-login li a {
     display: inline-block;
     height: 40px;
     border: 1px solid;
@@ -306,28 +286,29 @@ small {
     line-height: 40px;
     text-align: center;
     position: relative;
+    font-size: 14px;
 }
 
-.google_ico a {
-    color: #fff;
+.google-ico a {
+    color: $White;
     padding-left: 40px !important;
 }
 
-.google_ico span {
+.google-ico span {
     padding: 0 15px;
 }
 
 /* social icon */
 
-.linkedin_ico a {
-    color: #0d83b3;
-    border-color: #0d83b3;
+.linkedin-ico a {
+    color: $cerulean;
+    border-color: $cerulean;
 }
 
-.google_ico a {
-    background: #5092f3;
-    border-color: #5092f3 !important;
-    color: #fff;
+.google-ico a {
+    background: $cornflowerBlue;
+    border-color: $cornflowerBlue !important;
+    color: $White;
 }
 
 .ico-google {
@@ -345,25 +326,25 @@ small {
     height: 18px;
 }
 
-.login_option,
-.login_option a {
+.login-option,
+.login-option a {
     color: #0c5fc1;
     margin-top: 55px;
     font-weight: 500;
 }
 
-.login_option a {
+.login-option a {
     border-bottom: 2px dotted #0c5fc1;
 }
 
-.slide_content h1 {
+.slide-content h1 {
     font-size: 24px;
     text-align: left;
     font-weight: 500;
     line-height: 34px;
 }
 
-.feature_list {
+.feature-list {
     display: flex;
     flex-direction: column;
     /* height: 100%; */
@@ -372,14 +353,14 @@ small {
     align-self: self-start;
 }
 
-.feature_list li {
+.feature-list li {
     list-style: none;
     margin-bottom: 70px;
     padding-left: 55px;
     position: relative;
 }
 
-.feature_list li .signup-ico {
+.feature-list li .signup-ico {
     position: absolute;
     left: 0;
     height: 100%;
@@ -389,12 +370,12 @@ small {
     bottom: 0;
 }
 
-.feature_list li > p {
+.feature-list li > p {
     font-size: 20px;
     text-align: left;
 }
 
-.client_testimonial {
+.client-testimonial {
     align-self: flex-start;
     /* padding-left: 55px; */
     position: relative;
@@ -403,7 +384,7 @@ small {
     margin: 0 -15px;
 }
 
-.client_testimonial .content {
+.client-testimonial .content {
     display: flex;
     align-self: left;
     flex-direction: column;
@@ -412,17 +393,17 @@ small {
     padding: 30px 70px;
 }
 
-.client_testimonial p {
+.client-testimonial p {
     font-size: 20px;
     margin-bottom: 10px;
     text-align: left;
 }
 
-.client_testimonial h4 {
+.client-testimonial h4 {
     font-size: 20px;
 }
 
-.hash_tag {
+.hash-tag {
     color: #e33536;
 }
 
@@ -447,7 +428,7 @@ small {
     /* left: -335px; */
     left: 0;
     z-index: 1;
-    background: #fff;
+    background: $White;
     /* bottom: 0; */
     bottom: -38px;
     border-radius: 0;
@@ -472,8 +453,100 @@ small {
     right: inherit;
 }
 
+/* new theme login page css start */
+.login-box {
+    position: relative;
+}
+.login-left {
+    background-color: $top_header;
+    position: absolute;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+}
+.login-right {
+    background-image: url("../../assets/images/Login-Page-Image.png");
+    height: 100vh;
+    justify-content: flex-start;
+    background-position: top right;
+    background-size: cover;
+}
+.px-0 {
+    padding: 0;
+}
+.mx-0 {
+    margin: 0;
+}
+.giddh-login {
+    margin-left: -245px;
+    width: 495px;
+}
+.giddh-login-inner {
+    max-width: 476px;
+    width: 90%;
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.logo-login {
+    background-color: $darkMidnightBlue;
+    height: 98px;
+    display: flex;
+    align-items: center;
+    padding: 35px;
+    position: relative;
+}
+.accounting-space {
+    padding: 30px;
+    border-radius: 0;
+    background-color: $White;
+}
+.accounting-space h4 {
+    color: $pageTitleColor;
+    font-weight: 600;
+    font-size: 20px;
+}
+.btn-outline-primary {
+    background-color: $primaryBtncolror;
+    border-radius: 3px;
+    min-width: 160px;
+    border-radius: 5px;
+    color: $White;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+    background-color: $primaryBtnHovercolror;
+    box-shadow: none;
+    outline: none;
+}
+.login-with {
+    color: $pageTitleColor;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+.login-with a {
+    color: $pageTitleColor;
+    text-decoration: none;
+}
+.btn-secondary {
+    background-color: $White;
+    color: $navy;
+    border: 1px solid $light-text-blue;
+    border-radius: 5px;
+}
+.btn-secondary:hover {
+    color: $White !important;
+    background-color: $light-text-blue;
+    border-color: $light-text-blue;
+}
+.forgotStep {
+    display: none;
+}
+
 @media only screen and (max-width: 1200px) {
-    .slide_content {
+    .slide-content {
         padding: 0 55px;
     }
 }
@@ -485,60 +558,26 @@ small {
 }
 
 @media only screen and (max-width: 767px) {
-    .flex-container {
-        background: #fff8ea url("/assets/images/banner-grid-design.png") repeat;
-        display: block;
-    }
-
-    .login_box,
-    .slide_content {
-        padding: 80px 20px;
-    }
-
-    .slide_content .logo {
-        display: none;
-    }
-
-    .flex-container > div {
-        display: block;
-        height: auto;
-        text-align: center;
-        overflow: hidden;
-    }
-
-    .social_login {
-        display: block;
-    }
-
-    .logo {
-        padding: 20px;
-        float: left;
-    }
-
-    .logo img {
-        max-width: 130px;
-    }
-
-    .form_wrapper form {
+    .giddh-login {
         margin: 0 auto;
     }
-
-    .client_testimonial {
-        margin: 0 auto;
+}
+@media only screen and (max-width: 375px) {
+    .social-login {
+        flex-direction: column;
+        width: 100%;
     }
-
-    .hint ul {
-        text-align: left;
+    .social-login li {
+        display: block;
+        margin-right: 0px;
+        margin-bottom: 10px;
     }
-
-    .hint {
-        bottom: -74px;
+    .social-login li:first-child a {
+        display: block;
+        width: 100%;
     }
-
-    .hint:before {
-        left: 6px;
-        top: -12px;
-        transform: rotate(-90deg);
-        right: inherit;
+    .btn-secondary {
+        margin-left: 0;
+        margin-top: 8px;
     }
 }
