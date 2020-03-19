@@ -228,6 +228,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public currentState: any = '';
     public isCalendlyModelActivate: boolean = false;
     public companyInitials: any = '';
+    public forceOpenNavigation: boolean = false;
     /**
      *
      */
@@ -755,6 +756,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             e.stopPropagation();
         }
         this.companyDropdown.isOpen = false;
+        this.forceOpenNavigation = false;
         if (this.companyDetailsDropDownWeb) {
             this.companyDetailsDropDownWeb.hide();
         }
@@ -1052,7 +1054,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (this.sideMenu) {
             this.sideMenu.isopen = event;
         }
-        if (this.companyDropdown) {
+        if (this.companyDropdown && !this.forceOpenNavigation) {
+            this.forceOpenNavigation = false;
             this.companyDropdown.isOpen = false;
         }
         if (this.companyDetailsDropDownWeb) {
