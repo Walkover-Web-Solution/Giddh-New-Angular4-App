@@ -49,7 +49,7 @@ import { DateFormatterPipe } from "./dateFormatter.pipe";
 import { ReactiveFormsModule } from "@angular/forms";
 import { DigitsOnlyModule } from "../shared/helpers/directives/digitsOnly/digitsOnly.module";
 import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
-import { GiddRoundOffPipeModule } from '../shared/helpers/pipes/round-off/round-off.module';
+import { GiddhRoundOffPipeModule } from '../shared/helpers/pipes/round-off/round-off.module';
 
 @NgModule({
     declarations: [
@@ -135,7 +135,7 @@ import { GiddRoundOffPipeModule } from '../shared/helpers/pipes/round-off/round-
         DigitsOnlyModule,
         NgxMaskModule.forRoot(),
         ProformaInvoiceModule,
-        GiddRoundOffPipeModule
+        GiddhRoundOffPipeModule
     ],
     entryComponents: [PaginationComponent]
 })
