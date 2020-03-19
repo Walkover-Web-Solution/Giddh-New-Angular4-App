@@ -192,7 +192,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** True if company country will UAE and accounts involve Debtors/ Cash / bank / Sales */
     public isTouristSchemeApplicable: boolean;
     public allowParentGroup = ['sales', 'cash', 'sundrydebtors', 'bankaccounts'];
-
+    public shareLedgerDates: any = {
+        from: '',
+        to: ''
+    };
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
@@ -1115,6 +1118,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public showShareLedgerModal() {
+        this.shareLedgerDates.from = moment(this.datePickerOptions.startDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+        this.shareLedgerDates.to = moment(this.datePickerOptions.endDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+
         this.sharLedger.clear();
         this.shareLedgerModal.show();
         this.sharLedger.checkAccountSharedWith();
