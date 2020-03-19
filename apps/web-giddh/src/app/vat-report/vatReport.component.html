@@ -49,7 +49,7 @@
                                                                         name="fromDate"
                                                                         (click)="$event.stopPropagation()"
                                                                         [showWeeks]="false" [minMode]="'month'"
-                                                                        (selectionDone)="periodChanged($event);monthWise.hide()"
+                                                                        (selectionDone)="periodChanged($event);monthWise.hide();updateDatepickerVisibility('hidden');"
                                                                         [ngModel]="selectedMonth">
                                                                     </datepicker>
                                                                 </a>
