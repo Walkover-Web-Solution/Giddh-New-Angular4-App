@@ -117,7 +117,7 @@
                                 <td>{{item.name}} ({{item.code}})</td>
                                 <td>{{item.parentStockUnit?.name}} <span *ngIf="!item.parentStockUnit?.name">-</span>
                                 </td>
-                                <td class="text-right">{{item.displayQuantityPerUnit}}</td>
+                                <td class="text-right">{{item.displayQuantityPerUnit | giddhRoundOff : giddhDecimalPlaces}}</td>
                                 <td class="action ico-btn">
                                     <button class="btn-default btn-xs" [disabled]="editMode" (click)="editUnit(item)"><i
                                             class="fa fa-pencil"></i></button>

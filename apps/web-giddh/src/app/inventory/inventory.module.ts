@@ -49,8 +49,7 @@ import { DateFormatterPipe } from "./dateFormatter.pipe";
 import { ReactiveFormsModule } from "@angular/forms";
 import { DigitsOnlyModule } from "../shared/helpers/directives/digitsOnly/digitsOnly.module";
 import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
-import { SalesAddStockComponent } from '../proforma-invoice/components/aside-menu-product-service/components/create-stock/sales.create.stock.component';
-import { SalesAddStockGroupComponent } from '../proforma-invoice/components/aside-menu-product-service/components/create-stock-group-modal/create.stock.group.modal';
+import { GiddRoundOffPipeModule } from '../shared/helpers/pipes/round-off/round-off.module';
 
 @NgModule({
     declarations: [
@@ -135,7 +134,8 @@ import { SalesAddStockGroupComponent } from '../proforma-invoice/components/asid
         ReactiveFormsModule,
         DigitsOnlyModule,
         NgxMaskModule.forRoot(),
-        ProformaInvoiceModule
+        ProformaInvoiceModule,
+        GiddRoundOffPipeModule
     ],
     entryComponents: [PaginationComponent]
 })

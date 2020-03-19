@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { find, take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store/roots';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
 import { LoginActions } from '../services/actions/login.action';
 import { StockUnitRequest } from '../../../models/api-models/Inventory';
@@ -15,7 +15,7 @@ import { SettingsProfileActions } from '../../../actions/settings/profile/settin
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
-import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
+import { uniqueNameInvalidStringReplace, giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 
 @Component({
     selector: 'inventory-custom-stock',  // <home></home>
@@ -43,6 +43,8 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public isStockUnitCodeAvailable$: Observable<boolean>;
     public isDivide: boolean = false;
+    /** User selected decimal places */
+    public giddhDecimalPlaces: number = 2;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private customStockActions: CustomStockUnitAction, private inventoryAction: InventoryAction,
@@ -61,9 +63,10 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
             }
         });
 
-        this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
-            if (!_.isEmpty(o)) {
-                this.companyProfile = _.cloneDeep(o);
+        this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profileData) => {
+            if (!_.isEmpty(profileData)) {
+                this.companyProfile = _.cloneDeep(profileData);
+                this.giddhDecimalPlaces = this.companyProfile.balanceDecimalPlaces || 2;
                 if (this.companyProfile.country) {
                     this.country = this.companyProfile.country.toLocaleLowerCase();
                     if (this.country && this.country === 'india') {
@@ -145,9 +148,10 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
 
     public editUnit(item: StockUnitRequest) {
         this.customUnitObj = Object.assign({}, item);
-        this.setUnitName(this.customUnitObj.name);
+        this.selectedUnitName = item.name;
+        // this.setUnitName(this.customUnitObj.name);
         if (item.displayQuantityPerUnit) {
-            this.customUnitObj.quantityPerUnit = item.displayQuantityPerUnit;
+            this.customUnitObj.quantityPerUnit = giddhRoundOff(item.displayQuantityPerUnit, this.giddhDecimalPlaces);
         }
         if (this.customUnitObj.parentStockUnit) {
             this.customUnitObj.parentStockUnitCode = item.parentStockUnit.code;
