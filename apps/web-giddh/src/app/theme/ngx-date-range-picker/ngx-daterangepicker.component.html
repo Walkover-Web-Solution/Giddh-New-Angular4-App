@@ -9,13 +9,12 @@
 }" [class]="'drops-' + drops + '-' + opens">
 
     <!-- ranges container -->
-    <div class="ranges" *ngIf="ranges?.length"
-        style="border-right: 1px solid gainsboro;display: flex;flex-direction: column;">
+    <div class="ranges" *ngIf="ranges?.length">
         <!-- loop over ranges -->
-        <div style="flex: 1 1 auto;">
+        <div class="range-container">
             <ul>
 
-                <li *ngFor="let range of ranges; let i = index" style="position: relative" class="menu-li">
+                <li *ngFor="let range of ranges; let i = index" class="menu-li">
                     <button type="button" class="btn-angle-down" (click)="clickRange($event, range)"
                         (dblclick)="dblClickRange($event, range)" [disabled]="disableRange(ranges, range)"
                         [ngClass]="{'active': range.isSelected}">{{range.name}}
@@ -41,19 +40,17 @@
         <!-- loop over ranges -->
 
         <!-- days up to today/ yesterday input -->
-        <div style="border-bottom: 1px solid gainsboro;border-top: 1px solid gainsboro;">
+        <div class="days-upto-select">
             <ul>
                 <li>
-                    <button><input type="text"
-                            style="width: 28px;height: 17px;margin-right: 3px;font-size: 12px;margin-bottom: 0;"
-                            (keyup)="uptoInputKeyUp($event)" (change)="uptoToday($event,$event.target.value)"> days up
+                    <button><input type="text" (keyup)="uptoInputKeyUp($event)"
+                            (change)="uptoToday($event,$event.target.value)"> days up
                         to today
                     </button>
                 </li>
                 <li>
                     <button><input type="text" (change)="uptoYesterday($event,$event.target.value)"
-                            (keyup)="uptoInputKeyUp($event)"
-                            style="width: 28px;height: 17px;margin-right: 3px;font-size: 12px;margin-bottom: 0;"> days
+                            (keyup)="uptoInputKeyUp($event)"> days
                         up
                         to yesterday
                     </button>
@@ -66,25 +63,23 @@
     <!-- ranges container -->
 
     <!-- calender container -->
-    <div style="display: flex;flex-direction: column;" (mousewheel)="mouseUp($event)">
+    <div class="calender-container" (mousewheel)="mouseUp($event)">
 
-        <div style="flex:1 1 auto;overflow: auto;">
+        <div class="calender-container-wrapper">
 
-            <div style="display: flex ;flex-direction: column;" (mouseout)="hoveredDate = null">
+            <div class="calender-body" (mouseout)="hoveredDate = null">
                 <div>
 
                     <!-- start date/ end date inputs container -->
                     <div class="select-date-range">
                         <input placeholder="start date" #startDateElement [value]="startDateString"
                             (change)="setStartDate($event.target.value)" (click)="ActiveDate =0"
-                            style="width: 100px;height:30px;font-size: 12px;"
                             [class]="ActiveDate ===0 ?ActiveSelectedDateClass :''">
-                        <span style="display: flex;align-items: flex-start">
+                        <span>
                             _
                         </span>
                         <input placeholder="end date" #endDateElement [value]="endDateString"
                             (change)="setEndDate($event.target.value)" (click)="ActiveDate =1"
-                            style="width: 100px;height: 30px;font-size: 12px;"
                             [class]="ActiveDate ===1 ?ActiveSelectedDateClass :''">
                     </div>
                     <!-- start date/ end date inputs container -->
@@ -96,7 +91,7 @@
                             <span class="month-name" (click)="monthPickerClick()">
 
                                 <ng-container *ngIf="showDropdowns && calendarVariables.start.dropdowns">
-                                    <!--<div>-->
+
 
                                     {{this.locale.monthNames[calendarVariables?.start?.calendar[1][1].month()]}}
 
@@ -109,9 +104,9 @@
                                         </option>
                                     </select>
 
-                                    <!--</div>-->
 
-                                    <!--<div style="padding-start: 5px">-->
+
+
                                     {{ calendarVariables?.start?.calendar[1][1].format(" YYYY")}}
                                     <select class="yearselect" (change)="yearChanged($event, sideEnum.start)">
                                         <option *ngFor="let y of calendarVariables.start.dropdowns.yearArrays"
@@ -119,7 +114,7 @@
                                             {{y}}
                                         </option>
                                     </select>
-                                    <!--</div>-->
+
 
                                 </ng-container>
 
@@ -150,8 +145,7 @@
                     <!-- month selection -->
                     <div class="d-container" *ngIf="showMonthPicker" (mousewheel)="mouseUpYear($event)">
                         <div>
-                            <h2
-                                style="position: relative;padding-left: 24px;font-size: 13px;color: rgba(0,0,0,.54);margin: 9px 0;;">
+                            <h2>
                                 {{ calendarVariables?.start?.calendar[1][1].format(" YYYY")}}</h2>
                             <div class="dropdown-containt">
                                 <div class="d-month"
@@ -193,8 +187,7 @@
                             </div>
                         </div>
                         <div>
-                            <h2
-                                style="position: relative;padding-left: 24px;font-size: 13px;color: rgba(0,0,0,.54);margin: 9px 0;;">
+                            <h2>
                                 {{ calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').format(" YYYY")}}
                             </h2>
                             <div class="dropdown-containt">
@@ -249,8 +242,7 @@
                             </div>
                         </div>
                         <div>
-                            <h2
-                                style="position: relative;padding-left: 24px;font-size: 13px;color: rgba(0,0,0,.54);margin: 16px 0;;">
+                            <h2>
                                 {{ calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').format(" YYYY")}}
                             </h2>
                             <div class="dropdown-containt">
@@ -338,7 +330,7 @@
 
                                             </div>
 
-                                            <div style="padding-left: 5px">
+                                            <div class="year-name">
                                                 {{ calendarVariables?.start?.calendar[1][1].format(" YYYY")}}
                                                 <select class="yearselect"
                                                     (change)="yearChanged($event, sideEnum.start)">
@@ -504,7 +496,7 @@
                                                     </option>
                                                 </select>
                                             </div>
-                                            <div style="padding-left: 5px">
+                                            <div>
                                                 {{ calendarVariables?.end?.calendar[1][1].format(" YYYY")}}
                                                 <select class="yearselect" (change)="yearChanged($event, sideEnum.end)">
                                                     <option *ngFor="let y of calendarVariables.end.dropdowns.yearArrays"
@@ -636,12 +628,12 @@
                 <!-- clear button -->
 
                 <!-- cancel button -->
-                <button class="btn btn-default" *ngIf="showCancel" type="button"
+                <button class="btn btn-danger" *ngIf="showCancel" type="button"
                     (click)="clickCancel($event)">{{locale.cancelLabel}}</button>
                 <!-- cancel button -->
 
                 <!-- apply button -->
-                <button class="btn" [disabled]="applyBtn.disabled" type="button"
+                <button class="btn btn-success" [disabled]="applyBtn.disabled" type="button"
                     (click)="clickApply($event)">{{locale.applyLabel}}</button>
                 <!-- apply button -->
 

@@ -90,10 +90,10 @@ export interface DateRangeClicked {
 })
 export class NgxDaterangepickerComponent implements OnInit {
     chosenLabel: string;
-    calendarVariables: CalendarVariables = {start: {}, end: {}};
-    timepickerVariables: { start: any, end: any } = {start: {}, end: {}};
+    calendarVariables: CalendarVariables = { start: {}, end: {} };
+    timepickerVariables: { start: any, end: any } = { start: {}, end: {} };
     // daterangepicker: { start: FormControl, end: FormControl } = {start: new FormControl(), end: new FormControl()};
-    applyBtn: { disabled: boolean } = {disabled: false};
+    applyBtn: { disabled: boolean } = { disabled: false };
     startDate = moment().startOf('day');
     endDate = moment().endOf('day');
     ActiveDate: ActiveDateEnum = ActiveDateEnum.Start;
@@ -177,7 +177,7 @@ export class NgxDaterangepickerComponent implements OnInit {
     public goToPreviousMonthDisabled: boolean = false;
     public goToNextMonthDisabled: boolean = false;
 
-    private _old: { start: any, end: any } = {start: null, end: null};
+    private _old: { start: any, end: any } = { start: null, end: null };
 
     constructor(
         private _ref: ChangeDetectorRef,
@@ -186,7 +186,7 @@ export class NgxDaterangepickerComponent implements OnInit {
         this.choosedDate = new EventEmitter();
         this.rangeClicked = new EventEmitter();
         this.datesUpdated = new EventEmitter();
-        this.locale = {...this._locale};
+        this.locale = { ...this._locale };
         this.updateMonthsInView();
     }
 
@@ -197,7 +197,7 @@ export class NgxDaterangepickerComponent implements OnInit {
     }
 
     @Input() set locale(value) {
-        this._locale = {...this._localeService.config, ...value};
+        this._locale = { ...this._localeService.config, ...value };
     }
 
     get startDateString(): string {
@@ -328,7 +328,7 @@ export class NgxDaterangepickerComponent implements OnInit {
         if (maxDate && end.isAfter(maxDate)) {
             end = maxDate.clone();
         }
-        return {start, maxDate, end};
+        return { start, maxDate, end };
     }
 
     renderTimePicker(side: DateType) {
@@ -643,7 +643,7 @@ export class NgxDaterangepickerComponent implements OnInit {
         }
         this.updateMonthsInView();
         if (this.autoApply) {
-            this.datesUpdated.emit({name: '', startDate: this.startDate, endDate: this.endDate});
+            this.datesUpdated.emit({ name: '', startDate: this.startDate, endDate: this.endDate });
         }
         this.updateView();
     }
@@ -792,10 +792,10 @@ export class NgxDaterangepickerComponent implements OnInit {
             }
         }
         if (this.chosenLabel) {
-            this.choosedDate.emit({name: this.chosenLabel, startDate: this.startDate, endDate: this.endDate});
+            this.choosedDate.emit({ name: this.chosenLabel, startDate: this.startDate, endDate: this.endDate });
         }
 
-        this.datesUpdated.emit({name: '', startDate: this.startDate, endDate: this.endDate});
+        this.datesUpdated.emit({ name: '', startDate: this.startDate, endDate: this.endDate });
         this.hide();
     }
 
@@ -982,9 +982,9 @@ export class NgxDaterangepickerComponent implements OnInit {
     }
 
     setMonth(year: number, month: number) {
-        this.startCalendar.month = moment({y: year, M: month, d: 1});
+        this.startCalendar.month = moment({ y: year, M: month, d: 1 });
         if (this.linkedCalendars) {
-            this.endCalendar.month = moment({y: year, M: month, d: 1}).add(1, 'month');
+            this.endCalendar.month = moment({ y: year, M: month, d: 1 }).add(1, 'month');
         }
         this.updateCalendars();
         this.showMonthPicker = false;
@@ -1264,7 +1264,7 @@ export class NgxDaterangepickerComponent implements OnInit {
             this.setActiveDate(ActiveDateEnum.Start);
             this.isShown = false; // hide calendars
         }
-        this.rangeClicked.emit({name: range.name, startDate: dates.value[0], endDate: dates.value[1]});
+        this.rangeClicked.emit({ name: range.name, startDate: dates.value[0], endDate: dates.value[1] });
         if (!this.keepCalendarOpeningWithRange) {
             this.clickApply();
         } else {
@@ -1356,8 +1356,8 @@ export class NgxDaterangepickerComponent implements OnInit {
     clear() {
         this.startDate = moment().startOf('day');
         this.endDate = moment().endOf('day');
-        this.choosedDate.emit({name: '', startDate: null, endDate: null});
-        this.datesUpdated.emit({name: '', startDate: null, endDate: null});
+        this.choosedDate.emit({ name: '', startDate: null, endDate: null });
+        this.datesUpdated.emit({ name: '', startDate: null, endDate: null });
         this.hide();
     }
 
@@ -1431,7 +1431,7 @@ export class NgxDaterangepickerComponent implements OnInit {
      *  build the locale config
      */
     private _buildLocale() {
-        this.locale = {...this._localeService.config, ...this.locale};
+        this.locale = { ...this._localeService.config, ...this.locale };
         if (!this.locale.format) {
             if (this.timePicker) {
                 this.locale.format = moment.localeData().longDateFormat('lll');
