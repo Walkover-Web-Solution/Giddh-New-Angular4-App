@@ -21,23 +21,49 @@
 }
 .input-group {
     position: relative;
+    input.form-control {
+        padding-left: 35px !important;
+        background-image: url("../../../../assets/images/calender.svg") !important;
+        background-size: 17px !important;
+        background-position: 9px 8px !important;
+        background-repeat: no-repeat !important;
+        padding-left: 45px !important;
+        position: relative;
+        z-index: 99;
+        cursor: default;
+        width: 100%;
+        &:focus {
+            border-color: $inputBorderColor;
+        }
+    }
 }
-.inputWrapper {
+.icon-calender {
+    position: absolute;
+    z-index: 9;
+    height: 32px;
+    width: 32px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid $inputBorderColor;
+    color: #999999;
+}
+.input-wrapper {
     display: block !important;
-    width: 200px !important;
+    width: 220px !important;
     position: relative;
     height: 36px !important;
-}
-.inputWrapper:before {
-    position: absolute;
-    content: "";
-    display: block;
-    height: 36px;
-    width: 1px;
-    background-color: #d9d9d9;
-    left: 37px !important;
-    z-index: 100;
-    top: 0;
+    &:before {
+        position: absolute;
+        content: "";
+        display: block;
+        height: 36px;
+        width: 1px;
+        background-color: #d9d9d9;
+        left: 37px !important;
+        z-index: 100;
+        top: 0;
+    }
 }
 .advance-icon {
     width: 32px;
@@ -52,19 +78,7 @@
     color: #1a237e;
     background: #fff;
 }
-.icon-calender {
-    position: absolute;
-    z-index: 9;
-    height: 36px;
-    width: 36px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    border-right: 1px solid $tableBorderColor;
-    color: #999999;
-    left: 0;
-    font-size: 18px;
-}
+
 .input-grp-dateRangePicker input.form-control {
     padding-left: 45px !important;
     width: 220px;
@@ -76,7 +90,8 @@
     padding: 0 8px;
     margin-right: 0px;
 }
-.basic > tbody > tr > td, .basic > thead > tr > th {
+.basic > tbody > tr > td,
+.basic > thead > tr > th {
     padding: 8px 10px;
 }
 .invoice-footer h3 {
