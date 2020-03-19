@@ -93,7 +93,8 @@ export class NewBranchTransferProductStockDetails {
 
 export class NewBranchTransferProduct {
 	public name: string;
-	public hsnNumber: any;
+    public hsnNumber: any;
+    public sacNumber: any;
 	public skuCode: any;
 	public uniqueName: any;
 	public stockDetails: NewBranchTransferProductStockDetails;
