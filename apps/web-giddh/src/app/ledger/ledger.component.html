@@ -1236,7 +1236,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <!-- [from]="advanceSearchRequest?.from" [to]="advanceSearchRequest?.to" -->
-            <share-ledger #sharLedger [accountUniqueName]="lc.accountUnq" [advanceSearchRequest]="advanceSearchRequest"
+            <share-ledger #sharLedger [from]="shareLedgerDates?.from" [to]="shareLedgerDates?.to" [accountUniqueName]="lc.accountUnq" [advanceSearchRequest]="advanceSearchRequest"
                 (closeShareLedgerModal)="hideShareLedgerModal()"></share-ledger>
         </div>
     </div>
