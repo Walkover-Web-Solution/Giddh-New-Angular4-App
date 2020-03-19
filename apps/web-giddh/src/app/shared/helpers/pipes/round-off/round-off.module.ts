@@ -6,4 +6,4 @@ import { GiddhRoundOffPipe } from './round-off.pipe';
     declarations: [GiddhRoundOffPipe],
     exports: [GiddhRoundOffPipe]
 })
-export class GiddRoundOffPipeModule { }
+export class GiddhRoundOffPipeModule { }
