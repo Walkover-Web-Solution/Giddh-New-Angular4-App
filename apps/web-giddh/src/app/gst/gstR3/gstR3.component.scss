@@ -143,7 +143,7 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab .active {
-    background-color: $lightTextBlue;
+    background-color: $light-text-blue;
 }
 
 .tax-engine .gstr3b-header .sel-tab li:before {
@@ -155,7 +155,7 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab .active:after {
-    border-left: 23px solid $lightTextBlue;
+    border-left: 23px solid $light-text-blue;
 }
 
 .tax-engine .gstr3b-header .sel-tab li:after {
@@ -491,15 +491,15 @@ dropdown-menu-right {
 
 .btn-2 {
     background: #fff;
-    color: $lightTextBlue;
+    color: $light-text-blue;
     border: 0px;
     border-radius: 4px;
-    border: 1px solid $lightTextBlue;
+    border: 1px solid $light-text-blue;
 }
 
 .btn-2:hover {
     color: #ffffff;
-    background: $lightTextBlue;
+    background: $light-text-blue;
 }
 
 ul#dropdown-menu {
