@@ -13,7 +13,7 @@ import { SalesRegisterDetailsComponent } from './components/sales-register-detai
 import { PurchaseRegisterComponent } from './components/purchase-register-component/purchase.register.component';
 import { PurchaseRegisterExpandComponent } from './components/purchase-register-expand-component/purchase.register.expand.component';
 import { ReverseChargeReport } from './components/reverse-charge-report-component/reverse-charge-report.component';
-import { AdvanceReceiptReport } from './components/advance-receipt-report/advance-receipt-report.component';
+import { AdvanceReceiptReportComponent } from './components/advance-receipt-report/advance-receipt-report.component';
 
 @NgModule({
     imports: [
@@ -31,7 +31,7 @@ import { AdvanceReceiptReport } from './components/advance-receipt-report/advanc
                     { path: 'purchase-register', component: PurchaseRegisterComponent},
                     { path: 'purchase-detailed-expand', component: PurchaseRegisterExpandComponent },
                     { path: 'reverse-charge', component: ReverseChargeReport },
-                    { path: 'advance-receipt-report', component: AdvanceReceiptReport },
+                    { path: 'advance-receipt-report', component: AdvanceReceiptReportComponent },
                 ]
             }
         ]),
