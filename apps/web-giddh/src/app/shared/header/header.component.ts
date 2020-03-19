@@ -1055,7 +1055,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.sideMenu.isopen = event;
         }
         if (this.companyDropdown && !this.forceOpenNavigation) {
-            this.forceOpenNavigation = false;
             this.companyDropdown.isOpen = false;
         }
         if (this.companyDetailsDropDownWeb) {
