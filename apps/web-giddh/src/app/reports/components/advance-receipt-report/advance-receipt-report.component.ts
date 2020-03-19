@@ -212,7 +212,6 @@ export class AdvanceReceiptReportComponent implements OnDestroy, OnInit {
     private handleSummaryResponse(response: any) {
         if (response) {
             if (response.status === 'success' && response.body) {
-                console.log('Response: ', response);
                 this.receiptsSummaryData = response.body;
             } else {
                 this.toastService.errorToast(response.message, response.code);
