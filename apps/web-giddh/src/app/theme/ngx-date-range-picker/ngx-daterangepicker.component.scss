@@ -75,7 +75,7 @@ $input-height: 3rem !default;
     width: $md-drppicker-width;
     //padding: 4px;
     display: flex;
-    margin-top: -10px;
+    margin-top: 0;
     overflow: hidden;
     z-index: 1000;
     font-size: 14px;
@@ -952,6 +952,10 @@ td span {
     align-items: center;
     justify-content: center;
     border-radius: 100%;
+    width: 30px;
+    height: 30px;
+    line-height: 2.3;
+    display: block;
 }
 
 //td.start-date::after {
@@ -1126,7 +1130,9 @@ td span {
     height: 30px;
     border: 1px dashed transparent;
 }
-
+.close-calender{
+    display:none;
+}
 .calender-container {
     display: flex;
     flex-direction: column;
@@ -1263,6 +1269,87 @@ td span {
 
         li:hover {
             background-color: $whiteSmoke;
+        }
+    }
+}
+/*media query*/
+
+@media(max-width:767px){
+    .md-drppicker{
+        flex-direction: column;
+        z-index: 5;
+      .ranges {
+        .range-container{
+            ul{
+                width:100%;
+                li{
+                    ul.sub-ranges-cal {
+                        width: 100%;
+                        right: 0;
+                        top: 0;
+                        position: static;
+                    }
+                }
+            }
+            .btn-angle-down{
+                &:focus{
+                    ul.sub-ranges-cal {
+                        width: 100%;
+                        right: 0;
+                        top: 0;
+                        position: static;
+                    }
+                }
+            }
+            
+        }
+        .days-upto-select {
+            ul{
+                width:100%;
+            }
+        }
+      } 
+ 
+      .calender-container{
+        position: absolute;
+        top: 0;
+        width: 100%;
+        left: 0;
+        background-color: #fff;
+        z-index: 1;
+        min-width: 300px;
+        padding-top: 30px;
+
+        .close-calender{
+            position: absolute;
+            top: 10px;
+            left: 0;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            font-size: 17px;
+            font-style: initial;
+            padding-left:15px;
+            img{
+                margin-right: 15px;
+            }
+        }
+      }
+
+      &.double {
+        width: 300px;
+        
+    }
+   
+}
+}
+
+@media(max-width:360px){
+    .md-drppicker{
+
+        &.double {
+            width: 280px;
+             
         }
     }
 }

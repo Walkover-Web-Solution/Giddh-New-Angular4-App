@@ -9,11 +9,16 @@
 }" [class]="'drops-' + drops + '-' + opens">
 
     <!-- ranges container -->
+   
     <div class="ranges" *ngIf="ranges?.length">
         <!-- loop over ranges -->
-        <div class="range-container">
+        <div class="range-container">  
             <ul>
-
+                <li class="menu-li"  type="button"  (click)="visibleCalnderOn();">
+                    <button>
+                       Custom
+                    </button>
+                </li>
                 <li *ngFor="let range of ranges; let i = index" class="menu-li">
                     <button type="button" class="btn-angle-down" (click)="clickRange($event, range)"
                         (dblclick)="dblClickRange($event, range)" [disabled]="disableRange(ranges, range)"
@@ -21,9 +26,7 @@
 
                         <span *ngIf="range.ranges.length" class="available prev angle-down"></span>
                     </button>
-
-
-                    <ul *ngIf="range.ranges.length" class="sub-ranges-cal menu-drawer">
+                    <ul *ngIf="range.ranges.length && dropdownShow " class="sub-ranges-cal menu-drawer">
                         <li *ngFor="let subRange of range.ranges">
                             <button type="button" (click)="clickRange($event,subRange)"
                                 (dblclick)="dblClickRange($event, subRange)"
@@ -35,10 +38,8 @@
 
                 </li>
             </ul>
-
         </div>
         <!-- loop over ranges -->
-
         <!-- days up to today/ yesterday input -->
         <div class="days-upto-select">
             <ul>
@@ -58,13 +59,14 @@
             </ul>
         </div>
         <!-- days up to today/ yesterday input -->
-
     </div>
     <!-- ranges container -->
-
     <!-- calender container -->
-    <div class="calender-container" (mousewheel)="mouseUp($event)">
-
+    <div  *ngIf="!isMobileScreen" class="calender-container" (mousewheel)="mouseUp($event)">
+      <div class="close-calender" (click)="closeCalander();">
+       <img src="../../../assets/images/close-icon.svg" alt="close-btn"> Custom
+      </div>
+    
         <div class="calender-container-wrapper">
 
             <div class="calender-body" (mouseout)="hoveredDate = null">

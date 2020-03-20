@@ -5,6 +5,7 @@ import * as _moment from 'moment';
 import { Moment } from 'moment';
 import { LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 const moment = _moment;
 
@@ -173,16 +174,17 @@ export class NgxDaterangepickerComponent implements OnInit {
     @Output() datesUpdated: EventEmitter<DateRangeClicked>;
     @ViewChild('pickerContainer') pickerContainer: ElementRef;
     showMonthPicker = false;
-
+    public isMobileScreen: boolean = false;
+public dropdownShow:boolean = false;
     public goToPreviousMonthDisabled: boolean = false;
     public goToNextMonthDisabled: boolean = false;
-
+    
     private _old: { start: any, end: any } = { start: null, end: null };
 
     constructor(
         private _ref: ChangeDetectorRef,
-        private _localeService: NgxDaterangepickerLocaleService
-    ) {
+        private _localeService: NgxDaterangepickerLocaleService,
+        private _breakPointObservar: BreakpointObserver) {
         this.choosedDate = new EventEmitter();
         this.rangeClicked = new EventEmitter();
         this.datesUpdated = new EventEmitter();
@@ -215,6 +217,13 @@ export class NgxDaterangepickerComponent implements OnInit {
     }
 
     ngOnInit() {
+
+        this._breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
         this._buildLocale();
         const daysOfWeek = [...this.locale.daysOfWeek];
         if (this.locale.firstDay !== 0) {
@@ -249,6 +258,14 @@ export class NgxDaterangepickerComponent implements OnInit {
         this.renderCalendar(DateType.start);
         this.renderCalendar(DateType.end);
     }
+
+    public visibleCalnderOn(){
+        this.isMobileScreen = !this.isMobileScreen;
+      
+    }
+ public closeCalander(){
+     this.isMobileScreen = !this.isMobileScreen;
+ }
 
     /**
      * check whether go to previous and go to next month are allowed
@@ -1242,6 +1259,7 @@ export class NgxDaterangepickerComponent implements OnInit {
      * @param range
      */
     clickRange(e, range) {
+        this.dropdownShow = !this.dropdownShow;
         this.selectRange(this.ranges, range.name);
 
         this.chosenRange = range.name;
