@@ -65,16 +65,16 @@ export const VOUCHER_TYPE_LIST: any[] = [
     },
     {
         value: VoucherTypeEnum.generateProforma,
-        label: 'Proformas',
+        label: 'Proforma',
         additional: {
-            label: 'Proformas'
+            label: 'Proforma'
         }
     },
     {
         value: VoucherTypeEnum.generateEstimate,
-        label: 'Estimates',
+        label: 'Estimate',
         additional: {
-            label: 'Estimates (Beta)'
+            label: 'Estimate (Beta)'
         }
     }
 ];

@@ -2085,7 +2085,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             txn.sacNumberExists = false;
             txn.hsnNumber = null;
 
-            if (txn.stockDetails && txn.stockDetails.hsnNumber && this.inventorySettings && this.inventorySettings.manageInventory === true) {
+            if (txn.stockDetails && txn.stockDetails.hsnNumber && this.inventorySettings && (this.inventorySettings.manageInventory === true || !txn.stockDetails.sacNumber)) {
                 txn.hsnNumber = txn.stockDetails.hsnNumber;
                 txn.hsnOrSac = 'hsn';
             }
@@ -2095,7 +2095,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 txn.hsnOrSac = 'sac';
             }
 
-            if (!o.stock && o.hsnNumber && this.inventorySettings && this.inventorySettings.manageInventory === true) {
+            if (!o.stock && o.hsnNumber && this.inventorySettings && (this.inventorySettings.manageInventory === true || !o.sacNumber)) {
                 txn.hsnNumber = o.hsnNumber;
                 txn.hsnOrSac = 'hsn';
             }
