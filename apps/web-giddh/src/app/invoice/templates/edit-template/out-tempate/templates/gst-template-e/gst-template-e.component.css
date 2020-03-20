@@ -232,7 +232,6 @@ tfoot.table-details tr th {
 
 #royal .subfooter {
     margin-top: 100px;
-    padding: 0 15px;
 }
 #royal .subfooter h1 {
     font-size: 24px;
@@ -380,4 +379,7 @@ img {
     display: block;
     white-space: pre-line;
     line-height: 1.1em;
+}
+.line-height-initial {
+    line-height: initial;
 }
