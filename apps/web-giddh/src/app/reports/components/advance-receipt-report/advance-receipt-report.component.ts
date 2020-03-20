@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -7,7 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { GetAllAdvanceReceiptsRequest, AdvanceReceiptSummaryRequest } from '../../../models/api-models/Reports';
+import { AdvanceReceiptSummaryRequest, GetAllAdvanceReceiptsRequest } from '../../../models/api-models/Reports';
 import { ReceiptService } from '../../../services/receipt.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
@@ -78,8 +78,8 @@ export class AdvanceReceiptReportComponent implements OnDestroy, OnInit {
         endDate: moment()
     };
     public receiptType: Array<any> = [
-        { label: 'Normal Receipts', value: 'normal receipt'},
-        { label: 'Advance Receipts', value: 'advance receipt'}
+        { label: 'Normal Receipts', value: 'normal receipt' },
+        { label: 'Advance Receipts', value: 'advance receipt' }
     ];
     public modalRef: BsModalRef;
     public message: string;
@@ -140,17 +140,27 @@ export class AdvanceReceiptReportComponent implements OnDestroy, OnInit {
     public allReceipts: Array<any>;
     /** Stores summary data of all receipts based on filters applied */
     public receiptsSummaryData: any;
-
+    /** Stores the value of pagination limit for template use */
+    public paginationLimit: number = PAGINATION_LIMIT;
     /** Stores the current page number */
-    private pageConfiguration: { currentPage: number, totalPages: number } = {
+    public pageConfiguration: { currentPage: number, totalPages: number, totalItems: number } = {
         currentPage: 1,
-        totalPages: 1
+        totalPages: 1,
+        totalItems: 1
     };
+    public searchQueryParams: {
+        receiptName: string,
+        customerName: string;
+        paymentMode: string;
+
+    }
+
     /** Subject to unsubscribe all the observables when the component destroys */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     /** @ignore */
     constructor(
+        private changeDetectorRef: ChangeDetectorRef,
         private modalService: BsModalService,
         private receiptService: ReceiptService,
         private store: Store<AppState>,
@@ -201,7 +211,15 @@ export class AdvanceReceiptReportComponent implements OnDestroy, OnInit {
             if (response.status === 'success' && response.body) {
                 this.pageConfiguration.currentPage = response.body.page;
                 this.pageConfiguration.totalPages = response.body.totalPages;
+                this.pageConfiguration.totalItems = response.body.totalItems;
+                // let i = 0;
+                // while(i<=100) {
+                //     response.body.results.push(response.body.results[0]);
+                //     i++;
+                // }
+                // this.pageConfiguration.totalItems = 101;
                 this.allReceipts = response.body.results;
+                this.changeDetectorRef.detectChanges();
                 return response.body;
             } else {
                 this.toastService.errorToast(response.message, response.code);
@@ -269,7 +287,17 @@ export class AdvanceReceiptReportComponent implements OnDestroy, OnInit {
         }, 200);
     }
 
-    public onReceiptTypeChanged(type: string) {
+    public onReceiptTypeChanged(event: any) {
+        this.fetchAllReceipts({page: event.page}).subscribe((response) => this.handleFetchAllReceiptResponse(response));
+    }
 
+    public onDateChange(event: any) {
+        this.datePickerOptions.startDate = event.picker.startDate._d;
+        this.datePickerOptions.endDate = event.picker.endDate._d;
+        this.fetchReceiptsData();
+    }
+
+    public onPageChanged(event: any) {
+        this.fetchAllReceipts({page: event.page}).subscribe((response) => this.handleFetchAllReceiptResponse(response));
     }
 }

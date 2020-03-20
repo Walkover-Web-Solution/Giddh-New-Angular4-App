@@ -59,7 +59,8 @@
                                     </a>
                                     <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
                                         role="menu" aria-labelledby="button-alignment">
-                                        <li *ngFor="let type of receiptType" role="menuitem"><a class="dropdown-item" href="javascript:;"
+                                        <li *ngFor="let type of receiptType" role="menuitem"><a class="dropdown-item"
+                                                href="javascript:;"
                                                 (click)="onReceiptTypeChanged(type.value);">{{type.label}}</a></li>
                                     </ul>
                                 </div>
@@ -112,20 +113,32 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let receipt of allReceipts">
-                        <td data-title="#"><a href="javascript:void(0)">{{ receipt.receiptNumber }}</a> </td>
+                        <td data-title="#">{{ receipt.receiptNumber }}</td>
                         <td data-title="Entry Date">{{ receipt.date }}</td>
                         <td data-title="Supplier's Name">{{ receipt.type }}</td>
                         <td data-title="Vouchter Type">{{ receipt.baseAccountName }}</td>
                         <td data-title="Payment Mode">{{ receipt.particularNames }}</td>
                         <td data-title="Invoice#">
-                            <tr *ngFor="let invoice of receipt.invoices">{{ invoice }}</tr>
-                        </td>
-                        <td data-title="Supplier Country">{{ receipt.totalAmount.symbol }}{{ receipt.totalAmount.amount | giddhCurrency}}
-                        </td>
-                        <td data-title="Taxable Value">{{ receipt.unusedAmount.symbol }}{{ receipt.unusedAmount.amount | giddhCurrency}}</td>
+                    <tr *ngFor="let invoice of receipt.invoices">{{ invoice }}</tr>
+                    </td>
+                    <td data-title="Supplier Country">
+                        {{ receipt.totalAmount.symbol }}{{ receipt.totalAmount.amount | giddhCurrency}}
+                    </td>
+                    <td data-title="Taxable Value">
+                        {{ receipt.unusedAmount.symbol }}{{ receipt.unusedAmount.amount | giddhCurrency}}</td>
+                    </tr>
+                    <tr *ngIf="!allReceipts?.length">
+                        <td data-title="No records found" colspan="12" align="center">No records found.</td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div *ngIf="pageConfiguration.totalItems > paginationLimit" class="paginationWrapper">
+            <pagination [totalItems]="pageConfiguration.totalItems" [(ngModel)]="pageConfiguration.currentPage"
+                [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit"
+                [rotate]="false" previousText="&#9668;" nextText="&#9658;" (pageChanged)="onPageChanged($event)">
+            </pagination>
         </div>
     </div>
 
@@ -133,7 +146,8 @@
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 total-due-sale-wrap">
             <div class="col-md-3 col-sm-6 total-due-sale">
                 <h3>Advance Receipts</h3>
-                <h1>{{receiptsSummaryData?.advance?.symbol}}{{receiptsSummaryData?.advance?.amount | giddhCurrency}}</h1>
+                <h1>{{receiptsSummaryData?.advance?.symbol}}{{receiptsSummaryData?.advance?.amount | giddhCurrency}}
+                </h1>
             </div>
 
             <div class="col-md-3 col-sm-6 total-due-sale">
