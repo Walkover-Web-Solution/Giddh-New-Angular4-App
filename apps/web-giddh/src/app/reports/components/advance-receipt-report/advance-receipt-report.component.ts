@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild, AfterViewInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
+import { cloneDeep } from '../../../lodash-optimized';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { Observable, ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, ReplaySubject, fromEvent } from 'rxjs';
+import { takeUntil, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
@@ -12,19 +13,23 @@ import { ReceiptService } from '../../../services/receipt.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { AppState } from '../../../store';
-import { DaterangePickerComponent } from '../../../theme/ng2-daterangepicker/daterangepicker.component';
+import { ADVANCE_RECEIPT_REPORT_FILTERS } from '../../constants/reports.constant';
 
 @Component({
     selector: 'advance-receipt-report',
     templateUrl: './advance-receipt-report.component.html',
     styleUrls: ['./advance-receipt-report.component.scss']
 })
-export class AdvanceReceiptReportComponent implements OnDestroy, OnInit {
+export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, OnInit {
 
-    @ViewChild('customerNameField') public customerNameField;
-    @ViewChild('ReceiptField') public ReceiptField;
-    @ViewChild('paymentModeField') public paymentModeField;
-    @ViewChild(DaterangePickerComponent) public dp: DaterangePickerComponent;
+    @ViewChild('customerName') public customerName: ElementRef;
+    @ViewChild('receiptNumber') public receiptNumber: ElementRef;
+    @ViewChild('paymentMode') public paymentMode: ElementRef;
+    @ViewChild('invoiceNumber') public invoiceNumber: ElementRef;
+    @ViewChild('customerNameParent') public customerNameParent: ElementRef;
+    @ViewChild('receiptNumberParent') public receiptNumberParent: ElementRef;
+    @ViewChild('paymentModeParent') public paymentModeParent: ElementRef;
+    @ViewChild('invoiceNumberParent') public invoiceNumberParent: ElementRef;
 
     public inlineSearch: any = '';
     public moment = moment;
@@ -83,58 +88,6 @@ export class AdvanceReceiptReportComponent implements OnDestroy, OnInit {
     ];
     public modalRef: BsModalRef;
     public message: string;
-    public advanceReceiptReport = [
-        {
-            receipt: "AD98834-3",
-            date: "13-02-2020",
-            type: "Advance Receipt",
-            customerName: "Shubhendra",
-            paymentMode: "ICIC",
-            invoice: "2018-19/INV/256",
-            totalAmount: "5000",
-            unusedAmount: "3000"
-        },
-        {
-            receipt: "AD98834-3",
-            date: "13-02-2020",
-            type: "Normal Receipt",
-            customerName: "Alok",
-            paymentMode: "Cash",
-            invoice: "2018-19/INV/256",
-            totalAmount: "213",
-            unusedAmount: "3000"
-        },
-        {
-            receipt: "AD98834-3",
-            date: "13-02-2020",
-            type: "Advance Receipt",
-            customerName: "Sadik",
-            paymentMode: "ICIC",
-            invoice: "2018-19/INV/256",
-            totalAmount: "423",
-            unusedAmount: "2312"
-        },
-        {
-            receipt: "AD98834-3",
-            date: "13-02-2020",
-            type: "Normal Receipt",
-            customerName: "Meghna",
-            paymentMode: "Cash",
-            invoice: "2018-19/INV/256",
-            totalAmount: "5000",
-            unusedAmount: "3000"
-        },
-        {
-            receipt: "AD98834-3",
-            date: "13-02-2020",
-            type: "Normal Receipt",
-            customerName: "Shubhendra",
-            paymentMode: "ICIC",
-            invoice: "2018-19/INV/256",
-            totalAmount: "5000",
-            unusedAmount: "3000"
-        },
-    ]
     public showEntryDate = true;
     /** Stores the list of all receipts */
     public allReceipts: Array<any>;
@@ -148,12 +101,22 @@ export class AdvanceReceiptReportComponent implements OnDestroy, OnInit {
         totalPages: 1,
         totalItems: 1
     };
-    public searchQueryParams: {
-        receiptName: string,
-        customerName: string;
-        paymentMode: string;
-
-    }
+    public searchQueryParams: any = {
+        receiptNumber: '',  // Receipt Number
+        baseAccountName: '',  // Customer Name
+        particularName: '', // Payment Mode
+        invoiceNumber: '',  // Invoice Number
+        sortBy: '',  // Sort by
+        sort: '' // Sort value
+    };
+    /** True, if the user clicks to search Receipt */
+    public showReceiptSearchBar: boolean = false;
+    /** True, if the user clicks to search Customer */
+    public showCustomerSearchBar: boolean = false;
+    /** True, if the user clicks to search Payment */
+    public showPaymentSearchBar: boolean = false;
+    /** True, if the user clicks to search Invoice */
+    public showInvoiceSearchBar: boolean = false;
 
     /** Subject to unsubscribe all the observables when the component destroys */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -181,8 +144,28 @@ export class AdvanceReceiptReportComponent implements OnDestroy, OnInit {
         });
     }
 
+    ngAfterViewInit(): void {
+        this.subscribeToEvents();
+    }
+
+    private subscribeToEvents(): void {
+        fromEvent(this.customerName.nativeElement, 'input').pipe(distinctUntilChanged(), debounceTime(700)).subscribe((event: any) => {
+            this.fetchAllReceipts(this.searchQueryParams).subscribe((response) => this.handleFetchAllReceiptResponse(response));
+        });
+        fromEvent(this.receiptNumber.nativeElement, 'input').pipe(distinctUntilChanged(), debounceTime(700)).subscribe((event: any) => {
+            this.fetchAllReceipts(this.searchQueryParams).subscribe((response) => this.handleFetchAllReceiptResponse(response));
+
+        });
+        fromEvent(this.paymentMode.nativeElement, 'input').pipe(distinctUntilChanged(), debounceTime(700)).subscribe((event: any) => {
+            this.fetchAllReceipts(this.searchQueryParams).subscribe((response) => this.handleFetchAllReceiptResponse(response));
+        });
+        fromEvent(this.invoiceNumber.nativeElement, 'input').pipe(distinctUntilChanged(), debounceTime(700)).subscribe((event: any) => {
+            this.fetchAllReceipts(this.searchQueryParams).subscribe((response) => this.handleFetchAllReceiptResponse(response));
+        });
+    }
+
     private fetchReceiptsData() {
-        this.fetchAllReceipts().subscribe((response) => this.handleFetchAllReceiptResponse(response));
+        this.fetchAllReceipts(this.searchQueryParams).subscribe((response) => this.handleFetchAllReceiptResponse(response));
         this.fetchSummary().subscribe((response) => this.handleSummaryResponse(response));
     }
 
@@ -192,8 +175,14 @@ export class AdvanceReceiptReportComponent implements OnDestroy, OnInit {
             to: moment(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT),
             count: PAGINATION_LIMIT
         }
-        if (additionalRequestParameters) {
-            requestObject = { ...requestObject, ...additionalRequestParameters };
+        const optionalParams = cloneDeep(additionalRequestParameters);
+        if (optionalParams) {
+            for (let key in optionalParams) {
+                if (!optionalParams[key]) {
+                    delete optionalParams[key]; // Delete falsy values
+                }
+            }
+            requestObject = { ...requestObject, ...optionalParams };
         }
         return this.receiptService.getAllAdvanceReceipts(requestObject);
     }
@@ -268,27 +257,44 @@ export class AdvanceReceiptReportComponent implements OnDestroy, OnInit {
     }
 
     /**
-     * This will put focus on selected search field
+     * Opens/Closes the respective search bar based on parameters provided
      *
-     * @param {*} inlineSearch
-     * @memberof ReverseChargeReport
+     * @param {string} filterName Name of the filter to open or close
+     * @param {boolean} openFilter True, if filter needs to be opened
+     * @memberof AdvanceReceiptReportComponent
      */
-    public focusOnColumnSearch(inlineSearch) {
-        this.inlineSearch = inlineSearch;
-
-        setTimeout(() => {
-            if (this.inlineSearch === 'Receipt') {
-                this.ReceiptField.nativeElement.focus();
-            } else if (this.inlineSearch === 'invoiceNumber') {
-                this.customerNameField.nativeElement.focus();
-            } else if (this.inlineSearch === 'paymentMode') {
-                this.paymentModeField.nativeElement.focus();
-            }
-        }, 200);
+    public searchBy(event: any, filterName: string, openFilter: boolean): void {
+        switch (filterName) {
+            case ADVANCE_RECEIPT_REPORT_FILTERS.RECEIPT_FILTER:
+                if (event && this.childOf(event.target, this.receiptNumberParent.nativeElement)) {
+                    return;
+                }
+                this.showReceiptSearchBar = openFilter;
+                break;
+            case ADVANCE_RECEIPT_REPORT_FILTERS.CUSTOMER_FILTER:
+                if (event && this.childOf(event.target, this.customerNameParent.nativeElement)) {
+                    return;
+                }
+                this.showCustomerSearchBar = openFilter;
+                break;
+            case ADVANCE_RECEIPT_REPORT_FILTERS.PAYMENT_FILTER:
+                if (event && this.childOf(event.target, this.paymentModeParent.nativeElement)) {
+                    return;
+                }
+                this.showPaymentSearchBar = openFilter;
+                break;
+            case ADVANCE_RECEIPT_REPORT_FILTERS.INVOICE_FILTER:
+                if (event && this.childOf(event.target, this.invoiceNumberParent.nativeElement)) {
+                    return;
+                }
+                this.showInvoiceSearchBar = openFilter;
+                break;
+            default: break;
+        }
     }
 
     public onReceiptTypeChanged(event: any) {
-        this.fetchAllReceipts({page: event.page}).subscribe((response) => this.handleFetchAllReceiptResponse(response));
+        this.fetchAllReceipts({ page: event.page }).subscribe((response) => this.handleFetchAllReceiptResponse(response));
     }
 
     public onDateChange(event: any) {
@@ -298,6 +304,10 @@ export class AdvanceReceiptReportComponent implements OnDestroy, OnInit {
     }
 
     public onPageChanged(event: any) {
-        this.fetchAllReceipts({page: event.page}).subscribe((response) => this.handleFetchAllReceiptResponse(response));
+        this.fetchAllReceipts({ page: event.page }).subscribe((response) => this.handleFetchAllReceiptResponse(response));
+    }
+
+    public childOf(element, parent) {
+        return parent.contains(element);
     }
 }
