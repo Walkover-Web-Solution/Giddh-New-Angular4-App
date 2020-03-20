@@ -438,6 +438,7 @@ export interface GenericRequestForGenerateSCD extends GenericRequest {
     uniqueName?: string,
     templateDetails?: TemplateDetailsClass
     deposit?: AmountClassMulticurrency;
+    roundOffApplicable?: boolean;
 }
 
 /**
