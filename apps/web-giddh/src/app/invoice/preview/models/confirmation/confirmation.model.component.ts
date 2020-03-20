@@ -8,6 +8,7 @@ import { confirmationMessages } from "../../../../shared/helpers/confirmationMes
 })
 
 export class DeleteInvoiceConfirmationModelComponent implements OnInit {
+    /* Taking module name as input to show confirmation message based on module */
     @Input() public module: string = '';
     @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
     @Output() public confirmDeleteEvent: EventEmitter<boolean> = new EventEmitter(true);
