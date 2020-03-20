@@ -75,7 +75,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     private selectedTaxes: string[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _cdr: ChangeDetectorRef) {
+    constructor(private cdr: ChangeDetectorRef) {
         //
     }
 
@@ -83,7 +83,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         if(this.taxes) {
             this.prepareTaxObject();
             this.change();
-            this._cdr.detectChanges();
+            this.cdr.detectChanges();
         }
     }
 
@@ -112,7 +112,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             this.change();
         }
 
-        this._cdr.detectChanges();
+        this.cdr.detectChanges();
     }
 
     /**
