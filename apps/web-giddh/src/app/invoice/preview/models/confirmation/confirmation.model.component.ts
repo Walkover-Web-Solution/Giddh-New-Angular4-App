@@ -13,7 +13,6 @@ export class DeleteInvoiceConfirmationModelComponent implements OnInit {
     @Output() public confirmDeleteEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
 
-    public message: string = '';
     public confirmationMessages: any[] = [];
 
     constructor() {
@@ -24,8 +23,6 @@ export class DeleteInvoiceConfirmationModelComponent implements OnInit {
         confirmationMessages.map(c => {
             this.confirmationMessages[c.module] = c;
         });
-        console.log(this.confirmationMessages);
-        console.log(this.module);
     }
 
     public onConfirmation() {
