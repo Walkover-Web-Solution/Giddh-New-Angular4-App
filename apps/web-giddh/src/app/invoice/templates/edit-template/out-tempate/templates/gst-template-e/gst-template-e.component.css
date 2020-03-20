@@ -99,16 +99,24 @@ body {
 }
 
 #royal .total-amount {
-    text-align: center;
-    vertical-align: bottom;
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-bottom: 1px solid #DF4927;
+    float: right;
 }
 
 #royal .total-amount h2 {
     font-size: 25px;
-    float: right;
     font-weight: bold;
-    /* display: flex; */
     line-height: normal;
+    margin-right: 10px;
+}
+.product-table thead tr th {
+    font-weight: normal;
+}
+tfoot.table-details tr th {
+    font-weight: normal;
 }
 
 #royal .mrL2 {
@@ -124,7 +132,7 @@ body {
 }
 
 #royal .meta {
-    margin: 2px 0 15px 0;
+    margin: 2px 0 0px 0;
 }
 
 #royal .meta h4 {
@@ -139,11 +147,6 @@ body {
     /* padding-bottom: 10px; */
 }
 
-#royal .product-table tbody tr td:last-child,
-#royal .product-table tfoot tr th:last-child {
-    /* background: #df49270d; */
-}
-
 #royal .product-table tfoot tr:last-child th {
     padding: 15px 0;
 }
@@ -151,17 +154,12 @@ body {
 #royal .product-table thead tr th:last-child {
     position: relative;
 }
-
-#royal .product-table tfoot tr:nth-last-child(2) th {
-    padding-bottom: 10px;
-}
-
 #royal .product-table tfoot tr:last-child {
     padding: 7px 0;
 }
 
 #royal .product-table tbody tr:last-child td {
-    padding-bottom: 50px;
+    padding-bottom: 10px;
 }
 /* #royal .product-table:before {
     position: absolute;
@@ -369,6 +367,7 @@ img {
 #royal .product-table tfoot tr th {
     padding: 0 8px;
     font-size: 11px;
+    font-weight: normal;
 }
 #royal footer p {
     font-size: 10px;

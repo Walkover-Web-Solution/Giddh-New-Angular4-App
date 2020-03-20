@@ -29,11 +29,16 @@
                                 <strong>INVOICE</strong>
                             </h4>
                         </td>
+
+                        <td class="text-center">
+                            <img src="assets/images/dublicate.svg" alt="">
+                        </td>
                         <td class="text-right" *ngIf="showLogo">
                             <figure class="col-xs-12">
                                 <img [hidden]='!showLogo' [src]="logoSrc" class="text-left max-width-180" alt=""
                                     [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
                             </figure>
+                            <p class="bold">Walkover Web Solutions Pvt Ltd.</p>
                         </td>
                     </tr>
 
@@ -64,13 +69,15 @@
                                 </ng-container>
                             </p>
 
+                            <p class="pt-05 pb-05" *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                                <strong>Attention to: </strong> Alok Gangrade</p>
+
                         </figure>
                     </td>
                 </tr>
                 <tr class="secondry_clr">
                     <td *ngIf="fieldsAndVisibility.header.billingAddress?.display">
-                        <p style="padding: 4px 0;" *ngIf="fieldsAndVisibility.header.attentionTo?.display">
-                            <strong>Attention to: </strong> Alok Gangrade</p>
+
                         <p *ngIf="fieldsAndVisibility.header.billingAddress?.display">
                             <strong>{{(fieldsAndVisibility.header.billingAddress?.label?.length > 0) ? fieldsAndVisibility.header.billingAddress?.label
                                 : 'Billing Address'}}</strong>
@@ -79,10 +86,23 @@
                         <p *ngIf="fieldsAndVisibility.header.billingAddress?.display" class="address">
                             24 Buidling Name <br /> 3rd Floor, 15 A.B. Road<br> Indore (M.P.) 452000</p>
                         <p *ngIf="fieldsAndVisibility.header.billingGstin?.display">
-                            <strong>{{fieldsAndVisibility.header.billingGstin?.label ? fieldsAndVisibility.header.billingGstin?.label
-                                : 'GSTIN'}}: 11AAAAAA000Z0A1</strong>
+                            {{fieldsAndVisibility.header.billingGstin?.label ? fieldsAndVisibility.header.billingGstin?.label
+                                : 'GSTIN'}}: 11AAAAAA000Z0A1
                         </p>
                     </td>
+
+                    <td>
+                        <p>
+                            <strong>Shipping Address:</strong>
+                        </p>
+                        <p>Green Soft Solutions</p>
+                        <p class="address">
+                            24 Buidling Name <br /> 3rd Floor, 15 A.B. Road<br> Indore (M.P.) 452000</p>
+                        <p>
+                            GSTIN: 11AAAAAA000Z0A1
+                        </p>
+                    </td>
+
                     <td style="padding-top: 20px;">
                         <p
                             *ngIf="fieldsAndVisibility.header.shippingDate?.display ||fieldsAndVisibility.header.shippedVia?.display || fieldsAndVisibility.header.trackingNumber?.display">
@@ -100,13 +120,18 @@
                     </td>
 
                     <!-- <td colspan="1"></td> -->
-                    <td class="total-amount">
+                </tr>
 
-                        <h2 class="amt secondry_clr priceAmount" *ngIf="fieldsAndVisibility.table.total?.display"
-                            [ngStyle]="{ 'background-color': inputTemplate.tableColor}">8166.00/-</h2>
-
+                <tr>
+                    <td colspan="3">
+                        <div class="total-amount" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">
+                            <h2 *ngIf="fieldsAndVisibility.table.total?.display"
+                            >8166.00/- </h2>
+                            <span>Due on 30/08/2017</span>
+                        </div>
                     </td>
                 </tr>
+
             </tbody>
         </table>
     </div>
@@ -193,6 +218,13 @@
                 </tr>
             </tbody>
             <tfoot class="table-details">
+
+                <tr>
+                    <th [attr.colspan]="columnsVisibled - 2"></th>
+                    <th class="text-right">Total Qty</th>
+                    <th class="text-right">22</th>
+                </tr>
+
                 <tr>
                     <th [attr.colspan]="columnsVisibled - 2"></th>
                     <th class="text-right">Sub Total</th>
@@ -224,11 +256,11 @@
 
                 <tr>
                     <td [attr.colspan]="columnsVisibled -2" class="text-left inwords">
-                        <p *ngIf="fieldsAndVisibility.footer.totalInWords?.display"> Eight Thousand One Hundred Sixty
+                        <p class="font-12" *ngIf="fieldsAndVisibility.footer.totalInWords?.display"> Eight Thousand One Hundred Sixty
                             Six Only</p>
                     </td>
                     <th class="text-right">
-                        Total
+                        <strong>Total</strong>
                     </th>
                     <th class="text-right">
                         8166.00
@@ -261,7 +293,7 @@
         <table class="tax-table item" cellspacing="0" cellpadding="0">
             <thead>
                 <tr>
-                    <th class="text-left" *ngIf="fieldsAndVisibility.table.hsnSac?.display" style="width: 50%;">
+                    <th class="text-left" *ngIf="fieldsAndVisibility.table.hsnSac?.display">
                         {{(fieldsAndVisibility.table.hsnSac?.label?.length > 0) ? fieldsAndVisibility.table.hsnSac?.label : 'HSN/SAC'}}
                     </th>
                     <th *ngIf="fieldsAndVisibility.table.taxableValue?.display">

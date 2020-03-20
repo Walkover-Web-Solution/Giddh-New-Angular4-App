@@ -1,7 +1,8 @@
 <div id="contentTab" class="tabcontent mrT2 templateEditor"
     *ngIf="content && customTemplate && customTemplate.sections">
     <!-- start header -->
-    <div id="headerDiv" *ngIf="templateUISectionVisibility.header">
+    <div id="headerDiv" *ngIf="templateUISectionVisibility.header" class="d-flex">
+        <div class="width-100">
         <h2>Header</h2>
         <div class="scrollAuto">
             <div class="clearfix">
@@ -315,7 +316,30 @@
         </div>
     </div>
 
-    <div id="tableDiv" *ngIf="templateUISectionVisibility.table">
+    <div class="form-group width-100 pl-5 pt-4">
+        <div class="col-md-11">
+            <div class="mb-1">
+                <input type="checkbox" checked /> Document Title: This is your
+            </div>
+
+            <div class="form-group">
+                <input type="text" class="form-control">
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+
+
+
+
+
+
+    <div id="tableDiv" *ngIf="templateUISectionVisibility.table" class="d-flex">
+
+        <div class="width-100">
+
         <h2>Table</h2>
 
         <div class="clearfix scrollAuto">
@@ -547,10 +571,31 @@
                 </tbody>
             </table>
         </div>
+        </div>
+
+        <div class="form-group width-100 pl-5 pt-4 align-items-center d-flex">
+            <div class="col-md-11">
+                <div class="mb-1">
+                    <input type="checkbox" checked /> Tax Bifurcation
+                  </div>
+                  <div class="clearfix mrL3">
+                    <p class="pd0">
+                        <input class="radio-custom cp ml0" id="tax-rate" type="radio" name="bifurcation" checked>
+                        <label class="radio-custom-label" for="tax-rate">Tax Rate</label>
+                    </p>
+
+                    <p class="pd0">
+                        <input class="radio-custom cp ml0" id="hsn-sac" type="radio">
+                        <label class="radio-custom-label" for="hsn-sac" name="bifurcation" >HSN/SAC</label>
+                    </p>
+                  </div>
+            </div>
+        </div>
+
     </div>
 
-    <div id="footerDiv" *ngIf="templateUISectionVisibility.footer" class="">
-        <div class="clearfix">
+    <div id="footerDiv" *ngIf="templateUISectionVisibility.footer" class="d-flex">
+        <div class="width-100">
             <h2>Footer</h2>
             <div class="clearfix bdrB scrollAuto">
                 <div *ngIf="fieldsAndVisibility.footer.companyName" class="form-group">
@@ -692,6 +737,25 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="form-group width-100 pl-5 pt-4">
+            <div class="col-md-11">
+                <div class="mb-1">
+                    <input type="checkbox" checked /> Tax Bifurcation
+                  </div>
+                  <div class="clearfix mrL3">
+                    <p class="pd0">
+                        <input class="radio-custom cp ml0" id="tax-rate-bottom" name="bifurcation" type="radio" checked>
+                        <label class="radio-custom-label" for="tax-rate-bottom">Tax Rate</label>
+                    </p>
+
+                    <p class="pd0">
+                        <input class="radio-custom cp ml0" id="hsn-sac-bottom" name="bifurcation" type="radio">
+                        <label class="radio-custom-label" for="hsn-sac-bottom">HSN/SAC</label>
+                    </p>
+                  </div>
             </div>
         </div>
 

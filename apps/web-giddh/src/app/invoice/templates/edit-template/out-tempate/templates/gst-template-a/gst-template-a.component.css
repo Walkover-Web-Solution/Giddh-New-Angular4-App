@@ -210,12 +210,13 @@ header img {
 #default table.item th,
 #default table.item tfoot tr th {
     position: relative;
-    padding: 14px 7px;
+    padding: 8px 7px;
     line-height: 1.2rem;
 }
 
 #default table.item tfoot tr th {
     padding-right: 7px;
+    border-top: 1px solid #d6d6d6;
 }
 
 /* tcs */
@@ -473,4 +474,42 @@ strong {
 .green-row {
     border-bottom: solid 1px rgb(121, 189, 88);
     padding: 6px 16px;
+}
+
+
+/*  */
+
+
+.tax-table p {
+    color: #595959;
+}
+
+.tax-table tfoot th {
+    font-weight: bold;
+}
+.tax-table {
+    table-layout: fixed;
+}
+
+.tax-table thead tr th,
+.tax-table tbody tr td,
+.tax-table tfoot tr th {
+    padding: 6px;
+    border-right: 1px solid #d6d6d6;
+}
+
+.tax-table thead tr th:last-child,
+.tax-table tbody tr td:last-child,
+.tax-table tfoot tr th:last-child {
+    border-right: 0px solid #d6d6d6;
+}
+
+table.tax-table.item {
+    padding-top: 0px !important;
+}
+.tax-table.item tfoot tr th {
+    border-bottom: 1px solid #d6d6d6;
+}
+.tax-table tbody tr td {
+    border-top: 0px solid;
 }
