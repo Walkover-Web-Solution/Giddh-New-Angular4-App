@@ -1405,10 +1405,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /**
      * To check Tax number validation using regex get by API
      *
-     * @param {*} value
+     * @param {*} value Value to be validated
+     * @param {string} fieldName Field name for which the value is validated
      * @memberof ProformaInvoiceComponent
      */
-    public checkGstNumValidation(value) {
+    public checkGstNumValidation(value, fieldName: string = '') {
         this.isValidGstinNumber = false;
         if (value) {
             if (this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
@@ -1422,7 +1423,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.isValidGstinNumber = true;
             }
             if (!this.isValidGstinNumber) {
-                this._toasty.errorToast('Invalid ' + this.formFields['taxName'].label);
+                if (fieldName) {
+                    this._toasty.errorToast(`Invalid ${this.formFields['taxName'].label} in ${fieldName}! Please fix and try again`);
+                } else {
+                    this._toasty.errorToast(`Invalid ${this.formFields['taxName'].label}! Please fix and try again`);
+                }
             }
         }
     }
@@ -1512,8 +1517,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         // special check if gst no filed is visible then and only then check for gst validation
         if (data.accountDetails && data.accountDetails.billingDetails && data.accountDetails.shippingDetails && data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
-            this.checkGstNumValidation(data.accountDetails.billingDetails.gstNumber);
-            this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber);
+            this.checkGstNumValidation(data.accountDetails.billingDetails.gstNumber, 'Billing Address');
+            if (!this.isValidGstinNumber) {
+                return;
+            }
+            this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber, 'Shipping Address');
             if (!this.isValidGstinNumber) {
                 return;
             }
@@ -2780,13 +2788,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         // special check if gst no filed is visible then and only then check for gst validation
         if (data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
-            if (!this.isValidGstIn(data.accountDetails.billingDetails.gstNumber)) {
-                this._toasty.errorToast('Invalid gst no in Billing Address! Please fix and try again');
+            this.checkGstNumValidation(data.accountDetails.billingDetails.gstNumber, 'Billing Address');
+            if (!this.isValidGstinNumber) {
                 return;
             }
             if (!this.autoFillShipping) {
-                if (!this.isValidGstIn(data.accountDetails.shippingDetails.gstNumber)) {
-                    this._toasty.errorToast('Invalid gst no in Shipping Address! Please fix and try again');
+                this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber, 'Shipping Address');
+                if (!this.isValidGstinNumber) {
                     return;
                 }
             }
