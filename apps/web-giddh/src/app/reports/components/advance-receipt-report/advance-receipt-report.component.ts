@@ -158,18 +158,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     }
 
     private subscribeToEvents(): void {
-        // fromEvent(this.customerName.nativeElement, 'input').pipe(distinctUntilChanged(), debounceTime(700)).subscribe((event: any) => {
-        //     this.fetchAllReceipts(this.searchQueryParams).subscribe((response) => this.handleFetchAllReceiptResponse(response));
-        // });
-        // fromEvent(this.receiptNumber.nativeElement, 'input').pipe(distinctUntilChanged(), debounceTime(700)).subscribe((event: any) => {
-        //     this.fetchAllReceipts(this.searchQueryParams).subscribe((response) => this.handleFetchAllReceiptResponse(response));
-        // });
-        // fromEvent(this.paymentMode.nativeElement, 'input').pipe(distinctUntilChanged(), debounceTime(700)).subscribe((event: any) => {
-        //     this.fetchAllReceipts(this.searchQueryParams).subscribe((response) => this.handleFetchAllReceiptResponse(response));
-        // });
-        // fromEvent(this.invoiceNumber.nativeElement, 'input').pipe(distinctUntilChanged(), debounceTime(700)).subscribe((event: any) => {
-        //     this.fetchAllReceipts(this.searchQueryParams).subscribe((response) => this.handleFetchAllReceiptResponse(response));
-        // });
         merge(
             fromEvent(this.customerName.nativeElement, 'input'),
             fromEvent(this.receiptNumber.nativeElement, 'input'),
@@ -216,12 +204,13 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 this.pageConfiguration.currentPage = response.body.page;
                 this.pageConfiguration.totalPages = response.body.totalPages;
                 this.pageConfiguration.totalItems = response.body.totalItems;
-                // let i = 0;
-                // while(i<=100) {
-                //     response.body.results.push(response.body.results[0]);
-                //     i++;
-                // }
-                // this.pageConfiguration.totalItems = 101;
+                let i = 0;
+                while(i<=100) {
+                    response.body.results[0].invoices = ['45457', '154211klk', '7777'];
+                    response.body.results.push(response.body.results[0]);
+                    i++;
+                }
+                this.pageConfiguration.totalItems = 101;
                 this.allReceipts = response.body.results;
                 this.changeDetectorRef.detectChanges();
                 return response.body;
@@ -309,7 +298,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     }
 
     public onReceiptTypeChanged(event: any) {
-        this.fetchAllReceipts({ page: event.page, ...this.searchQueryParams }).subscribe((response) => this.handleFetchAllReceiptResponse(response));
+        this.fetchAllReceipts({...this.searchQueryParams}).subscribe((response) => this.handleFetchAllReceiptResponse(response));
     }
 
     public onDateChange(event: any) {
