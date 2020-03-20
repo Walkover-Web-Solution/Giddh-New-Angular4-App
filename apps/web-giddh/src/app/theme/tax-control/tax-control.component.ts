@@ -8,7 +8,8 @@ import {
     OnInit,
     Output,
     SimpleChanges,
-    ViewChild
+    ViewChild,
+    ChangeDetectorRef
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as moment from 'moment/moment';
@@ -74,11 +75,16 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     private selectedTaxes: string[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor() {
+    constructor(private _cdr: ChangeDetectorRef) {
         //
     }
 
     public ngOnInit(): void {
+        if(this.taxes) {
+            this.prepareTaxObject();
+            this.change();
+            this._cdr.detectChanges();
+        }
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -100,6 +106,13 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
             this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), 2);
         }
+
+        if('taxes' in changes && changes && (Array.isArray(changes.taxes.currentValue))) {
+            this.prepareTaxObject();
+            this.change();
+        }
+
+        this._cdr.detectChanges();
     }
 
     /**
