@@ -11,7 +11,7 @@
                     </span>
                 </div>
                 <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
-                    <span class="icon-advance-serch" (click)="openModal(advanceSearch)"></span>
+                    <span class="icon-advance-search" (click)="openModal(advanceSearch)"></span>
                 </div>
             </div>
             <!-- Invoice filter section ends -->
@@ -28,14 +28,15 @@
             <table class="table basic giddh-table onMobileView">
                 <thead class="t-h-bg1">
                     <tr>
-
-                        <th width="13%" class="bdrR bdrB td_in_searchBox">
-                            <div [hidden]="inlineSearch == 'Receipt'">
+                        <th #receiptNumberParent width="13%" class="bdrR bdrB td_in_searchBox">
+                            <div [hidden]="showReceiptSearchBar">
                                 <span>Receipt #</span>
-                                <i class="icon-search" (click)="focusOnColumnSearch('Receipt');"></i>
+                                <i class="icon-search" (click)="searchBy(null, 'receipt', true)"></i>
                             </div>
-                            <div class="input-container" [hidden]="inlineSearch !== 'Receipt'">
-                                <input type="text" placeholder="Receipt" class="w100" #ReceiptField />
+                            <div class="input-container" [hidden]="!showReceiptSearchBar">
+                                <input #receiptNumber (clickOutside)="(showReceiptSearchBar) ? searchBy($event, 'receipt', false) : ''"
+                                    [(ngModel)]="searchQueryParams.receiptNumber" type="text"
+                                    placeholder="Search Receipt" class="w100" />
                             </div>
                         </th>
 
@@ -68,30 +69,43 @@
                         </th>
 
 
-                        <th width="13%" class="bdrR bdrB td_in_searchBox">
-                            <div [hidden]="inlineSearch == 'customerName'">
+                        <th #customerNameParent width="13%" class="bdrR bdrB td_in_searchBox">
+                            <div [hidden]="showCustomerSearchBar">
                                 <span>Customer Name</span>
-                                <i class="icon-search" (click)="focusOnColumnSearch('customerName');"></i>
+                                <i class="icon-search" (click)="searchBy(null, 'customerName', true);"></i>
                             </div>
-                            <div class="input-container" [hidden]="inlineSearch !== 'customerName'">
-                                <input type="text" placeholder="Invoice No." class="w100" #customerNameField
-                                    name="customerName" />
+                            <div class="input-container" [hidden]="!showCustomerSearchBar">
+                                <input #customerName (clickOutside)="(showCustomerSearchBar) ? searchBy($event, 'customerName', false) : ''"
+                                    [(ngModel)]="searchQueryParams.baseAccountName" type="text"
+                                    placeholder="Search Customer" class="w100" #customerNameField name="customerName" />
                             </div>
                         </th>
 
-                        <th width="13%" class="bdrR bdrB td_in_searchBox">
-                            <div [hidden]="inlineSearch == 'paymentMode'">
+                        <th #paymentModeParent width="13%" class="bdrR bdrB td_in_searchBox">
+                            <div [hidden]="showPaymentSearchBar">
                                 <span>Payment Mode</span>
-                                <i class="icon-search" (click)="focusOnColumnSearch('paymentMode');"></i>
+                                <i class="icon-search" (click)="searchBy(null, 'paymentMode', true)"></i>
                             </div>
-                            <div class="input-container" [hidden]="inlineSearch !== 'paymentMode'">
-                                <input type="text" placeholder="Supplier Country" class="w100" #paymentModeField />
+                            <div class="input-container" [hidden]="!showPaymentSearchBar">
+                                <input #paymentMode (clickOutside)="(showPaymentSearchBar) ? searchBy($event, 'paymentMode', false) : ''"
+                                    [(ngModel)]="searchQueryParams.particularName" type="text"
+                                    placeholder="Search Payment Mode" class="w100" #paymentModeField />
                             </div>
                         </th>
 
-                        <th>
-                            Invoice#
+                        <th #invoiceNumberParent width="13%" class="bdrR bdrB td_in_searchBox">
+                            <div [hidden]="showInvoiceSearchBar">
+                                <span>Invoice #</span>
+                                <i class="icon-search" (click)="searchBy(null, 'invoiceNumber', true)"></i>
+                            </div>
+                            <div class="input-container" [hidden]="!showInvoiceSearchBar">
+                                <input #invoiceNumber
+                                    (clickOutside)="(showInvoiceSearchBar) ? searchBy($event, 'invoiceNumber', false) : ''"
+                                    [(ngModel)]="searchQueryParams.invoiceNumber" type="text"
+                                    placeholder="Search Invoice No." class="w100" #paymentModeField />
+                            </div>
                         </th>
+
                         <th>
                             <div class="d-flex align-items-center">
                                 Total Amount
@@ -167,18 +181,6 @@
         </div>
     </div>
 </div>
-
-<!-- region search template (developer end) -->
-<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
-    <div [hidden]="show">
-        <span> {{ title }}</span>
-        <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
-    </div>
-    <div class="input-container" [hidden]="!show">
-        <input type="text" placeholder="Search {{ title }}" class="w100" #searchBox [formControl]="formControl" />
-    </div>
-</ng-template>
-<!-- endregion -->
 
 <!-- Adjust Payment modal start -->
 <ng-template #advanceSearch>
