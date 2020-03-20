@@ -7,7 +7,6 @@ import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permis
 })
 
 export class DeleteRoleConfirmationModelComponent {
-    @Input() public module: string = '';
     @Input() public selectedRoleForDelete: IRoleCommonResponseAndRequest;
     @Output() public confirmDeleteEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -17,7 +16,6 @@ export class DeleteRoleConfirmationModelComponent {
     }
 
     public onCancel() {
-        console.log(this.module);
         this.closeModelEvent.emit(true);
     }
 }

@@ -1,3 +1,9 @@
+/**
+ * Initiating the interface to create list of confirmation messages
+ *
+ * @export
+ * @interface ConfirmationMessages
+ */
 export interface ConfirmationMessages {
     module: string;
     title: string;
@@ -5,6 +11,12 @@ export interface ConfirmationMessages {
     message2: string;
 }
 
+/**
+ * Creating list of confirmation messages
+ *
+ * @export
+ * @interface ConfirmationMessages
+ */
 export const confirmationMessages: ConfirmationMessages[] = [
     { module: 'sales', title: 'Confirmation', message1: 'Do you want to delete the voucher(s) / invoice(s)?', message2: 'It will be deleted permanently and will no longer be accessible from any other module.' },
     { module: 'proformaslist', title: 'Confirmation', message1: 'Do you want to delete the voucher(s)?', message2: 'They will be deleted permanently and will no longer be accessible from any other module.' },
