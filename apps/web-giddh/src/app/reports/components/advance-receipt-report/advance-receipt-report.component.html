@@ -127,19 +127,19 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let receipt of allReceipts">
-                        <td data-title="#">{{ receipt.receiptNumber }}</td>
-                        <td data-title="Entry Date">{{ receipt.date }}</td>
-                        <td data-title="Supplier's Name">{{ receipt.type }}</td>
-                        <td data-title="Vouchter Type">{{ receipt.baseAccountName }}</td>
-                        <td data-title="Payment Mode">{{ receipt.particularNames }}</td>
+                        <td data-title="#">{{ receipt?.receiptNumber }}</td>
+                        <td data-title="Entry Date">{{ receipt?.date }}</td>
+                        <td data-title="Supplier's Name">{{ receipt?.type }}</td>
+                        <td data-title="Vouchter Type">{{ receipt?.baseAccountName }}</td>
+                        <td data-title="Payment Mode">{{ receipt?.particularNames }}</td>
                         <td data-title="Invoice#">
-                    <tr *ngFor="let invoice of receipt.invoices">{{ invoice }}</tr>
+                    <tr *ngFor="let invoice of receipt?.invoices">{{ invoice }}</tr>
                     </td>
                     <td data-title="Supplier Country">
-                        {{ receipt.totalAmount.symbol }}{{ receipt.totalAmount.amount | giddhCurrency}}
+                        {{ receipt?.totalAmount?.symbol }}{{ receipt?.totalAmount.amount | giddhCurrency}}
                     </td>
                     <td data-title="Taxable Value">
-                        {{ receipt.unusedAmount.symbol }}{{ receipt.unusedAmount.amount | giddhCurrency}}</td>
+                        {{ receipt?.unusedAmount?.symbol }}{{ receipt?.unusedAmount.amount | giddhCurrency}}</td>
                     </tr>
                     <tr *ngIf="!allReceipts?.length">
                         <td data-title="No records found" colspan="12" align="center">No records found.</td>
