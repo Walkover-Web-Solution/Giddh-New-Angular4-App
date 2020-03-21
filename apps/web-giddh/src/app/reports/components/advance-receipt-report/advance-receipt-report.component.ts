@@ -31,6 +31,7 @@ import {
     ReceiptAdvanceSearchModel,
 } from '../../constants/reports.constant';
 import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt-advance-search.component';
+import { GeneralActions } from '../../../actions/general/general.actions';
 
 @Component({
     selector: 'advance-receipt-report',
@@ -162,6 +163,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private componentFactoryResolver: ComponentFactoryResolver,
+        private generalAction: GeneralActions,
         private modalService: BsModalService,
         private receiptService: ReceiptService,
         private store: Store<AppState>,
@@ -169,6 +171,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     ) { }
 
     ngOnInit(): void {
+        this.store.dispatch(this.generalAction.setAppTitle('/pages/reports/receipt'));
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((applicationDate) => {
             if (applicationDate) {
                 this.universalDate = applicationDate;
