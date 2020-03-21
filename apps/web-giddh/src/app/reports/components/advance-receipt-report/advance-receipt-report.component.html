@@ -11,7 +11,12 @@
                     </span>
                 </div>
                 <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
-                    <span class="icon-advance-search" (click)="openModal(advanceSearch)"></span>
+                    <span class="icon-advance-search" (click)="openModal()"></span>
+                </div>
+                <div class="clear-filter width-100 align-items-center d-flex justify-content-center"
+                    *ngIf="showClearFilter">
+                    <button class="btn btn-filter" (click)="resetAdvanceSearch()"><span class="icon-cross"></span> Clear
+                        Filter</button>
                 </div>
             </div>
             <!-- Invoice filter section ends -->
@@ -34,7 +39,8 @@
                                 <i class="icon-search" (click)="searchBy(null, 'receipt', true)"></i>
                             </div>
                             <div class="input-container" [hidden]="!showReceiptSearchBar">
-                                <input #receiptNumber (clickOutside)="(showReceiptSearchBar) ? searchBy($event, 'receipt', false) : ''"
+                                <input #receiptNumber
+                                    (clickOutside)="(showReceiptSearchBar) ? searchBy($event, 'receipt', false) : ''"
                                     [(ngModel)]="searchQueryParams.receiptNumber" type="text"
                                     placeholder="Search Receipt" class="w100" />
                             </div>
@@ -44,7 +50,8 @@
                             <div class="d-flex align-items-center">
                                 Date
                                 <div class="icon-pointer pl-1 pointer">
-                                    <div class="icon-sort-asc"></div>
+                                    <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'RECEIPT_DATE'}">
+                                    </ng-container>
                                 </div>
                             </div>
                         </th>
@@ -75,7 +82,8 @@
                                 <i class="icon-search" (click)="searchBy(null, 'customerName', true);"></i>
                             </div>
                             <div class="input-container" [hidden]="!showCustomerSearchBar">
-                                <input #customerName (clickOutside)="(showCustomerSearchBar) ? searchBy($event, 'customerName', false) : ''"
+                                <input #customerName
+                                    (clickOutside)="(showCustomerSearchBar) ? searchBy($event, 'customerName', false) : ''"
                                     [(ngModel)]="searchQueryParams.baseAccountName" type="text"
                                     placeholder="Search Customer" class="w100" #customerNameField name="customerName" />
                             </div>
@@ -87,7 +95,8 @@
                                 <i class="icon-search" (click)="searchBy(null, 'paymentMode', true)"></i>
                             </div>
                             <div class="input-container" [hidden]="!showPaymentSearchBar">
-                                <input #paymentMode (clickOutside)="(showPaymentSearchBar) ? searchBy($event, 'paymentMode', false) : ''"
+                                <input #paymentMode
+                                    (clickOutside)="(showPaymentSearchBar) ? searchBy($event, 'paymentMode', false) : ''"
                                     [(ngModel)]="searchQueryParams.particularName" type="text"
                                     placeholder="Search Payment Mode" class="w100" #paymentModeField />
                             </div>
@@ -110,7 +119,8 @@
                             <div class="d-flex align-items-center">
                                 Total Amount
                                 <div class="icon-pointer pl-1 pointer">
-                                    <div class="icon-sort-asc"></div>
+                                    <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'TOTAL_AMOUNT'}">
+                                    </ng-container>
                                 </div>
                             </div>
                         </th>
@@ -119,7 +129,8 @@
                             <div class="d-flex align-items-center">
                                 Unused Amount
                                 <div class="icon-pointer pl-1 pointer">
-                                    <div class="icon-sort-asc"></div>
+                                    <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'UNUSED_AMOUNT'}">
+                                    </ng-container>
                                 </div>
                             </div>
                         </th>
@@ -183,9 +194,15 @@
 </div>
 
 <!-- Adjust Payment modal start -->
-<ng-template #advanceSearch>
-    <adjust-invoice-advance-search></adjust-invoice-advance-search>
-</ng-template>
+<div bsModal #receiptAdvanceSearchModal="bs-modal" [config]="{ ignoreBackdropClick: 'true', keyboard: 'true'}"
+    tabindex="-1" class="modal fade openPoup" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <ng-template element-view-container-ref #receiptAdvanceSearchFilter="elementviewcontainerref">
+            </ng-template>
+        </div>
+    </div>
+</div>
 <!-- Adjust Payment modal End-->
 
 
@@ -200,3 +217,15 @@
     <refund-amount></refund-amount>
 </ng-template>
 <!-- Refund Amount modal End-->
+
+<!-- region sort icon template -->
+<ng-template #sortTemplate let-column="column">
+    <div class="icon-sort-asc" *ngIf="searchQueryParams.sortBy !== column" (click)="handleSorting('asc', column)"
+        [ngClass]="{'activeTextColor': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'}"></div>
+    <div class="icon-sort-asc" *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'"
+        (click)="handleSorting('desc', column)"
+        [ngClass]="{'activeTextColor': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'}"></div>
+    <div class="icon-sort-dsc" *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'"
+        (click)="handleSorting('asc', column)"
+        [ngClass]="{'activeTextColor': searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'}"></div>
+</ng-template>

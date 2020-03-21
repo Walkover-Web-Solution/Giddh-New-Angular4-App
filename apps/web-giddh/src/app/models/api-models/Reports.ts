@@ -160,6 +160,11 @@ export interface GetAllAdvanceReceiptsRequest {
     baseAccountName?: string;
     particularName?: string;
     invoiceNumber?: string;
+    receiptTypes?: Array<string>;
+    totalAmount?: number;
+    totalAmountOperation?: string;
+    unUsedAmount?: number
+    unUsedAmountOperation?: string;
 }
 
 /** Request object model for advance receipts summary API */
