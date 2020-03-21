@@ -3823,6 +3823,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         return validEntries;
     }
 
+    /**
+     * Fetches the currency rate for multicurrency scenario
+     *
+     * @param {*} results Account details received from API
+     * @memberof ProformaInvoiceComponent
+     */
     public fetchCurrencyRate(results): void {
         if (this.isUpdateMode) {
             const vendorCurrency = (results[1].account.currency) ? results[1].account.currency.code : this.companyCurrency;
