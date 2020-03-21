@@ -33,6 +33,7 @@
             <table class="table basic giddh-table onMobileView">
                 <thead class="t-h-bg1">
                     <tr>
+                        <th>#</th>
                         <th #receiptNumberParent width="13%" class="bdrR bdrB td_in_searchBox">
                             <div [hidden]="showReceiptSearchBar">
                                 <span>Receipt #</span>
@@ -137,7 +138,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let receipt of allReceipts">
+                    <tr *ngFor="let receipt of allReceipts; let i = index">
+                        <td>{{ i + 1 }}</td>
                         <td data-title="#">{{ receipt?.receiptNumber }}</td>
                         <td data-title="Entry Date">{{ receipt?.date }}</td>
                         <td data-title="Supplier's Name">{{ receipt?.type }}</td>
