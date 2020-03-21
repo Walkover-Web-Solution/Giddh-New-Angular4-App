@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren, ChangeDetectorRef } from '@angular/core';
 import { ILedgersInvoiceResult, InvoicePaymentRequest } from '../../../../models/api-models/Invoice';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../../../shared/helpers/defaultDateFormat';
@@ -60,6 +60,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     public paymentModes$: Observable<IOption[]> = observableOf([]);
 
     constructor(
+        private changeDetectorRef: ChangeDetectorRef,
         private store: Store<AppState>,
         private _settingsTagActions: SettingsTagActions,
         private _ledgerService: LedgerService,
@@ -263,6 +264,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
                 if (rate) {
                     this.originalExchangeRate = rate;
                     this.exchangeRate = rate;
+                    this.changeDetectorRef.detectChanges();
                 }
             }, (error => {
 

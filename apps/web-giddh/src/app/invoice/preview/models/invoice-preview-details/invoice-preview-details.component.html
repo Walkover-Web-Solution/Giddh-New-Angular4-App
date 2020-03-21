@@ -472,7 +472,7 @@
 <div bsModal #receivePaymentPopup="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <invoice-payment-model *ngIf="selectedItem.voucherType !== 'purchase'" [selectedInvoiceForPayment]="selectedItem"
+            <invoice-payment-model *ngIf="receivePaymentPopup.isShown" [selectedInvoiceForPayment]="selectedItem"
                 (closeModelEvent)="processPaymentEvent.emit($event);receivePaymentPopup.toggle()">
             </invoice-payment-model>
         </div>
