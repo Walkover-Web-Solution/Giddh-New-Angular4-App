@@ -138,8 +138,7 @@
             <div class="text-center top-aging-table-top seprta-top-aging pd1" *ngIf="isMobileScreen">
                 <p>
                     <strong>Due as on </strong>
-                    <span class="italic underline">
-
+                    <span>
                         <input type="text"
                                [(ngModel)]="selectedDateRange" name="selectedDateRange"
                                ngxDaterangepickerMd
@@ -153,7 +152,7 @@
                                (datesUpdated)="selectedDate($event)"
                                [keepCalendarOpeningWithRange]="true"
                                [showRangeLabelOnInput]="false"
-                               class="form-control"
+                               class="form-control selected-date"
                                placeholder="Select please..."/>
 
 <!--                        <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"-->
