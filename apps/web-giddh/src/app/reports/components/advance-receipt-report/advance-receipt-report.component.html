@@ -196,11 +196,11 @@
 </div>
 
 <!-- Adjust Payment modal start -->
-<div bsModal #receiptAdvanceSearchModal="bs-modal" [config]="{ ignoreBackdropClick: 'true', keyboard: 'true'}"
+<div bsModal #receiptAdvanceSearchModalContainer="bs-modal" [config]="{ ignoreBackdropClick: 'true', keyboard: 'true'}"
     tabindex="-1" class="modal fade openPoup" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <ng-template element-view-container-ref #receiptAdvanceSearchFilter="elementviewcontainerref">
+            <ng-template element-view-container-ref #receiptAdvanceSearchFilterModal="elementviewcontainerref">
             </ng-template>
         </div>
     </div>
