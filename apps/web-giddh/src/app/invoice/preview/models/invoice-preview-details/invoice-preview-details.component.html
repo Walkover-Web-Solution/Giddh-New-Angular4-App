@@ -347,7 +347,7 @@
 
             <div class="invoice-editBody">
                 <proforma-invoice-component [accountUniqueName]="selectedItem.account.uniqueName"
-                [selectedItem]="selectedItem" [invoiceNo]="(voucherType !== 'purchase') ? selectedItem.voucherNumber : selectedItem?.uniqueName" [invoiceType]="voucherType"
+                [selectedItem]="selectedItem" [invoiceNo]="(voucherType !== 'purchase') ? selectedItem?.voucherNumber : selectedItem?.uniqueName" [invoiceType]="voucherType"
                     (cancelVoucherUpdate)="toggleEditMode()">
                 </proforma-invoice-component>
             </div>
