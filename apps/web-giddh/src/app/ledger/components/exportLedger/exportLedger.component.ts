@@ -46,7 +46,7 @@ export class ExportLedgerComponent implements OnInit {
                 this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
                 this.emailTypeMini = isAdmin ? 'admin-condensed' : 'view-condensed';
                 this.emailTypeDetail = isAdmin ? 'admin-detailed' : 'view-detailed';
-                this.emailTypeColumnar = isAdmin ? 'admin-columnar' : 'columnar';
+                this.emailTypeColumnar = 'columnar';
             }
         });
     }
