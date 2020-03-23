@@ -173,6 +173,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public shouldShowAdvanceReceiptMandatoryFields: boolean = false;
     /** List of available ITC */
     public availableItcList: Array<any> = AVAILABLE_ITC_LIST;
+    /** Allowed taxes list contains the unique name of all
+     * tax types within a company and count upto which they are allowed
+     */
+    public allowedSelectionOfAType: any = { type: [], count: 1 };
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -268,6 +272,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         this.store.pipe(select(s => s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
+            this.companyTaxesList.forEach((tax) => {
+                if (!this.allowedSelectionOfAType.type.includes(tax.taxType)) {
+                    this.allowedSelectionOfAType.type.push(tax.taxType);
+                }
+            });
+            if (!res) {
+                this.allowedSelectionOfAType.type = [];
+            }
         });
 
         this.shouldShowAdvanceReceipt = (this.blankLedger) ? this.blankLedger.voucherType === 'rcpt' : false;

@@ -128,7 +128,8 @@
                                 [prefixInput]="selectedPrefixForCurrency" [suffixInput]="selectedSuffixForCurrency"
                                 [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : []"
                                 (taxAmountSumEvent)="calculateTax()" (hideOtherPopups)="hideDiscount()"
-                                (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
+                                (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event"
+                                [allowedSelectionOfAType]="allowedSelectionOfAType">
                             </tax-control>
                             <!-- TODO: After design finalization
                                 <span class="eligible-ITC">Eligible for ITC <span class="icon-edit"></span> </span> -->
