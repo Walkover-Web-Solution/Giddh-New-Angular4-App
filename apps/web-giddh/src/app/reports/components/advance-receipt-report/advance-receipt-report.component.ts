@@ -259,25 +259,15 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         this.receiptAdvanceSearchModalContainer.show();
     }
 
-    // advance modal
-    adjustModal(adjustInvoiceModal: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(adjustInvoiceModal, { class: 'modal-lg' });
-    }
+    // // advance modal
+    // adjustModal(adjustInvoiceModal: TemplateRef<any>) {
+    //     this.modalRef = this.modalService.show(adjustInvoiceModal, { class: 'modal-lg' });
+    // }
 
-    // refuns amount modal
-    refundModalOpen(refundAmount: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(refundAmount, { class: 'modal-md' });
-    }
-
-    confirm(): void {
-        this.message = 'Confirmed!';
-        this.modalRef.hide();
-    }
-
-    decline(): void {
-        this.message = 'Declined!';
-        this.modalRef.hide();
-    }
+    // // refuns amount modal
+    // refundModalOpen(refundAmount: TemplateRef<any>) {
+    //     this.modalRef = this.modalService.show(refundAmount, { class: 'modal-md' });
+    // }
 
     /**
      * Opens/Closes the respective search bar based on parameters provided

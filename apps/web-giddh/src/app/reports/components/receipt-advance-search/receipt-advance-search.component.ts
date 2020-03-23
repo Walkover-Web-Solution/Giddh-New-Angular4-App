@@ -3,8 +3,8 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { ReceiptAdvanceSearchModel } from '../../constants/reports.constant';
 
 @Component({
-	selector: 'receipt-advance-search',
-	templateUrl: './receipt-advance-search.component.html',
+    selector: 'receipt-advance-search',
+    templateUrl: './receipt-advance-search.component.html',
     styleUrls: ['./receipt-advance-search.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -20,6 +20,6 @@ export class ReceiptAdvanceSearchComponent {
     @Input() public searchModel: ReceiptAdvanceSearchModel;
 
     /** @ignore */
-	constructor() {
-	}
+    constructor() {
+    }
 }

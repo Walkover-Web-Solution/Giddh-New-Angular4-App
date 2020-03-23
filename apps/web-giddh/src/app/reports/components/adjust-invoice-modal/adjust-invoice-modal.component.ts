@@ -9,12 +9,12 @@ import { Component, ElementRef, Input, OnInit } from '@angular/core';
 export class AdjustInvoiceModalComponent implements OnInit {
 
     adjustInvoiceReport = [
-        {invoice: '20181030-6',invoiceDate: '15-12-2018',invoiceAmount: 12300,BalanceDue: 2300,AdjustAmount: 10000},
-        {invoice: '20181030-6',invoiceDate: '15-12-2018',invoiceAmount: 12300,BalanceDue: 2300,AdjustAmount: 10000},
-        {invoice: '20181030-6',invoiceDate: '15-12-2018',invoiceAmount: 12300,BalanceDue: 2300,AdjustAmount: 10000},
-        {invoice: '20181030-6',invoiceDate: '15-12-2018',invoiceAmount: 12300,BalanceDue: 2300,AdjustAmount: 10000},
-        {invoice: '20181030-6',invoiceDate: '15-12-2018',invoiceAmount: 12300,BalanceDue: 2300,AdjustAmount: 10000},
-        {invoice: '20181030-6',invoiceDate: '15-12-2018',invoiceAmount: 12300,BalanceDue: 2300,AdjustAmount: 10000},
+        {invoice: '20181030-6',invoiceDate: '15-12-2018',invoiceAmount: 12300,balanceDue: 2300,adjustAmount: 10000},
+        {invoice: '20181030-6',invoiceDate: '15-12-2018',invoiceAmount: 12300,balanceDue: 2300,adjustAmount: 10000},
+        {invoice: '20181030-6',invoiceDate: '15-12-2018',invoiceAmount: 12300,balanceDue: 2300,adjustAmount: 10000},
+        {invoice: '20181030-6',invoiceDate: '15-12-2018',invoiceAmount: 12300,balanceDue: 2300,adjustAmount: 10000},
+        {invoice: '20181030-6',invoiceDate: '15-12-2018',invoiceAmount: 12300,balanceDue: 2300,adjustAmount: 10000},
+        {invoice: '20181030-6',invoiceDate: '15-12-2018',invoiceAmount: 12300,balanceDue: 2300,adjustAmount: 10000},
     ]
 	constructor() {
 	}
