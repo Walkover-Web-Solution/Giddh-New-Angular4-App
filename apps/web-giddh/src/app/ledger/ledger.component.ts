@@ -1549,9 +1549,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
-    public toggleAsidePane(event?): void {
+    public toggleAsidePane(event?, shSelectElement?: ShSelectComponent): void {
         if (event) {
             event.preventDefault();
+        }
+        if (shSelectElement) {
+            this.closeActiveEntry(shSelectElement);
         }
         this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
@@ -1745,6 +1748,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         }
+    }
+
+    /**
+     * Closes the active incomplete entry in ledger if user
+     * presses the shortcut key 'Alt + C'
+     *
+     * @private
+     * @param {ShSelectComponent} shSelectElement Current Sh select element instance
+     * @memberof LedgerComponent
+     */
+    private closeActiveEntry(shSelectElement: ShSelectComponent): void {
+        if (shSelectElement) {
+            shSelectElement.hide();
+        }
+        this.hideBankLedgerPopup(true);
     }
 
     /**
