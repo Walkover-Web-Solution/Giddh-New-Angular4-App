@@ -141,14 +141,19 @@
                     <tr *ngFor="let receipt of allReceipts; let i = index">
                         <td>{{ i + 1 }}</td>
                         <td data-title="#">{{ receipt?.receiptNumber }}</td>
-                        <td data-title="Entry Date">{{ receipt?.date }}</td>
+                        <td class="entry-date" data-title="Entry Date">{{ receipt?.date }}</td>
                         <td data-title="Supplier's Name">{{ receipt?.type }}</td>
                         <td data-title="Vouchter Type">{{ receipt?.baseAccountName }}</td>
-                        <td data-title="Payment Mode">{{ receipt?.particularNames }}</td>
-                        <td data-title="Invoice#">
-                    <tr *ngFor="let invoice of receipt?.invoices">{{ invoice }}</tr>
-                    </td>
-                    <td data-title="Supplier Country">
+                        <td data-title="Payment Mode">
+                            <tr *ngFor="let paymentMode of receipt?.particularNames?.split(',')">
+                                {{ paymentMode }}
+                            </tr>
+                        </td>
+                        <td *ngIf="receipt?.invoices?.length > 0" data-title="Invoice#">
+                            <tr *ngFor="let invoice of receipt?.invoices">{{ invoice }}</tr>
+                        </td>
+                        <td data-title="No Invoice number" *ngIf="!receipt?.invoices?.length">-</td>
+                    <td data-title="Total Amount">
                         {{ receipt?.totalAmount?.symbol }}{{ receipt?.totalAmount.amount | giddhCurrency}}
                     </td>
                     <td data-title="Taxable Value">
@@ -173,23 +178,25 @@
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 total-due-sale-wrap">
             <div class="col-md-3 col-sm-6 total-due-sale">
                 <h3>Advance Receipts</h3>
-                <h1>{{receiptsSummaryData?.advance?.symbol}}{{receiptsSummaryData?.advance?.amount | giddhCurrency}}
+                <h1>{{receiptsSummaryData?.advance?.symbol}}{{receiptsSummaryData?.advance?.amount | giddhCurrency}}/-
                 </h1>
             </div>
 
             <div class="col-md-3 col-sm-6 total-due-sale">
                 <h3>Normal Receipts</h3>
-                <h1>{{receiptsSummaryData?.normal?.symbol}}{{receiptsSummaryData?.normal?.amount | giddhCurrency}}</h1>
+                <h1>{{receiptsSummaryData?.normal?.symbol}}{{receiptsSummaryData?.normal?.amount | giddhCurrency}}/-
+                </h1>
             </div>
 
             <div class="col-md-3 col-sm-6 total-due-sale">
                 <h3>Total Receipts</h3>
-                <h1>{{receiptsSummaryData?.total?.symbol}}{{receiptsSummaryData?.total?.amount | giddhCurrency}}</h1>
+                <h1>{{receiptsSummaryData?.total?.symbol}}{{receiptsSummaryData?.total?.amount | giddhCurrency}}/-</h1>
             </div>
 
             <div class="col-md-3 col-sm-6 total-due-sale">
                 <h3>Unused Receipts</h3>
-                <h1>{{receiptsSummaryData?.unUsed?.symbol}}{{receiptsSummaryData?.unUsed?.amount | giddhCurrency}}</h1>
+                <h1>{{receiptsSummaryData?.unUsed?.symbol}}{{receiptsSummaryData?.unUsed?.amount | giddhCurrency}}/-
+                </h1>
             </div>
         </div>
     </div>
