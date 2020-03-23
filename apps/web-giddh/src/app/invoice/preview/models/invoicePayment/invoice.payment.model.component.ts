@@ -273,7 +273,9 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public focusAmountField() {
-        this.amountField.nativeElement.focus();
+        setTimeout(() => {
+            this.amountField.nativeElement.focus();
+        }, 200);
     }
 
     public loadPaymentModes() {
