@@ -149,10 +149,10 @@
                                {{ paymentMode }}
                             </div>
                         </td>
-                        <td *ngIf="receipt?.invoices?.length > 0" data-title="Invoice#">
-                            <div *ngFor="let invoice of receipt?.invoices">{{ invoice }}</div>
+                        <td *ngIf="receipt?.invoices" data-title="Invoice#">
+                            <div *ngFor="let invoice of receipt?.invoices?.split(',')">{{ invoice }}</div>
                         </td>
-                        <td data-title="No Invoice number" *ngIf="!receipt?.invoices?.length">-</td>
+                        <td data-title="No Invoice number" *ngIf="!receipt?.invoices">-</td>
                     <td data-title="Total Amount">
                         {{ receipt?.totalAmount?.symbol }}{{ receipt?.totalAmount.amount | giddhCurrency}}
                     </td>
