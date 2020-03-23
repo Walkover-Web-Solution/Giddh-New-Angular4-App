@@ -11,7 +11,7 @@ import { InventoryStockReportComponent } from "./components/stock-report-compone
 import { StockgrpListComponent } from "./components/sidebar-components/stockgrplist.component";
 import { StockListComponent } from "./components/sidebar-components/stockList.component";
 import { InventoryUpdateGroupComponent } from "./components/update-group-component/inventory.updategroup.component";
-
+import { DashboardComponent } from "./components/dashboard-component/dashboard.component"
 import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
 import { TooltipModule } from "ngx-bootstrap/tooltip";
 import { SharedModule } from "../shared/shared.module";
@@ -52,6 +52,7 @@ import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
 import { SalesAddStockComponent } from '../proforma-invoice/components/aside-menu-product-service/components/create-stock/sales.create.stock.component';
 import { SalesAddStockGroupComponent } from '../proforma-invoice/components/aside-menu-product-service/components/create-stock-group-modal/create.stock.group.modal';
 
+
 @NgModule({
     declarations: [
         // Components / Directives/ Pipes
@@ -87,7 +88,8 @@ import { SalesAddStockGroupComponent } from '../proforma-invoice/components/asid
         NewBranchTransferAddComponent,
         NewBranchTransferListComponent,
         AsideSenderReceiverDetailsPaneComponent,
-        DateFormatterPipe
+        DateFormatterPipe,
+        DashboardComponent
     ],
     exports: [
         InventoryComponent,
@@ -119,7 +121,8 @@ import { SalesAddStockGroupComponent } from '../proforma-invoice/components/asid
         JobworkSidebarComponent,
         ManufacturingComponent,
         NewBranchTransferAddComponent,
-        NewBranchTransferListComponent
+        NewBranchTransferListComponent,
+        DashboardComponent
     ],
     providers: [],
     imports: [

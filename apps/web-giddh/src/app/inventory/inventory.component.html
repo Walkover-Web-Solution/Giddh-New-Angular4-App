@@ -2,7 +2,7 @@
     <div class="inventory-controll">
         <tabset #inventoryStaticTabs>
 
-            <tab heading="Inventory" (select)="redirectUrlToActiveTab('inventory', $event)"
+            <tab heading="Inventory" (select)="redirectUrlToActiveTab('dashbaord', $event)"
                 [active]="activeTabIndex === 0">
                 <!--sidebar-->
                 <ng-container *ngIf="activeTabIndex === 0 && activeView !== 'receipt'">

@@ -183,11 +183,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
 
-        this.activeTabIndex = this.router.url.indexOf('jobwork') > -1 ? 1 : this.router.url.indexOf('manufacturing') > -1 ? 2 : this.router.url.indexOf('inventory/report') > -1 ? 3 : 0;;
+        this.activeTabIndex = this.router.url.indexOf('jobwork') > -1 ? 1 : this.router.url.indexOf('manufacturing') > -1 ? 2 : this.router.url.indexOf('inventory/report') > -1 ? 3 : this.router.url.indexOf('inventory/dashboard') > -1 ? 4 : 0;
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             if (s instanceof NavigationEnd) {
-                let index = s.url.indexOf('jobwork') > -1 ? 1 : s.url.indexOf('manufacturing') > -1 ? 2 : s.url.indexOf('inventory/report') > -1 ? 3 : 0;
+                let index = s.url.indexOf('jobwork') > -1 ? 1 : s.url.indexOf('manufacturing') > -1 ? 2 : s.url.indexOf('inventory/report') > -1 ? 3 : s.url.indexOf('inventory/dashboard') > -1 ? 4: 0;
                 if (this.activeTabIndex !== index) {
                     this.activeTabIndex = index;
                     this.saveLastState();
@@ -269,9 +269,13 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.router.navigate(['/pages', 'inventory', 'report'], { relativeTo: this.route });
                     this.activeTabIndex = 3;
                     break;
+               
+                case 'dashboard':
+                    this.router.navigate(['/pages', 'inventory', 'dashboard'], { relativeTo: this.route });
+                    this.activeTabIndex = 4;
+                    break;
             }
         }
-
         setTimeout(() => {
             if (activeTabIndex) {
                 this.inventoryStaticTabs.tabs[activeTabIndex].active = true;
@@ -280,7 +284,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
     }
-
     public loadAddCompanyComponent() {
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddComponent);
         let viewContainerRef = this.companyadd.viewContainerRef;
@@ -392,7 +395,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private saveLastState() {
         let companyUniqueName = null;
-        let state = this.activeTabIndex === 0 ? 'inventory' : this.activeTabIndex === 1 ? 'inventory/jobwork' : this.activeTabIndex === 2 ? 'inventory/manufacturing' : 'inventory/report';
+        let state = this.activeTabIndex === 0 ? 'inventory ' : this.activeTabIndex === 1 ? 'inventory/jobwork' : this.activeTabIndex === 2 ? 'inventory/manufacturing' : this.activeTabIndex === 3 ? 'inventory/dashboard' : 'inventory/report';
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;

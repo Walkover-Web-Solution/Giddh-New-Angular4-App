@@ -12,7 +12,7 @@ import { JobworkComponent } from "./jobwork/jobwork.component";
 import { InvViewService } from "./inv.view.service";
 import { ManufacturingComponent } from "./manufacturing/manufacturing.component";
 import { NewBranchTransferListComponent } from "./components/new-branch-transfer/new.branch.transfer.list.component";
-
+import { DashboardComponent} from "./components/dashboard-component/dashboard.component";
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -61,7 +61,14 @@ import { NewBranchTransferListComponent } from "./components/new-branch-transfer
                     {
                         path: "report",
                         component: NewBranchTransferListComponent
+                    },
+
+                    {
+                        path: "dashboard",
+                        component: DashboardComponent
                     }
+
+                    
                 ]
             }
         ])
