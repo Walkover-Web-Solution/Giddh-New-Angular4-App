@@ -210,7 +210,7 @@
                         </td>
 
                         <td>{{item.voucherDate}}</td>
-                        <td>{{item.grandTotal | giddhCurrency}}</td>
+                        <td>{{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
                     </tr>
                 </tbody>
 
