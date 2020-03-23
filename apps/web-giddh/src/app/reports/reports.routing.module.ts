@@ -14,6 +14,7 @@ import { PurchaseRegisterComponent } from './components/purchase-register-compon
 import { PurchaseRegisterExpandComponent } from './components/purchase-register-expand-component/purchase.register.expand.component';
 import { ReverseChargeReport } from './components/reverse-charge-report-component/reverse-charge-report.component';
 import { ColumnarReportComponent } from './components/columnar-report-component/columnar.report.component';
+import { AdvanceReceiptReportComponent } from './components/advance-receipt-report/advance-receipt-report.component';
 
 @NgModule({
     imports: [
@@ -31,7 +32,8 @@ import { ColumnarReportComponent } from './components/columnar-report-component/
                     { path: 'purchase-register', component: PurchaseRegisterComponent},
                     { path: 'purchase-detailed-expand', component: PurchaseRegisterExpandComponent },
                     { path: 'reverse-charge', component: ReverseChargeReport },
-                    { path: 'columnar-report', component: ColumnarReportComponent }
+                    { path: 'columnar-report', component: ColumnarReportComponent },
+                    { path: 'receipt', component: AdvanceReceiptReportComponent },
                 ]
             }
         ]),
