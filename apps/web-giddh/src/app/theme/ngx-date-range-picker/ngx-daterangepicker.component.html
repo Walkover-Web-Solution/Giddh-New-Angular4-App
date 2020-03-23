@@ -7,9 +7,7 @@
     'double': !singleDatePicker && showCalInRanges,
     'show-ranges': ranges?.length
 }" [class]="'drops-' + drops + '-' + opens">
-
     <!-- ranges container -->
-   
     <div class="ranges" *ngIf="ranges?.length">
         <!-- loop over ranges -->
         <div class="range-container">  
@@ -35,7 +33,6 @@
                             </button>
                         </li>
                     </ul>
-
                 </li>
             </ul>
         </div>
@@ -52,8 +49,7 @@
                 <li>
                     <button><input type="text" (change)="uptoYesterday($event,$event.target.value)"
                             (keyup)="uptoInputKeyUp($event)"> days
-                        up
-                        to yesterday
+                        up to yesterday
                     </button>
                 </li>
             </ul>
@@ -66,12 +62,9 @@
       <div class="close-calender" (click)="closeCalander();">
        <img src="../../../assets/images/close-icon.svg" alt="close-btn"> Custom
       </div>
-    
         <div class="calender-container-wrapper">
-
             <div class="calender-body" (mouseout)="hoveredDate = null">
                 <div>
-
                     <!-- start date/ end date inputs container -->
                     <div class="select-date-range">
                         <input placeholder="start date" #startDateElement [value]="startDateString"
@@ -85,18 +78,13 @@
                             [class]="ActiveDate ===1 ?ActiveSelectedDateClass :''">
                     </div>
                     <!-- start date/ end date inputs container -->
-
                     <!-- month name -->
                     <div class="month-field">
                         <!-- month name and month dropdown -->
                         <div>
                             <span class="month-name" (click)="monthPickerClick()">
-
                                 <ng-container *ngIf="showDropdowns && calendarVariables.start.dropdowns">
-
-
                                     {{this.locale.monthNames[calendarVariables?.start?.calendar[1][1].month()]}}
-
                                     <select class="monthselect" (change)="monthChanged($event, sideEnum.start)">
                                         <option
                                             [disabled]="(calendarVariables.start.dropdowns.inMinYear && m < calendarVariables.start.minDate.month()) || (calendarVariables.start.dropdowns.inMaxYear && m > calendarVariables.start.maxDate.month())"
@@ -105,10 +93,6 @@
                                             {{locale.monthNames[m]}}
                                         </option>
                                     </select>
-
-
-
-
                                     {{ calendarVariables?.start?.calendar[1][1].format(" YYYY")}}
                                     <select class="yearselect" (change)="yearChanged($event, sideEnum.start)">
                                         <option *ngFor="let y of calendarVariables.start.dropdowns.yearArrays"
@@ -116,34 +100,24 @@
                                             {{y}}
                                         </option>
                                     </select>
-
-
                                 </ng-container>
-
                                 <ng-container *ngIf="!showDropdowns || !calendarVariables.start.dropdowns">
                                     {{this.locale.monthNames[calendarVariables?.start?.calendar[1][1].month()]}}
                                     {{ calendarVariables?.start?.calendar[1][1].format(" YYYY")}}
                                 </ng-container>
-
                             </span>
                         </div>
                         <!-- month name and month dropdown -->
-
                         <!-- navigate to previous and next month buttons -->
                         <div class="prev-next-btn">
-
                             <button (click)="goToPrevMonth()" [disabled]="goToPreviousMonthDisabled"
                                 class="prev available"></button>
-
                             <button class="next available" [disabled]="goToNextMonthDisabled"
                                 (click)="goToNextMonth()"></button>
-
                         </div>
                         <!-- navigate to previous and next month buttons -->
-
                     </div>
                     <!-- month name -->
-
                     <!-- month selection -->
                     <div class="d-container" *ngIf="showMonthPicker" (mousewheel)="mouseUpYear($event)">
                         <div>
@@ -300,25 +274,18 @@
                         </div>
                     </div>
                     <!-- month selection -->
-
                 </div>
-
                 <!-- start date calendar container -->
                 <div class="calendar" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}"
                     *ngIf="showCalInRanges && !showMonthPicker">
-
                     <div class="calendar-table" *ngIf="calendarVariables">
-
                         <table class="table-condensed">
                             <thead>
-
                                 <tr>
                                     <th colspan="5" class="month drp-animate">
                                         <ng-container *ngIf="showDropdowns && calendarVariables.start.dropdowns">
                                             <div>
-
                                                 {{this.locale.monthNames[calendarVariables?.start?.calendar[1][1].month()]}}
-
                                                 <select class="monthselect"
                                                     (change)="monthChanged($event, sideEnum.start)">
                                                     <option
@@ -329,9 +296,7 @@
                                                         {{locale.monthNames[m]}}
                                                     </option>
                                                 </select>
-
                                             </div>
-
                                             <div class="year-name">
                                                 {{ calendarVariables?.start?.calendar[1][1].format(" YYYY")}}
                                                 <select class="yearselect"
@@ -343,29 +308,22 @@
                                                     </option>
                                                 </select>
                                             </div>
-
                                         </ng-container>
-
                                         <ng-container *ngIf="!showDropdowns || !calendarVariables.start.dropdowns">
                                             {{this.locale.monthNames[calendarVariables?.start?.calendar[1][1].month()]}}
                                             {{ calendarVariables?.start?.calendar[1][1].format(" YYYY")}}
                                         </ng-container>
-
                                     </th>
                                     <th *ngIf="showWeekNumbers || showISOWeekNumbers"></th>
-
                                     <ng-container
                                         *ngIf="!calendarVariables.start.minDate || calendarVariables.start.minDate.isBefore(calendarVariables.start.calendar.firstDay) && (!this.linkedCalendars || true)">
                                         <th>
                                         </th>
                                     </ng-container>
-
                                     <ng-container
                                         *ngIf="!(!calendarVariables.start.minDate || calendarVariables.start.minDate.isBefore(calendarVariables.start.calendar.firstDay) && (!this.linkedCalendars || true))">
                                         <th></th>
                                     </ng-container>
-
-
                                     <th></th>
                                     <!-- commented because we have moved next and previous month switcher at top -->
                                     <!--                <ng-container-->
@@ -380,33 +338,23 @@
                                     <!--                  <th></th>-->
                                     <!--                </ng-container>-->
                                 </tr>
-
-
-
                                 <tr>
                                     <th *ngIf="showWeekNumbers || showISOWeekNumbers" class="week">
                                         <span>{{this.locale.weekLabel}}</span>
                                     </th>
                                     <th *ngFor="let dayofweek of locale.daysOfWeek"><span>{{dayofweek}}</span></th>
                                 </tr>
-
-
                             </thead>
-
                             <tbody class="drp-animate">
-
                                 <ng-container *ngFor="let row of calendarVariables.start.calRows">
                                     <tr [class]="calendarVariables.start.classes[row].classList">
-
                                         <!-- add week number -->
                                         <td class="week" *ngIf="showWeekNumbers">
                                             <span>{{calendarVariables.start.calendar[row][0].week()}}</span>
                                         </td>
-
                                         <td class="week" *ngIf="showISOWeekNumbers">
                                             <span>{{calendarVariables.start.calendar[row][0].isoWeek()}}</span>
                                         </td>
-
                                         <!-- cal -->
                                         <!--<td *ngFor="let col of calendarVariables.start.calCols"-->
                                         <!--[class]="calendarVariables.start.classes[row][col]"-->
@@ -416,7 +364,6 @@
                                         <!--<span-->
                                         <!--*ngIf="!(calendarVariables.start.classes[row][col].indexOf('off')>-1)">{{calendarVariables.start.calendar[row][col].date()}}</span>-->
                                         <!--</td>-->
-
                                         <td *ngFor="let col of calendarVariables.start.calCols"
                                             [class]="calendarVariables.start.classes[row][col]"
                                             [style.backgroundColor]="!(calendarVariables.end.calendar[1][1].month() ==calendarVariables.end.calendar[row][col].month())?'white':'inherit'"
@@ -431,24 +378,18 @@
                                             <span
                                                 *ngIf="(calendarVariables.start.calendar[1][1].month() ==calendarVariables.start.calendar[row][col].month())">{{calendarVariables.start.calendar[row][col].date()}}</span>
                                         </td>
-
-
                                     </tr>
                                 </ng-container>
-
                             </tbody>
                         </table>
                     </div>
-
                     <div class="calendar-time" *ngIf="timePicker">
-
                         <select class="hourselect" [disabled]="!endDate"
                             [(ngModel)]="timepickerVariables.start.selectedHour"
                             (ngModelChange)="timeChanged($event, sideEnum.start)">
                             <option *ngFor="let i of timepickerVariables.start.hours" [value]="i"
                                 [disabled]="timepickerVariables.start.disabledHours.indexOf(i) > -1">{{i}}</option>
                         </select>
-
                         <select class="minuteselect" [disabled]="!endDate"
                             [(ngModel)]="timepickerVariables.start.selectedMinute"
                             (ngModelChange)="timeChanged($event, sideEnum.start)">
@@ -456,7 +397,6 @@
                                 [disabled]="timepickerVariables.start.disabledMinutes.indexOf(i) > -1">
                                 {{timepickerVariables.start.minutesLabel[index]}}</option>
                         </select>
-
                         <select *ngIf="timePickerSeconds" class="secondselect" [disabled]="!endDate"
                             [(ngModel)]="timepickerVariables.start.selectedSecond"
                             (ngModelChange)="timeChanged($event, sideEnum.start)">
@@ -464,21 +404,17 @@
                                 [disabled]="timepickerVariables.start.disabledSeconds.indexOf(i) > -1">
                                 {{timepickerVariables.start.secondsLabel[index]}}</option>
                         </select>
-
                         <select *ngIf="!timePicker24Hour" class="ampmselect"
                             [(ngModel)]="timepickerVariables.start.ampmModel"
                             (ngModelChange)="timeChanged($event, sideEnum.start)">
                             <option value="AM" [disabled]="timepickerVariables.start.amDisabled">AM</option>
                             <option value="PM" [disabled]="timepickerVariables.start.pmDisabled">PM</option>
                         </select>
-
                     </div>
                 </div>
                 <!-- start date calendar container -->
-
                 <!-- end date calendar container -->
                 <div class="calendar right" *ngIf="showCalInRanges && !singleDatePicker && !showMonthPicker">
-
                     <div class="calendar-table">
                         <table class="table-condensed" *ngIf="calendarVariables">
                             <thead>
@@ -534,7 +470,6 @@
                                         <th></th>
                                     </ng-container>
                                 </tr>
-
                                 <tr>
                                     <th *ngIf="showWeekNumbers || showISOWeekNumbers" class="week">
                                         <span>{{this.locale.weekLabel}}</span>
@@ -542,9 +477,7 @@
                                     <th *ngFor="let dayofweek of locale.daysOfWeek"><span>{{dayofweek}}</span></th>
                                 </tr>
                             </thead>
-
                             <tbody>
-
                                 <ng-container *ngFor="let row of calendarVariables.end.calRows">
                                     <tr [class]="calendarVariables.end.classes[row].classList">
                                         <td class="week" *ngIf="showWeekNumbers">
@@ -569,22 +502,18 @@
                                             <span
                                                 *ngIf="(calendarVariables.end.calendar[1][1].month() ==calendarVariables.end.calendar[row][col].month())">{{calendarVariables.end.calendar[row][col].date()}}</span>
                                         </td>
-
                                     </tr>
                                 </ng-container>
                             </tbody>
                         </table>
                     </div>
-
                     <div class="calendar-time" *ngIf="timePicker">
-
                         <select class="hourselect" [disabled]="!endDate"
                             [(ngModel)]="timepickerVariables.end.selectedHour"
                             (ngModelChange)="timeChanged($event, sideEnum.end)">
                             <option *ngFor="let i of timepickerVariables.end.hours" [value]="i"
                                 [disabled]="timepickerVariables.end.disabledHours.indexOf(i) > -1">{{i}}</option>
                         </select>
-
                         <select class="minuteselect" [disabled]="!endDate"
                             [(ngModel)]="timepickerVariables.end.selectedMinute"
                             (ngModelChange)="timeChanged($event, sideEnum.end)">
@@ -592,7 +521,6 @@
                                 [disabled]="timepickerVariables.end.disabledMinutes.indexOf(i) > -1">
                                 {{timepickerVariables.end.minutesLabel[index]}}</option>
                         </select>
-
                         <select *ngIf="timePickerSeconds" class="secondselect" [disabled]="!endDate"
                             [(ngModel)]="timepickerVariables.end.selectedSecond"
                             (ngModelChange)="timeChanged($event, sideEnum.end)">
@@ -600,26 +528,20 @@
                                 [disabled]="timepickerVariables.end.disabledSeconds.indexOf(i) > -1">
                                 {{timepickerVariables.end.secondsLabel[index]}}</option>
                         </select>
-
                         <select *ngIf="!timePicker24Hour" class="ampmselect"
                             [(ngModel)]="timepickerVariables.end.ampmModel"
                             (ngModelChange)="timeChanged($event, sideEnum.end)">
                             <option value="AM" [disabled]="timepickerVariables.end.amDisabled">AM</option>
                             <option value="PM" [disabled]="timepickerVariables.end.pmDisabled">PM</option>
                         </select>
-
                     </div>
                 </div>
                 <!-- end date calendar container -->
             </div>
-
         </div>
-
         <!-- buttons -->
         <div class="buttons" *ngIf="!autoApply && ( !ranges?.length || (showCalInRanges && !singleDatePicker))">
-
             <div class="buttons_input">
-
                 <!-- clear button -->
                 <button *ngIf="showClearButton" class="btn btn-default clear" type="button" (click)="clear()"
                     title="clear the date">
@@ -638,12 +560,9 @@
                 <button class="btn btn-success" [disabled]="applyBtn.disabled" type="button"
                     (click)="clickApply($event)">{{locale.applyLabel}}</button>
                 <!-- apply button -->
-
             </div>
-
         </div>
         <!-- buttons -->
-
     </div>
     <!-- calender container -->
 </div>
