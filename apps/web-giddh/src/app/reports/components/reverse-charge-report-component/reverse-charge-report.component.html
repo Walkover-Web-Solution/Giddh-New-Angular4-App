@@ -4,9 +4,10 @@
         <div class="mt-2 mb-2 input-grp-dateRangePicker d-flex">
             <div class="input-group">
                 <div class="form-group">
-                    <span class="icon-calender" (click)="dp.toggle()"></span> <input type="text"
-                        placeholder="Select Date" class="form-control" #dp="bsDaterangepicker" [(ngModel)]="datePicker"
-                        (bsValueChange)="changeFilterDate($event)" bsDaterangepicker [bsConfig]="bsConfig">
+                    <span class="icon-calender" (click)="dp.toggle()"></span>
+                    <input type="text" placeholder="Select Date" class="form-control" #dp="bsDaterangepicker"
+                        [(ngModel)]="datePicker" (bsValueChange)="changeFilterDate($event)" bsDaterangepicker
+                        [bsConfig]="bsConfig" container="body">
                 </div>
             </div>
             <div class="clear-filter width-100 align-items-center d-flex justify-content-center"
@@ -16,7 +17,7 @@
             </div>
         </div>
         <div class="invoice-preview  table-responsive">
-            <table class="table basic table-bordered giddh-table onMobileView">
+            <table class="table basic giddh-table onMobileView">
                 <thead class="t-h-bg1">
                     <tr (clickOutside)="inlineSearch = null">
                         <th class="text-center" width="4%">#</th>
@@ -125,7 +126,7 @@
                 [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
         </div>
     </div>
-    <div class=" mt-5 invoiceFooter row">
+    <div class=" mt-5 invoiceFooter">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex total-due-sale-wrap">
             <div class="col-sm-6 totalDueSale">
                 <h3>Total Taxable Value: </h3>

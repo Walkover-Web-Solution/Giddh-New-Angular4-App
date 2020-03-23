@@ -40,7 +40,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public allowVatReportAccess: boolean = false;
     @ViewChild('monthWise') public monthWise: BsDropdownDirective;
     @ViewChild('periodDropdown') public periodDropdown;
-    public isMonthSelected: boolean = false;
+    public isMonthSelected: boolean = true;
     public selectedMonth: any = null;
     public currentPeriod: any = {};
     public showCalendar: boolean = false;
@@ -56,8 +56,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
                 this.currentPeriod = {
-                    from: moment(universalDate[0]).format(GIDDH_DATE_FORMAT),
-                    to: moment(universalDate[1]).format(GIDDH_DATE_FORMAT)
+                    from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
+                    to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
                 };
                 this.selectedMonth = moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
                 this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);

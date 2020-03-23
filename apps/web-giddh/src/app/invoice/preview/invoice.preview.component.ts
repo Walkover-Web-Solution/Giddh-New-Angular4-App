@@ -299,7 +299,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     }
                 });
             }
-    
+
             if (!(a && a.voucherType)) {
                 return;
             }
@@ -313,7 +313,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 this.templateType = 'invoice';
             }
         });
-        
+
         // Get accounts
         this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
             let accounts: IOption[] = [];
