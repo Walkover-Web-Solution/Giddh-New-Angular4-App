@@ -192,8 +192,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 this.universalDate = applicationDate;
                 this.datePickerOptions = {
                     ...this.datePickerOptions,
-                    startDate: moment(applicationDate[0], 'DD-MM-YYYY').toDate(),
-                    endDate: moment(applicationDate[1], 'DD-MM-YYYY').toDate(),
+                    startDate: moment(applicationDate[0], GIDDH_DATE_FORMAT).toDate(),
+                    endDate: moment(applicationDate[1], GIDDH_DATE_FORMAT).toDate(),
                     chosenLabel: applicationDate[2]
                 }
             }
@@ -371,8 +371,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         this.showClearFilter = false;
         this.datePickerOptions = {
             ...this.datePickerOptions,
-            startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(),
-            endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate(),
+            startDate: moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(),
+            endDate: moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate(),
             chosenLabel: this.universalDate[2]
         }
         this.searchQueryParams = {

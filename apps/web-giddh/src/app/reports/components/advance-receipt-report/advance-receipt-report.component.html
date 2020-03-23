@@ -145,12 +145,12 @@
                         <td data-title="Supplier's Name">{{ receipt?.type }}</td>
                         <td data-title="Vouchter Type">{{ receipt?.baseAccountName }}</td>
                         <td data-title="Payment Mode">
-                            <tr *ngFor="let paymentMode of receipt?.particularNames?.split(',')">
-                                {{ paymentMode }}
-                            </tr>
+                            <div *ngFor="let paymentMode of receipt?.particularNames?.split(',')">
+                               {{ paymentMode }}
+                            </div>
                         </td>
                         <td *ngIf="receipt?.invoices?.length > 0" data-title="Invoice#">
-                            <tr *ngFor="let invoice of receipt?.invoices">{{ invoice }}</tr>
+                            <div *ngFor="let invoice of receipt?.invoices">{{ invoice }}</div>
                         </td>
                         <td data-title="No Invoice number" *ngIf="!receipt?.invoices?.length">-</td>
                     <td data-title="Total Amount">
