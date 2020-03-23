@@ -583,7 +583,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             } else {
                 // for edit mode direct from @Input
-                if (this.accountUniqueName && this.invoiceType && (this.invoiceNo || this.isPurchaseInvoice)) {
+                if (this.accountUniqueName && this.invoiceType && this.invoiceNo) {
                     this.store.dispatch(this._generalActions.setAppTitle('/pages/proforma-invoice/invoice/' + this.invoiceType));
                     this.getVoucherDetailsFromInputs();
                 }
@@ -3021,7 +3021,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     voucherType: this.parseVoucherType(this.invoiceType)
                 }));
             } else if (this.isPurchaseInvoice) {
-                this.store.dispatch(this.invoiceReceiptActions.GetPurchaseRecordDetails(this.selectedItem.account.uniqueName, this.selectedItem.uniqueName));
+                const accountUniqueName = (this.selectedItem) ? this.selectedItem.account.uniqueName : this.accountUniqueName;
+                const purchaseRecordUniqueName = (this.selectedItem) ? this.selectedItem.uniqueName : this.invoiceNo;
+                this.store.dispatch(this.invoiceReceiptActions.GetPurchaseRecordDetails(accountUniqueName, purchaseRecordUniqueName));
             } else {
                 this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
                     invoiceNumber: this.invoiceNo,
