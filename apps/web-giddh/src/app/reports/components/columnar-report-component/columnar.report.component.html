@@ -2,37 +2,41 @@
     <div class="container-fluid font-14">
         <div class="clearfix mt-2 mb-2">
             <ul class="list-inline d-inline-block middle nav-report">
-                <li class="active"><a href="javascript:void(0)" (click)="goToDashboard()">Report</a> <span
-                        class="d-inline-block pl-1"> ></span></li>
+                <li class="active"><a href="javascript:void(0)" [routerLink]="['/pages/reports-dashboard']">Report</a>
+                    <span class="d-inline-block pl-1"> ></span></li>
                 <li><a href="javascript:void(0)">Columnar Report</a></li>
-            </ul>       
-    </div>
-    <form> 
-        <div class="row">
-            <div class="col-md-2 col-sm-6 mb-1">
-                <!--Make sh-select dynamic  -->
-                <sh-select [options]="selectYear" [placeholder]="'Select Year'"> </sh-select>
-            </div>
-            <div class="col-md-2 col-sm-6 mb-1">
-                <!--Make sh-select dynamic  -->
-                <sh-select [options]="selectMonth" [placeholder]="'Select Month'"> </sh-select>
-            </div>
-            <div class="col-md-2 col-sm-6 mb-1">
-                <!--Make sh-select dynamic / need to group search field too -->
-                <sh-select [options]="flatGroupsOptions" [placeholder]="'Group'"> </sh-select>
-            </div>
-            <div class="col-md-2 col-sm-6 mb-1">
-                <!--Make sh-select dynamic  -->
-                <sh-select [options]="showOpeningClosingBalance" [placeholder]="'Show Opening/Closing Balance'"> </sh-select>
-            </div>
-            <div class="col-md-2 col-sm-6 mb-1">
-                <!--Make sh-select dynamic  -->
-                <sh-select [options]="selectCrDr" [placeholder]="' Replace Cr/Dr with  +/-'"> </sh-select>
-            </div>
-            <div class="col-md-2 col-sm-6 mb-1">
-                <button class="btn btn-pink">Export</button>
-            </div>
+            </ul>
         </div>
-    </form>
-
-</div>
+        <form #columnarReportForm="ngForm">
+            <div class="row">
+                <div class="col-md-2 col-sm-6 mb-1">
+                    <!--Make sh-select dynamic  -->
+                    <sh-select [options]="selectYear" [placeholder]="'Select Year'" name="financialYear"
+                        [(ngModel)]="exportRequest.financialYear"></sh-select>
+                </div>
+                <div class="col-md-2 col-sm-6 mb-1">
+                    <!--Make sh-select dynamic  -->
+                    <sh-select [options]="monthNames" [placeholder]="'Select Month'" name="monthYear"
+                        (selected)="selectMonth($event);"></sh-select>
+                </div>
+                <div class="col-md-2 col-sm-6 mb-1">
+                    <!--Make sh-select dynamic / need to group search field too -->
+                    <sh-select [options]="flatGroupsOptions" [placeholder]="'Group'" name="group"
+                        (selected)="selectGroup($event);"></sh-select>
+                </div>
+                <div class="col-md-2 col-sm-6 mb-1">
+                    <!--Make sh-select dynamic  -->
+                    <sh-select [options]="showOpeningClosingBalance" [placeholder]="'Show Opening/Closing Balance'"
+                        name="showHideOpeningClosing" [(ngModel)]="exportRequest.showHideOpeningClosing"></sh-select>
+                </div>
+                <div class="col-md-2 col-sm-6 mb-1">
+                    <!--Make sh-select dynamic  -->
+                    <sh-select [options]="selectCrDr" [placeholder]="'Replace Cr/Dr with  +/-'"
+                        name="balanceTypeAsSigns" [(ngModel)]="exportRequest.balanceTypeAsSigns"></sh-select>
+                </div>
+                <div class="col-md-2 col-sm-6 mb-1">
+                    <button class="btn btn-pink" [disabled]="columnarReportForm.invalid || isLoading" (click)="exportReport();">Export</button>
+                </div>
+            </div>
+        </form>
+    </div>
