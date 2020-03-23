@@ -84,14 +84,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
     public isFileUploading: boolean = false;
+    /** True, if attachment upload is to be displayed */
+    public shouldShowUploadAttachment: boolean = false;
     /** Source of image to be previewed */
     public imagePreviewSource: SafeUrl;
     /** Stores the type of attached document for Purchase Record */
     public attachedDocumentType: any;
     /** Stores the BLOB of attached document */
     private attachedDocumentBlob: Blob;
-    /** True, if attachment upload is to be displayed */
-    private shouldShowUploadAttachment: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private isUpdateVoucherActionSuccess$: Observable<boolean>;
     public proformaListComponent: ProformaListComponent;
