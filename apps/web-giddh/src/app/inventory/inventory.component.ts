@@ -63,7 +63,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public groupsWithStocks$: Observable<IGroupsWithStocksHierarchyMinItem[]>;
     public activeTab: string = 'inventory';
     public activeView: string = null;
-    public activeTabIndex: number = 0;
+    public activeTabIndex: number = 4;
     public currentUrl: string = null;
     public message: any;
     public GroupStockReportRequest: GroupStockReportRequest;

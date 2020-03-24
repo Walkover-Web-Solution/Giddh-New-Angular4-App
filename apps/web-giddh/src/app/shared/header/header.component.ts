@@ -228,6 +228,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public currentState: any = '';
     public isCalendlyModelActivate: boolean = false;
     public companyInitials: any = '';
+    public isInventoryDashboard: boolean = false;
     /**
      *
      */
@@ -274,6 +275,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (this.router.url.includes("/ledger")) {
                     this.currentState = this.router.url;
                     this.setCurrentAccountNameInHeading();
+                }
+
+                if(this.router.url.includes("/inventory/dashboard")) {
+                    this.isInventoryDashboard = true;
                 }
             }
         });

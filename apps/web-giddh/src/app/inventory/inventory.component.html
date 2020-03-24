@@ -1,4 +1,4 @@
-<div style="min-height:100%;">
+<div style="min-height:100%;" *ngIf="activeTabIndex !== 4">
     <div class="inventory-controll">
         <tabset #inventoryStaticTabs>
 
@@ -57,12 +57,9 @@
                 </ng-container>
             </tab>
 
-            <tab heading="Dashboard" (select)="redirectUrlToActiveTab('dashboard', $event)" [active]="activeTabIndex === 4">
-                <ng-container *ngIf="activeTabIndex === 4">
-                    <dashboardcomponent></dashboardcomponent>
-                </ng-container>
-            </tab>
-
         </tabset>
     </div>
+</div>
+<div *ngIf="activeTabIndex === 4">
+    <dashboardcomponent></dashboardcomponent>
 </div>

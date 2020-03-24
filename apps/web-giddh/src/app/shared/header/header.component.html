@@ -259,7 +259,10 @@
 
 <div class="nav-left-bar" [ngClass]="{'open': sideMenu.isopen, 'unvisible': companyList.length===0 }" (clickOutside)="closeSidebarMobile($event)">
 
-    <div class="menu_wrapper">
+    <div class="menu_wrapper" *ngIf="isInventoryDashboard">
+        Inventory Dashboard Sidebar
+    </div>
+    <div class="menu_wrapper" *ngIf="!isInventoryDashboard">
 
         <ul class="main-company-name">
 
