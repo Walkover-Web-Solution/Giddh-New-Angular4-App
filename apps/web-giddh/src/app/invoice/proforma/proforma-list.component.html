@@ -85,7 +85,7 @@
 
             <div *ngIf="voucherType === 'estimates'" class="btn-wrapper mb-1">
                 <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
-                    Estimates
+                    Estimate
                 </button>
             </div>
 
@@ -468,7 +468,7 @@
     <div bsModal #deleteConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
-                <delete-role-confirmation-model (confirmDeleteEvent)="deleteVoucher()" (closeModelEvent)="toggleConfirmationModel()">
+                <delete-role-confirmation-model [module]="voucherType+'list'" (confirmDeleteEvent)="deleteVoucher()" (closeModelEvent)="toggleConfirmationModel()">
                 </delete-role-confirmation-model>
             </div>
         </div>

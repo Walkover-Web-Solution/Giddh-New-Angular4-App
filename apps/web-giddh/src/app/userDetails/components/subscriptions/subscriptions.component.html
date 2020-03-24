@@ -106,9 +106,8 @@
                             </table>
                         </div>
                     </div>
-
                     <div class="mrT2">
-                        <p><small>* Additional charges on transactions above 40,000 @ 0.10 Rs. per transaction</small>
+                        <p><small>* Additional charges on transactions above {{seletedUserPlans?.planDetails?.transactionLimit | number}} @ {{seletedUserPlans?.planDetails?.ratePerExtraTransaction | number}} {{activeCompany?.baseCurrency}} per transaction</small>
                         </p>
                         <p><small>* Each month includes previous month's transactions</small></p>
                     </div>

@@ -426,7 +426,7 @@
 
             <!-- region debit transaction-->
             <div [ngClass]="Shown ? 'active' : ''" hr-item
-                (ngInit)="initNavigator(navigator,$event.nativeElement);    navigator.nextVertical();"
+            (ngInit)="initNavigator(navigator,$event.nativeElement);    navigator.nextVertical();"
                 class="left-col-new"
                 [ngClass]="{bdrR: (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
 
@@ -595,7 +595,7 @@
                                                     (onShow)="isSelectOpen=true;bs.hide();" (onHide)="onSelectHide()"
                                                     (selected)="selectAccount($event,txn)"
                                                     (keydown)="keydownPressed($event)" placeholder="Select Accounts"
-                                                    [notFoundLink]="true" (noResultsClicked)="toggleAsidePane()"
+                                                    [notFoundLink]="true" (noResultsClicked)="toggleAsidePane(null, shDebit)"
                                                     [multiple]="false" [ItemHeight]="67"
                                                     [useInBuiltFilterForFlattenAc]="true">
                                                     <ng-template #optionTemplate let-option="option">
@@ -619,7 +619,6 @@
                                                         </ng-container>
                                                     </ng-template>
                                                     <ng-template #notFoundLinkTemplate>
-
                                                         <a [ngClass]="{'active': keydownClassAdded}"
                                                             class="notfound-option" [keyboardShortcut]="'alt+c'"
                                                             (onShortcutPress)="toggleAsidePane()">
@@ -780,7 +779,7 @@
 
                             <td class="col-xs-6" data-title="Particular">
 
-                                <div class="d-flex align-items-center" style="justify-content: space-between">
+                                <div class="d-flex align-items-center justify-content-between">
                                     <div class="ellp">
                                         <!-- By -->
                                         {{ txn.inventory ? txn.particular.name + ' (' + txn.inventory.stock.name + ')' : txn.particular.name }}
@@ -821,13 +820,13 @@
                     (click)="$event.stopPropagation()">
                     <tbody>
 
-                        <tr *ngFor="let txn of lc.blankLedger.transactions;" (click)="$event.stopPropagation()">
+                        <tr *ngFor="let txn of lc.blankLedger.transactions;">
 
                             <td class="width100" *ngIf="txn.type === 'CREDIT'">
 
                                 <table class="width100 h-table">
                                     <tbody class="ledger-main">
-                                        <tr class="ledger-row" container="body" (keydown)="$event.stopPropagation()">
+                                        <tr class="ledger-row" container="body">
 
                                             <!--<td class="col-xs-1 text-center">-->
                                             <!---->
@@ -858,7 +857,7 @@
                                                     [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
                                                     [showClear]="false" placeholder="Select Accounts"
                                                     (keydown)="keydownPressed($event)" [notFoundLink]="true"
-                                                    (noResultsClicked)="toggleAsidePane()" [multiple]="false"
+                                                    (noResultsClicked)="toggleAsidePane(null, shCredit)" [multiple]="false"
                                                     [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
@@ -881,13 +880,13 @@
                                                         </ng-container>
                                                     </ng-template>
                                                     <ng-template #notFoundLinkTemplate>
-                                                        <div [ngClass]="{'active': keydownClassAdded}"
+                                                        <a [ngClass]="{'active': keydownClassAdded}"
                                                             class="notfound-option" [keyboardShortcut]="'alt+c'"
-                                                            (onShortcutPress)="toggleAsidePane()">
+                                                            (onShortcutPress)="toggleAsidePane(null, shCredit)">
                                                             <span [ngClass]="{'active': keydownClassAdded}">Create
-                                                                New</span>
+                                                                New A/c</span>
                                                             <span>Alt+C</span>
-                                                        </div>
+                                                        </a>
                                                     </ng-template>
                                                 </sh-select>
 
@@ -910,7 +909,7 @@
 
                                 <!--new ledge popup-->
                                 <div class="pos-abs entry-modal" (click)="shCredit?.hide()"
-                                    (keydown)="$event.stopPropagation()"
+                                (keydown)="$event.stopPropagation()"
                                     *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
                                     <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
@@ -1236,7 +1235,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <!-- [from]="advanceSearchRequest?.from" [to]="advanceSearchRequest?.to" -->
-            <share-ledger #sharLedger [accountUniqueName]="lc.accountUnq" [advanceSearchRequest]="advanceSearchRequest"
+            <share-ledger #sharLedger [from]="shareLedgerDates?.from" [to]="shareLedgerDates?.to" [accountUniqueName]="lc.accountUnq" [advanceSearchRequest]="advanceSearchRequest"
                 (closeShareLedgerModal)="hideShareLedgerModal()"></share-ledger>
         </div>
     </div>
@@ -1276,7 +1275,7 @@
                 <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
                     <form name="newRole" novalidate class="" autocomplete="off">
                         <div class="modal_wrap mrB2">
-                            <h3>Do you want to delete the selected entries? </h3>
+                            <h3>Do you want to delete the selected entrie(s)? </h3>
                             <p class="text-gray font-14 mt-05">All their corresponding vouchers and invoices will be
                                 deleted permanently and will no longer be accessible from other modules.</p>
                         </div>

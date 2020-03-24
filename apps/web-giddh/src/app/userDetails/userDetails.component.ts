@@ -18,6 +18,7 @@ import * as moment from 'moment';
 import { GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { BsModalRef, TabsetComponent } from 'ngx-bootstrap';
 import { GeneralActions } from '../actions/general/general.actions';
+import { CurrentPage } from '../models/api-models/Common';
 
 @Component({
     selector: 'user-details',
@@ -110,6 +111,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             if (params['type'] && this.activeTab !== params['type']) {
                 this.setStateDetails(params['type']);
                 this.activeTab = params['type'];
+                if(this.activeTab === "auth-key") {
+                    this.setCurrentPageTitle("Api");
+                }
             }
         });
 
@@ -410,6 +414,12 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
+    public setCurrentPageTitle(title) {
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = "User-Details > " + title;
+        currentPageObj.url = this.router.url;
+        this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
+    }
 }
 
 
