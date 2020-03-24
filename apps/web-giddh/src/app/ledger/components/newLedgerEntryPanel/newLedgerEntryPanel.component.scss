@@ -73,6 +73,10 @@ span.eligible-ITC {
 .inWords.words-inline {
     float: right;
 }
+.width-115 {
+    width: 115px;
+    font-size: 12px;
+}
 @media only screen and (max-width: 767px) {
     .ledger-panel .btn {
         margin-bottom: 13px;
@@ -121,5 +125,8 @@ span.eligible-ITC {
     .warehouse-field {
         display: flex;
         flex-direction: column-reverse;
+    }
+    .xs-justify-content-start {
+        justify-content: start;
     }
 }

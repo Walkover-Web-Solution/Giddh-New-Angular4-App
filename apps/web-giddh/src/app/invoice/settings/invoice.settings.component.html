@@ -343,14 +343,15 @@
 
                                 <div class=" selectEstimate">
 
-                                    <div class="col-md-2 col-sm-3 col-xs-12 p-0">
-
-                                        <span class="d-inline-block mr-2">
-                                            <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio" [(ngModel)]="estimateSetting.nextStepToEstimate" [value]="'salesorder'"> Proforma
+                                    <div class="col-md-12 col-xs-12 p-0">
+                                        <span class="pd0 mrR3">
+                                            <input id="radio-5" class="radio-custom cp ml0" name="signatureType" type="radio" [(ngModel)]="estimateSetting.nextStepToEstimate" [value]="'salesorder'" >
+                                            <label for="radio-5" class="radio-custom-label">Proforma</label>
                                         </span>
 
-                                        <span>
-                                            <input class="radio_theme" name="signatureType" type="radio" style="margin-left: 0px !important;" [(ngModel)]="estimateSetting.nextStepToEstimate" [value]="'invoice'"> Invoice
+                                        <span class="pd0 mrR3">
+                                            <input id="radio-6" class="radio-custom cp ml0" name="signatureType" type="radio" [(ngModel)]="estimateSetting.nextStepToEstimate" [value]="'invoice'">
+                                            <label for="radio-6" class="radio-custom-label">Invoice</label>
                                         </span>
 
                                     </div>

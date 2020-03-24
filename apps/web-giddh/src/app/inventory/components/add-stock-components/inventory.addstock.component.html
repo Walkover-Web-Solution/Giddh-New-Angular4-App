@@ -64,7 +64,7 @@
                                         [control]="addStockForm.get('uniqueName')" class="form-control"
                                         formControlName="uniqueName">
                                 </div>
-                                <div class="form-group col-sm-4 col-xs-12" [hidden]="!(isManageInventory$ | async)">
+                                <div class="form-group col-sm-4 col-xs-12">
                                     <label>HSN Code</label>
                                     <input type="text" class="form-control" maxlength="10" decimalDigitsDirective
                                         formControlName="hsnNumber" />
@@ -145,7 +145,7 @@
                             </div>
 
                             <div class="row sku-row">
-                                <div class="form-group col-sm-4 col-xs-12" [hidden]="(isManageInventory$ | async)">
+                                <div class="form-group col-sm-4 col-xs-12">
                                     <label>SAC Code</label>
                                     <input type="text" class="form-control" maxlength="10" formControlName="sacNumber"
                                         decimalDigitsDirective />
@@ -154,17 +154,7 @@
 
                                 <!-- SKU Code -->
                                 <div class="form-group col-sm-4 col-xs-12">
-                                    <label>
-                                        <span
-                                            *ngIf="!editSKUlabel && !addStockForm.controls['skuCodeHeading'].value">SKU
-                                            Code</span>
-                                        <span
-                                            *ngIf="!editSKUlabel">{{addStockForm.controls['skuCodeHeading'].value}}</span>
-                                        <input type="text" placeholder="Enter" class="label-input" *ngIf="editSKUlabel"
-                                            formControlName="skuCodeHeading" (blur)="editSKUlabel=!editSKUlabel">
-                                        <i *ngIf="!editSKUlabel" class="fa fa-pencil"
-                                            (click)="editSKUlabel=!editSKUlabel"></i>
-                                    </label>
+                                    <label>SKU Code</label>
                                     <input type="text" name="skuCode" class="form-control" maxlength="20"
                                         formControlName="skuCode" (keyup)="validateSKU($event)">
                                 </div>

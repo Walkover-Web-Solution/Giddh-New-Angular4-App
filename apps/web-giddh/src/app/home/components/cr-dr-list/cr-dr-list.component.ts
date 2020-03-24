@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Observable, ReplaySubject } from "rxjs";
-import { Store } from "@ngrx/store";
+import { Component, OnDestroy, OnInit, ChangeDetectorRef, Input } from '@angular/core';
+import { Observable, ReplaySubject, of } from "rxjs";
+import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { ContactService } from "../../../services/contact.service";
 import { take, takeUntil } from "rxjs/operators";
@@ -30,27 +30,34 @@ export class CrDrComponent implements OnInit, OnDestroy {
     public activeCompanyUniqueName$: Observable<string>;
     public activeCompany: any = {};
 
+    /** True, if universal date should only be used once for initializing */
+    @Input() initializeDateWithUniversalDate: boolean;
+    /** True, if date picker initialization with universal date is successful */
+    public isDatePickerInitialized: boolean;
+
     constructor(private store: Store<AppState>, private _contactService: ContactService, private cdRef: ChangeDetectorRef) {
-        this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-        this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
+        this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
+        this.store.pipe(select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
                 this.datePickerOptions = {
                     ...this.datePickerOptions, startDate: moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(),
-                    endDate: moment(universalDate[1], GIDDH_DATE_FORMAT).toDate()
+                    endDate: moment(universalDate[1], GIDDH_DATE_FORMAT).toDate(),
+                    chosenLabel: universalDate[2]
                 };
                 this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
                 this.dueDate = new Date(moment(universalDate[1]).format('YYYY-MM-DD'));
+                this.isDatePickerInitialized = true;
                 this.getAccountsReport();
             }
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        })), takeUntil((this.initializeDateWithUniversalDate) ? of(this.isDatePickerInitialized) : this.destroyed$)).subscribe();
 
         this.companies$.subscribe(c => {
             if (c) {

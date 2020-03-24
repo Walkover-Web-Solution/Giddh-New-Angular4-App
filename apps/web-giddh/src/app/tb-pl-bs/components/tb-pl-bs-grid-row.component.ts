@@ -78,16 +78,18 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
         //  this.accountDetails.map(f=> f.parentGroups.find(e=> e.name === this.groupDetail.groupName));
     }
 
-    public entryClicked(acc) {
-        let url = location.href + '?returnUrl=ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
-        if (isElectron) {
-            let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
-            ipcRenderer.send('open-url', url);
-        } else {
-            (window as any).open(url);
-        }
+  public entryClicked(acc) {
+    let url = location.href + '?returnUrl=ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
+    if (isElectron) {
+      let ipcRenderer = (window as any).require('electron').ipcRenderer;
+      url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
+      ipcRenderer.send('open-url', url);
+    }else if(isCordova){
+        //todo: entry Clicked
+    } else {
+      (window as any).open(url);
     }
+  }
 
     public accountInfo(acc, e: Event) {
         this.flattenAccounts$.pipe(

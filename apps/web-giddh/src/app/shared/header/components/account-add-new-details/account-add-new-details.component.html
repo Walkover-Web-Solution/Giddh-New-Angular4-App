@@ -23,12 +23,13 @@
                     </div>
                 </div>
             </div>
-            <div class="row ">
+            <div class="row">
                 <div class="col-sm-4">
                     <div class="form-group" formGroupName="country">
                         <label>Country <sup class="text-danger">*</sup> </label>
                         <sh-select [options]="countrySource" defaultValue="{{selectedCountry}}" required
-                            [isFilterEnabled]="true" formControlName="countryCode" (selected)="selectCountry($event)" [useInBuiltFilterForIOptionTypeItems]="true">
+                            [isFilterEnabled]="true" formControlName="countryCode" (selected)="selectCountry($event)"
+                            [useInBuiltFilterForIOptionTypeItems]="true">
                         </sh-select>
                     </div>
                 </div>
@@ -39,52 +40,53 @@
                             [isFilterEnabled]="true"></sh-select>
                     </div>
                 </div>
-                <div class="col-sm-4">
-                    <div class="form-group cr-dr-account">
-                        <label>Opening Balance </label>
-                        <!-- <input type="text" value="INR" class="form-control">
+
+                <div class="form-group  col-xs-12 col-sm-4 cr-dr-account">
+                    <label>Opening Balance </label>
+                    <!-- <input type="text" value="INR" class="form-control">
                             <span class="dr-label active">DR</span>
                             <span class="cr-label">CR</span> -->
-                        <div class="input-group"
-                            [ngClass]="{'input-group': addAccountForm.get('openingBalance').value > 0}">
-                            <input type="text" min="0" class="form-control text-right" decimalDigitsDirective
-                                formControlName="openingBalance" placeholder="00.00" />
-                            <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
+                    <div [ngClass]="{'input-group': addAccountForm.get('openingBalance').value > 0}">
+                        <input type="text" min="0" class="form-control text-right" decimalDigitsDirective
+                            formControlName="openingBalance" placeholder="00.00" />
+                        <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT' && addAccountForm.get('openingBalance').value > 0,
                   'cp': addAccountForm.get('openingBalance').value > 0}"
-                                *ngIf="addAccountForm.get('openingBalance').value > 0">DR.
-                            </div>
-                            <div class="input-group-addon" (click)="openingBalanceTypeChnaged('CREDIT')" [ngClass]="
-                 {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'CREDIT' && addAccountForm.get('openingBalance').value > 0,
-                  'cp': addAccountForm.get('openingBalance').value > 0}"
-                                *ngIf="addAccountForm.get('openingBalance').value > 0">CR.
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-            <div class="row"
-                *ngIf="isMultipleCurrency && addAccountForm.get('country').value.countryCode !== companyCountry">
-                <div class="form-group col-xs-12 col-sm-4">
-                    <label for="">Foreign Opening Balance</label>
-                    <div class="" [ngClass]="{'input-group': addAccountForm.get('foreignOpeningBalance').value > 0}">
-                        <input type="text" min="0" class="form-control text-right"
-                            formControlName="foreignOpeningBalance" placeholder="00.00" decimalDigitsDirective />
-                        <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
-                 {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT',
-                  'cp': addAccountForm.get('openingBalance').value > 0}"
-                            *ngIf="addAccountForm.get('foreignOpeningBalance').value > 0">DR.
+                            *ngIf="addAccountForm.get('openingBalance').value > 0">DR.
                         </div>
                         <div class="input-group-addon" (click)="openingBalanceTypeChnaged('CREDIT')" [ngClass]="
-                 {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'CREDIT',
+                 {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'CREDIT' && addAccountForm.get('openingBalance').value > 0,
                   'cp': addAccountForm.get('openingBalance').value > 0}"
-                            *ngIf="addAccountForm.get('foreignOpeningBalance').value > 0">CR.
+                            *ngIf="addAccountForm.get('openingBalance').value > 0">CR.
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="form-group col-xs-12 col-sm-4"
+                    *ngIf="isMultipleCurrency && addAccountForm.get('country').value.countryCode !== companyCountry">
+                    <div>
+                        <label for="">Foreign Opening Balance</label>
+                        <div class=""
+                            [ngClass]="{'input-group': addAccountForm.get('foreignOpeningBalance').value > 0}">
+                            <input type="text" min="0" class="form-control text-right"
+                                formControlName="foreignOpeningBalance" placeholder="00.00" decimalDigitsDirective />
+                            <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
+                                     {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT',
+                                      'cp': addAccountForm.get('openingBalance').value > 0}"
+                                *ngIf="addAccountForm.get('foreignOpeningBalance').value > 0">DR.
+                            </div>
+                            <div class="input-group-addon" (click)="openingBalanceTypeChnaged('CREDIT')" [ngClass]="
+                                     {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'CREDIT',
+                                      'cp': addAccountForm.get('openingBalance').value > 0}"
+                                *ngIf="addAccountForm.get('foreignOpeningBalance').value > 0">CR.
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
+
             <ng-container *ngIf="isHsnSacEnabledAcc">
                 <div class="row">
                     <div class="col-xs-6 form-group">
@@ -137,18 +139,18 @@
                                         <textarea name="gstAddr_{{i}}" formControlName="address" rows="4" cols="5"
                                             maxlength="120" class="form-control"></textarea>
                                     </div>
-
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label>State </label>
+                                        <label>State <sup class="text-danger" *ngIf="isStateRequired">*</sup> </label>
                                         <div class="custom-select">
                                             <sh-select #states [options]="statesSource$ | async"
                                                 [isFilterEnabled]="true" (selected)="selectedState(gst, $event)"
                                                 [forceClearReactive]="forceClear$ | async" formControlName="stateCode"
-                                                style="width:100%" [useInBuiltFilterForIOptionTypeItems]="true">
+                                                style="width:100%" [useInBuiltFilterForIOptionTypeItems]="true"
+                                                [attr.required]="isStateRequired">
                                             </sh-select>
                                         </div>
                                     </div>
@@ -243,7 +245,7 @@
                             <label>Mobile Number</label>
                             <div class="d-flex">
                                 <sh-select [placeholder]="'+91'" [options]="countryPhoneCode"
-                                    formControlName="mobileCode" style="width: 60px; margin-right: 10px;"></sh-select>
+                                    formControlName="mobileCode" class="mobile-number-sh-select"></sh-select>
                                 <input type="text" pattern="[0-9]*" class="form-control pull-right"
                                     placeholder="98XXXXXXXX" formControlName="mobileNo" id="contactNo"
                                     autocomplete="off" (blur)="isValidMobileNumber(mobileNoEl)" #mobileNoEl />
@@ -303,20 +305,46 @@
                     <div class="row"
                         *ngFor="let bank of addAccountForm.get('accountBankDetails')['controls'];let i = index;let f = first; let l = last"
                         [formGroupName]="i">
-                        <div class="form-group col-sm-5">
-                            <label for="">Bank Name</label>
-                            <input type="text" class="form-control" name="bankName_{{i}}" formControlName="bankName" />
+                        <div class="form-group col-sm-6" *ngIf="selectedCountryCode ==='AE'">
+                            <label>Beneficiary Name</label>
+                            <input type="text" class="form-control" placeholder="Enter Beneficiary Name "
+                                name="beneficiaryName_{{i}}" formControlName="beneficiaryName" />
                         </div>
-                        <div class="form-group col-sm-4">
-                            <div class="">
-                                <label for="">Account No.</label>
-                                <input type="text" class="form-control" name="accountNum_{{i}}"
-                                    formControlName="bankAccountNo" />
+                        <div class="form-group"
+                            [ngClass]="{'col-sm-5': selectedCountryCode !=='AE','col-sm-6': selectedCountryCode ==='AE'}">
+                            <label>Bank Name</label>
+                            <input type="text" class="form-control" placeholder="Enter Bank Name" name="bankName_{{i}}"
+                                formControlName="bankName" />
+                        </div>
+                        <div class="form-group col-sm-4" *ngIf="selectedCountryCode ==='AE'">
+                            <div>
+                                <label>Branch Name</label>
+                                <input type="text" class="form-control" placeholder="Enter Branch Name"
+                                    name="branchName_{{i}}" formControlName="branchName" />
                             </div>
                         </div>
-                        <div class="form-group col-sm-3">
-                            <label for="">IFSC Code</label>
-                            <input type="text" class="form-control" name="ifsc_{{i}}" formControlName="ifsc" />
+                        <div class="form-group col-sm-4 ">
+                            <div>
+                                <label *ngIf="selectedCountryCode==='IN' ">Account Number</label>
+                                <label *ngIf="selectedCountryCode !=='IN' ">IBAN</label>
+                                <input type="text" class="form-control " placeholder="Enter Account No. "
+                                    [maxlength]="bankIbanNumberMaxLength" [minlength]="bankIbanNumberMinLength"
+                                    #bankaccount (blur)="showBankDetailsValidation(bankaccount,'bankAccountNo')"
+                                    (keyup)="bankDetailsValidator(bankaccount, 'bankAccountNo')"
+                                    name="accountNum_{{i}} " formControlName="bankAccountNo" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-4" *ngIf="selectedCountryCode ==='AE'">
+                            <label>SWIFT Code/BIC</label>
+                            <input type="text" class="form-control" maxlength="11" minlength="8"
+                                placeholder="Enter SWIFT/BIC Code" #swiftcode name="swiftCode_{{i}}"
+                                (blur)="showBankDetailsValidation(swiftcode,'swiftCode')"
+                                (keyup)="bankDetailsValidator(swiftcode, 'swiftCode')" formControlName="swiftCode" />
+                        </div>
+                        <div *ngIf="selectedCountryCode!=='AE'" class="form-group col-sm-3">
+                            <label>IFSC Code</label>
+                            <input type="text" class="form-control" placeholder="Enter IFSC Code" name="ifsc_{{i}}"
+                                formControlName="ifsc" />
                         </div>
                     </div>
                 </div>

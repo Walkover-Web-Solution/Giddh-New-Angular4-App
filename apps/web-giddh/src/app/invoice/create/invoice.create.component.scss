@@ -23,13 +23,13 @@
     width: 100%;
     height: 80px;
     padding: 20px 0;
-    background-color: #7d7d7d;
+    background-color: "$veryLightGray";
 }
 
 // styles
 .form-inline {
     .form-group {
-        margin-right: 20px;
+        margin-right: 0;
         vertical-align: top;
     }
 }
@@ -47,6 +47,7 @@
     textarea.form-control {
         height: 140px;
         resize: none;
+        overflow-y: auto;
     }
     label {
         display: block;
@@ -89,4 +90,16 @@
 :host ::ng-deep sh-select input[type="text"] {
     width: 100%;
     height: 42px;
+}
+.staticInvoiceTable table {
+    max-width: 1280px;
+    width: 100%;
+}
+.wrap-billing-address {
+    padding-top: 0;
+}
+input.shipping-checkbox {
+    width: auto !important;
+    margin-right: 20px;
+    top: 0 !important;
 }

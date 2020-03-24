@@ -121,6 +121,8 @@ export class LedgerResponse {
     public attachedFileUniqueNames?: string[];
     public itcAvailable?: string = '';
     public reverseChargeTaxableAmount?: number;
+    public passportNumber?: string;
+    public touristSchemeApplicable?: boolean;
 }
 
 /*

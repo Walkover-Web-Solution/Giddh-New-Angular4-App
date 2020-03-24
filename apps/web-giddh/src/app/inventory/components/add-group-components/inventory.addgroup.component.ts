@@ -77,6 +77,8 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         this.addGroupForm = this._fb.group({
             name: ['', [Validators.required]],
             uniqueName: ['', [Validators.required]],
+            hsnNumber: [''],
+            sacNumber: [''],
             parentStockGroupUniqueName: [{ value: '', disabled: true }, [Validators.required]],
             isSubGroup: [false]
         });
@@ -108,6 +110,8 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 let updGroupObj = new StockGroupRequest();
                 updGroupObj.name = a.name;
                 updGroupObj.uniqueName = a.uniqueName;
+                updGroupObj.hsnNumber = a.hsnNumber;
+                updGroupObj.sacNumber = a.sacNumber;
                 if (updGroupObj.uniqueName === 'maingroup') {
                     this.addGroupForm.controls['uniqueName'].disable();
                     this.defaultGrpActive = true;
@@ -136,7 +140,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 if (a) {
                     this.addGroupForm.patchValue({ isSubGroup: true, parentStockGroupUniqueName: { label: a.name, value: a.uniqueName } });
                 } else {
-                    this.addGroupForm.patchValue({ name: '', uniqueName: '', isSubGroup: false });
+                    this.addGroupForm.patchValue({ name: '', uniqueName: '', hsnNumber: '', sacNumber: '', isSubGroup: false });
                 }
                 this.parentStockSearchString = '';
             }
