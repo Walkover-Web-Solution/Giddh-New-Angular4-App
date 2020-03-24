@@ -348,11 +348,11 @@
                                     <div class="pull-left">
                                         <div [ngClass]="{'mrT3': f}">
                                             <button type="button" class="btn btn-default" (click)="saveAmazonSeller(item)" *ngIf="l"><i
-                                                    class="fa fa-check"></i></button>
+                                                class="fa fa-check"></i></button>
                                             <button type="button" class="btn btn-default" (click)="updateAmazonSeller(item)" *ngIf="i === amazonEditItemIdx && !l"><i
-                                                    class="fa fa-check"></i></button>
+                                                class="fa fa-check"></i></button>
                                             <button type="button" class="btn btn-default" (click)="editAmazonSeller(i)" *ngIf="i !== amazonEditItemIdx && !l"><i
-                                                    class="fa fa-edit"></i></button>
+                                                class="fa fa-edit"></i></button>
                                             <button type="button" class="btn btn-danger" (click)="deleteAmazonSeller(item.get('sellerId').value, i)" *ngIf="!l"><i class="fa fa-trash-o"></i></button>
                                         </div>
                                     </div>

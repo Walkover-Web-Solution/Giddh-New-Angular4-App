@@ -318,8 +318,11 @@ export class SignupComponent implements OnInit, OnDestroy {
                 // this.store.dispatch(this.loginAction.signupWithGoogle(t));
             } else {
                 // linked in
-                const t = ipcRenderer.sendSync("authenticate", provider);
-                this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
+                ipcRenderer.send("authenticate", provider);
+                ipcRenderer.once("authenticate-token", (event, res) => {
+                    this.store.dispatch(this.loginAction.LinkedInElectronLogin(res));
+                });
+                // this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
             }
 
         } else if (Configuration.isCordova) {

@@ -107,7 +107,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
     public sideBarStateChange(event: boolean) {
         this.sideMenu.isopen = event;
-
     }
 
     private changeOnMobileView(isMobile) {
@@ -130,7 +129,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         // debugger;
         if (!LOCAL_ENV && !(isElectron || isCordova)) {
             this._versionCheckService.initVersionCheck(AppUrl + '/version.json');
-
             this._versionCheckService.onVersionChange$.subscribe((isChanged: boolean) => {
                 if (isChanged) {
                     this.newVersionAvailableForWebApp = _.clone(isChanged);

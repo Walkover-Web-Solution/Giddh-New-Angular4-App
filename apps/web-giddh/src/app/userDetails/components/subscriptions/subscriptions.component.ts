@@ -39,7 +39,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     constructor(private store: Store<AppState>,
         private _subscriptionsActions: SubscriptionsActions,
         private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService) {
-        
+
         this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
         this.subscriptions$ = this.store.pipe(select(s => s.subscriptions.subscriptions), takeUntil(this.destroyed$));
         this.companies$ = this.store.select(cmp => cmp.session.companies).pipe(takeUntil(this.destroyed$));
@@ -55,7 +55,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
                 });
             }
         });
-        
+
         this.isPlanShow = false;
         this.subscriptionService.getSubScribedCompanies().subscribe((res) => {
             this.isLoading = false;
@@ -70,6 +70,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         });
 
         this.subscriptions$.subscribe(userSubscriptions => {
+            this.isLoading = false;
             this.subscriptions = userSubscriptions;
             this.showCurrentCompanyPlan();
         });

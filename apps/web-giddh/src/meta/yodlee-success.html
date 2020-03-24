@@ -53,19 +53,19 @@
         switch (window.location.hostname) {
             case 'localhost':
             case 'dev.giddh.com':
-                apiBaseUrl = 'https://apirelease.giddh.com/';
+                apiBaseUrl = 'https://apitest.giddh.com/';
                 break;
             case 'test.giddh.com':
                 apiBaseUrl = 'https://apitest.giddh.com/';
                 break;
             case 'stage.giddh.com':
-                apiBaseUrl = 'https://apirelease.giddh.com/';
+                apiBaseUrl = 'https://apitest.giddh.com/';
                 break;
             case 'app.giddh.com':
                 apiBaseUrl = 'https://api.giddh.com/';
                 break;
             default:
-                apiBaseUrl = 'https://apirelease.giddh.com/';
+                apiBaseUrl = 'https://apitest.giddh.com/';
         }
         return apiBaseUrl;
     }

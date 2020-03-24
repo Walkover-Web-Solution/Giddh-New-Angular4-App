@@ -1,27 +1,27 @@
 Vue.use(VToaster, {
     timeout: 5000
 });
-Vue.directive('tooltip', function (el, binding) {
+Vue.directive('tooltip', function(el, binding) {
     $(el).tooltip({
         title: binding.value,
         placement: binding.arg,
         trigger: 'hover'
     });
 });
-Vue.filter('currency', function (value) {
+Vue.filter('currency', function(value) {
     return parseFloat(value).toFixed(2);
 });
 Vue.component('date-range-picker', {
     props: ['id', 'range'],
     template: '<div class="input-group"><input type="text" :id="id" :name="id" class="form-control" /><span class="input-group-addon"><span class="fa fa-calendar"></span></span></div>',
     watch: {
-        range: function (val, oldVal) {
+        range: function(val, oldVal) {
             var input = $('input[name="' + this.id + '"]');
             input.data('daterangepicker').setStartDate(val.startDate);
             input.data('daterangepicker').setEndDate(val.endDate);
         }
     },
-    mounted: function () {
+    mounted: function() {
         var self = this;
         var input = $('input[name="' + this.id + '"]');
         input.daterangepicker({
@@ -53,7 +53,7 @@ Vue.component('date-range-picker', {
                 format: 'D-MMM-YY'
             },
         });
-        input.on('apply.daterangepicker', function (ev, picker) {
+        input.on('apply.daterangepicker', function(ev, picker) {
             var dateObj = {
                 startDate: picker.startDate,
                 endDate: picker.endDate,
@@ -101,14 +101,14 @@ var app = new Vue({
         var id = this.getParameterByName('id');
         this.getMagicLinkData(id)
     },
-    created: function () {
+    created: function() {
         window.addEventListener('resize', this.handleResize);
     },
-    beforeDestroy: function () {
+    beforeDestroy: function() {
         window.removeEventListener('resize', this.handleResize)
     },
     methods: {
-        getMagicLinkData: function (id, from, to) {
+        getMagicLinkData: function(id, from, to) {
             var url = '';
             var apiBaseUrl = this.getApi();
             if (from && to) {
@@ -191,12 +191,12 @@ var app = new Vue({
                             msg = e.response.data.message;
                         }
                         this.$toaster.error(msg);
-                    });    
+                    });
             } else {
                 this.$toaster.error('Magic link ID not found.');
             }
         },
-        getParameterByName: function (name, url) {
+        getParameterByName: function(name, url) {
             if (!url) url = window.location.href;
             name = name.replace(/[\[\]]/g, "\\$&");
             var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
@@ -205,7 +205,7 @@ var app = new Vue({
             if (!results[2]) return '';
             return decodeURIComponent(results[2].replace(/\+/g, " "));
         },
-        checkCompEntry: function (ledger) {
+        checkCompEntry: function(ledger) {
             var unq = ledger.uniqueName;
             ledger.isCompoundEntry = true;
             var ledgerData = this.ledgerData;
@@ -219,7 +219,7 @@ var app = new Vue({
             this.ledgerData = {};
             this.ledgerData = ledgerData;
         },
-        customFilter: function (txn) {
+        customFilter: function(txn) {
             return txn.particular.name.indexOf(this.searchText) != -1;
         },
         filterBy: function (list, value) {
@@ -234,7 +234,7 @@ var app = new Vue({
                 return txn.particular.name.toLowerCase().includes(value.toLowerCase()) || String(txn.amount).includes(value.toLowerCase());
             });
         },
-        onDateRangeChanged: function (picker) {
+        onDateRangeChanged: function(picker) {
             var dates = {
                 startDate: moment(picker.startDate).format('DD-MM-YYYY'),
                 endDate: moment(picker.endDate).format('DD-MM-YYYY')
@@ -247,7 +247,7 @@ var app = new Vue({
 
             this.getMagicLinkData(id, dates.startDate, dates.endDate);
         },
-        handleResize: function (ev) {
+        handleResize: function(ev) {
             var width = ev.currentTarget.innerWidth;
             if (width > 992) {
                 this.selectedTab = '';
@@ -261,7 +261,7 @@ var app = new Vue({
                 this.isSmall = false;
             }
         },
-        downloadInvoice: function (invoiceNum) {
+        downloadInvoice: function(invoiceNum) {
             var id = this.getParameterByName('id');
             var apiBaseUrl = this.getApi();
             if (id) {
@@ -282,10 +282,10 @@ var app = new Vue({
                 this.$toaster.error('Magic link ID not found.');
             }
         },
-        downloadPurchaseInvoice: function (invoiceNum) {
+        downloadPurchaseInvoice: function(invoiceNum) {
             this.$toaster.error('Invoice for ' + invoiceNum + ' cannot be downloaded now.');
         },
-        base64ToBlob: function (b64Data, contentType, sliceSize) {
+        base64ToBlob: function(b64Data, contentType, sliceSize) {
             contentType = contentType || '';
             sliceSize = sliceSize || 512;
             var byteCharacters = atob(b64Data);
@@ -307,12 +307,12 @@ var app = new Vue({
                 type: contentType
             });
         },
-        validateEmail: function (emailStr) {
+        validateEmail: function(emailStr) {
             let pattern =
                 /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
             return pattern.test(emailStr);
         },
-        submitForm: function (formObj, ev) {
+        submitForm: function(formObj, ev) {
             ev.preventDefault();
             let form = formObj;
             if (!(this.validateEmail(form.email))) {
@@ -323,10 +323,10 @@ var app = new Vue({
             this.formSubmitted = true;
             this.responseMsg = 'Thanks! we will get in touch with you soon';
         },
-        sendContactFormData: function (data) {
+        sendContactFormData: function(data) {
             axios.get('https://giddh.com/contactus.php?fn=contactUs', {
-                params: data
-            })
+                    params: data
+                })
                 .then(response => {
                     console.log('the response is :', response);
                 })
@@ -334,7 +334,7 @@ var app = new Vue({
                     console.log('the error is :', e);
                 })
         },
-        getApi: function () {
+        getApi: function() {
             var apiBaseUrl = '';
             switch (window.location.hostname) {
                 case 'localhost':

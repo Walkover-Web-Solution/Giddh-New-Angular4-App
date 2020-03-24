@@ -191,7 +191,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
     }
-
     public addNumber(no: string) {
         this.oneTimePassword = '';
         const mobileRegex = /^[0-9]{1,10}$/;
