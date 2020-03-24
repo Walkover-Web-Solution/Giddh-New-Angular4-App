@@ -1,6 +1,6 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren, TemplateRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { BsDatepickerDirective, BsModalRef, ModalDirective, ModalOptions, PopoverDirective } from 'ngx-bootstrap';
+import { BsDatepickerDirective, BsModalRef, ModalDirective, ModalOptions, PopoverDirective, BsModalService } from 'ngx-bootstrap';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { SalesActions } from '../actions/sales/sales.action';
@@ -84,6 +84,8 @@ import { ProformaInvoiceUtilityService } from './services/proforma-invoice-utili
 import { PurchaseRecordService } from '../services/purchase-record.service';
 import { CommonActions } from '../actions/common.actions';
 import { PurchaseRecordActions } from '../actions/purchase-record/purchase-record.action';
+import { AdvanceReceiptAdjustmentComponent } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.component';
+import { AdvanceReceiptAdjustment, AdjustAdvancePaymentModal } from '../models/api-models/AdvanceReceiptsAdjust';
 
 const THEAD_ARR_READONLY = [
     {
@@ -180,6 +182,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /** Shipping state instance */
     @ViewChild('shippingState') shippingState: ElementRef;
 
+    /**Adjust advance receipts */
+    @ViewChild('adjustPaymentModal') public adjustPaymentModal: ModalDirective;
+    @ViewChild('advanceReceiptComponent') public advanceReceiptComponent: AdvanceReceiptAdjustmentComponent;
+    public showAdvanceReceiptAdjust: boolean = false;
+
+
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     public editCurrencyInputField: boolean = false;
@@ -239,7 +247,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public calculatedRoundOff: number = 0;
     public selectedVoucherType: string = 'sales';
-    // modals related
+    public tempDateParams: any = {};
     public modalConfig: ModalOptions = {
         animated: true,
         keyboard: false,
@@ -280,6 +288,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public fetchedConvertedRate: number = 0;
     public isAddBulkItemInProcess: boolean = false;
     public modalRef: BsModalRef;
+    message: string;
+
     public exceptTaxTypes: string[];
     /** Stores warehouses for a company */
     public warehouses: Array<any>;
@@ -315,7 +325,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public showSwitchedCurr = false;
     public reverseExchangeRate: number;
     public originalReverseExchangeRate: number;
+    /** to check is tourist scheme applicable(Note true if voucher type will be sales invoice)  */
+    public isTouristScheme: boolean = false;
+
     public countryCode: string = '';
+    public isValidGstinNumber: boolean = false;
     /** Allowed taxes list contains the unique name of all
      * tax types within a company and count upto which they are allowed
      */
@@ -354,6 +368,25 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private purchaseRecordInvoiceDate: string = '';
     /** Purchase Record invoice number */
     private purchaseRecordInvoiceNumber: string = '';
+    /** Inventory Settings */
+    public inventorySettings: any;
+    public companyCountryCode: string = '';
+    public advanceReceiptAdjustmentData: AdvanceReceiptAdjustment;
+    public adjustPaymentBalanceDueData: number = 0;
+    public totalAdvanceReceiptsAdjustedAmount: number = 0;
+    public isAdjustAmount = false;
+    public adjustPaymentData: AdjustAdvancePaymentModal = {
+        customerName: '',
+        customerUniquename: '',
+        voucherDate: '',
+        balanceDue: 0,
+        dueDate: '',
+        grandTotal: 0,
+        gstTaxesTotal: 0,
+        subTotal: 0,
+        totalTaxableValue: 0,
+        totalAdjustedAmount: 0
+    }
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -365,9 +398,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     private get isPurchaseRecordContractBroken(): boolean {
         return (this.purchaseRecordCustomerUniqueName !== this.invFormData.voucherDetails.customerUniquename) ||
-        (this.purchaseRecordInvoiceDate !== moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT)) ||
-        (this.purchaseRecordTaxNumber !== this.invFormData.accountDetails.shippingDetails.gstNumber ||
-        (this.purchaseRecordInvoiceNumber !== this.invFormData.voucherDetails.voucherNumber));
+            (this.purchaseRecordInvoiceDate !== moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT)) ||
+            (this.purchaseRecordTaxNumber !== this.invFormData.accountDetails.shippingDetails.gstNumber ||
+                (this.purchaseRecordInvoiceNumber !== this.invFormData.voucherDetails.voucherNumber));
     }
 
     constructor(
@@ -396,8 +429,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private settingsUtilityService: SettingsUtilityService,
         private warehouseActions: WarehouseActions,
         private commonActions: CommonActions,
-        private purchaseRecordAction: PurchaseRecordActions
+        private purchaseRecordAction: PurchaseRecordActions,
+        private modalService: BsModalService
     ) {
+        this.getInventorySettings();
+        this.advanceReceiptAdjustmentData = null;
         this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.companyActions.getTax());
@@ -447,8 +483,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             // } else {
             //     this.showLoader = false;
             //     this._cdr.detectChanges();
-                // call focus in customer after loader hides because after loader hider ui re-renders it self
-                // this.focusInCustomerName();
+            // call focus in customer after loader hides because after loader hider ui re-renders it self
+            // this.focusInCustomerName();
             // }
         });
     }
@@ -503,7 +539,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }).pipe(takeUntil(this.destroyed$)).subscribe();
 
         // get user country from his profile
-        this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
+        this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
             await this.prepareCompanyCountryAndCurrencyFromProfile(profile);
         });
 
@@ -812,6 +848,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
 
                 // update mode because voucher details is available
+                /** results[1] :- get voucher details response */
                 if (results[0] && results[1]) {
                     let obj;
 
@@ -867,6 +904,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         } else {
                             obj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
                         }
+                    }
+                    /** Tourist scheme added in case of sales invoice  */
+                    if (this.isSalesInvoice || this.isCashInvoice) {
+                        if (results[1] && results[1].touristSchemeApplicable) {
+                            obj.touristSchemeApplicable = results[1].touristSchemeApplicable;
+                            obj.passportNumber = results[1].passportNumber;
+                        } else {
+                            obj.touristSchemeApplicable = false;
+                            obj.passportNumber = '';
+                        }
+                    }
+                    if (this.isSalesInvoice) {
+                        if (results[1] && results[1].advanceReceiptAdjustment && results[1].advanceReceiptAdjustment && results[1].advanceReceiptAdjustment.adjustments && results[1].advanceReceiptAdjustment.adjustments.length) {
+                            this.calculateAdjustedVoucherTotal(results[1].advanceReceiptAdjustment.adjustments);
+                            this.advanceReceiptAdjustmentData = results[1].advanceReceiptAdjustment;
+                        }
+
                     }
 
                     if (obj.voucherDetails) {
@@ -1142,7 +1196,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private async prepareCompanyCountryAndCurrencyFromProfile(profile) {
         if (profile) {
             this.customerCountryName = profile.country;
-
             this.showGstAndTrnUsingCountryName(profile.country);
 
             this.companyCurrency = profile.baseCurrency || 'INR';
@@ -1153,12 +1206,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile.countryCode) {
-                this.countryCode = profile.countryCode;
+                this.companyCountryCode = profile.countryCode;
             } else if (profile.countryV2 && profile.countryV2.alpha2CountryCode) {
-                this.countryCode = profile.countryV2.alpha2CountryCode;
+                this.companyCountryCode = profile.countryV2.alpha2CountryCode;
             }
             if (!this.isUpdateMode) {
-                await this.getUpdatedStateCodes(this.countryCode);
+                await this.getUpdatedStateCodes(this.companyCountryCode);
             }
         } else {
             this.customerCountryName = '';
@@ -1352,24 +1405,29 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /**
      * To check Tax number validation using regex get by API
      *
-     * @param {*} value
+     * @param {*} value Value to be validated
+     * @param {string} fieldName Field name for which the value is validated
      * @memberof ProformaInvoiceComponent
      */
-    public checkGstNumValidation(value) {
-        let isValid: boolean = false;
+    public checkGstNumValidation(value, fieldName: string = '') {
+        this.isValidGstinNumber = false;
         if (value) {
-            if (!this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
+            if (this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(value)) {
-                        isValid = true;
+                        this.isValidGstinNumber = true;
                     }
                 }
             } else {
-                isValid = true;
+                this.isValidGstinNumber = true;
             }
-            if (!isValid) {
-                this._toasty.errorToast('Invalid ' + this.formFields['taxName'].label);
+            if (!this.isValidGstinNumber) {
+                if (fieldName) {
+                    this._toasty.errorToast(`Invalid ${this.formFields['taxName'].label} in ${fieldName}! Please fix and try again`);
+                } else {
+                    this._toasty.errorToast(`Invalid ${this.formFields['taxName'].label}! Please fix and try again`);
+                }
             }
         }
     }
@@ -1450,19 +1508,22 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public onSubmitInvoiceForm(form?: NgForm) {
+
+        if (this.isSalesInvoice && this.adjustPaymentBalanceDueData && this.invFormData && this.invFormData.voucherDetails) {
+            this.invFormData.voucherDetails.balanceDue = this.adjustPaymentBalanceDueData;
+        }
+
         let data: VoucherClass = _.cloneDeep(this.invFormData);
 
         // special check if gst no filed is visible then and only then check for gst validation
-        if (data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
-            if (!this.isValidGstIn(data.accountDetails.billingDetails.gstNumber)) {
-                this._toasty.errorToast('Invalid gst no in Billing Address! Please fix and try again');
+        if (data.accountDetails && data.accountDetails.billingDetails && data.accountDetails.shippingDetails && data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
+            this.checkGstNumValidation(data.accountDetails.billingDetails.gstNumber, 'Billing Address');
+            if (!this.isValidGstinNumber) {
                 return;
             }
-            if (!this.autoFillShipping) {
-                if (!this.isValidGstIn(data.accountDetails.shippingDetails.gstNumber)) {
-                    this._toasty.errorToast('Invalid gst no in Shipping Address! Please fix and try again');
-                    return;
-                }
+            this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber, 'Shipping Address');
+            if (!this.isValidGstinNumber) {
+                return;
             }
         }
 
@@ -1622,6 +1683,26 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             requestObject.account.shippingDetails.countryName = this.customerCountryName;
             requestObject.account.shippingDetails.stateCode = requestObject.account.shippingDetails.state.code;
             requestObject.account.shippingDetails.stateName = requestObject.account.shippingDetails.state.name;
+
+            /** Tourist scheme is applicable only for voucher type 'sales invoice' and 'Cash Invoice' and company country code 'AE'   */
+            if (this.isSalesInvoice || this.isCashInvoice) {
+                if (this.invFormData.touristSchemeApplicable) {
+                    requestObject.touristSchemeApplicable = this.invFormData.touristSchemeApplicable;
+                    requestObject.passportNumber = this.invFormData.passportNumber;
+                } else {
+                    requestObject.touristSchemeApplicable = false;
+                    requestObject.passportNumber = '';
+                }
+            }
+            /** Advance receipts adjustment for sales invoice*/
+            if (this.isSalesInvoice && this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
+                requestObject.advanceReceiptAdjustment = this.advanceReceiptAdjustmentData;
+                requestObject.advanceReceiptAdjustment.adjustments.map(item => {
+                    if (item && item.voucherDate) {
+                        item.voucherDate = item.voucherDate.replace(/\//g, '-');
+                    }
+                });
+            }
         } else {
             requestObject = {
                 account: data.accountDetails,
@@ -1826,6 +1907,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateOtherTaxes(entry.otherTaxModal, entry);
         this.calculateTcsTdsTotal();
         this.calculateBalanceDue();
+        /** In case of sales invoice if invoice amount less with advance receipts adjusted amount then open Advane receipts adjust modal */
+        if (this.isSalesInvoice && this.totalAdvanceReceiptsAdjustedAmount && this.isUpdateMode) {
+            if (this.invFormData.voucherDetails.grandTotal < this.totalAdvanceReceiptsAdjustedAmount) {
+                this.isAdjustAdvanceReceiptModalOpen();
+            }
+        }
     }
 
     public calculateTotalDiscount() {
@@ -1887,7 +1974,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.invFormData.voucherDetails.balanceDue =
             ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - depositAmount - Number(this.depositAmountAfterUpdate);
-        this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff;
+        this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff - this.totalAdvanceReceiptsAdjustedAmount;
     }
 
     public calculateSubTotal() {
@@ -1929,6 +2016,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
         this.grandTotalMulDum = calculatedGrandTotal * this.exchangeRate;
+    }
+
+    /**
+     * To check invoice amount less with advance receipts adjusted amount then open Advane receipts adjust modal
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public isAdjustAdvanceReceiptModalOpen() {
+        this.openAdjustPaymentModal();
     }
 
     public generateTotalAmount(txns: SalesTransactionItemClass[]) {
@@ -2050,22 +2146,26 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.handleWarehouseVisibility();
             }
             txn.sacNumber = null;
+            txn.sacNumberExists = false;
             txn.hsnNumber = null;
-            if (txn.stockDetails && txn.stockDetails.hsnNumber) {
+
+            if (txn.stockDetails && txn.stockDetails.hsnNumber && this.inventorySettings && this.inventorySettings.manageInventory === true) {
                 txn.hsnNumber = txn.stockDetails.hsnNumber;
                 txn.hsnOrSac = 'hsn';
             }
-            if (txn.stockDetails && txn.stockDetails.sacNumber) {
+            if (txn.stockDetails && txn.stockDetails.sacNumber && this.inventorySettings && this.inventorySettings.manageInventory === false) {
                 txn.sacNumber = txn.stockDetails.sacNumber;
+                txn.sacNumberExists = true;
                 txn.hsnOrSac = 'sac';
             }
 
-            if (!o.stock && o.hsnNumber) {
+            if (!o.stock && o.hsnNumber && this.inventorySettings && this.inventorySettings.manageInventory === true) {
                 txn.hsnNumber = o.hsnNumber;
                 txn.hsnOrSac = 'hsn';
             }
-            if (!o.stock && o.sacNumber) {
+            if (!o.stock && o.sacNumber && this.inventorySettings && !this.inventorySettings.manageInventory && this.inventorySettings.manageInventory === false) {
                 txn.sacNumber = o.sacNumber;
+                txn.sacNumberExists = true;
                 txn.hsnOrSac = 'sac';
             }
 
@@ -2086,6 +2186,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             txn.total = null;
             txn.rate = null;
             txn.sacNumber = null;
+            txn.sacNumberExists = false;
             txn.taxableValue = 0;
             txn.applicableTaxes = [];
 
@@ -2113,6 +2214,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         txn.taxableValue = null;
         txn.sacNumber = null;
         txn.hsnNumber = null;
+        txn.sacNumberExists = false;
     }
 
     public noResultsForCustomer(e: boolean): void {
@@ -2211,14 +2313,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public removeTransaction(entryIdx: number) {
-        if (this.invFormData.entries.length > 1) {
-            if (this.activeIndx === entryIdx) {
-                this.activeIndx = null;
-            }
-            this.invFormData.entries = this.invFormData.entries.filter((entry, index) => entryIdx !== index);
-            this.calculateAffectedThingsFromOtherTaxChanges();
-        } else {
-            this._toasty.warningToast('Unable to delete a single transaction');
+        if (this.activeIndx === entryIdx) {
+            this.activeIndx = null;
+        }
+        this.invFormData.entries = cloneDeep(this.invFormData.entries.filter((entry, index) => entryIdx !== index));
+        this.calculateAffectedThingsFromOtherTaxChanges();
+        if (this.invFormData.entries.length === 0) {
+            this.addBlankRow(null);
         }
         this.handleWarehouseVisibility();
     }
@@ -2604,6 +2705,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     requestObject['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
                 }
 
+                /** Tourist scheme is applicable only for voucher type 'sales invoice' and 'cash invoice' and company country code 'AE'   */
+                if (this.isSalesInvoice || this.isCashInvoice) {
+                    if (this.invFormData.touristSchemeApplicable) {
+                        requestObject.touristSchemeApplicable = this.invFormData.touristSchemeApplicable;
+                        requestObject.passportNumber = this.invFormData.passportNumber;
+                    } else {
+                        requestObject.touristSchemeApplicable = false;
+                        requestObject.passportNumber = '';
+                    }
+                }
+                /** Advance receipts adjustment for sales invoice*/
+                if (this.isSalesInvoice && this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
+                    requestObject.advanceReceiptAdjustment = this.advanceReceiptAdjustmentData;
+                }
+
                 this.salesService.updateVoucherV4(<GenericRequestForGenerateSCD>this.updateData(requestObject, requestObject.voucher)).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
                         this.actionsAfterVoucherUpdate(response, invoiceForm);
@@ -2672,13 +2788,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         // special check if gst no filed is visible then and only then check for gst validation
         if (data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
-            if (!this.isValidGstIn(data.accountDetails.billingDetails.gstNumber)) {
-                this._toasty.errorToast('Invalid gst no in Billing Address! Please fix and try again');
+            this.checkGstNumValidation(data.accountDetails.billingDetails.gstNumber, 'Billing Address');
+            if (!this.isValidGstinNumber) {
                 return;
             }
             if (!this.autoFillShipping) {
-                if (!this.isValidGstIn(data.accountDetails.shippingDetails.gstNumber)) {
-                    this._toasty.errorToast('Invalid gst no in Shipping Address! Please fix and try again');
+                this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber, 'Shipping Address');
+                if (!this.isValidGstinNumber) {
                     return;
                 }
             }
@@ -3009,6 +3125,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 newTrxObj.stockDetails = trx.stockDetails;
                 newTrxObj.taxableValue = trx.taxableValue;
                 newTrxObj.hsnNumber = trx.hsnNumber;
+                newTrxObj.sacNumber = trx.sacNumber;
+                newTrxObj.sacNumberExists = (trx.sacNumber) ? true : false;
                 newTrxObj.isStockTxn = trx.isStockTxn;
                 newTrxObj.applicableTaxes = entry.taxList;
 
@@ -3293,6 +3411,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 salesTransactionItemClass.amount = t.amount.amountForAccount;
                 salesTransactionItemClass.hsnNumber = t.hsnNumber;
                 salesTransactionItemClass.sacNumber = t.sacNumber;
+                salesTransactionItemClass.sacNumberExists = (t.sacNumber) ? true : false;
                 salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName;
                 salesTransactionItemClass.description = entry.description;
                 salesTransactionItemClass.date = t.date;
@@ -4032,4 +4151,127 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateTotalTaxSum();
         this._cdr.detectChanges();
     }
+
+    /**
+     * This function is used to get inventory settings from store
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public getInventorySettings(): void {
+        this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
+            if (settings && settings.companyInventorySettings) {
+                this.inventorySettings = settings.companyInventorySettings;
+            }
+        });
+    }
+
+    /**
+     * Toggle Tourist scheme checkbox then reset passport number
+     *
+     * @param {*} event Click event
+     * @memberof ProformaInvoiceComponent
+     */
+    public touristSchemeApplicableToggle(): void {
+        this.invFormData.passportNumber = '';
+    }
+
+    /**
+     *
+     *
+     * @param {*} event
+     * @memberof ProformaInvoiceComponent
+     */
+    public allowAlphanumericChar(event: any): void {
+        if (event && event.value) {
+            this.invFormData.passportNumber = this.generalService.allowAlphanumericChar(event.value)
+        }
+    }
+
+    // Advance receipts adjustment start
+
+    /**
+     * To close advance reciipt modal
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public closeAdvanceReceiptModal() {
+        this.showAdvanceReceiptAdjust = false;
+        this.adjustPaymentModal.hide();
+        if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
+            this.isAdjustAmount = this.advanceReceiptAdjustmentData.adjustments.length ? true : false;
+        } else {
+            this.isAdjustAmount = false;
+        }
+    }
+
+
+    /**
+     * To open advance receipts adjustment pop up
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public openAdjustPaymentModal() {
+        this.showAdvanceReceiptAdjust = true;
+        this.isAdjustAmount = true;
+        this.adjustPaymentModal.show();
+    }
+
+    /**
+     * Toggle advance receipts option
+     *
+     * @param {*} event True, if Advance receipt adjust option enabled
+     * @memberof ProformaInvoiceComponent
+     */
+    public clickAdjustAmount(event) {
+        if (event) {
+            this.isAdjustAmount = true;
+            this.openAdjustPaymentModal();
+        } else {
+            this.isAdjustAmount = false;
+            this.adjustPaymentBalanceDueData = 0;
+            this.advanceReceiptAdjustmentData = null;
+        }
+    }
+
+    /**
+     * To get all advance adjusted data
+     *
+     * @param {{ adjustVoucherData: AdvanceReceiptAdjustment, adjustPaymentData: AdjustAdvancePaymentModal }} advanceReceiptsAdjustEvent event that contains advance receipts adjusted data
+     * @memberof ProformaInvoiceComponent
+     */
+    public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: AdvanceReceiptAdjustment, adjustPaymentData: AdjustAdvancePaymentModal }) {
+
+        this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
+        // this.invFormData.voucherDetails.balanceDue = advanceReceiptsAdjustEvent.adjustPaymentData.balanceDue;
+        this.adjustPaymentBalanceDueData = advanceReceiptsAdjustEvent.adjustPaymentData.grandTotal - advanceReceiptsAdjustEvent.adjustPaymentData.totalAdjustedAmount;
+        this.adjustPaymentData = advanceReceiptsAdjustEvent.adjustPaymentData;
+        if (this.isUpdateMode) {
+            this.calculateAdjustedVoucherTotal(advanceReceiptsAdjustEvent.adjustVoucherData.adjustments)
+        }
+        this.closeAdvanceReceiptModal();
+    }
+
+    /**
+     * To calculate advance receipt adjusted amount is case of update invoice
+     *
+     * @param {*} voucherObject voucher response in case of update
+     * @memberof ProformaInvoiceComponent
+     */
+    public calculateAdjustedVoucherTotal(voucherObjectArray: any[]) {
+        this.totalAdvanceReceiptsAdjustedAmount = 0;
+        if (voucherObjectArray) {
+            let adjustments = cloneDeep(voucherObjectArray);
+            let totalAmount = 0;
+            if (adjustments) {
+                adjustments.forEach((item) => {
+                    totalAmount += Number(item.dueAmount ? item.dueAmount.amountForAccount : 0);
+                });
+            }
+            this.totalAdvanceReceiptsAdjustedAmount = totalAmount;
+        } else {
+            this.advanceReceiptAdjustmentData = null;
+        }
+    }
+
 }
+

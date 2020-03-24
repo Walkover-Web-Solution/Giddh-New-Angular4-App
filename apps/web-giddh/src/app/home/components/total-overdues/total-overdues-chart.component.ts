@@ -5,7 +5,7 @@ import { Options } from 'highcharts';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
 import { isNullOrUndefined } from 'util';
@@ -106,7 +106,6 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public PaybaleDurationAmt: number = 0;
     public moment = moment;
     public amountSettings: any = { baseCurrencySymbol: '', balanceDecimalPlaces: '' };
-    public isDefault: boolean = true;
     public universalDate$: Observable<any>;
     public dataFound: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -116,17 +115,14 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
         this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
         this.totalOverDuesResponse$ = this.store.select(p => p.home.totalOverDues).pipe(takeUntil(this.destroyed$));
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
         this.companies$.subscribe(c => {
             if (c) {
                 let activeCompany: CompanyResponse;
-                let activeCmpUniqueName = '';
-                let financialYears = [];
                 this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
-                    activeCmpUniqueName = a;
                     activeCompany = c.find(p => p.uniqueName === a);
                     if (activeCompany) {
                         this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
@@ -136,15 +132,14 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
             }
         });
         // img path
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron||isCordova)  ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         // listen for universal date
-        this.universalDate$.subscribe(dateObj => {
-            if (this.isDefault && dateObj) {
+        this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
+            if (dateObj) {
                 let dates = [];
                 dates = [moment(dateObj[0]).format(GIDDH_DATE_FORMAT), moment(dateObj[1]).format(GIDDH_DATE_FORMAT), false];
                 this.getFilterDate(dates);
-                this.isDefault = false;
             }
         });
 

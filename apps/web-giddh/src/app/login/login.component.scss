@@ -1,0 +1,555 @@
+/************ login page start *****************/
+@import "../../assets/css/color.scss";
+/*typography styles*/
+
+body.ununresponsive {
+    padding: 0;
+    background: #2c2c43;
+}
+
+.intro.login {
+    /* background: url('../images/new/login_bg.jpg') no-repeat top center scroll; */
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    width: 100%;
+    display: table;
+}
+
+.btn-lg {
+    padding: 10px 16px;
+    font-size: 16px;
+    line-height: 1.3333333;
+}
+
+.btn {
+    cursor: pointer;
+}
+
+.btn:focus {
+    outline: 0;
+}
+
+.modal-header h3 {
+    color: $White;
+    font-size: 1.3rem;
+}
+
+.login {
+    padding-top: 0;
+}
+
+.login .brand-heading {
+    color: white;
+    font-size: 40px;
+    margin-bottom: 80px;
+}
+
+#box {
+    background-color: $White;
+    padding: 20px 30px;
+    margin: 0 auto;
+    width: 360px;
+    height: auto;
+}
+
+#box button {
+    text-transform: uppercase;
+}
+
+.login-btn {
+    position: relative;
+}
+
+#box img {
+    max-height: 30px;
+    position: absolute;
+    left: 10px;
+    top: 4px;
+}
+
+#box .glyphicon {
+    max-height: 30px;
+    position: absolute;
+    left: 15px;
+    top: 13px;
+}
+
+#box .btn:hover,
+#box .btn:hover {
+    color: $White;
+}
+
+.mrB1 {
+    margin-bottom: 10px;
+}
+
+.twitter {
+    background: #11b1e5;
+}
+
+.google {
+    background: #de4d3c;
+}
+
+.linkedin {
+    background: #0e78aa;
+}
+
+.mobile {
+    background: #26263a;
+}
+
+.btn-login {
+    text-transform: uppercase;
+    color: $White;
+    margin-bottom: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+    padding: 10px 16px !important;
+}
+
+.btn-login:hover,
+.btn-login:focus,
+.btn-login:active {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+/*giddh loader*/
+
+.giddh-spinner {
+    animation: rotate 1.5s infinite linear;
+    background: #221f1f none repeat scroll 0 0;
+    border: 7px solid #c63b13;
+    border-radius: 50%;
+    box-shadow: 0 -10px 0 14px $White inset;
+    box-sizing: border-box;
+    height: 60px;
+    width: 60px;
+    margin: 0 auto 20px;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.intro .lead {
+    text-align: center;
+    font-size: 18px;
+}
+
+.btn-login.btn-default {
+    color: #333;
+    background-color: $White;
+    border-color: #ccc;
+}
+
+.btn-login.btn-default:hover {
+    color: #000 !important;
+    background-color: $White;
+    border-color: #ccc;
+    box-shadow: none;
+}
+
+.intro .intro-body {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    padding: 100px 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+button.close {
+    float: right;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    color: #db7f53;
+    text-shadow: none;
+    opacity: 1;
+}
+
+/* .modal-body {
+    overflow: hidden;
+} */
+
+.email {
+    background: #10aae0;
+}
+
+/************* end login page *************/
+
+/***********************SIGN IN REDESIGN ***********************/
+
+.form-control,
+:host ::ng-deep .form-control {
+    height: 41px;
+    font-size: 16px;
+}
+
+:host ::ng-deep .clear {
+    top: 50% !important;
+    font-size: 22px !important;
+    right: 6px !important;
+}
+
+.btn-success {
+    background: $midnightBlue;
+    color: $White;
+    border-color: $midnightBlue;
+}
+
+.btn-success:hover {
+    background: $midnightBlueHover;
+    border-color: $midnightBlueHover;
+    color: $White;
+}
+
+strong {
+    font-family: "Roboto", sans-serif;
+}
+
+.logo {
+    position: absolute;
+    left: 100px;
+    top: 32px;
+    width: 124px;
+    z-index: 9;
+}
+
+h1 {
+    font-size: 24px;
+}
+
+.slide-content {
+    padding: 80px 100px;
+    color: $White;
+    background: #2c2c43;
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-box h1 {
+    color: #0f0f27;
+    font-weight: 500;
+}
+
+.form-wrapper {
+    display: flex;
+    margin-bottom: 40px;
+    flex-direction: column;
+}
+
+small {
+    color: #333;
+}
+
+.form-wrapper form {
+    width: 300px;
+}
+
+/* social-login */
+
+.social-login {
+    overflow: hidden;
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.social-login li {
+    list-style: none;
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.social-login li a {
+    display: inline-block;
+    height: 40px;
+    border: 1px solid;
+    min-width: 40px;
+    line-height: 40px;
+    text-align: center;
+    position: relative;
+    font-size: 14px;
+}
+
+.google-ico a {
+    color: $White;
+    padding-left: 40px !important;
+}
+
+.google-ico span {
+    padding: 0 15px;
+}
+
+/* social icon */
+
+.linkedin-ico a {
+    color: $cerulean;
+    border-color: $cerulean;
+}
+
+.google-ico a {
+    background: $cornflowerBlue;
+    border-color: $cornflowerBlue !important;
+    color: $White;
+}
+
+.ico-google {
+    height: 38px;
+    position: absolute;
+    width: 40px;
+    left: 0;
+    background: #fff8eb;
+    line-height: 38px;
+    vertical-align: middle;
+}
+
+.ico-google img {
+    width: 18px;
+    height: 18px;
+}
+
+.login-option,
+.login-option a {
+    color: #0c5fc1;
+    margin-top: 55px;
+    font-weight: 500;
+}
+
+.login-option a {
+    border-bottom: 2px dotted #0c5fc1;
+}
+
+.slide-content h1 {
+    font-size: 24px;
+    font-weight: 400;
+    text-align: center;
+    line-height: 34px;
+}
+
+.hash-tag {
+    color: #e34b26;
+}
+
+.slide-content .btn {
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 55px;
+    transition: all 0.5s ease;
+    padding: 4px 18px;
+}
+
+.slide-content .btn-white {
+    color: #fff7eb;
+    border: 1px solid $White;
+}
+
+.slide-content .btn-white:hover {
+    color: #0f0f27;
+    background: $White;
+}
+
+.slide-content > div > img {
+    max-width: 400px;
+    margin-bottom: 40px;
+}
+
+.app-ico,
+.download-app {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.app-ico ul h1 {
+    margin-top: 10px;
+}
+
+.app-ico ul li,
+.download-app ul li {
+    display: inline-block;
+    list-style: none;
+    /* margin-right: 20px; */
+    border-radius: 2px;
+}
+
+.app-ico ul li {
+    height: 40px;
+}
+
+.download-app ul li {
+    margin-right: 0;
+}
+
+.app-ico ul li a,
+.download-app ul li a {
+    display: inline-block;
+    height: 40px;
+    border: 1px solid;
+    min-width: 40px;
+    line-height: 40px;
+    color: $White;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.app-ico ul li a:hover,
+.download-app ul li a:hover {
+    background: $White;
+    color: #2c2d43;
+}
+
+.download-app ul li a:hover i {
+    border-color: #2c2d43;
+}
+
+.img-hover:hover img:last-child {
+    display: block !important;
+}
+
+.img-hover:hover img:first-child {
+    display: none;
+}
+/* new theme login page css start */
+.login-box {
+    position: relative;
+}
+.login-left {
+    background-color: $top_header;
+    position: absolute;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+}
+.login-right {
+    background-image: url("../../assets/images/Login-Page-Image.png");
+    height: 100vh;
+    justify-content: flex-start;
+    background-position: top right;
+    background-size: cover;
+}
+.px-0 {
+    padding: 0;
+}
+.mx-0 {
+    margin: 0;
+}
+.giddh-login {
+    margin-left: -245px;
+    width: 495px;
+}
+.giddh-login-inner {
+    max-width: 476px;
+    width: 90%;
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.logo-login {
+    background-color: $darkMidnightBlue;
+    height: 98px;
+    display: flex;
+    align-items: center;
+    padding: 35px;
+    position: relative;
+}
+.accounting-space {
+    padding: 30px;
+    border-radius: 0;
+    background-color: $White;
+}
+.accounting-space h4 {
+    color: $pageTitleColor;
+    font-weight: 600;
+    font-size: 20px;
+}
+.btn-outline-primary {
+    background-color: $primaryBtncolror;
+    border-radius: 3px;
+    min-width: 160px;
+    border-radius: 5px;
+    color: $White;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+    background-color: $primaryBtnHovercolror;
+    box-shadow: none;
+    outline: none;
+}
+.login-with {
+    color: $pageTitleColor;
+    font-size: 0.9em;
+}
+.login-with a {
+    color: $pageTitleColor;
+    text-decoration: none;
+}
+.btn-secondary {
+    background-color: $White;
+    color: $navy;
+    border: 1px solid $light-text-blue;
+    border-radius: 5px;
+}
+.btn-secondary:hover {
+    color: $White !important;
+    background-color: $light-text-blue;
+    border-color: $light-text-blue;
+}
+
+@media only screen and (max-width: 768px) {
+    .giddh-login {
+        margin: 0 auto;
+    }
+}
+@media only screen and (max-width: 375px) {
+    .forget-pw {
+        margin: 5px 0;
+    }
+    .social-login {
+        flex-direction: column;
+        width: 100%;
+    }
+    .social-login li {
+        display: block;
+        margin-right: 0px;
+        margin-bottom: 10px;
+    }
+    .social-login li:first-child a {
+        display: block;
+        width: 100%;
+    }
+    .btn-secondary {
+        margin-left: 0;
+        margin-top: 8px;
+    }
+    .account {
+        display: flex;
+        flex-direction: column;
+        align-items: baseline;
+    }
+}

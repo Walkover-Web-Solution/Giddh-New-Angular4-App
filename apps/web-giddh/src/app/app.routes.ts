@@ -92,6 +92,7 @@ export const ROUTES: Routes = [
             { path: 'search', loadChildren: './search/search.module#SearchModule' },
             { path: 'trial-balance-and-profit-loss', loadChildren: './tb-pl-bs/tb-pl-bs.module#TBPlBsModule', canActivate: [NeedsAuthentication, NeedsAuthorization] },
             { path: 'audit-logs', loadChildren: './audit-logs/audit-logs.module#AuditLogsModule', canActivate: [NeedsAuthorization] },
+            { path: 'create-advance-receipt', loadChildren: './create-advance-receipt/create-advance-receipt.module#CreateAdvanceReceiptModule', canActivate: [NeedsAuthorization] },
             { path: 'ledger', loadChildren: './ledger/ledger.module#LedgerModule', canActivate: [NeedsAuthorization] },
             { path: 'permissions', loadChildren: './permissions/permission.module#PermissionModule', canActivate: [NeedsAuthorization] },
             { path: 'settings', loadChildren: './settings/settings.module#SettingsModule', canActivate: [NeedsAuthorization] },
@@ -116,7 +117,7 @@ export const ROUTES: Routes = [
 
             { path: 'expenses-manager', loadChildren: './expenses/expenses.module#ExpensesModule', canActivate: [NeedsAuthorization] },
 
-            { path: 'vat-report', loadChildren: './vat-report/vatReport.module#VarReportModule', canActivate: [NeedsAuthorization] },
+            { path: 'vat-report', loadChildren: './vat-report/vatReport.module#VatReportModule', canActivate: [NeedsAuthorization] },
             { path: 'purchase-management', loadChildren: './purchase/purchase.module#PurchaseModule', canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
             // {path: '**', pathMatch: 'full', component: NotFoundComponent},

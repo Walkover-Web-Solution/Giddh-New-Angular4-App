@@ -31,3 +31,12 @@ export class VatReportSections {
 export class VatReportResponse {
     sections: VatReportSections[];
 }
+
+export class VatReportTransactionsRequest {
+    from: string;
+    to: string;
+    taxNumber: string;
+    section: any;
+    page: any;
+    count: any;
+}

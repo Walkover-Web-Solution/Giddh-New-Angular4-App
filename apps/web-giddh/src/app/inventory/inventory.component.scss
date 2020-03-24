@@ -60,3 +60,12 @@
 .inventory-controll ::ng-deep.nav-tabs > li:nth-child(2) {
     display: none;
 }
+
+.inventory-controll .container-fluid {
+    .branch-warehouse-filter {
+        width: 100%;
+    }
+    .branch-filter {
+        margin-right: 15px;
+    }
+}

@@ -8,7 +8,6 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
 import { GeneralService } from '../services/general.service';
 import { ToasterService } from '../services/toaster.service';
-import { GeneralActions } from '../actions/general/general.actions';
 import { VatService } from "../services/vat.service";
 import * as moment from 'moment/moment';
 import { createSelector } from "reselect";
@@ -41,13 +40,13 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public allowVatReportAccess: boolean = false;
     @ViewChild('monthWise') public monthWise: BsDropdownDirective;
     @ViewChild('periodDropdown') public periodDropdown;
-    public isMonthSelected: boolean = false;
+    public isMonthSelected: boolean = true;
     public selectedMonth: any = null;
     public currentPeriod: any = {};
     public showCalendar: boolean = false;
     public datepickerVisibility: any = 'hidden';
 
-    constructor(private store: Store<AppState>, private vatService: VatService, private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private cdRef: ChangeDetectorRef, private companyActions: CompanyActions) {
+    constructor(private store: Store<AppState>, private vatService: VatService, private _generalService: GeneralService, private _toasty: ToasterService, private cdRef: ChangeDetectorRef, private companyActions: CompanyActions, private _route: Router) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), (takeUntil(this.destroyed$)));
     }
@@ -57,8 +56,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
                 this.currentPeriod = {
-                    from: moment(universalDate[0]).format(GIDDH_DATE_FORMAT),
-                    to: moment(universalDate[1]).format(GIDDH_DATE_FORMAT)
+                    from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
+                    to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
                 };
                 this.selectedMonth = moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
                 this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -101,12 +100,14 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
             this.vatReport = [];
 
-            this.vatService.GetVatReport(vatReportRequest).subscribe((res) => {
-                if (res.status === 'success') {
-                    this.vatReport = res.body.sections;
-                    this.cdRef.detectChanges();
-                } else {
-                    this._toasty.errorToast(res.message);
+            this.vatService.getVatReport(vatReportRequest).subscribe((res) => {
+                if(res) {
+                    if (res.status === 'success') {
+                        this.vatReport = res.body.sections;
+                        this.cdRef.detectChanges();
+                    } else {
+                        this._toasty.errorToast(res.message);
+                    }
                 }
             });
         }
@@ -118,7 +119,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         vatReportRequest.to = this.toDate;
         vatReportRequest.taxNumber = this.activeCompany.addresses[0].taxNumber;
 
-        this.vatService.DownloadVatReport(vatReportRequest).subscribe((res) => {
+        this.vatService.downloadVatReport(vatReportRequest).subscribe((res) => {
             if (res.status === "success") {
                 let blob = this._generalService.base64ToBlob(res.body, 'application/xls', 512);
                 return saveAs(blob, `VatReport.xlsx`);
@@ -208,5 +209,15 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.periodDropdown.hide();
         document.querySelector(".btn-group.dropdown").classList.remove("open");
         document.querySelector(".btn-group.dropdown").classList.remove("show");
+    }
+
+    /**
+     * This will redirect to vat report detail page
+     *
+     * @param {*} section
+     * @memberof VatReportComponent
+     */
+    public viewVatReportTransactions(section) {
+        this._route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.currentPeriod.from, to: this.currentPeriod.to } });
     }
 }

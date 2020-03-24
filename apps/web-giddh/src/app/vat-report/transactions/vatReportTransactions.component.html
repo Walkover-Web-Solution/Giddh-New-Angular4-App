@@ -1,0 +1,67 @@
+<div class="branch-transfer-report mt-2">
+    <div class="container-fluid">
+
+        <div class="clearfix">
+            <a [routerLink]="['/pages/vat-report']" class="fond-inline-block mr-2"><i class="fa fa-angle-left font-20 middle"></i> Back</a> <span *ngIf="vatReportTransactions.results && vatReportTransactions.results.length > 0">{{vatReportTransactions.results[0].description}}</span>
+        </div>
+
+        <div class="invoice-preview table-responsive">
+            <table class="table basic table-bordered mt-2 invoice-table desktopTable table-responsive">
+                <thead>
+                    <tr>
+                        <th width="10%">Invoice Date</th>
+                        <th width="15%">Invoice Number</th>
+                        <th width="15%">Customer Name</th>
+                        <th width="12%" class="text-right">Taxable Amount</th>
+                        <th width="12%" class="text-right">VAT Amount</th>
+                        <th width="10%">Reverse Charge</th>
+                        <th width="15%">TRN Number</th>
+                        <th width="15%">Place of Supply</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="vatReportTransactions.results && vatReportTransactions.results.length > 0">
+                    <tr *ngFor="let item of vatReportTransactions.results; let i = index;">
+                        <td>{{ (item.voucherDate) ? item.voucherDate : '-' }}</td>
+                        <td><a href="javascript:;" [ngClass]="{'noclick': !item.voucherNumber && item.voucherType !== 'purchase'}" (click)="onSelectInvoice(item)">{{ (item.voucherNumber) ? item.voucherNumber : '-' }}</a></td>
+                        <td>{{ (item.customerName) ? item.customerName : '-' }}</td>
+                        <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ item.taxableAmount | giddhCurrency }}</td>
+                        <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ item.vatAmount | giddhCurrency }}</td>
+                        <td>{{ (item.reverseCharge) ? item.reverseCharge : '-' }}</td>
+                        <td>{{ (item.trnNumber) ? item.trnNumber : '-' }}</td>
+                        <td>{{ (item.placeOfSupply) ? item.placeOfSupply : '-' }}</td>
+                    </tr>
+                </tbody>
+                <tbody *ngIf="!vatReportTransactions || !vatReportTransactions.results || vatReportTransactions.results.length === 0">
+                    <tr>
+                        <td *ngIf="!isLoading" colspan="8" align="center">No records found.</td>
+                        <td *ngIf="isLoading" colspan="8">&nbsp;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="paginationWrapper" *ngIf="vatReportTransactions.totalPages > 1">
+            <pagination [totalItems]="vatReportTransactions.totalPages" [(ngModel)]="vatReportTransactions.page"
+                [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
+                (pageChanged)="pageChanged($event)"></pagination>
+        </div>
+    </div>
+</div>
+
+<!-- Download or Send Invoice on mail -->
+<div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div element-view-container-ref #downloadOrSendMailComponent=elementviewcontainerref>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal dialog -->
+<div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
+    <div class="modal-dialog gray modal-liquid">
+        <div class="modal-content">
+            <invoice-generate-model (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>
+        </div>
+    </div>
+</div>

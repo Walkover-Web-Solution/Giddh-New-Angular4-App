@@ -3,6 +3,7 @@ import { ReportsRoutingModule } from './reports.routing.module';
 import { ReportsComponent } from './reports.component';
 import { ReportsDetailsComponent } from './components/report-details-components/report.details.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { CommonModule } from '@angular/common';
 import { Options } from 'highcharts';
 import { BsDropdownModule, DatepickerModule, TooltipModule, } from 'ngx-bootstrap';
@@ -25,6 +26,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { ReverseChargeReport } from './components/reverse-charge-report-component/reverse-charge-report.component';
+import { AdvanceReceiptReportComponent } from './components/advance-receipt-report/advance-receipt-report.component';
+import { ReceiptAdvanceSearchComponent } from './components/receipt-advance-search/receipt-advance-search.component';
+import { RefundAmountComponent } from './components/refund-amount/refund-amount.component';
+import { AdjustInvoiceModalComponent } from './components/adjust-invoice-modal/adjust-invoice-modal.component';
+import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 
 @NgModule({
     declarations: [
@@ -38,7 +45,15 @@ import { ClickOutsideModule } from 'ng-click-outside';
         ReportsDashboardComponent,
         PurchaseRegisterComponent,
         PurchaseRegisterTableComponent,
-        PurchaseRegisterExpandComponent
+        PurchaseRegisterExpandComponent,
+        ReverseChargeReport,
+        AdvanceReceiptReportComponent,
+        ReceiptAdvanceSearchComponent,
+        RefundAmountComponent,
+        AdjustInvoiceModalComponent
+    ],
+    entryComponents: [
+        ReceiptAdvanceSearchComponent
     ],
     exports: [
         ReportsComponent,
@@ -54,6 +69,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
         BsDatepickerModule.forRoot(),
         CommonModule,
         ChartModule,
+        Daterangepicker,
         BsDropdownModule,
         PaginationModule,
         ShSelectModule,
@@ -62,7 +78,9 @@ import { ClickOutsideModule } from 'ng-click-outside';
         AccountDetailModalModule,
         ReactiveFormsModule,
         ClickOutsideModule,
-        TooltipModule
+        TooltipModule,
+        ElementViewChildModule,
+        ModalModule.forRoot(),
     ]
 })
 

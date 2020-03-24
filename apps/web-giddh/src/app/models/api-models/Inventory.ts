@@ -18,6 +18,8 @@ export class StockGroupRequest implements INameUniqueName {
     public isSelfParent?: boolean;
     public name: string;
     public uniqueName: string;
+    public hsnNumber: string;
+    public sacNumber: string;
     public parentStockGroupUniqueName?: string;
     public isSubGroup?: boolean;
 }
@@ -29,6 +31,8 @@ export class StockGroupRequest implements INameUniqueName {
 export class StockGroupResponse {
     public childStockGroups?: INameUniqueName[];
     public name: string;
+    public hsnNumber: string;
+    public sacNumber: string;
     public parentStockGroup?: INameUniqueName;
     public parentStockGroupNames: string[];
     public stocks: INameUniqueName[];
@@ -119,6 +123,8 @@ export class StockReportRequest {
     public param?: string;
     public expression?: string;
     public val?: number;
+    public warehouseUniqueName?: string;
+    public branchUniqueName?: string;
 }
 
 export class GroupStockReportRequest {
@@ -139,6 +145,8 @@ export class GroupStockReportRequest {
     public stockName: string;
     public source?: string;
     public reportDownloadType?: string;
+    public warehouseUniqueName?: string;
+    public branchUniqueName?: string;
 }
 
 export class AdvanceFilterOptions {
@@ -274,4 +282,6 @@ export class InventoryDownloadRequest {
     public number?: number;
     public sort?: string;
     public sortBy?: string;
+    public warehouseUniqueName?: string;
+    public branchUniqueName?: string;
 }

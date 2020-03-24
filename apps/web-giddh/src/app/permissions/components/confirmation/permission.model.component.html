@@ -13,8 +13,13 @@
 
 				<div class="col-xs-6 pdL0">
 					<div class="col-xs-12 pdL0 mrB1">
-						<input type="radio" [(ngModel)]="newRole.copyoption" name="copypermissionornot"
-							[value]="'copy_permission'" /> Copy Permission
+
+                        <span class="pd0 mrR3">
+                            <input id="copyPermission" class="radio-custom cp ml0" type="radio" [(ngModel)]="newRole.copyoption" name="copypermissionornot"
+							[value]="'copy_permission'">
+                            <label for="copyPermission" class="radio-custom-label">Copy Permission</label>
+                        </span>
+
 					</div>
 					<div class="form-group mrT1">
 						<select class="form-control" name="somename"
@@ -26,10 +31,13 @@
 
 				<div class="col-xs-6 pdR0">
 					<div class="col-xs-12 pdR0 mrB1">
-						<input type="radio" [(ngModel)]="newRole.copyoption" name="copypermissionornot"
-							[value]="'select_heads'" />
-						Select
-						Heads
+
+                        <span class="pd0 mrR3">
+                            <input id="selectHeads" class="radio-custom cp ml0" type="radio" [(ngModel)]="newRole.copyoption" name="copypermissionornot"
+							[value]="'select_heads'">
+                            <label for="selectHeads" class="radio-custom-label">Select Heads</label>
+                        </span>
+
 					</div>
 					<div class="btn-group" dropdown [isDisabled]="newRole.copyoption != 'select_heads'">
 						<button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">

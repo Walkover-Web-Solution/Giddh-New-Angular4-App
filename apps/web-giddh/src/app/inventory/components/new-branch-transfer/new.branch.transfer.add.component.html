@@ -8,17 +8,22 @@
     </div>
     <div class="reciptNoteContent">
         <div class="reciptNoteRadioBtn pr-15 pl-15 mb-2" *ngIf="!editBranchTransferUniqueName">
-            <span class="mrR1"><input
-                    [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'products'}"
-                    name="transferType" id="multipleProducts" style="margin-left: 0px !important;" type="radio"
-                    (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'products'"><label
-                    for="multipleProducts">Multiple Products</label></span>
-            <span><input [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'senders'}"
-                    name="transferType" id="multipleSenders" style="margin-left: 0px !important;" type="radio"
-                    (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'senders'"><label
-                    for="multipleSenders" *ngIf="branchTransferMode === 'receiptnote'">Multiple Senders</label><label
-                    for="multipleSenders" *ngIf="branchTransferMode === 'deliverynote'">Multiple
-                    Receivers</label></span>
+            <span class="pd0 mrR3">
+                <input id="multipleProducts" class="radio-custom cp ml0" type="radio" [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'products'}"
+                name="transferType"
+                (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'products'">
+                <label for="multipleProducts" class="radio-custom-label">Multiple Products</label>
+            </span>
+
+            <span class="pd0 mrR3">
+                <input id="multipleSenders" class="radio-custom cp ml0" type="radio" [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'senders'}"
+                name="transferType" type="radio"
+                (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'senders'">
+                <label for="multipleSenders" class="radio-custom-label" *ngIf="branchTransferMode === 'receiptnote'">Multiple Senders</label>
+                <label for="multipleSenders" class="radio-custom-label" *ngIf="branchTransferMode === 'deliverynote'">Multiple
+                Receivers</label>
+            </span>
+
         </div>
         <div class="mb-2" *ngIf="editBranchTransferUniqueName"></div>
         <div class="multipleProductsWrapper ">
@@ -64,7 +69,8 @@
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <input name="productHsnCode" class="form-control" maxlength="8" [(ngModel)]="branchTransfer.products[0].hsnNumber">
+                                <input name="productHsnCode" class="form-control" maxlength="8" *ngIf="(inventorySettings?.manageInventory || !branchTransfer.products[0].sacNumber)" [(ngModel)]="branchTransfer.products[0].hsnNumber">
+                                <input name="productHsnCode" class="form-control" maxlength="8" *ngIf="(!inventorySettings?.manageInventory && branchTransfer.products[0].sacNumber)" [(ngModel)]="branchTransfer.products[0].sacNumber">
                             </div>
                         </div>
                         <div class="row mrB2">
@@ -194,7 +200,8 @@
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <input name="productHsnCode" maxlength="8" class="form-control" [(ngModel)]="branchTransfer.products[0].hsnNumber">
+                                <input name="productHsnCode" class="form-control" maxlength="8" *ngIf="(inventorySettings?.manageInventory || !branchTransfer.products[0].sacNumber)" [(ngModel)]="branchTransfer.products[0].hsnNumber">
+                                <input name="productHsnCode" class="form-control" maxlength="8" *ngIf="(!inventorySettings?.manageInventory && branchTransfer.products[0].sacNumber)" [(ngModel)]="branchTransfer.products[0].sacNumber">
                             </div>
                         </div>
                         <div class="row mrB2" *ngIf="transferType !== 'senders'">
@@ -338,13 +345,14 @@
                                     <div *ngIf="activeRow !== i">
                                         <div *ngIf="product.name">{{product.name}}</div>
                                         <div *ngIf="product.skuCode">SKU Code: {{product.skuCode}}</div>
-                                        <div *ngIf="product.hsnNumber">HSN/SAC Code: {{product.hsnNumber}}</div>
+                                        <div *ngIf="(inventorySettings?.manageInventory || !product.sacNumber)">HSN/SAC Code: {{product.hsnNumber}}</div>
+                                        <div *ngIf="(!inventorySettings?.manageInventory && product.sacNumber)">HSN/SAC Code: {{product.sacNumber}}</div>
                                         <div *ngIf="product.description">{{product.description}}</div>
                                     </div>
                                     <div class="pos-rel">
                                         <div class="hsnCode text-right" (click)="focusHsnNumber();" *ngIf="activeRow == i">
                                             <label>HSN/SAC Code: </label>
-                                            <span>{{product.hsnNumber}}
+                                            <span>{{ (inventorySettings?.manageInventory || !product.sacNumber) ? product.hsnNumber : product.sacNumber}}
                                                 <span class="edit-icon cp">
                                                     <img src="assets/images/edit-pencilicon.svg">
                                                 </span>
@@ -576,7 +584,7 @@
         </div>
         <button type="button" class="mt-05" id="close" (click)="toggleTransporterModel()"><i
                 class="icon-cross"></i></button>
-        <form #generateTransporterForm="ngForm" class="sadik" autocomplete="off">
+        <form #generateTransporterForm="ngForm" autocomplete="off">
             <div class="aside-body pt-2 pb-1 pr-2 pl-2 bg-gray">
                 <div class="form-group">
                     <label for="transporterName">Transporter Name <span class="text-danger">*</span></label>

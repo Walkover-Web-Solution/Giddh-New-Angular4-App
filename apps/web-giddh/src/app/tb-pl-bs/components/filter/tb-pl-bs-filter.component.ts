@@ -165,7 +165,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
 
     public ngOnInit() {
 
-        this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
+        this.imgPath = (isElectron|| isCordova) ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         //
         if (!this.showLabels) {
             this.filterForm.patchValue({selectedDateOption: '0'});
@@ -196,7 +196,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                     this.setCurrentFY();
                 } else {
                     this.universalDateICurrent = false;
-                    this.datePickerOptions = { ...this.datePickerOptions, startDate: date[0], endDate: date[1] };
+                    this.datePickerOptions = { ...this.datePickerOptions, startDate: date[0], endDate: date[1], chosenLabel: date[2] };
 
                     // assign dates
                     // this.assignStartAndEndDateForDateRangePicker(date[0], date[1]);
@@ -243,7 +243,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                 if (activeFinancialYear) {
                     this.datePickerOptions = {
                         ...this.datePickerOptions,
-                        startDate: moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'), endDate: moment()
+                        startDate: moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'), endDate: moment(), chosenLabel: undefined
                     };
 
                     // assign dates

@@ -187,8 +187,9 @@
                     </ng-template>
                     <!-- <span class="icon-dots-three-vertical"></span> -->
                     <div class="cText no-padding">
-                        <span class="cName ellp pdR1 alice">{{ ((selectedCompany | async)?.name) | slice: 0 : 1}}
-                        </span>
+
+                        <span class="cName ellp pdR1 alice">{{companyInitials}}</span>
+
                         <img src="assets/images/giddh-white-logo.svg" class="giddh-logo">
                     </div>
                 </a>
@@ -271,8 +272,7 @@
                     </ng-template>
                     <!-- <span class="icon-dots-three-vertical"></span> -->
                     <div class="cText d-flex">
-                        <span class="cName ellp pdR1 alice">{{ ((selectedCompany | async)?.name) | slice: 0 : 1}}
-                        </span>
+                        <span class="cName ellp pdR1 alice">{{companyInitials}}</span>
 
                         <div class="company-name-finance-year" placement="bottom">
                             <span class=" ellp pdR1">{{ ((selectedCompany | async)?.name)}}
@@ -303,7 +303,7 @@
 
         </ul>
 
-        <div class="nav_wrapper">
+        <div class="nav-wrapper">
 
             <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="false">
 

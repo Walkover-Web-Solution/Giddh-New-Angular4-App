@@ -19,7 +19,7 @@ export class CreateInvoiceHeaderComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron||isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 
     public ngOnDestroy() {

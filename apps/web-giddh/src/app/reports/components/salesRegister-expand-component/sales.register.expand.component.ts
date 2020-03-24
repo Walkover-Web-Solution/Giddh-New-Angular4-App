@@ -68,7 +68,7 @@ export class SalesRegisterExpandComponent implements OnInit {
 
     ngOnInit() {
         this.setCurrentPageTitle();
-        this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
+        this.imgPath = (isElectron||isCordova)  ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         this.getDetailedsalesRequestFilter.page = 1;
         this.getDetailedsalesRequestFilter.count = 50;
         this.getDetailedsalesRequestFilter.q = '';

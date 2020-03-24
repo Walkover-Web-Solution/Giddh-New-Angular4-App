@@ -11,26 +11,11 @@
                             <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
                                 (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
 
-                            <!--                            <input type="text"-->
-                            <!--                                   [(ngModel)]="selectedDateRange"-->
-                            <!--                                   ngxDaterangepickerMd-->
-                            <!--                                   [alwaysShowCalendars]="true"-->
-                            <!--                                   [ranges]="datePickerOptions.ranges"-->
-                            <!--                                   [showClearButton]="false"-->
-                            <!--                                   [showCancel]="true"-->
-                            <!--                                   [showDropdowns]="true"-->
-                            <!--                                   [locale]="{applyLabel: 'Done'}"-->
-                            <!--                                   (datesUpdated)="dateRangeChanged($event)"-->
-                            <!--                                   [keepCalendarOpeningWithRange]="true"-->
-                            <!--                                   [showRangeLabelOnInput]="false"-->
-                            <!--                                   name="selectedDateRange"-->
-                            <!--                                   class="form-control"-->
-                            <!--                                   placeholder="Select please..."/>-->
 
                         </span>
                     </div>
                     <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
-                        <span class="icon-advance-serch" (click)="toggleAdvanceSearchPopup(false)"></span>
+                        <span class="icon-advance-search" (click)="toggleAdvanceSearchPopup(false)"></span>
                     </div>
                 </div>
             </form>

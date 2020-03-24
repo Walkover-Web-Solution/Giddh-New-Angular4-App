@@ -50,6 +50,10 @@ import { TaxControlComponent } from '../../../theme/tax-control/tax-control.comp
 import { BlankLedgerVM, TransactionVM, AVAILABLE_ITC_LIST } from '../../ledger.vm';
 import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
 import { GeneralService } from '../../../services/general.service';
+import {isAndroidCordova, isIOSCordova} from "@giddh-workspaces/utils";
+import {IOSFilePicker} from "@ionic-native/file-picker/ngx";
+import {FileTransfer} from "@ionic-native/file-transfer/ngx";
+import {FileChooser} from "@ionic-native/file-chooser/ngx";
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -94,10 +98,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public selectedSuffixForCurrency: string;
     @Input() public inputMaskFormat: string = '';
     @Input() public giddhBalanceDecimalPlaces: number = 2;
+    @ViewChild('webFileInput') public webFileInput: ElementRef;
     /** True, if RCM taxable amount needs to be displayed in create new ledger component as per criteria */
     @Input() public shouldShowRcmTaxableAmount: boolean = false;
     /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
     @Input() public shouldShowItcSection: boolean = false;
+    /** To check Tourist scheme applicable in ledger */
+    @Input() public isTouristSchemeApplicable: boolean = false;
 
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
@@ -140,11 +147,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public activeAccount$: Observable<AccountResponse>;
     public activeAccount: AccountResponse;
     public currentAccountApplicableTaxes: string[] = [];
-    //variable added for storing the selected taxes after the tax component is destroyed for resolution of G0-295 by shehbaz
-    public currentAccountSavedApplicableTaxes: string[] = [];
-    public isMulticurrency: boolean;
-    public accountBaseCurrency: string;
-    public companyCurrency: string;
     public totalForTax: number = 0;
     public taxListForStock = []; // New
     public companyIsMultiCurrency: boolean;
@@ -221,7 +223,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public ngOnInit() {
         this.showAdvanced = false;
         this.uploadInput = new EventEmitter<UploadInput>();
-        this.fileUploadOptions = { concurrency: 0 };
+        this.fileUploadOptions = {concurrency: 0};
         this.activeAccount$.subscribe(acc => {
             if (acc) {
                 this.activeAccount = acc;
@@ -285,22 +287,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (this.currentTxn && this.currentTxn.selectedAccount) {
+            let activeAccountTaxes = [];
+            if (this.activeAccount && this.activeAccount.applicableTaxes) {
+                activeAccountTaxes = this.activeAccount.applicableTaxes.map((tax) => tax.uniqueName);
+            }
             if (this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length) {
-                this.taxListForStock = this.currentTxn.selectedAccount.stock.stockTaxes;
+                this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.stock.stockTaxes, activeAccountTaxes);
             } else if (this.currentTxn.selectedAccount.parentGroups && this.currentTxn.selectedAccount.parentGroups.length) {
-                let parentAcc = this.currentTxn.selectedAccount.parentGroups[0].uniqueName;
-                let incomeAccArray = ['revenuefromoperations', 'otherincome'];
-                let expensesAccArray = ['operatingcost', 'indirectexpenses'];
-                let assetsAccArray = ['assets'];
-                let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray, ...assetsAccArray];
-
-                if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
-                    let appTaxes = [];
-                    if (this.activeAccount && this.activeAccount.applicableTaxes) {
-                        this.activeAccount.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
-                        this.taxListForStock = appTaxes;
-                    }
-                }
+                this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.applicableTaxes, activeAccountTaxes);
             } else {
                 this.taxListForStock = [];
             }
@@ -321,7 +315,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         case 'tcspay':
                         case 'tdsrc':
                         case 'tdspay':
-                            this.blankLedger.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
+                            this.blankLedger.otherTaxModal.appliedOtherTax = {
+                                name: tax.name,
+                                uniqueName: tax.uniqueName
+                            };
                             break;
                         default:
                             appliedTaxes.push(tax.uniqueName);
@@ -333,11 +330,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (this.blankLedger.otherTaxModal.appliedOtherTax && this.blankLedger.otherTaxModal.appliedOtherTax.uniqueName) {
                 this.blankLedger.isOtherTaxesApplicable = true;
             }
-        }
-
-        if ('selectedCurrency' in changes) {
-            // this.baseCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.baseCurrencyDetails) : cloneDeep(this.foreignCurrencyDetails);
-            // this.foreignCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.foreignCurrencyDetails) : cloneDeep(this.baseCurrencyDetails);
         }
     }
 
@@ -581,7 +573,69 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.currentTxn = null;
     }
 
-    public onUploadOutput(output: UploadOutput): void {
+    public onUploadOutput(): void {
+        if (isAndroidCordova()) {
+            const fc = new FileChooser();
+            fc.open()
+                .then(uri => {
+                    this.uploadFile(uri);
+                })
+                .catch(e => {
+                    if (e !== 'User canceled.') {
+                        this._toasty.errorToast('Something Went Wrong');
+                    }
+                    this.isFileUploading = false;
+                });
+        } else if (isIOSCordova()) {
+            const filePicker = new IOSFilePicker();
+            filePicker.pickFile()
+                .then(uri => {
+                    this.uploadFile(uri);
+                })
+                .catch(err => {
+                    if (err !== 'canceled') {
+                        this._toasty.errorToast('Something Went Wrong');
+                    }
+                    this.isFileUploading = false;
+                });
+        } else {
+            // web
+            this.webFileInput.nativeElement.click();
+        }
+    }
+
+    private uploadFile(uri) {
+        let sessionKey = null;
+        let companyUniqueName = null;
+        this.sessionKey$.pipe(take(1)).subscribe(a => sessionKey = a);
+        const transfer = new FileTransfer();
+        const fileTransfer = transfer.create();
+        const options = {
+            fileKey: 'file',
+            headers: {
+                'Session-Id': sessionKey
+            }
+        };
+        const httpUrl = Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName);
+        fileTransfer.upload(uri, httpUrl, options)
+            .then((data) => {
+                if (data && data.response) {
+                    const result = JSON.parse(data.response);
+                    this.isFileUploading = false;
+                    this.blankLedger.attachedFile = result.body.uniqueName;
+                    this.blankLedger.attachedFileName = result.body.uniqueName;
+                    this._toasty.successToast('file uploaded successfully');
+                }
+            }, (err) => {
+                // show toaster
+                this.isFileUploading = false;
+                this.blankLedger.attachedFile = '';
+                this.blankLedger.attachedFileName = '';
+                this._toasty.errorToast(err.body.message);
+            });
+    }
+
+    public onWebUpload(output: UploadOutput) {
         if (output.type === 'allAddedToQueue') {
             let sessionKey = null;
             let companyUniqueName = null;
@@ -592,8 +646,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
                 method: 'POST',
                 fieldName: 'file',
-                data: { company: companyUniqueName },
-                headers: { 'Session-Id': sessionKey },
+                data: {company: companyUniqueName},
+                headers: {'Session-Id': sessionKey},
             };
             this.uploadInput.emit(event);
         } else if (output.type === 'start') {
@@ -625,7 +679,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public unitChanged(stockUnitCode: string) {
         let unit = this.currentTxn.selectedAccount.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === stockUnitCode);
-        this.currentTxn.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode };
+        this.currentTxn.inventory.unit = {code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode};
         if (this.currentTxn.inventory.unit) {
             this.changePrice(this.currentTxn.inventory.unit.rate.toString());
         }
@@ -1009,5 +1063,49 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private validateTaxes(): boolean {
         const taxes = [...this.currentTxn.taxesVm.filter(p => p.isChecked).map(p => p.uniqueName)];
         return taxes.length > 0;
+    }
+
+    /**
+     * Toggle Tourist scheme checkbox then reset passport number
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public touristSchemeApplicableToggle(): void {
+        this.blankLedger.passportNumber = '';
+    }
+
+     /**
+     * Merges the involved accounts (current ledger account and particular account) taxes
+     *
+     * @private
+     * @param {Array<string>} firstAccountTaxes Taxes array of first account
+     * @param {Array<string>} secondAccountTaxes Taxes array of second account
+     * @returns {Array<string>} Merged taxes array of unique taxes from both accounts
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private mergeInvolvedAccountsTaxes(firstAccountTaxes: Array<string>, secondAccountTaxes: Array<string>): Array<string> {
+        const mergedAccountTaxes = (firstAccountTaxes) ? [...firstAccountTaxes] : [];
+        if (secondAccountTaxes) {
+            secondAccountTaxes.forEach((tax: string) => {
+                if (!mergedAccountTaxes.includes(tax)) {
+                    mergedAccountTaxes.push(tax);
+                }
+            });
+
+        }
+        return mergedAccountTaxes;
+    }
+
+
+    /**
+     * To make value alphanumeric
+     *
+     * @param {*} event Template ref to get value
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public allowAlphanumericChar(event: any): void {
+        if (event && event.value) {
+            this.blankLedger.passportNumber = this.generalService.allowAlphanumericChar(event.value)
+        }
     }
 }

@@ -2,6 +2,9 @@
 .pItem {
     padding: 0 4px;
 }
+.height-30 {
+    height: 30px;
+}
 
 .ledgHead.entry-popup table td.select2-ledger > sh-select {
     position: initial;
@@ -38,21 +41,21 @@ table.width100 {
 
 .modal-header ng-select div a.ng-star-inserted {
     font-size: 18px;
-    color: #fff;
+    color: $White;
 }
 
 .modal-header ng-select div i.fa.fa-caret-up::before {
-    color: #fff;
+    color: $White;
     font-size: 24px;
 }
 
 ng-select > div i.fa.fa-caret-down::before {
-    color: #fff;
+    color: $White;
     font-size: 20px;
 }
 
 ng-select > div a.ng-star-inserted {
-    color: #fff;
+    color: $White;
     text-transform: uppercase;
     font-size: 16px;
 }
@@ -63,7 +66,7 @@ ng-select > div {
 }
 
 ng-select .select_drop i.fa.fa-caret-up::before {
-    color: #fff;
+    color: $White;
     font-size: 20px;
 }
 
@@ -108,7 +111,7 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     height: 26px;
 } */
 .ledger-main .form-control {
-    background: #fff !important;
+    background: $White !important;
     height: 45px;
     padding-right: 12px !important;
     padding-left: 12px !important;
@@ -187,6 +190,47 @@ span.eligible-ITC {
         margin-bottom: 4px;
     }
 }
+.adjust-receipt {
+    padding: 10px;
+    border: 1px solid $inputBorderColor;
+    margin-top: 10px;
+}
+.pr-05 {
+    padding-right: 5px;
+}
+.pl-05 {
+    padding-left: 5px;
+}
+.adjustment-field {
+    max-height: 160px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 160px;
+}
+.ledger-bottom {
+    display: flex;
+}
+.ledger-head th {
+    color: $JacksonsPurple;
+    padding-left: 0;
+    padding-bottom: 10px;
+}
+.update-ledger-account {
+    align-items: center;
+    span {
+        padding-left: 10px;
+    }
+    sh-select {
+        width: 100%;
+    }
+}
+/* responsive */
+@media only screen and (max-width: 1359px) {
+    .ledger-bottom {
+        display: block;
+    }
+}
+
 @media only screen and (max-width: 1024px) {
     .ledger_book {
         display: block;
@@ -314,5 +358,11 @@ span.eligible-ITC {
     }
     .xs-pt-0 {
         padding-top: 0px !important;
+    }
+    .adjustment-field .pr-05 {
+        padding-right: 15px;
+    }
+    .adjustment-field .pl-05 {
+        padding-left: 15px;
     }
 }

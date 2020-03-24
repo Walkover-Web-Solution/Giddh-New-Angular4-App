@@ -446,7 +446,28 @@ sh-select:focus {
 .transaction-in-short {
     margin-bottom: 80px;
 }
-// reponsive
+.ledger-account-label {
+    align-items: center;
+    span {
+        padding-left: 10px;
+    }
+    sh-select {
+        width: 100%;
+    }
+}
+.ledger-main .ledger-row:hover {
+    background-color: transparent;
+}
+/*reponsive*/
+.modal-ledger {
+    width: 70%;
+}
+@media only screen and (max-width: 1540px) {
+    .modal-ledger {
+        width: 85%;
+    }
+}
+
 @media only screen and (max-width: 1366px) {
     .modal-ledger {
         width: 100%;

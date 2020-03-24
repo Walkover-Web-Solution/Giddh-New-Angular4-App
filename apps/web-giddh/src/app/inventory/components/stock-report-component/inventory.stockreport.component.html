@@ -39,7 +39,7 @@
                         {{stockReport.stockName}}</span> (Stock)</h2>
 
                 <div class="advance-icon" tooltip="Advance Search">
-                    <span class="icon-advance-serch" (click)="onOpenAdvanceSearch()"></span>
+                    <span class="icon-advance-search" (click)="onOpenAdvanceSearch()"></span>
                 </div>
 
                 <!-- <i class="fa fa-refresh ml-1 cp" *ngIf="isFilterCorrect" (click)="resetFilter(true)"></i> -->
@@ -355,7 +355,10 @@
                 </tr>
             </tbody>
 
-            <tbody *ngIf="!stockReport">
+            <tbody *ngIf="!stockReport && !stockNotFoundMessage">
+                <!-- TODO: Show loader only when API request is in process and not base it on data of stock report
+                    For current use, integrated it with case when stock not found so as to avoid loader
+                -->
                 <!-- in case of all entity with group -->
                 <tr>
                     <td colspan="10" class="text-center empty_table">
@@ -371,11 +374,11 @@
                 </tr>
             </tbody>
 
-            <tbody *ngIf="stockReport && stockReport.count < 1" class="table-border">
+            <tbody *ngIf="(stockReport && stockReport.count < 1) || stockNotFoundMessage" class="table-border">
                 <tr>
                     <td colspan="10" class="text-center empty_table">
                         <img src="assets/images/search-data-not-found.svg" />
-                        <h1>No Report Found !!</h1>
+                        <h1 [class.stock-not-found]="stockNotFoundMessage">{{ (stockNotFoundMessage) ? stockNotFoundMessage : 'No Report Found !!' }}</h1>
                     </td>
                 </tr>
             </tbody>
