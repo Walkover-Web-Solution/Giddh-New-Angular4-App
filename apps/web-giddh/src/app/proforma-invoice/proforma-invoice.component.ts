@@ -362,7 +362,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /** Inventory Settings */
     public inventorySettings: any;
     public companyCountryCode: string = '';
-    public applyRoundOff: boolean = true;
+    //public applyRoundOff: boolean = true;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -828,9 +828,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (results[0] && results[1]) {
                     let obj;
 
-                    if(results[1].roundOffTotal && results[1].roundOffTotal.amountForAccount === 0 && results[1].roundOffTotal.amountForCompany === 0) {
-                        this.applyRoundOff = false;
-                    }
+                    // if(results[1].roundOffTotal && results[1].roundOffTotal.amountForAccount === 0 && results[1].roundOffTotal.amountForCompany === 0) {
+                    //     this.applyRoundOff = false;
+                    // }
 
                     if (this.isLastInvoiceCopied) {
                         obj = { accountDetails: null, voucherDetails: null, templateDetails: null, entries: null, companyDetails: null, depositEntry: null, depositEntryToBeUpdated: null, depositAccountUniqueName: '', templateUniqueName: null, number: '' };
@@ -1949,11 +1949,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (!this.isPurchaseInvoice) {
             //Save the Grand Total for Edit
             if (calculatedGrandTotal > 0) {
-                if(this.applyRoundOff) {
+                //if(this.applyRoundOff) {
                     this.calculatedRoundOff = Number((Math.round(calculatedGrandTotal) - calculatedGrandTotal).toFixed(2));
-                } else {
-                    this.calculatedRoundOff = Number((calculatedGrandTotal - calculatedGrandTotal).toFixed(2));
-                }
+                // } else {
+                //     this.calculatedRoundOff = Number((calculatedGrandTotal - calculatedGrandTotal).toFixed(2));
+                // }
 
                 calculatedGrandTotal = Number((calculatedGrandTotal + this.calculatedRoundOff).toFixed(2));
             } else if (calculatedGrandTotal === 0) {
@@ -2636,7 +2636,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     dueDate: data.voucherDetails.dueDate,
                     number: this.invoiceNo,
                     uniqueName: unqName,
-                    roundOffApplicable: this.applyRoundOff,
+                    //roundOffApplicable: this.applyRoundOff,
                     deposit
                 } as GenericRequestForGenerateSCD;
                 if (this.isCreditNote || this.isDebitNote) {
