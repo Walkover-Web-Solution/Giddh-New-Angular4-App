@@ -269,7 +269,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.router.navigate(['/pages', 'inventory', 'report'], { relativeTo: this.route });
                     this.activeTabIndex = 3;
                     break;
-               
                 case 'dashboard':
                     this.router.navigate(['/pages', 'inventory', 'dashboard'], { relativeTo: this.route });
                     this.activeTabIndex = 4;
@@ -395,7 +394,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private saveLastState() {
         let companyUniqueName = null;
-        let state = this.activeTabIndex === 0 ? 'inventory ' : this.activeTabIndex === 1 ? 'inventory/jobwork' : this.activeTabIndex === 2 ? 'inventory/manufacturing' : this.activeTabIndex === 3 ? 'inventory/dashboard' : 'inventory/report';
+        let state = this.activeTabIndex === 0 ? 'inventory ' : this.activeTabIndex === 1 ? 'inventory/jobwork' : this.activeTabIndex === 2 ? 'inventory/manufacturing' : this.activeTabIndex === 3 ? 'inventory/report' : 'inventory/dashboard';
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
