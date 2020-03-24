@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
 import { select, Store } from '@ngrx/store';
 import { takeUntil, take } from 'rxjs/operators';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AppState } from '../../../store';
 import { ToasterService } from '../../../services/toaster.service';
@@ -11,6 +11,7 @@ import { LedgerService } from '../../../services/ledger.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import * as moment from 'moment/moment';
 import { saveAs } from "file-saver";
+import { IForceClear } from '../../../models/api-models/Sales';
 
 @Component({
     selector: 'columnar-report-component',
@@ -19,7 +20,7 @@ import { saveAs } from "file-saver";
 })
 
 export class ColumnarReportComponent implements OnInit, OnDestroy {
-    public monthNames = [{ label: "January", value: "01" }, { label: "February", value: "02" }, { label: "March", value: "03" }, { label: "April", value: "04" }, { label: "May", value: "05" }, { label: "June", value: "06" }, { label: "July", value: "07" }, { label: "August", value: "08" }, { label: "September", value: "09" }, { label: "October", value: "10" }, { label: "November", value: "11" }, { label: "December", value: "12" }];
+    public monthNames: any = [];
     public selectYear: any = [];
     public showOpeningClosingBalance = [{ label: 'Yes', value: true }, { label: 'No', value: false }];
     public selectCrDr = [{ label: 'Yes', value: true }, { label: 'No', value: false }];
@@ -31,6 +32,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public companyUniqueName: string = '';
     public groupUniqueName: string = '';
     public isLoading: boolean = false;
+    public forceClear$: Observable<IForceClear> = observableOf({status: false});
 
     constructor(public settingsFinancialYearService: SettingsFinancialYearService, private store: Store<AppState>, private toaster: ToasterService, private generalService: GeneralService, private ledgerService: LedgerService) {
         this.exportRequest.fileType = 'xls';
@@ -72,7 +74,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 res.body.financialYears.forEach(key => {
                     let financialYearStarts = moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     let financialYearEnds = moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
-                    this.selectYear.push({ label: financialYearStarts + " - " + financialYearEnds, value: financialYearStarts });
+                    this.selectYear.push({ label: financialYearStarts + " - " + financialYearEnds, value: key });
                 });
             }
         });
@@ -89,16 +91,6 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Callback for month selection
-     *
-     * @param {*} event
-     * @memberof ColumnarReportComponent
-     */
-    public selectMonth(event: any): void {
-        this.exportRequest.monthYear = event.value + "-" + moment().year();
-    }
-
-    /**
      * This will export the report in excel sheet
      *
      * @memberof ColumnarReportComponent
@@ -107,7 +99,12 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         if (!this.isLoading) {
             this.isLoading = true;
             this.ledgerService.downloadColumnarReport(this.companyUniqueName, this.groupUniqueName, this.exportRequest).subscribe((res) => {
+                this.isLoading = false;
                 if (res.status === "success") {
+                    this.exportRequest = {};
+                    this.groupUniqueName = '';
+                    this.forceClear$ = observableOf({status: true});
+
                     let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
                     return saveAs(blob, `ColumnarReport.xlsx`);
                 } else {
@@ -126,5 +123,45 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for select year to prepare list of months
+     *
+     * @param {*} event
+     * @memberof ColumnarReportComponent
+     */
+    public selectFinancialYear(event): void {
+        if (event && event.value) {
+            this.exportRequest.financialYear = moment(event.value.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+
+            let financialYearStarts = moment(new Date(event.value.financialYearStarts.split("-").reverse().join("-")));
+            let financialYearEnds = moment(new Date(event.value.financialYearEnds.split("-").reverse().join("-")));
+            let tempDate = financialYearStarts;
+            let monthsCount = financialYearEnds.diff(financialYearStarts, 'months');
+            this.monthNames = [];
+            
+            this.monthNames.push({label: moment(tempDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: moment(tempDate.toDate(), GIDDH_DATE_FORMAT).format("MM-YYYY")});
+
+            for (let i = 1; i <= monthsCount; i++) {
+                tempDate = tempDate.add(1, 'month');
+
+                this.monthNames.push({label: moment(tempDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: moment(tempDate.toDate(), GIDDH_DATE_FORMAT).format("MM-YYYY")});
+            }
+        }
+    }
+
+    /**
+     * Checks if form is valid
+     *
+     * @returns {boolean}
+     * @memberof ColumnarReportComponent
+     */
+    public isFormValid(): boolean {
+        if(this.exportRequest.financialYear && this.groupUniqueName) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -7,35 +7,33 @@
                 <li><a href="javascript:void(0)">Columnar Report</a></li>
             </ul>
         </div>
-        <form #columnarReportForm="ngForm">
+        <form>
             <div class="row">
                 <div class="col-md-2 col-sm-6 mb-1">
                     <!--Make sh-select dynamic  -->
-                    <sh-select [options]="selectYear" [placeholder]="'Select Year'" name="financialYear"
-                        [(ngModel)]="exportRequest.financialYear"></sh-select>
+                    <sh-select [options]="selectYear" [placeholder]="'Select Year'" name="financialYear" (selected)="selectFinancialYear($event);" [forceClearReactive]="forceClear$ | async"></sh-select>
                 </div>
                 <div class="col-md-2 col-sm-6 mb-1">
                     <!--Make sh-select dynamic  -->
-                    <sh-select [options]="monthNames" [placeholder]="'Select Month'" name="monthYear"
-                        (selected)="selectMonth($event);"></sh-select>
+                    <sh-select [options]="monthNames" [multiple]="true" [placeholder]="'Select Month'" name="monthYear" [(ngModel)]="exportRequest.monthYear" [forceClearReactive]="forceClear$ | async"></sh-select>
                 </div>
                 <div class="col-md-2 col-sm-6 mb-1">
                     <!--Make sh-select dynamic / need to group search field too -->
                     <sh-select [options]="flatGroupsOptions" [placeholder]="'Group'" name="group"
-                        (selected)="selectGroup($event);"></sh-select>
+                        (selected)="selectGroup($event);" [forceClearReactive]="forceClear$ | async"></sh-select>
                 </div>
                 <div class="col-md-2 col-sm-6 mb-1">
                     <!--Make sh-select dynamic  -->
                     <sh-select [options]="showOpeningClosingBalance" [placeholder]="'Show Opening/Closing Balance'"
-                        name="showHideOpeningClosing" [(ngModel)]="exportRequest.showHideOpeningClosing"></sh-select>
+                        name="showHideOpeningClosing" [(ngModel)]="exportRequest.showHideOpeningClosing" [forceClearReactive]="forceClear$ | async"></sh-select>
                 </div>
                 <div class="col-md-2 col-sm-6 mb-1">
                     <!--Make sh-select dynamic  -->
                     <sh-select [options]="selectCrDr" [placeholder]="'Replace Cr/Dr with  +/-'"
-                        name="balanceTypeAsSigns" [(ngModel)]="exportRequest.balanceTypeAsSigns"></sh-select>
+                        name="balanceTypeAsSigns" [(ngModel)]="exportRequest.balanceTypeAsSigns" [forceClearReactive]="forceClear$ | async"></sh-select>
                 </div>
                 <div class="col-md-2 col-sm-6 mb-1">
-                    <button class="btn btn-pink" [disabled]="columnarReportForm.invalid || isLoading" (click)="exportReport();">Export</button>
+                    <button class="btn btn-pink" [disabled]="!isFormValid() || isLoading" (click)="exportReport();">Export</button>
                 </div>
             </div>
         </form>
