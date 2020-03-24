@@ -289,7 +289,7 @@ export class GeneralService {
 
         let hourOffset = convertdLocalTime.getTimezoneOffset() / 60;
 
-        convertdLocalTime.setHours(convertdLocalTime.getHours() + hourOffset);
+        convertdLocalTime.setMinutes(convertdLocalTime.getMinutes() - (hourOffset*60));
 
         return convertdLocalTime;
     }
