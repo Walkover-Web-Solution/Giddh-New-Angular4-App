@@ -71,11 +71,14 @@
                         <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
                             class="pItem text-right amount">
                             <label class="primary_clr font-12">Amount</label>
-                            <input type="text" name="" class="form-control text-right"
+                            <input *ngIf="!isAdvanceReceipt" type="text" name="" class="form-control text-right"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
-                                [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
                                 [mask]="inputMaskFormat" [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
                                 (keyup)="amountChanged();calculateTotal()" />
+                            <input *ngIf="isAdvanceReceipt" type="text" name="" class="form-control text-right"
+                            [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency" disabled
+                            [mask]="inputMaskFormat" [(ngModel)]="currentTxn.advanceReceiptAmount" (focus)="hideDiscountTax()"
+                            (keyup)="amountChanged();calculateTotal()" />
                             <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 {{ currentTxn?.convertedAmount | giddhCurrency}}
@@ -129,6 +132,7 @@
                                 [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : []"
                                 (taxAmountSumEvent)="calculateTax()" (hideOtherPopups)="hideDiscount()"
                                 (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event"
+                                [isAdvanceReceipt]="isAdvanceReceipt"
                                 [allowedSelectionOfAType]="allowedSelectionOfAType">
                             </tax-control>
                             <!-- TODO: After design finalization
@@ -151,7 +155,8 @@
                             <label class="primary_clr font-12">Total</label>
                             <input type="text" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat" name="" class="form-control text-right"
-                                [(ngModel)]="currentTxn.total" (blur)="calculateAmount()" />
+                                [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"
+                                [disabled]="isAdvanceReceipt ? 'disabled' : null" />
                             <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 {{ currentTxn.convertedTotal | giddhCurrency}}

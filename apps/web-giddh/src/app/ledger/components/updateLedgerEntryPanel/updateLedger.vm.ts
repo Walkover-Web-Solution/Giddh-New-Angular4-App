@@ -345,11 +345,15 @@ export class UpdateLedgerVm {
         let total = this.totalAmount - this.discountTrxTotal;
         this.appliedTaxPerTotal = taxTotal;
         this.totalForTax = total;
-
-        this.taxTrxTotal = giddhRoundOff(((total * taxTotal) / 100), this.giddhBalanceDecimalPlaces);
+        if (this.isAdvanceReceipt) {
+            this.taxTrxTotal = giddhRoundOff(this.getInclusiveTax(), this.giddhBalanceDecimalPlaces);
+            this.grandTotal = giddhRoundOff(this.totalAmount + this.taxTrxTotal, this.giddhBalanceDecimalPlaces);
+            this.totalAmount = giddhRoundOff(this.grandTotal - this.taxTrxTotal, this.giddhBalanceDecimalPlaces);
+        } else {
+            this.taxTrxTotal = giddhRoundOff(((total * taxTotal) / 100), this.giddhBalanceDecimalPlaces);
+            this.grandTotal = giddhRoundOff((total + this.taxTrxTotal), this.giddhBalanceDecimalPlaces);
+        }
         this.convertedTaxTrxTotal = this.calculateConversionRate(this.taxTrxTotal);
-
-        this.grandTotal = giddhRoundOff((total + this.taxTrxTotal), this.giddhBalanceDecimalPlaces);
         this.convertedGrandTotal = this.calculateConversionRate(this.grandTotal);
 
         this.calculateOtherTaxes(this.selectedLedger.otherTaxModal);
@@ -653,5 +657,19 @@ export class UpdateLedgerVm {
         } else {
             return giddhRoundOff(baseModel / this.selectedLedger.exchangeRate, this.giddhBalanceDecimalPlaces);
         }
+    }
+
+    /**
+     * Calculates the inclusive tax rate for advance receipt
+     *
+     * @private
+     * @returns {number} Inclusive tax rate
+     * @memberof UpdateLedgerVm
+     */
+    private getInclusiveTax(): number {
+        const totalPercentage = this.selectedTaxes.reduce((pv, cv) => {
+            return pv + cv.amount;
+        }, 0);
+        return (this.totalAmount * totalPercentage) / (100 + totalPercentage);
     }
 }
