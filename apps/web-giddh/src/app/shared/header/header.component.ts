@@ -413,6 +413,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
     }
 
+    public backToMainSidebar(){
+       this.isInventoryDashboard = !this.isInventoryDashboard;
+    }
     public ngOnInit() {
         this._generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
             if (value === 'logoutCordova') {

@@ -9,9 +9,9 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class DashboardComponent implements OnInit {
-
+    public imgPath: string = '';
 ngOnInit(){
-    
+    this.imgPath = (isElectron||isCordova)  ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 }
 
 }

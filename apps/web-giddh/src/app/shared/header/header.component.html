@@ -260,7 +260,31 @@
 <div class="nav-left-bar" [ngClass]="{'open': sideMenu.isopen, 'unvisible': companyList.length===0 }" (clickOutside)="closeSidebarMobile($event)">
 
     <div class="menu_wrapper" *ngIf="isInventoryDashboard">
-        Inventory Dashboard Sidebar
+        
+
+       <p class="sidebar-back-btn" (click)="backToMainSidebar();"> <img src="../../../assets/images/back-arrow.svg"> Back</p>
+        <ul class="left_fixed_header mb-2">
+            <h6 class="mb-1">Inventory</h6>
+            <li> <a href="#"><span class="label">Dashboard</span></a></li>
+            <li> <a  href="#"><span class="label">Settings</span></a></li>
+        </ul>
+
+        <ul class="left_fixed_header mb-2">
+            <li> <a  href="#"><span class="label">Items/Products</span></a> </li>
+            <li><a  href="#"><span class="label">Manufacturing</span></a></li>
+            <li> <a href="#"><span class="label">Packages</span></a></li>
+            <li> <a href="#"><span class="label">Delivery Challan</span></a></li>
+            <li><a href="#"><span class="label">Receipt Note</span></a></li>
+            <li> <a href="#"><span class="label">Goods-in-Transit</span></a></li>
+
+        </ul>
+
+        <ul class="left_fixed_header mb-2">
+            <li><a  href="#"><span class="label">Branch</span></a></li>
+            <li><a href="#"><span class="label">Warehouse</span></a></li>
+            <li><a href="#"><span class="label">Jobwork</span></a></li>
+        </ul>
+
     </div>
     <div class="menu_wrapper" *ngIf="!isInventoryDashboard">
 
