@@ -71,11 +71,11 @@
                         <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
                             class="pItem text-right amount">
                             <label class="primary_clr font-12">Amount</label>
-                            <input *ngIf="!isAdvanceReceipt" type="text" name="" class="form-control text-right"
+                            <input *ngIf="!isAdvanceReceipt" type="text" name="amount" class="form-control text-right"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat" [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
                                 (keyup)="amountChanged();calculateTotal()" />
-                            <input *ngIf="isAdvanceReceipt" type="text" name="" class="form-control text-right"
+                            <input *ngIf="isAdvanceReceipt" type="text" name="advanceAmount" class="form-control text-right"
                             [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency" disabled
                             [mask]="inputMaskFormat" [(ngModel)]="currentTxn.advanceReceiptAmount" (focus)="hideDiscountTax()"
                             (keyup)="amountChanged();calculateTotal()" />
@@ -154,7 +154,7 @@
                             class="pItem text-right total-amn" id="totalTd" (resized)="onResized($event)">
                             <label class="primary_clr font-12">Total</label>
                             <input type="text" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
-                                [mask]="inputMaskFormat" name="" class="form-control text-right"
+                                [mask]="inputMaskFormat" name="totalAmount" class="form-control text-right"
                                 [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"
                                 [disabled]="isAdvanceReceipt ? 'disabled' : null" />
                             <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
