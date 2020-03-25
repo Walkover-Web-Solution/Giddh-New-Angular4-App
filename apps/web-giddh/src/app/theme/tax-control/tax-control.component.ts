@@ -61,6 +61,10 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public maskInput: string;
     @Input() public prefixInput: string;
     @Input() public suffixInput: string;
+    /** True, if current transaction is advance receipt
+     * Required for inclusive tax rate calculation
+    */
+    @Input() public isAdvanceReceipt: boolean;
 
     @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
     @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
@@ -102,6 +106,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
         if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
             this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), 2);
+        }
+        if (changes['isAdvanceReceipt'] && changes['isAdvanceReceipt'].currentValue !== changes['isAdvanceReceipt'].previousValue) {
+            this.change();
         }
     }
 
@@ -190,7 +197,13 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     public change() {
         this.selectedTaxes = [];
         this.taxSum = this.calculateSum();
-        this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), 2);
+        if (this.isAdvanceReceipt) {
+            // Inclusive tax rate
+            this.taxTotalAmount = giddhRoundOff((this.totalForTax * this.taxSum) / (100 + this.taxSum), 2);
+        } else {
+            // Exclusive tax rate
+            this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), 2);
+        }
         this.selectedTaxes = this.generateSelectedTaxes();
 
         if (this.allowedSelection > 0) {
@@ -209,7 +222,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
         if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.type.length) {
             this.allowedSelectionOfAType.type.forEach(taxType => {
-                let selectedTaxes = this.taxRenderData.filter(appliedTaxes => (appliedTaxes.isChecked && taxType === appliedTaxes.type));
+                const selectedTaxes = this.taxRenderData.filter(appliedTaxes => (appliedTaxes.isChecked && taxType === appliedTaxes.type));
 
                 if (selectedTaxes.length >= this.allowedSelectionOfAType.count) {
                     this.taxRenderData.map((taxesApplied => {
@@ -227,6 +240,20 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                     }));
                 }
             });
+            if (this.isAdvanceReceipt) {
+                // In case of advance receipt only a single tax is allowed in addition to CESS
+                // Check if atleast a single non-cess tax is selected, if yes, then disable all other taxes
+                // except CESS taxes
+                const atleastSingleTaxSelected: boolean = this.taxRenderData.filter((tax) => tax.isChecked && tax.type !== 'gstcess').length !== 0;
+                if (atleastSingleTaxSelected) {
+                    this.taxRenderData.map((taxesApplied => {
+                        if ('gstcess' !== taxesApplied.type && !taxesApplied.isChecked) {
+                            taxesApplied.isDisabled = true;
+                        }
+                        return taxesApplied;
+                    }));
+                }
+            }
         }
 
         this.taxAmountSumEvent.emit(this.taxSum);

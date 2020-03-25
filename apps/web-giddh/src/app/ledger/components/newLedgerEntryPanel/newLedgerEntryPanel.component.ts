@@ -173,6 +173,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public shouldShowAdvanceReceiptMandatoryFields: boolean = false;
     /** List of available ITC */
     public availableItcList: Array<any> = AVAILABLE_ITC_LIST;
+    /** Allowed taxes list contains the unique name of all
+     * tax types within a company and count upto which they are allowed
+     */
+    public allowedSelectionOfAType: any = { type: [], count: 1 };
     /** country name of active account */
     public activeAccountCountryName: string = '';
 
@@ -225,7 +229,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public ngOnInit() {
         this.showAdvanced = false;
         this.uploadInput = new EventEmitter<UploadInput>();
-        this.fileUploadOptions = { concurrency: 0 };
+        this.fileUploadOptions = {concurrency: 0};
+        this.currentTxn.advanceReceiptAmount = this.currentTxn.amount;
         this.activeAccount$.subscribe(acc => {
             if (acc) {
                 this.activeAccount = acc;
@@ -273,6 +278,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         this.store.pipe(select(s => s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
+            this.companyTaxesList.forEach((tax) => {
+                if (!this.allowedSelectionOfAType.type.includes(tax.taxType)) {
+                    this.allowedSelectionOfAType.type.push(tax.taxType);
+                }
+            });
+            if (!res) {
+                this.allowedSelectionOfAType.type = [];
+            }
         });
 
         this.shouldShowAdvanceReceipt = (this.blankLedger) ? this.blankLedger.voucherType === 'rcpt' : false;
@@ -293,6 +306,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public ngOnChanges(changes: SimpleChanges): void {
         if (this.currentTxn && this.currentTxn.selectedAccount) {
             let activeAccountTaxes = [];
+            this.currentTxn.advanceReceiptAmount = this.currentTxn.amount;
             if (this.activeAccount && this.activeAccount.applicableTaxes) {
                 activeAccountTaxes = this.activeAccount.applicableTaxes.map((tax) => tax.uniqueName);
             }
@@ -383,16 +397,27 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         totalPercentage = this.currentTxn.taxesVm.reduce((pv, cv) => {
             return cv.isChecked ? pv + cv.amount : pv;
         }, 0);
-        this.currentTxn.tax = giddhRoundOff(((totalPercentage * (Number(this.currentTxn.amount) - this.currentTxn.discount)) / 100), this.giddhBalanceDecimalPlaces);
+        if (this.isAdvanceReceipt) {
+            // Inclusive tax rate
+            this.currentTxn.tax = giddhRoundOff((totalPercentage * this.currentTxn.amount) / (100 + totalPercentage), this.giddhBalanceDecimalPlaces);
+        } else {
+            // Exclusive tax rate
+            this.currentTxn.tax = giddhRoundOff(((totalPercentage * (Number(this.currentTxn.amount) - this.currentTxn.discount)) / 100), this.giddhBalanceDecimalPlaces);
+        }
         this.currentTxn.convertedTax = this.calculateConversionRate(this.currentTxn.tax);
         this.calculateTotal();
     }
 
     public calculateTotal() {
         if (this.currentTxn && this.currentTxn.amount) {
-            let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
-            this.totalForTax = total;
-            this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+            if (this.isAdvanceReceipt) {
+                this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                this.currentTxn.total = giddhRoundOff((this.currentTxn.advanceReceiptAmount + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+            } else {
+                let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
+                this.totalForTax = total;
+                this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+            }
             this.currentTxn.convertedTotal = this.calculateConversionRate(this.currentTxn.total);
         }
         this.calculateOtherTaxes(this.blankLedger.otherTaxModal);
@@ -1043,6 +1068,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public handleAdvanceReceiptChange(): void {
         this.currentTxn['subVoucher'] = this.isAdvanceReceipt ? Subvoucher.AdvanceReceipt : '';
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
+        this.calculateTax();
     }
 
     /**

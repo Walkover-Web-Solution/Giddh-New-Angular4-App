@@ -55,8 +55,14 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     @Input() public customTaxTypesForTaxFilter: string[] = [];
     @Input() public exceptTaxTypes: string[] = [];
     @Input() public allowedSelection: number = 0;
-    @Input() public allowedSelectionOfAType: { type: string, count: number };
-
+    /** Allowed taxes list contains the unique name of all
+     * tax types within a company and count upto which they are allowed
+     */
+    @Input() public allowedSelectionOfAType: { type: string[], count: number };
+    /** True, if current transaction is advance receipt
+     * Required for inclusive tax rate calculation
+    */
+    @Input() public isAdvanceReceipt: boolean;
     @Input() public maskInput: string;
     @Input() public prefixInput: string;
     @Input() public suffixInput: string;
@@ -84,15 +90,13 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     }
 
     public ngOnChanges(changes: SimpleChanges) {
-        if (changes['applicableTaxes'] && changes['applicableTaxes'].currentValue !== changes['applicableTaxes'].previousValue) {
-            this.taxRenderData = [];
-            this.sum = 0;
-            this.prepareTaxObject();
-            this.change();
-        }
-
-        if (changes['date'] && changes['date'].currentValue !== changes['date'].previousValue) {
-            if (moment(changes['date'].currentValue, 'DD-MM-YYYY').isValid()) {
+        if ('applicableTaxes' in changes || 'date' in changes) {
+            const hasApplicableTaxesChanged = changes['applicableTaxes'] && changes['applicableTaxes'].currentValue !== changes['applicableTaxes'].previousValue;
+            if (hasApplicableTaxesChanged) {
+                this.taxRenderData = [];
+            }
+            const hasDateChanged = changes['date'] && changes['date'].currentValue !== changes['date'].previousValue && moment(changes['date'].currentValue, 'DD-MM-YYYY').isValid();
+            if (hasApplicableTaxesChanged || hasDateChanged) {
                 this.sum = 0;
                 this.prepareTaxObject();
                 this.change();
@@ -100,7 +104,13 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
         }
 
         if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
-            this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
+            if (this.isAdvanceReceipt) {
+                // Inclusive tax calculation
+                this.formattedTotal = `${giddhRoundOff((this.totalForTax * this.sum) / (100 + this.sum), 2)}`;
+            } else {
+                // Exclusive tax calculation
+                this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
+            }
         }
     }
 
@@ -124,6 +134,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
         this.taxes.map(tx => {
             let taxObj = new TaxControlData();
             taxObj.name = tx.name;
+            taxObj.type = tx.taxType;
             taxObj.uniqueName = tx.uniqueName;
             if (this.date) {
                 let taxObject = _.orderBy(tx.taxDetail, (p: ITaxDetail) => {
@@ -170,7 +181,13 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     public change() {
         this.selectedTaxes = [];
         this.sum = this.calculateSum();
-        this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
+        if (this.isAdvanceReceipt) {
+            // Inclusive tax calculation
+            this.formattedTotal = `${giddhRoundOff((this.totalForTax * this.sum) / (100 + this.sum), 2)}`;
+        } else {
+            // Exclusive tax calculation
+            this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
+        }
         this.selectedTaxes = this.generateSelectedTaxes();
 
         if (this.allowedSelection > 0) {
@@ -184,6 +201,41 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
                     m.isDisabled = m.isDisabled ? false : m.isDisabled;
                     return m;
                 });
+            }
+        }
+        if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.type.length) {
+            this.allowedSelectionOfAType.type.forEach(taxType => {
+                const selectedTaxes = this.taxRenderData.filter(appliedTaxes => (appliedTaxes.isChecked && taxType === appliedTaxes.type));
+
+                if (selectedTaxes.length >= this.allowedSelectionOfAType.count) {
+                    this.taxRenderData.map((taxesApplied => {
+                        if (taxType === taxesApplied.type && !taxesApplied.isChecked) {
+                            taxesApplied.isDisabled = true;
+                        }
+                        return taxesApplied;
+                    }));
+                } else {
+                    this.taxRenderData.map((taxesApplied => {
+                        if (taxType === taxesApplied.type && taxesApplied.isDisabled) {
+                            taxesApplied.isDisabled = false;
+                        }
+                        return taxesApplied;
+                    }));
+                }
+            });
+            if (this.isAdvanceReceipt) {
+                // In case of advance receipt only a single tax is allowed in addition to CESS
+                // Check if atleast a single non-cess tax is selected, if yes, then disable all other taxes
+                // except CESS taxes
+                const atleastSingleTaxSelected: boolean = this.taxRenderData.filter((tax) => tax.isChecked && tax.type !== 'gstcess').length !== 0;
+                if (atleastSingleTaxSelected) {
+                    this.taxRenderData.map((taxesApplied => {
+                        if ('gstcess' !== taxesApplied.type && !taxesApplied.isChecked) {
+                            taxesApplied.isDisabled = true;
+                        }
+                        return taxesApplied;
+                    }));
+                }
             }
         }
 

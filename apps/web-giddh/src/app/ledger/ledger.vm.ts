@@ -372,6 +372,7 @@ export class TransactionVM {
     public itcAvailable?: string = '';
     public reverseChargeTaxableAmount?: number;
     public shouldShowRcmEntry?: boolean;
+    public advanceReceiptAmount?: number = 0;
 }
 
 export interface IInventory {
