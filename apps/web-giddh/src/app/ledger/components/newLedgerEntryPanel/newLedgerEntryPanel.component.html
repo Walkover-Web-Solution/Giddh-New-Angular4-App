@@ -119,7 +119,7 @@
                             <!--tax control component-->
                             <!-- Login Changes by Sagar  -->
                             <!-- [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes" -->
-                            <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate"
+                            <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate" [customerCountryName]="activeAccountCountryName"
                                 [taxRenderData]="currentTxn.taxesVm" [totalForTax]="totalForTax"
                                 [customHeading]="shouldShowAdvanceReceiptMandatoryFields ? 'Tax on Advance' : isRcmEntry ? 'Tax (RCM)' : ''"
                                 [isMandatory]="shouldShowAdvanceReceiptMandatoryFields || isRcmEntry"
