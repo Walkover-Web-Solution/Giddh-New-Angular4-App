@@ -66,6 +66,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
     @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
+    /** selected customer country name */
+    @Input() public customerCountryName: string = '';
+
 
     @ViewChild('taxInputElement') public taxInputElement: ElementRef;
 
@@ -114,21 +117,26 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             this.taxes = this.taxes.filter(f => !this.exceptTaxTypes.includes(f.taxType));
         }
 
-        this.taxes.map(tx => {
-            let index = this.taxRenderData.findIndex(f => f.uniqueName === tx.uniqueName);
+        this.taxes.map(tax => {
+            let index = this.taxRenderData.findIndex(f => f.uniqueName === tax.uniqueName);
 
             // if tax is already prepared then only check if it's checked or not on basis of applicable taxes
             if (index > -1) {
-                this.taxRenderData[index].isChecked = this.taxRenderData[index].isChecked ? true : (this.applicableTaxes && this.applicableTaxes.length) ? this.applicableTaxes.some(s => s === tx.uniqueName) : false;
+                // For foreign country gst type taxed should not be selected bydefault
+                if (this.customerCountryName && tax && this.customerCountryName !== 'India' && tax.taxType === 'gst') {
+                    this.taxRenderData[index].isChecked = false;
+                } else {
+                   this.taxRenderData[index].isChecked = this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(item => item === tax.uniqueName) : false;
+                }
             } else {
 
                 let taxObj = new TaxControlData();
-                taxObj.name = tx.name;
-                taxObj.uniqueName = tx.uniqueName;
-                taxObj.type = tx.taxType;
+                taxObj.name = tax.name;
+                taxObj.uniqueName = tax.uniqueName;
+                taxObj.type = tax.taxType;
 
                 if (this.date) {
-                    let taxObject = _.orderBy(tx.taxDetail, (p: ITaxDetail) => {
+                    let taxObject = _.orderBy(tax.taxDetail, (p: ITaxDetail) => {
                         return moment(p.date, 'DD-MM-YYYY');
                     }, 'desc');
                     let exactDate = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY').isSame(moment(this.date, 'DD-MM-YYYY')));
@@ -143,10 +151,14 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                         }
                     }
                 } else {
-                    taxObj.amount = tx.taxDetail[0].taxValue;
+                    taxObj.amount = tax.taxDetail[0].taxValue;
+                }
+                if (this.customerCountryName !== 'India' && tax.taxType === 'gst') {
+                    taxObj.isChecked = false;
+                } else {
+                    taxObj.isChecked = this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tax.uniqueName) : false;
                 }
 
-                taxObj.isChecked = this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tx.uniqueName) : false;
                 taxObj.isDisabled = false;
                 this.taxRenderData.push(taxObj);
             }
