@@ -1,5 +1,6 @@
 import {
-    Component, ElementRef,
+    Component,
+    ElementRef,
     EventEmitter,
     forwardRef,
     Input,
@@ -8,15 +9,19 @@ import {
     OnInit,
     Output,
     SimpleChanges,
-    ViewChild
+    ViewChild,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Store, select } from '@ngrx/store';
 import * as moment from 'moment/moment';
+import { ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
 import * as _ from '../../lodash-optimized';
 import { TaxResponse } from '../../models/api-models/Company';
 import { ITaxDetail } from '../../models/interfaces/tax.interface';
-import { ReplaySubject } from 'rxjs';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
+import { AppState } from '../../store';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -78,14 +83,18 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
     public taxSum: number = 0;
     public taxTotalAmount: number = 0;
+    public giddhBalanceDecimalPlaces: number = 2;
     private selectedTaxes: string[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor() {
-        //
-    }
+    constructor(private store: Store<AppState>) { }
 
     public ngOnInit(): void {
+        this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            if (profile) {
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -105,7 +114,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         }
 
         if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
-            this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), 2);
+            this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), this.giddhBalanceDecimalPlaces);
         }
         if (changes['isAdvanceReceipt'] && changes['isAdvanceReceipt'].currentValue !== changes['isAdvanceReceipt'].previousValue) {
             this.change();
@@ -199,10 +208,10 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         this.taxSum = this.calculateSum();
         if (this.isAdvanceReceipt) {
             // Inclusive tax rate
-            this.taxTotalAmount = giddhRoundOff((this.totalForTax * this.taxSum) / (100 + this.taxSum), 2);
+            this.taxTotalAmount = giddhRoundOff((this.totalForTax * this.taxSum) / (100 + this.taxSum), this.giddhBalanceDecimalPlaces);
         } else {
             // Exclusive tax rate
-            this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), 2);
+            this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), this.giddhBalanceDecimalPlaces);
         }
         this.selectedTaxes = this.generateSelectedTaxes();
 

@@ -306,7 +306,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public ngOnChanges(changes: SimpleChanges): void {
         if (this.currentTxn && this.currentTxn.selectedAccount) {
             let activeAccountTaxes = [];
-            this.currentTxn.advanceReceiptAmount = this.currentTxn.amount;
+            this.currentTxn.advanceReceiptAmount = giddhRoundOff(this.currentTxn.amount, this.giddhBalanceDecimalPlaces);
             if (this.activeAccount && this.activeAccount.applicableTaxes) {
                 activeAccountTaxes = this.activeAccount.applicableTaxes.map((tax) => tax.uniqueName);
             }
