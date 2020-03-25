@@ -309,6 +309,13 @@ export class GeneralService {
         }
     }
 
+    /**
+     * This will remove the selectall value from array used for multi checkbox dropdown
+     *
+     * @param {Array<string>} array
+     * @returns {Array<string>}
+     * @memberof GeneralService
+     */
     public removeSelectAllFromArray(array: Array<string>): Array<string> {
         let newArray = [];
         array.forEach(key => {
