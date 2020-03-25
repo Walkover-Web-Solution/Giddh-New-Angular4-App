@@ -98,6 +98,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public exportReport(): void {
         if (!this.isLoading) {
             this.isLoading = true;
+            this.exportRequest.monthYear = this.generalService.removeSelectAllFromArray(this.exportRequest.monthYear);
             this.ledgerService.downloadColumnarReport(this.companyUniqueName, this.groupUniqueName, this.exportRequest).subscribe((res) => {
                 this.isLoading = false;
                 if (res.status === "success") {
@@ -139,7 +140,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             let financialYearEnds = moment(new Date(event.value.financialYearEnds.split("-").reverse().join("-")));
             let tempDate = financialYearStarts;
             let monthsCount = financialYearEnds.diff(financialYearStarts, 'months');
-            this.monthNames = [];
+            this.monthNames = [{label: 'Select All', value: 'selectall'}];
             
             this.monthNames.push({label: moment(tempDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: moment(tempDate.toDate(), GIDDH_DATE_FORMAT).format("MM-YYYY")});
 

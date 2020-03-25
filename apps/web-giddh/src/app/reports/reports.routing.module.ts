@@ -32,7 +32,7 @@ import { AdvanceReceiptReportComponent } from './components/advance-receipt-repo
                     { path: 'purchase-register', component: PurchaseRegisterComponent},
                     { path: 'purchase-detailed-expand', component: PurchaseRegisterExpandComponent },
                     { path: 'reverse-charge', component: ReverseChargeReport },
-                    { path: 'columnar-report', component: ColumnarReportComponent },
+                    { path: 'monthly-columnar-report', component: ColumnarReportComponent },
                     { path: 'receipt', component: AdvanceReceiptReportComponent },
                 ]
             }

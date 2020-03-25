@@ -308,4 +308,15 @@ export class GeneralService {
             return '';
         }
     }
+
+    public removeSelectAllFromArray(array: Array<string>): Array<string> {
+        let newArray = [];
+        array.forEach(key => {
+            if(key !== "selectall") {
+                newArray.push(key);
+            }
+        });
+
+        return newArray;
+    }
 }
