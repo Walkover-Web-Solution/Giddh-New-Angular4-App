@@ -621,7 +621,7 @@
                                                     <ng-template #notFoundLinkTemplate>
                                                         <a [ngClass]="{'active': keydownClassAdded}"
                                                             class="notfound-option" [keyboardShortcut]="'alt+c'"
-                                                            (onShortcutPress)="toggleAsidePane()">
+                                                            (onShortcutPress)="toggleAsidePane(null, shDebit)">
                                                             <span [ngClass]="{'active': keydownClassAdded}">Create
                                                                 New A/c</span>
                                                             <span>Alt+C</span>
