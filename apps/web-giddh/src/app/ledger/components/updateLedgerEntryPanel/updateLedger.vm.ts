@@ -351,8 +351,8 @@ export class UpdateLedgerVm {
             this.taxTrxTotal = giddhRoundOff(this.getInclusiveTax(), this.giddhBalanceDecimalPlaces);
             setTimeout(() => {
                 this.advanceReceiptAmount = giddhRoundOff(this.totalAmount - this.taxTrxTotal, this.giddhBalanceDecimalPlaces);
+                this.grandTotal = giddhRoundOff(this.advanceReceiptAmount + this.taxTrxTotal, this.giddhBalanceDecimalPlaces);
             }, 200);
-            this.grandTotal = giddhRoundOff(this.advanceReceiptAmount + this.taxTrxTotal, this.giddhBalanceDecimalPlaces);
         } else {
             this.taxTrxTotal = giddhRoundOff(((total * taxTotal) / 100), this.giddhBalanceDecimalPlaces);
             this.grandTotal = giddhRoundOff((total + this.taxTrxTotal), this.giddhBalanceDecimalPlaces);
@@ -508,8 +508,13 @@ export class UpdateLedgerVm {
         }
 
         let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
-        this.totalAmount = giddhRoundOff(Number(((Number(this.grandTotal) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
-            (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal)))), this.giddhBalanceDecimalPlaces);
+        if (this.isAdvanceReceipt) {
+            this.totalAmount = this.grandTotal;
+            this.generateGrandTotal();
+        } else {
+            this.totalAmount = giddhRoundOff(Number(((Number(this.grandTotal) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
+                (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal)))), this.giddhBalanceDecimalPlaces);
+        }
 
         this.convertedTotalAmount = this.calculateConversionRate(this.totalAmount);
 
