@@ -1,17 +1,16 @@
-	/*styles for home content only*/
+/*styles for home content only*/
 
 // @import url('../../assets/css/color.css');
 @import "../../../../assets/css/color.scss";
 // new dashboard css
 .dashboard-container {
 	max-width: 1170px;
-    width: 100%;
-    
-    .white-block{
-        background-color: $White;
-        border: 1px solid $tableBorderColor;
-        padding: 15px;
-    }
+	width: 100%;
+	.white-block {
+		background-color: $White;
+		border: 1px solid $tableBorderColor;
+		padding: 15px;
+	}
 	h5 {
 		color: $charcoal;
 		font-weight: 600;
@@ -22,9 +21,9 @@
 		padding: 9px;
 		margin-bottom: 20px;
 		font-size: 16px;
-		border:1px solid $tableBorderColor;
+		border: 1px solid $tableBorderColor;
 		span.icon-traingle-info {
-			color: #ff6262;
+			color: $bitter-sweet;
 			font-size: 15px;
 			margin-right: 10px;
 		}
@@ -80,8 +79,8 @@
 		.item-details {
 			background-color: $White;
 			border: 1px solid $tableBorderColor;
-            padding: 15px;
-            min-height: 275px;
+			padding: 15px;
+			min-height: 275px;
 			.negative-stock {
 				display: flex;
 				align-items: center;
@@ -118,137 +117,172 @@
 					font-size: 30px;
 				}
 			}
-			 
-        }
-        .selling-item-details{
-            min-height: 275px;
-
-            .selling-item-header{
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                margin-bottom: 25px;
-                h5{
-                    margin-bottom: 0;
-                }
-                
-            }
-        }
-    }
-    table {
-        margin-bottom: 10px;
-        th{
-            border:0;
-            padding-left: 0;
-            padding-right: 0;
+		}
+		.selling-item-details {
+			min-height: 275px;
+			.selling-item-header {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				margin-bottom: 25px;
+				h5 {
+					margin-bottom: 0;
+				}
+			}
+		}
+	}
+	table {
+		margin-bottom: 10px;
+		th {
+			border: 0;
+			padding-left: 0;
+			padding-right: 0;
 			font-size: 14px;
 			color: $black;
-        }
-        td {
-            border-top: none !important;
-            border-bottom: 1px solid $tableBorderColor;
-            padding-left: 0;
-            padding-right: 0;
-        }
+		}
+		td {
+			border-top: none !important;
+			border-bottom: 1px solid $tableBorderColor;
+			padding-left: 0;
+			padding-right: 0;
+		}
 	}
-	.purchase-order{
-	.purchase-detail{
-		border-right:1px solid $tableBorderColor;
-		.single-purchase-detail{
-			margin-bottom: 30px;
-			p{
-				font-size: 20px;
-				color: $top_header;
+	.purchase-order {
+		.purchase-order-header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin-bottom: 25px;
+			h5 {
+				margin-bottom: 0;
 			}
-			small{
-			font-size:12px;
-			color: $charcoal;
+		}
+		.purchase-detail {
+			border-right: 1px solid $tableBorderColor;
+			.single-purchase-detail {
+				margin-bottom: 30px;
+				p {
+					font-size: 20px;
+					color: $top_header;
+				}
+				small {
+					font-size: 12px;
+					color: $charcoal;
+				}
 			}
 		}
 	}
+	.sales-order {
+		.sales-order-header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin-bottom: 25px;
+			h5 {
+				margin-bottom: 0;
+			}
+		}
 	}
-	.show-more{
-		color: $denim;
+	.show-more {
+		a{
+			color: $denim;
+		}
 	}
-}	
+}
 
 /* media query */
-@media(max-width:767px){
+
+@media(max-width:767px) {
 	.dashboard-container {
-	.activity-block {
-		margin-bottom: 15px;
-		text-align: center;
-		font-size: 14px;
-	}
-
-	h3{
-		font-size: 22px !important;
-	}
-
-	.purchase-order{
-		.purchase-detail{
-			.single-purchase-detail{
-margin-bottom: 15px;
-			}
+		.activity-block {
+			margin-bottom: 15px;
+			text-align: center;
+			font-size: 14px;
 		}
-	}
-	.dashboard-product-details {
-	 
-		.item-details {
-			min-height: auto;
-			.stock{
+		h3 {
+			font-size: 22px !important;
+		}
+		.purchase-order {
+			.purchase-order-header {
+				flex-direction: column;
 				margin-bottom: 10px;
-			}
-			.negative-stock {
-
-				.negative-stock-img {
-					height: 44px;
-					width: 44px;
-					img{
-						width: 25px;
-					}
-
+				justify-content: baseline;
+				align-items: baseline;
+				h5 {
+					margin-bottom: 10px;
 				}
-
 			}
-			.less-stock {
-
-				.less-stock-img {
-					height: 44px;
-					width: 44px;
-					img{
-						width: 25px;
+			.purchase-detail {
+				border-right: none;
+				.single-purchase-detail {
+					margin-bottom: 15px;
+					margin-top: 15px;
+				}
+			}
+		}
+		.dashboard-product-details {
+			.item-details {
+				min-height: auto;
+				.stock {
+					margin-bottom: 10px;
+				}
+				.negative-stock {
+					.negative-stock-img {
+						height: 44px;
+						width: 44px;
+						img {
+							width: 25px;
+						}
 					}
 				}
-			
+				.less-stock {
+					.less-stock-img {
+						height: 44px;
+						width: 44px;
+						img {
+							width: 25px;
+						}
+					}
+				}
 			}
-			 
-        }
-        .selling-item-details{
-            min-height: auto;
-margin-top: 20px;
-            .selling-item-header{
-                margin-bottom: 5px;
-            }
-        }
-    }
-	table {
-		margin-top: 10px !important;
-	}
-	.onMobileView.table{
-		margin-top: 0 !important;
-		tbody{
-			tr{
-				box-shadow: none;
-				td{
-					font-size: 14px;
-					&:before{
-						left: 0;
+			.selling-item-details {
+				min-height: auto;
+				margin-top: 20px;
+				.selling-item-header {
+					margin-bottom: 5px;
+					span {
+						cursor: pointer;
+					}
+				}
+			}
+		}
+		.sales-order {
+			.sales-order-header {
+				flex-direction: column;
+				margin-bottom: 10px;
+				justify-content: baseline;
+				align-items: baseline;
+				h5 {
+					margin-bottom: 10px;
+				}
+			}
+		}
+		table {
+			margin-top: 10px !important;
+		}
+		.onMobileView.table {
+			margin-top: 0 !important;
+			tbody {
+				tr {
+					box-shadow: none;
+					td {
+						font-size: 14px;
+						&:before {
+							left: 0;
+						}
 					}
 				}
 			}
 		}
 	}
-	 
-}
 }

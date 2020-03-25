@@ -7,7 +7,6 @@
                     <p> <span class="icon-traingle-info"></span> Your plan 1 ended on 10/09/2019. Apply to upgrade your subscription.<a class="click-here">Click here</a></p>
                 </div>
             </div>
-             
             <!-- sales activity -->
             <div class="sales-activity white-block">
                 <h5>Sales Activity</h5>
@@ -39,12 +38,10 @@
                     </div>
                 </div>
             </div>
-
             <!-- product details -->
-
             <div class="dashboard-product-details mt-2">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-6 col-sm-6">
                         <div class="item-details white-block">
                             <h5>Items/Product Details</h5>
                             <div class="row">
@@ -71,22 +68,21 @@
                                     </div>
                                 </div>
                             </div>
-
                             <table class="table mt-5">
                                 <tbody>
-                                    <tr>
-                                        <td>Total Items Group</td>
-                                        <td>27</td>
+                                    <tr *ngFor="let itemDetailData of itemDetailDatas">
+                                        <td>{{ itemDetailData.totalItemGroup }}</td>
+                                        <td>{{ itemDetailData.itemNo }}</td>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <td>Total Items/Products</td>
                                         <td>20</td>
-                                    </tr>
+                                    </tr> -->
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 col-sm-6">
                         <div class="selling-item-details white-block">
                             <div class="selling-item-header">
                                 <h5>Top Selling Items</h5>
@@ -100,18 +96,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                   <tr>
-                                       <td data-title="Item/Product">Sample Product Name 1</td>
-                                       <td data-title="Stock in hand">4900 Nos.</td>
-                                   </tr>
-                                   <tr>
-                                    <td  data-title="Item/Product">Sample Product Name 1</td>
-                                    <td data-title="Stock in hand">4900 Nos.</td>
-                                </tr>
-                                <tr>
-                                    <td  data-title="Item/Product">Sample Product Name 1</td>
-                                    <td data-title="Stock in hand">4900 Nos.</td>
-                                </tr>
+                                    <tr *ngFor="let sellingItemData of sellingItemDatas">
+                                        <td data-title="Item/Product">{{sellingItemData.simpleProductName}}</td>
+                                        <td data-title="Stock in hand">{{sellingItemData.itemNo}}</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -122,139 +110,152 @@
             <div class="purchase-order white-block mt-2">
                 <div class="purchase-order-header">
                     <h5>Purchase Order</h5>
-                    <div class="row">
-                        <div class="col-md-2">
-                            <div class="purchase-detail">
-                                <div class="single-purchase-detail">
-                                    <p>23</p>
-                                    <small>Quantity Ordered</small>
-                                </div>
-
-                                <div  class="single-purchase-detail">
-                                    <p>12</p>
-                                    <small>Received</small>
-                                </div>
-
-                                <div  class="single-purchase-detail">
-                                    <p>₹ 12,000</p>
-                                    <small>Amount to pay</small>
-                                </div>
+                    <div>
+                        <input type="text" placeholder="Daterangepicker" class="form-control" bsDaterangepicker>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 col-sm-2">
+                        <div class="purchase-detail">
+                            <div class="single-purchase-detail">
+                                <p>23</p>
+                                <small>Quantity Ordered</small>
                             </div>
-                        </div>
-                        <div class="col-md-10">
-                            <div class="table-of-purchase">
-                                <table class="table onMobileView ">
-                                    <thead>
-                                        <tr>
-                                            <th>Vendor Name</th>
-                                            <th>Total Amount</th>
-                                            <th>Received</th>
-                                            <th>Paid</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td data-title="Vendor Name">
-                                                Walkover Web 1 Solution pvt ltd.
-                                            </td>
-                                            <td  data-title="Total Amount">11,12,55,733.00</td>
-                                            <td  data-title="Received">
-                                                <div>
-                                                    <input id="recieved-1" class="checkbox-custom" type="checkbox" >
-                                                    <label for="recieved-1" class="checkbox-custom-label"  >
-                                                    </label>
-                                                   
-                                                </div>
-                                            </td>
-                                            <td  data-title="Paid">
-                                                <div>
-                                                    <input id="paid-1" class="checkbox-custom" type="checkbox" >
-                                                    <label for="paid-1" class="checkbox-custom-label"  >
-                                                    </label>
-                                                   
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <span class="show-more">+ Show More</span>
+                            <div class="single-purchase-detail">
+                                <p>12</p>
+                                <small>Received</small>
+                            </div>
+                            <div class="single-purchase-detail">
+                                <p>₹ 12,000</p>
+                                <small>Amount to pay</small>
                             </div>
                         </div>
                     </div>
-                </div>
+                    <div class="col-md-10 col-sm-10">
+                        <div class="table-of-purchase">
+                            <table class="table onMobileView ">
+                                <thead>
+                                    <tr>
+                                        <th width="25%">Vendor Name</th>
+                                        <th width="20%" class="text-right">Total Amount</th>
+                                        <th width="20%" class="text-center">Received</th>
+                                        <th width="20  %" class="text-center">Paid</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let purchaseData of purchaseDatas">
+                                        <td data-title="Vendor Name">
+                                            {{purchaseData.vendorName }}
+                                        </td>
+                                        <td class="text-right" data-title="Total Amount"> {{purchaseData.totalAmount }}</td>
+                                        <td class="text-center" data-title="Received">
+                                            <!-- checkbox should be dynamic -->
+                                            <div>
+                                                <input id="recieved-1" class="checkbox-custom" type="checkbox">
+                                                <label for="recieved-1" class="checkbox-custom-label">
+                                                </label>
 
+                                            </div>
+                                        </td>
+                                        <td class="text-center" data-title="Paid">
+                                            <!-- checkbox should be dynamic -->
+                                            <div>
+                                                <input id="paid-1" class="checkbox-custom" type="checkbox">
+                                                <label for="paid-1" class="checkbox-custom-label">
+                                                </label>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- make it functional -->
+                            <span class="show-more"><a href="javascript:void(0)">+ Show More</a></span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- sales order -->
             <div class="sales-order white-block mt-2">
                 <div class="sales-order-header">
-                    <h5>Purchase Order</h5>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="table-of-purchase">
-                                <table class="table onMobileView ">
-                                    <thead>
-                                        <tr>
-                                            <th>Customer Name</th>
-                                            <th>Total Amount</th>
-                                            <th>Packed</th>
-                                            <th>Shipped</th>
-                                            <th>Delivered</th>
-                                            <th>invoiced</th>
-                                            <th>Payment</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td data-title="Stock in hand">
-                                                Walkover Web 1 Solution pvt ltd.
-                                            </td>
-                                            <td  data-title="Total Amount">11,12,55,733.00</td>
-                                            <td  data-title="Packed">
-                                                <div>
-                                                    <input id="packed-1" class="checkbox-custom" type="checkbox" >
-                                                    <label for="packed-1" class="checkbox-custom-label"  >
-                                                    </label>
-                                                   
-                                                </div>
-                                            </td>
-                                            <td  data-title="Shipped">
-                                                <div>
-                                                    <input id="shipped-1" class="checkbox-custom" type="checkbox" >
-                                                    <label for="shipped-1" class="checkbox-custom-label"  >
-                                                    </label>
-                                                </div>
-                                            </td>
-                                            <td data-title="Delivered">
-                                                <div>
-                                                    <input id="delivered-1" class="checkbox-custom" type="checkbox" >
-                                                    <label for="delivered-1" class="checkbox-custom-label"  >
-                                                    </label>
-                                                </div>
-                                            </td>
-                                            <td  data-title="invoiced">
-                                                <div>
-                                                    <input id="invoiced-1" class="checkbox-custom" type="checkbox" >
-                                                    <label for="invoiced-1" class="checkbox-custom-label"  >
-                                                    </label>
-                                                </div>
-                                            </td>
-                                            <td data-title="Payment">
-                                                <div>
-                                                    <input id="payment-1" class="checkbox-custom" type="checkbox" >
-                                                    <label for="payment-1" class="checkbox-custom-label"  >
-                                                    </label>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
 
-                                <span class="show-more">+ Show More</span>
-                            </div>
+                    <h5>Sales Order</h5>
+                    <!-- need to add universal datpicker as included on dashboard page  -->
+                    <div>
+                        <input type="text" placeholder="Daterangepicker" class="form-control" bsDaterangepicker>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-of-purchase">
+                            <table class="table onMobileView ">
+                                <thead>
+                                    <tr>
+                                        <th width="20%">Customer Name</th>
+                                        <th class="text-right">Total Amount</th>
+                                        <th class="text-center">Packed</th>
+                                        <th class="text-center">Shipped</th>
+                                        <th class="text-center">Delivered</th>
+                                        <th class="text-center">invoiced</th>
+                                        <th class="text-center">Payment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let purchaseOrderData of purchaseOrderDatas">
+                                        <td data-title="Stock in hand">
+                                            {{ purchaseOrderData.customerName}}
+                                        </td>
+                                        <td class="text-right" data-title="Total Amount"> {{purchaseOrderData.totalAmount}} </td>
+                                        <td data-title="Packed" class="text-center">
+                                            <!-- checkbox should be dynamic -->
+                                            <div>
+                                                <input id="packed-1" class="checkbox-custom" type="checkbox">
+                                                <label for="packed-1" class="checkbox-custom-label">
+                                                </label>
+
+                                            </div>
+                                        </td>
+                                        <td data-title="Shipped" class="text-center">
+                                            <!-- checkbox should be dynamic -->
+                                            <div>
+                                                <input id="shipped-1" class="checkbox-custom" type="checkbox">
+                                                <label for="shipped-1" class="checkbox-custom-label">
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td data-title="Delivered" class="text-center">
+                                            <!-- checkbox should be dynamic -->
+                                            <div>
+                                                <input id="delivered-1" class="checkbox-custom" type="checkbox">
+                                                <label for="delivered-1" class="checkbox-custom-label">
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td data-title="invoiced" class="text-center">
+                                            <!-- checkbox should be dynamic -->
+                                            <div>
+                                                <input id="invoiced-1" class="checkbox-custom" type="checkbox">
+                                                <label for="invoiced-1" class="checkbox-custom-label">
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td data-title="Payment" class="text-center">
+                                            <!-- checkbox should be dynamic -->
+                                            <div>
+                                                <input id="payment-1" class="checkbox-custom" type="checkbox">
+                                                <label for="payment-1" class="checkbox-custom-label">
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- make it functional -->
+                            <span class="show-more"><a href="javascript:void(0)">+ Show More</a></span>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

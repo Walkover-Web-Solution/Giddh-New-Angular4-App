@@ -270,20 +270,24 @@
         </ul>
 
         <ul class="left_fixed_header mb-2">
-            <li> <a  href="#"><span class="label">Items/Products</span></a> </li>
-            <li><a  href="#"><span class="label">Manufacturing</span></a></li>
-            <li> <a href="#"><span class="label">Packages</span></a></li>
-            <li> <a href="#"><span class="label">Delivery Challan</span></a></li>
-            <li><a href="#"><span class="label">Receipt Note</span></a></li>
-            <li> <a href="#"><span class="label">Goods-in-Transit</span></a></li>
+            <li><a href="javascript:void(0)" (click)="analyzeOtherMenus('inventory')"><span class="label">Items/Products</span></a> </li>
+            <li><a href="javascript:void(0)" (click)="analyzeOtherMenus('manufacturing/report')"><span class="label">Manufacturing</span></a></li>
+            <li><a href="javascript:void(0)"><span class="label">Packages</span></a></li>
+            <li><a href="javascript:void(0)"><span class="label">Delivery Challan</span></a></li>
+            <li><a href="javascript:void(0)"><span class="label">Receipt Note</span></a></li>
+            <li><a href="javascript:void(0)"><span class="label">Goods-in-Transit</span></a></li>
 
         </ul>
 
         <ul class="left_fixed_header mb-2">
-            <li><a  href="#"><span class="label">Branch</span></a></li>
-            <li><a href="#"><span class="label">Warehouse</span></a></li>
-            <li><a href="#"><span class="label">Jobwork</span></a></li>
+            <li><a href="javascript:void(0)" (click)="analyzeOtherMenus('inventory/report')"><span class="label">Branch</span></a></li>
+            <li><a href="javascript:void(0)" (click)="analyzeOtherMenus('settings/warehouse')"><span class="label">Warehouse</span></a></li>
+            <li><a href="javascript:void(0)" ><span class="label">Jobwork</span></a></li>
         </ul>
+
+        <div class="collapse-sidebar" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
+            <i class="fa fa-angle-left"></i>
+        </div>
 
     </div>
     <div class="menu_wrapper" *ngIf="!isInventoryDashboard">
@@ -470,7 +474,7 @@
 
     </div>
 
-    <div class="mobile_menu_icon" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
+    <div class="mobile_menu_icon"  *ngIf="!isInventoryDashboard" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
         <span class="icon-bar" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right"></span>
     </div>
 
@@ -484,10 +488,12 @@
                     <!-- (isOpenChange)="sideBarStateChange($event)" -->
                     <li class="hamburger_menu cp" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
 
-                        <button class="btn mrR0" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right">
+                        <button  *ngIf="!isInventoryDashboard" class="btn mrR0" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right">
                             <i class="icon-bar"></i>
                         </button>
-
+                       
+                        <h4 class="inline text-capitalize"  *ngIf="isInventoryDashboard">Dashboard
+                        </h4>
                         <h4 class="inline text-capitalize" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
                             <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txtLwc">c</span></h4>
 
@@ -495,6 +501,7 @@
                             <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txtLwc">c</span></h4>
 
                     </li>
+                     
 
                     <!-- books search -->
                     <!-- <li [attachOutsideOnClick]="true" (clickOutside)="forceCloseSidebar($event)">
@@ -509,9 +516,7 @@
 </div>
 </div>
 </li> -->
-                    <li>
 
-                    </li>
                 </ul>
 
                 <div class="giddh_logo">
