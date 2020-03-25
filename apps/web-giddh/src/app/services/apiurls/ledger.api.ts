@@ -40,6 +40,7 @@ export const LEDGER_API = {
     GET_BALANCE: 'v2/company/:companyUniqueName/accounts/:accountUniqueName/balance?from=:from&to=:to&accountCurrency=:accountCurrency',
     GET_CURRENCY_RATE: 'currency/rate?from=:from&to=:to&date=:date',
 
-    GET_UNPAID_INVOICE_LIST: 'v2/company/:companyUniqueName/invoices/list?accountUniqueName=:accountUniqueName&status=:accStatus'
+    GET_UNPAID_INVOICE_LIST: 'v2/company/:companyUniqueName/invoices/list?accountUniqueName=:accountUniqueName&status=:accStatus',
+    GET_COLUMNAR_REPORT: 'v2/company/:companyUniqueName/groups/:groupUniqueName/export/account-balances'
 };
 

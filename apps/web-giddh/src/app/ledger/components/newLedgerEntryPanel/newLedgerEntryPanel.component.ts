@@ -50,10 +50,10 @@ import { TaxControlComponent } from '../../../theme/tax-control/tax-control.comp
 import { BlankLedgerVM, TransactionVM, AVAILABLE_ITC_LIST } from '../../ledger.vm';
 import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
 import { GeneralService } from '../../../services/general.service';
-import {isAndroidCordova, isIOSCordova} from "@giddh-workspaces/utils";
-import {IOSFilePicker} from "@ionic-native/file-picker/ngx";
-import {FileTransfer} from "@ionic-native/file-transfer/ngx";
-import {FileChooser} from "@ionic-native/file-chooser/ngx";
+import { isAndroidCordova, isIOSCordova } from "@giddh-workspaces/utils";
+import { IOSFilePicker } from "@ionic-native/file-picker/ngx";
+import { FileTransfer } from "@ionic-native/file-transfer/ngx";
+import { FileChooser } from "@ionic-native/file-chooser/ngx";
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -177,6 +177,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * tax types within a company and count upto which they are allowed
      */
     public allowedSelectionOfAType: any = { type: [], count: 1 };
+    /** country name of active account */
+    public activeAccountCountryName: string = '';
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -241,6 +243,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     let appTaxes = [];
                     acc.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
                     this.currentAccountApplicableTaxes = appTaxes;
+                }
+                if (acc.country && acc.country.countryName) {
+                    this.activeAccountCountryName = acc.country.countryName;
                 }
             }
         });
@@ -671,8 +676,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
                 method: 'POST',
                 fieldName: 'file',
-                data: {company: companyUniqueName},
-                headers: {'Session-Id': sessionKey},
+                data: { company: companyUniqueName },
+                headers: { 'Session-Id': sessionKey },
             };
             this.uploadInput.emit(event);
         } else if (output.type === 'start') {
@@ -704,7 +709,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public unitChanged(stockUnitCode: string) {
         let unit = this.currentTxn.selectedAccount.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === stockUnitCode);
-        this.currentTxn.inventory.unit = {code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode};
+        this.currentTxn.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode };
         if (this.currentTxn.inventory.unit) {
             this.changePrice(this.currentTxn.inventory.unit.rate.toString());
         }
@@ -1100,15 +1105,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.blankLedger.passportNumber = '';
     }
 
-     /**
-     * Merges the involved accounts (current ledger account and particular account) taxes
-     *
-     * @private
-     * @param {Array<string>} firstAccountTaxes Taxes array of first account
-     * @param {Array<string>} secondAccountTaxes Taxes array of second account
-     * @returns {Array<string>} Merged taxes array of unique taxes from both accounts
-     * @memberof NewLedgerEntryPanelComponent
-     */
+    /**
+    * Merges the involved accounts (current ledger account and particular account) taxes
+    *
+    * @private
+    * @param {Array<string>} firstAccountTaxes Taxes array of first account
+    * @param {Array<string>} secondAccountTaxes Taxes array of second account
+    * @returns {Array<string>} Merged taxes array of unique taxes from both accounts
+    * @memberof NewLedgerEntryPanelComponent
+    */
     private mergeInvolvedAccountsTaxes(firstAccountTaxes: Array<string>, secondAccountTaxes: Array<string>): Array<string> {
         const mergedAccountTaxes = (firstAccountTaxes) ? [...firstAccountTaxes] : [];
         if (secondAccountTaxes) {
