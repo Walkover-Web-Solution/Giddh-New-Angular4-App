@@ -90,15 +90,13 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     }
 
     public ngOnChanges(changes: SimpleChanges) {
-        if (changes['applicableTaxes'] && changes['applicableTaxes'].currentValue !== changes['applicableTaxes'].previousValue) {
-            this.taxRenderData = [];
-            this.sum = 0;
-            this.prepareTaxObject();
-            this.change();
-        }
-
-        if (changes['date'] && changes['date'].currentValue !== changes['date'].previousValue) {
-            if (moment(changes['date'].currentValue, 'DD-MM-YYYY').isValid()) {
+        if ('applicableTaxes' in changes || 'date' in changes) {
+            const hasApplicableTaxesChanged = changes['applicableTaxes'] && changes['applicableTaxes'].currentValue !== changes['applicableTaxes'].previousValue;
+            if (hasApplicableTaxesChanged) {
+                this.taxRenderData = [];
+            }
+            const hasDateChanged = changes['date'] && changes['date'].currentValue !== changes['date'].previousValue && moment(changes['date'].currentValue, 'DD-MM-YYYY').isValid();
+            if (hasApplicableTaxesChanged || hasDateChanged) {
                 this.sum = 0;
                 this.prepareTaxObject();
                 this.change();
@@ -106,7 +104,13 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
         }
 
         if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
-            this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
+            if (this.isAdvanceReceipt) {
+                // Inclusive tax calculation
+                this.formattedTotal = `${giddhRoundOff((this.totalForTax * this.sum) / (100 + this.sum), 2)}`;
+            } else {
+                // Exclusive tax calculation
+                this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
+            }
         }
     }
 
@@ -177,7 +181,6 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     public change() {
         this.selectedTaxes = [];
         this.sum = this.calculateSum();
-        this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
         if (this.isAdvanceReceipt) {
             // Inclusive tax calculation
             this.formattedTotal = `${giddhRoundOff((this.totalForTax * this.sum) / (100 + this.sum), 2)}`;

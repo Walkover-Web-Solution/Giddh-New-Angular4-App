@@ -527,10 +527,12 @@
                         <div *ngIf="vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields"
                             class="text-right table-amount">
                             <label class="font-12">Amount</label>
-                            <input type="text" name="" class="form-control text-right" [mask]="vm.inputMaskFormat"
-                                [rawInputValue]="vm.totalAmount" [prefix]="vm.selectedPrefixForCurrency"
-                                [suffix]="vm.selectedSuffixForCurrency" (focus)="hideDiscountTax()"
-                                (blur)="vm.inventoryAmountChanged()" [(ngModel)]="vm.totalAmount" [disabled]="isAdvanceReceipt ? 'disabled' : null" />
+                            <input *ngIf="isAdvanceReceipt" type="text" name="advanceAmount" class="form-control text-right"
+                                [mask]="vm.inputMaskFormat" [rawInputValue]="vm.advanceReceiptAmount" [prefix]="vm.selectedPrefixForCurrency"
+                                [suffix]="vm.selectedSuffixForCurrency" [(ngModel)]="vm.advanceReceiptAmount" disabled />
+                            <input *ngIf="!isAdvanceReceipt" type="text" name="amount" class="form-control text-right" [mask]="vm.inputMaskFormat"
+                                [rawInputValue]="vm.totalAmount" [prefix]="vm.selectedPrefixForCurrency" [suffix]="vm.selectedSuffixForCurrency"
+                                (focus)="hideDiscountTax()" (blur)="vm.inventoryAmountChanged()" [(ngModel)]="vm.totalAmount" />
                             <p class="mb-0 amnt-total" *ngIf="vm.isMultiCurrencyAvailable">
                                 <ng-container
                                     *ngTemplateOutlet="totalWithCurrencySymbol;context: { $implicit: vm.convertedTotalAmount }">

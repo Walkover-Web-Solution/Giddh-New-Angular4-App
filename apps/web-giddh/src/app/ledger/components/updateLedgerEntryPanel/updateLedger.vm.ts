@@ -70,6 +70,8 @@ export class UpdateLedgerVm {
     public inputMaskFormat: string;
     public selectedCurrencyForDisplay: 0 | 1 = 0;
     public giddhBalanceDecimalPlaces: number = 2;
+    /** Advance receipt amount */
+    public advanceReceiptAmount: number = 0;
 
     constructor() {
         this.voucherTypeList = [{
@@ -347,8 +349,10 @@ export class UpdateLedgerVm {
         this.totalForTax = total;
         if (this.isAdvanceReceipt) {
             this.taxTrxTotal = giddhRoundOff(this.getInclusiveTax(), this.giddhBalanceDecimalPlaces);
-            this.grandTotal = giddhRoundOff(this.totalAmount + this.taxTrxTotal, this.giddhBalanceDecimalPlaces);
-            this.totalAmount = giddhRoundOff(this.grandTotal - this.taxTrxTotal, this.giddhBalanceDecimalPlaces);
+            setTimeout(() => {
+                this.advanceReceiptAmount = giddhRoundOff(this.totalAmount - this.taxTrxTotal, this.giddhBalanceDecimalPlaces);
+            }, 200);
+            this.grandTotal = giddhRoundOff(this.advanceReceiptAmount + this.taxTrxTotal, this.giddhBalanceDecimalPlaces);
         } else {
             this.taxTrxTotal = giddhRoundOff(((total * taxTotal) / 100), this.giddhBalanceDecimalPlaces);
             this.grandTotal = giddhRoundOff((total + this.taxTrxTotal), this.giddhBalanceDecimalPlaces);
