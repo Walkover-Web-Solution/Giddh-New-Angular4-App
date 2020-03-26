@@ -286,10 +286,10 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     /**
      * Displays the error message if unit code is invalid
      *
-     * @param {*} isInvalid
+     * @param {boolean} isInvalid True, if unit code field has errors
      * @memberof InventoryCustomStockComponent
      */
-    public handleUnitCodeValidation(isInvalid): void {
+    public handleUnitCodeValidation(isInvalid: boolean): void {
         if (isInvalid) {
             this.toasterService.errorToast('Invalid Unit Code');
         }
