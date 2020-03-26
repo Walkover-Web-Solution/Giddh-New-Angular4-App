@@ -27,8 +27,9 @@
                             <div class="form-group col-xs-6">
                                 <label>Unit Code<sup>*</sup></label>
                                 <!-- [disabled]="country === 'india' || (isStockUnitCodeAvailable$ | async)" -->
-                                <input placeholder="Unique name" type="text" name="code"
-                                    [(ngModel)]="customUnitObj.code" class="form-control" required />
+                                <input placeholder="Unique name" type="text" name="code" [class.error-box]="unitCode?.errors?.pattern"
+                                    [pattern]="stockUnitCodeRegex" #unitCode="ngModel" [(ngModel)]="customUnitObj.code"
+                                    (change)="handleUnitCodeValidation(unitCode?.errors)" class="form-control" required />
                             </div>
 
                             <div class="form-group col-xs-5">

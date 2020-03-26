@@ -76,4 +76,5 @@ export const INVENTORY_API = {
     DELETE_BRANCH_TRANSFER: 'company/:companyUniqueName/branch-transfer/:branchTransferUniqueName',
     UPDATE_BRANCH_TRANSFER: 'company/:companyUniqueName/branch-transfer/:branchTransferUniqueName',
     DOWNLOAD_NEW_BRANCH_TRANSFER: 'company/:companyUniqueName/branch-transfer/download?fileType=base64',
+    GET_UNIT_CODE_REGEX: 'ui/forms?formName=:formName&country=:country'
 };
