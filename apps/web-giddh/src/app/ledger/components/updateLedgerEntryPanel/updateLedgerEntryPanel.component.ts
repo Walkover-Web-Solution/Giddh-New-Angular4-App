@@ -1230,6 +1230,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.shouldShowAdvanceReceiptMandatoryFields) {
             this.vm.generatePanelAmount();
         }
+        this.vm.generateGrandTotal();
+        this.vm.generateCompoundTotal();
     }
 
     // petty cash account changes, change all things related to account uniquename
