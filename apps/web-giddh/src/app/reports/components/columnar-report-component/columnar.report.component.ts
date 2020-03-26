@@ -42,9 +42,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.flattenGroups$.subscribe(flattenGroups => {
             if (flattenGroups) {
                 flattenGroups.forEach(key => {
-                    if (!key.parentGroups || key.parentGroups.length === 0) {
-                        this.flatGroupsOptions.push({ label: key.groupName, value: key.groupUniqueName });
-                    }
+                    this.flatGroupsOptions.push({ label: key.groupName, value: key.groupUniqueName });
                 });
             }
         });
