@@ -318,11 +318,13 @@ export class GeneralService {
      */
     public removeSelectAllFromArray(array: Array<string>): Array<string> {
         let newArray = [];
-        array.forEach(key => {
-            if(key !== "selectall") {
-                newArray.push(key);
-            }
-        });
+        if(array && array.length > 0) {
+            array.forEach(key => {
+                if(key !== "selectall") {
+                    newArray.push(key);
+                }
+            });
+        }
 
         return newArray;
     }
