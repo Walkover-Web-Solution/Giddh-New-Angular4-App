@@ -51,3 +51,10 @@
 #noresult:hover {
     background: transparent;
 }
+.item span {
+    float: left;
+}
+.item span input[type="checkbox"]:after {
+    top: -1px !important;
+    left: -1px !important;
+}
