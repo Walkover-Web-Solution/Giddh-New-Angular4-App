@@ -27,6 +27,7 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ReverseChargeReport } from './components/reverse-charge-report-component/reverse-charge-report.component';
+import { ColumnarReportComponent } from './components/columnar-report-component/columnar.report.component';
 import { AdvanceReceiptReportComponent } from './components/advance-receipt-report/advance-receipt-report.component';
 import { ReceiptAdvanceSearchComponent } from './components/receipt-advance-search/receipt-advance-search.component';
 import { RefundAmountComponent } from './components/refund-amount/refund-amount.component';
@@ -47,6 +48,7 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
         PurchaseRegisterTableComponent,
         PurchaseRegisterExpandComponent,
         ReverseChargeReport,
+        ColumnarReportComponent,
         AdvanceReceiptReportComponent,
         ReceiptAdvanceSearchComponent,
         RefundAmountComponent,

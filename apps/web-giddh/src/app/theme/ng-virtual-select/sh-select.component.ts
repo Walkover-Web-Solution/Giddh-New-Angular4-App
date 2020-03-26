@@ -50,6 +50,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public doNotReset: boolean = false;
     @Input() public defaultValue: string = "";
     @Input() public readonlyInput: boolean;
+    @Input() public showCheckbox: boolean = false;
 
     @ViewChild('inputFilter') public inputFilter: ElementRef;
     @ViewChild('mainContainer') public mainContainer: ElementRef;
