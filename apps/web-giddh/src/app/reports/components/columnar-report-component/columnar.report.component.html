@@ -20,11 +20,11 @@
             </div>
             <div class="col-md-2 col-sm-6 mb-1">
                 <sh-select [options]="showOpeningClosingBalance" [placeholder]="'Show Opening/Closing Balance'"
-                    name="showHideOpeningClosing" [(ngModel)]="exportRequest.showHideOpeningClosing" [forceClearReactive]="forceClear$ | async"></sh-select>
+                    name="showHideOpeningClosingBalance" [(ngModel)]="exportRequest.showHideOpeningClosingBalance" [forceClearReactive]="forceClear$ | async"></sh-select>
             </div>
             <div class="col-md-2 col-sm-6 mb-1">
                 <sh-select [options]="selectCrDr" [placeholder]="'Replace Cr/Dr with  +/-'"
-                    name="balanceTypeAsSigns" [(ngModel)]="exportRequest.balanceTypeAsSigns" [forceClearReactive]="forceClear$ | async"></sh-select>
+                    name="balanceTypeAsSign" [(ngModel)]="exportRequest.balanceTypeAsSign" [forceClearReactive]="forceClear$ | async"></sh-select>
             </div>
             <div class="col-md-2 col-sm-6 mb-1">
                 <button class="btn btn-pink" [disabled]="!isFormValid() || isLoading" (click)="exportReport();">Export</button>
