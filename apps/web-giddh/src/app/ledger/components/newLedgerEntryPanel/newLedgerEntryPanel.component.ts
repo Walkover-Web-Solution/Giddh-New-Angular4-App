@@ -397,7 +397,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         totalPercentage = this.currentTxn.taxesVm.reduce((pv, cv) => {
             return cv.isChecked ? pv + cv.amount : pv;
         }, 0);
-        this.calculateInclusiveOrExclusiveTaxes(totalPercentage);
+        this.currentTxn.tax = giddhRoundOff(
+            this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceipt, this.currentTxn.amount, totalPercentage, this.currentTxn.discount),
+            this.giddhBalanceDecimalPlaces);
         this.currentTxn.convertedTax = this.calculateConversionRate(this.currentTxn.tax);
         this.calculateTotal();
     }
@@ -1132,23 +1134,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public allowAlphanumericChar(event: any): void {
         if (event && event.value) {
             this.blankLedger.passportNumber = this.generalService.allowAlphanumericChar(event.value)
-        }
-    }
-
-    /**
-     * Calculates tax inclusively for Advance receipt else exclusively
-     *
-     * @private
-     * @param {number} totalPercentage Total percentage of tax
-     * @memberof NewLedgerEntryPanelComponent
-     */
-    private calculateInclusiveOrExclusiveTaxes(totalPercentage: number): void {
-        if (this.isAdvanceReceipt) {
-            // Inclusive tax rate
-            this.currentTxn.tax = giddhRoundOff((totalPercentage * this.currentTxn.amount) / (100 + totalPercentage), this.giddhBalanceDecimalPlaces);
-        } else {
-            // Exclusive tax rate
-            this.currentTxn.tax = giddhRoundOff(((totalPercentage * (Number(this.currentTxn.amount) - this.currentTxn.discount)) / 100), this.giddhBalanceDecimalPlaces);
         }
     }
 }
