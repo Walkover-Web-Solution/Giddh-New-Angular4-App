@@ -397,13 +397,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         totalPercentage = this.currentTxn.taxesVm.reduce((pv, cv) => {
             return cv.isChecked ? pv + cv.amount : pv;
         }, 0);
-        if (this.isAdvanceReceipt) {
-            // Inclusive tax rate
-            this.currentTxn.tax = giddhRoundOff((totalPercentage * this.currentTxn.amount) / (100 + totalPercentage), this.giddhBalanceDecimalPlaces);
-        } else {
-            // Exclusive tax rate
-            this.currentTxn.tax = giddhRoundOff(((totalPercentage * (Number(this.currentTxn.amount) - this.currentTxn.discount)) / 100), this.giddhBalanceDecimalPlaces);
-        }
+        this.calculateInclusiveOrExclusiveTaxes(totalPercentage);
         this.currentTxn.convertedTax = this.calculateConversionRate(this.currentTxn.tax);
         this.calculateTotal();
     }
@@ -413,6 +407,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (this.isAdvanceReceipt) {
                 this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
                 this.currentTxn.total = giddhRoundOff((this.currentTxn.advanceReceiptAmount + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                this.totalForTax = this.currentTxn.total;
             } else {
                 let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
                 this.totalForTax = total;
@@ -933,11 +928,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
-
+            const amount = (this.isAdvanceReceipt) ? transaction.advanceReceiptAmount : transaction.amount;
             if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
-                taxableValue = Number(transaction.amount) - transaction.discount;
+                taxableValue = Number(amount) - transaction.discount;
             } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
-                let rawAmount = Number(transaction.amount) - transaction.discount;
+                let rawAmount = Number(amount) - transaction.discount;
                 taxableValue = (rawAmount + ((rawAmount * transaction.tax) / 100));
             }
 
@@ -1137,6 +1132,23 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public allowAlphanumericChar(event: any): void {
         if (event && event.value) {
             this.blankLedger.passportNumber = this.generalService.allowAlphanumericChar(event.value)
+        }
+    }
+
+    /**
+     * Calculates tax inclusively for Advance receipt else exclusively
+     *
+     * @private
+     * @param {number} totalPercentage Total percentage of tax
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private calculateInclusiveOrExclusiveTaxes(totalPercentage: number): void {
+        if (this.isAdvanceReceipt) {
+            // Inclusive tax rate
+            this.currentTxn.tax = giddhRoundOff((totalPercentage * this.currentTxn.amount) / (100 + totalPercentage), this.giddhBalanceDecimalPlaces);
+        } else {
+            // Exclusive tax rate
+            this.currentTxn.tax = giddhRoundOff(((totalPercentage * (Number(this.currentTxn.amount) - this.currentTxn.discount)) / 100), this.giddhBalanceDecimalPlaces);
         }
     }
 }

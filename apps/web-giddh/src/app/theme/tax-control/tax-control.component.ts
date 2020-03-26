@@ -114,7 +114,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         }
 
         if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
-            this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), this.giddhBalanceDecimalPlaces);
+            this.calculateInclusiveOrExclusiveTaxes();
         }
         if (changes['isAdvanceReceipt'] && changes['isAdvanceReceipt'].currentValue !== changes['isAdvanceReceipt'].previousValue) {
             this.change();
@@ -206,13 +206,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     public change() {
         this.selectedTaxes = [];
         this.taxSum = this.calculateSum();
-        if (this.isAdvanceReceipt) {
-            // Inclusive tax rate
-            this.taxTotalAmount = giddhRoundOff((this.totalForTax * this.taxSum) / (100 + this.taxSum), this.giddhBalanceDecimalPlaces);
-        } else {
-            // Exclusive tax rate
-            this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), this.giddhBalanceDecimalPlaces);
-        }
+        this.calculateInclusiveOrExclusiveTaxes();
         this.selectedTaxes = this.generateSelectedTaxes();
 
         if (this.allowedSelection > 0) {
@@ -349,6 +343,23 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     public taxInputBlur(event) {
         if (event && event.relatedTarget && this.taxInputElement && !this.taxInputElement.nativeElement.contains(event.relatedTarget)) {
             // this.toggleTaxPopup(false);
+        }
+    }
+
+    /**
+     * Calculates tax inclusively for Advance receipt else exclusively
+     *
+     * @private
+     * @param {number} totalPercentage Total percentage of tax
+     * @memberof TaxControlComponent
+     */
+    private calculateInclusiveOrExclusiveTaxes(): void {
+        if (this.isAdvanceReceipt) {
+            // Inclusive tax rate
+            this.taxTotalAmount = giddhRoundOff((this.totalForTax * this.taxSum) / (100 + this.taxSum), this.giddhBalanceDecimalPlaces);
+        } else {
+            // Exclusive tax rate
+            this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), this.giddhBalanceDecimalPlaces);
         }
     }
 
