@@ -1973,7 +1973,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.invFormData.voucherDetails.balanceDue =
             ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - depositAmount - Number(this.depositAmountAfterUpdate);
-        this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff - this.totalAdvanceReceiptsAdjustedAmount;
+        this.invFormData.voucherDetails.balanceDue = Math.round(this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff) - this.totalAdvanceReceiptsAdjustedAmount;
     }
 
     public calculateSubTotal() {

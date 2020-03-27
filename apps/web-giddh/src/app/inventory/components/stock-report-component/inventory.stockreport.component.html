@@ -399,20 +399,18 @@
     <!-- sticky Footer -->
     <section class="mt-5" *ngIf="stockReport && stockReport.transactions && stockReport.transactions.length>0">
         <!-- <span>{{activeGroupName}} Value:</span> -->
-        <div class="sticky-footer stickyFooterSaleAmount">
-            <div class="innerContentFooter">
+        <div class="sticky-footer sticky-footer-sale-amount">
+            <div class="inner-content-footer">
 
                 <div class="row">
                     <div class="col-sm-3 pr-0">
                         <div class="col-xs-6 p0">
-                            <h4 class="text-light">Profit/Loss</h4>
+                            <h4 class="text-light text-left">Profit/Loss</h4>
                         </div>
-                        <div class="row">
                             <div class="col-xs-12 p0">
                                 <h4 class="text-orange text-left">&nbsp;{{stockReport.profit | giddhCurrency}}
                                     ({{dateRangePickerCmp.value | replaceHyphens}})</h4>
                             </div>
-                        </div>
                     </div>
                     <div class="col-sm-2 pr-0">
                         <div class="row">
@@ -421,7 +419,7 @@
                             </div>
                             <div class="col-xs-2 p0">
                                 <h4 class="text-orange text-left">
-                                    &nbsp;{{stockReport.inwardBalance.transactionCount + stockReport.outwardBalance.transactionCount}}
+                                    {{stockReport.inwardBalance.transactionCount + stockReport.outwardBalance.transactionCount}}
                                 </h4>
                             </div>
                         </div>
@@ -450,7 +448,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-7">
                         <div class="flex-col">
                             <div class="cont">
                                 <h4 class="text-light">Opening</h4>
@@ -461,9 +459,6 @@
 
                         </div>
                         <div class="flex-col">
-                            <!--              <div class="text-center operators">+</div>-->
-                        </div>
-                        <div class="flex-col">
                             <div class="cont">
                                 <h4 class="text-light">Inward</h4>
                                 <h2>{{stockReport.inwardBalance.amount}}</h2>
@@ -472,18 +467,12 @@
                             </div>
                         </div>
                         <div class="flex-col">
-                            <!--              <div class="text-center operators">-</div>-->
-                        </div>
-                        <div class="flex-col">
                             <div class="cont">
                                 <h4 class="text-light">Outward</h4>
                                 <h2>{{stockReport.outwardBalance.amount}}</h2>
                                 <h4>({{stockReport.outwardBalance.quantity}}
                                     {{stockReport.outwardBalance.stockUnit}})</h4>
                             </div>
-                        </div>
-                        <div class="flex-col">
-                            <!--              <div class="text-center operators">=</div>-->
                         </div>
                         <div class="flex-col">
                             <div class="cont">

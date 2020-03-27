@@ -530,6 +530,7 @@ export class VoucherClass {
     public number?: string;
     public subVoucher?: string;
     public advanceReceiptAdjustment?: AdvanceReceiptAdjustment;
+    public subTotal?: AmountClassMulticurrency
 
     constructor() {
         this.accountDetails = new AccountDetailsClass();
