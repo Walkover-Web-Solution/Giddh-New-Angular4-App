@@ -10,6 +10,7 @@ import {
     Output,
     SimpleChanges,
     ViewChild,
+    ChangeDetectorRef
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
@@ -87,7 +88,10 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     private selectedTaxes: string[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>) { }
+    constructor(
+        private cdr: ChangeDetectorRef,
+        private store: Store<AppState>
+    ) { }
 
     public ngOnInit(): void {
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
@@ -95,6 +99,11 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
+        if (this.taxes) {
+            this.prepareTaxObject();
+            this.change();
+            this.cdr.detectChanges();
+        }
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -119,6 +128,13 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         if (changes['isAdvanceReceipt'] && changes['isAdvanceReceipt'].currentValue !== changes['isAdvanceReceipt'].previousValue) {
             this.change();
         }
+
+        if('taxes' in changes && changes && (Array.isArray(changes.taxes.currentValue))) {
+            this.prepareTaxObject();
+            this.change();
+        }
+
+        this.cdr.detectChanges();
     }
 
     /**

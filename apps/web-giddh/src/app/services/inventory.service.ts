@@ -1125,4 +1125,17 @@ export class InventoryService {
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, companyUniqueName)));
     }
+
+    /**
+     * Method to fetch unit code regex for validaton
+     *
+     * @param {string} formName Form name for which regex is needed
+     * @param {string} countryName Country name
+     * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operation
+     * @memberof InventoryService
+     */
+    public getUnitCodeRegex(formName: string, countryName: string): Observable<BaseResponse<any, any>> {
+        const url = `${this.config.apiUrl}${INVENTORY_API.GET_UNIT_CODE_REGEX}`.replace(':formName', formName).replace(':country', countryName);
+        return this._http.get(url).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
 }

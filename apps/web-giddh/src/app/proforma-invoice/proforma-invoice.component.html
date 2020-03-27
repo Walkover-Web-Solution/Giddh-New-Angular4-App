@@ -2207,7 +2207,8 @@
 
 <!-- common template ref for displaying invoice type with first letter capital -->
 <ng-template #invoiceTypeDisplayRef>
-    {{invoiceType | titlecase}}
+    {{((invoiceType === 'proforma' || invoiceType === 'proformas') ? 'proforma' :
+        (invoiceType === 'estimate' || invoiceType === 'estimates') ? 'estimate' : invoiceType) | titlecase}}
 </ng-template>
 <div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #purchaseRecordConfirmationPopup="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
     <div class="modal-dialog">

@@ -211,8 +211,24 @@ export class LedgerVM {
         };
     }
 
-    public getUnderstandingText(selectedLedgerAccountType, accountName) {
-        let data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
+    public getUnderstandingText(selectedLedgerAccountType, accountName, parentGroups) {
+        let data;
+        let isReverseChargeAccount = false;
+
+        if(parentGroups) {
+            parentGroups.forEach(key => {
+                if(key.uniqueName === "reversecharge") {
+                    isReverseChargeAccount = true;
+                }
+            });
+        }
+
+        if(isReverseChargeAccount) {
+            data = _.cloneDeep(underStandingTextData.find(p => p.accountType === "ReverseCharge"));
+        } else {
+            data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
+        }
+
         if (data) {
             data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
             data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
