@@ -225,11 +225,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public purchaseRecord: any = {};
     /**Adjust advance receipts */
     @ViewChild('adjustPaymentModal') public adjustPaymentModal: ModalDirective;
+    /** To add advance receipt modal in DOM */
     public showAdvanceReceiptAdjust: boolean = false;
     /** To check is advance receipts modal in update mode */
     public isUpdateMode = false;
     /** selected invoice adjust advance receipts data */
     public advanceReceiptAdjustmentData: AdvanceReceiptAdjustment;
+    /** Observable to get observable store data of voucher */
     public voucherDetails$: Observable<any>;
     /** selected invoice details data  */
     public invFormData: VoucherClass = new VoucherClass();
