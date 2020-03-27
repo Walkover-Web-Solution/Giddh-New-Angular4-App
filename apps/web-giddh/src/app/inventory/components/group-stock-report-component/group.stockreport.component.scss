@@ -198,8 +198,8 @@ tfoot {
     color: $activeIconTh;
 }
 
-.stickyFooterSaleAmount {
-    .innerContentFooter {
+.sticky-footer-sale-amount {
+    .inner-content-footer {
         padding-left: 0;
         padding-right: 80px;
         min-height: 60px;
@@ -213,7 +213,7 @@ tfoot {
             min-width: 105px;
         }
         .flex-col:nth-child(even) {
-            min-width: 55px;
+            min-width: 20px;
         }
         .operators {
             font-size: 39px;

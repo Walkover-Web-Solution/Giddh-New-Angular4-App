@@ -7784,34 +7784,34 @@ app-header {
 
 /* sticky footer css merged */
 
-.sticky-footer.stickyFooterSaleAmount {
+.sticky-footer.sticky-footer-sale-amount {
     background: $White;
     padding: 10px;
     box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.16);
     text-align: right !important;
 }
 
-.menu_open .sticky-footer.stickyFooterSaleAmount {
+.menu_open .sticky-footer.sticky-footer-sale-amount {
     padding-left: 215px;
 }
 
-.stickyFooterSaleAmount .innerContentFooter {
+.sticky-footer-sale-amount .inner-content-footer {
     padding-left: 80px;
 }
 
-.stickyFooterSaleAmount .total-due h3 {
+.sticky-footer-sale-amount .total-due h3 {
     font-size: 20px;
 
     padding-right: 13px;
 }
 
-.stickyFooterSaleAmount .totalSale h3 {
+.sticky-footer-sale-amount .totalSale h3 {
     font-size: 20px;
     color: #8f9091;
     padding-right: 13px;
 }
 
-.stickyFooterSaleAmount h2 {
+.sticky-footer-sale-amount h2 {
     color: #333333;
     font-size: 32px;
     margin-top: 3px;
@@ -7901,12 +7901,12 @@ footer#footer.absoulte-footer {
     z-index: -1040;
 }
 
-section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
+section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
     text-align: left !important;
     margin-bottom: 0;
 }
 
-.sticky-footer.stickyFooterSaleAmount.customerFooterWrap {
+.sticky-footer.sticky-footer-sale-amount.customerFooterWrap {
     text-align: left !important;
 }
 
