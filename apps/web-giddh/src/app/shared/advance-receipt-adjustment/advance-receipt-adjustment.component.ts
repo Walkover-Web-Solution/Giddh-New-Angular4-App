@@ -108,9 +108,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             }
         }
         if (this.invoiceFormDetails && this.invoiceFormDetails.voucherDetails) {
-            if (true) {
                 this.invoiceFormDetails.voucherDetails.voucherDate = moment(this.invoiceFormDetails.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
-            }
             this.assignVoucherDetails();
         }
         this.getAllAdvanceReceipts();

@@ -1488,7 +1488,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     this._toaster.errorToast(response.message);
                 }
             }
-        })
+        });
         this.closeAdvanceReceiptModal();
     }
 }
