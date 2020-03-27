@@ -39,7 +39,7 @@ import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
 import { ToasterService } from '../../services/toaster.service';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
-import { VoucherTypeEnum } from '../../models/api-models/Sales';
+import { VoucherTypeEnum, VoucherClass, GenericRequestForGenerateSCD } from '../../models/api-models/Sales';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { saveAs } from 'file-saver';
@@ -51,6 +51,8 @@ import { PurchaseRecordUpdateModel } from '../../purchase/purchase-record/consta
 import { InvoiceBulkUpdateService } from '../../services/invoice.bulkupdate.service';
 import { PurchaseRecordActions } from '../../actions/purchase-record/purchase-record.action';
 import { Location } from '@angular/common';
+import { AdvanceReceiptAdjustment, AdjustAdvancePaymentModal } from '../../models/api-models/AdvanceReceiptsAdjust';
+import { SalesService } from '../../services/sales.service';
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
 /** Multi currency modules includes Cash/Sales Invoice and CR/DR note */
@@ -221,6 +223,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     /** Pagination limit */
     public paginationLimit: number = PAGINATION_LIMIT;
     public purchaseRecord: any = {};
+    /**Adjust advance receipts */
+    @ViewChild('adjustPaymentModal') public adjustPaymentModal: ModalDirective;
+    public showAdvanceReceiptAdjust: boolean = false;
+    public isUpdateMode = false;
+    public advanceReceiptAdjustmentData: AdvanceReceiptAdjustment;
+    public voucherDetails$: Observable<any>;
+    public invFormData: VoucherClass = new VoucherClass();
+    public changeStatusInvoiceUniqueName: string = '';
+
+
+
+
 
     constructor(
         private store: Store<AppState>,
@@ -238,8 +252,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private purchaseRecordActions: PurchaseRecordActions,
         private purchaseRecordService: PurchaseRecordService,
         private _invoiceBulkUpdateService: InvoiceBulkUpdateService,
-        private location: Location
+        private location: Location,
+        private salesService: SalesService
     ) {
+        this.advanceReceiptAdjustmentData = null;
         this.invoiceSearchRequest.page = 1;
         this.invoiceSearchRequest.count = PAGINATION_LIMIT;
         this.invoiceSearchRequest.entryTotalBy = '';
@@ -253,6 +269,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.exportInvoiceRequestInProcess$ = this.store.select(p => p.invoice.exportInvoiceInprogress).pipe(takeUntil(this.destroyed$));
         this.exportedInvoiceBase64res$ = this.store.select(p => p.invoice.exportInvoicebase64Data).pipe(takeUntil(this.destroyed$));
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.voucherDetails$ = this.store.pipe(select(s => s.receipt.voucher), takeUntil(this.destroyed$));
         //this._invoiceService.getTotalAndBalDue();
     }
 
@@ -266,10 +283,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = PAGINATION_LIMIT;
         this._activatedRoute.params.subscribe(a => {
-            if(a && a.accountUniqueName && a.purchaseRecordUniqueName) {
+            if (a && a.accountUniqueName && a.purchaseRecordUniqueName) {
                 this._receiptServices.GetPurchaseRecordDetails(a.accountUniqueName, a.purchaseRecordUniqueName).subscribe((res: any) => {
-                    if(res && res.body) {
-                        if(res.body.date) {
+                    if (res && res.body) {
+                        if (res.body.date) {
                             this.invoiceSearchRequest.from = res.body.date;
                             this.invoiceSearchRequest.to = res.body.date;
                             this.getVoucher(false);
@@ -293,7 +310,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             cashInvoice: false
                         };
                         this.selectedVoucher = VoucherTypeEnum.purchase;
-                        if(this.itemsListForDetails) {
+                        if (this.itemsListForDetails) {
                             this.onSelectInvoice(this.purchaseRecord);
                         }
                     }
@@ -403,7 +420,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     }
                 }, 100);
 
-                if(this.purchaseRecord && this.purchaseRecord.uniqueName) {
+                if (this.purchaseRecord && this.purchaseRecord.uniqueName) {
                     this.onSelectInvoice(this.purchaseRecord);
                 }
             });
@@ -412,29 +429,29 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.store.pipe(select(store => store.receipt.vouchers), publishReplay(1), refCount()),
             this.store.pipe(select(store => store.purchaseRecord.updatedRecordDetails))
         ]).pipe(takeUntil(this.destroyed$))
-        .subscribe((response) => {
-            const voucherData: ReciptResponse = response[0];
-            const record: PurchaseRecordUpdateModel = response[1];
-            if (voucherData && voucherData.items && record) {
-                this.selectedInvoiceForDetails = null;
-                let voucherIndex = voucherData.items.findIndex(item => item.uniqueName === record.purchaseRecordUniqueName);
-                if (voucherIndex > -1) {
-                    let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
-                    if (record.mergedRecordUniqueName) {
-                        allItems = allItems.filter(item => item.uniqueName !== record.mergedRecordUniqueName);
+            .subscribe((response) => {
+                const voucherData: ReciptResponse = response[0];
+                const record: PurchaseRecordUpdateModel = response[1];
+                if (voucherData && voucherData.items && record) {
+                    this.selectedInvoiceForDetails = null;
+                    let voucherIndex = voucherData.items.findIndex(item => item.uniqueName === record.purchaseRecordUniqueName);
+                    if (voucherIndex > -1) {
+                        let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
+                        if (record.mergedRecordUniqueName) {
+                            allItems = allItems.filter(item => item.uniqueName !== record.mergedRecordUniqueName);
+                        }
+                        allItems[voucherIndex].voucherNumber = record.invoiceNumber;
+                        allItems = uniqBy([allItems[voucherIndex], ...allItems], 'uniqueName');
+                        this.itemsListForDetails = allItems;
+                        this.toggleBodyClass();
+                        setTimeout(() => {
+                            this.selectedInvoiceForDetails = allItems[0];
+                            this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
+                            this.store.dispatch(this.purchaseRecordActions.resetUpdatePurchaseRecord());
+                        }, 1000);
                     }
-                    allItems[voucherIndex].voucherNumber = record.invoiceNumber;
-                    allItems = uniqBy([allItems[voucherIndex], ...allItems], 'uniqueName');
-                    this.itemsListForDetails = allItems;
-                    this.toggleBodyClass();
-                    setTimeout(() => {
-                        this.selectedInvoiceForDetails = allItems[0];
-                        this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
-                        this.store.dispatch(this.purchaseRecordActions.resetUpdatePurchaseRecord());
-                    }, 1000);
                 }
-            }
-        });
+            });
 
         this.store.pipe(select(s => s.invoice.settings), takeUntil(this.destroyed$)).subscribe(settings => {
             this.invoiceSetting = settings;
@@ -601,6 +618,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     this.parseBalRes(res);
                 });
             });
+
+        this.voucherDetails$.subscribe(response => {
+            console.log('v details', response);
+            if (response) {
+                this.invFormData.voucherDetails.totalTaxableValue = response.subTotal.amountForAccount
+                this.invFormData.voucherDetails.subTotal = response.subTotal.amountForAccount;
+                this.advanceReceiptAdjustmentData = response.advanceReceiptAdjustment;
+                this.showAdvanceReceiptAdjust = true;
+                this.adjustPaymentModal.show();
+            }
+        })
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -625,13 +653,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-/**
- * Advance search model show hide
- *
- * @param {boolean} isClosed  Boolean to check model need to close or not
- * @memberof InvoicePreviewComponent
- */
-public toggleAdvanceSearchPopup(isClosed: boolean) {
+    /**
+     * Advance search model show hide
+     *
+     * @param {boolean} isClosed  Boolean to check model need to close or not
+     * @memberof InvoicePreviewComponent
+     */
+    public toggleAdvanceSearchPopup(isClosed: boolean) {
         if (isClosed) {
             this.toggleAllItems(false);
         }
@@ -639,13 +667,13 @@ public toggleAdvanceSearchPopup(isClosed: boolean) {
 
     }
 
-/**
- * Bulk update model show hide
- *
- * @param {boolean} isClose Boolean to check model need to close or not
- * @memberof InvoicePreviewComponent
- */
-public toggleBulkUpdatePopup(isClose: boolean): void {
+    /**
+     * Bulk update model show hide
+     *
+     * @param {boolean} isClose Boolean to check model need to close or not
+     * @memberof InvoicePreviewComponent
+     */
+    public toggleBulkUpdatePopup(isClose: boolean): void {
         if (isClose) {
             this.getVoucher(false);
             this.toggleAllItems(false);
@@ -1078,7 +1106,7 @@ public toggleBulkUpdatePopup(isClose: boolean): void {
                 return ele.isSelected;
             });
 
-            if(this.voucherData && this.voucherData.items) {
+            if (this.voucherData && this.voucherData.items) {
                 this.voucherData.items.forEach((ele) => {
                     this.selectedInvoicesList = this.selectedInvoicesList.filter((s) => {
                         return ele.uniqueName !== s.uniqueName;
@@ -1262,7 +1290,7 @@ public toggleBulkUpdatePopup(isClose: boolean): void {
         this.selectedInvoiceForDetails = null;
         this.toggleBodyClass();
 
-        if(this.purchaseRecord && this.purchaseRecord.uniqueName) {
+        if (this.purchaseRecord && this.purchaseRecord.uniqueName) {
             this.location.back();
         } else {
             this.getVoucher(this.isUniversalDateApplicable);
@@ -1408,4 +1436,63 @@ public toggleBulkUpdatePopup(isClose: boolean): void {
         return item;
     }
 
+    /**
+     * To adjustinvoice with advance receipts
+     *
+     * @param {ReceiptItem} item invoice details object
+     * @memberof InvoicePreviewComponent
+     */
+    public onPerformAdjustPaymentAction(item: ReceiptItem) {
+        this.invFormData.voucherDetails.balanceDue = item.balanceDue.amountForAccount;
+        this.invFormData.voucherDetails.grandTotal = item.grandTotal.amountForAccount;
+        this.invFormData.voucherDetails.customerName = item.account.name;
+        this.invFormData.voucherDetails.customerUniquename = item.account.uniqueName;
+        this.invFormData.voucherDetails.voucherDate = item.voucherDate
+        this.invFormData.accountDetails.currencySymbol = item.accountCurrencySymbol;
+        this.changeStatusInvoiceUniqueName = item.uniqueName;
+        // To clear receipts voucher store
+        this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+        // To get re-assign receipts voucher store
+        this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(item.account.uniqueName, {
+            invoiceNumber: item.voucherNumber,
+            voucherType: VoucherTypeEnum.sales
+        }));
+    }
+
+    /**
+        * To close advance reciipt modal
+        *
+        * @memberof InvoicePreviewComponent
+        */
+    public closeAdvanceReceiptModal() {
+        this.showAdvanceReceiptAdjust = false;
+        this.advanceReceiptAdjustmentData = null;
+        this.changeStatusInvoiceUniqueName = ''
+        this.adjustPaymentModal.hide();
+    }
+
+    /**
+    * To get all advance adjusted data
+    *
+    * @param {{ adjustVoucherData: AdvanceReceiptAdjustment, adjustPaymentData: AdjustAdvancePaymentModal }} advanceReceiptsAdjustEvent event that contains advance receipts adjusted data
+    * @memberof InvoicePreviewComponent
+    */
+    public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: AdvanceReceiptAdjustment, adjustPaymentData: AdjustAdvancePaymentModal }) {
+        this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
+        this.salesService.adjustAnInvoiceWithAdvanceReceipts(this.advanceReceiptAdjustmentData, this.changeStatusInvoiceUniqueName).subscribe(response => {
+            if (response) {
+                if (response.status === 'success') {
+                    this._toaster.successToast(response.body);
+                    this.changeStatusInvoiceUniqueName = ''
+                    this.closeAdvanceReceiptModal();
+                    this.getVoucher(this.isUniversalDateApplicable);
+                } else {
+                    this._toaster.errorToast(response.message);
+                }
+                console.log(response);
+            }
+        })
+        console.log(this.advanceReceiptAdjustmentData);
+        this.closeAdvanceReceiptModal();
+    }
 }

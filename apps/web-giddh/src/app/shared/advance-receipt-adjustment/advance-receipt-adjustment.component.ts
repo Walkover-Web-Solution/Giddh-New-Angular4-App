@@ -100,17 +100,22 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             ]
         };
         if (this.advanceReceiptAdjustmentUpdatedData) {
-            this.adjustVoucherForm = this.advanceReceiptAdjustmentUpdatedData;
+            this.adjustVoucherForm = this.advanceReceiptAdjustmentUpdatedData.adjustments.length? this.advanceReceiptAdjustmentUpdatedData: this.adjustVoucherForm;
             if (this.advanceReceiptAdjustmentUpdatedData && this.advanceReceiptAdjustmentUpdatedData.adjustments && this.advanceReceiptAdjustmentUpdatedData.adjustments.length && this.advanceReceiptAdjustmentUpdatedData.tdsTaxUniqueName) {
                 this.isTaxDeducted = true;
             } else {
                 this.isTaxDeducted = false;
             }
         }
-        this.assignVoucherDetails();
+        if (this.invoiceFormDetails && this.invoiceFormDetails.voucherDetails) {
+            if (true) {
+                this.invoiceFormDetails.voucherDetails.voucherDate = moment(this.invoiceFormDetails.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
+            }
+            this.assignVoucherDetails();
+        }
         this.getAllAdvanceReceipts();
-        if(this.isUpdateMode) {
-           this.calculateBalanceDue()
+        if (this.isUpdateMode) {
+            this.calculateBalanceDue()
         }
         this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
             if (obj && obj.taxes) {
@@ -139,6 +144,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public onCancel(): void {
+        if (this.adjustPayment && this.adjustPayment.totalAdjustedAmount && this.adjustPayment.grandTotal && this.adjustPayment.totalAdjustedAmount - this.adjustPayment.grandTotal > 0) {
+            this.toaster.warningToast('The adjusted amount of the linked invoice\'s is more than this receipt');
+            return;
+        }
         this.closeModelEvent.emit(true);
     }
 
@@ -153,7 +162,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             grandTotal: Number(this.invoiceFormDetails.voucherDetails.grandTotal),
             customerName: this.invoiceFormDetails.voucherDetails.customerName,
             customerUniquename: this.invoiceFormDetails.voucherDetails.customerUniquename,
-            voucherDate: moment(this.invoiceFormDetails.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT),
+            voucherDate: this.invoiceFormDetails.voucherDetails.voucherDate,
             totalTaxableValue: Number(this.invoiceFormDetails.voucherDetails.totalTaxableValue),
             subTotal: Number(this.invoiceFormDetails.voucherDetails.subTotal)
 
@@ -184,7 +193,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                                 item.voucherDate = item.voucherDate.replace(/-/g, '/');
                                 this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                                 this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-
                             }
                         });
                     }

@@ -52,6 +52,7 @@ export class AdjustAdvancePaymentModal {
     subTotal: number;
     totalTaxableValue: number;
     totalAdjustedAmount: number;
+    currencySymbol?: string
 }
 
 export class AdvanceReceiptRequest {
