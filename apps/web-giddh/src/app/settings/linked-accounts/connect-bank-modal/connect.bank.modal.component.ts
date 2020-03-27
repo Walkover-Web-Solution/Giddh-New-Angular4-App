@@ -17,23 +17,23 @@ import { Store } from '@ngrx/store';
     height: 400px;
   }
 
-  .connect-page .page-title {
-    margin-top: 0;
-  }
+    .connect-page .page-title {
+        margin-top: 0;
+    }
 
-  .provider_ico {
-    margin-right: 10px;
-    max-width: 16px;
-    max-height: 16px;
-    float: left;
-    object-fit: contain;
-  }
+    .provider_ico {
+        margin-right: 10px;
+        max-width: 16px;
+        max-height: 16px;
+        float: left;
+        object-fit: contain;
+    }
 
-  .provider_ico img {
-    width: 100%;
-    height: auto;
-  }
-  `]
+    .provider_ico img {
+        width: 100%;
+        height: auto;
+    }
+    `]
 })
 
 export class ConnectBankModalComponent implements OnChanges {
@@ -59,6 +59,7 @@ export class ConnectBankModalComponent implements OnChanges {
     public cancelRequest: boolean = false;
     public needReloadingLinkedAccounts$: Observable<boolean> = of(false);
     public isElectron = isElectron;
+    public isCordova = isCordova;
     public base64StringForModel: SafeResourceUrl = '';
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

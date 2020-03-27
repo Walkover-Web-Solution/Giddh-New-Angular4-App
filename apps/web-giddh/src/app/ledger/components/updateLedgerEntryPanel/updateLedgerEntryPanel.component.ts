@@ -113,6 +113,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public shouldShowRcmTaxableAmount: boolean = false;
     /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
     public shouldShowItcSection: boolean = false;
+    /** Allowed taxes list contains the unique name of all
+     * tax types within a company and count upto which they are allowed
+     */
+    public allowedSelectionOfAType: any = { type: [], count: 1 };
     public tags$: Observable<TagRequest[]>;
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
@@ -239,6 +243,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             });
         }
+        this.vm.companyTaxesList$.pipe(take(1)).subscribe(taxes => {
+            if (taxes) {
+                taxes.forEach((tax) => {
+                    if (!this.allowedSelectionOfAType.type.includes(tax.taxType)) {
+                        this.allowedSelectionOfAType.type.push(tax.taxType);
+                    }
+                });
+            } else {
+                this.allowedSelectionOfAType.type = [];
+            }
+        });
 
         // get entry name and ledger account uniqueName
         observableCombineLatest(this.entryUniqueName$, this.editAccUniqueName$).subscribe((resp: any[]) => {
@@ -1215,6 +1230,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.shouldShowAdvanceReceiptMandatoryFields) {
             this.vm.generatePanelAmount();
         }
+        this.vm.generateGrandTotal();
+        this.vm.generateCompoundTotal();
     }
 
     // petty cash account changes, change all things related to account uniquename

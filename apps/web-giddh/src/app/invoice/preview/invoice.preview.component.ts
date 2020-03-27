@@ -269,6 +269,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if(a && a.accountUniqueName && a.purchaseRecordUniqueName) {
                 this._receiptServices.GetPurchaseRecordDetails(a.accountUniqueName, a.purchaseRecordUniqueName).subscribe((res: any) => {
                     if(res && res.body) {
+                        if(res.body.date) {
+                            this.invoiceSearchRequest.from = res.body.date;
+                            this.invoiceSearchRequest.to = res.body.date;
+                            this.getVoucher(false);
+                        }
+
                         this.purchaseRecord = {
                             balanceStatus: '',
                             dueDate: res.body.dueDate,
@@ -293,7 +299,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     }
                 });
             }
-    
+
             if (!(a && a.voucherType)) {
                 return;
             }
@@ -307,7 +313,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 this.templateType = 'invoice';
             }
         });
-        
+
         // Get accounts
         this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
             let accounts: IOption[] = [];
@@ -584,6 +590,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(s => s.receipt.isDeleteSuccess), takeUntil(this.destroyed$))
             .subscribe(result => {
                 this.selectedItems = [];
+                this.selectedInvoicesList = [];
                 if (result && this.selectedInvoiceForDetails) {
                     this.selectedInvoiceForDetails = null;
                     this.getVoucher(this.isUniversalDateApplicable);

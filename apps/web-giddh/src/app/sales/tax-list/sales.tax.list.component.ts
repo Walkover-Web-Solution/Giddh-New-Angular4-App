@@ -20,7 +20,7 @@ import { each } from '../../lodash-optimized';
           overflow: auto;
       }
 
-      :host .fake-disabled-label {
+      :host .disabled-label {
           cursor: not-allowed;
           opacity: .5;
       }

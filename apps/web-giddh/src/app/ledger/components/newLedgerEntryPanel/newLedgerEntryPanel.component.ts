@@ -50,6 +50,10 @@ import { TaxControlComponent } from '../../../theme/tax-control/tax-control.comp
 import { BlankLedgerVM, TransactionVM, AVAILABLE_ITC_LIST } from '../../ledger.vm';
 import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
 import { GeneralService } from '../../../services/general.service';
+import { isAndroidCordova, isIOSCordova } from "@giddh-workspaces/utils";
+import { IOSFilePicker } from "@ionic-native/file-picker/ngx";
+import { FileTransfer } from "@ionic-native/file-transfer/ngx";
+import { FileChooser } from "@ionic-native/file-chooser/ngx";
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -94,6 +98,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public selectedSuffixForCurrency: string;
     @Input() public inputMaskFormat: string = '';
     @Input() public giddhBalanceDecimalPlaces: number = 2;
+    @ViewChild('webFileInput') public webFileInput: ElementRef;
     /** True, if RCM taxable amount needs to be displayed in create new ledger component as per criteria */
     @Input() public shouldShowRcmTaxableAmount: boolean = false;
     /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
@@ -168,6 +173,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public shouldShowAdvanceReceiptMandatoryFields: boolean = false;
     /** List of available ITC */
     public availableItcList: Array<any> = AVAILABLE_ITC_LIST;
+    /** Allowed taxes list contains the unique name of all
+     * tax types within a company and count upto which they are allowed
+     */
+    public allowedSelectionOfAType: any = { type: [], count: 1 };
+    /** country name of active account */
+    public activeAccountCountryName: string = '';
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -218,7 +229,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public ngOnInit() {
         this.showAdvanced = false;
         this.uploadInput = new EventEmitter<UploadInput>();
-        this.fileUploadOptions = { concurrency: 0 };
+        this.fileUploadOptions = {concurrency: 0};
+        this.currentTxn.advanceReceiptAmount = this.currentTxn.amount;
         this.activeAccount$.subscribe(acc => {
             if (acc) {
                 this.activeAccount = acc;
@@ -231,6 +243,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     let appTaxes = [];
                     acc.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
                     this.currentAccountApplicableTaxes = appTaxes;
+                }
+                if (acc.country && acc.country.countryName) {
+                    this.activeAccountCountryName = acc.country.countryName;
                 }
             }
         });
@@ -263,6 +278,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         this.store.pipe(select(s => s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
+            this.companyTaxesList.forEach((tax) => {
+                if (!this.allowedSelectionOfAType.type.includes(tax.taxType)) {
+                    this.allowedSelectionOfAType.type.push(tax.taxType);
+                }
+            });
+            if (!res) {
+                this.allowedSelectionOfAType.type = [];
+            }
         });
 
         this.shouldShowAdvanceReceipt = (this.blankLedger) ? this.blankLedger.voucherType === 'rcpt' : false;
@@ -283,6 +306,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public ngOnChanges(changes: SimpleChanges): void {
         if (this.currentTxn && this.currentTxn.selectedAccount) {
             let activeAccountTaxes = [];
+            this.currentTxn.advanceReceiptAmount = giddhRoundOff(this.currentTxn.amount, this.giddhBalanceDecimalPlaces);
             if (this.activeAccount && this.activeAccount.applicableTaxes) {
                 activeAccountTaxes = this.activeAccount.applicableTaxes.map((tax) => tax.uniqueName);
             }
@@ -310,7 +334,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         case 'tcspay':
                         case 'tdsrc':
                         case 'tdspay':
-                            this.blankLedger.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
+                            this.blankLedger.otherTaxModal.appliedOtherTax = {
+                                name: tax.name,
+                                uniqueName: tax.uniqueName
+                            };
                             break;
                         default:
                             appliedTaxes.push(tax.uniqueName);
@@ -370,16 +397,24 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         totalPercentage = this.currentTxn.taxesVm.reduce((pv, cv) => {
             return cv.isChecked ? pv + cv.amount : pv;
         }, 0);
-        this.currentTxn.tax = giddhRoundOff(((totalPercentage * (Number(this.currentTxn.amount) - this.currentTxn.discount)) / 100), this.giddhBalanceDecimalPlaces);
+        this.currentTxn.tax = giddhRoundOff(
+            this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceipt, this.currentTxn.amount, totalPercentage, this.currentTxn.discount),
+            this.giddhBalanceDecimalPlaces);
         this.currentTxn.convertedTax = this.calculateConversionRate(this.currentTxn.tax);
         this.calculateTotal();
     }
 
     public calculateTotal() {
         if (this.currentTxn && this.currentTxn.amount) {
-            let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
-            this.totalForTax = total;
-            this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+            if (this.isAdvanceReceipt) {
+                this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                this.currentTxn.total = giddhRoundOff((this.currentTxn.advanceReceiptAmount + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                this.totalForTax = this.currentTxn.total;
+            } else {
+                let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
+                this.totalForTax = total;
+                this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+            }
             this.currentTxn.convertedTotal = this.calculateConversionRate(this.currentTxn.total);
         }
         this.calculateOtherTaxes(this.blankLedger.otherTaxModal);
@@ -565,7 +600,69 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.currentTxn = null;
     }
 
-    public onUploadOutput(output: UploadOutput): void {
+    public onUploadOutput(): void {
+        if (isAndroidCordova()) {
+            const fc = new FileChooser();
+            fc.open()
+                .then(uri => {
+                    this.uploadFile(uri);
+                })
+                .catch(e => {
+                    if (e !== 'User canceled.') {
+                        this._toasty.errorToast('Something Went Wrong');
+                    }
+                    this.isFileUploading = false;
+                });
+        } else if (isIOSCordova()) {
+            const filePicker = new IOSFilePicker();
+            filePicker.pickFile()
+                .then(uri => {
+                    this.uploadFile(uri);
+                })
+                .catch(err => {
+                    if (err !== 'canceled') {
+                        this._toasty.errorToast('Something Went Wrong');
+                    }
+                    this.isFileUploading = false;
+                });
+        } else {
+            // web
+            this.webFileInput.nativeElement.click();
+        }
+    }
+
+    private uploadFile(uri) {
+        let sessionKey = null;
+        let companyUniqueName = null;
+        this.sessionKey$.pipe(take(1)).subscribe(a => sessionKey = a);
+        const transfer = new FileTransfer();
+        const fileTransfer = transfer.create();
+        const options = {
+            fileKey: 'file',
+            headers: {
+                'Session-Id': sessionKey
+            }
+        };
+        const httpUrl = Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName);
+        fileTransfer.upload(uri, httpUrl, options)
+            .then((data) => {
+                if (data && data.response) {
+                    const result = JSON.parse(data.response);
+                    this.isFileUploading = false;
+                    this.blankLedger.attachedFile = result.body.uniqueName;
+                    this.blankLedger.attachedFileName = result.body.uniqueName;
+                    this._toasty.successToast('file uploaded successfully');
+                }
+            }, (err) => {
+                // show toaster
+                this.isFileUploading = false;
+                this.blankLedger.attachedFile = '';
+                this.blankLedger.attachedFileName = '';
+                this._toasty.errorToast(err.body.message);
+            });
+    }
+
+    public onWebUpload(output: UploadOutput) {
         if (output.type === 'allAddedToQueue') {
             let sessionKey = null;
             let companyUniqueName = null;
@@ -833,11 +930,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
-
+            const amount = (this.isAdvanceReceipt) ? transaction.advanceReceiptAmount : transaction.amount;
             if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
-                taxableValue = Number(transaction.amount) - transaction.discount;
+                taxableValue = Number(amount) - transaction.discount;
             } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
-                let rawAmount = Number(transaction.amount) - transaction.discount;
+                let rawAmount = Number(amount) - transaction.discount;
                 taxableValue = (rawAmount + ((rawAmount * transaction.tax) / 100));
             }
 
@@ -968,6 +1065,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public handleAdvanceReceiptChange(): void {
         this.currentTxn['subVoucher'] = this.isAdvanceReceipt ? Subvoucher.AdvanceReceipt : '';
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
+        this.calculateTax();
     }
 
     /**
@@ -1004,15 +1102,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.blankLedger.passportNumber = '';
     }
 
-     /**
-     * Merges the involved accounts (current ledger account and particular account) taxes
-     *
-     * @private
-     * @param {Array<string>} firstAccountTaxes Taxes array of first account
-     * @param {Array<string>} secondAccountTaxes Taxes array of second account
-     * @returns {Array<string>} Merged taxes array of unique taxes from both accounts
-     * @memberof NewLedgerEntryPanelComponent
-     */
+    /**
+    * Merges the involved accounts (current ledger account and particular account) taxes
+    *
+    * @private
+    * @param {Array<string>} firstAccountTaxes Taxes array of first account
+    * @param {Array<string>} secondAccountTaxes Taxes array of second account
+    * @returns {Array<string>} Merged taxes array of unique taxes from both accounts
+    * @memberof NewLedgerEntryPanelComponent
+    */
     private mergeInvolvedAccountsTaxes(firstAccountTaxes: Array<string>, secondAccountTaxes: Array<string>): Array<string> {
         const mergedAccountTaxes = (firstAccountTaxes) ? [...firstAccountTaxes] : [];
         if (secondAccountTaxes) {

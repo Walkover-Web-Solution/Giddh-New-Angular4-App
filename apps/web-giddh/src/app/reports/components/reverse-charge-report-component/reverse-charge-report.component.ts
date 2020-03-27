@@ -51,6 +51,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public bsConfig: Partial<BsDaterangepickerConfig> = { showWeekNumbers: false, dateInputFormat: "DD-MM-YYYY", rangeInputFormat: "DD-MM-YYYY" };
     public universalDate$: Observable<any>;
     public datePicker: any[] = [];
+    public universalDate: any[] = [];
 
     constructor(private store: Store<AppState>, private toasty: ToasterService, private cdRef: ChangeDetectorRef, private reverseChargeService: ReverseChargeService, private router: Router, private generalActions: GeneralActions) {
         this.setCurrentPageTitle();
@@ -80,9 +81,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
 
         this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
-                if(this.reverseChargeReportGetRequest.from !== moment(universalDate[0]).format(GIDDH_DATE_FORMAT) || this.reverseChargeReportGetRequest.to !== moment(universalDate[1]).format(GIDDH_DATE_FORMAT)) {
-                    this.datePicker = [moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(), moment(universalDate[1], GIDDH_DATE_FORMAT).toDate()];
+                this.universalDate = _.cloneDeep(dateObj);
+                if (this.reverseChargeReportGetRequest.from !== moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.reverseChargeReportGetRequest.to !== moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT)) {
+                    this.datePicker = [moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(), moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate()];
                 }
             }
         })).pipe(takeUntil(this.destroyed$)).subscribe();
@@ -139,7 +140,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public getReverseChargeReport(resetPage: boolean): void {
-        if (this.activeCompany && this.reverseChargeReportGetRequest.from && this.reverseChargeReportGetRequest.to && !this.isLoading) {
+        if (this.activeCompany && this.reverseChargeReportGetRequest.from && this.reverseChargeReportGetRequest.to) {
             this.isLoading = true;
 
             if (resetPage) {
@@ -230,5 +231,42 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         currentPageObj.name = "Reports > Reverse Charge";
         currentPageObj.url = this.router.url;
         this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
+    }
+
+    /**
+     * This function is used to check if filters are applied
+     *
+     * @returns {boolean}
+     * @memberof ReverseChargeReport
+     */
+    public checkIfFiltersApplied(): boolean {
+        if(this.reverseChargeReportPostRequest.invoiceNumber || this.reverseChargeReportPostRequest.supplierCountry || this.reverseChargeReportPostRequest.supplierName || this.reverseChargeReportPostRequest.voucherType || this.reverseChargeReportGetRequest.from !== moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.reverseChargeReportGetRequest.to !== moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * This function is used to reset filters
+     *
+     * @memberof ReverseChargeReport
+     */
+    public resetFilters(): void {
+        this.reverseChargeReportPostRequest = {
+            supplierName: '',
+            invoiceNumber: '',
+            supplierCountry: '',
+            voucherType: ''
+        };
+
+        this.reverseChargeReportGetRequest.sort = "";
+        this.reverseChargeReportGetRequest.sortBy = "";
+
+        if(this.reverseChargeReportGetRequest.from !== moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.reverseChargeReportGetRequest.to !== moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT)) {
+            this.datePicker = [moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(), moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate()];
+        } else {
+            this.getReverseChargeReport(true);
+        }
     }
 }

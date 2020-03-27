@@ -2,22 +2,22 @@
  * Created by kunalsaxena on 9/1/17.
  */
 import * as moment from 'moment/moment';
-import { InvoicePurchaseActions } from '../actions/purchase-invoice/purchase-invoice.action';
-import { select, Store } from '@ngrx/store';
-import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { ToasterService } from '../services/toaster.service';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { CompanyActions } from '../actions/company.actions';
-import { AlertConfig, BsDropdownDirective } from 'ngx-bootstrap';
-import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
-import { Observable, of, ReplaySubject } from 'rxjs';
-import { AppState } from '../store';
-import { take, takeUntil } from 'rxjs/operators';
-import { GstReconcileActions } from '../actions/gst-reconcile/GstReconcile.actions';
-import { Router } from '@angular/router';
-import { GstOverViewRequest } from '../models/api-models/GstReconcile';
-import { createSelector } from 'reselect';
+import {InvoicePurchaseActions} from '../actions/purchase-invoice/purchase-invoice.action';
+import {select, Store} from '@ngrx/store';
+import {CompanyResponse, StateDetailsRequest} from '../models/api-models/Company';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {ToasterService} from '../services/toaster.service';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import {CompanyActions} from '../actions/company.actions';
+import {AlertConfig, BsDropdownDirective} from 'ngx-bootstrap';
+import {GIDDH_DATE_FORMAT} from '../shared/helpers/defaultDateFormat';
+import {Observable, of, ReplaySubject} from 'rxjs';
+import {AppState} from '../store';
+import {take, takeUntil} from 'rxjs/operators';
+import {GstReconcileActions} from '../actions/gst-reconcile/GstReconcile.actions';
+import {Router} from '@angular/router';
+import {GstOverViewRequest} from '../models/api-models/GstReconcile';
+import {createSelector} from 'reselect';
 
 
 @Component({
@@ -168,7 +168,7 @@ export class GstComponent implements OnInit {
             this.store.dispatch(this._gstAction.GetOverView('gstr2', request));
             this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
         }
-        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = (isElectron||isCordova)  ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
 
     }
 

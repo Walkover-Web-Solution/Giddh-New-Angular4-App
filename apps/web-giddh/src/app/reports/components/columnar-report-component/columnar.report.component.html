@@ -1,0 +1,33 @@
+<div class="columnar-report-page">
+    <div class="container-fluid font-14">
+        <div class="clearfix mt-2 mb-2">
+            <ul class="list-inline d-inline-block middle nav-report">
+                <li class="active"><a href="javascript:void(0)" [routerLink]="['/pages/reports/reports-dashboard']">Report</a>
+                    <span class="d-inline-block pl-1"> ></span></li>
+                <li><a href="javascript:void(0)">Monthly Columnar Report</a></li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-sm-6 mb-1">
+                <sh-select [options]="selectYear" [placeholder]="'Select Year'" name="financialYear" (selected)="selectFinancialYear($event);" [forceClearReactive]="forceClear$ | async"></sh-select>
+            </div>
+            <div class="col-md-2 col-sm-6 mb-1">
+                <sh-select [showCheckbox]="true" [options]="monthNames" [multiple]="true" [placeholder]="'Select Month'" name="monthYear" [(ngModel)]="exportRequest.monthYear" [forceClearReactive]="forceClear$ | async"></sh-select>
+            </div>
+            <div class="col-md-2 col-sm-6 mb-1">
+                <sh-select [options]="flatGroupsOptions" [placeholder]="'Group'" name="group"
+                    (selected)="selectGroup($event);" [forceClearReactive]="forceClear$ | async"></sh-select>
+            </div>
+            <div class="col-md-2 col-sm-6 mb-1">
+                <sh-select [options]="showOpeningClosingBalance" [placeholder]="'Show Opening/Closing Balance'"
+                    name="showHideOpeningClosingBalance" [(ngModel)]="exportRequest.showHideOpeningClosingBalance" [forceClearReactive]="forceClear$ | async"></sh-select>
+            </div>
+            <div class="col-md-2 col-sm-6 mb-1">
+                <sh-select [options]="selectCrDr" [placeholder]="'Replace Cr/Dr with  +/-'"
+                    name="balanceTypeAsSign" [(ngModel)]="exportRequest.balanceTypeAsSign" [forceClearReactive]="forceClear$ | async"></sh-select>
+            </div>
+            <div class="col-md-2 col-sm-6 mb-1">
+                <button class="btn btn-pink" [disabled]="!isFormValid() || isLoading" (click)="exportReport();">Export</button>
+            </div>
+        </div>
+    </div>

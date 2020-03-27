@@ -57,4 +57,5 @@ export class CommandKRequest {
     page: any;
     q: string;
     group: string;
+    totalPages: number;
 }
