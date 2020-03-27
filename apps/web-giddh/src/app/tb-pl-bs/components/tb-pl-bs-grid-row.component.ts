@@ -31,7 +31,7 @@ import { take } from 'rxjs/operators';
             <div style="padding: 0px;border-right: 0px;" [innerHTML]="account.name | lowercase | highlight:search">
             </div>
 
-            <span account-detail-modal-component *ngIf="ModalUniqueName && ModalUniqueName === account.uniqueName"
+            <span account-detail-modal-component *ngIf="ModalUniqueName && ModalUniqueName === account.uniqueName" [shouldShowGenerateInvoice]="false"
                   [accountUniqueName]="account.uniqueName" [isModalOpen]="account.uniqueName === ModalUniqueName"
                   [from]="from" [to]="to">
             </span>
