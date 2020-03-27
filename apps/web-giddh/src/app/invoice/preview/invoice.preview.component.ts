@@ -226,15 +226,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     /**Adjust advance receipts */
     @ViewChild('adjustPaymentModal') public adjustPaymentModal: ModalDirective;
     public showAdvanceReceiptAdjust: boolean = false;
+    /** To check is advance receipts modal in update mode */
     public isUpdateMode = false;
+    /** selected invoice adjust advance receipts data */
     public advanceReceiptAdjustmentData: AdvanceReceiptAdjustment;
     public voucherDetails$: Observable<any>;
+    /** selected invoice details data  */
     public invFormData: VoucherClass = new VoucherClass();
+    /** selected invoice unique name for change status */
     public changeStatusInvoiceUniqueName: string = '';
-
-
-
-
 
     constructor(
         private store: Store<AppState>,
@@ -1437,7 +1437,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * To adjustinvoice with advance receipts
+     * To adjust invoice with advance receipts
      *
      * @param {ReceiptItem} item invoice details object
      * @memberof InvoicePreviewComponent
