@@ -58,3 +58,7 @@
     top: -1px !important;
     left: -1px !important;
 }
+.disabled a, .disabled a .item{
+    cursor: not-allowed !important;
+    color: gray !important;
+}
