@@ -620,10 +620,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             });
 
         this.voucherDetails$.subscribe(response => {
-            if (response) {
+            if (response && response.subTotal ) {
                 this.invFormData.voucherDetails.totalTaxableValue = response.subTotal.amountForAccount
                 this.invFormData.voucherDetails.subTotal = response.subTotal.amountForAccount;
+                if(response.advanceReceiptAdjustment) {
                 this.advanceReceiptAdjustmentData = response.advanceReceiptAdjustment;
+                }
                 this.showAdvanceReceiptAdjust = true;
                 this.adjustPaymentModal.show();
             }
@@ -1458,10 +1460,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-        * To close advance reciipt modal
-        *
-        * @memberof InvoicePreviewComponent
-        */
+    * To close advance receipt modal
+    *
+    * @memberof InvoicePreviewComponent
+    */
     public closeAdvanceReceiptModal(): void {
         this.showAdvanceReceiptAdjust = false;
         this.advanceReceiptAdjustmentData = null;
