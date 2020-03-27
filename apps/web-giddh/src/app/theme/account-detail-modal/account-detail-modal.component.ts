@@ -1,16 +1,16 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { AppState } from '../../store';
-import { select, Store } from '@ngrx/store';
-import { Observable, ReplaySubject } from 'rxjs';
-import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap';
+import { ReplaySubject } from 'rxjs';
+
+import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
+import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { BulkEmailRequest } from '../../models/api-models/Search';
+import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { AccountService } from '../../services/account.service';
 import { CompanyService } from '../../services/companyService.service';
 import { ToasterService } from '../../services/toaster.service';
-import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { Router } from '@angular/router';
-import { VoucherTypeEnum } from '../../models/api-models/Sales';
-import { AccountService } from '../../services/account.service';
+import { AppState } from '../../store';
 
 @Component({
     selector: '[account-detail-modal-component]',
@@ -86,7 +86,6 @@ export class AccountDetailModalComponent implements OnChanges {
 
     constructor(private store: Store<AppState>, private _companyServices: CompanyService,
         private _toaster: ToasterService, private _groupWithAccountsAction: GroupWithAccountsAction, private _accountService: AccountService,
-        private _router: Router,
         private changeDetectorRef: ChangeDetectorRef) {
     }
 
