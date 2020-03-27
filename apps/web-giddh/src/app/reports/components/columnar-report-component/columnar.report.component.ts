@@ -101,14 +101,14 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         if (!this.isLoading) {
             this.isLoading = true;
             let monthYear = [];
-            let tempDate = moment(new Date(this.fromMonth));
-            let monthsCount = moment(new Date(this.toMonth)).diff(tempDate, 'months');
+            let startDate = moment(new Date(this.fromMonth));
+            let monthsCount = moment(new Date(this.toMonth)).diff(startDate, 'months');
 
-            monthYear.push(moment(tempDate.toDate(), GIDDH_DATE_FORMAT).format("MM-YYYY"));
+            monthYear.push(moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MM-YYYY"));
 
-            for (let i = 1; i <= monthsCount; i++) {
-                tempDate = tempDate.add(1, 'month');
-                monthYear.push(moment(tempDate.toDate(), GIDDH_DATE_FORMAT).format("MM-YYYY"));
+            for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
+                startDate = startDate.add(1, 'month');
+                monthYear.push(moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MM-YYYY"));
             }
 
             this.exportRequest.monthYear = monthYear;
@@ -154,19 +154,19 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
 
             let financialYearStarts = moment(new Date(event.value.financialYearStarts.split("-").reverse().join("-")));
             let financialYearEnds = moment(new Date(event.value.financialYearEnds.split("-").reverse().join("-")));
-            let tempDate = financialYearStarts;
+            let startDate = financialYearStarts;
             let monthsCount = financialYearEnds.diff(financialYearStarts, 'months');
             
             this.fromMonthNames = [];
             this.toMonthNames = [];
 
-            this.fromMonthNames.push({label: moment(tempDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: tempDate.toDate()});
-            this.toMonthNames.push({label: moment(tempDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: tempDate.toDate()});
+            this.fromMonthNames.push({label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate()});
+            this.toMonthNames.push({label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate()});
 
-            for (let i = 1; i <= monthsCount; i++) {
-                tempDate = tempDate.add(1, 'month');
-                this.fromMonthNames.push({label: moment(tempDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: tempDate.toDate()});
-                this.toMonthNames.push({label: moment(tempDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: tempDate.toDate()});
+            for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
+                startDate = startDate.add(1, 'month');
+                this.fromMonthNames.push({label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate()});
+                this.toMonthNames.push({label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate()});
             }
         }
     }
@@ -195,15 +195,15 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         if(event.value) {
             let fromMonth = moment(new Date(this.financialYearSelected.financialYearStarts.split("-").reverse().join("-")));
             let toMonth = moment(new Date(this.financialYearSelected.financialYearEnds.split("-").reverse().join("-")));
-            let tempDate = fromMonth;
+            let startDate = fromMonth;
             let monthsCount = toMonth.diff(fromMonth, 'months');
             this.toMonthNames = [];
 
-            this.toMonthNames.push({label: moment(tempDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: tempDate.toDate(), disabled: (new Date(event.value) > tempDate.toDate())});
+            this.toMonthNames.push({label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate())});
 
-            for (let i = 1; i <= monthsCount; i++) {
-                tempDate = tempDate.add(1, 'month');
-                this.toMonthNames.push({label: moment(tempDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: tempDate.toDate(), disabled: (new Date(event.value) > tempDate.toDate())});
+            for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
+                startDate = startDate.add(1, 'month');
+                this.toMonthNames.push({label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate())});
             }
         }
     }
@@ -218,15 +218,15 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         if(event.value) {
             let fromMonth = moment(new Date(this.financialYearSelected.financialYearStarts.split("-").reverse().join("-")));
             let toMonth = moment(new Date(this.financialYearSelected.financialYearEnds.split("-").reverse().join("-")));
-            let tempDate = fromMonth;
+            let startDate = fromMonth;
             let monthsCount = toMonth.diff(fromMonth, 'months');
             this.fromMonthNames = [];
             
-            this.fromMonthNames.push({label: moment(tempDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: tempDate.toDate(), disabled: (new Date(event.value) < tempDate.toDate())});
+            this.fromMonthNames.push({label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate())});
 
-            for (let i = 1; i <= monthsCount; i++) {
-                tempDate = tempDate.add(1, 'month');
-                this.fromMonthNames.push({label: moment(tempDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: tempDate.toDate(), disabled: (new Date(event.value) < tempDate.toDate())});
+            for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
+                startDate = startDate.add(1, 'month');
+                this.fromMonthNames.push({label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate())});
             }
         }
     }
