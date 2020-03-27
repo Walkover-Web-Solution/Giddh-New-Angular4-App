@@ -23,7 +23,7 @@ export class AccountDetailModalComponent implements OnChanges {
     @Input() public accountUniqueName: string;
     @Input() public from: string;
     @Input() public to: string;
-    /** Required to hide go to invoice from modules that don't support it, for eg. Trial balance */
+    /** Required to hide generate invoice from modules that don't support it, for eg. Trial balance */
     @Input() public shouldShowGenerateInvoice: boolean = true;
 
     // take voucher type from parent component
