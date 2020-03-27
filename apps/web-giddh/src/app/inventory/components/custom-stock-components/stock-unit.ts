@@ -1,178 +1,178 @@
 export const StockUnits = [
     {
         label: 'Bags',
-        value: 'BAG'
+        value: 'bag'
     },
     {
         label: 'Bale',
-        value: 'BAL'
+        value: 'bal'
     },
     {
         label: 'Bundles',
-        value: 'BDL'
+        value: 'bdl'
     },
     {
         label: 'Buckles',
-        value: 'BKL'
+        value: 'bkl'
     },
     {
         label: 'Billion of units',
-        value: 'BOU'
+        value: 'bou'
     },
     {
         label: 'Box',
-        value: 'BOX'
+        value: 'box'
     },
     {
         label: 'Bottles',
-        value: 'BTL'
+        value: 'btl'
     },
     {
         label: 'Bunches',
-        value: 'BUN'
+        value: 'bun'
     },
     {
         label: 'Cans',
-        value: 'CAN'
+        value: 'can'
     },
     {
         label: 'Cubic meters',
-        value: 'CBM'
+        value: 'cbm'
     },
     {
         label: 'Cubic Centimeters',
-        value: 'CCM'
+        value: 'ccm'
     },
     {
         label: 'Centimeters',
-        value: 'CMS'
+        value: 'cms'
     },
     {
         label: 'Cartons',
-        value: 'CTN'
+        value: 'ctn'
     },
     {
         label: 'Dozens',
-        value: 'DOZ'
+        value: 'doz'
     },
     {
         label: 'Drums',
-        value: 'DRM'
+        value: 'drm'
     },
     {
         label: 'Great Gross',
-        value: 'GGK'
+        value: 'ggk'
     },
     {
         label: 'Grammes',
-        value: 'GMS'
+        value: 'gms'
     },
     {
         label: 'Gross',
-        value: 'GRS'
+        value: 'grs'
     },
     {
         label: 'Gross Yards',
-        value: 'GYD'
+        value: 'gyd'
     },
     {
         label: 'Kilograms',
-        value: 'KGS'
+        value: 'kgs'
     },
     {
         label: 'Kilolitre',
-        value: 'KLR'
+        value: 'klr'
     },
     {
         label: 'Kilometre',
-        value: 'KME'
+        value: 'kme'
     },
     {
         label: 'Mililitre',
-        value: 'MLT'
+        value: 'mlt'
     },
     {
         label: 'Meters',
-        value: 'MTR'
+        value: 'mtr'
     },
     {
         label: 'Metric Ton',
-        value: 'MTS'
+        value: 'mts'
     },
     {
         label: 'Numbers',
-        value: 'NOS'
+        value: 'nos'
     },
     {
         label: 'Packs',
-        value: 'PAC'
+        value: 'pac'
     },
     {
         label: 'Pieces',
-        value: 'PCS'
+        value: 'pcs'
     },
     {
         label: 'Pairs',
-        value: 'PRS'
+        value: 'prs'
     },
     {
         label: 'Quintal',
-        value: 'QTL'
+        value: 'qtl'
     },
     {
         label: 'Rolls',
-        value: 'ROL'
+        value: 'rol'
     },
     {
         label: 'Sets',
-        value: 'SET'
+        value: 'set'
     },
     {
         label: 'Square Feet',
-        value: 'SQF'
+        value: 'sqf'
     },
     {
         label: 'Square Meters',
-        value: 'SQM'
+        value: 'sqm'
     },
     {
         label: 'Square Yards',
-        value: 'SQY'
+        value: 'sqy'
     },
     {
         label: 'Tablets',
-        value: 'TBS'
+        value: 'tbs'
     },
     {
         label: 'Ten Gross',
-        value: 'TGM'
+        value: 'tgm'
     },
     {
         label: 'Thousands',
-        value: 'THD'
+        value: 'thd'
     },
     {
         label: 'Tonnes',
-        value: 'TON'
+        value: 'ton'
     },
     {
         label: 'Tubes',
-        value: 'TUB'
+        value: 'tub'
     },
     {
         label: 'US Gallons',
-        value: 'UGS'
+        value: 'ugs'
     },
     {
         label: 'Units',
-        value: 'UNT'
+        value: 'unt'
     },
     {
         label: 'Yards',
-        value: 'YDS'
+        value: 'yds'
     },
     {
         label: 'Others',
-        value: 'OTH'
+        value: 'oth'
     }
 ];

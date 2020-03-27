@@ -250,7 +250,12 @@ h1 {
     justify-content: center;
 }
 
-.login-box h1 {
+.login_box {
+    background: #fff8ea url("/assets/images/banner-grid-design.png") repeat;
+    padding: 20px 70px;
+}
+
+.login_box h1 {
     color: #0f0f27;
     font-weight: 500;
 }

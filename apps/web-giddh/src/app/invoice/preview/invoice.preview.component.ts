@@ -708,10 +708,10 @@ public toggleBulkUpdatePopup(isClose: boolean): void {
             let objItem = item || this.selectedInvoiceForDetails;
             let actionToPerform = ev;
             if (actionToPerform === 'paid') {
-                this.invoicePaymentModelComponent.loadPaymentModes();
-                this.selectedInvoice = objItem;
                 this.performActionOnInvoiceModel.show();
                 setTimeout(() => {
+                    this.invoicePaymentModelComponent.loadPaymentModes();
+                    this.selectedInvoice = objItem;
                     this.invoicePaymentModelComponent.focusAmountField();
                 }, 500);
             } else {
