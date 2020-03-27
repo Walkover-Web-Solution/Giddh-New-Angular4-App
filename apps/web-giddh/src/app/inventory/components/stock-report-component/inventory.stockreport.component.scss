@@ -239,9 +239,9 @@ button[aria-expanded="true"] i {
 .icon-pointer .activeTextColor {
     color: $activeIconTh;
 }
-.stickyFooterSaleAmount {
-    .innerContentFooter {
-        padding-left: 260px;
+.sticky-footer-sale-amount {
+    .inner-content-footer {
+        padding-left: 15px;
         padding-right: 80px;
         min-height: 60px;
         .flex-col {
@@ -249,12 +249,7 @@ button[aria-expanded="true"] i {
             justify-content: center;
             align-items: center;
             vertical-align: middle;
-        }
-        .flex-col:nth-child(odd) {
             min-width: 120px;
-        }
-        .flex-col:nth-child(even) {
-            min-width: 50px;
         }
         .operators {
             font-size: 39px;
