@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -23,6 +23,8 @@ export class AccountDetailModalComponent implements OnChanges {
     @Input() public accountUniqueName: string;
     @Input() public from: string;
     @Input() public to: string;
+    /** Required to hide go to invoice from modules that don't support it, for eg. Trial balance */
+    @Input() public shouldShowGenerateInvoice: boolean = true;
 
     // take voucher type from parent component
     @Input() public voucherType: VoucherTypeEnum;
@@ -84,7 +86,8 @@ export class AccountDetailModalComponent implements OnChanges {
 
     constructor(private store: Store<AppState>, private _companyServices: CompanyService,
         private _toaster: ToasterService, private _groupWithAccountsAction: GroupWithAccountsAction, private _accountService: AccountService,
-        private _router: Router) {
+        private _router: Router,
+        private changeDetectorRef: ChangeDetectorRef) {
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -104,6 +107,7 @@ export class AccountDetailModalComponent implements OnChanges {
         this._accountService.GetAccountDetailsV2(accountUniqueName).subscribe(response => {
             if (response.status === 'success') {
                 this.accInfo = response.body;
+                this.changeDetectorRef.detectChanges();
             } else {
                 this._toaster.errorToast(response.message);
             }
