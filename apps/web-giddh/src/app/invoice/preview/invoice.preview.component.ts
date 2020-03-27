@@ -237,6 +237,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public invFormData: VoucherClass = new VoucherClass();
     /** selected invoice unique name for change status */
     public changeStatusInvoiceUniqueName: string = '';
+    /** Total deposit amount of invoice */
+    public depositAmount: number = 0;
 
     constructor(
         private store: Store<AppState>,
@@ -622,11 +624,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             });
 
         this.voucherDetails$.subscribe(response => {
-            if (response && response.subTotal ) {
+            if (response && response.subTotal) {
                 this.invFormData.voucherDetails.totalTaxableValue = response.subTotal.amountForAccount
                 this.invFormData.voucherDetails.subTotal = response.subTotal.amountForAccount;
-                if(response.advanceReceiptAdjustment) {
-                this.advanceReceiptAdjustmentData = response.advanceReceiptAdjustment;
+                if (response.advanceReceiptAdjustment) {
+                    this.advanceReceiptAdjustmentData = response.advanceReceiptAdjustment;
+                }
+                if(response['deposit']) {
+                   this.depositAmount = response.deposit.amountForAccount;
                 }
                 this.showAdvanceReceiptAdjust = true;
                 this.adjustPaymentModal.show();
