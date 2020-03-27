@@ -620,7 +620,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             });
 
         this.voucherDetails$.subscribe(response => {
-            console.log('v details', response);
             if (response) {
                 this.invFormData.voucherDetails.totalTaxableValue = response.subTotal.amountForAccount
                 this.invFormData.voucherDetails.subTotal = response.subTotal.amountForAccount;
@@ -659,12 +658,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @param {boolean} isClosed  Boolean to check model need to close or not
      * @memberof InvoicePreviewComponent
      */
-    public toggleAdvanceSearchPopup(isClosed: boolean) {
+    public toggleAdvanceSearchPopup(isClosed: boolean): void {
         if (isClosed) {
             this.toggleAllItems(false);
         }
         this.advanceSearch.toggle();
-
     }
 
     /**
@@ -1442,7 +1440,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @param {ReceiptItem} item invoice details object
      * @memberof InvoicePreviewComponent
      */
-    public onPerformAdjustPaymentAction(item: ReceiptItem) {
+    public onPerformAdjustPaymentAction(item: ReceiptItem): void {
         this.invFormData.voucherDetails.balanceDue = item.balanceDue.amountForAccount;
         this.invFormData.voucherDetails.grandTotal = item.grandTotal.amountForAccount;
         this.invFormData.voucherDetails.customerName = item.account.name;
@@ -1464,7 +1462,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         *
         * @memberof InvoicePreviewComponent
         */
-    public closeAdvanceReceiptModal() {
+    public closeAdvanceReceiptModal(): void {
         this.showAdvanceReceiptAdjust = false;
         this.advanceReceiptAdjustmentData = null;
         this.changeStatusInvoiceUniqueName = ''
@@ -1489,10 +1487,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 } else {
                     this._toaster.errorToast(response.message);
                 }
-                console.log(response);
             }
         })
-        console.log(this.advanceReceiptAdjustmentData);
         this.closeAdvanceReceiptModal();
     }
 }
