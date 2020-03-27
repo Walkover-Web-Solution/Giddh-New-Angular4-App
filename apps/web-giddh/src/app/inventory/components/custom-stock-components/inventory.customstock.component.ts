@@ -291,7 +291,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
      */
     public handleUnitCodeValidation(isInvalid: boolean): void {
         if (isInvalid) {
-            this.toasterService.errorToast('Invalid Unit Code');
+            this.toasterService.errorToast('Only numbers and lower case alphabets without spaces are allowed!', 'Invalid Unit Code');
         }
     }
 }
