@@ -1971,6 +1971,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (isNaN(count)) {
             count = 0;
         }
+        if (!this.isUpdateMode) {
+            this.adjustPaymentBalanceDueData = this.invFormData.voucherDetails.grandTotal - this.adjustPaymentData.totalAdjustedAmount;
+            this.adjustPaymentBalanceDueData = this.adjustPaymentBalanceDueData - depositAmount;
+        }
 
         this.invFormData.voucherDetails.balanceDue =
             ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - depositAmount - Number(this.depositAmountAfterUpdate);
@@ -4245,7 +4249,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // this.invFormData.voucherDetails.balanceDue = advanceReceiptsAdjustEvent.adjustPaymentData.balanceDue;
         this.adjustPaymentBalanceDueData = advanceReceiptsAdjustEvent.adjustPaymentData.grandTotal - advanceReceiptsAdjustEvent.adjustPaymentData.totalAdjustedAmount;
 
-        if(this.depositAmount) {
+        if (this.depositAmount) {
             let deposit = cloneDeep(this.depositAmount);
             this.adjustPaymentBalanceDueData = this.adjustPaymentBalanceDueData - deposit;
         }
