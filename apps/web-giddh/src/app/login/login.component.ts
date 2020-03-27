@@ -103,7 +103,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 private _authService: AuthenticationService,
                 private _generalService: GeneralService
     ) {
-        this.urlPath = (isElectron || isCordova) ? "" : AppUrl + APP_FOLDER;
+        this.urlPath = (isElectron || isCordova()) ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = store.select(state => {
             return state.login.isLoginWithEmailInProcess;
         }).pipe(takeUntil(this.destroyed$));
