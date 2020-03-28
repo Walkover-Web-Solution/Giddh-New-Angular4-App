@@ -236,7 +236,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      */
     public deleteAdjustVoucherRow(index: number): void {
         let selectedItem = this.newAdjustVoucherOptions.find(item => item.value === this.adjustVoucherForm.adjustments[index].uniqueName);
+        if(selectedItem && selectedItem.value && selectedItem.label && selectedItem.additional) {
         this.adjustVoucherOptions.push({ value: selectedItem.value, label: selectedItem.label, additional: selectedItem.additional });
+        }
         this.adjustVoucherOptions = _.uniqBy(this.adjustVoucherOptions, (item) => {
             return item.value && item.label.trim();
         });

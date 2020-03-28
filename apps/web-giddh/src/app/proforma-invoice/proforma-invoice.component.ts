@@ -4205,7 +4205,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      *
      * @memberof ProformaInvoiceComponent
      */
-    public resetAdvanceReceiptAdjustData() {
+    public resetAdvanceReceiptAdjustData(): void {
         this.adjustPaymentData.customerName = '',
             this.adjustPaymentData.customerUniquename = '',
             this.adjustPaymentData.voucherDate = '',
