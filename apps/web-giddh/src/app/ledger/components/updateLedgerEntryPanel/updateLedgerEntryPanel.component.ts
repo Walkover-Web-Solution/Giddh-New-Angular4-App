@@ -972,6 +972,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         // if no petty cash mode then do normal update ledger request
         if (!this.isPettyCash) {
+            requestObj['handleNetworkDisconnection'] = true;
             if (this.baseAccountChanged) {
                 this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName + '?newAccountUniqueName=' + this.changedAccountUniq));
             } else {
