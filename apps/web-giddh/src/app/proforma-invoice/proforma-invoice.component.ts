@@ -1496,10 +1496,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public convertDateForAPI(val: any): string {
         if (val) {
-            try {
-                return moment(val).format(GIDDH_DATE_FORMAT);
-            } catch (error) {
-                return '';
+            // To check val is DD-MM-YY format already so it will be string then return val
+            if (typeof val === 'string' && val.includes('-')) {
+                return val;
+            } else {
+                try {
+                    return moment(val).format(GIDDH_DATE_FORMAT);
+                } catch (error) {
+                    return '';
+                }
             }
         } else {
             return '';
@@ -1970,6 +1975,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (isNaN(count)) {
             count = 0;
         }
+        if (!this.isUpdateMode) {
+            this.adjustPaymentBalanceDueData = this.invFormData.voucherDetails.grandTotal - this.adjustPaymentData.totalAdjustedAmount;
+            this.adjustPaymentBalanceDueData = this.adjustPaymentBalanceDueData - depositAmount;
+        }
 
         this.invFormData.voucherDetails.balanceDue =
             ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - depositAmount - Number(this.depositAmountAfterUpdate);
@@ -2251,6 +2260,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.bankAccounts$ = observableOf(this.updateBankAccountObject(item.additional.currency));
             }
         }
+        /** To reset advance receipt data */
+        this.resetAdvanceReceiptAdjustData();
     }
 
     public onSelectBankCash(item: IOption) {
@@ -4210,6 +4221,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     // Advance receipts adjustment start
 
     /**
+     * To reset advance receipt adjusted data
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public resetAdvanceReceiptAdjustData(): void {
+        this.adjustPaymentData.customerName = '',
+        this.adjustPaymentData.customerUniquename = '',
+        this.adjustPaymentData.voucherDate = '',
+        this.adjustPaymentData.balanceDue = 0,
+        this.adjustPaymentData.dueDate = '',
+        this.adjustPaymentData.grandTotal = 0,
+        this.adjustPaymentData.gstTaxesTotal = 0,
+        this.adjustPaymentData.subTotal = 0,
+        this.adjustPaymentData.totalTaxableValue = 0,
+        this.adjustPaymentData.totalAdjustedAmount = 0
+    }
+    /**
      * To close advance reciipt modal
      *
      * @memberof ProformaInvoiceComponent
@@ -4264,6 +4292,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
         // this.invFormData.voucherDetails.balanceDue = advanceReceiptsAdjustEvent.adjustPaymentData.balanceDue;
         this.adjustPaymentBalanceDueData = advanceReceiptsAdjustEvent.adjustPaymentData.grandTotal - advanceReceiptsAdjustEvent.adjustPaymentData.totalAdjustedAmount;
+
+        if (this.depositAmount) {
+            let deposit = cloneDeep(this.depositAmount);
+            this.adjustPaymentBalanceDueData = this.adjustPaymentBalanceDueData - deposit;
+        }
         this.adjustPaymentData = advanceReceiptsAdjustEvent.adjustPaymentData;
         if (this.isUpdateMode) {
             this.calculateAdjustedVoucherTotal(advanceReceiptsAdjustEvent.adjustVoucherData.adjustments)

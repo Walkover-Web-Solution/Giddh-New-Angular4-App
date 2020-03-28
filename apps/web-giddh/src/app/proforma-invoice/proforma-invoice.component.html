@@ -275,7 +275,7 @@
                                     <span class="balance-due">{{isProformaInvoice || isEstimateInvoice ? 'Total Amount' : 'Balance Due'}}</span>
                                     <span class="sp-rupees" *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}
                                         <strong>
-                                            <ng-container *ngIf="adjustPaymentBalanceDueData">
+                                            <ng-container *ngIf="adjustPaymentData?.totalAdjustedAmount">
                                                 {{adjustPaymentBalanceDueData | giddhCurrency}}</ng-container>
                                             <ng-container *ngIf="!adjustPaymentBalanceDueData">
                                                 {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</ng-container>
@@ -286,7 +286,7 @@
                                     <span>{{invFormData.voucherDetails.balanceDue * exchangeRate - adjustPaymentBalanceDueData | giddhCurrency}}</span>
                                     </span>
                                     <span class="sp-rupees" *ngIf='!isMulticurrencyAccount'>
-                                        <ng-container *ngIf="adjustPaymentBalanceDueData">
+                                        <ng-container *ngIf="adjustPaymentData?.totalAdjustedAmount">
                                             {{adjustPaymentBalanceDueData | giddhCurrency}}</ng-container>
                                         <ng-container *ngIf="!adjustPaymentBalanceDueData">
                                             {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</ng-container>
@@ -1251,10 +1251,10 @@
                                         <li class="clearfix mrT1 biggerDollar" *ngIf="isSalesInvoice ">
                                             <strong class="pull-right balanceDueText"> <span
                                                                         *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>
-                                                                    <ng-container *ngIf="adjustPaymentBalanceDueData">
+                                                                    <ng-container *ngIf="adjustPaymentData?.totalAdjustedAmount">
                                                                         {{adjustPaymentBalanceDueData | giddhCurrency }}
                                                                     </ng-container>
-                                                                    <ng-container *ngIf="!adjustPaymentBalanceDueData">
+                                                                    <ng-container *ngIf="!adjustPaymentData?.totalAdjustedAmount">
                                                                         {{invFormData.voucherDetails.balanceDue | giddhCurrency }}
                                                                     </ng-container>
                                                                 </strong>
@@ -2221,8 +2221,8 @@
 <div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent [isUpdateMode]="isUpdateMode" [invoiceFormDetails]="invFormData" [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData" (closeModelEvent)="closeAdvanceReceiptModal()"
-                (submitClicked)="getAdvanceReceiptAdjustData($event)">
+            <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent [isUpdateMode]="isUpdateMode" [depositAmount]="depositAmount" [invoiceFormDetails]="invFormData" [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
+                (closeModelEvent)="closeAdvanceReceiptModal()" (submitClicked)="getAdvanceReceiptAdjustData($event)">
             </advance-receipt-adjustment-component>
         </div>
     </div>

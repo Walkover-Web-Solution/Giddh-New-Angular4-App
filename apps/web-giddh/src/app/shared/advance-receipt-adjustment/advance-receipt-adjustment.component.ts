@@ -64,6 +64,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     @Input() public invoiceFormDetails;
     @Input() public isUpdateMode;
+    @Input() public depositAmount = 0;
     @Input() public advanceReceiptAdjustmentUpdatedData: AdvanceReceiptAdjustment;
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public submitClicked: EventEmitter<{ adjustVoucherData: AdvanceReceiptAdjustment, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
@@ -100,7 +101,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             ]
         };
         if (this.advanceReceiptAdjustmentUpdatedData) {
-            this.adjustVoucherForm = this.advanceReceiptAdjustmentUpdatedData.adjustments.length? this.advanceReceiptAdjustmentUpdatedData: this.adjustVoucherForm;
+            this.adjustVoucherForm = this.advanceReceiptAdjustmentUpdatedData.adjustments.length ? this.advanceReceiptAdjustmentUpdatedData : this.adjustVoucherForm;
             if (this.advanceReceiptAdjustmentUpdatedData && this.advanceReceiptAdjustmentUpdatedData.adjustments && this.advanceReceiptAdjustmentUpdatedData.adjustments.length && this.advanceReceiptAdjustmentUpdatedData.tdsTaxUniqueName) {
                 this.isTaxDeducted = true;
             } else {
@@ -108,7 +109,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             }
         }
         if (this.invoiceFormDetails && this.invoiceFormDetails.voucherDetails) {
+            if (typeof this.invoiceFormDetails.voucherDetails.voucherDate !== 'string' && !this.invoiceFormDetails.voucherDetails.voucherDate.includes('-')) {
                 this.invoiceFormDetails.voucherDetails.voucherDate = moment(this.invoiceFormDetails.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
+            }
             this.assignVoucherDetails();
         }
         this.getAllAdvanceReceipts();
@@ -233,7 +236,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      */
     public deleteAdjustVoucherRow(index: number): void {
         let selectedItem = this.newAdjustVoucherOptions.find(item => item.value === this.adjustVoucherForm.adjustments[index].uniqueName);
+        if(selectedItem && selectedItem.value && selectedItem.label && selectedItem.additional) {
         this.adjustVoucherOptions.push({ value: selectedItem.value, label: selectedItem.label, additional: selectedItem.additional });
+        }
         this.adjustVoucherOptions = _.uniqBy(this.adjustVoucherOptions, (item) => {
             return item.value && item.label.trim();
         });
