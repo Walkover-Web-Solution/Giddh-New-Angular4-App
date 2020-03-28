@@ -199,6 +199,9 @@ export class LedgerActions {
                 if (response.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
+                } else if (response.status === 'no-network') {
+                    this.ResetUpdateLedger();
+                    return { type: 'EmptyAction' };
                 } else {
                     this._toasty.successToast('entry updated successfully');
                     if (response.request.generateInvoice && !response.body.voucherGenerated) {
