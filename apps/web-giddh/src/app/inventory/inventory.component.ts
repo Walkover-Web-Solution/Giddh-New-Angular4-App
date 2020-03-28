@@ -157,7 +157,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public ngOnInit() {
 
         this.isBranchVisible$ = this.store.select(s => s.inventory.showBranchScreen).pipe(takeUntil(this.destroyed$));
-        document.querySelector('body').classList.add('inventorypage');
+        document.querySelector('body').classList.add('inventory-page');
 
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
 

@@ -104,13 +104,13 @@ tfoot td .tableSec.form-group {
     font-size: 26px;
     font-family: opensans-semibold;
 }
-
-.multipleProductsWrapper table thead,
-.multipleReciverWrapper table thead {
+.multiple-products-wrapper form{
+    padding-bottom: 60px;
+}
+.multiple-products-wrapper  table thead{
     border-top: 1px solid #d9d9d9;
 }
-.multipleProductsWrapper table tbody,
-.multipleReciverWrapper table tbody {
+.multiple-products-wrapper  table tbody {
     border-bottom: 1px solid #d9d9d9;
 }
 #actionPane {

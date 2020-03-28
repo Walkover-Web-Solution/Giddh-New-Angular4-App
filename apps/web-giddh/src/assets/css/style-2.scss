@@ -7876,7 +7876,7 @@ footer#footer.absoulte-footer {
     position: relative;
 }
 
-.inventorypage footer#footer.absoulte-footer[_ngcontent-c4] {
+.inventory-page footer#footer.absoulte-footer[_ngcontent-c4] {
     bottom: -60px;
     background-color: transparent !important;
 }
@@ -8732,8 +8732,8 @@ p.remvBrnchName {
     top: 0;
 }
 
-.inventorypage .modal,
-.inventorypage .reciptNoteModal {
+.inventory-page .modal,
+.inventory-page .reciptNoteModal {
     margin-top: 0;
     border-radius: 0;
 }
@@ -8874,6 +8874,27 @@ input.checkbox-custom[type="checkbox"] {
 
 .modal-invoice-preview .modal-body {
     padding: 0;
+}
+
+.select2-parent.select2-ledger .update-ledger-account input {
+    padding-left: 4px !important;
+}
+.select2-parent.select2-ledger
+    .update-ledger-account
+    input.form-control.focused {
+    padding-left: 10px !important;
+}
+.select2-parent.select2-ledger .ledger-account-label input.form-control {
+    padding-left: 1px !important;
+}
+.select2-parent.select2-ledger
+    .ledger-account-label
+    input.form-control.focused {
+    padding-left: 10px !important;
+}
+
+.inventory-page.modal-open .reciptNoteModal {
+    margin-bottom: 0;
 }
 
 /* responsive */
