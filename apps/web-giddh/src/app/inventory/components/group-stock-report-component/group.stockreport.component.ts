@@ -763,7 +763,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
     openModal() {
         this.modalRef = this.modalService.show(
             this.template,
-            Object.assign({}, { class: 'modal-lg reciptNoteModal' })
+            Object.assign({}, { class: 'modal-lg recipt-note-modal ' })
         );
     }
 
