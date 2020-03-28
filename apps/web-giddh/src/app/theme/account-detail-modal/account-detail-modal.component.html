@@ -36,7 +36,7 @@
                             <a href="javascript: void 0" (click)="performActions(1)">Go to Ledger</a>
                         </li>
 
-                        <li class="li-link">
+                        <li class="li-link" *ngIf="shouldShowGenerateInvoice">
                             <a href="javascript: void 0" (click)="performActions(2)">Generate Invoice</a>
                         </li>
 
