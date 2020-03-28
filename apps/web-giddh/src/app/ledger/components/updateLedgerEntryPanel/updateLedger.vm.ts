@@ -315,11 +315,11 @@ export class UpdateLedgerVm {
         this.companyTaxesList$.subscribe(taxes => companyTaxes = taxes);
 
         if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
-
+            const amount = (this.isAdvanceReceipt) ? this.advanceReceiptAmount : this.totalAmount;
             if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
-                taxableValue = Number(this.totalAmount) - this.discountTrxTotal;
+                taxableValue = Number(amount) - this.discountTrxTotal;
             } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
-                let rawAmount = Number(this.totalAmount) - this.discountTrxTotal;
+                let rawAmount = Number(amount) - this.discountTrxTotal;
                 taxableValue = (rawAmount + ((rawAmount * this.appliedTaxPerTotal) / 100));
             }
 

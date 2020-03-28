@@ -289,7 +289,7 @@ export class GeneralService {
 
         let hourOffset = convertdLocalTime.getTimezoneOffset() / 60;
 
-        convertdLocalTime.setHours(convertdLocalTime.getHours() + hourOffset);
+        convertdLocalTime.setMinutes(convertdLocalTime.getMinutes() - (hourOffset*60));
 
         return convertdLocalTime;
     }
@@ -318,12 +318,34 @@ export class GeneralService {
      */
     public removeSelectAllFromArray(array: Array<string>): Array<string> {
         let newArray = [];
-        array.forEach(key => {
-            if(key !== "selectall") {
-                newArray.push(key);
-            }
-        });
+        if(array && array.length > 0) {
+            array.forEach(key => {
+                if(key !== "selectall") {
+                    newArray.push(key);
+                }
+            });
+        }
 
         return newArray;
+    }
+
+    /**
+     * Calculates tax inclusively for Advance receipt else exclusively
+     *
+     * @param {boolean} [inclusive=false] If true, inclusive tax will be calculated
+     * @param {number} amount Amount on which tax needs to be calculated
+     * @param {number} totalTaxPercentage  Tax percentage sum total
+     * @param {number} totalDiscount Discount amount (and not percentage) applicable on amount
+     * @returns {number} Tax value
+     * @memberof GeneralService
+     */
+    public calculateInclusiveOrExclusiveTaxes(inclusive = false, amount: number, totalTaxPercentage: number, totalDiscount: number): number {
+        if (inclusive) {
+            // Inclusive tax rate
+            return (totalTaxPercentage * (Number(amount) - totalDiscount)) / (100 + totalTaxPercentage);
+        } else {
+            // Exclusive tax rate
+            return ((totalTaxPercentage * (Number(amount) - totalDiscount)) / 100);
+        }
     }
 }

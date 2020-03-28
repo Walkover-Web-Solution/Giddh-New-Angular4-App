@@ -306,7 +306,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public ngOnChanges(changes: SimpleChanges): void {
         if (this.currentTxn && this.currentTxn.selectedAccount) {
             let activeAccountTaxes = [];
-            this.currentTxn.advanceReceiptAmount = this.currentTxn.amount;
+            this.currentTxn.advanceReceiptAmount = giddhRoundOff(this.currentTxn.amount, this.giddhBalanceDecimalPlaces);
             if (this.activeAccount && this.activeAccount.applicableTaxes) {
                 activeAccountTaxes = this.activeAccount.applicableTaxes.map((tax) => tax.uniqueName);
             }
@@ -397,13 +397,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         totalPercentage = this.currentTxn.taxesVm.reduce((pv, cv) => {
             return cv.isChecked ? pv + cv.amount : pv;
         }, 0);
-        if (this.isAdvanceReceipt) {
-            // Inclusive tax rate
-            this.currentTxn.tax = giddhRoundOff((totalPercentage * this.currentTxn.amount) / (100 + totalPercentage), this.giddhBalanceDecimalPlaces);
-        } else {
-            // Exclusive tax rate
-            this.currentTxn.tax = giddhRoundOff(((totalPercentage * (Number(this.currentTxn.amount) - this.currentTxn.discount)) / 100), this.giddhBalanceDecimalPlaces);
-        }
+        this.currentTxn.tax = giddhRoundOff(
+            this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceipt, this.currentTxn.amount, totalPercentage, this.currentTxn.discount),
+            this.giddhBalanceDecimalPlaces);
         this.currentTxn.convertedTax = this.calculateConversionRate(this.currentTxn.tax);
         this.calculateTotal();
     }
@@ -413,6 +409,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (this.isAdvanceReceipt) {
                 this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
                 this.currentTxn.total = giddhRoundOff((this.currentTxn.advanceReceiptAmount + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                this.totalForTax = this.currentTxn.total;
             } else {
                 let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
                 this.totalForTax = total;
@@ -933,11 +930,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
-
+            const amount = (this.isAdvanceReceipt) ? transaction.advanceReceiptAmount : transaction.amount;
             if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
-                taxableValue = Number(transaction.amount) - transaction.discount;
+                taxableValue = Number(amount) - transaction.discount;
             } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
-                let rawAmount = Number(transaction.amount) - transaction.discount;
+                let rawAmount = Number(amount) - transaction.discount;
                 taxableValue = (rawAmount + ((rawAmount * transaction.tax) / 100));
             }
 

@@ -103,14 +103,9 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
             }
         }
 
-        if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
-            if (this.isAdvanceReceipt) {
-                // Inclusive tax calculation
-                this.formattedTotal = `${giddhRoundOff((this.totalForTax * this.sum) / (100 + this.sum), 2)}`;
-            } else {
-                // Exclusive tax calculation
-                this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
-            }
+        if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue ||
+            changes['isAdvanceReceipt'] && changes['isAdvanceReceipt'].currentValue !== changes['isAdvanceReceipt'].previousValue) {
+            this.calculateInclusiveOrExclusiveFormattedTax();
         }
     }
 
@@ -181,13 +176,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     public change() {
         this.selectedTaxes = [];
         this.sum = this.calculateSum();
-        if (this.isAdvanceReceipt) {
-            // Inclusive tax calculation
-            this.formattedTotal = `${giddhRoundOff((this.totalForTax * this.sum) / (100 + this.sum), 2)}`;
-        } else {
-            // Exclusive tax calculation
-            this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
-        }
+        this.calculateInclusiveOrExclusiveFormattedTax();
         this.selectedTaxes = this.generateSelectedTaxes();
 
         if (this.allowedSelection > 0) {
@@ -326,5 +315,21 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
             tax.amount = p.amount;
             return tax;
         });
+    }
+
+    /**
+     * Calculates tax inclusively for Advance receipt else exclusively
+     *
+     * @private
+     * @memberof UpdateLedgerTaxControlComponent
+     */
+    private calculateInclusiveOrExclusiveFormattedTax(): void {
+        if (this.isAdvanceReceipt) {
+            // Inclusive tax calculation
+            this.formattedTotal = `${giddhRoundOff((this.totalForTax * this.sum) / (100 + this.sum), 2)}`;
+        } else {
+            // Exclusive tax calculation
+            this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
+        }
     }
 }

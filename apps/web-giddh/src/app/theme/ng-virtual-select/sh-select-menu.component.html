@@ -6,7 +6,7 @@
         [showNotFoundLinkAsDefault]="showNotFoundLinkAsDefault" [noResultLinkEnabled]="noResultLinkEnabled">
 
         <div class="item" *ngFor="let row of viewPortItems" [class.selected]="selectedValues?.indexOf(row) !== -1"
-            [class.hilighted]="row.isHilighted" (click)="toggleSelected(row)" [style.height.px]="ItemHeight">
+            [class.hilighted]="row.isHilighted" [class.disabled]="row.disabled" (click)="toggleSelected(row)" [style.height.px]="ItemHeight">
             <ng-template [ngTemplateOutletContext]="{option: row}" [ngTemplateOutlet]="optionTemplate"></ng-template>
             <ng-container *ngIf="!optionTemplate">
                 <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">

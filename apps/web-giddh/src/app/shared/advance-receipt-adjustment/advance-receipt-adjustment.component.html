@@ -21,7 +21,7 @@
                 <div class="col-md-3 text-right font-14 pt-2 xs-left" *ngIf="!isUpdateMode">
                     <p>Invoice Total: <i class="font-10"></i>{{invoiceFormDetails.accountDetails.currencySymbol}}{{adjustPayment?.grandTotal | giddhCurrency}}
                     </p>
-                    <p>Due <span class="text-light">(Post Adj):</span> <i class="font-10"></i>{{invoiceFormDetails.accountDetails.currencySymbol}}{{ adjustPayment.grandTotal - adjustPayment.totalAdjustedAmount | giddhCurrency}}
+                    <p>Due <span class="text-light">(Post Adj):</span> <i class="font-10"></i>{{invoiceFormDetails.accountDetails.currencySymbol}}{{ adjustPayment.grandTotal - adjustPayment.totalAdjustedAmount - depositAmount | giddhCurrency}}
                     </p>
                 </div>
             </div>
@@ -128,7 +128,7 @@
                         </div>
                     </ng-container>
                     <span class="text-light" *ngIf="isUpdateMode">
-                Excess amount: {{invoiceFormDetails.accountDetails.currencySymbol}}{{adjustPayment.totalAdjustedAmount- adjustPayment.grandTotal | giddhCurrency}}
+                Excess amount: {{invoiceFormDetails.accountDetails.currencySymbol}}{{adjustPayment.totalAdjustedAmount- adjustPayment.grandTotal - depositAmount  | giddhCurrency}}
             </span>
                     <div class="mt-4">
                         <button *ngIf="!isUpdateMode" type="button" class="btn btn-success mrR1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt()">Save</button>

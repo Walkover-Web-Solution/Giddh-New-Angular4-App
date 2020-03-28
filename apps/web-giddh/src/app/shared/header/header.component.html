@@ -177,7 +177,7 @@
 
             </div>
             <div class="col-sm-6">
-                <div class="giddh-logo">
+                <div class="giddh-logo" (click)="forceOpenNavigation = true;">
 
                     <!-- [attachOutsideOnClick]="true" [isOpen]="companyMenu.isopen"  [attachOutsideOnClick]="true" (clickOutside)="closeUserMenu(dropdown)"-->
             <li class="company-name pos-rel" [autoClose]="false" dropdown #dropdown="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="dropdown.isOpen = false">
@@ -425,6 +425,7 @@
                                                 *ngIf="activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode != 'IN'">Vat
                                                 Report</a></li>
                                         <li><a (click)="analyzeOtherMenus('home')">Dashboard</a></li>
+                                        <li><a (click)="analyzeOtherMenus('reports/reports-dashboard')">Reports</a></li>
                                     </ul>
 
                                 </div>
@@ -735,15 +736,6 @@
 
 
 <ng-template #headDropdownMenu>
-        <!-- dropdown  #dropdown="bs-dropdown" [autoClose]="false" -->
-        <!-- <li class="pos-rel pdT1" tooltip="{{seletedCompanywithBranch}}" placement="bottom">
-    <a href="javascript:void(0)" class="clearfix" dropdownToggle>
-      <div class="ellp bold">{{ (selectedCompany | async)?.name }} <span
-          *ngIf="(selectedCompany | async)?.nameAlias"
-          style="color: #4B5196;">({{ (selectedCompany | async)?.nameAlias }})</span></div>
-      <small class="ellp">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }}</small>
-    </a>
-  </li> -->
 
         <li>
             <div class="cText head-nav">

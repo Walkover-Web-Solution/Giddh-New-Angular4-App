@@ -137,7 +137,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public activeAccount: AccountResponse;
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public showAdvanced: boolean;
-    public currentAccountApplicableTaxes: string[] = [];
+    // public currentAccountApplicableTaxes: string[] = [];
 
     public baseCurrency: string = null;
     public isChangeAcc: boolean = false;
@@ -336,11 +336,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         let expensesAccArray = ['operatingcost', 'indirectexpenses'];
                         let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
 
-                        if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
-                            let appTaxes = [];
-                            this.activeAccount.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
-                            this.currentAccountApplicableTaxes = appTaxes;
-                        }
+                        // if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
+                        //     let appTaxes = [];
+                        //     this.activeAccount.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
+                        //     this.currentAccountApplicableTaxes = appTaxes;
+                        // }
 
                         // check if account is stockable
                         isStockableAccount = this.activeAccount.uniqueName !== 'roundoff' ? incomeAndExpensesAccArray.includes(parentAcc) : false;
@@ -1230,6 +1230,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.shouldShowAdvanceReceiptMandatoryFields) {
             this.vm.generatePanelAmount();
         }
+        this.vm.generateGrandTotal();
+        this.vm.generateCompoundTotal();
     }
 
     // petty cash account changes, change all things related to account uniquename
