@@ -1255,6 +1255,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (this.modelRefCrossLimit) {
             this.modelRefCrossLimit.hide();
         }
+        document.querySelector('body').classList.remove('modal-open');
         this.router.navigate(['/pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, showPlans: true } });
     }
 
