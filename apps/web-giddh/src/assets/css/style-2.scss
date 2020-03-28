@@ -7883,7 +7883,7 @@ footer#footer.absoulte-footer {
     position: relative;
 }
 
-.inventorypage footer#footer.absoulte-footer[_ngcontent-c4] {
+.inventory-page footer#footer.absoulte-footer[_ngcontent-c4] {
     bottom: -60px;
     background-color: transparent !important;
 }
@@ -8739,8 +8739,8 @@ p.remvBrnchName {
     top: 0;
 }
 
-.inventorypage .modal,
-.inventorypage .reciptNoteModal {
+.inventory-page .modal,
+.inventory-page .reciptNoteModal {
     margin-top: 0;
     border-radius: 0;
 }
@@ -8899,6 +8899,11 @@ input.checkbox-custom[type="checkbox"] {
     input.form-control.focused {
     padding-left: 10px !important;
 }
+
+.inventory-page.modal-open .reciptNoteModal {
+    margin-bottom: 0;
+}
+
 /* responsive */
 
 @media (max-width: 1440px) {
