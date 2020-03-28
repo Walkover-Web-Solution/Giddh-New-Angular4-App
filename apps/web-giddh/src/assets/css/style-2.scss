@@ -8734,13 +8734,13 @@ p.remvBrnchName {
     padding-right: 0 !important;
 }
 
-.reciptNoteModal {
+.recipt-note-modal  {
     width: 100% !important;
     top: 0;
 }
 
 .inventory-page .modal,
-.inventory-page .reciptNoteModal {
+.inventory-page .recipt-note-modal  {
     margin-top: 0;
     border-radius: 0;
 }
@@ -8900,7 +8900,7 @@ input.checkbox-custom[type="checkbox"] {
     padding-left: 10px !important;
 }
 
-.inventory-page.modal-open .reciptNoteModal {
+.inventory-page.modal-open .recipt-note-modal  {
     margin-bottom: 0;
 }
 
