@@ -853,7 +853,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (results[0] && results[1]) {
                     let obj;
 
-                    if(results[1].roundOffTotal && results[1].roundOffTotal.amountForAccount === 0 && results[1].roundOffTotal.amountForCompany === 0) {
+                    if (results[1].roundOffTotal && results[1].roundOffTotal.amountForAccount === 0 && results[1].roundOffTotal.amountForCompany === 0) {
                         this.applyRoundOff = false;
                     }
 
@@ -1513,10 +1513,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public onSubmitInvoiceForm(form?: NgForm) {
 
-        if (this.isSalesInvoice && this.adjustPaymentBalanceDueData && this.invFormData && this.invFormData.voucherDetails) {
-            this.invFormData.voucherDetails.balanceDue = this.adjustPaymentBalanceDueData;
-        }
-
         let data: VoucherClass = _.cloneDeep(this.invFormData);
 
         // special check if gst no filed is visible then and only then check for gst validation
@@ -1981,8 +1977,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         this.invFormData.voucherDetails.balanceDue =
-            ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - depositAmount - Number(this.depositAmountAfterUpdate);
-        this.invFormData.voucherDetails.balanceDue = Math.round(this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff) - this.totalAdvanceReceiptsAdjustedAmount;
+            ((count + this.invFormData.voucherDetails.tcsTotal + this.calculatedRoundOff) - this.invFormData.voucherDetails.tdsTotal) - depositAmount - Number(this.depositAmountAfterUpdate) - this.totalAdvanceReceiptsAdjustedAmount;
+        // this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff - this.totalAdvanceReceiptsAdjustedAmount;
     }
 
     public calculateSubTotal() {
@@ -2013,7 +2009,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (!this.isPurchaseInvoice) {
             //Save the Grand Total for Edit
             if (calculatedGrandTotal > 0) {
-                if(this.applyRoundOff) {
+                if (this.applyRoundOff) {
                     this.calculatedRoundOff = Number((Math.round(calculatedGrandTotal) - calculatedGrandTotal).toFixed(2));
                 } else {
                     this.calculatedRoundOff = Number((calculatedGrandTotal - calculatedGrandTotal).toFixed(2));
@@ -4227,15 +4223,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public resetAdvanceReceiptAdjustData(): void {
         this.adjustPaymentData.customerName = '',
-        this.adjustPaymentData.customerUniquename = '',
-        this.adjustPaymentData.voucherDate = '',
-        this.adjustPaymentData.balanceDue = 0,
-        this.adjustPaymentData.dueDate = '',
-        this.adjustPaymentData.grandTotal = 0,
-        this.adjustPaymentData.gstTaxesTotal = 0,
-        this.adjustPaymentData.subTotal = 0,
-        this.adjustPaymentData.totalTaxableValue = 0,
-        this.adjustPaymentData.totalAdjustedAmount = 0
+            this.adjustPaymentData.customerUniquename = '',
+            this.adjustPaymentData.voucherDate = '',
+            this.adjustPaymentData.balanceDue = 0,
+            this.adjustPaymentData.dueDate = '',
+            this.adjustPaymentData.grandTotal = 0,
+            this.adjustPaymentData.gstTaxesTotal = 0,
+            this.adjustPaymentData.subTotal = 0,
+            this.adjustPaymentData.totalTaxableValue = 0,
+            this.adjustPaymentData.totalAdjustedAmount = 0
     }
     /**
      * To close advance reciipt modal
