@@ -4207,15 +4207,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public resetAdvanceReceiptAdjustData(): void {
         this.adjustPaymentData.customerName = '',
-            this.adjustPaymentData.customerUniquename = '',
-            this.adjustPaymentData.voucherDate = '',
-            this.adjustPaymentData.balanceDue = 0,
-            this.adjustPaymentData.dueDate = '',
-            this.adjustPaymentData.grandTotal = 0,
-            this.adjustPaymentData.gstTaxesTotal = 0,
-            this.adjustPaymentData.subTotal = 0,
-            this.adjustPaymentData.totalTaxableValue = 0,
-            this.adjustPaymentData.totalAdjustedAmount = 0
+        this.adjustPaymentData.customerUniquename = '',
+        this.adjustPaymentData.voucherDate = '',
+        this.adjustPaymentData.balanceDue = 0,
+        this.adjustPaymentData.dueDate = '',
+        this.adjustPaymentData.grandTotal = 0,
+        this.adjustPaymentData.gstTaxesTotal = 0,
+        this.adjustPaymentData.subTotal = 0,
+        this.adjustPaymentData.totalTaxableValue = 0,
+        this.adjustPaymentData.totalAdjustedAmount = 0
     }
     /**
      * To close advance reciipt modal
