@@ -15,7 +15,7 @@
                         </span>
                     </div>
                     <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
-                        <span class="icon-advance-serch" (click)="toggleAdvanceSearchPopup(false)"></span>
+                        <span class="icon-advance-search" (click)="toggleAdvanceSearchPopup(false)"></span>
                     </div>
                 </div>
             </form>
@@ -378,6 +378,9 @@
                                                 <li (click)="onPerformAction(item, 'paid')">
                                                     <a class="cp" href="javascript:void(0)">Paid</a>
                                                 </li>
+                                                <li *ngIf="selectedVoucher === 'sales'" (click)="onPerformAdjustPaymentAction(item)">
+                                                    <a class="cp" href="javascript:void(0)">Adjust Amount</a>
+                                                </li>
                                                 <li (click)="onPerformAction(item, 'unpaid')">
                                                     <a class="cp" href="javascript:void(0)">Unpaid</a>
                                                 </li>
@@ -617,7 +620,7 @@
     <div bsModal #invoiceConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
-                <delete-role-confirmation-model [selectedInvoiceForDelete]="selectedInvoice" (confirmDeleteEvent)="deleteConfirmedInvoice()" (closeModelEvent)="closeConfirmationPopup()">
+                <delete-role-confirmation-model [module]="(selectedVoucher !== 'purchase') ? selectedVoucher : 'purchaselist'" [selectedInvoiceForDelete]="selectedInvoice" (confirmDeleteEvent)="deleteConfirmedInvoice()" (closeModelEvent)="closeConfirmationPopup()">
                 </delete-role-confirmation-model>
             </div>
         </div>
@@ -627,7 +630,7 @@
     <div bsModal #performActionOnInvoiceModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
         <div class="modal-dialog modal-md perform-payment">
             <div class="modal-content">
-                <invoice-payment-model *ngIf="(selectedVoucher !== 'purchase')" [selectedInvoiceForPayment]="selectedInvoice" (closeModelEvent)="closePerformActionPopup($event)">
+                <invoice-payment-model *ngIf="performActionOnInvoiceModel.isShown" [selectedInvoiceForPayment]="selectedInvoice" (closeModelEvent)="closePerformActionPopup($event)">
                 </invoice-payment-model>
             </div>
         </div>
@@ -730,3 +733,15 @@
     <div class="icon-sort-dsc" *ngIf="sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'desc'" (click)="sortButtonClicked('asc', column)" [ngClass]="{'activeTextColor': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'desc'}"></div>
 </ng-template>
 <!-- endregion -->
+
+<!-- Advance receipt adjust modal start -->
+<div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent [isUpdateMode]="isUpdateMode" [depositAmount]="depositAmount" [invoiceFormDetails]="invFormData" [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
+                (closeModelEvent)="closeAdvanceReceiptModal()" (submitClicked)="getAdvanceReceiptAdjustData($event)">
+            </advance-receipt-adjustment-component>
+        </div>
+    </div>
+</div>
+<!-- end  -->

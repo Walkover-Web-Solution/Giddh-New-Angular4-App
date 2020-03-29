@@ -1,14 +1,13 @@
-<div id="" class="">
+<div>
     <div class="modal-header themeBg pd2 pdL2 pdR2 clearfix">
-        <h3 class="modal-title bg" id="modal-title">Confirmation </h3>
+        <h3 class="modal-title bg" id="modal-title">{{confirmationMessages[module]?.title}}</h3>
         <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="onCancel()"></i>
     </div>
     <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
         <form name="newRole" novalidate class="" autocomplete="off">
             <div class="modal_wrap mrB2">
-                <h3>Do you want to delete the selected voucher(s) <b
-                        *ngIf="selectedInvoiceForDelete">{{selectedInvoiceForDelete?.invoiceNumber}}</b>?</h3>
-                        <p class="text-gray font-14 mt-05">They will be deleted permanently and will no longer be accessible from any other module. </p>
+                <h3>{{confirmationMessages[module]?.message1}}</h3>
+                <p class="text-gray font-14 mt-05">{{confirmationMessages[module]?.message2}}</p>
             </div>
             <div class="d-flex" style="justify-content: flex-start">
                 <button type="submit" class="btn btn-md btn-success mrR1" (click)="onConfirmation()">Yes</button>

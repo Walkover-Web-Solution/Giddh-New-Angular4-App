@@ -384,7 +384,7 @@ a[vr-item]:focus {
     visibility: visible;
 }
 
-.nav_wrapper {
+.nav-wrapper {
     position: relative;
     height: calc(100vh - 145px);
 }
@@ -572,7 +572,7 @@ span.icon-support.dropdown-toggle {
 
 ul.sub-list {
     min-height: 50px;
-    max-height: 400px;
+    max-height: 290px;
 }
 
 .upgradePlan.list-inline > li {
@@ -642,8 +642,8 @@ ul.sub-list {
 /* responsive */
 
 @media (max-height: 800px) {
-    .nav_wrapper {
-        height: calc(100vh - 235px);
+    .nav-wrapper {
+        height: calc(100vh - 140px);
     }
 }
 

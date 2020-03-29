@@ -1,3 +1,5 @@
+import { saveAs } from 'file-saver';
+
 /**
  * NativeScript helpers
  */

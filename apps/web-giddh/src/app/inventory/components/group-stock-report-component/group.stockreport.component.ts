@@ -795,7 +795,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     openModal() {
         this.modalRef = this.modalService.show(
             this.template,
-            Object.assign({}, { class: 'modal-lg reciptNoteModal' })
+            Object.assign({}, { class: 'modal-lg receipt-note-modal ' })
         );
     }
 

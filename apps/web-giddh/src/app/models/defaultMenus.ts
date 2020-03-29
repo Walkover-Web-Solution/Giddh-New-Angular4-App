@@ -87,11 +87,13 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'User-Details > Company', uniqueName: '/pages/user-details/company', additional: { tab: 'company', tabIndex: 4 } },
     { type: 'MENU', name: 'Reports > Sales Register', uniqueName: '/pages/reports/sales-register' },
     { type: 'MENU', name: 'Reports > Purchase Register', uniqueName: '/pages/reports/purchase-register' },
+    { type: 'MENU', name: 'Reports > Monthly Columnar Report', uniqueName: '/pages/reports/monthly-columnar-report' },
     { type: 'MENU', name: 'Reports', uniqueName: '/pages/reports/reports-dashboard' },
     { type: 'MENU', name: 'Petty Cash Management > Pending', uniqueName: '/pages/expenses-manager', additional: { tab: 'pending', tabIndex: 0 } },
     { type: 'MENU', name: 'Petty Cash Management > Rejected', uniqueName: '/pages/expenses-manager', additional: { tab: 'rejected', tabIndex: 1 } },
 
     { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase' },
+    { type: 'MENU', name: 'Reports > Receipt', uniqueName: '/pages/reports/receipt' }
 ];
 export let HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'inventory',
     'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
@@ -171,7 +173,7 @@ export let NAVIGATION_ITEM_LIST_RESPONSIVE: IUlist[] = [
     { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook' },
     { type: 'MENU', name: 'Purchase Record ', uniqueName: '/pages/proforma-invoice/invoice/purchase' },
     { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase' },
-
+    { type: 'MENU', name: 'Reports > Receipt', uniqueName: '/pages/reports/receipt' },
 ];
 export let NAVIGATION_ITEM_LIST: IUlist[] = [];
 

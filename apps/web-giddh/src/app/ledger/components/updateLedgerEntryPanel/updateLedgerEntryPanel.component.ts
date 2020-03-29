@@ -113,6 +113,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public shouldShowRcmTaxableAmount: boolean = false;
     /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
     public shouldShowItcSection: boolean = false;
+    /** Allowed taxes list contains the unique name of all
+     * tax types within a company and count upto which they are allowed
+     */
+    public allowedSelectionOfAType: any = { type: [], count: 1 };
     public tags$: Observable<TagRequest[]>;
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
@@ -133,7 +137,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public activeAccount: AccountResponse;
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public showAdvanced: boolean;
-    public currentAccountApplicableTaxes: string[] = [];
+    // public currentAccountApplicableTaxes: string[] = [];
 
     public baseCurrency: string = null;
     public isChangeAcc: boolean = false;
@@ -239,6 +243,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             });
         }
+        this.vm.companyTaxesList$.pipe(take(1)).subscribe(taxes => {
+            if (taxes) {
+                taxes.forEach((tax) => {
+                    if (!this.allowedSelectionOfAType.type.includes(tax.taxType)) {
+                        this.allowedSelectionOfAType.type.push(tax.taxType);
+                    }
+                });
+            } else {
+                this.allowedSelectionOfAType.type = [];
+            }
+        });
 
         // get entry name and ledger account uniqueName
         observableCombineLatest(this.entryUniqueName$, this.editAccUniqueName$).subscribe((resp: any[]) => {
@@ -321,11 +336,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         let expensesAccArray = ['operatingcost', 'indirectexpenses'];
                         let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
 
-                        if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
-                            let appTaxes = [];
-                            this.activeAccount.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
-                            this.currentAccountApplicableTaxes = appTaxes;
-                        }
+                        // if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
+                        //     let appTaxes = [];
+                        //     this.activeAccount.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
+                        //     this.currentAccountApplicableTaxes = appTaxes;
+                        // }
 
                         // check if account is stockable
                         isStockableAccount = this.activeAccount.uniqueName !== 'roundoff' ? incomeAndExpensesAccArray.includes(parentAcc) : false;
@@ -972,6 +987,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         // if no petty cash mode then do normal update ledger request
         if (!this.isPettyCash) {
+            requestObj['handleNetworkDisconnection'] = true;
             if (this.baseAccountChanged) {
                 this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName + '?newAccountUniqueName=' + this.changedAccountUniq));
             } else {
@@ -1215,6 +1231,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.shouldShowAdvanceReceiptMandatoryFields) {
             this.vm.generatePanelAmount();
         }
+        this.vm.generateGrandTotal();
+        this.vm.generateCompoundTotal();
     }
 
     // petty cash account changes, change all things related to account uniquename
