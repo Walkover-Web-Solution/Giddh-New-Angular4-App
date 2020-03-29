@@ -19,7 +19,7 @@ export abstract class BaseLoginProvider implements LoginProvider {
             return;
         }
         const signInJS = document.createElement('script');
-        signInJS.async = true;
+        signInJS.defer = true;
         signInJS.src = obj.url;
         signInJS.onload = onload;
         if (obj.name === 'LINKEDIN') {

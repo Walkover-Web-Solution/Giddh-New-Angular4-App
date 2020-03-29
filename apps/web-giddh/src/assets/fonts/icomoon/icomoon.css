@@ -4,10 +4,10 @@
     src: url("fonts/icomoon.eot?lf4fyi");
     src: url("fonts/icomoon.eot?lf4fyi#iefix") format("embedded-opentype"),
         url("fonts/icomoon.woff?lf4fyi") format("woff"),
+        url("fonts/icomoon.woff?61305536") format("woff"),
         url("fonts/icomoon.svg?lf4fyi#icomoon") format("svg");
     font-weight: normal;
     font-style: normal;
-    font-display: block;
 }
 
 [class^="icon-"],
