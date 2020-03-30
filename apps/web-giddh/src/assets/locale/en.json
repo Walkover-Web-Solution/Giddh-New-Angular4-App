@@ -77,5 +77,9 @@
         "contra" : "Contra",
         "debit_note" : "Debit Note",
         "credit_note" : "Credit Note"
-    }
+    },
+    "app_create" : "Create",
+    "app_date_range" : "Date Range",
+    "app_financial_year" : "Financial Year",
+    "app_as_of" : "As Of"
 }
