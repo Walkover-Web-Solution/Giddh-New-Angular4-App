@@ -1,0 +1,8 @@
+{
+    "chart_title" : "Top",
+    "debtors" : "Debtors (Customers)",
+    "invoiced_on" : "Invoiced on",
+    "bill_amount" : "Bill Amount",
+    "due_as_on" : "Due as on",
+    "creditors" : "Creditors (Vendors)"
+}
