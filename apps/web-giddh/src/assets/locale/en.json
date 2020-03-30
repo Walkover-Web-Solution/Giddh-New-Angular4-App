@@ -21,6 +21,8 @@
     "app_save" : "Save",
     "app_search" : "Search",
     "app_cancel" : "Cancel",
+    "app_update" : "Update",
+    "app_delete" : "Delete",
     "app_name" : "Name",
     "app_action" : "Action",
     "app_goto_ledger" : "Go to Ledger",
@@ -81,5 +83,9 @@
     "app_create" : "Create",
     "app_date_range" : "Date Range",
     "app_financial_year" : "Financial Year",
-    "app_as_of" : "As Of"
+    "app_as_of" : "As Of",
+    "app_hsn_code" : "HSN Code",
+    "app_sac_code" : "SAC Code",
+    "app_sku_code" : "SKU Code",
+    "app_all_fields_required" : "All fields are required."
 }
