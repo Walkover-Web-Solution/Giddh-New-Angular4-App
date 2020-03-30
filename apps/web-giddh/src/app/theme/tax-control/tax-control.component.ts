@@ -76,8 +76,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
     @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
-    /** selected customer country name */
-    @Input() public customerCountryName: string = '';
 
 
     @ViewChild('taxInputElement') public taxInputElement: ElementRef;
@@ -154,12 +152,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
             // if tax is already prepared then only check if it's checked or not on basis of applicable taxes
             if (index > -1) {
-                // For foreign country gst type taxed should not be selected bydefault
-                if (this.customerCountryName && tax && this.customerCountryName !== 'India' && tax.taxType === 'gst') {
-                    this.taxRenderData[index].isChecked = false;
-                } else {
                    this.taxRenderData[index].isChecked = this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(item => item === tax.uniqueName) : false;
-                }
             } else {
 
                 let taxObj = new TaxControlData();
@@ -185,11 +178,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 } else {
                     taxObj.amount = tax.taxDetail[0].taxValue;
                 }
-                if (this.customerCountryName !== 'India' && tax.taxType === 'gst') {
-                    taxObj.isChecked = false;
-                } else {
                     taxObj.isChecked = this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tax.uniqueName) : false;
-                }
 
                 taxObj.isDisabled = false;
                 this.taxRenderData.push(taxObj);
