@@ -1,16 +1,11 @@
 {
-    "chart_title" : [
-        {
-            "income" : "Income",
-            "expenses" : "Expenses",
-            "sales" : "Sales",
-            "payment" : "Payment",
-            "receipt" : "Receipt"
-        }
-    ],
-    "last_week" : "Last Week",
-    "this_week" : "This Week",
-    "total" : "Total",
+    "chart_title" : {
+        "income" : "Income",
+        "expenses" : "Expenses",
+        "sales" : "Sales",
+        "payment" : "Payment",
+        "receipt" : "Receipt"
+    },
     "highest" : "Highest",
     "lowest" : "Lowest",
     "date_range" : "Date Range",
