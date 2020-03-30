@@ -36,7 +36,7 @@
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">
-                <input [attr.readonly]="readonlyInput" class="form-control focused"
+                <input [attr.readonly]="readonlyInput" class="form-control focused" aria-label="Input field"
                     (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [disabled]="disabled"
                     [value]="filter" style="padding-right: 13px !important;" />
             </ng-container>

@@ -11,7 +11,7 @@
                 <div class="d-flex search-ledger-field">
 
                     <div style="position: relative" *ngIf="checkedTrxWhileHovering.length === 0">
-                        <input type="search" [(ngModel)]="searchText" name="searchText" class="form-control"
+                        <input type="search" [(ngModel)]="searchText" name="searchText" class="form-control" aria-label="Search Ledger"
                             (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
                         <i class="icon-search pos-abs" style="left:5px;top:10px;"></i>
                     </div>
@@ -55,7 +55,7 @@
                 <div class="advanceSearchByDate date-advanceSearch">
                     <!-- <span class="icon-calender "></span> -->
                     <span class="inputWrapper">
-                        <input type="text" class="form-control daterange_picker_ledger" daterangepicker
+                        <input type="text" class="form-control daterange_picker_ledger" daterangepicker aria-label="Apply date filter"
                             [options]="datePickerOptions" (applyDaterangepicker)="selectedDate($event)"
                             name="daterangeInput" />
                     </span>
@@ -243,7 +243,7 @@
                                                             <td class="col-xs-3 pos-rel">
                                                                 <input class="form-control alR" type="text"
                                                                     decimalDigitsDirective [DecimalPlaces]="2"
-                                                                    [(ngModel)]="txn.amount"
+                                                                    [(ngModel)]="txn.amount" aria-label="Entry Amount"
                                                                     (input)="needToReCalculate.next(true)"
                                                                     (click)="blankLedgerAmountClick()">
                                                             </td>
@@ -343,7 +343,7 @@
                                                             <td class="col-xs-3 pos-rel">
                                                                 <input class="form-control alR" type="text"
                                                                     decimalDigitsDirective [DecimalPlaces]="2"
-                                                                    [(ngModel)]="txn.amount"
+                                                                    [(ngModel)]="txn.amount" aria-label="Entry Amount"
                                                                     (input)="needToReCalculate.next(true)"
                                                                     (click)="blankLedgerAmountClick()">
                                                             </td>
@@ -580,7 +580,7 @@
                                                         [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                         [(ngModel)]="lc.blankLedger.entryDate"
                                                         [placeholder]="lc.formatPlaceholder" [outsideClick]="true"
-                                                        (click)="$event.stopPropagation()" autocomplete="off" />
+                                                        (click)="$event.stopPropagation()" autocomplete="off" aria-label="Entry date" />
 
                                                 </div>
                                             </td>
@@ -642,7 +642,7 @@
 
                                             <td data-title="Amount" class="col-xs-4 pos-rel">
                                                 <input class="form-control alR" type="text"
-                                                    [prefix]="selectedPrefixForCurrency"
+                                                    [prefix]="selectedPrefixForCurrency" aria-label="Entry Amount"
                                                     [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                                     [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
                                                     (click)="showNewLedgerEntryPopup(txn);blankLedgerAmountClick()">
@@ -847,7 +847,7 @@
                                                         [outsideClick]="true" style="padding-left: 7px !important;"
                                                         bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                         [(ngModel)]="lc.blankLedger.entryDate"
-                                                        [placeholder]="lc.formatPlaceholder" autocomplete="off" />
+                                                        [placeholder]="lc.formatPlaceholder" autocomplete="off" aria-label="Entry date" />
                                                 </div>
 
                                             </td>
@@ -908,7 +908,7 @@
                                             </td>
 
                                             <td class="col-xs-3 pos-rel" data-title="Amount">
-                                                <input class="form-control alR" type="text"
+                                                <input class="form-control alR" type="text" aria-label="Entry Amount"
                                                     [prefix]="selectedPrefixForCurrency"
                                                     [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                                     [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
@@ -1279,11 +1279,11 @@
         <div class="modal-content">
             <div id="" class="">
                 <div class="modal-header themeBg pdL2 pdR2 clearfix">
-                    <h3 class="modal-title bg" id="modal-title">Confirmation </h3>
+                    <h3 class="modal-title bg" id="bulk-update-modal-title">Confirmation </h3>
                     <i class="fa fa-times text-right close_modal" aria-hidden="true"
                         (click)="onCancelBulkActionConfirmation()"></i>
                 </div>
-                <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
+                <div class="modal-body pdL2 pdR2 clearfix" id="delete-entry-modal">
                     <form name="newRole" novalidate class="" autocomplete="off">
                         <div class="modal_wrap mrB2">
                             <h3>Do you want to delete the selected entrie(s)? </h3>
@@ -1313,11 +1313,11 @@
         <div class="modal-content">
             <div id="" class="">
                 <div class="modal-header themeBg pdL2 pdR2 clearfix">
-                    <h3 class="modal-title bg" id="modal-title">Confirmation</h3>
+                    <h3 class="modal-title bg" id="generate-invoice-modal-title">Confirmation</h3>
                     <i class="fa fa-times text-right close_modal" aria-hidden="true"
                         (click)="onCancelSelectInvoiceModal()"></i>
                 </div>
-                <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
+                <div class="modal-body pdL2 pdR2 clearfix" id="generate-invoice-modal-body">
                     <form name="newRole" novalidate class="" autocomplete="off">
                         <div class="modal_wrap mrB2 text-center">
                             <h2>Select invoice generate option</h2>

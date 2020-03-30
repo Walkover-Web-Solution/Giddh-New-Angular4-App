@@ -190,7 +190,7 @@
 
                         <span class="cName ellp pdR1 alice">{{companyInitials}}</span>
 
-                        <img src="assets/images/giddh-white-logo.svg" class="giddh-logo">
+                        <img alt="Giddh logo" src="assets/images/giddh-white-logo.svg" class="giddh-logo">
                     </div>
                 </a>
                 <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
@@ -298,7 +298,7 @@
                 <span class="input-group-addon" id="">
                     <i class="icon-search"></i>
                 </span>
-                <input type="text" class="form-control jumpToAccount" placeholder="Jump to Account" aria-describedby="">
+                <input aria-label="Search Account" type="text" class="form-control jumpToAccount" placeholder="Jump to Account" aria-describedby="">
             </div>
 
         </ul>
@@ -458,7 +458,7 @@
                     <!-- (isOpenChange)="sideBarStateChange($event)" -->
                     <li class="hamburger_menu cp" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
 
-                        <button class="btn mrR0" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right">
+                        <button aria-label="Menu Button" class="btn mrR0" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right">
                             <i class="icon-bar"></i>
                         </button>
 
@@ -512,7 +512,7 @@
                         <!-- (isOpenChange)="sideBarStateChange($event)" -->
                         <li class="hamburger_menu cp pull-left" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
 
-                            <button class="btn mrR0" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right">
+                            <button aria-label="Menu Button" class="btn mrR0" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right">
                                 <i class="icon-bar"></i>
                             </button>
 
@@ -568,7 +568,7 @@
                             <label class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
                         </li>
                     </ul>
-                    <button id="AddManage" type="button" class="btn btn-gray btn-xs btn-sm pull-right mrR0 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"><span
+                    <button aria-label="View Accounts" id="AddManage" type="button" class="btn btn-gray btn-xs btn-sm pull-right mrR0 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"><span
                             class="icon-edit-ico"></span>
                         Accounts
                     </button>
