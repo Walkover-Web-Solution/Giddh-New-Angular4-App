@@ -66,6 +66,17 @@ export const underStandingTextData = [
         }
     },
     {
+        accountType: 'ReverseCharge',
+        text: {
+            cr: `<accountName> is decreasing ↓`,
+            dr: '<accountName> is increasing ↑'
+        },
+        balanceText: {
+            cr: '(-) Reverse Charge ( ohh no!)',
+            dr: 'Reverse Charge value'
+        }
+    },
+    {
         accountType: null,
         text: {
             cr: '<accountName> liability is going out',
