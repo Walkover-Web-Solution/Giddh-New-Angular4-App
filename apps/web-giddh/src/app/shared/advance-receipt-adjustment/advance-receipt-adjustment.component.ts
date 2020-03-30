@@ -109,7 +109,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             }
         }
         if (this.invoiceFormDetails && this.invoiceFormDetails.voucherDetails) {
-            if (typeof this.invoiceFormDetails.voucherDetails.voucherDate !== 'string' && !this.invoiceFormDetails.voucherDetails.voucherDate.includes('-')) {
+            if (typeof this.invoiceFormDetails.voucherDetails.voucherDate !== 'string') {
                 this.invoiceFormDetails.voucherDetails.voucherDate = moment(this.invoiceFormDetails.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
             }
             this.assignVoucherDetails();
@@ -146,7 +146,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      */
     public onCancel(): void {
         if (this.adjustPayment && this.adjustPayment.totalAdjustedAmount && this.adjustPayment.grandTotal && this.adjustPayment.totalAdjustedAmount - this.adjustPayment.grandTotal > 0) {
-            this.toaster.warningToast('The adjusted amount of the linked invoice\'s is more than this receipt');
+            this.toaster.warningToast('The adjusted amount of the linked invoice\'s is more than this receipt due amount');
             return;
         }
         this.closeModelEvent.emit(true);
@@ -223,7 +223,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                 this.isInvalidForm = false;
             }
         } else {
-            this.toaster.errorToast('The adjusted amount of the linked invoice\'s is more than this receipt');
+            this.toaster.errorToast('The adjusted amount of the linked invoice\'s is more than this receipt due amount');
             this.isInvalidForm = true;
         }
     }
