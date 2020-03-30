@@ -239,6 +239,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public changeStatusInvoiceUniqueName: string = '';
     /** Total deposit amount of invoice */
     public depositAmount: number = 0;
+    /** True, if select perform adjust payment action for an invoice  */
+    public selectedPerformAdjustPaymentAction: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -630,11 +632,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 if (response.advanceReceiptAdjustment) {
                     this.advanceReceiptAdjustmentData = response.advanceReceiptAdjustment;
                 }
-                if(response['deposit']) {
-                   this.depositAmount = response.deposit.amountForAccount;
+                if (response['deposit']) {
+                    this.depositAmount = response.deposit.amountForAccount;
                 }
-                this.showAdvanceReceiptAdjust = true;
-                this.adjustPaymentModal.show();
+                if (this.selectedPerformAdjustPaymentAction) {
+                    this.showAdvanceReceiptAdjust = true;
+                    this.adjustPaymentModal.show();
+                }
             }
         })
     }
@@ -755,6 +759,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     voucherType: objItem.voucherType
                 }));
             }
+            this.selectedPerformAdjustPaymentAction = false;
         }
     }
 
@@ -1457,6 +1462,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.invFormData.voucherDetails.voucherDate = item.voucherDate
         this.invFormData.accountDetails.currencySymbol = item.accountCurrencySymbol;
         this.changeStatusInvoiceUniqueName = item.uniqueName;
+        this.selectedPerformAdjustPaymentAction = true;
         // To clear receipts voucher store
         this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
         // To get re-assign receipts voucher store
@@ -1474,7 +1480,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public closeAdvanceReceiptModal(): void {
         this.showAdvanceReceiptAdjust = false;
         this.advanceReceiptAdjustmentData = null;
-        this.changeStatusInvoiceUniqueName = ''
+        this.changeStatusInvoiceUniqueName = '';
         this.adjustPaymentModal.hide();
     }
 

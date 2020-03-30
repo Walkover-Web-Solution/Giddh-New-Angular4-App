@@ -236,8 +236,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      */
     public deleteAdjustVoucherRow(index: number): void {
         let selectedItem = this.newAdjustVoucherOptions.find(item => item.value === this.adjustVoucherForm.adjustments[index].uniqueName);
-        if(selectedItem && selectedItem.value && selectedItem.label && selectedItem.additional) {
-        this.adjustVoucherOptions.push({ value: selectedItem.value, label: selectedItem.label, additional: selectedItem.additional });
+        if (selectedItem && selectedItem.value && selectedItem.label && selectedItem.additional) {
+            this.adjustVoucherOptions.push({ value: selectedItem.value, label: selectedItem.label, additional: selectedItem.additional });
         }
         this.adjustVoucherOptions = _.uniqBy(this.adjustVoucherOptions, (item) => {
             return item.value && item.label.trim();
@@ -337,15 +337,16 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public saveAdjustAdvanceReceipt(): void {
+        let isValid: boolean = true;
         if (this.isTaxDeducted) {
             if (this.adjustVoucherForm.tdsTaxUniqueName === '') {
                 if (this.tdsTypeBox && this.tdsTypeBox.nativeElement)
                     this.tdsTypeBox.nativeElement.classList.add('error-box');
-                return;
+                isValid = false;
             } else if (this.adjustVoucherForm.tdsAmount === '') {
                 if (this.tdsAmountBox && this.tdsAmountBox.nativeElement) {
                     this.tdsAmountBox.nativeElement.classList.add('error-box');
-                    return;
+                    isValid = false;
                 }
             }
         } else {
@@ -355,23 +356,23 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         }
         if ((Number(this.adjustPayment.grandTotal) - Number(this.adjustPayment.totalAdjustedAmount)) < 0) {
             this.toaster.errorToast('The adjusted amount of the linked invoice\'s is more than this receipt');
-            return;
+            isValid = false;
         }
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length) {
             this.adjustVoucherForm.adjustments.forEach(item => {
                 if (!item.voucherNumber) {
-                    this.toaster.errorToast('please select voucher');
-                    return;
+                    isValid = false;
                 } else if (!item.dueAmount.amountForAccount) {
-                    this.toaster.errorToast('please enter amount');
-                    return;
+                    isValid = false;
                 }
             });
         }
-        this.submitClicked.emit({
-            adjustVoucherData: this.adjustVoucherForm,
-            adjustPaymentData: this.adjustPayment
-        });
+        if (isValid) {
+            this.submitClicked.emit({
+                adjustVoucherData: this.adjustVoucherForm,
+                adjustPaymentData: this.adjustPayment
+            });
+        }
     }
 
     /**

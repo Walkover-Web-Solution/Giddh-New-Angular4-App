@@ -892,7 +892,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             }
                             obj = cloneDeep(convertedRes1) as VoucherClass;
                             this.selectedAccountDetails$.pipe(take(1)).subscribe(acc => {
-                                obj.accountDetails.currencySymbol = acc.currencySymbol || '';
+                                if (acc) {
+                                    obj.accountDetails.currencySymbol = acc.currencySymbol || '';
+                                }
                             });
                             this.fetchCurrencyRate(results);
                         } else if (this.isPurchaseInvoice) {
