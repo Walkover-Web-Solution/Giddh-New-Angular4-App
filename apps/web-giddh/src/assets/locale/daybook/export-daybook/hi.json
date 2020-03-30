@@ -1,0 +1,13 @@
+{
+    "popup_heading" : "Export Daybook",
+    "type" : "type",
+    "mini" : "Mini",
+    "detailed" : "Detailed",
+    "export_as" : "Export As",
+    "pdf" : "PDF",
+    "excel" : "Excel",
+    "order" : "Order",
+    "ascending" : "Ascending",
+    "descending" : "Descending",
+    "download" : "Download"
+}

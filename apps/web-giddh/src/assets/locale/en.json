@@ -35,12 +35,6 @@
     "select_category" : "Select Category",
     "amount" : "Amount",
     "select" : "Select",
-    "comparision_filters" : {
-        "equals" : "Equals",
-        "greater_than" : "Greater Than",
-        "less_than" : "Less Than",
-        "exclude" : "Exclude"
-    },
     "reset_filter" : "Reset Filter",
     "due_in_last_days" : "Due in Last days",
     "result_total" : "Result Total",
@@ -63,5 +57,25 @@
     "ifsc_code" : "IFSC Code",
     "select_mode" : "Select Mode",
     "remark" : "Remark",
-    "confirm" : "Confirm"
+    "confirm" : "Confirm",
+    "collapse_all" : "Collapse All",
+    "expand_all" : "Expand All",
+    "export" : "Export",
+    "pages" : "Pages",
+    "go" : "Go",
+    "from" : "From",
+    "to" : "To",
+    "custom_range" : "Custom Range",
+    "select_range" : "Select Range",
+    "quantity" : "Quantity",
+    "voucher_types" : {
+        "sales" : "Sales",
+        "purchase" : "Purchases",
+        "receipt" : "Receipt",
+        "payment" : "Payment",
+        "journal" : "Journal",
+        "contra" : "Contra",
+        "debit_note" : "Debit Note",
+        "credit_note" : "Credit Note"
+    }
 }
