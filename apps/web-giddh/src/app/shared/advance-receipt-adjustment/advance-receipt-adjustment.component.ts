@@ -223,7 +223,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                 this.isInvalidForm = false;
             }
         } else {
-            this.toaster.errorToast('The adjusted amount of the linked invoice\'s is more than this receipt due amount');
+            this.toaster.errorToast('The adjusted amount of the linked invoice\'s is more than this receipt');
             this.isInvalidForm = true;
         }
     }
