@@ -513,3 +513,14 @@ table.tax-table.item {
 .tax-table tbody tr td {
     border-top: 0px solid;
 }
+.warehouse-table {
+    width: 100%;
+    border-bottom: 1px solid #D6D6D6;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+.warehouse-table tbody tr td {
+    padding: 0px 20px 5px 10px;
+}

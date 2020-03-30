@@ -42,16 +42,9 @@
                         </td>
                     </tr>
 
-                </tbody>
-            </table>
-        </header>
-
-        <table class="meta">
-            <tbody>
-                <tr>
-                    <td colspan="2">
-                        <figure>
-                            <p>
+                    <tr>
+                        <td colspan="3">
+                            <p class="mt-05">
                                 <ng-container *ngIf="voucherType==='sales'">
                                     <span *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label
                                     : 'Number'}}: 20170911-1</span>
@@ -68,10 +61,41 @@
                                                 : 'Voucher Date'}}: 11/09/2017</span>
                                 </ng-container>
                             </p>
+                        </td>
+                    </tr>
 
+                </tbody>
+            </table>
+        </header>
+
+
+        <table class="warehouse-table" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td>
+                        <p>Company Details:</p>
+                        <p><strong>Walkover Web Solutions Pvt</strong></p>
+                        <p>Ltd. 405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, Near Greater Kailash Hospital, Indore 452001(M. P.)</p>
+                        <p>GSTIN:23AAAAAA000A1Z0</p>
+                    </td>
+
+                    <td>
+                        <p>Shipped From:</p>
+                        <p><strong>Walkover Web Solutions Pvt</strong></p>
+                        <p>405 Agrawal Traders, 10/2, Old Palasia, MG Road, Ujjain 456001 (M. P.)</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <table class="meta">
+            <tbody>
+                <tr>
+                    <td colspan="2">
+                        <figure>
                             <p class="pt-05 pb-05" *ngIf="fieldsAndVisibility.header.attentionTo?.display">
                                 <strong>Attention to: </strong> Alok Gangrade</p>
-
                         </figure>
                     </td>
                 </tr>
@@ -103,7 +127,7 @@
                         </p>
                     </td>
 
-                    <td style="padding-top: 20px;">
+                    <td>
                         <p
                             *ngIf="fieldsAndVisibility.header.shippingDate?.display ||fieldsAndVisibility.header.shippedVia?.display || fieldsAndVisibility.header.trackingNumber?.display">
                             <strong>Shipping Detail:</strong>
@@ -117,6 +141,11 @@
                         <p *ngIf="fieldsAndVisibility.header.trackingNumber?.display">
                             {{(fieldsAndVisibility.header.trackingNumber?.label?.length > 0) ? fieldsAndVisibility.header.trackingNumber?.label : 'Tracking No'}}:
                             123654</p>
+
+                            <p>Custom 1: dummy</p>
+                            <p>Custom 2: dummy</p>
+                            <p>Custom 3: dummy</p>
+
                     </td>
 
                     <!-- <td colspan="1"></td> -->

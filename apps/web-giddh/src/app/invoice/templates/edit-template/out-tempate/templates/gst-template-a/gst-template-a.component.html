@@ -119,13 +119,35 @@
                     </div>
                 </ng-container>
             </header>
+
+
+            <table class="warehouse-table" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td>
+                            <p>Company Details:</p>
+                            <p><strong>Walkover Web Solutions Pvt</strong></p>
+                            <p>Ltd. 405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, Near Greater Kailash Hospital, Indore 452001(M. P.)</p>
+                            <p>GSTIN:23AAAAAA000A1Z0</p>
+                        </td>
+
+                        <td>
+                            <p>Shipped From:</p>
+                            <p><strong>Walkover Web Solutions Pvt</strong></p>
+                            <p>405 Agrawal Traders, 10/2, Old Palasia, MG Road, Ujjain 456001 (M. P.)</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
             <table class="meta cargoDetail ">
                 <tbody>
                     <tr>
 
 
                         <td *ngIf="fieldsAndVisibility.header.billingAddress?.display ">
-                            <p>
+                            <p class="strong">
                                 {{(fieldsAndVisibility.header.billingAddress?.label?.length > 0) ? fieldsAndVisibility.header.billingAddress?.label : 'To'}}
                             </p>
                             <p *ngIf="fieldsAndVisibility.header.customerName?.display ">Green Soft Solutions</p>
@@ -135,7 +157,7 @@
                         </td>
 
                         <td *ngIf="fieldsAndVisibility.header.shippingAddress?.display ">
-                            <p>
+                            <p class="strong">
                                 {{(fieldsAndVisibility.header.shippingAddress?.label?.length > 0) ? fieldsAndVisibility.header.shippingAddress?.label : 'Shipping Address'}}
                             </p>
                             <p *ngIf="fieldsAndVisibility.header.customerName?.display ">Green Soft Solutions</p>
@@ -557,7 +579,7 @@
                         </th>
                         <td>
                             Ten Thousand One Hundred Sixty Six Only
-                            <div class="inner " style=" margin-right: 0px; ">&nbsp;</div>
+                            <div class="inner mr-0">&nbsp;</div>
                         </td>
                     </tr>
                     <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display ">
@@ -575,9 +597,20 @@
                         </th>
                         <td>
                             One hundred fourty-eight dollars & twenty cents
-                            <div class="inner " style=" margin-right: 0px; ">&nbsp;</div>
+                            <div class="inner mr-0">&nbsp;</div>
                         </td>
                     </tr>
+
+                    <tr>
+                        <th>TCS</th>
+                        <td><span [innerHTML]="rupeeSymbol"></span>2900.00</td>
+                    </tr>
+
+                    <tr>
+                        <th class="strong">Total Due (in INR)</th>
+                        <td><span [innerHTML]="rupeeSymbol" class="strong"></span>27380.00</td>
+                    </tr>
+
                 </table>
 
 

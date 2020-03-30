@@ -287,6 +287,10 @@ tfoot.table-details tr th {
     color: #4b4c4f;
 }
 
+#royal .secondry_clr td {
+    padding-bottom: 10px;
+}
+
 .address {
     max-width: 220px;
 }
@@ -382,4 +386,15 @@ img {
 }
 .line-height-initial {
     line-height: initial;
+}
+.warehouse-table {
+    width: 100%;
+    border-bottom: 1px solid #D6D6D6;
+    border-top: 1px solid #D6D6D6;
+    padding-bottom: 5px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+.warehouse-table tbody tr td {
+    padding: 4px 0px 1px 0px;
 }
