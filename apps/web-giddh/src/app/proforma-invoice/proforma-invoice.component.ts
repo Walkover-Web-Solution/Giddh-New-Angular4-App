@@ -892,7 +892,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             }
                             obj = cloneDeep(convertedRes1) as VoucherClass;
                             this.selectedAccountDetails$.pipe(take(1)).subscribe(acc => {
-                                obj.accountDetails.currencySymbol = acc.currencySymbol || '';
+                                if (acc) {
+                                    obj.accountDetails.currencySymbol = acc.currencySymbol || '';
+                                }
                             });
                             this.fetchCurrencyRate(results);
                         } else if (this.isPurchaseInvoice) {
@@ -1497,8 +1499,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public convertDateForAPI(val: any): string {
         if (val) {
             // To check val is DD-MM-YY format already so it will be string then return val
-            if (typeof val === 'string' && val.includes('-')) {
-                return val;
+            if (typeof val === 'string') {
+                if (val.includes('-')) {
+                    return val;
+                } else {
+                    return '';
+                }
             } else {
                 try {
                     return moment(val).format(GIDDH_DATE_FORMAT);
