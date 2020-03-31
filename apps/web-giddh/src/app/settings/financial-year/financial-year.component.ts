@@ -1,7 +1,7 @@
 import { takeUntil } from 'rxjs/operators';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { Store } from '@ngrx/store';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,TemplateRef } from '@angular/core';
 import { AppState } from '../../store/roots';
 import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
 import * as _ from '../../lodash-optimized';
@@ -13,6 +13,8 @@ import { CompanyActions } from '../../actions/company.actions';
 import { createSelector } from 'reselect';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IForceClear } from '../../models/api-models/Sales';
+import { FinancialYearAsideComponent } from './financial-year-aside/financial-year-aside.component';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 export interface IGstObj {
     newGstNumber: string;
@@ -33,6 +35,8 @@ export class FinancialYearComponent implements OnInit {
     public currentCompanyUniqueName: string;
     public currentCompanyFinancialYearUN: string;
     public currentCompanyName: string;
+    public accountAsideMenuState: string = 'out';
+    public paymentAsideMenuState: string = 'out';
     public financialOptions = [];
     public yearOptions = [];
     public FYPeriodOptions: IOption[] = [
@@ -56,8 +60,33 @@ export class FinancialYearComponent implements OnInit {
     constructor(
         private store: Store<AppState>,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
-        private _companyActions: CompanyActions
+        private _companyActions: CompanyActions,
+        private modalService: BsModalService
     ) {
+    }
+
+
+    modalRef: BsModalRef;
+    openModal(template: TemplateRef<any>) {
+      this.modalRef = this.modalService.show(template);
+    }
+    public toggleBodyClass() {
+        if (this.accountAsideMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
+    public openFinancialYearAside(){
+        this.toggleAccountAsidePane();
+    }
+    public toggleAccountAsidePane(event?): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+
+        this.toggleBodyClass();
     }
 
     public ngOnInit() {

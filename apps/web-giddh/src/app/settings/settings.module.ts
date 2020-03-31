@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 
 import { ContactModule } from '../contact/contact.module';
 import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-menu-create-tax.module';
+import { FinancialYearAsideModule } from '../shared/financial-year-aside/financial-year-aside.module';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { OmitByKeyPipeModule } from '../shared/helpers/pipes/omitBy/omitBy.module';
 import { SharedModule } from '../shared/shared.module';
@@ -29,7 +30,6 @@ import { SettingTaxesComponent } from './Taxes/setting.taxes.component';
 import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
 import { SettingsServiceModule } from './settings-service.module';
-
 @NgModule({
     declarations: [
         SettingsComponent,
@@ -57,12 +57,14 @@ import { SettingsServiceModule } from './settings-service.module';
         SharedModule,
         SettingRountingModule,
         AsideMenuCreateTaxModule,
+        FinancialYearAsideModule,
         ContactModule,
         CurrencyModule,
         OmitByKeyPipeModule,
         SettingsServiceModule
     ]
 })
+
 
 export class SettingsModule {
 }

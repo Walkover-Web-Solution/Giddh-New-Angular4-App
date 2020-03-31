@@ -114,6 +114,10 @@
         tbody > tr:hover td {
             background: transparent;
         }
+        tbody tr:last-child td {
+            border-bottom: none !important;
+        }
+
     }
     /*card responsive code*/
     .on-mobile-view {

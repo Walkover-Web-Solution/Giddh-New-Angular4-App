@@ -1,5 +1,64 @@
+@import '../../../assets/css/color.scss';
+.lock-status-toggle {
+	align-items: center;
+	.toggle {
+		input[type="checkbox"] {
+			opacity: 1;
+		}
+		margin-right:8px;
+		.toggle-label {
+			padding: 0;
+		}
+	}
+	i {
+		color: #484848;
+		margin-left: 5px;
+		cursor: pointer;
+	}
+}
+.unlocked-toggle {
+	.toggle-switch {
+		background-color: $nobel;
+		border-color: $nobel;
+	}
+}
+.toggle-checkbox:checked+.toggle-label .toggle-switch {
+	right: -4px;
+}
+.default-year {
+	cursor: pointer;
+	.set-default {
+		display: block;
+	}
+	.set-default-selected {
+		display: none;
+	}
+	&:hover {
+		.set-default {
+			display: none;
+		}
+		.set-default-selected {
+			display: block;
+			color: $midnightBlue;
+		}
+	}
+}
+.discription-confirmation{
+    color: $nobel;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+.confirm-note{
+  
+    color: $charcoal;
+    font-size: 14px;
+}
 @media (max-width: 767px) {
-    .financialYearField .btn {
-        margin-top: 10px;
-    }
+	.financialYearField .btn {
+		margin-top: 10px;
+	}
+	.financial-year-data {
+		display: flex;
+		flex-direction: column-reverse;
+	}
 }

@@ -162,7 +162,7 @@
     }
     .onMobileView,
     .onMobileView tbody {
-        display: block;
+        display: block;background: transparent;
     }
 }
 
@@ -688,7 +688,9 @@ input {
 .mb-15 {
     margin-bottom: 15px;
 }
-
+.mr-0{
+    margin-right: 0;
+}
 .mr-1 {
     margin-right: 10px;
 }
@@ -3829,7 +3831,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .modal-title {
     font-size: 18px !important;
-    /* color: black !important */
+    color: $White !important;
 }
 
 .radio {
@@ -7844,7 +7846,7 @@ app-header {
     border-radius: 0;
 }
 
-.accountAsideMenuState2 #close {
+.account-aside-menu-state-2  #close {
     display: block;
     position: fixed;
     right: 472px;
@@ -7986,7 +7988,7 @@ div#getGroupModal {
     animation-fill-mode: both;
 }
 
-.accountAsideMenuState2 .horizontal-form {
+.account-aside-menu-state-2  .horizontal-form {
     padding-bottom: 110px;
 }
 
@@ -8602,7 +8604,7 @@ button.ladda-button .ladda-label {
     transition: none !important;
 }
 
-.accountAsideMenuState2 #close {
+.account-aside-menu-state-2  #close {
     display: block;
     position: absolute;
     right: 10px;

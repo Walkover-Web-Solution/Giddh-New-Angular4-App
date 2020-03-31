@@ -1,100 +1,88 @@
 <div class="clearfix mrT1">
-    <form>
-        <div class="row">
-            <div class="col-xs-12">
-                <h1 class="section_head">Financial Year(s) - {{ currentCompanyName }}</h1>
-                <div class="row">
-                    <div class="col-sm-7 col-xs-12 ">
-                        <table class="giddh-table basic table financial-year onMobileView">
-                            <thead>
-                                <tr>
-                                    <th>Sr. No.</th>
-                                    <th>From</th>
-                                    <th>To</th>
-                                    <th>Lock Status</th>
-                                </tr>
-                            </thead>
-                            <tbody *ngIf="financialYearObj && financialYearObj.financialYears">
-                                <tr *ngFor="let financialYear of financialYearObj.financialYears; let i = index">
-                                    <td data-title="#">{{i+1}}</td>
-                                    <td data-title="From">{{financialYear?.financialYearStarts}}</td>
-                                    <td data-title="#To">{{financialYear?.financialYearEnds}}</td>
-                                    <td data-title="Lock Status"
-                                        *ngIf="currentCompanyFinancialYearUN != financialYear?.uniqueName"
-                                        class="status">
-                                        <span *ngIf="financialYear?.isLocked"><i class="fa fa-toggle-off fa-2x cp"
-                                                aria-hidden="true"
-                                                (click)="lockUnlockFinancialYear(financialYear);"></i>
-                                            <label>Locked</label></span>
-                                        <span *ngIf="!financialYear?.isLocked"><i class="fa fa-toggle-on fa-2x cp"
-                                                aria-hidden="true"
-                                                (click)="lockUnlockFinancialYear(financialYear);"></i>
-                                            <label>Unlocked</label></span>
-                                    </td>
-                                    <td data-title="Lock Status"
-                                        *ngIf="currentCompanyFinancialYearUN == financialYear?.uniqueName">
-                                        Current Financial Year (can not be locked)
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tbody *ngIf="!financialYearObj || !financialYearObj.financialYears.length"
-                                class="onMobileView noRecords">
-                                <tr>
-                                    <td colspan="4" class="text-center empty_table">
-                                        <h1>No Record Found !!</h1>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <!-- <hr class="clearfix"> -->
-                <!-- <div class="financialYearField row">
-                    <div class="form-group mrT1 col-md-4 col-sm-12 clearfix">
-                        <label>Switch Financial Year</label>
-                        <div class="row">
-                            <span class=" col-sm-7 col-xs-12">
-                                <sh-select placeholder="Select Financial Year" name="currentCompanyFinancialYearUN"
-                                    [ngModel]="currentCompanyFinancialYearUN" [options]="financialOptions"
-                                    (selected)="selectFinancialYearOption($event)" [width]="'100%'"  >
-                                </sh-select>
-                            </span>
-                            <span class="col-sm-4 col-xs-12">
-                                <button class="btn btn-success btn-sm " (click)="switchFY()">Save</button>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="form-group col-md-4 col-sm-12 mrT1 mrB clearfix">
-                        <label>Add Financial Year</label>
-                        <div class="row">
-                            <span class=" col-sm-7 col-xs-12 ">
-                                <sh-select placeholder="Select Financial Year" [options]="yearOptions"
-                                    [forceClearReactive]="forceClear$ | async" (selected)="selectYear($event)">
-                                </sh-select>
-                            </span>
-                            <div class="col-sm-4 col-xs-12">
-                                <button class="btn btn-success btn-sm " (click)="addFY()">Save</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group mrT1 col-md-4 col-sm-12 mrB clearfix">
-                        <label>Financial Year Period</label>
-                        <div class="row">
-                            <span class="col-sm-7 col-xs-12 ">
-                                <sh-select name="selectedFYPeriod" [ngModel]="selectedFYPeriod"
-                                    placeholder="Financial Year Period" (selected)="selectFYPeriod($event)"
-                                    [options]="FYPeriodOptions">
-                                </sh-select>
-                            </span>
-                            <div class="col-sm-4 col-xs-12">
-                                <button class="btn btn-success btn-sm " (click)="updateFYPeriod()">Save</button>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-            </div>
-        </div>
-    </form>
+	<form>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="row financial-year-data">
+					<div class="col-sm-7 col-xs-12">
+						<table class="giddh-table basic table financial-year onMobileView">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>From</th>
+									<th>To</th>
+									<th>Default year</th>
+									<th>Lock Status</th>
+								</tr>
+							</thead>
+							<tbody *ngIf="financialYearObj && financialYearObj.financialYears">
+								<tr *ngFor="let financialYear of financialYearObj.financialYears; let i = index">
+									<td data-title="#">{{i+1}}</td>
+									<td data-title="From">{{financialYear?.financialYearStarts}}</td>
+									<td data-title="#To">{{financialYear?.financialYearEnds}}</td>
+									<td>
+										<div class="default-year">
+											<div class="set-default-selected"  (click)="openModal(template)"> <i class="icon-favorite-selected"></i> Set as default </div>
+											<div class="set-default"> <i class="icon-no-selected"></i> Set as default </div>
+										</div>
+									</td>
+									<td data-title="Lock Status" *ngIf="currentCompanyFinancialYearUN != financialYear?.uniqueName" class="status">
+										<div class="d-flex lock-status-toggle" (click)="lockUnlockFinancialYear(financialYear);" [ngClass]="{'locaked-toggle':financialYear?.isLocked}" *ngIf="financialYear?.isLocked">
+											<div class="toggle d-inline-block">
+												<input type="checkbox" class="toggle-checkbox" id="disabled" checked>
+												<label class="toggle-label" for="disabled"> <span class="toggle-inner"></span> <span class="toggle-switch"></span> </label>
+											</div> <span *ngIf="financialYear?.isLocked">Locked 
+                                        <i class="icon-info"></i>
+                                        </span> </div>
+										<div class="d-flex lock-status-toggle" (click)="lockUnlockFinancialYear(financialYear);" [ngClass]="{'unlocked-toggle':!financialYear?.isLocked}" *ngIf="!financialYear?.isLocked">
+											<div class="toggle d-inline-block">
+												<input type="checkbox" class="toggle-checkbox" id="enabled">
+												<label class="toggle-label" for="enabled"> <span class="toggle-inner"></span> <span class="toggle-switch"></span> </label>
+                                            </div> 
+                                            <span *ngIf="!financialYear?.isLocked">Unlocked
+                                                <i class="icon-info"></i>
+                                            </span> 
+                                        </div>
+									</td>
+									<td data-title="Lock Status" *ngIf="currentCompanyFinancialYearUN == financialYear?.uniqueName"> Current Financial Year (can not be locked) </td>
+								</tr>
+							</tbody>
+							<tbody *ngIf="!financialYearObj || !financialYearObj.financialYears.length" class="onMobileView noRecords">
+								<tr>
+									<td colspan="4" class="text-center empty_table">
+										<h1>No Record Found !!</h1> </td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="col-sm-5 col-xs-12">
+						<button class="btn btn-pink pull-right mr-0" (click)="openFinancialYearAside('customer')">+ New Financial Year</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
 </div>
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+<div *ngIf="accountAsideMenuState === 'in'">
+	<financial-year-aside class="account-aside-menu-state-2  transinherit" (closeAsideEvent)="toggleAccountAsidePane($event)"> </financial-year-aside>
+</div>
+ 
+<!-- confirmation modal -->
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Confirmation</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+     <p class="discription-confirmation">Locking this financial year will freeze all its information (ledgers, accounts, etc…) and you will not be able to make any changes to it (until you unlock it again).</p>
+     <p class="confirm-note">Do you still want to proceed?</p>
+
+    <div class="mt-3">
+        <button class="btn btn-success btn-sm">Save</button>
+        <button _ngcontent-pic-c32="" class="btn btn-danger" type="button" (click)="modalRef.hide()">Cancel</button>
+    </div>
+    </div>
+</ng-template>
+
