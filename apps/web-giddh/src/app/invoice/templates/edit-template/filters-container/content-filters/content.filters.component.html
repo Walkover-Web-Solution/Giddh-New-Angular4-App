@@ -1,7 +1,7 @@
 <div id="contentTab" class="tabcontent mrT2 templateEditor"
     *ngIf="content && customTemplate && customTemplate.sections">
     <!-- start header -->
-    <div id="headerDiv" *ngIf="templateUISectionVisibility.header" class="d-flex">
+    <div id="headerDiv" *ngIf="templateUISectionVisibility.header">
         <div class="width-100">
         <h2>Header</h2>
         <div class="scrollAuto">
@@ -312,18 +312,6 @@
                         </span>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group width-100 pl-5 pt-4">
-        <div class="col-md-11">
-            <div class="mb-1">
-                <input type="checkbox" checked /> Document Title: This is your
-            </div>
-
-            <div class="form-group">
-                <input type="text" class="form-control">
             </div>
         </div>
     </div>

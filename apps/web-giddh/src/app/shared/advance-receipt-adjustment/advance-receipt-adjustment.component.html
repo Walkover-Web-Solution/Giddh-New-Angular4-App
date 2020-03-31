@@ -30,10 +30,10 @@
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label for="name">Adjustment Voucher {{entryIdx}}<span class="text-danger">*</span></label>
+                                <label for="name">Adjustment Voucher<span class="text-danger">*</span></label>
                                 <div [class.error-box]="entry.uniqueName === ''">
                                     <sh-select class="text-left dropdown-arrow" name="uniqueName_{{entryIdx}}" [defaultValue]="entry.voucherNumber" (click)="clickSelectVoucher(entryIdx);" required [placeholder]="'Select Voucher'" [(ngModel)]="entry.uniqueName" (selected)="selectVoucher($event, entry, entryIdx);"
-                                        [options]="adjustVoucherOptions" [notFoundLink]="true" [multiple]="false">
+                                        [options]="adjustVoucherOptions" [multiple]="false">
                                         <ng-template #optionTemplate let-option="option">
                                             <a href="javascript:void(0)" class="list-item">
                                                 <div class="item">{{option.label}}</div>
@@ -113,7 +113,8 @@
                                 <div class="form-group clearfix">
                                     <label class="col-md-2">Amount <span class="text-danger">* </span></label>
                                     <div class="col-md-3">
-                                        <input type="text" class="form-control" required #tdsAmountBox name="tdsAmount.amountForAccount" (ngModelChange)="changeTdsAmount($event)" [(ngModel)]="adjustVoucherForm.tdsAmount.amountForAccount" placeholder="Amount">
+                                        <input type="text" class="form-control" required #tdsAmountBox decimalDigitsDirective [prefix]="currencySymbol" [mask]="inputMaskFormat" name="tdsAmount.amountForAccount" (ngModelChange)="changeTdsAmount($event)" [(ngModel)]="adjustVoucherForm.tdsAmount.amountForAccount"
+                                            placeholder="Amount">
                                     </div>
                                 </div>
                             </div>
