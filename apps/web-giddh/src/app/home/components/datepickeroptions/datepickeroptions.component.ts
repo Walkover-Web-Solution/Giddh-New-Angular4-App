@@ -39,7 +39,7 @@ export class DatepickeroptionsComponent implements OnInit, OnDestroy {
                 moment()
             ],
             'This Financial Year to Date': [
-                moment().startOf('year').subtract(9, 'year'),
+                moment().startOf('year').subtract(9, 'month'),
                 moment()
             ],
             'This Year to Date': [
