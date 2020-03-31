@@ -1336,10 +1336,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * onOpenAdvanceSearch
      */
-    public onOpenAdvanceSearch() {
+    public onOpenAdvanceSearch(): void {
         if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.datePickerOptions && this.datePickerOptions.startDate && this.datePickerOptions.endDate) {
             this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
-                page: 0,
                 dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
                     bsRangeValue: [this.datePickerOptions.startDate, this.datePickerOptions.endDate]
                 })
