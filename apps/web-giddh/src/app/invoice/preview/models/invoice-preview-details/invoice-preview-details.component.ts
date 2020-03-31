@@ -61,8 +61,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     @Output() public sendEmail: EventEmitter<string | { email: string, invoiceType: string[], invoiceNumber: string }> = new EventEmitter<string | { email: string, invoiceType: string[], invoiceNumber: string }>();
     @Output() public processPaymentEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
     @Output() public refreshDataAfterVoucherUpdate: EventEmitter<boolean> = new EventEmitter();
+    /** Event emmiter when advance receipt action selected */
     @Output() public isOpenAdvanceReceiptModal: EventEmitter<boolean> = new EventEmitter();
-
 
     public filteredData: InvoicePreviewDetailsVm[] = [];
     public showEditMode: boolean = false;
