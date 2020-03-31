@@ -47,7 +47,7 @@ import { AdvanceSearchModelComponent } from './components/advance-search/advance
 import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
-import {download} from "@giddh-workspaces/utils";
+import { download } from "@giddh-workspaces/utils";
 
 @Component({
     selector: 'ledger',
@@ -975,7 +975,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (d.status === 'success') {
                 // debugger;
                 let blob = base64ToBlob(d.body, 'application/pdf', 512);
-                download(`${activeAccount.name} - ${invoiceName}.pdf`,blob, 'application/pdf');
+                download(`${activeAccount.name} - ${invoiceName}.pdf`, blob, 'application/pdf');
             } else {
                 this._toaster.errorToast(d.message);
             }
@@ -1334,9 +1334,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * onOpenAdvanceSearch
+     * To open advance search modal
+     *
+     * @memberof LedgerComponent
      */
     public onOpenAdvanceSearch() {
+        if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend) {
+            this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+                page: 0,
+                dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+                    bsRangeValue: [this.datePickerOptions.startDate, this.datePickerOptions.endDate]
+                })
+            });
+        }
         this.advanceSearchModel.show();
     }
 
@@ -1773,7 +1783,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public checkTouristSchemeApplicable(activeLedgerParentgroup: string, selectedAccountParentGroup: string): void {
-        if (this.profileObj && this.profileObj.countryV2 && this.profileObj.countryV2.alpha2CountryCode && this.profileObj.countryV2.alpha2CountryCode === 'AE' && activeLedgerParentgroup && selectedAccountParentGroup && (this.allowParentGroup.includes(activeLedgerParentgroup)) && ( this.allowParentGroup.includes(selectedAccountParentGroup))) {
+        if (this.profileObj && this.profileObj.countryV2 && this.profileObj.countryV2.alpha2CountryCode && this.profileObj.countryV2.alpha2CountryCode === 'AE' && activeLedgerParentgroup && selectedAccountParentGroup && (this.allowParentGroup.includes(activeLedgerParentgroup)) && (this.allowParentGroup.includes(selectedAccountParentGroup))) {
             this.isTouristSchemeApplicable = true;
         } else {
             this.isTouristSchemeApplicable = false;
