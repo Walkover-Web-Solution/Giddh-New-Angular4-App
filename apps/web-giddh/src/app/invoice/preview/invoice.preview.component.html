@@ -708,7 +708,7 @@
     <!-- region invoice-preview-details -->
     <div *ngIf="selectedInvoiceForDetails">
         <invoice-preview-details-component [selectedItem]="selectedInvoiceForDetails" [items]="itemsListForDetails" [invoiceSetting]="invoiceSetting" (deleteVoucher)="deleteConfirmedInvoice()" (sendEmail)="sendEmail($event)" (closeEvent)="invoicePreviewClosed()"
-            (isOpenAdvanceReceiptModal)="openAdvanceReceiptModal($event)" (processPaymentEvent)="closePerformActionPopup($event)" [voucherType]="selectedVoucher" (updateVoucherAction)="onPerformAction(null, $event)" [appSideMenubarIsOpen]="appSideMenubarIsOpen"
+            (onOpenAdvanceReceiptModal)="openAdvanceReceiptModal($event)" (processPaymentEvent)="closePerformActionPopup($event)" [voucherType]="selectedVoucher" (updateVoucherAction)="onPerformAction(null, $event)" [appSideMenubarIsOpen]="appSideMenubarIsOpen"
             (refreshDataAfterVoucherUpdate)="getVoucher(isUniversalDateApplicable)"></invoice-preview-details-component>
     </div>
     <!-- endregion -->
