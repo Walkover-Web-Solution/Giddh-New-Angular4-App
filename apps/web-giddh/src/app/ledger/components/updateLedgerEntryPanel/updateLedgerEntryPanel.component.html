@@ -907,7 +907,7 @@
                             <div class="mrR1 form-group pull-left cp">
                                 <label class="pull-left cp fs16">
                                     <input class="pull-left" type="checkbox" name="generateInvoice" [(ngModel)]="vm.selectedLedger.generateInvoice"
-                                           [disabled]="vm.isInvoiceGeneratedAlready || (isAdvanceReceipt && vm.selectedLedger.generateInvoice)">
+                                           [disabled]="(vm.isInvoiceGeneratedAlready || (isAdvanceReceipt && vm.selectedLedger.generateInvoice)) ? 'disabled': null">
                                     Generate Invoice
                                 </label>
                             </div>
