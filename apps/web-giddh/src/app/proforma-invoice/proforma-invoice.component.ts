@@ -388,6 +388,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         totalAdjustedAmount: 0
     }
     public applyRoundOff: boolean = true;
+    public customerAccount: any = {email: ''};
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -892,7 +893,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             }
                             obj = cloneDeep(convertedRes1) as VoucherClass;
                             this.selectedAccountDetails$.pipe(take(1)).subscribe(acc => {
-                                obj.accountDetails.currencySymbol = acc.currencySymbol || '';
+                                if (acc) {
+                                    obj.accountDetails.currencySymbol = acc.currencySymbol || '';
+                                }
                             });
                             this.fetchCurrencyRate(results);
                         } else if (this.isPurchaseInvoice) {
@@ -1497,8 +1500,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public convertDateForAPI(val: any): string {
         if (val) {
             // To check val is DD-MM-YY format already so it will be string then return val
-            if (typeof val === 'string' && val.includes('-')) {
-                return val;
+            if (typeof val === 'string') {
+                if (val.includes('-')) {
+                    return val;
+                } else {
+                    return '';
+                }
             } else {
                 try {
                     return moment(val).format(GIDDH_DATE_FORMAT);
@@ -2235,6 +2242,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.isCustomerSelected = true;
             this.invFormData.accountDetails.name = '';
             if (item.additional) {
+                this.customerAccount.email = item.additional.email;
                 // If currency of item is null or undefined then treat it to be equivalent of company currency
                 item.additional['currency'] = item.additional.currency || this.companyCurrency;
                 this.isMulticurrencyAccount = item.additional.currency !== this.companyCurrency;
