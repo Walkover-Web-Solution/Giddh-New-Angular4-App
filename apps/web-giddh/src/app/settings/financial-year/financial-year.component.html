@@ -21,32 +21,34 @@
 									<td data-title="#To">{{financialYear?.financialYearEnds}}</td>
 									<td>
 										<div class="default-year">
-											<div class="set-default-selected"  (click)="openModal(template)"> <i class="icon-favorite-selected"></i> Set as default </div>
+											<div class="set-default-selected"> <i class="icon-favorite-selected"></i> Set as default </div>
 											<div class="set-default"> <i class="icon-no-selected"></i> Set as default </div>
 										</div>
 									</td>
 									<td data-title="Lock Status" *ngIf="currentCompanyFinancialYearUN != financialYear?.uniqueName" class="status">
-										<div class="d-flex lock-status-toggle" (click)="lockUnlockFinancialYear(financialYear);" [ngClass]="{'locaked-toggle':financialYear?.isLocked}" *ngIf="financialYear?.isLocked">
+										<div class="d-flex lock-status-toggle" (click)="lockUnlockFinancialYear(financialYear) || openModal(template);" [ngClass]="{'locaked-toggle':financialYear?.isLocked}" *ngIf="financialYear?.isLocked">
 											<div class="toggle d-inline-block">
 												<input type="checkbox" class="toggle-checkbox" id="disabled" checked>
 												<label class="toggle-label" for="disabled"> <span class="toggle-inner"></span> <span class="toggle-switch"></span> </label>
-											</div> <span *ngIf="financialYear?.isLocked">Locked 
-                                        <i class="icon-info"></i>
-                                        </span> </div>
-										<div class="d-flex lock-status-toggle" (click)="lockUnlockFinancialYear(financialYear);" [ngClass]="{'unlocked-toggle':!financialYear?.isLocked}" *ngIf="!financialYear?.isLocked">
-											<div class="toggle d-inline-block">
+											</div> <span *ngIf="financialYear?.isLocked">Locked </span> </div>
+
+                                        <!-- after clicking to toggle button 1st confirmation modal will open , if user make confirm then toggle button
+                                             will swithced but right now it's not working like that plz make it proper functional (for more info contact to meghna & shalinee) 
+                                    
+                                            confirmation modal will appear when user toggle for lock and unloack both side
+                                        -->
+										<div class="d-flex lock-status-toggle" (click)="lockUnlockFinancialYear(financialYear) || openModal(template);" [ngClass]="{'unlocked-toggle':!financialYear?.isLocked}" *ngIf="!financialYear?.isLocked">
+											<div class="toggle d-inline-block">   
 												<input type="checkbox" class="toggle-checkbox" id="enabled">
 												<label class="toggle-label" for="enabled"> <span class="toggle-inner"></span> <span class="toggle-switch"></span> </label>
                                             </div> 
-                                            <span *ngIf="!financialYear?.isLocked">Unlocked
-                                                <i class="icon-info"></i>
-                                            </span> 
+                                            <span *ngIf="!financialYear?.isLocked">Unlocked</span> 
                                         </div>
 									</td>
 									<td data-title="Lock Status" *ngIf="currentCompanyFinancialYearUN == financialYear?.uniqueName"> Current Financial Year (can not be locked) </td>
 								</tr>
 							</tbody>
-							<tbody *ngIf="!financialYearObj || !financialYearObj.financialYears.length" class="onMobileView noRecords">
+							<tbody *ngIf="!financialYearObj || !financialYearObj.financialYears.length" class="onMobileView no-records">
 								<tr>
 									<td colspan="4" class="text-center empty_table">
 										<h1>No Record Found !!</h1> </td>
