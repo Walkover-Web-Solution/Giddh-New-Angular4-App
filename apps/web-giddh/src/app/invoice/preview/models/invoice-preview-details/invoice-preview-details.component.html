@@ -157,6 +157,9 @@
                                                 <li class="cp" role="menuitem"
                                                     (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"><a
                                                         class="dropdown-item">Paid</a></li>
+                                                <li (click)="openInvoiceAdvanceReceiptModal()">
+                                                    <a class="cp" href="javascript:void(0)">Adjust Amount</a>
+                                                </li>
 
                                                 <li class="cp" role="menuitem"
                                                     (click)="updateVoucherAction.emit('unpaid')"><a

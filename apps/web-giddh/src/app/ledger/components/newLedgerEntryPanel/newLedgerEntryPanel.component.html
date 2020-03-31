@@ -427,7 +427,7 @@
 
                     <label class="pull-left cp fs16">
 
-                        <input class="pull-left" type="checkbox" name="generateInvoice"
+                        <input class="pull-left" type="checkbox" name="generateInvoice" [disabled]="isAdvanceReceipt && blankLedger.generateInvoice ? 'disabled' : null"
                             [(ngModel)]="blankLedger.generateInvoice">
                         Generate Invoice
                     </label>

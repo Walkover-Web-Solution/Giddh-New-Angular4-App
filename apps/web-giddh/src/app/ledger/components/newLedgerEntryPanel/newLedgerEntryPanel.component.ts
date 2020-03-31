@@ -229,7 +229,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public ngOnInit() {
         this.showAdvanced = false;
         this.uploadInput = new EventEmitter<UploadInput>();
-        this.fileUploadOptions = {concurrency: 0};
+        this.fileUploadOptions = { concurrency: 0 };
         this.currentTxn.advanceReceiptAmount = this.currentTxn.amount;
         this.activeAccount$.subscribe(acc => {
             if (acc) {
@@ -1064,6 +1064,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public handleAdvanceReceiptChange(): void {
         this.currentTxn['subVoucher'] = this.isAdvanceReceipt ? Subvoucher.AdvanceReceipt : '';
+        this.blankLedger.generateInvoice = this.isAdvanceReceipt;
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
         this.calculateTax();
     }
