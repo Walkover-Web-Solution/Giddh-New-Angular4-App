@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, KeyValueDiffers } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
 import { select, Store } from '@ngrx/store';
 import { takeUntil, take } from 'rxjs/operators';
@@ -209,7 +209,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof ColumnarReportComponent
      */
-    public selectFromMonth(event) {
+    public selectFromMonth(event): void {
         if (event.value) {
             let fromMonth = moment(new Date(this.financialYearSelected.financialYearStarts.split("-").reverse().join("-")));
             let toMonth = moment(new Date(this.financialYearSelected.financialYearEnds.split("-").reverse().join("-")));
@@ -232,7 +232,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof ColumnarReportComponent
      */
-    public selectToMonth(event) {
+    public selectToMonth(event): void {
         if (event.value) {
             let fromMonth = moment(new Date(this.financialYearSelected.financialYearStarts.split("-").reverse().join("-")));
             let toMonth = moment(new Date(this.financialYearSelected.financialYearEnds.split("-").reverse().join("-")));
@@ -254,7 +254,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      *
      * @memberof ColumnarReportComponent
      */
-    public selectActiveFinancialYear() {
+    public selectActiveFinancialYear(): void {
         if(this.selectYear && this.selectYear.length > 0 && this.activeFinancialYear) {
             this.selectYear.forEach(key => {
                 if(key.value.uniqueName === this.activeFinancialYear) {
