@@ -86,7 +86,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 moment()
             ],
             'This Financial Year to Date': [
-                moment().startOf('year').subtract(9, 'year'),
+                moment().startOf('year').subtract(9, 'month'),
                 moment()
             ],
             'This Year to Date': [
@@ -313,6 +313,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     public onReceiptTypeChanged(currentlySelectedReceipt: string): void {
+        this.showClearFilter = true;
         this.searchQueryParams.receiptTypes = [currentlySelectedReceipt];
         this.fetchAllReceipts({ ...this.searchQueryParams }).subscribe((response) => this.handleFetchAllReceiptResponse(response));
     }
@@ -420,6 +421,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             fromEvent(this.receiptNumber.nativeElement, 'input'),
             fromEvent(this.paymentMode.nativeElement, 'input'),
             fromEvent(this.invoiceNumber.nativeElement, 'input')).pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
+                this.showClearFilter = true;
                 this.fetchAllReceipts(this.searchQueryParams).subscribe((response) => this.handleFetchAllReceiptResponse(response));
             });
     }
