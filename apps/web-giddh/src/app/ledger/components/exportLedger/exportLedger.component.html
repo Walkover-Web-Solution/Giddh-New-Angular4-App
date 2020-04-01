@@ -10,19 +10,19 @@
                 <label class="w100">Type:</label>
 
                 <span class="pd0 mrR3">
-                    <input id="mini" class="radio-custom cp ml0" type="radio" name="emailTypeSelected"
+                    <input id="mini" class="radio-custom cp ml0" type="radio" name="emailTypeSelected" (ngModelChange)="handleReportTypeChange($event)"
                         [(ngModel)]="emailTypeSelected" [value]="emailTypeMini">
                     <label for="mini" class="radio-custom-label">Mini</label>
                 </span>
 
                 <span class="pd0 mrR3">
-                    <input id="detailed" class="radio-custom cp ml0" type="radio" name="emailTypeSelected"
+                    <input id="detailed" class="radio-custom cp ml0" type="radio" name="emailTypeSelected" (ngModelChange)="handleReportTypeChange($event)"
                         [(ngModel)]="emailTypeSelected" [value]="emailTypeDetail">
                     <label for="detailed" class="radio-custom-label">Detailed</label>
                 </span>
 
                 <span class="pd0 mrR3">
-                    <input id="columnar" class="radio-custom cp ml0" type="radio" name="emailTypeSelected"
+                    <input id="columnar" class="radio-custom cp ml0" type="radio" name="emailTypeSelected" (ngModelChange)="handleReportTypeChange($event)"
                         [(ngModel)]="emailTypeSelected" [value]="emailTypeColumnar">
                     <label for="columnar" class="radio-custom-label">Columnar</label>
                 </span>
