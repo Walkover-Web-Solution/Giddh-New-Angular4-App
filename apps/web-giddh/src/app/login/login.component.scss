@@ -214,14 +214,14 @@ button.close {
 }
 
 .btn-success {
-    background: $midnightBlue;
+    background: $mid-night-blue;
     color: $White;
-    border-color: $midnightBlue;
+    border-color: $mid-night-blue;
 }
 
 .btn-success:hover {
-    background: $midnightBlueHover;
-    border-color: $midnightBlueHover;
+    background: $mid-night-blue-hover;
+    border-color: $mid-night-blue-hover;
     color: $White;
 }
 
@@ -316,8 +316,8 @@ small {
 }
 
 .google-ico a {
-    background: $cornflowerBlue;
-    border-color: $cornflowerBlue !important;
+    background: $corn-flower-blue;
+    border-color: $corn-flower-blue !important;
     color: $White;
 }
 
@@ -443,7 +443,7 @@ small {
     position: relative;
 }
 .login-left {
-    background-color: $top_header;
+    background-color: $mid-night-blue;
     position: absolute;
     left: 0;
     height: 100vh;
@@ -474,7 +474,7 @@ small {
     overflow: hidden;
 }
 .logo-login {
-    background-color: $darkMidnightBlue;
+    background-color: $darkmid-night-blue;
     height: 98px;
     display: flex;
     align-items: center;
@@ -487,12 +487,12 @@ small {
     background-color: $White;
 }
 .accounting-space h4 {
-    color: $pageTitleColor;
+    color: $mid-night-blue;
     font-weight: 600;
     font-size: 20px;
 }
 .btn-outline-primary {
-    background-color: $primaryBtncolror;
+    background-color: $deep-sky-blue;
     border-radius: 3px;
     min-width: 160px;
     border-radius: 5px;
@@ -502,28 +502,28 @@ small {
 }
 .btn-outline-primary:hover,
 .btn-outline-primary:focus {
-    background-color: $primaryBtnHovercolror;
+    background-color: $deep-sky-blue-hover;
     box-shadow: none;
     outline: none;
 }
 .login-with {
-    color: $pageTitleColor;
+    color: $mid-night-blue;
     font-size: 0.9em;
 }
 .login-with a {
-    color: $pageTitleColor;
+    color: $mid-night-blue;
     text-decoration: none;
 }
 .btn-secondary {
     background-color: $White;
     color: $navy;
-    border: 1px solid $light-text-blue;
+    border: 1px solid $chetwode-blue;
     border-radius: 5px;
 }
 .btn-secondary:hover {
     color: $White !important;
-    background-color: $light-text-blue;
-    border-color: $light-text-blue;
+    background-color: $chetwode-blue;
+    border-color: $chetwode-blue;
 }
 
 @media only screen and (max-width: 768px) {

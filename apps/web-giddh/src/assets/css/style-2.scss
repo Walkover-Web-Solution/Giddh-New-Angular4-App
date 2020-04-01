@@ -770,7 +770,7 @@ input {
 
 .company-list button.btn-link:hover {
     color: $White;
-    background: $dark-blue00;
+    background: $midnight-express;
     text-decoration: none;
 }
 
@@ -874,7 +874,7 @@ ul.sub-list {
 .tab-integraton .nav-tabs > li.active a {
     background: $White !important;
     box-shadow: 0 6px 7px #cacaca;
-    border: 1px solid $dark-blue00 !important;
+    border: 1px solid $midnight-express !important;
     color: #333333 !important;
     border-radius: 3px;
     /* display: block; */
@@ -886,7 +886,7 @@ ul.sub-list {
 
 .tab-integraton .nav-tabs > li > a > span {
     font-size: 30px;
-    color: $dark-blue00;
+    color: $midnight-express;
     opacity: 0.4;
     margin-bottom: 6px;
 }
@@ -901,7 +901,7 @@ ul.sub-list {
 
 .customer-footer-box .numbertotal {
     font-size: 26px;
-    color: $border-blue;
+    color: $chetwode-blue;
 }
 
 .customer-footer-box h5 {
@@ -950,7 +950,7 @@ ul.sub-list {
 }
 
 .custom-tabs .nav.nav-tabs > li a:hover {
-    color: $activeTabBorder !important;
+    color: $deep-sky-blue !important;
 }
 
 .custom-tabs .nav.nav-tabs > li.active a {
@@ -967,27 +967,27 @@ ul.sub-list {
 }
 
 .btn-pink {
-    background: $primaryBtncolror;
-    border: 1px solid $primaryBtncolror;
+    background: $deep-sky-blue;
+    border: 1px solid $deep-sky-blue;
     color: $White;
 }
 
 .btn-pink:hover,
 .btn-pink:focus {
-    background: $primaryBtnHovercolror !important;
-    border-color: $primaryBtnHovercolror;
+    background: $deep-sky-blue-hover !important;
+    border-color: $deep-sky-blue-hover;
     color: $White;
 }
 
 .btn-light-gray {
-    background: $btn-light-gray;
-    border-color: $btn-light-gray;
+    background: $lavender;
+    border-color: $lavender;
     color: #1a237e;
 }
 
 .btn-light-gray:hover {
-    background: $primaryBtncolror;
-    border-color: $primaryBtncolror;
+    background: $deep-sky-blue;
+    border-color: $deep-sky-blue;
     color: $White;
 }
 
@@ -1126,13 +1126,13 @@ ul.sub-list {
 .pagination > li > a {
     background: $White !important;
     color: #484848 !important;
-    border: 1px solid $JacksonsPurple !important;
+    border: 1px solid $Jacksons-purple !important;
 }
 
 .pagination > li.active > a {
-    background: $JacksonsPurple !important;
+    background: $Jacksons-purple !important;
     color: $White !important;
-    border: 1px solid $JacksonsPurple !important;
+    border: 1px solid $Jacksons-purple !important;
 }
 
 .custom-dropdown .dropdown-menu > li > a:hover {
@@ -1260,13 +1260,13 @@ ul.sub-list {
 }
 
 .btn-green {
-    background: $primaryBtncolror;
+    background: $deep-sky-blue;
     color: $White;
 }
 
 .btn-green:hover {
     color: $White;
-    background: $primaryBtnHovercolror;
+    background: $deep-sky-blue-hover;
 }
 
 /* .Advance-Search .header:after {
@@ -1496,7 +1496,7 @@ modal-container.modal {
     background: $White;
     border-radius: 0px 2px 2px 0px !important;
     border-left: 0px;
-    border-color: $inputBorderColor;
+    border-color: $Gainsboro;
 }
 
 .btn-filter {
@@ -1557,7 +1557,7 @@ modal-container.modal {
     justify-content: center;
 }
 .color-primary {
-    color: $primaryBtncolror;
+    color: $deep-sky-blue;
 }
 /* my css end */
 
@@ -1565,7 +1565,7 @@ modal-container.modal {
 
 .form-control {
     background: $White !important;
-    border: 1px solid $inputBorderColor;
+    border: 1px solid $Gainsboro;
     border-radius: 2px !important;
     padding: 6px !important;
     outline: 0;
@@ -1592,7 +1592,7 @@ input:-moz-placeholder {
 
 .form-control:focus {
     outline: none;
-    border-color: $border-blue !important;
+    border-color: $chetwode-blue !important;
     box-shadow: none;
 }
 
@@ -1630,7 +1630,7 @@ input:-moz-placeholder {
     display: inline-flex;
     width: 28px;
     height: 28px;
-    background-color: $border-blue;
+    background-color: $chetwode-blue;
     text-align: center;
     border-radius: 50%;
     justify-content: center;
@@ -1731,8 +1731,8 @@ header .navbar {
 
 .btn-primary {
     background: $White;
-    border-color: $border-blue;
-    color: $dark-blue00;
+    border-color: $chetwode-blue;
+    color: $midnight-express;
 }
 
 .btn-primary:hover,
@@ -1743,9 +1743,9 @@ header .navbar {
 .open > .dropdown-toggle.btn-primary,
 .btn-primary:active:focus,
 .btn-primary:active:hover {
-    background: $border-blue;
+    background: $chetwode-blue;
     color: $White;
-    border-color: $border-blue;
+    border-color: $chetwode-blue;
 }
 
 .btn-primary.disabled.focus,
@@ -1757,9 +1757,9 @@ header .navbar {
 fieldset[disabled] .btn-primary.focus,
 fieldset[disabled] .btn-primary:focus,
 fieldset[disabled] .btn-primary:hover {
-    background: $border-blue;
+    background: $chetwode-blue;
     color: $White;
-    border-color: $border-blue;
+    border-color: $chetwode-blue;
 }
 
 .btn {
@@ -1778,8 +1778,8 @@ fieldset[disabled] .btn-primary:hover {
 
 .btn-default {
     background: $White;
-    border-color: $border-blue;
-    color: $dark-blue00;
+    border-color: $chetwode-blue;
+    color: $midnight-express;
 }
 
 .btn-default:hover,
@@ -1791,9 +1791,9 @@ fieldset[disabled] .btn-primary:hover {
 .btn-default:active,
 .btn-default:active:focus,
 .open > .dropdown-toggle.btn-default {
-    background: $border-blue;
+    background: $chetwode-blue;
     color: $White;
-    border-color: $border-blue;
+    border-color: $chetwode-blue;
 }
 
 #actionPane .btn-default {
@@ -2128,15 +2128,15 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .selected-company a.ellp {
-    color: $border-blue;
+    color: $chetwode-blue;
 }
 
 #companyList li.selected-company a:focus {
-    background-color: $border-blue;
+    background-color: $chetwode-blue;
 }
 
 #companyList li.selected-company a:hover span {
-    color: $border-blue !important;
+    color: $chetwode-blue !important;
 }
 
 #companyList li.selected-company a:focus span {
@@ -2243,8 +2243,8 @@ input[type="checkbox"]:after {
 }
 
 input[type="checkbox"]:checked:after {
-    background-color: $border-blue;
-    border-color: $border-blue;
+    background-color: $chetwode-blue;
+    border-color: $chetwode-blue;
 }
 
 .tab-pane .list-inline > li {
@@ -2659,7 +2659,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .campanien-list ul > li > a:hover {
-    color: $light-text-blue;
+    color: $chetwode-blue;
     background: #eeeff9;
 }
 
@@ -2933,7 +2933,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .daterangepicker td.in-range {
-    background-color: $light-purple !important;
+    background-color: $lavender-light !important;
     border-color: transparent;
     color: #000;
     border-radius: 0;
@@ -2977,8 +2977,8 @@ input[type="checkbox"]:checked:after {
 
 .ranges li.active,
 .ranges li:hover {
-    background: $border-blue !important;
-    border: 1px solid $border-blue !important;
+    background: $chetwode-blue !important;
+    border: 1px solid $chetwode-blue !important;
     color: $White !important;
 }
 
@@ -3091,7 +3091,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .ledger-main .form-control:focus {
-    border: 1px solid $activeIconTh !important;
+    border: 1px solid $deep-sky-blue !important;
     border-radius: 0 !important;
 }
 
@@ -3101,7 +3101,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .active.end-date.in-range.available,
 .daterangepicker td.start-date {
-    background: $border-blue !important;
+    background: $chetwode-blue !important;
     color: $White;
     border-radius: 2px;
 }
@@ -3561,7 +3561,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .pop-panel .form-control {
     background: #f9f7f2;
-    border-color: $inputBorderColor;
+    border-color: $Gainsboro;
 }
 
 .pop-panel label {
@@ -3788,7 +3788,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .modal-header {
     position: relative;
-    background: $top_header !important;
+    background: $mid-night-blue !important;
 }
 
 .close_modal {
@@ -4224,7 +4224,7 @@ label {
 
 #App_taxes .form-control {
     background: #f4f5f5 !important;
-    border: 1px solid $inputBorderColor;
+    border: 1px solid $Gainsboro;
 }
 
 .col_wrapper:nth-child(1) {
@@ -4276,26 +4276,26 @@ label {
 
 .isActive {
     color: $White !important;
-    background: $primaryBtncolror;
-    border-color: $primaryBtncolror;
+    background: $deep-sky-blue;
+    border-color: $deep-sky-blue;
 }
 
 .isActive:hover {
     color: $White !important;
-    background: $primaryBtnHovercolror;
-    border-color: $primaryBtnHovercolror;
+    background: $deep-sky-blue-hover;
+    border-color: $deep-sky-blue-hover;
 }
 
 .isParent.isActive {
     color: $White !important;
-    background: $primaryBtncolror !important;
-    border-color: $primaryBtncolror;
+    background: $deep-sky-blue !important;
+    border-color: $deep-sky-blue;
 }
 
 .isParent.isActive:hover {
     color: $White !important;
-    background: $primaryBtnHovercolror !important;
-    border-color: $primaryBtnHovercolror;
+    background: $deep-sky-blue-hover !important;
+    border-color: $deep-sky-blue-hover;
 }
 
 .primary_clr {
@@ -4422,7 +4422,7 @@ label {
 
 #App_taxes .form-control {
     background: #f4f5f5 !important;
-    border: 1px solid $inputBorderColor;
+    border: 1px solid $Gainsboro;
 }
 
 .tax-bullet {
@@ -4539,7 +4539,7 @@ label {
 }
 
 .breadcrumb > .active > a {
-    color: $activeTabBorder;
+    color: $deep-sky-blue;
 }
 
 .breadcrumb a {
@@ -5143,7 +5143,7 @@ label {
     position: absolute;
     width: 8px;
     height: 8px;
-    background: $border-blue;
+    background: $chetwode-blue;
     left: 5px;
     bottom: 5px;
     border-radius: 50%;
@@ -5152,7 +5152,7 @@ label {
 }
 
 .radio_theme:checked:before {
-    border: 1px solid $border-blue;
+    border: 1px solid $chetwode-blue;
 }
 
 .dropdown-container .dropdown-menu {
@@ -5273,7 +5273,7 @@ label {
 #customInvoice .templateEditor .table > tbody > tr > td .form-control {
     margin: 7px 0;
     background: $White;
-    border-color: $inputBorderColor;
+    border-color: $Gainsboro;
     border-radius: 2px;
 }
 
@@ -5606,7 +5606,7 @@ datepicker-inner .well table tbody tr td .btn-default {
 }
 
 datepicker-inner .well table tbody tr td .btn-default:hover {
-    background: $border-blue !important;
+    background: $chetwode-blue !important;
     color: $White;
 }
 
@@ -5737,7 +5737,7 @@ input[type="checkbox"][disabled]:after {
 }
 
 .toggle-btn label {
-    color: $border-blue;
+    color: $chetwode-blue;
     font-size: 16px;
 }
 
@@ -5787,8 +5787,8 @@ input[type="checkbox"][disabled]:after {
 
 .active-toggle-btn {
     color: $White;
-    background-color: $border-blue;
-    border-color: $border-blue;
+    background-color: $chetwode-blue;
+    border-color: $chetwode-blue;
 }
 
 .input-group-addon input[type="radio"] {
@@ -5934,7 +5934,7 @@ virtual-scroll .scrollable-content .item > a {
 }
 
 virtual-scroll .scrollable-content .item.selected > a {
-    color: $border-blue !important;
+    color: $chetwode-blue !important;
 }
 
 virtual-scroll .scrollable-content .item:hover .item,
@@ -5955,7 +5955,7 @@ table input[type="number"] {
 }
 
 .btn-link {
-    color: $JacksonsPurple;
+    color: $Jacksons-purple;
     /* color: #2262D1; */
 }
 
@@ -6103,7 +6103,7 @@ typeahead-container .dropdown-menu li.active > a > a {
 .btn-share,
 .btn-share:hover,
 .btn-share:focus {
-    background: $primaryBtncolror;
+    background: $deep-sky-blue;
     color: $White;
 }
 
@@ -6424,7 +6424,7 @@ table td[class*=col-]:last-child {
 
 .form-header {
     padding: 20px 15px;
-    background: $top_header;
+    background: $mid-night-blue;
     color: $White;
 }
 
@@ -6560,7 +6560,7 @@ table td[class*=col-]:last-child {
 }
 
 .user_circle {
-    background: $border-blue;
+    background: $chetwode-blue;
     border-radius: 100%;
     margin-right: 10px;
     width: 30px;
@@ -6966,7 +6966,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .user_dropdown > li a:hover {
-    color: $border-blue;
+    color: $chetwode-blue;
     background: #eeeff9;
 }
 
@@ -6987,7 +6987,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     font-size: 20px;
     text-transform: capitalize;
     width: auto;
-    color: $pageTitleColor;
+    color: $mid-night-blue;
     font-family: $tableFontSemibold;
     vertical-align: middle;
 }
@@ -8194,7 +8194,7 @@ span.red-text {
 }
 
 .hamburger_menu i.icon-bar {
-    color: $pageTitleColor;
+    color: $mid-night-blue;
 }
 
 .pageCount span {
@@ -8313,13 +8313,13 @@ ul.dropdown-menu p.lead.pd {
 }
 
 /*  .nav.nav-tabs>li>a {
-                    color: $dark-blue00 !important;
+                    color: $midnight-express !important;
                     border-bottom: 4px solid transparent !important;
                 }
             */
 .nav-tabs > li.active > a,
 .invoce-controll .nav-tabs > li.active > a {
-    border-bottom: 4px solid $activeIconTh !important;
+    border-bottom: 4px solid $deep-sky-blue !important;
     padding-bottom: 7px !important;
     font-family: $tableFontSemibold;
 }
@@ -8329,7 +8329,7 @@ ul.dropdown-menu p.lead.pd {
 }
 
 .dropdown-menu > li > a:hover {
-    color: $border-blue !important;
+    color: $chetwode-blue !important;
     background: #eeeff9 !important;
 }
 
@@ -8365,13 +8365,13 @@ ul.dropdown-menu p.lead.pd {
 }
 
 #invoice-setting .nav > li > a.active {
-    border: 1px solid $activeTabBorder !important;
-    border-bottom-color: $activeTabBorder !important;
-    color: $activeTabBorder !important;
+    border: 1px solid $deep-sky-blue !important;
+    border-bottom-color: $deep-sky-blue !important;
+    color: $deep-sky-blue !important;
 }
 
 #invoice-setting .nav > li > a.active span {
-    color: $activeTabBorder;
+    color: $deep-sky-blue;
 }
 
 .aging-table th .table-checkbox {
@@ -8398,7 +8398,7 @@ ul.dropdown-menu p.lead.pd {
     min-width: 170px;
 }
 
-.settingPage ul.nav.nav-tabs {
+.setting-page ul.nav.nav-tabs {
     margin-bottom: 15px;
     padding: 0 0px 0 15px !important;
     background-color: #f7f8fa;
@@ -8407,16 +8407,16 @@ ul.dropdown-menu p.lead.pd {
     top: -4px;
 }
 
-.settingPage .nav > li > a {
+.setting-page .nav > li > a {
     padding: 2px 0px;
-    margin-right: 35px;
+    margin-right: 25px;
     padding-bottom: 7px;
     font-size: 14px;
     color: #333 !important;
 }
 
-.settingPage .nav > li > a:hover {
-    color: $activeTabBorder !important;
+.setting-page .nav > li > a:hover {
+    color: $deep-sky-blue !important;
 }
 
 #tab-integration .nav-tabs {
@@ -8428,7 +8428,7 @@ ul.dropdown-menu p.lead.pd {
     padding-top: 0 !important;
 }
 
-.settingPage .nav > li > a.active {
+.setting-page .nav > li > a.active {
     color: #1c1c1c !important;
 }
 
@@ -8446,14 +8446,14 @@ ul.dropdown-menu p.lead.pd {
 }
 
 #tab-integration .nav-tabs > li a.active {
-    border-bottom: 1px solid $activeTabBorder !important;
+    border-bottom: 1px solid $deep-sky-blue !important;
     font-family: "opensans-regular";
-    color: $activeTabBorder !important;
-    border-color: $activeTabBorder !important;
+    color: $deep-sky-blue !important;
+    border-color: $deep-sky-blue !important;
 }
 
 #tab-integration .nav-tabs > li a.active span {
-    color: $activeTabBorder;
+    color: $deep-sky-blue;
 }
 
 .input-group-addon {
@@ -8471,13 +8471,13 @@ ul.dropdown-menu p.lead.pd {
 }
 
 .date-advanceSearch .input-group input.form-control {
-    border-color: $inputBorderColor !important;
+    border-color: $Gainsboro !important;
 }
 
 .advance-icon {
     height: 36px !important;
     width: 36px !important;
-    border: 1px solid $inputBorderColor !important;
+    border: 1px solid $Gainsboro !important;
 }
 
 .table-bordered > tbody > tr > td,
@@ -8486,7 +8486,7 @@ ul.dropdown-menu p.lead.pd {
 .table-bordered > tfoot > tr > th,
 .table-bordered > thead > tr > td,
 .table-bordered > thead > tr > th {
-    border: 1px solid $tableBorderColor;
+    border: 1px solid $Gainsboro;
 }
 
 table.basic td {
@@ -8533,7 +8533,7 @@ button.btn.btn-filter {
 
 .icon-sort-asc:hover,
 .icon-sort-dsc:hover {
-    color: $activeIconTh !important;
+    color: $deep-sky-blue !important;
 }
 
 .amount-arrow .icon-sort-asc {
@@ -8542,7 +8542,7 @@ button.btn.btn-filter {
 }
 
 .td_in_searchBox div i.icon-search:hover {
-    color: $activeIconTh !important;
+    color: $deep-sky-blue !important;
 }
 
 .mobileCode .menu {
@@ -8769,7 +8769,7 @@ p.remvBrnchName {
 
 .createAccForm li.highlighted.selected .account-list-item,
 .createAccForm li.highlighted .account-list-item {
-    color: $light-text-blue !important;
+    color: $chetwode-blue !important;
 }
 
 button {
@@ -8857,24 +8857,24 @@ input.checkbox-custom[type="checkbox"] {
 }
 
 .checkbox-custom:checked + .checkbox-custom-label:before {
-    background: $border-blue;
+    background: $chetwode-blue;
 
-    border: 2px solid $border-blue;
+    border: 2px solid $chetwode-blue;
 }
 
 .radio-custom + .radio-custom-label:before {
     border-radius: 50%;
-    border: 1px solid $border-blue;
+    border: 1px solid $chetwode-blue;
 }
 
 .radio-custom:checked + :before {
-    background: $border-blue;
-    border: 1px solid $border-blue;
+    background: $chetwode-blue;
+    border: 1px solid $chetwode-blue;
     box-shadow: inset 0px 0px 0px 4px $White;
 }
 
 .checkbox-custom:focus + .checkbox-custom-label:before {
-    border: 1px solid $border-blue;
+    border: 1px solid $chetwode-blue;
 }
 
 /* radio & checkbox new CSS end */
@@ -9175,7 +9175,7 @@ input.checkbox-custom[type="checkbox"] {
         border-right: none;
     }
     header .navbar {
-        background-color: $top_header !important;
+        background-color: $mid-night-blue !important;
         /*border-bottom: 2px solid #e6e7e8;*/
     }
     header .hamburger_menu h4 {
@@ -9286,7 +9286,7 @@ input.checkbox-custom[type="checkbox"] {
     #settingTab app-invoice-setting .tab-container .nav.nav-tabs {
         margin-top: 50px;
     }
-    .settingPage .nav > li > a,
+    .setting-page .nav > li > a,
     .custom-tabs .nav.nav-tabs > li a {
         padding-top: 7px;
     }

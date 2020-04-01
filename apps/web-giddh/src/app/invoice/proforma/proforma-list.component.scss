@@ -35,7 +35,7 @@
 
 .td_in_searchBox div i {
     margin-top: 1px;
-    color: $iconColorTh;
+    color: $wild-blue-yonder;
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -44,7 +44,7 @@
 }
 
 .td_in_searchBox div i:hover {
-    color: $activeIconTh;
+    color: $deep-sky-blue;
 }
 
 .td_in_searchBox {
@@ -68,7 +68,7 @@
 }
 
 .dropdown-menu > li > a:hover {
-    color: $border-blue;
+    color: $chetwode-blue;
     background: #e5e5e5;
 }
 
@@ -127,12 +127,12 @@
 
 .icon-pointer {
     cursor: pointer;
-    color: $iconColorTh;
+    color: $wild-blue-yonder;
     margin-left: 6px;
 }
 
 .icon-pointer .activeTextColor {
-    color: $activeIconTh;
+    color: $deep-sky-blue;
 }
 .date-advanceSearch {
     justify-content: space-between;
@@ -151,12 +151,12 @@ ul.selectActionDropdown {
     display: block;
 }
 .selectActionDropdown a:hover {
-    color: $border-blue !important;
+    color: $chetwode-blue !important;
     background: #eeeff9 !important;
 }
 .dropdown-toggle.spcl_dropdown {
-    color: $border-blueDark;
-    border: 1px solid $border-blue;
+    color: $navy ;
+    border: 1px solid $chetwode-blue;
     width: 91px;
     padding-left: 10px;
     padding-right: 10px;
@@ -167,9 +167,9 @@ ul.selectActionDropdown {
     background-color: #fff;
 }
 .dropdown-toggle.spcl_dropdown:hover {
-    background: $border-blue;
+    background: $chetwode-blue;
     color: #fff !important;
-    border-color: $border-blue;
+    border-color: $chetwode-blue;
 }
 .dropdown-toggle.spcl_dropdown .caret {
     color: #999999;
@@ -186,7 +186,7 @@ ul.selectActionDropdown {
 }
 .input-group input.form-control {
     padding-left: 35px !important;
-    border-color: $border-blue;
+    border-color: $chetwode-blue;
     background-image: url("../../../assets/images/calender.svg") !important;
     background-size: 17px !important;
     background-position: 9px 8px !important;
@@ -198,7 +198,7 @@ ul.selectActionDropdown {
     width: 100%;
 }
 .input-group input.form-control:focus {
-    border-color: $border-blue;
+    border-color: $chetwode-blue;
 }
 .icon-calender {
     position: absolute;
@@ -208,7 +208,7 @@ ul.selectActionDropdown {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $border-blue;
+    border-right: 1px solid $chetwode-blue;
 }
 .advance-icon {
     width: 32px;
@@ -218,9 +218,9 @@ ul.selectActionDropdown {
     align-items: center;
     font-size: 18px;
     margin-left: 10px;
-    border: 1px solid $border-blue;
+    border: 1px solid $chetwode-blue;
     border-radius: 2px;
-    color: $dark-blue00;
+    color: $midnight-express;
     background: #fff;
 }
 .advance-icon:hover {
