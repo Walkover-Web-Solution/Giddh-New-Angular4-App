@@ -17,7 +17,7 @@
 }
 
 .branch-transfer-report .basic > thead > tr > th {
-    border-top: 1px solid $Gainsboro !important;
+    border-top: 1px solid $gainsboro !important;
 }
 .icon-pointer.activeTextColor {
     color: #01a9f4;
@@ -37,7 +37,7 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $Gainsboro;
+    border-right: 1px solid $gainsboro;
     color: #999999;
     left: 0;
     font-size: 18px;
@@ -46,7 +46,7 @@
     padding-left: 45px !important;
     width: 210px;
     &:focus {
-        border-color: $Gainsboro !important;
+        border-color: $gainsboro !important;
     }
 }
 .btn-filter {

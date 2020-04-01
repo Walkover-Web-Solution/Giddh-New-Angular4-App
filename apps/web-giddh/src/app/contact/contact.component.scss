@@ -262,7 +262,7 @@ tr.aging-table-top td {
 i.icon-options {
     width: 36px;
     height: 36px;
-    border: 1px solid $Gainsboro;
+    border: 1px solid $gainsboro;
     background-color: #fff;
     color: #999;
     font-size: 20px;
@@ -303,8 +303,8 @@ span.inputAddon {
     min-width: 140px;
 }
 .aging-table thead tr th {
-    border-top: 1px solid $Gainsboro;
-    border-bottom: 1px solid $Gainsboro !important;
+    border-top: 1px solid $gainsboro;
+    border-bottom: 1px solid $gainsboro !important;
     position: relative;
     padding-right: 10px !important;
 }

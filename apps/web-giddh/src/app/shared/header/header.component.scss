@@ -23,7 +23,7 @@
 }
 
 .account-search .input-group-addon {
-    border-color: $Gainsboro;
+    border-color: $gainsboro;
     border-radius: 2px 0 0 2px;
     color: #484848;
     font-size: 12px;
@@ -41,7 +41,7 @@
 
 .account-search .form-control {
     background: none !important;
-    border-color: $Gainsboro;
+    border-color: $gainsboro;
     border-left: 0px;
     border-radius: 0px 2px 2px 0 !important;
     height: 36px;
@@ -49,7 +49,7 @@
 }
 
 .account-search .form-control:focus {
-    border-color: $Gainsboro !important;
+    border-color: $gainsboro !important;
     color: #b7b7b7;
 }
 

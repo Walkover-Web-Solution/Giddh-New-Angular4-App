@@ -309,7 +309,7 @@ ul.selectActionDropdown {
     width: 100%;
 }
 .input-group input.form-control:focus {
-    border-color: $Gainsboro;
+    border-color: $gainsboro;
 }
 .icon-calender {
     position: absolute;
@@ -319,7 +319,7 @@ ul.selectActionDropdown {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $Gainsboro;
+    border-right: 1px solid $gainsboro;
     color: #999999;
 }
 
@@ -331,7 +331,7 @@ ul.selectActionDropdown {
     align-items: center;
     font-size: 18px;
     margin-left: 10px;
-    border: 1px solid $Gainsboro;
+    border: 1px solid $gainsboro;
     border-radius: 2px;
     color: $midnight-express;
     background: #fff;
