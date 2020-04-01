@@ -7,7 +7,5 @@
     },
     "remove_branch_message" : "Are you sure want to remove",
     "warehouse_all_entity" : "All Entity",
-    "manage_inventory" : "Manage your Inventory!",
-    "add_manage_inventory" : "Add & Manage product in the inventory",
-    "start" : "Start"
+    "manage_inventory" : "Manage your Inventory!"
 }

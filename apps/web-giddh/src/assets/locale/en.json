@@ -98,9 +98,10 @@
     "app_import_stock" : "Import Stock",
     "app_inward_note" : "Inward Note",
     "app_outward_note" : "Outward Note",
+    "app_transfer_note" : "Transfer Note",
     "app_create_account" : "Create Account",
     "app_divide" : "Divide",
-    "app_multiple" : "Multiply",
+    "app_multiply" : "Multiply",
     "app_inwards" : "Inwards",
     "app_outwards" : "Outwards",
     "app_opening_stock" : "Opening Stock",
@@ -163,5 +164,8 @@
     "app_done" : "Done",
     "app_add_new" : "Add New",
     "app_expense_account" : "Expense A/c",
-    "app_grand_total" : "Grand Total"
+    "app_grand_total" : "Grand Total",
+    "app_confirmation" : "Confirmation",
+    "app_add_manage_inventory" : "Add & Manage product in the inventory",
+    "app_start" : "Start"
 }

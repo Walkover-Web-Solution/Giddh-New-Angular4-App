@@ -22,5 +22,6 @@
     "search_by_filters" : {
         "quantity_inward" : "Quantity Inward",
         "voucher_number" : "Voucher Number"
-    }
+    },
+    "delete_manufacturing_entry_message" : "Are you sure you want to delete this manufacturing entry?"
 }
