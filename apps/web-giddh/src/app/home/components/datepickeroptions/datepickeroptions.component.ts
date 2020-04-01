@@ -71,7 +71,6 @@ export class DatepickeroptionsComponent implements OnInit, OnDestroy {
 
     constructor(private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
-        console.log(moment().quarter());
     }
 
     public ngOnInit() {
