@@ -39,7 +39,7 @@ export class DatepickeroptionsComponent implements OnInit, OnDestroy {
                 moment()
             ],
             'This Financial Year to Date': [
-                moment().startOf('year').add(3, 'month'),
+                (moment().quarter() === 1) ? moment().startOf('year').subtract(1, 'year').add(3, 'month') : moment().startOf('year').add(3, 'month'),
                 moment()
             ],
             'This Year to Date': [
@@ -71,6 +71,7 @@ export class DatepickeroptionsComponent implements OnInit, OnDestroy {
 
     constructor(private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+        console.log(moment().quarter());
     }
 
     public ngOnInit() {
