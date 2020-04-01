@@ -638,13 +638,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 if (response.taxTotal) {
                     if (response.taxTotal.taxBreakdown) {
                         response.taxTotal.taxBreakdown.forEach(item => {
-                            if (item.taxType === 'tcspay' && item.amountForAccount)
+                            if (item.taxType === 'tcspay' && item.amountForAccount) {
                                 this.invFormData.voucherDetails.tcsTotal = item.amountForAccount;
-                            if (item.taxType === 'tdspay' && item.amountForAccount)
+                            }
+                            if (item.taxType === 'tdspay' && item.amountForAccount) {
                                 this.invFormData.voucherDetails.tdsTotal = item.amountForAccount;
+                            }
+
                         });
                     } else {
-                        this.invFormData.voucherDetails.tcsTotal = response.taxTotal.cumulativeAmountForAccount
+                        this.invFormData.voucherDetails.tcsTotal = response.taxTotal.cumulativeAmountForAccount;
                     }
                 }
                 if (response['deposit']) {
@@ -1510,7 +1513,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
         this.advanceReceiptAdjustmentData.adjustments.map(item => {
             item.voucherDate = (item.voucherDate.toString().includes('/')) ? item.voucherDate.trim().replace(/\//g, '-') : item.voucherDate;
-        })
+        });
         this.salesService.adjustAnInvoiceWithAdvanceReceipts(this.advanceReceiptAdjustmentData, this.changeStatusInvoiceUniqueName).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
