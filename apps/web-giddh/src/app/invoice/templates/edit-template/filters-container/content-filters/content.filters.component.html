@@ -10,10 +10,23 @@
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['companyName'].display"
                         (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company Name
                 </div>
+
+                <div class="form-group">
+                    <input type="checkbox" checked /> Document Title: This is your
+                    <div class="mrL3">
+                        <input type="text" value="Invoice" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" checked /> Company/Warehouse Address
+                </div>
+
                 <div *ngIf="fieldsAndVisibility.header.gstin" class="form-group">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['gstin'].display"
                         (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> GSTIN
                 </div>
+
                 <!-- <div *ngIf="fieldsAndVisibility.header.pan" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[2].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> PAN</div> -->
 
                 <div *ngIf="voucherType==='sales'|| voucherType===''">
@@ -405,6 +418,27 @@
                         </td>
 
                     </tr>
+
+
+                    <div class="form-group">
+                        <div class="form-group">
+                            <input type="checkbox" checked /> Tax Bifurcation
+                        </div>
+                        <div class="mrL3">
+                           <div class="clearfix mb-05">
+                                <input type="radio" class="radio_theme" name="tax-rate"/>
+                                Tax Rate
+                           </div>
+
+                           <div class="clearfix">
+                                <input type="radio" class="radio_theme point" name="tax-rate"/>
+                                HSN/SAC
+                            </div>
+
+                        </div>
+                      </div>
+
+
                     <!--  -->
                     <tr [hidden]="true">
                         <td>
@@ -544,6 +578,38 @@
                                 Total(in words)</label>
                         </td>
                     </tr>
+
+
+                    <tr>
+                        <td>
+                            <label><input type="checkbox" checked /> TCS</label>
+                        </td>
+
+                        <td>
+                            <input type="text" value="TCS" class="form-control" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label><input type="checkbox" checked /> TDS</label>
+                        </td>
+
+                        <td>
+                            <input type="text" value="TDS" class="form-control" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label><input type="checkbox" checked /> Total Due</label>
+                        </td>
+
+                        <td>
+                            <input type="text" value="Total Due" class="form-control" />
+                        </td>
+                    </tr>
+
                 </tbody>
             </table>
         </div>
@@ -595,7 +661,6 @@
                         (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Invoice Total(in words)
                 </div>
 
-
                 <div class="clearfix mrT1">
                     <div *ngIf="fieldsAndVisibility.footer.message1">
                         <input type="checkbox" name="msg1"
@@ -614,6 +679,26 @@
                         </div>
                     </div>
                 </div>
+
+
+                <div class="form-group">
+                    <div class="form-group">
+                        <input type="checkbox" checked /> Tax Bifurcation
+                    </div>
+                    <div class="mrL3">
+                       <div class="clearfix mb-05">
+                            <input type="radio" class="radio_theme" name="tax-rate"/>
+                            Tax Rate
+                       </div>
+
+                       <div class="clearfix">
+                            <input type="radio" class="radio_theme point" name="tax-rate"/>
+                            HSN/SAC
+                        </div>
+
+                    </div>
+                  </div>
+
                 <div *ngIf="fieldsAndVisibility.footer.thanks" class="clearfix mrT1">
                     <div class="form-group thanks-input-group">
                         <input type="checkbox" name="ty"
