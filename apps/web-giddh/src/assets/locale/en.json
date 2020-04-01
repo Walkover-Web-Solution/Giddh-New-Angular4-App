@@ -149,5 +149,19 @@
     "app_search_account" : "Search Account",
     "app_inward" : "Inward",
     "app_outward" : "Outward",
-    "app_opening" : "Opening"
+    "app_opening" : "Opening",
+    "app_comparision_filters" : {
+        "equals" : "Equals",
+        "greater_than" : "Greater Than",
+        "less_than" : "Less Than",
+        "exclude" : "Exclude",
+        "excluded" : "Excluded",
+        "greater_than_equals" : "Greater Than or Equals",
+        "less_than_equals" : "Less Than or Equals"
+    },
+    "app_today" : "Today",
+    "app_done" : "Done",
+    "app_add_new" : "Add New",
+    "app_expense_account" : "Expense A/c",
+    "app_grand_total" : "Grand Total"
 }

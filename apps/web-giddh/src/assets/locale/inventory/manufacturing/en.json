@@ -19,13 +19,6 @@
     "raw_products" : "Raw Products",
     "product_inwards" : "Product Inwards",
     "quantity_outwards" : "Quantity Outwards",
-    "operation_filters" : {
-        "equals" : "Equals",
-        "greater_than" : "Greater Than",
-        "less_than" : "Less Than",
-        "greater_than_equals" : "Greater Than or Equals",
-        "less_than_equals" : "Less Than or Equals"
-    },
     "search_by_filters" : {
         "quantity_inward" : "Quantity Inward",
         "voucher_number" : "Voucher Number"

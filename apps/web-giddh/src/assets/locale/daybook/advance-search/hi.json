@@ -13,13 +13,5 @@
     "select_accounts" : "Select Accounts",
     "cheque_details" : "Cheque Details",
     "cheque_number" : "Cheque Number",
-    "clearance_date" : "Clearance Date",
-    "comparision_filters" : {
-        "equals" : "Equals",
-        "greater_than" : "Greater Than",
-        "less_than" : "Less Than",
-        "exclude" : "Exclude",
-        "greater_than_equals" : "Greater Than or Equals",
-        "less_than_equals" : "Less Than or Equals"
-    }
+    "clearance_date" : "Clearance Date"
 }

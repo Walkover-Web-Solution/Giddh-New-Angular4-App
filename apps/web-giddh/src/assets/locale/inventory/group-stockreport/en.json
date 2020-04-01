@@ -1,10 +1,4 @@
 {
-    "comparision_filters" : {
-        "equals" : "Equals",
-        "greater_than" : "Greater Than",
-        "less_than" : "Less Than",
-        "excluded" : "Excluded"
-    },
     "upcoming_feature" : "Upcoming feature",
     "select_branch" : "Select Branch",
     "new_transfer" : "New Transfer",

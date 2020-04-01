@@ -1,10 +1,4 @@
 {
-    "comparision_filters" : {
-        "equals" : "Equals",
-        "greater_than" : "Greater Than",
-        "less_than" : "Less Than",
-        "exclude" : "Exclude"
-    },
     "category_options_for_customer" : {
         "opening_balance" : "Opening Balance",
         "sales" : "Sales",
