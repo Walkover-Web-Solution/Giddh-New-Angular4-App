@@ -143,33 +143,32 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.totalOverDuesResponse$.pipe(skipWhile(p => (isNullOrUndefined(p))))
-            .subscribe(p => {
-                if (p && p.length) {
-                    this.dataFound = true;
+        this.totalOverDuesResponse$.subscribe(p => {
+            if (p && p.length) {
+                this.dataFound = true;
 
-                    this.overDueObj = p;
-                    this.overDueObj.forEach((grp) => {
-                        if (grp.uniqueName === 'sundrydebtors') {
-                            this.sundryDebtorResponse = grp;
-                            this.totalRecievable = this.sundryDebtorResponse.closingBalance.amount;
-                            this.ReceivableDurationAmt = this.sundryDebtorResponse.debitTotal - this.sundryDebtorResponse.creditTotal;
-                        } else {
-                            this.sundryCreditorResponse = grp;
-                            this.totalPayable = this.sundryCreditorResponse.closingBalance.amount;
-                            this.PaybaleDurationAmt = this.sundryCreditorResponse.creditTotal - this.sundryCreditorResponse.debitTotal;
-                        }
-                    });
-
-                    if (this.totalRecievable === 0 && this.totalPayable === 0) {
-                        this.resetChartData();
+                this.overDueObj = p;
+                this.overDueObj.forEach((grp) => {
+                    if (grp.uniqueName === 'sundrydebtors') {
+                        this.sundryDebtorResponse = grp;
+                        this.totalRecievable = this.sundryDebtorResponse.closingBalance.amount;
+                        this.ReceivableDurationAmt = this.sundryDebtorResponse.debitTotal - this.sundryDebtorResponse.creditTotal;
                     } else {
-                        this.generateCharts();
+                        this.sundryCreditorResponse = grp;
+                        this.totalPayable = this.sundryCreditorResponse.closingBalance.amount;
+                        this.PaybaleDurationAmt = this.sundryCreditorResponse.creditTotal - this.sundryCreditorResponse.debitTotal;
                     }
-                } else {
+                });
+
+                if (this.totalRecievable === 0 && this.totalPayable === 0) {
                     this.resetChartData();
+                } else {
+                    this.generateCharts();
                 }
-            });
+            } else {
+                this.resetChartData();
+            }
+        });
     }
 
     public resetChartData() {
