@@ -1,6 +1,5 @@
-import { skipWhile, take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
-import * as Highcharts from 'highcharts';
 import { Options } from 'highcharts';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -8,11 +7,9 @@ import { HomeActions } from '../../../actions/home/home.actions';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
-import { isNullOrUndefined } from 'util';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { DashboardService } from '../../../services/dashboard.service';
 import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
-import { ProfitLossRequest } from "../../../models/api-models/tb-pl-bs";
 import * as _ from "../../../lodash-optimized";
 
 @Component({
