@@ -1,6 +1,5 @@
-import { skipWhile, take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
-import * as Highcharts from 'highcharts';
 import { Options } from 'highcharts';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -8,11 +7,9 @@ import { HomeActions } from '../../../actions/home/home.actions';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
-import { isNullOrUndefined } from 'util';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { DashboardService } from '../../../services/dashboard.service';
 import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
-import { ProfitLossRequest } from "../../../models/api-models/tb-pl-bs";
 import * as _ from "../../../lodash-optimized";
 
 @Component({
@@ -143,33 +140,32 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.totalOverDuesResponse$.pipe(skipWhile(p => (isNullOrUndefined(p))))
-            .subscribe(p => {
-                if (p && p.length) {
-                    this.dataFound = true;
+        this.totalOverDuesResponse$.subscribe(p => {
+            if (p && p.length) {
+                this.dataFound = true;
 
-                    this.overDueObj = p;
-                    this.overDueObj.forEach((grp) => {
-                        if (grp.uniqueName === 'sundrydebtors') {
-                            this.sundryDebtorResponse = grp;
-                            this.totalRecievable = this.sundryDebtorResponse.closingBalance.amount;
-                            this.ReceivableDurationAmt = this.sundryDebtorResponse.debitTotal - this.sundryDebtorResponse.creditTotal;
-                        } else {
-                            this.sundryCreditorResponse = grp;
-                            this.totalPayable = this.sundryCreditorResponse.closingBalance.amount;
-                            this.PaybaleDurationAmt = this.sundryCreditorResponse.creditTotal - this.sundryCreditorResponse.debitTotal;
-                        }
-                    });
-
-                    if (this.totalRecievable === 0 && this.totalPayable === 0) {
-                        this.resetChartData();
+                this.overDueObj = p;
+                this.overDueObj.forEach((grp) => {
+                    if (grp.uniqueName === 'sundrydebtors') {
+                        this.sundryDebtorResponse = grp;
+                        this.totalRecievable = this.sundryDebtorResponse.closingBalance.amount;
+                        this.ReceivableDurationAmt = this.sundryDebtorResponse.debitTotal - this.sundryDebtorResponse.creditTotal;
                     } else {
-                        this.generateCharts();
+                        this.sundryCreditorResponse = grp;
+                        this.totalPayable = this.sundryCreditorResponse.closingBalance.amount;
+                        this.PaybaleDurationAmt = this.sundryCreditorResponse.creditTotal - this.sundryCreditorResponse.debitTotal;
                     }
-                } else {
+                });
+
+                if (this.totalRecievable === 0 && this.totalPayable === 0) {
                     this.resetChartData();
+                } else {
+                    this.generateCharts();
                 }
-            });
+            } else {
+                this.resetChartData();
+            }
+        });
     }
 
     public resetChartData() {
