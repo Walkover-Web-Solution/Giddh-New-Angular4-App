@@ -638,6 +638,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 if (this.selectedPerformAdjustPaymentAction) {
                     this.showAdvanceReceiptAdjust = true;
                     this.adjustPaymentModal.show();
+                    this.selectedPerformAdjustPaymentAction = false;
                 }
             }
         })
@@ -1505,5 +1506,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         this.closeAdvanceReceiptModal();
+    }
+
+    /**
+     * To open advance receipt adjust modal requested from invoice detailed component
+     *
+     * @param {*} event emmiter event
+     * @memberof InvoicePreviewComponent
+     */
+    public openAdvanceReceiptModal(event): void {
+        if (event) {
+            this.onPerformAdjustPaymentAction(this.selectedInvoice);
+        }
     }
 }

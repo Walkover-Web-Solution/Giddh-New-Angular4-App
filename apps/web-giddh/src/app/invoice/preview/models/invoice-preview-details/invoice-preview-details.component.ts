@@ -61,6 +61,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     @Output() public sendEmail: EventEmitter<string | { email: string, invoiceType: string[], invoiceNumber: string }> = new EventEmitter<string | { email: string, invoiceType: string[], invoiceNumber: string }>();
     @Output() public processPaymentEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
     @Output() public refreshDataAfterVoucherUpdate: EventEmitter<boolean> = new EventEmitter();
+    /** Event emmiter when advance receipt action selected */
+    @Output() public onOpenAdvanceReceiptModal: EventEmitter<boolean> = new EventEmitter();
 
     public filteredData: InvoicePreviewDetailsVm[] = [];
     public showEditMode: boolean = false;
@@ -150,10 +152,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this.detectChanges();
             }
         }));
-           this.isUpdateVoucherActionSuccess$.subscribe(res => {
+        this.isUpdateVoucherActionSuccess$.subscribe(res => {
             if (res) {
                 // get all data again because we are updating action in list page so we have to update data i.e we have to fire this
-               this.proformaListComponent.getAll();
+                this.proformaListComponent.getAll();
             }
         });
         this.uploadInput = new EventEmitter<UploadInput>();
@@ -516,5 +518,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.isVoucherDownloading = false;
         this.isVoucherDownloadError = true;
         this.detectChanges();
+    }
+
+    /**
+     * To open advance receipt adjust modal
+     *
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public openInvoiceAdvanceReceiptModal(): void {
+        this.onOpenAdvanceReceiptModal.emit(true);
     }
 }

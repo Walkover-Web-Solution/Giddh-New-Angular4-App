@@ -552,10 +552,10 @@
                                             <i class="fa fa-ellipsis-v" (click)="showMoreBtn=!showMoreBtn;selectedItemForMoreBtn = item.voucherNumber"></i>
                                             <ul class="dropdown-menu displayBlock" *ngIf="showMoreBtn && selectedItemForMoreBtn === item.voucherNumber">
                                                 <li (click)="onPerformAction(item, 'paid')">
-                                                    <a class="cp" href="javascript:void(0)">paid</a>
+                                                    <a class="cp" href="javascript:void(0)">Paid</a>
                                                 </li>
                                                 <li (click)="onPerformAction(item, 'unpaid')">
-                                                    <a class="cp" href="javascript:void(0)">unpaid</a>
+                                                    <a class="cp" href="javascript:void(0)">Unpaid</a>
                                                 </li>
                                                 <li (click)="onPerformAction(item, 'hold')">
                                                     <a class="cp" href="javascript:void(0)">Hold</a>
@@ -708,7 +708,8 @@
     <!-- region invoice-preview-details -->
     <div *ngIf="selectedInvoiceForDetails">
         <invoice-preview-details-component [selectedItem]="selectedInvoiceForDetails" [items]="itemsListForDetails" [invoiceSetting]="invoiceSetting" (deleteVoucher)="deleteConfirmedInvoice()" (sendEmail)="sendEmail($event)" (closeEvent)="invoicePreviewClosed()"
-            (processPaymentEvent)="closePerformActionPopup($event)" [voucherType]="selectedVoucher" (updateVoucherAction)="onPerformAction(null, $event)" [appSideMenubarIsOpen]="appSideMenubarIsOpen" (refreshDataAfterVoucherUpdate)="getVoucher(isUniversalDateApplicable)"></invoice-preview-details-component>
+            (onOpenAdvanceReceiptModal)="openAdvanceReceiptModal($event)" (processPaymentEvent)="closePerformActionPopup($event)" [voucherType]="selectedVoucher" (updateVoucherAction)="onPerformAction(null, $event)" [appSideMenubarIsOpen]="appSideMenubarIsOpen"
+            (refreshDataAfterVoucherUpdate)="getVoucher(isUniversalDateApplicable)"></invoice-preview-details-component>
     </div>
     <!-- endregion -->
 
