@@ -142,4 +142,16 @@ export class ExportLedgerComponent implements OnInit {
             });
         }
     }
+
+    /**
+     * Handler for report type change
+     *
+     * @param {string} reportType Selected report type to be exported
+     * @memberof ExportLedgerComponent
+     */
+    public handleReportTypeChange(reportType: string): void {
+        if (reportType === 'columnar') {
+            this.exportAs = 'xlsx';
+        }
+    }
 }
