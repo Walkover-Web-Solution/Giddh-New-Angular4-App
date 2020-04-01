@@ -56,7 +56,7 @@ export class DatepickeroptionsComponent implements OnInit, OnDestroy {
             ],
             'Last Financial Year': [
                 moment().startOf('year').subtract(1, 'year').month('April').startOf('month'),
-                moment().endOf('year').subtract(1, 'year').month('March').endOf('month')
+                moment().month('March').endOf('month')
             ],
             'Last Year': [
                 moment().subtract(1, 'year').startOf('year'),
