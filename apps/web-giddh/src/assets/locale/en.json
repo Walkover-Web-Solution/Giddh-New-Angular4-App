@@ -116,7 +116,8 @@
     "app_no_report_found" : "No Report Found !!",
     "app_select_type" : "Select Type",
     "validations" : {
-        "numbers_only" : "input number only"
+        "numbers_only" : "input number only",
+        "something_went_wrong" : "Something went wrong"
     },
     "app_custom_stock_unit" : "Custom Stock Unit",
     "app_receipt_note" : "Receipt Note",
@@ -167,5 +168,10 @@
     "app_grand_total" : "Grand Total",
     "app_confirmation" : "Confirmation",
     "app_add_manage_inventory" : "Add & Manage product in the inventory",
-    "app_start" : "Start"
+    "app_start" : "Start",
+    "app_add" : "Add",
+    "app_delete_all" : "Delete All",
+    "app_no_result_found" : "No results found",
+    "app_buy_new_plan" : "Buy New Plan",
+    "app_select_plan" : "Select Plan"
 }
