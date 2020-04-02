@@ -270,7 +270,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     /**
      * This will call the api to get the data
      *
-     * @param {string} group
+     * @param {string} group uniqueName (sundrydebtors or sundrycreditors)
      * @memberof TotalOverduesChartComponent
      */
     public getTotalOverduesData(group: string): void {
