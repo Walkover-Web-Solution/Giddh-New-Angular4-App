@@ -3599,11 +3599,6 @@ a.btn.btn-xs.btn-link.pull-right {
 .multi-select {
     position: relative;
 }
-
-/* .form-control[readonly] {
-  background: $white !important;
-} */
-
 .multi-select input.form-control {
     background-image: url("../images/caret.svg") !important;
     background-size: 10px !important;
@@ -3788,7 +3783,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .modal-header {
     position: relative;
-    background: $mid-night-blue !important;
+    background: $midnight-blue !important;
 }
 
 .close_modal {
@@ -5576,29 +5571,6 @@ input[type="checkbox"][disabled] {
     position: relative;
     left: 5px;
 }
-
-/* .ledger-row .select2-ledger .select2-container--open .select2-search--dropdown {
-    top: -34px;
-    position: fixed;
-    background: transparent;
-    width: 100%;
-    padding: 0;
-}
-
-.ledger-row .select2-ledger .select2-container--open .select2-search__field {
-    background: $white0bc !important;
-    border: 0;
-    height: 34px;
-}
-
-.ledger-row .select2-ledger .select2-container--default .select2-selection__arrow {
-    display: none !important;
-}
-
-.ledger-row .select2-ledger .select2-container--default .select2-selection__rendered {
-    padding-right: 0;
-} */
-
 datepicker-inner .well table tbody tr td .btn-default {
     padding: 0 4px;
     border: 0;
@@ -5890,14 +5862,8 @@ ng-select > div > div.single > div.clear:hover {
 }
 
 .input-group .input-group-btn .btn {
-    /*background: $white;*/
     border-left: 0px;
 }
-
-// .input-group .input-group-btn .btn:hover {
-//     color: #28ab00 !important;
-//     background: $white;
-// }
 ng-select .select_drop {
     position: initial;
 }
@@ -6424,7 +6390,7 @@ table td[class*=col-]:last-child {
 
 .form-header {
     padding: 20px 15px;
-    background: $mid-night-blue;
+    background: $midnight-blue;
     color: $white;
 }
 
@@ -6987,7 +6953,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     font-size: 20px;
     text-transform: capitalize;
     width: auto;
-    color: $mid-night-blue;
+    color: $midnight-blue;
     font-family: $tableFontSemibold;
     vertical-align: middle;
 }
@@ -8194,7 +8160,7 @@ span.red-text {
 }
 
 .hamburger_menu i.icon-bar {
-    color: $mid-night-blue;
+    color: $midnight-blue;
 }
 
 .pageCount span {
@@ -8312,11 +8278,6 @@ ul.dropdown-menu p.lead.pd {
     height: 36px;
 }
 
-/*  .nav.nav-tabs>li>a {
-                    color: $midnight-express !important;
-                    border-bottom: 4px solid transparent !important;
-                }
-            */
 .nav-tabs > li.active > a,
 .invoce-controll .nav-tabs > li.active > a {
     border-bottom: 4px solid $deep-sky-blue !important;
@@ -9175,7 +9136,7 @@ input.checkbox-custom[type="checkbox"] {
         border-right: none;
     }
     header .navbar {
-        background-color: $mid-night-blue !important;
+        background-color: $midnight-blue !important;
         /*border-bottom: 2px solid #e6e7e8;*/
     }
     header .hamburger_menu h4 {

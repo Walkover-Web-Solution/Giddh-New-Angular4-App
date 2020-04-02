@@ -214,14 +214,14 @@ button.close {
 }
 
 .btn-success {
-    background: $mid-night-blue;
+    background: $midnight-blue;
     color: $white;
-    border-color: $mid-night-blue;
+    border-color: $midnight-blue;
 }
 
 .btn-success:hover {
-    background: $mid-night-blue-hover;
-    border-color: $mid-night-blue-hover;
+    background: $midnight-blue-hover;
+    border-color: $midnight-blue-hover;
     color: $white;
 }
 
@@ -443,7 +443,7 @@ small {
     position: relative;
 }
 .login-left {
-    background-color: $mid-night-blue;
+    background-color: $midnight-blue;
     position: absolute;
     left: 0;
     height: 100vh;
@@ -474,7 +474,7 @@ small {
     overflow: hidden;
 }
 .logo-login {
-    background-color: $darkmid-night-blue;
+    background-color: $dark-midnight-blue;
     height: 98px;
     display: flex;
     align-items: center;
@@ -487,7 +487,7 @@ small {
     background-color: $white;
 }
 .accounting-space h4 {
-    color: $mid-night-blue;
+    color: $midnight-blue;
     font-weight: 600;
     font-size: 20px;
 }
@@ -507,11 +507,11 @@ small {
     outline: none;
 }
 .login-with {
-    color: $mid-night-blue;
+    color: $midnight-blue;
     font-size: 0.9em;
 }
 .login-with a {
-    color: $mid-night-blue;
+    color: $midnight-blue;
     text-decoration: none;
 }
 .btn-secondary {
