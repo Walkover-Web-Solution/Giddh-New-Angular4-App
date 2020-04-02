@@ -494,7 +494,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     /**
      * return remaining due after adjustment with advance receipts
      *
-     * @returns {number}
+     * @returns {number} Balance due
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public getBalanceDue(): number {
