@@ -3,7 +3,7 @@
     div {
         i {
             margin-top: 1px;
-            color: $iconColorTh;
+            color: $wild-blue-yonder;
             padding-right: 8px;
             cursor: pointer;
             display: flex;
@@ -33,7 +33,7 @@
         cursor: default;
         width: 100%;
         &:focus {
-            border-color: $inputBorderColor;
+            border-color: $gainsboro;
         }
     }
 }
@@ -45,7 +45,7 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $inputBorderColor;
+    border-right: 1px solid $gainsboro;
     color: #999999;
 }
 .input-wrapper {
@@ -80,10 +80,10 @@
 }
 
 .btn-filter {
-    background: $whisperColor;
-    border: 1px solid $whisperColor;
+    background: $whisper-color;
+    border: 1px solid $whisper-color;
     font-size: 16px;
-    color: $pageTitleColor;
+    color: $midnight-blue;
     display: inline-flex;
     justify-content: space-between;
     -webkit-box-align: center;
