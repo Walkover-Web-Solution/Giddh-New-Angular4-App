@@ -58,7 +58,7 @@ export class DashboardService {
         })));
     }
 
-    public GetClosingBalance(groupUniqueName: string = '', fromDate: string = '', toDate: string = '', refresh: boolean = false): Observable<BaseResponse<ClosingBalanceResponse, string>> {
+    public getClosingBalance(groupUniqueName: string = '', fromDate: string = '', toDate: string = '', refresh: boolean = false): Observable<BaseResponse<ClosingBalanceResponse, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.get(this.config.apiUrl + DASHBOARD_API.CLOSING_BALANCE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':fromDate', fromDate).replace(':toDate', toDate).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)).replace(':refresh', refresh.toString())).pipe(map((res) => {
