@@ -83,6 +83,10 @@
         "hi" : "Hi",
         "select_subscription_message" : "Please select a subscription for your company",
         "free" : "FREE",
-        "subscription_renewal" : "Subscription Renewal"
+        "subscription_renewal" : "Subscription Renewal",
+        "created_on" : "Created On",
+        "address" : "Address",
+        "delete_company_title" : "Delete Company",
+        "delete_company_content" : "Are you sure you want to permanently delete"
     }
 }

@@ -173,5 +173,25 @@
     "app_delete_all" : "Delete All",
     "app_no_result_found" : "No results found",
     "app_buy_new_plan" : "Buy New Plan",
-    "app_select_plan" : "Select Plan"
+    "app_select_plan" : "Select Plan",
+    "app_unique_name" : "Unique Name",
+    "app_saving" : "Saving...",
+    "app_saved" : "Saved",
+    "app_tax_types" : {
+        "gst" : "GST",
+        "input_gst" : "InputGST",
+        "others" : "others"
+    },
+    "app_tax_duration" : {
+        "monthly" : "Monthly",
+        "quarterly" : "Quarterly",
+        "half_yearly" : "Half-Yearly",
+        "yearly" : "Yearly"
+    },
+    "app_tax_subtypes" : {
+        "receivable" : "Receivable",
+        "payable" : "Payable"
+    },
+    "app_refresh" : "Refresh",
+    "app_next" : "Next"
 }
