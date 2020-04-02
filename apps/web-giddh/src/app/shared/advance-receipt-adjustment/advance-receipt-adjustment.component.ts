@@ -117,9 +117,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             if (typeof this.invoiceFormDetails.voucherDetails.voucherDate !== 'string') {
                 this.invoiceFormDetails.voucherDetails.voucherDate = moment(this.invoiceFormDetails.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
             }
-            this.invoiceFormDetails.voucherDetails.tcsTotal = this.invoiceFormDetails.voucherDetails.tcsTotal ? this.invoiceFormDetails.voucherDetails.tcsTotal : 0
-            this.invoiceFormDetails.voucherDetails.tdsTotal = this.invoiceFormDetails.voucherDetails.tdsTotal ? this.invoiceFormDetails.voucherDetails.tdsTotal : 0
-
+            this.invoiceFormDetails.voucherDetails.tcsTotal = this.invoiceFormDetails.voucherDetails.tcsTotal || 0;
+            this.invoiceFormDetails.voucherDetails.tdsTotal = this.invoiceFormDetails.voucherDetails.tdsTotal || 0;
             this.assignVoucherDetails();
         }
         this.getAllAdvanceReceipts();
@@ -153,6 +152,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public onCancel(): void {
+        // TODO: This warning is removed as this is suggestion from testing team please remove it after approval
         // if (this.adjustPayment && this.adjustPayment.totalAdjustedAmount && this.adjustPayment.grandTotal && this.adjustPayment.totalAdjustedAmount - this.adjustPayment.grandTotal > 0) {
         //     this.toaster.warningToast('The adjusted amount of the linked invoice\'s is more than this receipt due amount');
         //     return;
