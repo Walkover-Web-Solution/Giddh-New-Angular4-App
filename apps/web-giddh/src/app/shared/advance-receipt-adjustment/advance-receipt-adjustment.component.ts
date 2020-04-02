@@ -177,7 +177,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             tcsTotal: Number(this.invoiceFormDetails.voucherDetails.tcsTotal),
             tdsTotal: Number(this.invoiceFormDetails.voucherDetails.tdsTotal)
         });
-        if (this.adjustPayment.grandTotal - this.adjustPayment.totalAdjustedAmount - this.depositAmount + this.adjustPayment.tdsTotal + this.adjustPayment.tcsTotal > 0) {
+        if (this.getBalanceDue() > 0) {
             this.isInvalidForm = true;
         }
         this.balanceDueAmount = this.invoiceFormDetails.voucherDetails.balanceDue;
@@ -217,7 +217,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public addNewBlankAdjustVoucherRow(): void {
-        if (this.adjustPayment.grandTotal - this.adjustPayment.totalAdjustedAmount - this.depositAmount + this.adjustPayment.tdsTotal + this.adjustPayment.tcsTotal >= 0) {
+        if (this.getBalanceDue() >= 0) {
             let isAnyBlankEntry: boolean;
             this.adjustVoucherForm.adjustments.forEach(item => {
                 if (!item.uniqueName || !item.voucherNumber) {
@@ -484,11 +484,20 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             });
             // this.adjustPayment.balanceDue = Number(this.adjustPayment.grandTotal.) - Number(totalAmount);
             this.adjustPayment.totalAdjustedAmount = Number(totalAmount);
-            if (this.adjustPayment.grandTotal - this.adjustPayment.totalAdjustedAmount - this.depositAmount + this.adjustPayment.tdsTotal + this.adjustPayment.tcsTotal < 0) {
+            if (this.getBalanceDue() < 0) {
                 this.isInvalidForm = true;
             } else {
                 this.isInvalidForm = false;
             }
         }
     }
+    /**
+     * return remaining due after adjustment with advance receipts
+     *
+     * @returns {number}
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    public getBalanceDue(): number {
+            return this.adjustPayment.grandTotal - this.adjustPayment.totalAdjustedAmount - this.depositAmount + this.adjustPayment.tdsTotal + this.adjustPayment.tcsTotal;
+        }
 }
