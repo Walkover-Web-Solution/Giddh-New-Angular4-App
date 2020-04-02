@@ -626,11 +626,28 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             });
 
         this.voucherDetails$.subscribe(response => {
-            if (response && response.subTotal) {
-                this.invFormData.voucherDetails.totalTaxableValue = response.subTotal.amountForAccount
-                this.invFormData.voucherDetails.subTotal = response.subTotal.amountForAccount;
+            if (response) {
+                if (response.subTotal) {
+                    this.invFormData.voucherDetails.totalTaxableValue = response.subTotal.amountForAccount
+                    this.invFormData.voucherDetails.subTotal = response.subTotal.amountForAccount;
+                }
+
                 if (response.advanceReceiptAdjustment) {
                     this.advanceReceiptAdjustmentData = response.advanceReceiptAdjustment;
+                }
+                if (response.taxTotal) {
+                    if (response.taxTotal.taxBreakdown) {
+                        response.taxTotal.taxBreakdown.forEach(item => {
+                            if (item.taxType === 'tcspay' && item.amountForAccount) {
+                                this.invFormData.voucherDetails.tcsTotal = item.amountForAccount;
+                            }
+                            if (item.taxType === 'tdspay' && item.amountForAccount) {
+                                this.invFormData.voucherDetails.tdsTotal = item.amountForAccount;
+                            }
+                        });
+                    } else {
+                        this.invFormData.voucherDetails.tcsTotal = response.taxTotal.cumulativeAmountForAccount;
+                    }
                 }
                 if (response['deposit']) {
                     this.depositAmount = response.deposit.amountForAccount;
@@ -1493,6 +1510,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     */
     public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: AdvanceReceiptAdjustment, adjustPaymentData: AdjustAdvancePaymentModal }) {
         this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
+        this.advanceReceiptAdjustmentData.adjustments.map(item => {
+            item.voucherDate = (item.voucherDate.toString().includes('/')) ? item.voucherDate.trim().replace(/\//g, '-') : item.voucherDate;
+        });
         this.salesService.adjustAnInvoiceWithAdvanceReceipts(this.advanceReceiptAdjustmentData, this.changeStatusInvoiceUniqueName).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {

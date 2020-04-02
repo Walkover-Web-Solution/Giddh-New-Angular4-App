@@ -388,7 +388,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         totalAdjustedAmount: 0
     }
     public applyRoundOff: boolean = true;
-    public customerAccount: any = {email: ''};
+    public customerAccount: any = { email: '' };
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -1828,7 +1828,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 // this.selectedEntry = cloneDeep(this.invFormData.entries[index]);
             }
         }
-
         this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
     }
@@ -1958,6 +1957,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.invFormData.voucherDetails.tcsTotal = tcsSum;
         this.invFormData.voucherDetails.tdsTotal = tdsSum;
+        /** Call calculateBalanceDue if advance receipt adjusted for balance due added TDS TCS taxes  */
+        if (this.adjustPaymentData.totalAdjustedAmount) {
+            this.calculateBalanceDue();
+        }
     }
 
     public calculateBalanceDue() {
@@ -1979,8 +1982,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             count = 0;
         }
         if (!this.isUpdateMode) {
-            this.adjustPaymentBalanceDueData = this.invFormData.voucherDetails.grandTotal - this.adjustPaymentData.totalAdjustedAmount;
-            this.adjustPaymentBalanceDueData = this.adjustPaymentBalanceDueData - depositAmount;
+            this.adjustPaymentBalanceDueData = this.invFormData.voucherDetails.grandTotal - this.adjustPaymentData.totalAdjustedAmount - depositAmount + this.invFormData.voucherDetails.tcsTotal + this.invFormData.voucherDetails.tdsTotal;
         }
 
         this.invFormData.voucherDetails.balanceDue =
@@ -4281,6 +4283,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else {
             this.isAdjustAmount = false;
             this.adjustPaymentBalanceDueData = 0;
+            this.adjustPaymentData.totalAdjustedAmount = 0;
             this.advanceReceiptAdjustmentData = null;
         }
     }
@@ -4301,6 +4304,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let deposit = cloneDeep(this.depositAmount);
             this.adjustPaymentBalanceDueData = this.adjustPaymentBalanceDueData - deposit;
         }
+        this.adjustPaymentBalanceDueData = this.adjustPaymentBalanceDueData + this.invFormData.voucherDetails.tcsTotal + this.invFormData.voucherDetails.tdsTotal;
         this.adjustPaymentData = advanceReceiptsAdjustEvent.adjustPaymentData;
         if (this.isUpdateMode) {
             this.calculateAdjustedVoucherTotal(advanceReceiptsAdjustEvent.adjustVoucherData.adjustments)
@@ -4314,7 +4318,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param {*} voucherObject voucher response in case of update
      * @memberof ProformaInvoiceComponent
      */
-    public calculateAdjustedVoucherTotal(voucherObjectArray: any[]) {
+    public calculateAdjustedVoucherTotal(voucherObjectArray: any[]): void {
         this.totalAdvanceReceiptsAdjustedAmount = 0;
         if (voucherObjectArray) {
             let adjustments = cloneDeep(voucherObjectArray);
@@ -4329,6 +4333,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.advanceReceiptAdjustmentData = null;
         }
     }
-
 }
+
 

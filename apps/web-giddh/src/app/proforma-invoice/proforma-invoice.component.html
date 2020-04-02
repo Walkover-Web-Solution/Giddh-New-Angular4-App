@@ -277,7 +277,7 @@
                                         <strong>
                                             <ng-container *ngIf="adjustPaymentData?.totalAdjustedAmount">
                                                 {{adjustPaymentBalanceDueData | giddhCurrency}}</ng-container>
-                                            <ng-container *ngIf="!adjustPaymentBalanceDueData">
+                                            <ng-container *ngIf="!adjustPaymentData?.totalAdjustedAmount">
                                                 {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</ng-container>
                                         </strong></span>
                                     <!-- added multicurrency feature make it functional to change into appropriate currency -->
@@ -288,7 +288,7 @@
                                     <span class="sp-rupees" *ngIf='!isMulticurrencyAccount'>
                                         <ng-container *ngIf="adjustPaymentData?.totalAdjustedAmount">
                                             {{adjustPaymentBalanceDueData | giddhCurrency}}</ng-container>
-                                        <ng-container *ngIf="!adjustPaymentBalanceDueData">
+                                        <ng-container *ngIf="!adjustPaymentData?.totalAdjustedAmount">
                                             {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</ng-container>
                                     </span>
                                 </p>
@@ -887,9 +887,9 @@
                                     <td class="pos-rel dropdown-container item-tax" style="height:1px;">
                                         <div class="td_Wrapper">
                                             <div class="text-right" style="flex:1;">
-                                                <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes"
-                                                    [allowedSelectionOfAType]="allowedSelectionOfAType" [showHeading]="false" [rootClass]="'salseInvoicetable'" (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)" (hideOtherPopups)="closeDiscountPopup()"
-                                                    [maskInput]="inputMaskFormat" [prefixInput]="invFormData.accountDetails.currencySymbol" [suffixInput]="selectedSuffixForCurrency">
+                                                <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="allowedSelectionOfAType"
+                                                    [showHeading]="false" [rootClass]="'salseInvoicetable'" (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)" (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat" [prefixInput]="invFormData.accountDetails.currencySymbol"
+                                                    [suffixInput]="selectedSuffixForCurrency">
                                                 </tax-control>
                                                 <!-- TODO: After design finalization
                                                     <span class="eligible-ITC">Eligible for ITC <span
@@ -2161,7 +2161,7 @@
 <ng-template let-entry #otherTaxesModal>
     <div id="top0">
         <app-aside-menu-other-taxes *ngIf="asideMenuStateForOtherTaxes === 'in'" [class]="asideMenuStateForOtherTaxes" [taxes]="companyTaxesList" [otherTaxesModal]="entry.otherTaxModal" [@slideInOut]="asideMenuStateForOtherTaxes" (closeModal)="toggleOtherTaxesAsidePane(true, null)"
-            (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true, null);calculateAffectedThingsFromOtherTaxChanges()">
+            (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true, null);calculateAffectedThingsFromOtherTaxChanges();">
         </app-aside-menu-other-taxes>
     </div>
 </ng-template>
@@ -2207,8 +2207,7 @@
 
 <!-- common template ref for displaying invoice type with first letter capital -->
 <ng-template #invoiceTypeDisplayRef>
-    {{((invoiceType === 'proforma' || invoiceType === 'proformas') ? 'proforma' :
-        (invoiceType === 'estimate' || invoiceType === 'estimates') ? 'estimate' : invoiceType) | titlecase}}
+    {{((invoiceType === 'proforma' || invoiceType === 'proformas') ? 'proforma' : (invoiceType === 'estimate' || invoiceType === 'estimates') ? 'estimate' : invoiceType) | titlecase}}
 </ng-template>
 <div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #purchaseRecordConfirmationPopup="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
     <div class="modal-dialog">
