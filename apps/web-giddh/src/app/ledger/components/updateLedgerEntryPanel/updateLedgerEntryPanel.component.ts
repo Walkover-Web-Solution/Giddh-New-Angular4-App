@@ -579,9 +579,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                     this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax);
                     //#endregion
-                    if (!this.vm.showNewEntryPanel) {
+                    if (!this.vm.showNewEntryPanel || this.isAdvanceReceipt) {
                         // Calculate entry total for credit and debit transactions when UI panel at the bottom to update
-                        // transaction is not visible
+                        // transaction is not visible or current transaction is advance receipt as discount field is not displayed
+                        // for advance receipt. Update Ledger calculates entry total only when discount value is set or changes therefore
+                        // additional condition is required to check for advance receipt to calculate entry total
                         this.vm.getEntryTotal();
                         this.vm.generateCompoundTotal();
                     }
