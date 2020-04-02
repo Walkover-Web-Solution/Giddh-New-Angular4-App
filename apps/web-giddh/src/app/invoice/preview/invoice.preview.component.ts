@@ -644,7 +644,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             if (item.taxType === 'tdspay' && item.amountForAccount) {
                                 this.invFormData.voucherDetails.tdsTotal = item.amountForAccount;
                             }
-
                         });
                     } else {
                         this.invFormData.voucherDetails.tcsTotal = response.taxTotal.cumulativeAmountForAccount;

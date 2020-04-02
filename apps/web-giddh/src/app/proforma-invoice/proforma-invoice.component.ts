@@ -4304,9 +4304,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let deposit = cloneDeep(this.depositAmount);
             this.adjustPaymentBalanceDueData = this.adjustPaymentBalanceDueData - deposit;
         }
-         if (this.adjustPaymentData && this.adjustPaymentData.totalAdjustedAmount) {
-            this.adjustPaymentBalanceDueData = this.adjustPaymentBalanceDueData + this.invFormData.voucherDetails.tcsTotal + this.invFormData.voucherDetails.tdsTotal;
-        }
+        this.adjustPaymentBalanceDueData = this.adjustPaymentBalanceDueData + this.invFormData.voucherDetails.tcsTotal + this.invFormData.voucherDetails.tdsTotal;
         this.adjustPaymentData = advanceReceiptsAdjustEvent.adjustPaymentData;
         if (this.isUpdateMode) {
             this.calculateAdjustedVoucherTotal(advanceReceiptsAdjustEvent.adjustVoucherData.adjustments)
