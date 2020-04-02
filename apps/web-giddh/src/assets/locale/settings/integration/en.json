@@ -68,9 +68,7 @@
         "alias_id_label" : "Alias ID",
         "alias_id_placeholder" : "Enter Alias ID",
         "accounts" : "Accounts",
-        "connection_request_message1" : "Congratulations!! A request has been sent to your account, go to",
-        "connection_request_message2" : "ICICI portal",
-        "connection_request_message3" : "and accept it.",
+        "connection_request_message" : "Congratulations!! A request has been sent to your account, go to <a href='https://www.icicibank.com/' target='_blank'>ICICI portal</a> and accept it.",
         "note" : "Once it is done you can link your ICICI account/s and make payment directly through GIDDH.",
         "add_more" : "Add More ID"
     }

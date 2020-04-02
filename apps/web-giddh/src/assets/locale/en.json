@@ -30,6 +30,7 @@
     "app_send_sms" : "Send SMS",
     "app_send_email" : "Send Email",
     "app_gstin" : "GSTIN",
+    "app_trn" : "TRN",
     "app_no_records_found" : "No Record Found !!",
     "app_pay_now" : "Pay Now",
     "app_add_bank_details" : "Add Bank Detail",
@@ -193,5 +194,10 @@
         "payable" : "Payable"
     },
     "app_refresh" : "Refresh",
-    "app_next" : "Next"
+    "app_next" : "Next",
+    "app_financial_year_periods" : {
+        "period1" : "JAN-DEC",
+        "period2" : "APR-MAR",
+        "period3" : "JULY-JULY"
+    }
 }
