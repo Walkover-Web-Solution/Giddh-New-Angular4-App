@@ -136,153 +136,147 @@
 
     <div>
 
-        <div class="table-responsive">
+    <div class="table-responsive">
+        <table class="transactions-table table-striped  table zi-table table-hover"
+            *ngIf="!(viewTransactionInProgress$ | async) && (viewTransaction$ | async) && (viewTransaction$ | async)?.totalItems">
 
-            <div class="ps">
-                <perfect-scrollbar>
-                    <table class="transactions-table table-striped  table zi-table table-hover"
-                        *ngIf="!(viewTransactionInProgress$ | async) && (viewTransaction$ | async) && (viewTransaction$ | async)?.totalItems">
+            <thead>
 
-                        <thead>
+                <tr>
+                    <th class="text-left">
+                        <div class="relative">
+                            <div class="pull-left over-flow"> Invoice Date
+                            </div>
+                        </div>
+                    </th>
 
-                            <tr>
-                                <th style="" class="text-left">
-                                    <div style="position: relative">
-                                        <div class="pull-left over-flow"> Invoice Date
-                                        </div>
-                                    </div>
-                                </th>
+                    <th class="text-left">
+                        <div class="relative">
+                            <div class="pull-left over-flow"> Invoice #
+                            </div>
+                        </div>
+                    </th>
 
-                                <th style="" class="text-left">
-                                    <div style="position: relative">
-                                        <div class="pull-left over-flow"> Invoice #
-                                        </div>
-                                    </div>
-                                </th>
+                    <th class="text-left">
+                        <div class="relative">
+                            <div class="pull-left over-flow"> Customer GSTIN
+                            </div>
+                        </div>
+                    </th>
 
-                                <th style="" class="text-left">
-                                    <div style="position: relative">
-                                        <div class="pull-left over-flow"> Customer GSTIN
-                                        </div>
-                                    </div>
-                                </th>
+                    <th class="text-left">
+                        <div class="relative">
+                            <div class="pull-left over-flow"> Customer Name
+                            </div>
+                        </div>
+                    </th>
 
-                                <th style="" class="text-left">
-                                    <div style="position: relative">
-                                        <div class="pull-left over-flow"> Customer Name
-                                        </div>
-                                    </div>
-                                </th>
+                    <th class="text-left">
+                        <div class="relative">
+                            <div class="pull-left over-flow"> Status
+                            </div>
+                        </div>
+                    </th>
 
-                                <th style="" class="text-left">
-                                    <div style="position: relative">
-                                        <div class="pull-left over-flow"> Status
-                                        </div>
-                                    </div>
-                                </th>
+                    <th class="text-left">
+                        <div class="relative">
+                            <div class="pull-left over-flow"> Action on GSTN
+                            </div>
+                        </div>
+                    </th>
 
-                                <th style="" class="text-left">
-                                    <div style="position: relative">
-                                        <div class="pull-left over-flow"> Action on GSTN
-                                        </div>
-                                    </div>
-                                </th>
+                    <th class="text-left">
+                        <div class="relative">
+                            <div class="pull-left over-flow"> Place of supply
+                            </div>
+                        </div>
+                    </th>
 
-                                <th style="" class="text-left">
-                                    <div style="position: relative">
-                                        <div class="pull-left over-flow"> Place of supply
-                                        </div>
-                                    </div>
-                                </th>
+                    <th class="text-left">
+                        <div class="relative">
+                            <div class=" over-flow"> Reverse Charge
+                            </div>
+                        </div>
+                    </th>
 
-                                <th style="" class="text-left">
-                                    <div style="position: relative">
-                                        <div class=" over-flow"> Reverse Charge
-                                        </div>
-                                    </div>
-                                </th>
+                    <th class="text-right">
+                        <div class="relative">
+                            <div class=" over-flow"> Taxable Amount
+                            </div>
+                        </div>
+                    </th>
 
-                                <th style="" class="text-right">
-                                    <div style="position: relative">
-                                        <div class=" over-flow"> Taxable Amount
-                                        </div>
-                                    </div>
-                                </th>
-
-                                <th style="" class="text-right">
-                                    <div style="position: relative">
-                                        <div class=" over-flow"> IGST
-                                        </div>
-                                    </div>
-                                </th>
+                    <th class="text-right">
+                        <div class="relative">
+                            <div class=" over-flow"> IGST
+                            </div>
+                        </div>
+                    </th>
 
 
-                                <th style="" class="text-right">
-                                    <div style="position: relative">
-                                        <div class=" over-flow"> CGST
-                                        </div>
-                                    </div>
-                                </th>
+                    <th class="text-right">
+                        <div class="relative">
+                            <div class=" over-flow"> CGST
+                            </div>
+                        </div>
+                    </th>
 
-                                <th style="" class="text-right">
-                                    <div style="position: relative">
-                                        <div class=" over-flow"> SGST
-                                        </div>
-                                    </div>
-                                </th>
+                    <th class="text-right">
+                        <div class="relative">
+                            <div class=" over-flow"> SGST
+                            </div>
+                        </div>
+                    </th>
 
-                                <th style="" class="text-right">
-                                    <div style="position: relative">
-                                        <div class=" over-flow"> CESS
-                                        </div>
-                                    </div>
-                                </th>
+                    <th class="text-right">
+                        <div class="relative">
+                            <div class=" over-flow"> CESS
+                            </div>
+                        </div>
+                    </th>
 
-                                <th style="" class="text-right">
-                                    <div style="position: relative">
-                                        <div class=" over-flow"> Total Amount
-                                        </div>
-                                    </div>
-                                </th>
+                    <th class="text-right">
+                        <div class="relative">
+                            <div class=" over-flow"> Total Amount
+                            </div>
+                        </div>
+                    </th>
 
-                            </tr>
+                </tr>
 
-                        </thead>
+            </thead>
 
-                        <tbody>
+            <tbody>
 
-                            <tr class="cursor-pointer" *ngFor="let item of (viewTransaction$ | async).results">
-                                <td>{{item.voucherDate ? item.voucherDate : '-'}}</td>
-                                <td class="btn-link" *ngIf="item.voucherType !== 'purchase'"
-                                    (click)="onSelectInvoice(item)">{{item.voucherNumber ? item.voucherNumber : '-'}}
-                                </td>
-                                <td *ngIf="item.voucherType === 'purchase'">
-                                    {{item.voucherNumber ? item.voucherNumber : '-'}}</td>
-                                <td>
-                                    {{item.accountGstin ? item.accountGstin : '-'}}
-                                </td>
-                                <td>{{item.accountName ? item.accountName : '-'}}</td>
-                                <td>{{item.status ? item.status : '-'}}</td>
-                                <td>{{item.actionOnGstin ? item.actionOnGstin : '-'}}</td>
-                                <td>
-                                    {{item.pos ? item.pos : '-'}}
-                                </td>
-                                <td>{{item.reverseCharge ? item.reverseCharge : '-'}}</td>
-                                <td align="right"><i class="fa fa-inr"></i>{{item.taxableAmount | number: '1.2-2'}}</td>
-                                <td align="right"><i class="fa fa-inr"></i>{{item.igstAmount | number: '1.2-2'}}</td>
-                                <td align="right"><i class="fa fa-inr"></i>{{item.cgstAmount | number: '1.2-2'}}</td>
-                                <td align="right"><i class="fa fa-inr"></i>{{item.sgstAmount | number: '1.2-2'}}</td>
-                                <td align="right"><i class="fa fa-inr"></i>{{item.cessAmount | number: '1.2-2'}}</td>
-                                <td align="right"><i class="fa fa-inr"></i>{{item.totalAmount | number: '1.2-2'}}</td>
-                            </tr>
+                <tr class="cursor-pointer" *ngFor="let item of (viewTransaction$ | async).results">
+                    <td>{{item.voucherDate ? item.voucherDate : '-'}}</td>
+                    <td class="btn-link nowrap" *ngIf="item.voucherType !== 'purchase'"
+                        (click)="onSelectInvoice(item)">{{item.voucherNumber ? item.voucherNumber : '-'}}
+                    </td>
+                    <td *ngIf="item.voucherType === 'purchase'">
+                        {{item.voucherNumber ? item.voucherNumber : '-'}}</td>
+                    <td class="nowrap">
+                        {{item.accountGstin ? item.accountGstin : '-'}}
+                    </td>
+                    <td>{{item.accountName ? item.accountName : '-'}}</td>
+                    <td>{{item.status ? item.status : '-'}}</td>
+                    <td>{{item.actionOnGstin ? item.actionOnGstin : '-'}}</td>
+                    <td>
+                        {{item.pos ? item.pos : '-'}}
+                    </td>
+                    <td>{{item.reverseCharge ? item.reverseCharge : '-'}}</td>
+                    <td class="text-right nowrap"><i class="fa fa-inr"></i>{{item.taxableAmount | number: '1.2-2'}}</td>
+                    <td class="text-right nowrap"><i class="fa fa-inr"></i>{{item.igstAmount | number: '1.2-2'}}</td>
+                    <td class="text-right nowrap"><i class="fa fa-inr"></i>{{item.cgstAmount | number: '1.2-2'}}</td>
+                    <td class="text-right nowrap"><i class="fa fa-inr"></i>{{item.sgstAmount | number: '1.2-2'}}</td>
+                    <td class="text-right nowrap"><i class="fa fa-inr"></i>{{item.cessAmount | number: '1.2-2'}}</td>
+                    <td class="text-right nowrap"><i class="fa fa-inr"></i>{{item.totalAmount | number: '1.2-2'}}</td>
+                </tr>
 
-                        </tbody>
+            </tbody>
 
-                    </table>
-                </perfect-scrollbar>
-            </div>
-
-        </div>
+        </table>
+    </div>
 
         <!-- pagination -->
         <div class="text-center" *ngIf="(viewTransaction$ | async)?.totalPages > 1">
