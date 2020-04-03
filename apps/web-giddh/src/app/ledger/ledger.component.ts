@@ -289,7 +289,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.trxRequest.from = moment(value.picker.startDate).format('DD-MM-YYYY');
         this.trxRequest.to = moment(value.picker.endDate).format('DD-MM-YYYY');
         this.todaySelected = true;
-        this.lc.blankLedger.entryDate = moment(value.picker.endDate).format('DD-MM-YYYY');
+        this.lc.blankLedger.entryDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         this.getTransactionData();
         // Después del éxito de la entrada. llamar para transacciones bancarias
         this.lc.activeAccount$.subscribe((data: AccountResponse) => {
