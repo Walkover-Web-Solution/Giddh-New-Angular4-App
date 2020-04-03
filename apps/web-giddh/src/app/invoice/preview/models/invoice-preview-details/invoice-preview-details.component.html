@@ -140,7 +140,7 @@
 
                                         <!-- region for invoice -->
                                         <div class="btn-group changeStatus-dropdown pull-right" dropdown
-                                            *ngIf="!only4ProformaEstimates && selectedItem.voucherType !== 'purchase'">
+                                            *ngIf="!only4ProformaEstimates && selectedItem?.voucherType !== 'purchase'">
 
                                             <label *ngIf="selectedItem.voucherStatus === 'cancel'" class="labeled">
                                                 {{ selectedItem.voucherStatus }}
@@ -180,7 +180,7 @@
                                                     (click)="toggleEditMode()"><i class="fa fa-pencil"></i></a>
                                             </span>
 
-                                            <span class="pos-rel" *ngIf="selectedItem.voucherType !== 'purchase'">
+                                            <span class="pos-rel" *ngIf="selectedItem?.voucherType !== 'purchase'">
                                                 <a href="javascript:void 0" tooltip="Send Email" placement="top"
                                                     (click)="showEmailSendModal.toggle()"><i
                                                         class="fa fa-envelope-o"></i></a>
@@ -192,7 +192,7 @@
                                                     (click)="printVoucher()"><i class="fa fa-print"></i></a>
                                             </span>
 
-                                            <span *ngIf="selectedItem.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')"
+                                            <span *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')"
                                                 [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading || shouldShowUploadAttachment}">
                                                 <a href="javascript:void 0" tooltip="Download" placement="top"
                                                     (click)="downloadPdf()"><i class="fa fa-file-pdf-o"></i></a>
@@ -217,7 +217,7 @@
                             </div>
                         </div>
 
-                        <div class="payment-detail" *ngIf="!only4ProformaEstimates && (selectedItem.voucherType !== 'purchase')">
+                        <div class="payment-detail" *ngIf="!only4ProformaEstimates && (selectedItem?.voucherType !== 'purchase')">
 
                             <div class="clearfix">
 
@@ -294,7 +294,7 @@
 
                         <div *ngIf="!shouldShowUploadAttachment" #attachedDocumentPreview class="fixed-ng2pdfview pdf-preview"
                             [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
-                            <ng2-pdfjs-viewer *ngIf="selectedItem.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')" viewerId="MyUniqueID"
+                            <ng2-pdfjs-viewer *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')" viewerId="MyUniqueID"
                                 [hidden]="isVoucherDownloading || isVoucherDownloadError || isFileUploading"
                                 [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="testPagesLoaded($event);"
                                 [openFile]="false" [viewBookmark]="false" [download]="false">
@@ -347,7 +347,7 @@
 
             <div class="invoice-editBody">
                 <proforma-invoice-component [accountUniqueName]="selectedItem.account.uniqueName"
-                    [selectedItem]="selectedItem" [invoiceNo]="selectedItem.voucherNumber" [invoiceType]="voucherType"
+                [selectedItem]="selectedItem" [invoiceNo]="(voucherType !== 'purchase') ? selectedItem?.voucherNumber : selectedItem?.uniqueName" [invoiceType]="voucherType"
                     (cancelVoucherUpdate)="toggleEditMode()">
                 </proforma-invoice-component>
             </div>
@@ -460,7 +460,7 @@
     tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <confirm-modal [body]="'Do you want to delete the voucher?'"
+            <confirm-modal [body]="only4ProformaEstimates ? 'Do you want to delete the voucher(s)?' : selectedItem.voucherType === 'purchase' ? 'Do you want to delete the selected records?' : 'Do you want to delete the voucher/invoice?'"
                 (cancelCallBack)="deleteConfirmationModel.toggle()"
                 (successCallBack)="deleteVoucher.emit(true);deleteConfirmationModel.toggle()"></confirm-modal>
         </div>
@@ -472,7 +472,7 @@
 <div bsModal #receivePaymentPopup="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <invoice-payment-model *ngIf="selectedItem.voucherType !== 'purchase'" [selectedInvoiceForPayment]="selectedItem"
+            <invoice-payment-model *ngIf="receivePaymentPopup.isShown" [selectedInvoiceForPayment]="selectedItem"
                 (closeModelEvent)="processPaymentEvent.emit($event);receivePaymentPopup.toggle()">
             </invoice-payment-model>
         </div>

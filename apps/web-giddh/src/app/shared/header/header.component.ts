@@ -228,6 +228,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public currentState: any = '';
     public isCalendlyModelActivate: boolean = false;
     public companyInitials: any = '';
+    public forceOpenNavigation: boolean = false;
     /**
      *
      */
@@ -284,7 +285,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             let currentPageResponse = _.clone(response);
             if (currentPageResponse) {
                 if (currentPageResponse && currentPageResponse.url && currentPageResponse.url.includes('ledger/')) {
-
+                    this.isLedgerAccSelected = true;
                 } else {
                     this.currentState = currentPageResponse.url;
                     this.selectedPage = currentPageResponse.name;
@@ -755,6 +756,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             e.stopPropagation();
         }
         this.companyDropdown.isOpen = false;
+        this.forceOpenNavigation = false;
         if (this.companyDetailsDropDownWeb) {
             this.companyDetailsDropDownWeb.hide();
         }
@@ -1052,7 +1054,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (this.sideMenu) {
             this.sideMenu.isopen = event;
         }
-        if (this.companyDropdown) {
+        if (this.companyDropdown && !this.forceOpenNavigation) {
             this.companyDropdown.isOpen = false;
         }
         if (this.companyDetailsDropDownWeb) {
@@ -1247,10 +1249,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public goToSelectPlan(): void {
-        this.modalService.hide(1);
-        setTimeout(() => {
-            this.router.navigate(['/pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, showPlans: true } });
-        }, 200);
+        if (this.modelRefExpirePlan) {
+            this.modelRefExpirePlan.hide();
+        }
+        if (this.modelRefCrossLimit) {
+            this.modelRefCrossLimit.hide();
+        }
+        document.querySelector('body').classList.remove('modal-open');
+        this.router.navigate(['/pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, showPlans: true } });
     }
 
     public onRight(nodes) {

@@ -36,7 +36,7 @@
                             <span class="caret"></span>
                         </button>
                         <ul *dropdownMenu class="dropdown-menu fixedDropdownPlus" role="menu" aria-labelledby="button-basic">
-                            <li role="menuitem" *ngIf="selectedVoucher !== 'purchase'">
+                            <li role="menuitem" *ngIf="selectedVoucher !== 'purchase' && selectedInvoicesList?.length">
                                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleBulkUpdatePopup(false);">Bulk Update</a>
                             </li>
                             <li role="menuitem" *ngIf="selectedItems.length === 1">
@@ -617,7 +617,7 @@
     <div bsModal #invoiceConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
-                <delete-role-confirmation-model [selectedInvoiceForDelete]="selectedInvoice" (confirmDeleteEvent)="deleteConfirmedInvoice()" (closeModelEvent)="closeConfirmationPopup()">
+                <delete-role-confirmation-model [module]="(selectedVoucher !== 'purchase') ? selectedVoucher : 'purchaselist'" [selectedInvoiceForDelete]="selectedInvoice" (confirmDeleteEvent)="deleteConfirmedInvoice()" (closeModelEvent)="closeConfirmationPopup()">
                 </delete-role-confirmation-model>
             </div>
         </div>
@@ -627,7 +627,7 @@
     <div bsModal #performActionOnInvoiceModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
         <div class="modal-dialog modal-md perform-payment">
             <div class="modal-content">
-                <invoice-payment-model *ngIf="(selectedVoucher !== 'purchase')" [selectedInvoiceForPayment]="selectedInvoice" (closeModelEvent)="closePerformActionPopup($event)">
+                <invoice-payment-model *ngIf="performActionOnInvoiceModel.isShown" [selectedInvoiceForPayment]="selectedInvoice" (closeModelEvent)="closePerformActionPopup($event)">
                 </invoice-payment-model>
             </div>
         </div>

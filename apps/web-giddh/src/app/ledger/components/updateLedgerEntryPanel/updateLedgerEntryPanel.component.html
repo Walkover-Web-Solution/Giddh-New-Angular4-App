@@ -555,7 +555,7 @@
                                     [totalForTax]="vm.totalForTax" [prefixInput]="vm.selectedPrefixForCurrency"
                                     [maskInput]="vm.inputMaskFormat" [suffixInput]="vm.selectedSuffixForCurrency"
                                     [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
-                                    [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : vm.selectedLedger.taxes"
+                                    [applicableTaxes]="vm.selectedLedger.taxes"
                                     (hideOtherPopups)="hideDiscount()" (selectedTaxEvent)="vm.taxTrxUpdated($event)">
                                 </update-ledger-tax-control>
                                 <!-- TODO: After design finalization
