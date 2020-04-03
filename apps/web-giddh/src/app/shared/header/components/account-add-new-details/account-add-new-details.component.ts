@@ -792,7 +792,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
-        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === "sundrydebtors" || this.activeGroupUniqueName === "sundrycreditors")) {
+        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value &&
+            this.isCreditorOrDebtor(this.activeGroupUniqueName)) {
             return true;
         } else {
             return false;
@@ -880,5 +881,23 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                  element.classList.remove('error-box');
             }
         }
+    }
+
+    /**
+     * Returns true if passed account belongs to creditor or debtor category
+     * required to make state mandatory
+     *
+     * @private
+     * @param {string} accountUniqueName Account unique name
+     * @returns {boolean} True if passed account belongs to creditor or debtor category
+     * @memberof AccountAddNewDetailsComponent
+     */
+    private isCreditorOrDebtor(accountUniqueName: string): boolean {
+        if (this.flatGroupsOptions) {
+            const groupDetails: any = this.flatGroupsOptions.filter((group) => group.value === accountUniqueName).pop();
+            return (groupDetails) ?
+                groupDetails.additional.some((parentGroup) => parentGroup.uniqueName === 'sundrydebtors' || parentGroup.uniqueName === 'sundrycreditors') : false;
+        }
+        return false;
     }
 }
