@@ -2,6 +2,7 @@
 
 @import "../css/giddh-common.scss";
 
+
 /* table css need to removed at last  (start)
    Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -818,11 +819,11 @@ ul.sub-list {
 }
 
 .bold {
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
 }
 
 .font-bold {
-    font-family: $tableFontBold;
+    font-family: $opensans-bold;
 }
 
 .modal-open {
@@ -1106,7 +1107,7 @@ ul.sub-list {
 
 .unbold {
     font-weight: normal !important;
-    font-family: $tableFontRegular !important;
+    font-family: $opensans-regular !important;
 }
 
 .top-aging-table-top .date-range-picker {
@@ -1125,14 +1126,14 @@ ul.sub-list {
 
 .pagination > li > a {
     background: $white !important;
-    color: #484848 !important;
-    border: 1px solid $jacksons-purple !important;
+    color: $nero !important;
+    border: 1px solid $midnight-blue !important;
 }
 
 .pagination > li.active > a {
-    background: $jacksons-purple !important;
+    background: $midnight-blue !important;
     color: $white !important;
-    border: 1px solid $jacksons-purple !important;
+    border: 1px solid $midnight-blue !important;
 }
 
 .custom-dropdown .dropdown-menu > li > a:hover {
@@ -1763,7 +1764,7 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .btn {
-    padding: 7px 16px;
+    padding: 7px 10px;
     border-radius: 2px;
     font-size: 14px;
     margin-right: 8px;
@@ -2288,7 +2289,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-success {
-    background: #0cb1af;
+    background: #0cb1af; 
     color: $white;
     border: 1px solid #0cb1af;
 }
@@ -2619,7 +2620,7 @@ input[type="checkbox"]:checked:after {
 
 .subscription-title {
     font-size: 20px;
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
 }
 
 .box2 {
@@ -5499,7 +5500,7 @@ input[type="checkbox"][disabled] {
 
 .section_head {
     padding-bottom: 10px;
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
     font-size: 110%;
     color: rgba(0, 0, 0, 0.8);
 }
@@ -6251,7 +6252,7 @@ table td[class*=col-]:last-child {
 
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
     text-transform: capitalize;
 }
 
@@ -6463,14 +6464,14 @@ table td[class*=col-]:last-child {
 
 .user_dropdown > li > a {
     font-size: 13px;
-    padding: 6px 20px !important;
+    padding: 6px 15px !important;
     color: #333333;
 }
 
 .app_list > ul {
     width: 100%;
     float: left;
-    padding: 4px 20px;
+    padding: 4px 15px;
     font-size: 14px;
     margin-bottom: 5px;
     /* margin: 10px 0; */
@@ -6478,7 +6479,7 @@ table td[class*=col-]:last-child {
 
 .app_list > ul h6 {
     margin-bottom: 10px;
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
     font-size: 13px;
 }
 
@@ -6954,7 +6955,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     text-transform: capitalize;
     width: auto;
     color: $midnight-blue;
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
     vertical-align: middle;
 }
 
@@ -8281,7 +8282,7 @@ ul.dropdown-menu p.lead.pd {
 .invoce-controll .nav-tabs > li.active > a {
     border-bottom: 4px solid $deep-sky-blue !important;
     padding-bottom: 7px !important;
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
 }
 
 .invoce-controll .nav-tabs > li > a {
@@ -8788,7 +8789,7 @@ input.checkbox-custom[type="checkbox"] {
 .radio-custom + .radio-custom-label:before {
     content: "";
     background: $white;
-    border: 1px solid #ccc;
+    border: 1px solid $gainsboro;
     display: inline-block;
     vertical-align: middle;
     width: 18px;
@@ -8824,7 +8825,7 @@ input.checkbox-custom[type="checkbox"] {
 
 .radio-custom + .radio-custom-label:before {
     border-radius: 50%;
-    border: 1px solid $chetwode-blue;
+    border: 1px solid $gainsboro;
 }
 
 .radio-custom:checked + :before {

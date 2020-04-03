@@ -1,6 +1,6 @@
 .giddh-table {
     background: #fff;
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
     border: 1px solid $gainsboro;
     width: 100%;
     max-width: 100%;
@@ -17,7 +17,7 @@
         background: #fff;
         padding: 15px 11px;
         border-bottom: 1px solid $gainsboro;
-        font-family: $tableFontSemibold;
+        font-family: $opensans-semibold;
     }
     thead > tr > th {
         border-top: 1px solid $gainsboro !important;
@@ -34,7 +34,7 @@
         white-space: inherit !important;
         border-left: none;
         border-right: none;
-        font-family: $tableFontRegular;
+        font-family: $opensans-regular;
         border-bottom: none !important;
     }
     thead > tr > th:first-child,
