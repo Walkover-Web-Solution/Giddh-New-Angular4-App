@@ -4381,10 +4381,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param {*} voucherDate  Voucher Date (DD-MM-YYYY) of selected invoice
      * @memberof ProformaInvoiceComponent
      */
-    public getAllAdvanceReceipts(customerUniquename, voucherDate): void {
-        if (customerUniquename && voucherDate) {
+    public getAllAdvanceReceipts(customerUniqueName, voucherDate): void {
+        if (customerUniqueName && voucherDate) {
             let requestObject = {
-                accountUniqueName: customerUniquename,
+                accountUniqueName: customerUniqueName,
                 invoiceDate: voucherDate
             };
             this.salesService.getAllAdvanceReceiptVoucher(requestObject).subscribe(res => {
