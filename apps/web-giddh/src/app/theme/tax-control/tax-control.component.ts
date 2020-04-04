@@ -109,7 +109,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         if ('date' in changes && changes.date.currentValue !== changes.date.previousValue) {
             if (moment(changes['date'].currentValue, 'DD-MM-YYYY').isValid()) {
                 this.taxSum = 0;
-                this.prepareTaxObject();
+                if (changes.date.firstChange) {
+                    this.prepareTaxObject();
+                }
                 this.change();
             }
         }
