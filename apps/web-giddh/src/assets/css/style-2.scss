@@ -9346,6 +9346,9 @@ input.checkbox-custom[type="checkbox"] {
     .xs-mr-0 {
         margin-right: 0px;
     }
+    body.hide-scroll-body{
+        overflow-y: hidden;
+    }
 }
 
 @media (max-width: 575px) {
