@@ -118,7 +118,7 @@
 }
 
 .click-dropdwon ul li:hover {
-    background-color: #d9d9d970;
+    background-color: $gainsboro;
 }
 
 .click-dropdwon ul li:hover a {
@@ -409,7 +409,7 @@ button.btn.btn-filter span.icon-cross {
     display: block;
     height: 36px;
     width: 1px;
-    background-color: #d9d9d9;
+    background-color: $gainsboro;
     left: 37px !important;
     z-index: 100;
     top: 0;

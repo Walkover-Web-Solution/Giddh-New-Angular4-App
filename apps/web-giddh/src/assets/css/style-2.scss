@@ -41,13 +41,13 @@
 .basic > thead > tr > th {
     background: $white;
     color: #000000;
-    border-right: 1px solid #d1d1d1;
+    border-right: 1px solid $gainsboro;
     padding: 15px 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid #d1d1d1;
+    border-bottom: 1px solid $gainsboro;
     font-family: opensans-semibold;
     font-size: 14px;
-    border-top: 1px solid #d1d1d1; // position: sticky !important;
+    border-top: 1px solid $gainsboro; // position: sticky !important;
     // top: 60px;
     // z-index: 999;
 }
@@ -397,7 +397,7 @@ input {
     display: block;
     overflow: hidden;
     cursor: pointer;
-    border: 1px solid #adadad;
+    border: 1px solid $chetwode-blue;
     border-radius: 30px;
 }
 
@@ -444,8 +444,8 @@ input {
     right: 28px;
     border-radius: 30px;
     transition: all 0.3s ease-in 0s;
-    background-color: #5b64c9;
-    border-color: #5b64c9;
+    background-color: $chetwode-blue;
+    border-color: $chetwode-blue;
 }
 
 .toggle-checkbox:checked + .toggle-label .toggle-inner {
@@ -4971,7 +4971,7 @@ label {
 .pagination > li > a:hover,
 .pagination > li > span:focus,
 .pagination > li > span:hover {
-    background-color: #d9d9d9 !important;
+    background-color: $gainsboro !important;
     border-color: #ddd;
 }
 
@@ -5094,7 +5094,7 @@ label {
 
 #dashboard .panel-default {
     color: #4d4d4d;
-    border-color: #d9d9d9;
+    border-color: $gainsboro;
 }
 
 #dashboard .panel-default > .panel-heading {
@@ -6243,7 +6243,7 @@ table td[class*=col-]:last-child {
 
 .ledger-stat h3 {
     font-size: 24px;
-    margin-top: 10px;
+    margin-top: 0;
 }
 
 .icomoon_ico {
@@ -6289,14 +6289,6 @@ table td[class*=col-]:last-child {
     overflow: hidden;
     width: 100%;
     text-align: center;
-}
-
-.pagination > li > a {
-    color: #4d4d4d;
-}
-
-.grey {
-    color: #4d4d4d;
 }
 
 .ledger-panel label {
@@ -8428,7 +8420,7 @@ ul.dropdown-menu p.lead.pd {
 
 .date-advanceSearch .icon-calender {
     height: 36px !important;
-    border-right: 1px solid #d9d9d9 !important;
+    border-right: 1px solid $gainsboro !important;
     color: #999999 !important;
 }
 

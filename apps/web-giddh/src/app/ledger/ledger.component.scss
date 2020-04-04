@@ -2,7 +2,7 @@
 
 .form-control,
 input {
-    color: #1c1c1c;
+    color: $nero;
 }
 .notfound-option {
     display: flex;
@@ -11,10 +11,10 @@ input {
 .ledgHead table td[class*="col-"],
 .ledgHead table td .select2-container {
     padding: 8px 10px !important;
-    border-bottom: 1px solid #ccc;
-    border-right: 1px solid #ccc;
+    border-bottom: 1px solid $gainsboro;
+    border-right: 1px solid $gainsboro;
     font-size: 13px;
-    color: #1c1c1c;
+    color: $nero;
     max-width: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -33,10 +33,9 @@ input {
 .ledgHead.entry-popup table td[class*="col-"] {
     padding: 0px !important;
     padding-bottom: 1px !important;
-    border-bottom: 1px solid #ccc;
-    border-right: 1px solid #ccc;
+    border-bottom: 1px solid $gainsboro;
+    border-right: 1px solid $gainsboro;
     font-size: 13px;
-    color: #4d4d4d;
     max-width: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -131,9 +130,6 @@ input {
     width: 100%;
     text-align: center;
 }
-.pagination > li > a {
-    color: #4d4d4d;
-}
 .pagination > .active > a {
     background: #d35f29 !important;
     color: #fff !important;
@@ -141,9 +137,6 @@ input {
 }
 .pagination > li > a:hover {
     color: #d35f29;
-}
-.grey {
-    color: #4d4d4d;
 }
 .ledger-panel label {
     font-weight: 400;
@@ -163,21 +156,21 @@ input {
 .t-h-bg1 th {
     background: #fff;
     color: #000000;
-    border-right: 1px solid #d1d1d1;
+    border-right: 1px solid $gainsboro;
     padding: 15px 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid #d1d1d1;
+    border-bottom: 1px solid $gainsboro;
     font-family: opensans-semibold;
     font-size: 14px;
-    border-top: 1px solid #d1d1d1;
+    border-top: 1px solid $gainsboro;
 }
 .ledger-main .form-control,
 .ledger-main input {
-    color: #1c1c1c;
+    color: $nero;
 }
 
 .ledger_book {
-    border: 0px solid #ccc;
+    border: 0px solid $gainsboro;
     clear: both;
     position: relative;
     float: left;
@@ -218,7 +211,7 @@ input {
     display: block;
     height: 36px;
     width: 1px;
-    background-color: #d9d9d9;
+    background-color: $gainsboro;
     left: 37px !important;
     z-index: 100;
     top: 0;
@@ -280,16 +273,16 @@ sh-select:focus {
 }
 .left-col-new table.width100.h-table tbody tr td:first-child,
 .left-col-new table.width100.h-table thead tr th:first-child {
-    border-left: 1px solid #ccc !important;
+    border-left: 1px solid $gainsboro !important;
 }
 .custom-tabs {
     display: none;
 }
 .ledgHead .icomoon_ico {
-    color: #999;
+    color:$gray;
     width: 36px;
     height: 36px;
-    border: 1px solid #d9d9d9;
+    border: 1px solid $gainsboro;
     padding: 3px;
     display: flex;
     justify-content: center;
@@ -331,7 +324,7 @@ sh-select:focus {
     margin-right: 15px;
 }
 .ledger_book .ledger-footer-1 .total_col .border-top {
-    border-top: 1px solid #d9d9d9 !important;
+    border-top: 1px solid $gainsboro !important;
 }
 .ledger_book .ledger-footer-1 .total_col .bdrT {
     border: none;
@@ -348,7 +341,7 @@ sh-select:focus {
     content: "";
     height: 1px;
     width: 32%;
-    background-color: #c4c4c4;
+    background-color:$gainsboro;
     left: -33%;
     top: 17px;
 }
@@ -357,7 +350,7 @@ sh-select:focus {
     content: "";
     height: 1px;
     width: 32%;
-    background-color: #c4c4c4;
+    background-color: $gainsboro;
     right: -33%;
     top: 17px;
 }
@@ -366,12 +359,12 @@ sh-select:focus {
     margin-top: 46px;
 }
 .ledger-stat h1 {
-    color: #262626;
-    font-size: 16px;
+    color: $nero;
+    font-size: 14px;
     margin-bottom: 10px;
 }
-.digitBlue {
-    color: $midnight-express;
+.digit-blue {
+    color: $midnight-blue;
 }
 .greyTextClr {
     color: #666 !important;
@@ -379,10 +372,10 @@ sh-select:focus {
 }
 
 .ledger-stat h3 {
-    font-size: 16px;
+    font-size: 14px;
 }
 .stat-block {
-    border-right: 1px solid #d9d9d9;
+    border-right: 1px solid $gainsboro;
     padding-left: 30px;
     padding-top: 20px;
     padding-bottom: 20px;
@@ -404,6 +397,9 @@ sh-select:focus {
     justify-content: center;
     align-items: center;
     margin-right: 7px;
+    i{
+        color: $gray;
+    }
 }
 .subTotal {
     font-size: 14px !important;
@@ -590,7 +586,7 @@ sh-select:focus {
     }
     .left-col-new table.width100.h-table tbody tr td:first-child,
     .left-col-new table.width100.h-table thead tr th:first-child {
-        border-left: 0px solid #ccc !important;
+        border-left: 0px solid $gainsboro !important;
     }
     .ledgHead.some.transactions-page {
         margin-top: 50px;
@@ -612,7 +608,7 @@ sh-select:focus {
         height: calc(100% - 220px);
         position: absolute;
         width: 0;
-        border-left: 1px solid #ccc;
+        border-left: 1px solid $gainsboro;
         top: 0px;
         bottom: 0;
         z-index: 1;
@@ -621,7 +617,7 @@ sh-select:focus {
         right: 0;
     }
     table.ledger-footer-1:first-child {
-        border-right: 1px solid #d1d1d1;
+        border-right: 1px solid $gainsboro;
     }
 }
 @media (max-width: 575px) {

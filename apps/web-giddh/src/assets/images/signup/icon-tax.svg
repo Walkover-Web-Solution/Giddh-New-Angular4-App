@@ -86,7 +86,7 @@
 	.st80{fill:#595959;stroke:#898989;stroke-width:0.25;stroke-miterlimit:10;}
 	.st81{fill:#FAFAFA;}
 	.st82{fill:none;stroke:#A6A6A6;stroke-linecap:round;stroke-miterlimit:10;}
-	.st83{fill:none;stroke:#D9D9D9;stroke-linecap:round;stroke-miterlimit:10;}
+	.st83{fill:none;stroke:;stroke-linecap:round;stroke-miterlimit:10;}
 	.st84{fill:none;stroke:#D37C59;stroke-linecap:round;stroke-miterlimit:10;}
 	.st85{fill:#707070;}
 	.st86{fill:#BFBFBF;}
@@ -151,7 +151,7 @@
 	.st135{fill:url(#SVGID_37_);stroke:#B3B3B3;stroke-width:0.75;stroke-linecap:round;stroke-miterlimit:10;}
 	.st136{fill:url(#SVGID_38_);stroke:#B3B3B3;stroke-width:0.75;stroke-linecap:round;stroke-miterlimit:10;}
 	.st137{fill:url(#SVGID_39_);stroke:#B3B3B3;stroke-width:0.75;stroke-linecap:round;stroke-miterlimit:10;}
-	.st138{fill:#D9D9D9;}
+	.st138{fill:;}
 	.st139{fill:url(#SVGID_40_);}
 	.st140{fill:url(#SVGID_41_);stroke:#B3B3B3;stroke-width:0.75;stroke-linecap:round;stroke-miterlimit:10;}
 	.st141{fill:url(#SVGID_42_);stroke:#B3B3B3;stroke-width:0.75;stroke-linecap:round;stroke-miterlimit:10;}
