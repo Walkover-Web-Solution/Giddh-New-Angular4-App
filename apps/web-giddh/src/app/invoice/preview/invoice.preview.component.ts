@@ -1548,7 +1548,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @param {ReciptResponse} item selected row item data
      * @memberof InvoicePreviewComponent
      */
-    public clickChangeStatusToggle(item: any) {
+    public clickChangeStatusToggle(item: any): void {
         this.isAccountHaveAdvanceReceipts = false;
         if (item && item.account && item.account.uniqueName && item.voucherDate) {
             this.getAllAdvanceReceipts(item.account.uniqueName, item.voucherDate);
