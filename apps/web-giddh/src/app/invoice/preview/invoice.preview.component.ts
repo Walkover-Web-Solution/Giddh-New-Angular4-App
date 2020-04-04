@@ -241,6 +241,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public depositAmount: number = 0;
     /** True, if select perform adjust payment action for an invoice  */
     public selectedPerformAdjustPaymentAction: boolean = false;
+    /** To check is selected account/customer have advance receipts */
+    public isAccountHaveAdvanceReceipts: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -1535,8 +1537,45 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     public openAdvanceReceiptModal(event): void {
-        if (event) {
+        if (event && this.isAccountHaveAdvanceReceipts) {
             this.onPerformAdjustPaymentAction(this.selectedInvoice);
+        }
+    }
+
+    /**
+     * To toggle change status container
+     *
+     * @param {ReciptResponse} item selected row item data
+     * @memberof InvoicePreviewComponent
+     */
+    public clickChangeStatusToggle(item: any) {
+        if (item.account.uniqueName && item.voucherDate) {
+            this.getAllAdvanceReceipts(item.account.uniqueName, item.voucherDate);
+        }
+    }
+
+    /**
+     * Call API to get all advance receipts of an invoice
+     *
+     * @param {*} customerUniquename Selected customer unique name
+     * @param {*} voucherDate Voucher Date (DD-MM-YYYY)
+     * @memberof InvoicePreviewComponent
+     */
+    public getAllAdvanceReceipts(customerUniquename, voucherDate): void {
+        if (customerUniquename && voucherDate) {
+            let requestObject = {
+                accountUniqueName: customerUniquename,
+                invoiceDate: voucherDate
+            };
+            this.salesService.getAllAdvanceReceiptVoucher(requestObject).subscribe(res => {
+                if (res && res.status === 'success') {
+                    if (res.body && res.body.length) {
+                        this.isAccountHaveAdvanceReceipts = true;
+                    } else {
+                        this.isAccountHaveAdvanceReceipts = false;
+                    }
+                }
+            })
         }
     }
 }

@@ -371,14 +371,14 @@
 
                                 <div>
                                     <div dropdown container="body" class="icon-ellipse selectAction">
-                                        <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic"></a>
+                                        <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right" (click)="clickChangeStatusToggle(item)" aria-controls="dropdown-basic"></a>
 
                                         <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu" aria-labelledby="edit-model-basic">
                                             <ul class="selectActionDropdown">
                                                 <li (click)="onPerformAction(item, 'paid')">
                                                     <a class="cp" href="javascript:void(0)">Paid</a>
                                                 </li>
-                                                <li *ngIf="selectedVoucher === 'sales'" (click)="onPerformAdjustPaymentAction(item)">
+                                                <li *ngIf="selectedVoucher === 'sales'" [ngClass]="{'no-click': !isAccountHaveAdvanceReceipts}" (click)="onPerformAdjustPaymentAction(item)">
                                                     <a class="cp" href="javascript:void(0)">Adjust Amount</a>
                                                 </li>
                                                 <li (click)="onPerformAction(item, 'unpaid')">
