@@ -1559,6 +1559,9 @@ modal-container.modal {
 .color-primary {
     color: $deep-sky-blue;
 }
+.select-error input.form-control {
+    border: 2px solid $red;
+}
 /* my css end */
 
 /*input*/
@@ -7706,7 +7709,7 @@ app-header {
 }
 
 .error-box {
-    border: 2px solid red;
+    border: 2px solid $red;
 }
 .text-warning {
     color: #ffa000;
