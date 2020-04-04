@@ -1562,7 +1562,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @param {*} voucherDate Voucher Date (DD-MM-YYYY)
      * @memberof InvoicePreviewComponent
      */
-    public getAllAdvanceReceipts(customerUniqueName, voucherDate): void {
+    public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: string): void {
         if (customerUniqueName && voucherDate) {
             let requestObject = {
                 accountUniqueName: customerUniqueName,
