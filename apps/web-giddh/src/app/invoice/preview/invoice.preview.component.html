@@ -36,7 +36,7 @@
                             <span class="caret"></span>
                         </button>
                         <ul *dropdownMenu class="dropdown-menu fixedDropdownPlus" role="menu" aria-labelledby="button-basic">
-                            <li role="menuitem" *ngIf="selectedVoucher !== 'purchase'">
+                            <li role="menuitem" *ngIf="selectedVoucher !== 'purchase' && selectedInvoicesList?.length">
                                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleBulkUpdatePopup(false);">Bulk Update</a>
                             </li>
                             <li role="menuitem" *ngIf="selectedItems.length === 1">

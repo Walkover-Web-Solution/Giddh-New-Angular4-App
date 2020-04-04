@@ -289,6 +289,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.trxRequest.from = moment(value.picker.startDate).format('DD-MM-YYYY');
         this.trxRequest.to = moment(value.picker.endDate).format('DD-MM-YYYY');
         this.todaySelected = true;
+        this.lc.blankLedger.entryDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         this.getTransactionData();
         // Después del éxito de la entrada. llamar para transacciones bancarias
         this.lc.activeAccount$.subscribe((data: AccountResponse) => {
@@ -1336,7 +1337,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * onOpenAdvanceSearch
      */
-    public onOpenAdvanceSearch() {
+    public onOpenAdvanceSearch(): void {
+        if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.datePickerOptions && this.datePickerOptions.startDate && this.datePickerOptions.endDate ) {
+            this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+                page: 0,
+                dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+                    bsRangeValue: [this.datePickerOptions.startDate, this.datePickerOptions.endDate]
+                })
+            });
+        }
         this.advanceSearchModel.show();
     }
 

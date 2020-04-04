@@ -7400,7 +7400,6 @@ th:first-child {
 }
 
 .tax-engine .table-responsive {
-    display: table;
     width: 100%;
     max-width: 100vw;
 }
@@ -9346,6 +9345,9 @@ input.checkbox-custom[type="checkbox"] {
     }
     .xs-mr-0 {
         margin-right: 0px;
+    }
+    body.hide-scroll-body{
+        overflow-y: hidden;
     }
 }
 
