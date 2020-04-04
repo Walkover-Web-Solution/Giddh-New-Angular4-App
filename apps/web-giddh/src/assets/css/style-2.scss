@@ -1570,12 +1570,12 @@ modal-container.modal {
     border-radius: 2px !important;
     padding: 6px !important;
     outline: 0;
-    color: #484848 !important;
+    color: $nero !important;
     box-shadow: none;
 }
 
 input {
-    color: #484848 !important;
+    color: $nero !important;
 }
 
 .form-control::-webkit-input-placeholder,
