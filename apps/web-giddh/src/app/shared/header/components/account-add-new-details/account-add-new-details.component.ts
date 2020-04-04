@@ -259,11 +259,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             if (flattenGroups) {
                 let items: IOption[] = flattenGroups.filter(grps => {
                     return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
-                }).map(m => {
-                    return {
-                        value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups
-                    }
-                });
+                }).map((m: any) => ({ value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups }));
                 this.flatGroupsOptions = items;
                 if (this.flatGroupsOptions.length > 0 && this.activeGroupUniqueName) {
                     let selectedGroupDetails;
@@ -281,6 +277,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                             }
                         }
                     }
+                    this.toggleStateRequired();
                 }
             }
         });
@@ -893,10 +890,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     private isCreditorOrDebtor(accountUniqueName: string): boolean {
-        if (this.flatGroupsOptions) {
+        if (this.flatGroupsOptions && _.isArray(this.flatGroupsOptions) && this.flatGroupsOptions.length && accountUniqueName) {
             const groupDetails: any = this.flatGroupsOptions.filter((group) => group.value === accountUniqueName).pop();
-            return (groupDetails) ?
-                groupDetails.additional.some((parentGroup) => parentGroup.uniqueName === 'sundrydebtors' || parentGroup.uniqueName === 'sundrycreditors') : false;
+            if (groupDetails) {
+                return groupDetails.additional.some((parentGroup) => {
+                    const groups = [parentGroup.uniqueName, groupDetails.value]
+                    return groups.includes('sundrydebtors') || groups.includes('sundrycreditors');
+                });
+            }
+            return false;
         }
         return false;
     }
