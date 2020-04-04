@@ -147,7 +147,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      *
      * @memberof AdvanceReceiptAdjustmentComponent
      */
-    public onClear() {
+    public onClear(): void {
         this.adjustVoucherForm = {
             tdsTaxUniqueName: '',
             tdsAmount: {
