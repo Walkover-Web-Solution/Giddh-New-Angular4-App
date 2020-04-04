@@ -1549,7 +1549,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     public clickChangeStatusToggle(item: any) {
-        if (item.account.uniqueName && item.voucherDate) {
+        this.isAccountHaveAdvanceReceipts = false;
+        if (item && item.account && item.account.uniqueName && item.voucherDate) {
             this.getAllAdvanceReceipts(item.account.uniqueName, item.voucherDate);
         }
     }
@@ -1561,10 +1562,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @param {*} voucherDate Voucher Date (DD-MM-YYYY)
      * @memberof InvoicePreviewComponent
      */
-    public getAllAdvanceReceipts(customerUniquename, voucherDate): void {
-        if (customerUniquename && voucherDate) {
+    public getAllAdvanceReceipts(customerUniqueName, voucherDate): void {
+        if (customerUniqueName && voucherDate) {
             let requestObject = {
-                accountUniqueName: customerUniquename,
+                accountUniqueName: customerUniqueName,
                 invoiceDate: voucherDate
             };
             this.salesService.getAllAdvanceReceiptVoucher(requestObject).subscribe(res => {
@@ -1575,7 +1576,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.isAccountHaveAdvanceReceipts = false;
                     }
                 }
-            })
+            });
         }
     }
 }

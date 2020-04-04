@@ -142,6 +142,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         this.closeModelEvent.emit(true);
     }
 
+    /**
+     * To clear advance receipt adjustment form
+     *
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
     public onClear() {
         this.adjustVoucherForm = {
             tdsTaxUniqueName: '',
@@ -372,7 +377,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.toaster.errorToast('The adjusted amount of the linked invoice\'s is more than this receipt');
             isValid = false;
         }
-        if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length>1) {
+        if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 1) {
             this.adjustVoucherForm.adjustments.forEach(item => {
                 if (!item.voucherNumber) {
                     isValid = false;
@@ -381,7 +386,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                 }
             });
         }
-        if (isValid ) {
+        if (isValid) {
             this.submitClicked.emit({
                 adjustVoucherData: this.adjustVoucherForm,
                 adjustPaymentData: this.adjustPayment
