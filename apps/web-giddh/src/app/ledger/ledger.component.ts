@@ -1072,7 +1072,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     if (!cls) {
                         return;
                     }
-                    return cls.contains('chkclrbsdp') || cls.contains('currencyToggler');
+                    return cls.contains('chkclrbsdp') || cls.contains('currencyToggler') || cls.contains('bs-datepicker');
                 });
 
                 if (notClose) {
