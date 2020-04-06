@@ -114,9 +114,9 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
      */
     public prepareTaxObject() {
         // if updating don't recalculate
-        if (this.taxRenderData.length) {
-            return;
-        }
+        // if (this.taxRenderData.length) {
+        //     return;
+        // }
 
         if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
             this.taxes = this.taxes.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
@@ -125,34 +125,43 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
         if (this.exceptTaxTypes && this.exceptTaxTypes.length) {
             this.taxes = this.taxes.filter(f => !this.exceptTaxTypes.includes(f.taxType));
         }
-
-        this.taxes.map(tx => {
-            let taxObj = new TaxControlData();
-            taxObj.name = tx.name;
-            taxObj.type = tx.taxType;
-            taxObj.uniqueName = tx.uniqueName;
-            if (this.date) {
-                let taxObject = _.orderBy(tx.taxDetail, (p: ITaxDetail) => {
-                    return moment(p.date, 'DD-MM-YYYY');
-                }, 'desc');
-                let exactDate = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY').isSame(moment(this.date, 'DD-MM-YYYY')));
-                if (exactDate.length > 0) {
-                    taxObj.amount = exactDate[0].taxValue;
-                } else {
-                    let filteredTaxObject = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY') < moment(this.date, 'DD-MM-YYYY'));
-                    if (filteredTaxObject.length > 0) {
-                        taxObj.amount = filteredTaxObject[0].taxValue;
-                    } else {
-                        taxObj.amount = 0;
-                    }
+        this.taxes.map(tax => {
+            const index = this.taxRenderData.findIndex(f => f.uniqueName === tax.uniqueName);
+            // if tax is already prepared then only check if it's checked or not on basis of applicable taxes
+            if (index > -1) {
+                if (this.date && tax.taxDetail && tax.taxDetail.length) {
+                    this.taxRenderData[index].amount =
+                        (moment(tax.taxDetail[0].date, 'DD-MM-YYYY').isSame(moment(this.date, 'DD-MM-YYYY')) || moment(tax.taxDetail[0].date, 'DD-MM-YYYY') < moment(this.date, 'DD-MM-YYYY')) ?
+                            tax.taxDetail[0].taxValue : 0;
                 }
             } else {
-                taxObj.amount = tx.taxDetail[0].taxValue;
+                let taxObj = new TaxControlData();
+                taxObj.name = tax.name;
+                taxObj.type = tax.taxType;
+                taxObj.uniqueName = tax.uniqueName;
+                if (this.date) {
+                    let taxObject = _.orderBy(tax.taxDetail, (p: ITaxDetail) => {
+                        return moment(p.date, 'DD-MM-YYYY');
+                    }, 'desc');
+                    let exactDate = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY').isSame(moment(this.date, 'DD-MM-YYYY')));
+                    if (exactDate.length > 0) {
+                        taxObj.amount = exactDate[0].taxValue;
+                    } else {
+                        let filteredTaxObject = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY') < moment(this.date, 'DD-MM-YYYY'));
+                        if (filteredTaxObject.length > 0) {
+                            taxObj.amount = filteredTaxObject[0].taxValue;
+                        } else {
+                            taxObj.amount = 0;
+                        }
+                    }
+                } else {
+                    taxObj.amount = tax.taxDetail[0].taxValue;
+                }
+                taxObj.isChecked = (this.applicableTaxes && (this.applicableTaxes.indexOf(tax.uniqueName) > -1));
+                // if (taxObj.amount && taxObj.amount > 0) {
+                this.taxRenderData.push(taxObj);
+                // }
             }
-            taxObj.isChecked = (this.applicableTaxes && (this.applicableTaxes.indexOf(tx.uniqueName) > -1));
-            // if (taxObj.amount && taxObj.amount > 0) {
-            this.taxRenderData.push(taxObj);
-            // }
         });
     }
 

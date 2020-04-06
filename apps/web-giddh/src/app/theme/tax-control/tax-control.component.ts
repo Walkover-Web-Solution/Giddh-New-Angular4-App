@@ -109,9 +109,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         if ('date' in changes && changes.date.currentValue !== changes.date.previousValue) {
             if (moment(changes['date'].currentValue, 'DD-MM-YYYY').isValid()) {
                 this.taxSum = 0;
-                if (changes.date.firstChange) {
-                    this.prepareTaxObject();
-                }
+                this.prepareTaxObject();
                 this.change();
             }
         }
@@ -154,7 +152,14 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
             // if tax is already prepared then only check if it's checked or not on basis of applicable taxes
             if (index > -1) {
-                   this.taxRenderData[index].isChecked = this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(item => item === tax.uniqueName) : false;
+                this.taxRenderData[index].isChecked =
+                    this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(item => item === tax.uniqueName) :
+                        this.taxRenderData[index].isChecked ? this.taxRenderData[index].isChecked : false;
+                if (this.date && tax.taxDetail && tax.taxDetail.length) {
+                    this.taxRenderData[index].amount =
+                        (moment(tax.taxDetail[0].date, 'DD-MM-YYYY').isSame(moment(this.date, 'DD-MM-YYYY')) || moment(tax.taxDetail[0].date, 'DD-MM-YYYY') < moment(this.date, 'DD-MM-YYYY')) ?
+                        tax.taxDetail[0].taxValue : 0;
+                }
             } else {
 
                 let taxObj = new TaxControlData();
