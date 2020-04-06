@@ -8901,7 +8901,6 @@ input.checkbox-custom[type="checkbox"] {
         overflow: auto;
         white-space: initial;
         width: 100%;
-        max-width: 230px;
         margin: 0 auto;
         display: block;
     }
@@ -9225,7 +9224,7 @@ input.checkbox-custom[type="checkbox"] {
     #settingTab .tab-container .nav.nav-tabs {
         position: fixed;
         width: 100%;
-        top: 85px;
+        top: 95px;
     }
     .custom-tabs .nav.nav-tabs {
         position: fixed;
@@ -9315,8 +9314,14 @@ input.checkbox-custom[type="checkbox"] {
     .xs-d-block {
         display: block;
     }
+    .xs-mb-1 {
+        margin-bottom: 10px;
+    }
     .xs-mr-0 {
         margin-right: 0px;
+    }
+    .xs-pull-left {
+        float: left !important;
     }
 }
 
