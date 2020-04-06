@@ -23,6 +23,7 @@ import { TaxResponse } from '../../models/api-models/Company';
 import { ITaxDetail } from '../../models/interfaces/tax.interface';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { AppState } from '../../store';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -157,7 +158,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                         this.taxRenderData[index].isChecked ? this.taxRenderData[index].isChecked : false;
                 if (this.date && tax.taxDetail && tax.taxDetail.length) {
                     this.taxRenderData[index].amount =
-                        (moment(tax.taxDetail[0].date, 'DD-MM-YYYY').isSame(moment(this.date, 'DD-MM-YYYY')) || moment(tax.taxDetail[0].date, 'DD-MM-YYYY') < moment(this.date, 'DD-MM-YYYY')) ?
+                        (moment(tax.taxDetail[0].date, GIDDH_DATE_FORMAT).isSame(moment(this.date, GIDDH_DATE_FORMAT)) || moment(tax.taxDetail[0].date, GIDDH_DATE_FORMAT) < moment(this.date, GIDDH_DATE_FORMAT)) ?
                         tax.taxDetail[0].taxValue : 0;
                 }
             } else {
@@ -169,13 +170,13 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
                 if (this.date) {
                     let taxObject = _.orderBy(tax.taxDetail, (p: ITaxDetail) => {
-                        return moment(p.date, 'DD-MM-YYYY');
+                        return moment(p.date, GIDDH_DATE_FORMAT);
                     }, 'desc');
-                    let exactDate = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY').isSame(moment(this.date, 'DD-MM-YYYY')));
+                    let exactDate = taxObject.filter(p => moment(p.date, GIDDH_DATE_FORMAT).isSame(moment(this.date, GIDDH_DATE_FORMAT)));
                     if (exactDate.length > 0) {
                         taxObj.amount = exactDate[0].taxValue;
                     } else {
-                        let filteredTaxObject = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY') < moment(this.date, 'DD-MM-YYYY'));
+                        let filteredTaxObject = taxObject.filter(p => moment(p.date, GIDDH_DATE_FORMAT) < moment(this.date, GIDDH_DATE_FORMAT));
                         if (filteredTaxObject.length > 0) {
                             taxObj.amount = filteredTaxObject[0].taxValue;
                         } else {
