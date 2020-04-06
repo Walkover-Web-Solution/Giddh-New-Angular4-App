@@ -18,10 +18,10 @@
                         <input type="text" class="form-control" name="customerName" [(ngModel)]="adjustPayment.customerName" readonly disabled>
                     </div>
                 </div>
-                <div class="col-md-3 text-right font-14 pt-2 xs-left" *ngIf="!isUpdateMode">
+                <div class="col-md-3 text-right font-14 pt-2 xs-left">
                     <p>Invoice Total: <i class="font-10"></i>{{invoiceFormDetails.accountDetails.currencySymbol}}{{adjustPayment?.grandTotal | giddhCurrency}}
                     </p>
-                    <p>Due <span class="text-light">(Post Adj):</span> <i class="font-10"></i> {{invoiceFormDetails.accountDetails.currencySymbol}} {{ adjustPayment.grandTotal - adjustPayment.totalAdjustedAmount - depositAmount + adjustPayment.tcsTotal +
+                    <p>Due <span class="text-light">(Post Adj):</span> <i class="font-10"></i> {{invoiceFormDetails.accountDetails.currencySymbol}} {{ adjustPayment.grandTotal - adjustPayment.totalAdjustedAmount - depositAmount + adjustPayment.tcsTotal -
                         adjustPayment.tdsTotal | giddhCurrency}}
                     </p>
                 </div>
@@ -32,9 +32,9 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <label for="name">Adjustment Voucher<span class="text-danger">*</span></label>
-                                <div class="select-error" [class.error-box]="entry.uniqueName === ''">
-                                    <sh-select class="text-left dropdown-arrow" name="uniqueName_{{entryIdx}}" [defaultValue]="entry.voucherNumber" (click)="clickSelectVoucher(entryIdx);" required [placeholder]="'Select Voucher'" [(ngModel)]="entry.uniqueName" (selected)="selectVoucher($event, entry, entryIdx);"
-                                        [options]="adjustVoucherOptions" [multiple]="false">
+                                <div class="select-error" [class.error-box]="entry.uniqueName === '' && adjustAdvancePaymentForm?.form.controls['voucherName'+entryIdx]?.touched">
+                                    <sh-select class="text-left dropdown-arrow" name="voucherName{{entryIdx}}" [defaultValue]="entry.voucherNumber" (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm);" required [placeholder]="'Select Voucher'" [(ngModel)]="entry.uniqueName"
+                                        (selected)="selectVoucher($event, entry, entryIdx);" [options]="adjustVoucherOptions" [multiple]="false">
                                         <ng-template #optionTemplate let-option="option">
                                             <a href="javascript:void(0)" class="list-item">
                                                 <div class="item">{{option.label}}</div>
@@ -57,8 +57,8 @@
                                         (Inclusive
                                         Tax){{invoiceFormDetails.accountDetails.currencySymbol}}</span></label>
                                 <!-- decimalDigitsDirective -->
-                                <input [class.error-box]="entry.dueAmount.amountForAccount === 0" required decimalDigitsDirective type="text" class="form-control" placeholder="Enter Amount" name="dueAmount.amountForAccount_{{entryIdx}}" [(ngModel)]="entry.dueAmount.amountForAccount"
-                                    (ngModelChange)="calculateTax(entry, entryIdx )" [prefix]="currencySymbol" [mask]="inputMaskFormat">
+                                <input [class.error-box]="entry.dueAmount.amountForAccount === 0 && adjustAdvancePaymentForm?.form.controls['amount'+entryIdx]?.touched" required decimalDigitsDirective type="text" class="form-control" placeholder="Enter Amount" name="amount{{entryIdx}}"
+                                    [(ngModel)]="entry.dueAmount.amountForAccount" (ngModelChange)="calculateTax(entry, entryIdx)" [prefix]="currencySymbol" [mask]="inputMaskFormat">
                             </div>
                         </div>
                         <div class="col-sm-3">
@@ -131,14 +131,14 @@
                             </div>
                         </div>
                     </ng-container>
-                    <span class="text-light" *ngIf="isUpdateMode">
+                    <span class="text-light" *ngIf="exceedDueAmount<0">
                         Excess amount:
-                        {{invoiceFormDetails.accountDetails.currencySymbol}}{{adjustPayment.totalAdjustedAmount- adjustPayment.grandTotal - depositAmount + adjustPayment.tcsTotal + adjustPayment.tdsTotal  | giddhCurrency}}
+                        {{invoiceFormDetails.accountDetails.currencySymbol}}{{-exceedDueAmount  | giddhCurrency}}
                     </span>
                     <div class="mt-4">
                         <button *ngIf="!isUpdateMode" type="button" class="btn btn-success mrR1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt()">Save</button>
                         <button *ngIf="isUpdateMode" type="button" class="btn btn-success mrR1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt()">Update</button>
-                        <button type="button" class="btn btn-cancel" (click)="onCancel()">Cancel</button>
+                        <button type="button" class="btn btn-cancel" (click)="onClear()">Cancel</button>
                     </div>
                 </div>
 

@@ -2,7 +2,7 @@ import { IUlist } from './interfaces/ulist.interface';
 
 export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
-    // { type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher' },
+    { type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher' },
     { type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', additional: { tab: 'sales', tabIndex: 0 } },
     { type: 'MENU', name: 'E-way bill', uniqueName: '/pages/invoice/ewaybill' },
     // {type: 'MENU', name: 'E-way Generate', uniqueName: '/pages/invoice/ewaybill/create'},
@@ -117,9 +117,9 @@ export let DEFAULT_MENUS_ORIGINAL: IUlist[] = [
     {
         type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', isRemoved: false, pIndex: 2, additional: { tab: 'sales', tabIndex: 0 }
     },
-    // {
-    //     type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher', isRemoved: false, pIndex: 1
-    // },
+    {
+        type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher', isRemoved: false, pIndex: 1
+    },
     {
         type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report', isRemoved: false, pIndex: 9
     },

@@ -9323,6 +9323,9 @@ input.checkbox-custom[type="checkbox"] {
     .xs-pull-left {
         float: left !important;
     }
+    body.hide-scroll-body{
+        overflow-y: hidden;
+    }
 }
 
 @media (max-width: 575px) {
