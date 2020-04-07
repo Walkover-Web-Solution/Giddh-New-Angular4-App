@@ -373,8 +373,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             delete this.adjustVoucherForm['description'];
             delete this.adjustVoucherForm['tdsTaxUniqueName'];
         }
-        if ((Number(this.adjustPayment.grandTotal) - Number(this.adjustPayment.totalAdjustedAmount)) < 0) {
-            this.toaster.errorToast('The adjusted amount of the linked invoice\'s is more than this receipt');
+        if (this.getBalanceDue() < 0) {
+            this.toaster.errorToast(this.exceedDueErrorMessage);
             isValid = false;
         }
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 1) {
