@@ -34,6 +34,15 @@
         "closing_balance" : "Closing Balance"
     },
     "validations" : {
-        
-    }
+        "trigger_name" : "Please enter trigger name.",
+        "entity_type" : "Please select entity type.",
+        "entity" : "Please select an entity.",
+        "scope" : "Please select a scope.",
+        "filter" : "Please select a filter.",
+        "action" : "Please select an action.",
+        "enter_value" : "Please enter value.",
+        "enter_url" : "Please enter URL."
+    },
+    "delete_tax" : "Are you sure you want to delete {SELECTED_TAX}}?",
+    "update_trigger" : "Are you sure want to update {{TRIGGER_NAME}}?"
 }
