@@ -203,5 +203,7 @@
     "app_delink" : "Delink",
     "app_select_all" : "Select All",
     "app_edit_toolip" : "Edit",
-    "app_delete_tooltip" : "Delete"
+    "app_delete_tooltip" : "Delete",
+    "app_save_tooltip" : "Save",
+    "app_reset_tooltip" : "Reset"
 }
