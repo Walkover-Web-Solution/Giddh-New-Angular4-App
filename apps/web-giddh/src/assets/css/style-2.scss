@@ -193,9 +193,25 @@
 .middle {
     vertical-align: middle;
 }
+.clear-both{clear: both;}
 
 /* start MDB tweaks */
+.pt-0 {
+    padding-top: 0px !important;
+}
 
+.pb-0 {
+    padding-bottom: 0px !important;
+}
+
+.pr-0 {
+    padding-right: 0px !important;
+}
+
+.pl-0 {
+    padding-left: 0px !important;
+}
+ 
 .pd-1 {
     padding: 10px !important;
 }
