@@ -199,5 +199,9 @@
         "period1" : "JAN-DEC",
         "period2" : "APR-MAR",
         "period3" : "JULY-JULY"
-    }
+    },
+    "app_delink" : "Delink",
+    "app_select_all" : "Select All",
+    "app_edit_toolip" : "Edit",
+    "app_delete_tooltip" : "Delete"
 }
