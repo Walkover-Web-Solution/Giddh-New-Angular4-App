@@ -3824,20 +3824,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     /**
-     * Fetches the currency rate for multicurrency scenario
-     *
-     * @param {*} results Account details received from API
-     * @memberof ProformaInvoiceComponent
-     */
-    public fetchCurrencyRate(results): void {
-        const vendorCurrency = (results[1].account.currency) ? results[1].account.currency.code : this.companyCurrency;
-        if (vendorCurrency !== this.companyCurrency) {
-            this.isMulticurrencyAccount = true;
-            this.getCurrencyRate(this.companyCurrency, vendorCurrency);
-        }
-    }
-
-    /**
      * Purchase record confirmation change handler, triggerreed when the user performs any
      * action with the confirmation popup
      *
