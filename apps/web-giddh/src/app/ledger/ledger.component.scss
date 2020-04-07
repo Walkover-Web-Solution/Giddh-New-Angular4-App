@@ -104,7 +104,7 @@ input {
     bottom: 0;
 }
 .ledger-head th {
-    color: $JacksonsPurple;
+    color: $jacksons-purple;
     padding-left: 0;
 
     padding-bottom: 10px;
@@ -297,9 +297,9 @@ sh-select:focus {
     background-color: #fff;
 }
 .advancSearchBlock input {
-    background: $lightGray !important;
+    background: $solitude !important;
     height: 28px;
-    border-color: $lightGray !important;
+    border-color: $solitude !important;
 }
 .advancSearchBlock input::placeholder {
     color: #666666;
@@ -320,7 +320,7 @@ sh-select:focus {
 .advancSearchBlock .icon-search {
     right: 0;
     top: 0;
-    background-color: $border-blue;
+    background-color: $chetwode-blue;
     padding: 6px 9px;
     color: #fff;
 }
@@ -339,7 +339,7 @@ sh-select:focus {
 
 .advanceSearchByDate {
     display: inline-flex;
-    border: 1px solid $inputBorderColor;
+    border: 1px solid $gainsboro;
     border-radius: 2px;
     position: relative;
 }
@@ -371,7 +371,7 @@ sh-select:focus {
     margin-bottom: 10px;
 }
 .digitBlue {
-    color: $dark-blue00;
+    color: $midnight-express;
 }
 .greyTextClr {
     color: #666 !important;
@@ -388,17 +388,17 @@ sh-select:focus {
     padding-bottom: 20px;
 }
 .stat-block:first-child {
-    border-bottom: 8px solid $dark-blue00;
+    border-bottom: 8px solid $midnight-express;
 }
 .stat-block:nth-child(2) {
-    border-bottom: 8px solid $JacksonsPurple;
+    border-bottom: 8px solid $jacksons-purple;
 }
 .stat-block:nth-child(3) {
-    border-bottom: 8px solid $border-blue;
+    border-bottom: 8px solid $chetwode-blue;
 }
 .stat-block:last-child {
     border-right: none;
-    border-bottom: 8px solid $light-blue02;
+    border-bottom: 8px solid $portage;
 }
 .advnceSearchFilter {
     justify-content: center;

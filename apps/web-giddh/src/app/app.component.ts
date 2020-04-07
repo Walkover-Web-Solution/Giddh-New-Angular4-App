@@ -107,7 +107,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
     public sideBarStateChange(event: boolean) {
         this.sideMenu.isopen = event;
-
     }
 
     private changeOnMobileView(isMobile) {

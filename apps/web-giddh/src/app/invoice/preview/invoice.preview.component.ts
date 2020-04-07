@@ -241,6 +241,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public depositAmount: number = 0;
     /** True, if select perform adjust payment action for an invoice  */
     public selectedPerformAdjustPaymentAction: boolean = false;
+    /** To check is selected account/customer have advance receipts */
+    public isAccountHaveAdvanceReceipts: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -626,11 +628,28 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             });
 
         this.voucherDetails$.subscribe(response => {
-            if (response && response.subTotal) {
-                this.invFormData.voucherDetails.totalTaxableValue = response.subTotal.amountForAccount
-                this.invFormData.voucherDetails.subTotal = response.subTotal.amountForAccount;
+            if (response) {
+                if (response.subTotal) {
+                    this.invFormData.voucherDetails.totalTaxableValue = response.subTotal.amountForAccount
+                    this.invFormData.voucherDetails.subTotal = response.subTotal.amountForAccount;
+                }
+
                 if (response.advanceReceiptAdjustment) {
                     this.advanceReceiptAdjustmentData = response.advanceReceiptAdjustment;
+                }
+                if (response.taxTotal) {
+                    if (response.taxTotal.taxBreakdown) {
+                        response.taxTotal.taxBreakdown.forEach(item => {
+                            if (item.taxType === 'tcspay' && item.amountForAccount) {
+                                this.invFormData.voucherDetails.tcsTotal = item.amountForAccount;
+                            }
+                            if (item.taxType === 'tdspay' && item.amountForAccount) {
+                                this.invFormData.voucherDetails.tdsTotal = item.amountForAccount;
+                            }
+                        });
+                    } else {
+                        this.invFormData.voucherDetails.tcsTotal = response.taxTotal.cumulativeAmountForAccount;
+                    }
                 }
                 if (response['deposit']) {
                     this.depositAmount = response.deposit.amountForAccount;
@@ -1493,6 +1512,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     */
     public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: AdvanceReceiptAdjustment, adjustPaymentData: AdjustAdvancePaymentModal }) {
         this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
+        this.advanceReceiptAdjustmentData.adjustments.map(item => {
+            item.voucherDate = (item.voucherDate.toString().includes('/')) ? item.voucherDate.trim().replace(/\//g, '-') : item.voucherDate;
+        });
         this.salesService.adjustAnInvoiceWithAdvanceReceipts(this.advanceReceiptAdjustmentData, this.changeStatusInvoiceUniqueName).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
@@ -1515,8 +1537,46 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     public openAdvanceReceiptModal(event): void {
-        if (event) {
+        if (event && this.isAccountHaveAdvanceReceipts) {
             this.onPerformAdjustPaymentAction(this.selectedInvoice);
+        }
+    }
+
+    /**
+     * To toggle change status container
+     *
+     * @param {ReciptResponse} item selected row item data
+     * @memberof InvoicePreviewComponent
+     */
+    public clickChangeStatusToggle(item: any): void {
+        this.isAccountHaveAdvanceReceipts = false;
+        if (item && item.account && item.account.uniqueName && item.voucherDate) {
+            this.getAllAdvanceReceipts(item.account.uniqueName, item.voucherDate);
+        }
+    }
+
+    /**
+     * Call API to get all advance receipts of an invoice
+     *
+     * @param {*} customerUniquename Selected customer unique name
+     * @param {*} voucherDate Voucher Date (DD-MM-YYYY)
+     * @memberof InvoicePreviewComponent
+     */
+    public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: string): void {
+        if (customerUniqueName && voucherDate) {
+            let requestObject = {
+                accountUniqueName: customerUniqueName,
+                invoiceDate: voucherDate
+            };
+            this.salesService.getAllAdvanceReceiptVoucher(requestObject).subscribe(res => {
+                if (res && res.status === 'success') {
+                    if (res.body && res.body.length) {
+                        this.isAccountHaveAdvanceReceipts = true;
+                    } else {
+                        this.isAccountHaveAdvanceReceipts = false;
+                    }
+                }
+            });
         }
     }
 }

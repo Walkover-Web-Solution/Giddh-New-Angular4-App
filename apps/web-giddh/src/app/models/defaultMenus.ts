@@ -2,7 +2,7 @@ import { IUlist } from './interfaces/ulist.interface';
 
 export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
-    // { type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher' },
+    { type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher' },
     { type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', additional: { tab: 'sales', tabIndex: 0 } },
     { type: 'MENU', name: 'E-way bill', uniqueName: '/pages/invoice/ewaybill' },
     // {type: 'MENU', name: 'E-way Generate', uniqueName: '/pages/invoice/ewaybill/create'},
@@ -117,9 +117,9 @@ export let DEFAULT_MENUS_ORIGINAL: IUlist[] = [
     {
         type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', isRemoved: false, pIndex: 2, additional: { tab: 'sales', tabIndex: 0 }
     },
-    // {
-    //     type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher', isRemoved: false, pIndex: 1
-    // },
+    {
+        type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher', isRemoved: false, pIndex: 1
+    },
     {
         type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report', isRemoved: false, pIndex: 9
     },
@@ -173,7 +173,7 @@ export let NAVIGATION_ITEM_LIST_RESPONSIVE: IUlist[] = [
     { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook' },
     { type: 'MENU', name: 'Purchase Record ', uniqueName: '/pages/proforma-invoice/invoice/purchase' },
     { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase' },
-    { type: 'MENU', name: 'Reports > Receipt', uniqueName: '/pages/reports/receipt' },
+    { type: 'MENU', name: 'Reports > Receipt', uniqueName: '/pages/reports/receipt' }
 ];
 export let NAVIGATION_ITEM_LIST: IUlist[] = [];
 
@@ -199,7 +199,8 @@ export let DEFAULT_MENUS_RESPONSIVE: IUlist[] = [
     { type: 'MENU', name: 'Proforma Invoice', uniqueName: '/pages/proforma-invoice/invoice/proformas' },
     { type: 'MENU', name: 'Estimate (Beta)', uniqueName: '/pages/proforma-invoice/invoice/estimates' },
     { type: 'MENU', name: 'New Credit Note', uniqueName: '/pages/proforma-invoice/invoice/credit note' },
-    { type: 'MENU', name: 'New Debit Note', uniqueName: '/pages/proforma-invoice/invoice/debit note' }
+    { type: 'MENU', name: 'New Debit Note', uniqueName: '/pages/proforma-invoice/invoice/debit note' },
+    { type: 'MENU', name: 'Reports > Receipt', uniqueName: '/pages/reports/receipt' }
 ];
 
 export let DEFAULT_AC = [];

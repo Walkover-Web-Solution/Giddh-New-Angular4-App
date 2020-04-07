@@ -277,18 +277,18 @@
                                         <strong>
                                             <ng-container *ngIf="adjustPaymentData?.totalAdjustedAmount">
                                                 {{adjustPaymentBalanceDueData | giddhCurrency}}</ng-container>
-                                            <ng-container *ngIf="!adjustPaymentBalanceDueData">
+                                            <ng-container *ngIf="!adjustPaymentData?.totalAdjustedAmount">
                                                 {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</ng-container>
                                         </strong></span>
                                     <!-- added multicurrency feature make it functional to change into appropriate currency -->
                                     <span class="sp-rupees" *ngIf='isMulticurrencyAccount'>
                                         <span *ngIf="isMulticurrencyAccount">{{baseCurrencySymbol}}</span>
-                                    <span>{{invFormData.voucherDetails.balanceDue * exchangeRate - adjustPaymentBalanceDueData | giddhCurrency}}</span>
+                                    <span>{{invFormData.voucherDetails.balanceDue * exchangeRate  | giddhCurrency}}</span>
                                     </span>
                                     <span class="sp-rupees" *ngIf='!isMulticurrencyAccount'>
                                         <ng-container *ngIf="adjustPaymentData?.totalAdjustedAmount">
                                             {{adjustPaymentBalanceDueData | giddhCurrency}}</ng-container>
-                                        <ng-container *ngIf="!adjustPaymentBalanceDueData">
+                                        <ng-container *ngIf="!adjustPaymentData?.totalAdjustedAmount">
                                             {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</ng-container>
                                     </span>
                                 </p>
@@ -887,9 +887,9 @@
                                     <td class="pos-rel dropdown-container item-tax" style="height:1px;">
                                         <div class="td_Wrapper">
                                             <div class="text-right" style="flex:1;">
-                                                <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes"
-                                                    [allowedSelectionOfAType]="allowedSelectionOfAType" [showHeading]="false" [rootClass]="'salseInvoicetable'" (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)" (hideOtherPopups)="closeDiscountPopup()"
-                                                    [maskInput]="inputMaskFormat" [prefixInput]="invFormData.accountDetails.currencySymbol" [suffixInput]="selectedSuffixForCurrency">
+                                                <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="allowedSelectionOfAType"
+                                                    [showHeading]="false" [rootClass]="'salseInvoicetable'" (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)" (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat" [prefixInput]="invFormData.accountDetails.currencySymbol"
+                                                    [suffixInput]="selectedSuffixForCurrency">
                                                 </tax-control>
                                                 <!-- TODO: After design finalization
                                                     <span class="eligible-ITC">Eligible for ITC <span
@@ -1155,7 +1155,7 @@
                     </div>
 
                     <!--region balance due for non-purchase-->
-                    <div class="tableRow" *ngIf="((isSalesInvoice || isCashInvoice) && !isUpdateMode)">
+                    <div class="tableRow" *ngIf="((isSalesInvoice || isCashInvoice))">
 
                         <div class="tableCell depositeSection">
 
@@ -1164,7 +1164,7 @@
                                 <div (click)="clickedInside($event)" id="deposit-dropdown" class="form-group pd1">
                                     <p>Deposit</p>
                                     <ul>
-                                        <ng-container *ngIf="isSalesInvoice">
+                                        <ng-container *ngIf="isSalesInvoice && (isAccountHaveAdvanceReceipts || isInvoiceAdjustedWithAdvanceReceipts)">
                                             <li role="menuitem" class="mrT1 ">
                                                 <div class="clearfix paymentMode">
 
@@ -1216,40 +1216,41 @@
                                             </li>
                                         </ng-container>
 
-                                        <li role="menuitem" class="mrT1 ">
-                                            <div class="clearfix paymentMode">
+                                        <ng-container *ngIf="!isUpdateMode">
+                                            <li role="menuitem" class="mrT1 ">
+                                                <div class="clearfix paymentMode">
 
-                                                <sh-select class="pull-right " name="depositAccountUniqueName" [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
-                                                    [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
-                                                    <ng-template #optionTemplate1 let-option="option">
-                                                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                                                            <div class="item">{{ option.label }}
-                                                            </div>
-                                                            <div class="item_unq">{{ option.value }}
-                                                            </div>
-                                                        </a>
-                                                    </ng-template>
-                                                </sh-select>
-                                                <label class="pull-right">Payment Mode</label>
-                                            </div>
-                                        </li>
+                                                    <sh-select class="pull-right " name="depositAccountUniqueName" [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
+                                                        [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
+                                                        <ng-template #optionTemplate1 let-option="option">
+                                                            <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                                                <div class="item">{{ option.label }}
+                                                                </div>
+                                                                <div class="item_unq">{{ option.value }}
+                                                                </div>
+                                                            </a>
+                                                        </ng-template>
+                                                    </sh-select>
+                                                    <label class="pull-right">Payment Mode</label>
+                                                </div>
+                                            </li>
 
-                                        <li class="clearfix mrT1" *ngIf="isSalesInvoice">
-                                            <input type="text" (blur)="calculateBalanceDue()" placeholder="Amount" name="dueAmount" class="form-control amountField text-right pull-right max100" [(ngModel)]="depositAmount" [prefix]="depositCurrSymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
-                                            />
-                                            <label class="pull-right">Amount</label>
-                                        </li>
+                                            <li class="clearfix mrT1" *ngIf="isSalesInvoice">
+                                                <input type="text" (blur)="calculateBalanceDue()" placeholder="Amount" name="dueAmount" class="form-control amountField text-right pull-right max100" [(ngModel)]="depositAmount" [prefix]="depositCurrSymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
+                                                />
+                                                <label class="pull-right">Amount</label>
+                                            </li>
 
-                                        <li class="clearfix mrT1" *ngIf="isCashInvoice">
-                                            <span class="amountField pull-right max100 amountFiledCash">
+                                            <li class="clearfix mrT1" *ngIf="isCashInvoice">
+                                                <span class="amountField pull-right max100 amountFiledCash">
                                                                     <span
                                                                         *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span> {{invFormData.voucherDetails.balanceDue
-                                            | giddhCurrency}}</span>
-                                            <label class="pull-right">Amount</label>
-                                        </li>
+                                                | giddhCurrency}}</span>
+                                                <label class="pull-right">Amount</label>
+                                            </li>
 
-                                        <li class="clearfix mrT1 biggerDollar" *ngIf="isSalesInvoice ">
-                                            <strong class="pull-right balanceDueText"> <span
+                                            <li class="clearfix mrT1 biggerDollar" *ngIf="isSalesInvoice ">
+                                                <strong class="pull-right balanceDueText"> <span
                                                                         *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>
                                                                     <ng-container *ngIf="adjustPaymentData?.totalAdjustedAmount">
                                                                         {{adjustPaymentBalanceDueData | giddhCurrency }}
@@ -1258,9 +1259,9 @@
                                                                         {{invFormData.voucherDetails.balanceDue | giddhCurrency }}
                                                                     </ng-container>
                                                                 </strong>
-                                            <strong class="pull-right">Balance Due</strong>
-                                        </li>
-
+                                                <strong class="pull-right">Balance Due</strong>
+                                            </li>
+                                        </ng-container>
                                     </ul>
                                 </div>
 
@@ -2161,7 +2162,7 @@
 <ng-template let-entry #otherTaxesModal>
     <div id="top0">
         <app-aside-menu-other-taxes *ngIf="asideMenuStateForOtherTaxes === 'in'" [class]="asideMenuStateForOtherTaxes" [taxes]="companyTaxesList" [otherTaxesModal]="entry.otherTaxModal" [@slideInOut]="asideMenuStateForOtherTaxes" (closeModal)="toggleOtherTaxesAsidePane(true, null)"
-            (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true, null);calculateAffectedThingsFromOtherTaxChanges()">
+            (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true, null);calculateAffectedThingsFromOtherTaxChanges();">
         </app-aside-menu-other-taxes>
     </div>
 </ng-template>
@@ -2207,8 +2208,7 @@
 
 <!-- common template ref for displaying invoice type with first letter capital -->
 <ng-template #invoiceTypeDisplayRef>
-    {{((invoiceType === 'proforma' || invoiceType === 'proformas') ? 'proforma' :
-        (invoiceType === 'estimate' || invoiceType === 'estimates') ? 'estimate' : invoiceType) | titlecase}}
+    {{((invoiceType === 'proforma' || invoiceType === 'proformas') ? 'proforma' : (invoiceType === 'estimate' || invoiceType === 'estimates') ? 'estimate' : invoiceType) | titlecase}}
 </ng-template>
 <div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #purchaseRecordConfirmationPopup="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
     <div class="modal-dialog">

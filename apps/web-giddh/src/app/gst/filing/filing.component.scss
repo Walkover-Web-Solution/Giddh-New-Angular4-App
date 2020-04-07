@@ -1,7 +1,7 @@
 @import "../../../../../web-giddh/src/assets/css/color.scss";
 
 :host ::ng-deep .dropdown-menu > li > a:hover {
-    color: $border-blue;
+    color: $chetwode-blue;
     background: #e5e5e5;
 }
 /* my css */
@@ -17,6 +17,6 @@
     font-size: 14px;
 }
 .file-your-return {
-    border: 1px solid $border-blue;
+    border: 1px solid $chetwode-blue;
     border-radius: 2px;
 }
