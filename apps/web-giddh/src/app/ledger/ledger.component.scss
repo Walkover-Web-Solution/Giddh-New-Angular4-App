@@ -356,7 +356,7 @@ sh-select:focus {
 }
 
 .ledger-head {
-    margin-top: 46px;
+    margin-top: 35px;
 }
 .ledger-stat h1 {
     color: $nero;
@@ -401,10 +401,7 @@ sh-select:focus {
         color: $gray;
     }
 }
-.subTotal {
-    font-size: 14px !important;
-}
-
+ 
 .ledgHead .advancSearchBlock {
     height: 34px;
     vertical-align: middle;
@@ -454,6 +451,7 @@ sh-select:focus {
 .ledger-main .ledger-row:hover {
     background-color: transparent;
 }
+
 /*reponsive*/
 .modal-ledger {
     width: 70%;
