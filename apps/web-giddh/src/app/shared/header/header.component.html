@@ -348,15 +348,12 @@
                         </a>
                     </li>
 
-
-                    <li>
-                        <a [routerLink]="['/pages/all-modules']" [ngClass]="{'active': selectedPage && selectedPage.toLowerCase() == menu.name.toLowerCase()}">
-                            <span class="label">All Modules</span>
+                    <li class="other">
+                        <a [routerLink]="['/pages/all-modules']">All Modules
                         </a>
                     </li>
 
-
-                    <!-- <li id="other" *ngIf="!isMobileSite" (mouseenter)="allModulesPopover.show()" (mouseleave)="handleAllModulesLeaveEvent($event)">
+                    <!-- <li class="other" *ngIf="!isMobileSite" (mouseenter)="allModulesPopover.show()" (mouseleave)="handleAllModulesLeaveEvent($event)">
                         <a #allModulesPopover="bs-popover" [popover]="allModules" placement="right" containerClass="all-modules-popover"
                             (mouseenter)="allModulesPopover.show()" container="body">All
                             Modules <i *ngIf="!isMobileSite" tooltip="All Modules" placement="bottom" container="body"
