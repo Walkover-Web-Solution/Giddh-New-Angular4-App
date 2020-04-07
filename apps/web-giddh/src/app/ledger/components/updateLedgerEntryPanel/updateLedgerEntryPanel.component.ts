@@ -1404,9 +1404,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      *
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public calculateInclusiveTaxesForAdvanceReceipts() {
+    public calculateInclusiveTaxesForAdvanceReceipts(): void {
         this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices.map(item => {
-            item.taxAmount = this.generalService.calculateInclusiveOrExclusiveTaxes(true, item.adjustedAmount.amountForAccount, item.taxRate, 0)
+            item.taxAmount = this.generalService.calculateInclusiveOrExclusiveTaxes(true, item.adjustedAmount.amountForAccount, item.taxRate, 0);
         })
     }
 }
