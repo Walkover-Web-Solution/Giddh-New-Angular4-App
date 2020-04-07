@@ -869,12 +869,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             this.selectedAccountDetails$.pipe(take(1)).subscribe(acc => {
                                 obj.accountDetails.currencySymbol = acc.currencySymbol || '';
                             });
-                            this.fetchCurrencyRate(results);
                         } else if (this.isPurchaseInvoice) {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
                             this.isRcmEntry = (results[1]) ? results[1].subVoucher === Subvoucher.ReverseCharge : false;
                             obj = cloneDeep(convertedRes1) as VoucherClass;
-                            this.fetchCurrencyRate(results);
                         } else {
                             obj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
                         }
@@ -3832,12 +3830,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public fetchCurrencyRate(results): void {
-        if (this.isUpdateMode) {
-            const vendorCurrency = (results[1].account.currency) ? results[1].account.currency.code : this.companyCurrency;
-            if (vendorCurrency !== this.companyCurrency) {
-                this.isMulticurrencyAccount = true;
-                this.getCurrencyRate(this.companyCurrency, vendorCurrency);
-            }
+        const vendorCurrency = (results[1].account.currency) ? results[1].account.currency.code : this.companyCurrency;
+        if (vendorCurrency !== this.companyCurrency) {
+            this.isMulticurrencyAccount = true;
+            this.getCurrencyRate(this.companyCurrency, vendorCurrency);
         }
     }
 
