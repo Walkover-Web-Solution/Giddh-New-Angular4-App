@@ -1313,7 +1313,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountAddNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
-        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === "sundrydebtors" || this.activeGroupUniqueName === "sundrycreditors")) {
+        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value &&
+            this.isCreditorOrDebtor(this.activeGroupUniqueName)) {
             return true;
         } else {
             return false;
@@ -1400,5 +1401,28 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 element.classList.remove('error-box');
             }
         }
+    }
+
+    /**
+     * Returns true if passed account belongs to creditor or debtor category
+     * required to make state mandatory
+     *
+     * @private
+     * @param {string} accountUniqueName Account unique name
+     * @returns {boolean} True if passed account belongs to creditor or debtor category
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private isCreditorOrDebtor(accountUniqueName: string): boolean {
+        if (this.flatGroupsOptions && _.isArray(this.flatGroupsOptions) && this.flatGroupsOptions.length && accountUniqueName) {
+            const groupDetails: any = this.flatGroupsOptions.filter((group) => group.value === accountUniqueName).pop();
+            if (groupDetails) {
+                return groupDetails.additional.some((parentGroup) => {
+                    const groups = [parentGroup.uniqueName, groupDetails.value]
+                    return groups.includes('sundrydebtors') || groups.includes('sundrycreditors');
+                });
+            }
+            return false;
+        }
+        return false;
     }
 }

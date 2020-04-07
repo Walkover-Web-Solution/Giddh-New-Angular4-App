@@ -1065,6 +1065,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (this.companyDetailsDropDownWeb) {
             this.companyDetailsDropDownWeb.hide();
         }
+        if(event){
+            document.querySelector('body').classList.add('hide-scroll-body')
+        } else {
+            document.querySelector('body').classList.remove('hide-scroll-body')
+        }
         this.menuStateChange.emit(event);
     }
 

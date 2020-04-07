@@ -589,8 +589,14 @@
                                     <p *ngIf="fieldsAndVisibility.footer.message1?.display ">
                                         <span>*Tax to be paid on Reverse Charge.<br>
                                             <strong>Notes</strong> <br>
-                                            All payments to be made in cash. <br>
-                                            Contact us for queries on these quotations. <br>
+                                            <span style="white-space:pre-line;">
+                                                <ng-container *ngIf="fieldsAndVisibility?.footer?.message1?.label">{{fieldsAndVisibility.footer.message1?.label}}
+                                                </ng-container>
+                                            </span>
+                                            <ng-container *ngIf="!fieldsAndVisibility?.footer?.message1?.label">
+                                                All payments to be made in cash. <br>
+                                                Contact us for queries on these quotations. <br>
+                                            </ng-container>
                                         </span>
                                     </p>
 
