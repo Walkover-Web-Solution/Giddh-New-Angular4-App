@@ -168,7 +168,10 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div>
+							</div>
+							<div *ngIf="!vatReport?.length" class="no-data no-report">
+								<h1>To see the VAT report for this company, please provide a TRN in its profile section.</h1>
+							</div>
                         </tab>
                     </tabset>
                 </div>
