@@ -114,7 +114,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         private _generalActions: GeneralActions,
         private _generalService: GeneralService,
         private purchaseRecordService: PurchaseRecordService,
-        private sanitizer: DomSanitizer, private salesService: SalesService) {
+        private sanitizer: DomSanitizer,
+        private salesService: SalesService) {
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).subscribe(result => {
@@ -537,13 +538,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             this.onOpenAdvanceReceiptModal.emit(true);
         }
     }
+
     /**
      * To toggle change status container
      *
-     * @param {ReciptResponse} item selected row item data
+     * @param {InvoicePreviewDetailsVm} item selected row item data
      * @memberof InvoicePreviewDetailsComponent
      */
-    public clickChangeStatusToggle(item: any): void {
+    public clickChangeStatusToggle(item: InvoicePreviewDetailsVm): void {
         if (!this.isAccountHaveAdvanceReceipts) {
             if (item && item.account && item.account.uniqueName && item.voucherDate) {
                 this.getAllAdvanceReceipts(item.account.uniqueName, item.voucherDate);

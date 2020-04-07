@@ -162,7 +162,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /**To check tourist scheme applicable or not */
     public isTouristSchemeApplicable: boolean = false;
     public allowParentGroup = ['sales', 'cash', 'sundrydebtors', 'bankaccounts'];
-    /** To check advance receipts adjustment is there for Tx */
+    /** To check advance receipts adjustment is there for trasaction */
     public isAdjustedInvoicesWithAdvanceReceipt: boolean = false;
     /** To check is advance receipt adjustment invoice list need to show  */
     public selectedAdvanceReceiptAdjustInvoiceEditMode: boolean = false;

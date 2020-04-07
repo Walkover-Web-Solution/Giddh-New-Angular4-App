@@ -226,7 +226,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      *
      * @memberof AdvanceReceiptAdjustmentComponent
      */
-    public addNewBlankAdjustVoucherRow(): void {
+    public addNewBlankAdjustVoucherRow(): any {
         if (this.getBalanceDue() >= 0) {
             let isAnyBlankEntry: boolean;
             this.adjustVoucherForm.adjustments.forEach(item => {

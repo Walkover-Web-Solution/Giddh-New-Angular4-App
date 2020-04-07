@@ -741,7 +741,7 @@
                                         <label>Amount<span class="text-danger">*</span> <span
                                             class="text-light font-12 ml-05">(Inclusive Tax)</span></label>
                                         <input type="text" class="form-control mb-1" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective [(ngModel)]="item.adjustedAmount.amountForAccount" disabled>
-                                        <input type="text" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedAmountChange()" (click)="clicked()" *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode" [(ngModel)]="item.adjustedAmount.amountForAccount">
+                                        <input type="text" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedAmountChange()"  *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode" [(ngModel)]="item.adjustedAmount.amountForAccount">
                                     </div>
                                 </div>
                                 <div class="col-sm-2 pl-05">
