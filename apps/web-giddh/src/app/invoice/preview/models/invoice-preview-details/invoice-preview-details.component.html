@@ -147,9 +147,8 @@
                                             </label>
 
                                             <button id="button-basic2" dropdownToggle type="button"
-                                                class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic2"
-                                                *ngIf="selectedItem.voucherStatus !== 'cancel'">Change
-                                                Status <span class="caret"></span>
+                                                class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic2" (click)="clickChangeStatusToggle(selectedItem)"
+                                                *ngIf="selectedItem.voucherStatus !== 'cancel'">Change Status <span class="caret"></span>
                                             </button>
 
                                             <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu" role="menu"
@@ -157,7 +156,7 @@
                                                 <li class="cp" role="menuitem"
                                                     (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"><a
                                                         class="dropdown-item">Paid</a></li>
-                                                <li (click)="openInvoiceAdvanceReceiptModal()">
+                                                <li [ngClass]="{'no-click': !isAccountHaveAdvanceReceipts}" (click)="openInvoiceAdvanceReceiptModal()">
                                                     <a class="cp" href="javascript:void(0)">Adjust Amount</a>
                                                 </li>
 
