@@ -32,7 +32,7 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <label for="name">Adjustment Voucher<span class="text-danger">*</span></label>
-                                <div [class.error-box]="entry.uniqueName === '' && adjustAdvancePaymentForm?.form.controls['voucherName'+entryIdx]?.touched">
+                                <div class="select-error" [class.error-box]="entry.uniqueName === '' && adjustAdvancePaymentForm?.form.controls['voucherName'+entryIdx]?.touched">
                                     <sh-select class="text-left dropdown-arrow" name="voucherName{{entryIdx}}" [defaultValue]="entry.voucherNumber" (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm);" required [placeholder]="'Select Voucher'" [(ngModel)]="entry.uniqueName"
                                         (selected)="selectVoucher($event, entry, entryIdx);" [options]="adjustVoucherOptions" [multiple]="false">
                                         <ng-template #optionTemplate let-option="option">
