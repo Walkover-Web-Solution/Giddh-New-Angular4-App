@@ -195,6 +195,21 @@
 }
 
 /* start MDB tweaks */
+.pt-0 {
+    padding-top: 0px !important;
+}
+
+.pb-0 {
+    padding-bottom: 0px !important;
+}
+
+.pr-0 {
+    padding-right: 0px !important;
+}
+
+.pl-0 {
+    padding-left: 0px !important;
+}
 
 .pd-1 {
     padding: 10px !important;
@@ -212,21 +227,6 @@
     padding: 40px !important;
 }
 
-.pt-0 {
-    padding-top: 0px !important;
-}
-
-.pb-0 {
-    padding-bottom: 0px !important;
-}
-
-.pr-0 {
-    padding-right: 0px !important;
-}
-
-.pl-0 {
-    padding-left: 0px !important;
-}
 
 .pt-1 {
     padding-top: 10px !important;
@@ -661,7 +661,9 @@ input {
 .mt-5 {
     margin-top: 50px;
 }
-
+.mt-6{
+    margin-top: 60px;
+}
 .mrB0 {
     margin-bottom: 0;
 }
@@ -4310,11 +4312,6 @@ label {
 .breadcrumbs {
     font-size: 13px;
     overflow: hidden;
-}
-
-.form_bg {
-    background: #f5f5f5;
-    padding: 10px 20px;
 }
 
 #Addaccount .form-inline select.form-control {
@@ -8348,7 +8345,8 @@ ul.dropdown-menu p.lead.pd {
 }
 
 .asidePanelLedger button.btn.btn-lg.btn-primary {
-    min-width: 170px;
+    min-width: 150px;
+    font-size: 16px;
 }
 
 .setting-page ul.nav.nav-tabs {
