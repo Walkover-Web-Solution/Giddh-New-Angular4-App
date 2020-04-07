@@ -991,7 +991,7 @@
                                         {{ ledgerTxnBalance?.currencySymbol }}{{lc.reckoningDebitTotal  | giddhCurrency }}
                                     </span>
 
-                                    <span class="bdrT ng-binding" style="padding: 1px 0;"
+                                    <span class="bdrT ng-binding text-gray" style="padding: 1px 0;"
                                         *ngIf="isLedgerAccountAllowsMultiCurrency">
                                         {{ ledgerTxnBalance?.convertedCurrencySymbol }}{{lc.convertedReckoningDebitTotal  | giddhCurrency }}
                                     </span>
@@ -1031,7 +1031,7 @@
                                         {{ ledgerTxnBalance?.currencySymbol }}{{lc.reckoningCreditTotal | giddhCurrency }}
                                     </span>
 
-                                    <span class="bdrT" *ngIf="isLedgerAccountAllowsMultiCurrency"
+                                    <span class="bdrT text-gray" *ngIf="isLedgerAccountAllowsMultiCurrency"
                                         style="padding: 1px 0;">
                                         {{ ledgerTxnBalance?.convertedCurrencySymbol }}{{lc.convertedReckoningCreditTotal | giddhCurrency }}
                                     </span>
@@ -1119,7 +1119,7 @@
                             {{ ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
                         </h3>
 
-                        <h3 class="digit-blue subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                        <h3 class="digit-blue font-12 subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
                             {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedForwardedBalance?.amount | giddhCurrency}}
                             {{ ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
                         </h3>
@@ -1140,7 +1140,7 @@
                                     Cr.
                                 </h3>
 
-                                <h3 class="digit-blue subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <h3 class="digit-blue subTotal font-12" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedCreditTotal - ledgerTxnBalance?.convertedDebitTotal | giddhCurrency}}
                                     Cr.
                                 </h3>
@@ -1156,7 +1156,7 @@
                                     Dr.
                                 </h3>
 
-                                <h3 class="digit-blue subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <h3 class="digit-blue subTotal font-12" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedDebitTotal - ledgerTxnBalance?.convertedCreditTotal | giddhCurrency}}
                                     Dr.
                                 </h3>
@@ -1171,7 +1171,7 @@
                                 <span class="digit-blue mt-1">
                                     {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.debitTotal | giddhCurrency}}
                                 </span>
-                                <span class="digit-blue mt-1 subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <span class="digit-blue font-12 subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedDebitTotal | giddhCurrency}}
                                 </span>
                             </h1>
@@ -1180,7 +1180,7 @@
                                 <span class="digit-blue mt-1">
                                     {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.creditTotal | giddhCurrency}}
                                 </span>
-                                <span class="digit-blue mt-1 subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <span class="digit-blue font-12 subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedCreditTotal | giddhCurrency}}
                                 </span>
                             </h1>
