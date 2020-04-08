@@ -260,5 +260,6 @@
     "app_tax_amount" : "Tax Amount",
     "app_total_taxable_value" : "Total Taxable Value",
     "app_total_tax_amount" : "Total Tax Amount",
-    "app_s_no" : "S. No"
+    "app_s_no" : "S. No",
+    "app_type" : "Type"   
 }
