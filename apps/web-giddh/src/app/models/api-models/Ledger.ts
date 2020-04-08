@@ -3,6 +3,7 @@ import { IClosingBalance, IForwardBalance, ILedger, ILedgerTransactionItem, ITot
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from './Sales';
 import { PettyCashEntryStatus } from './Expences';
+import { AdvanceReceiptAdjustment } from './AdvanceReceiptsAdjust';
 
 /*
  * Model for ledger create api request
@@ -124,6 +125,7 @@ export class LedgerResponse {
     public passportNumber?: string;
     public touristSchemeApplicable?: boolean;
     public invoiceAdvanceReceiptAdjustment?: InvoiceAdvanceReceiptAdjustment;
+    public advanceReceiptAdjustment?: AdvanceReceiptAdjustment
 }
 /** Model for Ledger Advance receipts for invoices */
 export class InvoiceAdvanceReceiptAdjustment {
