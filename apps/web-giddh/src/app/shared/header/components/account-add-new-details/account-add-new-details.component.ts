@@ -439,18 +439,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.statesSource$.pipe(take(1)).subscribe(state => {
                     let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
-                    let s = state.find(st => st.value === stateCode);
-                    // statesEle.setDisabledState(false);
-                    if (s) {
-                        gstForm.get('stateCode').patchValue(s.value);
-                        gstForm.get('state').get('code').patchValue(s.value);
-                        // statesEle.setDisabledState(true);
+                    let currentState = state.find(st => st.value === stateCode);
+                    if (currentState) {
+                        gstForm.get('stateCode').patchValue(currentState.value);
+                        gstForm.get('state').get('code').patchValue(currentState.value);
                     } else {
                         if (this.isIndia) {
                             gstForm.get('stateCode').patchValue(null);
                             gstForm.get('state').get('code').patchValue(null);
                         }
-                        // statesEle.setDisabledState(false);
                         this._toaster.clearAllToaster();
                         if (this.formFields['taxName']) {
                             this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
