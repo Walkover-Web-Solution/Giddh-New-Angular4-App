@@ -25,6 +25,7 @@
     "app_delete" : "Delete",
     "app_name" : "Name",
     "app_action" : "Action",
+    "app_actions" : "Actions",
     "app_goto_ledger" : "Go to Ledger",
     "app_generate_invoice" : "Generate Invoice",
     "app_send_sms" : "Send SMS",
@@ -140,6 +141,7 @@
     "app_invalid_transporter_id_message" : "Transporter id should contain atleast 4 characters and should contain digit only.",
     "app_transporter_table_name" : "Name",
     "app_transporter_table_id" : "Transporter ID",
+    "app_transporter" : "Transporter",
     "app_date" : "Date",
     "app_warehouse" : "Warehouse",
     "app_select_action" : "Select Action",
@@ -288,5 +290,24 @@
     "app_invalid_iban" : "The IBAN must contain 23 to 34 characters.",
     "app_invalid_swift_code" : "The SWIFT Code/BIC must contain 8 to 11 characters.",
     "app_default_taxes" : "Default Taxes",
-    "app_select_tax" : "Select Tax"
+    "app_select_tax" : "Select Tax",
+    "app_transportation_mode" : "Mode of Transportation*",
+    "app_road" : "Road",
+    "app_rail" : "Rail",
+    "app_air" : "Air",
+    "app_ship" : "Ship",
+    "numbers" : {
+        "0" : "1",
+        "1" : "1",
+        "2" : "2",
+        "3" : "3",
+        "4" : "4",
+        "5" : "5",
+        "6" : "6",
+        "7" : "7",
+        "8" : "8",
+        "9" : "9"
+    },
+    "app_vehicle_no" : "Vehicle No",
+    "app_mode" : "Mode"
 }
