@@ -93,6 +93,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() set options(val: IOption[]) {
         this._options = val;
         this.updateRows(val);
+        this.selectedValues = [this.filter];
     }
 
     get selectedValues(): any[] {
