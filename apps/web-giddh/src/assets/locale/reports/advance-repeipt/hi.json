@@ -13,5 +13,9 @@
     "total_receipts" : "Total Receipts",
     "unused_receipts" : "Unused Receipts",
     "adjustment_voucher_label" : "Adjustment Voucher",
-    "adjustment_voucher_placeholder" : "Select Account"
+    "adjustment_voucher_placeholder" : "Select Account",
+    "receipt_types" : {
+        "normal_receipts" : "Normal Receipts",
+        "advance_receipts" : "Advance Receipts"
+    }
 }
