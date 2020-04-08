@@ -1,0 +1,21 @@
+{
+    "new_proforma" : "+ New Proforma",
+    "new_estimate" : "+ New Estimate",
+    "search_proforma" : "Search Proforma #",
+    "search_estimate" : "Search Estimate #",
+    "search_customer_name" : "Search Customer Name",
+    "proforma_no" : "Proforma No.",
+    "estimate_no" : "Estimate No.",
+    "proforma_date" : "Proforma Date",
+    "estimate_date" : "Estimate Date",
+    "total_amt" : "Total Amt.",
+    "expiry_date" : "Expiry Date",
+    "expired_by_today" : "Expired by Today",
+    "accepted" : "Accepted",
+    "declined" : "Declined",
+    "convert_proforma" : "Convert to Proforma",
+    "convert_invoice" : "Convert to Invoice",
+    "expired" : "Expired",
+    "no_entry_found_sales" : "No Entry found in sales",
+    "no_entry_found_note" : "Have to do some sales before creating invoice"
+}
