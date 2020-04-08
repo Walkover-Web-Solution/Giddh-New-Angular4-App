@@ -309,5 +309,25 @@
         "9" : "9"
     },
     "app_vehicle_no" : "Vehicle No",
-    "app_mode" : "Mode"
+    "app_mode" : "Mode",
+    "app_print" : "Print",
+    "app_export_pdf" : "Export Pdf",
+    "app_create_credit_note" : "Create Credit Note",
+    "app_receipt_no" : "Receipt No.",
+    "app_no_entry_date" : "No Entry found",
+    "app_oops_something_went_wrong" : "Oops! Something went wrong",
+    "app_no_preview_available" : "No Preview Available",
+    "app_status" : "Status",
+    "app_payment_status" : {
+        "paid" : "Paid",
+        "partially_paid" : "Partially Paid",
+        "unpaid" : "Unpaid",
+        "hold" : "Hold",
+        "cancel" : "Cancel"
+    },
+    "app_date_options" : {
+        "on" : "On",
+        "after" : "After",
+        "before" : "Before"
+    }
 }
