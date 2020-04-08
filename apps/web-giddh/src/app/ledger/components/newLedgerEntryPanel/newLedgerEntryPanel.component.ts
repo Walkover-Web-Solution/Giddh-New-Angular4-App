@@ -846,14 +846,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         });
 
         if (classList && classList instanceof Array) {
-            let notClose = classList.some((cls: DOMTokenList) => {
-                if (!cls) {
+            const shouldNotClose  = classList.some((className: DOMTokenList) => {
+                if (!className) {
                     return;
                 }
-                return cls.contains('chkclrbsdp') || cls.contains('currencyToggler');
+                return className.contains('chkclrbsdp') || className.contains('currencyToggler') || className.contains('bs-datepicker');
             });
 
-            if (notClose) {
+            if (shouldNotClose) {
                 return;
             }
         }

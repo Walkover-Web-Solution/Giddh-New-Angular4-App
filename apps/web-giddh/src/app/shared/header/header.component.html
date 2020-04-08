@@ -348,17 +348,17 @@
                         </a>
                     </li>
 
-                    <li class="other">
+                    <!-- <li class="other">
                         <a [routerLink]="['/pages/all-modules']">All Modules
                         </a>
-                    </li>
+                    </li> -->
 
-                    <!-- <li class="other" *ngIf="!isMobileSite" (mouseenter)="allModulesPopover.show()" (mouseleave)="handleAllModulesLeaveEvent($event)">
+                    <li class="other" *ngIf="!isMobileSite" (mouseenter)="allModulesPopover.show()" (mouseleave)="handleAllModulesLeaveEvent($event)">
                         <a #allModulesPopover="bs-popover" [popover]="allModules" placement="right" containerClass="all-modules-popover"
                             (mouseenter)="allModulesPopover.show()" container="body">All
                             Modules <i *ngIf="!isMobileSite" tooltip="All Modules" placement="bottom" container="body"
                                 class="fa fa-angle-right cp"></i></a>
-                    </li> -->
+                    </li>
                     <!-- All Modules list -->
                     <ng-template #allModules>
                         <ul class="left-sub-menu left_fixed_header open" id="other_sub_menu" (mouseenter)="allModulesPopover.show()"
