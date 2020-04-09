@@ -23,6 +23,8 @@
     "app_cancel" : "Cancel",
     "app_update" : "Update",
     "app_delete" : "Delete",
+    "app_view" : "View",
+    "app_admin" : "Admin",
     "app_name" : "Name",
     "app_action" : "Action",
     "app_actions" : "Actions",
@@ -117,7 +119,7 @@
     "app_create_new" : "Create New",
     "app_no_report_found" : "No Report Found !!",
     "app_select_type" : "Select Type",
-    "validations" : {
+    "app_validations" : {
         "numbers_only" : "input number only",
         "something_went_wrong" : "Something went wrong"
     },
@@ -296,7 +298,7 @@
     "app_rail" : "Rail",
     "app_air" : "Air",
     "app_ship" : "Ship",
-    "numbers" : {
+    "app_numbers" : {
         "0" : "1",
         "1" : "1",
         "2" : "2",
@@ -340,5 +342,6 @@
         "inventory" : "Inventory",
         "entries" : "Entries",
         "trial_balance" : "Trial Balance"
-    }
+    },
+    "app_please_select" : "Please Select"
 }
