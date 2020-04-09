@@ -1424,7 +1424,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /**
     * To calculate total amount of adjusted receipts.
     *
-    * @param {*} event Change value of an receipts
     * @memberof UpdateLedgerEntryPanelComponent
     */
     public adjustedReceiptsAmountChange(): void {
