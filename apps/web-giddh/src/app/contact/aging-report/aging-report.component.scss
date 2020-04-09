@@ -35,7 +35,7 @@
     width: auto;
 }
 .wrapsearchingAging a {
-    color: $JacksonsPurple;
+    color: $jacksons-purple;
 }
 .advance-icon {
     width: 32px;
@@ -61,19 +61,19 @@
 }
 .searchField input:focus {
     background-color: #fff !important;
-    border-color: $dark-blue00 !important;
+    border-color: $midnight-express !important;
 }
 span.inputAddon {
     position: absolute;
     right: 0px;
     padding: 4px 9px;
-    background-color: $border-blue;
+    background-color: $chetwode-blue;
     color: #fff;
     font-size: 20px;
     border-radius: 2px;
 }
 tr.aging-table-top {
-    border-bottom: 1px solid $tableBorderColor;
+    border-bottom: 1px solid $gainsboro;
 }
 tr.aging-table-top td {
     padding: 8px 0;

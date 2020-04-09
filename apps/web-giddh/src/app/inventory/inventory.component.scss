@@ -22,13 +22,13 @@
 }
 .inventory-controll ::ng-deep.nav-tabs > li > a:hover {
     border-color: transparent !important;
-    color: $activeIconTh !important;
+    color: $deep-sky-blue !important;
 }
 .inventory-controll ::ng-deep.nav-tabs > ::ng-deep li.active > a,
 .nav-tabs > ::ng-deep li.active > a:focus,
 ::ng-deep.nav-tabs > li.active > a:hover {
     color: #1c1c1c !important;
-    border-bottom: 4px solid $activeIconTh !important;
+    border-bottom: 4px solid $deep-sky-blue !important;
     cursor: pointer !important;
     background-color: unset !important;
     border-top: transparent !important;
@@ -36,8 +36,8 @@
     border-left: transparent !important;
 }
 .inventory-controll .nav-tabs > li > a:hover {
-    color: $activeIconTh !important;
-    border-bottom: 4px solid $activeIconTh !important;
+    color: $deep-sky-blue !important;
+    border-bottom: 4px solid $deep-sky-blue !important;
 }
 
 //.inventory-controll .invoice-nav.navbar-nav > li > a.active {
@@ -59,4 +59,13 @@
 }
 .inventory-controll ::ng-deep.nav-tabs > li:nth-child(2) {
     display: none;
+}
+
+.inventory-controll .container-fluid {
+    .branch-warehouse-filter {
+        width: 100%;
+    }
+    .branch-filter {
+        margin-right: 15px;
+    }
 }

@@ -50,6 +50,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public doNotReset: boolean = false;
     @Input() public defaultValue: string = "";
     @Input() public readonlyInput: boolean;
+    @Input() public showCheckbox: boolean = false;
+    @Input() public fixedValue: string = "";
 
     @ViewChild('inputFilter') public inputFilter: ElementRef;
     @ViewChild('mainContainer') public mainContainer: ElementRef;
@@ -129,6 +131,10 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                 this.propagateChange(this.filter);
             } else {
                 this.clearFilter();
+
+                if (this.fixedValue) {
+                    this.filter = this.fixedValue;
+                }
             }
             this.onHide.emit();
         }
@@ -426,6 +432,10 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             if (this.forceClearReactive.status) {
                 this.filter = '';
                 this.clear();
+
+                if (this.fixedValue) {
+                    this.filter = this.fixedValue;
+                }
             }
         }
 
@@ -433,6 +443,12 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             if (this.defaultValue) {
                 this.defaultValueUpdated = true;
                 this.filter = changes.defaultValue.currentValue;
+            }
+        }
+
+        if ('fixedValue' in changes) {
+            if (changes.fixedValue && changes.fixedValue.currentValue) {
+                this.filter = changes.fixedValue.currentValue;
             }
         }
     }

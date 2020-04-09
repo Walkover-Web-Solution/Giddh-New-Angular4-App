@@ -28,6 +28,7 @@ import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { LEDGER_API } from 'apps/web-giddh/src/app/services/apiurls/ledger.api';
 import { BaseResponse } from 'apps/web-giddh/src/app/models/api-models/BaseResponse';
 import { ProformaListComponent } from '../../../proforma/proforma-list.component';
+import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 
 @Component({
     selector: 'invoice-preview-details-component',
@@ -61,6 +62,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     @Output() public sendEmail: EventEmitter<string | { email: string, invoiceType: string[], invoiceNumber: string }> = new EventEmitter<string | { email: string, invoiceType: string[], invoiceNumber: string }>();
     @Output() public processPaymentEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
     @Output() public refreshDataAfterVoucherUpdate: EventEmitter<boolean> = new EventEmitter();
+    /** Event emmiter when advance receipt action selected */
+    @Output() public onOpenAdvanceReceiptModal: EventEmitter<boolean> = new EventEmitter();
 
     public filteredData: InvoicePreviewDetailsVm[] = [];
     public showEditMode: boolean = false;
@@ -95,6 +98,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private isUpdateVoucherActionSuccess$: Observable<boolean>;
     public proformaListComponent: ProformaListComponent;
+    /** To check is selected account/customer have advance receipts */
+    public isAccountHaveAdvanceReceipts: boolean = false;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -109,7 +114,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         private _generalActions: GeneralActions,
         private _generalService: GeneralService,
         private purchaseRecordService: PurchaseRecordService,
-        private sanitizer: DomSanitizer) {
+        private sanitizer: DomSanitizer,
+        private salesService: SalesService) {
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).subscribe(result => {
@@ -150,10 +156,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this.detectChanges();
             }
         }));
-           this.isUpdateVoucherActionSuccess$.subscribe(res => {
+        this.isUpdateVoucherActionSuccess$.subscribe(res => {
             if (res) {
                 // get all data again because we are updating action in list page so we have to update data i.e we have to fire this
-               this.proformaListComponent.getAll();
+                this.proformaListComponent.getAll();
             }
         });
         this.uploadInput = new EventEmitter<UploadInput>();
@@ -234,15 +240,19 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         }
     }
 
-    public selectVoucher(item: InvoicePreviewDetailsVm) {
+    /**
+     * To call when voucher change for preview
+     *
+     * @param {InvoicePreviewDetailsVm} item Selected voucher data
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public selectVoucher(item: InvoicePreviewDetailsVm): void {
         this.selectedItem = item;
-        // this.performActionAfterClose();
+        this.isAccountHaveAdvanceReceipts = false;
         this.downloadVoucher('base64');
-
         if (this.only4ProformaEstimates) {
             this.getVoucherVersions();
         }
-
         this.showEditMode = false;
     }
 
@@ -516,5 +526,58 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.isVoucherDownloading = false;
         this.isVoucherDownloadError = true;
         this.detectChanges();
+    }
+
+    /**
+     * To open advance receipt adjust modal
+     *
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public openInvoiceAdvanceReceiptModal(): void {
+        if (this.isAccountHaveAdvanceReceipts) {
+            this.onOpenAdvanceReceiptModal.emit(true);
+        }
+    }
+
+    /**
+     * To toggle change status container
+     *
+     * @param {InvoicePreviewDetailsVm} item selected row item data
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public clickChangeStatusToggle(item: InvoicePreviewDetailsVm): void {
+        if (!this.isAccountHaveAdvanceReceipts) {
+            if (item && item.account && item.account.uniqueName && item.voucherDate) {
+                this.getAllAdvanceReceipts(item.account.uniqueName, item.voucherDate);
+            }
+        }
+    }
+
+    /**
+     * Call API to get all advance receipts of an invoice
+     *
+     * @param {*} customerUniquename Selected customer unique name
+     * @param {*} voucherDate Voucher Date (DD-MM-YYYY)
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: string): void {
+        if (customerUniqueName && voucherDate) {
+            let requestObject = {
+                accountUniqueName: customerUniqueName,
+                invoiceDate: voucherDate
+            };
+            this.salesService.getAllAdvanceReceiptVoucher(requestObject).subscribe(res => {
+                if (res && res.status === 'success') {
+                    if (res.body && res.body.length) {
+                        this.isAccountHaveAdvanceReceipts = true;
+                    } else {
+                        this.isAccountHaveAdvanceReceipts = false;
+                    }
+                    this.detectChanges();
+                } else {
+                    this.isAccountHaveAdvanceReceipts = false;
+                }
+            });
+        }
     }
 }
