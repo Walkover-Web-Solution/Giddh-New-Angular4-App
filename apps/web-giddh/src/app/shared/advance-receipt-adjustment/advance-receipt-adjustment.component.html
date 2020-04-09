@@ -32,7 +32,7 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <label for="name">Adjustment Voucher<span class="text-danger">*</span></label>
-                                <div [class.error-box]="entry.uniqueName === '' && adjustAdvancePaymentForm?.form.controls['voucherName'+entryIdx]?.touched">
+                                <div class="select-error" [class.error-box]="entry.uniqueName === '' && adjustAdvancePaymentForm?.form.controls['voucherName'+entryIdx]?.touched">
                                     <sh-select class="text-left dropdown-arrow" name="voucherName{{entryIdx}}" [defaultValue]="entry.voucherNumber" (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm);" required [placeholder]="'Select Voucher'" [(ngModel)]="entry.uniqueName"
                                         (selected)="selectVoucher($event, entry, entryIdx);" [options]="adjustVoucherOptions" [multiple]="false">
                                         <ng-template #optionTemplate let-option="option">
@@ -133,7 +133,7 @@
                     </ng-container>
                     <span class="text-light" *ngIf="exceedDueAmount<0">
                         Excess amount:
-                        {{invoiceFormDetails.accountDetails.currencySymbol}}{{-exceedDueAmount  | giddhCurrency}}
+                        {{invoiceFormDetails.accountDetails.currencySymbol}}{{-exceedDueAmount  | giddhCurrency}} <i class="icon-info pointer" tooltip="adjustment amount is more than receipts."></i>
                     </span>
                     <div class="mt-4">
                         <button *ngIf="!isUpdateMode" type="button" class="btn btn-success mrR1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt()">Save</button>

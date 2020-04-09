@@ -123,7 +123,32 @@ export class LedgerResponse {
     public reverseChargeTaxableAmount?: number;
     public passportNumber?: string;
     public touristSchemeApplicable?: boolean;
+    public invoiceAdvanceReceiptAdjustment?: InvoiceAdvanceReceiptAdjustment;
 }
+/** Model for Ledger Advance receipts for invoices */
+export class InvoiceAdvanceReceiptAdjustment {
+    adjustedInvoices: AdjustedInvoice[];
+    totalAdjustmentAmount: number;
+    description: string;
+}
+
+/** Model for invoices list for ledger Advance receipts */
+export class AdjustedInvoice {
+    invoiceNumber: string;
+    invoiceUniqueName: string;
+    adjustedAmount: AdjustedAmount;
+    invoiceDate: string;
+    taxAmount?: number;
+    taxRate: number;
+    taxUniqueName: string[];
+}
+
+/** Model adjusted amounts for invoices */
+export class AdjustedAmount {
+    amountForAccount: number;
+    amountForCompany: number;
+}
+
 
 /*
  * Model for mail ledger api request
