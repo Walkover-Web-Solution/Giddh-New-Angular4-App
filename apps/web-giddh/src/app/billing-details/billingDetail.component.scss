@@ -1,3 +1,4 @@
+@import "../../assets/css/color.scss";
 .welcome-header {
     display: flex;
     justify-content: center;
@@ -39,7 +40,7 @@
 }
 
 .billing-details form label {
-    color: #707070;
+    color:$nero;
     font-size: 14px;
 }
 

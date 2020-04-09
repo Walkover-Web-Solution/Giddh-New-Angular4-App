@@ -33,7 +33,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    padding-left: 8px;
+    padding-left: 10px;
 }
 
 .td_in_searchBox div {
@@ -289,7 +289,7 @@ table th {
         height: 36px;
         border: 1px solid $gainsboro;
         background-color: #fff;
-        color: #999;
+        color: $gray;
         font-size: 20px;
         position: relative;
         padding: 7px;
