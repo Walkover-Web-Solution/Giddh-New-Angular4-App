@@ -329,5 +329,16 @@
         "on" : "On",
         "after" : "After",
         "before" : "Before"
+    },
+    "app_select_inventory_type" : "Select Inventory Type",
+    "app_inventory_type" : "Inventory Type",
+    "app_product" : "Product",
+    "app_service" : "Service",
+    "app_import" : {
+        "groups" : "Groups",
+        "accounts" : "Accounts",
+        "inventory" : "Inventory",
+        "entries" : "Entries",
+        "trial_balance" : "Trial Balance"
     }
 }
