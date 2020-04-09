@@ -707,38 +707,37 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
         let gstVal: string = gstForm.get('gstNumber').value;
 
-        if (gstVal.length !== 15) {
-            gstForm.get('partyType').reset('NOT APPLICABLE');
-        }
-
-        if (gstVal.length >= 2) {
-            this.statesSource$.pipe(take(1)).subscribe(state => {
-                let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
-
-                let s = state.find(st => st.value === stateCode);
-                if (s) {
-                    gstForm.get('stateCode').patchValue(s.value);
-                    gstForm.get('state').get('code').patchValue(s.value);
-
-                } else {
-                    if (this.isIndia) {
-                        gstForm.get('stateCode').patchValue(null);
-                        gstForm.get('state').get('code').patchValue(null);
-                    }
-                    this._toaster.clearAllToaster();
-                    if (this.formFields['taxName']) {
-                        this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
-                    }
-                }
-            });
-        } else {
-            // statesEle.setDisabledState(false);
-            if (this.isIndia) {
-                gstForm.get('stateCode').patchValue(null);
-                gstForm.get('state').get('code').patchValue(null);
+        if (gstVal.length) {
+            if (gstVal.length !== 15) {
+                gstForm.get('partyType').reset('NOT APPLICABLE');
             }
 
+            if (gstVal.length >= 2) {
+                this.statesSource$.pipe(take(1)).subscribe(state => {
+                    let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
+                    let currentState = state.find(st => st.value === stateCode);
+                    if (currentState) {
+                        gstForm.get('stateCode').patchValue(currentState.value);
+                        gstForm.get('state').get('code').patchValue(currentState.value);
+
+                    } else {
+                        if (this.isIndia) {
+                            gstForm.get('stateCode').patchValue(null);
+                            gstForm.get('state').get('code').patchValue(null);
+                        }
+                        this._toaster.clearAllToaster();
+                        if (this.formFields['taxName']) {
+                            this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
+                        }
+                    }
+                });
+            } else {
+                if (this.isIndia) {
+                    gstForm.get('stateCode').patchValue(null);
+                    gstForm.get('state').get('code').patchValue(null);
+                }
+            }
         }
     }
 
