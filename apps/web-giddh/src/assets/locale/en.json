@@ -145,6 +145,7 @@
     "app_transporter_table_id" : "Transporter ID",
     "app_transporter" : "Transporter",
     "app_date" : "Date",
+    "app_time" : "Time",
     "app_warehouse" : "Warehouse",
     "app_select_action" : "Select Action",
     "app_edit" : "Edit",
@@ -343,5 +344,7 @@
         "entries" : "Entries",
         "trial_balance" : "Trial Balance"
     },
-    "app_please_select" : "Please Select"
+    "app_please_select" : "Please Select",
+    "app_company" : "Company",
+    "app_tally" : "Tally"
 }
