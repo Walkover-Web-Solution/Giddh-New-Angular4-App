@@ -46,6 +46,7 @@
     "app_result_total" : "Result Total",
     "app_upcoming" : "Upcoming",
     "app_customer_name" : "Customer Name",
+    "app_customer_gstin" : "Customer GSTIN",
     "app_parent_group" : "Parent Group",
     "app_upcoming_due" : "Upcoming Due",
     "app_days" : "Days",
@@ -346,5 +347,12 @@
     },
     "app_please_select" : "Please Select",
     "app_company" : "Company",
-    "app_tally" : "Tally"
+    "app_tally" : "Tally",
+    "app_month_wise" : "Month Wise",
+    "app_reverse_charge" : "Reverse Charge",
+    "app_hsn_sac" : "HSN/SAC",
+    "app_description" : "Description",
+    "app_unit" : "Unit",
+    "app_email_sheet" : "Email Sheet",
+    "app_proceed" : "Proceed"
 }
