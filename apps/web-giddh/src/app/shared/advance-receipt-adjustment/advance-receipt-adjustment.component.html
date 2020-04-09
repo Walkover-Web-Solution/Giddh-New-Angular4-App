@@ -21,8 +21,7 @@
                 <div class="col-md-3 text-right font-14 pt-2 xs-left">
                     <p>Invoice Total: <i class="font-10"></i>{{invoiceFormDetails.accountDetails.currencySymbol}}{{adjustPayment?.grandTotal | giddhCurrency}}
                     </p>
-                    <p>Due <span class="text-light">(Post Adj):</span> <i class="font-10"></i> {{invoiceFormDetails.accountDetails.currencySymbol}} {{ adjustPayment.grandTotal - adjustPayment.totalAdjustedAmount - depositAmount + adjustPayment.tcsTotal -
-                        adjustPayment.tdsTotal | giddhCurrency}}
+                    <p>Due <span class="text-light">(Post Adj):</span> <i class="font-10"></i> {{invoiceFormDetails.accountDetails.currencySymbol}} {{ getBalanceDue() | giddhCurrency}}
                     </p>
                 </div>
             </div>
@@ -136,7 +135,7 @@
                         {{invoiceFormDetails.accountDetails.currencySymbol}}{{-exceedDueAmount  | giddhCurrency}} <i class="icon-info pointer" tooltip="adjustment amount is more than receipts."></i>
                     </span>
                     <div class="mt-4">
-                        <button *ngIf="!isUpdateMode" type="button" class="btn btn-success mrR1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt()">Save</button>
+                        <button *ngIf="!isUpdateMode" type="button" class="btn btn-success mrR1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)">Save</button>
                         <button *ngIf="isUpdateMode" type="button" class="btn btn-success mrR1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt()">Update</button>
                         <button type="button" class="btn btn-cancel" (click)="onClear()">Cancel</button>
                     </div>
