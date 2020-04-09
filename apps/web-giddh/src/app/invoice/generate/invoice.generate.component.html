@@ -94,21 +94,18 @@
                 </button>
             </div>
         </div>
-
     </form>
 
     <table class="table basic table-bordered pending-tabel onMobileView mt-15">
 
         <thead class="t-h-bg1">
             <tr>
-
                 <th style="width:4%" *ngIf="selectedLedgerItems.length > 0">
 
                     <div class="mh18_img" style="justify-content: center;display: flex">
                         <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
                         <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
                     </div>
-
                 </th>
 
                 <th *ngIf="selectedLedgerItems.length === 0" width="4%">
@@ -290,8 +287,8 @@
                 </td>
             </tr>
         </tbody>
-
     </table>
+</div>
 
     <div *ngIf="ledgersData?.totalItems > 20" class="paginationWrapper">
         <div class="alC">
@@ -310,7 +307,7 @@
         <h1>No entries found within given criteria.</h1>
         <h1>Do search with some other dates</h1>
     </div>
-</div>
+
 
 <!--modal dialog  -->
 <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
