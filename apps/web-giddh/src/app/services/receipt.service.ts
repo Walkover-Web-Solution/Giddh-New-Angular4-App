@@ -317,7 +317,8 @@ export class ReceiptService implements OnInit {
      * @memberof ReceiptService
      */
     public getAllAdvanceReceipts(requestObject: GetAllAdvanceReceiptsRequest): Observable<BaseResponse<any, GetAllAdvanceReceiptsRequest>> {
-        const companyUniqueName = this._generalService.companyUniqueName;
+        const companyUniqueName = String(requestObject.companyUniqueName);
+        delete requestObject.companyUniqueName;
         return this._http.post(
             `${this.config.apiUrl}${RECEIPT_API.GET_ALL_ADVANCE_RECEIPTS}`
                 .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
@@ -339,7 +340,8 @@ export class ReceiptService implements OnInit {
      * @memberof ReceiptService
      */
     public fetchSummary(requestObject: AdvanceReceiptSummaryRequest): Observable<BaseResponse<any, AdvanceReceiptSummaryRequest>> {
-        const companyUniqueName = this._generalService.companyUniqueName;
+        const companyUniqueName = String(requestObject.companyUniqueName);
+        delete requestObject.companyUniqueName;
         return this._http.get(
             `${this.config.apiUrl}${RECEIPT_API.GET_ADVANCE_RECEIPTS_SUMMARY}`
                 .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
