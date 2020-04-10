@@ -354,5 +354,6 @@
     "app_description" : "Description",
     "app_unit" : "Unit",
     "app_email_sheet" : "Email Sheet",
-    "app_proceed" : "Proceed"
+    "app_proceed" : "Proceed",
+    "app_details" : "Details"
 }
