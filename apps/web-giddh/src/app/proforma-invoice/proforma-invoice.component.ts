@@ -39,9 +39,9 @@ import {
     PurchaseRecordRequest,
     TemplateDetailsClass
 } from '../models/api-models/Sales';
-import { auditTime, delay, filter, take, takeUntil } from 'rxjs/operators';
+import { auditTime, delay, filter, take, takeUntil, debounceTime } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
-import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { NgForm } from '@angular/forms';
 import { DiscountListComponent } from '../sales/discount-list/discountList.component';
@@ -297,6 +297,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public rcmConfiguration: ConfirmationModalConfiguration;
     /** Purchase record confirmation popup configuration */
     public purchaseRecordConfirmationConfiguration: ConfirmationModalConfiguration;
+    /** Prevents double click on generate button */
+    public generateUpdateButtonClicked = new Subject<any>();
     public selectedCompany: any;
     public formFields: any[] = [];
 
@@ -462,6 +464,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             // call focus in customer after loader hides because after loader hider ui re-renders it self
             // this.focusInCustomerName();
             // }
+        });
+        this.generateUpdateButtonClicked.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((form) => {
+            if (this.isUpdateMode) {
+                this.handleUpdateInvoiceForm(form);
+            } else {
+                this.onSubmitInvoiceForm(form);
+            }
         });
     }
 
@@ -1440,9 +1449,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.ngAfterViewInit();
     }
 
-    public triggerSubmitInvoiceForm(f: NgForm, isUpdate) {
+    public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {
         this.updateAccount = isUpdate;
-        this.onSubmitInvoiceForm(f);
+        this.generateUpdateButtonClicked.next(form);
     }
 
     public autoFillShippingDetails() {
@@ -2607,6 +2616,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param invoiceForm
      */
     public submitUpdateForm(invoiceForm: NgForm) {
+        this.generateUpdateButtonClicked.next(invoiceForm);
+    }
+
+    /**
+     * Handles the update operation of invoice form
+     *
+     * @private
+     * @param {NgForm} invoiceForm Form instance for values
+     * @memberof ProformaInvoiceComponent
+     */
+    private handleUpdateInvoiceForm(invoiceForm: NgForm): void {
         let requestObject: any = this.prepareDataForApi();
         if (!requestObject) {
             return;
