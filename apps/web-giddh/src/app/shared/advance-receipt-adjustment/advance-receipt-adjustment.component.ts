@@ -472,6 +472,17 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      */
     public calculateTax(entryData: Adjustment, index: number): void {
         let entry: Adjustment = cloneDeep(entryData);
+        let selectedItem;
+        if (entryData && this.newAdjustVoucherOptions && this.newAdjustVoucherOptions.length) {
+            selectedItem = this.newAdjustVoucherOptions.find(item => {
+                return item.label === entryData.voucherNumber;
+            });
+            // To restrict user to enter amount less or equal selected voucher amount
+            if (selectedItem && selectedItem.additional && selectedItem.additional.dueAmount && this.adjustVoucherForm.adjustments[index].dueAmount.amountForAccount > selectedItem.additional.dueAmount.amountForAccount) {
+                this.adjustVoucherForm.adjustments[index].dueAmount.amountForAccount = selectedItem.additional.dueAmount.amountForAccount;
+                entry.dueAmount.amountForAccount = selectedItem.additional.dueAmount.amountForAccount;
+            }
+        }
         if (entry && entry.taxRate && entry.dueAmount.amountForAccount) {
             let taxAmount = this.calculateInclusiveTaxAmount(entry.dueAmount.amountForAccount, entry.taxRate);
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = Number(taxAmount);
@@ -512,6 +523,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public getBalanceDue(): number {
-        return this.adjustPayment.grandTotal + this.adjustPayment.tcsTotal - this.adjustPayment.totalAdjustedAmount - this.depositAmount - this.adjustPayment.tdsTotal;
+        return parseFloat(Number(this.adjustPayment.grandTotal + this.adjustPayment.tcsTotal - this.adjustPayment.totalAdjustedAmount - this.depositAmount - this.adjustPayment.tdsTotal).toFixed(2));
     }
 }
