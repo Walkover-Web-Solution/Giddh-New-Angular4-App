@@ -123,7 +123,8 @@
         "matched" : "Matched",
         "vendor_details" : "Vendor Details",
         "transaction_date" : "Transaction Date",
-        "reconcilation_note" : "All transactions in Giddh Books whose vendor GSTIN, invoice number,&nbsp; invoice date, invoice amount and tax amount are same as the transactions in GSTN are displayed in this section."
+        "reconcilation_note" : "All transactions in Giddh Books whose vendor GSTIN, invoice number,&nbsp; invoice date, invoice amount and tax amount are same as the transactions in GSTN are displayed in this section.",
+        "cancel_title" : "Are you sure you want to cancel it?"
     },
     "gstr3b" : {
         "gstr3b_summary" : "GSTR 3B Summary",
@@ -196,9 +197,10 @@
         "submit_gst_error" : "Please Enter Submit In Text Box.."
     },
     "gstr_3b_label" : "GSTR-3B",
+    "gstr3_label" : "GSTR-3",
     "gstr2" : {
         "watch_gstr2_filing" : "Watch GSTR-2 Filing",
-        "gstr2_month_year" : "GSTR-2 (July - 2017)",
+        "gstr2_month_year" : "GSTR-2 ({{MONTH}} - {{YEAR}})",
         "comments_history" : "Comments &amp; History",
         "reconciliation_details" : "Reconciliation Details",
         "matched_transactions" : "Matched Transactions",
@@ -234,5 +236,46 @@
         "error_code" : "Error Code",
         "error_message" : "Error Message",
         "no_transaction_found" : "No Transactions Found"
+    },
+    "gstr1" : {
+        "how_file_gstr1" : "How do I file GSTR-1?",
+        "how_file_gstr2" : "How do I file GSTR-2?",
+        "learn_gstr3_filing" : "Learn about GSTR-3B filing",
+        "filing_dates" : "Filing Dates for {{MONTH}} returns",
+        "recent_activity" : "RECENT ACTIVITY",
+        "gstr_return_generated" : "{{GSTR}} Return generated for {{MONTH}} - {{YEAR}}",
+        "related_tips" : "RELATED TIPS",
+        "related_tip1" : "When should I file my GST returns every month?",
+        "related_tip2" : "What is GSTR-1?",
+        "related_tip3" : "How do I push the transactions?",
+        "related_tip4" : "How do I file GSTR-1?",
+        "watch_gstr1_filing" : "Watch GSTR-1 Filing",
+        "credit_note_transactions" : "Credit Note Transactions",
+        "customer_debit_note_transactions" : "Customer Debit Note Transactions",
+        "refund_voucher" : "Refund voucher",
+        "refund_vouchers" : "Refund Vouchers",
+        "advance_payments" : "Advance Payments",
+        "invoice_type" : "Invoice Type",
+        "b2b" : "B2B",
+        "b2cl" : "B2CL",
+        "b2cs" : "B2CS",
+        "uploaded" : "Uploaded",
+        "unuploaded" : "Unuploaded",
+        "to_be_updated" : "To be Updated",
+        "to_be_deleted" : "To be Deleted",
+        "intra_state_registered" : "Intra-State supplies to registered persons",
+        "inter_state_registered" : "Inter-State supplies to registered persons",
+        "intra_state_unregistered" : "Intra-State supplies to unregistered persons",
+        "inter_state_unregistered" : "Inter-State supplies to unregistered persons",
+        "invoices_outward_supply" : "Invoices for outward supply",
+        "invoices_inward_supply" : "Invoices for inward supply from unregistered person.",
+        "view_self_invoice_summary" : "(View Self Invoice Summary)",
+        "revised_invoice" : "Revised Invoice",
+        "receipt_voucher" : "Receipt voucher",
+        "payment_voucher" : "Payment Voucher",
+        "delivery_challan_job_work" : "Delivery Challan for job work",
+        "delivery_challan_supply_approval" : "Delivery Challan for supply on approval",
+        "delivery_challan_liquid_gas" : "Delivery Challan in case of liquid gas",
+        "delivery_challan_wayof_supply" : "Delivery Challan in cases other than by way of supply (excluding at S no. 9 to 11)"
     }
 }

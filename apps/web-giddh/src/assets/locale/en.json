@@ -355,5 +355,9 @@
     "app_unit" : "Unit",
     "app_email_sheet" : "Email Sheet",
     "app_proceed" : "Proceed",
-    "app_details" : "Details"
+    "app_details" : "Details",
+    "app_invoices" : "Invoices",
+    "app_credit_notes" : "Credit Notes",
+    "app_debit_notes" : "Debit Notes",
+    "app_all" : "All"
 }
