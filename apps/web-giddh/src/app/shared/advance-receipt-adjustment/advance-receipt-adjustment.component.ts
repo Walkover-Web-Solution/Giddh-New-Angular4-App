@@ -355,7 +355,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      *
      * @memberof AdvanceReceiptAdjustmentComponent
      */
-    public saveAdjustAdvanceReceipt(): void {
+    public saveAdjustAdvanceReceipt(form: NgForm): void {
         let isValid: boolean = true;
         if (this.isTaxDeducted) {
             if (this.adjustVoucherForm.tdsTaxUniqueName === '') {
@@ -378,9 +378,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             isValid = false;
         }
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 1) {
-            this.adjustVoucherForm.adjustments.forEach(item => {
+            this.adjustVoucherForm.adjustments.forEach((item, index) => {
                 if (!item.voucherNumber) {
                     isValid = false;
+                    form.controls[`voucherName${index}`].markAsTouched();
                 } else if (!item.dueAmount.amountForAccount) {
                     isValid = false;
                 }
@@ -466,6 +467,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      *
      * @param {Adjustment} entry Advance receipts adjuste amount object
      * @param {number} index Index number
+     * @param {boolean} is To check is amount field changed
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public calculateTax(entryData: Adjustment, index: number): void {
@@ -510,6 +512,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public getBalanceDue(): number {
-        return this.adjustPayment.grandTotal - this.adjustPayment.totalAdjustedAmount - this.depositAmount - this.adjustPayment.tdsTotal + this.adjustPayment.tcsTotal;
+        return this.adjustPayment.grandTotal + this.adjustPayment.tcsTotal - this.adjustPayment.totalAdjustedAmount - this.depositAmount - this.adjustPayment.tdsTotal;
     }
 }
