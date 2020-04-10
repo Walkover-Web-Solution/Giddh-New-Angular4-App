@@ -414,7 +414,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      *
      * @memberof AdvanceReceiptAdjustmentComponent
      */
-    public clickSelectVoucher(index: number, form: NgForm): void {
+    public clickSelectVoucher(index: number, form: NgForm): any {
         form.controls[`voucherName${index}`].markAsTouched();
         this.adjustVoucherOptions = this.getAdvanceReceiptUnselectedVoucher();
         if (this.adjustVoucherForm.adjustments.length && this.adjustVoucherForm.adjustments[index] && this.adjustVoucherForm.adjustments[index].voucherNumber) {
