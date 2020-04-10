@@ -263,8 +263,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
 
         this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
-        // To set company unique name (On change company then company unique was not getting set on general service)
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => this.generalService.companyUniqueName = s);
 
         // SETTING CURRENT PAGE ON INIT
         this.setCurrentPage();
