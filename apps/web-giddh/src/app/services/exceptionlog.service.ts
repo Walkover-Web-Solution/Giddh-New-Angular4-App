@@ -1,7 +1,7 @@
 import { map, catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { EXCEPTION_NONPROD_API, EXCEPTION_PROD_API } from './apiurls/exceptionlog.api';
+import { EXCEPTION_NON_PROD_API, EXCEPTION_PROD_API } from './apiurls/exceptionlog.api';
 import { HttpWrapperService } from "./httpWrapper.service";
 import { Observable } from "rxjs";
 import { ErrorHandler } from './catchManager/catchmanger';
@@ -35,7 +35,7 @@ export class ExceptionLogService {
             color: 'danger'
         };
 
-        let url = (PRODUCTION_ENV || isElectron || isCordova) ? EXCEPTION_PROD_API : EXCEPTION_NONPROD_API;
+        let url = (PRODUCTION_ENV || isElectron || isCordova) ? EXCEPTION_PROD_API : EXCEPTION_NON_PROD_API;
         let options = { headers: [] };
         options.headers["Content-Type"] = "application/x-www-form-urlencoded";
 
