@@ -1,11 +1,12 @@
-import { Component, Input, Output, OnInit, ViewChild, ElementRef, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, Output, OnInit, EventEmitter, OnDestroy } from '@angular/core';
 import * as moment from 'moment/moment';
 import * as _ from 'lodash';
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
-import { Observable, ReplaySubject } from "rxjs";
+import { Observable, ReplaySubject, of as observableOf } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'datepickeroptions',
@@ -68,13 +69,13 @@ export class DatepickeroptionsComponent implements OnInit, OnDestroy {
     };
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public activeCompanyUniqueName: string = '';
 
-    constructor(private store: Store<AppState>) {
+    constructor(private store: Store<AppState>, private generalService: GeneralService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        // listen for universal date
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
                 this.datePickerOptions = {
@@ -83,6 +84,29 @@ export class DatepickeroptionsComponent implements OnInit, OnDestroy {
                 };
             }
         });
+
+        this.store.pipe(select(state => {
+            if (!state.session.companies) {
+                return;
+            }
+            state.session.companies.forEach(company => {
+                if (company.uniqueName === state.session.companyUniqueName && this.activeCompanyUniqueName != state.session.companyUniqueName) {
+                    this.activeCompanyUniqueName = company.uniqueName;
+
+                    let activeFinancialYear = company.activeFinancialYear;
+                    if (activeFinancialYear) {
+                        this.datePickerOptions.ranges['This Financial Year to Date'] = [
+                            moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'),
+                            moment()
+                        ];
+                        this.datePickerOptions.ranges['Last Financial Year'] = [
+                            moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).subtract(1, 'year'),
+                            moment(activeFinancialYear.financialYearEnds, GIDDH_DATE_FORMAT).subtract(1, 'year')
+                        ];
+                    }
+                }
+            });
+        }), takeUntil(this.destroyed$)).subscribe();
     }
 
     public setFilterDate(ev) {
