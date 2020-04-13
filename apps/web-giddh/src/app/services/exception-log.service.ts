@@ -25,7 +25,6 @@ export class ExceptionLogService implements ErrorHandler {
      * @memberof ExceptionLogService
      */
     public handleError(error: any): void {
-        console.info('Errorrrr occurred: ', error);
         this.addUiException({component: '', exception: error.stack}).subscribe(() => {}, () => {});
         throw error;
     }
