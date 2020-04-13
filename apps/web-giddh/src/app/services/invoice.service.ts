@@ -5,7 +5,7 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { EWAYBILL_API, INVOICE_API, INVOICE_API_2 } from './apiurls/invoice.api';
 import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, IEwayBillAllList, IEwayBillCancel, IEwayBillfilter, IEwayBillGenerateResponse, IEwayBillTransporter, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass, UpdateEwayVehicle } from '../models/api-models/Invoice';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
@@ -28,7 +28,7 @@ export class InvoiceService {
     private _: any;
     private voucherType: string = '';
 
-    constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, private _httpClient: HttpClient, private _generalService: GeneralService,
+    constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService, private _httpClient: HttpClient, private _generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this._ = config._;
         _ = config._;

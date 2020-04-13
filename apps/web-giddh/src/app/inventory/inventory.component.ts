@@ -24,7 +24,7 @@ import { IGroupsWithStocksHierarchyMinItem } from "../models/interfaces/groupsWi
 import { InventoryService } from '../services/inventory.service';
 import { ToasterService } from '../services/toaster.service';
 import { SettingsUtilityService } from '../settings/services/settings-utility.service';
-import { ExceptionLogService } from '../services/exceptionlog.service';
+import { ExceptionLogService } from '../services/exception-log.service';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
