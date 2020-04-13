@@ -5,22 +5,22 @@
             <button class="btn btn-pink" style="margin: 0 !important;" (click)="importFiles()">Import Files</button>
         </div>
 
-        <div class="mt-2" style="height: 68vh; overflow-y: auto;">
+        <div class="mt-15 import-data-tble row">
 
             <div class="no-data h-100" *ngIf="!importStatusResponse?.results?.length">
                 <h2>No Import Status Available.</h2>
             </div>
 
-            <div class="row" style="margin: 0">
+            <div>
 
                 <div class="col-xs-6 mb-2" *ngFor="let item of importStatusResponse.results">
 
-                    <div class="r-card">
+                    <div class="import-card">
 
                         <i class="hover-orange" style="position: absolute;right: 15px;cursor: pointer;z-index: 2;"
                             (click)="downloadItem(item)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="13.333" height="15" viewBox="0 0 13.333 15"
-                                class="svg_hover_orange">
+                                class="download-import">
                                 <path class=""
                                     d="M77.9,363.333H91.233V365H77.9Zm10-5-3.333,3.333-3.333-3.333h2.5V350H85.4v8.333Z"
                                     transform="translate(-77.9 -350)" />
@@ -37,7 +37,7 @@
 
                         </div>
 
-                        <div class="row mt-2">
+                        <div class="row mt-1">
 
                             <div class="col-xs-3">
                                 <label class="text-gray">Status:</label>
@@ -47,7 +47,7 @@
 
                         </div>
 
-                        <div class="row mt-2">
+                        <div class="row mt-1">
 
                             <div class="col-xs-3">
                                 <label class="text-gray">Dated:</label>
@@ -56,7 +56,7 @@
 
                         </div>
 
-                        <div class="row mt-2">
+                        <div class="row mt-1">
 
                             <div class="col-xs-3">
                                 <label class="text-gray">Submitted By:</label>

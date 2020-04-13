@@ -1081,7 +1081,7 @@ ul.sub-list {
 
 .top-aging-table-top1 p {
     font-size: 12px;
-    color: #a9a9a9;
+    color: $nobel;
     font-style: italic;
     margin-bottom: 7px;
     text-align: left;
@@ -1092,7 +1092,7 @@ ul.sub-list {
 }
 
 .top-aging-table-box > span {
-    color: #a9a9a9;
+    color: $nobel;
     margin-right: 5px;
     display: inline-block;
 }
@@ -1662,7 +1662,7 @@ input:-moz-placeholder {
 
 header .navbar {
     background-color: #f7f8fa;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid $gainsboro;
     padding: 3px 0;
 }
 
@@ -2625,7 +2625,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .text-light-2 {
-    color: #adadad;
+    color:$nobel;
 }
 
 .subscription-title {
@@ -3963,7 +3963,7 @@ input[type=radio]:checked:after {
 }
 
 .btn.btn-md {
-    padding: 10px 15px;
+    padding:7px 15px;
 }
 
 select.form-control {
@@ -5933,8 +5933,10 @@ table input[type="number"] {
 }
 
 .btn-link {
-    color: $jacksons-purple;
-    /* color: #2262D1; */
+    color: $primary !important;
+    &:hover{
+        color: $primary !important;
+    }
 }
 
 typeahead-container .dropdown-menu li.active > a,
