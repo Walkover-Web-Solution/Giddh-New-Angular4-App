@@ -1,0 +1,2 @@
+export const EXCEPTION_NON_PROD_API = 'https://hooks.slack.com/services/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';
+export const EXCEPTION_PROD_API = 'https://hooks.slack.com/services/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';

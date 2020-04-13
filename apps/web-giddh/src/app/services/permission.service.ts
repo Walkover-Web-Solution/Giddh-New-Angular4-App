@@ -6,7 +6,7 @@ import { CreateNewRoleRequest, CreateNewRoleResponse, IRoleCommonResponseAndRequ
 import { PERMISSION_API } from './apiurls/permission.api';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { IPageStr } from '../permissions/permission.utility';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
@@ -18,7 +18,7 @@ export class PermissionService {
 	private companyUniqueName: string;
 	private roleUniqueName: string;
 
-	constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
+	constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService,
 		private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 	}
 
