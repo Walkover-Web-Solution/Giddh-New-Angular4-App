@@ -104,7 +104,12 @@ form.gstinForm {
     width: 90px;
     margin-right: 10px;
 }
-
+a.btn-remove {
+    padding: 3px 10px;
+    background-color: $white;
+    color: $nero;
+    border: 1px solid $very-light-gray;
+}
 @media (max-width: 767px) {
     .upper-form .selectGroup {
         margin-bottom: 15px;

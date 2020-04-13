@@ -563,6 +563,7 @@ input {
     z-index: 9;
     position: relative;
     top: -4px;
+    border-color:$gainsboro !important;
 }
 
 .invoce-controll .invoice-nav.navbar-nav > li > a:hover {
@@ -1046,10 +1047,10 @@ ul.sub-list {
     margin-bottom: 0px;
 }
 
-.aging-table > thead > tr > th,
-.aging-table tr > td {
-    min-width: 145px;
-}
+// .aging-table > thead > tr > th,
+// .aging-table tr > td {
+//     min-width: 145px;
+// }
 
 .d-none {
     display: none;
@@ -1158,8 +1159,11 @@ ul.sub-list {
 .aging-table.table-aging-report tr td:first-child,
 .aging-table.table-aging-report tr th:first-child {
     padding-left: 15px !important;
+    width: 20%;
 }
-
+.aging-table.table-aging-report tr th:first-child{
+    white-space: nowrap !important;
+}
 .aging-table .table-checkbox {
     position: absolute;
     left: 5px;
@@ -7879,7 +7883,6 @@ section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
 }
 
 .contact-main .table-aging-report {
-    margin-top: 30px !important;
     width: calc(100% - 1px);
 }
 
@@ -8345,7 +8348,6 @@ ul.dropdown-menu p.lead.pd {
     min-width: 155px;
     background: $white;
     color: #5b64c9;
-    border-radius: 0px;
     box-shadow: none;
 }
 
@@ -8442,6 +8444,7 @@ ul.dropdown-menu p.lead.pd {
     height: 36px !important;
     width: 36px !important;
     border: 1px solid $gainsboro !important;
+    color: $gray !important;
 }
 
 .table-bordered > tbody > tr > td,
@@ -8462,7 +8465,7 @@ table.basic td {
 }
 
 button.btn.btn-filter {
-    padding: 6px 10px !important;
+    padding: 8px 10px !important;
 }
 
 .setting-container .btn-default.btn-xs {
@@ -8685,7 +8688,7 @@ p.remvBrnchName {
 }
 
 #asidePaneFormTabs.custom-tabs .nav.nav-tabs {
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid $gainsboro;
     padding: 0 0px 0 0 !important;
     background-color: transparent;
     z-index: 9;
@@ -8871,7 +8874,9 @@ input.checkbox-custom[type="checkbox"] {
     font-size: 16px;
     min-width: 150px;
 }
-
+.modal-content{
+    border: none !important;
+}
 /* responsive */
 
 @media (max-width: 1440px) {

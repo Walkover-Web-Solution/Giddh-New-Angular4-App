@@ -22,6 +22,7 @@
     thead > tr > th {
         border-top: 1px solid $gainsboro !important;
         border-bottom: none !important;
+        white-space: nowrap;
     }
     tbody > tr > td {
         font-weight: 400;

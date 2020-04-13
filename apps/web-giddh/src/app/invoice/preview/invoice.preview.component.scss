@@ -425,17 +425,6 @@ button.btn.btn-filter span.icon-cross {
     z-index: 100;
     top: 0;
 }
-
-
-/* .invoice-preview {
-    padding-bottom: 250px;
-}
-
-.paginationWrapper {
-    position: relative;
-    top: -220px;
-} */
-
 .invoiceFooter h3 {
     font-size: 16px;
     color: #999999;
@@ -456,8 +445,9 @@ button.btn.btn-filter span.icon-cross {
 div.remove-capitalize {
     text-transform: none !important;
 }
-
-
+span.icon-export-icon{
+color:$gray;
+}
 /* responsive */
 
 @media (max-width: 768px) {
