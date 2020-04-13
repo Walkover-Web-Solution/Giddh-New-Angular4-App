@@ -12,19 +12,19 @@ import { GeneralService } from './general.service';
 export class ExceptionLogService implements ErrorHandler {
     /** Company unique name for current session */
     private companyUniqueName: string;
-    /** General service instance */
-    private generalService: GeneralService;
-    /** Giddh Error handler service instance */
-    private errorHandler: GiddhErrorHandler;
-    /** Http service instance */
-    private http: HttpWrapperService;
 
     /** @ignore */
     constructor(
         private injector: Injector
     ) { }
 
-    public handleError(error: any) {
+    /**
+     * Publishes the error to server
+     *
+     * @param {*} error Error
+     * @memberof ExceptionLogService
+     */
+    public handleError(error: any): void {
         console.info('Errorrrr occurred: ', error);
         this.addUiException({component: '', exception: error.stack}).subscribe(() => {}, () => {});
         throw error;
