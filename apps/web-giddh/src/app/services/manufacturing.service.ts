@@ -4,7 +4,7 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { MANUFACTURING_API } from './apiurls/manufacturing.api';
 import { ICommonResponseOfManufactureItem, IManufacturingItemRequest, IManufacturingUnqItemObj, IMfStockSearchRequest } from '../models/interfaces/manufacturing.interface';
 import { StocksResponse } from '../models/api-models/Inventory';
@@ -17,7 +17,7 @@ export class ManufacturingService {
 	private user: UserDetails;
 	private companyUniqueName: string;
 
-	constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, private _generalService: GeneralService,
+	constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService, private _generalService: GeneralService,
 		@Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 	}
 

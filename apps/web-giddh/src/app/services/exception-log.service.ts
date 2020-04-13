@@ -1,18 +1,32 @@
 import { map, catchError } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Injectable, ErrorHandler, Injector } from '@angular/core';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { EXCEPTION_NON_PROD_API, EXCEPTION_PROD_API } from './apiurls/exceptionlog.api';
+import { EXCEPTION_NON_PROD_API, EXCEPTION_PROD_API } from './apiurls/exception-log.api';
 import { HttpWrapperService } from "./httpWrapper.service";
 import { Observable } from "rxjs";
-import { ErrorHandler } from './catchManager/catchmanger';
+import { } from ''
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 
 @Injectable()
-export class ExceptionLogService {
+export class ExceptionLogService implements ErrorHandler {
+    /** Company unique name for current session */
     private companyUniqueName: string;
 
-    constructor(private errorHandler: ErrorHandler, private http: HttpWrapperService, private generalService: GeneralService) {
+    /** @ignore */
+    constructor(
+        private injector: Injector
+    ) { }
 
+    /**
+     * Publishes the error to server
+     *
+     * @param {*} error Error
+     * @memberof ExceptionLogService
+     */
+    public handleError(error: any): void {
+        this.addUiException({component: '', exception: error.stack}).subscribe(() => {}, () => {});
+        throw error;
     }
 
     /**
@@ -23,7 +37,12 @@ export class ExceptionLogService {
      * @memberof ExceptionLogService
      */
     public addUiException(request: any): Observable<BaseResponse<any, any>> {
-        this.companyUniqueName = this.generalService.companyUniqueName;
+        // Need to inject manually as ErrorHandler service is instantiated first and
+        // dependency injection is not available at that time
+        const generalService = this.injector.get(GeneralService);
+        const http = this.injector.get(HttpWrapperService);
+        const errorHandler = this.injector.get(GiddhErrorHandler);
+        this.companyUniqueName = generalService.companyUniqueName;
 
         let payloadJson = {
             text: "Company Unique Name: " + this.companyUniqueName,
@@ -41,10 +60,10 @@ export class ExceptionLogService {
 
         let payload = "payload=" + JSON.stringify(payloadJson);
 
-        return this.http.post(url, payload, options).pipe(
+        return http.post(url, payload, options).pipe(
             map((response) => {
                 return response;
             }),
-            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
+            catchError((e) => errorHandler.HandleCatch<any, any>(e, request)));
     }
 }

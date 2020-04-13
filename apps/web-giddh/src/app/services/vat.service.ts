@@ -6,7 +6,7 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { UserDetails } from "../models/api-models/loginModels";
 import { VatReportRequest, VatReportResponse, VatReportTransactionsRequest } from '../models/api-models/Vat';
-import { ErrorHandler } from "./catchManager/catchmanger";
+import { GiddhErrorHandler } from "./catchManager/catchmanger";
 import { HttpWrapperService } from "./httpWrapper.service";
 import { Observable } from "rxjs";
 
@@ -15,7 +15,7 @@ export class VatService {
     private companyUniqueName: string;
     private user: UserDetails;
 
-    constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService, private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this.user = this._generalService.user;
     }
 
