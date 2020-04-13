@@ -1,7 +1,7 @@
 import { MagicLinkService } from "./magic-link.service";
 import { PermissionDataService } from "../permissions/permission-data.service";
 import { LogsService } from "./logs.service";
-import { ErrorHandler } from "./catchManager/catchmanger";
+import { GiddhErrorHandler } from "./catchManager/catchmanger";
 import { ModuleWithProviders, NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
@@ -65,7 +65,6 @@ import { InvoiceBulkUpdateService } from './invoice.bulkupdate.service';
 import { UserAgent } from "@ionic-native/user-agent/ngx";
 import { EcommerceService } from './ecommerce.service';
 import { ReverseChargeService } from './reversecharge.service';
-import { ExceptionLogService } from './exceptionlog.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -84,7 +83,7 @@ export class ServiceModule {
                 PermissionDataService,
                 LoaderService,
                 StorageService,
-                ErrorHandler,
+                GiddhErrorHandler,
                 UserAgent,
                 HttpWrapperService,
                 AuthenticationService,
@@ -137,8 +136,7 @@ export class ServiceModule {
                 CommandKService,
                 InvoiceBulkUpdateService,
                 EcommerceService,
-                ReverseChargeService,
-                ExceptionLogService
+                ReverseChargeService
             ]
         };
     }

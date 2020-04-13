@@ -1,7 +1,7 @@
 import { catchError, map } from 'rxjs/operators';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { BaseResponse } from '../models/api-models/BaseResponse';
@@ -13,7 +13,7 @@ import { CommonPaginatedRequest } from '../models/api-models/Invoice';
 @Injectable()
 export class ImportExcelService {
 
-	constructor(private errorHandler: ErrorHandler,
+	constructor(private errorHandler: GiddhErrorHandler,
 		private _http: HttpWrapperService,
 		private _generalService: GeneralService,
 		@Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
