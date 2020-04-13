@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { HttpWrapperService } from './httpWrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { DASHBOARD_API } from './apiurls/dashboard.api';
 import {
     BankAccountsResponse,
@@ -28,7 +28,7 @@ export class DashboardService {
     private companyUniqueName: string;
     private user: UserDetails;
 
-    constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router, private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: GiddhErrorHandler, public _http: HttpWrapperService, public _router: Router, private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
     public Dashboard(fromDate: string = '', toDate: string = '', interval: string = 'monthly', refresh: boolean = false): Observable<BaseResponse<DashboardResponse, string>> {

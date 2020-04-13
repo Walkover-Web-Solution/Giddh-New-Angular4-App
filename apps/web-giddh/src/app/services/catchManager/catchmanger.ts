@@ -8,7 +8,7 @@ import { AppState } from '../../store';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
-export class ErrorHandler {
+export class GiddhErrorHandler {
 
     constructor(private _toaster: ToasterService, private store: Store<AppState>) {
     }

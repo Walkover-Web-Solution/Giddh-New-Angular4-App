@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { ELEDGER_API } from './apiurls/eledger.api';
 import { EledgerMapRequest, EledgerResponse } from '../models/api-models/Eledger';
 import { GeneralService } from './general.service';
@@ -17,7 +17,7 @@ export class EledgerService {
 	private companyUniqueName: string;
 	private user: UserDetails;
 
-	constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router,
+	constructor(private errorHandler: GiddhErrorHandler, public _http: HttpWrapperService, public _router: Router,
 		private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 	}
 
