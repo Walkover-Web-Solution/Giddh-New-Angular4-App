@@ -1,6 +1,6 @@
 <div class="clearfix" *ngIf="!parentCompanyName && (branches$ | async)?.length > 0">
-    <div class="d-flex date-advanceSearch row">
-        <form class="form-inline input-grp-dateRangePicker pr col-sm-8">
+    <div class="d-flex date-advanceSearch row xs-d-block">
+        <form class="form-inline input-grp-dateRangePicker pr col-sm-8 xs-mb-1">
             <div class=" mrR1 d-flex">
                 <div class="input-group">
                     <div class="form-group">
@@ -26,12 +26,12 @@
             </div>
         </form>
         <div class="col-sm-4">
-            <button class="btn btn-pink mrB2 pull-right " (click)="openAddBranchModal()"> +New Branch</button>
+            <button class="btn btn-pink pull-right xs-pull-left" (click)="openAddBranchModal()"> +New Branch</button>
         </div>
     </div>
 </div>
-<div *ngIf="(branches$ | async)?.length > 0">
-    <table class="table basic table-bordered mrT2" *ngIf="branchViewType === 'table'">
+<div *ngIf="(branches$ | async)?.length > 0" class="table-responsive on-mobile-view">
+    <table class="table basic mt-2 giddh-table" *ngIf="branchViewType === 'table'">
         <thead>
             <tr>
                 <th>Branch Name</th>
@@ -45,22 +45,22 @@
         </thead>
         <tbody>
             <tr *ngFor="let branch of branches$ | async">
-                <td>{{branch.name}}</td>
-                <td *ngIf="formFields['taxName']">{{branch?.addresses[0]?.taxNumber}}</td>
-                <td>{{branch.contactNo}}</td>
-                <td class="text-right"><span
+                <td data-title="Branch Name">{{branch.name}}</td>
+                <td data-title="{{formFields['taxName'].label}}" *ngIf="formFields['taxName']">{{branch?.addresses[0]?.taxNumber}}</td>
+                <td data-title="Contact No.">{{branch.contactNo}}</td>
+                <td data-title="Total Sales" class="text-right"><span
                         *ngIf="branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount">{{branch.companyTotals.sales.amount | giddhCurrency}}</span><span
                         *ngIf="!(branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount)">0</span>
                 </td>
-                <td class="text-right"><span
+                <td class="text-right" data-title="Total Expenses"><span
                         *ngIf="branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount">{{branch.companyTotals.expenses.amount | giddhCurrency}}</span><span
                         *ngIf="!(branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount)">0</span>
                 </td>
-                <td class="text-right"><span
+                <td class="text-right" data-title="Total Taxes"><span
                         *ngIf="branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount">{{branch.companyTotals.taxes.amount | giddhCurrency}}</span><span
                         *ngIf="!(branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount)">0</span>
                 </td>
-                <td class="text-right unlink">
+                <td data-title="Action" class="text-right unlink">
                     <a (click)="removeBranch(branch.uniqueName, branch.name)">Delink</a></td>
             </tr>
         </tbody>

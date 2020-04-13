@@ -42,6 +42,7 @@ import { ProformaPrintInPlaceComponent } from './components/proforma-print-inpla
 import { ProformaInvoiceRendererComponent } from './proforma-invoice-renderer.component';
 import { ProformaInvoiceComponent } from './proforma-invoice.component';
 import { ProformaInvoiceRoutingModule } from './proforma-invoice.routing.module';
+import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
 
 
 @NgModule({
@@ -73,7 +74,8 @@ import { ProformaInvoiceRoutingModule } from './proforma-invoice.routing.module'
         PdfJsViewerModule,
         CurrencyModule,
         NgxMaskModule.forRoot(),
-        SettingsServiceModule
+        SettingsServiceModule,
+        AdvanceReceiptAdjustmentModule
     ],
     exports: [ProformaInvoiceComponent, SalesAddStockComponent, SalesAddStockGroupComponent, AsideMenuProductServiceComponent],
     declarations: [
