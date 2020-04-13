@@ -155,13 +155,12 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
-
         this.isBranchVisible$ = this.store.select(s => s.inventory.showBranchScreen).pipe(takeUntil(this.destroyed$));
         document.querySelector('body').classList.add('inventory-page');
 
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
 
-        this.activeTabIndex = this.router.url.indexOf('jobwork') > -1 ? 1 : this.router.url.indexOf('manufacturing') > -1 ? 2 : this.router.url.indexOf('inventory/report') > -1 ? 3 : 0;;
+        this.activeTabIndex = this.router.url.indexOf('jobwork') > -1 ? 1 : this.router.url.indexOf('manufacturing') > -1 ? 2 : this.router.url.indexOf('inventory/report') > -1 ? 3 : 0;
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             if (s instanceof NavigationEnd) {
@@ -171,7 +170,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.saveLastState();
                 }
             }
-        })
+        });
     }
 
     public ngOnDestroy() {
@@ -186,7 +185,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public setDefaultGroup() {
         // for first time load, show first group report
-
         this.groupsWithStocks$.pipe(take(2)).subscribe(a => {
             if (a && !this.activeView) {
                 this.GroupStockReportRequest = new GroupStockReportRequest();
@@ -203,7 +201,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             }
         });
-
     }
 
     public openCreateCompanyModal() {
@@ -211,13 +208,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public redirectUrlToActiveTab(type: string, event: any, activeTabIndex?: number, currentUrl?: string) {
-
         if (event) {
             if (!(event instanceof TabDirective)) {
                 return;
             }
         }
-
         if (currentUrl) {
             this.router.navigateByUrl(this.currentUrl);
         } else {
