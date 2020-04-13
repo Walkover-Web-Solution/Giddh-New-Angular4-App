@@ -57,7 +57,7 @@
                                         Tax){{invoiceFormDetails.accountDetails.currencySymbol}}</span></label>
                                 <!-- decimalDigitsDirective -->
                                 <input [class.error-box]="entry.dueAmount.amountForAccount === 0 && adjustAdvancePaymentForm?.form.controls['amount'+entryIdx]?.touched" required decimalDigitsDirective type="text" class="form-control" placeholder="Enter Amount" name="amount{{entryIdx}}"
-                                    [(ngModel)]="entry.dueAmount.amountForAccount" (blur)="calculateTax(entry, entryIdx)" [prefix]="currencySymbol" [mask]="inputMaskFormat">
+                                    [(ngModel)]="entry.dueAmount.amountForAccount" (ngModelChange)="calculateTax(entry, entryIdx)" [prefix]="currencySymbol" [mask]="inputMaskFormat">
                             </div>
                         </div>
                         <div class="col-sm-3">
@@ -136,7 +136,7 @@
                     </span>
                     <div class="mt-4">
                         <button *ngIf="!isUpdateMode" type="button" class="btn btn-success mrR1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)">Save</button>
-                        <button *ngIf="isUpdateMode" type="button" class="btn btn-success mrR1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt()">Update</button>
+                        <button *ngIf="isUpdateMode" type="button" class="btn btn-success mrR1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)">Update</button>
                         <button type="button" class="btn btn-cancel" (click)="onClear()">Cancel</button>
                     </div>
                 </div>
