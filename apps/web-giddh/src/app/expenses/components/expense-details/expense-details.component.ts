@@ -259,6 +259,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         delete ledgerRequest['pettyCashEntryStatus'];
         delete ledgerRequest['pettyCashEntryStatus'];
         delete ledgerRequest['othersCategory'];
+        ledgerRequest.attachedFileName = (this.DownloadAttachedImgResponse && this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0].name : '';
+        ledgerRequest.attachedFileUniqueNames = (this.DownloadAttachedImgResponse && this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0].uniqueName : '';
 
         this.expenseService.actionPettycashReports(actionType, { ledgerRequest }).subscribe(res => {
             this.approveEntryRequestInProcess = false;
