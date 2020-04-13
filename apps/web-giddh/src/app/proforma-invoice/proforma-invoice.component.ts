@@ -4413,7 +4413,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment(): number {
-        return this.invFormData.voucherDetails.grandTotal - this.adjustPaymentData.totalAdjustedAmount - this.depositAmount + this.invFormData.voucherDetails.tcsTotal - this.invFormData.voucherDetails.tdsTotal
+        return parseFloat(Number(this.invFormData.voucherDetails.grandTotal + this.invFormData.voucherDetails.tcsTotal - this.adjustPaymentData.totalAdjustedAmount - this.depositAmount - this.invFormData.voucherDetails.tdsTotal).toFixed(2));
     }
 
     /**
