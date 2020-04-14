@@ -124,6 +124,7 @@
         "numbers_only" : "input number only",
         "something_went_wrong" : "Something went wrong"
     },
+    "app_something_went_wrong" : "Something went wrong! Please try again.",
     "app_custom_stock_unit" : "Custom Stock Unit",
     "app_receipt_note" : "Receipt Note",
     "app_delivery_challan" : "Delivery Challan",
@@ -361,5 +362,7 @@
     "app_debit_notes" : "Debit Notes",
     "app_all" : "All",
     "app_payment_mode" : "Payment Mode",
-    "app_select_account" : "Select Account"
+    "app_select_account" : "Select Account",
+    "app_invoice_date" : "Invoice Date",
+    "app_invoice_number" : "Invoice Number"
 }

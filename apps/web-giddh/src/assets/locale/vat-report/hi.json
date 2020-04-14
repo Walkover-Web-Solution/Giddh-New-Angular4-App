@@ -1,0 +1,10 @@
+{
+    "tab_heading" : "VAT Report",
+    "vat_report_period" : "VAT Report for period",
+    "vat_amount" : "VAT Amount",
+    "adjustment" : "Adjustment",
+    "taxable_amount" : "Taxable Amount",
+    "trn_number" : "TRN Number",
+    "place_supply" : "Place of Supply",
+    "no_records_found" : "No records found"
+}
