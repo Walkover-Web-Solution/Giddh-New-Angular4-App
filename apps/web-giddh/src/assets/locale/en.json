@@ -359,5 +359,7 @@
     "app_invoices" : "Invoices",
     "app_credit_notes" : "Credit Notes",
     "app_debit_notes" : "Debit Notes",
-    "app_all" : "All"
+    "app_all" : "All",
+    "app_payment_mode" : "Payment Mode",
+    "app_select_account" : "Select Account"
 }
