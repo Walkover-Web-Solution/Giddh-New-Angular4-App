@@ -617,6 +617,10 @@ $input-height: 3rem !default;
                         cursor: pointer;
                         font-size: 12px;
 
+                        .available.prev{
+                            transform: rotate(180deg);
+                        }
+
                         .drop-down {
                             position: absolute;
                             z-index: 1017;
@@ -951,23 +955,11 @@ td span {
     align-items: center;
     justify-content: center;
     border-radius: 100%;
-    width: 30px;
-    height: 30px;
-    line-height: 2.3;
+    width: 26px;
+    height: 26px;
+    line-height: 2.0;
     display: block;
 }
-
-//td.start-date::after {
-//  content: "";
-//  background-color: #c6dafc;
-//  width: 14px;
-//  height: 109%;
-//  right: -5px;
-//  top: -1px;
-//  position: absolute;
-//  display: inline-block;
-//
-//}
 .se {
     width: 270px;
     opacity: 0;
@@ -1092,7 +1084,7 @@ td span {
     background-color: #fff;
     right: -100%;
     top: 0;
-    z-index: 1;
+    z-index: 9999;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     box-shadow: 0 6px 1;
@@ -1282,11 +1274,23 @@ td span {
             ul{
                 width:100%;
                 li{
+                    .available.prev{
+                        transform: rotate(269deg) !important;
+                         }
+                    }
+                    .select-financial-year {
+                        ul.sub-ranges-cal{
+                            border-bottom: none;
+                        }
+                    }
                     ul.sub-ranges-cal {
                         width: 100%;
                         right: 0;
                         top: 0;
                         position: static;
+                        border: none;
+                        border-bottom: 1px solid $inputBorderColor;
+                        border-radius: 0;
                     }
                 }
             }
@@ -1307,41 +1311,40 @@ td span {
                 width:100%;
             }
         }
+        .calender-container{
+            position: absolute;
+            top: 0;
+            width: 100%;
+            left: 0;
+            background-color: #fff;
+            z-index: 1;
+            min-width: 300px;
+            padding-top: 30px;
+    
+            .close-calender{
+                position: absolute;
+                top: 10px;
+                left: 0;
+                display: flex;
+                align-items: center;
+                width: 100%;
+                font-size: 17px;
+                font-style: initial;
+                padding-left:15px;
+                img{
+                    margin-right: 15px;
+                }
+            }
+          }
+    
+          &.double {
+            width: 300px; 
+        }
       } 
  
-      .calender-container{
-        position: absolute;
-        top: 0;
-        width: 100%;
-        left: 0;
-        background-color: #fff;
-        z-index: 1;
-        min-width: 300px;
-        padding-top: 30px;
-
-        .close-calender{
-            position: absolute;
-            top: 10px;
-            left: 0;
-            display: flex;
-            align-items: center;
-            width: 100%;
-            font-size: 17px;
-            font-style: initial;
-            padding-left:15px;
-            img{
-                margin-right: 15px;
-            }
-        }
-      }
-
-      &.double {
-        width: 300px;
-        
-    }
-   
+     
 }
-}
+ 
 
 @media(max-width:360px){
     .md-drppicker{

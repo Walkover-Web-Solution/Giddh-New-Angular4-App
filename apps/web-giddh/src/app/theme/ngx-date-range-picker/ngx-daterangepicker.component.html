@@ -11,7 +11,7 @@
     <div class="ranges" *ngIf="ranges?.length">
         <!-- loop over ranges -->
         <div class="range-container">  
-            <ul>
+            <ul class="range-list">
                 <li class="menu-li"  type="button"  (click)="visibleCalnderOn();">
                     <button>
                        Custom
@@ -32,6 +32,17 @@
                                 [ngClass]="{'active': subRange.isSelected}">{{subRange.name}}
                             </button>
                         </li>
+                    </ul>
+                </li>
+                <li class="menu-li select-financial-year">
+                    <button type="button" class="btn-angle-down"  (click)="clickRange($event)">Select Financial Year
+                        <span class="available prev angle-down"></span>
+                    </button>
+                    <ul class="sub-ranges-cal menu-drawer" *ngIf="dropdownShow">
+                        <li>
+                            <button type="button">Apr19-Mar20</button>
+                        </li>
+                        <li><button type="button">Apr20-Mar19</button></li>
                     </ul>
                 </li>
             </ul>
