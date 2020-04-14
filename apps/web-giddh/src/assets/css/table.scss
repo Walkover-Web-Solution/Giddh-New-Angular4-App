@@ -36,6 +36,7 @@
         border-right: none;
         font-family: $tableFontRegular;
         border-bottom: none !important;
+        white-space: nowrap !important;
     }
     thead > tr > th:first-child,
     tbody > tr > td:first-child {

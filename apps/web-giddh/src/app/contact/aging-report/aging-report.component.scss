@@ -34,7 +34,7 @@
     float: right;
     width: auto;
 }
-.wrapsearchingAging a {
+.wrap-searching-aging a {
     color: $jacksons-purple;
 }
 .advance-icon {
@@ -180,14 +180,15 @@ tr.aging-table-top td {
         font-size: 14px;
     }
 }
-@media (max-width: 540px) {
-    .wrapsearchingAging .max250 {
-        max-width: 200px !important;
+@media (max-width: 575px) {
+    .wrap-searching-aging .max250 {
+        max-width: calc(100% - 50px);
+        width: 100%;
     }
-    .wrapsearchingAging .max250 input {
+    .wrap-searching-aging .max250 input {
         width: 100% !important;
     }
-    .wrapsearchingAging {
+    .wrap-searching-aging {
         float: none !important;
         justify-content: space-between;
     }
@@ -199,20 +200,18 @@ tr.aging-table-top td {
         float: none;
         width: 100%;
     }
+    .form-inline{
+        .btn-group{
+            width: 100%;
+            .btn{
+                width: 100%;
+            }
+        }
+    }
 }
 
 @media (max-width: 375px) {
-    .wrapsearchingAging + .btn-group {
+    .wrap-searching-aging + .btn-group {
         float: left !important;
     }
 }
-@media (max-width: 320px) {
-    .wrapsearchingAging .max250 {
-        max-width: 150px !important;
-    }
-}
-
-// .table-aging-report {
-//   min-height: 300px;
-//   margin-top:0 !important;
-// }

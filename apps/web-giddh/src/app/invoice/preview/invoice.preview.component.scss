@@ -245,7 +245,7 @@ td.card-header.clearfix {
     justify-content: space-between;
 }
 
-.mobileSearch {
+.mobile-search {
     display: none;
     margin-bottom: 15px;
 }
@@ -286,7 +286,7 @@ ul.selectActionDropdown {
     background: #eeeff9 !important;
 }
 
-.addInvoice .dropdown-toggle {
+.add-invoice .dropdown-toggle {
     color: #fff;
 }
 
@@ -328,7 +328,7 @@ ul.selectActionDropdown {
     color: #999999;
 }
 
-.advance-icon {
+.advance-icon , .search-icon-block {
     width: 32px;
     height: 32px;
     display: inline-flex;
@@ -346,7 +346,7 @@ ul.selectActionDropdown {
     background: #eaeaea;
 }
 
-.dropdown-toggle.spcl_dropdown {
+.dropdown-toggle.more-btn-dropdown {
     color: $navy !important;
     border: 1px solid $chetwode-blue;
     width: 91px;
@@ -360,17 +360,17 @@ ul.selectActionDropdown {
     background-color: #fff;
 }
 
-.dropdown-toggle.spcl_dropdown:hover {
+.dropdown-toggle.more-btn-dropdown:hover {
     background: $chetwode-blue;
     color: #fff !important;
     border-color: $chetwode-blue;
 }
 
-.dropdown-toggle.spcl_dropdown:hover .caret {
+.dropdown-toggle.more-btn-dropdown:hover .caret {
     color: #fff !important;
 }
 
-.dropdown-toggle.spcl_dropdown .caret {
+.dropdown-toggle.more-btn-dropdown .caret {
     color: #999999;
 }
 
@@ -449,7 +449,7 @@ button.btn.btn-filter span.icon-cross {
     display: inline-block;
 }
 
-.addInvoice .btn-group.show {
+.add-invoice .btn-group.show {
     display: inline-block !important;
 }
 
@@ -543,13 +543,6 @@ div.remove-capitalize {
     .paginationWrapper {
         top: 0px;
     }
-    .mobileSearch {
-        display: block;
-        margin-bottom: 0;
-    }
-    .mobileSearch .input-container input {
-        font-size: 13px;
-    }
     .input-grp-dateRangePicker .form-group {
         margin-bottom: 10px;
     }
@@ -559,9 +552,23 @@ div.remove-capitalize {
     .desktop-view-btn {
         display: none;
     }
+    .date-advanceSearch{
+        .add-invoice{
+            display: none;
+        }
+    }
+    
 }
 
 @media (max-width: 767px) {
+    .mobile-search {
+        display: flex;
+        margin-bottom: 0;
+        flex-direction: column-reverse;
+    }
+    .mobile-search .input-container input {
+        font-size: 13px;
+    }
     .invoice-modal-content:after,
     .invoice-modal-content {
         top: 131px;
@@ -583,7 +590,13 @@ div.remove-capitalize {
     }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 575px) {
+    button.btn.btn-filter{
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
     .invoce-controll .nav.nav-tabs {
         margin-bottom: 28px;
     }
@@ -593,6 +606,13 @@ div.remove-capitalize {
     .invoiceFooter {
         display: flex;
         padding: 10px 0;
+    }
+    .full-width-on-mobile {
+        width: 100%;
+        margin: 5px 0;
+    }
+    .date-advanceSearch{
+        flex-direction: column;
     }
 }
 
@@ -619,20 +639,12 @@ div.remove-capitalize {
     .smallLoading {
         top: 5px;
     }
-    .full-width-on-mobile {
-        width: 100%;
-        margin: 5px 0;
-    }
 }
-
 @media (max-width: 320px) {
     .date-advanceSearch .input-group {
         width: 144px;
     }
-    .btn-dropdown-ddl-newinv {
-        padding: 5px 10px !important;
-    }
-    .mobileSearch .input-container input {
+    .mobile-search .input-container input {
         letter-spacing: -0.99px;
     }
 }

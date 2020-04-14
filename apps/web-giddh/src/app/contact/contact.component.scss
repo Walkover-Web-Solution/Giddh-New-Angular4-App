@@ -299,9 +299,6 @@ span.inputAddon {
 .aging-table .btn-small {
     min-width: 140px;
 }
-.aging-table .btn-small {
-    min-width: 140px;
-}
 .aging-table thead tr th {
     border-top: 1px solid $gainsboro;
     border-bottom: 1px solid $gainsboro !important;
@@ -374,8 +371,14 @@ span.inputAddon {
             display: block;
         }
     }
+    .aging-table .btn-small {
+        min-width: auto;
+    }
 }
 @media (max-width: 767px) {
+    .date-range-picker{
+        height: 26px !important;
+    }
     span.inputAddon {
         top: 0;
     }
@@ -390,12 +393,33 @@ span.inputAddon {
         padding-bottom: 10px;
         float: right !important;
     }
-    .header-left .form-group {
-        vertical-align: bottom !important;
-        margin-bottom: 5px;
+    .form-inline{
+        position: relative;
+        .dis{
+            position: absolute;
+            left: 0;
+            top: 0;
+            }
+            .header-left{
+                width: calc(100% - 50px);
+                margin-left: 45px;
+                .form-group {
+                    vertical-align: bottom !important;
+                    margin-bottom: 5px;
+                    max-width: 100%;
+                    input{
+                        width: 100%;
+                    }
+                }
+            }
     }
+   
     .customer-footer-box {
         padding-top: 0;
+        float: left !important;
+    }
+    .customer-footer-box + .btn-group {
+        float: left !important;
     }
     .custumerRightWrap {
         position: relative;
@@ -414,16 +438,28 @@ span.inputAddon {
         top: 8px;
     }
 }
-@media (max-width: 652px) {
-    .customer-footer-box + .btn-group {
-        float: left !important;
-    }
-}
-
 @media (max-width: 575px) {
+    .customer-footer-box + .btn-group {
+        float: none !important;
+        width: 100%;
+        button{
+            width: 100%;
+        }
+    }
     .customer-footer-box {
         padding-bottom: 10px;
         float: none !important;
+        .customer-inner-box{
+            display: flex;
+            align-items: center;
+            padding-top: 6px;
+            h5{
+                font-size: 16px;
+                .numbertotal{
+                    font-size: 20px;
+                }
+            }
+        }
     }
     .custumerRightWrap h4.mb-1.pdR2 {
         margin-bottom: 10px;

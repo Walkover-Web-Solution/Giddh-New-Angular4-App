@@ -655,7 +655,18 @@ input {
     border-radius: 4px;
     right: 0;
 }
-
+.mt-15{
+    margin-top: 15px;
+}
+.mb-15{
+    margin-bottom: 15px;
+}
+.ml-15{
+    margin-left: 15px;
+}
+.mr-15{
+    margin-right: 15px;
+}
 .mt-1 {
     margin-top: 10px;
 }
@@ -9145,6 +9156,9 @@ input.checkbox-custom[type="checkbox"] {
 }
 
 @media (max-width: 767px) {
+    .btn{
+        padding: 7px 8px;
+    }
     .setting-container {
         margin-top: 65px;
     }
@@ -9242,7 +9256,7 @@ input.checkbox-custom[type="checkbox"] {
     #settingTab .tab-container .nav.nav-tabs {
         position: fixed;
         width: 100%;
-        top: 95px;
+        top: 83px;
     }
     .custom-tabs .nav.nav-tabs {
         position: fixed;
@@ -9394,9 +9408,8 @@ input.checkbox-custom[type="checkbox"] {
 @media (max-width: 375px) {
     #settingTab .tab-container .nav.nav-tabs,
     .custom-tabs .nav.nav-tabs {
-        top: 78px;
+        top:83px;
     }
-
     .aside-pane-form .custom-tabs .nav.nav-tabs > li {
         padding-right: 20px;
     }
