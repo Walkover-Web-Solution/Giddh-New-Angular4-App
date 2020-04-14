@@ -21,6 +21,7 @@ export class ShSelectMenuComponent implements OnChanges {
     @Input() public dropdownMinHeight: number;
     @Input() public showNotFoundLinkAsDefault: boolean;
     @Input() public noResultLinkTemplate: TemplateRef<any>;
+    @Input() public showCheckbox: boolean = false;
 
     @Output() public noToggleClick: EventEmitter<any> = new EventEmitter<any>();
     @Output() public noResultClicked = new EventEmitter<null>();
@@ -50,7 +51,29 @@ export class ShSelectMenuComponent implements OnChanges {
     }
 
     public toggleSelected(row) {
-        this.noToggleClick.emit(row);
+        if (this.showCheckbox) {
+            if(row.value === "selectall") {
+                let isSelectAllChecked = this.selectedValues.indexOf(row);
+
+                this._rows.forEach(key => {
+                    if(isSelectAllChecked === -1) {
+                        if(this.selectedValues.indexOf(key) === -1) {
+                            this.noToggleClick.emit(key);
+                        }
+                    } else {
+                        if(this.selectedValues.indexOf(key) !== -1) {
+                            this.noToggleClick.emit(key);
+                        }
+                    }
+                });
+            } else {
+                this.noToggleClick.emit(row);
+            }
+        } else {
+            if(!row.disabled) {
+                this.noToggleClick.emit(row);
+            }
+        }
     }
 
 }

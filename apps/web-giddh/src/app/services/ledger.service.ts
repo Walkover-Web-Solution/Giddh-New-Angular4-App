@@ -406,4 +406,26 @@ export class LedgerService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
+
+    /**
+     * This will download the columnar report
+     *
+     * @param {string} companyUniqueName
+     * @param {string} groupUniqueName
+     * @param {*} request
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof LedgerService
+     */
+    public downloadColumnarReport(companyUniqueName: string, groupUniqueName: string, request: any): Observable<BaseResponse<any, any>> {
+        return this._http.post(this.config.apiUrl + LEDGER_API.GET_COLUMNAR_REPORT.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            .replace(':groupUniqueName', groupUniqueName), request
+        ).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = request;
+                data.queryString = { request };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
+    }
 }
