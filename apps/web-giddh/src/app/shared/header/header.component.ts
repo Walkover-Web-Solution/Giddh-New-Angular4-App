@@ -63,6 +63,7 @@ import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from 
 import { userLoginStateEnum } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { CountryRequest, CurrentPage } from '../../models/api-models/Common';
+import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 
 @Component({
     selector: 'app-header',
@@ -229,6 +230,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isCalendlyModelActivate: boolean = false;
     public companyInitials: any = '';
     public forceOpenNavigation: boolean = false;
+    /** VAT supported countries to show the Vat Report section in all modules */
+    public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+
     /**
      *
      */
