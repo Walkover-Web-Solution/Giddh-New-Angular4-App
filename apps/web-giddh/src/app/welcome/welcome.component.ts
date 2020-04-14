@@ -220,16 +220,12 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             });
         }
         if (!this.isOnBoardingInProgress) {
-            combineLatest([
-                this._companyService.GetAllBusinessTypeList(),
-                this._companyService.GetAllBusinessNatureList()
-            ]).subscribe(([businessTypeResponse, businessNatureResponse]) => {
-                _.map(businessTypeResponse.body, (businessType) => {
-                    this.businessTypeList.push({label: businessType, value: businessType});
-                });
-                _.map(businessNatureResponse.body, (businessNature) => {
-                    this.businessNatureList.push({label: businessNature, value: businessNature});
-                });
+            this._companyService.GetAllBusinessNatureList().subscribe((businessNatureResponse) => {
+                if (businessNatureResponse && businessNatureResponse.body) {
+                    _.map(businessNatureResponse.body, (businessNature) => {
+                        this.businessNatureList.push({label: businessNature, value: businessNature});
+                    });
+                }
                 this.reFillForm();
             });
         }
@@ -318,7 +314,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             }
             let gstDetails = this.prepareGstDetail(this.companyProfileObj);
-            if (gstDetails.taxNumber || gstDetails.address) {
+            if (gstDetails.taxNumber || gstDetails.address || gstDetails.stateCode) {
                 this.createNewCompanyPreparedObj.addresses.push(gstDetails);
             } else {
                 this.createNewCompanyPreparedObj.addresses = [];
@@ -374,19 +370,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public prepareGstDetail(obj) {
-        if (obj.taxNumber) {
-            this.addressesObj.taxNumber = obj.taxNumber;
-            this.addressesObj.stateCode = obj.state;
-            this.addressesObj.address = obj.address;
-            this.addressesObj.isDefault = false;
-            this.addressesObj.stateName = this.selectedstateName ? this.selectedstateName.split('-')[1] : '';
-        } else if (obj.address) {
-            this.addressesObj.taxNumber = "";
-            this.addressesObj.stateCode = "";
-            this.addressesObj.address = obj.address;
-            this.addressesObj.isDefault = false;
-            this.addressesObj.stateName = '';
-        }
+        this.addressesObj.taxNumber = obj.taxNumber || '';
+        this.addressesObj.stateCode = obj.state || '';
+        this.addressesObj.address = obj.address || '';
+        this.addressesObj.isDefault = false;
+        this.addressesObj.stateName = this.selectedstateName ? this.selectedstateName.split('-')[1] : '';
         return this.addressesObj;
     }
 
@@ -461,7 +449,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.forceClear$ = observableOf({status: true});
             this.isTaxNumberSameAsHeadQuarter = 0;
 
-            if (this.selectedBusinesstype === 'Unregistered') {
+            if (this.selectedBusinesstype === 'Unregistered' || this.selectedBusinesstype === 'Others') {
                 this.isGstValid = true;
             } else {
                 this.isGstValid = false;
@@ -586,6 +574,14 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.currentTaxList[res.applicableTaxes[key].uniqueName] = [];
                     this.currentTaxList[res.applicableTaxes[key].uniqueName] = res.applicableTaxes[key];
                 });
+                if (res.businessType) {
+                    _.map(res.businessType, (businessType) => {
+                        this.businessTypeList.push({label: businessType, value: businessType});
+                    });
+                    if (this.businessTypeList && this.businessTypeList.length === 1) {
+                        this.selectedBusinesstype = this.businessTypeList[0].value;
+                    }
+                }
                 this.reFillTax();
             } else {
                 let onboardingFormRequest = new OnboardingFormRequest();
@@ -615,7 +611,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                         value: res.stateList[key].code
                     });
                 });
-                this.statesSource$ = observableOf(this.states);
+                // this.statesSource$ = observableOf(this.states);
+                this.statesSource$ = observableOf([]);
                 this.reFillState();
             } else {
                 let statesRequest = new StatesRequest();

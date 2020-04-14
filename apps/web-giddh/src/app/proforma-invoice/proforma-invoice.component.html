@@ -192,7 +192,7 @@
                                                                         </sales-sh-select>
                                                                     </div>
 
-                                                                    <div class="col-sm-12 pd ">
+                                                                    <div class="col-sm-12 pd " *ngIf="shouldShowTrnGstField">
                                                                         <!-- <label>GSTIN</label> -->
                                                                         <input maxLength="15" autocomplete="None" type="text" name="billingDetails.gstNumber" class="form-control input-custom" *ngIf="showGSTINNo" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber" (change)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
                                                                             placeholder="GSTIN" />
@@ -245,7 +245,7 @@
                                                                             </sales-sh-select>
                                                                         </div>
 
-                                                                        <div class="col-sm-12 pd ">
+                                                                        <div class="col-sm-12 pd " *ngIf="shouldShowTrnGstField">
                                                                             <input [readonly]="autoFillShipping" autocomplete="None" maxLength="15" type="text" name="shippingDetails.gstNumber" *ngIf="showGSTINNo" class="form-control input-custom" [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber" (change)="getStateCode('shippingDetails', statesShipping)"
                                                                                 placeholder="GSTIN" />
                                                                             <input [readonly]="autoFillShipping" maxLength="15" autocomplete="None" type="text" name="shippingDetails.gstNumber" class="form-control input-custom" *ngIf="showTRNNo" [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber" (change)="getStateCode('shippingDetails', statesShipping);"

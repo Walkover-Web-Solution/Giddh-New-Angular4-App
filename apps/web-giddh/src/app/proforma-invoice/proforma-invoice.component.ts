@@ -307,6 +307,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public purchaseRecordConfirmationConfiguration: ConfirmationModalConfiguration;
     /** Prevents double click on generate button */
     public generateUpdateButtonClicked = new Subject<any>();
+    /** True, if the Giddh supports the taxation of the country (not supported now: UK, US, Nepal, Australia) */
+    public shouldShowTrnGstField: boolean = false;
     public selectedCompany: any;
     public formFields: any[] = [];
 
@@ -1208,6 +1210,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.formFields[res.fields[key].name] = [];
                     this.formFields[res.fields[key].name] = res.fields[key];
                 });
+                if (this.formFields && this.formFields['taxName']) {
+                    this.shouldShowTrnGstField = true;
+                } else {
+                    this.shouldShowTrnGstField = false;
+                }
             }
         });
         this.prepareInvoiceTypeFlags();
