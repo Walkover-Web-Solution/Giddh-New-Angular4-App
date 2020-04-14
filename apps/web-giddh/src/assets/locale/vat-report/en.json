@@ -6,5 +6,6 @@
     "taxable_amount" : "Taxable Amount",
     "trn_number" : "TRN Number",
     "place_supply" : "Place of Supply",
-    "no_records_found" : "No records found"
+    "no_records_found" : "No records found",
+    "no_trn_available" : "To see the VAT report for this company, please provide a TRN in its profile section."
 }
