@@ -96,6 +96,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     };
     public approveEntryRequestInProcess: boolean = false;
     public selectedEntryForApprove: ExpenseResults;
+    public imgAttachedFileName = '';
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -259,16 +260,16 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         delete ledgerRequest['pettyCashEntryStatus'];
         delete ledgerRequest['pettyCashEntryStatus'];
         delete ledgerRequest['othersCategory'];
-        ledgerRequest.attachedFileUniqueNames = [];
+
         if (this.accountEntryPettyCash && this.accountEntryPettyCash.attachedFileUniqueNames && this.accountEntryPettyCash.attachedFileUniqueNames.length) {
-            ledgerRequest.attachedFileUniqueNames.push(this.accountEntryPettyCash.attachedFileUniqueNames[0]);
+            ledgerRequest.attachedFile =this.accountEntryPettyCash.attachedFileUniqueNames[0];
         } else {
-            ledgerRequest.attachedFileUniqueNames.push((this.DownloadAttachedImgResponse && this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0].uniqueName : '');
+            ledgerRequest.attachedFile = (this.DownloadAttachedImgResponse && this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0].uniqueName : '';
         }
         if (this.accountEntryPettyCash.attachedFile) {
             ledgerRequest.attachedFileName = this.accountEntryPettyCash.attachedFile;
         } else {
-            ledgerRequest.attachedFileName = (this.DownloadAttachedImgResponse && this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0].name : '';
+            ledgerRequest.attachedFileName = this.imgAttachedFileName;
         }
 
         this.expenseService.actionPettycashReports(actionType, { ledgerRequest }).subscribe(res => {
@@ -365,6 +366,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
                 this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
                 let img = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
                 this.DownloadAttachedImgResponse.push(output.file.response.body);
+                this.imgAttachedFileName =output.file.response.body.name;
                 this.imageURL.push(img);
                 // this.customTemplate.sections.footer.data.imageSignature.label = output.file.response.body.uniqueName;
                 this._toasty.successToast('file uploaded successfully.');
