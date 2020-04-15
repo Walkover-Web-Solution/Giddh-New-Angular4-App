@@ -126,14 +126,14 @@ i.close.icon.clear:hover::after {
     color: black;
 }
 
-.sh-select-disabled .selectedVal,
+.sh-select-disabled .selected-value,
 .sh-select-disabled .form-control {
     background: #eee !important;
     pointer-events: none;
     cursor: not-allowed;
 }
 
-.selectedVal {
+.selected-value {
     border: 1px solid #d6d6d6 !important;
     padding-right: 22px !important;
     background: #fff !important;

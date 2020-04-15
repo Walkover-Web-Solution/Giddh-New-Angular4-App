@@ -37,7 +37,7 @@
     <div class="modal-body" [hidden]="isChangeAcc">
 
         <!-- region transactions -->
-        <div class="ledgHead entry-popup">
+        <div class="ledger-head entry-popup">
 
             <table class="col-xs-12 ledger-head mrT1 hidden-xs">
                 <thead>
@@ -73,7 +73,7 @@
                     <table class="width100 card-table">
 
                         <thead class="hidden-xs">
-                        <tr class="t-h-bg1">
+                        <tr class="thead-bg">
 
                             <th class="col-xs-2" style="border-top:none">
                                     <span class="cursor-pointer">
@@ -110,7 +110,7 @@
                                                 <span *ngIf="(
                                                         (!dbtSelect.isOpen && txn.particular.uniqueName) ||
                                                         (dbtSelect.isOpen && dbtSelect.filter))">To</span>
-                                            <sh-select id="dbtID" [notFoundLink]="true"
+                                            <sh-select id="debit-id" [notFoundLink]="true"
                                                        (noResultsClicked)="showQuickAccountModal()"
                                                        (keydown)="keydownPressed($event)"
                                                        [options]="vm.flatternAccountList4Select | async" #dbtSelect
@@ -260,7 +260,7 @@
                     <!-- region credit transaction header -->
                     <table class="width100 card-table">
                         <thead class="xs-hidden">
-                        <tr class="t-h-bg1">
+                        <tr class="thead-bg">
                             <th class="col-xs-2" style="border-top:none">
                                     <span class="cursor-pointer">
                                         Date
@@ -284,7 +284,7 @@
                                            bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }">
                                 </td>
 
-                                <td data-title="Particular" id="crdIDTd"
+                                <td data-title="Particular" id="cradit-idTd"
                                     class="pos-rel col-xs-6 select2-parent select2-ledger"
                                     [ngClass]="{ otherAccountEntry: txn.particular.uniqueName === 'others' }">
 
@@ -293,7 +293,7 @@
                                                 <span *ngIf="(
                                                         (!crdSelect.isOpen && txn.particular.uniqueName) ||
                                                         (crdSelect.isOpen && crdSelect.filter))">By</span>
-                                            <sh-select id="crdID" [notFoundLink]="true"
+                                            <sh-select id="cradit-id" [notFoundLink]="true"
                                                        (noResultsClicked)="showQuickAccountModal()"
                                                        (keydown)="keydownPressed($event)"
                                                        [options]="vm.flatternAccountList4Select | async" #crdSelect

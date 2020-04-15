@@ -24,16 +24,16 @@
     display: flex;
 }
 
-.td_in_searchBox div {
+.td-searchBox div {
     display: flex;
 }
 
-.td_in_searchBox div span {
+.td-searchBox div span {
     /*flex: 1 1 auto;*/
     padding: 8px 0 8px 10px;
 }
 
-.td_in_searchBox div i {
+.td-searchBox div i {
     margin-top: 1px;
     color: $wild-blue-yonder;
     padding-right: 8px;
@@ -43,15 +43,15 @@
     padding-left: 10px;
 }
 
-.td_in_searchBox div i:hover {
+.td-searchBox div i:hover {
     color: $deep-sky-blue;
 }
 
-.td_in_searchBox {
+.td-searchBox {
     padding: 0 !important;
 }
 
-.td_in_searchBox .input-container input {
+.td-searchBox .input-container input {
     height: 50px;
     min-width: 100%;
     padding: 11px;
@@ -61,7 +61,7 @@
     background-color: #f2f2f2;
 }
 
-.td_in_searchBox .input-container i {
+.td-searchBox .input-container i {
     position: absolute;
     right: 10px;
     top: 12px;
@@ -76,7 +76,7 @@
     margin-top: 0;
 }
 
-.input-h .td_in_searchBox .input-container input {
+.input-h .td-searchBox .input-container input {
     height: 50px !important;
 }
 
@@ -154,7 +154,7 @@ ul.selectActionDropdown {
     color: $chetwode-blue !important;
     background: #eeeff9 !important;
 }
-.dropdown-toggle.spcl_dropdown {
+.dropdown-toggle.more-dropdown {
     color: $navy ;
     border: 1px solid $chetwode-blue;
     width: 91px;
@@ -166,15 +166,15 @@ ul.selectActionDropdown {
     margin-right: 15px;
     background-color: #fff;
 }
-.dropdown-toggle.spcl_dropdown:hover {
+.dropdown-toggle.more-dropdown:hover {
     background: $chetwode-blue;
     color: #fff !important;
     border-color: $chetwode-blue;
 }
-.dropdown-toggle.spcl_dropdown .caret {
+.dropdown-toggle.more-dropdown .caret {
     color: #999999;
 }
-.dropdown-toggle.spcl_dropdown:hover .caret {
+.dropdown-toggle.more-dropdown:hover .caret {
     color: #fff !important;
 }
 
@@ -259,7 +259,7 @@ a.btn-link-2 {
     box-shadow: 1px 1px 0 $gainsboro;
 } */
 
-.inputWrapper {
+.input-wrapper {
     display: block !important;
     width: 200px !important;
     position: relative;

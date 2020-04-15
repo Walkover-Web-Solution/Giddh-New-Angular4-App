@@ -2,7 +2,7 @@
     <div style="height: 44px;" *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'">
         <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
             style="margin-bottom: 10px;display: inline-block !important;">
-            <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
+            <button dropdownToggle type="button" class="btn more-dropdown dropdown-toggle"
                 aria-controls="dropdown-basic">
                 {{ selectedVoucher | titlecase}}
                 <span class="caret"></span>
@@ -98,7 +98,7 @@
 
     <table class="table basic table-bordered pending-tabel onMobileView mt-15">
 
-        <thead class="t-h-bg1">
+        <thead class="thead-bg">
             <tr>
                 <th style="width:4%" *ngIf="selectedLedgerItems.length > 0">
 

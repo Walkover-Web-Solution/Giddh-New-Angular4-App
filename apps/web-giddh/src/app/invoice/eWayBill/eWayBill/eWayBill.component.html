@@ -25,7 +25,7 @@
                 <div class="col-md-12">
                     <div class="table-responsive remove-overflow">
                         <table class="table basic table-bordered">
-                            <thead class="t-h-bg1" (clickOutside)="clickedOutside();">
+                            <thead class="thead-bg" (clickOutside)="clickedOutside();">
                                 <tr>
                                     <th style="width:50px">#</th>
                                     <th class="nowrap">
@@ -41,7 +41,7 @@
                                         </div>
                                     </th>
 
-                                    <th class="td_in_searchBox nowrap" #searchInvoiceContainer>
+                                    <th class="td-searchBox nowrap" #searchInvoiceContainer>
 
                                         <div [hidden]="showSearchInvoiceNo">
                                             <span> INVOICE NO.</span>
@@ -57,7 +57,7 @@
 
                                     </th>
 
-                                    <th style="width:20%" class="td_in_searchBox nowrap" #searchCustomerContainer>
+                                    <th style="width:20%" class="td-searchBox nowrap" #searchCustomerContainer>
                                         <!-- clickOutside)="clickedOutside($event, searchCustomerContainer, 'customerUniqueName')" -->
                                         <div [hidden]="showSearchCustomer">
                                             <span> CUSTOMER NAME</span>
@@ -193,7 +193,7 @@
             <div class="col-md-12">
                 <div class="table-responsive">
                     <table class="table basic table-bordered">
-                        <thead class="t-h-bg1">
+                        <thead class="thead-bg">
                             <tr>
                                 <th>
                                     EWB.No & Date
@@ -589,7 +589,7 @@
         <h4 class="font-22 mb-2">2. Item Details</h4>
         <div class="table-responsive">
             <table class="table basic table-bordered">
-                <thead class="t-h-bg1">
+                <thead class="thead-bg">
                     <tr>
                         <th>#</th>
                         <th>E-Way Bill No. & Date</th>

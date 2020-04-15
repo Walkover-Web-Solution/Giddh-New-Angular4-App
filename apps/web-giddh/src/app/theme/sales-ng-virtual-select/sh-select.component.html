@@ -5,9 +5,9 @@
 
 
         <!--region multiple-->
-        <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" style="background: white;" class="bdr">
-            <ng-container *ngIf="selectedValues?.length">
-                <span class="chip" *ngFor="let sl of selectedValues">
+        <div *ngIf="multiple" [ngClass]="{'has-item':selected-valueues?.length}" style="background: white;" class="bdr">
+            <ng-container *ngIf="selected-valueues?.length">
+                <span class="chip" *ngFor="let sl of selected-valueues">
                     {{ sl.label }}
                     <span class="chipClosebtn" (mousedown)="clearSingleSelection($event, sl)"
                         (click)="clearSingleSelection($event, sl)">&times;</span>
@@ -17,15 +17,15 @@
             <input type="text" class="pdL1"
                 [ngClass]="{'hasValue':filter?.length, 'bottom-border-only' : showBottomBorderOnly}" #inputFilter
                 tabindex="0" (blur)="filterInputBlur($event)"
-                [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter"
+                [placeholder]="selected-valueues?.length > 0 ? filter : placeholder" [(ngModel)]="filter"
                 (ngModelChange)="updateFilter($event)">
         </div>
         <!--endregion-->
 
         <!--region single-->
-        <!-- <b *ngIf="!multiple && showLabelOnly" [hidden]="((!isOpen || !isFilterEnabled))">{{selectedValues[0]?.label}}</b> -->
+        <!-- <b *ngIf="!multiple && showLabelOnly" [hidden]="((!isOpen || !isFilterEnabled))">{{selected-valueues[0]?.label}}</b> -->
         <button class="label-btn form-control text-left" *ngIf="!multiple && showLabelOnly"
-            [hidden]="((!isOpen || !isFilterEnabled))">{{selectedValues[0]?.label}}
+            [hidden]="((!isOpen || !isFilterEnabled))">{{selected-valueues[0]?.label}}
         </button>
 
         <input type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" class="form-control" #inputFilter
@@ -35,16 +35,16 @@
 
         <!-- (click)="show($event);" -->
         <div *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
-            <ng-container *ngIf="selectedValues?.length">
+            <ng-container *ngIf="selected-valueues?.length">
                 <div *ngIf="!multiple">
                     <button class="form-control label-btn text-left"
-                        *ngIf="showLabelOnly">{{selectedValues[0]?.label}}</button>
+                        *ngIf="showLabelOnly">{{selected-valueues[0]?.label}}</button>
                     <input type="text" *ngIf="!showLabelOnly" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}"
                         (input)="openListIfNotOpened($event)" (click)="selectText($event);" type="text"
-                        value="{{selectedValues[0].label}}" class="form-control selectedVal cp" />
+                        value="{{selected-valueues[0].label}}" class="form-control selected-value cp" />
                 </div>
             </ng-container>
-            <ng-container *ngIf="!selectedValues?.length">
+            <ng-container *ngIf="!selected-valueues?.length">
                 <input type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" *ngIf="!showLabelOnly"
                     [tabindex]="tabIndex" class="firstElementToFocus form-control" name="filter2" [(ngModel)]="filter"
                     (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [value]="filter"
@@ -53,15 +53,15 @@
         </div>
         <!--endregion-->
 
-        <!-- *ngIf="!isOpen && selectedValues.length === 0" -->
+        <!-- *ngIf="!isOpen && selected-valueues.length === 0" -->
         <!-- <div class="toggle" [ngClass]="{ 'label-toggle':showBottomBorderOnly}" *ngIf="isOpen" (click)="hide();"><i class="fa fa-caret-up"></i></div>
     <div class="toggle" [ngClass]="{ 'label-toggle':showBottomBorderOnly}" *ngIf="!isOpen" (click)="show($event)"><i class="fa fa-caret-down"></i></div> -->
 
     </div>
 
-    <!-- <span class="clear" *ngIf="showClear && selectedValues.length > 0" (click)="$event.stopPropagation();clear();">&times;</span> -->
+    <!-- <span class="clear" *ngIf="showClear && selected-valueues.length > 0" (click)="$event.stopPropagation();clear();">&times;</span> -->
     <sh-select-menu #menuEle [showLabelOnly]="showLabelOnly" [isOpen]="isOpen" [rows]="rows"
-        [selectedValues]="selectedValues" [optionTemplate]="optionTemplate" (noToggleClick)="toggleSelected($event)"
+        [selected-valueues]="selected-valueues" [optionTemplate]="optionTemplate" (noToggleClick)="toggleSelected($event)"
         (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink"
         [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight"
         [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"

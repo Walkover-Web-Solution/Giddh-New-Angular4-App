@@ -7,7 +7,7 @@
     <button id="close" (click)="closeAsidePane()" *ngIf="!hideFirstScreen"><i class="icon-cross"></i></button>
     <button id="back" (click)="backButtonPressed()" *ngIf="hideFirstScreen">Back</button>
 
-    <div class="aside-body flexy-child vmiddle asidePanelLedger " *ngIf="!hideFirstScreen" vr-item>
+    <div class="aside-body flexy-child vmiddle aside-panel-ledger " *ngIf="!hideFirstScreen" vr-item>
         <div class="pb-3 alC">
             <button class="btn btn-lg btn-primary" (click)="toggleStockPane()">Create Stock</button>
         </div>

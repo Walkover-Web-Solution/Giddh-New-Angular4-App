@@ -36,7 +36,7 @@ export class SettingsWarehouseService {
      * @returns {Observable<BaseResponse<any, any>>} Observable of create warehouse to carry out further operations
      * @memberof SettingsWarehouseService
      */
-    public createWarehouse(params: any): Observable<BaseResponse<any, any>> {
+    public create-warehouse(params: any): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + WAREHOUSE_API.CREATE.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), params).pipe(
             map((response) => {
@@ -95,7 +95,7 @@ export class SettingsWarehouseService {
      * @returns {Observable<BaseResponse<any, any>>} Observable of update warehouse to carry out further operations
      * @memberof SettingsWarehouseService
      */
-    public setAsDefaultWarehouse(params: any): Observable<BaseResponse<any, any>> {
+    public set-as-defaultWarehouse(params: any): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this.generalService.companyUniqueName;
         const contextPath = WAREHOUSE_API.SET_DEFAULT_WAREHOUSE.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             .replace(':warehouseUniqueName', params.warehouseUniqueName);

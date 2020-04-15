@@ -173,7 +173,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
                     requestParamter['warehouseUniqueName'] = this.selectedWarehouse.uniqueName;
                     this.store.dispatch(this.warehouseActions.updateWarehouse(requestParamter));
                 } else {
-                    this.store.dispatch(this.warehouseActions.createWarehouse(requestParamter));
+                    this.store.dispatch(this.warehouseActions.create-warehouse(requestParamter));
                 }
             }
         }
@@ -238,9 +238,9 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      * @param {number} warehouseIndex Selected warehouse index
      * @memberof WarehouseComponent
      */
-    public setAsDefault(warehouse: any, warehouseIndex: number): void {
+    public set-as-default(warehouse: any, warehouseIndex: number): void {
         if (!warehouse.isDefault) {
-            this.store.dispatch(this.warehouseActions.setAsDefaultWarehouse({
+            this.store.dispatch(this.warehouseActions.set-as-defaultWarehouse({
                 warehouseUniqueName: warehouse.uniqueName,
                 warehouseIndex
             }));

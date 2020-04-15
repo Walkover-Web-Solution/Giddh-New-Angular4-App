@@ -154,17 +154,17 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     private advanceSearchModel: ReceiptAdvanceSearchModel = {
         adjustmentVoucherDetails: {
             vouchers: [...RECEIPT_TYPES],
-            selectedValue: this.searchQueryParams.receiptTypes[0],
+            selected-valueue: this.searchQueryParams.receiptTypes[0],
             isDisabled: !!this.searchQueryParams.receiptTypes.length
         },
         totalAmountFilter: {
             filterValues: [...ADVANCE_RECEIPT_ADVANCE_SEARCH_AMOUNT_FILTERS],
-            selectedValue: '',
+            selected-valueue: '',
             amount: ''
         },
         unusedAmountFilter: {
             filterValues: [...ADVANCE_RECEIPT_ADVANCE_SEARCH_AMOUNT_FILTERS],
-            selectedValue: '',
+            selected-valueue: '',
             amount: ''
         }
     };
@@ -231,7 +231,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         viewContainerRef.clear();
         const componentRef = viewContainerRef.createComponent(componentFactory);
 
-        this.advanceSearchModel.adjustmentVoucherDetails.selectedValue = this.searchQueryParams.receiptTypes[0];
+        this.advanceSearchModel.adjustmentVoucherDetails.selected-valueue = this.searchQueryParams.receiptTypes[0];
         this.advanceSearchModel.adjustmentVoucherDetails.isDisabled = !!this.searchQueryParams.receiptTypes.length;
         (componentRef.instance as ReceiptAdvanceSearchComponent).searchModel = cloneDeep(this.advanceSearchModel);
         merge(
@@ -244,15 +244,15 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             // Listener for confirm event of modal
             this.showClearFilter = true;
             this.advanceSearchModel = cloneDeep(data);
-            if (data.adjustmentVoucherDetails.selectedValue) {
-                this.searchQueryParams.receiptTypes = [data.adjustmentVoucherDetails.selectedValue];
+            if (data.adjustmentVoucherDetails.selected-valueue) {
+                this.searchQueryParams.receiptTypes = [data.adjustmentVoucherDetails.selected-valueue];
             }
             this.fetchAllReceipts({
                 receiptTypes: this.searchQueryParams.receiptTypes,
                 totalAmount: data.totalAmountFilter.amount,
-                totalAmountOperation: data.totalAmountFilter.selectedValue,
+                totalAmountOperation: data.totalAmountFilter.selected-valueue,
                 unUsedAmount: data.unusedAmountFilter.amount,
-                unUsedAmountOperation: data.unusedAmountFilter.selectedValue
+                unUsedAmountOperation: data.unusedAmountFilter.selected-valueue
             }).subscribe((response) => this.handleFetchAllReceiptResponse(response));
             this.receiptAdvanceSearchModalContainer.hide();
         });
@@ -378,17 +378,17 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         this.advanceSearchModel = {
             adjustmentVoucherDetails: {
                 vouchers: [...RECEIPT_TYPES],
-                selectedValue: this.searchQueryParams.receiptTypes[0],
+                selected-valueue: this.searchQueryParams.receiptTypes[0],
                 isDisabled: !!this.searchQueryParams.receiptTypes.length
             },
             totalAmountFilter: {
                 filterValues: [...ADVANCE_RECEIPT_ADVANCE_SEARCH_AMOUNT_FILTERS],
-                selectedValue: '',
+                selected-valueue: '',
                 amount: ''
             },
             unusedAmountFilter: {
                 filterValues: [...ADVANCE_RECEIPT_ADVANCE_SEARCH_AMOUNT_FILTERS],
-                selectedValue: '',
+                selected-valueue: '',
                 amount: ''
             }
         };

@@ -119,7 +119,7 @@
 
     <section class="clearfix mrB2 whiteBg">
         <table class="table">
-            <thead class="t-h-bg1">
+            <thead class="thead-bg">
                 <tr>
                     <th [hidden]="!customThead['sNo']?.display">{{ customThead['sNo']?.label }}</th>
                     <th [hidden]="!customThead['date']?.display">{{ customThead['date']?.label }}</th>
@@ -479,7 +479,7 @@
                     <td colspan="2"> -->
 
         <table class="table  table-custom-invoice  basic cursor-pointer">
-            <thead class="t-h-bg1" (click)="setActiveIndxs(1000)">
+            <thead class="thead-bg" (click)="setActiveIndxs(1000)">
                 <tr>
                     <th *ngFor="let item of tthead" attr.data-field="{{item.label}}" [hidden]="!item.display">
                         {{item.label}}

@@ -18,7 +18,7 @@ const INV_PAGE = [
       padding: 5px 15px;
     }
 
-    .spcl_dropdown {
+    .more-dropdown {
       border: 0 !important;
       background: transparent !important;
       box-shadow: none !important;

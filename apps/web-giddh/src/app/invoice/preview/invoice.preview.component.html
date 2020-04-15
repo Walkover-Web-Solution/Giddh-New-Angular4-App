@@ -31,7 +31,7 @@
                 <!-- E-way bill generation and export to excel for a single selected item in invoice sizes -->
                 <div *ngIf="selectedVoucher !== 'purchase' || (selectedItems.length === 1 && selectedVoucher === 'purchase')">
                     <div class="btn-group" dropdown #dp="bs-dropdown">
-                        <button dropdownToggle type="button" class="btn spcl_dropdown desktop-view-btn dropdown-toggle" aria-controls="dropdown-basic">
+                        <button dropdownToggle type="button" class="btn more-dropdown desktop-view-btn dropdown-toggle" aria-controls="dropdown-basic">
                             More
                             <span class="caret"></span>
                         </button>
@@ -100,7 +100,7 @@
                     <div class="moreExportBtn d-flex mb-1">
                         <div style="height: 30px; " *ngIf="selectedItems.length === 1">
                             <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()" style="margin-bottom: 10px;display: inline-block !important;">
-                                <button dropdownToggle type="button" class="btn spcl_dropdown btn-default dropdown-toggle" aria-controls="dropdown-basic">
+                                <button dropdownToggle type="button" class="btn more-dropdown btn-default dropdown-toggle" aria-controls="dropdown-basic">
                                     More
                                     <span class="caret"></span>
                                 </button>
@@ -173,10 +173,10 @@
         <!-- For mobile screen sizes ends -->
 
         <div class="invoice-preview  table-responsive">
-            <table class="table basic table-bordered mt-15 invoice-table desktopTable table-responsive">
+            <table class="table basic table-bordered mt-15 invoice-table desktop-table table-responsive">
 
                 <!--sales-->
-                <thead class="t-h-bg1" *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
+                <thead class="thead-bg" *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
                     <tr>
                         <th style="min-width:50px; width: 4%" *ngIf="selectedItems.length > 0">
                             <div class="mh18_img" style="justify-content: center;display: flex">
@@ -250,7 +250,7 @@
                 </thead>
 
                 <!--non sales-->
-                <thead class="t-h-bg1 input-h" *ngIf="selectedVoucher !== 'sales' && selectedVoucher !== 'purchase'">
+                <thead class="thead-bg input-h" *ngIf="selectedVoucher !== 'sales' && selectedVoucher !== 'purchase'">
                     <tr>
                         <th style="min-width:50px; width: 4%" *ngIf="selectedItems.length > 0">
                             <div class="mh18_img" style="display: flex;justify-content: center">
@@ -688,7 +688,7 @@
     </div>
 
     <!--total sale & Total Due-->
-    <div class=" mt-5 invoiceFooter row" *ngIf="!selectedInvoiceForDetails">
+    <div class=" mt-5 invoice-footer row" *ngIf="!selectedInvoiceForDetails">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex total-due-sale-wrap">
             <div class="col-sm-6 totalDueSale">
                 <h3 class="">

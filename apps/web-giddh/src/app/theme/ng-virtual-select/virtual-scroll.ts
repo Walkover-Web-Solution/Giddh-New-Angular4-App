@@ -47,7 +47,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
 
     @Input()
     public items: IOption[] = [];
-    @Input() public selectedValues: any[];
+    @Input() public selected-valueues: any[];
     @Input()
     public scrollbarWidth: number;
     @Input()
@@ -96,8 +96,8 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
         this.previousStart = undefined;
         this.previousEnd = undefined;
         let currentItemIndex = -1;
-        if (this.selectedValues && this.selectedValues.length > 0) {
-            currentItemIndex = this.items.findIndex(item => item.value === this.selectedValues[0].value);
+        if (this.selected-valueues && this.selected-valueues.length > 0) {
+            currentItemIndex = this.items.findIndex(item => item.value === this.selected-valueues[0].value);
         }
         if (this.items && this.items.length) {
             currentItemIndex = (currentItemIndex === -1) ? 0 : currentItemIndex;
@@ -117,8 +117,8 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     public ngAfterViewInit() {
-        if (this.selectedValues && this.selectedValues.length > 0) {
-            let item = this.items.find(p => p.value === (this.selectedValues.length > 0 ? this.selectedValues[0].value : (this.items.length > 0 ? this.items[0].value : null)));
+        if (this.selected-valueues && this.selected-valueues.length > 0) {
+            let item = this.items.find(p => p.value === (this.selected-valueues.length > 0 ? this.selected-valueues[0].value : (this.items.length > 0 ? this.items[0].value : null)));
             setTimeout(() => {
                 this.scrollInto(item);
             }, 50);

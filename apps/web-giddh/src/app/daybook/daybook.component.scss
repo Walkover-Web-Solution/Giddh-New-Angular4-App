@@ -1,7 +1,6 @@
 @import "../../assets/css/color.scss";
 .date-range-picker {
     padding-left: 35px !important;
-    // border-color:$chetwode-blue;
     background-image: url("../../assets/images/calender.svg") !important;
     background-size: 17px !important;
     background-position: 9px 8px !important;
@@ -13,11 +12,10 @@
     border: 1px solid $gainsboro;
     text-align: left;
 }
-
 .date-range-picker:focus {
     border-color: $gainsboro !important;
 }
-.inputWrapper {
+.input-wrapper {
     position: relative;
     display: block;
     background-color: #fff;

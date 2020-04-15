@@ -4,11 +4,9 @@
     background: #fff;
     text-align: center;
     display: flex;
-    // justify-content: space-between;
     justify-content: space-around;
     li {
         padding-bottom: 0;
-        // display: inline-block;
         padding: 0 15px;
         display: flex;
         flex-direction: column;
@@ -68,11 +66,9 @@
     z-index: 9;
     position: relative;
 }
-
-.dashed_bdr {
+.dashed-border {
     border: 2px dashed $gainsboro;
 }
-
 .import_type {
     display: flex;
     justify-content: center;

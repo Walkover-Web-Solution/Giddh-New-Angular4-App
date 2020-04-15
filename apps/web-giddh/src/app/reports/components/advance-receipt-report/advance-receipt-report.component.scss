@@ -1,5 +1,5 @@
 @import "../../../../assets/css/color.scss";
-.td_in_searchBox {
+.td-searchBox {
     div {
         i {
             margin-top: 1px;
@@ -13,7 +13,7 @@
     }
 }
 
-.td_in_searchBox div {
+.td-searchBox div {
     display: flex;
 }
 .d-flex {
@@ -128,7 +128,7 @@
     color: #333;
     display: block;
 }
-.giddh-table .td_in_searchBox {
+.giddh-table .td-searchBox {
     padding-right: 10px !important;
 }
 .entry-date {
@@ -148,7 +148,7 @@
     .total-due-sale:last-child {
         margin-bottom: 0px;
     }
-    .invoiceFooter {
+    .invoice-footer {
         position: relative;
         margin-top: 10px;
     }

@@ -32,7 +32,7 @@
                             </div>
                         </a>
 
-                        <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
+                        <ul class="dropdown-menu user-dropdown" role="menu" *dropdownMenu>
 
                             <li>
                                 <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/settings/taxes', {tab: 'taxes', tabIndex: 0})">Settings</a>
@@ -147,7 +147,7 @@
                                 <a href="javascript:void(0)" (click)="logout()">Logout</a>
                             </li>
                             <li role="separator" class="divider" style="width:100%"></li>
-                            <li class="app_list ">
+                            <li class="app-list  ">
                                 <ul>
                                     <h6>Downloads</h6>
                                     <li>
@@ -193,7 +193,7 @@
                         <img src="assets/images/giddh-white-logo.svg" class="giddh-logo">
                     </div>
                 </a>
-                <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
+                <ul class="dropdown-menu user-dropdown" role="menu" *dropdownMenu>
                 <ng-container *ngTemplateOutlet="headDropdownMenu"></ng-container>
                 </ul>
 
@@ -289,7 +289,7 @@
                 </a>
 
 
-                <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
+                <ul class="dropdown-menu user-dropdown" role="menu" *dropdownMenu>
                     <ng-container *ngTemplateOutlet="headDropdownMenu"></ng-container>
                 </ul>
             </li>
@@ -456,7 +456,7 @@
 
 </div>
 
-<header class="clearfix header-container desktopHeader " [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen , 'ledger-page': isLedgerAccSelected }">
+<header class="clearfix header-container desktop-header " [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen , 'ledger-page': isLedgerAccSelected }">
     <nav class="navbar ">
         <div class="container-fluid pdT1 pdB1">
             <div class="navbar_header">
@@ -873,7 +873,7 @@
             <a href="javascript:void(0)" (click)="logout()">Logout</a>
         </li>
         <li role="separator" class="divider" style="width:100%"></li>
-        <li class="app_list ">
+        <li class="app-list  ">
             <ul>
                 <h6>Downloads</h6>
                 <li>

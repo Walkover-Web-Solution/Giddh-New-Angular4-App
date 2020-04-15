@@ -9,7 +9,7 @@ import { IOption } from './sh-options.interface';
     styleUrls: ['./sh-select-menu.component.scss']
 })
 export class ShSelectMenuComponent implements OnChanges {
-    @Input() public selectedValues: any[];
+    @Input() public selected-valueues: any[];
     @Input() public isOpen: boolean;
     @Input() public optionTemplate: TemplateRef<any>;
     @Input() public notFoundMsg: string;
@@ -53,15 +53,15 @@ export class ShSelectMenuComponent implements OnChanges {
     public toggleSelected(row) {
         if (this.showCheckbox) {
             if(row.value === "selectall") {
-                let isSelectAllChecked = this.selectedValues.indexOf(row);
+                let isSelectAllChecked = this.selected-valueues.indexOf(row);
 
                 this._rows.forEach(key => {
                     if(isSelectAllChecked === -1) {
-                        if(this.selectedValues.indexOf(key) === -1) {
+                        if(this.selected-valueues.indexOf(key) === -1) {
                             this.noToggleClick.emit(key);
                         }
                     } else {
-                        if(this.selectedValues.indexOf(key) !== -1) {
+                        if(this.selected-valueues.indexOf(key) !== -1) {
                             this.noToggleClick.emit(key);
                         }
                     }

@@ -186,7 +186,7 @@ tfoot td .tableSec.form-group {
 .branch-transfer-report .input-group {
     width: 230px;
 }
-.branch-transfer-report .inputWrapper {
+.branch-transfer-report .input-wrapper {
     display: block !important;
     width: 100% !important;
     position: relative;
@@ -235,28 +235,28 @@ tfoot td .tableSec.form-group {
     left: auto !important;
 }
 
-.td_in_searchBox div {
+.td-searchBox div {
     display: flex;
 }
 
-.td_in_searchBox div span {
+.td-searchBox div span {
     padding-right: 8px;
 }
 
-.td_in_searchBox div i {
+.td-searchBox div i {
     margin-top: 3px;
     color: #8080808c;
     padding-right: 8px;
     cursor: pointer;
 }
 
-.td_in_searchBox {
+.td-searchBox {
     padding: 0 0 0 10px !important;
 }
-.td_in_searchBox .input-container {
+.td-searchBox .input-container {
     position: relative;
 }
-.td_in_searchBox .input-container input {
+.td-searchBox .input-container input {
     min-height: 38px;
     width: 100%;
     padding: 8px;
@@ -264,12 +264,12 @@ tfoot td .tableSec.form-group {
     border: 0px;
 }
 
-.td_in_searchBox .input-container i {
+.td-searchBox .input-container i {
     position: absolute;
     right: 0px;
     top: 9px;
 }
-.td_in_searchBox .input-container input {
+.td-searchBox .input-container input {
     height: 50px;
     min-width: 100%;
     padding: 11px;

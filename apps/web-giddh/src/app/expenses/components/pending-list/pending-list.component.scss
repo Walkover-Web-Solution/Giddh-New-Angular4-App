@@ -34,7 +34,7 @@
 .icon-sort-asc.activeTextColor {
     color: #757bb9 !important;
 }
-.td_in_searchBox {
+.td-searchBox {
     div {
         display: flex;
         i {
@@ -49,7 +49,7 @@
     }
 }
 
-.td_in_searchBox .input-container input {
+.td-searchBox .input-container input {
     height: 50px;
     min-width: 100%;
     padding: 11px;
@@ -58,7 +58,7 @@
     border: none;
     background-color: #f2f2f2;
 }
-.td_in_searchBox {
+.td-searchBox {
     // padding: 0px !important;
     position: relative;
 }

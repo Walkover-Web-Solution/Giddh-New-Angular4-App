@@ -211,11 +211,11 @@ export class MfEditComponent implements OnInit {
         this.selectedProductName = data.label;
         this.manufacturingDetails.manufacturingMultipleOf = 1;
         if (data.value) {
-            let selectedValue = _.cloneDeep(data.value);
-            this.selectedProduct = selectedValue;
+            let selected-valueue = _.cloneDeep(data.value);
+            this.selectedProduct = selected-valueue;
             let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
-            // manufacturingObj.stockUniqueName = selectedValue;
-            manufacturingObj.uniqueName = selectedValue;
+            // manufacturingObj.stockUniqueName = selected-valueue;
+            manufacturingObj.uniqueName = selected-valueue;
             this.manufacturingDetails = manufacturingObj;
             this.store.dispatch(this.manufacturingActions.GetStockWithRate(manufacturingObj.stockUniqueName));
         }

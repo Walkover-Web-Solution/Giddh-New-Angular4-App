@@ -9,7 +9,7 @@ import { IOption } from './sh-options.interface';
     styleUrls: ['./sh-select-menu.component.scss']
 })
 export class SalesShSelectMenuComponent implements OnChanges {
-    @Input() public selectedValues: any[];
+    @Input() public selected-valueues: any[];
     @Input() public isOpen: boolean;
     @Input() public optionTemplate: TemplateRef<any>;
     @Input() public notFoundMsg: string;

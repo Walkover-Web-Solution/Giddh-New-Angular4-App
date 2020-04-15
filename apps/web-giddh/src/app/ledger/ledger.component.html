@@ -1,7 +1,7 @@
 <section class="container">
 
     <!-- region ledger table-->
-    <div class="ledgHead transactions-page mt-2 pos-rel">
+    <div class="ledger-head transactions-page mt-2 pos-rel">
 
         <!-- region ledger header -->
         <div class="clearfix row">
@@ -69,7 +69,7 @@
             <div class="col-sm-4 col-xs-12 text-right C-flex-end search-options">
                 <div class="d-flex xs-width-100 ledger-head-top">
 
-                    <div *ngIf="isLedgerAccountAllowsMultiCurrency" class="advancSearchBlock">
+                    <div *ngIf="isLedgerAccountAllowsMultiCurrency" class="advance-search-block">
                         <span class="mr-1 d-inilne-block font-14">{{ baseCurrencyDetails?.code }}</span>
 
                         <div class="toggle d-inline-block currencyToggler" data-key="disabled">
@@ -433,7 +433,7 @@
                 <!-- region debit transaction header-->
                 <table class="width100 h-table table-head hidden-xs">
                     <thead>
-                        <tr class="t-h-bg1">
+                        <tr class="thead-bg">
                             <th class="col-xs-3">
                                 <span class="cp">Date</span>
                             </th>
@@ -694,7 +694,7 @@
                 <!-- region credit transaction header-->
                 <table class="width100 h-table hidden-xs">
                     <thead>
-                        <tr class="t-h-bg1">
+                        <tr class="thead-bg">
                             <th class="col-xs-3">
                                 <span class="cp">Date</span>
                             </th>

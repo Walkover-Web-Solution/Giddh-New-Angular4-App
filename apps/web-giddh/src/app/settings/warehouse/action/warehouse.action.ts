@@ -46,16 +46,16 @@ export class WarehouseActions {
      * @memberof WarehouseActions
      */
 	@Effect()
-	private createWarehouse$ = this.action$.pipe(
+	private create-warehouse$ = this.action$.pipe(
 		ofType(WarehouseActions.CREATE_WAREHOUSE),
-		switchMap((action: CustomActions) => this.settingsWarehouseService.createWarehouse(action.payload)),
+		switchMap((action: CustomActions) => this.settingsWarehouseService.create-warehouse(action.payload)),
 		map((response: BaseResponse<any, any>) => {
 			if (response.status === 'error') {
 				this.toast.errorToast(response.message, response.code);
 				return { type: 'EmptyAction' };
 			}
 			this.toast.successToast('New warehouse created successfully', 'Success');
-			return this.createWarehouseResponse(response);
+			return this.create-warehouseResponse(response);
 		})
 	);
 
@@ -107,14 +107,14 @@ export class WarehouseActions {
 	@Effect()
 	private setDefaultWarehouse$ = this.action$.pipe(
 		ofType(WarehouseActions.SET_AS_DEFAULT_WAREHOUSE),
-		switchMap((action: CustomActions) => this.settingsWarehouseService.setAsDefaultWarehouse(action.payload)),
+		switchMap((action: CustomActions) => this.settingsWarehouseService.set-as-defaultWarehouse(action.payload)),
 		map((response: BaseResponse<any, any>) => {
 			if (response.status === 'error') {
 				this.toast.errorToast(response.message, response.code);
 				return { type: 'EmptyAction' };
 			}
 			this.toast.successToast('Warehouse updated successfully', 'Success');
-			return this.setAsDefaultWarehouseResponse(response);
+			return this.set-as-defaultWarehouseResponse(response);
 		})
 	);
 
@@ -132,7 +132,7 @@ export class WarehouseActions {
      * @returns {CustomActions} Action to create warehouse
      * @memberof WarehouseActions
      */
-	public createWarehouse(params: any): CustomActions {
+	public create-warehouse(params: any): CustomActions {
 		return { type: WarehouseActions.CREATE_WAREHOUSE, payload: params };
 	}
 
@@ -144,7 +144,7 @@ export class WarehouseActions {
      * @returns {CustomActions} Action to handle create warehouse response
      * @memberof WarehouseActions
      */
-	public createWarehouseResponse(response: BaseResponse<any, any>): CustomActions {
+	public create-warehouseResponse(response: BaseResponse<any, any>): CustomActions {
 		return { type: WarehouseActions.CREATE_WAREHOUSE_RESPONSE, payload: response };
 	}
 
@@ -218,7 +218,7 @@ export class WarehouseActions {
      * @returns {CustomActions} Action to handle set default warehouse operation
      * @memberof WarehouseActions
      */
-	public setAsDefaultWarehouse(param: any): CustomActions {
+	public set-as-defaultWarehouse(param: any): CustomActions {
 		return { type: WarehouseActions.SET_AS_DEFAULT_WAREHOUSE, payload: param };
 	}
 
@@ -229,7 +229,7 @@ export class WarehouseActions {
      * @returns {CustomActions} Action to handle set default warehouse response
      * @memberof WarehouseActions
      */
-	public setAsDefaultWarehouseResponse(response: any): CustomActions {
+	public set-as-defaultWarehouseResponse(response: any): CustomActions {
 		return { type: WarehouseActions.SET_AS_DEFAULT_WAREHOUSE_RESPONSE, payload: response };
 	}
 

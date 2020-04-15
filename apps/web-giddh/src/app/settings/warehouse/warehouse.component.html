@@ -1,5 +1,5 @@
 <ng-container *ngIf="warehouses">
-    <div class="createWarehouse" *ngIf="!warehouses?.length">
+    <div class="create-warehouse" *ngIf="!warehouses?.length">
         <div class="spinner2">
             <div class="cube1"></div>
             <div class="cube2"></div>
@@ -20,7 +20,7 @@
                     <div class="d-flex">
                         <h3>{{ warehouse.name }}</h3>
                         <div class="warehouse-options">
-                            <span class="setAsDefault" (click)="setAsDefault(warehouse, warehouseIndex)">
+                            <span class="set-as-default" (click)="set-as-default(warehouse, warehouseIndex)">
                                 <i *ngIf="warehouse.isDefault" class="icon-favorite-selected"></i>
                                 <i *ngIf="!warehouse.isDefault" class="icon-no-selected"></i>
                                 Set as Default</span>

@@ -1,11 +1,11 @@
 <div class="menu" *ngIf="isOpen && _rows" style="background-color: white" [style.min-height.px]="dropdownMinHeight">
     <!--virtual-->
     <virtual-scroll *ngIf="!showCheckbox" #v [items]="_rows" (update)="viewPortItems = $event" [style.max-height.px]="ItemHeight*4"
-        [childHeight]="viewPortItems?.length === 0?41:undefined" [selectedValues]="selectedValues"
+        [childHeight]="viewPortItems?.length === 0?41:undefined" [selected-valueues]="selected-valueues"
         [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
         [showNotFoundLinkAsDefault]="showNotFoundLinkAsDefault" [noResultLinkEnabled]="noResultLinkEnabled">
 
-        <div class="item" *ngFor="let row of viewPortItems" [class.selected]="selectedValues?.indexOf(row) !== -1"
+        <div class="item" *ngFor="let row of viewPortItems" [class.selected]="selected-valueues?.indexOf(row) !== -1"
             [class.hilighted]="row.isHilighted" [class.disabled]="row.disabled" (click)="toggleSelected(row)" [style.height.px]="ItemHeight">
             <ng-template [ngTemplateOutletContext]="{option: row}" [ngTemplateOutlet]="optionTemplate"></ng-template>
             <ng-container *ngIf="!optionTemplate">
@@ -35,16 +35,16 @@
     </virtual-scroll>
 
     <virtual-scroll *ngIf="showCheckbox" #v [items]="_rows" (update)="viewPortItems = $event" [style.max-height.px]="ItemHeight*4"
-        [childHeight]="viewPortItems?.length === 0?41:undefined" [selectedValues]="selectedValues"
+        [childHeight]="viewPortItems?.length === 0?41:undefined" [selected-valueues]="selected-valueues"
         [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
         [showNotFoundLinkAsDefault]="showNotFoundLinkAsDefault" [noResultLinkEnabled]="noResultLinkEnabled">
 
-        <div class="item" *ngFor="let row of viewPortItems" [class.selected]="selectedValues?.indexOf(row) !== -1"
+        <div class="item" *ngFor="let row of viewPortItems" [class.selected]="selected-valueues?.indexOf(row) !== -1"
             [class.hilighted]="row.isHilighted" [style.height.px]="ItemHeight">
             <ng-template [ngTemplateOutletContext]="{option: row}" [ngTemplateOutlet]="optionTemplate"></ng-template>
             <ng-container *ngIf="!optionTemplate">
                 <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                    <div class="item"><span><input type="checkbox" class="form-control" [value]="row.value" [checked]="selectedValues?.indexOf(row) !== -1" (change)="toggleSelected(row)"></span> <span (click)="toggleSelected(row)">{{row.label}}</span></div>
+                    <div class="item"><span><input type="checkbox" class="form-control" [value]="row.value" [checked]="selected-valueues?.indexOf(row) !== -1" (change)="toggleSelected(row)"></span> <span (click)="toggleSelected(row)">{{row.label}}</span></div>
                 </a>
             </ng-container>
         </div>

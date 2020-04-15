@@ -114,7 +114,7 @@
                     <th class="text-center bdrB" width="20%" colspan="2">Closing Stock</th>
                 </tr>
                 <tr class="bdrT">
-                    <th colspan="2" class="bdrR td_in_searchBox max-width-140"
+                    <th colspan="2" class="bdrR td-searchBox max-width-140"
                         (clickOutside)="clickedOutside($event,null, 'product')">
                         <div [hidden]="showProductSearch">
                             <span>Product Name</span>
@@ -128,7 +128,7 @@
                         </div>
                     </th>
                     <!-- in case of all entity with group -->
-                    <th colspan="2" class="bdrR td_in_searchBox max-width-140"
+                    <th colspan="2" class="bdrR td-searchBox max-width-140"
                         *ngIf="GroupStockReportRequest.branchDetails==='allEntity'"
                         (clickOutside)="clickedOutside($event,null, 'source')">
                         <div [hidden]="showSourceSearch">

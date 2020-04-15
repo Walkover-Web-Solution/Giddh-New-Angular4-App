@@ -13,7 +13,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" [disabled]="searchModel.adjustmentVoucherDetails.isDisabled ? 'disabled' : null"
-                                [(ngModel)]="searchModel.adjustmentVoucherDetails.selectedValue"
+                                [(ngModel)]="searchModel.adjustmentVoucherDetails.selected-valueue"
                                 placeholder="Select Account" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
                                 [options]="searchModel.adjustmentVoucherDetails.vouchers">
                             </sh-select>
@@ -26,7 +26,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <sh-select class="text-left dropdown-arrow" name="totalAmount"
-                                [(ngModel)]="searchModel.totalAmountFilter.selectedValue"
+                                [(ngModel)]="searchModel.totalAmountFilter.selected-valueue"
                                 placeholder="Select" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
                                 [options]="searchModel.totalAmountFilter.filterValues">
                             </sh-select>
@@ -40,12 +40,12 @@
                     </div>
                 </div>
 
-                <div class="row" *ngIf="searchModel?.adjustmentVoucherDetails?.selectedValue !== 'normal receipt'">
+                <div class="row" *ngIf="searchModel?.adjustmentVoucherDetails?.selected-valueue !== 'normal receipt'">
                     <label class="col-md-3">Unused Amount</label>
                     <div class="col-sm-4">
                         <div class="form-group">
                             <sh-select class="text-left dropdown-arrow" name="unusedAmount"
-                                [(ngModel)]="searchModel.unusedAmountFilter.selectedValue"
+                                [(ngModel)]="searchModel.unusedAmountFilter.selected-valueue"
                                 placeholder="Select" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
                                 [options]="searchModel.unusedAmountFilter.filterValues">
                             </sh-select>

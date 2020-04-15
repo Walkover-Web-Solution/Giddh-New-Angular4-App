@@ -790,7 +790,7 @@ ul.sub-list {
     margin-top: 5px;
 }
 
-.user_dropdown > li > a .glyphicon-menu-right {
+.user-dropdown > li > a .glyphicon-menu-right {
     font-size: 10px;
     float: right;
     padding-top: 4px;
@@ -1670,7 +1670,7 @@ header .navbar {
     font-size: 14px;
 } */
 
-.t-h-bg1 th {
+.thead-bg th {
     background: $white;
     color: #4d4d4d;
     padding: 11px !important;
@@ -1730,11 +1730,11 @@ header .navbar {
     color: #616161;
 }
 
-.ledgHead {
+.ledger-head {
     width: 100%;
 }
 
-/* .ledgHead input[type=search] {
+/* .ledger-head input[type=search] {
     min-width: 220px;
 } */
 
@@ -4647,7 +4647,7 @@ label {
     font-size: 1.2rem;
 }
 
-.top_bar h1.section_title.inline {
+.top-bar h1.section_title.inline {
     margin-top: 7px;
 }
 
@@ -5503,7 +5503,7 @@ input[type="checkbox"][disabled] {
     padding: 8px 0;
 }
 
-.top_bar {
+.top-bar {
     padding-top: 15px;
     padding-bottom: 15px;
     /* padding-left: 240px; */
@@ -6181,8 +6181,8 @@ typeahead-container .dropdown-menu li.active > a > a {
 
 /* =========================== LEDGER CSS ============================ */
 
-.ledgHead table td[class*="col-"],
-.ledgHead table td .select2-container {
+.ledger-head table td[class*="col-"],
+.ledger-head table td .select2-container {
     padding: 8px !important;
     border-bottom: 1px solid #ccc;
     border-right: 1px solid #ccc;
@@ -6198,11 +6198,11 @@ typeahead-container .dropdown-menu li.active > a > a {
     background-color: #f7f8fa;
 }
 
-.ledgHead table td.pdR25imp {
+.ledger-head table td.pdR25imp {
     padding-right: 25px !important;
 }
 
-.ledgHead.entry-popup table td[class*="col-"] {
+.ledger-head.entry-popup table td[class*="col-"] {
     padding: 0px !important;
     padding-bottom: 1px !important;
     border-bottom: 1px solid #ccc;
@@ -6216,11 +6216,11 @@ typeahead-container .dropdown-menu li.active > a > a {
     position: relative;
 }
 
-.ledgHead.entry-popup table td.pdR25imp {
+.ledger-head.entry-popup table td.pdR25imp {
     padding-right: 25px !important;
 }
 
-.ledgHead .ledger-main td[class*="col-"] {
+.ledger-head .ledger-main td[class*="col-"] {
     padding: 0px !important;
 }
 
@@ -6238,11 +6238,11 @@ table td[class*=col-]:last-child {
     border: 0;
 }
 
-.t-h-bg1 th {
+.thead-bg th {
     border-left: 0;
 }
 
-.ledgHead input[type="search"] {
+.ledger-head input[type="search"] {
     min-width: auto;
 }
 
@@ -6312,7 +6312,7 @@ table td[class*=col-]:last-child {
     padding-right: 25px !important;
 }
 
-.t-h-bg1 th {
+.thead-bg th {
     background: #eaebed;
     color: #4d4d4d;
     border-right: 1px solid #c4c6c7;
@@ -6321,7 +6321,7 @@ table td[class*=col-]:last-child {
     border-bottom: 1px solid #c4c6c7;
 }
 
-.ledger_book {
+.ledger-book{
     border: 1px solid #ccc;
     clear: both;
     /* // overflow: hidden; */
@@ -6369,11 +6369,11 @@ table td[class*=col-]:last-child {
     border: 0 !important;
 } */
 
-.select2-ledger sh-select .selectedVal {
+.select2-ledger sh-select .selected-value {
     border: 0 !important;
 }
 
-.ledgHead.entry-popup table td.select2-ledger > sh-select {
+.ledger-head.entry-popup table td.select2-ledger > sh-select {
     top: 1px;
 }
 
@@ -6459,7 +6459,7 @@ table td[class*=col-]:last-child {
     color: #7f7f7f;
 }
 
-.user_dropdown {
+.user-dropdown {
     width: 270px;
     right: 4px;
     padding: 0px;
@@ -6467,13 +6467,13 @@ table td[class*=col-]:last-child {
     left: -15px !important;
 }
 
-.user_dropdown > li > a {
+.user-dropdown > li > a {
     font-size: 13px;
     padding: 6px 15px !important;
     color: #333333;
 }
 
-.app_list > ul {
+.app-list  > ul {
     width: 100%;
     float: left;
     padding: 4px 15px;
@@ -6482,13 +6482,13 @@ table td[class*=col-]:last-child {
     /* margin: 10px 0; */
 }
 
-.app_list > ul h6 {
+.app-list  > ul h6 {
     margin-bottom: 10px;
     font-family: $opensans-semibold;
     font-size: 13px;
 }
 
-.app_list > ul li {
+.app-list  > ul li {
     list-style-type: none;
     float: left;
     width: 50%;
@@ -6514,7 +6514,7 @@ table td[class*=col-]:last-child {
     color: #666666;
 }
 
-.app_list > ul li a {
+.app-list  > ul li a {
     padding: 3px 0;
     color: #555;
     display: block;
@@ -6522,11 +6522,11 @@ table td[class*=col-]:last-child {
     font-size: 12px;
 }
 
-.app_list > ul li a > i {
+.app-list  > ul li a > i {
     margin-right: 2px;
 }
 
-.app_list > ul li a:hover {
+.app-list  > ul li a:hover {
     color: #000;
     background: none;
 }
@@ -6934,11 +6934,11 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .cmp:hover,
-.user_dropdown > li a:hover .userName_wrap small {
+.user-dropdown > li a:hover .userName_wrap small {
     color: #666;
 }
 
-.user_dropdown > li a:hover {
+.user-dropdown > li a:hover {
     color: $chetwode-blue;
     background: #eeeff9;
 }
@@ -7723,7 +7723,7 @@ app-header {
 }
 
 /* my css */
-.new-ledger-text-right .inputWrapper .form-control {
+.new-ledger-text-right .input-wrapper .form-control {
     text-align: right !important;
 }
 .box .company-box .inner-company-box ul > li .tooltip {
@@ -7791,12 +7791,12 @@ app-header {
 
 /* my css */
 
-.ledger_book .right-col-new .entry-modal {
+.ledger-book.right-col-new .entry-modal {
     width: 165%;
     left: -65%;
 }
 
-.ledger_book .left-col-new .entry-modal {
+.ledger-book.left-col-new .entry-modal {
     width: 165%;
 }
 
@@ -7978,7 +7978,7 @@ div#getGroupModal {
     animation-name: fadeIn;
 }
 
-.invoiceFooter {
+.invoice-footer {
     display: flex;
     padding: 20px;
     background: $white;
@@ -7991,7 +7991,7 @@ div#getGroupModal {
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
 }
 
-.menu_open .invoiceFooter {
+.menu_open .invoice-footer {
     left: 215px;
     display: flex;
     padding: 20px;
@@ -8077,11 +8077,11 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     padding-left: 0 !important;
 }
 
-/* .custom-select input.form-control.selectedVal.cp {
+/* .custom-select input.form-control.selected-value.cp {
   padding-right: 0 !important;
 } */
 
-.welcome-container .selectBox .custom-select input.form-control.selectedVal.cp,
+.welcome-container .selectBox .custom-select input.form-control.selected-value.cp,
 .welcome-container .selectBox input,
 .welcome-container .selectBox textarea {
     color: #333;
@@ -8146,7 +8146,7 @@ span.red-text {
     overflow-y: auto;
 }
 
-.ledger_book .tooltip-inner {
+.ledger-book.tooltip-inner {
     word-break: break-word !important;
     white-space: pre-line !important;
 }
@@ -8359,7 +8359,7 @@ ul.dropdown-menu p.lead.pd {
     border-color: #5b64c9;
 }
 
-.asidePanelLedger button.btn.btn-lg.btn-primary {
+.aside-panel-ledger button.btn.btn-lg.btn-primary {
     min-width: 150px;
     font-size: 16px;
 }
@@ -8508,7 +8508,7 @@ button.btn.btn-filter {
     margin-left: 10px !important;
 }
 
-.td_in_searchBox div i.icon-search:hover {
+.td-searchBox div i.icon-search:hover {
     color: $deep-sky-blue !important;
 }
 
@@ -8522,16 +8522,16 @@ button.btn.btn-filter {
     color: red;
 }
 
-.aside-pane-form #asidePaneFormTabs ul.nav.nav-tabs {
+.aside-pane-form #aside-pane-form-tabs ul.nav.nav-tabs {
     padding: 0 !important;
     background-color: $white !important;
 }
 
-.aside-pane-form #asidePaneFormTabs .nav > li > a {
+.aside-pane-form #aside-pane-form-tabs .nav > li > a {
     padding-bottom: 10px !important;
 }
 
-// .custom-tabs#asidePaneFormTabs .nav.nav-tabs > li {
+// .custom-tabs#aside-pane-form-tabs .nav.nav-tabs > li {
 //     padding-right: 0;
 // }
 .mangeAccountPopup .modal-dialog.modal-lg {
@@ -8639,7 +8639,7 @@ p.remvBrnchName {
     display: inline;
 }
 
-.asidePanelLedger {
+.aside-panel-ledger {
     display: flex !important;
     vertical-align: middle;
     justify-content: center !important;
@@ -8650,7 +8650,7 @@ p.remvBrnchName {
     transform: translate(0) !important;
 }
 
-.asidePanelLedger .btn-lg:hover {
+.aside-panel-ledger .btn-lg:hover {
     background-color: #5b64c9 !important;
     border-color: #5b64c9 !important;
     color: $white !important;
@@ -8687,7 +8687,7 @@ p.remvBrnchName {
     min-width: 90px !important;
 }
 
-#asidePaneFormTabs.custom-tabs .nav.nav-tabs {
+#aside-pane-form-tabs.custom-tabs .nav.nav-tabs {
     border-bottom: 1px solid $gainsboro;
     padding: 0 0px 0 0 !important;
     background-color: transparent;
@@ -9130,7 +9130,7 @@ input.checkbox-custom[type="checkbox"] {
 }
 
 @media (max-width: 1199px) {
-    .ledger_book .left-col-new .entry-modal {
+    .ledger-book.left-col-new .entry-modal {
         width: 100%;
     }
 }
@@ -9178,7 +9178,7 @@ input.checkbox-custom[type="checkbox"] {
     .xs-width-100 {
         width: 100%;
     }
-    .ledger_book .right-col-new .entry-modal {
+    .ledger-book.right-col-new .entry-modal {
         width: 100%;
         left: 0%;
     }
@@ -9227,7 +9227,7 @@ input.checkbox-custom[type="checkbox"] {
         width: 100%;
         top: 0;
     }
-    .user_dropdown > li > a .glyphicon-menu-right {
+    .user-dropdown > li > a .glyphicon-menu-right {
         transform: rotate(90deg);
     }
     #settingTab .tab-container .nav.nav-tabs {
@@ -9240,15 +9240,15 @@ input.checkbox-custom[type="checkbox"] {
         width: 100%;
         top: 85px;
     }
-    .ledgHead.entry-popup .custom-tabs .nav.nav-tabs {
+    .ledger-head.entry-popup .custom-tabs .nav.nav-tabs {
         position: relative;
         width: 100%;
         top: 0;
     }
-    .custom-tabs .top_bar {
+    .custom-tabs .top-bar {
         margin-top: 40px;
     }
-    .custom-tabs.hide-header .top_bar {
+    .custom-tabs.hide-header .top-bar {
         margin-top: 0;
     }
     #settingTab setting-integration .tab-container .nav.nav-tabs,
@@ -9262,7 +9262,7 @@ input.checkbox-custom[type="checkbox"] {
     .custom-tabs .nav.nav-tabs > li a {
         padding-top: 7px;
     }
-    .ledgHead .custom-tabs .nav.nav-tabs {
+    .ledger-head .custom-tabs .nav.nav-tabs {
         left: 0;
     }
     .daterangepicker.dropdown-menu.show-calendar {
@@ -9317,7 +9317,7 @@ input.checkbox-custom[type="checkbox"] {
     .cText span.cName {
         color: $white !important;
     }
-    .user_dropdown {
+    .user-dropdown {
         left: 0px !important;
     }
     .xs-d-block {
@@ -9342,7 +9342,7 @@ input.checkbox-custom[type="checkbox"] {
         float: left;
     }
 
-    .custom-tabs .top_bar {
+    .custom-tabs .top-bar {
         padding-top: 10px;
         padding-bottom: 10px;
     }

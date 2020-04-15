@@ -118,7 +118,7 @@ i.close.icon.clear:hover::after {
     border: 1px solid #ccc;
 }
 
-.sh-select-disabled .selectedVal,
+.sh-select-disabled .selected-value,
 .sh-select-disabled .form-control,
 .sh-select-disabled .form-control[readonly] {
     background: #eee !important;
@@ -126,7 +126,7 @@ i.close.icon.clear:hover::after {
     cursor: not-allowed;
 }
 
-.selectedVal {
+.selected-value {
     border: 1px solid $gainsboro !important;
     padding-right: 22px !important;
     background: #fff !important;

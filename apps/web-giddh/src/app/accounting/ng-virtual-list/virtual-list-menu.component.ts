@@ -9,7 +9,7 @@ import { VirtualScrollComponent } from '../../theme/ng-virtual-select/virtual-sc
     styleUrls: ['./virtual-list-menu.component.scss']
 })
 export class AVAccountListComponent implements OnChanges {
-    @Input() public selectedValues: any[];
+    @Input() public selected-valueues: any[];
     @Input() public isOpen: boolean;
     @Input() public optionTemplate: TemplateRef<any>;
     @Input() public notFoundMsg: string;

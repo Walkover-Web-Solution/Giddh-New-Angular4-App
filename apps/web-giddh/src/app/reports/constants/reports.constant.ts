@@ -24,14 +24,14 @@ export const ADVANCE_RECEIPT_ADVANCE_SEARCH_AMOUNT_FILTERS = [
 /** Interface for advance search voucher field */
 export interface AdjustmentVoucher {
     vouchers: Array<any>;
-    selectedValue: string;
+    selected-valueue: string;
     isDisabled?: boolean;
 }
 
 /** Interface for amount search voucher field */
 export interface AmountFilter {
     filterValues: Array<any>;
-    selectedValue: string;
+    selected-valueue: string;
     amount: any;
 }
 

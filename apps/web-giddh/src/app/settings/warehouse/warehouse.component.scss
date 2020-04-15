@@ -1,25 +1,25 @@
 @import "../../../assets/css/color.scss";
 
-.createWarehouse {
+.create-warehouse {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: calc(100vh - 250px);
 }
-.createWarehouse h2 {
+.create-warehouse h2 {
     font-size: 20px;
     font-family: "opensans-semibold";
     margin: 10px 0;
 }
-.createWarehouse p {
+.create-warehouse p {
     font-size: 14px;
     margin-bottom: 10px;
 }
-.createWarehouse p span {
+.create-warehouse p span {
     color: #5b64c9;
 }
-.createWarehouse img {
+.create-warehouse img {
     margin-bottom: 20px;
 }
 .warehouseCard {
@@ -69,7 +69,7 @@
     width: 66%;
     word-break: break-all;
 }
-span.setAsDefault {
+span.set-as-default {
     background-color: $gainsboro;
     padding: 5px 10px;
     font-size: 14px;
@@ -97,7 +97,7 @@ span.setAsDefault {
     color: #8f9091;
     font-size: 12px;
 }
-.setAsDefault i.icon-favorite-selected {
+.set-as-default i.icon-favorite-selected {
     color: #5b64c9;
 }
 .createNewWarehouseBtn {

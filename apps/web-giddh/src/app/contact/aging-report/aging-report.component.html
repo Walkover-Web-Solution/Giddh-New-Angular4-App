@@ -1,6 +1,6 @@
 <div class="container-fluid">
 
-    <div class="top_bar clearfix">
+    <div class="top-bar clearfix">
 
         <div class="form-inline">
 
@@ -47,16 +47,12 @@
 
     <div class="contact-main agingPage ">
         <div class=" pdB2 mrB1 onMobileView mobilecardwrapper">
-
-
             <div *ngIf="!isMobileScreen" class="table-responsive">
                 <!-- <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true"> -->
                 <ng-container *ngTemplateOutlet='mainTable'></ng-container>
                 <!-- </perfect-scrollbar> -->
             </div>
-
             <div *ngIf="isMobileScreen">
-
                 <div class="text-center top-aging-table-top pd1">
                     <p (click)="openAgingDropDown()"><strong>Due in Last days </strong></p>
                     <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions"
@@ -64,10 +60,6 @@
                 </div>
                 <ng-container *ngTemplateOutlet='mainTable'></ng-container>
             </div>
-
-
-
-
         </div>
     </div>
 </div>

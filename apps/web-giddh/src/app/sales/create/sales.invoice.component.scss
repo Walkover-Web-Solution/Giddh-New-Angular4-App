@@ -473,7 +473,7 @@ textarea:focus {
     max-width: 600px;
 }
 
-.spcl_dropdown {
+.more-dropdown {
     border: 0 !important;
     background: transparent !important;
     box-shadow: none !important;
@@ -626,7 +626,7 @@ form label {
 // .billing-address input, .billing-address textarea{
 //     background-color: transparent !important;
 // }
-.billing-address .selectedVal {
+.billing-address .selected-value {
     border: none !important;
     padding-right: 2px !important;
     background-color: transparent !important;
@@ -634,7 +634,7 @@ form label {
     height: 28px;
 }
 
-input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
+input.form-control.selected-value.cp.bottom-border-only.ng-star-inserted {
     background-color: transparent !important;
     padding-left: 0 !important;
 }
@@ -651,7 +651,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 }
 
 .billing-address
-    input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
+    input.form-control.selected-value.cp.bottom-border-only.ng-star-inserted {
     background: transparent !important;
     padding-left: 0 !important;
 }
@@ -1212,6 +1212,6 @@ section.sales-invoiceBGwhite {
     width: 100% !important;
 }
 
-::ng-deep .billing-address sales-sh-select .selectedVal {
+::ng-deep .billing-address sales-sh-select .selected-value {
     padding-right: 0 !important;
 }

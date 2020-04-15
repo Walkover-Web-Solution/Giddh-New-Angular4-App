@@ -70,7 +70,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     public isOpen: boolean;
     public filter: string = '';
     public filteredData: IOption[] = [];
-    public _selectedValues: IOption[] = [];
+    public _selected-valueues: IOption[] = [];
     public _options: IOption[] = [];
     public defaultValueUpdated: boolean = false;
     /** Keys. **/
@@ -97,11 +97,11 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         this.updateRows(val);
     }
 
-    get selectedValues(): any[] {
-        return this._selectedValues;
+    get selected-valueues(): any[] {
+        return this._selected-valueues;
     }
 
-    set selectedValues(val: any[]) {
+    set selected-valueues(val: any[]) {
         if (!val) {
             val = [];
         }
@@ -110,9 +110,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             val = [val];
         }
         if (val.length > 0 && this.rows) {
-            this._selectedValues = this.rows.filter((f: any) => val.findIndex(p => p === f.label || p === f.value) !== -1);
+            this._selected-valueues = this.rows.filter((f: any) => val.findIndex(p => p === f.label || p === f.value) !== -1);
         } else {
-            this._selectedValues = val;
+            this._selected-valueues = val;
         }
     }
 
@@ -124,8 +124,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     public onDocumentClick(event) {
         if (this.isOpen && !this.element.nativeElement.contains(event.target)) {
             this.isOpen = false;
-            if (this.selectedValues && this.selectedValues.length === 1 && !this.multiple) {
-                this.filter = this.selectedValues[0].label;
+            if (this.selected-valueues && this.selected-valueues.length === 1 && !this.multiple) {
+                this.filter = this.selected-valueues[0].label;
             } else if (this.doNotReset && this.filter !== '') {
                 this.propagateChange(this.filter);
             } else {
@@ -232,15 +232,15 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         this.clearFilter();
 
         if (!this.multiple) {
-            if (this._selectedValues[0] && this._selectedValues[0].value === item.value) {
+            if (this._selected-valueues[0] && this._selected-valueues[0].value === item.value) {
                 callChanges = false;
             }
         }
 
         if (callChanges && !this.multiple) {
             // check last selected value is there
-            if (this.selectedValues[0]) {
-                this.previousChange.emit(this.selectedValues[0]);
+            if (this.selected-valueues[0]) {
+                this.previousChange.emit(this.selected-valueues[0]);
             }
         }
 
@@ -256,16 +256,16 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     }
 
     public selectSingle(item) {
-        this._selectedValues.splice(0, this.rows.length);
-        this._selectedValues.push(item);
+        this._selected-valueues.splice(0, this.rows.length);
+        this._selected-valueues.push(item);
         this.hide();
     }
 
     public selectMultiple(item) {
-        if (this.selectedValues.indexOf(item) === -1) {
-            this.selectedValues.push(item);
+        if (this.selected-valueues.indexOf(item) === -1) {
+            this.selected-valueues.push(item);
         } else {
-            this.selectedValues.splice(this.selectedValues.indexOf(item), 1);
+            this.selected-valueues.splice(this.selected-valueues.indexOf(item), 1);
         }
     }
 
@@ -287,7 +287,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         this.focusFilter();
         this.onShow.emit();
         if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-            let item = this.rows.find(p => p.value === (this._selectedValues.length > 0 ? this._selectedValues[0] : (this.rows.length > 0 ? this.rows[0].value : null)));
+            let item = this.rows.find(p => p.value === (this._selected-valueues.length > 0 ? this._selected-valueues[0] : (this.rows.length > 0 ? this.rows[0].value : null)));
             if (item !== null) {
                 this.menuEle.virtualScrollElm.scrollInto(item);
             }
@@ -353,8 +353,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         if (event) {
             if (event.relatedTarget && (!this.ele.nativeElement.contains(event.relatedTarget))) {
                 this.isOpen = false;
-                if (this.selectedValues && this.selectedValues.length === 1) {
-                    this.filter = this.selectedValues[0].label;
+                if (this.selected-valueues && this.selected-valueues.length === 1) {
+                    this.filter = this.selected-valueues[0].label;
                 } else {
                     this.clearFilter();
                 }
@@ -366,8 +366,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             this.onHide.emit();
         } else {
             this.isOpen = false;
-            if (this.selectedValues && this.selectedValues.length === 1) {
-                this.filter = this.selectedValues[0].label;
+            if (this.selected-valueues && this.selected-valueues.length === 1) {
+                this.filter = this.selected-valueues[0].label;
             } else {
                 this.clearFilter();
             }
@@ -395,11 +395,11 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
         // send last cleared value
         if (this.multiple) {
-            this.onClear.emit(this._selectedValues);
+            this.onClear.emit(this._selected-valueues);
         } else {
             let newValue: IOption;
-            if (this.selectedValues.length > 0) {
-                newValue = this.selectedValues[0];
+            if (this.selected-valueues.length > 0) {
+                newValue = this.selected-valueues[0];
             }
             if (!newValue) {
                 newValue = {
@@ -412,7 +412,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             this.onClear.emit(newValue);
         }
 
-        this.selectedValues = [];
+        this.selected-valueues = [];
         this.onChange();
         this.clearFilter();
         this.hide();
@@ -455,7 +455,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     //////// ControlValueAccessor imp //////////
 
     public writeValue(value: any) {
-        this.selectedValues = value;
+        this.selected-valueues = value;
         if (!this.cdRef['destroyed']) {
             this.cdRef.detectChanges();
         }
@@ -475,7 +475,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
     public clearSingleSelection(event, option: IOption) {
         event.stopPropagation();
-        this.selectedValues = this.selectedValues.filter(f => f.value !== option.value).map(p => p.value);
+        this.selected-valueues = this.selected-valueues.filter(f => f.value !== option.value).map(p => p.value);
         this.onChange();
     }
     public openListIfNotOpened(ev) {
@@ -487,13 +487,13 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     public onChange() {
         if (this.multiple) {
             let newValues: string[];
-            newValues = this._selectedValues.map(p => p.value);
+            newValues = this._selected-valueues.map(p => p.value);
             this.propagateChange(newValues);
-            this.selected.emit(this._selectedValues);
+            this.selected.emit(this._selected-valueues);
         } else {
             let newValue: IOption;
-            if (this.selectedValues.length > 0) {
-                newValue = this.selectedValues[0];
+            if (this.selected-valueues.length > 0) {
+                newValue = this.selected-valueues[0];
             }
             if (!newValue) {
                 newValue = {

@@ -3,14 +3,14 @@
 
 
     <!--region multiple-->
-    <!-- <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" style="background: white;" class="bdr">
-          <ng-container *ngIf="selectedValues?.length">
-              <span class="chip" *ngFor="let sl of selectedValues">
+    <!-- <div *ngIf="multiple" [ngClass]="{'has-item':selected-valueues?.length}" style="background: white;" class="bdr">
+          <ng-container *ngIf="selected-valueues?.length">
+              <span class="chip" *ngFor="let sl of selected-valueues">
                   {{ sl.label }}
                   <span class="chipClosebtn" (mousedown)="clearSingleSelection($event, sl)" (click)="clearSingleSelection($event, sl)">&times;</span>
               </span>
           </ng-container>
-          <input type="text" style="opacity: 0 !important;position: absolute" class="pdL1" [ngClass]="{'hasValue':filter?.length}" #inputFilter (click)="show($event);" (blur)="filterInputBlur($event)" [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">
+          <input type="text" style="opacity: 0 !important;position: absolute" class="pdL1" [ngClass]="{'hasValue':filter?.length}" #inputFilter (click)="show($event);" (blur)="filterInputBlur($event)" [placeholder]="selected-valueues?.length > 0 ? filter : placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">
       </div> -->
     <!--endregion-->
 
@@ -19,20 +19,20 @@
           style="padding-right: 22px !important;opacity: 0;position: absolute"> -->
 
     <!-- <div (click)="show($event);" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
-          <ng-container *ngIf="selectedValues?.length">
+          <ng-container *ngIf="selected-valueues?.length">
               <div *ngIf="!multiple">
-                  <input type="text" readonly value="{{selectedValues[0].label}}" class="form-control selectedVal cp" />
+                  <input type="text" readonly value="{{selected-valueues[0].label}}" class="form-control selected-value cp" />
               </div>
           </ng-container>
-          <ng-container *ngIf="!selectedValues?.length">
+          <ng-container *ngIf="!selected-valueues?.length">
               <input type="text" class="form-control" [placeholder]="placeholder" [value]="filter" style="padding-right: 22px !important;" />
           </ng-container>
       </div> -->
     <!--endregion-->
 
     <!-- </div> -->
-    <!-- <span class="clear" *ngIf="showClear && selectedValues.length > 0" (click)="$event.stopPropagation();clear();">&times;</span> -->
-    <virtual-list-menu #menuEle [isOpen]="isOpen" [rows]="rows" [selectedValues]="selectedValues"
+    <!-- <span class="clear" *ngIf="showClear && selected-valueues.length > 0" (click)="$event.stopPropagation();clear();">&times;</span> -->
+    <virtual-list-menu #menuEle [isOpen]="isOpen" [rows]="rows" [selected-valueues]="selected-valueues"
         [optionTemplate]="optionTemplate" (noToggleClick)="toggleSelected($event)"
         (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink"
         [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight"

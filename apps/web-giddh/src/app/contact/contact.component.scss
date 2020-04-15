@@ -491,30 +491,30 @@ span.inputAddon {
     }
 }
 
-.td_in_searchBox div {
+.td-searchBox div {
     display: flex;
 }
 
-.td_in_searchBox div span {
+.td-searchBox div span {
     flex: 1 1 auto;
     padding-left: 8px;
 }
 
-.td_in_searchBox div i {
+.td-searchBox div i {
     margin-top: 3px;
     color: #8080808c;
     padding-right: 8px;
     cursor: pointer;
 }
 
-.td_in_searchBox {
+.td-searchBox {
     padding: 0px !important;
     position: relative;
 }
-.td_in_searchBox .input-container {
+.td-searchBox .input-container {
     position: relative;
 }
-.td_in_searchBox .input-container input {
+.td-searchBox .input-container input {
     min-height: 38px;
     width: 100%;
     padding: 8px;
@@ -522,7 +522,7 @@ span.inputAddon {
     border: 0px;
 }
 
-.td_in_searchBox .input-container i {
+.td-searchBox .input-container i {
     position: absolute;
     right: 0px;
     top: 9px;

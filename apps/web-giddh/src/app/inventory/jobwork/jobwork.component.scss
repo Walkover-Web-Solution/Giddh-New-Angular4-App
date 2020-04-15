@@ -25,13 +25,13 @@
 .flex-fill {
     flex: 1 1 auto;
 }
-.td_in_searchBox div {
+.td-searchBox div {
     display: flex;
 }
-.td_in_searchBox div span {
+.td-searchBox div span {
     padding-left: 13px;
 }
-.td_in_searchBox div i {
+.td-searchBox div i {
     margin-top: 1px;
     color: #757bb9;
     padding-right: 8px;
@@ -40,10 +40,10 @@
     align-items: center;
     padding-left: 10px;
 }
-.td_in_searchBox {
+.td-searchBox {
     padding: 0px !important;
 }
-.td_in_searchBox .input-container input {
+.td-searchBox .input-container input {
     height: 50px;
     min-width: 100%;
     padding: 11px;
@@ -52,7 +52,7 @@
     border: none;
     background-color: #f2f2f2;
 }
-.td_in_searchBox .input-container i {
+.td-searchBox .input-container i {
     position: absolute;
     right: 0px;
     top: 10px;
@@ -68,7 +68,7 @@
 }
 .icon-pointer .glyphicon:hover {
 }
-.td_in_searchBox div i:hover {
+.td-searchBox div i:hover {
     color: #999;
 }
 
