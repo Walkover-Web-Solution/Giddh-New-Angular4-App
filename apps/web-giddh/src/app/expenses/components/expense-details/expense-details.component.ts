@@ -259,10 +259,11 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         delete ledgerRequest['pettyCashEntryStatus'];
         delete ledgerRequest['pettyCashEntryStatus'];
         delete ledgerRequest['othersCategory'];
+        ledgerRequest.attachedFileUniqueNames = [];
         if (this.accountEntryPettyCash && this.accountEntryPettyCash.attachedFileUniqueNames && this.accountEntryPettyCash.attachedFileUniqueNames.length) {
-            ledgerRequest.attachedFileUniqueNames = this.accountEntryPettyCash.attachedFileUniqueNames;
+            ledgerRequest.attachedFileUniqueNames.push(this.accountEntryPettyCash.attachedFileUniqueNames[0]);
         } else {
-            ledgerRequest.attachedFileUniqueNames = (this.DownloadAttachedImgResponse && this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0].uniqueName : '';
+            ledgerRequest.attachedFileUniqueNames.push((this.DownloadAttachedImgResponse && this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0].uniqueName : '');
         }
         if (this.accountEntryPettyCash.attachedFile) {
             ledgerRequest.attachedFileName = this.accountEntryPettyCash.attachedFile;
