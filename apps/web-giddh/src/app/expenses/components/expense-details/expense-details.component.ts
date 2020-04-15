@@ -97,7 +97,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     public approveEntryRequestInProcess: boolean = false;
     public selectedEntryForApprove: ExpenseResults;
     /** unique name of any attached image   */
-    public imgAttachedFileName = '';
+    public imgAttachedFileName: string = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private modalService: BsModalService,
@@ -262,11 +262,11 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         delete ledgerRequest['othersCategory'];
 
         if (this.accountEntryPettyCash && this.accountEntryPettyCash.attachedFileUniqueNames && this.accountEntryPettyCash.attachedFileUniqueNames.length) {
-            ledgerRequest.attachedFile =this.accountEntryPettyCash.attachedFileUniqueNames[0];
+            ledgerRequest.attachedFile = this.accountEntryPettyCash.attachedFileUniqueNames[0];
         } else {
             ledgerRequest.attachedFile = (this.DownloadAttachedImgResponse && this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0].uniqueName : '';
         }
-        if (this.accountEntryPettyCash.attachedFile) {
+        if (this.accountEntryPettyCash && this.accountEntryPettyCash.attachedFile) {
             ledgerRequest.attachedFileName = this.accountEntryPettyCash.attachedFile;
         } else {
             ledgerRequest.attachedFileName = this.imgAttachedFileName;
@@ -367,7 +367,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
                 let img = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
                 this.DownloadAttachedImgResponse.push(output.file.response.body);
                 this.imageURL.push(img);
-                this.imgAttachedFileName =output.file.response.body.name;
+                this.imgAttachedFileName = output.file.response.body.name;
                 // this.customTemplate.sections.footer.data.imageSignature.label = output.file.response.body.uniqueName;
                 this._toasty.successToast('file uploaded successfully.');
                 // this.startUpload();
