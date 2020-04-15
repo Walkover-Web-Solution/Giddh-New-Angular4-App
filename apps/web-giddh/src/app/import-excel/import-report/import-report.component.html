@@ -5,7 +5,8 @@
             <button class="btn btn-pink" style="margin: 0 !important;" (click)="importFiles()">Import Files</button>
         </div>
 
-        <div class="mt-15 import-data-tble row">
+        <div class="mt-15 import-data-tble row
+        ">
 
             <div class="no-data h-100" *ngIf="!importStatusResponse?.results?.length">
                 <h2>No Import Status Available.</h2>
@@ -21,7 +22,7 @@
                             (click)="downloadItem(item)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="13.333" height="15" viewBox="0 0 13.333 15"
                                 class="download-import">
-                                <path class=""
+                                <path
                                     d="M77.9,363.333H91.233V365H77.9Zm10-5-3.333,3.333-3.333-3.333h2.5V350H85.4v8.333Z"
                                     transform="translate(-77.9 -350)" />
                             </svg>

@@ -47,9 +47,7 @@
     border-bottom: 1px solid $gainsboro;
     font-family: opensans-semibold;
     font-size: 14px;
-    border-top: 1px solid $gainsboro; // position: sticky !important;
-    // top: 60px;
-    // z-index: 999;
+    border-top: 1px solid $gainsboro;
 }
 
 .basic > tbody > tr:hover td {
@@ -1046,11 +1044,6 @@ ul.sub-list {
     border: 0px;
     margin-bottom: 0px;
 }
-
-// .aging-table > thead > tr > th,
-// .aging-table tr > td {
-//     min-width: 145px;
-// }
 
 .d-none {
     display: none;

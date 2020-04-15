@@ -195,9 +195,7 @@ a[vr-item]:focus {
 .left_fixed_header > li > a.active .label,
 .left_fixed_header > li > a.active .label > span {
     color:$nero;
-    // font-family:$opensans-semibold;
- 
-}
+ }
 
 .left_fixed_header > li > a .label {
     display: table-cell;
@@ -208,7 +206,6 @@ a[vr-item]:focus {
     color: #262626;
     letter-spacing: 0.6px;
     font-weight: normal;
-//    font-family: $opensans-regular;
     padding: 0;
 }
 
