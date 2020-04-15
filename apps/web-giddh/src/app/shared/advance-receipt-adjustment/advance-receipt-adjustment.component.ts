@@ -377,6 +377,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.toaster.errorToast(this.exceedDueErrorMessage);
             isValid = false;
         }
+        this.adjustVoucherForm.adjustments.map(item => {
+            if (item && item.voucherDate) {
+                if (typeof item.voucherDate === 'string') {
+                    item.voucherDate = item.voucherDate.replace(/\//g, '-');
+                }
+            }
+        });
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 1) {
             this.adjustVoucherForm.adjustments.forEach((item, index) => {
                 if (!item.voucherNumber) {

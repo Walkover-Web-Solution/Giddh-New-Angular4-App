@@ -3,7 +3,7 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { GST_RECONCILE_API } from './apiurls/GstReconcile.api';
@@ -17,7 +17,7 @@ export class GstReconcileService {
     private companyUniqueName: string;
     private user: UserDetails;
 
-    constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService,
+    constructor(private errorHandler: GiddhErrorHandler, public _http: HttpWrapperService,
         private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 

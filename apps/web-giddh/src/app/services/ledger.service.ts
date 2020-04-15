@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { LEDGER_API } from './apiurls/ledger.api';
 import { BlankLedgerVM } from '../ledger/ledger.vm';
 import { GeneralService } from './general.service';
@@ -22,7 +22,7 @@ export class LedgerService {
     private user: UserDetails;
 
     constructor(
-        private errorHandler: ErrorHandler,
+        private errorHandler: GiddhErrorHandler,
         public _http: HttpWrapperService,
         private _httpClient: HttpClient,
         public _router: Router,

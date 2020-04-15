@@ -1922,12 +1922,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateOtherTaxes(entry.otherTaxModal, entry);
         this.calculateTcsTdsTotal();
         this.calculateBalanceDue();
-        /** In case of sales invoice if invoice amount less with advance receipts adjusted amount then open Advane receipts adjust modal */
-        if (this.isSalesInvoice && this.totalAdvanceReceiptsAdjustedAmount && this.isUpdateMode) {
-            if (this.invFormData.voucherDetails.grandTotal < this.totalAdvanceReceiptsAdjustedAmount) {
-                this.isAdjustAdvanceReceiptModalOpen();
-            }
-        }
+        // /** In case of sales invoice if invoice amount less with advance receipts adjusted amount then open Advane receipts adjust modal */
+        // if (this.isSalesInvoice && this.totalAdvanceReceiptsAdjustedAmount && this.isUpdateMode) {
+        //     if (this.getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment() < 0) {
+        //         this.isAdjustAdvanceReceiptModalOpen();
+        //     }
+        // }
     }
 
     public calculateTotalDiscount() {
@@ -2713,6 +2713,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let requestObject: any = this.prepareDataForApi();
         if (!requestObject) {
             return;
+        }
+        /** In case of sales invoice if invoice amount less with advance receipts adjusted amount then open Advane receipts adjust modal */
+        if (this.isSalesInvoice && this.totalAdvanceReceiptsAdjustedAmount && this.isUpdateMode) {
+            if (this.getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment() < 0) {
+                this.isAdjustAdvanceReceiptModalOpen();
+                return;
+            }
         }
         if (this.isProformaInvoice || this.isEstimateInvoice) {
             this.store.dispatch(this.proformaActions.updateProforma(requestObject));
