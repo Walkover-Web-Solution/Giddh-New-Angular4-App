@@ -1,5 +1,23 @@
 /*td-in-searchbox_style*/
 @import "../../../assets/css/color.scss";
+.reccuring-form{
+    flex: 1;
+}
+.search-icon-block{
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    margin-left: 10px;
+    border: 1px solid $gainsboro;
+    border-radius: 2px;
+    color:gray;
+    background: #fff;
+    align-items: center;
+    justify-content: center;
+}
 .td_in_searchBox div {
     display: flex;
 }
@@ -83,17 +101,13 @@
 .btn-link-2 {
     color: #1c1c1c;
 }
-// table{
-//   position: relative;
-// }
-// .basic > thead > tr > th{
-//     position: sticky !important;
-//     top: 59px;
-//     z-index: 99;
-//     box-shadow: 1px 1px 0 #d9d9d9;
-// }
-// responsive
 @media (max-width: 768px) {
+    .form-view .input-group{
+        display: flex;
+    }
+    .reccuring-form{
+        display: none;
+    }
     .justify-content-sm {
         justify-content: left !important;
     }

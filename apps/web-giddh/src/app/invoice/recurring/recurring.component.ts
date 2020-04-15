@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { FormControl } from '@angular/forms';
 import { RecurringInvoice, RecurringInvoices } from '../../models/interfaces/RecurringInvoice';
@@ -9,7 +9,7 @@ import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import * as moment from 'moment';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { BsDatepickerDirective } from 'ngx-bootstrap';
+import { BsDatepickerDirective, ModalDirective, BsModalRef, ModalOptions , BsModalService } from 'ngx-bootstrap';
 import { GeneralService } from '../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 @Component({
@@ -72,7 +72,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
     constructor(private store: Store<AppState>,
         private cdr: ChangeDetectorRef,
         private _generalService: GeneralService,
-        private _invoiceActions: InvoiceActions, private _breakPointObservar: BreakpointObserver) {
+        private _invoiceActions: InvoiceActions, private _breakPointObservar: BreakpointObserver , private modalService: BsModalService) {
         this.recurringData$ = this.store.pipe(takeUntil(this.destroyed$), select(s => s.invoice.recurringInvoiceData.recurringInvoices));
         this.recurringData$.subscribe(p => {
             if (p && p.recurringVoucherDetails) {
@@ -80,7 +80,9 @@ export class RecurringComponent implements OnInit, OnDestroy {
             }
         });
     }
-
+    openModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(template);
+    }
 
     public ngOnInit() {
         this.invoiceTypeOptions = [

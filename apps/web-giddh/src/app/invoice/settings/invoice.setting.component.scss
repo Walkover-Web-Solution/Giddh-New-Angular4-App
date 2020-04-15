@@ -38,8 +38,11 @@
 .estimate-tab {
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
     margin: 0 15px;
+    label{
+        font-size: 14px;
+    }
 }
-
+ 
 h4 > span {
     color: #939292 !important;
     font-size: 12px !important;
@@ -161,6 +164,9 @@ span.viasocket a {
 }
 
 @media (max-width: 767px) {
+    .selectEstimate .mrR3 {
+        margin-right: 0;
+    }
     .hideOnMobile {
         display: none;
     }

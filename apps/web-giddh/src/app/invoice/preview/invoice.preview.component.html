@@ -161,7 +161,6 @@
               </button>
             </div>
             <div class="modal-body">
-                <div class="mobile-search">
                     <div class="row">
                         <div class="col-sm-6 col-xs-6 full-width-on-mobile">
                             <div class="input-container">
@@ -178,9 +177,9 @@
                         </div>
                        
                     </div>
-                </div>
+                
             </div>
-          </ng-template>
+        </ng-template>
 
         <!-- For mobile screen sizes ends -->
 
@@ -700,11 +699,16 @@
     </div>
 
     <!--total sale & Total Due-->
-    <div class=" mt-5 invoiceFooter row" *ngIf="!selectedInvoiceForDetails">
+    <div class=" mt-5 invoiceFooter" *ngIf="!selectedInvoiceForDetails">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex total-due-sale-wrap">
             <div class="col-sm-6 totalDueSale">
-                <h3 class="">
-                    Total{{!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note') ? (selectedVoucher === 'purchase') ? ' Purchases:' : ' Sale:' : ':' }}
+                <h3>
+                    Total
+                    {{!(selectedVoucher === 'credit note' 
+                    || selectedVoucher === 'debit note') ?
+                     (selectedVoucher === 'purchase') ? ' 
+                     Purchases:' : ' Sale:' : ':' 
+                    }}
                 </h3>
                 <h1>{{baseCurrencySymbol}}{{ totalSale | giddhCurrency }}<span *ngIf="baseCurrency==='INR'">/-</span>
                 </h1>

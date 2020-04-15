@@ -329,8 +329,8 @@ ul.selectActionDropdown {
 }
 
 .advance-icon , .search-icon-block {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -340,8 +340,11 @@ ul.selectActionDropdown {
     border-radius: 2px;
     color: $midnight-express;
     background: #fff;
+    color: $gray;
 }
-
+.search-icon-block{
+    display: none;
+}
 .advance-icon:hover {
     background: #eaeaea;
 }
@@ -349,7 +352,7 @@ ul.selectActionDropdown {
 .dropdown-toggle.more-btn-dropdown {
     color: $navy !important;
     border: 1px solid $chetwode-blue;
-    width: 91px;
+    width: 80px;
     padding-left: 10px;
     padding-right: 10px;
     display: inline-flex;
@@ -409,7 +412,7 @@ button.btn.btn-filter span.icon-cross {
 
 .inputWrapper {
     display: block !important;
-    width: 200px !important;
+    width: 196px !important;
     position: relative;
     height: 36px !important;
 }
@@ -461,6 +464,9 @@ div.remove-capitalize {
 /* responsive */
 
 @media (max-width: 768px) {
+    .search-icon-block{
+        display: flex;
+    }
     .card-header .mh18_img {
         margin-right: 5px;
     }
@@ -561,6 +567,7 @@ div.remove-capitalize {
 }
 
 @media (max-width: 767px) {
+
     .mobile-search {
         display: flex;
         margin-bottom: 0;
@@ -628,9 +635,6 @@ div.remove-capitalize {
 }
 
 @media (max-width: 360px) {
-    .date-advanceSearch .input-group {
-        width: 100%;
-    }
     .input-grp-dateRangePicker .btn {
         padding-left: 0;
         padding-top: 10px;
@@ -641,9 +645,6 @@ div.remove-capitalize {
     }
 }
 @media (max-width: 320px) {
-    .date-advanceSearch .input-group {
-        width: 144px;
-    }
     .mobile-search .input-container input {
         letter-spacing: -0.99px;
     }

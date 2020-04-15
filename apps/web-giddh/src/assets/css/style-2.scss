@@ -8355,6 +8355,11 @@ ul.dropdown-menu p.lead.pd {
     font-family: "opensans-regular";
     color: #484848 !important;
     margin-right: 0 !important;
+    margin-left: 0 !important;
+}
+
+#invoice-setting ul.nav-tabs > li{
+    margin-right: 35px;
 }
 
 #invoice-setting .nav > li > a.active {
@@ -8938,9 +8943,6 @@ input.checkbox-custom[type="checkbox"] {
         margin-bottom: 20px;
         margin-right: 10px;
     }
-    #settingTab .tab-integraton .nav-tabs > li:nth-child(2n) {
-        margin-right: 0 !important;
-    }
     #settingTab .tab-integraton .nav-tabs > li > a {
         width: 90px;
         height: 90px;
@@ -9141,6 +9143,15 @@ input.checkbox-custom[type="checkbox"] {
     .tax-engine .table-striped > tbody > tr:nth-of-type(odd) {
         background-color: $white;
     }
+    .modal-header{
+        padding: 12px 15px !important;
+        h3, h4{
+            font-size: 16px !important;
+        }
+        .close{
+            top: 0;font-size: 26px;
+        }
+    }
 }
 
 @media (max-width: 1280px) {
@@ -9280,7 +9291,21 @@ input.checkbox-custom[type="checkbox"] {
     }
     #settingTab app-invoice-setting .tab-container .nav.nav-tabs {
         margin-top: 50px;
+        white-space: nowrap;
+        padding-left: 15px !important;
     }
+    #settingTab .tab-integraton .nav-tabs > li > a {
+        width: 70px;
+        height: 70px;
+    }
+    .tab-integraton .nav-tabs > li > a > span{
+        font-size: 22px;
+    }
+    #settingTab .tab-integraton .nav-tabs > li{
+        width: 70px;
+        margin-bottom: 15px;
+    }
+
     .setting-page .nav > li > a,
     .custom-tabs .nav.nav-tabs > li a {
         padding-top: 7px;

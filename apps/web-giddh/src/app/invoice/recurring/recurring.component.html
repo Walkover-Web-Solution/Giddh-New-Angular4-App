@@ -4,9 +4,85 @@
     <form #recurringForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker pr" (ngSubmit)="submit()">
 
         <div class="d-flex">
-
-            <div style="flex: 1">
-
+            <div class="search-icon-block" (click)="openModal(template)">
+                <i class="icon-search"></i>
+            </div>
+            <ng-template #template>
+                <div class="modal-header">
+                  <h4 class="modal-title bg pull-left">Search here...</h4>
+                  <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-view">
+                        <div class="form-group">
+                            <label class="d-block">Invoice Type</label>
+                            <div class="ng-select-wrap">
+                                <sh-select name="invoiceType" [placeholder]="'Select Account'" [(ngModel)]="filter.status"
+                                    [options]="invoiceTypeOptions" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
+                                    [useInBuiltFilterForIOptionTypeItems]="true">
+                                    <ng-template #optionTemplate let-option="option">
+                                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                            <div class="item">{{ option.label }}</div>
+                                        </a>
+                                    </ng-template>
+                                </sh-select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="d-block">Interval</label>
+                            <div class="ng-select-wrap">
+                                <sh-select name="interval" [placeholder]="'Select Account'" [options]="intervalOptions"
+                                    [notFoundLink]="false" [multiple]="false" [(ngModel)]="filter.duration" [ItemHeight]="33"
+                                    [useInBuiltFilterForIOptionTypeItems]="true">
+                                    <ng-template #optionTemplate let-option="option">
+                                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                            <div class="item">{{ option.label }}</div>
+                                        </a>
+                                    </ng-template>
+                                </sh-select>
+                            </div>
+                        </div>  
+                        <div class="form-group">
+                            <label class="d-block">Last Invoice Date</label>
+                            <div class="input-group">
+                                <input name="lastInvoiceDate" placeholder="Select Date" [(ngModel)]="filter.lastInvoiceDate"
+                                    type="text" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" autocomplete="off"
+                                    class="form-control" bsDatepicker required>
+                            </div>
+                        </div>    
+                        <div class="form-group" *ngIf="isMobileScreen">
+                            <div class="searchInvoiceNo">
+                                <label class="d-block">Search Invoice No.</label>
+                                <div class="input-group">
+                                    <input type="text" placeholder="Search Invoice No." class="w100"
+                                        [formControl]="invoiceNumberInput" #invoiceSearch class="form-control" />
+                                    <!--<i class="icon-search" (click)="showInvoiceNumberSearch = false;"></i>-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" *ngIf="isMobileScreen">
+                            <div class="searchCustomerNo">
+                                <div class="input-container">
+                                    <label class="d-block">Search Customer Name</label>
+                                    <input type="text" placeholder="Search Customer Name" class="w100" name="customerName"
+                                        [formControl]="customerNameInput" #customerSearch class="form-control" />
+                                    <!-- <i class="icon-search" (click)="showCustomerNameSearch = false;"></i> -->
+                                </div>
+                            </div>
+                        </div>     
+                        <div class="form-group">
+                            <button class="btn btn-success btn-sm">Search</button>
+                            <a class="cp" href="javascript: void 0">
+                                <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333"
+                                    tooltip="Reset Filter" *ngIf="showResetFilterButton" (click)="resetFilter()"></i>
+                            </a>
+                        </div>
+                    </div>  
+                </div>
+            </ng-template>
+            <div class="reccuring-form">     
                 <div class="form-group mrR1">
                     <label class="d-block">Invoice Type</label>
                     <div class="ng-select-wrap">
@@ -21,13 +97,6 @@
                         </sh-select>
                     </div>
                 </div>
-
-                <!--<div class="form-group mrR1">-->
-                <!--<label class="d-block">Search Customer</label>-->
-                <!--<input type="text" class="form-control" name="customerName" [(ngModel)]="filter.customerName"-->
-                <!--placeholder="customer name">-->
-                <!--</div>-->
-
                 <div class="form-group mrR1">
                     <label class="d-block">Interval</label>
                     <div class="ng-select-wrap">
@@ -54,7 +123,7 @@
 
                 <div class="form-group mrR1" *ngIf="isMobileScreen">
                     <div class="searchInvoiceNo">
-                        <label class="d-block">&nbsp;</label>
+                        <label class="d-block">Search Invoice No.</label>
                         <div class="input-group">
                             <input type="text" placeholder="Search Invoice No." class="w100"
                                 [formControl]="invoiceNumberInput" #invoiceSearch class="form-control" />
@@ -65,7 +134,7 @@
                 <div class="form-group mrR1" *ngIf="isMobileScreen">
                     <div class="searchCustomerNo">
                         <div class="input-container">
-                            <label class="d-block">&nbsp;</label>
+                            <label class="d-block">Search Customer Name</label>
                             <input type="text" placeholder="Search Customer Name" class="w100" name="customerName"
                                 [formControl]="customerNameInput" #customerSearch class="form-control" />
                             <!-- <i class="icon-search" (click)="showCustomerNameSearch = false;"></i> -->
@@ -85,9 +154,7 @@
 
 
             </div>
-
             <div class="d-flex " style="margin-top: 24px">
-
                 <div style="height: 30px;" *ngIf="selectedItems.length < 0">
                     <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
                         style="margin-bottom: 10px;display:inline-block !important;">
@@ -135,7 +202,6 @@
 
             </div>
         </div>
-
     </form>
 
     <table class="table basic table-bordered mrT2 onMobileView">

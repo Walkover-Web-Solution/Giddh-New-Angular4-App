@@ -2,31 +2,13 @@
 
     <div class="d-flex date-advanceSearch">
         <form #invoiceForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker pr">
-
             <div class="d-flex">
-
                 <div class="form-group mrR1 d-flex">
                     <div class="input-group ">
                         <!-- <span class="icon-calender"></span> -->
                         <span class="inputWrapper">
                             <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
                                 class="form-control" (applyDaterangepicker)="dateRangeChanged($event)" />
-
-<!--                            <input type="text"-->
-<!--                                   [(ngModel)]="selectedDateRange"-->
-<!--                                   ngxDaterangepickerMd-->
-<!--                                   [alwaysShowCalendars]="true"-->
-<!--                                   [ranges]="datePickerOptions.ranges"-->
-<!--                                   [showClearButton]="false"-->
-<!--                                   [showCancel]="true"-->
-<!--                                   [showDropdowns]="true"-->
-<!--                                   [locale]="{applyLabel: 'Done'}"-->
-<!--                                   (datesUpdated)="dateRangeChanged($event)"-->
-<!--                                   [keepCalendarOpeningWithRange]="true"-->
-<!--                                   [showRangeLabelOnInput]="false"-->
-<!--                                   name="selectedDateRange"-->
-<!--                                   class="form-control"-->
-<!--                                   placeholder="Select please..."/>-->
                         </span>
                     </div>
 
@@ -34,10 +16,9 @@
                         <span class="icon-advance-search" (click)="toggleAdvanceSearchPopup()" tooltip="Advance Search"></span>
                         <!-- -->
                     </div>
-                    <!-- <a class="cp pd smallLoading" *ngIf="showResetAdvanceSearchIcon" href="javascript: void 0"
-            (click)="resetAdvanceSearch()">
-            <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333" tooltip="Reset Filter"></i>
-          </a> -->
+                    <div class="search-icon-block" (click)="openModal(template)">
+                        <i class="icon-search"></i>
+                    </div>
                 </div>
 
 
@@ -145,6 +126,34 @@
         </div>
 
     </div>
+
+    <ng-template #template>
+        <div class="modal-header">
+          <h4 class="modal-title bg pull-left">Search here...</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+                        <div class="input-container">
+                            <input type="text" placeholder="Search Invoice No." class=" form-control" #searchBox name="voucherNumberInput" [formControl]="voucherNumberInput" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+                        <div class="input-container">
+                            <input type="text" placeholder="Search Customer Name" class=" form-control" #searchBox name="accountUniqueNameInput" [formControl]="accountUniqueNameInput" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-6 mt-2">
+                        <button class="btn btn-pink">Submit</button>
+                    </div>
+                   
+                </div>
+            
+        </div>
+    </ng-template>
 
     <!--  -->
     <div class="clearfix">
