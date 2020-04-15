@@ -2118,7 +2118,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let o = _.cloneDeep(selectedAcc.additional);
 
             // check if we have quantity in additional object. it's for only bulk add mode
-            txn.quantity = o.quantity ? o.quantity : null;
+            txn.quantity = o.quantity ? o.quantity : (o.stock) ? 1 : null;
             txn.applicableTaxes = [];
             txn.sku_and_customfields = null;
 
