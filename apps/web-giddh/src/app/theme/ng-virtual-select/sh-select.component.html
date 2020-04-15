@@ -1,4 +1,4 @@
-<div #dd [style.width]="width">
+<div #dd [style.width]="width" class="pos-rel">
     <div class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'"
         (click)="show($event)" [class.open]="isOpen" tabindex="0" (focus)="show($event)" (blur)="hide($event)"
         (keydown)="keydownUp($event)">

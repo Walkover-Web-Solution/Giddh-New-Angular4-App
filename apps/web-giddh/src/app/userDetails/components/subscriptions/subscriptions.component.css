@@ -92,7 +92,7 @@
     height: auto !important;
 }
 .subscription-table {
-    border: 1px solid #d1d1d1;
+    border: 1px solid $gainsboro;
 }
 @media only screen and (max-width: 767px) {
     .transection-popup {

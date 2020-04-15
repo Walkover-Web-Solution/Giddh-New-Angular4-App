@@ -1,3 +1,4 @@
+@import "../../assets/css/color.scss";
 .date-range-picker {
     padding-left: 35px !important;
     // border-color:$chetwode-blue;
@@ -9,12 +10,12 @@
     position: relative;
     z-index: 1;
     cursor: default;
-    border: 1px solid #d9d9d9;
+    border: 1px solid $gainsboro;
     text-align: left;
 }
 
 .date-range-picker:focus {
-    border-color: #d9d9d9 !important;
+    border-color: $gainsboro !important;
 }
 .inputWrapper {
     position: relative;
@@ -27,7 +28,7 @@
     display: block;
     height: 36px;
     width: 1px;
-    background-color: #d9d9d9;
+    background-color: $gainsboro;
     left: 37px !important;
     z-index: 2;
     top: 0;
@@ -46,7 +47,7 @@
     align-items: center;
     font-size: 18px;
     margin-left: 7px;
-    border: 1px solid #d9d9d9;
+    border: 1px solid $gainsboro;
     border-radius: 2px;
     color: #1a237e;
     margin-right: 7px;

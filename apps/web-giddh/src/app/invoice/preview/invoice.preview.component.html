@@ -173,7 +173,7 @@
         <!-- For mobile screen sizes ends -->
 
         <div class="invoice-preview  table-responsive">
-            <table class="table basic table-bordered mrT2 invoice-table desktopTable table-responsive">
+            <table class="table basic table-bordered mt-15 invoice-table desktopTable table-responsive">
 
                 <!--sales-->
                 <thead class="t-h-bg1" *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
@@ -467,7 +467,7 @@
 
         <ng-container *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && (selectedVoucher === 'sales' || selectedVoucher === 'purchase') && isMobileView">
             <div class="card mobileTable" *ngFor="let item of voucherData?.items; let i = index">
-                <table class="table basic table-bordered mrT2 invoice-table" *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
+                <table class="table basic table-bordered mt-15 invoice-table" *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
                     <tr>
                         <td class="card-header clearfix">
                             <div class="col-xs-4 p-0">

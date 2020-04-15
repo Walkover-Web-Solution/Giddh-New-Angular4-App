@@ -1,3 +1,4 @@
+@import "../../../assets/css/color.scss";
 .import_type {
     display: flex;
     justify-content: center;
@@ -12,8 +13,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    margin: 0 10px;
-    border: 1px solid #d9d9d9;
+    margin: 0 15px;
+    border: 1px solid $gainsboro;
     background: #fafafa;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -47,9 +48,9 @@
     // height: 100%;
 }
 .text-link-2 {
-    color: #0c8fe6 !important;
+    color: $primary !important;
     &:hover {
-        color: #0c8fe6 !important;
+        color: $primary !important;
     }
 }
 

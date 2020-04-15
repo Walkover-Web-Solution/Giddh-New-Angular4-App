@@ -24,7 +24,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
       padding: 40px 67px;
       margin: 0 15px;
       border-radius: 2px;
-      border: 1px solid #d9d9d9;
+      border: 1px solid $gainsboro;
       background: #fafafa;
       width: 330px;
       text-align: center;
