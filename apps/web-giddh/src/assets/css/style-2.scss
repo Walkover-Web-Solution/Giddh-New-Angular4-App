@@ -2,6 +2,7 @@
 
 @import "../css/giddh-common.scss";
 
+
 /* table css need to removed at last  (start)
    Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -39,16 +40,14 @@
 
 .basic > thead > tr > th {
     background: $white;
-    color: #000000;
-    border-right: 1px solid #d1d1d1;
+    color: $nero;
+    border-right: 1px solid $gainsboro;
     padding: 15px 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid #d1d1d1;
+    border-bottom: 1px solid $gainsboro;
     font-family: opensans-semibold;
     font-size: 14px;
-    border-top: 1px solid #d1d1d1; // position: sticky !important;
-    // top: 60px;
-    // z-index: 999;
+    border-top: 1px solid $gainsboro;
 }
 
 .basic > tbody > tr:hover td {
@@ -226,21 +225,6 @@
     padding: 40px !important;
 }
 
-.pt-0 {
-    padding-top: 0px !important;
-}
-
-.pb-0 {
-    padding-bottom: 0px !important;
-}
-
-.pr-0 {
-    padding-right: 0px !important;
-}
-
-.pl-0 {
-    padding-left: 0px !important;
-}
 
 .pt-1 {
     padding-top: 10px !important;
@@ -411,7 +395,7 @@ input {
     display: block;
     overflow: hidden;
     cursor: pointer;
-    border: 1px solid #adadad;
+    border: 1px solid $chetwode-blue;
     border-radius: 30px;
 }
 
@@ -458,8 +442,8 @@ input {
     right: 28px;
     border-radius: 30px;
     transition: all 0.3s ease-in 0s;
-    background-color: #5b64c9;
-    border-color: #5b64c9;
+    background-color: $chetwode-blue;
+    border-color: $chetwode-blue;
 }
 
 .toggle-checkbox:checked + .toggle-label .toggle-inner {
@@ -571,12 +555,13 @@ input {
 }
 
 .invoce-controll .nav.nav-tabs {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     padding: 0 0px 0 15px !important;
     background-color: #f7f8fd;
     z-index: 9;
     position: relative;
     top: -4px;
+    border-color:$gainsboro !important;
 }
 
 .invoce-controll .invoice-nav.navbar-nav > li > a:hover {
@@ -597,9 +582,9 @@ input {
 }
 
 .invoce-controll .nav > li > a {
-    padding: 10px 0px !important;
-    margin-right: 25px !important;
-    margin-left: 10px !important;
+    padding: 8px 0px !important;
+    margin-right: 35px !important;
+    margin-left: 0 !important;
     padding-bottom: 7px !important;
     font-size: 14px;
     color: #262626 !important;
@@ -675,7 +660,12 @@ input {
 .mt-5 {
     margin-top: 50px;
 }
-
+.mt-6{
+    margin-top: 60px;
+}
+.mt-15{
+    margin-top: 15px;
+}
 .mrB0 {
     margin-bottom: 0;
 }
@@ -833,11 +823,11 @@ ul.sub-list {
 }
 
 .bold {
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
 }
 
 .font-bold {
-    font-family: $tableFontBold;
+    font-family: $opensans-bold;
 }
 
 .modal-open {
@@ -882,7 +872,7 @@ ul.sub-list {
     vertical-align: middle;
     justify-content: center;
     align-items: center;
-    font-size: 20px;
+    font-size: 18px;
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
 
@@ -1055,11 +1045,6 @@ ul.sub-list {
     margin-bottom: 0px;
 }
 
-.aging-table > thead > tr > th,
-.aging-table tr > td {
-    min-width: 145px;
-}
-
 .d-none {
     display: none;
 }
@@ -1089,7 +1074,7 @@ ul.sub-list {
 
 .top-aging-table-top1 p {
     font-size: 12px;
-    color: #a9a9a9;
+    color: $nobel;
     font-style: italic;
     margin-bottom: 7px;
     text-align: left;
@@ -1100,7 +1085,7 @@ ul.sub-list {
 }
 
 .top-aging-table-box > span {
-    color: #a9a9a9;
+    color: $nobel;
     margin-right: 5px;
     display: inline-block;
 }
@@ -1121,7 +1106,7 @@ ul.sub-list {
 
 .unbold {
     font-weight: normal !important;
-    font-family: $tableFontRegular !important;
+    font-family: $opensans-regular !important;
 }
 
 .top-aging-table-top .date-range-picker {
@@ -1140,14 +1125,14 @@ ul.sub-list {
 
 .pagination > li > a {
     background: $white !important;
-    color: #484848 !important;
-    border: 1px solid $jacksons-purple !important;
+    color: $nero !important;
+    border: 1px solid $midnight-blue !important;
 }
 
 .pagination > li.active > a {
-    background: $jacksons-purple !important;
+    background: $midnight-blue !important;
     color: $white !important;
-    border: 1px solid $jacksons-purple !important;
+    border: 1px solid $midnight-blue !important;
 }
 
 .custom-dropdown .dropdown-menu > li > a:hover {
@@ -1167,8 +1152,11 @@ ul.sub-list {
 .aging-table.table-aging-report tr td:first-child,
 .aging-table.table-aging-report tr th:first-child {
     padding-left: 15px !important;
+    width: 20%;
 }
-
+.aging-table.table-aging-report tr th:first-child{
+    white-space: nowrap !important;
+}
 .aging-table .table-checkbox {
     position: absolute;
     left: 5px;
@@ -1201,7 +1189,7 @@ ul.sub-list {
 }
 
 .text-gray {
-    color: #666666;
+    color:$nobel;
 }
 
 .Advance-Search .input-group-addon {
@@ -1585,12 +1573,12 @@ modal-container.modal {
     border-radius: 2px !important;
     padding: 6px !important;
     outline: 0;
-    color: #484848 !important;
+    color: $nero !important;
     box-shadow: none;
 }
 
 input {
-    color: #484848 !important;
+    color: $nero !important;
 }
 
 .form-control::-webkit-input-placeholder,
@@ -1667,7 +1655,7 @@ input:-moz-placeholder {
 
 header .navbar {
     background-color: #f7f8fa;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid $gainsboro;
     padding: 3px 0;
 }
 
@@ -1779,7 +1767,7 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .btn {
-    padding: 7px 16px;
+    padding: 7px 10px;
     border-radius: 2px;
     font-size: 14px;
     margin-right: 8px;
@@ -2304,7 +2292,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-success {
-    background: #0cb1af;
+    background: #0cb1af; 
     color: $white;
     border: 1px solid #0cb1af;
 }
@@ -2630,12 +2618,12 @@ input[type="checkbox"]:checked:after {
 }
 
 .text-light-2 {
-    color: #adadad;
+    color:$nobel;
 }
 
 .subscription-title {
     font-size: 20px;
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
 }
 
 .box2 {
@@ -3968,7 +3956,7 @@ input[type=radio]:checked:after {
 }
 
 .btn.btn-md {
-    padding: 10px 15px;
+    padding:7px 15px;
 }
 
 select.form-control {
@@ -4163,7 +4151,7 @@ select.form-control {
 }
 
 form label {
-    color: #484848;
+    color:$nero;
     font-weight: normal;
     padding-bottom: 5px;
 }
@@ -4331,11 +4319,6 @@ label {
 .breadcrumbs {
     font-size: 13px;
     overflow: hidden;
-}
-
-.form_bg {
-    background: #f5f5f5;
-    padding: 10px 20px;
 }
 
 #Addaccount .form-inline select.form-control {
@@ -4992,7 +4975,7 @@ label {
 .pagination > li > a:hover,
 .pagination > li > span:focus,
 .pagination > li > span:hover {
-    background-color: #d9d9d9 !important;
+    background-color: $gainsboro !important;
     border-color: #ddd;
 }
 
@@ -5115,7 +5098,7 @@ label {
 
 #dashboard .panel-default {
     color: #4d4d4d;
-    border-color: #d9d9d9;
+    border-color: $gainsboro;
 }
 
 #dashboard .panel-default > .panel-heading {
@@ -5521,7 +5504,7 @@ input[type="checkbox"][disabled] {
 
 .section_head {
     padding-bottom: 10px;
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
     font-size: 110%;
     color: rgba(0, 0, 0, 0.8);
 }
@@ -5943,8 +5926,10 @@ table input[type="number"] {
 }
 
 .btn-link {
-    color: $jacksons-purple;
-    /* color: #2262D1; */
+    color: $primary !important;
+    &:hover{
+        color: $primary !important;
+    }
 }
 
 typeahead-container .dropdown-menu li.active > a,
@@ -6264,7 +6249,7 @@ table td[class*=col-]:last-child {
 
 .ledger-stat h3 {
     font-size: 24px;
-    margin-top: 10px;
+    margin-top: 0;
 }
 
 .icomoon_ico {
@@ -6273,7 +6258,7 @@ table td[class*=col-]:last-child {
 
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
     text-transform: capitalize;
 }
 
@@ -6310,14 +6295,6 @@ table td[class*=col-]:last-child {
     overflow: hidden;
     width: 100%;
     text-align: center;
-}
-
-.pagination > li > a {
-    color: #4d4d4d;
-}
-
-.grey {
-    color: #4d4d4d;
 }
 
 .ledger-panel label {
@@ -6485,14 +6462,14 @@ table td[class*=col-]:last-child {
 
 .user_dropdown > li > a {
     font-size: 13px;
-    padding: 6px 20px !important;
+    padding: 6px 15px !important;
     color: #333333;
 }
 
 .app_list > ul {
     width: 100%;
     float: left;
-    padding: 4px 20px;
+    padding: 4px 15px;
     font-size: 14px;
     margin-bottom: 5px;
     /* margin: 10px 0; */
@@ -6500,7 +6477,7 @@ table td[class*=col-]:last-child {
 
 .app_list > ul h6 {
     margin-bottom: 10px;
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
     font-size: 13px;
 }
 
@@ -6610,6 +6587,7 @@ table td[class*=col-]:last-child {
 
 .dropdown-menu > li > a {
     padding: 2px 10px;
+    color: $nero;
 }
 
 /* ==================================================
@@ -6976,7 +6954,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     text-transform: capitalize;
     width: auto;
     color: $midnight-blue;
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
     vertical-align: middle;
 }
 
@@ -7898,7 +7876,6 @@ section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
 }
 
 .contact-main .table-aging-report {
-    margin-top: 30px !important;
     width: calc(100% - 1px);
 }
 
@@ -8303,7 +8280,7 @@ ul.dropdown-menu p.lead.pd {
 .invoce-controll .nav-tabs > li.active > a {
     border-bottom: 4px solid $deep-sky-blue !important;
     padding-bottom: 7px !important;
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
 }
 
 .invoce-controll .nav-tabs > li > a {
@@ -8364,7 +8341,6 @@ ul.dropdown-menu p.lead.pd {
     min-width: 155px;
     background: $white;
     color: #5b64c9;
-    border-radius: 0px;
     box-shadow: none;
 }
 
@@ -8377,7 +8353,8 @@ ul.dropdown-menu p.lead.pd {
 }
 
 .asidePanelLedger button.btn.btn-lg.btn-primary {
-    min-width: 170px;
+    min-width: 150px;
+    font-size: 16px;
 }
 
 .setting-page ul.nav.nav-tabs {
@@ -8428,7 +8405,7 @@ ul.dropdown-menu p.lead.pd {
 }
 
 #tab-integration .nav-tabs > li a.active {
-    border-bottom: 1px solid $deep-sky-blue !important;
+    border: 1px solid $deep-sky-blue !important;
     font-family: "opensans-regular";
     color: $deep-sky-blue !important;
     border-color: $deep-sky-blue !important;
@@ -8448,7 +8425,7 @@ ul.dropdown-menu p.lead.pd {
 
 .date-advanceSearch .icon-calender {
     height: 36px !important;
-    border-right: 1px solid #d9d9d9 !important;
+    border-right: 1px solid $gainsboro !important;
     color: #999999 !important;
 }
 
@@ -8460,6 +8437,7 @@ ul.dropdown-menu p.lead.pd {
     height: 36px !important;
     width: 36px !important;
     border: 1px solid $gainsboro !important;
+    color: $gray !important;
 }
 
 .table-bordered > tbody > tr > td,
@@ -8480,7 +8458,7 @@ table.basic td {
 }
 
 button.btn.btn-filter {
-    padding: 6px 10px !important;
+    padding: 8px 10px !important;
 }
 
 .setting-container .btn-default.btn-xs {
@@ -8703,7 +8681,7 @@ p.remvBrnchName {
 }
 
 #asidePaneFormTabs.custom-tabs .nav.nav-tabs {
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid $gainsboro;
     padding: 0 0px 0 0 !important;
     background-color: transparent;
     z-index: 9;
@@ -8810,7 +8788,7 @@ input.checkbox-custom[type="checkbox"] {
 .radio-custom + .radio-custom-label:before {
     content: "";
     background: $white;
-    border: 1px solid #ccc;
+    border: 1px solid $gainsboro;
     display: inline-block;
     vertical-align: middle;
     width: 18px;
@@ -8846,7 +8824,7 @@ input.checkbox-custom[type="checkbox"] {
 
 .radio-custom + .radio-custom-label:before {
     border-radius: 50%;
-    border: 1px solid $chetwode-blue;
+    border: 1px solid $gainsboro;
 }
 
 .radio-custom:checked + :before {
@@ -8885,7 +8863,13 @@ input.checkbox-custom[type="checkbox"] {
 .inventory-page.modal-open .receipt-note-modal  {
     margin-bottom: 0;
 }
-
+.aside-body .btn-lg.btn-primary{
+    font-size: 16px;
+    min-width: 150px;
+}
+.modal-content{
+    border: none !important;
+}
 /* responsive */
 
 @media (max-width: 1440px) {

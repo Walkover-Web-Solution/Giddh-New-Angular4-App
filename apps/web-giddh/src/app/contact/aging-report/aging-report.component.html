@@ -49,7 +49,7 @@
         <div class=" pdB2 mrB1 onMobileView mobilecardwrapper">
 
 
-            <div *ngIf="!isMobileScreen">
+            <div *ngIf="!isMobileScreen" class="table-responsive">
                 <!-- <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true"> -->
                 <ng-container *ngTemplateOutlet='mainTable'></ng-container>
                 <!-- </perfect-scrollbar> -->
@@ -131,7 +131,7 @@
 <!-- endregion -->
 
 <ng-template #mainTable>
-    <table class="table  giddh-table aging-table table-aging-report table-responsive">
+    <table class="table  giddh-table aging-table table-aging-report">
         <thead>
             <tr class="aging-table-top">
                 <td></td>

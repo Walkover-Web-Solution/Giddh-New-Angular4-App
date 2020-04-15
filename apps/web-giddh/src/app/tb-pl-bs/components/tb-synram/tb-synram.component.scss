@@ -1,3 +1,5 @@
+@import "../../../../assets/css/color.scss";
+
 .mrT2 {
     margin-top: 20px;
 }
@@ -5,7 +7,7 @@
     margin-right: 10px;
 }
 form label {
-    color: rgba(0, 0, 0, 0.8);
+    color:$nero;
     font-weight: normal;
 }
 

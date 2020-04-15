@@ -14,7 +14,7 @@
     color: $wild-blue-yonder;
     padding-right: 8px;
     cursor: pointer;
-    padding-left: 8px;
+    padding-left: 10px;
 }
 
 .td_in_searchBox {
@@ -83,15 +83,6 @@
 .btn-link-2 {
     color: #1c1c1c;
 }
-// table{
-//   position: relative;
-// }
-// .basic > thead > tr > th{
-//     position: sticky !important;
-//     top: 59px;
-//     z-index: 99;
-//     box-shadow: 1px 1px 0 #d9d9d9;
-// }
 // responsive
 @media (max-width: 768px) {
     .justify-content-sm {

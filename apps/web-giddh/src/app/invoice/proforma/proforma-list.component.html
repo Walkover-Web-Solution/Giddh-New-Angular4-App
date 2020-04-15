@@ -77,13 +77,13 @@
             </div>
             <!-- endregion -->
 
-            <div *ngIf="voucherType === 'proformas'" class="btn-wrapper mb-1">
+            <div *ngIf="voucherType === 'proformas'" class="btn-wrapper">
                 <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
                     Proforma
                 </button>
             </div>
 
-            <div *ngIf="voucherType === 'estimates'" class="btn-wrapper mb-1">
+            <div *ngIf="voucherType === 'estimates'" class="btn-wrapper">
                 <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
                     Estimate
                 </button>
@@ -114,7 +114,7 @@
     <!--  -->
     <div class="clearfix">
         <div class="table-responsive removeResponsive">
-            <table class="table basic table-bordered mrT2 invoice-table onMobileView table-responsive">
+            <table class="table basic table-bordered mt-15 invoice-table onMobileView table-responsive">
                 <thead class="t-h-bg1">
                     <tr>
 

@@ -96,8 +96,8 @@
         </div>
     </form>
 
-    <div class="table-responsive">
-    <table class="table basic table-bordered pending-tabel onMobileView mrT2">
+    <table class="table basic table-bordered pending-tabel onMobileView mt-15">
+
         <thead class="t-h-bg1">
             <tr>
                 <th style="width:4%" *ngIf="selectedLedgerItems.length > 0">
@@ -288,7 +288,7 @@
             </tr>
         </tbody>
     </table>
-    </div>
+</div>
 
     <div *ngIf="ledgersData?.totalItems > 20" class="paginationWrapper">
         <div class="alC">
@@ -307,7 +307,7 @@
         <h1>No entries found within given criteria.</h1>
         <h1>Do search with some other dates</h1>
     </div>
-</div>
+
 
 <!--modal dialog  -->
 <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
