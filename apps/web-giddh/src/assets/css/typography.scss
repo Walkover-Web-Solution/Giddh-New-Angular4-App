@@ -7,7 +7,7 @@
             format("woff2"),
         url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.woff")
             format("woff"),
-        url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.ttf")
+        url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.woff")
             format("truetype");
     font-style: normal;
     font-weight: normal;
@@ -61,14 +61,10 @@
 }
 /*table fonts start*/
 
-$tableFontRegular: "opensans-regular";
-$tableFontSemibold: "opensans-semibold";
-$tableFontBold: "opensans-bold";
-$tableFontExtraBold: "opensans-extra-bold";
-
-$font-family: (
-    "bold": "opensans-bold",
-    "regular": "opensans-regular"
-);
-
-/*table fonts end*/
+$opensans-regular: "opensans-regular";
+$opensans-semibold: "opensans-semibold";
+$opensans-bold: "opensans-bold";
+$opensans-extra-bold: "opensans-extra-bold";
+body {
+    font-family: $opensans-regular ;
+}

@@ -22,8 +22,7 @@ body {
     height: 100%;
     background: #f7f8fa;
     font-family: "opensans-regular";
-
-    color: #333333;
+    color: $nero;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-size: 14px;
@@ -4852,7 +4851,7 @@ border-bottom: 1px solid #e0e0e0;
 /*box styles  on settings integration page*/
 
 .box {
-    padding: 20px;
+    padding: 15px;
     background-color: white;
     /* margin: 20px 0; */
 }
@@ -5202,7 +5201,7 @@ form#groupDetailForm {
     .mobileHeader .upperLayerHeader .navbar-nav {
         float: none;
     }
-    .desktopHeader {
+    .desktop-header {
         display: block;
     }
 
@@ -5239,7 +5238,7 @@ form#groupDetailForm {
         top: 0;
         z-index: 101;
     }
-    .desktopHeader {
+    .desktop-header {
         display: none;
     }
     .ledger_book .h-table tbody .ledger-row td {

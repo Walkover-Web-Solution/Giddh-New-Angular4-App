@@ -1,5 +1,6 @@
+@import "../../../../assets/css/color.scss";
 .secondryDarkbg span {
-    background: #087e7d;
+    background: $teal;
     width: 15px;
     height: 15px;
     display: inline-block;
@@ -84,7 +85,7 @@ p.bankBalnc {
     justify-content: space-between;
 }
 .single-bank-detatil {
-    border-bottom: 1px solid #d9d9d9;
+    border-bottom: 1px solid $gainsboro;
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
@@ -100,7 +101,7 @@ a.connectBnk {
 }
 .totalSalesHeader {
     background-color: #fff;
-    border: 1px solid #d9d9d9;
+    border: 1px solid $gainsboro;
     border-radius: 2px;
     padding: 15px 15px 20px;
 }
@@ -122,12 +123,12 @@ a.connectBnk {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid #d1d1d1;
-    color: #262626;
+    border-right: 1px solid $gainsboro;
+    color:$nero;
 }
 .dateRangeInput input {
     padding-left: 35px !important;
-    color: #262626;
+    color:$nero;
 }
 .page-title h1 {
     color: #1a237e;
@@ -199,7 +200,7 @@ a.connectBnk {
 .panel {
     padding: 15px;
     border-radius: 2px;
-    border: 1px solid #d9d9d9;
+    border: 1px solid $gainsboro;
 
     position: relative;
 }
@@ -221,7 +222,7 @@ span.dateWiseSale {
 }
 
 .single-sale-data {
-    border-right: 1px solid #d9d9d9;
+    border-right: 1px solid $gainsboro;
     min-height: 78px;
 }
 .total-sale-data {
@@ -239,10 +240,10 @@ span.dateWiseSale {
     font-family: "opensans-semibold";
 }
 input:read-only {
-    border-color: #d1d1d1 !important;
+    border-color: $gainsboro !important;
 }
 input:read-only:focus {
-    border-color: #d1d1d1 !important;
+    border-color: $gainsboro !important;
 }
 .totalSalesHeader label {
     margin-bottom: 5px;
