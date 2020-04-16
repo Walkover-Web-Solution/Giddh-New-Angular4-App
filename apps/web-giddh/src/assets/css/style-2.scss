@@ -2,6 +2,7 @@
 
 @import "../css/giddh-common.scss";
 
+
 /* table css need to removed at last  (start)
    Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -38,17 +39,15 @@
 }
 
 .basic > thead > tr > th {
-    background: $White;
-    color: #000000;
-    border-right: 1px solid #d1d1d1;
+    background: $white;
+    color: $nero;
+    border-right: 1px solid $gainsboro;
     padding: 15px 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid #d1d1d1;
+    border-bottom: 1px solid $gainsboro;
     font-family: opensans-semibold;
     font-size: 14px;
-    border-top: 1px solid #d1d1d1; // position: sticky !important;
-    // top: 60px;
-    // z-index: 999;
+    border-top: 1px solid $gainsboro;
 }
 
 .basic > tbody > tr:hover td {
@@ -56,7 +55,7 @@
 }
 
 .basic {
-    background: $White;
+    background: $white;
 }
 
 /*
@@ -74,7 +73,7 @@
 @media (max-width: 768px) {
     .onMobileView tbody tr {
         box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
-        background: $White;
+        background: $white;
         border-bottom: 1px solid #dfdfdf;
         cursor: pointer;
         display: block;
@@ -192,8 +191,23 @@
 .middle {
     vertical-align: middle;
 }
-
+.clear-both{clear: both;}
 /* start MDB tweaks */
+.pt-0 {
+    padding-top: 0px !important;
+}
+
+.pb-0 {
+    padding-bottom: 0px !important;
+}
+
+.pr-0 {
+    padding-right: 0px !important;
+}
+
+.pl-0 {
+    padding-left: 0px !important;
+}
 
 .pd-1 {
     padding: 10px !important;
@@ -211,21 +225,6 @@
     padding: 40px !important;
 }
 
-.pt-0 {
-    padding-top: 0px !important;
-}
-
-.pb-0 {
-    padding-bottom: 0px !important;
-}
-
-.pr-0 {
-    padding-right: 0px !important;
-}
-
-.pl-0 {
-    padding-left: 0px !important;
-}
 
 .pt-1 {
     padding-top: 10px !important;
@@ -396,7 +395,7 @@ input {
     display: block;
     overflow: hidden;
     cursor: pointer;
-    border: 1px solid #adadad;
+    border: 1px solid $chetwode-blue;
     border-radius: 30px;
 }
 
@@ -416,7 +415,7 @@ input {
     padding: 0;
     line-height: 15px;
     font-size: 12px;
-    color: $White;
+    color: $white;
     font-family: Trebuchet, Arial, sans-serif;
     font-weight: bold;
     box-sizing: border-box;
@@ -443,8 +442,8 @@ input {
     right: 28px;
     border-radius: 30px;
     transition: all 0.3s ease-in 0s;
-    background-color: #5b64c9;
-    border-color: #5b64c9;
+    background-color: $chetwode-blue;
+    border-color: $chetwode-blue;
 }
 
 .toggle-checkbox:checked + .toggle-label .toggle-inner {
@@ -556,20 +555,21 @@ input {
 }
 
 .invoce-controll .nav.nav-tabs {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     padding: 0 0px 0 15px !important;
     background-color: #f7f8fd;
     z-index: 9;
     position: relative;
     top: -4px;
+    border-color:$gainsboro !important;
 }
 
 .invoce-controll .invoice-nav.navbar-nav > li > a:hover {
-    color: $White;
+    color: $white;
 }
 
 .invoce-controll .invoice-nav.navbar-nav > li > a.active {
-    background-color: $White;
+    background-color: $white;
 }
 
 .navbar {
@@ -582,9 +582,9 @@ input {
 }
 
 .invoce-controll .nav > li > a {
-    padding: 10px 0px !important;
-    margin-right: 25px !important;
-    margin-left: 10px !important;
+    padding: 8px 0px !important;
+    margin-right: 35px !important;
+    margin-left: 0 !important;
     padding-bottom: 7px !important;
     font-size: 14px;
     color: #262626 !important;
@@ -619,7 +619,7 @@ input {
 }
 
 .white-box {
-    background: $White;
+    background: $white;
     padding: 20px;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 15px;
@@ -635,7 +635,7 @@ input {
     z-index: 99;
     background: black;
     font-size: 12px;
-    color: $White !important;
+    color: $white !important;
     padding: 2px 5px;
     border-radius: 4px;
     right: 0;
@@ -660,7 +660,12 @@ input {
 .mt-5 {
     margin-top: 50px;
 }
-
+.mt-6{
+    margin-top: 60px;
+}
+.mt-15{
+    margin-top: 15px;
+}
 .mrB0 {
     margin-bottom: 0;
 }
@@ -769,8 +774,8 @@ input {
 }
 
 .company-list button.btn-link:hover {
-    color: $White;
-    background: $dark-blue00;
+    color: $white;
+    background: $midnight-express;
     text-decoration: none;
 }
 
@@ -818,11 +823,11 @@ ul.sub-list {
 }
 
 .bold {
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
 }
 
 .font-bold {
-    font-family: $tableFontBold;
+    font-family: $opensans-bold;
 }
 
 .modal-open {
@@ -861,20 +866,20 @@ ul.sub-list {
 .tab-integraton .nav-tabs > li > a {
     width: 120px;
     height: 120px;
-    background: $White;
+    background: $white;
     display: flex;
     flex-direction: column;
     vertical-align: middle;
     justify-content: center;
     align-items: center;
-    font-size: 20px;
+    font-size: 18px;
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
 
 .tab-integraton .nav-tabs > li.active a {
-    background: $White !important;
+    background: $white !important;
     box-shadow: 0 6px 7px #cacaca;
-    border: 1px solid $dark-blue00 !important;
+    border: 1px solid $midnight-express !important;
     color: #333333 !important;
     border-radius: 3px;
     /* display: block; */
@@ -886,7 +891,7 @@ ul.sub-list {
 
 .tab-integraton .nav-tabs > li > a > span {
     font-size: 30px;
-    color: $dark-blue00;
+    color: $midnight-express;
     opacity: 0.4;
     margin-bottom: 6px;
 }
@@ -901,7 +906,7 @@ ul.sub-list {
 
 .customer-footer-box .numbertotal {
     font-size: 26px;
-    color: $border-blue;
+    color: $chetwode-blue;
 }
 
 .customer-footer-box h5 {
@@ -910,7 +915,7 @@ ul.sub-list {
 }
 
 .customer-right {
-    background: $White;
+    background: $white;
     padding: 0 15px;
     float: right;
 }
@@ -950,7 +955,7 @@ ul.sub-list {
 }
 
 .custom-tabs .nav.nav-tabs > li a:hover {
-    color: $activeTabBorder !important;
+    color: $deep-sky-blue !important;
 }
 
 .custom-tabs .nav.nav-tabs > li.active a {
@@ -967,28 +972,28 @@ ul.sub-list {
 }
 
 .btn-pink {
-    background: $primaryBtncolror;
-    border: 1px solid $primaryBtncolror;
-    color: $White;
+    background: $deep-sky-blue;
+    border: 1px solid $deep-sky-blue;
+    color: $white;
 }
 
 .btn-pink:hover,
 .btn-pink:focus {
-    background: $primaryBtnHovercolror !important;
-    border-color: $primaryBtnHovercolror;
-    color: $White;
+    background: $deep-sky-blue-hover !important;
+    border-color: $deep-sky-blue-hover;
+    color: $white;
 }
 
 .btn-light-gray {
-    background: $btn-light-gray;
-    border-color: $btn-light-gray;
+    background: $lavender;
+    border-color: $lavender;
     color: #1a237e;
 }
 
 .btn-light-gray:hover {
-    background: $primaryBtncolror;
-    border-color: $primaryBtncolror;
-    color: $White;
+    background: $deep-sky-blue;
+    border-color: $deep-sky-blue;
+    color: $white;
 }
 
 .top-aging-table-top {
@@ -1041,11 +1046,6 @@ ul.sub-list {
     margin-bottom: 0px;
 }
 
-.aging-table > thead > tr > th,
-.aging-table tr > td {
-    min-width: 145px;
-}
-
 .d-none {
     display: none;
 }
@@ -1062,7 +1062,7 @@ ul.sub-list {
 }
 
 .top-aging-table-top1 {
-    background: $White;
+    background: $white;
     position: absolute;
     left: 0;
     right: 0;
@@ -1075,7 +1075,7 @@ ul.sub-list {
 
 .top-aging-table-top1 p {
     font-size: 12px;
-    color: #a9a9a9;
+    color: $nobel;
     font-style: italic;
     margin-bottom: 7px;
     text-align: left;
@@ -1086,7 +1086,7 @@ ul.sub-list {
 }
 
 .top-aging-table-box > span {
-    color: #a9a9a9;
+    color: $nobel;
     margin-right: 5px;
     display: inline-block;
 }
@@ -1107,7 +1107,7 @@ ul.sub-list {
 
 .unbold {
     font-weight: normal !important;
-    font-family: $tableFontRegular !important;
+    font-family: $opensans-regular !important;
 }
 
 .top-aging-table-top .date-range-picker {
@@ -1126,15 +1126,15 @@ ul.sub-list {
 }
 
 .pagination > li > a {
-    background: $White !important;
-    color: #484848 !important;
-    border: 1px solid $JacksonsPurple !important;
+    background: $white !important;
+    color: $nero !important;
+    border: 1px solid $midnight-blue !important;
 }
 
 .pagination > li.active > a {
-    background: $JacksonsPurple !important;
-    color: $White !important;
-    border: 1px solid $JacksonsPurple !important;
+    background: $midnight-blue !important;
+    color: $white !important;
+    border: 1px solid $midnight-blue !important;
 }
 
 .custom-dropdown .dropdown-menu > li > a:hover {
@@ -1154,8 +1154,11 @@ ul.sub-list {
 .aging-table.table-aging-report tr td:first-child,
 .aging-table.table-aging-report tr th:first-child {
     padding-left: 15px !important;
+    width: 20%;
 }
-
+.aging-table.table-aging-report tr th:first-child{
+    white-space: nowrap !important;
+}
 .aging-table .table-checkbox {
     position: absolute;
     left: 5px;
@@ -1167,7 +1170,7 @@ ul.sub-list {
 }
 
 /* .pagination-main {
-    background: $White;
+    background: $white;
 } */
 
 .invoice-btn.show {
@@ -1188,7 +1191,7 @@ ul.sub-list {
 }
 
 .text-gray {
-    color: #666666;
+    color:$nobel;
 }
 
 .Advance-Search .input-group-addon {
@@ -1247,7 +1250,7 @@ ul.sub-list {
     border: 1px solid #d6d6d6;
     /* height: 32px; */
     border-radius: 2px;
-    background: $White;
+    background: $white;
     font-size: 14px;
     cursor: pointer;
 }
@@ -1262,13 +1265,13 @@ ul.sub-list {
 }
 
 .btn-green {
-    background: $primaryBtncolror;
-    color: $White;
+    background: $deep-sky-blue;
+    color: $white;
 }
 
 .btn-green:hover {
-    color: $White;
-    background: $primaryBtnHovercolror;
+    color: $white;
+    background: $deep-sky-blue-hover;
 }
 
 /* .Advance-Search .header:after {
@@ -1360,7 +1363,7 @@ modal-container.modal {
 }
 
 .sales-invoice-modal .modal-header h4 {
-    color: $White !important;
+    color: $white !important;
     font-size: 22px !important;
 }
 
@@ -1377,7 +1380,7 @@ modal-container.modal {
 }
 
 .sales-invoice-modal .modal-body {
-    background: $White;
+    background: $white;
 }
 
 .sales-invoice-modal .ps__thumb-y {
@@ -1437,7 +1440,7 @@ modal-container.modal {
 }
 
 .list-icon-group input:checked + label {
-    background-color: $White;
+    background-color: $white;
     box-shadow: 2px 2px 5px gainsboro;
 }
 
@@ -1476,7 +1479,7 @@ modal-container.modal {
 .price-input {
     border: 1px solid #ccc;
     font-size: 14px;
-    background: $White;
+    background: $white;
     padding: 1px 2px;
     display: inline-block;
     max-width: 90px;
@@ -1484,7 +1487,7 @@ modal-container.modal {
 }
 
 .input-search .input-group-addon {
-    background: $White;
+    background: $white;
     border-right: 0px;
     border-color: #c6c6c6;
     color: #a9a9a9;
@@ -1495,14 +1498,14 @@ modal-container.modal {
 }
 
 .input-search .form-control {
-    background: $White;
+    background: $white;
     border-radius: 0px 2px 2px 0px !important;
     border-left: 0px;
-    border-color: $inputBorderColor;
+    border-color: $gainsboro;
 }
 
 .btn-filter {
-    background: $White;
+    background: $white;
     border: 1px solid #cbcbcb;
     font-size: 16px;
     padding: 4px 8px;
@@ -1559,24 +1562,25 @@ modal-container.modal {
     justify-content: center;
 }
 .color-primary {
-    color: $primaryBtncolror;
+    color: $deep-sky-blue;
 }
+
 /* my css end */
 
 /*input*/
 
 .form-control {
-    background: $White !important;
-    border: 1px solid $inputBorderColor;
+    background: $white !important;
+    border: 1px solid $gainsboro;
     border-radius: 2px !important;
     padding: 6px !important;
     outline: 0;
-    color: #484848 !important;
+    color: $nero !important;
     box-shadow: none;
 }
 
 input {
-    color: #484848 !important;
+    color: $nero !important;
 }
 
 .form-control::-webkit-input-placeholder,
@@ -1594,7 +1598,7 @@ input:-moz-placeholder {
 
 .form-control:focus {
     outline: none;
-    border-color: $border-blue !important;
+    border-color: $chetwode-blue !important;
     box-shadow: none;
 }
 
@@ -1632,7 +1636,7 @@ input:-moz-placeholder {
     display: inline-flex;
     width: 28px;
     height: 28px;
-    background-color: $border-blue;
+    background-color: $chetwode-blue;
     text-align: center;
     border-radius: 50%;
     justify-content: center;
@@ -1653,7 +1657,7 @@ input:-moz-placeholder {
 
 header .navbar {
     background-color: #f7f8fa;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid $gainsboro;
     padding: 3px 0;
 }
 
@@ -1662,7 +1666,7 @@ header .navbar {
 } */
 
 .t-h-bg1 th {
-    background: $White;
+    background: $white;
     color: #4d4d4d;
     padding: 11px !important;
     font-weight: 400;
@@ -1732,9 +1736,9 @@ header .navbar {
 /*btn*/
 
 .btn-primary {
-    background: $White;
-    border-color: $border-blue;
-    color: $dark-blue00;
+    background: $white;
+    border-color: $chetwode-blue;
+    color: $midnight-express;
 }
 
 .btn-primary:hover,
@@ -1745,9 +1749,9 @@ header .navbar {
 .open > .dropdown-toggle.btn-primary,
 .btn-primary:active:focus,
 .btn-primary:active:hover {
-    background: $border-blue;
-    color: $White;
-    border-color: $border-blue;
+    background: $chetwode-blue;
+    color: $white;
+    border-color: $chetwode-blue;
 }
 
 .btn-primary.disabled.focus,
@@ -1759,13 +1763,13 @@ header .navbar {
 fieldset[disabled] .btn-primary.focus,
 fieldset[disabled] .btn-primary:focus,
 fieldset[disabled] .btn-primary:hover {
-    background: $border-blue;
-    color: $White;
-    border-color: $border-blue;
+    background: $chetwode-blue;
+    color: $white;
+    border-color: $chetwode-blue;
 }
 
 .btn {
-    padding: 7px 16px;
+    padding: 7px 10px;
     border-radius: 2px;
     font-size: 14px;
     margin-right: 8px;
@@ -1779,9 +1783,9 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .btn-default {
-    background: $White;
-    border-color: $border-blue;
-    color: $dark-blue00;
+    background: $white;
+    border-color: $chetwode-blue;
+    color: $midnight-express;
 }
 
 .btn-default:hover,
@@ -1793,9 +1797,9 @@ fieldset[disabled] .btn-primary:hover {
 .btn-default:active,
 .btn-default:active:focus,
 .open > .dropdown-toggle.btn-default {
-    background: $border-blue;
-    color: $White;
-    border-color: $border-blue;
+    background: $chetwode-blue;
+    color: $white;
+    border-color: $chetwode-blue;
 }
 
 #actionPane .btn-default {
@@ -1807,12 +1811,12 @@ fieldset[disabled] .btn-primary:hover {
 /*btn end*/
 
 .ledger-main .form-control {
-    background: $White !important;
+    background: $white !important;
     height: 45px;
 }
 
 .ledger-header thead th {
-    background: $White;
+    background: $white;
     border-right: 1px solid #c4c6c7;
 }
 
@@ -1822,7 +1826,7 @@ fieldset[disabled] .btn-primary:hover {
 
 .compoundEntry td,
 .compoundEntry td .form-control {
-    /* background: $White0bc !important; */
+    /* background: $white0bc !important; */
     border: 0;
 }
 
@@ -1867,7 +1871,7 @@ fieldset[disabled] .btn-primary:hover {
     min-height: 28px;
     border: 0;
     background: transparent;
-    color: $White;
+    color: $white;
     padding: 7px 35px 7px 10px !important;
     border: 1px solid #5f6e7e;
 }
@@ -1878,12 +1882,12 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .ledger_search i {
-    color: $White;
+    color: $white;
 }
 
 .ledger_search .input-group-addon {
     background: #333;
-    color: $White;
+    color: $white;
     border: 0;
     border-top: 0;
     border-bottom: 0;
@@ -1953,7 +1957,7 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .export-ledger-options .list-unstyled {
-    background: $White;
+    background: $white;
     left: -80px;
     width: 151px;
 }
@@ -1995,13 +1999,13 @@ fieldset[disabled] .btn-primary:hover {
 
 .btn-gray {
     background: #666666;
-    color: $White;
+    color: $white;
     /* font-size: 10px;
     padding: 7px 10px; */
 }
 
 .btn-gray:hover {
-    color: $White;
+    color: $white;
 }
 
 .p-t-5 {
@@ -2090,7 +2094,7 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .danger-btn {
-    color: $White;
+    color: $white;
     text-shadow: none;
     background-image: none;
     padding: 12px 25px;
@@ -2107,7 +2111,7 @@ fieldset[disabled] .btn-primary:hover {
     display: inline-block;
     background: none;
     padding: 0px 5px 0 0 !important;
-    color: $White;
+    color: $white;
 }
 
 /* #cmpWrp .cText {
@@ -2117,7 +2121,7 @@ fieldset[disabled] .btn-primary:hover {
 } */
 
 #companyList {
-    background: $White;
+    background: $white;
     padding-bottom: 4px;
 }
 
@@ -2130,19 +2134,19 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .selected-company a.ellp {
-    color: $border-blue;
+    color: $chetwode-blue;
 }
 
 #companyList li.selected-company a:focus {
-    background-color: $border-blue;
+    background-color: $chetwode-blue;
 }
 
 #companyList li.selected-company a:hover span {
-    color: $border-blue !important;
+    color: $chetwode-blue !important;
 }
 
 #companyList li.selected-company a:focus span {
-    color: $White !important;
+    color: $white !important;
 }
 
 .company-name .icon-dots-three-vertical {
@@ -2152,7 +2156,7 @@ fieldset[disabled] .btn-primary:hover {
     bottom: 0;
     transform: translateY(-50%);
     right: 16px;
-    color: $White;
+    color: $white;
 }
 
 p.table-email {
@@ -2225,7 +2229,7 @@ input[type="checkbox"]:before {
     z-index: 1;
     width: 12px;
     height: 7px;
-    border: 2px solid $White;
+    border: 2px solid $white;
     border-top-style: none;
     border-right-style: none;
 }
@@ -2238,15 +2242,15 @@ input[type="checkbox"]:after {
     border: 1px solid #cccccc;
     width: 18px;
     height: 18px;
-    background: $White;
+    background: $white;
     cursor: pointer;
     border-radius: 2px;
     visibility: visible;
 }
 
 input[type="checkbox"]:checked:after {
-    background-color: $border-blue;
-    border-color: $border-blue;
+    background-color: $chetwode-blue;
+    border-color: $chetwode-blue;
 }
 
 .tab-pane .list-inline > li {
@@ -2285,13 +2289,13 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-success-outline:hover {
-    color: $White;
+    color: $white;
     background: #0cb1af;
 }
 
 .btn-success {
-    background: #0cb1af;
-    color: $White;
+    background: #0cb1af; 
+    color: $white;
     border: 1px solid #0cb1af;
 }
 
@@ -2300,7 +2304,7 @@ input[type="checkbox"]:checked:after {
 .btn-success:active:hover,
 .btn-success:focus {
     background: #087e7d;
-    color: $White;
+    color: $white;
     border: 1px solid #087e7d;
 }
 
@@ -2384,7 +2388,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .thumbnail.active {
-    background: $White;
+    background: $white;
     box-shadow: 0 5px 34px 0 rgba(211, 95, 41, 0.18);
 }
 
@@ -2393,7 +2397,7 @@ input[type="checkbox"]:checked:after {
     float: left;
     overflow: hidden;
     padding: 0;
-    background: $White;
+    background: $white;
     border-color: #fbc2a8 !important;
 }
 
@@ -2411,7 +2415,7 @@ input[type="checkbox"]:checked:after {
 
 .switch.wide.checked small {
     left: 31px;
-    background: $White;
+    background: $white;
 }
 
 .switch.wide {
@@ -2616,16 +2620,16 @@ input[type="checkbox"]:checked:after {
 }
 
 .text-light-2 {
-    color: #adadad;
+    color:$nobel;
 }
 
 .subscription-title {
     font-size: 20px;
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
 }
 
 .box2 {
-    background: $White;
+    background: $white;
 }
 
 .head-title {
@@ -2661,13 +2665,19 @@ input[type="checkbox"]:checked:after {
 }
 
 .campanien-list ul > li > a:hover {
-    color: $light-text-blue;
+    color: $chetwode-blue;
     background: #eeeff9;
 }
 
 .campanien-list ul > li > a > span {
     color: #ababab;
     float: right;
+}
+
+li.no-click {
+    pointer-events: none;
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .modal-list {
@@ -2931,11 +2941,11 @@ input[type="checkbox"]:checked:after {
 .daterangepicker td.active:hover {
     background-color: #5864c9 !important;
     border-color: transparent;
-    color: $White;
+    color: $white;
 }
 
 .daterangepicker td.in-range {
-    background-color: $light-purple !important;
+    background-color: $lavender-light !important;
     border-color: transparent;
     color: #000;
     border-radius: 0;
@@ -2954,7 +2964,7 @@ input[type="checkbox"]:checked:after {
 }
 
 #user-dropdown {
-    color: $White;
+    color: $white;
     background: #333;
     width: 50px;
     text-align: center;
@@ -2979,9 +2989,9 @@ input[type="checkbox"]:checked:after {
 
 .ranges li.active,
 .ranges li:hover {
-    background: $border-blue !important;
-    border: 1px solid $border-blue !important;
-    color: $White !important;
+    background: $chetwode-blue !important;
+    border: 1px solid $chetwode-blue !important;
+    color: $white !important;
 }
 
 .download-invoice-ledger {
@@ -2996,7 +3006,7 @@ input[type="checkbox"]:checked:after {
     border-top-width: 0;
     top: 1px;
     border-right: 15px solid transparent;
-    border-bottom: 15px solid $White;
+    border-bottom: 15px solid $white;
     border-left: 15px solid transparent;
     left: -15px;
     z-index: 9;
@@ -3021,27 +3031,27 @@ button:focus {
 /*placeholder webkit css*/
 
 #accountSearch::-webkit-input-placeholder {
-    color: $White;
+    color: $white;
 }
 
 #accountSearch::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
-    color: $White;
+    color: $white;
 }
 
 #accountSearch::-moz-placeholder {
     /* Firefox 19+ */
-    color: $White;
+    color: $white;
 }
 
 #accountSearch:-ms-input-placeholder {
     /* IE 10+ */
-    color: $White;
+    color: $white;
 }
 
 #accountSearch:-moz-placeholder {
     /* Firefox 18- */
-    color: $White;
+    color: $white;
 }
 
 input[type="number"]::-webkit-outer-spin-button,
@@ -3055,7 +3065,7 @@ input[type="number"]::-webkit-inner-spin-button {
     height: 0;
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-bottom: 8px solid $White;
+    border-bottom: 8px solid $white;
     position: absolute;
     top: 2px;
     left: -6px;
@@ -3075,10 +3085,10 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .datePickr .dropdown-menu table {
-    border: 1px solid $White;
+    border: 1px solid $white;
     padding: 4px;
     border-radius: 4px;
-    background-color: $White;
+    background-color: $white;
 }
 
 .datePickr .dropdown-menu table th,
@@ -3093,7 +3103,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .ledger-main .form-control:focus {
-    border: 1px solid $activeIconTh !important;
+    border: 1px solid $deep-sky-blue !important;
     border-radius: 0 !important;
 }
 
@@ -3103,8 +3113,8 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .active.end-date.in-range.available,
 .daterangepicker td.start-date {
-    background: $border-blue !important;
-    color: $White;
+    background: $chetwode-blue !important;
+    color: $white;
     border-radius: 2px;
 }
 
@@ -3177,7 +3187,7 @@ footer > div > a {
 
 footer > div > a:hover {
     text-decoration: none;
-    color: $White;
+    color: $white;
 }
 
 footer > div > a:first-child {
@@ -3251,7 +3261,7 @@ footer small a {
 }
 
 .form-theme .form-control {
-    background: $White !important;
+    background: $white !important;
 }
 
 .form-theme .form-control[disabled],
@@ -3267,7 +3277,7 @@ footer small a {
 .form_title {
     padding: 12px 20px;
     background: #525252;
-    color: $White;
+    color: $white;
 }
 
 .form_title label {
@@ -3493,7 +3503,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .today.weekend.off.active.end-date.in-range.available {
-    background: $White !important;
+    background: $white !important;
     color: #999;
 }
 
@@ -3508,7 +3518,7 @@ a.btn.btn-xs.btn-link.pull-right {
     float: left;
     border-radius: 4px;
     transform: translateY(-50%);
-    color: $White;
+    color: $white;
 }
 
 .dlt_btn .glyphicon.glyphicon-remove {
@@ -3563,7 +3573,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .pop-panel .form-control {
     background: #f9f7f2;
-    border-color: $inputBorderColor;
+    border-color: $gainsboro;
 }
 
 .pop-panel label {
@@ -3583,7 +3593,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .popover.bottom > .arrow {
     right: 13%;
     left: auto;
-    border-bottom-color: $White;
+    border-bottom-color: $white;
 }
 
 .default_clr {
@@ -3601,17 +3611,12 @@ a.btn.btn-xs.btn-link.pull-right {
 .multi-select {
     position: relative;
 }
-
-/* .form-control[readonly] {
-  background: $White !important;
-} */
-
 .multi-select input.form-control {
     background-image: url("../images/caret.svg") !important;
     background-size: 10px !important;
     background-position: 96% !important;
     background-repeat: no-repeat !important;
-    background-color: $White !important;
+    background-color: $white !important;
     padding-right: 24px !important;
 }
 
@@ -3620,7 +3625,7 @@ a.btn.btn-xs.btn-link.pull-right {
     background-size: 12px !important;
     background-position: 94% !important;
     background-repeat: no-repeat !important;
-    background-color: $White !important;
+    background-color: $white !important;
     padding-right: 32px !important;
 }
 
@@ -3695,7 +3700,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 /* #shareModalh3 {
     font-size: 18px;
-    color: $White;
+    color: $white;
 } */
 
 .emailInput {
@@ -3790,7 +3795,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .modal-header {
     position: relative;
-    background: $top_header !important;
+    background: $midnight-blue !important;
 }
 
 .close_modal {
@@ -3798,7 +3803,7 @@ a.btn.btn-xs.btn-link.pull-right {
     top: 50%;
     transform: translateY(-50%);
     right: 15px;
-    color: $White;
+    color: $white;
     opacity: 1;
     text-shadow: none;
     cursor: pointer;
@@ -3826,7 +3831,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .modal-title.bg {
-    color: $White !important;
+    color: $white !important;
 }
 
 .modal-title {
@@ -3953,7 +3958,7 @@ input[type=radio]:checked:after {
 }
 
 .btn.btn-md {
-    padding: 10px 15px;
+    padding:7px 15px;
 }
 
 select.form-control {
@@ -3973,7 +3978,7 @@ select.form-control {
 }
 
 .addStockTbl .form-control {
-    background-color: $White !important;
+    background-color: $white !important;
 }
 
 .linkStockTbl {
@@ -4037,7 +4042,7 @@ select.form-control {
 }
 
 .modal-header > h3 {
-    color: $White;
+    color: $white;
     font-size: 18px;
 }
 
@@ -4053,7 +4058,7 @@ select.form-control {
     min-width: 160px;
     font-size: 14px;
     text-align: left;
-    background-color: $White;
+    background-color: $white;
     background-clip: padding-box;
     border: 1px solid #ccc;
     border: 1px solid rgba(0, 0, 0, 0.15);
@@ -4136,7 +4141,7 @@ select.form-control {
 
 /* .searchBar .form-control {
     background: #6b6a6a !important;
-    color: $White;
+    color: $white;
 } */
 
 .searchBar .form-control {
@@ -4148,7 +4153,7 @@ select.form-control {
 }
 
 form label {
-    color: #484848;
+    color:$nero;
     font-weight: normal;
     padding-bottom: 5px;
 }
@@ -4177,7 +4182,7 @@ label {
 
 .btn-add:hover,
 .btn-add:focus {
-    color: $White !important;
+    color: $white !important;
 }
 
 .ledger-panel .bdrB {
@@ -4226,7 +4231,7 @@ label {
 
 #App_taxes .form-control {
     background: #f4f5f5 !important;
-    border: 1px solid $inputBorderColor;
+    border: 1px solid $gainsboro;
 }
 
 .col_wrapper:nth-child(1) {
@@ -4277,27 +4282,27 @@ label {
 }
 
 .isActive {
-    color: $White !important;
-    background: $primaryBtncolror;
-    border-color: $primaryBtncolror;
+    color: $white !important;
+    background: $deep-sky-blue;
+    border-color: $deep-sky-blue;
 }
 
 .isActive:hover {
-    color: $White !important;
-    background: $primaryBtnHovercolror;
-    border-color: $primaryBtnHovercolror;
+    color: $white !important;
+    background: $deep-sky-blue-hover;
+    border-color: $deep-sky-blue-hover;
 }
 
 .isParent.isActive {
-    color: $White !important;
-    background: $primaryBtncolror !important;
-    border-color: $primaryBtncolror;
+    color: $white !important;
+    background: $deep-sky-blue !important;
+    border-color: $deep-sky-blue;
 }
 
 .isParent.isActive:hover {
-    color: $White !important;
-    background: $primaryBtnHovercolror !important;
-    border-color: $primaryBtnHovercolror;
+    color: $white !important;
+    background: $deep-sky-blue-hover !important;
+    border-color: $deep-sky-blue-hover;
 }
 
 .primary_clr {
@@ -4316,11 +4321,6 @@ label {
 .breadcrumbs {
     font-size: 13px;
     overflow: hidden;
-}
-
-.form_bg {
-    background: #f5f5f5;
-    padding: 10px 20px;
 }
 
 #Addaccount .form-inline select.form-control {
@@ -4375,7 +4375,7 @@ label {
 
 .btn-add:hover,
 .btn-add:focus {
-    color: $White !important;
+    color: $white !important;
 }
 
 .ledger-panel .bdrB {
@@ -4424,7 +4424,7 @@ label {
 
 #App_taxes .form-control {
     background: #f4f5f5 !important;
-    border: 1px solid $inputBorderColor;
+    border: 1px solid $gainsboro;
 }
 
 .tax-bullet {
@@ -4515,7 +4515,7 @@ label {
 }
 
 .accmerge li > a.isActive > span {
-    color: $White;
+    color: $white;
 }
 
 #getGroupModal hr {
@@ -4541,7 +4541,7 @@ label {
 }
 
 .breadcrumb > .active > a {
-    color: $activeTabBorder;
+    color: $deep-sky-blue;
 }
 
 .breadcrumb a {
@@ -4558,7 +4558,7 @@ label {
 
 .new_btn {
     position: absolute;
-    background: $White;
+    background: $white;
     top: 0;
     padding: 4px 0;
     width: 100%;
@@ -4580,7 +4580,7 @@ label {
     position: absolute;
     height: 100%;
     z-index: 99;
-    background: $White;
+    background: $white;
     width: 100%;
     left: 0;
     display: table;
@@ -4970,14 +4970,14 @@ label {
 .pagination > .active > span,
 .pagination > .active > span:focus,
 .pagination > .active > span:hover {
-    color: $White;
+    color: $white;
 }
 
 .pagination > li > a:focus,
 .pagination > li > a:hover,
 .pagination > li > span:focus,
 .pagination > li > span:hover {
-    background-color: #d9d9d9 !important;
+    background-color: $gainsboro !important;
     border-color: #ddd;
 }
 
@@ -5059,7 +5059,7 @@ label {
 
 #single_role .panel-heading {
     background: #ccc;
-    color: $White;
+    color: $white;
     border-radius: 0;
 }
 
@@ -5082,7 +5082,7 @@ label {
 }
 
 #single_role .panel-body tbody tr:nth-child(1) td {
-    background: $White;
+    background: $white;
     border-right: 0;
 }
 
@@ -5100,7 +5100,7 @@ label {
 
 #dashboard .panel-default {
     color: #4d4d4d;
-    border-color: #d9d9d9;
+    border-color: $gainsboro;
 }
 
 #dashboard .panel-default > .panel-heading {
@@ -5131,7 +5131,7 @@ label {
     position: absolute;
     width: 18px;
     height: 18px;
-    background: $White;
+    background: $white;
     /* top: -2px;
     right: -2px; */
     top: 0;
@@ -5145,7 +5145,7 @@ label {
     position: absolute;
     width: 8px;
     height: 8px;
-    background: $border-blue;
+    background: $chetwode-blue;
     left: 5px;
     bottom: 5px;
     border-radius: 50%;
@@ -5154,7 +5154,7 @@ label {
 }
 
 .radio_theme:checked:before {
-    border: 1px solid $border-blue;
+    border: 1px solid $chetwode-blue;
 }
 
 .dropdown-container .dropdown-menu {
@@ -5186,7 +5186,7 @@ label {
     .select2-container--default
     .select2-results__option--highlighted[aria-selected]
     a {
-    color: $White !important;
+    color: $white !important;
 }
 
 .ledger-row td .select2-results ul li a {
@@ -5253,7 +5253,7 @@ label {
 }
 
 #customInvoice .templateEditor .btn-group-lg > .btn:hover {
-    background: $White;
+    background: $white;
 }
 
 #customInvoice {
@@ -5274,8 +5274,8 @@ label {
 #customInvoice .templateEditor .form-control,
 #customInvoice .templateEditor .table > tbody > tr > td .form-control {
     margin: 7px 0;
-    background: $White;
-    border-color: $inputBorderColor;
+    background: $white;
+    border-color: $gainsboro;
     border-radius: 2px;
 }
 
@@ -5354,7 +5354,7 @@ label {
     width: 50px;
     height: 50px;
     float: left;
-    background: $White url("../images/designTool.svg") no-repeat;
+    background: $white url("../images/designTool.svg") no-repeat;
     background-size: 65px;
 }
 
@@ -5389,7 +5389,7 @@ label {
 }
 
 .templateView li img {
-    background: $White;
+    background: $white;
     height: 100%;
     width: 100%;
     object-fit: contain;
@@ -5406,7 +5406,7 @@ label {
     width: 100px;
     height: 100px;
     float: left;
-    background: $White;
+    background: $white;
     object-fit: contain;
 }
 
@@ -5506,7 +5506,7 @@ input[type="checkbox"][disabled] {
 
 .section_head {
     padding-bottom: 10px;
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
     font-size: 110%;
     color: rgba(0, 0, 0, 0.8);
 }
@@ -5578,29 +5578,6 @@ input[type="checkbox"][disabled] {
     position: relative;
     left: 5px;
 }
-
-/* .ledger-row .select2-ledger .select2-container--open .select2-search--dropdown {
-    top: -34px;
-    position: fixed;
-    background: transparent;
-    width: 100%;
-    padding: 0;
-}
-
-.ledger-row .select2-ledger .select2-container--open .select2-search__field {
-    background: $White0bc !important;
-    border: 0;
-    height: 34px;
-}
-
-.ledger-row .select2-ledger .select2-container--default .select2-selection__arrow {
-    display: none !important;
-}
-
-.ledger-row .select2-ledger .select2-container--default .select2-selection__rendered {
-    padding-right: 0;
-} */
-
 datepicker-inner .well table tbody tr td .btn-default {
     padding: 0 4px;
     border: 0;
@@ -5608,15 +5585,15 @@ datepicker-inner .well table tbody tr td .btn-default {
 }
 
 datepicker-inner .well table tbody tr td .btn-default:hover {
-    background: $border-blue !important;
-    color: $White;
+    background: $chetwode-blue !important;
+    color: $white;
 }
 
 datepicker-inner .well table tbody tr td .btn-default:hover span {
     text-decoration: none;
 }
 datepicker-inner .well table tbody tr td .btn-default:hover .text-success {
-    color: $White;
+    color: $white;
 }
 datepicker-inner
     .well
@@ -5644,13 +5621,13 @@ datepicker-inner
     td
     button.btn.btn-default.btn-link:hover
     .text-success {
-    color: $White !important;
+    color: $white !important;
 }
 .dropdown-menu.month-picker li a:hover {
     color: initial !important;
 }
 datepicker-inner .well {
-    background-color: $White;
+    background-color: $white;
     border-top: 0;
     box-shadow: none;
     margin: 0;
@@ -5678,7 +5655,7 @@ datepicker-inner .well table tbody .btn:active {
 
 datepicker-inner .well table tbody .btn.active .text-info,
 datepicker-inner .well table tbody .btn:active .text-info {
-    color: $White !important;
+    color: $white !important;
 }
 
 datepicker-inner .well table thead tr th .btn-secondary,
@@ -5695,7 +5672,7 @@ datepicker-inner .well table thead tr:nth-child(2) {
 
 datepicker-inner .well table tbody .btn-info .text-muted,
 datepicker-inner .well table tbody .btn-default.active {
-    color: $White;
+    color: $white;
 }
 
 .my-dropdown-menu datepicker-inner .well {
@@ -5739,12 +5716,12 @@ input[type="checkbox"][disabled]:after {
 }
 
 .toggle-btn label {
-    color: $border-blue;
+    color: $chetwode-blue;
     font-size: 16px;
 }
 
 .table-container {
-    background: $White;
+    background: $white;
 }
 
 .table-container section div .group {
@@ -5788,9 +5765,9 @@ input[type="checkbox"][disabled]:after {
 }
 
 .active-toggle-btn {
-    color: $White;
-    background-color: $border-blue;
-    border-color: $border-blue;
+    color: $white;
+    background-color: $chetwode-blue;
+    border-color: $chetwode-blue;
 }
 
 .input-group-addon input[type="radio"] {
@@ -5802,7 +5779,7 @@ input[type="checkbox"][disabled]:after {
     position: absolute;
     width: 18px;
     height: 18px;
-    background: $White;
+    background: $white;
     top: -1px;
     right: -2px;
     border: 1px solid #999;
@@ -5892,14 +5869,8 @@ ng-select > div > div.single > div.clear:hover {
 }
 
 .input-group .input-group-btn .btn {
-    /*background: $White;*/
     border-left: 0px;
 }
-
-// .input-group .input-group-btn .btn:hover {
-//     color: #28ab00 !important;
-//     background: $White;
-// }
 ng-select .select_drop {
     position: initial;
 }
@@ -5936,7 +5907,7 @@ virtual-scroll .scrollable-content .item > a {
 }
 
 virtual-scroll .scrollable-content .item.selected > a {
-    color: $border-blue !important;
+    color: $chetwode-blue !important;
 }
 
 virtual-scroll .scrollable-content .item:hover .item,
@@ -5957,8 +5928,10 @@ table input[type="number"] {
 }
 
 .btn-link {
-    color: $JacksonsPurple;
-    /* color: #2262D1; */
+    color: $primary !important;
+    &:hover{
+        color: $primary !important;
+    }
 }
 
 typeahead-container .dropdown-menu li.active > a,
@@ -5980,7 +5953,7 @@ typeahead-container .dropdown-menu li.active > a > a {
     right: 20px;
     top: 4px;
     line-height: 48px;
-    color: $White;
+    color: $white;
     opacity: 1;
     font-weight: 100;
     text-shadow: none;
@@ -5990,7 +5963,7 @@ typeahead-container .dropdown-menu li.active > a > a {
 /**new modal design**/
 
 .welcome_header {
-    background: $White url("../images/Welcome.png") no-repeat center center;
+    background: $white url("../images/Welcome.png") no-repeat center center;
     text-align: center;
     padding: 0px 0 30px;
     position: relative;
@@ -6105,8 +6078,8 @@ typeahead-container .dropdown-menu li.active > a > a {
 .btn-share,
 .btn-share:hover,
 .btn-share:focus {
-    background: $primaryBtncolror;
-    color: $White;
+    background: $deep-sky-blue;
+    color: $white;
 }
 
 .entry-modal {
@@ -6119,7 +6092,7 @@ typeahead-container .dropdown-menu li.active > a > a {
 
 .square-switch {
     width: 100%;
-    background: $White;
+    background: $white;
     height: 34px;
     line-height: 32px;
     margin: 0;
@@ -6145,7 +6118,7 @@ typeahead-container .dropdown-menu li.active > a > a {
 
 .square-switch input[type="checkbox"]:checked ~ label {
     background: #28ab00;
-    color: $White;
+    color: $white;
 }
 
 .square-switch > input[type="checkbox"] {
@@ -6270,7 +6243,7 @@ table td[class*=col-]:last-child {
 
 .ledger-stat {
     padding: 50px 0;
-    background: $White;
+    background: $white;
     color: #808080;
     font-size: 18px;
     margin: 100px 0;
@@ -6278,7 +6251,7 @@ table td[class*=col-]:last-child {
 
 .ledger-stat h3 {
     font-size: 24px;
-    margin-top: 10px;
+    margin-top: 0;
 }
 
 .icomoon_ico {
@@ -6287,7 +6260,7 @@ table td[class*=col-]:last-child {
 
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
     text-transform: capitalize;
 }
 
@@ -6314,7 +6287,7 @@ table td[class*=col-]:last-child {
     width: 50%;
     left: 25%;
     bottom: 100px;
-    background: $White;
+    background: $white;
     padding: 5px;
     font-size: 12px;
 }
@@ -6324,14 +6297,6 @@ table td[class*=col-]:last-child {
     overflow: hidden;
     width: 100%;
     text-align: center;
-}
-
-.pagination > li > a {
-    color: #4d4d4d;
-}
-
-.grey {
-    color: #4d4d4d;
 }
 
 .ledger-panel label {
@@ -6356,10 +6321,10 @@ table td[class*=col-]:last-child {
     clear: both;
     /* // overflow: hidden; */
     position: relative;
-    background: $White;
+    background: $white;
     float: left;
     width: 100%;
-    background: $White;
+    background: $white;
 }
 
 .Width600 {
@@ -6426,8 +6391,8 @@ table td[class*=col-]:last-child {
 
 .form-header {
     padding: 20px 15px;
-    background: $top_header;
-    color: $White;
+    background: $midnight-blue;
+    color: $white;
 }
 
 .form-header h3 {
@@ -6436,16 +6401,16 @@ table td[class*=col-]:last-child {
 }
 
 .form_body {
-    background: $White;
+    background: $white;
     /* padding: 15px; */
 }
 
 .noHover:hover td {
-    background: $White !important;
+    background: $white !important;
 }
 
 /* .universal_date label {
-    color: $White;
+    color: $white;
 } */
 
 .universal_date .btn-link {
@@ -6499,14 +6464,14 @@ table td[class*=col-]:last-child {
 
 .user_dropdown > li > a {
     font-size: 13px;
-    padding: 6px 20px !important;
+    padding: 6px 15px !important;
     color: #333333;
 }
 
 .app_list > ul {
     width: 100%;
     float: left;
-    padding: 4px 20px;
+    padding: 4px 15px;
     font-size: 14px;
     margin-bottom: 5px;
     /* margin: 10px 0; */
@@ -6514,7 +6479,7 @@ table td[class*=col-]:last-child {
 
 .app_list > ul h6 {
     margin-bottom: 10px;
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
     font-size: 13px;
 }
 
@@ -6562,7 +6527,7 @@ table td[class*=col-]:last-child {
 }
 
 .user_circle {
-    background: $border-blue;
+    background: $chetwode-blue;
     border-radius: 100%;
     margin-right: 10px;
     width: 30px;
@@ -6570,7 +6535,7 @@ table td[class*=col-]:last-child {
     display: inline-block;
     text-align: center;
     line-height: 30px;
-    color: $White;
+    color: $white;
     font-size: 14px;
     border: 1px solid var(--dark-blue);
     text-transform: uppercase;
@@ -6624,6 +6589,7 @@ table td[class*=col-]:last-child {
 
 .dropdown-menu > li > a {
     padding: 2px 10px;
+    color: $nero;
 }
 
 /* ==================================================
@@ -6833,7 +6799,7 @@ panel.sFthanks.fieldset {
 
 .unit_action .isSelected {
     opacity: 1;
-    background-color: $White !important;
+    background-color: $white !important;
 }
 
 /* ===============================================================
@@ -6968,7 +6934,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .user_dropdown > li a:hover {
-    color: $border-blue;
+    color: $chetwode-blue;
     background: #eeeff9;
 }
 
@@ -6989,8 +6955,8 @@ perfect-scrollbar > .ps > .ps-overlay {
     font-size: 20px;
     text-transform: capitalize;
     width: auto;
-    color: $pageTitleColor;
-    font-family: $tableFontSemibold;
+    color: $midnight-blue;
+    font-family: $opensans-semibold;
     vertical-align: middle;
 }
 
@@ -7214,7 +7180,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .table.transactions-summary-table > tbody > tr.secondary-row > td {
     border: none;
-    background-color: $White;
+    background-color: $white;
     border-right: 1px solid #ededed;
     font-size: 13px;
     padding: 13px;
@@ -7409,7 +7375,6 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .table-responsive {
-    display: table;
     width: 100%;
     max-width: 100vw;
 }
@@ -7599,7 +7564,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .zi-table.table thead > tr > th {
     color: #263035;
-    background: $White;
+    background: $white;
     font-weight: 700;
     font-size: 12px;
     text-transform: uppercase;
@@ -7613,7 +7578,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .transactions-overview {
-    background: $White;
+    background: $white;
 }
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a .count {
@@ -7627,7 +7592,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .table-striped > tbody > tr:nth-child(even) > td,
 .tax-engine .table-striped > tbody > tr:nth-child(even) > th {
-    background-color: $White;
+    background-color: $white;
 }
 
 .tax-engine .sub-filter-nav-band .nav-tabs > li.active > a::before {
@@ -7635,7 +7600,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine {
-    background: $White;
+    background: $white;
 }
 
 .tax-engine .header-band {
@@ -7669,7 +7634,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .push-gstin .nav.nav-tabs {
-    background: $White;
+    background: $white;
 }
 
 .push-gstin .nav.nav-tabs > li > a:hover,
@@ -7742,7 +7707,7 @@ app-header {
 }
 
 .error-box {
-    border: 2px solid red;
+    border: 2px solid $red;
 }
 .text-warning {
     color: #ffa000;
@@ -7786,34 +7751,34 @@ app-header {
 
 /* sticky footer css merged */
 
-.sticky-footer.stickyFooterSaleAmount {
-    background: $White;
+.sticky-footer.sticky-footer-sale-amount {
+    background: $white;
     padding: 10px;
     box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.16);
     text-align: right !important;
 }
 
-.menu_open .sticky-footer.stickyFooterSaleAmount {
+.menu_open .sticky-footer.sticky-footer-sale-amount {
     padding-left: 215px;
 }
 
-.stickyFooterSaleAmount .innerContentFooter {
+.sticky-footer-sale-amount .inner-content-footer {
     padding-left: 80px;
 }
 
-.stickyFooterSaleAmount .total-due h3 {
+.sticky-footer-sale-amount .total-due h3 {
     font-size: 20px;
 
     padding-right: 13px;
 }
 
-.stickyFooterSaleAmount .totalSale h3 {
+.sticky-footer-sale-amount .totalSale h3 {
     font-size: 20px;
     color: #8f9091;
     padding-right: 13px;
 }
 
-.stickyFooterSaleAmount h2 {
+.sticky-footer-sale-amount h2 {
     color: #333333;
     font-size: 32px;
     margin-top: 3px;
@@ -7861,7 +7826,7 @@ app-header {
 }
 
 .selection-none *::selection {
-    background: $White;
+    background: $white;
 }
 
 .selection-none-header *::selection {
@@ -7885,7 +7850,7 @@ footer#footer.absoulte-footer {
     position: relative;
 }
 
-.inventorypage footer#footer.absoulte-footer[_ngcontent-c4] {
+.inventory-page footer#footer.absoulte-footer {
     bottom: -60px;
     background-color: transparent !important;
 }
@@ -7903,17 +7868,16 @@ footer#footer.absoulte-footer {
     z-index: -1040;
 }
 
-section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
+section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
     text-align: left !important;
     margin-bottom: 0;
 }
 
-.sticky-footer.stickyFooterSaleAmount.customerFooterWrap {
+.sticky-footer.sticky-footer-sale-amount.customerFooterWrap {
     text-align: left !important;
 }
 
 .contact-main .table-aging-report {
-    margin-top: 30px !important;
     width: calc(100% - 1px);
 }
 
@@ -8012,7 +7976,7 @@ div#getGroupModal {
 .invoiceFooter {
     display: flex;
     padding: 20px;
-    background: $White;
+    background: $white;
     margin-top: 60px;
     position: fixed;
     width: 100%;
@@ -8026,7 +7990,7 @@ div#getGroupModal {
     left: 215px;
     display: flex;
     padding: 20px;
-    background: $White;
+    background: $white;
     margin-top: 60px;
     position: fixed;
     width: 100%;
@@ -8140,7 +8104,7 @@ span.red-text {
 
 #invoice-setting .nav > li > a:focus,
 #invoice-setting .nav > li > a:hover {
-    background: $White !important;
+    background: $white !important;
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
 
@@ -8196,7 +8160,7 @@ span.red-text {
 }
 
 .hamburger_menu i.icon-bar {
-    color: $pageTitleColor;
+    color: $midnight-blue;
 }
 
 .pageCount span {
@@ -8294,7 +8258,7 @@ span.red-text {
 }
 
 .dashboard-container input[type="checkbox"]:checked:before {
-    border-color: $White;
+    border-color: $white;
 }
 
 .dashboard-container input[type="checkbox"]:after {
@@ -8314,16 +8278,11 @@ ul.dropdown-menu p.lead.pd {
     height: 36px;
 }
 
-/*  .nav.nav-tabs>li>a {
-                    color: $dark-blue00 !important;
-                    border-bottom: 4px solid transparent !important;
-                }
-            */
 .nav-tabs > li.active > a,
 .invoce-controll .nav-tabs > li.active > a {
-    border-bottom: 4px solid $activeIconTh !important;
+    border-bottom: 4px solid $deep-sky-blue !important;
     padding-bottom: 7px !important;
-    font-family: $tableFontSemibold;
+    font-family: $opensans-semibold;
 }
 
 .invoce-controll .nav-tabs > li > a {
@@ -8331,7 +8290,7 @@ ul.dropdown-menu p.lead.pd {
 }
 
 .dropdown-menu > li > a:hover {
-    color: $border-blue !important;
+    color: $chetwode-blue !important;
     background: #eeeff9 !important;
 }
 
@@ -8367,13 +8326,13 @@ ul.dropdown-menu p.lead.pd {
 }
 
 #invoice-setting .nav > li > a.active {
-    border: 1px solid $activeTabBorder !important;
-    border-bottom-color: $activeTabBorder !important;
-    color: $activeTabBorder !important;
+    border: 1px solid $deep-sky-blue !important;
+    border-bottom-color: $deep-sky-blue !important;
+    color: $deep-sky-blue !important;
 }
 
 #invoice-setting .nav > li > a.active span {
-    color: $activeTabBorder;
+    color: $deep-sky-blue;
 }
 
 .aging-table th .table-checkbox {
@@ -8382,25 +8341,25 @@ ul.dropdown-menu p.lead.pd {
 
 .btn-lg.btn-primary {
     min-width: 155px;
-    background: $White;
+    background: $white;
     color: #5b64c9;
-    border-radius: 0px;
     box-shadow: none;
 }
 
 .btn-lg.btn-primary:hover {
     background: #5b64c9;
-    color: $White;
+    color: $white;
     box-shadow: 0px 4px 4px -3px #afabab;
     border-radius: 0px;
     border-color: #5b64c9;
 }
 
 .asidePanelLedger button.btn.btn-lg.btn-primary {
-    min-width: 170px;
+    min-width: 150px;
+    font-size: 16px;
 }
 
-.settingPage ul.nav.nav-tabs {
+.setting-page ul.nav.nav-tabs {
     margin-bottom: 15px;
     padding: 0 0px 0 15px !important;
     background-color: #f7f8fa;
@@ -8409,16 +8368,16 @@ ul.dropdown-menu p.lead.pd {
     top: -4px;
 }
 
-.settingPage .nav > li > a {
+.setting-page .nav > li > a {
     padding: 2px 0px;
-    margin-right: 35px;
+    margin-right: 25px;
     padding-bottom: 7px;
     font-size: 14px;
     color: #333 !important;
 }
 
-.settingPage .nav > li > a:hover {
-    color: $activeTabBorder !important;
+.setting-page .nav > li > a:hover {
+    color: $deep-sky-blue !important;
 }
 
 #tab-integration .nav-tabs {
@@ -8430,7 +8389,7 @@ ul.dropdown-menu p.lead.pd {
     padding-top: 0 !important;
 }
 
-.settingPage .nav > li > a.active {
+.setting-page .nav > li > a.active {
     color: #1c1c1c !important;
 }
 
@@ -8444,18 +8403,18 @@ ul.dropdown-menu p.lead.pd {
 }
 
 #tab-integration .nav-tabs > li a:hover {
-    background-color: $White !important;
+    background-color: $white !important;
 }
 
 #tab-integration .nav-tabs > li a.active {
-    border-bottom: 1px solid $activeTabBorder !important;
+    border: 1px solid $deep-sky-blue !important;
     font-family: "opensans-regular";
-    color: $activeTabBorder !important;
-    border-color: $activeTabBorder !important;
+    color: $deep-sky-blue !important;
+    border-color: $deep-sky-blue !important;
 }
 
 #tab-integration .nav-tabs > li a.active span {
-    color: $activeTabBorder;
+    color: $deep-sky-blue;
 }
 
 .input-group-addon {
@@ -8468,18 +8427,19 @@ ul.dropdown-menu p.lead.pd {
 
 .date-advanceSearch .icon-calender {
     height: 36px !important;
-    border-right: 1px solid #d9d9d9 !important;
+    border-right: 1px solid $gainsboro !important;
     color: #999999 !important;
 }
 
 .date-advanceSearch .input-group input.form-control {
-    border-color: $inputBorderColor !important;
+    border-color: $gainsboro !important;
 }
 
 .advance-icon {
     height: 36px !important;
     width: 36px !important;
-    border: 1px solid $inputBorderColor !important;
+    border: 1px solid $gainsboro !important;
+    color: $gray !important;
 }
 
 .table-bordered > tbody > tr > td,
@@ -8488,7 +8448,7 @@ ul.dropdown-menu p.lead.pd {
 .table-bordered > tfoot > tr > th,
 .table-bordered > thead > tr > td,
 .table-bordered > thead > tr > th {
-    border: 1px solid $tableBorderColor;
+    border: 1px solid $gainsboro;
 }
 
 table.basic td {
@@ -8500,7 +8460,7 @@ table.basic td {
 }
 
 button.btn.btn-filter {
-    padding: 6px 10px !important;
+    padding: 8px 10px !important;
 }
 
 .setting-container .btn-default.btn-xs {
@@ -8535,7 +8495,7 @@ button.btn.btn-filter {
 
 .icon-sort-asc:hover,
 .icon-sort-dsc:hover {
-    color: $activeIconTh !important;
+    color: $deep-sky-blue !important;
 }
 
 .amount-arrow .icon-sort-asc {
@@ -8544,7 +8504,7 @@ button.btn.btn-filter {
 }
 
 .td_in_searchBox div i.icon-search:hover {
-    color: $activeIconTh !important;
+    color: $deep-sky-blue !important;
 }
 
 .mobileCode .menu {
@@ -8559,7 +8519,7 @@ button.btn.btn-filter {
 
 .aside-pane-form #asidePaneFormTabs ul.nav.nav-tabs {
     padding: 0 !important;
-    background-color: $White !important;
+    background-color: $white !important;
 }
 
 .aside-pane-form #asidePaneFormTabs .nav > li > a {
@@ -8613,7 +8573,7 @@ button.ladda-button .ladda-label {
     border: 0;
     border-radius: 0;
     background: transparent;
-    color: $White;
+    color: $white;
 }
 
 .ng-select-wrap.liq.selectGroup .below {
@@ -8688,7 +8648,7 @@ p.remvBrnchName {
 .asidePanelLedger .btn-lg:hover {
     background-color: #5b64c9 !important;
     border-color: #5b64c9 !important;
-    color: $White !important;
+    color: $white !important;
 }
 
 .daterangepicker td.active,
@@ -8723,7 +8683,7 @@ p.remvBrnchName {
 }
 
 #asidePaneFormTabs.custom-tabs .nav.nav-tabs {
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid $gainsboro;
     padding: 0 0px 0 0 !important;
     background-color: transparent;
     z-index: 9;
@@ -8736,13 +8696,13 @@ p.remvBrnchName {
     padding-right: 0 !important;
 }
 
-.reciptNoteModal {
+.receipt-note-modal  {
     width: 100% !important;
     top: 0;
 }
 
-.inventorypage .modal,
-.inventorypage .reciptNoteModal {
+.inventory-page .modal,
+.inventory-page .receipt-note-modal  {
     margin-top: 0;
     border-radius: 0;
 }
@@ -8771,7 +8731,7 @@ p.remvBrnchName {
 
 .createAccForm li.highlighted.selected .account-list-item,
 .createAccForm li.highlighted .account-list-item {
-    color: $light-text-blue !important;
+    color: $chetwode-blue !important;
 }
 
 button {
@@ -8829,8 +8789,8 @@ input.checkbox-custom[type="checkbox"] {
 .checkbox-custom + .checkbox-custom-label:before,
 .radio-custom + .radio-custom-label:before {
     content: "";
-    background: $White;
-    border: 1px solid #ccc;
+    background: $white;
+    border: 1px solid $gainsboro;
     display: inline-block;
     vertical-align: middle;
     width: 18px;
@@ -8849,7 +8809,7 @@ input.checkbox-custom[type="checkbox"] {
     z-index: 1;
     width: 12px;
     height: 7px;
-    border: 2px solid $White;
+    border: 2px solid $white;
     border-top-style: none;
     border-right-style: none;
     transition: transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
@@ -8859,24 +8819,24 @@ input.checkbox-custom[type="checkbox"] {
 }
 
 .checkbox-custom:checked + .checkbox-custom-label:before {
-    background: $border-blue;
+    background: $chetwode-blue;
 
-    border: 2px solid $border-blue;
+    border: 2px solid $chetwode-blue;
 }
 
 .radio-custom + .radio-custom-label:before {
     border-radius: 50%;
-    border: 1px solid $border-blue;
+    border: 1px solid $gainsboro;
 }
 
 .radio-custom:checked + :before {
-    background: $border-blue;
-    border: 1px solid $border-blue;
-    box-shadow: inset 0px 0px 0px 4px $White;
+    background: $chetwode-blue;
+    border: 1px solid $chetwode-blue;
+    box-shadow: inset 0px 0px 0px 4px $white;
 }
 
 .checkbox-custom:focus + .checkbox-custom-label:before {
-    border: 1px solid $border-blue;
+    border: 1px solid $chetwode-blue;
 }
 
 /* radio & checkbox new CSS end */
@@ -8900,6 +8860,17 @@ input.checkbox-custom[type="checkbox"] {
     .ledger-account-label
     input.form-control.focused {
     padding-left: 10px !important;
+}
+
+.inventory-page.modal-open .receipt-note-modal  {
+    margin-bottom: 0;
+}
+.aside-body .btn-lg.btn-primary{
+    font-size: 16px;
+    min-width: 150px;
+}
+.modal-content{
+    border: none !important;
 }
 /* responsive */
 
@@ -8934,7 +8905,6 @@ input.checkbox-custom[type="checkbox"] {
         overflow: auto;
         white-space: initial;
         width: 100%;
-        max-width: 230px;
         margin: 0 auto;
         display: block;
     }
@@ -8997,7 +8967,7 @@ input.checkbox-custom[type="checkbox"] {
     .left-account-opration {
         height: initial !important;
         width: 100%;
-        background: $White;
+        background: $white;
     }
     .usesr-last-list > li {
         display: inline-block;
@@ -9019,7 +8989,7 @@ input.checkbox-custom[type="checkbox"] {
     .stock-lists {
         position: absolute;
         box-shadow: 0 3px 6px #ccc;
-        background: $White;
+        background: $white;
         min-width: 200px;
         display: inline-block;
         z-index: 9;
@@ -9141,10 +9111,10 @@ input.checkbox-custom[type="checkbox"] {
     }
     .tax-engine .table-striped > tbody > tr:nth-child(odd) > td,
     .tax-engine .table-striped > tbody > tr:nth-child(odd) > th {
-        background-color: $White;
+        background-color: $white;
     }
     .tax-engine .table-striped > tbody > tr:nth-of-type(odd) {
-        background-color: $White;
+        background-color: $white;
     }
 }
 
@@ -9172,15 +9142,15 @@ input.checkbox-custom[type="checkbox"] {
         border-right: none;
     }
     header .navbar {
-        background-color: $top_header !important;
+        background-color: $midnight-blue !important;
         /*border-bottom: 2px solid #e6e7e8;*/
     }
     header .hamburger_menu h4 {
-        color: $White;
+        color: $white;
         font-size: 16px;
     }
     header .hamburger_menu i.icon-bar {
-        color: $White;
+        color: $white;
     }
     .dropdown-width ul.dropdown-menu.pd {
         min-width: 150px !important;
@@ -9258,7 +9228,7 @@ input.checkbox-custom[type="checkbox"] {
     #settingTab .tab-container .nav.nav-tabs {
         position: fixed;
         width: 100%;
-        top: 85px;
+        top: 95px;
     }
     .custom-tabs .nav.nav-tabs {
         position: fixed;
@@ -9283,7 +9253,7 @@ input.checkbox-custom[type="checkbox"] {
     #settingTab app-invoice-setting .tab-container .nav.nav-tabs {
         margin-top: 50px;
     }
-    .settingPage .nav > li > a,
+    .setting-page .nav > li > a,
     .custom-tabs .nav.nav-tabs > li a {
         padding-top: 7px;
     }
@@ -9340,7 +9310,7 @@ input.checkbox-custom[type="checkbox"] {
         display: block;
     }
     .cText span.cName {
-        color: $White !important;
+        color: $white !important;
     }
     .user_dropdown {
         left: 0px !important;
@@ -9348,8 +9318,17 @@ input.checkbox-custom[type="checkbox"] {
     .xs-d-block {
         display: block;
     }
+    .xs-mb-1 {
+        margin-bottom: 10px;
+    }
     .xs-mr-0 {
         margin-right: 0px;
+    }
+    .xs-pull-left {
+        float: left !important;
+    }
+    body.hide-scroll-body{
+        overflow-y: hidden;
     }
 }
 
@@ -9366,7 +9345,7 @@ input.checkbox-custom[type="checkbox"] {
         overflow-x: hidden;
     }
     #companyList {
-        background: $White;
+        background: $white;
         padding-bottom: 4px;
         left: 0px;
         top: 30px;
@@ -9546,7 +9525,7 @@ input.checkbox-custom[type="checkbox"] {
         padding: 4px 15px !important;
     }
     .bgWhiteMo {
-        background-color: $White;
+        background-color: $white;
     }
     .breadcrumbs {
         border-top: 1px solid #ccc;
@@ -9565,7 +9544,7 @@ input.checkbox-custom[type="checkbox"] {
         position: relative;
     }
     .grp_list:nth-child(2) {
-        background-color: $White;
+        background-color: $white;
     }
     .col_wrapper.left-account-opration:nth-child(3),
     .col_wrapper.left-account-opration:nth-child(2),

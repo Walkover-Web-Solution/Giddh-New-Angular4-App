@@ -1,6 +1,6 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, OnInit, Optional } from '@angular/core';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { HttpWrapperService } from './httpWrapper.service';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
@@ -13,7 +13,7 @@ import { NewVsOldInvoicesRequest, NewVsOldInvoicesResponse } from '../models/api
 export class NewVsOldInvoicesService implements OnInit {
     private companyUniqueName: string;
 
-    constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
+    constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService,
         private _generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this.companyUniqueName = this._generalService.companyUniqueName;

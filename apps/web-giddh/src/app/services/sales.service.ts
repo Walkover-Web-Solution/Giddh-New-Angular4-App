@@ -4,13 +4,13 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GenericRequestForGenerateSCD } from '../models/api-models/Sales';
 import { SALES_API_V2, SALES_API_V4 } from './apiurls/sales.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from "../models/api-models/Reports";
-import { AdvanceReceiptRequest } from '../models/api-models/AdvanceReceiptsAdjust';
+import { AdvanceReceiptRequest, AdvanceReceiptAdjustment } from '../models/api-models/AdvanceReceiptsAdjust';
 import { ADVANCE_RECEIPTS_API } from './apiurls/advance-receipt-adjustment.api';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class SalesService {
 
     constructor(
         private _http: HttpWrapperService,
-        private errorHandler: ErrorHandler,
+        private errorHandler: GiddhErrorHandler,
         private _generalService: GeneralService,
         @Optional() @Inject(ServiceConfig)
         private config: IServiceConfigArgs
@@ -116,14 +116,14 @@ export class SalesService {
         }), catchError((e) => this.errorHandler.HandleCatch(e)));
     }
 
-/**
- * API call to get all advance receipt vouchers using invoice date
- *
- * @param {AdvanceReceiptRequest} model Request model
- * @returns {Observable<BaseResponse<any, AdvanceReceiptRequest>>} API response
- * @memberof SalesService
- */
-public getAllAdvanceReceiptVoucher(model: AdvanceReceiptRequest): Observable<BaseResponse<any, AdvanceReceiptRequest>> {
+    /**
+     * API call to get all advance receipt vouchers using invoice date
+     *
+     * @param {AdvanceReceiptRequest} model Request model
+     * @returns {Observable<BaseResponse<any, AdvanceReceiptRequest>>} API response
+     * @memberof SalesService
+     */
+    public getAllAdvanceReceiptVoucher(model: AdvanceReceiptRequest): Observable<BaseResponse<any, AdvanceReceiptRequest>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.get(this.config.apiUrl + ADVANCE_RECEIPTS_API.GET_ALL_ADVANCE_RECEIPTS
@@ -137,4 +137,25 @@ public getAllAdvanceReceiptVoucher(model: AdvanceReceiptRequest): Observable<Bas
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, AdvanceReceiptRequest>(e, model)));
     }
+
+    /**
+     * API call to adjust an invoice with advance receipts
+     *
+     * @param {AdvanceReceiptAdjustment} model Adjust advance receipts request model
+     * @param {string} invoiceUniqueName Invoice unique name which need to adjust
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SalesService
+     */
+    public adjustAnInvoiceWithAdvanceReceipts(model: AdvanceReceiptAdjustment, invoiceUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.user = this._generalService.user;
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.post(this.config.apiUrl + ADVANCE_RECEIPTS_API.INVOICE_ADJUSTMENT_WITH_ADVANCE_RECEIPT.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceUniqueName', invoiceUniqueName), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
 }

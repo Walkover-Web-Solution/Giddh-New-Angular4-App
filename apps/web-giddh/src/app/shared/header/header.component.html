@@ -177,7 +177,7 @@
 
             </div>
             <div class="col-sm-6">
-                <div class="giddh-logo">
+                <div class="giddh-logo" (click)="forceOpenNavigation = true;">
 
                     <!-- [attachOutsideOnClick]="true" [isOpen]="companyMenu.isopen"  [attachOutsideOnClick]="true" (clickOutside)="closeUserMenu(dropdown)"-->
             <li class="company-name pos-rel" [autoClose]="false" dropdown #dropdown="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="dropdown.isOpen = false">
@@ -347,7 +347,13 @@
                             <span class="label">{{menu.name}}</span>
                         </a>
                     </li>
-                    <li id="other" *ngIf="!isMobileSite" (mouseenter)="allModulesPopover.show()" (mouseleave)="handleAllModulesLeaveEvent($event)">
+
+                    <!-- <li class="other">
+                        <a [routerLink]="['/pages/all-modules']">All Modules
+                        </a>
+                    </li> -->
+
+                    <li class="other" *ngIf="!isMobileSite" (mouseenter)="allModulesPopover.show()" (mouseleave)="handleAllModulesLeaveEvent($event)">
                         <a #allModulesPopover="bs-popover" [popover]="allModules" placement="right" containerClass="all-modules-popover"
                             (mouseenter)="allModulesPopover.show()" container="body">All
                             Modules <i *ngIf="!isMobileSite" tooltip="All Modules" placement="bottom" container="body"
@@ -425,6 +431,7 @@
                                                 *ngIf="activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode != 'IN'">Vat
                                                 Report</a></li>
                                         <li><a (click)="analyzeOtherMenus('home')">Dashboard</a></li>
+                                        <li><a (click)="analyzeOtherMenus('reports/reports-dashboard')">Reports</a></li>
                                     </ul>
 
                                 </div>
@@ -449,7 +456,7 @@
 
 </div>
 
-<header class="clearfix header-container desktopHeader " [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen }">
+<header class="clearfix header-container desktop-header " [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen , 'ledger-page': isLedgerAccSelected }">
     <nav class="navbar ">
         <div class="container-fluid pdT1 pdB1">
             <div class="navbar_header">
@@ -735,15 +742,6 @@
 
 
 <ng-template #headDropdownMenu>
-        <!-- dropdown  #dropdown="bs-dropdown" [autoClose]="false" -->
-        <!-- <li class="pos-rel pdT1" tooltip="{{seletedCompanywithBranch}}" placement="bottom">
-    <a href="javascript:void(0)" class="clearfix" dropdownToggle>
-      <div class="ellp bold">{{ (selectedCompany | async)?.name }} <span
-          *ngIf="(selectedCompany | async)?.nameAlias"
-          style="color: #4B5196;">({{ (selectedCompany | async)?.nameAlias }})</span></div>
-      <small class="ellp">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }}</small>
-    </a>
-  </li> -->
 
         <li>
             <div class="cText head-nav">

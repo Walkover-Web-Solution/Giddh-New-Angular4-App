@@ -1,4 +1,10 @@
+
+
+ 
 @import "../../../assets/css/color.scss";
+ 
+ 
+
 .ddMaxHeight {
     max-height: 500px;
 }
@@ -23,7 +29,7 @@
 }
 
 .account-search .input-group-addon {
-    border-color: $inputBorderColor;
+    border-color: $gainsboro;
     border-radius: 2px 0 0 2px;
     color: #484848;
     font-size: 12px;
@@ -41,7 +47,7 @@
 
 .account-search .form-control {
     background: none !important;
-    border-color: $inputBorderColor;
+    border-color: $gainsboro;
     border-left: 0px;
     border-radius: 0px 2px 2px 0 !important;
     height: 36px;
@@ -49,7 +55,7 @@
 }
 
 .account-search .form-control:focus {
-    border-color: $inputBorderColor !important;
+    border-color: $gainsboro !important;
     color: #b7b7b7;
 }
 
@@ -60,7 +66,7 @@
 }
 
 .account-search:hover:after {
-    color: $light-blue01;
+    color: $rich-blue;
     cursor: pointer;
 }
 
@@ -132,7 +138,7 @@ a[vr-item]:focus {
 }
 
 .main-company-name > li > a {
-    padding: 7px 15px !important;
+    padding: 6px 15px !important;
 }
 
 .main-company-name > li > a:hover .cText .cName,
@@ -143,6 +149,7 @@ a[vr-item]:focus {
 .left_fixed_header > li {
     text-transform: capitalize;
     position: relative;
+ 
 }
 .no-padding {
     padding: 0px !important;
@@ -157,7 +164,7 @@ a[vr-item]:focus {
 .left_fixed_header > li > a {
     display: block;
     padding: 7px 15px;
-    color: #1c1c1c;
+    color: $nero;
     position: relative;
 }
 
@@ -172,7 +179,8 @@ a[vr-item]:focus {
 }
 
 .left_fixed_header > li > a:hover {
-    color: #262626;
+    color: $nero;
+   
 }
 
 .left_fixed_header > li > a:hover .label > span,
@@ -181,14 +189,13 @@ a[vr-item]:focus {
 }
 
 .left_fixed_header > li a.active {
-    background: $menuHoverColor;
+    background: $lavender;
 }
 
 .left_fixed_header > li > a.active .label,
 .left_fixed_header > li > a.active .label > span {
-    color: #1c1c1c;
-    font-family: "opensans-semibold";
-}
+    color:$nero;
+ }
 
 .left_fixed_header > li > a .label {
     display: table-cell;
@@ -199,7 +206,6 @@ a[vr-item]:focus {
     color: #262626;
     letter-spacing: 0.6px;
     font-weight: normal;
-    font-family: "opensans-regular";
     padding: 0;
 }
 
@@ -211,11 +217,13 @@ a[vr-item]:focus {
     line-height: 1.3;
 }
 
+/*
 .left_fixed_header > li:hover a,
 .left_fixed_header > li > a:hover span,
 .left_fixed_header > li:hover a span {
     color: #fff;
 }
+*/
 
 .left_fixed_header [class^="icon-"] {
     font-size: 20px;
@@ -265,17 +273,17 @@ a[vr-item]:focus {
 }
 
 .left_fixed_header h6 {
-    color: $sidebarHeading;
+    color: $midnight-blue;
     font-size: 14px;
     padding-left: 15px;
     padding-right: 15px;
-    font-family: "opensans-semibold";
+    // font-family:$opensans-semibold;
 }
 
 .left_fixed_header > h6 > i {
     float: right;
     font-size: 10px;
-    background: $sidebarHeading;
+    background: $midnight-blue;
     display: inline-block;
     width: 15px;
     height: 15px;
@@ -287,7 +295,7 @@ a[vr-item]:focus {
     margin-right: 2px;
 }
 
-#other i {
+.other i {
     float: right;
     font-size: 20px;
     background: transparent;
@@ -422,20 +430,20 @@ a[vr-item]:focus {
 }
 
 .universal_date li input {
-    background: $headerBtnColor !important;
+    background: $governor-bay !important;
     padding-left: 29px !important;
     color: #fff !important;
     padding-right: 5px !important;
-    border: 1px solid $headerBtnColor;
+    border: 1px solid $governor-bay;
     text-align: left;
 }
 
 .universal_date li input:focus {
-    border: 1px solid $headerBtnColor !important;
+    border: 1px solid $governor-bay !important;
 }
 
 .header-date {
-    background: $headerBtnColor !important;
+    background: $governor-bay !important;
     padding: 5px 11px;
     border-radius: 0px 2px 2px 0px;
     color: #fff;
@@ -447,7 +455,7 @@ a[vr-item]:focus {
 }
 
 .calender-addone {
-    background-color: $headerBtnColor;
+    background-color: $governor-bay;
     color: #fff;
     padding: 9px 8px 9px 10px;
     vertical-align: bottom;
@@ -458,25 +466,25 @@ a[vr-item]:focus {
 
 .notToday .calender-addone {
     position: absolute;
-    border: 1px solid $headerBtnColor;
+    border: 1px solid $governor-bay;
     padding: 8px 8px;
 }
 
 #AddManage.btn-gray {
-    background: $headerBtnColor;
+    background: $governor-bay;
     color: #fff;
     position: relative;
     padding-left: 32px;
     padding-top: 4px;
     padding-bottom: 5px;
     padding-right: 12px;
-    border: 1px solid $headerBtnColor;
+    border: 1px solid $governor-bay;
 }
 
 #AddManage .icon-edit-ico {
     position: absolute;
     left: 0px;
-    background-color: $headerBtnColor;
+    background-color: $governor-bay;
     padding: 8px 6px 8px 7px;
     top: 0px;
     text-align: center;
@@ -485,11 +493,11 @@ a[vr-item]:focus {
 }
 
 span.icon-support.dropdown-toggle {
-    background-color: $headerBtnColor;
+    background-color: $governor-bay;
     color: #fff;
     padding: 6px 7px;
     font-size: 17px;
-    border: 1px solid $headerBtnColor;
+    border: 1px solid $governor-bay;
     border-radius: 1px;
     position: relative;
     top: 1px;
@@ -499,10 +507,10 @@ span.icon-support.dropdown-toggle {
     height: 32px;
 }
 
-#other a {
-    color: #262626;
+.other a {
+    color: $extra-dark-gray;
     text-transform: uppercase;
-    font-family: opensans-semibold;
+    // font-family:$opensans-semibold;
 }
 
 .showMoreOpt {
@@ -516,7 +524,7 @@ span.icon-support.dropdown-toggle {
 }
 
 .primary-header {
-    background-color: $top_header;
+    background-color: $midnight-blue;
     min-height: 60px;
     position: fixed;
     width: 100%;
@@ -542,7 +550,7 @@ span.icon-support.dropdown-toggle {
 
 .primary-header .company-name-finance-year {
     display: inline-block;
-    padding-left: 10px;
+    padding-left: 15px;
     width: 90%;
 }
 
@@ -572,7 +580,7 @@ span.icon-support.dropdown-toggle {
 
 ul.sub-list {
     min-height: 50px;
-    max-height: 400px;
+    max-height: 290px;
 }
 
 .upgradePlan.list-inline > li {
@@ -580,7 +588,7 @@ ul.sub-list {
 }
 
 .nav-left-bar .company-name .cText span {
-    color: #1c1c1c;
+    color: $nero;
     word-break: break-all;
 }
 
@@ -638,12 +646,16 @@ ul.sub-list {
     background: #f1f1f1;
     border-bottom: 1px solid #e4e4e4;
 }
-
+.ledger-page {
+    position: sticky;
+    top: 60px;
+    z-index: 10;
+}
 /* responsive */
 
 @media (max-height: 800px) {
     .nav-wrapper {
-        height: calc(100vh - 140px);
+        height: calc(100vh - 150px);
     }
 }
 
@@ -711,7 +723,7 @@ ul.sub-list {
         top: 14px;
         color: #fff;
         right: -35px;
-        background-color: $top_header;
+        background-color: $midnight-blue;
         width: 35px;
         height: 35px;
         text-align: center;

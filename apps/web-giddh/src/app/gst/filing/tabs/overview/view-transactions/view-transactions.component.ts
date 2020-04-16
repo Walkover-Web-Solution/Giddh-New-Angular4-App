@@ -15,9 +15,9 @@ import { DownloadOrSendInvoiceOnMailComponent } from '../../../../../invoice/pre
 export const Gstr1TransactionType = [
     { label: 'Invoices', value: 'invoices' },
     { label: 'Credit Notes', value: 'credit-notes' },
-    { label: 'Advance Receipt', value: 'advance-receipt' },
-    // {label: 'Refund Vouchers', value: 'refund-vouchers'},
     { label: 'Debit Notes', value: 'debit-notes' },
+    { label: 'Advance Receipt', value: 'advance-receipt' },
+    { label: 'Adjusted advance receipt', value: 'adjusted-advance-receipt' },
 ];
 
 export const Gstr2TransactionType = [

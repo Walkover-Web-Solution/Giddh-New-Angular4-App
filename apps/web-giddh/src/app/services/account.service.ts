@@ -8,7 +8,7 @@ import { Inject, Injectable, OnInit, Optional } from '@angular/core';
 import { ACCOUNTS_API, ACCOUNTS_API_V2 } from './apiurls/account.api';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { APPLY_TAX_API } from './apiurls/applyTax.api';
 import { ApplyTaxRequest } from '../models/api-models/ApplyTax';
 import { GeneralService } from './general.service';
@@ -22,7 +22,7 @@ export class AccountService implements OnInit {
     private user: UserDetails;
     private companyUniqueName: string;
 
-    constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
+    constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService,
         private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;

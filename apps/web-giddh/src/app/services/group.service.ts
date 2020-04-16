@@ -9,7 +9,7 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { LoaderService } from './loader.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { FlattenGroupsAccountsResponse, GroupCreateRequest, GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse, MoveGroupRequest, ShareGroupRequest } from '../models/api-models/Group';
 import { GROUP_API } from './apiurls/group.api';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
@@ -26,7 +26,7 @@ export class GroupService {
     private user: UserDetails;
     private _: any;
 
-    constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService,
+    constructor(private errorHandler: GiddhErrorHandler, public _http: HttpWrapperService,
         public _router: Router,
         private _generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {

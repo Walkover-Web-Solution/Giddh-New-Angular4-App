@@ -139,7 +139,7 @@ ul.list-unstyled li a {
     }
 
     a:hover {
-        color: $JacksonsPurple !important;
+        color: $jacksons-purple !important;
     }
 }
 
@@ -243,7 +243,7 @@ tr.aging-table-top td {
 
 .moreBtn li:hover {
     background-color: #eeeff9;
-    color: $JacksonsPurple;
+    color: $jacksons-purple;
 }
 
 .btn-primary.active,
@@ -262,9 +262,9 @@ tr.aging-table-top td {
 i.icon-options {
     width: 36px;
     height: 36px;
-    border: 1px solid $inputBorderColor;
+    border: 1px solid $gainsboro;
     background-color: #fff;
-    color: #999;
+    color: $gray;
     font-size: 20px;
     padding: 0;
     display: flex;
@@ -284,13 +284,13 @@ i.icon-options:hover {
 }
 .searchField input:focus {
     background-color: #fff !important;
-    border-color: $dark-blue00 !important;
+    border-color: $midnight-express !important;
 }
 span.inputAddon {
     position: absolute;
     right: 0px;
     padding: 4px 9px;
-    background-color: $border-blue;
+    background-color: $chetwode-blue;
     color: #fff;
     font-size: 20px;
     border-radius: 2px;
@@ -303,8 +303,8 @@ span.inputAddon {
     min-width: 140px;
 }
 .aging-table thead tr th {
-    border-top: 1px solid $tableBorderColor;
-    border-bottom: 1px solid $tableBorderColor !important;
+    border-top: 1px solid $gainsboro;
+    border-bottom: 1px solid $gainsboro !important;
     position: relative;
     padding-right: 10px !important;
 }

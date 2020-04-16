@@ -1,4 +1,4 @@
-<div #dd [style.width]="width">
+<div #dd [style.width]="width" class="pos-rel">
     <div class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'"
         (click)="show($event)" [class.open]="isOpen" tabindex="0" (focus)="show($event)" (blur)="hide($event)"
         (keydown)="keydownUp($event)">
@@ -6,7 +6,7 @@
 
         <!--region multiple-->
         <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" style="background: white;" class="bdr">
-            <ng-container *ngIf="selectedValues?.length">
+            <ng-container *ngIf="selectedValues?.length && !showCheckbox">
                 <span class="chip" *ngFor="let sl of selectedValues">
                     {{ sl.label }}
                     <span class="chipClosebtn" (mousedown)="clearSingleSelection($event, sl)"
@@ -16,7 +16,7 @@
 
             <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
             <input type="text" class="pdL1" [ngClass]="{'hasValue':filter?.length}" #inputFilter tabindex="0"
-                (click)="show($event);" [placeholder]="selectedValues?.length > 0 ? filter : placeholder"
+                (click)="show($event);" [placeholder]="selectedValues?.length > 0 && !showCheckbox ? filter : placeholder"
                 [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">
         </div>
         <!--endregion-->
@@ -51,6 +51,6 @@
         (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink"
         [noResultLinkTemplate]="notFoundLinkTemplate" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText"
         [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
-        [showNotFoundLinkAsDefault]="showNotFoundLinkAsDefault" [dropdownMinHeight]="dropdownMinHeight">
+        [showNotFoundLinkAsDefault]="showNotFoundLinkAsDefault" [dropdownMinHeight]="dropdownMinHeight" [showCheckbox]="showCheckbox">
     </sh-select-menu>
 </div>

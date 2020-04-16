@@ -216,7 +216,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public openModal(): void {
         this.modalRef = this.modalService.show(
             this.branchtransfertemplate,
-            Object.assign({}, { class: 'modal-lg reciptNoteModal mb-0 pt-85' })
+            Object.assign({}, { class: 'modal-lg receipt-note-modal  mb-0 pt-85' })
         );
     }
 

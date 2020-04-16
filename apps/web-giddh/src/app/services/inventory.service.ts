@@ -22,7 +22,7 @@ import { GroupsWithStocksFlatten, GroupsWithStocksHierarchyMin } from '../models
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { IGroupsWithStocksHierarchyMinItem } from '../models/interfaces/groupsWithStocks.interface';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
@@ -44,7 +44,7 @@ export class InventoryService {
     private user: UserDetails;
     private _: any;
 
-    constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router,
+    constructor(private errorHandler: GiddhErrorHandler, public _http: HttpWrapperService, public _router: Router,
         private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this._ = config._;
         _ = config._;
@@ -1124,5 +1124,18 @@ export class InventoryService {
                 data.queryString = {};
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, companyUniqueName)));
+    }
+
+    /**
+     * Method to fetch unit code regex for validaton
+     *
+     * @param {string} formName Form name for which regex is needed
+     * @param {string} countryName Country name
+     * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operation
+     * @memberof InventoryService
+     */
+    public getUnitCodeRegex(formName: string, countryName: string): Observable<BaseResponse<any, any>> {
+        const url = `${this.config.apiUrl}${INVENTORY_API.GET_UNIT_CODE_REGEX}`.replace(':formName', formName).replace(':country', countryName);
+        return this._http.get(url).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 }

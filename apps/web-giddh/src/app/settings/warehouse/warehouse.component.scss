@@ -1,3 +1,5 @@
+@import "../../../assets/css/color.scss";
+
 .createWarehouse {
     display: flex;
     flex-direction: column;
@@ -26,11 +28,11 @@
     min-height: 300px;
     margin-bottom: 15px;
 }
-.warehouseOptions {
+.warehouse-options {
     min-width: 180px;
     text-align: right;
 }
-.warehouseOptions {
+.warehouse-options {
     .warehouse-options {
         cursor: pointer;
     }
@@ -68,7 +70,7 @@
     word-break: break-all;
 }
 span.setAsDefault {
-    background-color: #d9d9d9;
+    background-color: $gainsboro;
     padding: 5px 10px;
     font-size: 14px;
     border-radius: 13px;
@@ -119,5 +121,8 @@ span.setAsDefault {
         float: none;
         width: 100%;
         margin-bottom: 15px;
+    }
+    .warehouse-options {
+        text-align: right;
     }
 }

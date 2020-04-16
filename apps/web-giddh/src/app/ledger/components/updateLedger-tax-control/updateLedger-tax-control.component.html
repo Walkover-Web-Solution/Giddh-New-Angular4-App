@@ -17,7 +17,7 @@
             (click)="$event.stopPropagation()" style="max-height: 102px;min-height: 40px">
             <li *ngFor="let tax of taxRenderData;trackBy: trackByFn">
                 <label class="checkbox oh width100 p0 m0 customItem bdrB" style="padding: 5px;margin-bottom: 5px;"
-                    (click)="$event.stopPropagation()" [ngClass]="{'fake-disabled-label': tax.isDisabled}">
+                    (click)="$event.stopPropagation()" [ngClass]="{'disabled-label': tax.isDisabled}">
                     <input class="pull-left" type="checkbox" [(ngModel)]="tax.isChecked" [disabled]="tax.isDisabled"
                         (change)="change()" (click)="$event.stopPropagation()" />
                     <span class="pull-left ellp">{{tax.name}}</span>
