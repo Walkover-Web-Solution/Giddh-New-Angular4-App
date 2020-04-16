@@ -32,6 +32,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 
 export class RecurringComponent implements OnInit, OnDestroy {
     public currentPage = 1;
+    public modalRef: BsModalRef;
     public asideMenuStateForRecurringEntry: string = 'out';
     public invoiceTypeOptions: IOption[];
     public intervalOptions: IOption[];
