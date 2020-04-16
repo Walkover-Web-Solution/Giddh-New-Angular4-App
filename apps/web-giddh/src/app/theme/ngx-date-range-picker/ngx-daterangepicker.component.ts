@@ -178,6 +178,8 @@ export class NgxDaterangepickerComponent implements OnInit {
 public dropdownShow:boolean = false;
     public goToPreviousMonthDisabled: boolean = false;
     public goToNextMonthDisabled: boolean = false;
+    private mouseWheelEventsRequired: number = 40;
+    private mouseWheelEvents: number = 0;
     
     private _old: { start: any, end: any } = { start: null, end: null };
 
@@ -1005,39 +1007,44 @@ public dropdownShow:boolean = false;
         }
         this.updateCalendars();
         this.showMonthPicker = false;
-        // this.s
     }
 
     mouseUp(e: MouseWheelEvent) {
-        // debugger;
         if (e.deltaY < 0) {
-            if (this.singleDatePicker) {
-                if ((!this.calendarVariables.start.maxDate ||
-                    this.calendarVariables.start.maxDate.isAfter(this.calendarVariables.start.calendar.lastDay)) &&
-                    (!this.linkedCalendars || this.singleDatePicker)) {
-                    this.goToNextMonth();
-                }
-            } else {
-                if (!this.calendarVariables.end.maxDate ||
-                    this.calendarVariables.end.maxDate.isAfter(this.calendarVariables.end.calendar.lastDay)) {
-                    this.goToNextMonth();
+            if (this.mouseWheelEvents >= this.mouseWheelEventsRequired) {
+                this.mouseWheelEvents = 0;
+                if (this.singleDatePicker) {
+                    if ((!this.calendarVariables.start.maxDate ||
+                        this.calendarVariables.start.maxDate.isAfter(this.calendarVariables.start.calendar.lastDay)) &&
+                        (!this.linkedCalendars || this.singleDatePicker)) {
+                        this.goToNextMonth();
+                    }
+                } else {
+                    if (!this.calendarVariables.end.maxDate ||
+                        this.calendarVariables.end.maxDate.isAfter(this.calendarVariables.end.calendar.lastDay)) {
+                        this.goToNextMonth();
+                    }
                 }
             }
         }
         if (e.deltaY > 0) {
-            if (this.singleDatePicker) {
-                if (!this.calendarVariables.start.minDate ||
-                    this.calendarVariables.start.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
-                    this.goToPrevMonth();
-                }
-                // this.goToNextMonth(DateType.start);
-            } else {
-                if (!this.calendarVariables.start.minDate ||
-                    this.calendarVariables.start.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
-                    this.goToPrevMonth();
+            if (this.mouseWheelEvents >= this.mouseWheelEventsRequired) {
+                this.mouseWheelEvents = 0;
+                if (this.singleDatePicker) {
+                    if (!this.calendarVariables.start.minDate ||
+                        this.calendarVariables.start.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
+                        this.goToPrevMonth();
+                    }
+                } else {
+                    if (!this.calendarVariables.start.minDate ||
+                        this.calendarVariables.start.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
+                        this.goToPrevMonth();
+                    }
                 }
             }
         }
+
+        this.mouseWheelEvents++;
         e.stopPropagation();
         e.stopImmediatePropagation();
         return false;
