@@ -634,6 +634,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 // this.closeUpdateLedgerModal.emit(true);
             }
         });
+        if (this.vm) {
+            this.vm.compundTotalObserver.subscribe(res => {
+                if (res) {
+                    this.checkAdvanceReceiptOrInvoiceAdjusted();
+                }
+            });
+        }
     }
 
     private prepareMultiCurrencyObject(accountUniqueName) {
@@ -914,6 +921,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         txn.convertedAmount = this.vm.calculateConversionRate(txn.amount);
         txn.isUpdated = true;
         this.vm.onTxnAmountChange(txn);
+        // TODO: may use later
+        // this.checkAdvanceReceiptOrInvoiceAdjusted();
     }
 
     public showDeleteAttachedFileModal() {
@@ -1398,14 +1407,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 totalAmount = Number(totalAmount) + Number(item.adjustedAmount.amountForAccount);
             });
             this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.totalAdjustmentAmount = totalAmount;
-            if (Number(this.vm.compoundTotal) < Number(totalAmount)) {
-                this.isAdjustedAmountExcess = true;
-                this.adjustedExcessAmount = totalAmount - this.vm.compoundTotal;
-            } else {
-                this.isAdjustedAmountExcess = false;
-                this.adjustedExcessAmount = 0;
-            }
-            this.selectedAdvanceReceiptAdjustInvoiceEditMode = false;
+            this.checkAdjustedAmountExceed(Number(totalAmount));
             this.calculateInclusiveTaxesForAdvanceReceiptsInvoices();
         }
     }
@@ -1433,14 +1435,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 totalAmount = Number(totalAmount) + Number(item.dueAmount.amountForAccount);
             });
             this.totalAdjustedAmount = totalAmount;
-            if (Number(this.vm.compoundTotal) < Number(totalAmount)) {
-                this.isAdjustedAmountExcess = true;
-                this.adjustedExcessAmount = totalAmount - this.vm.compoundTotal;
-            } else {
-                this.isAdjustedAmountExcess = false;
-                this.adjustedExcessAmount = 0;
-            }
-            this.selectedAdvanceReceiptAdjustInvoiceEditMode = false;
+            this.checkAdjustedAmountExceed(Number(totalAmount));
             this.calculateInclusiveTaxesForAdvanceReceipts();
         }
     }
@@ -1457,5 +1452,35 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             totalAmount = Number(totalAmount) + Number(item.dueAmount.amountForAccount);
         });
         this.totalAdjustedAmount = totalAmount;
+    }
+
+    /**
+     * To check adjusted advance amount is more  than advance receipt/invoice
+     *
+     * @param {number} totalAmount Total compound amount
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public checkAdjustedAmountExceed(totalAmount: number) {
+        if (Number(this.vm.compoundTotal) < Number(totalAmount)) {
+            this.isAdjustedAmountExcess = true;
+            this.adjustedExcessAmount = totalAmount - this.vm.compoundTotal;
+        } else {
+            this.isAdjustedAmountExcess = false;
+            this.adjustedExcessAmount = 0;
+        }
+        this.selectedAdvanceReceiptAdjustInvoiceEditMode = false;
+    }
+
+    /**
+     * To check advance Receipt/Invoice amount is exceed to adjusted amount when amount change
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public checkAdvanceReceiptOrInvoiceAdjusted() {
+        if (this.isAdjustedInvoicesWithAdvanceReceipt && this.vm.selectedLedger && this.vm.selectedLedger.voucherGeneratedType === 'receipt') {
+            this.adjustedInvoiceAmountChange();
+        } else if (this.isAdjustedWithAdvanceReceipt && this.vm.selectedLedger.voucherGeneratedType === 'sales') {
+            this.adjustedReceiptsAmountChange();
+        }
     }
 }
