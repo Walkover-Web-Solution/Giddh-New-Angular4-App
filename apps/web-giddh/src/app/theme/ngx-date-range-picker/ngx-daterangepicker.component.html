@@ -45,6 +45,9 @@
                         <li><button type="button">Apr20-Mar19</button></li>
                     </ul>
                 </li>
+                <li class="menu-li">
+                    <button type="button">All time</button>
+                </li>
             </ul>
         </div>
         <!-- loop over ranges -->
@@ -92,7 +95,7 @@
                     <!-- month name -->
                     <div class="month-field">
                         <!-- month name and month dropdown -->
-                        <div>
+                        <div class="month-dropdown">
                             <span class="month-name" (click)="monthPickerClick()">
                                 <ng-container *ngIf="showDropdowns && calendarVariables.start.dropdowns">
                                     {{this.locale.monthNames[calendarVariables?.start?.calendar[1][1].month()]}}
@@ -104,6 +107,7 @@
                                             {{locale.monthNames[m]}}
                                         </option>
                                     </select>
+                                  
                                     {{ calendarVariables?.start?.calendar[1][1].format(" YYYY")}}
                                     <select class="yearselect" (change)="yearChanged($event, sideEnum.start)">
                                         <option *ngFor="let y of calendarVariables.start.dropdowns.yearArrays"
@@ -111,6 +115,7 @@
                                             {{y}}
                                         </option>
                                     </select>
+                                    <button class="prev available"></button>
                                 </ng-container>
                                 <ng-container *ngIf="!showDropdowns || !calendarVariables.start.dropdowns">
                                     {{this.locale.monthNames[calendarVariables?.start?.calendar[1][1].month()]}}
@@ -445,7 +450,7 @@
                                                     </option>
                                                 </select>
                                             </div>
-                                            <div>
+                                            <div class="year-name">
                                                 {{ calendarVariables?.end?.calendar[1][1].format(" YYYY")}}
                                                 <select class="yearselect" (change)="yearChanged($event, sideEnum.end)">
                                                     <option *ngFor="let y of calendarVariables.end.dropdowns.yearArrays"
