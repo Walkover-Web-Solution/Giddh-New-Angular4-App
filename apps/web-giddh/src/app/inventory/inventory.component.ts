@@ -322,7 +322,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public getAllBranches() {
         let branchFilterRequest = new BranchFilterRequest();
-
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
         this.store.dispatch(this.settingsBranchActions.GetParentCompany());
