@@ -8287,6 +8287,7 @@ ul.dropdown-menu p.lead.pd {
 
 .form-control {
     height: 36px;
+    font-size: 14px !important;
 }
 
 .nav-tabs > li.active > a,
@@ -9253,7 +9254,7 @@ input.checkbox-custom[type="checkbox"] {
     #settingTab .tab-container .nav.nav-tabs {
         position: fixed;
         width: 100%;
-        top: 83px;
+        top:90px;
     }
     .custom-tabs .nav.nav-tabs {
         position: fixed;
