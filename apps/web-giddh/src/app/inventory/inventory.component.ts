@@ -639,8 +639,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public addUiException(exceptionRequest: any): void {
         exceptionRequest.component = 'inventory.component.ts';
-        this.exceptionLogService.addUiException(exceptionRequest).subscribe((response) => {
+        this.exceptionLogService.addUiException(exceptionRequest).subscribe(() => {
             // No need to handle the response
-        });
+        }, () => {});
     }
 }
