@@ -1,12 +1,14 @@
-import { map, catchError } from 'rxjs/operators';
-import { Injectable, ErrorHandler, Injector } from '@angular/core';
+import { ErrorHandler, Injectable, Injector } from '@angular/core';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { EXCEPTION_NON_PROD_API, EXCEPTION_PROD_API } from './apiurls/exception-log.api';
-import { HttpWrapperService } from "./httpWrapper.service";
-import { Observable } from "rxjs";
-import { } from ''
+import { EXCEPTION_API } from './apiurls/exception-log.api';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
+import { HttpWrapperService } from './httpWrapper.service';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()
 export class ExceptionLogService implements ErrorHandler {
@@ -25,7 +27,7 @@ export class ExceptionLogService implements ErrorHandler {
      * @memberof ExceptionLogService
      */
     public handleError(error: any): void {
-        this.addUiException({component: '', exception: error.stack}).subscribe(() => {}, () => {});
+        this.addUiException({ component: '', exception: error.stack }).subscribe(() => { }, () => { });
         throw error;
     }
 
@@ -42,28 +44,22 @@ export class ExceptionLogService implements ErrorHandler {
         const generalService = this.injector.get(GeneralService);
         const http = this.injector.get(HttpWrapperService);
         const errorHandler = this.injector.get(GiddhErrorHandler);
-        this.companyUniqueName = generalService.companyUniqueName;
+        const config: IServiceConfigArgs = this.injector.get(ServiceConfig) as IServiceConfigArgs;
+        const router = this.injector.get(Router);
 
-        let payloadJson = {
-            text: "Company Unique Name: " + this.companyUniqueName,
-            fields: [{
-                title: request.component,
-                value: request.exception,
-                short: false
-            }],
-            color: 'danger'
+
+        this.companyUniqueName = generalService.companyUniqueName;
+        const payloadJson = {
+            user_agent: navigator.userAgent,
+            user: this.companyUniqueName,
+            page: router.url,
+            error: (request.component) ? `${request.component} ${request.exception}` : request.exception,
+            env: (PRODUCTION_ENV) ? 'PROD' : (STAGING_ENV) ? 'STAGE' : 'TEST'
         };
 
-        let url = (PRODUCTION_ENV || isElectron || isCordova) ? EXCEPTION_PROD_API : EXCEPTION_NON_PROD_API;
-        let options = { headers: [] };
-        options.headers["Content-Type"] = "application/x-www-form-urlencoded";
+        const url = `${config.apiUrl}${EXCEPTION_API}`;
 
-        let payload = "payload=" + JSON.stringify(payloadJson);
-
-        return http.post(url, payload, options).pipe(
-            map((response) => {
-                return response;
-            }),
+        return http.post(url, payloadJson).pipe(
             catchError((e) => errorHandler.HandleCatch<any, any>(e, request)));
     }
 }
