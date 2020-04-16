@@ -559,27 +559,34 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public getOnboardingForm() {
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                Object.keys(res.fields).forEach(key => {
-                    this.formFields[res.fields[key].name] = [];
-                    this.formFields[res.fields[key].name] = res.fields[key];
-                });
-
-                Object.keys(res.applicableTaxes).forEach(key => {
-                    this.taxesList.push({
-                        label: res.applicableTaxes[key].name,
-                        value: res.applicableTaxes[key].uniqueName,
-                        isSelected: false
+                if (res.fields) {
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            this.formFields[res.fields[key].name] = [];
+                            this.formFields[res.fields[key].name] = res.fields[key];
+                        }
                     });
-
-                    this.currentTaxList[res.applicableTaxes[key].uniqueName] = [];
-                    this.currentTaxList[res.applicableTaxes[key].uniqueName] = res.applicableTaxes[key];
-                });
+                }
+                if (res.applicableTaxes) {
+                    Object.keys(res.applicableTaxes).forEach(key => {
+                        if (res.applicableTaxes[key]) {
+                            this.taxesList.push({
+                                label: res.applicableTaxes[key].name,
+                                value: res.applicableTaxes[key].uniqueName,
+                                isSelected: false
+                            });
+                            this.currentTaxList[res.applicableTaxes[key].uniqueName] = [];
+                            this.currentTaxList[res.applicableTaxes[key].uniqueName] = res.applicableTaxes[key];
+                        }
+                    });
+                }
                 if (res.businessType) {
                     _.map(res.businessType, (businessType) => {
                         this.businessTypeList.push({label: businessType, value: businessType});
                     });
                     if (this.businessTypeList && this.businessTypeList.length === 1) {
                         this.selectedBusinesstype = this.businessTypeList[0].value;
+                        this.companyProfileObj.businessType = this.selectedBusinesstype;
                     }
                 }
                 this.reFillTax();
@@ -611,8 +618,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                         value: res.stateList[key].code
                     });
                 });
-                // this.statesSource$ = observableOf(this.states);
-                this.statesSource$ = observableOf([]);
+                this.statesSource$ = observableOf(this.states);
                 this.reFillState();
             } else {
                 let statesRequest = new StatesRequest();

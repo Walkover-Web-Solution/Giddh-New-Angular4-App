@@ -224,12 +224,18 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                Object.keys(res.fields).forEach(key => {
-                    this.formFields[res.fields[key].name] = [];
-                    this.formFields[res.fields[key].name] = res.fields[key];
-                });
+                if (res.fields) {
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            this.formFields[res.fields[key].name] = [];
+                            this.formFields[res.fields[key].name] = res.fields[key];
+                        }
+                    });
+                }
                 if (this.formFields['taxName'] && this.formFields['taxName'].label) {
                     this.GSTIN_OR_TRN = this.formFields['taxName'].label;
+                } else {
+                    this.GSTIN_OR_TRN = '';
                 }
             }
         });

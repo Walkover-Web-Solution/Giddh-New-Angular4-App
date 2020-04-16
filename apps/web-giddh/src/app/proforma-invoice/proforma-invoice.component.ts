@@ -1206,10 +1206,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }, () => { this.startLoader(false); });
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                Object.keys(res.fields).forEach(key => {
-                    this.formFields[res.fields[key].name] = [];
-                    this.formFields[res.fields[key].name] = res.fields[key];
-                });
+                if (res.fields) {
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            this.formFields[res.fields[key].name] = [];
+                            this.formFields[res.fields[key].name] = res.fields[key];
+                        }
+                    });
+                }
                 if (this.formFields && this.formFields['taxName']) {
                     this.shouldShowTrnGstField = true;
                 } else {
