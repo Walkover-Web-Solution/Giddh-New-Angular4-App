@@ -22,6 +22,7 @@ import { GeneralService } from '../../services/general.service';
 @Component({
     selector: 'setting-linked-accounts',
     templateUrl: './setting.linked.accounts.component.html',
+    
     styles: [`
     .bank_delete {
       right: 0;

@@ -4166,6 +4166,7 @@ form label {
     color:$nero;
     font-weight: normal;
     padding-bottom: 5px;
+    font-size: 14px;
 }
 
 label {
@@ -9273,6 +9274,7 @@ input.checkbox-custom[type="checkbox"] {
     #settingTab setting-integration .tab-container .nav.nav-tabs,
     #settingTab app-invoice-setting .tab-container .nav.nav-tabs {
         position: inherit;
+        white-space: nowrap;
     }
     #settingTab app-invoice-setting .tab-container .nav.nav-tabs {
         margin-top: 50px;
