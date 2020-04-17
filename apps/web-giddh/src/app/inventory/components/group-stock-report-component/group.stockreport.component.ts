@@ -292,8 +292,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                 } else {
                     this.groupStockReport = res;
                     this.groupNotFoundMessage = '';
-                    this.cdr.detectChanges();
                 }
+                this.cdr.detectChanges();
             }
         });
 

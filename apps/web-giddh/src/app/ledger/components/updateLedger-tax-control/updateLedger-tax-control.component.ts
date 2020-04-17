@@ -96,7 +96,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
             if (hasApplicableTaxesChanged) {
                 this.taxRenderData = [];
             }
-            const hasDateChanged = changes['date'] && changes['date'].currentValue !== changes['date'].previousValue && moment(changes['date'].currentValue, 'DD-MM-YYYY').isValid();
+            const hasDateChanged = changes['date'] && changes['date'].currentValue !== changes['date'].previousValue && moment(changes['date'].currentValue, GIDDH_DATE_FORMAT).isValid();
             if (hasApplicableTaxesChanged || hasDateChanged) {
                 this.sum = 0;
                 this.prepareTaxObject();

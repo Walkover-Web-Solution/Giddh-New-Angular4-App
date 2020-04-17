@@ -124,7 +124,7 @@
 
                             </div>
                         </div>
-                        <div class="col-xs-12 mrB2 selectBox">
+                        <div class="col-xs-12 mrB2 selectBox" *ngIf="(statesSource$ | async)?.length">
                             <div>
                                 <label>State<sup class="text-danger">*</sup></label><br>
                                 <div>
@@ -163,6 +163,20 @@
                             </div>
                         </div>
                     </ng-container>
+                    <!-- Show the state drop down for countries UK, US and Nepal for which we don't support taxation for now
+                            and business type is 'Others' than 'Registered' or 'Unregistered' -->
+                        <div *ngIf="(!formFields['taxName'] && businessTypeList?.length === 1 && businessTypeList[0].label === 'Other') && !isWarehouse" class="col-xs-12 mrB2 selectBox">
+                            <div *ngIf="(statesSource$ | async)?.length">
+                                <label>State<sup class="text-danger">*</sup></label><br>
+                                <div>
+                                    <sh-select #states [options]="statesSource$ | async" required
+                                        [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" name="state"
+                                        [(ngModel)]="companyProfileObj.state" style="width:100%"
+                                        [defaultValue]="companyProfileObj.selectedState"></sh-select>
+                                </div>
+                            </div>
+                        </div>
+                    <!-- </ng-container> -->
                     <div class="col-xs-12 mrB2 selectBox">
                         <!-- Show the section if the company/branch is Registered or onboarding of warehouse is going on -->
                         <div *ngIf="selectedBusinesstype || isWarehouse" class="clearfix">
@@ -184,7 +198,8 @@
                     </div>
                     <div class="col-xs-12 ">
                         <p class="change-preference ">Note: You can always change your preferences later in Settings.
-                        </p>
+                        </p><br />
+                        <p class="taxation-not-supported" *ngIf="!formFields['taxName']">Taxation not supported for your country! Perform all the other functions of accounting.</p>
                     </div>
                     <div class="col-xs-12 d-flex mrT5">
                         <button class="btn btn-primary" (click)="back(isbranch)">Back</button>
