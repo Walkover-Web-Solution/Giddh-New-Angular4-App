@@ -378,9 +378,9 @@
                                                 <li (click)="onPerformAction(item, 'paid')">
                                                     <a class="cp" href="javascript:void(0)">Paid</a>
                                                 </li>
-                                                <li *ngIf="selectedVoucher === 'sales'" [ngClass]="{'no-click': !isAccountHaveAdvanceReceipts}" (click)="onPerformAdjustPaymentAction(item)">
+                                                <!-- <li *ngIf="selectedVoucher === 'sales'" [ngClass]="{'no-click': !isAccountHaveAdvanceReceipts}" (click)="onPerformAdjustPaymentAction(item)">
                                                     <a class="cp" href="javascript:void(0)">Adjust Amount</a>
-                                                </li>
+                                                </li> -->
                                                 <li (click)="onPerformAction(item, 'unpaid')">
                                                     <a class="cp" href="javascript:void(0)">Unpaid</a>
                                                 </li>
