@@ -72,7 +72,6 @@ $input-height: 3rem !default;
     background-color: $md-drppicker-bg-color;
     border-radius: 4px;
     width: $md-drppicker-width;
-    //padding: 4px;
     display: flex;
     margin-top: 0;
     overflow: hidden;
@@ -204,7 +203,6 @@ $input-height: 3rem !default;
     }
 
     .calendar {
-        /* display: none; */
         max-width: $md-drppicker-width - ($md-drppicker-calendar-margin * 2);
         margin: $md-drppicker-calendar-margin;
 
@@ -268,9 +266,8 @@ $input-height: 3rem !default;
         text-align: center;
         width: $md-drppicker-cell-width;
         height: $md-drppicker-cell-height;
-
         border: $md-drppicker-cell-border-size solid
-            $md-drppicker-cell-border-color;
+        $md-drppicker-cell-border-color;
         white-space: nowrap;
         cursor: pointer;
         height: 2em;
@@ -286,8 +283,6 @@ $input-height: 3rem !default;
                 background-position: center;
                 opacity: 0.8;
                 transition: background-color 0.2s ease;
-                //border-radius: 2em;
-
                 &:hover {
                     margin: 0;
                 }
@@ -320,9 +315,6 @@ $input-height: 3rem !default;
                 margin: 0.25em 0;
                 opacity: 0.8;
                 transition: background-color 0.2s ease;
-
-                //transform: scale(1);
-                //transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
             }
         }
 
@@ -336,10 +328,7 @@ $input-height: 3rem !default;
         margin: 0.25em 0;
         opacity: 0.8;
         transition: background-color 0.2s ease;
-        //border-radius: 2em;
         transform: scale(1);
-        //transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
-
         &.off {
             &,
             &.in-range,
@@ -350,10 +339,7 @@ $input-height: 3rem !default;
                 color: $md-drppicker-unselected-color;
             }
         }
-
-        //
         // Date Range
-
         &.in-range {
             background-color: #c6dafc;
             border-color: $md-drppicker-in-range-border-color;
@@ -364,7 +350,6 @@ $input-height: 3rem !default;
             z-index: 999;
             position: relative;
         }
-
         &.in-range::before {
             content: "";
             background-color: #7d87e445;
@@ -379,7 +364,7 @@ $input-height: 3rem !default;
         &.in-range.end-date::before {
             content: "";
             background-color:#7d87e445;
-            width:93%;
+            width:84%;
             height: 100%;
             left: 0px;
             top: -1px;
@@ -410,27 +395,6 @@ $input-height: 3rem !default;
             position: absolute;
             display: inline-block;
         }
-
-        //&.in-range::after {
-        //  content: "";
-        //  /* background-color: #c6dafc; */
-        //  display: inline-block;
-        //  width: 100%;
-        //  height: 100%;
-        //  position: absolute;
-        //  left: 0;
-        //  top: 0;
-        //  z-index: 1;
-        //
-        //  border-radius: 100%;
-        //
-        //}
-        //&.in-range::after:hover {
-        //
-        //  background-color: #efeeee;
-        //
-        //  border: 1px solid;
-        //}
         &.in-range-hovered {
             border-left: 0;
             border-right: 0;
@@ -771,8 +735,6 @@ $input-height: 3rem !default;
             .calendar {
                 &.left {
                     clear: left;
-                    /*margin-right: 1.5em;*/
-
                     .calendar-table {
                         border-right: none;
                         border-top-right-radius: 0;
@@ -927,8 +889,9 @@ td:hover span {
 
 .md-drppicker td.start-date.active {
     span {
-        background-color: $midnightBlue !important;
+        background-color: $midnight-blue !important;
         color: #fff !important;
+        border-color:$midnight-blue !important;
     }
 }
 
@@ -972,10 +935,7 @@ td span {
 }
 
 .d-container {
-    //height: 535px;
-    //height: 0px;
     width: 100%;
-    //position: absolute;
     background-color: white;
     z-index: 100;
     overflow: hidden;
@@ -988,6 +948,7 @@ td span {
         color: rgba(0, 0, 0, 0.54);
         margin: 9px 0 0;
         font-style: normal;
+        text-align: left;
     }
 }
 
@@ -1024,7 +985,6 @@ td span {
     height: 21px;
     width: 21px;
     cursor: pointer;
-    //border-radius: 2em;
     background-color: unset !important;
     border: unset !important;
 
@@ -1045,7 +1005,6 @@ td span {
     background-position: center;
     opacity: 0.8;
     transition: background-color 0.2s ease;
-    //border-radius: 2em;
     height: 21px;
     background-color: unset !important;
     border: unset !important;
@@ -1100,7 +1059,7 @@ td span {
         &:hover {
             background-color: $lavender !important;
             button {
-                color: $JacksonsPurple !important;
+                color: $jacksons-purple !important;
             }
         }
     }
@@ -1152,7 +1111,7 @@ td span {
                     font-size: 12px;
                     padding: 6px 0;
                     border: none;
-                    border-bottom: 1px solid $inputBorderColor;
+                    border-bottom: 1px solid $gainsboro;
                     &:focus {
                         outline: none;
                         box-shadow: none;
@@ -1164,8 +1123,8 @@ td span {
                     align-items: flex-start;
                 }
                 .activeSelectedDate {
-                    border-bottom-color: $btnLink !important;
-                    box-shadow: 0 1px 0 0 $btnLink !important;
+                    border-bottom-color: $primary !important;
+                    box-shadow: 0 1px 0 0 $primary !important;
                 }
             }
         }
@@ -1269,11 +1228,11 @@ td span {
                 font-size: 12px;
                 margin-bottom: 0;
                 border: none;
-                border-bottom: 1px solid $inputBorderColor;
+                border-bottom: 1px solid $gainsboro;
                 background-color: transparent;
                 &:focus {
-                    border-bottom-color: $btnLink !important;
-                    box-shadow: 0 1px 0 0 $btnLink !important;
+                    border-bottom-color: $primary !important;
+                    box-shadow: 0 1px 0 0 $primary !important;
                     outline: none;
                 }
             }
@@ -1310,7 +1269,7 @@ td span {
                         top: 0;
                         position: static;
                         border: none;
-                        border-bottom: 1px solid $inputBorderColor;
+                        border-bottom: 1px solid $gainsboro;
                         border-radius: 0;
                     }
                 }
@@ -1367,6 +1326,5 @@ td span {
       } 
      .d-container{
         width: 280px;
-    }
-     
+    }    
 }
