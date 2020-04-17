@@ -1,6 +1,6 @@
 import { ErrorHandler, Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { BaseResponse } from '../models/api-models/BaseResponse';
@@ -46,20 +46,27 @@ export class ExceptionLogService implements ErrorHandler {
         const errorHandler = this.injector.get(GiddhErrorHandler);
         const config: IServiceConfigArgs = this.injector.get(ServiceConfig) as IServiceConfigArgs;
         const router = this.injector.get(Router);
-
+        let user;
+        if (generalService && generalService.user) {
+            user = generalService.user;
+        }
 
         this.companyUniqueName = generalService.companyUniqueName;
         const payloadJson = {
             user_agent: navigator.userAgent,
-            user: this.companyUniqueName,
-            page: router.url,
+            user: (user) ? `Name: ${user.name} Email: ${user.email} Company Uniquename: ${this.companyUniqueName}` : `Company Uniquename: ${this.companyUniqueName}`,
+            page: (router) ? router.url : '',
             error: (request.component) ? `${request.component} ${request.exception}` : request.exception,
             env: (PRODUCTION_ENV) ? 'PROD' : (STAGING_ENV) ? 'STAGE' : 'TEST'
         };
 
         const url = `${config.apiUrl}${EXCEPTION_API}`;
 
-        return http.post(url, payloadJson).pipe(
-            catchError((e) => errorHandler.HandleCatch<any, any>(e, request)));
+        if (!AppUrl.includes('localhost')) {
+            return http.post(url, payloadJson).pipe(
+                catchError((e) => errorHandler.HandleCatch<any, any>(e, request)));
+        } else {
+            return of();
+        }
     }
 }
