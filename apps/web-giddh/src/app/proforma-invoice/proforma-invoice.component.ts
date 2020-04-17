@@ -492,14 +492,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (!this.shouldShowLoader) {
                 return;
             }
-            // if (stateLoader.show) {
-            //     this.startLoader(true);
-            // } else {
-            //     this.startLoader(false);
-            //     this._cdr.detectChanges();
-            // call focus in customer after loader hides because after loader hider ui re-renders it self
-            // this.focusInCustomerName();
-            // }
         });
         this.generateUpdateButtonClicked.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((form) => {
             this.startLoader(true);
@@ -566,7 +558,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         });
 
         this.store.pipe(select(appState => appState.company), take(1)).subscribe((companyData: CurrentCompanyState) => {
-            this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            }
         });
 
         this.route.params.pipe(takeUntil(this.destroyed$), delay(0)).subscribe(parmas => {

@@ -263,7 +263,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         });
 
         this.store.pipe(select(appState => appState.company), take(1)).subscribe((companyData: CurrentCompanyState) => {
-            this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            }
         });
 
         this.tags$ = this.store.select(createSelector([(st: AppState) => st.settings.tags], (tags) => {

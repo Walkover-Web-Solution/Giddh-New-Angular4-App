@@ -1553,7 +1553,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         };
         this.commonService.getOnboardingForm(request).subscribe((response) => {
             if (response && response.status === 'success' && response.body) {
-                console.log('Response received: ', response);
                 this.store.dispatch(this.companyActions.setCompanyTcsTdsApplicability(response.body.isTcsTdsApplicable))
             } else {
                 // Set to false in error scenarios

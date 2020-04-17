@@ -233,7 +233,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         });
         this.store.pipe(select(appState => appState.company), take(1)).subscribe((companyData: CurrentCompanyState) => {
-            this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            }
         });
         this.showAdvanced = false;
         this.vm.selectedLedger = new LedgerResponse();
