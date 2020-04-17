@@ -655,9 +655,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     this.depositAmount = response.deposit.amountForAccount;
                 }
                 if (this.selectedPerformAdjustPaymentAction) {
-                    this.showAdvanceReceiptAdjust = true;
-                    this.adjustPaymentModal.show();
-                    this.selectedPerformAdjustPaymentAction = false;
+                    if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments && this.advanceReceiptAdjustmentData.adjustments.length) {
+                        this.showAdvanceReceiptAdjust = true;
+                        this.adjustPaymentModal.show();
+                        this.selectedPerformAdjustPaymentAction = false;
+                    } else {
+                        if (response.account && response.date) {
+                            this.getAllAdvanceReceipts(response.account.uniqueName, response.date);
+                        }
+                    }
                 }
             }
         })
@@ -1549,12 +1555,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @param {ReciptResponse} item selected row item data
      * @memberof InvoicePreviewComponent
      */
-    public clickChangeStatusToggle(item: any): void {
-        this.isAccountHaveAdvanceReceipts = false;
-        if (item && item.account && item.account.uniqueName && item.voucherDate) {
-            this.getAllAdvanceReceipts(item.account.uniqueName, item.voucherDate);
-        }
-    }
+    // public clickChangeStatusToggle(item: any): void {
+    //     this.isAccountHaveAdvanceReceipts = false;
+    //     if (item && item.account && item.account.uniqueName && item.voucherDate) {
+    //         this.getAllAdvanceReceipts(item.account.uniqueName, item.voucherDate);
+    //     }
+    // }
 
     /**
      * Call API to get all advance receipts of an invoice
@@ -1569,12 +1575,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 accountUniqueName: customerUniqueName,
                 invoiceDate: voucherDate
             };
+            this.isAccountHaveAdvanceReceipts = false;
             this.salesService.getAllAdvanceReceiptVoucher(requestObject).subscribe(res => {
                 if (res && res.status === 'success') {
                     if (res.body && res.body.length) {
                         this.isAccountHaveAdvanceReceipts = true;
                     } else {
                         this.isAccountHaveAdvanceReceipts = false;
+                        this._toaster.warningToast('There is no advanced receipt for adjustment.');
                     }
                 }
             });
