@@ -5,7 +5,7 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpWrapperService } from './httpWrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { SUBSCRIPTIONS_API } from './apiurls/subscriptions.api';
@@ -16,7 +16,7 @@ import { SubscriptionsUser } from '../models/api-models/Subscriptions';
 export class SubscriptionsService {
     public moment = moment;
 
-    constructor(private errorHandler: ErrorHandler,
+    constructor(private errorHandler: GiddhErrorHandler,
         public _httpClient: HttpClient,
         public _http: HttpWrapperService,
         public _router: Router,

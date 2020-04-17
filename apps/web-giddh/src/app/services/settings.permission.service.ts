@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { SETTINGS_PERMISSION_API } from './apiurls/settings.permission.api';
 import { IUpdatePermissionResponse, ShareRequestForm } from '../models/api-models/Permission';
 import { GeneralService } from './general.service';
@@ -16,7 +16,7 @@ export class SettingsPermissionService {
     private user: UserDetails;
     private companyUniqueName: string;
 
-    constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
+    constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService,
         private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 

@@ -23,7 +23,7 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { COMPANY_API } from './apiurls/comapny.api';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { BulkEmailRequest } from '../models/api-models/Search';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
@@ -36,7 +36,7 @@ export class CompanyService {
     private user: UserDetails;
     private companyUniqueName: string;
 
-    constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, private _generalService: GeneralService,
+    constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService, private _generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
