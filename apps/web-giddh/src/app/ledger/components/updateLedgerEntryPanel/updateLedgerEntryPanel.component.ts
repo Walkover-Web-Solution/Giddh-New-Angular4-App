@@ -635,11 +635,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         });
         if (this.vm) {
-            this.vm.compundTotalObserver.subscribe(res => {
-                if (res) {
-                    this.checkAdvanceReceiptOrInvoiceAdjusted();
-                }
-            });
+            this.vm.compundTotalObserver.pipe(takeUntil(this.destroyed$))
+                .subscribe(res => {
+                    if (res || res === 0) {
+                        this.checkAdvanceReceiptOrInvoiceAdjusted();
+                    }
+                });
         }
     }
 
@@ -1460,7 +1461,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @param {number} totalAmount Total compound amount
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public checkAdjustedAmountExceed(totalAmount: number) {
+    public checkAdjustedAmountExceed(totalAmount: number): void {
         if (Number(this.vm.compoundTotal) < Number(totalAmount)) {
             this.isAdjustedAmountExcess = true;
             this.adjustedExcessAmount = totalAmount - this.vm.compoundTotal;
@@ -1476,7 +1477,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      *
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public checkAdvanceReceiptOrInvoiceAdjusted() {
+    public checkAdvanceReceiptOrInvoiceAdjusted(): void {
         if (this.isAdjustedInvoicesWithAdvanceReceipt && this.vm.selectedLedger && this.vm.selectedLedger.voucherGeneratedType === 'receipt') {
             this.adjustedInvoiceAmountChange();
         } else if (this.isAdjustedWithAdvanceReceipt && this.vm.selectedLedger.voucherGeneratedType === 'sales') {

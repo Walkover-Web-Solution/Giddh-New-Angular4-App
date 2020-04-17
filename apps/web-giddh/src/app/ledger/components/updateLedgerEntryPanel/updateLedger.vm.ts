@@ -73,7 +73,7 @@ export class UpdateLedgerVm {
     /** Advance receipt amount */
     public advanceReceiptAmount: number = 0;
     /** To track compund total change for update ledger advance adjustment */
-    public compundTotalObserver = new BehaviorSubject(null)
+    public compundTotalObserver = new BehaviorSubject(null);
 
     constructor() {
         this.voucherTypeList = [{
