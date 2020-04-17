@@ -208,13 +208,17 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                     this.allAdvanceReceiptResponse = res.body
                     if (res.body && res.body.length) {
                         this.adjustVoucherOptions = [];
-                        this.allAdvanceReceiptResponse.forEach(item => {
-                            if (item) {
-                                item.voucherDate = item.voucherDate.replace(/-/g, '/');
-                                this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-                                this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-                            }
-                        });
+                        if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
+                            this.allAdvanceReceiptResponse.forEach(item => {
+                                if (item) {
+                                    item.voucherDate = item.voucherDate.replace(/-/g, '/');
+                                    this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                                    this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                                }
+                            });
+                        } else {
+                            this.toaster.warningToast("There is no advanced receipt for adjustment.");
+                        }
                     }
                 }
             })
