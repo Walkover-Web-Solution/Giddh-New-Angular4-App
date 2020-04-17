@@ -1,6 +1,6 @@
 import { UserDetails } from '../models/api-models/loginModels';
 import { Optional, Inject, Injectable } from '@angular/core';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { HttpWrapperService } from './httpWrapper.service';
 import { ServiceConfig, IServiceConfigArgs } from './service.config';
 import { GeneralService } from './general.service';
@@ -14,7 +14,7 @@ export class EcommerceService {
     private user: UserDetails;
     private companyUniqueName: string;
 
-    constructor(private errorHandler: ErrorHandler, private http: HttpWrapperService,
+    constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 

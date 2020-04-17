@@ -4,7 +4,7 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GenericRequestForGenerateSCD } from '../models/api-models/Sales';
 import { SALES_API_V2, SALES_API_V4 } from './apiurls/sales.api';
 import { GeneralService } from './general.service';
@@ -21,7 +21,7 @@ export class SalesService {
 
     constructor(
         private _http: HttpWrapperService,
-        private errorHandler: ErrorHandler,
+        private errorHandler: GiddhErrorHandler,
         private _generalService: GeneralService,
         @Optional() @Inject(ServiceConfig)
         private config: IServiceConfigArgs

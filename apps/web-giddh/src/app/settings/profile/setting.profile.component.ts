@@ -103,7 +103,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.initProfileObj();
-
         this.dataSource = (text$: Observable<any>): Observable<any> => {
             return text$.pipe(
                 debounceTime(300),
