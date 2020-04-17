@@ -4,7 +4,7 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { SETTINGS_BUNCH_API } from './apiurls/settings.bunch.api';
@@ -15,7 +15,7 @@ export class SettingsBunchService {
 	private user: UserDetails;
 	private companyUniqueName: string;
 
-	constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
+	constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService,
 		private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 	}
 

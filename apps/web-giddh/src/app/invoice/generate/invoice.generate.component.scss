@@ -85,7 +85,7 @@ tfoot {
 }
 
 .dropdown-menu > li > a:hover {
-    color: $border-blue;
+    color: $chetwode-blue;
     background: #e5e5e5;
 }
 
@@ -141,7 +141,7 @@ tfoot {
     width: 100%;
 }
 .input-group input.form-control:focus {
-    border-color: $border-blue;
+    border-color: $chetwode-blue;
 }
 .icon-calender {
     position: absolute;
@@ -151,7 +151,7 @@ tfoot {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $border-blue;
+    border-right: 1px solid $chetwode-blue;
 }
 
 .input-wrapper {
@@ -166,7 +166,7 @@ tfoot {
     display: block;
     height: 36px;
     width: 1px;
-    background-color: #d9d9d9;
+    background-color: $gainsboro;
     left: 37px !important;
     z-index: 100;
     top: 0;
@@ -258,7 +258,7 @@ tfoot {
 button.btn.btn-filter {
     background: #e4e4e4;
     border: 1px solid #e4e4e4;
-    font-size: 16px;
+    font-size: 14px;
     color: #1a237e;
     display: inline-flex;
     justify-content: space-between;

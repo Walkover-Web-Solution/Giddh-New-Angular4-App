@@ -36,7 +36,7 @@
 
 .welcome-container form label {
     font-size: 14px;
-    color: #707070;
+    color: $nero;
 }
 
 .box {
@@ -117,7 +117,7 @@ fieldset[disabled] {
     top: 38px;
     z-index: 9;
     cursor: pointer;
-    color: $btnLink;
+    color: $deep-sky-blue;
 }
 .pos-rel {
     position: relative;

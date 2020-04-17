@@ -586,7 +586,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
                 deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode.filter(p => p !== (action.payload as BaseResponse<string, string>).request)
             });
         case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_NAME:
-            return Object.assign({}, state, { isStockUnitCodeAvailable: false });
+            return Object.assign({}, state, { isStockUnitCodeAvailable: null });
         case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_NAME_RESPONSE:
             let resStockUnit: BaseResponse<StockDetailResponse, string> = action.payload;
             if (resStockUnit.status === 'success') {

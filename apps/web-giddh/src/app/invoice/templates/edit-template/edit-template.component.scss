@@ -1,13 +1,14 @@
+@import "../../../../assets/css/color.scss";
 .template-grid {
     background: #fff;
     max-width: 255px;
     width: 100%;
     padding: 20px;
     min-height: 250px;
-    border: 1px solid #d9d9d9;
+    border: 1px solid $gainsboro;
     float: left;
     border-radius: 4px;
-    margin: 0 15px 15px 0;
+    margin:5px 15px 15px 0;
     position: relative;
 }
 
@@ -35,7 +36,7 @@
 }
 
 .spcl_dropdown {
-    border: 1px solid #d9d9d9 !important;
+    border: 1px solid $gainsboro !important;
     box-shadow: none !important;
     border-radius: 0 !important;
     font-size: 14px;
@@ -51,7 +52,7 @@
 }
 
 .dropdown-menu > li > a:hover {
-    color: $border-blue;
+    color: $chetwode-blue;
     background: #e5e5e5;
 }
 .badge {

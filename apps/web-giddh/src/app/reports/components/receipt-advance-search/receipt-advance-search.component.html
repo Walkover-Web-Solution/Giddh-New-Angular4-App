@@ -40,7 +40,7 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" *ngIf="searchModel?.adjustmentVoucherDetails?.selectedValue !== 'normal receipt'">
                     <label class="col-md-3">Unused Amount</label>
                     <div class="col-sm-4">
                         <div class="form-group">

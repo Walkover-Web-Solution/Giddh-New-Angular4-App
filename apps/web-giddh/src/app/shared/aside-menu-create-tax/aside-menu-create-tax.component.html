@@ -49,8 +49,8 @@
                             *ngIf="newTaxObj.taxType === 'tds' || newTaxObj.taxType === 'tcs'">
                             <label>Select Type <span class="text-danger">*</span> </label><br>
                             <sh-select [options]="taxNameTypesMapping[newTaxObj.taxType]" name="tdsTcsTaxSubTypes"
-                                [(ngModel)]="newTaxObj.tdsTcsTaxSubTypes" [placeholder]="'Select Type'"
-                                [ItemHeight]="33" required [forceClearReactive]="forceClear$ | async"></sh-select>
+                                [(ngModel)]="newTaxObj.tdsTcsTaxSubTypes" [defaultValue]="selectedTaxType" placeholder="{{selectedTaxType ? selectedTaxType : 'Select Type'}}" [ngClass]="{'placeholder-black': selectedTaxType}"
+                                [ItemHeight]="33" required [forceClearReactive]="forceClear$ | async" [disabled]="checkIfTdsOrTcs"></sh-select>
                         </div>
 
                     </div>
@@ -117,7 +117,7 @@
 
                     <div class="row">
 
-                        <div class="col-xs-12 mrT1">
+                        <div class="col-xs-12 mt-5">
                             <button type="submit" class="btn btn-success" *ngIf="!tax" [disabled]="taxForm.invalid"
                                 [ladda]="isTaxCreateInProcess">Create
                             </button>

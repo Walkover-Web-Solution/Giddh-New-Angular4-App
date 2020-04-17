@@ -10,19 +10,19 @@
                 <label class="w100">Type:</label>
 
                 <span class="pd0 mrR3">
-                    <input id="mini" class="radio-custom cp ml0" type="radio" name="emailTypeSelected"
+                    <input id="mini" class="radio-custom cp ml0" type="radio" name="emailTypeSelected" (ngModelChange)="handleReportTypeChange($event)"
                         [(ngModel)]="emailTypeSelected" [value]="emailTypeMini">
                     <label for="mini" class="radio-custom-label">Mini</label>
                 </span>
 
                 <span class="pd0 mrR3">
-                    <input id="detailed" class="radio-custom cp ml0" type="radio" name="emailTypeSelected"
+                    <input id="detailed" class="radio-custom cp ml0" type="radio" name="emailTypeSelected" (ngModelChange)="handleReportTypeChange($event)"
                         [(ngModel)]="emailTypeSelected" [value]="emailTypeDetail">
                     <label for="detailed" class="radio-custom-label">Detailed</label>
                 </span>
 
                 <span class="pd0 mrR3">
-                    <input id="columnar" class="radio-custom cp ml0" type="radio" name="emailTypeSelected"
+                    <input id="columnar" class="radio-custom cp ml0" type="radio" name="emailTypeSelected" (ngModelChange)="handleReportTypeChange($event)"
                         [(ngModel)]="emailTypeSelected" [value]="emailTypeColumnar">
                     <label for="columnar" class="radio-custom-label">Columnar</label>
                 </span>
@@ -33,7 +33,7 @@
                 <label class="w100">Export As:</label>
 
 
-                <span class="pd0 mrR3">
+                <span class="pd0 mrR3" [hidden]="emailTypeSelected === 'columnar'">
                     <input id="pdf" class="radio-custom cp ml0" type="radio" name="exportAs" [(ngModel)]="exportAs"
                         [value]="'pdf'">
                     <label for="pdf" class="radio-custom-label">PDF</label>
@@ -63,14 +63,14 @@
                 </span>
 
             </div>
-            <div class="pdB2 clearfix" [hidden]="emailTypeSelected === 'admin-condensed'">
+            <div class="pdB2 clearfix" [hidden]="emailTypeSelected === 'admin-condensed' || emailTypeSelected === 'columnar'">
                 <label class="w100">Invoice no.:</label>
                 <label class="radio-inline pd0" style="margin-left: 6px;">
                     <input type="checkbox" name="withInvoiceNumber" [(ngModel)]="withInvoiceNumber">
                 </label>
             </div>
             <button class="btn-success btn" (click)="exportLedger()">Download</button>
-            <div class="modal_wrap">
+            <div class="modal_wrap" [hidden]="emailTypeSelected === 'columnar'">
                 <div class="clearfix"></div>
                 <h3 class="pdT1 pdB1">Or</h3>
                 <div>

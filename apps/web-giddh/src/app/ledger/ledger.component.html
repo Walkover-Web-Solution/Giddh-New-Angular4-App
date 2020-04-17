@@ -1,7 +1,7 @@
 <section class="container">
 
     <!-- region ledger table-->
-    <div class="ledgHead some transactions-page mrT3 pos-rel">
+    <div class="ledgHead transactions-page mt-2 pos-rel">
 
         <!-- region ledger header -->
         <div class="clearfix row">
@@ -426,7 +426,7 @@
 
             <!-- region debit transaction-->
             <div [ngClass]="Shown ? 'active' : ''" hr-item
-                (ngInit)="initNavigator(navigator,$event.nativeElement);    navigator.nextVertical();"
+            (ngInit)="initNavigator(navigator,$event.nativeElement);    navigator.nextVertical();"
                 class="left-col-new"
                 [ngClass]="{bdrR: (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
 
@@ -592,48 +592,46 @@
                                                     <span *ngIf="( (!shDebit.isOpen && txn.particular) ||
                                                                 (shDebit.isOpen && shDebit.filter))">To
                                                     </span>
-
-                                                    <sh-select [idEl]="txn.id" #shDebit
-                                                        [options]="lc.flattenAccountList | async"
-                                                        [(ngModel)]="txn.particular" vr-item tabindex="-1" #select
-                                                        [showClear]="false" (keydown.enter)="onEnter(select,txn)"
-                                                        (onShow)="isSelectOpen=true;bs.hide();"
-                                                        (onHide)="onSelectHide()" (selected)="selectAccount($event,txn)"
-                                                        (keydown)="keydownPressed($event)"
-                                                        placeholder="To Select Accounts" [notFoundLink]="true"
-                                                        (noResultsClicked)="toggleAsidePane()" [multiple]="false"
-                                                        [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
-                                                        <ng-template #optionTemplate let-option="option">
-                                                            <ng-container *ngIf="!option.additional?.stock">
-                                                                <a href="javascript:void(0)" class="list-item"
-                                                                    style="border-bottom: 1px solid #ccc;">
-                                                                    <div class="item">{{ option.label }}</div>
-                                                                    <div class="item_unq">
-                                                                        {{ option.additional?.uniqueName }}</div>
-                                                                </a>
-                                                            </ng-container>
-                                                            <ng-container *ngIf="option.additional?.stock">
-                                                                <a href="javascript:void(0)" class="list-item"
-                                                                    style="border-bottom: 1px solid #ccc;">
-                                                                    <div class="item">{{ option.label }}</div>
-                                                                    <div class="item_unq">
-                                                                        {{ option.additional?.uniqueName }}</div>
-                                                                    <div class="item_stock">Stock:
-                                                                        {{ option.additional?.stock.name }}</div>
-                                                                </a>
-                                                            </ng-container>
-                                                        </ng-template>
-                                                        <ng-template #notFoundLinkTemplate>
-
-                                                            <a [ngClass]="{'active': keydownClassAdded}"
-                                                                class="notfound-option" [keyboardShortcut]="'alt+c'"
-                                                                (onShortcutPress)="toggleAsidePane()">
-                                                                <span [ngClass]="{'active': keydownClassAdded}">Create
-                                                                    New A/c</span>
-                                                                <span>Alt+C</span>
+                                                <sh-select [idEl]="txn.id" #shDebit
+                                                    [options]="lc.flattenAccountList | async"
+                                                    [(ngModel)]="txn.particular" vr-item tabindex="-1" #select
+                                                    [showClear]="false" (keydown.enter)="onEnter(select,txn)"
+                                                    (onShow)="isSelectOpen=true;bs.hide();" (onHide)="onSelectHide()"
+                                                    (selected)="selectAccount($event,txn)"
+                                                    (keydown)="keydownPressed($event)" placeholder="To Select Accounts"
+                                                    [notFoundLink]="true" (noResultsClicked)="toggleAsidePane(null, shDebit)"
+                                                    [multiple]="false" [ItemHeight]="67"
+                                                    [useInBuiltFilterForFlattenAc]="true">
+                                                    <ng-template #optionTemplate let-option="option">
+                                                        <ng-container *ngIf="!option.additional?.stock">
+                                                            <a href="javascript:void(0)" class="list-item"
+                                                                style="border-bottom: 1px solid #ccc;">
+                                                                <div class="item">{{ option.label }}</div>
+                                                                <div class="item_unq">
+                                                                    {{ option.additional?.uniqueName }}</div>
                                                             </a>
-                                                        </ng-template>
-                                                    </sh-select>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="option.additional?.stock">
+                                                            <a href="javascript:void(0)" class="list-item"
+                                                                style="border-bottom: 1px solid #ccc;">
+                                                                <div class="item">{{ option.label }}</div>
+                                                                <div class="item_unq">
+                                                                    {{ option.additional?.uniqueName }}</div>
+                                                                <div class="item_stock">Stock:
+                                                                    {{ option.additional?.stock.name }}</div>
+                                                            </a>
+                                                        </ng-container>
+                                                    </ng-template>
+                                                    <ng-template #notFoundLinkTemplate>
+                                                        <a [ngClass]="{'active': keydownClassAdded}"
+                                                            class="notfound-option" [keyboardShortcut]="'alt+c'"
+                                                            (onShortcutPress)="toggleAsidePane(null, shDebit)">
+                                                            <span [ngClass]="{'active': keydownClassAdded}">Create
+                                                                New A/c</span>
+                                                            <span>Alt+C</span>
+                                                        </a>
+                                                    </ng-template>
+                                                </sh-select>
                                                 </div>
                                                 <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
                                                     <li>Create New Account</li>
@@ -785,7 +783,7 @@
 
                             <td class="col-xs-6" data-title="Particular">
 
-                                <div class="d-flex align-items-center" style="justify-content: space-between">
+                                <div class="d-flex align-items-center justify-content-between">
                                     <div class="ellp">
                                         By
                                         {{ txn.inventory ? txn.particular.name + ' (' + txn.inventory.stock.name + ')' : txn.particular.name }}
@@ -826,13 +824,13 @@
                     (click)="$event.stopPropagation()">
                     <tbody>
 
-                        <tr *ngFor="let txn of lc.blankLedger.transactions;" (click)="$event.stopPropagation()">
+                        <tr *ngFor="let txn of lc.blankLedger.transactions;">
 
                             <td class="width100" *ngIf="txn.type === 'CREDIT'">
 
                                 <table class="width100 h-table">
                                     <tbody class="ledger-main">
-                                        <tr class="ledger-row" container="body" (keydown)="$event.stopPropagation()">
+                                        <tr class="ledger-row" container="body">
 
                                             <!--<td class="col-xs-1 text-center">-->
                                             <!---->
@@ -861,15 +859,14 @@
                                                         (!shCredit.isOpen && txn.particular) ||
                                                         (shCredit.isOpen && shCredit.filter))">By </span>
 
-                                                    <sh-select [idEl]="txn.id" #shCredit
+                                                        <sh-select [idEl]="txn.id" #shCredit
                                                         [options]="lc.flattenAccountList | async" vr-item tabindex="-1"
                                                         #select (keydown.enter)="onEnter(shCredit,txn)"
-                                                        (onShow)="isSelectOpen=true;bsd.hide()"
-                                                        (onHide)="onSelectHide()" [(ngModel)]="txn.particular"
-                                                        (selected)="selectAccount($event,txn)" [showClear]="false"
-                                                        placeholder="By Select Accounts"
+                                                        (onShow)="isSelectOpen=true;bsd.hide()" (onHide)="onSelectHide()"
+                                                        [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
+                                                        [showClear]="false" placeholder="By Select Accounts"
                                                         (keydown)="keydownPressed($event)" [notFoundLink]="true"
-                                                        (noResultsClicked)="toggleAsidePane()" [multiple]="false"
+                                                        (noResultsClicked)="toggleAsidePane(null, shCredit)" [multiple]="false"
                                                         [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                                                         <ng-template #optionTemplate let-option="option">
                                                             <ng-container *ngIf="!option.additional?.stock">
@@ -892,13 +889,13 @@
                                                             </ng-container>
                                                         </ng-template>
                                                         <ng-template #notFoundLinkTemplate>
-                                                            <div [ngClass]="{'active': keydownClassAdded}"
+                                                            <a [ngClass]="{'active': keydownClassAdded}"
                                                                 class="notfound-option" [keyboardShortcut]="'alt+c'"
-                                                                (onShortcutPress)="toggleAsidePane()">
+                                                                (onShortcutPress)="toggleAsidePane(null, shCredit)">
                                                                 <span [ngClass]="{'active': keydownClassAdded}">Create
-                                                                    New</span>
+                                                                    New A/c</span>
                                                                 <span>Alt+C</span>
-                                                            </div>
+                                                            </a>
                                                         </ng-template>
                                                     </sh-select>
 
@@ -923,7 +920,7 @@
 
                                 <!--new ledge popup-->
                                 <div class="pos-abs entry-modal" (click)="shCredit?.hide()"
-                                    (keydown)="$event.stopPropagation()"
+                                (keydown)="$event.stopPropagation()"
                                     *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
                                     <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
@@ -973,7 +970,7 @@
                                     <!-- To  -->
 
                                     To Balance C/F:
-                                    <span class="digitBlue">
+                                    <span class="digit-blue">
                                         {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.closingBalance?.amount  | giddhCurrency }}
                                     </span>
 
@@ -994,7 +991,7 @@
                                         {{ ledgerTxnBalance?.currencySymbol }}{{lc.reckoningDebitTotal  | giddhCurrency }}
                                     </span>
 
-                                    <span class="bdrT ng-binding" style="padding: 1px 0;"
+                                    <span class="bdrT ng-binding text-gray" style="padding: 1px 0;"
                                         *ngIf="isLedgerAccountAllowsMultiCurrency">
                                         {{ ledgerTxnBalance?.convertedCurrencySymbol }}{{lc.convertedReckoningDebitTotal  | giddhCurrency }}
                                     </span>
@@ -1017,7 +1014,7 @@
                                     [tooltip]="lc.ledgerUnderStandingObj.balanceText.dr" [placement]="'left'">
                                     <!-- By -->
                                     By Balance C/F:
-                                    <span class="digitBlue">
+                                    <span class="digit-blue">
                                         {{ ledgerTxnBalance?.currencySymbol }}{{ledgerTxnBalance?.closingBalance?.amount  | giddhCurrency}}
                                     </span>
                                 </span>
@@ -1034,7 +1031,7 @@
                                         {{ ledgerTxnBalance?.currencySymbol }}{{lc.reckoningCreditTotal | giddhCurrency }}
                                     </span>
 
-                                    <span class="bdrT" *ngIf="isLedgerAccountAllowsMultiCurrency"
+                                    <span class="bdrT text-gray" *ngIf="isLedgerAccountAllowsMultiCurrency"
                                         style="padding: 1px 0;">
                                         {{ ledgerTxnBalance?.convertedCurrencySymbol }}{{lc.convertedReckoningCreditTotal | giddhCurrency }}
                                     </span>
@@ -1104,12 +1101,12 @@
                 <div class="col-sm-3 col-xs-12 stat-block">
                     <div class="ledger-state-box">
                         <h1>Total Transactions
-                            <span class="digitBlue">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ |
+                            <span class="digit-blue">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ |
                 async)?.creditTransactionsCount}}</span>
                         </h1>
                         <span class=" mrR2 greyTextClr">Debit <span
-                                class="digitBlue">{{(lc.transactionData$ | async)?.debitTransactionsCount}}</span></span><br>
-                        <span class=" mrR2 greyTextClr">Credit <span class="digitBlue">
+                                class="digit-blue">{{(lc.transactionData$ | async)?.debitTransactionsCount}}</span></span><br>
+                        <span class=" mrR2 greyTextClr">Credit <span class="digit-blue">
                                 {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span></span>
                     </div>
                 </div>
@@ -1117,12 +1114,12 @@
                     <div class="ledger-state-box">
                         <h1>Opening Balance</h1>
 
-                        <h3 class="digitBlue">
+                        <h3 class="digit-blue">
                             {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.forwardedBalance?.amount | giddhCurrency}}
                             {{ ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
                         </h3>
 
-                        <h3 class="digitBlue subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                        <h3 class="digit-blue font-12 subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
                             {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedForwardedBalance?.amount | giddhCurrency}}
                             {{ ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
                         </h3>
@@ -1138,12 +1135,12 @@
                         <div class="d-flex" style="justify-content: space-between">
 
                             <div *ngIf="ledgerTxnBalance?.creditTotal > ledgerTxnBalance?.debitTotal">
-                                <h3 class="digitBlue">
+                                <h3 class="digit-blue">
                                     {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.creditTotal - ledgerTxnBalance?.debitTotal | giddhCurrency}}
                                     Cr.
                                 </h3>
 
-                                <h3 class="digitBlue subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <h3 class="digit-blue subTotal font-12" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedCreditTotal - ledgerTxnBalance?.convertedDebitTotal | giddhCurrency}}
                                     Cr.
                                 </h3>
@@ -1154,12 +1151,12 @@
                         <div class="d-flex" style="justify-content: space-between">
 
                             <div *ngIf="ledgerTxnBalance?.creditTotal < ledgerTxnBalance?.debitTotal">
-                                <h3 class="digitBlue">
+                                <h3 class="digit-blue">
                                     {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.debitTotal - ledgerTxnBalance?.creditTotal | giddhCurrency}}
                                     Dr.
                                 </h3>
 
-                                <h3 class="digitBlue subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <h3 class="digit-blue subTotal font-12" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedDebitTotal - ledgerTxnBalance?.convertedCreditTotal | giddhCurrency}}
                                     Dr.
                                 </h3>
@@ -1171,19 +1168,19 @@
                         <div class="d-flex debitCreditAmount" style="justify-content: space-between">
 
                             <h1 class="mrT font16 greyTextClr d-flex" style="flex-direction: column">Debit
-                                <span class="digitBlue mt-1">
+                                <span class="digit-blue mt-1">
                                     {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.debitTotal | giddhCurrency}}
                                 </span>
-                                <span class="digitBlue mt-1 subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <span class="digit-blue font-12 subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedDebitTotal | giddhCurrency}}
                                 </span>
                             </h1>
 
                             <h1 class="mrT font16 greyTextClr d-flex" style="flex-direction: column">Credit
-                                <span class="digitBlue mt-1">
+                                <span class="digit-blue mt-1">
                                     {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.creditTotal | giddhCurrency}}
                                 </span>
-                                <span class="digitBlue mt-1 subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <span class="digit-blue font-12 subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedCreditTotal | giddhCurrency}}
                                 </span>
                             </h1>
@@ -1198,11 +1195,11 @@
                     <div class="ledger-state-box">
                         <h1>Closing Balance</h1>
                         <div class="d-flex" style="justify-content: space-between;flex-direction: column">
-                            <h3 class="digitBlue">
+                            <h3 class="digit-blue">
                                 {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.closingBalance?.amount | giddhCurrency}}
                                 {{ ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
                             </h3>
-                            <h3 class="digitBlue" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                            <h3 class="digit-blue" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedClosingBalance?.amount | giddhCurrency}}
                                 {{ ledgerTxnBalance?.convertedClosingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
                             </h3>
@@ -1249,7 +1246,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <!-- [from]="advanceSearchRequest?.from" [to]="advanceSearchRequest?.to" -->
-            <share-ledger #sharLedger [accountUniqueName]="lc.accountUnq" [advanceSearchRequest]="advanceSearchRequest"
+            <share-ledger #sharLedger [from]="shareLedgerDates?.from" [to]="shareLedgerDates?.to" [accountUniqueName]="lc.accountUnq" [advanceSearchRequest]="advanceSearchRequest"
                 (closeShareLedgerModal)="hideShareLedgerModal()"></share-ledger>
         </div>
     </div>
@@ -1289,7 +1286,7 @@
                 <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
                     <form name="newRole" novalidate class="" autocomplete="off">
                         <div class="modal_wrap mrB2">
-                            <h3>Do you want to delete the selected entries? </h3>
+                            <h3>Do you want to delete the selected entrie(s)? </h3>
                             <p class="text-gray font-14 mt-05">All their corresponding vouchers and invoices will be
                                 deleted permanently and will no longer be accessible from other modules.</p>
                         </div>

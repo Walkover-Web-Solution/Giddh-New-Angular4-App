@@ -74,7 +74,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Stores the current value of branch and warehouse selected for filters */
     public currentBranchAndWarehouseFilterValues: { warehouse: string, branch: string } = { warehouse: '', branch: '' };
     /** List of warehouses */
-	public warehouses: Array<any> = [];
+    public warehouses: Array<any> = [];
     /** List of branches */
     public branches: Array<any> = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -82,7 +82,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     constructor(
         private store: Store<AppState>,
         private _inventoryAction: InventoryAction,
-        private _companyActions: CompanyActions,
         private invoiceActions: InvoiceActions,
         private inventoryService: InventoryService,
         private settingsBranchActions: SettingsBranchActions,
@@ -177,13 +176,12 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
-
         this.isBranchVisible$ = this.store.select(s => s.inventory.showBranchScreen).pipe(takeUntil(this.destroyed$));
-        document.querySelector('body').classList.add('inventorypage');
+        document.querySelector('body').classList.add('inventory-page');
 
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
 
-        this.activeTabIndex = this.router.url.indexOf('jobwork') > -1 ? 1 : this.router.url.indexOf('manufacturing') > -1 ? 2 : this.router.url.indexOf('inventory/report') > -1 ? 3 : 0;;
+        this.activeTabIndex = this.router.url.indexOf('jobwork') > -1 ? 1 : this.router.url.indexOf('manufacturing') > -1 ? 2 : this.router.url.indexOf('inventory/report') > -1 ? 3 : 0;
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             if (s instanceof NavigationEnd) {
@@ -232,7 +230,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             }
         });
-
     }
 
     public openCreateCompanyModal() {
@@ -240,7 +237,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public redirectUrlToActiveTab(type: string, event: any, activeTabIndex?: number, currentUrl?: string) {
-
         if (event) {
             if (!(event instanceof TabDirective)) {
                 return;

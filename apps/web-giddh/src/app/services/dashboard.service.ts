@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { HttpWrapperService } from './httpWrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { DASHBOARD_API } from './apiurls/dashboard.api';
 import {
     BankAccountsResponse,
@@ -28,7 +28,7 @@ export class DashboardService {
     private companyUniqueName: string;
     private user: UserDetails;
 
-    constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router, private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: GiddhErrorHandler, public _http: HttpWrapperService, public _router: Router, private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
     public Dashboard(fromDate: string = '', toDate: string = '', interval: string = 'monthly', refresh: boolean = false): Observable<BaseResponse<DashboardResponse, string>> {
@@ -58,7 +58,7 @@ export class DashboardService {
         })));
     }
 
-    public GetClosingBalance(groupUniqueName: string = '', fromDate: string = '', toDate: string = '', refresh: boolean = false): Observable<BaseResponse<ClosingBalanceResponse, string>> {
+    public getClosingBalance(groupUniqueName: string = '', fromDate: string = '', toDate: string = '', refresh: boolean = false): Observable<BaseResponse<ClosingBalanceResponse, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.get(this.config.apiUrl + DASHBOARD_API.CLOSING_BALANCE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':fromDate', fromDate).replace(':toDate', toDate).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)).replace(':refresh', refresh.toString())).pipe(map((res) => {

@@ -127,8 +127,12 @@ export class HttpWrapperService {
         if (options.headers["Content-Type"] === "multipart/form-data") {
             delete options.headers["Content-Type"];
         }
-        if (!options.headers["Accept"]) {
+        if (!options.headers["Accept"] && options.headers["Content-Type"] != "application/x-www-form-urlencoded") {
             options.headers["Accept"] = "application/json";
+        }
+        if(options.headers["Content-Type"] == "application/x-www-form-urlencoded") {
+            delete options.headers["cache-control"];
+            delete options.headers["Session-Id"];
         }
         options.headers = new HttpHeaders(options.headers);
         return options;
