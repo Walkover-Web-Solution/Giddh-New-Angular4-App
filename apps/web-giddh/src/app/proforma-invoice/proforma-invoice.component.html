@@ -911,7 +911,7 @@
                                                 <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.total" readonly decimalDigitsDirective [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                                 />
 
-                                                <div class="wrap-otherTax">
+                                                <div *ngIf="isTcsTdsApplicable" class="wrap-otherTax">
                                                     <input type="checkbox" class="other-taxes-checkobx" [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable" name="entry.isOtherTaxApplicable_{{entryIdx}}" id="entry.isOtherTaxApplicable_{{entryIdx}}" (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
                                                     <label for="entry.isOtherTaxApplicable_{{entryIdx}}" *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable" style="font-size:13px;vertical-align: middle">Other Tax?</label>
                                                 </div>
@@ -1698,7 +1698,7 @@
                                         <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.total" readonly decimalDigitsDirective [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                         />
 
-                                        <div class="wrap-otherTax">
+                                        <div *ngIf="isTcsTdsApplicable" class="wrap-otherTax">
                                             <input type="checkbox" class="other-taxes-checkobx" [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable" name="entry.isOtherTaxApplicable_{{entryIdx}}" id="entry.isOtherTaxApplicable_{{entryIdx}}" (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
                                             <label for="entry.isOtherTaxApplicable_{{entryIdx}}" *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable" style="font-size:13px;vertical-align: middle">Other
                                                             Tax?</label>

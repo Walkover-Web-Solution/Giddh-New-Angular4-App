@@ -46,7 +46,7 @@ export class CommonService {
             }));
     }
 
-    public GetOnboardingForm(request: OnboardingFormRequest): Observable<BaseResponse<any, any>> {
+    public getOnboardingForm(request: OnboardingFormRequest): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.FORM;
         url = url.replace(':formName', request.formName);
         url = url.replace(':country', request.country);
