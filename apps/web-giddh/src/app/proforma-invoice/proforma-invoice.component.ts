@@ -552,6 +552,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.route.params.pipe(takeUntil(this.destroyed$), delay(0)).subscribe(parmas => {
             if (parmas['invoiceType']) {
+                // Reset voucher due to advance receipt model set voucher in invoice management
+                this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
                 this.selectedVoucherType = parmas['invoiceType'];
                 if (this.invoiceType !== parmas['invoiceType']) {
                     this.invoiceType = decodeURI(parmas['invoiceType']) as VoucherTypeEnum;
@@ -1489,6 +1491,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 moment().add(duePeriod, 'days').toDate() : moment().toDate();
         }
         this.ngAfterViewInit();
+        this.clickAdjustAmount(false)
     }
 
     public triggerSubmitInvoiceForm(f: NgForm, isUpdate) {
@@ -2288,6 +2291,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         /** To reset advance receipt data */
         this.resetAdvanceReceiptAdjustData();
+        this.clickAdjustAmount(false);
     }
 
     public onSelectBankCash(item: IOption) {
@@ -3018,6 +3022,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isLastInvoiceCopied = true;
         this.showLastEstimateModal = false;
         this.getVoucherDetailsFromInputs();
+        this.resetAdvanceReceiptAdjustData();
     }
 
     public calculateOtherTaxes(modal: SalesOtherTaxesModal, entryObj?: SalesEntryClass) {
@@ -4262,16 +4267,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public resetAdvanceReceiptAdjustData(): void {
-        this.adjustPaymentData.customerName = '',
-            this.adjustPaymentData.customerUniquename = '',
-            this.adjustPaymentData.voucherDate = '',
-            this.adjustPaymentData.balanceDue = 0,
-            this.adjustPaymentData.dueDate = '',
-            this.adjustPaymentData.grandTotal = 0,
-            this.adjustPaymentData.gstTaxesTotal = 0,
-            this.adjustPaymentData.subTotal = 0,
-            this.adjustPaymentData.totalTaxableValue = 0,
-            this.adjustPaymentData.totalAdjustedAmount = 0
+            this.adjustPaymentData.customerName = '';
+            this.adjustPaymentData.customerUniquename = '';
+            this.adjustPaymentData.voucherDate = '';
+            this.adjustPaymentData.balanceDue = 0;
+            this.adjustPaymentData.dueDate = '';
+            this.adjustPaymentData.grandTotal = 0;
+            this.adjustPaymentData.gstTaxesTotal = 0;
+            this.adjustPaymentData.subTotal = 0;
+            this.adjustPaymentData.totalTaxableValue = 0;
+            this.adjustPaymentData.totalAdjustedAmount = 0;
     }
     /**
      * To close advance reciipt modal
