@@ -8901,7 +8901,7 @@ input.checkbox-custom[type="checkbox"] {
     .auto_save {
         top: 96px;
     }
-    #settingTab .tab-container .nav.nav-tabs {
+    #setting-tab .tab-container .nav.nav-tabs {
         margin: 0;
         padding: 10px 0px 0;
         white-space: nowrap;
@@ -8909,28 +8909,28 @@ input.checkbox-custom[type="checkbox"] {
         width: 100%;
         overflow-y: hidden;
     }
-    #settingTab .tab-container .nav-tabs > li {
+    #setting-tab .tab-container .nav-tabs > li {
         float: none;
         display: inline-block;
         cursor: grab;
     }
-    #settingTab .nav-tabs > li {
+    #setting-tab .nav-tabs > li {
         float: left;
         margin-bottom: 0px;
     }
-    #settingTab .tab-integraton .nav.nav-tabs {
+    #setting-tab .tab-integraton .nav.nav-tabs {
         overflow: auto;
         white-space: initial;
         width: 100%;
         margin: 0 auto;
         display: block;
     }
-    #settingTab .tab-integraton .nav-tabs > li {
+    #setting-tab .tab-integraton .nav-tabs > li {
         width: 100px;
         margin-bottom: 20px;
         margin-right: 10px;
     }
-    #settingTab .tab-integraton .nav-tabs > li > a {
+    #setting-tab .tab-integraton .nav-tabs > li > a {
         width: 90px;
         height: 90px;
         font-size: 14px;
@@ -9031,17 +9031,17 @@ input.checkbox-custom[type="checkbox"] {
 }
 
 @media (max-width: 768px) {
-    #settingTab .tab-integraton .nav-tabs{
+    #setting-tab .tab-integraton .nav-tabs{
         padding-top: 0 !important;
     }
-    #settingTab .tab-integraton .nav-tabs > li > a {
+    #setting-tab .tab-integraton .nav-tabs > li > a {
         width: 70px;
         height: 70px;
     }
     .tab-integraton .nav-tabs > li > a > span{
         font-size: 22px;
     }
-    #settingTab .tab-integraton .nav-tabs > li{
+    #setting-tab .tab-integraton .nav-tabs > li{
         width: 70px;
         margin-bottom: 15px;
     }
@@ -9266,7 +9266,7 @@ input.checkbox-custom[type="checkbox"] {
     .user_dropdown > li > a .glyphicon-menu-right {
         transform: rotate(90deg);
     }
-    #settingTab .tab-container .nav.nav-tabs {
+    #setting-tab .tab-container .nav.nav-tabs {
         position: fixed;
         width: 100%;
         top:80px;
@@ -9290,12 +9290,12 @@ input.checkbox-custom[type="checkbox"] {
     .invoce-controll .nav.nav-tabs {
         padding: 10px 0px 0 15px !important;
     }
-    #settingTab setting-integration .tab-container .nav.nav-tabs,
-    #settingTab app-invoice-setting .tab-container .nav.nav-tabs {
+    #setting-tab setting-integration .tab-container .nav.nav-tabs,
+    #setting-tab app-invoice-setting .tab-container .nav.nav-tabs {
         position: inherit;
         white-space: nowrap;
     }
-    #settingTab app-invoice-setting .tab-container .nav.nav-tabs {
+    #setting-tab app-invoice-setting .tab-container .nav.nav-tabs {
         margin-top: 45px;
         white-space: nowrap;
         padding-left: 15px !important;
@@ -9317,7 +9317,7 @@ input.checkbox-custom[type="checkbox"] {
     .tooltip.bs-tooltip-top {
         display: none !important;
     }
-    .custom-body #settingTab .tab-container .nav.nav-tabs {
+    .custom-body #setting-tab .tab-container .nav.nav-tabs {
         position: inherit;
     }
     .aside-pane-form .custom-tabs ul.nav.nav-tabs {
@@ -9411,7 +9411,7 @@ input.checkbox-custom[type="checkbox"] {
 }
 
 @media (max-width: 375px) {
-    // #settingTab .tab-container .nav.nav-tabs,
+    // #setting-tab .tab-container .nav.nav-tabs,
     // .custom-tabs .nav.nav-tabs {
     //     top:80px;
     // }

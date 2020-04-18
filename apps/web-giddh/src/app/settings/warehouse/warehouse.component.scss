@@ -22,7 +22,7 @@
 .createWarehouse img {
     margin-bottom: 20px;
 }
-.warehouseCard {
+.warehouse-card {
     background-color: #ebecee;
     padding: 15px;
     min-height: 300px;
@@ -55,14 +55,14 @@
         min-width: 100px;
     }
 }
-.warehouseCard .d-flex {
+.warehouse-card .d-flex {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #cbcbcb;
     padding-bottom: 10px;
 }
 
-.warehouseCard h3 {
+.warehouse-card h3 {
     font-size: 16px;
     font-family: "opensans-semibold";
     float: left;
@@ -114,10 +114,10 @@ span.setAsDefault {
 }
 
 @media only screen and (max-width: 767px) {
-    .warehouseCard .d-flex {
+    .warehouse-card .d-flex {
         display: block;
     }
-    .warehouseCard h3 {
+    .warehouse-card h3 {
         float: none;
         width: 100%;
         margin-bottom: 15px;
@@ -125,7 +125,7 @@ span.setAsDefault {
     .warehouse-options {
         text-align: right;
     }
-    .warehouseCard {
+    .warehouse-card {
         min-height: auto;
     }
 

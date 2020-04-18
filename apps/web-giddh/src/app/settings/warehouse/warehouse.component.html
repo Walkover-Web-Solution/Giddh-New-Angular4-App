@@ -6,7 +6,7 @@
         </div>
     </div>
 
-    <div *ngIf="warehouses?.length" class="warehouseCardView">
+    <div *ngIf="warehouses?.length" class="warehouse-card-view">
 
         <div class="mb-15 text-right">
             <button class="btn btn-pink" (click)="resetOnboardingForm();openCreateWarehouseModal();">
@@ -16,7 +16,7 @@
 
         <div class="row">
             <div *ngFor="let warehouse of warehouses; index as warehouseIndex" class="col-md-4 col-sm-6 pdR1">
-                <div class="warehouseCard">
+                <div class="warehouse-card">
                     <div class="d-flex">
                         <h3>{{ warehouse.name }}</h3>
                         <div class="warehouse-options">
