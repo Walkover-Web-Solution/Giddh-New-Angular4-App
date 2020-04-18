@@ -2236,7 +2236,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     description[this.activeIndx].nativeElement.focus();
                 }
             }, 200);
-
+            this.calculateStockEntryAmount(txn);
+            this.calculateWhenTrxAltered(entry, txn);
             return txn;
         } else {
             txn.isStockTxn = false;
@@ -2257,7 +2258,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     description[this.activeIndx].nativeElement.focus();
                 }
             }, 200);
-
             return txn;
         }
     }
@@ -3983,6 +3983,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.purchaseRecordConfirmationPopup) {
             this.purchaseRecordConfirmationPopup.hide();
         }
+    }
+
+    /**
+     * Quantity field blur handler
+     *
+     * @param {SalesEntryClass} entry Current entry
+     * @param {SalesTransactionItemClass} transaction Current transaction
+     * @memberof ProformaInvoiceComponent
+     */
+    public handleQuantityBlur(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
+        transaction.quantity = Number(transaction.quantity);
+        this.calculateStockEntryAmount(transaction);
+        this.calculateWhenTrxAltered(entry, transaction);
     }
 
     /**
