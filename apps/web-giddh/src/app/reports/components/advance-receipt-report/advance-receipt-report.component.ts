@@ -6,15 +6,15 @@ import {
     ElementRef,
     OnDestroy,
     OnInit,
-    TemplateRef,
     ViewChild,
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { BsModalRef, ModalDirective } from 'ngx-bootstrap/modal';
 import { fromEvent, merge, Observable, ReplaySubject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil, take } from 'rxjs/operators';
 
+import { GeneralActions } from '../../../actions/general/general.actions';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { cloneDeep, isArray } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
@@ -31,7 +31,6 @@ import {
     ReceiptAdvanceSearchModel,
 } from '../../constants/reports.constant';
 import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt-advance-search.component';
-import { GeneralActions } from '../../../actions/general/general.actions';
 
 @Component({
     selector: 'advance-receipt-report',
@@ -66,7 +65,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     /** Date picker options for date filter */
     public datePickerOptions: any = {
         hideOnEsc: true,
-        // parentEl: '#dateRangePickerParent',
         locale: {
             applyClass: 'btn-green',
             applyLabel: 'Go',
@@ -172,13 +170,14 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     private universalDate: Array<Date>;
     /** Subject to unsubscribe all the observables when the component destroys */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Company unique name for API calls */
+    private activeCompanyUniqueName: string;
 
     /** @ignore */
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private componentFactoryResolver: ComponentFactoryResolver,
         private generalAction: GeneralActions,
-        private modalService: BsModalService,
         private receiptService: ReceiptService,
         private store: Store<AppState>,
         private toastService: ToasterService
@@ -187,6 +186,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     /** Subscribe to universal date and set header title */
     public ngOnInit(): void {
         this.store.dispatch(this.generalAction.setAppTitle('/pages/reports/receipt'));
+        this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(uniqueName => this.activeCompanyUniqueName = uniqueName);
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((applicationDate) => {
             if (applicationDate) {
                 this.universalDate = applicationDate;
@@ -248,6 +248,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 this.searchQueryParams.receiptTypes = [data.adjustmentVoucherDetails.selectedValue];
             }
             this.fetchAllReceipts({
+                companyUniqueName: this.activeCompanyUniqueName,
                 receiptTypes: this.searchQueryParams.receiptTypes,
                 totalAmount: data.totalAmountFilter.amount,
                 totalAmountOperation: data.totalAmountFilter.selectedValue,
@@ -447,6 +448,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     private fetchAllReceipts(additionalRequestParameters?: GetAllAdvanceReceiptsRequest): Observable<BaseResponse<any, GetAllAdvanceReceiptsRequest>> {
         let requestObject: GetAllAdvanceReceiptsRequest = {
+            companyUniqueName: this.activeCompanyUniqueName,
             from: moment(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT),
             to: moment(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT),
             count: PAGINATION_LIMIT
@@ -473,6 +475,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     private fetchSummary(): Observable<BaseResponse<any, AdvanceReceiptSummaryRequest>> {
         const requestObject: AdvanceReceiptSummaryRequest = {
+            companyUniqueName: this.activeCompanyUniqueName,
             from: moment(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT),
             to: moment(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT)
         };
@@ -483,10 +486,11 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * Handler for handling all receipts response received from the API
      *
      * @private
-     * @param {*} response Response received from API
+     * @param {*} response Response form the GET ALL api
+     * @returns {*} If success then response of API call else error toast
      * @memberof AdvanceReceiptReportComponent
      */
-    private handleFetchAllReceiptResponse(response: any): void {
+    private handleFetchAllReceiptResponse(response: any): any {
         if (response) {
             if (response.status === 'success' && response.body) {
                 this.pageConfiguration.currentPage = response.body.page;

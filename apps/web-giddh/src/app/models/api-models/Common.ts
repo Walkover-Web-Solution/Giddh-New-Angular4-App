@@ -45,6 +45,7 @@ export class OnboardingFormResponse {
         name: string;
         label: string;
     }];
+    businessType: Array<string>;
 }
 
 export class CurrentPage {
