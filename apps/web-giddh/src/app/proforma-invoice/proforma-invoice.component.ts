@@ -924,8 +924,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             obj.passportNumber = '';
                         }
                     }
+                    //  If last invoice copied then no need to add advanceReceiptAdjustment as pre-fill ref:- G0-5554
                     if (this.isSalesInvoice) {
-                        if (results[1] && results[1].advanceReceiptAdjustment && results[1].advanceReceiptAdjustment.adjustments && results[1].advanceReceiptAdjustment.adjustments.length) {
+                        if (results[1] && results[1].advanceReceiptAdjustment && results[1].advanceReceiptAdjustment.adjustments && results[1].advanceReceiptAdjustment.adjustments.length && !this.isLastInvoiceCopied) {
                             this.isInvoiceAdjustedWithAdvanceReceipts = true;
                             this.calculateAdjustedVoucherTotal(results[1].advanceReceiptAdjustment.adjustments);
                             this.advanceReceiptAdjustmentData = results[1].advanceReceiptAdjustment;
@@ -3023,6 +3024,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.showLastEstimateModal = false;
         this.getVoucherDetailsFromInputs();
         this.resetAdvanceReceiptAdjustData();
+        this.clickAdjustAmount(false);
     }
 
     public calculateOtherTaxes(modal: SalesOtherTaxesModal, entryObj?: SalesEntryClass) {
