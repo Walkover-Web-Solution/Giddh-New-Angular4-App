@@ -5279,4 +5279,7 @@ form#groupDetailForm {
     .no-data {
         font-size: 26px;
     }
+    #settingTab .nav > li > a:hover {
+        color: inherit !important;
+    }
 }

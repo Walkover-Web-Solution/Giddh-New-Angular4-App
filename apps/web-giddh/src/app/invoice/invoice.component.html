@@ -2,11 +2,61 @@
     <nav class="navbar">
         <div class="invoce-controll">
             <div class="row" style="margin: 0 !important;">
+                <div class="btn-group" dropdown *ngIf="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note' && tabsDropdown">
+                    <button id="button1-basic" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle" aria-controls="dropdown-basic"></button>
+                        <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                            <li role="menuitem">
+                                <a class="dropdown-item cp">Debit Note</a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp">Credit Note</a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp">Pending</a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp">Template</a>
+                            </li>
+                        </ul>
+                </div>
+                <div class="btn-group tabs-dropdown" dropdown *ngIf="selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note' && tabsDropdown">
+                    <button id="button1-basic" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle" aria-controls="dropdown-basic">
+                        Estimates
+                        <span class="caret"></span>
+                    </button>
+                        <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                            <li role="menuitem">
+                                <a class="dropdown-item cp">estimates</a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp">proformas</a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp">sales</a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp">recurring</a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp">pending</a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp">settings</a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp">template</a>
+                            </li>
+
+
+                            
+                        </ul>
+                </div>
 
                 <!--<invoice-page-dd (pageChanged)="goToRoute($event)" (selectVoucher)="voucherChange($event)"></invoice-page-dd>-->
                 <div class="" id="settingTab">
                     <ng-template [ngIf]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'">
 
+                        
                         <tabset #staticTabs>
 
                             <tab heading="Debit Note" [active]="activeTab === 'debit note'" (select)="tabChanged('debit note', $event);voucherChanged('debitNote')">

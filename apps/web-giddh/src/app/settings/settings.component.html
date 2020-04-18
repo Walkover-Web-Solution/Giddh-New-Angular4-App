@@ -1,8 +1,8 @@
 <div class="container-fluid settings-bg" [keyboardShortcut]="['alt+right', 'alt+left']" [config]="{ignoreHost:true}"
     (onShortcutPress)="selectTabByShortcut($event)">
     <div class="row">
-
-        <div class="setting-page" id="settingTab">
+    <div class="invoce-controll">
+        <div id="settingTab">
 
             <tabset #staticTabs>
 
@@ -99,5 +99,6 @@
             </tabset>
 
         </div>
+    </div>
     </div>
 </div>
