@@ -13,7 +13,7 @@ $md-drppicker-cell-hover-color: $md-drppicker-color !default;
 $md-drppicker-cell-hover-border-color: $md-drppicker-cell-border-color !default;
 $md-drppicker-cell-hover-bg-color: #eee !default;
 
-$md-drppicker-in-range-color: #000 !default;
+$md-drppicker-in-range-color: #1c1c1c !default;
 $md-drppicker-in-range-border-color: transparent !default;
 $md-drppicker-in-range-bg-color: #dde2e4 !default;
 
@@ -72,7 +72,6 @@ $input-height: 3rem !default;
     background-color: $md-drppicker-bg-color;
     border-radius: 4px;
     width: $md-drppicker-width;
-    //padding: 4px;
     display: flex;
     margin-top: 0;
     overflow: hidden;
@@ -204,7 +203,6 @@ $input-height: 3rem !default;
     }
 
     .calendar {
-        /* display: none; */
         max-width: $md-drppicker-width - ($md-drppicker-calendar-margin * 2);
         margin: $md-drppicker-calendar-margin;
 
@@ -246,8 +244,7 @@ $input-height: 3rem !default;
     table {
         width: 100%;
         margin: 0;
-        //border-collapse: unset !important;
-        //border-spacing: 4px !important;
+        border-collapse: collapse;
     }
 
     th {
@@ -269,9 +266,8 @@ $input-height: 3rem !default;
         text-align: center;
         width: $md-drppicker-cell-width;
         height: $md-drppicker-cell-height;
-
         border: $md-drppicker-cell-border-size solid
-            $md-drppicker-cell-border-color;
+        $md-drppicker-cell-border-color;
         white-space: nowrap;
         cursor: pointer;
         height: 2em;
@@ -287,8 +283,6 @@ $input-height: 3rem !default;
                 background-position: center;
                 opacity: 0.8;
                 transition: background-color 0.2s ease;
-                //border-radius: 2em;
-
                 &:hover {
                     margin: 0;
                 }
@@ -321,9 +315,6 @@ $input-height: 3rem !default;
                 margin: 0.25em 0;
                 opacity: 0.8;
                 transition: background-color 0.2s ease;
-
-                //transform: scale(1);
-                //transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
             }
         }
 
@@ -337,10 +328,7 @@ $input-height: 3rem !default;
         margin: 0.25em 0;
         opacity: 0.8;
         transition: background-color 0.2s ease;
-        //border-radius: 2em;
         transform: scale(1);
-        //transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
-
         &.off {
             &,
             &.in-range,
@@ -351,10 +339,7 @@ $input-height: 3rem !default;
                 color: $md-drppicker-unselected-color;
             }
         }
-
-        //
         // Date Range
-
         &.in-range {
             background-color: #c6dafc;
             border-color: $md-drppicker-in-range-border-color;
@@ -365,7 +350,6 @@ $input-height: 3rem !default;
             z-index: 999;
             position: relative;
         }
-
         &.in-range::before {
             content: "";
             background-color: #7d87e445;
@@ -379,24 +363,26 @@ $input-height: 3rem !default;
 
         &.in-range.end-date::before {
             content: "";
-            background-color: transparent;
-            width: 50%;
+            background-color:#7d87e445;
+            width:84%;
             height: 100%;
             left: 0px;
             top: -1px;
             position: absolute;
             display: inline-block;
+            border-radius: 0 50% 50% 0;
         }
 
         &.start-date::before {
             content: "";
-            background-color: transparent;
-            width: 50%;
+            background-color:#7d87e445;
+            width: 100%;
             height: 100%;
-            left: 50%;
+            left: 0;
             top: -1px;
             position: absolute;
             display: inline-block;
+            border-radius: 50% 0 0 50%;
         }
 
         &.start-date.start-date-reset::before {
@@ -409,30 +395,7 @@ $input-height: 3rem !default;
             position: absolute;
             display: inline-block;
         }
-
-        //&.in-range::after {
-        //  content: "";
-        //  /* background-color: #c6dafc; */
-        //  display: inline-block;
-        //  width: 100%;
-        //  height: 100%;
-        //  position: absolute;
-        //  left: 0;
-        //  top: 0;
-        //  z-index: 1;
-        //
-        //  border-radius: 100%;
-        //
-        //}
-        //&.in-range::after:hover {
-        //
-        //  background-color: #efeeee;
-        //
-        //  border: 1px solid;
-        //}
         &.in-range-hovered {
-            border-bottom: 1px dashed gray !important;
-            border-top: 1px dashed gray !important;
             border-left: 0;
             border-right: 0;
             border-radius: 0 !important;
@@ -609,13 +572,18 @@ $input-height: 3rem !default;
                 li {
                     position: relative;
                     button {
-                        padding: 8px 12px;
+                        padding: 8px 10px;
                         width: 100%;
                         background: none;
                         border: none;
                         text-align: left;
                         cursor: pointer;
                         font-size: 12px;
+                        border-left: 3px solid transparent !important;
+
+                        .available.prev{
+                            transform: rotate(180deg);
+                        }
 
                         .drop-down {
                             position: absolute;
@@ -767,8 +735,6 @@ $input-height: 3rem !default;
             .calendar {
                 &.left {
                     clear: left;
-                    /*margin-right: 1.5em;*/
-
                     .calendar-table {
                         border-right: none;
                         border-top-right-radius: 0;
@@ -777,12 +743,11 @@ $input-height: 3rem !default;
                 }
 
                 &.right {
-                    margin-left: 0;
-
                     .calendar-table {
                         border-left: none;
                         border-top-left-radius: 0;
                         border-bottom-left-radius: 0;
+
                     }
                 }
             }
@@ -796,7 +761,7 @@ $input-height: 3rem !default;
             }
 
             .calendar.left .calendar-table {
-                padding-right: 12px;
+                padding-right: 4px;
             }
 
             .ranges,
@@ -892,7 +857,7 @@ $input-height: 3rem !default;
 }
 
 .in-range.available:hover {
-    background-color: #7d87e445 !important;
+    background-color:transparent !important;
     border-radius: 0 !important;
 }
 
@@ -904,7 +869,7 @@ td span {
 }
 td:hover span {
     background-color: #f2f2f2;
-    border: 1px solid #ccc;
+    border: 1px solid #808080;
 }
 
 .off.in-range {
@@ -924,21 +889,29 @@ td:hover span {
 
 .md-drppicker td.start-date.active {
     span {
-        background-color: $midnightBlue !important;
+        background-color: $midnight-blue !important;
         color: #fff !important;
+        border-color:$midnight-blue !important;
     }
 }
 
 .md-drppicker td.end-date.active {
     background-color: white !important;
 
+
     span {
-        background-color: $midnightBlue !important;
-        color: #fff !important;
+        background-color: #7d87e400 !important;
+        color: #1c1c1c !important;
     }
 
     .available:hover {
         background-color: unset !important;
+    }
+    &:hover{
+        span{
+        background-color: #f2f2f2 !important;
+        border-color: #808080 !important;
+    }
     }
 }
 
@@ -951,45 +924,31 @@ td span {
     align-items: center;
     justify-content: center;
     border-radius: 100%;
-    width: 30px;
-    height: 30px;
-    line-height: 2.3;
+    width: 26px;
+    height: 26px;
+    line-height:2;
     display: block;
 }
-
-//td.start-date::after {
-//  content: "";
-//  background-color: #c6dafc;
-//  width: 14px;
-//  height: 109%;
-//  right: -5px;
-//  top: -1px;
-//  position: absolute;
-//  display: inline-block;
-//
-//}
 .se {
     width: 270px;
     opacity: 0;
 }
 
 .d-container {
-    //height: 535px;
-    //height: 0px;
-    width: 267px;
-    //position: absolute;
+    width: 100%;
     background-color: white;
     z-index: 100;
     overflow: hidden;
     transition: 30ms all;
-    border-top: 1px solid gainsboro;
 
     h2 {
         position: relative;
-        padding-left: 24px;
+        padding-left: 10px;
         font-size: 13px;
         color: rgba(0, 0, 0, 0.54);
-        margin: 9px 0;
+        margin: 9px 0 0;
+        font-style: normal;
+        text-align: left;
     }
 }
 
@@ -1000,15 +959,16 @@ td span {
     padding: 7px;
 
     .d-month {
-        width: 25%;
-        padding: 8px 4px;
+        width: 20%;
+        padding: 6px 4px;
         text-align: center;
         text-transform: uppercase;
-        font-size: 13px;
+        font-size: 12px;
+        font-style: normal;
 
         &:hover {
             border-radius: 50px;
-            background-color: gainsboro;
+            background-color:#e4e4e4;
             cursor: pointer;
         }
     }
@@ -1018,14 +978,13 @@ td span {
     display: block;
     background-image: url("data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgMy43IDYiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDMuNyA2IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxwYXRoIGQ9Ik0zLjcsMC43TDEuNCwzbDIuMywyLjNMMyw2TDAsM2wzLTNMMy43LDAuN3oiLz4NCjwvZz4NCjwvc3ZnPg0K");
     background-repeat: no-repeat;
-    background-size: 0.7em;
+    background-size: 0.6em;
     background-position: center;
     opacity: 0.8;
     transition: background-color 0.2s ease;
     height: 21px;
     width: 21px;
     cursor: pointer;
-    //border-radius: 2em;
     background-color: unset !important;
     border: unset !important;
 
@@ -1042,11 +1001,10 @@ td span {
     display: block;
     background-image: url("data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgMy43IDYiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDMuNyA2IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxwYXRoIGQ9Ik0zLjcsMC43TDEuNCwzbDIuMywyLjNMMyw2TDAsM2wzLTNMMy43LDAuN3oiLz4NCjwvZz4NCjwvc3ZnPg0K");
     background-repeat: no-repeat;
-    background-size: 0.7em;
+    background-size: 0.6em;
     background-position: center;
     opacity: 0.8;
     transition: background-color 0.2s ease;
-    //border-radius: 2em;
     height: 21px;
     background-color: unset !important;
     border: unset !important;
@@ -1071,7 +1029,7 @@ td span {
 }
 
 .activatedDate span {
-    color: #000 !important;
+    color: #1c1c1c !important;
     background-color: #c6dafc !important;
 }
 
@@ -1092,7 +1050,7 @@ td span {
     background-color: #fff;
     right: -100%;
     top: 0;
-    z-index: 1;
+    z-index: 9999;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     box-shadow: 0 6px 1;
@@ -1101,7 +1059,7 @@ td span {
         &:hover {
             background-color: $lavender !important;
             button {
-                color: $JacksonsPurple !important;
+                color: $jacksons-purple !important;
             }
         }
     }
@@ -1126,8 +1084,9 @@ td span {
 
 .md-drppicker .calendar th,
 .md-drppicker .calendar td {
-    height: 30px;
-    border: 1px dashed transparent;
+    height: 26px;
+    border:none;
+    border-top: 1px solid transparent;
 }
 .close-calender{
     display:none;
@@ -1135,6 +1094,7 @@ td span {
 .calender-container {
     display: flex;
     flex-direction: column;
+    max-width: 260px;
     .calender-container-wrapper {
         flex: 1 1 auto;
         overflow: auto;
@@ -1143,15 +1103,15 @@ td span {
             flex-direction: column;
             .select-date-range {
                 display: flex;
-                justify-content: space-around;
-                padding-top: 10px;
+                justify-content: space-between;
+                padding: 10px 10px 0;
                 input {
                     width: 100px;
                     height: auto;
                     font-size: 12px;
                     padding: 6px 0;
                     border: none;
-                    border-bottom: 1px solid $inputBorderColor;
+                    border-bottom: 1px solid $gainsboro;
                     &:focus {
                         outline: none;
                         box-shadow: none;
@@ -1163,8 +1123,8 @@ td span {
                     align-items: flex-start;
                 }
                 .activeSelectedDate {
-                    border-bottom-color: $btnLink !important;
-                    box-shadow: 0 1px 0 0 $btnLink !important;
+                    border-bottom-color: $primary !important;
+                    box-shadow: 0 1px 0 0 $primary !important;
                 }
             }
         }
@@ -1174,14 +1134,25 @@ td span {
 .month-field {
     display: flex;
     justify-content: space-between;
-    padding: 10px 12px 0;
+    padding: 10px 10px 6px;
     border-bottom: 1px solid $whiteSmoke;
-    padding-bottom: 10px;
-
+         .month-dropdown{
+        display: flex;
+        flex-direction: row;
+        width: 180px;
+        justify-content: flex-start;
+        align-items: flex-start;
+        .prev.available{
+            display: inline-flex;
+            transform: rotate(270deg);
+            margin-left: 6px;
+        }
+    }
     .month-name {
         font-weight: 700;
         cursor: pointer;
         font-style: initial;
+        display: flex;
     }
 }
 .prev-next-btn {
@@ -1201,13 +1172,14 @@ td span {
         li {
             position: relative;
             button {
-                padding: 8px 12px;
+                padding: 8px 10px;
                 width: 100%;
                 background: none;
                 border: none;
                 text-align: left;
                 cursor: pointer;
                 font-size: 12px;
+                
 
                 .drop-down {
                     position: absolute;
@@ -1256,11 +1228,11 @@ td span {
                 font-size: 12px;
                 margin-bottom: 0;
                 border: none;
-                border-bottom: 1px solid $inputBorderColor;
+                border-bottom: 1px solid $gainsboro;
                 background-color: transparent;
                 &:focus {
-                    border-bottom-color: $btnLink !important;
-                    box-shadow: 0 1px 0 0 $btnLink !important;
+                    border-bottom-color: $primary !important;
+                    box-shadow: 0 1px 0 0 $primary !important;
                     outline: none;
                 }
             }
@@ -1282,11 +1254,23 @@ td span {
             ul{
                 width:100%;
                 li{
+                    .available.prev{
+                        transform: rotate(269deg) !important;
+                         }
+                    }
+                    .select-financial-year {
+                        ul.sub-ranges-cal{
+                            border-bottom: none;
+                        }
+                    }
                     ul.sub-ranges-cal {
                         width: 100%;
                         right: 0;
                         top: 0;
                         position: static;
+                        border: none;
+                        border-bottom: 1px solid $gainsboro;
+                        border-radius: 0;
                     }
                 }
             }
@@ -1307,48 +1291,40 @@ td span {
                 width:100%;
             }
         }
-      } 
- 
-      .calender-container{
-        position: absolute;
-        top: 0;
-        width: 100%;
-        left: 0;
-        background-color: #fff;
-        z-index: 1;
-        min-width: 300px;
-        padding-top: 30px;
-
-        .close-calender{
+        .calender-container{
             position: absolute;
-            top: 10px;
-            left: 0;
-            display: flex;
-            align-items: center;
+            top: 0;
             width: 100%;
-            font-size: 17px;
-            font-style: initial;
-            padding-left:15px;
-            img{
-                margin-right: 15px;
+            left: 0;
+            background-color: #fff;
+            z-index: 1;
+            min-width: 100%;
+            padding-top: 30px;
+    
+            .close-calender{
+                position: absolute;
+                top: 10px;
+                left: 0;
+                display: flex;
+                align-items: center;
+                width: 100%;
+                font-size: 17px;
+                font-style: initial;
+                padding-left:15px;
+                img{
+                    margin-right: 15px;
+                }
             }
-        }
-      }
-
-      &.double {
-        width: 300px;
-        
-    }
-   
-}
-}
-
-@media(max-width:360px){
-    .md-drppicker{
-
-        &.double {
+          }
+    
+          &.double {
             width: 280px;
-             
+            height: 400px;
+            overflow-y: auto; 
         }
-    }
+       
+      } 
+     .d-container{
+        width: 280px;
+    }    
 }
