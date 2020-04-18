@@ -81,7 +81,7 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     timePickerSeconds: Boolean = false;
     _locale: LocaleConfig = {};
     @Input() set locale(value) {
-        this._locale = {...this._localeService.config, ...value};
+        this._locale = { ...this._localeService.config, ...value };
     }
 
     get locale(): any {
@@ -141,7 +141,7 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         const componentFactory = this._componentFactoryResolver.resolveComponentFactory(NgxDaterangepickerComponent);
         viewContainerRef.clear();
         const componentRef = viewContainerRef.createComponent(componentFactory);
-        this.picker = (<NgxDaterangepickerComponent> componentRef.instance);
+        this.picker = (<NgxDaterangepickerComponent>componentRef.instance);
         this.picker.inline = false; // set inline to false for all directive usage
     }
 
@@ -202,6 +202,8 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     open(event?: any) {
         this.picker.show(event);
         setTimeout(() => {
+            this.removeDuplicateDatepickers();
+            this.appendDatepickerToBody();
             this.setPosition();
         });
     }
@@ -280,45 +282,29 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         }
     }
 
+    getPosition(element) {
+        var xPosition = 0;
+        var yPosition = 40;
+
+        while (element) {
+            xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
+            yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
+            element = element.offsetParent;
+        }
+
+        return { x: xPosition, y: yPosition };
+    }
+
     /**
      * Set position of the calendar
      */
     setPosition() {
-        let style;
-        let containerTop;
         const container = this.picker.pickerContainer.nativeElement;
         const element = this._el.nativeElement;
-        if (this.drops && this.drops === 'up') {
-            containerTop = (element.offsetTop - container.clientHeight) + 'px';
-        } else {
-            containerTop = 'auto';
-        }
-        if (this.opens === 'left') {
-            style = {
-                top: containerTop,
-                left: (element.offsetLeft - container.clientWidth + element.clientWidth) + 'px',
-                right: 'auto'
-            };
-        } else if (this.opens === 'center') {
-            style = {
-                top: containerTop,
-                left: (element.offsetLeft + element.clientWidth / 2
-                    - container.clientWidth / 2) + 'px',
-                right: 'auto'
-            };
-        } else {
-            style = {
-                top: containerTop,
-                left: element.offsetLeft + 'px',
-                right: 'auto'
-            };
-        }
-        if (style) {
-            this._renderer.setStyle(container, 'top', style.top);
-            this._renderer.setStyle(container, 'left', style.left);
-            this._renderer.setStyle(container, 'right', style.right);
-        }
-
+        let position = this.getPosition(element);
+        this._renderer.setStyle(container, 'top', position.y + 'px');
+        this._renderer.setStyle(container, 'left', position.x + 'px');
+        this._renderer.setStyle(container, 'right', 'auto');
     }
 
     /**
@@ -338,5 +324,17 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         if (!clickedInside) {
             this.hide();
         }
+    }
+
+    public removeDuplicateDatepickers() {
+        if (document.getElementsByTagName("ngx-daterangepicker-material").length > 1) {
+            for (let loop = 1; loop < document.getElementsByTagName("ngx-daterangepicker-material").length; loop++) {
+                document.getElementsByTagName("ngx-daterangepicker-material")[loop].remove();
+            }
+        }
+    }
+
+    public appendDatepickerToBody() {
+        document.body.appendChild(document.getElementsByTagName("ngx-daterangepicker-material")[0]);
     }
 }

@@ -175,12 +175,12 @@ export class NgxDaterangepickerComponent implements OnInit {
     @ViewChild('pickerContainer') pickerContainer: ElementRef;
     showMonthPicker = false;
     public isMobileScreen: boolean = false;
-public dropdownShow:boolean = false;
+    public dropdownShow: boolean = false;
     public goToPreviousMonthDisabled: boolean = false;
     public goToNextMonthDisabled: boolean = false;
     private mouseWheelEventsRequired: number = 40;
     private mouseWheelEvents: number = 0;
-    
+    private componentRef: any;
     private _old: { start: any, end: any } = { start: null, end: null };
 
     constructor(
@@ -261,13 +261,13 @@ public dropdownShow:boolean = false;
         this.renderCalendar(DateType.end);
     }
 
-    public visibleCalnderOn(){
+    public visibleCalnderOn() {
         this.isMobileScreen = !this.isMobileScreen;
-      
     }
- public closeCalander(){
-     this.isMobileScreen = !this.isMobileScreen;
- }
+
+    public closeCalander() {
+        this.isMobileScreen = !this.isMobileScreen;
+    }
 
     /**
      * check whether go to previous and go to next month are allowed
@@ -500,7 +500,7 @@ public dropdownShow:boolean = false;
 
         let curDate = moment([lastYear, lastMonth, startDay, 12, minute, second]);
 
-        for (let i = 0, col = 0, row = 0; i < 42; i++, col++, curDate = moment(curDate).add(24, 'hour')) {
+        for (let i = 0, col = 0, row = 0; i < 42; i++ , col++ , curDate = moment(curDate).add(24, 'hour')) {
             if (i > 0 && col % 7 === 0) {
                 col = 0;
                 row++;
@@ -1314,7 +1314,7 @@ public dropdownShow:boolean = false;
     show(e?) {
         if (this.isShown) {
             return;
-        }
+        } 
         this._old.start = this.startDate.clone();
         this._old.end = this.endDate.clone();
         this.isShown = true;
