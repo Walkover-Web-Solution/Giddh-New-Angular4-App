@@ -319,13 +319,13 @@
     </div>
 
     <div class="clearfix sales-ragister ">
-        <div class="col-xs-3 ">
+        <div class="col-xs-2 ">
             <p>Transaction count</p>
             <p class="text-orange ">
                 {{ (SalesRegisteDetailedResponse$ | async).totalItems }}
             </p>
         </div>
-        <div class="col-xs-9 ">
+        <div class="col-xs-10 ">
             <div *ngIf="SalesRegisteDetailedItems" class="clearfix main-sale-register-box ">
                 <div class="sale-register-box text-right">
                     <p>Sales</p>
@@ -346,7 +346,7 @@
                     </h4>
                 </div>
                 <div class="sale-register-box text-right">
-                    <p>Discount</p>
+                    <p>Net Discount</p>
                     <h4>
                         {{
                             (SalesRegisteDetailedResponse$ | async)
@@ -355,7 +355,25 @@
                     </h4>
                 </div>
                 <div class="sale-register-box text-right">
-                    <p>Total Tax</p>
+                    <p>Net TCS</p>
+                    <h4>
+                        {{
+                            (SalesRegisteDetailedResponse$ | async).tcsTotal
+                                | giddhCurrency
+                        }}
+                    </h4>
+                </div>
+                <div class="sale-register-box text-right">
+                    <p>Net TDS</p>
+                    <h4>
+                        {{
+                            (SalesRegisteDetailedResponse$ | async).tdsTotal
+                                | giddhCurrency
+                        }}
+                    </h4>
+                </div>
+                <div class="sale-register-box text-right">
+                    <p>Net Tax</p>
                     <h4>
                         {{
                             (SalesRegisteDetailedResponse$ | async).taxTotal
