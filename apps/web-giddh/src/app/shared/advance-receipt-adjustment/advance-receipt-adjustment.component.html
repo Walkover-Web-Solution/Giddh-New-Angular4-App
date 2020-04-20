@@ -18,7 +18,7 @@
                         <input type="text" class="form-control" name="customerName" [(ngModel)]="adjustPayment.customerName" readonly disabled>
                     </div>
                 </div>
-                <div class="col-md-4 text-right font-14 pt-2 xs-left">
+                <div class="col-md-4 text-right font-14 pt-2 xs-left" *ngIf="exceedDueAmount>0">
                     <p>Invoice Total: <i class="font-10"></i>{{invoiceFormDetails.accountDetails.currencySymbol}}{{adjustPayment?.grandTotal | giddhCurrency}}
                     </p>
                     <p>Due <span class="text-light">(Post Adj):</span> <span class="nowrap"><i class="font-10"></i> {{invoiceFormDetails.accountDetails.currencySymbol}} {{ getBalanceDue() | giddhCurrency}}</span>
