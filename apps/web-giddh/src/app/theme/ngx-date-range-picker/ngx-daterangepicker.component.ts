@@ -12,6 +12,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
+import { NavigationEnd, Router, NavigationStart } from '@angular/router';
 
 const moment = _moment;
 
@@ -193,7 +194,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     constructor(
         private _ref: ChangeDetectorRef,
         private _localeService: NgxDaterangepickerLocaleService,
-        private _breakPointObservar: BreakpointObserver, private store: Store<AppState>, public settingsFinancialYearService: SettingsFinancialYearService) {
+        private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router) {
         this.choosedDate = new EventEmitter();
         this.rangeClicked = new EventEmitter();
         this.datesUpdated = new EventEmitter();
@@ -266,6 +267,13 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         }
         this.renderCalendar(DateType.start);
         this.renderCalendar(DateType.end);
+
+        this.router.events.subscribe(event => {
+            if (event instanceof NavigationStart) {
+                this.removeAllDatepickers();
+                this.hide();
+            }
+        });
     }
 
     public visibleCalnderOn() {
@@ -1334,6 +1342,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
             }
         }
         this.updateView();
+
+        setTimeout(() => {
+            this.isShown = true;
+            this._ref.detectChanges();
+        }, 20);
     }
 
     hide(e?) {
@@ -1734,5 +1747,25 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         }
 
         this.updateView();
+    }
+
+    public removeDuplicateDatepickers() {
+        if (document.getElementsByTagName("ngx-daterangepicker-material").length > 1) {
+            for (let loop = 0; loop < document.getElementsByTagName("ngx-daterangepicker-material").length; loop++) {
+                document.getElementsByTagName("ngx-daterangepicker-material")[loop].remove();
+            }
+        }
+    }
+
+    public removeAllDatepickers() {
+        if (document.getElementsByTagName("ngx-daterangepicker-material").length > 0) {
+            for (let loop = 0; loop < document.getElementsByTagName("ngx-daterangepicker-material").length; loop++) {
+                document.getElementsByTagName("ngx-daterangepicker-material")[loop].remove();
+            }
+        }
+    }
+
+    public appendDatepickerToBody() {
+        document.body.appendChild(document.getElementsByTagName("ngx-daterangepicker-material")[0]);
     }
 }
