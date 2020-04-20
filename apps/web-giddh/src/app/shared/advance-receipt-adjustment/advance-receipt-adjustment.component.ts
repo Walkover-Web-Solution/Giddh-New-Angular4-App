@@ -395,11 +395,12 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         });
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 0) {
             this.adjustVoucherForm.adjustments.forEach((item, key) => {
-                if (!item.voucherNumber) {
+                if (!item.voucherNumber && item.dueAmount.amountForAccount) {
                     isValid = false;
                     form.controls[`voucherName${key}`].markAsTouched();
-                } else if (!item.dueAmount.amountForAccount) {
+                } else if (item.voucherNumber && !item.dueAmount.amountForAccount) {
                     isValid = false;
+                    form.controls[`amount${key}`].markAsTouched();
                 }
             });
         }
