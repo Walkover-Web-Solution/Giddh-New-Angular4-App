@@ -943,7 +943,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             this.advanceReceiptAdjustmentData = results[1].advanceReceiptAdjustment;
                         } else {
                             this.isInvoiceAdjustedWithAdvanceReceipts = false;
-
                         }
 
                     }
