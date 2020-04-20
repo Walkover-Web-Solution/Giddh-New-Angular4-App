@@ -105,6 +105,9 @@ export class MfEditComponent implements OnInit {
                     if (response.status === 'success') {
                         let flattenGroupResponse = _.cloneDeep(response.body.results);
 
+                        this.liabilityGroupAccounts = [];
+                        this.expenseGroupAccounts = [];
+
                         _.forEach(GroupWithAccResponse, (d: any) => {
                             _.forEach(flattenGroupResponse, acc => {
                                 if (d.category === 'expenses' || d.category === 'liabilities' || d.category === 'assets') {

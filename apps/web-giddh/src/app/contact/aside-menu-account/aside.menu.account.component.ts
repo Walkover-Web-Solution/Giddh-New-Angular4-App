@@ -118,11 +118,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
             if (flattenGroups) {
                 let items: IOption[] = flattenGroups.filter(grps => {
                     return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
-                }).map(m => {
-                    return {
-                        value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups
-                    };
-                });
+                }).map((m: any) => ({ value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups }));
                 this.flatGroupsOptions = items;
             }
         });

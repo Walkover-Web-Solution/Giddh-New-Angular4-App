@@ -16,7 +16,7 @@ import {
     VerifyMobileModel,
     VerifyMobileResponseModel
 } from '../models/api-models/loginModels';
-import {ErrorHandler} from './catchManager/catchmanger';
+import {GiddhErrorHandler} from './catchManager/catchmanger';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {GeneralService} from './general.service';
 import {IServiceConfigArgs, ServiceConfig} from './service.config';
@@ -27,7 +27,7 @@ import {UserAgent} from "@ionic-native/user-agent/ngx";
 @Injectable()
 export class AuthenticationService {
 
-    constructor(private errorHandler: ErrorHandler,
+    constructor(private errorHandler: GiddhErrorHandler,
                 public _httpClient: HttpClient,
                 public _http: HttpWrapperService,
                 public _router: Router,

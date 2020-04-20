@@ -1,36 +1,27 @@
 <div class="container-fluid settings-bg" [keyboardShortcut]="['alt+right', 'alt+left']" [config]="{ignoreHost:true}"
     (onShortcutPress)="selectTabByShortcut($event)">
     <div class="row">
-
-        <div class="settingPage" id="settingTab">
-
+    <div class="invoce-controll">
+        <div id="setting-tab">
             <tabset #staticTabs>
-
                 <tab heading="Taxes" [active]="activeTab === 'taxes'" (select)="tabChanged('taxes')">
                     <div class="setting-container">
                         <setting-taxes></setting-taxes>
                     </div>
-
                 </tab>
-
                 <tab heading="Integration" (select)="integrationSelected($event); tabChanged('integration')"
                     [active]="activeTab === 'integration'">
                     <div class="setting-container">
                         <setting-integration #integrationComponent [selectedTabParent]="selectedChildTab">
                         </setting-integration>
                     </div>
-
                 </tab>
-
                 <tab heading="Linked Accounts" (select)="linkedAccountSelected($event); tabChanged('linked-accounts')"
                     [active]="activeTab === 'linked-accounts'">
                     <div class="setting-container">
                         <setting-linked-accounts #eBankComp></setting-linked-accounts>
                     </div>
-
-
                 </tab>
-
                 <tab heading="Profile" (select)="profileSelected($event); tabChanged('profile')"
                     [active]="activeTab === 'profile'">
                     <div class="setting-container">
@@ -40,47 +31,37 @@
                                 class="glyphicon glyphicon-refresh mrR fs14 rotate"></i>Saving...</span>
                         <span *ngIf="isCompanyProfileUpdated && !(isUpdateCompanyInProgress$ | async)" class="auto_save"
                             style="float: right;"><i class="glyphicon glyphicon-check mrR fs14"></i>Saved</span>
-                    </div>
-
+                   </div>
                 </tab>
-
                 <tab heading="Financial Year" (select)="financialYearSelected($event); tabChanged('financial-year')"
                     [active]="activeTab === 'financial-year'">
                     <div class="setting-container">
                         <financial-year #financialYearComp></financial-year>
                     </div>
-
                 </tab>
-
                 <!-- Arpit: Sagar told me to remove this condition from permission tab -->
                 <!-- *ngIf="isUserSuperAdmin" -->
-
                 <tab (select)="permissionTabSelected($event); tabChanged('permission')" heading="Permission"
                     [active]="activeTab === 'permission'">
                     <div class="setting-container">
                         <setting-permission #permissionComp></setting-permission>
                     </div>
-
                 </tab>
-
                 <tab heading="Branch" [active]="activeTab === 'branch'" (select)="tabChanged('branch')">
                     <div class="setting-container">
                         <setting-branch></setting-branch>
                     </div>
                 </tab>
-
                 <tab heading="Tags" (select)="tagsTabSelected($event);tabChanged('tag')" [active]="activeTab === 'tag'">
                     <div class="setting-container">
                         <setting-tags #tagComp></setting-tags>
                     </div>
                 </tab>
-
                 <tab heading="Trigger" [active]="activeTab === 'trigger'" (select)="tabChanged('trigger')">
                     <div class="setting-container">
                         <setting-trigger></setting-trigger>
                     </div>
                 </tab>
-
                 <tab heading="Discount" [active]="activeTab === 'discount'" (select)="tabChanged('discount')">
                     <div class="setting-container">
                         <setting-discount></setting-discount>
@@ -99,5 +80,6 @@
             </tabset>
 
         </div>
+    </div>
     </div>
 </div>

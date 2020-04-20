@@ -1,15 +1,14 @@
-.tagsTable {
+.tags-table {
     max-width: 600px;
     width: 100%;
 }
 
-.tagsTable td:nth-child(3) {
-    white-space: inherit;
+.tags-table td:nth-child(3) {
+    white-space: inherit !important;
 }
 @media (max-width: 768px) {
-    .tagsTable {
+    .tags-table {
         max-width: 100%;
         width: 100%;
-        padding: 0 15px;
     }
 }

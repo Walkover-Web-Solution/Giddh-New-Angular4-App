@@ -386,16 +386,19 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                Object.keys(res.fields).forEach(key => {
-                    this.formFields[res.fields[key].name] = [];
-                    this.formFields[res.fields[key].name] = res.fields[key];
-                });
-                this.GSTIN_OR_TRN = res.fields[0].label;
-
-
-                // Object.keys(res.applicableTaxes).forEach(key => {
-                //     this.taxesList.push({ label: res.applicableTaxes[key].name, value: res.applicableTaxes[key].uniqueName, isSelected: false });
-                // });
+                if (res.fields) {
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            this.formFields[res.fields[key].name] = [];
+                            this.formFields[res.fields[key].name] = res.fields[key];
+                        }
+                    });
+                }
+                if (this.formFields['taxName'] && this.formFields['taxName'].label) {
+                    this.GSTIN_OR_TRN = this.formFields['taxName'].label;
+                } else {
+                    this.GSTIN_OR_TRN = '';
+                }
             }
         });
         this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
@@ -707,38 +710,37 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
         let gstVal: string = gstForm.get('gstNumber').value;
 
-        if (gstVal.length !== 15) {
-            gstForm.get('partyType').reset('NOT APPLICABLE');
-        }
-
-        if (gstVal.length >= 2) {
-            this.statesSource$.pipe(take(1)).subscribe(state => {
-                let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
-
-                let s = state.find(st => st.value === stateCode);
-                if (s) {
-                    gstForm.get('stateCode').patchValue(s.value);
-                    gstForm.get('state').get('code').patchValue(s.value);
-
-                } else {
-                    if (this.isIndia) {
-                        gstForm.get('stateCode').patchValue(null);
-                        gstForm.get('state').get('code').patchValue(null);
-                    }
-                    this._toaster.clearAllToaster();
-                    if (this.formFields['taxName']) {
-                        this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
-                    }
-                }
-            });
-        } else {
-            // statesEle.setDisabledState(false);
-            if (this.isIndia) {
-                gstForm.get('stateCode').patchValue(null);
-                gstForm.get('state').get('code').patchValue(null);
+        if (gstVal.length) {
+            if (gstVal.length !== 15) {
+                gstForm.get('partyType').reset('NOT APPLICABLE');
             }
 
+            if (gstVal.length >= 2) {
+                this.statesSource$.pipe(take(1)).subscribe(state => {
+                    let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
+                    let currentState = state.find(st => st.value === stateCode);
+                    if (currentState) {
+                        gstForm.get('stateCode').patchValue(currentState.value);
+                        gstForm.get('state').get('code').patchValue(currentState.value);
+
+                    } else {
+                        if (this.isIndia) {
+                            gstForm.get('stateCode').patchValue(null);
+                            gstForm.get('state').get('code').patchValue(null);
+                        }
+                        this._toaster.clearAllToaster();
+                        if (this.formFields['taxName']) {
+                            this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
+                        }
+                    }
+                });
+            } else {
+                if (this.isIndia) {
+                    gstForm.get('stateCode').patchValue(null);
+                    gstForm.get('state').get('code').patchValue(null);
+                }
+            }
         }
     }
 
@@ -1313,7 +1315,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountAddNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
-        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === "sundrydebtors" || this.activeGroupUniqueName === "sundrycreditors")) {
+        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value &&
+            this.isCreditorOrDebtor(this.activeGroupUniqueName)) {
             return true;
         } else {
             return false;
@@ -1400,5 +1403,28 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 element.classList.remove('error-box');
             }
         }
+    }
+
+    /**
+     * Returns true if passed account belongs to creditor or debtor category
+     * required to make state mandatory
+     *
+     * @private
+     * @param {string} accountUniqueName Account unique name
+     * @returns {boolean} True if passed account belongs to creditor or debtor category
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private isCreditorOrDebtor(accountUniqueName: string): boolean {
+        if (this.flatGroupsOptions && _.isArray(this.flatGroupsOptions) && this.flatGroupsOptions.length && accountUniqueName) {
+            const groupDetails: any = this.flatGroupsOptions.filter((group) => group.value === accountUniqueName).pop();
+            if (groupDetails) {
+                return groupDetails.additional.some((parentGroup) => {
+                    const groups = [parentGroup.uniqueName, groupDetails.value]
+                    return groups.includes('sundrydebtors') || groups.includes('sundrycreditors');
+                });
+            }
+            return false;
+        }
+        return false;
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
 import { select, Store } from '@ngrx/store';
 import { takeUntil, take } from 'rxjs/operators';
@@ -23,36 +23,49 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public fromMonthNames: any = [];
     public toMonthNames: any = [];
     public selectYear: any = [];
-    public showOpeningClosingBalance = [{ label: 'Yes', value: true }, { label: 'No', value: false }];
     public selectCrDr = [{ label: 'Yes', value: true }, { label: 'No', value: false }];
     public flatGroupsOptions: any = [];
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public exportRequest: any = {};
-    public activeCompanyUniqueName$: Observable<string>;
     public companyUniqueName: string = '';
     public groupUniqueName: string = '';
     public isLoading: boolean = false;
-    public forceClear$: Observable<IForceClear> = observableOf({status: false});
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    public forceClearMonths$: Observable<IForceClear> = observableOf({ status: false });
     public fromMonth: any = '';
     public toMonth: any = '';
     public financialYearSelected: any;
+    public activeFinancialYear: string = '';
+    public activeFinancialYearLabel: string = '';
 
     constructor(public settingsFinancialYearService: SettingsFinancialYearService, private store: Store<AppState>, private toaster: ToasterService, private ledgerService: LedgerService, private generalService: GeneralService) {
         this.exportRequest.fileType = 'xls';
-        this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
+        this.exportRequest.balanceTypeAsSign = true;
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
 
         this.flattenGroups$.subscribe(flattenGroups => {
             if (flattenGroups) {
+                this.flatGroupsOptions = [];
                 flattenGroups.forEach(key => {
                     this.flatGroupsOptions.push({ label: key.groupName, value: key.groupUniqueName });
                 });
             }
         });
 
-        this.activeCompanyUniqueName$.pipe(take(1)).subscribe(activeCompanyName => {
-            this.companyUniqueName = activeCompanyName;
+        this.store.pipe(takeUntil(this.destroyed$)).subscribe(state => {
+            if (state.session && !this.activeFinancialYear) {
+                this.companyUniqueName = _.cloneDeep(state.session.companyUniqueName);
+
+                if (this.companyUniqueName && state.session.companies) {
+                    let companies = _.cloneDeep(state.session.companies);
+                    let comp = companies.find((c) => c.uniqueName === this.companyUniqueName);
+                    if (comp) {
+                        this.activeFinancialYear = comp.activeFinancialYear.uniqueName;
+                        this.selectActiveFinancialYear();
+                    }
+                }
+            }
         });
     }
 
@@ -78,6 +91,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                     let financialYearEnds = moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     this.selectYear.push({ label: financialYearStarts + " - " + financialYearEnds, value: key });
                 });
+                this.selectActiveFinancialYear();
             }
         });
     }
@@ -100,26 +114,33 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public exportReport(): void {
         if (!this.isLoading) {
             this.isLoading = true;
-            let monthYear = [];
-            let startDate = moment(new Date(this.fromMonth));
-            let monthsCount = moment(new Date(this.toMonth)).diff(startDate, 'months');
 
-            monthYear.push(moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MM-YYYY"));
+            if(this.fromMonth && this.toMonth) {
+                let monthYear = [];
+                let startDate = moment(new Date(this.fromMonth));
+                let monthsCount = moment(new Date(this.toMonth)).diff(startDate, 'months');
 
-            for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
-                startDate = startDate.add(1, 'month');
                 monthYear.push(moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MM-YYYY"));
+
+                for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
+                    startDate = startDate.add(1, 'month');
+                    monthYear.push(moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MM-YYYY"));
+                }
+
+                this.exportRequest.monthYear = monthYear;
             }
 
-            this.exportRequest.monthYear = monthYear;
             this.ledgerService.downloadColumnarReport(this.companyUniqueName, this.groupUniqueName, this.exportRequest).subscribe((res) => {
                 this.isLoading = false;
                 if (res.status === "success") {
                     this.exportRequest = {};
                     this.groupUniqueName = '';
-                    this.forceClear$ = observableOf({status: true});
+                    this.forceClear$ = observableOf({ status: true });
+                    this.forceClearMonths$ = observableOf({ status: true });
                     this.fromMonthNames = [];
                     this.toMonthNames = [];
+                    this.selectActiveFinancialYear();
+                    this.exportRequest.balanceTypeAsSign = true;
 
                     let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
                     return saveAs(blob, `ColumnarReport.xlsx`);
@@ -149,6 +170,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      */
     public selectFinancialYear(event): void {
         if (event && event.value) {
+            this.forceClearMonths$ = observableOf({ status: true });
             this.financialYearSelected = event.value;
             this.exportRequest.financialYear = moment(event.value.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
 
@@ -160,13 +182,13 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             this.fromMonthNames = [];
             this.toMonthNames = [];
 
-            this.fromMonthNames.push({label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate()});
-            this.toMonthNames.push({label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate()});
+            this.fromMonthNames.push({ label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate() });
+            this.toMonthNames.push({ label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate() });
 
             for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                 startDate = startDate.add(1, 'month');
-                this.fromMonthNames.push({label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate()});
-                this.toMonthNames.push({label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate()});
+                this.fromMonthNames.push({ label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate() });
+                this.toMonthNames.push({ label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate() });
             }
         }
     }
@@ -178,7 +200,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public isFormValid(): boolean {
-        if(this.exportRequest.financialYear && this.groupUniqueName) {
+        if (this.exportRequest.financialYear && this.groupUniqueName) {
             return true;
         } else {
             return false;
@@ -191,19 +213,19 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof ColumnarReportComponent
      */
-    public selectFromMonth(event) {
-        if(event.value) {
+    public selectFromMonth(event): void {
+        if (event.value) {
             let fromMonth = moment(new Date(this.financialYearSelected.financialYearStarts.split("-").reverse().join("-")));
             let toMonth = moment(new Date(this.financialYearSelected.financialYearEnds.split("-").reverse().join("-")));
             let startDate = fromMonth;
             let monthsCount = toMonth.diff(fromMonth, 'months');
             this.toMonthNames = [];
 
-            this.toMonthNames.push({label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate())});
+            this.toMonthNames.push({ label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate()) });
 
             for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                 startDate = startDate.add(1, 'month');
-                this.toMonthNames.push({label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate())});
+                this.toMonthNames.push({ label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate()) });
             }
         }
     }
@@ -214,20 +236,39 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof ColumnarReportComponent
      */
-    public selectToMonth(event) {
-        if(event.value) {
+    public selectToMonth(event): void {
+        if (event.value) {
             let fromMonth = moment(new Date(this.financialYearSelected.financialYearStarts.split("-").reverse().join("-")));
             let toMonth = moment(new Date(this.financialYearSelected.financialYearEnds.split("-").reverse().join("-")));
             let startDate = fromMonth;
             let monthsCount = toMonth.diff(fromMonth, 'months');
             this.fromMonthNames = [];
 
-            this.fromMonthNames.push({label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate())});
+            this.fromMonthNames.push({ label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate()) });
 
             for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                 startDate = startDate.add(1, 'month');
-                this.fromMonthNames.push({label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate())});
+                this.fromMonthNames.push({ label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate()) });
             }
+        }
+    }
+
+    /**
+     * This will select the active financial year by default in dropdown
+     *
+     * @memberof ColumnarReportComponent
+     */
+    public selectActiveFinancialYear(): void {
+        if(this.selectYear && this.selectYear.length > 0 && this.activeFinancialYear) {
+            this.selectYear.forEach(key => {
+                if(key.value.uniqueName === this.activeFinancialYear) {
+                    this.selectFinancialYear(key);
+
+                    let financialYearStarts = moment(key.value.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+                    let financialYearEnds = moment(key.value.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+                    this.activeFinancialYearLabel = financialYearStarts + " - " + financialYearEnds;
+                }
+            });
         }
     }
 }

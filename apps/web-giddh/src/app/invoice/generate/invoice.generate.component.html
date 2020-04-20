@@ -1,8 +1,8 @@
-<div class="invoice-genrate-container mt-xs-60">
+<div class="invoice-genrate-container">
     <div style="height: 44px;" *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'">
         <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
             style="margin-bottom: 10px;display: inline-block !important;">
-            <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
+            <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                 aria-controls="dropdown-basic">
                 {{ selectedVoucher | titlecase}}
                 <span class="caret"></span>
@@ -65,10 +65,10 @@
                         Generate Compound
                     </button>
 
-                    <button placement="top" tooltip="Works only for single entry." *ngIf="!isMobileView"
+                    <!-- <button placement="top" tooltip="Works only for single entry." *ngIf="!isMobileView"
                         [hidden]="selectedLedgerItems.length === 0 || selectedLedgerItems.length > 1 || !togglePrevGenBtn"
                         class="btn btn-primary" (click)="previewInvoice()">Preview &amp; Generate
-                    </button>
+                    </button> -->
 
 
                 </div>
@@ -94,21 +94,18 @@
                 </button>
             </div>
         </div>
-
     </form>
 
-    <table class="table basic table-bordered pending-tabel onMobileView mrT2">
+    <table class="table basic table-bordered pending-tabel onMobileView mt-15">
 
         <thead class="t-h-bg1">
             <tr>
-
                 <th style="width:4%" *ngIf="selectedLedgerItems.length > 0">
 
                     <div class="mh18_img" style="justify-content: center;display: flex">
                         <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
                         <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
                     </div>
-
                 </th>
 
                 <th *ngIf="selectedLedgerItems.length === 0" width="4%">
@@ -290,8 +287,8 @@
                 </td>
             </tr>
         </tbody>
-
     </table>
+</div>
 
     <div *ngIf="ledgersData?.totalItems > 20" class="paginationWrapper">
         <div class="alC">
@@ -310,7 +307,7 @@
         <h1>No entries found within given criteria.</h1>
         <h1>Do search with some other dates</h1>
     </div>
-</div>
+
 
 <!--modal dialog  -->
 <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">

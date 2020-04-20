@@ -1,21 +1,8 @@
+@import '../../../assets/css/color.scss';
 :host {
     display: block;
     position: relative;
 }
-
-/* .header {
-    width: 100%;
-    margin: 0 !important;
-    padding: 2px 30px 2px 10px;
-    box-sizing: border-box;
-    background-color: white;
-    font-size: 1.0em;
-    border-radius: 2px;
-    border: 1px solid rgba(34, 36, 38, .15);
-    vertical-align: middle;
-    cursor: pointer;
-} */
-
 .header:hover {
     cursor: text;
 }
@@ -28,8 +15,9 @@
 
 .header.open {
     border-radius: 2px 2px 0 0;
-    box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+    /* box-shadow: 0 2px 3px 0 rgba(34, 36, 38, .15); */
     border-bottom: none;
+    line-height: auto;
 }
 
 .header:focus {
@@ -61,6 +49,7 @@ div {
 
 input[type="text"] {
     outline: none;
+    width: 100%;
 }
 
 [hidden] {
@@ -95,7 +84,7 @@ i.close.icon.clear:hover::after {
 
 .sh-select-disabled {
     background-color: #e3e3e3;
-    color: darkgray;
+    color: $bay-of-many;
     cursor: not-allowed;
 }
 
@@ -126,14 +115,8 @@ i.close.icon.clear:hover::after {
     color: black;
 }
 
-.header .form-control[readonly] {
-    background-color: #fff !important;
-    border: 1px solid #ccc;
-}
-
 .sh-select-disabled .selectedVal,
-.sh-select-disabled .form-control,
-.sh-select-disabled .form-control[readonly] {
+.sh-select-disabled .form-control {
     background: #eee !important;
     pointer-events: none;
     cursor: not-allowed;
@@ -141,7 +124,7 @@ i.close.icon.clear:hover::after {
 
 .selectedVal {
     border: 1px solid #d6d6d6 !important;
-    padding-right: 22px !important;
+    padding-right: 5px !important;
     background: #fff !important;
 }
 
@@ -163,4 +146,53 @@ i.close.icon.clear:hover::after {
 }
 .header .bdr > input[type="text"]:-moz-placeholder {
     color: #c1c1c1 !important;
+}
+
+.toggle {
+    position: absolute;
+    right: 0;
+    border: 1px solid #ddd;
+    height: 100%;
+    width: 28px;
+    text-align: center;
+    line-height: 32px;
+    vertical-align: middle;
+    top: 0;
+    bottom: 0;
+    cursor: pointer;
+    background: #f4f5f8;
+    color: #686868;
+    font-size: 16px;
+}
+
+button.form-control:focus {
+    border-color: #ddd !important;
+}
+
+.label-btn {
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    font-size: 20px;
+    color: #393a3d;
+}
+
+.toggle:hover {
+    background: #eee;
+}
+
+.label-toggle {
+    border: 0 !important;
+    background: transparent !important;
+    border-radius: 0;
+}
+
+.bottom-border-only {
+    border: none !important;
+    border-bottom: 1px solid #d6d6d6 !important;
+    border-radius: 0 !important;
+}
+.Advance-Search .header {
+    position: relative;
 }

@@ -4,9 +4,85 @@
     <form #recurringForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker pr" (ngSubmit)="submit()">
 
         <div class="d-flex">
-
-            <div style="flex: 1">
-
+            <div class="search-icon-block" *ngIf="isMobileScreen" (click)="openModal(template)">
+                <i class="icon-search"></i>
+            </div>
+            <ng-template #template>
+                <div class="modal-header">
+                  <h4 class="modal-title bg pull-left">Search here...</h4>
+                  <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-view">
+                        <div class="form-group">
+                            <label class="d-block">Invoice Type</label>
+                            <div class="ng-select-wrap">
+                                <sh-select name="invoiceType" [placeholder]="'Select Account'" [(ngModel)]="filter.status"
+                                    [options]="invoiceTypeOptions" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
+                                    [useInBuiltFilterForIOptionTypeItems]="true">
+                                    <ng-template #optionTemplate let-option="option">
+                                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                            <div class="item">{{ option.label }}</div>
+                                        </a>
+                                    </ng-template>
+                                </sh-select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="d-block">Interval</label>
+                            <div class="ng-select-wrap">
+                                <sh-select name="interval" [placeholder]="'Select Account'" [options]="intervalOptions"
+                                    [notFoundLink]="false" [multiple]="false" [(ngModel)]="filter.duration" [ItemHeight]="33"
+                                    [useInBuiltFilterForIOptionTypeItems]="true">
+                                    <ng-template #optionTemplate let-option="option">
+                                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                            <div class="item">{{ option.label }}</div>
+                                        </a>
+                                    </ng-template>
+                                </sh-select>
+                            </div>
+                        </div>  
+                        <div class="form-group">
+                            <label class="d-block">Last Invoice Date</label>
+                            <div class="input-group">
+                                <input name="lastInvoiceDate" placeholder="Select Date" [(ngModel)]="filter.lastInvoiceDate"
+                                    type="text" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" autocomplete="off"
+                                    class="form-control" bsDatepicker required>
+                            </div>
+                        </div>    
+                        <div class="form-group search-invoice-filed">
+                            <div class="searchInvoiceNo">
+                                <label class="d-block">Search Invoice No.</label>
+                                <div class="input-group">
+                                    <input type="text" placeholder="Search Invoice No." class="w100"
+                                        [formControl]="invoiceNumberInput" #invoiceSearch class="form-control" />
+                                    <!--<i class="icon-search" (click)="showInvoiceNumberSearch = false;"></i>-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group search-invoice-filed">
+                            <div class="searchCustomerNo">
+                                <div class="input-container">
+                                    <label class="d-block">Search Customer Name</label>
+                                    <input type="text" placeholder="Search Customer Name" class="w100" name="customerName"
+                                        [formControl]="customerNameInput" #customerSearch class="form-control" />
+                                    <!-- <i class="icon-search" (click)="showCustomerNameSearch = false;"></i> -->
+                                </div>
+                            </div>
+                        </div>     
+                        <div class="form-group">
+                            <button class="btn btn-success btn-sm">Search</button>
+                            <a class="cp" href="javascript: void 0">
+                                <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333"
+                                    tooltip="Reset Filter" *ngIf="showResetFilterButton" (click)="resetFilter()"></i>
+                            </a>
+                        </div>
+                    </div>  
+                </div>
+            </ng-template>
+            <div class="reccuring-form" *ngIf="!isMobileScreen">     
                 <div class="form-group mrR1">
                     <label class="d-block">Invoice Type</label>
                     <div class="ng-select-wrap">
@@ -21,13 +97,6 @@
                         </sh-select>
                     </div>
                 </div>
-
-                <!--<div class="form-group mrR1">-->
-                <!--<label class="d-block">Search Customer</label>-->
-                <!--<input type="text" class="form-control" name="customerName" [(ngModel)]="filter.customerName"-->
-                <!--placeholder="customer name">-->
-                <!--</div>-->
-
                 <div class="form-group mrR1">
                     <label class="d-block">Interval</label>
                     <div class="ng-select-wrap">
@@ -54,7 +123,7 @@
 
                 <div class="form-group mrR1" *ngIf="isMobileScreen">
                     <div class="searchInvoiceNo">
-                        <label class="d-block">&nbsp;</label>
+                        <label class="d-block">Search Invoice No.</label>
                         <div class="input-group">
                             <input type="text" placeholder="Search Invoice No." class="w100"
                                 [formControl]="invoiceNumberInput" #invoiceSearch class="form-control" />
@@ -65,7 +134,7 @@
                 <div class="form-group mrR1" *ngIf="isMobileScreen">
                     <div class="searchCustomerNo">
                         <div class="input-container">
-                            <label class="d-block">&nbsp;</label>
+                            <label class="d-block">Search Customer Name</label>
                             <input type="text" placeholder="Search Customer Name" class="w100" name="customerName"
                                 [formControl]="customerNameInput" #customerSearch class="form-control" />
                             <!-- <i class="icon-search" (click)="showCustomerNameSearch = false;"></i> -->
@@ -85,14 +154,12 @@
 
 
             </div>
-
             <div class="d-flex " style="margin-top: 24px">
-
                 <div style="height: 30px;" *ngIf="selectedItems.length < 0">
                     <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
                         style="margin-bottom: 10px;display:inline-block !important;">
 
-                        <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
+                        <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                             aria-controls="dropdown-basic">
                             More
                             <span class="caret"></span>
@@ -135,145 +202,147 @@
 
             </div>
         </div>
-
     </form>
 
-    <table class="table basic table-bordered mrT2 onMobileView">
+    <div class="table-responsive">
+        <table class="table basic giddh-table table-bordered mt-15 onMobileView">
 
-        <thead class="t-h-bg1">
-            <tr>
+            <thead class="t-h-bg1">
+                <tr>
 
-                <th style="width:4%" *ngIf="selectedItems.length > 0">
-                    <div class="mh18_img" style="justify-content: center;display: flex">
-                        <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
-                        <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
-                    </div>
-                </th>
-
-                <th *ngIf="selectedItems.length === 0" width="4%">
-                    <div class="mh18_img" style="justify-content: center;display: flex">
-                        #
-                    </div>
-                </th>
-
-                <th width="20%" class="td_in_searchBox" #searchInvoiceContainer
-                    (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
-
-                    <div [hidden]="showInvoiceNumberSearch">
-                        <span> Invoice Number</span>
-                        <i class="icon-search"
-                            (click)="showInvoiceNumberSearch = true;showCustomerNameSearch = false;"></i>
-                    </div>
-
-                    <div class="input-container" [hidden]="!showInvoiceNumberSearch">
-                        <input type="text" placeholder="Search Invoice No." class="w100"
-                            [formControl]="invoiceNumberInput" #invoiceSearch />
-                        <!--<i class="icon-search" (click)="showInvoiceNumberSearch = false;"></i>-->
-                    </div>
-
-                </th>
-
-                <th width="20%" class="td_in_searchBox" #searchCustomerContainer
-                    (clickOutside)="clickedOutside($event, searchCustomerContainer, 'customerName')">
-
-                    <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerNameSearch, title: 'Customer Name', fieldName: 'customerName',
-           formControl: customerNameInput}"></ng-container>
-
-                </th>
-
-                <th>
-                    <div class="d-flex">
-                        <div class="">Interval</div>
-
-                        <div class="icon-pointer">
-                            <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'duration'}"></ng-container>
-
+                    <th style="width:4%" *ngIf="selectedItems.length > 0">
+                        <div class="mh18_img" style="justify-content: center;display: flex">
+                            <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
+                            <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
                         </div>
-                    </div>
-                </th>
-                <th>
-                    <div class="d-flex">
-                        <div class=""> Last Invoice Date</div>
-                        <div class="icon-pointer">
-                            <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'lastinvoicedate'}">
-                            </ng-container>
+                    </th>
+
+                    <th *ngIf="selectedItems.length === 0" width="4%">
+                        <div class="mh18_img" style="justify-content: center;display: flex">
+                            #
                         </div>
-                    </div>
-                </th>
-                <th>
-                    <div class="d-flex">
-                        <div class=""> Next Invoice Date</div>
-                        <div class="icon-pointer">
-                            <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'nextcrondate'}">
-                            </ng-container>
+                    </th>
 
+                    <th width="20%" class="td_in_searchBox" #searchInvoiceContainer
+                        (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
 
+                        <div [hidden]="showInvoiceNumberSearch">
+                            <span> Invoice Number</span>
+                            <i class="icon-search"
+                                (click)="showInvoiceNumberSearch = true;showCustomerNameSearch = false;"></i>
                         </div>
-                    </div>
-                </th>
-                <th>
-                    <div class="d-flex">
-                        <div class="">Status</div>
-                        <div class="icon-pointer">
-                            <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'status'}"></ng-container>
 
-
-
+                        <div class="input-container" [hidden]="!showInvoiceNumberSearch">
+                            <input type="text" placeholder="Search Invoice No." class="w100"
+                                [formControl]="invoiceNumberInput" #invoiceSearch />
+                            <!--<i class="icon-search" (click)="showInvoiceNumberSearch = false;"></i>-->
                         </div>
-                    </div>
-                </th>
-                <th>
-                    <div class="d-flex text-right">
-                        <div class="flex-fill">Invoice Amt</div>
-                        <div class="icon-pointer">
-                            <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'vouchertotal'}">
-                            </ng-container>
 
+                    </th>
 
+                    <th width="20%" class="td_in_searchBox" #searchCustomerContainer
+                        (clickOutside)="clickedOutside($event, searchCustomerContainer, 'customerName')">
+
+                        <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerNameSearch, title: 'Customer Name', fieldName: 'customerName',
+            formControl: customerNameInput}"></ng-container>
+
+                    </th>
+
+                    <th>
+                        <div class="d-flex">
+                            <div class="">Interval</div>
+
+                            <div class="icon-pointer">
+                                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'duration'}"></ng-container>
+
+                            </div>
                         </div>
-                    </div>
-                </th>
-            </tr>
-        </thead>
+                    </th>
+                    <th>
+                        <div class="d-flex">
+                            <div class=""> Last Invoice Date</div>
+                            <div class="icon-pointer">
+                                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'lastinvoicedate'}">
+                                </ng-container>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="d-flex">
+                            <div class=""> Next Invoice Date</div>
+                            <div class="icon-pointer">
+                                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'nextcrondate'}">
+                                </ng-container>
+
+
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="d-flex">
+                            <div class="">Status</div>
+                            <div class="icon-pointer">
+                                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'status'}"></ng-container>
 
 
 
-        <tbody *ngIf="(recurringData$ | async)?.totalItems > 0"
-            (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
-            (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="d-flex text-right">
+                            <div class="flex-fill">Invoice Amt</div>
+                            <div class="icon-pointer">
+                                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'vouchertotal'}">
+                                </ng-container>
 
-            <tr *ngFor="let col of recurringVoucherDetails;let i = index"
-                (mouseover)="hoveredItemForAction = col.uniqueName">
 
-                <td *ngIf="hoveredItemForAction === col.uniqueName || col.isSelected || selectedItems.length > 0"
-                    data-title="#">
-                    <div class="mh18_img justify-content-sm" style="justify-content: center;display: flex">
-                        <img *ngIf="!col?.isSelected" src="assets/images/unchecked.png"
-                            (click)="toggleItem(col, true)" />
-                        <img *ngIf="col?.isSelected" src="assets/images/checked.png" (click)="toggleItem(col, false)" />
-                    </div>
-                </td>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
 
-                <td *ngIf="!col.isSelected && hoveredItemForAction !== col.uniqueName && selectedItems.length === 0"
-                    data-title="#">
-                    <div style="justify-content: center;display: flex" class="justify-content-sm">{{ i + 1}}</div>
-                </td>
 
-                <td data-title="Invoice Number">
-                    <a *ngIf="!isMobileScreen" class="cp btn-link-2"
-                        (click)="col.status !== 'inactive' && openUpdatePanel(col)">{{ col.voucherNumber || '-'  }}</a>
-                    <a *ngIf="isMobileScreen" class="cp btn-link-2">{{ col.voucherNumber || '-'  }}</a>
-                </td>
-                <td data-title="Customer Name">{{ col.customerName || '-' }}</td>
-                <td data-title="Interval">{{ col.duration || '-'  }}</td>
-                <td data-title="Last Invoice Date">{{ col.lastInvoiceDate || '-'  }}</td>
-                <td data-title="Next Invoice Date ">{{ col.nextCronDate || '-'  }}</td>
-                <td data-title="Status">{{ col.status || '-' | titlecase  }}</td>
-                <td data-title="Invoice Amt" class=" text-right">{{ col.voucherTotal | giddhCurrency   }}</td>
-            </tr>
-        </tbody>
 
-    </table>
+            <tbody *ngIf="(recurringData$ | async)?.totalItems > 0"
+                (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+                (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
+
+                <tr *ngFor="let col of recurringVoucherDetails;let i = index"
+                    (mouseover)="hoveredItemForAction = col.uniqueName">
+
+                    <td *ngIf="hoveredItemForAction === col.uniqueName || col.isSelected || selectedItems.length > 0"
+                        data-title="#">
+                        <div class="mh18_img justify-content-sm" style="justify-content: center;display: flex">
+                            <img *ngIf="!col?.isSelected" src="assets/images/unchecked.png"
+                                (click)="toggleItem(col, true)" />
+                            <img *ngIf="col?.isSelected" src="assets/images/checked.png" (click)="toggleItem(col, false)" />
+                        </div>
+                    </td>
+
+                    <td *ngIf="!col.isSelected && hoveredItemForAction !== col.uniqueName && selectedItems.length === 0"
+                        data-title="#">
+                        <div style="justify-content: center;display: flex" class="justify-content-sm">{{ i + 1}}</div>
+                    </td>
+
+                    <td data-title="Invoice Number">
+                        <a *ngIf="!isMobileScreen" class="cp btn-link-2"
+                            (click)="col.status !== 'inactive' && openUpdatePanel(col)">{{ col.voucherNumber || '-'  }}</a>
+                        <a *ngIf="isMobileScreen" class="cp btn-link-2">{{ col.voucherNumber || '-'  }}</a>
+                    </td>
+                    <td data-title="Customer Name">{{ col.customerName || '-' }}</td>
+                    <td data-title="Interval">{{ col.duration || '-'  }}</td>
+                    <td data-title="Last Invoice Date">{{ col.lastInvoiceDate || '-'  }}</td>
+                    <td data-title="Next Invoice Date ">{{ col.nextCronDate || '-'  }}</td>
+                    <td data-title="Status">{{ col.status || '-' | titlecase  }}</td>
+                    <td data-title="Invoice Amt" class=" text-right">{{ col.voucherTotal | giddhCurrency   }}</td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+
     <div class="paginationWrapper" *ngIf="(recurringData$ | async)?.totalItems > 20">
         <div class="alC">
             <pagination [maxSize]="5" [totalItems]="(recurringData$ | async)?.totalItems" [itemsPerPage]="20"

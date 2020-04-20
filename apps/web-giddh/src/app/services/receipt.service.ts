@@ -30,7 +30,7 @@ import {
 } from '../purchase/purchase-record/constants/purchase-record.interface';
 import { COMPANY_API } from './apiurls/comapny.api';
 import { RECEIPT_API } from './apiurls/recipt.api';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { HttpWrapperService } from './httpWrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
@@ -41,7 +41,7 @@ export class ReceiptService implements OnInit {
     private user: UserDetails;
 
     constructor(private _generalService: GeneralService, private _http: HttpWrapperService,
-        private _httpClient: HttpClient, private errorHandler: ErrorHandler,
+        private _httpClient: HttpClient, private errorHandler: GiddhErrorHandler,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs, private _loaderService: LoaderService) {
         this.companyUniqueName = this._generalService.companyUniqueName;
     }
@@ -69,7 +69,7 @@ export class ReceiptService implements OnInit {
         const requestPayload = type === VoucherTypeEnum.purchase ? this.getPurchaseRecordPayload(body) : body;
         const contextPath = type === VoucherTypeEnum.purchase ? RECEIPT_API.GET_ALL_PURCHASE_RECORDS : RECEIPT_API.GET_ALL;
         const requestParameter = {
-            page: body.page, count: body.count, from: body.from, to: body.to, q: body.q, sort: body.sort, sortBy: body.sortBy
+            page: body.page, count: body.count, from: body.from, to: body.to, q: (body.q) ? encodeURIComponent(body.q) : body.q, sort: body.sort, sortBy: body.sortBy
         };
         let url = this.createQueryString(this.config.apiUrl + contextPath, (type === VoucherTypeEnum.purchase) ? requestParameter : { ...requestParameter, type });
 
@@ -278,7 +278,7 @@ export class ReceiptService implements OnInit {
         this.companyUniqueName = this._generalService.companyUniqueName;
         let requestType = type;
         let url = this.createQueryString(this.config.apiUrl + RECEIPT_API.GET_ALL_BAL_SALE_DUE, {
-            page: body.page, count: body.count, from: body.from, to: body.to, type: requestType, q: body.q, sort: body.sort, sortBy: body.sortBy
+            page: body.page, count: body.count, from: body.from, to: body.to, type: requestType, q: body.q ? encodeURIComponent(body.q) : body.q, sort: body.sort, sortBy: body.sortBy
         });
 
         return this._http.post(url
@@ -317,7 +317,8 @@ export class ReceiptService implements OnInit {
      * @memberof ReceiptService
      */
     public getAllAdvanceReceipts(requestObject: GetAllAdvanceReceiptsRequest): Observable<BaseResponse<any, GetAllAdvanceReceiptsRequest>> {
-        const companyUniqueName = this._generalService.companyUniqueName;
+        const companyUniqueName = String(requestObject.companyUniqueName);
+        delete requestObject.companyUniqueName;
         return this._http.post(
             `${this.config.apiUrl}${RECEIPT_API.GET_ALL_ADVANCE_RECEIPTS}`
                 .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
@@ -339,7 +340,8 @@ export class ReceiptService implements OnInit {
      * @memberof ReceiptService
      */
     public fetchSummary(requestObject: AdvanceReceiptSummaryRequest): Observable<BaseResponse<any, AdvanceReceiptSummaryRequest>> {
-        const companyUniqueName = this._generalService.companyUniqueName;
+        const companyUniqueName = String(requestObject.companyUniqueName);
+        delete requestObject.companyUniqueName;
         return this._http.get(
             `${this.config.apiUrl}${RECEIPT_API.GET_ADVANCE_RECEIPTS_SUMMARY}`
                 .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
