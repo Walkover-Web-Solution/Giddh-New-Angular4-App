@@ -40,7 +40,6 @@
                 <input type="checkbox" name="balanceTypeAsSign" id="balanceTypeAsSign" [(ngModel)]="exportRequest.balanceTypeAsSign" [value]="true">&nbsp;<label for="balanceTypeAsSign">Cr/Dr with +/-</label>
             </div>
         </div>
-
         <div class="row">
             <div class="col-sm-3 col-xs-12 mb-2 clear-both">
                 <button class="btn btn-pink " [disabled]="!isFormValid() || isLoading" (click)="exportReport();">Export</button>
@@ -48,3 +47,4 @@
         </div>
         
     </div>
+</div>
