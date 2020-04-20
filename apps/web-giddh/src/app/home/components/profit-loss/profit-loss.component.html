@@ -6,7 +6,7 @@
             <i class="glyphicon glyphicon-refresh mrL2" (click)="refreshChart()"></i>
             <div class="pull-right dashboard-filter">
                 <div class="btn-group" dropdown>
-                    <span id="button-basic" dropdownToggle class="dropdown-toggle monthDropdown"
+                    <span id="button-basic" dropdownToggle class="dropdown-toggle month-dropdown"
                         aria-controls="dropdown-basic">
                         <datepickeroptions (filterDates)="getFilterDate($event)"></datepickeroptions>
                     </span>
@@ -25,36 +25,34 @@
                 </div>
             </div>
             <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
-                <perfect-scrollbar [scrollIndicators]="true">
                     <chart [options]="profitLossChart" *ngIf="dataFound" #currentRatio></chart>
                     <div class="noDataAvailable" *ngIf="!dataFound">
                         <img src="{{imgPath}}noDataChart.svg" alt="no data found">
                     </div>
                     <div class="clearfix mrB2">
                         <div class="">
-                            <span class="mrB1 dueAmount">Net Profit/Loss</span>
-                            <span class="total_amt pull-right">
+                            <span class="mrB1 due-amount">Net Profit/Loss</span>
+                            <span class="total-amount pull-right">
                                 {{netProfitLossType}}<span>{{amountSettings.baseCurrencySymbol}}</span>
                                 {{ netProfitLoss | giddhCurrency }}</span>
                         </div>
                     </div>
                     <div class="clearfix mrB2">
                         <div class="">
-                            <span class="mrB1 dueAmount">Total Income</span>
+                            <span class="mrB1 due-amount">Total Income</span>
                             <span
-                                class="total_amt pull-right totalExpensesText"><span>{{amountSettings.baseCurrencySymbol}}</span>
+                                class="total-amount pull-right total-expenses-text"><span>{{amountSettings.baseCurrencySymbol}}</span>
                                 {{ totalIncome | giddhCurrency }} {{totalIncomeType}}</span>
                         </div>
                     </div>
                     <div class="clearfix mrB2">
                         <div class="">
-                            <span class="mrB1 dueAmount">Total Expenses</span>
+                            <span class="mrB1 due-amount">Total Expenses</span>
                             <span
-                                class="total_amt pull-right totalIncomeText"><span>{{amountSettings.baseCurrencySymbol}}</span>
+                                class="total-amount pull-right total-income-text"><span>{{amountSettings.baseCurrencySymbol}}</span>
                                 {{ totalExpense | giddhCurrency }} {{totalExpenseType}}</span>
                         </div>
                     </div>
-                </perfect-scrollbar>
             </div>
         </div>
     </div>

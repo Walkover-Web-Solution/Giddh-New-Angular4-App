@@ -5127,6 +5127,7 @@ label {
 #dashboard .panel-heading i {
     position: relative;
     top: 4px;
+    color: $gray;
 }
 
 /*************************************************** input CSS  ****************************************************/
@@ -9159,6 +9160,12 @@ input.checkbox-custom[type="checkbox"] {
 @media (max-width: 1280px) {
     .multi-select input.form-control {
         padding-right: 18px !important;
+    }
+    #dashboard .panel-default > .panel-heading{
+        font-size: 14px;
+    }
+    #dashboard .panel-heading i{
+        margin-left: 10px;
     }
 }
 
