@@ -16,12 +16,12 @@
             <div class="col-sm-3 col-xs-12">
                 <div class="row">
                     <div class="col-md-6 col-xs-12 mb-2">
-                        <sh-select [options]="fromMonthNames" [placeholder]="'From Month'" name="fromMonth" [(ngModel)]="fromMonth" [forceClearReactive]="forceClear$ | async" (selected)="selectFromMonth($event);"></sh-select>
+                        <sh-select [options]="fromMonthNames" [placeholder]="'From Month'" name="fromMonth" [(ngModel)]="fromMonth" [forceClearReactive]="forceClearMonths$ | async" (selected)="selectFromMonth($event);"></sh-select>
                     </div>
                     <div class="col-md-6 col-xs-12 mb-2">
-                        <sh-select [options]="toMonthNames" [placeholder]="'To Month'" name="toMonth" [(ngModel)]="toMonth" [forceClearReactive]="forceClear$ | async" (selected)="selectToMonth($event);"></sh-select>
+                        <sh-select [options]="toMonthNames" [placeholder]="'To Month'" name="toMonth" [(ngModel)]="toMonth" [forceClearReactive]="forceClearMonths$ | async" (selected)="selectToMonth($event);"></sh-select>
                     </div>
-            </div>
+                </div>
             </div>
         </div>
         <div class="row">
