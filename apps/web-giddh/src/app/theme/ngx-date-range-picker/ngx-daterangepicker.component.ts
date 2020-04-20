@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import * as _moment from 'moment';
@@ -6,6 +6,12 @@ import { Moment } from 'moment';
 import { LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { take, takeUntil } from 'rxjs/operators';
+import { Observable, ReplaySubject } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { AppState } from '../../store';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
 
 const moment = _moment;
 
@@ -89,7 +95,7 @@ export interface DateRangeClicked {
         multi: true
     }]
 })
-export class NgxDaterangepickerComponent implements OnInit {
+export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     chosenLabel: string;
     calendarVariables: CalendarVariables = { start: {}, end: {} };
     timepickerVariables: { start: any, end: any } = { start: {}, end: {} };
@@ -181,16 +187,19 @@ export class NgxDaterangepickerComponent implements OnInit {
     private mouseWheelEventsRequired: number = 20;
     private mouseWheelEvents: number = 0;
     private _old: { start: any, end: any } = { start: null, end: null };
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public financialYears: any[] = [];
 
     constructor(
         private _ref: ChangeDetectorRef,
         private _localeService: NgxDaterangepickerLocaleService,
-        private _breakPointObservar: BreakpointObserver) {
+        private _breakPointObservar: BreakpointObserver, private store: Store<AppState>, public settingsFinancialYearService: SettingsFinancialYearService) {
         this.choosedDate = new EventEmitter();
         this.rangeClicked = new EventEmitter();
         this.datesUpdated = new EventEmitter();
         this.locale = { ...this._locale };
         this.updateMonthsInView();
+        this.getFinancialYears();
     }
 
     _locale: LocaleConfig = {};
@@ -218,7 +227,6 @@ export class NgxDaterangepickerComponent implements OnInit {
     }
 
     ngOnInit() {
-
         this._breakPointObservar.observe([
             '(max-width: 767px)'
         ]).subscribe(result => {
@@ -1265,7 +1273,6 @@ export class NgxDaterangepickerComponent implements OnInit {
      * @param range
      */
     clickRange(e, range) {
-        this.dropdownShow = !this.dropdownShow;
         this.selectRange(this.ranges, range.name);
 
         this.chosenRange = range.name;
@@ -1318,11 +1325,11 @@ export class NgxDaterangepickerComponent implements OnInit {
         this._old.end = this.endDate.clone();
         this.isShown = true;
         if (this.ActiveDate === ActiveDateEnum.End) {
-            if(this.endDateElement) {
+            if (this.endDateElement) {
                 this.endDateElement.nativeElement.focus();
             }
         } else {
-            if(this.startDateElement) {
+            if (this.startDateElement) {
                 this.startDateElement.nativeElement.focus();
             }
         }
@@ -1666,5 +1673,66 @@ export class NgxDaterangepickerComponent implements OnInit {
                 }
             });
         }
+    }
+
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
+    public getFinancialYears(): void {
+        this.settingsFinancialYearService.GetAllFinancialYears().subscribe(res => {
+            if (res && res.body && res.body.financialYears) {
+                res.body.financialYears.forEach(key => {
+                    let financialYearStarts = moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+                    let financialYearEnds = moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+                    this.financialYears.push({ label: financialYearStarts + " - " + financialYearEnds, value: key });
+                });
+
+                if (this.ranges && this.ranges.length > 0) {
+                    let loop = 0;
+                    let allTimeIndex = -1;
+                    this.ranges.forEach(key => {
+                        if (key.name === "All Time") {
+                            allTimeIndex = loop;
+                        }
+                        loop++;
+                    });
+
+                    if (allTimeIndex > -1) {
+                        this.ranges[allTimeIndex].value = [
+                            moment(moment(res.body.financialYears[0].financialYearStarts, GIDDH_DATE_FORMAT).toDate()),
+                            moment()
+                        ];
+                    }
+                }
+            }
+        });
+    }
+
+    public clickFinancialYear(financialYear) {
+        this.startDate = moment(new Date(financialYear.value.financialYearStarts.split("-").reverse().join("-")));
+        this.endDate = moment(new Date(financialYear.value.financialYearEnds.split("-").reverse().join("-")));
+        this.chosenLabel = this.startDate.format(GIDDH_DATE_FORMAT) + " - " + this.endDate.format(GIDDH_DATE_FORMAT);
+        this.showCalInRanges = (!this.ranges.length) || this.alwaysShowCalendars;
+
+        if (!this.timePicker) {
+            this.startDate.startOf('day');
+            this.endDate.endOf('day');
+        }
+
+        if (!this.alwaysShowCalendars) {
+            this.setActiveDate(ActiveDateEnum.Start);
+            this.isShown = false; // hide calendars
+        }
+        this.rangeClicked.emit({ name: "Select Financial Year", startDate: this.startDate, endDate: this.endDate });
+        if (!this.keepCalendarOpeningWithRange) {
+            this.clickApply();
+        } else {
+            this.renderCalendar(DateType.start);
+            this.renderCalendar(DateType.end);
+        }
+
+        this.updateView();
     }
 }

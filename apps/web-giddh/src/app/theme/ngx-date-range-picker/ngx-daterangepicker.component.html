@@ -35,18 +35,14 @@
                     </ul>
                 </li>
                 <li class="menu-li select-financial-year">
-                    <button type="button" class="btn-angle-down"  (click)="clickRange($event)">Select Financial Year
+                    <button type="button" class="btn-angle-down" (click)="dropdownShow = !dropdownShow">Select Financial Year
                         <span class="available prev angle-down"></span>
                     </button>
-                    <ul class="sub-ranges-cal menu-drawer" *ngIf="dropdownShow">
-                        <li>
-                            <button type="button">Apr19-Mar20</button>
+                    <ul class="sub-ranges-cal menu-drawer" *ngIf="dropdownShow && financialYears && financialYears.length > 0">
+                        <li *ngFor="let financialYear of financialYears;">
+                            <button type="button" (click)="clickFinancialYear(financialYear)">{{financialYear.label}}</button>
                         </li>
-                        <li><button type="button">Apr20-Mar19</button></li>
                     </ul>
-                </li>
-                <li class="menu-li">
-                    <button type="button">All time</button>
                 </li>
             </ul>
         </div>

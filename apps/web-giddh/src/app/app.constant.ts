@@ -74,7 +74,8 @@ export enum DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM {
     ThisYearToDate = 'This Year to Date',
     LastQuarter = 'Last Quarter',
     LastFinancialYear = 'Last Financial Year',
-    LastYear = 'Last Year'
+    LastYear = 'Last Year',
+    AllTime = 'All Time'
 }
 
 /**
@@ -138,6 +139,12 @@ export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
         name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.LastYear, value: [
             moment().subtract(1, 'year').startOf('year'),
             moment().subtract(1, 'year').endOf('year')
+        ]
+    },
+    {
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.AllTime, value: [
+            moment().startOf('year').subtract(10, 'year'),
+            moment()
         ]
     }
 ];

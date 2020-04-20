@@ -263,8 +263,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.store.pipe(select(p => p.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 this.datePickerOptions = a;
-                this.fromDate = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
-                this.toDate = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
+                this.fromDate = moment(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT);
             }
         });
 
