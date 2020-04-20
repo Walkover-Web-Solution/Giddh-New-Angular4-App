@@ -302,8 +302,16 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         const container = this.picker.pickerContainer.nativeElement;
         const element = this._el.nativeElement;
         let position = this.getPosition(element);
+        let screenWidth = screen.width;
+        let totalWidth = container.offsetWidth + position.x;
+        let positionX = position.x;
+
+        if(totalWidth > screenWidth) {
+            positionX = positionX - (screenWidth - totalWidth);
+        }
+
         this._renderer.setStyle(container, 'top', position.y + 'px');
-        this._renderer.setStyle(container, 'left', position.x + 'px');
+        this._renderer.setStyle(container, 'left', positionX + 'px');
         this._renderer.setStyle(container, 'right', 'auto');
     }
 
