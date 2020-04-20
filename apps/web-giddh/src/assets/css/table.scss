@@ -37,6 +37,7 @@
         border-right: none;
         font-family: $opensans-regular;
         border-bottom: none !important;
+        white-space: nowrap !important;
     }
     thead > tr > th:first-child,
     tbody > tr > td:first-child {
