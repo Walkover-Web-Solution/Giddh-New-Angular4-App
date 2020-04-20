@@ -6,7 +6,7 @@
 			<i class="glyphicon glyphicon-refresh mrL2" (click)="refreshChart()"></i>
 			<div class="pull-right dashboard-filter">
 				<div class="btn-group" dropdown>
-					<span id="button-basic" dropdownToggle class="dropdown-toggle monthDropdown"
+					<span id="button-basic" dropdownToggle class="dropdown-toggle month-dropdown"
 						aria-controls="dropdown-basic">
 						<datepickeroptions (filterDates)="getFilterDate($event)"></datepickeroptions>
 					</span>
@@ -25,15 +25,15 @@
 				</div>
 			</div>
 			<div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
-				<perfect-scrollbar [scrollIndicators]="true">
+			 
 					<chart [options]="totaloverDueChart" *ngIf="dataFound" #currentRatio></chart>
 					<div class="noDataAvailable" *ngIf="!dataFound">
 						<img src="{{imgPath}}noDataChart.svg" alt="no data found">
 					</div>
 					<div class="clearfix mrB2">
 						<div class="">
-							<span class="mrB1 dueAmount">Customer Due</span>
-							<span class="total_amt pull-right vendorDueText">
+							<span class="mrB1 due-amount">Customer Due</span>
+							<span class="total-amount pull-right vendor-due-text">
 								<span>{{amountSettings.baseCurrencySymbol}}</span>
 								{{ totalRecievable | giddhCurrency }}</span>
 						</div>
@@ -44,9 +44,9 @@
 					</div>
 					<div class="clearfix mrB2">
 						<div class="">
-							<span class="mrB1 dueAmount">Vendor Due</span>
+							<span class="mrB1 due-amount">Vendor Due</span>
 							<span
-								class="total_amt pull-right customerDueText"><span>{{amountSettings.baseCurrencySymbol}}</span>
+								class="total-amount pull-right customer-due-text"><span>{{amountSettings.baseCurrencySymbol}}</span>
 								{{ totalPayable | giddhCurrency }}</span>
 						</div>
 						<div class="clearfix">
@@ -54,7 +54,7 @@
 							<small class="pull-right">{{ PaybaleDurationAmt | giddhCurrency }}</small>
 						</div>
 					</div>
-				</perfect-scrollbar>
+				 
 			</div>
 		</div>
 	</div>

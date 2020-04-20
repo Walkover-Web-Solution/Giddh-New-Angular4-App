@@ -24,70 +24,7 @@ import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/cu
 @Component({
     selector: 'profit-loss',
     templateUrl: 'profit-loss.component.html',
-    styleUrls: ['../../home.component.scss'],
-    styles: [
-        `
-            .total_amt {
-                font-size: 18px;
-            }
-
-            .totalIncomeText {
-                color: #4693F1;
-            }
-
-            .totalExpensesText {
-                color: #FED46A
-            }
-
-            span.monthDropdown {
-                font-size: 12px;
-                color: #666666;
-                vertical-align: top;
-            }
-
-            .dashboard-filter .btn-group {
-                display: block;
-                line-height: 1;
-            }
-
-            .dashboard-filter .btn-group span {
-                vertical-align: middle;
-                color: #666666;
-            }
-
-            .underline {
-                text-decoration: underline;
-            }
-
-            .dashboard-filter {
-                display: inline-flex;
-                color: #666666;
-                align-items: flex-end;
-
-            }
-
-            .dashboard-filter .icon-collapse-icon {
-                margin-left: 8px;
-                font-size: 14px;
-            }
-
-            .dueAmount {
-                color: #262626;
-                font-size: 16px;
-                margin: 0;
-                padding: 0;
-            }
-
-            span.icon-rupees {
-                font-size: 15px;
-            }
-
-            .panel-body small {
-                color: #666666;
-            }
-
-		`
-    ]
+    styleUrls: ['../../home.component.scss' , './profit-loss.component.scss'],
 })
 
 export class ProfitLossComponent implements OnInit, OnDestroy {
