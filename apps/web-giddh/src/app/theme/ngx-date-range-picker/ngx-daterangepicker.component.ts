@@ -178,7 +178,7 @@ export class NgxDaterangepickerComponent implements OnInit {
     public dropdownShow: boolean = false;
     public goToPreviousMonthDisabled: boolean = false;
     public goToNextMonthDisabled: boolean = false;
-    private mouseWheelEventsRequired: number = 40;
+    private mouseWheelEventsRequired: number = 20;
     private mouseWheelEvents: number = 0;
     private componentRef: any;
     private _old: { start: any, end: any } = { start: null, end: null };
