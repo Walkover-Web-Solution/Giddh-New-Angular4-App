@@ -1583,6 +1583,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 if (res && res.status === 'success') {
                     if (res.body && res.body.length) {
                         this.isAccountHaveAdvanceReceipts = true;
+                        this.showAdvanceReceiptAdjust = true;
+                        this.adjustPaymentModal.show();
+                        this.selectedPerformAdjustPaymentAction = false;
                     } else {
                         this.isAccountHaveAdvanceReceipts = false;
                         this._toaster.warningToast('There is no advanced receipt for adjustment.');
