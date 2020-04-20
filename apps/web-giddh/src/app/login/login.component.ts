@@ -389,21 +389,34 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
 
         } else if (isCordova()) {
-
-            (window as any).plugins.googleplus.login(
-                {
-                    'scopes': 'email', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
-                    'webClientId': this._generalService.getGoogleCredentials().GOOGLE_CLIENT_ID,
-                    'offline': true // optional, but requires the webClientId - if set to true the plugin will also return a serverAuthCode, which can be used to grant offline access to a non-Google server
-                },
-                (obj) => {
-                    this.store.dispatch(this.loginAction.signupWithGoogle(obj.accessToken));
-                    // console.log((JSON.stringify(obj))); // do something useful instead of alerting
-                },
-                (msg) => {
-                    console.log(('error: ' + msg));
-                }
-            );
+            if (provider === "google") {
+                (window as any).plugins.googleplus.login(
+                    {
+                        'scopes': 'email', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
+                        'webClientId': this._generalService.getGoogleCredentials().GOOGLE_CLIENT_ID,
+                        'offline': true // optional, but requires the webClientId - if set to true the plugin will also return a serverAuthCode, which can be used to grant offline access to a non-Google server
+                    },
+                    (obj) => {
+                        this.store.dispatch(this.loginAction.signupWithGoogle(obj.accessToken));
+                        // console.log((JSON.stringify(obj))); // do something useful instead of alerting
+                    },
+                    (msg) => {
+                        console.log(('error: ' + msg));
+                    }
+                );
+            } else {
+                (window as any).plugins.SignInWithApple.signin(
+                    { requestedScopes: [0, 1] },
+                    function (succ) {
+                        console.log(succ);
+                        alert(JSON.stringify(succ));
+                    },
+                    function (err) {
+                        console.error(err);
+                        console.log(JSON.stringify(err));
+                    }
+                );
+            }
 
         } else {
             //  web social authentication

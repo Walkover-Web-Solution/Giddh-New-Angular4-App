@@ -36,6 +36,7 @@
         "cordova-plugin-googleplus": "^8.2.1",
         "cordova-plugin-inappbrowser-popup-bridge": "^1.0.22",
         "cordova-plugin-network-information": "^2.0.2",
+        "cordova-plugin-sign-in-with-apple": "^0.1.1",
         "cordova-plugin-splashscreen": "^5.0.3",
         "cordova-plugin-statusbar": "^2.4.3",
         "cordova-plugin-useragent": "^1.0.6",
@@ -76,7 +77,8 @@
                 "PLAY_SERVICES_VERSION": "15.0.1"
             },
             "cordova-plugin-useragent": {},
-            "im.ltdev.cordova.UserAgent": {}
+            "im.ltdev.cordova.UserAgent": {},
+            "cordova-plugin-sign-in-with-apple": {}
         },
         "platforms": [
             "ios",
