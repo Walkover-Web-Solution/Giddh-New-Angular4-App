@@ -205,7 +205,7 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
             this.removeDuplicateDatepickers();
             this.appendDatepickerToBody();
             this.setPosition();
-        });
+        }, 20);
     }
 
     @HostListener("document:keyup.esc", ['$event'])
@@ -302,12 +302,12 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         const container = this.picker.pickerContainer.nativeElement;
         const element = this._el.nativeElement;
         let position = this.getPosition(element);
-        let screenWidth = screen.width;
+        let screenWidth = window.innerWidth;
         let totalWidth = container.offsetWidth + position.x;
         let positionX = position.x;
 
         if(totalWidth > screenWidth) {
-            positionX = positionX - (screenWidth - totalWidth);
+            positionX = positionX - (totalWidth - screenWidth);
         }
 
         this._renderer.setStyle(container, 'top', position.y + 'px');
@@ -336,7 +336,7 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
 
     public removeDuplicateDatepickers() {
         if (document.getElementsByTagName("ngx-daterangepicker-material").length > 1) {
-            for (let loop = 1; loop < document.getElementsByTagName("ngx-daterangepicker-material").length; loop++) {
+            for (let loop = 0; loop < document.getElementsByTagName("ngx-daterangepicker-material").length; loop++) {
                 document.getElementsByTagName("ngx-daterangepicker-material")[loop].remove();
             }
         }

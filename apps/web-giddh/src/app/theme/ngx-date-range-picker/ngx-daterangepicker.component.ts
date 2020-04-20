@@ -1313,14 +1313,18 @@ export class NgxDaterangepickerComponent implements OnInit {
     show(e?) {
         if (this.isShown) {
             return;
-        } 
+        }
         this._old.start = this.startDate.clone();
         this._old.end = this.endDate.clone();
         this.isShown = true;
         if (this.ActiveDate === ActiveDateEnum.End) {
-            this.endDateElement.nativeElement.focus();
+            if(this.endDateElement) {
+                this.endDateElement.nativeElement.focus();
+            }
         } else {
-            this.startDateElement.nativeElement.focus();
+            if(this.startDateElement) {
+                this.startDateElement.nativeElement.focus();
+            }
         }
         this.updateView();
     }
