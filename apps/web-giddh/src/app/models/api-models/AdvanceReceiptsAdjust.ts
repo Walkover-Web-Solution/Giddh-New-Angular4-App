@@ -2,7 +2,7 @@ export class AdvanceReceiptAdjustment {
     tdsTaxUniqueName: string;
     tdsAmount: TdsAmount;
     description: string;
-    adjustments: Adjustment[];
+    adjustments: Adjustment[]= [];
 }
 
 export class Adjustment {
