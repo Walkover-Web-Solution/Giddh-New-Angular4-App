@@ -20,6 +20,34 @@
                 <th class="width-200px">
                     <div class="d-flex">
                         <div class="flex-fill text-right ">
+                            Tax
+                        </div>
+                    </div>
+                </th>
+                <th class="width-200px">
+                    <div class="d-flex">
+                        <div class="flex-fill text-right ">
+                            Discount
+                        </div>
+                    </div>
+                </th>
+                <th class="width-200px">
+                    <div class="d-flex">
+                        <div class="flex-fill text-right ">
+                            TCS
+                        </div>
+                    </div>
+                </th>
+                <th class="width-200px">
+                    <div class="d-flex">
+                        <div class="flex-fill text-right ">
+                            TDS
+                        </div>
+                    </div>
+                </th>
+                <th class="width-200px">
+                    <div class="d-flex">
+                        <div class="flex-fill text-right ">
                             Net Purchase
                         </div>
                     </div>
@@ -38,6 +66,10 @@
                 <td><a class="cursor-pointer" (click)="gotoDetailedPurchase(item)">{{item.particular}}</a></td>
                 <td class="text-right">{{item.purchase | giddhCurrency}}</td>
                 <td class="text-right">{{item.returns | giddhCurrency}}</td>
+                <td class="text-right">{{item.taxTotal | giddhCurrency}}</td>
+                <td class="text-right">{{item.discountTotal | giddhCurrency}}</td>
+                <td class="text-right">{{item.tcsTotal | giddhCurrency}}</td>
+                <td class="text-right">{{item.tdsTotal | giddhCurrency}}</td>
                 <td class="text-right">{{item.cumulative | giddhCurrency}}</td>
                 <td class="text-right">{{item.netPurchase | giddhCurrency}}</td>
             </tr>
@@ -47,6 +79,10 @@
                 <th><a href="javascript:void(0)">{{purchaseRegisterTotal.particular }}</a></th>
                 <th class="text-right">{{purchaseRegisterTotal.purchase | giddhCurrency}}</th>
                 <th class="text-right">{{purchaseRegisterTotal.returns | giddhCurrency}}</th>
+                <th class="text-right">{{purchaseRegisterTotal.taxTotal | giddhCurrency}}</th>
+                <th class="text-right">{{purchaseRegisterTotal.discountTotal | giddhCurrency}}</th>
+                <th class="text-right">{{purchaseRegisterTotal.tcsTotal | giddhCurrency}}</th>
+                <th class="text-right">{{purchaseRegisterTotal.tdsTotal | giddhCurrency}}</th>
                 <th class="text-right">{{purchaseRegisterTotal.cumulative | giddhCurrency}}</th>
                 <th class="text-right">{{purchaseRegisterTotal.netPurchase | giddhCurrency}}</th>
             </tr>

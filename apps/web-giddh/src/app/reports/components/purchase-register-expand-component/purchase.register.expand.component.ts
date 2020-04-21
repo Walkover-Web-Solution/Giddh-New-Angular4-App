@@ -22,7 +22,7 @@ export class PurchaseRegisterExpandComponent implements OnInit {
     public PurchaseRegisteDetailedItems: PurchaseRegisteDetailedResponse;
     public from: string;
     public to: string;
-    public PurchaseRegisteDetailedResponse$: Observable<PurchaseRegisteDetailedResponse>;
+    public purchaseRegisteDetailedResponse$: Observable<PurchaseRegisteDetailedResponse>;
     public isGetPurchaseDetailsInProcess$: Observable<boolean>;
     public isGetPurchaseDetailsSuccess$: Observable<boolean>;
     public getDetailedPurchaseRequestFilter: ReportsDetailedRequestFilter = new ReportsDetailedRequestFilter();
@@ -54,7 +54,7 @@ export class PurchaseRegisterExpandComponent implements OnInit {
     bsValue = new Date();
 
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private _generalActions: GeneralActions) {
-        this.PurchaseRegisteDetailedResponse$ = this.store.pipe(select(p => p.receipt.PurchaseRegisteDetailedResponse), takeUntil(this.destroyed$));
+        this.purchaseRegisteDetailedResponse$ = this.store.pipe(select(p => p.receipt.PurchaseRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetPurchaseDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetPurchaseDetailsInProcess), takeUntil(this.destroyed$));
         this.isGetPurchaseDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetPurchaseDetailsSuccess), takeUntil(this.destroyed$));
     }
@@ -77,7 +77,7 @@ export class PurchaseRegisterExpandComponent implements OnInit {
         });
         this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
         this.getCurrentMonthYear();
-        this.PurchaseRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: PurchaseRegisteDetailedResponse) => {
+        this.purchaseRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: PurchaseRegisteDetailedResponse) => {
             if (res) {
                 this.PurchaseRegisteDetailedItems = res;
                 _.map(this.PurchaseRegisteDetailedItems.items, (obj: any) => {

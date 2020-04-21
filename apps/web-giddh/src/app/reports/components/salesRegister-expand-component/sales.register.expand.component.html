@@ -229,9 +229,9 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody *ngIf="(SalesRegisteDetailedResponse$ | async).items.length">
+                <tbody *ngIf="(salesRegisteDetailedResponse$ | async).items.length">
                     <tr *ngFor="
-                            let item of (SalesRegisteDetailedResponse$ | async)
+                            let item of (salesRegisteDetailedResponse$ | async)
                                 .items
                         ">
                         <td>{{ item.date }}</td>
@@ -302,16 +302,16 @@
             </table>
         </div>
 
-        <div class="text-center " *ngIf="(SalesRegisteDetailedResponse$ | async).totalItems > 50">
+        <div class="text-center " *ngIf="(salesRegisteDetailedResponse$ | async).totalItems > 50">
             <pagination [totalItems]="
-                    (SalesRegisteDetailedResponse$ | async).totalItems
+                    (salesRegisteDetailedResponse$ | async).totalItems
                 " [(ngModel)]="getDetailedsalesRequestFilter.page" [maxSize]="5" class="pagination-sm "
                 [boundaryLinks]="true" [itemsPerPage]="50" [rotate]="false" previousText="&#9668; " nextText="&#9658; "
                 (pageChanged)="pageChanged($event)"></pagination>
         </div>
     </div>
     <div class="no-data " *ngIf="
-            (SalesRegisteDetailedResponse$ | async).items.length === 0 &&
+            (salesRegisteDetailedResponse$ | async).items.length === 0 &&
             !(isGetSalesDetailsInProcess$ | async)
         ">
         <h1>No entries found within given criteria.</h1>
@@ -322,7 +322,7 @@
         <div class="col-xs-2 ">
             <p>Transaction count</p>
             <p class="text-orange ">
-                {{ (SalesRegisteDetailedResponse$ | async).totalItems }}
+                {{ (salesRegisteDetailedResponse$ | async).totalItems }}
             </p>
         </div>
         <div class="col-xs-10 ">
@@ -331,7 +331,7 @@
                     <p>Sales</p>
                     <h4>
                         {{
-                            (SalesRegisteDetailedResponse$ | async).creditTotal
+                            (salesRegisteDetailedResponse$ | async).creditTotal
                                 | giddhCurrency
                         }}
                     </h4>
@@ -340,43 +340,43 @@
                     <p>Return</p>
                     <h4>
                         {{
-                            (SalesRegisteDetailedResponse$ | async).debitTotal
+                            (salesRegisteDetailedResponse$ | async).debitTotal
                                 | giddhCurrency
                         }}
                     </h4>
                 </div>
                 <div class="sale-register-box text-right">
-                    <p>Net Discount</p>
+                    <p>Discount</p>
                     <h4>
                         {{
-                            (SalesRegisteDetailedResponse$ | async)
+                            (salesRegisteDetailedResponse$ | async)
                                 .discountTotal | giddhCurrency
                         }}
                     </h4>
                 </div>
                 <div class="sale-register-box text-right">
-                    <p>Net TCS</p>
+                    <p>TCS</p>
                     <h4>
                         {{
-                            (SalesRegisteDetailedResponse$ | async).tcsTotal
+                            (salesRegisteDetailedResponse$ | async).tcsTotal
                                 | giddhCurrency
                         }}
                     </h4>
                 </div>
                 <div class="sale-register-box text-right">
-                    <p>Net TDS</p>
+                    <p>TDS</p>
                     <h4>
                         {{
-                            (SalesRegisteDetailedResponse$ | async).tdsTotal
+                            (salesRegisteDetailedResponse$ | async).tdsTotal
                                 | giddhCurrency
                         }}
                     </h4>
                 </div>
                 <div class="sale-register-box text-right">
-                    <p>Net Tax</p>
+                    <p>Tax</p>
                     <h4>
                         {{
-                            (SalesRegisteDetailedResponse$ | async).taxTotal
+                            (salesRegisteDetailedResponse$ | async).taxTotal
                                 | giddhCurrency
                         }}
                     </h4>
@@ -386,7 +386,7 @@
                     <p>Net Sales</p>
                     <h4 class="text-orange ">
                         {{
-                            (SalesRegisteDetailedResponse$ | async).netTotal
+                            (salesRegisteDetailedResponse$ | async).netTotal
                                 .amount | giddhCurrency
                         }}
                     </h4>

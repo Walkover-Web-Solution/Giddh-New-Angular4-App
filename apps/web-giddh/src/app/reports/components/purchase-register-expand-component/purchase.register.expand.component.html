@@ -229,9 +229,9 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody *ngIf="(PurchaseRegisteDetailedResponse$ | async).items.length">
+                <tbody *ngIf="(purchaseRegisteDetailedResponse$ | async).items.length">
                     <tr *ngFor="
-                            let item of (PurchaseRegisteDetailedResponse$ | async)
+                            let item of (purchaseRegisteDetailedResponse$ | async)
                                 .items
                         ">
                         <td>{{ item.date }}</td>
@@ -302,16 +302,16 @@
             </table>
         </div>
 
-        <div class="text-center " *ngIf="(PurchaseRegisteDetailedResponse$ | async).totalItems > 50">
+        <div class="text-center " *ngIf="(purchaseRegisteDetailedResponse$ | async).totalItems > 50">
             <pagination [totalItems]="
-                    (PurchaseRegisteDetailedResponse$ | async).totalItems
+                    (purchaseRegisteDetailedResponse$ | async).totalItems
                 " [(ngModel)]="getDetailedPurchaseRequestFilter.page" [maxSize]="5" class="pagination-sm "
                 [boundaryLinks]="true" [itemsPerPage]="50" [rotate]="false" previousText="&#9668; " nextText="&#9658; "
                 (pageChanged)="pageChanged($event)"></pagination>
         </div>
     </div>
     <div class="no-data " *ngIf="
-            (PurchaseRegisteDetailedResponse$ | async).items.length === 0 &&
+            (purchaseRegisteDetailedResponse$ | async).items.length === 0 &&
             !(isGetPurchaseDetailsInProcess$ | async)
         ">
         <h1>No entries found within given criteria.</h1>
@@ -319,19 +319,19 @@
     </div>
 
     <div class="clearfix sales-ragister ">
-        <div class="col-xs-3 ">
+        <div class="col-xs-2">
             <p>Transaction count</p>
             <p class="text-orange ">
-                {{ (PurchaseRegisteDetailedResponse$ | async).totalItems }}
+                {{ (purchaseRegisteDetailedResponse$ | async).totalItems }}
             </p>
         </div>
-        <div class="col-xs-9 ">
+        <div class="col-xs-10">
             <div *ngIf="PurchaseRegisteDetailedItems" class="clearfix main-sale-register-box ">
                 <div class="sale-register-box text-right">
                     <p>Purchase</p>
                     <h4>
                         {{
-                            (PurchaseRegisteDetailedResponse$ | async).debitTotal
+                            (purchaseRegisteDetailedResponse$ | async).debitTotal
                                 | giddhCurrency
                         }}
                     </h4>
@@ -340,7 +340,7 @@
                     <p>Return</p>
                     <h4>
                         {{
-                            (PurchaseRegisteDetailedResponse$ | async).creditTotal
+                            (purchaseRegisteDetailedResponse$ | async).creditTotal
                                 | giddhCurrency
                         }}
                     </h4>
@@ -349,16 +349,34 @@
                     <p>Discount</p>
                     <h4>
                         {{
-                            (PurchaseRegisteDetailedResponse$ | async)
+                            (purchaseRegisteDetailedResponse$ | async)
                                 .discountTotal | giddhCurrency
                         }}
                     </h4>
                 </div>
                 <div class="sale-register-box text-right">
-                    <p>Total Tax</p>
+                    <p>TCS</p>
                     <h4>
                         {{
-                            (PurchaseRegisteDetailedResponse$ | async).taxTotal
+                            (purchaseRegisteDetailedResponse$ | async).tcsTotal
+                                | giddhCurrency
+                        }}
+                    </h4>
+                </div>
+                <div class="sale-register-box text-right">
+                    <p>TDS</p>
+                    <h4>
+                        {{
+                            (purchaseRegisteDetailedResponse$ | async).tdsTotal
+                                | giddhCurrency
+                        }}
+                    </h4>
+                </div>
+                <div class="sale-register-box text-right">
+                    <p>Tax</p>
+                    <h4>
+                        {{
+                            (purchaseRegisteDetailedResponse$ | async).taxTotal
                                 | giddhCurrency
                         }}
                     </h4>
@@ -368,7 +386,7 @@
                     <p>Net Purchase</p>
                     <h4 class="text-orange ">
                         {{
-                            (PurchaseRegisteDetailedResponse$ | async).netTotal
+                            (purchaseRegisteDetailedResponse$ | async).netTotal
                                 .amount | giddhCurrency
                         }}
                     </h4>
