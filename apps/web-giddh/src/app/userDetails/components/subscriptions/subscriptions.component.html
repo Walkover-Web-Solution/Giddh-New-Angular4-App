@@ -52,7 +52,6 @@
                             <div class="col-md-6 text-right">
 
                                 <button type="button" class="btn btn-primary" (click)="isPlanShow=true">Buy Transactions</button>
-
                                 <button type="button" class="btn btn-success">Renew</button>
 
                                 <div class="btn-group d-inline-block custom-dropdown pt-05 ml-1" dropdown placement="bottom right">
@@ -184,13 +183,12 @@
                 </div>
 
 
-                <p><small>*Additional charges on transactions above 40,000 @ 0.10 Rs. per transaction * </small></p>
-                <p><small>Each month includes previous month's transactions</small></p>
 
-                    <div class="clearfix mb-2">
-                        <!-- comment by sadik <button type="button" class="btn btn-primary" (click)="isPlanShow=true">Change Plan</button> -->
-                        <!-- <button type="button" (click)="isPlanShow=true" class="btn btn-pink">Payment Log</button> -->
-                    </div>
+
+                    <!-- <div class="clearfix mb-2">
+                         comment by sadik <button type="button" class="btn btn-primary" (click)="isPlanShow=true">Change Plan</button>
+                         <button type="button" (click)="isPlanShow=true" class="btn btn-pink">Payment Log</button>
+                    </div> -->
                 </div>
             </div>
 
@@ -234,19 +232,22 @@
                         </ul>
                     </div>
 
-                    <div class="pl-2 mt-3 mb-2">
+                    <div class="pl-2 mt-3 buy-transactions">
                         <button class="btn btn-primary" type="button">Buy Transactions</button>
                     </div>
-
-
                   </div>
-
                 </div>
-
                 </div>
-
-
             </div>
+
+
+            <div class="mrT2">
+                <p><small>* Additional charges on transactions above {{seletedUserPlans?.planDetails?.transactionLimit | number}} @ {{seletedUserPlans?.planDetails?.ratePerExtraTransaction | number}} {{activeCompany?.baseCurrency}} per transaction</small>
+                </p>
+                <p><small>* Each month includes previous month's transactions</small></p>
+            </div>
+
+
         </div>
 
         <div class="clearfix mrT2 relative">
@@ -287,11 +288,11 @@
                             </table>
                         </div>
                     </div>
-                    <div class="mrT2">
+                    <!-- <div class="mrT2">
                         <p><small>* Additional charges on transactions above {{seletedUserPlans?.planDetails?.transactionLimit | number}} @ {{seletedUserPlans?.planDetails?.ratePerExtraTransaction | number}} {{activeCompany?.baseCurrency}} per transaction</small>
                         </p>
                         <p><small>* Each month includes previous month's transactions</small></p>
-                    </div>
+                    </div> -->
                 </div>
 
 
@@ -317,6 +318,39 @@
             </div>
         </div>
 
+    </div>
+
+
+    <div class="box mt-2">
+        <div class="row d-flex justify-content-between align-items-center">
+            <div class="col-md-8">
+                <p class="bold">Plan 2</p>
+            <ul class="list-inline plan-list">
+                <li>Expiry Date: 25/05/2020  </li>
+                <li>No. of companies : 4/10</li>
+                <li>Transaction Limit: 40,000</li>
+            </ul>
+            </div>
+            <div class="col-md-4 text-right">
+                <span class="font-26">5</span> days remaining
+            </div>
+        </div>
+    </div>
+
+    <div class="box mt-2">
+        <div class="row d-flex justify-content-between align-items-center">
+            <div class="col-md-8">
+                <p class="bold">Professional</p>
+            <ul class="list-inline plan-list">
+                <li>Expiry Date: 25/05/2020  </li>
+                <li>No. of companies : 4/10</li>
+                <li>Transaction Limit: 40,000</li>
+            </ul>
+            </div>
+            <div class="col-md-4 text-right">
+                <div class="active"><span class="green-dote"></span> Active </div>
+            </div>
+        </div>
     </div>
 
 
