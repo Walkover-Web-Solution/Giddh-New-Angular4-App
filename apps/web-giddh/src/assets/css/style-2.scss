@@ -6683,20 +6683,9 @@ table td[class*=col-]:last-child {
     margin-left: 5px;
 }
 
-.overdue_chart , .profit_loss_chart {
+.overdue-chart , .profit-loss-chart {
     margin: 0 auto;
 }
-
-/* .overdue_chart {
-    width: 100% !important;
-    height: 174px !important;
-}
-
-.overdue_chart svg {
-    width: 100% !important;
-    height: 174px !important;
-} */
-
 .condition_tag {
     position: absolute;
     top: 2px;

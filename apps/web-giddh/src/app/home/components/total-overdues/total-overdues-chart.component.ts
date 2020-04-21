@@ -92,7 +92,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
             chart: {
                 type: 'pie',
                 polar: false,
-                className: 'overdue_chart',
+                className: 'overdue-chart',
                 width: 260,
                 height: '180px'
             },
