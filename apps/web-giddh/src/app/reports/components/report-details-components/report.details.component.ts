@@ -114,8 +114,8 @@ export class ReportsDetailsComponent implements OnInit {
             reportsModel.discountTotal = item.discountTotal;
             reportsModel.tcsTotal = item.tcsTotal;
             reportsModel.tdsTotal = item.tdsTotal;
-            reportsModel.netSales = item.closingBalance.amount;
-            reportsModel.cumulative = item.balance.amount;
+            reportsModel.netSales = item.balance.amount;
+            reportsModel.cumulative = item.closingBalance.amount;
             reportsModel.from = item.from;
             reportsModel.to = item.to;
 
@@ -137,8 +137,8 @@ export class ReportsDetailsComponent implements OnInit {
                 reportsModelCombined.discountTotal += item.discountTotal;
                 reportsModelCombined.tcsTotal += item.tcsTotal;
                 reportsModelCombined.tdsTotal += item.tdsTotal;
-                reportsModelCombined.netSales = item.closingBalance.amount;
-                reportsModelCombined.cumulative += item.balance.amount;
+                reportsModelCombined.netSales += item.balance.amount;
+                reportsModelCombined.cumulative = item.closingBalance.amount;
                 reportModelArray.push(reportsModel);
                 if (indexMonths % 3 === 0) {
                     reportsModelCombined.particular = 'Quarter ' + indexMonths / 3;
@@ -305,7 +305,7 @@ export class ReportsDetailsComponent implements OnInit {
         this.salesRegisterTotal.discountTotal += item.discountTotal;
         this.salesRegisterTotal.tcsTotal += item.tcsTotal;
         this.salesRegisterTotal.tdsTotal += item.tdsTotal;
-        this.salesRegisterTotal.netSales = item.closingBalance.amount;
-        this.salesRegisterTotal.cumulative += item.balance.amount;
+        this.salesRegisterTotal.netSales += item.balance.amount;
+        this.salesRegisterTotal.cumulative = item.closingBalance.amount;
     }
 }

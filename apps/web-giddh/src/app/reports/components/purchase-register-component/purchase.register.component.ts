@@ -113,8 +113,8 @@ export class PurchaseRegisterComponent implements OnInit {
             reportsModel.discountTotal = item.discountTotal;
             reportsModel.tcsTotal = item.tcsTotal;
             reportsModel.tdsTotal = item.tdsTotal;
-            reportsModel.netPurchase = item.closingBalance.amount;
-            reportsModel.cumulative = item.balance.amount;
+            reportsModel.netPurchase = item.balance.amount;
+            reportsModel.cumulative = item.closingBalance.amount;
             reportsModel.from = item.from;
             reportsModel.to = item.to;
             let mdyFrom = item.from.split('-');
@@ -135,8 +135,8 @@ export class PurchaseRegisterComponent implements OnInit {
                 reportsModelCombined.discountTotal += item.discountTotal;
                 reportsModelCombined.tcsTotal += item.tcsTotal;
                 reportsModelCombined.tdsTotal += item.tdsTotal;
-                reportsModelCombined.netPurchase = item.closingBalance.amount;
-                reportsModelCombined.cumulative += item.balance.amount;
+                reportsModelCombined.netPurchase += item.balance.amount;
+                reportsModelCombined.cumulative = item.closingBalance.amount;
                 reportModelArray.push(reportsModel);
                 if (indexMonths % 3 === 0) {
                     reportsModelCombined.particular = 'Quarter ' + indexMonths / 3;
@@ -304,7 +304,7 @@ export class PurchaseRegisterComponent implements OnInit {
         this.purchaseRegisterTotal.discountTotal += item.discountTotal;
         this.purchaseRegisterTotal.tcsTotal += item.tcsTotal;
         this.purchaseRegisterTotal.tdsTotal += item.tdsTotal;
-        this.purchaseRegisterTotal.netPurchase = item.closingBalance.amount;
-        this.purchaseRegisterTotal.cumulative += item.balance.amount;
+        this.purchaseRegisterTotal.netPurchase += item.balance.amount;
+        this.purchaseRegisterTotal.cumulative = item.closingBalance.amount;
     }
 }
