@@ -447,7 +447,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private modalService: BsModalService
     ) {
         this.getInventorySettings();
-        this.advanceReceiptAdjustmentData = null;
+        this.advanceReceiptAdjustmentData = new AdvanceReceiptAdjustment();
+        this.advanceReceiptAdjustmentData.adjustments = [];
         this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.companyActions.getTax());
@@ -1754,12 +1755,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             /** Advance receipts adjustment for sales invoice*/
             if (this.isSalesInvoice && this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
-                requestObject.advanceReceiptAdjustment = this.advanceReceiptAdjustmentData;
-                requestObject.advanceReceiptAdjustment.adjustments.map(item => {
-                    if (item && item.voucherDate) {
-                        item.voucherDate = item.voucherDate.replace(/\//g, '-');
-                    }
-                });
+                if (this.advanceReceiptAdjustmentData.adjustments.length) {
+                    requestObject.advanceReceiptAdjustment = this.advanceReceiptAdjustmentData;
+                    requestObject.advanceReceiptAdjustment.adjustments.map(item => {
+                        if (item && item.voucherDate) {
+                            item.voucherDate = item.voucherDate.replace(/\//g, '-');
+                        }
+                    });
+                } else {
+                    this.advanceReceiptAdjustmentData.adjustments = [];
+                    requestObject.advanceReceiptAdjustment = this.advanceReceiptAdjustmentData;
+                }
+
             }
         } else {
             requestObject = {
@@ -2821,8 +2828,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                 }
                 /** Advance receipts adjustment for sales invoice*/
-                if (this.isSalesInvoice && this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
-                    requestObject.advanceReceiptAdjustment = this.advanceReceiptAdjustmentData;
+                if (this.isSalesInvoice) {
+                    if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments && this.advanceReceiptAdjustmentData.adjustments.length) {
+                        requestObject.advanceReceiptAdjustment = this.advanceReceiptAdjustmentData;
+                    } else {
+                        if (this.advanceReceiptAdjustmentData) {
+                            this.advanceReceiptAdjustmentData.adjustments = [];
+                            requestObject.advanceReceiptAdjustment = this.advanceReceiptAdjustmentData;
+                        }
+                    }
                 }
 
                 this.salesService.updateVoucherV4(<GenericRequestForGenerateSCD>this.updateData(requestObject, requestObject.voucher)).pipe(takeUntil(this.destroyed$))
@@ -4335,16 +4349,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public resetAdvanceReceiptAdjustData(): void {
-            this.adjustPaymentData.customerName = '';
-            this.adjustPaymentData.customerUniquename = '';
-            this.adjustPaymentData.voucherDate = '';
-            this.adjustPaymentData.balanceDue = 0;
-            this.adjustPaymentData.dueDate = '';
-            this.adjustPaymentData.grandTotal = 0;
-            this.adjustPaymentData.gstTaxesTotal = 0;
-            this.adjustPaymentData.subTotal = 0;
-            this.adjustPaymentData.totalTaxableValue = 0;
-            this.adjustPaymentData.totalAdjustedAmount = 0;
+        this.adjustPaymentData.customerName = '';
+        this.adjustPaymentData.customerUniquename = '';
+        this.adjustPaymentData.voucherDate = '';
+        this.adjustPaymentData.balanceDue = 0;
+        this.adjustPaymentData.dueDate = '';
+        this.adjustPaymentData.grandTotal = 0;
+        this.adjustPaymentData.gstTaxesTotal = 0;
+        this.adjustPaymentData.subTotal = 0;
+        this.adjustPaymentData.totalTaxableValue = 0;
+        this.adjustPaymentData.totalAdjustedAmount = 0;
     }
     /**
      * To close advance reciipt modal
@@ -4388,7 +4402,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.adjustPaymentBalanceDueData = 0;
             this.adjustPaymentData.totalAdjustedAmount = 0;
             this.totalAdvanceReceiptsAdjustedAmount = 0;
-            this.advanceReceiptAdjustmentData = null;
+            this.advanceReceiptAdjustmentData.adjustments = [];
             this.calculateBalanceDue();
         }
     }
@@ -4440,7 +4454,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.isAdjustAmount = false;
             }
         } else {
-            this.advanceReceiptAdjustmentData = null;
+            this.advanceReceiptAdjustmentData.adjustments = [];
         }
     }
 
