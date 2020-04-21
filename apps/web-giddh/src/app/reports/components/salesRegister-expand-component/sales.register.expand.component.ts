@@ -11,6 +11,7 @@ import { BsDropdownDirective } from 'ngx-bootstrap';
 import { FormControl } from '@angular/forms';
 import { CurrentPage } from '../../../models/api-models/Common';
 import { GeneralActions } from '../../../actions/general/general.actions';
+import { PAGINATION_LIMIT } from '../../../app.constant';
 
 
 @Component({
@@ -30,6 +31,8 @@ export class SalesRegisterExpandComponent implements OnInit {
     public selectedMonth: string;
     // public showSearchCustomer: boolean = false;
     public showSearchInvoiceNo: boolean = false;
+    /** Pagination limit for records */
+    public paginationLimit: number = PAGINATION_LIMIT;
 
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     // searching
