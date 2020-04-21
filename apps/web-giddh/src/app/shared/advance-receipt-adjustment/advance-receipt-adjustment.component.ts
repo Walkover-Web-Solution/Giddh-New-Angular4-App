@@ -403,6 +403,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                     form.controls[`amount${key}`].markAsTouched();
                 }
             });
+           this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments.filter(item => {
+                return item.voucherNumber !== '' || item.dueAmount.amountForAccount > 0;
+            });
         }
         if (isValid) {
             this.submitClicked.emit({
