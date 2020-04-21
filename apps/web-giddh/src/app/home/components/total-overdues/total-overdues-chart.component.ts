@@ -15,74 +15,7 @@ import * as _ from "../../../lodash-optimized";
 @Component({
     selector: 'toal-overdues-chart',
     templateUrl: 'total-overdues-chart.component.html',
-    styleUrls: ['../../home.component.scss'],
-    styles: [
-        `
-            .total_amt {
-                font-size: 18px;
-            }
-
-            .customerDueText {
-                color: #0CB1AF;
-            }
-
-            .vendorDueText {
-                color: #F85C88;
-            }
-
-            .secondary_text {
-                color: #5B64C9;
-            }
-
-            span.monthDropdown {
-                font-size: 12px;
-                color: #666666;
-                vertical-align: top;
-            }
-
-            .dashboard-filter .btn-group {
-                display: block;
-                line-height: 1;
-            }
-
-            .dashboard-filter .btn-group span {
-                vertical-align: middle;
-                color: #666666;
-            }
-
-            .underline {
-                text-decoration: underline;
-            }
-
-            .dashboard-filter {
-                display: inline-flex;
-                color: #666666;
-                align-items: flex-end;
-
-            }
-
-            .dashboard-filter .icon-collapse-icon {
-                margin-left: 8px;
-                font-size: 14px;
-            }
-
-            .dueAmount {
-                color: #262626;
-                font-size: 16px;
-                margin: 0;
-                padding: 0;
-            }
-
-            span.icon-rupees {
-                font-size: 15px;
-            }
-
-            .panel-body small {
-                color: #666666;
-            }
-
-		`
-    ]
+    styleUrls: ['../../home.component.scss', './total-overdues-chart.component.scss'],
 })
 
 export class TotalOverduesChartComponent implements OnInit, OnDestroy {
@@ -160,7 +93,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
                 type: 'pie',
                 polar: false,
                 className: 'overdue_chart',
-                width: 348,
+                width: 300,
                 height: '180px'
             },
             title: {

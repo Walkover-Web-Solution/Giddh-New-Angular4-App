@@ -483,7 +483,7 @@
                                 <input type="text" name="" class="form-control text-right"
                                        [(ngModel)]="vm.stockTrxEntry.inventory.quantity" decimalDigitsDirective
                                        [DecimalPlaces]="4" (paste)="vm.inventoryQuantityChanged($event)"
-                                       (change)="vm.inventoryQuantityChanged($event.target.value)" />
+                                       (change)="handleQuantityChange($event?.target?.value);" />
                             </div>
 
                             <div class="text-right table-amount width-80">
@@ -618,7 +618,7 @@
                             </p>
                         </div>
 
-                        <div *ngIf="vm.showNewEntryPanel" class="text-right table-amount last-ttable-amount">
+                        <div *ngIf="vm.showNewEntryPanel && isTcsTdsApplicable" class="text-right table-amount last-ttable-amount">
                             <div class="text-right">
 
                                 <div *ngIf="!vm.selectedLedger.isOtherTaxesApplicable" class="other-tax">

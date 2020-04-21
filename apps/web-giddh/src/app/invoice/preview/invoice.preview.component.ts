@@ -12,10 +12,11 @@ import {
     OnDestroy,
     OnInit,
     SimpleChanges,
-    ViewChild
+    ViewChild,
+    TemplateRef 
 } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
-import { BsModalRef, ModalOptions } from 'ngx-bootstrap/modal';
+import { BsModalRef, ModalOptions , BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
@@ -72,7 +73,6 @@ const COMPARISON_FILTER = [
     styleUrls: ['./invoice.preview.component.scss'],
 })
 export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
-
     public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null };
     @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
     @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
@@ -261,7 +261,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private purchaseRecordService: PurchaseRecordService,
         private _invoiceBulkUpdateService: InvoiceBulkUpdateService,
         private location: Location,
-        private salesService: SalesService
+        private salesService: SalesService,
+        private modalService: BsModalService
     ) {
         this.advanceReceiptAdjustmentData = null;
         this.invoiceSearchRequest.page = 1;
@@ -280,7 +281,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.voucherDetails$ = this.store.pipe(select(s => s.receipt.voucher), takeUntil(this.destroyed$));
         //this._invoiceService.getTotalAndBalDue();
     }
-
+    openModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(template);
+    }
     public ngOnInit() {
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
@@ -655,9 +658,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     this.depositAmount = response.deposit.amountForAccount;
                 }
                 if (this.selectedPerformAdjustPaymentAction) {
-                    this.showAdvanceReceiptAdjust = true;
-                    this.adjustPaymentModal.show();
-                    this.selectedPerformAdjustPaymentAction = false;
+                    if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments && this.advanceReceiptAdjustmentData.adjustments.length) {
+                        this.showAdvanceReceiptAdjust = true;
+                        this.adjustPaymentModal.show();
+                        this.selectedPerformAdjustPaymentAction = false;
+                    } else {
+                        if (response.account && response.date) {
+                            this.getAllAdvanceReceipts(response.account.uniqueName, response.date);
+                        }
+                    }
                 }
             }
         })
@@ -1549,12 +1558,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @param {ReciptResponse} item selected row item data
      * @memberof InvoicePreviewComponent
      */
-    public clickChangeStatusToggle(item: any): void {
-        this.isAccountHaveAdvanceReceipts = false;
-        if (item && item.account && item.account.uniqueName && item.voucherDate) {
-            this.getAllAdvanceReceipts(item.account.uniqueName, item.voucherDate);
-        }
-    }
+    // public clickChangeStatusToggle(item: any): void {
+    //     this.isAccountHaveAdvanceReceipts = false;
+    //     if (item && item.account && item.account.uniqueName && item.voucherDate) {
+    //         this.getAllAdvanceReceipts(item.account.uniqueName, item.voucherDate);
+    //     }
+    // }
 
     /**
      * Call API to get all advance receipts of an invoice
@@ -1569,12 +1578,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 accountUniqueName: customerUniqueName,
                 invoiceDate: voucherDate
             };
+            this.isAccountHaveAdvanceReceipts = false;
             this.salesService.getAllAdvanceReceiptVoucher(requestObject).subscribe(res => {
                 if (res && res.status === 'success') {
                     if (res.body && res.body.length) {
                         this.isAccountHaveAdvanceReceipts = true;
+                        this.showAdvanceReceiptAdjust = true;
+                        this.adjustPaymentModal.show();
+                        this.selectedPerformAdjustPaymentAction = false;
                     } else {
                         this.isAccountHaveAdvanceReceipts = false;
+                        this._toaster.warningToast('There is no advanced receipt for adjustment.');
                     }
                 }
             });

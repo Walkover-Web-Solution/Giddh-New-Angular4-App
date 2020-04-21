@@ -25,7 +25,7 @@ const PaymentGateway = [
 @Component({
     selector: 'app-invoice-setting',
     templateUrl: './invoice.settings.component.html',
-    styleUrls: ['./invoice.setting.component.css'],
+    styleUrls: ['./invoice.setting.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InvoiceSettingComponent implements OnInit, OnDestroy {

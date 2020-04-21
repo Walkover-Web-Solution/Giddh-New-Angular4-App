@@ -56,6 +56,7 @@ export class CompanyActions {
     public static SET_ACTIVE_FINANCIAL_YEAR = 'SET_ACTIVE_FINANCIAL_YEAR';
 
     public static USER_REMOVE_COMPANY_CREATE_SESSION = "USER_REMOVE_COMPANY_CREATE_SESSION";
+    public static SET_IS_TCS_TDS_APPLICABLE = 'SET_IS_TCS_TDS_APPLICABLE';
 
     @Effect()
     public createCompany$: Observable<Action> = this.action$
@@ -588,5 +589,17 @@ export class CompanyActions {
 
     public removeCompanyCreateSession(): CustomActions {
         return { type: CompanyActions.USER_REMOVE_COMPANY_CREATE_SESSION };
+    }
+
+    /**
+     * Returns the action to set whether company country is
+     * eligible for other tax (TCS/TDS)
+     *
+     * @param {string} isTcsTdsApplicable True if the company country has other tax (TCS/TDS)
+     * @returns {CustomActions} Action to set country eligibility for other tax (TCS/TDS)
+     * @memberof CompanyActions
+     */
+    public setCompanyTcsTdsApplicability(isTcsTdsApplicable: boolean): CustomActions {
+        return { type: CompanyActions.SET_IS_TCS_TDS_APPLICABLE, payload: isTcsTdsApplicable };
     }
 }

@@ -1675,6 +1675,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Handle amount input
+     *
+     * @param {TransactionVM} transaction Current transaction
+     * @memberof LedgerComponent
+     */
+    public handleAmountInput(transaction: TransactionVM): void {
+        transaction.amount = Number(transaction.amount);
+        this.needToReCalculate.next(true);
+    }
+
+    /**
      * Handles RCM section visinility based on provided transaction details
      *
      * @private

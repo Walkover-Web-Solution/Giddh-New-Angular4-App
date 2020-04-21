@@ -4,7 +4,7 @@
 }
 
 .tags-table td:nth-child(3) {
-    white-space: inherit;
+    white-space: inherit !important;
 }
 @media (max-width: 768px) {
     .tags-table {

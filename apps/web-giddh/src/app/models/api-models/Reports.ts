@@ -150,6 +150,7 @@ export interface PurchaseRegisteDetailedResponse {
 
 /** Request object model for get all advance receipts API */
 export interface GetAllAdvanceReceiptsRequest {
+    companyUniqueName: string;
     sortBy?: string;
     page?: number;
     sort?: 'asc' | 'desc';
@@ -169,6 +170,7 @@ export interface GetAllAdvanceReceiptsRequest {
 
 /** Request object model for advance receipts summary API */
 export interface AdvanceReceiptSummaryRequest {
+    companyUniqueName: string;
     from?: string;
     to?: string;
 }

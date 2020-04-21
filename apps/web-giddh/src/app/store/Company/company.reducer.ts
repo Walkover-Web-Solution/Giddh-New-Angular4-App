@@ -24,6 +24,7 @@ export interface CurrentCompanyState {
     isTaxUpdatedSuccessfully: boolean;
     isCompanyActionInProgress: boolean;
     isAccountInfoLoading: boolean;
+    isTcsTdsApplicable: boolean;
 }
 
 /**
@@ -55,7 +56,8 @@ const initialState: CurrentCompanyState = {
     isTaxUpdatingInProcess: false,
     isTaxUpdatedSuccessfully: false,
     isCompanyActionInProgress: false,
-    isAccountInfoLoading: false
+    isAccountInfoLoading: false,
+    isTcsTdsApplicable: false
 };
 
 export function CompanyReducer(state: CurrentCompanyState = initialState, action: CustomActions): CurrentCompanyState {
@@ -202,7 +204,11 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                 isAccountInfoLoading: false
             });
         }
-
+        case CompanyActions.SET_IS_TCS_TDS_APPLICABLE:
+            return {
+                ...state,
+                isTcsTdsApplicable: action.payload
+            };
         default:
             return state;
     }

@@ -32,6 +32,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public groupUniqueName: string = '';
     public isLoading: boolean = false;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    public forceClearMonths$: Observable<IForceClear> = observableOf({ status: false });
     public fromMonth: any = '';
     public toMonth: any = '';
     public financialYearSelected: any;
@@ -135,6 +136,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                     this.exportRequest = {};
                     this.groupUniqueName = '';
                     this.forceClear$ = observableOf({ status: true });
+                    this.forceClearMonths$ = observableOf({ status: true });
                     this.fromMonthNames = [];
                     this.toMonthNames = [];
                     this.selectActiveFinancialYear();
@@ -168,6 +170,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      */
     public selectFinancialYear(event): void {
         if (event && event.value) {
+            this.forceClearMonths$ = observableOf({ status: true });
             this.financialYearSelected = event.value;
             this.exportRequest.financialYear = moment(event.value.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
 
