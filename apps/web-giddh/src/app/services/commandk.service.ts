@@ -6,11 +6,11 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { CommandKRequest } from '../models/api-models/Common';
 import { HttpWrapperService } from "./httpWrapper.service";
 import { Observable } from "rxjs";
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 
 @Injectable()
 export class CommandKService {
-    constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 
     }
 

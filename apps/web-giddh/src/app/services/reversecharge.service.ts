@@ -4,14 +4,14 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { REVERSECHARGE_API } from './apiurls/reversecharge.api';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { ReverseChargeReportGetRequest, ReverseChargeReportPostRequest } from '../models/api-models/ReverseCharge';
-import { ErrorHandler } from "./catchManager/catchmanger";
+import { GiddhErrorHandler } from "./catchManager/catchmanger";
 import { HttpWrapperService } from "./httpWrapper.service";
 import { Observable } from "rxjs";
 
 @Injectable()
 export class ReverseChargeService {
-    constructor(private errorHandler: ErrorHandler, private http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
-        
+    constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+
     }
 
     public getReverseChargeReport(companyUniqueName: any, requestGet: ReverseChargeReportGetRequest, requestPost: ReverseChargeReportPostRequest): Observable<BaseResponse<any, any>> {

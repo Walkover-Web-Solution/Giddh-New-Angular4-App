@@ -4,7 +4,7 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { SETTINGS_FINANCIAL_YEAR_API } from './apiurls/settings.financial-year.api';
 import { ActiveFinancialYear } from '../models/api-models/Company';
 import { GeneralService } from './general.service';
@@ -27,7 +27,7 @@ export class SettingsFinancialYearService {
 	private user: UserDetails;
 	private companyUniqueName: string;
 
-	constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
+	constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService,
 		private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 	}
 
@@ -123,7 +123,7 @@ export class SettingsFinancialYearService {
 			return data;
 		}), catchError((e) => this.errorHandler.HandleCatch<IFinancialYearResponse, string>(e)));
     }
-    
+
     /*
 	* Add Future Financial Year
 	* API: 'company/:companyUniqueName/future-financial-year'

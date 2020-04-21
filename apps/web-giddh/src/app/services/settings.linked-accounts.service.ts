@@ -6,7 +6,7 @@
 // import { BaseResponse } from '../models/api-models/BaseResponse';
 // import { BankAccountsResponse } from '../models/api-models/Dashboard';
 // import { SETTINGS_LINKED_ACCOUNTS_API } from './apiurls/settings.linked-accounts.api';
-// import { ErrorHandler } from './catchManager/catchmanger';
+// import { GiddhErrorHandler } from './catchManager/catchmanger';
 // import { UserDetails } from '../models/api-models/loginModels';
 
 // @Injectable()
@@ -14,7 +14,7 @@
 //   private user: UserDetails;
 //   private companyUniqueName: string;
 //   private roleUniqueName: string;
-//   constructor(private errorHandler: ErrorHandler,private _http: HttpWrapperService, private store: Store<AppState>) { }
+//   constructor(private errorHandler: GiddhErrorHandler,private _http: HttpWrapperService, private store: Store<AppState>) { }
 
 //   public GetBankAccounts(): Observable<BaseResponse<BankAccountsResponse[], string>> {
 //     this.store.take(1).subscribe(s => {

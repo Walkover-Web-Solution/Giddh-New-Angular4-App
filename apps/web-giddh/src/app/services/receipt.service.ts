@@ -8,7 +8,7 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { HttpClient } from '@angular/common/http';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { RECEIPT_API } from './apiurls/recipt.api';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { UserDetails } from '../models/api-models/loginModels';
 import { LoaderService } from '../loader/loader.service';
 import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from '../models/api-models/Reports';
@@ -22,7 +22,7 @@ export class ReceiptService implements OnInit {
     private user: UserDetails;
 
     constructor(private _generalService: GeneralService, private _http: HttpWrapperService,
-        private _httpClient: HttpClient, private errorHandler: ErrorHandler,
+        private _httpClient: HttpClient, private errorHandler: GiddhErrorHandler,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs, private _loaderService: LoaderService) {
         this.companyUniqueName = this._generalService.companyUniqueName;
     }

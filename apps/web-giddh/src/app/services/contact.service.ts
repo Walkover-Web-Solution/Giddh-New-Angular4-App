@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { HttpWrapperService } from './httpWrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { PayNowRequest } from '../contact/contact.component';
@@ -16,7 +16,7 @@ import { ContactAdvanceSearchModal } from "../models/api-models/Contact";
 export class ContactService {
 	private companyUniqueName: string;
 
-	constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router,
+	constructor(private errorHandler: GiddhErrorHandler, public _http: HttpWrapperService, public _router: Router,
 		private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 	}
 
