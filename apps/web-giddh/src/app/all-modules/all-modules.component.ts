@@ -8,6 +8,7 @@ import { AppState } from '../store';
 import { GeneralActions } from '../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 import { GeneralService } from '../services/general.service';
+import { VAT_SUPPORTED_COUNTRIES } from '../app.constant';
 
 @Component({
     selector: 'all-modules',
@@ -21,6 +22,7 @@ export class AllModulesComponent implements OnInit {
     @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
 
     public activeCompany: any;
+    public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
 
     constructor(private componentFactoryResolver: ComponentFactoryResolver, private store: Store<AppState>, private generalActions: GeneralActions, private groupWithAccountsAction: GroupWithAccountsAction, private generalService: GeneralService) {
 
