@@ -1,3 +1,5 @@
+@import "../../../../assets/css/color.scss";
+
 .transaction-list .box {
     height: 400px;
     overflow-y: auto;
@@ -91,16 +93,68 @@
 .transaction-list .campanien-list ul {
     height: auto !important;
 }
-/* .subscription-table {
+.subscription-table {
     border: 1px solid $gainsboro;
-} */
+}
 .custom-dropdown .dropdown-toggle {
     background: no-repeat;
     border: 0px;
     font-size: 20px;
     padding: 0px;
-    color: #999999;
+    color: $nobel;
 }
+.associated-companies > ul > li {
+    border-bottom: 1px solid $gainsboro;
+    list-style-type: none;
+}
+.associated-companies > ul > li > a {
+    color: #1C1C1C;
+    font-size: 14px;
+    padding: 12px 20px;
+    display: inline-block;
+}
+.associated-companies > ul > li > a span {
+    margin-right: 20px;
+}
+.associated-companies > ul > li > a:hover {
+    color: $deep-sky-blue;
+}
+.active {
+    color: $light-green;
+}
+.green-dote {
+    width: 9px;
+    height: 9px;
+    display: inline-block;
+    border-radius: 40px;
+    background-color: $light-green;
+}
+.basic > tbody > tr td:first-child, .basic > thead > tr th:first-child {
+    border-left: 0px solid #ddd !important;
+}
+.basic > tbody > tr td:last-child, .basic > thead > tr th:last-child {
+    border-right: 0px solid #ddd !important;
+}
+.table-subscription {
+    border-right: 1px solid $gainsboro;
+    border-left: 1px solid $gainsboro;
+    border-bottom: 1px solid $gainsboro;
+    max-height: 345px;
+    overflow-y: auto;
+}
+.left-div {
+    border-left: 1px solid $gainsboro;
+    padding-left: 0px;
+}
+.giddh-table tbody {
+    tr:last-child {
+        td {
+            border-bottom: 0px solid $gainsboro !important;
+        }
+    }
+}
+
+
 @media only screen and (max-width: 767px) {
     .transection-popup {
         position: relative;

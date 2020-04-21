@@ -35,14 +35,15 @@
             <div class="col-md-9 col-sm-6 text-right xs-left">
                 <button type="button" *ngIf="seletedUserPlans?.additionalCharges >0" (click)="goToBillingDetails();"
                     class="btn btn-pink mt-2">Pay Now</button>
-                <button type="button" (click)="isPlanShow=true" class="btn btn-green">Buy New Plan</button>
+                <button type="button" (click)="isPlanShow=true" class="btn btn-green mr-0">Buy New Plan</button>
             </div>
         </div>
 
         <div class="box">
         <div class="clearfix mrT2">
-            <div class="row">
+            <div class="row d-flex">
                 <div class="col-md-7">
+                    <div class="pr-2">
                     <div class="clearfix">
                         <div class="row">
                             <div class="col-md-6">
@@ -72,7 +73,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row mb-4">
                         <div class="col-md-6">
                             <div class="table-responsive">
                                 <table class="table table-no-border mb-0">
@@ -115,55 +116,136 @@
                     </div>
 
 
-                <h2>Bonsai (Transactions Statement)</h2>
+                <h2 class="section_head pb-0">Bonsai (Transactions Statement)</h2>
 
-                <div class="table-responsive">
-                    <table class="table basic mt-2 giddh-table">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Cunsumptions (previous+current)</th>
-                                <th>Balance</th>
-                                <th>Additional Charges</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Apr</td>
-                                <td>5,000</td>
-                                <td>35,000</td>
-                                <td>0</td>
-                            </tr>
+                <div class="table-subscription mt-1">
+                    <div class="table-responsive">
+                        <table class="table basic giddh-table onMobileView mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Cunsumptions <span class="text-gray">(previous+current)</span></th>
+                                    <th>Balance</th>
+                                    <th class="text-right">Additional Charges</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Apr</td>
+                                    <td>5,000</td>
+                                    <td>35,000</td>
+                                    <td class="text-right">0</td>
+                                </tr>
 
-                            <tr>
-                                <td>Apr</td>
-                                <td>5,000</td>
-                                <td>35,000</td>
-                                <td>0</td>
-                            </tr>
+                                <tr>
+                                    <td>Apr</td>
+                                    <td>5,000</td>
+                                    <td>35,000</td>
+                                    <td class="text-right">0</td>
+                                </tr>
 
-                            <tr>
-                                <td>Apr</td>
-                                <td>5,000</td>
-                                <td>35,000</td>
-                                <td>0</td>
-                            </tr>
+                                <tr>
+                                    <td>Apr</td>
+                                    <td>5,000</td>
+                                    <td>35,000</td>
+                                    <td class="text-right">0</td>
+                                </tr>
 
-                            <tr>
-                                <td>Apr</td>
-                                <td>5,000</td>
-                                <td>35,000</td>
-                                <td>0</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                <tr>
+                                    <td>Apr</td>
+                                    <td>5,000</td>
+                                    <td>35,000</td>
+                                    <td class="text-right">0</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Apr</td>
+                                    <td>5,000</td>
+                                    <td>35,000</td>
+                                    <td class="text-right">0</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Apr</td>
+                                    <td>5,000</td>
+                                    <td>35,000</td>
+                                    <td class="text-right">0</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Apr</td>
+                                    <td>5,000</td>
+                                    <td>35,000</td>
+                                    <td class="text-right">0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+
+
+                <p><small>*Additional charges on transactions above 40,000 @ 0.10 Rs. per transaction * </small></p>
+                <p><small>Each month includes previous month's transactions</small></p>
 
                     <div class="clearfix mb-2">
                         <!-- comment by sadik <button type="button" class="btn btn-primary" (click)="isPlanShow=true">Change Plan</button> -->
                         <!-- <button type="button" (click)="isPlanShow=true" class="btn btn-pink">Payment Log</button> -->
                     </div>
                 </div>
+            </div>
+
+
+                <div class="col-md-5 left-div">
+                    <div class="main-associated-companies">
+
+                  <div class="d-flex justify-content-between pl-2">
+                    <h2 class="section_head pb-0">Associated Companies</h2>
+                    <div class="active">
+                       <span class="green-dote"> </span> Active
+                    </div>
+                  </div>
+
+                  <div class="clearfix">
+                    <div class="mt-1 mb-1 pl-2">
+                        <input type="search" class="form-control" [(ngModel)]="srchString"
+                            (ngModelChange)="filterCompanyList($event)" placeholder="Search Company here">
+                    </div>
+                    <div class="associated-companies" *ngIf="subscriptions">
+                        <ul>
+                            <li *ngFor="let company of selectedPlanCompanies"><a href="javascript:void(0)"><span>{{company.transactions}}</span>{{company.name}}</a>
+                            </li>
+
+                            <li *ngFor="let associatedCompany of associatedCompanies; let i = index"><a href="javascript:void(0)"><span>{{i+1}}</span>{{associatedCompany.companyName}}</a>
+                                <div class="btn-group d-inline-block custom-dropdown pt-05 ml-1 pull-right mt-05" dropdown placement="bottom right">
+                                    <button id="button-alignment" dropdownToggle type="button" class="dropdown-toggle"
+                                        aria-controls="dropdown-alignment">
+                                        <span class="icon-dots-three-vertical"></span>
+                                    </button>
+                                    <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                                        aria-labelledby="button-alignment">
+                                        <li role="menuitem">
+                                            <a class="dropdown-item" href="javascript:void(0)"
+                                                (click)="openModal(template, company)">Delete</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                    <div class="pl-2 mt-3 mb-2">
+                        <button class="btn btn-primary" type="button">Buy Transactions</button>
+                    </div>
+
+
+                  </div>
+
+                </div>
+
+                </div>
+
+
             </div>
         </div>
 

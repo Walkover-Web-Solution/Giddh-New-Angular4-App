@@ -728,6 +728,9 @@ input {
 .ml-0 {
     margin-left: 0px;
 }
+.mr-0 {
+    margin-left: 0px;
+}
 
 .ml-1 {
     margin-left: 10px;
@@ -1573,6 +1576,9 @@ modal-container.modal {
 .color-primary {
     color: $deep-sky-blue;
 }
+.justify-content-between {
+    justify-content: space-between;
+}
 
 /* my css end */
 
@@ -2304,7 +2310,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-success {
-    background: #0cb1af; 
+    background: #0cb1af;
     color: $white;
     border: 1px solid #0cb1af;
 }
@@ -9307,7 +9313,7 @@ input.checkbox-custom[type="checkbox"] {
         white-space: nowrap;
         padding-left: 15px !important;
     }
-   
+
     .setting-page .nav > li > a,
     .custom-tabs .nav.nav-tabs > li a {
         padding-top: 7px;

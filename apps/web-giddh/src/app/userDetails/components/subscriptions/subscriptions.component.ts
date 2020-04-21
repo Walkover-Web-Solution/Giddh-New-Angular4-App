@@ -13,7 +13,7 @@ import { CompanyResponse } from '../../../models/api-models/Company';
 
 @Component({
     selector: 'subscriptions',
-    styleUrls: ['./subscriptions.component.css'],
+    styleUrls: ['./subscriptions.component.scss'],
     templateUrl: './subscriptions.component.html'
 })
 
@@ -36,10 +36,20 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     public activeCompany: any = {};
     public currentCompanyPlan: any = '';
 
+    associatedCompanies = [
+        {companyName: 'ABC Limited'},
+        {companyName: 'ABC Limited'},
+        {companyName: 'ABC Limited'},
+        {companyName: 'ABC Limited'},
+        {companyName: 'ABC Limited'},
+        {companyName: 'ABC Limited'},
+        {companyName: 'ABC Limited'},
+    ];
+
     constructor(private store: Store<AppState>,
         private _subscriptionsActions: SubscriptionsActions,
         private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService) {
-        
+
         this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
         this.subscriptions$ = this.store.pipe(select(s => s.subscriptions.subscriptions), takeUntil(this.destroyed$));
         this.companies$ = this.store.select(cmp => cmp.session.companies).pipe(takeUntil(this.destroyed$));
@@ -55,7 +65,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
                 });
             }
         });
-        
+
         this.isPlanShow = false;
         this.subscriptionService.getSubScribedCompanies().subscribe((res) => {
             this.isLoading = false;
