@@ -143,7 +143,7 @@
                             </div>
                         </th>
 
-                        <th class=" text-right ">
+                        <th *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal" class=" text-right ">
                             <div class="d-flex justify-content-end">
                                 <div class=" text-right ">Sales</div>
                                 <div class="icon-pointer">
@@ -158,7 +158,7 @@
                             </div>
                         </th>
 
-                        <th class=" text-right ">
+                        <th *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal" class=" text-right ">
                             <div class="d-flex justify-content-end">
                                 <div class=" text-right  ">Return</div>
                                 <div class="icon-pointer">
@@ -188,7 +188,7 @@
                             </div>
                         </th>
 
-                        <th *ngIf="showFieldFilter.discount" class=" text-right ">
+                        <th *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal" class=" text-right ">
                             <div class="d-flex justify-content-end">
                                 <div class=" text-right  ">Discount</div>
                                 <div class="icon-pointer">
@@ -203,7 +203,7 @@
                             </div>
                         </th>
 
-                        <th *ngIf="showFieldFilter.tax" class=" text-right ">
+                        <th *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async)?.taxTotal" class=" text-right ">
                             <div class="d-flex justify-content-end">
                                 <div class=" text-right ">Tax</div>
                                 <div class="icon-pointer">
@@ -258,7 +258,7 @@
                                 item.voucherNumber
                             }}</a>
                         </td>
-                        <td class="text-right ">
+                        <td *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal" class="text-right ">
                             {{ item.creditTotal | giddhCurrency }}
                             <ng-container *ngIf="expand">
                                 <ng-container *ngFor="let stock of item.stocks">
@@ -266,7 +266,7 @@
                                 </ng-container>
                             </ng-container>
                         </td>
-                        <td class="text-right ">
+                        <td *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal" class="text-right ">
                             {{ item.debitTotal | giddhCurrency }}
                         </td>
                         <td class="text-right " *ngIf="showFieldFilter.qtyRate">
@@ -288,10 +288,10 @@
                                 </ng-container>
                             </ng-container>
                         </td>
-                        <td *ngIf="showFieldFilter.discount" class="text-right ">
+                        <td *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal" class="text-right ">
                             {{ item.discountTotal | giddhCurrency }}
                         </td>
-                        <td *ngIf="showFieldFilter.tax" class="text-right ">
+                        <td *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async)?.taxTotal" class="text-right ">
                             {{ item.taxTotal | giddhCurrency }}
                         </td>
                         <td class="text-right ">
@@ -327,7 +327,7 @@
         </div>
         <div class="col-xs-10 ">
             <div *ngIf="SalesRegisteDetailedItems" class="clearfix main-sale-register-box ">
-                <div class="sale-register-box text-right">
+                <div *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal" class="sale-register-box text-right">
                     <p>Sales</p>
                     <h4>
                         {{
@@ -336,7 +336,7 @@
                         }}
                     </h4>
                 </div>
-                <div class="sale-register-box text-right">
+                <div *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal" class="sale-register-box text-right">
                     <p>Return</p>
                     <h4>
                         {{
@@ -345,7 +345,7 @@
                         }}
                     </h4>
                 </div>
-                <div class="sale-register-box text-right">
+                <div class="sale-register-box text-right" *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal">
                     <p>Discount</p>
                     <h4>
                         {{
@@ -354,7 +354,7 @@
                         }}
                     </h4>
                 </div>
-                <div class="sale-register-box text-right">
+                <div class="sale-register-box text-right" *ngIf="(salesRegisteDetailedResponse$ | async).tcsTotal">
                     <p>TCS</p>
                     <h4>
                         {{
@@ -363,7 +363,7 @@
                         }}
                     </h4>
                 </div>
-                <div class="sale-register-box text-right">
+                <div class="sale-register-box text-right" *ngIf="(salesRegisteDetailedResponse$ | async).tdsTotal">
                     <p>TDS</p>
                     <h4>
                         {{
@@ -372,7 +372,7 @@
                         }}
                     </h4>
                 </div>
-                <div class="sale-register-box text-right">
+                <div class="sale-register-box text-right" *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async).taxTotal" >
                     <p>Tax</p>
                     <h4>
                         {{
