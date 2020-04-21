@@ -337,7 +337,7 @@
                             <span class="icon-dashboard"></span>
                             <span class="label">{{menu.name}}</span>
                         </a>
-                        <a *ngIf="menu.uniqueName == '/pages/vat-report' && activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode != 'IN'" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage && selectedPage.toLowerCase() == menu.name.toLowerCase()}"
+                        <a *ngIf="menu.uniqueName == '/pages/vat-report' && activeCompany && vatSupportedCountries?.includes(activeCompany.countryV2.alpha2CountryCode)" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage && selectedPage.toLowerCase() == menu.name.toLowerCase()}"
                             (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
                             <span class="icon-dashboard"></span>
                             <span class="label">{{menu.name}}</span>
@@ -347,7 +347,13 @@
                             <span class="label">{{menu.name}}</span>
                         </a>
                     </li>
-                    <li id="other" *ngIf="!isMobileSite" (mouseenter)="allModulesPopover.show()" (mouseleave)="handleAllModulesLeaveEvent($event)">
+
+                    <!-- <li class="other">
+                        <a [routerLink]="['/pages/all-modules']">All Modules
+                        </a>
+                    </li> -->
+
+                    <li class="other" *ngIf="!isMobileSite" (mouseenter)="allModulesPopover.show()" (mouseleave)="handleAllModulesLeaveEvent($event)">
                         <a #allModulesPopover="bs-popover" [popover]="allModules" placement="right" containerClass="all-modules-popover"
                             (mouseenter)="allModulesPopover.show()" container="body">All
                             Modules <i *ngIf="!isMobileSite" tooltip="All Modules" placement="bottom" container="body"
@@ -422,7 +428,7 @@
                                                 *ngIf="activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode == 'IN'">GSTR</a>
                                         </li>
                                         <li><a (click)="analyzeOtherMenus('vat-report')"
-                                                *ngIf="activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode != 'IN'">Vat
+                                                *ngIf="activeCompany && activeCompany.countryV2 && vatSupportedCountries?.includes(activeCompany.countryV2.alpha2CountryCode)">Vat
                                                 Report</a></li>
                                         <li><a (click)="analyzeOtherMenus('home')">Dashboard</a></li>
                                         <li><a (click)="analyzeOtherMenus('reports/reports-dashboard')">Reports</a></li>
@@ -450,7 +456,7 @@
 
 </div>
 
-<header class="clearfix header-container desktopHeader " [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen }">
+<header class="clearfix header-container desktop-header " [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen , 'ledger-page': isLedgerAccSelected }">
     <nav class="navbar ">
         <div class="container-fluid pdT1 pdB1">
             <div class="navbar_header">
@@ -647,7 +653,7 @@
             </div>
 
             <div class="modal-body custom-body mrB3" [style.padding-top.px]="0" [style.padding-bottom.px]="0">
-                <div class="" id="settingTab">
+                <div class="" id="setting-tab">
                     <tabset #supportTab>
                         <tab heading="Arrange a Demo">
                             <div class="argdemo mrT2">
@@ -871,7 +877,7 @@
             <ul>
                 <h6>Downloads</h6>
                 <li>
-                    <a href="https://play.google.com/store/apps/details?id=com.giddh.app" target="_blank" title="android app">
+                    <a href="https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en" target="_blank" title="android app">
                         <i class="fa fa-android"></i> Android</a>
                 </li>
                 <li>

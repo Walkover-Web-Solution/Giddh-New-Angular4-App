@@ -4,14 +4,14 @@ import { HttpWrapperService } from '../services/httpWrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { Observable } from 'rxjs';
-import { ErrorHandler } from '../services/catchManager/catchmanger';
+import { GiddhErrorHandler } from '../services/catchManager/catchmanger';
 
 @Injectable()
 export class CreateHttpService {
 	constructor(
 		public _http: HttpWrapperService,
 		@Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
-		private errorHandler: ErrorHandler) {
+		private errorHandler: GiddhErrorHandler) {
 		//
 	}
 

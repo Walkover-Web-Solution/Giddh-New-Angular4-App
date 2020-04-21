@@ -49,7 +49,7 @@ section.reciptNote {
 button.btn.btn-filter {
     background: #e4e4e4;
     border: 1px solid #e4e4e4;
-    font-size: 16px;
+    font-size: 14px;
     color: #1a237e;
     display: -webkit-inline-box;
     display: inline-flex;
@@ -108,10 +108,10 @@ tfoot td .tableSec.form-group {
     padding-bottom: 60px;
 }
 .multiple-products-wrapper  table thead{
-    border-top: 1px solid #d9d9d9;
+    border-top: 1px solid $gainsboro;
 }
 .multiple-products-wrapper  table tbody {
-    border-bottom: 1px solid #d9d9d9;
+    border-bottom: 1px solid $gainsboro;
 }
 #actionPane {
     background-color: #ccc;
@@ -198,14 +198,14 @@ tfoot td .tableSec.form-group {
     display: block;
     height: 36px;
     width: 1px;
-    background-color: #d9d9d9;
+    background-color: $gainsboro;
     left: 37px !important;
     z-index: 100;
     top: 0;
 }
 .branch-transfer-report .input-group input.form-control {
     padding-left: 35px !important;
-    border-color: #d1d1d1;
+    border-color: $gainsboro;
     background-image: url("../../../../assets/images/calender.svg") !important;
     background-size: 17px !important;
     background-position: 9px 8px !important;
@@ -216,7 +216,7 @@ tfoot td .tableSec.form-group {
     cursor: default;
 }
 .branch-transfer-report .input-group input.form-control:focus {
-    border-color: #d1d1d1 !important;
+    border-color: $gainsboro !important;
 }
 .branch-transfer-report .btn-group.show {
     display: inline !important;
@@ -225,10 +225,10 @@ tfoot td .tableSec.form-group {
     color: #333;
 }
 .branch-transfer-report .basic > thead > tr > th {
-    border-top: 1px solid #d9d9d9 !important;
+    border-top: 1px solid $gainsboro !important;
 }
 .branch-transfer-report tbody {
-    border-bottom: 1px solid #d9d9d9 !important;
+    border-bottom: 1px solid $gainsboro !important;
 }
 .branch-transfer-report ul#dropdown-basic {
     right: 0 !important;
@@ -287,9 +287,9 @@ tfoot td .tableSec.form-group {
     align-items: center;
     font-size: 18px;
     margin-left: 10px;
-    border: 1px solid $inputBorderColor;
+    border: 1px solid $gainsboro;
     border-radius: 2px;
-    color: $dark-blue00;
+    color: $midnight-express;
     background: #fff;
 }
 .advance-icon:hover {

@@ -62,7 +62,9 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
 import { userLoginStateEnum } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
-import { CountryRequest, CurrentPage } from '../../models/api-models/Common';
+import { CountryRequest, CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
+import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { CommonService } from '../../services/common.service';
 
 @Component({
     selector: 'app-header',
@@ -229,11 +231,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isCalendlyModelActivate: boolean = false;
     public companyInitials: any = '';
     public forceOpenNavigation: boolean = false;
+    /** VAT supported countries to show the Vat Report section in all modules */
+    public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+
     /**
      *
      */
     // tslint:disable-next-line:no-empty
     constructor(
+        private commonService: CommonService,
         private loginAction: LoginActions,
         private socialAuthService: AuthService,
         private store: Store<AppState>,
@@ -252,7 +258,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private changeDetection: ChangeDetectorRef,
         private _windowRef: WindowRef,
         private _breakpointObserver: BreakpointObserver,
-        private _generalService: GeneralService,
+        private generalService: GeneralService,
         private commonActions: CommonActions
     ) {
         this._windowRef.nativeWindow.superformIds = ['Jkvq'];
@@ -330,7 +336,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.dispatch(this.companyActions.setTotalNumberofCompanies(this.companyList.length));
             let selectedCmp = companies.find(cmp => {
                 if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === this._generalService.companyUniqueName;
+                    return cmp.uniqueName === this.generalService.companyUniqueName;
                 } else {
                     return false;
                 }
@@ -392,13 +398,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.createNewCompanyUser = res;
             }
         });
-        this._generalService.isMobileSite.subscribe(s => {
+        this.generalService.isMobileSite.subscribe(s => {
             this.isMobileSite = s;
             this.menuItemsFromIndexDB = DEFAULT_MENUS;
             this.accountItemsFromIndexDB = DEFAULT_AC;
         });
         this.totalNumberOfcompanies$ = this.store.select(state => state.session.totalNumberOfcompanies).pipe(takeUntil(this.destroyed$));
-        this._generalService.invokeEvent.subscribe(value => {
+        this.generalService.invokeEvent.subscribe(value => {
             if (value === 'openschedulemodal') {
                 this.openScheduleCalendlyModel();
                 // this.openScheduleModal();
@@ -410,7 +416,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
-        this._generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
+        this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
             if (value === 'logoutCordova') {
                 this.zone.run(() => {
                     this.router.navigate(['login']);
@@ -418,7 +424,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 });
             }
         });
-
         this.sideBarStateChange(true);
         this.getElectronAppVersion();
         this.store.dispatch(this.companyActions.GetApplicationDate());
@@ -586,7 +591,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         // TODO : It is commented due to we have implement calendly and its under discussion to remove
 
-        // this._generalService.talkToSalesModal.subscribe(a => {
+        // this.generalService.talkToSalesModal.subscribe(a => {
         //     if (a) {
         //         this.openScheduleCalendlyModel();
         //     }
@@ -618,7 +623,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         // if invalid menu item clicked then navigate to default route and remove invalid entry from db
-        this._generalService.invalidMenuClicked.subscribe(data => {
+        this.generalService.invalidMenuClicked.subscribe(data => {
             if (data) {
                 this.onItemSelected(data.next, data);
             }
@@ -666,6 +671,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         this.selectedPlanStatus = res.subscription.status;
                     }
                     this.activeCompany = res;
+                    this.checkIfCompanyTcsTdsApplicable();
                 }
             });
         }
@@ -1060,6 +1066,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (this.companyDetailsDropDownWeb) {
             this.companyDetailsDropDownWeb.hide();
         }
+        if(event){
+            document.querySelector('body').classList.add('hide-scroll-body')
+        } else {
+            document.querySelector('body').classList.remove('hide-scroll-body')
+        }
         this.menuStateChange.emit(event);
     }
 
@@ -1230,7 +1241,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     // public closeModal() {
     //     this.talkSalesModal.hide();
-    //     this._generalService.talkToSalesModal.next(false);
+    //     this.generalService.talkToSalesModal.next(false);
     // }
 
     public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
@@ -1468,7 +1479,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public removeCompanySessionData() {
-        this._generalService.createNewCompany = null;
+        this.generalService.createNewCompany = null;
         this.store.dispatch(this.commonActions.resetCountry());
         this.store.dispatch(this.companyActions.removeCompanyCreateSession());
     }
@@ -1527,5 +1538,29 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public openScheduleCalendlyModel() {
         this.store.dispatch(this._generalActions.isOpenCalendlyModel(true));
+    }
+
+    /**
+     * Fetches whether company country has other taxes (TCS/TDS)
+     *
+     * @private
+     * @memberof HeaderComponent
+     */
+    private checkIfCompanyTcsTdsApplicable(): void {
+        const request: OnboardingFormRequest = {
+            country: (this.activeCompany && this.activeCompany.countryV2) ? this.activeCompany.countryV2.alpha2CountryCode : '',
+            formName: 'otherTaxes'
+        };
+        this.commonService.getOnboardingForm(request).subscribe((response) => {
+            if (response && response.status === 'success' && response.body) {
+                this.store.dispatch(this.companyActions.setCompanyTcsTdsApplicability(response.body.isTcsTdsApplicable))
+            } else {
+                // Set to false in error scenarios
+                this.store.dispatch(this.companyActions.setCompanyTcsTdsApplicability(false));
+            }
+        }, () => {
+            // Set to false in error scenarios
+            this.store.dispatch(this.companyActions.setCompanyTcsTdsApplicability(false));
+        });
     }
 }

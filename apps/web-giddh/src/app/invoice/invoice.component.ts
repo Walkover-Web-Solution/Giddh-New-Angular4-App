@@ -12,11 +12,13 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { CurrentPage } from '../models/api-models/Common';
 import { GeneralActions } from '../actions/general/general.actions';
 @Component({
-    templateUrl: './invoice.component.html'
+    templateUrl: './invoice.component.html',
+    styleUrls:[`./invoice.component.scss`]
 })
 export class InvoiceComponent implements OnInit, OnDestroy {
     @ViewChild('staticTabs') public staticTabs: TabsetComponent;
-
+    
+    public tabsDropdown:boolean = false;
     public selectedVoucherType: VoucherTypeEnum;
     public activeTab: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

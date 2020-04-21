@@ -22,8 +22,8 @@ export class HomeActions {
         .ofType(HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_ACTIVE_YEAR).pipe(
             switchMap((action: CustomActions) => {
                 return observableZip(
-                    this._dashboardService.GetClosingBalance('operatingcost', action.payload.fromDate, action.payload.toDate, action.payload.refresh),
-                    this._dashboardService.GetClosingBalance('indirectexpenses', action.payload.fromDate, action.payload.toDate, action.payload.refresh)
+                    this._dashboardService.getClosingBalance('operatingcost', action.payload.fromDate, action.payload.toDate, action.payload.refresh),
+                    this._dashboardService.getClosingBalance('indirectexpenses', action.payload.fromDate, action.payload.toDate, action.payload.refresh)
                 );
             }), map((res) => {
                 if (res[0].status === 'success' && res[1].status === 'success') {
@@ -47,8 +47,8 @@ export class HomeActions {
         .ofType(HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_LAST_YEAR).pipe(
             switchMap((action: CustomActions) => {
                 return observableZip(
-                    this._dashboardService.GetClosingBalance('operatingcost', action.payload.fromDate, action.payload.toDate, action.payload.refresh),
-                    this._dashboardService.GetClosingBalance('indirectexpenses', action.payload.fromDate, action.payload.toDate, action.payload.refresh)
+                    this._dashboardService.getClosingBalance('operatingcost', action.payload.fromDate, action.payload.toDate, action.payload.refresh),
+                    this._dashboardService.getClosingBalance('indirectexpenses', action.payload.fromDate, action.payload.toDate, action.payload.refresh)
                 );
             }), map((res) => {
                 if (res[0].status === 'success' && res[1].status === 'success') {
@@ -71,8 +71,8 @@ export class HomeActions {
         .ofType(HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_ACTIVE_YEAR).pipe(
             switchMap((action: CustomActions) => {
                 return observableZip(
-                    this._dashboardService.GetClosingBalance('revenuefromoperations', action.payload.fromDate, action.payload.toDate, action.payload.refresh),
-                    this._dashboardService.GetClosingBalance('otherincome', action.payload.fromDate, action.payload.toDate, action.payload.refresh)
+                    this._dashboardService.getClosingBalance('revenuefromoperations', action.payload.fromDate, action.payload.toDate, action.payload.refresh),
+                    this._dashboardService.getClosingBalance('otherincome', action.payload.fromDate, action.payload.toDate, action.payload.refresh)
                 );
             }), map((res) => {
                 if (res[0].status === 'success' && res[1].status === 'success') {
@@ -96,8 +96,8 @@ export class HomeActions {
         .ofType(HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_LAST_YEAR).pipe(
             switchMap((action: CustomActions) => {
                 return observableZip(
-                    this._dashboardService.GetClosingBalance('revenuefromoperations', action.payload.fromDate, action.payload.toDate, action.payload.refresh),
-                    this._dashboardService.GetClosingBalance('otherincome', action.payload.fromDate, action.payload.toDate, action.payload.refresh)
+                    this._dashboardService.getClosingBalance('revenuefromoperations', action.payload.fromDate, action.payload.toDate, action.payload.refresh),
+                    this._dashboardService.getClosingBalance('otherincome', action.payload.fromDate, action.payload.toDate, action.payload.refresh)
                 );
             }), map((res) => {
                 if (res[0].status === 'success' && res[1].status === 'success') {
@@ -404,8 +404,8 @@ export class HomeActions {
         .ofType(HOME.TOTAL_OVERDUES.GET_TOTALOVER_DUES).pipe(
             switchMap((action: CustomActions) => {
                 return observableZip(
-                    this._dashboardService.GetClosingBalance('sundrydebtors', action.payload.fromDate, action.payload.toDate, action.payload.refresh),
-                    this._dashboardService.GetClosingBalance('sundrycreditors', action.payload.fromDate, action.payload.toDate, action.payload.refresh)
+                    this._dashboardService.getClosingBalance('sundrydebtors', action.payload.fromDate, action.payload.toDate, action.payload.refresh),
+                    this._dashboardService.getClosingBalance('sundrycreditors', action.payload.fromDate, action.payload.toDate, action.payload.refresh)
                 );
             }), map((res) => {
                 if (res[0].status === 'success' && res[1].status === 'success') {

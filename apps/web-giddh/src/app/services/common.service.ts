@@ -6,7 +6,7 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { UserDetails } from "../models/api-models/loginModels";
 import { CountryRequest, CountryResponse, CurrencyResponse, CallingCodesResponse, OnboardingFormRequest, OnboardingFormResponse } from '../models/api-models/Common';
-import { ErrorHandler } from "./catchManager/catchmanger";
+import { GiddhErrorHandler } from "./catchManager/catchmanger";
 import { HttpWrapperService } from "./httpWrapper.service";
 import { Observable } from "rxjs";
 
@@ -14,7 +14,7 @@ import { Observable } from "rxjs";
 export class CommonService {
     private user: UserDetails;
 
-    constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService, private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this.user = this._generalService.user;
     }
 
@@ -46,7 +46,7 @@ export class CommonService {
             }));
     }
 
-    public GetOnboardingForm(request: OnboardingFormRequest): Observable<BaseResponse<any, any>> {
+    public getOnboardingForm(request: OnboardingFormRequest): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.FORM;
         url = url.replace(':formName', request.formName);
         url = url.replace(':country', request.country);

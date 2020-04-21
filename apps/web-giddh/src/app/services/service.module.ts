@@ -1,7 +1,7 @@
 import { MagicLinkService } from "./magic-link.service";
 import { PermissionDataService } from "../permissions/permission-data.service";
 import { LogsService } from "./logs.service";
-import { ErrorHandler } from "./catchManager/catchmanger";
+import { GiddhErrorHandler } from "./catchManager/catchmanger";
 import { ModuleWithProviders, NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
@@ -83,7 +83,7 @@ export class ServiceModule {
                 PermissionDataService,
                 LoaderService,
                 StorageService,
-                ErrorHandler,
+                GiddhErrorHandler,
                 UserAgent,
                 HttpWrapperService,
                 AuthenticationService,

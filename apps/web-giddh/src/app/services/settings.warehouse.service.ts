@@ -4,7 +4,7 @@ import { catchError, map } from 'rxjs/operators';
 
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { WAREHOUSE_API } from '../settings/warehouse/constants/warehouse.constant';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { HttpWrapperService } from './httpWrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
@@ -24,7 +24,7 @@ export class SettingsWarehouseService {
     /** @ignore */
     constructor(
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
-        private errorHandler: ErrorHandler,
+        private errorHandler: GiddhErrorHandler,
         private generalService: GeneralService,
         private http: HttpWrapperService,
     ) { }

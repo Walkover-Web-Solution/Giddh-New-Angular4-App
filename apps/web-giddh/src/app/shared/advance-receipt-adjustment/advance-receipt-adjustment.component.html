@@ -7,21 +7,21 @@
 </div>
 <div class="modal-body font-14">
     <div class="row">
-        <div class="col-md-11">
+        <div class="col-md-12">
             <span class="text-light" *ngIf="isUpdateMode">
-        The adjusted amount of the linked invoice's is more than this receipt; update them first.
-    </span>
+                The adjusted amount of the linked invoice's is more than this receipt; update them first.
+            </span>
             <div class="row mb-2">
-                <div class="col-md-9 mrT">
+                <div class="col-md-8 mrT">
                     <div class="form-group">
                         <label>Customer Name </label>
                         <input type="text" class="form-control" name="customerName" [(ngModel)]="adjustPayment.customerName" readonly disabled>
                     </div>
                 </div>
-                <div class="col-md-3 text-right font-14 pt-2 xs-left" *ngIf="!isUpdateMode">
+                <div class="col-md-4 text-right font-14 pt-2 xs-left" *ngIf="exceedDueAmount>0">
                     <p>Invoice Total: <i class="font-10"></i>{{invoiceFormDetails.accountDetails.currencySymbol}}{{adjustPayment?.grandTotal | giddhCurrency}}
                     </p>
-                    <p>Due <span class="text-light">(Post Adj):</span> <i class="font-10"></i>{{invoiceFormDetails.accountDetails.currencySymbol}}{{ adjustPayment.grandTotal - adjustPayment.totalAdjustedAmount - depositAmount | giddhCurrency}}
+                    <p>Due <span class="text-light">(Post Adj):</span> <span class="nowrap"><i class="font-10"></i> {{invoiceFormDetails.accountDetails.currencySymbol}} {{ getBalanceDue() | giddhCurrency}}</span>
                     </p>
                 </div>
             </div>
@@ -31,8 +31,8 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <label for="name">Adjustment Voucher<span class="text-danger">*</span></label>
-                                <div [class.error-box]="entry.uniqueName === ''">
-                                    <sh-select class="text-left dropdown-arrow" name="uniqueName_{{entryIdx}}" [defaultValue]="entry.voucherNumber" (click)="clickSelectVoucher(entryIdx);" required [placeholder]="'Select Voucher'" [(ngModel)]="entry.uniqueName" (selected)="selectVoucher($event, entry, entryIdx);"
+                                <div class="select-error select-caret relative" [class.error-box]="entry.uniqueName === '' && adjustAdvancePaymentForm?.form.controls['voucherName'+entryIdx]?.touched">
+                                    <sh-select class="text-left" name="voucherName{{entryIdx}}" [defaultValue]="entry.voucherNumber" (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm);" required [placeholder]="'Select Voucher'" [(ngModel)]="entry.uniqueName" (selected)="selectVoucher($event, entry, entryIdx);"
                                         [options]="adjustVoucherOptions" [multiple]="false">
                                         <ng-template #optionTemplate let-option="option">
                                             <a href="javascript:void(0)" class="list-item">
@@ -52,15 +52,14 @@
 
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label>Amount<span class="text-danger">* </span> <span
-                                class="text-light">
-                                (Inclusive Tax){{invoiceFormDetails.accountDetails.currencySymbol}}</span></label>
+                                <label>Amount<span class="text-danger">* </span> <span class="text-light">
+                                        (Inclusive Tax)</span></label>
                                 <!-- decimalDigitsDirective -->
-                                <input [class.error-box]="entry.dueAmount.amountForAccount === 0" required decimalDigitsDirective type="text" class="form-control" placeholder="Enter Amount" name="dueAmount.amountForAccount_{{entryIdx}}" [(ngModel)]="entry.dueAmount.amountForAccount"
-                                    (ngModelChange)="calculateTax(entry, entryIdx )" [prefix]="currencySymbol" [mask]="inputMaskFormat">
+                                <input [class.error-box]="entry.dueAmount.amountForAccount === 0 && adjustAdvancePaymentForm?.form.controls['amount'+entryIdx]?.touched" required decimalDigitsDirective type="text" class="form-control" placeholder="Enter Amount" name="amount{{entryIdx}}"
+                                    [(ngModel)]="entry.dueAmount.amountForAccount" (ngModelChange)="calculateTax(entry, entryIdx);" [prefix]="currencySymbol" [mask]="inputMaskFormat">
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             <div class="form-group">
                                 <label for="name_{{entryIdx}}">Tax</label>
                                 <input id="name_{{entryIdx}}" type="text" class="form-control" name="calculatedTaxAmount_{{entryIdx}}" decimalDigitsDirective [(ngModel)]="entry.calculatedTaxAmount" placeholder="00.00" disabled>
@@ -73,7 +72,7 @@
                 </ng-container>
 
                 <p><a href="javascript:void(0)" (click)="addNewBlankAdjustVoucherRow()" class="font-14"><span
-                    class="font-16">+</span> Add New Line</a></p>
+                            class="font-16">+</span> Add New Line</a></p>
 
                 <div class="clearfix">
                     <div class="clearfix mb-1 mt-2 row">
@@ -83,16 +82,18 @@
 
                         <div class="col-md-8 col-sm-8 col-xs-7">
                             <span class="pd0 mr-2 d-inline-block">
-                        <input class="radio-custom cp ml0" type="radio" id="deductedNo" name="isTaxDeducted"
-                            [value]="false" [(ngModel)]="isTaxDeducted" (ngModelChange)="isTdsSelected($event )" />
-                        <label for="deductedNo" class="radio-custom-label">No</label>
-                    </span>
+                                <input class="radio-custom cp ml0" type="radio" id="deductedNo" name="isTaxDeducted"
+                                    [value]="false" [(ngModel)]="isTaxDeducted"
+                                    (ngModelChange)="isTdsSelected($event )" />
+                                <label for="deductedNo" class="radio-custom-label">No</label>
+                            </span>
 
                             <span class="pd0 mr-2 d-inline-block">
-                        <input class="radio-custom cp ml0" type="radio" name="isTaxDeducted" id="deductedYes"
-                            [value]="true" [(ngModel)]="isTaxDeducted" (ngModelChange)="isTdsSelected($event )" />
-                        <label for="deductedYes" class="radio-custom-label">Yes</label>
-                    </span>
+                                <input class="radio-custom cp ml0" type="radio" name="isTaxDeducted" id="deductedYes"
+                                    [value]="true" [(ngModel)]="isTaxDeducted"
+                                    (ngModelChange)="isTdsSelected($event )" />
+                                <label for="deductedYes" class="radio-custom-label">Yes</label>
+                            </span>
                         </div>
                     </div>
 
@@ -128,13 +129,14 @@
                             </div>
                         </div>
                     </ng-container>
-                    <span class="text-light" *ngIf="isUpdateMode">
-                Excess amount: {{invoiceFormDetails.accountDetails.currencySymbol}}{{adjustPayment.totalAdjustedAmount- adjustPayment.grandTotal - depositAmount  | giddhCurrency}}
-            </span>
+                    <span class="text-light" *ngIf="exceedDueAmount<0">
+                        Excess amount:
+                        {{invoiceFormDetails.accountDetails.currencySymbol}}{{-exceedDueAmount  | giddhCurrency}} <i class="icon-info pointer" tooltip="adjustment amount is more than receipts."></i>
+                    </span>
                     <div class="mt-4">
-                        <button *ngIf="!isUpdateMode" type="button" class="btn btn-success mrR1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt()">Save</button>
-                        <button *ngIf="isUpdateMode" type="button" class="btn btn-success mrR1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt()">Update</button>
-                        <button type="button" class="btn btn-cancel" (click)="onCancel()">Cancel</button>
+                        <button *ngIf="!isUpdateMode" type="button" class="btn btn-success mrR1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)">Save</button>
+                        <button *ngIf="isUpdateMode" type="button" class="btn btn-success mrR1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)">Update</button>
+                        <button type="button" class="btn btn-cancel" (click)="onClear()">Reset</button>
                     </div>
                 </div>
 

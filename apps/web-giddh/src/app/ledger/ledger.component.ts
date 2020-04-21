@@ -47,7 +47,7 @@ import { AdvanceSearchModelComponent } from './components/advance-search/advance
 import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
-import {download} from "@giddh-workspaces/utils";
+import { download } from "@giddh-workspaces/utils";
 
 @Component({
     selector: 'ledger',
@@ -289,6 +289,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.trxRequest.from = moment(value.picker.startDate).format('DD-MM-YYYY');
         this.trxRequest.to = moment(value.picker.endDate).format('DD-MM-YYYY');
         this.todaySelected = true;
+        this.lc.blankLedger.entryDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         this.getTransactionData();
         // Después del éxito de la entrada. llamar para transacciones bancarias
         this.lc.activeAccount$.subscribe((data: AccountResponse) => {
@@ -435,7 +436,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.fileUploadOptions = { concurrency: 0 };
         this.shouldShowItcSection = false;
         this.shouldShowRcmTaxableAmount = false;
-
         observableCombineLatest(this.universalDate$, this.route.params, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (!Array.isArray(resp[0])) {
                 return;
@@ -975,7 +975,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (d.status === 'success') {
                 // debugger;
                 let blob = base64ToBlob(d.body, 'application/pdf', 512);
-                download(`${activeAccount.name} - ${invoiceName}.pdf`,blob, 'application/pdf');
+                download(`${activeAccount.name} - ${invoiceName}.pdf`, blob, 'application/pdf');
             } else {
                 this._toaster.errorToast(d.message);
             }
@@ -1067,14 +1067,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
             });
 
             if (classList && classList instanceof Array) {
-                let notClose = classList.some((cls: DOMTokenList) => {
-                    if (!cls) {
+                const shouldNotClose = classList.some((className: DOMTokenList) => {
+                    if (!className) {
                         return;
                     }
-                    return cls.contains('chkclrbsdp') || cls.contains('currencyToggler');
+                    return className.contains('chkclrbsdp') || className.contains('currencyToggler') || className.contains('bs-datepicker');
                 });
 
-                if (notClose) {
+                if (shouldNotClose) {
                     return;
                 }
             }
@@ -1334,9 +1334,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * onOpenAdvanceSearch
+     * To open advance search modal
+     *
+     * @memberof LedgerComponent
      */
-    public onOpenAdvanceSearch() {
+    public onOpenAdvanceSearch(): void {
+        if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.datePickerOptions && this.datePickerOptions.startDate && this.datePickerOptions.endDate ) {
+            this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+                page: 0,
+                dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+                    bsRangeValue: [this.datePickerOptions.startDate, this.datePickerOptions.endDate]
+                })
+            });
+        }
         this.advanceSearchModel.show();
     }
 
@@ -1665,6 +1675,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Handle amount input
+     *
+     * @param {TransactionVM} transaction Current transaction
+     * @memberof LedgerComponent
+     */
+    public handleAmountInput(transaction: TransactionVM): void {
+        transaction.amount = Number(transaction.amount);
+        this.needToReCalculate.next(true);
+    }
+
+    /**
      * Handles RCM section visinility based on provided transaction details
      *
      * @private
@@ -1773,7 +1794,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public checkTouristSchemeApplicable(activeLedgerParentgroup: string, selectedAccountParentGroup: string): void {
-        if (this.profileObj && this.profileObj.countryV2 && this.profileObj.countryV2.alpha2CountryCode && this.profileObj.countryV2.alpha2CountryCode === 'AE' && activeLedgerParentgroup && selectedAccountParentGroup && (this.allowParentGroup.includes(activeLedgerParentgroup)) && ( this.allowParentGroup.includes(selectedAccountParentGroup))) {
+        if (this.profileObj && this.profileObj.countryV2 && this.profileObj.countryV2.alpha2CountryCode && this.profileObj.countryV2.alpha2CountryCode === 'AE' && activeLedgerParentgroup && selectedAccountParentGroup && (this.allowParentGroup.includes(activeLedgerParentgroup)) && (this.allowParentGroup.includes(selectedAccountParentGroup))) {
             this.isTouristSchemeApplicable = true;
         } else {
             this.isTouristSchemeApplicable = false;

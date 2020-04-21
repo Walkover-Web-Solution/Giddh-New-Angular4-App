@@ -1,7 +1,7 @@
 .giddh-table {
     background: #fff;
-    font-family: $tableFontSemibold;
-    border: 1px solid $tableBorderColor;
+    font-family: $opensans-semibold;
+    border: 1px solid $gainsboro;
     width: 100%;
     max-width: 100%;
     border-collapse: separate;
@@ -16,12 +16,13 @@
         border-right: none;
         background: #fff;
         padding: 15px 11px;
-        border-bottom: 1px solid $tableBorderColor;
-        font-family: $tableFontSemibold;
+        border-bottom: 1px solid $gainsboro;
+        font-family: $opensans-semibold;
     }
     thead > tr > th {
-        border-top: 1px solid $tableBorderColor !important;
+        border-top: 1px solid $gainsboro !important;
         border-bottom: none !important;
+        white-space: nowrap;
     }
     tbody > tr > td {
         font-weight: 400;
@@ -31,21 +32,22 @@
         vertical-align: middle !important;
         font-size: 14px;
         word-break: break-word;
-        white-space: inherit !important;
+        white-space: nowrap !important;
         border-left: none;
         border-right: none;
-        font-family: $tableFontRegular;
+        font-family: $opensans-regular;
         border-bottom: none !important;
+        white-space: nowrap !important;
     }
     thead > tr > th:first-child,
     tbody > tr > td:first-child {
-        border-left: 1px solid $tableBorderColor;
+        border-left: 1px solid $gainsboro;
         white-space: normal !important;
         word-break: inherit;
     }
     thead > tr > th:last-child,
     tbody > tr > td:last-child {
-        border-right: 1px solid $tableBorderColor;
+        border-right: 1px solid $gainsboro;
     }
     tfoot > tr > td {
         vertical-align: middle !important;
@@ -57,14 +59,14 @@
         background: rgba(221, 225, 230, 0.5);
     }
     tbody tr:last-child td {
-        border-bottom: 1px solid $tableBorderColor !important;
+        border-bottom: 1px solid $gainsboro !important;
     }
     .icon-sort-asc,
     .icon-sort-dsc {
-        color: $iconColorTh;
+        color: $wild-blue-yonder;
     }
     .icon-pointer .activeTextColor {
-        color: $activeIconTh;
+        color: $deep-sky-blue;
         opacity: 1;
     }
     .td_in_searchBox {
@@ -113,6 +115,9 @@
         }
         tbody > tr:hover td {
             background: transparent;
+        }
+        tbody tr:last-child td {
+            border-bottom: 0px solid!important;
         }
     }
     /*card responsive code*/
@@ -186,6 +191,7 @@
         .table-bordered > tfoot > tr > td {
             border: none;
         }
+
         th {
             display: none;
         }
