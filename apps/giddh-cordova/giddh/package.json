@@ -81,9 +81,9 @@
             "cordova-plugin-sign-in-with-apple": {}
         },
         "platforms": [
-            "ios",
             "android",
-            "browser"
+            "browser",
+            "ios"
         ]
     }
 }

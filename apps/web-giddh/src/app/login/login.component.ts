@@ -387,7 +387,6 @@ export class LoginComponent implements OnInit, OnDestroy {
                     this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                 });
             }
-
         } else if (isCordova()) {
             if (provider === "google") {
                 (window as any).plugins.googleplus.login(
@@ -404,8 +403,8 @@ export class LoginComponent implements OnInit, OnDestroy {
                         console.log(('error: ' + msg));
                     }
                 );
-            } else {
-                (window as any).plugins.SignInWithApple.signin(
+            } else if(provider === "apple") {
+                (cordova.plugins as any).SignInWithApple.signin(
                     { requestedScopes: [0, 1] },
                     function (succ) {
                         console.log(succ);
@@ -413,11 +412,10 @@ export class LoginComponent implements OnInit, OnDestroy {
                     },
                     function (err) {
                         console.error(err);
-                        console.log(JSON.stringify(err));
+                        alert(JSON.stringify(err));
                     }
-                );
+                )
             }
-
         } else {
             //  web social authentication
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
