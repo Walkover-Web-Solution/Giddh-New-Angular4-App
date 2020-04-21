@@ -3758,9 +3758,9 @@ ul.pills li {
 }
 
 #dashboard .panel-body {
-    height: 340px;
+    height: auto;
     overflow-y: auto;
-    overflow-x: hidden;
+    width: 100%
 }
 
 tr.db-bnk-account {
@@ -3783,7 +3783,7 @@ tr.db-bnk-account > td.reconnectDiv {
 }
 
 .panel-body .chart-div {
-    height: 300px;
+    height: auto;
 }
 
 .maxWidth250 {

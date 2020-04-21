@@ -147,7 +147,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                 type: 'pie',
                 polar: false,
                 className: 'profit_loss_chart',
-                width: 348,
+                width: 260,
                 height: '180px'
             },
             title: {
