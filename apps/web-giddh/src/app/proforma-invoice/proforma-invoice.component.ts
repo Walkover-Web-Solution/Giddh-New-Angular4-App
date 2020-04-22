@@ -86,6 +86,7 @@ import { CommonActions } from '../actions/common.actions';
 import { PurchaseRecordActions } from '../actions/purchase-record/purchase-record.action';
 import { AdvanceReceiptAdjustmentComponent } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.component';
 import { AdvanceReceiptAdjustment, AdjustAdvancePaymentModal } from '../models/api-models/AdvanceReceiptsAdjust';
+import { CurrentCompanyState } from '../store/Company/company.reducer';
 
 const THEAD_ARR_READONLY = [
     {
@@ -307,6 +308,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public purchaseRecordConfirmationConfiguration: ConfirmationModalConfiguration;
     /** Prevents double click on generate button */
     public generateUpdateButtonClicked = new Subject<any>();
+    /** True, if the Giddh supports the taxation of the country (not supported now: UK, US, Nepal, Australia) */
+    public shouldShowTrnGstField: boolean = false;
+    /** True, if company country supports other tax (TCS/TDS) */
+    public isTcsTdsApplicable: boolean;
     public selectedCompany: any;
     public formFields: any[] = [];
 
@@ -487,14 +492,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (!this.shouldShowLoader) {
                 return;
             }
-            // if (stateLoader.show) {
-            //     this.startLoader(true);
-            // } else {
-            //     this.startLoader(false);
-            //     this._cdr.detectChanges();
-            // call focus in customer after loader hides because after loader hider ui re-renders it self
-            // this.focusInCustomerName();
-            // }
         });
         this.generateUpdateButtonClicked.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((form) => {
             this.startLoader(true);
@@ -558,6 +555,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // get user country from his profile
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
             await this.prepareCompanyCountryAndCurrencyFromProfile(profile);
+        });
+
+        this.store.pipe(select(appState => appState.company), take(1)).subscribe((companyData: CurrentCompanyState) => {
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            }
         });
 
         this.route.params.pipe(takeUntil(this.destroyed$), delay(0)).subscribe(parmas => {
@@ -1204,10 +1207,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }, () => { this.startLoader(false); });
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                Object.keys(res.fields).forEach(key => {
-                    this.formFields[res.fields[key].name] = [];
-                    this.formFields[res.fields[key].name] = res.fields[key];
-                });
+                if (res.fields) {
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            this.formFields[res.fields[key].name] = [];
+                            this.formFields[res.fields[key].name] = res.fields[key];
+                        }
+                    });
+                }
+                if (this.formFields && this.formFields['taxName']) {
+                    this.shouldShowTrnGstField = true;
+                } else {
+                    this.shouldShowTrnGstField = false;
+                }
             }
         });
         this.prepareInvoiceTypeFlags();

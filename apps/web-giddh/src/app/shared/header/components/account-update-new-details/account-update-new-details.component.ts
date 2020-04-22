@@ -386,16 +386,19 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                Object.keys(res.fields).forEach(key => {
-                    this.formFields[res.fields[key].name] = [];
-                    this.formFields[res.fields[key].name] = res.fields[key];
-                });
-                this.GSTIN_OR_TRN = res.fields[0].label;
-
-
-                // Object.keys(res.applicableTaxes).forEach(key => {
-                //     this.taxesList.push({ label: res.applicableTaxes[key].name, value: res.applicableTaxes[key].uniqueName, isSelected: false });
-                // });
+                if (res.fields) {
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            this.formFields[res.fields[key].name] = [];
+                            this.formFields[res.fields[key].name] = res.fields[key];
+                        }
+                    });
+                }
+                if (this.formFields['taxName'] && this.formFields['taxName'].label) {
+                    this.GSTIN_OR_TRN = this.formFields['taxName'].label;
+                } else {
+                    this.GSTIN_OR_TRN = '';
+                }
             }
         });
         this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
