@@ -1155,7 +1155,7 @@
                     </div>
 
                     <!--region balance due for non-purchase-->
-                    <div class="tableRow" *ngIf="((isSalesInvoice || isCashInvoice))">
+                    <div class="tableRow" *ngIf="((isSalesInvoice || isCashInvoice) && !isUpdateMode)">
 
                         <div class="tableCell depositeSection">
 
