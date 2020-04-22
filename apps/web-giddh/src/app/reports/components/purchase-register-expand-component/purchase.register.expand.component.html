@@ -170,12 +170,12 @@
                                 </div>
                             </div>
                         </th>
-                        <th *ngIf="showFieldFilter.qtyRate" class=" text-right ">
+                        <th *ngIf="showFieldFilter.qtyRate && (purchaseRegisteDetailedResponse$ | async)?.quantityTotal" class=" text-right ">
                             <div class="d-flex justify-content-end">
                                 <div class=" text-right  ">Qty/Unit</div>
                             </div>
                         </th>
-                        <th *ngIf="showFieldFilter.qtyRate" class=" text-right ">
+                        <th *ngIf="showFieldFilter.qtyRate && (purchaseRegisteDetailedResponse$ | async)?.rateTotal" class=" text-right ">
                             <div class="d-flex justify-content-end">
                                 <div class=" text-right ">Rate</div>
                                 <div class="icon-pointer">
@@ -269,7 +269,7 @@
                         <td *ngIf="(purchaseRegisteDetailedResponse$ | async).creditTotal" class="text-right ">
                             {{ item.creditTotal | giddhCurrency }}
                         </td>
-                        <td class="text-right " *ngIf="showFieldFilter.qtyRate">
+                        <td class="text-right " *ngIf="showFieldFilter.qtyRate && (purchaseRegisteDetailedResponse$ | async)?.quantityTotal">
                             -
                             <ng-container *ngIf="expand">
                                 <ng-container *ngFor="let stock of item.stocks">
@@ -280,7 +280,7 @@
                                 </ng-container>
                             </ng-container>
                         </td>
-                        <td class="text-right " *ngIf="showFieldFilter.qtyRate">
+                        <td class="text-right " *ngIf="showFieldFilter.qtyRate && (purchaseRegisteDetailedResponse$ | async)?.rateTotal">
                             -
                             <ng-container *ngIf="expand">
                                 <ng-container *ngFor="let stock of item.stocks">
