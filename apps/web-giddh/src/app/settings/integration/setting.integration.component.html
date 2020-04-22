@@ -44,7 +44,7 @@
 
             <div class="box clearfix mb-2">
                 <h3 class="section_head">Gmail Integration</h3>
-                <div class="d-flex">
+                <div class="d-flex gmail-integration-message">
 
                     <ng-container *ngIf="!(isGmailIntegrated$ | async)">
                         <a *ngIf="!isElectron " class="btn btn-primary" [href]="gmailAuthCodeUrl$ | async">Connect with

@@ -17,3 +17,24 @@
     align-items: center;
     flex-direction: column;
 }
+@media(max-width:767px){
+    .ratio-chart-block{
+        position: relative;
+        padding-bottom: 10px;
+
+        &:after{
+                position: absolute;
+                content: '';
+                border-bottom: 1px solid #d9d9d9;
+                bottom: 0;
+                height: 1px;
+                width: 90%;
+                
+        }
+        &:last-child{
+            &:after{
+                display: none;
+            }
+        }
+    }
+}

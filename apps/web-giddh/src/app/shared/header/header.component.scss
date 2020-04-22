@@ -1,4 +1,10 @@
+
+
+ 
 @import "../../../assets/css/color.scss";
+ 
+ 
+
 .ddMaxHeight {
     max-height: 500px;
 }
@@ -132,7 +138,7 @@ a[vr-item]:focus {
 }
 
 .main-company-name > li > a {
-    padding: 7px 15px !important;
+    padding: 6px 15px !important;
 }
 
 .main-company-name > li > a:hover .cText .cName,
@@ -143,6 +149,7 @@ a[vr-item]:focus {
 .left_fixed_header > li {
     text-transform: capitalize;
     position: relative;
+ 
 }
 .no-padding {
     padding: 0px !important;
@@ -157,7 +164,7 @@ a[vr-item]:focus {
 .left_fixed_header > li > a {
     display: block;
     padding: 7px 15px;
-    color: #1c1c1c;
+    color: $nero;
     position: relative;
 }
 
@@ -172,7 +179,8 @@ a[vr-item]:focus {
 }
 
 .left_fixed_header > li > a:hover {
-    color: #262626;
+    color: $nero;
+   
 }
 
 .left_fixed_header > li > a:hover .label > span,
@@ -186,9 +194,8 @@ a[vr-item]:focus {
 
 .left_fixed_header > li > a.active .label,
 .left_fixed_header > li > a.active .label > span {
-    color: #1c1c1c;
-    font-family: "opensans-semibold";
-}
+    color:$nero;
+ }
 
 .left_fixed_header > li > a .label {
     display: table-cell;
@@ -199,7 +206,6 @@ a[vr-item]:focus {
     color: #262626;
     letter-spacing: 0.6px;
     font-weight: normal;
-    font-family: "opensans-regular";
     padding: 0;
 }
 
@@ -211,11 +217,13 @@ a[vr-item]:focus {
     line-height: 1.3;
 }
 
+/*
 .left_fixed_header > li:hover a,
 .left_fixed_header > li > a:hover span,
 .left_fixed_header > li:hover a span {
     color: #fff;
 }
+*/
 
 .left_fixed_header [class^="icon-"] {
     font-size: 20px;
@@ -269,7 +277,7 @@ a[vr-item]:focus {
     font-size: 14px;
     padding-left: 15px;
     padding-right: 15px;
-    font-family: "opensans-semibold";
+    // font-family:$opensans-semibold;
 }
 
 .left_fixed_header > h6 > i {
@@ -287,7 +295,7 @@ a[vr-item]:focus {
     margin-right: 2px;
 }
 
-#other i {
+.other i {
     float: right;
     font-size: 20px;
     background: transparent;
@@ -499,10 +507,10 @@ span.icon-support.dropdown-toggle {
     height: 32px;
 }
 
-#other a {
-    color: #262626;
+.other a {
+    color: $extra-dark-gray;
     text-transform: uppercase;
-    font-family: opensans-semibold;
+    // font-family:$opensans-semibold;
 }
 
 .showMoreOpt {
@@ -542,7 +550,7 @@ span.icon-support.dropdown-toggle {
 
 .primary-header .company-name-finance-year {
     display: inline-block;
-    padding-left: 10px;
+    padding-left: 15px;
     width: 90%;
 }
 
@@ -580,7 +588,7 @@ ul.sub-list {
 }
 
 .nav-left-bar .company-name .cText span {
-    color: #1c1c1c;
+    color: $nero;
     word-break: break-all;
 }
 
@@ -638,7 +646,11 @@ ul.sub-list {
     background: #f1f1f1;
     border-bottom: 1px solid #e4e4e4;
 }
-
+.ledger-page {
+    position: sticky;
+    top: 60px;
+    z-index: 10;
+}
 /* responsive */
 
 @media (max-height: 800px) {
@@ -726,7 +738,7 @@ ul.sub-list {
         display: flex;
     }
     .paddingTopFixed-mobile {
-        padding-top: 86px;
+        padding-top: 92px;
     }
     .upperLayerHeader .open .dropdown-menu {
         background-color: #fff;
@@ -798,8 +810,5 @@ ul.sub-list {
         text-align: left;
         height: 24px !important;
         display: none;
-    }
-    .lowerLayerHeader {
-        padding-top: 5px;
     }
 }

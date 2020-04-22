@@ -206,7 +206,7 @@ tr:last-child td.pos-rel.WordWrap.vendor-customer-name.cursor-pointer {
     line-height: 1.6;
 }
 
-.custumerRightWrap {
+.customer-right-wrap {
     padding-right: 0;
 }
 
@@ -264,7 +264,7 @@ i.icon-options {
     height: 36px;
     border: 1px solid $gainsboro;
     background-color: #fff;
-    color: #999;
+    color: $gray;
     font-size: 20px;
     padding: 0;
     display: flex;
@@ -299,9 +299,6 @@ span.inputAddon {
 .aging-table .btn-small {
     min-width: 140px;
 }
-.aging-table .btn-small {
-    min-width: 140px;
-}
 .aging-table thead tr th {
     border-top: 1px solid $gainsboro;
     border-bottom: 1px solid $gainsboro !important;
@@ -315,7 +312,7 @@ span.inputAddon {
     .aging-table > tbody > tr input[type="checkbox"] {
         top: 2px;
     }
-    .custumerRightWrap h4.mb-1.pdR2 {
+    .customer-right-wrap h4.mb-1.pdR2 {
         margin-bottom: 0;
     }
     tr:last-child td.pos-rel.WordWrap.customer-name.cursor-pointer,
@@ -341,14 +338,14 @@ span.inputAddon {
     .onDesktopView.btn-group {
         display: none;
     }
-    .custumerRightWrap {
+    .customer-right-wrap {
         padding-right: 0;
         position: fixed;
         bottom: 0;
         width: 100%;
         background: #fff;
         padding: 10px 5px;
-        z-index: 90;
+        z-index:1;
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
     }
     td.pos-rel.WordWrap.customer-name.cursor-pointer,
@@ -374,8 +371,14 @@ span.inputAddon {
             display: block;
         }
     }
+    .aging-table .btn-small {
+        min-width: auto;
+    }
 }
 @media (max-width: 767px) {
+    .date-range-picker{
+        height: 26px !important;
+    }
     span.inputAddon {
         top: 0;
     }
@@ -390,14 +393,35 @@ span.inputAddon {
         padding-bottom: 10px;
         float: right !important;
     }
-    .header-left .form-group {
-        vertical-align: bottom !important;
-        margin-bottom: 5px;
+    .form-inline{
+        position: relative;
+        .dis{
+            position: absolute;
+            left: 0;
+            top: 0;
+            }
+            .header-left{
+                width: calc(100% - 50px);
+                margin-left: 45px;
+                .form-group {
+                    vertical-align: bottom !important;
+                    margin-bottom: 5px;
+                    max-width: 100%;
+                    input{
+                        width: 100%;
+                    }
+                }
+            }
     }
+   
     .customer-footer-box {
         padding-top: 0;
+        float: left !important;
     }
-    .custumerRightWrap {
+    .customer-footer-box + .btn-group {
+        float: left !important;
+    }
+    .customer-right-wrap {
         position: relative;
     }
     .pagination-main .mt-5 {
@@ -414,18 +438,30 @@ span.inputAddon {
         top: 8px;
     }
 }
-@media (max-width: 652px) {
-    .customer-footer-box + .btn-group {
-        float: left !important;
-    }
-}
-
 @media (max-width: 575px) {
+    .customer-footer-box + .btn-group {
+        float: none !important;
+        width: 100%;
+        button{
+            width: 100%;
+        }
+    }
     .customer-footer-box {
         padding-bottom: 10px;
         float: none !important;
+        .customer-inner-box{
+            display: flex;
+            align-items: center;
+            padding-top: 6px;
+            h5{
+                font-size: 16px;
+                .numbertotal{
+                    font-size: 20px;
+                }
+            }
+        }
     }
-    .custumerRightWrap h4.mb-1.pdR2 {
+    .customer-right-wrap h4.mb-1.pdR2 {
         margin-bottom: 10px;
     }
     .customer-right {
@@ -455,7 +491,7 @@ span.inputAddon {
         font-size: 14px;
         padding-bottom: 7px;
     }
-    .custumerRightWrap h4 {
+    .customer-right-wrap h4 {
         text-align: left !important;
         padding-left: 15px;
     }

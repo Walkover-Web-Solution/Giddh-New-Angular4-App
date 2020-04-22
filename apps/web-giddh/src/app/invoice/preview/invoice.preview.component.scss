@@ -44,7 +44,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    padding-left: 8px;
+    padding-left: 10px;
 }
 
 .td_in_searchBox div i:hover {
@@ -117,7 +117,7 @@
 }
 
 .click-dropdwon ul li:hover {
-    background-color: #d9d9d970;
+    background-color: $gainsboro;
 }
 
 .click-dropdwon ul li:hover a {
@@ -245,7 +245,7 @@ td.card-header.clearfix {
     justify-content: space-between;
 }
 
-.mobileSearch {
+.mobile-search {
     display: none;
     margin-bottom: 15px;
 }
@@ -286,7 +286,7 @@ ul.selectActionDropdown {
     background: #eeeff9 !important;
 }
 
-.addInvoice .dropdown-toggle {
+.add-invoice .dropdown-toggle {
     color: #fff;
 }
 
@@ -328,9 +328,9 @@ ul.selectActionDropdown {
     color: #999999;
 }
 
-.advance-icon {
-    width: 32px;
-    height: 32px;
+.advance-icon , .search-icon-block {
+    width: 36px;
+    height: 36px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -338,18 +338,21 @@ ul.selectActionDropdown {
     margin-left: 10px;
     border: 1px solid $gainsboro;
     border-radius: 2px;
-    color: $midnight-express;
+    color: $gray;
     background: #fff;
+    color: $gray;
 }
-
+.search-icon-block{
+    display: none;
+}
 .advance-icon:hover {
     background: #eaeaea;
 }
 
-.dropdown-toggle.spcl_dropdown {
+.dropdown-toggle.more-btn-dropdown {
     color: $navy !important;
     border: 1px solid $chetwode-blue;
-    width: 91px;
+    width: 80px;
     padding-left: 10px;
     padding-right: 10px;
     display: inline-flex;
@@ -360,17 +363,17 @@ ul.selectActionDropdown {
     background-color: #fff;
 }
 
-.dropdown-toggle.spcl_dropdown:hover {
+.dropdown-toggle.more-btn-dropdown:hover {
     background: $chetwode-blue;
     color: #fff !important;
     border-color: $chetwode-blue;
 }
 
-.dropdown-toggle.spcl_dropdown:hover .caret {
+.dropdown-toggle.more-btn-dropdown:hover .caret {
     color: #fff !important;
 }
 
-.dropdown-toggle.spcl_dropdown .caret {
+.dropdown-toggle.more-btn-dropdown .caret {
     color: #999999;
 }
 
@@ -387,7 +390,7 @@ button.btn.btn-default.ladda-button {
 button.btn.btn-filter {
     background: #e4e4e4;
     border: 1px solid #e4e4e4;
-    font-size: 16px;
+    font-size: 14px;
     color: #1a237e;
     display: inline-flex;
     justify-content: space-between;
@@ -409,7 +412,7 @@ button.btn.btn-filter span.icon-cross {
 
 .inputWrapper {
     display: block !important;
-    width: 200px !important;
+    width: 196px !important;
     position: relative;
     height: 36px !important;
 }
@@ -420,22 +423,11 @@ button.btn.btn-filter span.icon-cross {
     display: block;
     height: 36px;
     width: 1px;
-    background-color: #d9d9d9;
+    background-color: $gainsboro;
     left: 37px !important;
     z-index: 100;
     top: 0;
 }
-
-
-/* .invoice-preview {
-    padding-bottom: 250px;
-}
-
-.paginationWrapper {
-    position: relative;
-    top: -220px;
-} */
-
 .invoiceFooter h3 {
     font-size: 16px;
     color: #999999;
@@ -449,25 +441,29 @@ button.btn.btn-filter span.icon-cross {
     display: inline-block;
 }
 
-.addInvoice .btn-group.show {
+.add-invoice .btn-group.show {
     display: inline-block !important;
 }
 
 div.remove-capitalize {
     text-transform: none !important;
 }
-
-
+span.icon-export-icon{
+color:$gray;
+}
 /* responsive */
 
 @media (max-width: 768px) {
+    .search-icon-block{
+        display: flex;
+    }
     .card-header .mh18_img {
         margin-right: 5px;
     }
     .mobileTable {
         display: block;
     }
-    .desktopTable {
+    .desktop-table  {
         display: none;
     }
     .mobileViewPagination {
@@ -543,13 +539,6 @@ div.remove-capitalize {
     .paginationWrapper {
         top: 0px;
     }
-    .mobileSearch {
-        display: block;
-        margin-bottom: 0;
-    }
-    .mobileSearch .input-container input {
-        font-size: 13px;
-    }
     .input-grp-dateRangePicker .form-group {
         margin-bottom: 10px;
     }
@@ -559,9 +548,24 @@ div.remove-capitalize {
     .desktop-view-btn {
         display: none;
     }
+    .date-advanceSearch{
+        .add-invoice{
+            display: none;
+        }
+    }
+    
 }
 
 @media (max-width: 767px) {
+
+    .mobile-search {
+        display: flex;
+        margin-bottom: 0;
+        flex-direction: column-reverse;
+    }
+    .mobile-search .input-container input {
+        font-size: 13px;
+    }
     .invoice-modal-content:after,
     .invoice-modal-content {
         top: 131px;
@@ -573,7 +577,7 @@ div.remove-capitalize {
         font-size: 18px !important;
     }
     .invoice-container {
-        padding-top: 60px;
+        padding-top: 55px;
     }
     .total-due-sale-wrap {
         display: block !important;
@@ -583,7 +587,13 @@ div.remove-capitalize {
     }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 575px) {
+    button.btn.btn-filter{
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
     .invoce-controll .nav.nav-tabs {
         margin-bottom: 28px;
     }
@@ -593,6 +603,13 @@ div.remove-capitalize {
     .invoiceFooter {
         display: flex;
         padding: 10px 0;
+    }
+    .full-width-on-mobile {
+        width: 100%;
+        margin: 5px 0;
+    }
+    .date-advanceSearch{
+        flex-direction: column;
     }
 }
 
@@ -608,9 +625,6 @@ div.remove-capitalize {
 }
 
 @media (max-width: 360px) {
-    .date-advanceSearch .input-group {
-        width: 100%;
-    }
     .input-grp-dateRangePicker .btn {
         padding-left: 0;
         padding-top: 10px;
@@ -619,20 +633,9 @@ div.remove-capitalize {
     .smallLoading {
         top: 5px;
     }
-    .full-width-on-mobile {
-        width: 100%;
-        margin: 5px 0;
-    }
 }
-
 @media (max-width: 320px) {
-    .date-advanceSearch .input-group {
-        width: 144px;
-    }
-    .btn-dropdown-ddl-newinv {
-        padding: 5px 10px !important;
-    }
-    .mobileSearch .input-container input {
+    .mobile-search .input-container input {
         letter-spacing: -0.99px;
     }
 }

@@ -146,5 +146,6 @@ export class InvoiceSettings {
 	defaultPaymentGateway: string;
 	enableNarrationOnInvAndVoucher: boolean;
 	sendInvLinkOnSms: boolean;
-	smsContent?: any;
+    smsContent?: any;
+    autoDeleteEntries?: any;
 }
