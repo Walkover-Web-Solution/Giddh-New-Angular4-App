@@ -54,6 +54,7 @@ import { isAndroidCordova, isIOSCordova } from "@giddh-workspaces/utils";
 import { IOSFilePicker } from "@ionic-native/file-picker/ngx";
 import { FileTransfer } from "@ionic-native/file-transfer/ngx";
 import { FileChooser } from "@ionic-native/file-chooser/ngx";
+import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -179,6 +180,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public allowedSelectionOfAType: any = { type: [], count: 1 };
     /** country name of active account */
     public activeAccountCountryName: string = '';
+    /** True, if company country supports other tax (TCS/TDS) */
+    public isTcsTdsApplicable: boolean;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -256,6 +259,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.warehouses = warehouseData.formattedWarehouses;
                 this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
                 this.selectedWarehouse = String(this.defaultWarehouse);
+            }
+        });
+
+        this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
             }
         });
 
@@ -405,6 +414,28 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public calculateTotal() {
+        if (this.currentTxn) {
+            if (this.currentTxn.amount) {
+                if (this.isAdvanceReceipt) {
+                    this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.total = giddhRoundOff((this.currentTxn.advanceReceiptAmount + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                    this.totalForTax = this.currentTxn.total;
+                } else {
+                    let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
+                    this.totalForTax = total;
+                    this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                }
+                this.currentTxn.convertedTotal = this.calculateConversionRate(this.currentTxn.total);
+            } else {
+                // Amount is zero, set other parameters to zero
+                if (this.isAdvanceReceipt) {
+                    this.currentTxn.advanceReceiptAmount = 0;
+                }
+                this.totalForTax = 0;
+                this.currentTxn.total = 0;
+                this.currentTxn.convertedTotal = this.calculateConversionRate(this.currentTxn.total);
+            }
+        }
         if (this.currentTxn && this.currentTxn.amount) {
             if (this.isAdvanceReceipt) {
                 this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);

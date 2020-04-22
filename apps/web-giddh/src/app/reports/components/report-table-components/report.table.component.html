@@ -13,31 +13,55 @@
                         <div class="flex-fill text-right ">
                             Sales
                         </div>
-
                     </div>
                 </th>
-                <th class="width-200px">
+                <th *ngIf="salesRegisterTotal.returns" class="width-200px">
                     <div class="d-flex">
                         <div class="flex-fill text-right ">
                             Return
                         </div>
-
                     </div>
                 </th>
-                <th class="width-200px">
+                <th *ngIf="salesRegisterTotal.taxTotal" class="width-200px">
+                    <div class="d-flex">
+                        <div class="flex-fill text-right ">
+                            Tax
+                        </div>
+                    </div>
+                </th>
+                <th *ngIf="salesRegisterTotal.discountTotal" class="width-200px">
+                    <div class="d-flex">
+                        <div class="flex-fill text-right ">
+                            Discount
+                        </div>
+                    </div>
+                </th>
+                <th *ngIf="isTcsTdsApplicable && salesRegisterTotal.tcsTotal" class="width-200px">
+                    <div class="d-flex">
+                        <div class="flex-fill text-right ">
+                            TCS
+                        </div>
+                    </div>
+                </th>
+                <th *ngIf="isTcsTdsApplicable && salesRegisterTotal.tdsTotal" class="width-200px">
+                    <div class="d-flex">
+                        <div class="flex-fill text-right ">
+                            TDS
+                        </div>
+                    </div>
+                </th>
+                <th *ngIf="salesRegisterTotal.netSales" class="width-200px">
                     <div class="d-flex">
                         <div class="flex-fill text-right ">
                             Net Sales
                         </div>
-
                     </div>
                 </th>
-                <th class="width-200px">
+                <th *ngIf="salesRegisterTotal.cumulative" class="width-200px">
                     <div class="d-flex">
                         <div class="flex-fill text-right ">
                             Cumulative
                         </div>
-
                     </div>
                 </th>
             </tr>
@@ -46,9 +70,13 @@
             <tr *ngFor="let item of reportRespone" [ngClass]="{'bgChange': item.reportType === 'combined'}">
                 <td><a class="cursor-pointer" (click)="GotoDetailedSales(item)">{{item.particular}}</a></td>
                 <td class="text-right">{{item.sales | giddhCurrency}}</td>
-                <td class="text-right">{{item.returns | giddhCurrency}}</td>
-                <td class="text-right">{{item.cumulative | giddhCurrency}}</td>
-                <td class="text-right">{{item.netSales | giddhCurrency}}</td>
+                <td *ngIf="salesRegisterTotal.returns" class="text-right">{{item.returns | giddhCurrency}}</td>
+                <td *ngIf="salesRegisterTotal.taxTotal" class="text-right">{{item.taxTotal | giddhCurrency}}</td>
+                <td *ngIf="salesRegisterTotal.discountTotal" class="text-right">{{item.discountTotal | giddhCurrency}}</td>
+                <td *ngIf="isTcsTdsApplicable && salesRegisterTotal.tcsTotal" class="text-right">{{item.tcsTotal | giddhCurrency}}</td>
+                <td *ngIf="isTcsTdsApplicable && salesRegisterTotal.tdsTotal" class="text-right">{{item.tdsTotal | giddhCurrency}}</td>
+                <td *ngIf="salesRegisterTotal.netSales" class="text-right">{{item.netSales | giddhCurrency}}</td>
+                <td *ngIf="salesRegisterTotal.cumulative" class="text-right">{{item.cumulative | giddhCurrency}}</td>
             </tr>
         </tbody>
 
@@ -56,9 +84,13 @@
             <tr>
                 <th><a href="javascript:void(0)">{{salesRegisterTotal.particular }}</a></th>
                 <th class="text-right">{{salesRegisterTotal.sales | giddhCurrency}}</th>
-                <th class="text-right">{{salesRegisterTotal.returns | giddhCurrency}}</th>
-                <th class="text-right">{{salesRegisterTotal.cumulative | giddhCurrency}}</th>
-                <th class="text-right">{{salesRegisterTotal.netSales | giddhCurrency}}</th>
+                <th *ngIf="salesRegisterTotal.returns" class="text-right">{{salesRegisterTotal.returns | giddhCurrency}}</th>
+                <th *ngIf="salesRegisterTotal.taxTotal" class="text-right">{{salesRegisterTotal.taxTotal | giddhCurrency}}</th>
+                <th *ngIf="salesRegisterTotal.discountTotal" class="text-right">{{salesRegisterTotal.discountTotal | giddhCurrency}}</th>
+                <th *ngIf="isTcsTdsApplicable && salesRegisterTotal.tcsTotal" class="text-right">{{salesRegisterTotal.tcsTotal | giddhCurrency}}</th>
+                <th *ngIf="isTcsTdsApplicable && salesRegisterTotal.tdsTotal" class="text-right">{{salesRegisterTotal.tdsTotal | giddhCurrency}}</th>
+                <th *ngIf="salesRegisterTotal.netSales" class="text-right">{{salesRegisterTotal.netSales | giddhCurrency}}</th>
+                <th *ngIf="salesRegisterTotal.cumulative" class="text-right">{{salesRegisterTotal.cumulative | giddhCurrency}}</th>
             </tr>
         </tfoot>
     </table>

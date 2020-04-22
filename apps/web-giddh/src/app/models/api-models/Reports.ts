@@ -5,6 +5,10 @@ export class ReportsModel {
     public particular: string;
     public sales: number = 0;
     public returns: number = 0;
+    public taxTotal: number = 0;
+    public discountTotal: number = 0;
+    public tcsTotal: number = 0;
+    public tdsTotal: number = 0;
     public netSales: number = 0;
     public cumulative: number = 0;
     public reportType: string;
@@ -118,12 +122,18 @@ export interface SalesRegisteDetailedResponse {
     totalItems: number;
     from: string;
     to: string;
+    quantityTotal: number;
+    rateTotal: number;
 }
 
 export class PurchaseReportsModel {
     public particular: string;
     public purchase: number = 0;
     public returns: number = 0;
+    public taxTotal: number = 0;
+    public discountTotal: number = 0;
+    public tcsTotal: number = 0;
+    public tdsTotal: number = 0;
     public netPurchase: number = 0;
     public cumulative: number = 0;
     public reportType: string;
@@ -146,10 +156,13 @@ export interface PurchaseRegisteDetailedResponse {
     totalItems: number;
     from: string;
     to: string;
+    quantityTotal: number;
+    rateTotal: number;
 }
 
 /** Request object model for get all advance receipts API */
 export interface GetAllAdvanceReceiptsRequest {
+    companyUniqueName: string;
     sortBy?: string;
     page?: number;
     sort?: 'asc' | 'desc';
@@ -169,6 +182,7 @@ export interface GetAllAdvanceReceiptsRequest {
 
 /** Request object model for advance receipts summary API */
 export interface AdvanceReceiptSummaryRequest {
+    companyUniqueName: string;
     from?: string;
     to?: string;
 }

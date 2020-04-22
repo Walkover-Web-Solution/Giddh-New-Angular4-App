@@ -10,7 +10,7 @@ import { ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 @Component({
 	selector: 'tb-synram',
 	templateUrl: './tb-synram.component.html',
-	styleUrls: ['./tb-synram.component.css']
+	styleUrls: ['./tb-synram.component.scss']
 })
 export class TbSynramComponent implements OnInit {
 

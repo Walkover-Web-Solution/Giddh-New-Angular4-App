@@ -1,9 +1,10 @@
+@import "../../../assets/css/color.scss";
 input {
     width: 100% !important;
 }
 input.form-control.date-range-picker {
     text-align: left;
-    border: 1px solid #d1d1d1;
+    border: 1px solid $gainsboro;
     padding-left: 5px !important;
 }
 .square-switch {

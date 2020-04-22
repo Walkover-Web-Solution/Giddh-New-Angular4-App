@@ -1,12 +1,15 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ILedgersInvoiceResult } from "../../../models/api-models/Invoice";
 import { ReportsModel } from "../../../models/api-models/Reports";
-import { Store } from "@ngrx/store";
+import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { GroupWithAccountsAction } from "../../../actions/groupwithaccounts.actions";
 import { ModalDirective } from "ngx-bootstrap";
 import { Router } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
+import { CurrentCompanyState } from '../../../store/Company/company.reducer';
+import { ReplaySubject } from 'rxjs';
 
 
 @Component({
@@ -14,7 +17,7 @@ import { Router } from '@angular/router';
     templateUrl: './report.table.component.html',
     styleUrls: ['./report.table.component.scss']
 })
-export class ReportsTableComponent implements OnInit {
+export class ReportsTableComponent implements OnInit, OnDestroy {
     @Input() public reportRespone: ReportsModel[];
     @Input() public activeFinacialYr: any;
     @Input() salesRegisterTotal: any;
@@ -39,10 +42,36 @@ export class ReportsTableComponent implements OnInit {
     public activeTab: any = 'customer';
     public purchaseOrSales: 'sales' | 'purchase';
 
-    ngOnInit() {
-    }
+    /** True, if company country supports other tax (TCS/TDS) */
+    public isTcsTdsApplicable: boolean;
+
+    /** Subject to unsubscribe from subscriptions */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private _groupWithAccountsAction: GroupWithAccountsAction, private _router: Router) {
+    }
+
+    /**
+     * Initialize variables
+     *
+     * @memberof ReportsTableComponent
+     */
+    ngOnInit(): void {
+        this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            }
+        });
+    }
+
+    /**
+     * Unsubscribes from all the subscriptions
+     *
+     * @memberof PurchaseRegisterTableComponent
+     */
+    ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     public performActions(type: number, account: any, event?: any) {
