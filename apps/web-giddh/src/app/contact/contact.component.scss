@@ -308,7 +308,9 @@ span.inputAddon {
     position: relative;
     padding-right: 10px !important;
 }
-
+.comment-field{
+    min-width: 200px;
+}
 // responsive
 
 @media (max-width: 768px) {

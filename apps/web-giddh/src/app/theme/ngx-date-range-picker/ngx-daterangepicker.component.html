@@ -12,10 +12,20 @@
         <!-- loop over ranges -->
         <div class="range-container">  
             <ul class="range-list">
-                <li class="menu-li"  type="button"  (click)="visibleCalnderOn();">
+                <li class="menu-li custom-select-btn"  type="button"  (click)="visibleCalnderOn();">
                     <button>
                        Custom
                     </button>
+                </li>
+                <li class="menu-li select-financial-year">
+                    <button type="button" class="btn-angle-down" (click)="dropdownShow = !dropdownShow">Select Financial Year
+                        <span class="available prev angle-down"></span>
+                    </button>
+                    <ul class="sub-ranges-cal menu-drawer financial-year-dropdown" *ngIf="dropdownShow && financialYears && financialYears.length > 0">
+                        <li *ngFor="let financialYear of financialYears;">
+                            <button type="button" (click)="clickFinancialYear(financialYear)">{{financialYear.label}}</button>
+                        </li>
+                    </ul>
                 </li>
                 <li *ngFor="let range of ranges; let i = index" class="menu-li">
                     <button type="button" class="btn-angle-down" (click)="clickRange($event, range)"
@@ -34,16 +44,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="menu-li select-financial-year">
-                    <button type="button" class="btn-angle-down" (click)="dropdownShow = !dropdownShow">Select Financial Year
-                        <span class="available prev angle-down"></span>
-                    </button>
-                    <ul class="sub-ranges-cal menu-drawer" *ngIf="dropdownShow && financialYears && financialYears.length > 0">
-                        <li *ngFor="let financialYear of financialYears;">
-                            <button type="button" (click)="clickFinancialYear(financialYear)">{{financialYear.label}}</button>
-                        </li>
-                    </ul>
-                </li>
+                
             </ul>
         </div>
         <!-- loop over ranges -->

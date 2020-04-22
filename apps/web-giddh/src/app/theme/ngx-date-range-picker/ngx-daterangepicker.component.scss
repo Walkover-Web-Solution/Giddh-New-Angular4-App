@@ -856,6 +856,12 @@ $input-height: 3rem !default;
     }
 }
 
+@media(min-width:769px){
+    .custom-select-btn{
+        display: none;
+    }
+}
+
 .in-range.available:hover {
     background-color:transparent !important;
     border-radius: 0 !important;
@@ -1065,6 +1071,10 @@ td span {
     }
 }
 
+.financial-year-dropdown{
+    height: 120px;
+    overflow-y: auto;
+}
 .menu-li {
     cursor: pointer;
 }
@@ -1245,7 +1255,7 @@ td span {
 }
 /*media query*/
 
-@media(max-width:767px){
+@media(max-width:768px){
     .md-drppicker{
         flex-direction: column;
         z-index: 5;
@@ -1271,6 +1281,7 @@ td span {
                         border: none;
                         border-bottom: 1px solid $gainsboro;
                         border-radius: 0;
+                       
                     }
                 }
             }
@@ -1327,4 +1338,23 @@ td span {
      .d-container{
         width: 280px;
     }    
+}
+@media(max-height:768px){
+    .drops-down-right{
+        height: 400px;
+        .ranges {
+            height: 400px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            ul.sub-ranges-cal {
+                width: 100%;
+                right: 0;
+                top: 0;
+                position: static;
+                border: none;
+                border-bottom: 1px solid #d9d9d9;
+                border-radius: 0;
+            }
+        }
+    }
 }
