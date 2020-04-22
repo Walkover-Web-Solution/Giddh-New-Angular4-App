@@ -11,6 +11,8 @@ import { BsDropdownDirective } from 'ngx-bootstrap';
 import { FormControl } from '@angular/forms';
 import { CurrentPage } from '../../../models/api-models/Common';
 import { GeneralActions } from '../../../actions/general/general.actions';
+import { PAGINATION_LIMIT } from '../../../app.constant';
+import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 
 
 @Component({
@@ -23,13 +25,17 @@ export class SalesRegisterExpandComponent implements OnInit {
     public SalesRegisteDetailedItems: SalesRegisteDetailedResponse;
     public from: string;
     public to: string;
-    public SalesRegisteDetailedResponse$: Observable<SalesRegisteDetailedResponse>;
+    public salesRegisteDetailedResponse$: Observable<SalesRegisteDetailedResponse>;
     public isGetSalesDetailsInProcess$: Observable<boolean>;
     public isGetSalesDetailsSuccess$: Observable<boolean>;
     public getDetailedsalesRequestFilter: ReportsDetailedRequestFilter = new ReportsDetailedRequestFilter();
     public selectedMonth: string;
     // public showSearchCustomer: boolean = false;
     public showSearchInvoiceNo: boolean = false;
+    /** Pagination limit for records */
+    public paginationLimit: number = PAGINATION_LIMIT;
+    /** True, if company country supports other tax (TCS/TDS) */
+    public isTcsTdsApplicable: boolean;
 
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     // searching
@@ -61,7 +67,7 @@ export class SalesRegisterExpandComponent implements OnInit {
     bsValue = new Date();
 
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private _generalActions: GeneralActions) {
-        this.SalesRegisteDetailedResponse$ = this.store.pipe(select(p => p.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
+        this.salesRegisteDetailedResponse$ = this.store.pipe(select(p => p.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetSalesDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsInProcess), takeUntil(this.destroyed$));
         this.isGetSalesDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsSuccess), takeUntil(this.destroyed$));
     }
@@ -73,6 +79,11 @@ export class SalesRegisterExpandComponent implements OnInit {
         this.getDetailedsalesRequestFilter.count = 50;
         this.getDetailedsalesRequestFilter.q = '';
 
+        this.store.pipe(select(appState => appState.company), take(1)).subscribe((companyData: CurrentCompanyState) => {
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            }
+        });
 
         this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
             if (params.from && params.to) {
@@ -84,7 +95,7 @@ export class SalesRegisterExpandComponent implements OnInit {
         });
         this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
         this.getCurrentMonthYear();
-        this.SalesRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: SalesRegisteDetailedResponse) => {
+        this.salesRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: SalesRegisteDetailedResponse) => {
             if (res) {
                 this.SalesRegisteDetailedItems = res;
                 _.map(this.SalesRegisteDetailedItems.items, (obj: any) => {

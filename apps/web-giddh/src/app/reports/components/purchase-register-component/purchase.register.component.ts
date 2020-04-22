@@ -109,34 +109,34 @@ export class PurchaseRegisterComponent implements OnInit {
             let reportsModel: PurchaseReportsModel = new PurchaseReportsModel();
             reportsModel.purchase = item.debitTotal;
             reportsModel.returns = item.creditTotal;
-            reportsModel.netPurchase = item.closingBalance.amount;
-            reportsModel.cumulative = item.balance.amount;
+            reportsModel.taxTotal = item.taxTotal;
+            reportsModel.discountTotal = item.discountTotal;
+            reportsModel.tcsTotal = item.tcsTotal;
+            reportsModel.tdsTotal = item.tdsTotal;
+            reportsModel.netPurchase = item.balance.amount;
+            reportsModel.cumulative = item.closingBalance.amount;
             reportsModel.from = item.from;
             reportsModel.to = item.to;
-
             let mdyFrom = item.from.split('-');
             let mdyTo = item.to.split('-');
             let dateDiff = this.datediff(this.parseDate(mdyFrom), this.parseDate(mdyTo));
             if (dateDiff <= 8) {
-                this.purchaseRegisterTotal.purchase += item.debitTotal;
-                this.purchaseRegisterTotal.returns += item.creditTotal;
-                this.purchaseRegisterTotal.netPurchase = item.closingBalance.amount;
-                this.purchaseRegisterTotal.cumulative += item.balance.amount;
+                this.setPurchaseRegisterTotal(item);
                 this.purchaseRegisterTotal.particular = this.selectedMonth + " " + mdyFrom[2];
                 reportsModel.particular = 'Week' + weekCount++;
                 reportModelArray.push(reportsModel);
             } else if (dateDiff <= 31) {
-                this.purchaseRegisterTotal.purchase += item.debitTotal;
-                this.purchaseRegisterTotal.returns += item.creditTotal;
-                this.purchaseRegisterTotal.netPurchase = item.closingBalance.amount;
-                this.purchaseRegisterTotal.cumulative += item.balance.amount;
-
+                this.setPurchaseRegisterTotal(item);
                 reportsModel.particular = this.monthNames[parseInt(mdyFrom[1]) - 1] + " " + mdyFrom[2];
                 indexMonths++;
                 reportsModelCombined.purchase += item.debitTotal;
                 reportsModelCombined.returns += item.creditTotal;
-                reportsModelCombined.netPurchase = item.closingBalance.amount;
-                reportsModelCombined.cumulative += item.balance.amount;
+                reportsModelCombined.taxTotal += item.taxTotal;
+                reportsModelCombined.discountTotal += item.discountTotal;
+                reportsModelCombined.tcsTotal += item.tcsTotal;
+                reportsModelCombined.tdsTotal += item.tdsTotal;
+                reportsModelCombined.netPurchase += item.balance.amount;
+                reportsModelCombined.cumulative = item.closingBalance.amount;
                 reportModelArray.push(reportsModel);
                 if (indexMonths % 3 === 0) {
                     reportsModelCombined.particular = 'Quarter ' + indexMonths / 3;
@@ -146,11 +146,7 @@ export class PurchaseRegisterComponent implements OnInit {
                     reportsModelCombined = new PurchaseReportsModel();
                 }
             } else if (dateDiff <= 93) {
-                this.purchaseRegisterTotal.purchase += item.debitTotal;
-                this.purchaseRegisterTotal.returns += item.creditTotal;
-                this.purchaseRegisterTotal.netPurchase = item.closingBalance.amount;
-                this.purchaseRegisterTotal.cumulative += item.balance.amount;
-
+                this.setPurchaseRegisterTotal(item);
                 reportsModel.particular = this.formatParticular(mdyTo, mdyFrom, index, this.monthNames);
                 reportModelArray.push(reportsModel);
                 index++;
@@ -291,5 +287,24 @@ export class PurchaseRegisterComponent implements OnInit {
         }
 
         return { firstDay, lastDay };
+    }
+
+    /**
+     * Calculates the purchase register total
+     *
+     * @private
+     * @param {*} transaction Purchase transaction
+     * @memberof PurchaseRegisterComponent
+     */
+    private setPurchaseRegisterTotal(transaction: any): void {
+        const item = _.cloneDeep(transaction);
+        this.purchaseRegisterTotal.purchase += item.debitTotal;
+        this.purchaseRegisterTotal.returns += item.creditTotal;
+        this.purchaseRegisterTotal.taxTotal += item.taxTotal;
+        this.purchaseRegisterTotal.discountTotal += item.discountTotal;
+        this.purchaseRegisterTotal.tcsTotal += item.tcsTotal;
+        this.purchaseRegisterTotal.tdsTotal += item.tdsTotal;
+        this.purchaseRegisterTotal.netPurchase += item.balance.amount;
+        this.purchaseRegisterTotal.cumulative = item.closingBalance.amount;
     }
 }

@@ -5,6 +5,10 @@ export class ReportsModel {
     public particular: string;
     public sales: number = 0;
     public returns: number = 0;
+    public taxTotal: number = 0;
+    public discountTotal: number = 0;
+    public tcsTotal: number = 0;
+    public tdsTotal: number = 0;
     public netSales: number = 0;
     public cumulative: number = 0;
     public reportType: string;
@@ -124,6 +128,10 @@ export class PurchaseReportsModel {
     public particular: string;
     public purchase: number = 0;
     public returns: number = 0;
+    public taxTotal: number = 0;
+    public discountTotal: number = 0;
+    public tcsTotal: number = 0;
+    public tdsTotal: number = 0;
     public netPurchase: number = 0;
     public cumulative: number = 0;
     public reportType: string;

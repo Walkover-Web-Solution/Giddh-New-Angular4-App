@@ -110,35 +110,35 @@ export class ReportsDetailsComponent implements OnInit {
             let reportsModel: ReportsModel = new ReportsModel();
             reportsModel.sales = item.creditTotal;
             reportsModel.returns = item.debitTotal;
-            reportsModel.netSales = item.closingBalance.amount;
-            reportsModel.cumulative = item.balance.amount;
+            reportsModel.taxTotal = item.taxTotal;
+            reportsModel.discountTotal = item.discountTotal;
+            reportsModel.tcsTotal = item.tcsTotal;
+            reportsModel.tdsTotal = item.tdsTotal;
+            reportsModel.netSales = item.balance.amount;
+            reportsModel.cumulative = item.closingBalance.amount;
             reportsModel.from = item.from;
             reportsModel.to = item.to;
-
 
             let mdyFrom = item.from.split('-');
             let mdyTo = item.to.split('-');
             let dateDiff = this.datediff(this.parseDate(mdyFrom), this.parseDate(mdyTo));
             if (dateDiff <= 8) {
-                this.salesRegisterTotal.sales += item.creditTotal;
-                this.salesRegisterTotal.returns += item.debitTotal;
-                this.salesRegisterTotal.netSales = item.closingBalance.amount;
-                this.salesRegisterTotal.cumulative += item.balance.amount;
+                this.setSalesRegisterTotal(item);
                 this.salesRegisterTotal.particular = this.selectedMonth + " " + mdyFrom[2];
                 reportsModel.particular = 'Week' + weekCount++;
                 reportModelArray.push(reportsModel);
             } else if (dateDiff <= 31) {
-                this.salesRegisterTotal.sales += item.creditTotal;
-                this.salesRegisterTotal.returns += item.debitTotal;
-                this.salesRegisterTotal.netSales = item.closingBalance.amount;
-                this.salesRegisterTotal.cumulative += item.balance.amount;
-
+                this.setSalesRegisterTotal(item);
                 reportsModel.particular = this.monthNames[parseInt(mdyFrom[1]) - 1] + " " + mdyFrom[2];
                 indexMonths++;
                 reportsModelCombined.sales += item.creditTotal;
                 reportsModelCombined.returns += item.debitTotal;
-                reportsModelCombined.netSales = item.closingBalance.amount;
-                reportsModelCombined.cumulative += item.balance.amount;
+                reportsModelCombined.taxTotal += item.taxTotal;
+                reportsModelCombined.discountTotal += item.discountTotal;
+                reportsModelCombined.tcsTotal += item.tcsTotal;
+                reportsModelCombined.tdsTotal += item.tdsTotal;
+                reportsModelCombined.netSales += item.balance.amount;
+                reportsModelCombined.cumulative = item.closingBalance.amount;
                 reportModelArray.push(reportsModel);
                 if (indexMonths % 3 === 0) {
                     reportsModelCombined.particular = 'Quarter ' + indexMonths / 3;
@@ -148,11 +148,7 @@ export class ReportsDetailsComponent implements OnInit {
                     reportsModelCombined = new ReportsModel();
                 }
             } else if (dateDiff <= 93) {
-                this.salesRegisterTotal.sales += item.creditTotal;
-                this.salesRegisterTotal.returns += item.debitTotal;
-                this.salesRegisterTotal.netSales = item.closingBalance.amount;
-                this.salesRegisterTotal.cumulative += item.balance.amount;
-
+                this.setSalesRegisterTotal(item);
                 reportsModel.particular = this.formatParticular(mdyTo, mdyFrom, index, this.monthNames);
                 reportModelArray.push(reportsModel);
                 index++;
@@ -292,5 +288,24 @@ export class ReportsDetailsComponent implements OnInit {
         }
 
         return { firstDay, lastDay };
+    }
+
+    /**
+     * Calculates the sales register total
+     *
+     * @private
+     * @param {*} transaction Sales transaction
+     * @memberof ReportsDetailsComponent
+     */
+    private setSalesRegisterTotal(transaction: any): void {
+        const item = _.cloneDeep(transaction);
+        this.salesRegisterTotal.sales += item.creditTotal;
+        this.salesRegisterTotal.returns += item.debitTotal;
+        this.salesRegisterTotal.taxTotal += item.taxTotal;
+        this.salesRegisterTotal.discountTotal += item.discountTotal;
+        this.salesRegisterTotal.tcsTotal += item.tcsTotal;
+        this.salesRegisterTotal.tdsTotal += item.tdsTotal;
+        this.salesRegisterTotal.netSales += item.balance.amount;
+        this.salesRegisterTotal.cumulative = item.closingBalance.amount;
     }
 }
