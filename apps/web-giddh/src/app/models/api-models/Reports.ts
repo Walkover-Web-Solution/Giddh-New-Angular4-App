@@ -122,6 +122,8 @@ export interface SalesRegisteDetailedResponse {
     totalItems: number;
     from: string;
     to: string;
+    quantityTotal: number;
+    rateTotal: number;
 }
 
 export class PurchaseReportsModel {
@@ -154,6 +156,8 @@ export interface PurchaseRegisteDetailedResponse {
     totalItems: number;
     from: string;
     to: string;
+    quantityTotal: number;
+    rateTotal: number;
 }
 
 /** Request object model for get all advance receipts API */

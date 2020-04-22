@@ -3,7 +3,7 @@
         <thead>
             <tr>
                 <th class="d-flex align-items-center">Particular</th>
-                <th *ngIf="purchaseRegisterTotal.purchase" class="width-200px">
+                <th class="width-200px">
                     <div class="d-flex">
                         <div class="flex-fill text-right ">
                             Purchase
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                 </th>
-                <th class="width-200px">
+                <th *ngIf="purchaseRegisterTotal.cumulative" class="width-200px">
                     <div class="d-flex">
                         <div class="flex-fill text-right ">
                             Cumulative
@@ -64,7 +64,7 @@
         <tbody>
             <tr *ngFor="let item of reportRespone" [ngClass]="{'bgChange': item.reportType === 'combined'}">
                 <td><a class="cursor-pointer" (click)="gotoDetailedPurchase(item)">{{item.particular}}</a></td>
-                <td *ngIf="purchaseRegisterTotal.purchase" class="text-right">{{item.purchase | giddhCurrency}}</td>
+                <td class="text-right">{{item.purchase | giddhCurrency}}</td>
                 <td *ngIf="purchaseRegisterTotal.returns" class="text-right">{{item.returns | giddhCurrency}}</td>
                 <td *ngIf="purchaseRegisterTotal.taxTotal" class="text-right">{{item.taxTotal | giddhCurrency}}</td>
                 <td *ngIf="purchaseRegisterTotal.discountTotal" class="text-right">{{item.discountTotal | giddhCurrency}}</td>
@@ -77,7 +77,7 @@
         <tfoot class="bold">
             <tr>
                 <th><a href="javascript:void(0)">{{purchaseRegisterTotal.particular }}</a></th>
-                <th *ngIf="purchaseRegisterTotal.purchase" class="text-right">{{purchaseRegisterTotal.purchase | giddhCurrency}}</th>
+                <th class="text-right">{{purchaseRegisterTotal.purchase | giddhCurrency}}</th>
                 <th *ngIf="purchaseRegisterTotal.returns" class="text-right">{{purchaseRegisterTotal.returns | giddhCurrency}}</th>
                 <th *ngIf="purchaseRegisterTotal.taxTotal" class="text-right">{{purchaseRegisterTotal.taxTotal | giddhCurrency}}</th>
                 <th *ngIf="purchaseRegisterTotal.discountTotal" class="text-right">{{purchaseRegisterTotal.discountTotal | giddhCurrency}}</th>

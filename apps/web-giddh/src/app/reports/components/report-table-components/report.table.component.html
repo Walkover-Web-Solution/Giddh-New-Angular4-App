@@ -8,7 +8,7 @@
                     <i class="icon-collapse" tooltip="Collapse All" placement="top"></i>
                 </a>-->
                 </th>
-                <th *ngIf="salesRegisterTotal.sales" class="width-200px">
+                <th class="width-200px">
                     <div class="d-flex">
                         <div class="flex-fill text-right ">
                             Sales
@@ -69,7 +69,7 @@
         <tbody>
             <tr *ngFor="let item of reportRespone" [ngClass]="{'bgChange': item.reportType === 'combined'}">
                 <td><a class="cursor-pointer" (click)="GotoDetailedSales(item)">{{item.particular}}</a></td>
-                <td *ngIf="salesRegisterTotal.sales" class="text-right">{{item.sales | giddhCurrency}}</td>
+                <td class="text-right">{{item.sales | giddhCurrency}}</td>
                 <td *ngIf="salesRegisterTotal.returns" class="text-right">{{item.returns | giddhCurrency}}</td>
                 <td *ngIf="salesRegisterTotal.taxTotal" class="text-right">{{item.taxTotal | giddhCurrency}}</td>
                 <td *ngIf="salesRegisterTotal.discountTotal" class="text-right">{{item.discountTotal | giddhCurrency}}</td>
@@ -83,7 +83,7 @@
         <tfoot class="bold">
             <tr>
                 <th><a href="javascript:void(0)">{{salesRegisterTotal.particular }}</a></th>
-                <th *ngIf="salesRegisterTotal.sales" class="text-right">{{salesRegisterTotal.sales | giddhCurrency}}</th>
+                <th class="text-right">{{salesRegisterTotal.sales | giddhCurrency}}</th>
                 <th *ngIf="salesRegisterTotal.returns" class="text-right">{{salesRegisterTotal.returns | giddhCurrency}}</th>
                 <th *ngIf="salesRegisterTotal.taxTotal" class="text-right">{{salesRegisterTotal.taxTotal | giddhCurrency}}</th>
                 <th *ngIf="salesRegisterTotal.discountTotal" class="text-right">{{salesRegisterTotal.discountTotal | giddhCurrency}}</th>
