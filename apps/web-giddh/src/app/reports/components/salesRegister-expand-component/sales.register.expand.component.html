@@ -75,7 +75,7 @@
 
 
 
-        <div class="form-group expand-collapse-btn mrR1">
+        <div class="form-group expand-collapse-btn mrR1 d-inline-block">
             <a class="cp" (click)="emitExpand()" data-toggle="tooltip" data-placement="top" title="Expand All"
                 *ngIf="!expand">
                 <span class="icon-expandIcon"></span>
@@ -91,12 +91,12 @@
 
 <ng-container *ngIf="(isGetSalesDetailsSuccess$ | async)">
     <div class="clearfix sales-register-table">
-        <div class="responsive mt-2">
-            <table class="table basic table-bordered table-middle ">
+        <div class="responsive table-responsive">
+            <table class="table basic giddh-table onMobileView">
                 <thead>
                     <tr>
                         <th>
-                            <div class="d-flex ">
+                            <div class="d-flex">
                                 <div class=" ">Date</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="
@@ -234,9 +234,9 @@
                             let item of (salesRegisteDetailedResponse$ | async)
                                 .items
                         ">
-                        <td>{{ item.date }}</td>
+                        <td data-title="Date">{{ item.date }}</td>
 
-                        <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select "
+                        <td data-title="Account" (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select "
                             (clickOutside)="modalUniqueName = ''">
                             {{ item.account.name }}
                             <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
@@ -250,15 +250,15 @@
                                 </ng-container>
                             </ng-container>
                         </td>
-                        <td *ngIf="showFieldFilter.voucherType" class="verticle-align-top">
+                        <td data-title="Voucher Type" *ngIf="showFieldFilter.voucherType" class="verticle-align-top">
                             {{ item.voucherType }}
                         </td>
-                        <td *ngIf="showFieldFilter.voucherNo" class="verticle-align-top">
+                        <td data-title="Voucher No" *ngIf="showFieldFilter.voucherNo" class="verticle-align-top">
                             <a href="javascript:void(0) ">{{
                                 item.voucherNumber
                             }}</a>
                         </td>
-                        <td *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal" class="text-right ">
+                        <td data-title="Sales" *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal" class="text-right ">
                             {{ item.creditTotal | giddhCurrency }}
                             <ng-container *ngIf="expand">
                                 <ng-container *ngFor="let stock of item.stocks">
@@ -266,10 +266,10 @@
                                 </ng-container>
                             </ng-container>
                         </td>
-                        <td *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal" class="text-right ">
+                        <td data-title="Return" *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal" class="text-right ">
                             {{ item.debitTotal | giddhCurrency }}
                         </td>
-                        <td class="text-right " *ngIf="showFieldFilter.qtyRate">
+                        <td data-title="Qty/Unit" class="text-right " *ngIf="showFieldFilter.qtyRate">
                             -
                             <ng-container *ngIf="expand">
                                 <ng-container *ngFor="let stock of item.stocks">
@@ -280,7 +280,7 @@
                                 </ng-container>
                             </ng-container>
                         </td>
-                        <td class="text-right " *ngIf="showFieldFilter.qtyRate">
+                        <td data-title="Rate" class="text-right " *ngIf="showFieldFilter.qtyRate">
                             -
                             <ng-container *ngIf="expand">
                                 <ng-container *ngFor="let stock of item.stocks">
@@ -288,13 +288,13 @@
                                 </ng-container>
                             </ng-container>
                         </td>
-                        <td *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal" class="text-right ">
+                        <td data-title="Discount" *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal" class="text-right ">
                             {{ item.discountTotal | giddhCurrency }}
                         </td>
-                        <td *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async)?.taxTotal" class="text-right ">
+                        <td data-title="Tax" *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async)?.taxTotal" class="text-right ">
                             {{ item.taxTotal | giddhCurrency }}
                         </td>
-                        <td class="text-right ">
+                        <td data-title="Net Sales" class="text-right ">
                             {{ item.netTotal | giddhCurrency }}
                         </td>
                     </tr>
@@ -319,14 +319,14 @@
     </div>
 
     <div class="clearfix sales-ragister ">
-        <div class="col-xs-2 ">
+        <div class="col-md-2 col-sm-3 col-xs-12">
             <p>Transaction count</p>
             <p class="text-orange ">
                 {{ (salesRegisteDetailedResponse$ | async).totalItems }}
             </p>
         </div>
-        <div class="col-xs-10 ">
-            <div *ngIf="SalesRegisteDetailedItems" class="clearfix main-sale-register-box ">
+        <div class="col-md-10 col-sm-9 col-xs-12">
+            <div *ngIf="SalesRegisteDetailedItems" class="clearfix main-sale-register-box">
                 <div *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal" class="sale-register-box text-right">
                     <p>Sales</p>
                     <h4>

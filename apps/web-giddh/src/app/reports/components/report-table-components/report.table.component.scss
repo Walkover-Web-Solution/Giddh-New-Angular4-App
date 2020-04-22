@@ -7,7 +7,7 @@
 .basic > tbody > tr > td,
 .basic > thead > tr > th,
 .basic > tfoot > tr > th {
-    padding: 10px 14px;
+    white-space: nowrap !important;
 }
 .basic > tfoot > tr > th {
     background: #e3e3e3;
@@ -21,7 +21,7 @@
 .basic > tbody > tr > td > a {
     color: #0c8fe6;
 }
-.particular[_ngcontent-c9] {
+.particular {
     float: right;
     margin-top: 2px;
     font-size: 19px;
@@ -40,11 +40,6 @@
     border: 1px solid #d9d9d9;
     justify-content: center;
     align-items: center;
-}
-.basic > tbody > tr td:first-child,
-.basic > thead > tr th:first-child {
-    border-left: 0px solid #ddd !important;
-    border-bottom: 0px;
 }
 .btn-sort i {
     display: block;
