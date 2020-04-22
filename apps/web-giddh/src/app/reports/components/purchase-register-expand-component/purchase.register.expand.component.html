@@ -354,7 +354,7 @@
                         }}
                     </h4>
                 </div>
-                <div *ngIf="(purchaseRegisteDetailedResponse$ | async)?.tcsTotal" class="sale-register-box text-right">
+                <div *ngIf="isTcsTdsApplicable && (purchaseRegisteDetailedResponse$ | async)?.tcsTotal" class="sale-register-box text-right">
                     <p>TCS</p>
                     <h4>
                         {{
@@ -363,7 +363,7 @@
                         }}
                     </h4>
                 </div>
-                <div *ngIf="(purchaseRegisteDetailedResponse$ | async)?.tdsTotal" class="sale-register-box text-right">
+                <div *ngIf="isTcsTdsApplicable && (purchaseRegisteDetailedResponse$ | async)?.tdsTotal" class="sale-register-box text-right">
                     <p>TDS</p>
                     <h4>
                         {{

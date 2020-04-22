@@ -12,6 +12,7 @@ import { FormControl } from '@angular/forms';
 import { CurrentPage } from '../../../models/api-models/Common';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { PAGINATION_LIMIT } from '../../../app.constant';
+import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 
 
 @Component({
@@ -33,6 +34,8 @@ export class SalesRegisterExpandComponent implements OnInit {
     public showSearchInvoiceNo: boolean = false;
     /** Pagination limit for records */
     public paginationLimit: number = PAGINATION_LIMIT;
+    /** True, if company country supports other tax (TCS/TDS) */
+    public isTcsTdsApplicable: boolean;
 
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     // searching
@@ -76,6 +79,11 @@ export class SalesRegisterExpandComponent implements OnInit {
         this.getDetailedsalesRequestFilter.count = 50;
         this.getDetailedsalesRequestFilter.q = '';
 
+        this.store.pipe(select(appState => appState.company), take(1)).subscribe((companyData: CurrentCompanyState) => {
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            }
+        });
 
         this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
             if (params.from && params.to) {

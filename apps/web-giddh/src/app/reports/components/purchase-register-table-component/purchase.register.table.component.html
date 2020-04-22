@@ -31,14 +31,14 @@
                         </div>
                     </div>
                 </th>
-                <th *ngIf="purchaseRegisterTotal.tcsTotal" class="width-200px">
+                <th *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tcsTotal" class="width-200px">
                     <div class="d-flex">
                         <div class="flex-fill text-right ">
                             TCS
                         </div>
                     </div>
                 </th>
-                <th *ngIf="purchaseRegisterTotal.tdsTotal" class="width-200px">
+                <th *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tdsTotal" class="width-200px">
                     <div class="d-flex">
                         <div class="flex-fill text-right ">
                             TDS
@@ -68,8 +68,8 @@
                 <td *ngIf="purchaseRegisterTotal.returns" class="text-right">{{item.returns | giddhCurrency}}</td>
                 <td *ngIf="purchaseRegisterTotal.taxTotal" class="text-right">{{item.taxTotal | giddhCurrency}}</td>
                 <td *ngIf="purchaseRegisterTotal.discountTotal" class="text-right">{{item.discountTotal | giddhCurrency}}</td>
-                <td *ngIf="purchaseRegisterTotal.tcsTotal" class="text-right">{{item.tcsTotal | giddhCurrency}}</td>
-                <td *ngIf="purchaseRegisterTotal.tdsTotal" class="text-right">{{item.tdsTotal | giddhCurrency}}</td>
+                <td *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tcsTotal" class="text-right">{{item.tcsTotal | giddhCurrency}}</td>
+                <td *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tdsTotal" class="text-right">{{item.tdsTotal | giddhCurrency}}</td>
                 <td *ngIf="purchaseRegisterTotal.netPurchase" class="text-right">{{item.netPurchase | giddhCurrency}}</td>
                 <td *ngIf="purchaseRegisterTotal.cumulative" class="text-right">{{item.cumulative | giddhCurrency}}</td>
             </tr>
@@ -81,8 +81,8 @@
                 <th *ngIf="purchaseRegisterTotal.returns" class="text-right">{{purchaseRegisterTotal.returns | giddhCurrency}}</th>
                 <th *ngIf="purchaseRegisterTotal.taxTotal" class="text-right">{{purchaseRegisterTotal.taxTotal | giddhCurrency}}</th>
                 <th *ngIf="purchaseRegisterTotal.discountTotal" class="text-right">{{purchaseRegisterTotal.discountTotal | giddhCurrency}}</th>
-                <th *ngIf="purchaseRegisterTotal.tcsTotal" class="text-right">{{purchaseRegisterTotal.tcsTotal | giddhCurrency}}</th>
-                <th *ngIf="purchaseRegisterTotal.tdsTotal" class="text-right">{{purchaseRegisterTotal.tdsTotal | giddhCurrency}}</th>
+                <th *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tcsTotal" class="text-right">{{purchaseRegisterTotal.tcsTotal | giddhCurrency}}</th>
+                <th *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tdsTotal" class="text-right">{{purchaseRegisterTotal.tdsTotal | giddhCurrency}}</th>
                 <th *ngIf="purchaseRegisterTotal.netPurchase" class="text-right">{{purchaseRegisterTotal.netPurchase | giddhCurrency}}</th>
                 <th *ngIf="purchaseRegisterTotal.cumulative" class="text-right">{{purchaseRegisterTotal.cumulative | giddhCurrency}}</th>
             </tr>
