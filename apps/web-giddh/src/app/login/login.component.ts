@@ -31,6 +31,8 @@ import { AuthenticationService } from "../services/authentication.service";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { isCordova } from "@giddh-workspaces/utils";
 import { GeneralService } from "../services/general.service";
+import { AppModule } from '..';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 @Component({
     selector: "login",
@@ -91,6 +93,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     //Button to hide linkedIn button till functionality is available
     public showLinkedInButton = false;
+    public deviceDetails: any;
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: FormBuilder,
@@ -161,6 +164,21 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.userDetails$ = this.store.select(p => p.session.user);
         this.isTwoWayAuthInProcess$ = this.store.select(p => p.login.isTwoWayAuthInProcess);
         this.isTwoWayAuthInSuccess$ = this.store.select(p => p.login.isTwoWayAuthSuccess);
+
+        if (isCordova()) {
+            const bootstrap = () => {
+                platformBrowserDynamic().bootstrapModule(AppModule);
+            };
+
+            if (typeof window['cordova'] !== 'undefined') {
+                document.addEventListener('deviceready', (device) => {
+                    console.log(device);
+                    bootstrap();
+                }, false);
+            } else {
+                bootstrap();
+            }
+        }
     }
 
     // tslint:disable-next-line:no-empty
@@ -403,7 +421,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                         console.log(('error: ' + msg));
                     }
                 );
-            } else if(provider === "apple") {
+            } else if (provider === "apple") {
                 (cordova.plugins as any).SignInWithApple.signin(
                     { requestedScopes: [0, 1] },
                     function (succ) {
