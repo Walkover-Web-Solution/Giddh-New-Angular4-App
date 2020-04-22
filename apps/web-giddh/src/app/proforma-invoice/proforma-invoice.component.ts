@@ -558,7 +558,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             await this.prepareCompanyCountryAndCurrencyFromProfile(profile);
         });
 
-        this.store.pipe(select(appState => appState.company), take(1)).subscribe((companyData: CurrentCompanyState) => {
+        this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
             }
