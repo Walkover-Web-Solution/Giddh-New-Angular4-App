@@ -2,30 +2,36 @@
     <div class="panel panel-default">
         <div class="row">
             <div class="col-sm-9">
-                <div class="leftColumn">
-                    <div class="panel-heading clearfix">
-                        <div class="btn-group gstDropdown pull-left" dropdown>
-                            <span id="button-basic" dropdownToggle class="dropdown-toggle"
-                                aria-controls="dropdown-basic">
-                                <span *ngIf="activeGraphType !== undefined">
-                                    <strong>{{activeGraphType['uniqueName']}}</strong> </span> <span
-                                    class="icon-arrow-down mrL1"></span>
-                            </span>
-                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
-                                aria-labelledby="button-basic">
-                                <li role="menuitem" *ngFor="let gtype of revenueGraphTypes;"><a class="dropdown-item"
-                                        (click)="changeGraphType(gtype);">{{gtype.uniqueName}}</a></li>
-                            </ul>
-                        </div>
-                        <i class="glyphicon glyphicon-refresh pull-right mrL2" (click)="refreshChart()"></i>
-                        <span class="thisWeek pull-right"><span class="icon-collapse-icon mrL1" tooltip="Expand"
-                                (click)="showLineChart()"></span> </span>
-                        <ul class="dashboard-option pull-right">
-                            <li class="secondryDarkbg"> <span></span> Last Week</li>
-                            <li class="secondrylightbg"> <span></span> This Week</li>
-                        </ul>
+                <div class="left-column">
+                    <div class="panel-heading pl-0 pt-0 clearfix">
+                        <div class="panel-heading-inner-coonent">
+                            <div class="btn-group gst-dropdown cursor-pointer pull-left" dropdown>
+                                <span id="button-basic" dropdownToggle class="dropdown-toggle"
+                                    aria-controls="dropdown-basic">
+                                    <span *ngIf="activeGraphType !== undefined">
+                                        <strong>{{activeGraphType['uniqueName']}}</strong> </span> <span
+                                        class="icon-arrow-down mrL1"></span>
+                                </span>
+                                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                                    aria-labelledby="button-basic">
+                                    <li role="menuitem" *ngFor="let gtype of revenueGraphTypes;"><a class="dropdown-item"
+                                            (click)="changeGraphType(gtype);">{{gtype.uniqueName}}</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="refresh-btn">
+                                <i class="glyphicon glyphicon-refresh pull-right mrL2" (click)="refreshChart()"></i>
+                                <span class="this-week pull-right"><span class="icon-collapse-icon mrL1" tooltip="Expand"
+                                        (click)="showLineChart()"></span> </span>
+                                <ul class="dashboard-option pull-right">
+                                    <li class="secondryDarkbg"> <span></span> Last Week</li>
+                                    <li class="secondrylightbg"> <span></span> This Week</li>
+                                </ul>
+                            </div>
+                        </div>  
+
                     </div>
-                    <div class="panel-body pos-rel">
+                    <div class="panel-body pl-0 pr-0 pos-rel">
                         <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
                             <div class="no-data mrT2 loader-main">
                                 <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
@@ -71,9 +77,9 @@
     </div>
 </div>
 <div class="" *ngIf="graphExpanded">
-    <div class="totalSalesHeader">
+    <div class="total-sales-header">
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-8">
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="daterang-block">
@@ -99,7 +105,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <div class="page-title">
                     <div class="collapse-close" (click)="showColumnChart()">
                         <span class="icon-collapse-icon" tooltip="Collapse"></span>
@@ -111,7 +117,7 @@
     </div>
     <div class="panel panel-default mrT1">
         <div class=" clearfix topdates">
-            <div class="pull-left aboutDate">
+            <div class="pull-left about-date">
                 <div class="active-date">
                     <span></span>{{this.getPreviousWeekStartEndDate[0] | date}} -
                     {{this.getPreviousWeekStartEndDate[1] | date}}
@@ -121,8 +127,8 @@
                     {{this.getCurrentWeekStartEndDate[1] | date}}
                 </div>
             </div>
-            <div class="pull-right">
-                <div class="total-salesTabs">
+            <div class="pull-right revenue-tabs">
+                <div class="total-sales-tabs">
                     <a [ngClass]="{'active-graph': graphParams.interval == 'daily'}"
                         (click)="updateChartFrequency('daily')">Daily</a>|<a
                         [ngClass]="{'active-graph': graphParams.interval == 'weekly'}"

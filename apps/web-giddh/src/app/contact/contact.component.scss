@@ -206,7 +206,7 @@ tr:last-child td.pos-rel.WordWrap.vendor-customer-name.cursor-pointer {
     line-height: 1.6;
 }
 
-.custumerRightWrap {
+.customer-right-wrap {
     padding-right: 0;
 }
 
@@ -312,7 +312,7 @@ span.inputAddon {
     .aging-table > tbody > tr input[type="checkbox"] {
         top: 2px;
     }
-    .custumerRightWrap h4.mb-1.pdR2 {
+    .customer-right-wrap h4.mb-1.pdR2 {
         margin-bottom: 0;
     }
     tr:last-child td.pos-rel.WordWrap.customer-name.cursor-pointer,
@@ -338,14 +338,14 @@ span.inputAddon {
     .onDesktopView.btn-group {
         display: none;
     }
-    .custumerRightWrap {
+    .customer-right-wrap {
         padding-right: 0;
         position: fixed;
         bottom: 0;
         width: 100%;
         background: #fff;
         padding: 10px 5px;
-        z-index: 90;
+        z-index:1;
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
     }
     td.pos-rel.WordWrap.customer-name.cursor-pointer,
@@ -421,7 +421,7 @@ span.inputAddon {
     .customer-footer-box + .btn-group {
         float: left !important;
     }
-    .custumerRightWrap {
+    .customer-right-wrap {
         position: relative;
     }
     .pagination-main .mt-5 {
@@ -461,7 +461,7 @@ span.inputAddon {
             }
         }
     }
-    .custumerRightWrap h4.mb-1.pdR2 {
+    .customer-right-wrap h4.mb-1.pdR2 {
         margin-bottom: 10px;
     }
     .customer-right {
@@ -491,7 +491,7 @@ span.inputAddon {
         font-size: 14px;
         padding-bottom: 7px;
     }
-    .custumerRightWrap h4 {
+    .customer-right-wrap h4 {
         text-align: left !important;
         padding-left: 15px;
     }

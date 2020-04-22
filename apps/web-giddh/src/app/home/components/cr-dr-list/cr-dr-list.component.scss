@@ -26,13 +26,13 @@ table.basic td {
     padding-right: 0;
     padding-left: 0;
     border-top: none;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid $gainsboro !important;
     padding-top: 20px;
     padding-bottom: 3px;
     font-size: 16px;
     color: #484848;
 }
-.credtorsTable tr:last-child td {
+.credtors-table tr:last-child td {
     border-bottom: none !important;
 }
 table.basic th {
@@ -42,10 +42,10 @@ table.basic th {
 .cr-dr-body {
     padding: 15px;
 }
-.debtorsTable {
+.debtors-table {
     margin-bottom: 50px;
 }
-span.thisWeek {
+span.this-week {
     color: #666666;
     text-decoration: underline;
     font-size: 16px;
@@ -63,4 +63,20 @@ thead th {
     text-align: center;
     color: rgba(0, 0, 0, 0.4) !important;
     font-size: 16px;
+}
+@media(max-width:768px){
+    .debtors-table {
+        margin-bottom: 30px;
+    }
+    table.basic td {
+        border-bottom: none !important;
+    }
+    table.on-mobile-view{
+        tbody td:before{
+            left: 10px;
+        }
+        tbody tr {
+            margin: 0 auto 22px;
+        }
+    }
 }

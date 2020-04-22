@@ -6683,20 +6683,9 @@ table td[class*=col-]:last-child {
     margin-left: 5px;
 }
 
-.overdue_chart {
+.overdue-chart , .profit-loss-chart {
     margin: 0 auto;
 }
-
-/* .overdue_chart {
-    width: 100% !important;
-    height: 174px !important;
-}
-
-.overdue_chart svg {
-    width: 100% !important;
-    height: 174px !important;
-} */
-
 .condition_tag {
     position: absolute;
     top: 2px;
@@ -8036,7 +8025,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     color: var(--dark-blue01);
 }
 
-.custumerRightWrap {
+.customer-right-wrap {
     padding-right: 0;
 }
 
@@ -8179,24 +8168,24 @@ span.red-text {
     font-size: 14px;
 }
 
-.total-salesTabs .nav.nav-tabs {
+.total-sales-tabs .nav.nav-tabs {
     position: absolute;
     top: 0;
     right: 12px;
 }
 
-.total-salesTabs .nav-tabs {
+.total-sales-tabs .nav-tabs {
     border-bottom: none;
 }
 
-.total-salesTabs .nav-tabs li a {
+.total-sales-tabs .nav-tabs li a {
     color: #484848;
     font-size: 16px;
     padding: 0 5px;
     position: relative;
 }
 
-.total-salesTabs .nav-tabs li a:after {
+.total-sales-tabs .nav-tabs li a:after {
     position: absolute;
     content: "";
     height: 15px;
@@ -8206,28 +8195,28 @@ span.red-text {
     top: 5px;
 }
 
-.total-salesTabs .nav-tabs li:last-child a:after {
+.total-sales-tabs .nav-tabs li:last-child a:after {
     display: none;
 }
 
-.total-salesTabs .nav-tabs > li.active a {
+.total-sales-tabs .nav-tabs > li.active a {
     font-family: "LatoWebBold";
 }
 
-.total-salesTabs .nav-tabs > li.active > a,
-.total-salesTabs .nav-tabs > li.active > a:focus,
-.total-salesTabs .nav-tabs > li.active > a:hover {
+.total-sales-tabs .nav-tabs > li.active > a,
+.total-sales-tabs .nav-tabs > li.active > a:focus,
+.total-sales-tabs .nav-tabs > li.active > a:hover {
     border: none;
 }
 
-.total-salesTabs .nav > li > a:focus,
-.total-salesTabs .nav > li > a:hover {
+.total-sales-tabs .nav > li > a:focus,
+.total-sales-tabs .nav > li > a:hover {
     text-decoration: none;
     background-color: transparent;
     border: none;
 }
 
-.total-salesTabs .nav-tabs > li > a {
+.total-sales-tabs .nav-tabs > li > a {
     border: none;
 }
 
@@ -8890,6 +8879,9 @@ input.checkbox-custom[type="checkbox"] {
 .modal-content{
     border: none !important;
 }
+.panel-block  .panel-body{
+    min-height: 350px;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9385,6 +9377,9 @@ input.checkbox-custom[type="checkbox"] {
     body.hide-scroll-body{
         overflow-y: hidden;
     }
+    .panel-block .panel-body{
+        min-height: auto;
+    } 
 }
 
 @media (max-width: 575px) {
@@ -9532,7 +9527,7 @@ input.checkbox-custom[type="checkbox"] {
     .xs-left {
         text-align: left !important;
     }
-    .custumerRightWrap .text-right.xs-left {
+    .customer-right-wrap .text-right.xs-left {
         text-align: right !important;
     }
     .form_box.form-bg {
