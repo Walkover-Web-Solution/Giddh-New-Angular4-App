@@ -168,12 +168,12 @@
                                 </div>
                             </div>
                         </th>
-                        <th *ngIf="showFieldFilter.qtyRate" class=" text-right ">
+                        <th *ngIf="showFieldFilter.qtyRate && (purchaseRegisteDetailedResponse$ | async)?.quantityTotal" class=" text-right ">
                             <div class="d-flex justify-content-end">
                                 <div class=" text-right  ">Qty/Unit</div>
                             </div>
                         </th>
-                        <th *ngIf="showFieldFilter.qtyRate" class=" text-right ">
+                        <th *ngIf="showFieldFilter.qtyRate && (purchaseRegisteDetailedResponse$ | async)?.rateTotal" class=" text-right ">
                             <div class="d-flex justify-content-end">
                                 <div class=" text-right ">Rate</div>
                                 <div class="icon-pointer">
@@ -267,7 +267,7 @@
                         <td data-title="Return" *ngIf="(purchaseRegisteDetailedResponse$ | async).creditTotal" class="text-right ">
                             {{ item.creditTotal | giddhCurrency }}
                         </td>
-                        <td data-title="Qty/Unit" class="text-right" *ngIf="showFieldFilter.qtyRate">
+                        <td class="text-right" data-title="Qty/Unit" *ngIf="showFieldFilter.qtyRate && (purchaseRegisteDetailedResponse$ | async)?.quantityTotal">
                             -
                             <ng-container *ngIf="expand">
                                 <ng-container *ngFor="let stock of item.stocks">
@@ -278,7 +278,7 @@
                                 </ng-container>
                             </ng-container>
                         </td>
-                        <td data-title="Rate" class="text-right " *ngIf="showFieldFilter.qtyRate">
+                        <td class="text-right" data-title="Rate" *ngIf="showFieldFilter.qtyRate && (purchaseRegisteDetailedResponse$ | async)?.rateTotal">
                             -
                             <ng-container *ngIf="expand">
                                 <ng-container *ngFor="let stock of item.stocks">
@@ -382,7 +382,7 @@
 
                 <div class="sale-register-box text-right">
                     <p>Net Purchase</p>
-                    <h4 class="text-orange ">
+                    <h4>
                         {{
                             (purchaseRegisteDetailedResponse$ | async).netTotal
                                 .amount | giddhCurrency

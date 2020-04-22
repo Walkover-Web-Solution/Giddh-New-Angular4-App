@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
-import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
+import { ReportsDetailedRequestFilter, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ReplaySubject, Observable } from 'rxjs';
@@ -72,7 +71,7 @@ export class PurchaseRegisterExpandComponent implements OnInit {
         this.getDetailedPurchaseRequestFilter.count = 50;
         this.getDetailedPurchaseRequestFilter.q = '';
 
-        this.store.pipe(select(appState => appState.company), take(1)).subscribe((companyData: CurrentCompanyState) => {
+        this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
             }
