@@ -7,7 +7,7 @@
 .basic > tbody > tr > td,
 .basic > thead > tr > th,
 .basic > tfoot > tr > th {
-    padding: 10px 14px;
+    white-space: nowrap !important;
 }
 .basic > tfoot > tr > th {
     background: #e3e3e3;

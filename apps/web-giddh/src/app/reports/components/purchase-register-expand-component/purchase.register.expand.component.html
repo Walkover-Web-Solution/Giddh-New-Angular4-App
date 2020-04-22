@@ -75,7 +75,7 @@
 
 
 
-        <div class="form-group expand-collapse-btn mrR1 d-inline-block">
+        <div class="form-group expand-collapse-btn mr-1 d-inline-block">
             <a class="cp" (click)="emitExpand()" data-toggle="tooltip" data-placement="top" title="Expand All"
                 *ngIf="!expand">
                 <span class="icon-expandIcon"></span>
@@ -215,7 +215,7 @@
                         </th>
                         <th class="text-right">
                             <div class="d-flex justify-content-end">
-                                <div class=" ">Net Purchase</div>
+                                <div>Net Purchase</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="
                                             sortingTemplate;
@@ -256,7 +256,7 @@
                                 item.voucherNumber
                             }}</a>
                         </td>
-                        <td data-title="Purchase" *ngIf="(purchaseRegisteDetailedResponse$ | async).debitTotal" class="text-right ">
+                        <td data-title="Purchase" *ngIf="(purchaseRegisteDetailedResponse$ | async).debitTotal" class="text-right">
                             {{ item.debitTotal | giddhCurrency }}
                             <ng-container *ngIf="expand">
                                 <ng-container *ngFor="let stock of item.stocks">
@@ -264,7 +264,7 @@
                                 </ng-container>
                             </ng-container>
                         </td>
-                        <td data-title="Return" *ngIf="(purchaseRegisteDetailedResponse$ | async).creditTotal" class="text-right ">
+                        <td data-title="Return" *ngIf="(purchaseRegisteDetailedResponse$ | async).creditTotal" class="text-right">
                             {{ item.creditTotal | giddhCurrency }}
                         </td>
                         <td class="text-right" data-title="Qty/Unit" *ngIf="showFieldFilter.qtyRate && (purchaseRegisteDetailedResponse$ | async)?.quantityTotal">
@@ -286,13 +286,13 @@
                                 </ng-container>
                             </ng-container>
                         </td>
-                        <td data-title="Discount" *ngIf="showFieldFilter.discount && (purchaseRegisteDetailedResponse$ | async)?.discountTotal" class="text-right ">
+                        <td data-title="Discount" *ngIf="showFieldFilter.discount && (purchaseRegisteDetailedResponse$ | async)?.discountTotal" class="text-right">
                             {{ item.discountTotal | giddhCurrency }}
                         </td>
-                        <td data-title="Tax" *ngIf="showFieldFilter.tax && (purchaseRegisteDetailedResponse$ | async).taxTotal" class="text-right ">
+                        <td data-title="Tax" *ngIf="showFieldFilter.tax && (purchaseRegisteDetailedResponse$ | async).taxTotal" class="text-right">
                             {{ item.taxTotal | giddhCurrency }}
                         </td>
-                        <td data-title="Net Purchase" class="text-right ">
+                        <td data-title="Net Purchase" class="text-right">
                             {{ item.netTotal | giddhCurrency }}
                         </td>
                     </tr>
