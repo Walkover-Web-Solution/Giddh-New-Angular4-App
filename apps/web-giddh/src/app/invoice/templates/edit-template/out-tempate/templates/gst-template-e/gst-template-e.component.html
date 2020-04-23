@@ -17,14 +17,14 @@
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header">
             <i class="fa fa-pencil"></i>
         </a>
-        <header>
+        <header class="bottom-border">
             <table>
                 <tbody>
                     <tr>
                         <td>
                             <h1 [ngStyle]="{'font-size' : inputTemplate.fontSize-1+28 +'px'}">hello</h1>
-                            <h4 class="sub_head">This is your
-                                <strong>INVOICE</strong>
+                            <h4 class="sub_head" *ngIf="fieldsAndVisibility.header.formNameTaxInvoice?.display">This is your
+                                <strong>{{fieldsAndVisibility.header.formNameTaxInvoice?.label}}</strong>
                             </h4>
                         </td>
 
@@ -64,7 +64,7 @@
         </header>
 
 
-        <table class="warehouse-table" cellspacing="0" cellpadding="0">
+        <table class="warehouse-table" cellspacing="0" cellpadding="0" *ngIf="fieldsAndVisibility?.header?.warehouseAddress?.display">
             <tbody>
                 <tr>
                     <td>
@@ -317,10 +317,10 @@
                 </tr>
             </tfoot>
         </table>
-        <table class="tax-table item" cellspacing="0" cellpadding="0">
+        <table class="tax-table item" cellspacing="0" cellpadding="0" *ngIf="fieldsAndVisibility.table.taxBifurcation?.display && fieldsAndVisibility.table.taxBifurcation?.label === 'hsnSac'">
             <thead>
                 <tr>
-                    <th class="text-left" *ngIf="fieldsAndVisibility.table.hsnSac?.display">
+                    <th class="text-left">
                         {{(fieldsAndVisibility.table.hsnSac?.label?.length > 0) ? fieldsAndVisibility.table.hsnSac?.label : 'HSN/SAC'}}
                     </th>
                     <th *ngIf="fieldsAndVisibility.table.taxableValue?.display">

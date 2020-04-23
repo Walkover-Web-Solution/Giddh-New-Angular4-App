@@ -212,7 +212,7 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
 
     public onUploadFileOutput(output: UploadOutput): void {
         if (output.type === 'allAddedToQueue' || output.type === 'addedToQueue') {
-            if(output.file) {
+            if (output.file) {
                 this.signatureImgAttached = true;
                 this.previewFile();
             }
@@ -259,7 +259,7 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
             this.startUpload();
             //this._invoiceUiDataService.setLogoPath(preview.src);
         };
-        
+
         if (file) {
             reader.readAsDataURL(file);
         } else {
@@ -294,5 +294,45 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
         }
         this._invoiceUiDataService.setCustomTemplate(template);
 
+    }
+
+    /**
+     * Change quanity then total quantity will get change
+     *
+     * @memberof ContentFilterComponent
+     */
+    public changeDisableQuantity() {
+        let template = _.cloneDeep(this.customTemplate);
+        if (!template.sections.table.data.quantity.display) {
+            template.sections.table.data.totalQuantity.display = false;
+        } else {
+            template.sections.table.data.totalQuantity.display = true;
+        }
+        this._invoiceUiDataService.setCustomTemplate(template);
+    }
+    /**
+     * Change Tax Bifurcation then total HSN/SAC or Tax table level will get change
+     *
+     * @param {string} lebel: String that allow tabel section either HSN/SAC(hsnSac) or Tax (taxRateBifurcation)
+     * @param {string} sectionType:  Define section for template a will be 'footer' and for teamplate e will be 'table'
+     * @memberof ContentFilterComponent
+     */
+    public checkedTaxBifurcation(lebel: string, sectionType: string) {
+        let template = _.cloneDeep(this.customTemplate);
+        if (sectionType === 'table') {
+            if (template.sections.table.data.taxBifurcation.display) {
+                template.sections.table.data.taxBifurcation.label = lebel;
+            } else {
+                template.sections.table.data.taxBifurcation.label = '';
+            }
+        } else {
+            if (template.sections.footer.data.taxBifurcation.display) {
+                template.sections.footer.data.taxBifurcation.label = lebel;
+            } else {
+                template.sections.footer.data.taxBifurcation.label = '';
+            }
+        }
+
+        this._invoiceUiDataService.setCustomTemplate(template);
     }
 }
