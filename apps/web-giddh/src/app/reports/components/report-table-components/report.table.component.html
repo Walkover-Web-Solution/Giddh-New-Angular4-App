@@ -1,5 +1,5 @@
-<div class="responsive">
-    <table class="table basic table-bordered">
+<div class="responsive table-responsive">
+    <table class="table basic giddh-table onMobileView">
         <thead>
             <tr>
                 <th class="d-flex align-items-center">Particular
@@ -68,15 +68,15 @@
         </thead>
         <tbody>
             <tr *ngFor="let item of reportRespone" [ngClass]="{'bgChange': item.reportType === 'combined'}">
-                <td><a class="cursor-pointer" (click)="GotoDetailedSales(item)">{{item.particular}}</a></td>
-                <td class="text-right">{{item.sales | giddhCurrency}}</td>
-                <td *ngIf="salesRegisterTotal.returns" class="text-right">{{item.returns | giddhCurrency}}</td>
-                <td *ngIf="salesRegisterTotal.taxTotal" class="text-right">{{item.taxTotal | giddhCurrency}}</td>
-                <td *ngIf="salesRegisterTotal.discountTotal" class="text-right">{{item.discountTotal | giddhCurrency}}</td>
-                <td *ngIf="isTcsTdsApplicable && salesRegisterTotal.tcsTotal" class="text-right">{{item.tcsTotal | giddhCurrency}}</td>
-                <td *ngIf="isTcsTdsApplicable && salesRegisterTotal.tdsTotal" class="text-right">{{item.tdsTotal | giddhCurrency}}</td>
-                <td *ngIf="salesRegisterTotal.netSales" class="text-right">{{item.netSales | giddhCurrency}}</td>
-                <td *ngIf="salesRegisterTotal.cumulative" class="text-right">{{item.cumulative | giddhCurrency}}</td>
+                <td data-title="Particular"><a class="cursor-pointer" (click)="GotoDetailedSales(item)">{{item.particular}}</a></td>
+                <td data-title="Sales" class="text-right">{{item.sales | giddhCurrency}}</td>
+                <td data-title="Return" *ngIf="salesRegisterTotal.returns" class="text-right">{{item.returns | giddhCurrency}}</td>
+                <td data-title="Tax" *ngIf="salesRegisterTotal.taxTotal" class="text-right">{{item.taxTotal | giddhCurrency}}</td>
+                <td data-title="Discount" *ngIf="salesRegisterTotal.discountTotal" class="text-right">{{item.discountTotal | giddhCurrency}}</td>
+                <td data-title="TCS" *ngIf="isTcsTdsApplicable && salesRegisterTotal.tcsTotal" class="text-right">{{item.tcsTotal | giddhCurrency}}</td>
+                <td data-title="TDS" *ngIf="isTcsTdsApplicable && salesRegisterTotal.tdsTotal" class="text-right">{{item.tdsTotal | giddhCurrency}}</td>
+                <td data-title="Net Sales" *ngIf="salesRegisterTotal.netSales" class="text-right">{{item.netSales | giddhCurrency}}</td>
+                <td data-title="Cumulative" *ngIf="salesRegisterTotal.cumulative" class="text-right">{{item.cumulative | giddhCurrency}}</td>
             </tr>
         </tbody>
 
