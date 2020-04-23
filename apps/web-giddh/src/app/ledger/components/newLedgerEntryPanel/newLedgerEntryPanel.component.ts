@@ -262,7 +262,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         });
 
-        this.store.pipe(select(appState => appState.company), take(1)).subscribe((companyData: CurrentCompanyState) => {
+        this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
             }
@@ -413,7 +413,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.calculateTotal();
     }
 
-    public calculateTotal() {
+    /**
+     * Calculates the total amount
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public calculateTotal(): void {
         if (this.currentTxn) {
             if (this.currentTxn.amount) {
                 if (this.isAdvanceReceipt) {

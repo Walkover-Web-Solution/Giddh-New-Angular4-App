@@ -57,3 +57,21 @@ span.icon-rupees {
 .panel-body small {
     color: $dark-gray;
 }
+.profit-loss-chart{
+    margin: 0 auto !important;
+}
+@media(max-width:767px){
+    .total-income {
+        margin-bottom: 10px;
+    }
+}
+@media(max-width:360px){
+    .dashboard-filter{
+        display: flex;
+        float: none !important;
+        margin-top: 10px;
+    }
+    .due-amount , .total-amount {
+        font-size: 14px;
+    }
+}

@@ -41,15 +41,15 @@
 
         <div class="box">
         <div class="clearfix mrT2">
-            <div class="row d-flex">
-                <div class="col-md-7">
+            <div class="row d-flex sm-d-block">
+                <div class="col-md-7 col-sm-7">
                     <div class="pr-2">
                     <div class="clearfix">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-6 col-sm-6">
                                 <h2 class="section_head pb-0">Financial Year(s) - Shreya040</h2>
                             </div>
-                            <div class="col-md-6 text-right">
+                            <div class="col-md-6 col-sm-6 text-right xs-left">
 
                                 <button type="button" class="btn btn-primary" (click)="isPlanShow=true">Buy Transactions</button>
                                 <button type="button" class="btn btn-success">Renew</button>
@@ -128,13 +128,15 @@
                                     <th class="text-right">Additional Charges</th>
                                 </tr>
                             </thead>
+
+
                             <tbody>
-                                <tr>
-                                    <td>Apr</td>
-                                    <td>5,000</td>
-                                    <td>35,000</td>
-                                    <td class="text-right">0</td>
-                                </tr>
+                                <!-- <tr *ngIf="seletedUserPlans">
+                                    <td class="professional-name">{{ moment(transaction.from, 'DD-MM-YYYY').format('MMM - YY')}}</td>
+                                    <td>{{ seletedUserPlans?.totalTransactions ? seletedUserPlans?.totalTransactions : 0 }}</td>
+                                    <td>{{ seletedUserPlans?.balance? seletedUserPlans?.balance: 0 }}</td>
+                                    <td class="text-right">{{ seletedUserPlans?.additionalCharges? seletedUserPlans?.additionalCharges: 0 }}</td>
+                                </tr> -->
 
                                 <tr>
                                     <td>Apr</td>
@@ -193,7 +195,7 @@
             </div>
 
 
-                <div class="col-md-5 left-div">
+                <div class="col-md-5 col-sm-5 left-div">
                     <div class="main-associated-companies">
 
                   <div class="d-flex justify-content-between pl-2">
@@ -260,14 +262,14 @@
             <!-- <h2 class="subscription-title" *ngIf="subscriptions">{{seletedUserPlans?.planDetails?.name}} <span
                     *ngIf="seletedUserPlans?.startedAt">({{seletedUserPlans?.startedAt}})</span></h2> -->
 
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-sm-7 transaction-list">
                     <div class="box clearfix mrT2 no-padding">
                         <div class="table-responsive">
                             <table class="table basic mr0 subscription-table">
                                 <thead>
                                     <tr>
-                                        <!-- <th>Date</th> <span class="text-light-2">(previous+current)</span>-->
+                                        <th>Date</th> <span class="text-light-2">(previous+current)</span>
                                         <th>Transactions</th>
                                         <th>Balance</th>
                                         <th>Additional Charges</th>
@@ -275,10 +277,10 @@
                                 </thead>
                                 <tbody *ngIf="seletedUserPlans">
                                     <tr>
-                                        <!-- <td class="professional-name">{{ moment(transaction.from, 'DD-MM-YYYY').format('MMM - YY')}}</td> -->
+                                        <td class="professional-name">{{ moment(transaction.from, 'DD-MM-YYYY').format('MMM - YY')}}</td>
                                         <td>{{ seletedUserPlans?.totalTransactions ? seletedUserPlans?.totalTransactions : 0 }}
                                         </td>
-                                        <!-- <span class="text-light ml-05">({{transaction.previousTransactionCount}}+{{transaction.currentTransactionCount}})</span> -->
+                                        <span class="text-light ml-05">({{transaction.previousTransactionCount}}+{{transaction.currentTransactionCount}})</span>
                                         <td>{{ seletedUserPlans?.balance? seletedUserPlans?.balance: 0 }}</td>
                                         <td class="text-danger">
                                             {{ seletedUserPlans?.additionalCharges? seletedUserPlans?.additionalCharges: 0 }}
@@ -288,11 +290,11 @@
                             </table>
                         </div>
                     </div>
-                    <!-- <div class="mrT2">
+                    <div class="mrT2">
                         <p><small>* Additional charges on transactions above {{seletedUserPlans?.planDetails?.transactionLimit | number}} @ {{seletedUserPlans?.planDetails?.ratePerExtraTransaction | number}} {{activeCompany?.baseCurrency}} per transaction</small>
                         </p>
                         <p><small>* Each month includes previous month's transactions</small></p>
-                    </div> -->
+                    </div>
                 </div>
 
 
@@ -315,15 +317,15 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
 
     </div>
 
 
     <div class="box mt-2">
-        <div class="row d-flex justify-content-between align-items-center">
-            <div class="col-md-8">
+        <div class="row d-flex justify-content-between align-items-center xs-d-block">
+            <div class="col-md-8 col-sm-8 col-xs-12">
                 <p class="bold">Plan 2</p>
             <ul class="list-inline plan-list">
                 <li>Expiry Date: 25/05/2020  </li>
@@ -331,15 +333,15 @@
                 <li>Transaction Limit: 40,000</li>
             </ul>
             </div>
-            <div class="col-md-4 text-right">
+            <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
                 <span class="font-26">5</span> days remaining
             </div>
         </div>
     </div>
 
     <div class="box mt-2">
-        <div class="row d-flex justify-content-between align-items-center">
-            <div class="col-md-8">
+        <div class="row d-flex justify-content-between align-items-center xs-d-block">
+            <div class="col-md-8 col-sm-8 col-xs-12">
                 <p class="bold">Professional</p>
             <ul class="list-inline plan-list">
                 <li>Expiry Date: 25/05/2020  </li>
@@ -347,8 +349,36 @@
                 <li>Transaction Limit: 40,000</li>
             </ul>
             </div>
-            <div class="col-md-4 text-right">
+            <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
                 <div class="active"><span class="green-dote"></span> Active </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="box mt-2">
+        <div class="row d-flex justify-content-between align-items-center xs-d-block">
+            <div class="col-md-8 col-sm-8 col-xs-12">
+                <p class="bold">TRIAL</p>
+            <ul class="list-inline plan-list">
+                <li>Expired on: 25/05/2020</li>
+            </ul>
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
+                <div class="text-danger"><span class="red-dote"></span> Active </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="box mt-2">
+        <div class="row d-flex justify-content-between align-items-center xs-d-block">
+            <div class="col-md-8 col-sm-8 col-xs-12">
+                <p class="bold">Professional</p>
+            <ul class="list-inline plan-list">
+                <li>Expired on: 25/05/2020</li>
+            </ul>
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
+                <div class="text-danger"><span class="red-dote"></span> Active </div>
             </div>
         </div>
     </div>
