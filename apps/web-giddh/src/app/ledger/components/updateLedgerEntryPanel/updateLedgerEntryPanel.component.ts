@@ -1310,7 +1310,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public handleQuantityChange(value: string): void {
-        this.vm.stockTrxEntry.inventory.quantity = Number(this.vm.stockTrxEntry.inventory.quantity);
+        if (this.vm && this.vm.stockTrxEntry && this.vm.stockTrxEntry.inventory) {
+            this.vm.stockTrxEntry.inventory.quantity = Number(this.vm.stockTrxEntry.inventory.quantity);
+        }
         this.vm.inventoryQuantityChanged(value);
     }
 
