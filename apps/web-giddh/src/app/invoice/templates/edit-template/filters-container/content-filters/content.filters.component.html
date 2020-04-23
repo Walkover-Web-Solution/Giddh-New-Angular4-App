@@ -536,45 +536,39 @@
             <h2>Footer</h2>
             <div class="clearfix bdrB scrollAuto">
                 <ng-container *ngIf="customTemplate?.templateType === 'gst_template_a'">
-                    <tr>
-                        <td>
-                            <label><input type="checkbox" name="tcs" checked
-                                    [(ngModel)]="customTemplate.sections['footer'].data['tcs'].display"
-                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked="true" />
-                                TCS</label>
-                        </td>
 
-                        <td>
+                    <div class="form-group">
+                        <input type="checkbox" name="tcs" checked
+                            [(ngModel)]="customTemplate.sections['footer'].data['tcs'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked="true" />
+                        TCS
+                        <div class="mrL3">
                             <input type="text" value="TCS" class="form-control" [(ngModel)]="customTemplate.sections['footer'].data['tcs'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['tcs'].display" />
-                        </td>
-                    </tr>
+                        </div>
+                    </div>
 
-                    <tr>
-                        <td>
-                            <label><input type="checkbox" [value]="true" name="tds" checked
-                                    [(ngModel)]="customTemplate.sections['footer'].data['tds'].display"
-                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"  />
-                                TDS</label>
-                        </td>
-
-                        <td>
+                    <div class="form-group">
+                        <input type="checkbox" [value]="true" name="tds" checked
+                            [(ngModel)]="customTemplate.sections['footer'].data['tds'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"  />
+                        TDS
+                        <div class="mrL3">
                             <input type="text" value="TDS" class="form-control" [(ngModel)]="customTemplate.sections['footer'].data['tds'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['tds'].display" />
-                        </td>
-                    </tr>
+                        </div>
+                    </div>
 
-                    <tr>
-                        <td>
-                            <label><input type="checkbox" [attr.checked]="true" name="totalDues"
-                                    [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].display"
-                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Total
-                                Due</label>
-                        </td>
-
-                        <td>
+                    <div class="form-group">
+                        <input type="checkbox" [attr.checked]="true" name="totalDues"
+                            [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Total
+                        Due
+                        <div class="mrL3">
                             <input type="text" value="Total Due (in INR)" class="form-control" [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['totalDue'].display"
                             />
-                        </td>
-                    </tr>
+                        </div>
+                    </div>
+
+
                 </ng-container>
                 <div *ngIf="fieldsAndVisibility.footer.companyName" class="form-group">
                     <input type="checkbox" checked [(ngModel)]="customTemplate.sections['footer'].data['companyName'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Company Name
