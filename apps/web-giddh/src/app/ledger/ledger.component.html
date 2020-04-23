@@ -644,7 +644,7 @@
                                                 <input class="form-control alR" type="text"
                                                     [prefix]="selectedPrefixForCurrency"
                                                     [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
-                                                    [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
+                                                    [(ngModel)]="txn.amount" (input)="handleAmountInput(txn);"
                                                     (click)="showNewLedgerEntryPopup(txn);blankLedgerAmountClick()">
                                             </td>
 
@@ -911,7 +911,7 @@
                                                 <input class="form-control alR" type="text"
                                                     [prefix]="selectedPrefixForCurrency"
                                                     [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
-                                                    [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
+                                                    [(ngModel)]="txn.amount" (input)="handleAmountInput(txn);"
                                                     (click)="showNewLedgerEntryPopup(txn);blankLedgerAmountClick()">
                                             </td>
                                         </tr>

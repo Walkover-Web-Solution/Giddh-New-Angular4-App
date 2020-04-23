@@ -404,7 +404,34 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.calculateTotal();
     }
 
-    public calculateTotal() {
+    /**
+     * Calculates the total amount
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public calculateTotal(): void {
+        if (this.currentTxn) {
+            if (this.currentTxn.amount) {
+                if (this.isAdvanceReceipt) {
+                    this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.total = giddhRoundOff((this.currentTxn.advanceReceiptAmount + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                    this.totalForTax = this.currentTxn.total;
+                } else {
+                    let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
+                    this.totalForTax = total;
+                    this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                }
+                this.currentTxn.convertedTotal = this.calculateConversionRate(this.currentTxn.total);
+            } else {
+                // Amount is zero, set other parameters to zero
+                if (this.isAdvanceReceipt) {
+                    this.currentTxn.advanceReceiptAmount = 0;
+                }
+                this.totalForTax = 0;
+                this.currentTxn.total = 0;
+                this.currentTxn.convertedTotal = this.calculateConversionRate(this.currentTxn.total);
+            }
+        }
         if (this.currentTxn && this.currentTxn.amount) {
             if (this.isAdvanceReceipt) {
                 this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
