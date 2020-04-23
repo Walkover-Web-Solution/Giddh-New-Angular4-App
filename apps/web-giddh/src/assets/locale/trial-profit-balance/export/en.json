@@ -1,0 +1,26 @@
+{
+    "xls" : {
+        "main_group_report" : "Main Group Report",
+        "group_wise_report" : "Group Wise Report",
+        "condensed_report" : "Condensed Report",
+        "account_wise_report" : "Account Wise Report"
+    },
+    "csv" : {
+        "group_wise_report" : "Group Wise Report",
+        "condensed_report" : "Condensed Report",
+        "account_wise_report" : "Account Wise Report"
+    },
+    "pdf" : {
+        "group_wise_report" : "Group Wise Report",
+        "condensed_report" : "Condensed Report",
+        "account_wise_report" : "Account Wise Report",
+        "group_wise_report_columns" : {
+            "particular" : "Particular",
+            "opening_balance" : "Opening Balance",
+            "debit" : "Debit",
+            "credit" : "Credit",
+            "closing_balance" : "Closing Balance"
+        },
+        "group_wise_report_total" : "Total"
+    }
+}

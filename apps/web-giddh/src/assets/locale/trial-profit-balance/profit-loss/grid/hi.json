@@ -1,0 +1,12 @@
+{
+    "no_data_found" : "Sorry, No Data Found!",
+    "account" : "Account",
+    "total_cost_of_goods_sold" : "Total Cost of Goods Sold",
+    "gross_profit" : "Gross Profit",
+    "total_revenue" : "Total Revenue",
+    "total_operating_expenses" : "Total Operating Expenses",
+    "operating_profit_loss" : "Operating Profit/Loss (EBIT)",
+    "total_other_expense" : "Total Other Expenses",
+    "income_before_taxes" : "Income Before Taxes (EBT)",
+    "taxes_30" : "Taxes (30%)"
+}

@@ -1,0 +1,31 @@
+{
+    "add_new_role" : "+ Add New Role",
+    "permission_error" : "You do not have permission to access this module",
+    "role_delete_content" : "Are you sure you want to delete {{ROLE}} ?",
+    "add_role" : "Add Role",
+    "new_role" : "New Role",
+    "copy_permission" : "Copy Permission",
+    "select_heads" : "Select Heads",
+    "add_role_error" : "At least 1 scope should selected.",
+    "name_codes" : {
+        "view" : "view",
+        "edit" : "edit",
+        "delete" : "delete",
+        "create" : "create",
+        "share" : "share",
+        "view_delete" : "view delete",
+        "share_lower" : "Share Lower",
+        "share_all" : "Share All",
+        "share_same" : "Share Same",
+        "comment" : "Comment",
+        "gst_view" : "GST View",
+        "gst_filing" : "GST Filing"
+    },
+    "select_pages" : "Select Pages",
+    "role_name_label" : "Role Name",
+    "role_name_placeholder" : "Role Name",
+    "role_type" : "Role Type",
+    "fresh_start" : "Fresh Start",
+    "copy_other_role" : "Copy From Other Role",
+    "close_list" : "Close list"
+}

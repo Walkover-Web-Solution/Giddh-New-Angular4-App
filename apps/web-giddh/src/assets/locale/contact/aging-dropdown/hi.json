@@ -1,0 +1,7 @@
+{
+    "first_interval" : "First interval",
+    "second_interval" : "Second interval",
+    "third_interval" : "Third interval",
+    "last_interval" : "Last interval",
+    "aging_error_message" : "4th column must be less than 5th and 5th must be less than 6th"
+}

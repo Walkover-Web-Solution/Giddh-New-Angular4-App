@@ -1,0 +1,20 @@
+{
+    "try_things" : "Try things out",
+    "create_send_invoice" : "Create and send an Invoice",
+    "add_customer" : "Add a customer",
+    "update_taxes" : "Update Taxes",
+    "configure_bank_account" : "Configure your bank account",
+    "have_data_tally" : "Have data on Tally?",
+    "giddh_usage" : "Don't worry!<br> Easily get your accounting data on Giddh",
+    "sync_with_tally" : "Sync With Tally",
+    "download_tcp" : "Download TCP",
+    "ask_question" : "Have a question to ask?",
+    "request_demo" : "Request a demo:",
+    "call" : "or call:",
+    "phone1" : "8818888764",
+    "phone2" : "8889500411",
+    "visit" : "or visit:",
+    "help_url" : "giddh.com/help",
+    "import_data" : "Import Data",
+    "data_available" : "Have data in CSV or Excel files?"
+}
