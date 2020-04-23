@@ -74,11 +74,11 @@ export const ROUTES = [
                 loadChildren: './manufacturing/manufacturing.module#ManufacturingModule',
                 data: { preload: true }
             },
-            {
-                path: 'accounting-voucher',
-                loadChildren: './accounting/accounting.module#AccountingModule',
-                data: { preload: true }
-            },
+            // {
+            //     path: 'accounting-voucher',
+            //     loadChildren: './accounting/accounting.module#AccountingModule',
+            //     data: { preload: true }
+            // },
             { path: 'user-details', loadChildren: './userDetails/userDetails.module#UserDetailsModule' },
             { path: 'contact', loadChildren: './contact/contact.module#ContactModule' },
             {
