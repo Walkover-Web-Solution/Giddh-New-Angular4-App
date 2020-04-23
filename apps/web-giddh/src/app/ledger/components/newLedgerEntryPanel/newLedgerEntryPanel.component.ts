@@ -404,7 +404,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.calculateTotal();
     }
 
-    public calculateTotal() {
+    /**
+     * Calculates the total amount
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public calculateTotal(): void {
         if (this.currentTxn) {
             if (this.currentTxn.amount) {
                 if (this.isAdvanceReceipt) {
