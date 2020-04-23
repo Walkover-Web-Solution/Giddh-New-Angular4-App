@@ -23,7 +23,7 @@
 }
 
 .account-search .input-group-addon {
-    border-color: $inputBorderColor;
+    border-color: $gainsboro;
     border-radius: 2px 0 0 2px;
     color: #484848;
     font-size: 12px;
@@ -41,7 +41,7 @@
 
 .account-search .form-control {
     background: none !important;
-    border-color: $inputBorderColor;
+    border-color: $gainsboro;
     border-left: 0px;
     border-radius: 0px 2px 2px 0 !important;
     height: 36px;
@@ -49,7 +49,7 @@
 }
 
 .account-search .form-control:focus {
-    border-color: $inputBorderColor !important;
+    border-color: $gainsboro !important;
     color: #b7b7b7;
 }
 
@@ -60,7 +60,7 @@
 }
 
 .account-search:hover:after {
-    color: $light-blue01;
+    color: $rich-blue;
     cursor: pointer;
 }
 
@@ -181,7 +181,7 @@ a[vr-item]:focus {
 }
 
 .left_fixed_header > li a.active {
-    background: $menuHoverColor;
+    background: $lavender;
 }
 
 .left_fixed_header > li > a.active .label,
@@ -265,7 +265,7 @@ a[vr-item]:focus {
 }
 
 .left_fixed_header h6 {
-    color: $sidebarHeading;
+    color: $midnight-blue;
     font-size: 14px;
     padding-left: 15px;
     padding-right: 15px;
@@ -275,7 +275,7 @@ a[vr-item]:focus {
 .left_fixed_header > h6 > i {
     float: right;
     font-size: 10px;
-    background: $sidebarHeading;
+    background: $midnight-blue;
     display: inline-block;
     width: 15px;
     height: 15px;
@@ -422,20 +422,20 @@ a[vr-item]:focus {
 }
 
 .universal_date li input {
-    background: $headerBtnColor !important;
+    background: $governor-bay !important;
     padding-left: 29px !important;
     color: #fff !important;
     padding-right: 5px !important;
-    border: 1px solid $headerBtnColor;
+    border: 1px solid $governor-bay;
     text-align: left;
 }
 
 .universal_date li input:focus {
-    border: 1px solid $headerBtnColor !important;
+    border: 1px solid $governor-bay !important;
 }
 
 .header-date {
-    background: $headerBtnColor !important;
+    background: $governor-bay !important;
     padding: 5px 11px;
     border-radius: 0px 2px 2px 0px;
     color: #fff;
@@ -447,7 +447,7 @@ a[vr-item]:focus {
 }
 
 .calender-addone {
-    background-color: $headerBtnColor;
+    background-color: $governor-bay;
     color: #fff;
     padding: 9px 8px 9px 10px;
     vertical-align: bottom;
@@ -458,25 +458,25 @@ a[vr-item]:focus {
 
 .notToday .calender-addone {
     position: absolute;
-    border: 1px solid $headerBtnColor;
+    border: 1px solid $governor-bay;
     padding: 8px 8px;
 }
 
 #AddManage.btn-gray {
-    background: $headerBtnColor;
+    background: $governor-bay;
     color: #fff;
     position: relative;
     padding-left: 32px;
     padding-top: 4px;
     padding-bottom: 5px;
     padding-right: 12px;
-    border: 1px solid $headerBtnColor;
+    border: 1px solid $governor-bay;
 }
 
 #AddManage .icon-edit-ico {
     position: absolute;
     left: 0px;
-    background-color: $headerBtnColor;
+    background-color: $governor-bay;
     padding: 8px 6px 8px 7px;
     top: 0px;
     text-align: center;
@@ -485,11 +485,11 @@ a[vr-item]:focus {
 }
 
 span.icon-support.dropdown-toggle {
-    background-color: $headerBtnColor;
+    background-color: $governor-bay;
     color: #fff;
     padding: 6px 7px;
     font-size: 17px;
-    border: 1px solid $headerBtnColor;
+    border: 1px solid $governor-bay;
     border-radius: 1px;
     position: relative;
     top: 1px;
@@ -516,7 +516,7 @@ span.icon-support.dropdown-toggle {
 }
 
 .primary-header {
-    background-color: $top_header;
+    background-color: $midnight-blue;
     min-height: 60px;
     position: fixed;
     width: 100%;
@@ -711,7 +711,7 @@ ul.sub-list {
         top: 14px;
         color: #fff;
         right: -35px;
-        background-color: $top_header;
+        background-color: $midnight-blue;
         width: 35px;
         height: 35px;
         text-align: center;

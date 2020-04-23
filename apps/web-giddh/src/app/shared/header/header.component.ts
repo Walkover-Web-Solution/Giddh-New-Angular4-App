@@ -253,7 +253,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private changeDetection: ChangeDetectorRef,
         private _windowRef: WindowRef,
         private _breakpointObserver: BreakpointObserver,
-        private _generalService: GeneralService,
+        private generalService: GeneralService,
         private commonActions: CommonActions
     ) {
         this._windowRef.nativeWindow.superformIds = ['Jkvq'];
@@ -331,7 +331,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.dispatch(this.companyActions.setTotalNumberofCompanies(this.companyList.length));
             let selectedCmp = companies.find(cmp => {
                 if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === this._generalService.companyUniqueName;
+                    return cmp.uniqueName === this.generalService.companyUniqueName;
                 } else {
                     return false;
                 }
@@ -393,13 +393,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.createNewCompanyUser = res;
             }
         });
-        this._generalService.isMobileSite.subscribe(s => {
+        this.generalService.isMobileSite.subscribe(s => {
             this.isMobileSite = s;
             this.menuItemsFromIndexDB = DEFAULT_MENUS;
             this.accountItemsFromIndexDB = DEFAULT_AC;
         });
         this.totalNumberOfcompanies$ = this.store.select(state => state.session.totalNumberOfcompanies).pipe(takeUntil(this.destroyed$));
-        this._generalService.invokeEvent.subscribe(value => {
+        this.generalService.invokeEvent.subscribe(value => {
             if (value === 'openschedulemodal') {
                 this.openScheduleCalendlyModel();
                 // this.openScheduleModal();
@@ -411,7 +411,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
-        this._generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
+        this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
             if (value === 'logoutCordova') {
                 this.zone.run(() => {
                     this.router.navigate(['login']);
@@ -586,7 +586,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         // TODO : It is commented due to we have implement calendly and its under discussion to remove
 
-        // this._generalService.talkToSalesModal.subscribe(a => {
+        // this.generalService.talkToSalesModal.subscribe(a => {
         //     if (a) {
         //         this.openScheduleCalendlyModel();
         //     }
@@ -618,7 +618,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         // if invalid menu item clicked then navigate to default route and remove invalid entry from db
-        this._generalService.invalidMenuClicked.subscribe(data => {
+        this.generalService.invalidMenuClicked.subscribe(data => {
             if (data) {
                 this.onItemSelected(data.next, data);
             }
@@ -1240,7 +1240,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     // public closeModal() {
     //     this.talkSalesModal.hide();
-    //     this._generalService.talkToSalesModal.next(false);
+    //     this.generalService.talkToSalesModal.next(false);
     // }
 
     public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
@@ -1478,7 +1478,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public removeCompanySessionData() {
-        this._generalService.createNewCompany = null;
+        this.generalService.createNewCompany = null;
         this.store.dispatch(this.commonActions.resetCountry());
         this.store.dispatch(this.companyActions.removeCompanyCreateSession());
     }

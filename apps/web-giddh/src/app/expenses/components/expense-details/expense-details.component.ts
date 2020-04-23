@@ -366,6 +366,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
                 this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
                 let img = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
                 this.DownloadAttachedImgResponse.push(output.file.response.body);
+                this.imgAttachedFileName = output.file.response.body.name;
                 this.imageURL.push(img);
                 this.imgAttachedFileName = output.file.response.body.name;
                 // this.customTemplate.sections.footer.data.imageSignature.label = output.file.response.body.uniqueName;

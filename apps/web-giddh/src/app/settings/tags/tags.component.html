@@ -12,7 +12,7 @@
                             </div>
                             <div class="form-group">
                                 <textarea class="form-control" name="tagDescription" [(ngModel)]="newTag.description"
-                                    placeholder="Tag Desciption (optional)"></textarea>
+                                    placeholder="Tag Description (optional)"></textarea>
                             </div>
                             <div class="mrT1">
                                 <button type="submit" class="btn btn-success btn-sm"
@@ -33,58 +33,53 @@
             </div> -->
                     </div>
                 </div>
-                <div class="">
-                    <div class="tagsTable">
-                        <div class="">
-                            <table class="table-bordered basic table mrB onMobileView">
-                                <thead>
-                                    <tr>
-                                        <th>Sr. No.</th>
-                                        <th>Tags Name</th>
-                                        <th>Tags Description</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody *ngIf="(tags$ | async)">
-                                    <tr *ngFor="let tag of tags$ | async; let i = index">
-                                        <td data-title="#">{{i+1}}</td>
-                                        <td data-title="Tags Name">
-                                            <span *ngIf="updateIndex !== i">{{tag.name}}</span>
-                                            <input *ngIf="updateIndex === i" type="text" class="form-control"
-                                                name="name_of_{{i}}" [(ngModel)]="tag.name" />
-                                        </td>
-                                        <td data-title="Tags Desciption">
-                                            <div *ngIf="updateIndex !== i">{{tag.description}}</div>
-                                            <textarea *ngIf="updateIndex === i" class="form-control"
-                                                name="description_of_{{i}}" [(ngModel)]="tag.description"></textarea>
-                                        </td>
-                                        <td class="icon-btn" data-title="Action">
-                                            <button *ngIf="updateIndex !== i" (click)="setUpdateIndex(i);" type="button"
-                                                class="btn btn-xs"><i class="fa fa-pencil" aria-hidden="true"
-                                                    tooltip="Edit"></i></button>
-                                            <button *ngIf="updateIndex !== i" (click)="deleteTag(tag, i);" type="button"
-                                                class="btn btn-xs"><i class="fa fa-trash" aria-hidden="true"
-                                                    tooltip="Delete"></i></button>
-                                            <button *ngIf="updateIndex === i" (click)="updateTag(tag, i);" type="button"
-                                                class="btn btn-xs"><i class="fa fa-check"
-                                                    aria-hidden="true"></i></button>
-                                            <button *ngIf="updateIndex === i" (click)="resetUpdateIndex();"
-                                                type="button" class="btn btn-xs"><i class="fa fa-times"
-                                                    aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <tbody *ngIf="!(tags$ | async)" class="onMobileView noRecords">
-                                    <tr>
-                                        <td colspan="4" class="text-center empty_table">
-                                            <h1>No Record Found !!</h1>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
+                <div class="tags-table">
+                        <table class="table-bordered basic table mrB onMobileView">
+                            <thead>
+                                <tr>
+                                    <th>Sr. No.</th>
+                                    <th>Tags Name</th>
+                                    <th>Tags Description</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf="(tags$ | async)">
+                                <tr *ngFor="let tag of tags$ | async; let i = index">
+                                    <td data-title="#">{{i+1}}</td>
+                                    <td data-title="Tags Name">
+                                        <span *ngIf="updateIndex !== i">{{tag.name}}</span>
+                                        <input *ngIf="updateIndex === i" type="text" class="form-control"
+                                            name="name_of_{{i}}" [(ngModel)]="tag.name" />
+                                    </td>
+                                    <td data-title="Tags Desciption">
+                                        <div *ngIf="updateIndex !== i">{{tag.description}}</div>
+                                        <textarea *ngIf="updateIndex === i" class="form-control"
+                                            name="description_of_{{i}}" [(ngModel)]="tag.description"></textarea>
+                                    </td>
+                                    <td class="icon-btn" data-title="Action">
+                                        <button *ngIf="updateIndex !== i" (click)="setUpdateIndex(i);" type="button"
+                                            class="btn btn-xs"><i class="fa fa-pencil" aria-hidden="true"
+                                                tooltip="Edit"></i></button>
+                                        <button *ngIf="updateIndex !== i" (click)="deleteTag(tag, i);" type="button"
+                                            class="btn btn-xs"><i class="fa fa-trash" aria-hidden="true"
+                                                tooltip="Delete"></i></button>
+                                        <button *ngIf="updateIndex === i" (click)="updateTag(tag, i);" type="button"
+                                            class="btn btn-xs"><i class="fa fa-check"
+                                                aria-hidden="true"></i></button>
+                                        <button *ngIf="updateIndex === i" (click)="resetUpdateIndex();"
+                                            type="button" class="btn btn-xs"><i class="fa fa-times"
+                                                aria-hidden="true"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="!(tags$ | async)" class="onMobileView noRecords">
+                                <tr>
+                                    <td colspan="4" class="text-center empty_table">
+                                        <h1>No Record Found !!</h1>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                 </div>
             </div>
 

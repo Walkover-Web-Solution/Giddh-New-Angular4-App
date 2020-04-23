@@ -23,7 +23,8 @@ export class GoogleLoginProvider extends BaseLoginProvider {
                     this.isInitialize = true;
                     this.auth2 = gapi.auth2.init({
                         client_id: this.clientId,
-                        scope: 'email'
+                        scope: 'email',
+                        prompt: 'select_account'
                     });
 
                     this.auth2.then(() => {

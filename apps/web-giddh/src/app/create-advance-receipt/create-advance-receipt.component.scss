@@ -1,0 +1,32 @@
+@import "../../assets/css/color.scss";
+.btn-attachment {
+    border: 1px solid $nobel;
+    color: $dark-gray;
+    padding: 10px;
+}
+.create-receipt-footer {
+    padding: 20px 0;
+    background-color: $very-light-gray;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.create-receipt-footer .btn-default {
+    background: $whisper-color;
+    color: $extra-dark-gray;
+    border-color: $whisper-color;
+}
+.create-receipt-footer .form-group {
+    margin-bottom: 20px;
+}
+#dropdown-basic {
+    transform: translateY(0%) !important;
+}
+.line-height-12 {
+    a {
+        line-height: 12px;
+        color: $deep-sky-blue;
+    }
+}

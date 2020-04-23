@@ -262,7 +262,7 @@ table th {
     margin-left: 6px;
 }
 .icon-pointer .activeTextColor {
-    color: $activeIconTh;
+    color: $deep-sky-blue;
 }
 .table-middle th .d-flex {
     align-items: center;
@@ -280,7 +280,7 @@ table th {
     align-items: center;
     background-color: #fff;
     font-size: 18px;
-    color: $pageTitleColor;
+    color: $midnight-blue;
     border: 1px solid #d9d9d9;
 }
 .top_bar {
@@ -300,10 +300,10 @@ table th {
 }
 
 .verticle-align-top a {
-    color: $lightTextBlue;
+    color: $chetwode-blue;
 
     &:hover {
-        color: $activeIconTh;
+        color: $deep-sky-blue;
     }
 }
 

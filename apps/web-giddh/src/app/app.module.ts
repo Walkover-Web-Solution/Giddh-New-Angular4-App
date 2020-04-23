@@ -4,7 +4,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
-import {NgModule} from '@angular/core';
+import {NgModule, ErrorHandler} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActionReducer, MetaReducer, StoreModule} from '@ngrx/store';
@@ -61,6 +61,7 @@ import {SelectPlanComponent} from './selectPlan/selectPlan.component';
 import {BillingDetailComponent} from './billing-details/billingDetail.component';
 import {TokenVerifyComponent} from './login/token-verify.component';
 import {AppLoginSuccessComponent} from "./app-login-success/app-login-success";
+import { ExceptionLogService } from './services/exception-log.service';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -192,6 +193,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             provide: HTTP_INTERCEPTORS,
             useClass: GiddhHttpInterceptor,
             multi: true
+        },{
+            provide: ErrorHandler,
+            useClass: ExceptionLogService
         },
         CustomPreloadingStrategy
     ]

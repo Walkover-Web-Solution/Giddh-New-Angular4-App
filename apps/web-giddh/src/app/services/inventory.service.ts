@@ -22,7 +22,7 @@ import { GroupsWithStocksFlatten, GroupsWithStocksHierarchyMin } from '../models
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { IGroupsWithStocksHierarchyMinItem } from '../models/interfaces/groupsWithStocks.interface';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
@@ -44,7 +44,7 @@ export class InventoryService {
     private user: UserDetails;
     private _: any;
 
-    constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router,
+    constructor(private errorHandler: GiddhErrorHandler, public _http: HttpWrapperService, public _router: Router,
         private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this._ = config._;
         _ = config._;
@@ -787,7 +787,7 @@ export class InventoryService {
     //  endregion
 
     // region linked Stocks
-    public GetLinkedStocks(): Observable<BaseResponse<LinkedStocksResponse, string>> {
+    public getLinkedStocks(): Observable<BaseResponse<LinkedStocksResponse, string>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http
             .get(this.config.apiUrl + INVENTORY_API.LINKED_STOCKS.LINKED_STOCKS
@@ -906,6 +906,7 @@ export class InventoryService {
     public downloadAllInventoryReports(request: InventoryDownloadRequest): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
         let url: string = null;
+        let requestObject;
         if (request.reportType === 'allgroup') {
             url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_ALL_GROUP_REPORT
                 .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -920,6 +921,14 @@ export class InventoryService {
                 .replace(':condition', encodeURIComponent(request.condition ? request.condition.toString() : ''))
         }
         else if (request.reportType === 'group') {
+            requestObject = {
+                entity: request.entity,
+                value: request.value,
+                number: request.number,
+                condition: request.condition,
+                warehouseUniqueName: request.warehouseUniqueName,
+                branchUniqueName: request.branchUniqueName
+            };
             url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_GROUP_REPORT
                 .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
                 .replace(':stockGroupUniquename', encodeURIComponent(request.stockGroupUniqueName))
@@ -927,11 +936,7 @@ export class InventoryService {
                 .replace(':from', encodeURIComponent(request.from ? request.from.toString() : ''))
                 .replace(':to', encodeURIComponent(request.to ? request.to.toString() : ''))
                 .replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy.toString() : ''))
-                .replace(':sort', encodeURIComponent(request.sort ? request.sort.toString() : ''))
-                .replace(':entity', encodeURIComponent(request.entity ? request.entity.toString() : ''))
-                .replace(':value', encodeURIComponent(request.value ? request.value.toString() : ''))
-                .replace(':number', encodeURIComponent(request.number ? request.number.toString() : ''))
-                .replace(':condition', encodeURIComponent(request.condition ? request.condition.toString() : ''));
+                .replace(':sort', encodeURIComponent(request.sort ? request.sort.toString() : ''));
         } else if (request.reportType === 'allstock') {
             url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_HIERARCHICAL_STOCKS_REPORT
                 .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -945,6 +950,10 @@ export class InventoryService {
                 .replace(':page', encodeURIComponent(request.page ? request.page.toString() : ''))
                 .replace(':count', encodeURIComponent(request.count ? request.count.toString() : ''));
         } else if (request.reportType === 'stock') {
+            requestObject = {
+                warehouseUniqueName: request.warehouseUniqueName,
+                branchUniqueName: request.branchUniqueName
+            };
             url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_STOCK_REPORT
                 .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
                 .replace(':stockGroupUniqueName', encodeURIComponent(request.stockGroupUniqueName))
@@ -966,13 +975,17 @@ export class InventoryService {
                 .replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy.toString() : ''));
         }
 
-        return this._http.get(url)
-            .pipe(map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.request = '';
-                data.queryString = {};
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
+        if (request.reportType === 'group' || request.reportType === 'stock') {
+            return this._http.post(url, requestObject).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error, '', {})));
+        } else {
+            return this._http.get(url)
+                .pipe(map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    data.queryString = {};
+                    return data;
+                }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
+        }
     }
 
     public downloadJobwork(stockUniqueName: string, reportType: string, format: string, from: string, to: string, reportFilters?: InventoryFilter): Observable<BaseResponse<string, string>> {

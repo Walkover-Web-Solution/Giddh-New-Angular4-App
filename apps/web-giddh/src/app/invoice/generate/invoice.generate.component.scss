@@ -85,7 +85,7 @@ tfoot {
 }
 
 .dropdown-menu > li > a:hover {
-    color: $border-blue;
+    color: $chetwode-blue;
     background: #e5e5e5;
 }
 
@@ -141,7 +141,7 @@ tfoot {
     width: 100%;
 }
 .input-group input.form-control:focus {
-    border-color: $border-blue;
+    border-color: $chetwode-blue;
 }
 .icon-calender {
     position: absolute;
@@ -151,7 +151,7 @@ tfoot {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $border-blue;
+    border-right: 1px solid $chetwode-blue;
 }
 
 .input-wrapper {

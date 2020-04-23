@@ -2,7 +2,7 @@ import { Inject, Optional } from '@angular/core';
 import { GeneralService } from './general.service';
 import { HttpWrapperService } from './httpWrapper.service';
 import { HttpClient } from '@angular/common/http';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
@@ -15,7 +15,7 @@ export class ProformaService {
 	private companyUniqueName: string;
 
 	constructor(private _generalService: GeneralService, private _http: HttpWrapperService,
-		private _httpClient: HttpClient, private errorHandler: ErrorHandler,
+		private _httpClient: HttpClient, private errorHandler: GiddhErrorHandler,
 		@Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 		this.companyUniqueName = this._generalService.companyUniqueName;
 	}
@@ -208,7 +208,8 @@ export class ProformaService {
 	}
 
 	public getAllVersions(request: ProformaGetAllVersionRequest, voucherType: string): Observable<BaseResponse<ProformaGetAllVersionsResponse, ProformaGetAllVersionRequest>> {
-		let url = this._generalService.createQueryString(this.config.apiUrl + ESTIMATES_API.getVersions, {
+	    this.companyUniqueName = this._generalService.companyUniqueName;
+    	let url = this._generalService.createQueryString(this.config.apiUrl + ESTIMATES_API.getVersions, {
 			page: request.page, count: request.count
         });
         this.companyUniqueName = this._generalService.companyUniqueName;
