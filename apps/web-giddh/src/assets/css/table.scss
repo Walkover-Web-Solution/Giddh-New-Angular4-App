@@ -122,21 +122,38 @@
     }
     /*card responsive code*/
     .on-mobile-view {
-        display: block;
-        table {
+        display: block;  
+       .table-bordered > tfoot > tr > td {
+            border: none;
+        }
+        .table-bordered {
+            border: none;
             background: transparent;
-            margin-bottom: 0;
-            width: 100%;
-            display: block;
-        }
-        table thead {
+            margin-top: 0;
+        } 
+    }
+    table.on-mobile-view {
+        background: transparent;
+        margin-bottom: 0;
+        width: 100%;
+        display: block;
+        thead {
             display: none;
+            th {
+                display: none;
+            }
         }
-        table tbody {
+         tbody {
             display: block;
             width: 100%;
         }
-        table tbody tr {
+        tbody td::first-letter {
+            text-transform: uppercase;
+        }
+        tbody > tr:hover td {
+            background: transparent;
+        }
+         tbody tr {
             box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
             background: #fff;
             border-bottom: none;
@@ -159,6 +176,8 @@
             word-wrap: inherit !important;
             max-width: 100%;
             white-space: inherit;
+            font-size: 14px !important;
+            margin-bottom: 14px;
         }
 
         tbody td:after {
@@ -187,24 +206,17 @@
             white-space: nowrap;
             width: 40%;
             text-align: left;
-        }
-        .table-bordered > tfoot > tr > td {
-            border: none;
+            white-space: normal !important;
+            word-break: inherit;
+
         }
 
-        th {
-            display: none;
-        }
-        .table-bordered {
-            border: none;
-            background: transparent;
-            margin-top: 0;
-        }
-        tbody td::first-letter {
-            text-transform: uppercase;
-        }
-        tbody > tr:hover td {
-            background: transparent;
+        tbody tr td.no-entries{
+            padding: 20px 0 0 !important;
+            border-top: none !important;
+            &:before, &:after{
+                display: none;
+            }
         }
     }
     .no-records.on-mobile-view {

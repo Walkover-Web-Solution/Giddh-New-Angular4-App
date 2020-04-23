@@ -232,7 +232,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
             }
         });
-        this.store.pipe(select(appState => appState.company), take(1)).subscribe((companyData: CurrentCompanyState) => {
+        this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
             }

@@ -76,7 +76,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
     { type: 'MENU', name: 'Vat Report', uniqueName: '/pages/vat-report' },
     { type: 'MENU', name: 'Import Data from TALLY', uniqueName: '/pages/tallysync' },
-    // { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
+    { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules'},
     { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: { tab: 'customer', tabIndex: 0 } },
     { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: { tab: 'vendor', tabIndex: 0 } },
     { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/aging-report', additional: { tab: 'aging-report', tabIndex: 1 } },
