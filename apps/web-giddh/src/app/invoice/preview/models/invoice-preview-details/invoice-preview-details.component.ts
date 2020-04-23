@@ -540,20 +540,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     /**
-     * To toggle change status container
-     *
-     * @param {InvoicePreviewDetailsVm} item selected row item data
-     * @memberof InvoicePreviewDetailsComponent
-     */
-    public clickChangeStatusToggle(item: InvoicePreviewDetailsVm): void {
-        if (!this.isAccountHaveAdvanceReceipts) {
-            if (item && item.account && item.account.uniqueName && item.voucherDate) {
-                this.getAllAdvanceReceipts(item.account.uniqueName, item.voucherDate);
-            }
-        }
-    }
-
-    /**
      * Call API to get all advance receipts of an invoice
      *
      * @param {*} customerUniquename Selected customer unique name
