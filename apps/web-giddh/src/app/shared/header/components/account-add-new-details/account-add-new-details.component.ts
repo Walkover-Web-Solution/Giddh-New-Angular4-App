@@ -432,8 +432,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
-        let gstVal: string = gstForm.get('gstNumber').value;
-
+        let gstVal: string = gstForm.get('gstNumber').value.trim();
+        gstForm.get('gstNumber').setValue(gstVal.trim());
         if (gstVal.length) {
             if (gstVal.length !== 15) {
                 gstForm.get('partyType').reset('NOT APPLICABLE');
