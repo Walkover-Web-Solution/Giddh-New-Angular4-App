@@ -105,7 +105,7 @@ input.form-control.send-alert {
     display: inline-flex;
 }
 
-.customEstimation label {
+.custom-estimation label {
     position: absolute;
     top: -24px;
     right: 15px;
@@ -144,7 +144,7 @@ span.viasocket a {
     position: relative;
 }
 
-.showOnMobile {
+.show-on-mobile {
     display: none;
 }
 
@@ -156,29 +156,26 @@ span.viasocket a {
     font-size: 16px;
 }
 
-.smsTextarea {
+.sms-textarea {
     margin-top: 0px;
     margin-bottom: 20px !important;
     margin-left: 10px !important;
     width: 260px;
 }
-
-@media (max-width: 767px) {
-    .select-estimate .mrR3 {
-        margin-right: 0;
+@media(max-width:768px){
+    .single-tab-block .col-sm-3{
+        width: 100% !important;
     }
-    .hideOnMobile {
+    .hide-on-mobile {
         display: none;
     }
-
-    #invoice-setting .showOnMobile {
+    #invoice-setting .show-on-mobile {
         display: inline-block;
         float: left;
         width: 20px;
         top: 4px;
     }
-
-    .paymentGateway {
+    .payment-gateway {
         margin-left: 15px;
         margin-top: 5px;
     }
@@ -196,15 +193,22 @@ span.viasocket a {
         padding: 0 15px;
     }
 
-    .integratdeEmail {
+    .integratde-email {
         margin-left: 30px;
     }
 
-    .customEstimation {
+    .custom-estimation {
         margin-top: 30px;
     }
+    .form-group.clearfix.max150 {
+        margin-top: 5px;
+    }
 
-    .smsTextarea {
+    .btn-wrapper {
+        padding: 0 15px;
+    }
+
+    .sms-textarea {
         margin-top: 5px;
         margin-bottom: 0px !important;
         margin-left: 0px !important;
@@ -215,47 +219,11 @@ span.viasocket a {
         width: 180px !important;
         position: relative;
     }
+    .select-estimate .mrR3 {
+        margin-right: 0;
+    }
 }
 
-.showOnMobile {
+.show-on-mobile {
     display: none;
-}
-
-@media (max-width: 767px) {
-    .hideOnMobile {
-        display: none;
-    }
-
-    #invoice-setting .showOnMobile {
-        display: inline-block;
-        float: left;
-        width: 20px;
-        top: 4px;
-    }
-
-    .paymentGateway {
-        margin-left: 15px;
-        margin-top: 5px;
-    }
-
-    #invoice-setting label {
-        float: left;
-        width: 88%;
-    }
-
-    .form-group.clearfix.max150 {
-        margin-top: 5px;
-    }
-
-    .btn-wrapper {
-        padding: 0 15px;
-    }
-
-    .integratdeEmail {
-        margin-left: 30px;
-    }
-
-    .customEstimation {
-        margin-top: 30px;
-    }
 }
