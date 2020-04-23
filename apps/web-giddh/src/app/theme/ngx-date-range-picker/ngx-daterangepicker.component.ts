@@ -7,7 +7,7 @@ import { LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { take, takeUntil } from 'rxjs/operators';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
@@ -169,6 +169,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     chosenRange: string;
     // some state information
     isShown: boolean = false;
+    isShown$ = new Subject();
     inline = true;
     startCalendar: any = {};
     endCalendar: any = {};
@@ -272,6 +273,16 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
             if (event instanceof NavigationStart) {
                 this.removeAllDatepickers();
                 this.hide();
+            }
+        });
+
+        this.isShown$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if(document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material").length > 0) {
+                if(response) {
+                    document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("show-calendar");
+                } else {
+                    document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
+                }
             }
         });
     }
@@ -771,6 +782,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
     remove() {
         this.setActiveDate(ActiveDateEnum.Start);
+        this.isShown$.next(false);
         this.isShown = false;
     }
 
@@ -1301,7 +1313,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
         if (!this.alwaysShowCalendars) {
             this.setActiveDate(ActiveDateEnum.Start);
-            this.isShown = false; // hide calendars
+            this.isShown$.next(false); // hide calendars
+            this.isShown = false;
         }
         this.rangeClicked.emit({ name: range.name, startDate: dates.value[0], endDate: dates.value[1] });
         if (!this.keepCalendarOpeningWithRange) {
@@ -1331,6 +1344,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         }
         this._old.start = this.startDate.clone();
         this._old.end = this.endDate.clone();
+        this.isShown$.next(true);
         this.isShown = true;
         if (this.ActiveDate === ActiveDateEnum.End) {
             if (this.endDateElement) {
@@ -1342,11 +1356,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
             }
         }
         this.updateView();
-
-        setTimeout(() => {
-            this.isShown = true;
-            this._ref.detectChanges();
-        }, 20);
     }
 
     hide(e?) {
@@ -1371,6 +1380,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
         // if picker is attached to a text input, update it
         this.updateElement();
+        this.isShown$.next(false);
         this.isShown = false;
 
         this._ref.detectChanges();
@@ -1736,7 +1746,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
         if (!this.alwaysShowCalendars) {
             this.setActiveDate(ActiveDateEnum.Start);
-            this.isShown = false; // hide calendars
+            this.isShown$.next(false); // hide calendars
+            this.isShown = false;
         }
         this.rangeClicked.emit({ name: "Select Financial Year", startDate: this.startDate, endDate: this.endDate });
         if (!this.keepCalendarOpeningWithRange) {
@@ -1767,5 +1778,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
     public appendDatepickerToBody() {
         document.body.appendChild(document.getElementsByTagName("ngx-daterangepicker-material")[0]);
+        this.isShown$.next(true);
     }
 }

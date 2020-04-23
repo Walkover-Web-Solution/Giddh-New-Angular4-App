@@ -66,7 +66,6 @@ $input-height: 3rem !default;
 * styles
 */
 .md-drppicker {
-    position: absolute;
     font-family: Roboto, sans-serif;
     color: $md-drppicker-color;
     background-color: $md-drppicker-bg-color;
@@ -74,8 +73,6 @@ $input-height: 3rem !default;
     width: $md-drppicker-width;
     display: flex;
     margin-top: 0;
-    overflow: hidden;
-    z-index: 1000;
     font-size: 14px;
     background-color: #ffffff;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);

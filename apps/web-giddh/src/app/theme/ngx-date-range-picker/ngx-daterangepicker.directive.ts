@@ -204,7 +204,7 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         setTimeout(() => {
             this.picker.removeDuplicateDatepickers();
             this.picker.appendDatepickerToBody();
-            this.setPosition(); 
+            this.setPosition();
         }, 20);
     }
 
@@ -237,7 +237,6 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         this.picker.setStartDate(start);
         this.picker.setEndDate(end);
         this.picker.updateView();
-
     }
 
     toggle(e?) {
@@ -299,7 +298,7 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
      * Set position of the calendar
      */
     setPosition() {
-        const container = this.picker.pickerContainer.nativeElement;
+        const container = document.getElementsByTagName("ngx-daterangepicker-material")[0] as HTMLElement;
         const element = this._el.nativeElement;
         let position = this.getPosition(element);
         let screenWidth = window.innerWidth;
@@ -332,5 +331,10 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         if (!clickedInside) {
             this.hide();
         }
+    }
+
+    @HostListener('window:resize', ['$event'])
+    windowResize(event) {
+        this.hide();
     }
 }

@@ -9697,3 +9697,13 @@ input.checkbox-custom[type="checkbox"] {
         font-size: 16px;
     }
 }
+.show-calendar {
+    display: block !important;
+}
+
+ngx-daterangepicker-material {
+    display: none;
+    position: absolute;
+    z-index: 1000;
+    overflow: hidden;
+}
