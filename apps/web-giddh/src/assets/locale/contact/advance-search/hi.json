@@ -1,0 +1,11 @@
+{
+    "category_options_for_customer" : {
+        "opening_balance" : "Opening Balance",
+        "sales" : "Sales",
+        "receipts" : "Receipts",
+        "closing_balance_due_amount" : "Closing Balance (Due amount)"   
+    },
+    "category_options_for_aging_report" : {
+        "total_due" : "Total Due"
+    }
+}

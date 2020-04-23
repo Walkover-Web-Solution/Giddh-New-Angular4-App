@@ -1,0 +1,14 @@
+{
+    "chart_title" : "Ratio Analysis",
+    "current_ratio" : "Current Ratio",
+    "current_assets" : "Current Assets",
+    "current_liabilities" : "Current Liabilities",
+    "debt_equity_ratio" : "Debt Equity Ratio",
+    "current_liability" : "Current Liab.",
+    "noncurrent_liability" : "NonCurrent Liab.",
+    "shareholders_fund" : "Shareholder's fund",
+    "proprietary_ratio" : "Proprietary Ratio",
+    "total_assets" : "Total Assets",
+    "fixed_assets_ratio" : "Fixed Assets Ratio",
+    "fixed_assets" : "Fixed Assets"
+}

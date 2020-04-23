@@ -1,0 +1,7 @@
+{
+    "date_filter_placeholder" : "Select Date",
+    "entry_date" : "Entry Date",
+    "suppliers_name" : "Supplier's Name",
+    "suppliers_invoice_date" : "Supplier's Invoice Date",
+    "suppliers_country" : "Supplier's Country"
+}
