@@ -90,7 +90,7 @@ export class FinancialYearComponent implements OnInit {
         let startYear = moment().subtract(7, 'year').year(); // moment().subtract(7, 'year').year();
         let yearArray = _.range(startYear, endYear);
         this.yearOptions = yearArray.map(q => {
-            return { label: q, value: q };
+            return { label: String(q), value: q };
         });
     }
 
