@@ -4032,9 +4032,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public handleQuantityBlur(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
-        transaction.quantity = Number(transaction.quantity);
-        this.calculateStockEntryAmount(transaction);
-        this.calculateWhenTrxAltered(entry, transaction);
+        if (transaction.quantity !== undefined) {
+            transaction.quantity = Number(transaction.quantity);
+            this.calculateStockEntryAmount(transaction);
+            this.calculateWhenTrxAltered(entry, transaction);
+        }
     }
 
     /**
