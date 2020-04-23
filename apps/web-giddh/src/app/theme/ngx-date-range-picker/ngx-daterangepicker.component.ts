@@ -96,7 +96,8 @@ export interface DateRangeClicked {
 export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     chosenLabel: string;
     calendarVariables: CalendarVariables = { start: {}, end: {} };
-    fullCalendar: any = {items: []};
+    calendarMonths: any[] = [];
+    renderedCalendarMonths: any[] = [];
     timepickerVariables: { start: any, end: any } = { start: {}, end: {} };
     applyBtn: { disabled: boolean } = { disabled: false };
     startDate = moment().startOf('day');
@@ -189,6 +190,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public financialYears: any[] = [];
     public itemHeight: number = 210;
+    public initialCalendarMonths: boolean = true;
     @ViewChild(ScrollComponent) public virtualScrollElem: ScrollComponent;
 
     constructor(
@@ -280,6 +282,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
                 if (response) {
                     document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("show-calendar");
                 } else {
+                    this.initialCalendarMonths = true;
                     document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
                 }
             }
@@ -493,7 +496,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
     renderCalendar(side: DateType) { // side enum
         const mainCalendar: any = (side === DateType.start) ? this.startCalendar : this.endCalendar;
-        console.log(mainCalendar);
         const month = mainCalendar.month.month();
         const year = mainCalendar.month.year();
         const hour = mainCalendar.month.hour();
@@ -610,13 +612,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         }
         this._buildCells(calendar, side);
 
-        this.fullCalendar.items[this.calendarVariables.start.month] = [];
-        this.fullCalendar.items[this.calendarVariables.start.month] = this.calendarVariables.start;
-
-        this.fullCalendar.items[this.calendarVariables.end.month] = [];
-        this.fullCalendar.items[this.calendarVariables.end.month] = this.calendarVariables.end;
-
-        console.log(this.fullCalendar);
+        this.addMonthInCalendarMonths(side);
 
         this.checkNavigateMonthsHolders();
     }
@@ -1736,11 +1732,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
                             moment()
                         ];
                     }
-
-                    this.fullCalendar.startYear = moment(new Date(this.financialYears[0].value.financialYearStarts.split("-").reverse().join("-")));
-                    this.fullCalendar.endYear = moment(new Date(this.financialYears[this.financialYears.length-1].value.financialYearStarts.split("-").reverse().join("-")));
-
-                    console.log(this.fullCalendar);
                 }
             }
         });
@@ -1802,7 +1793,45 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     onScroll(event: any) {
         // visible height + pixel scrolled >= total height - 200 (deducted 200 to load list little earlier before user reaches to end)
         if (event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 200)) {
+            this.initialCalendarMonths = false;
             this.goToNextMonth();
+        }
+    }
+
+    public addMonthInCalendarMonths(side: string): void {
+        if(side === "start") {
+            if(this.initialCalendarMonths === true) {
+                this.calendarMonths = [];
+                this.renderedCalendarMonths = [];
+            }
+
+            let existingMonthsLength = (Math.ceil(Object.keys(this.renderedCalendarMonths).length)) ? Math.ceil(Object.keys(this.renderedCalendarMonths).length) : 0;
+            let key = this.calendarVariables.start.month + "-" + this.calendarVariables.start.year;
+
+            if(!this.renderedCalendarMonths.includes(key)) {
+                this.renderedCalendarMonths.push(key);
+
+                if(this.calendarMonths[existingMonthsLength] === undefined) {
+                    this.calendarMonths[existingMonthsLength] = [];
+                }
+
+                this.calendarMonths[existingMonthsLength].start = this.calendarVariables.start;
+            }
+        }
+
+        if(side === "end") {
+            let existingMonthsLength = (Math.ceil(Object.keys(this.renderedCalendarMonths).length)) ? Math.ceil(Object.keys(this.renderedCalendarMonths).length) - 1 : 0;
+            let key = this.calendarVariables.end.month + "-" + this.calendarVariables.end.year;
+            
+            if(!this.renderedCalendarMonths.includes(key)) {
+                this.renderedCalendarMonths.push(key);
+
+                if(this.calendarMonths[existingMonthsLength] === undefined) {
+                    this.calendarMonths[existingMonthsLength] = [];
+                }
+
+                this.calendarMonths[existingMonthsLength].end = this.calendarVariables.end;
+            }
         }
     }
 }
