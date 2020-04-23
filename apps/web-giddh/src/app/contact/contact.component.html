@@ -19,6 +19,12 @@
 
                                 <li role="menuitem">
                                     <a class="dropdown-item">
+                                        <input type="checkbox" name="select all" />Select All
+                                    </a>
+                                </li>
+
+                                <li role="menuitem">
+                                    <a class="dropdown-item">
                                         <input type="checkbox" name="field_filter.parentGroup"
                                             (ngModelChange)="columnFilter($event, 'parentGroup')"
                                             [(ngModel)]="showFieldFilter.parentGroup" /> Parent Group
@@ -560,7 +566,7 @@
                         </div>
                     </th>
 
-                    <th *ngIf="showFieldFilter.comment">Comment</th>
+                    <th *ngIf="showFieldFilter.comment" class="comment-field">Comment</th>
 
                     <th *ngIf="activeTab === 'vendor' && isICICIIntegrated" width="10%">Action</th>
 
@@ -745,7 +751,9 @@
                         <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx' data-title=" Comment"
                             class="commentField">
                             <ng-container *ngIf='updateCommentIdx != idx'>
-                                {{account.comment || '-' }}
+                                {{account.comment}}
+                                <span [class.text-gray]="!account.comment" *ngIf="!account.comment">{{ 'Add Comment' }}</span>
+                                
                             </ng-container>
                             <ng-container *ngIf='updateCommentIdx === idx'>
                                 <textarea class='form-control' maxlength='100' autofocus="true "
