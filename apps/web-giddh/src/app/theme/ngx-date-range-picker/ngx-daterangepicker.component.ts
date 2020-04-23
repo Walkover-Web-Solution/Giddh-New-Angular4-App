@@ -1,18 +1,16 @@
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-
 import * as _moment from 'moment';
 import { Moment } from 'moment';
 import { LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { take, takeUntil } from 'rxjs/operators';
-import { Observable, ReplaySubject, Subject } from 'rxjs';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../../store';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject, Subject } from 'rxjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
-import { NavigationEnd, Router, NavigationStart } from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
+import { ScrollComponent } from './virtual-scroll/vscroll';
 
 const moment = _moment;
 
@@ -46,7 +44,6 @@ export class CalendarData {
 
 export class Calender {
     [key: number]: Moment;
-
     firstDay: Moment;
     lastDay: Moment;
 }
@@ -99,8 +96,8 @@ export interface DateRangeClicked {
 export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     chosenLabel: string;
     calendarVariables: CalendarVariables = { start: {}, end: {} };
+    fullCalendar: any = {items: []};
     timepickerVariables: { start: any, end: any } = { start: {}, end: {} };
-    // daterangepicker: { start: FormControl, end: FormControl } = {start: new FormControl(), end: new FormControl()};
     applyBtn: { disabled: boolean } = { disabled: false };
     startDate = moment().startOf('day');
     endDate = moment().endOf('day');
@@ -191,6 +188,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     private _old: { start: any, end: any } = { start: null, end: null };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public financialYears: any[] = [];
+    public itemHeight: number = 210;
+    @ViewChild(ScrollComponent) public virtualScrollElem: ScrollComponent;
 
     constructor(
         private _ref: ChangeDetectorRef,
@@ -277,8 +276,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         });
 
         this.isShown$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material").length > 0) {
-                if(response) {
+            if (document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material").length > 0) {
+                if (response) {
                     document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("show-calendar");
                 } else {
                     document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
@@ -494,6 +493,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
     renderCalendar(side: DateType) { // side enum
         const mainCalendar: any = (side === DateType.start) ? this.startCalendar : this.endCalendar;
+        console.log(mainCalendar);
         const month = mainCalendar.month.month();
         const year = mainCalendar.month.year();
         const hour = mainCalendar.month.hour();
@@ -609,6 +609,14 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
             };
         }
         this._buildCells(calendar, side);
+
+        this.fullCalendar.items[this.calendarVariables.start.month] = [];
+        this.fullCalendar.items[this.calendarVariables.start.month] = this.calendarVariables.start;
+
+        this.fullCalendar.items[this.calendarVariables.end.month] = [];
+        this.fullCalendar.items[this.calendarVariables.end.month] = this.calendarVariables.end;
+
+        console.log(this.fullCalendar);
 
         this.checkNavigateMonthsHolders();
     }
@@ -1728,6 +1736,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
                             moment()
                         ];
                     }
+
+                    this.fullCalendar.startYear = moment(new Date(this.financialYears[0].value.financialYearStarts.split("-").reverse().join("-")));
+                    this.fullCalendar.endYear = moment(new Date(this.financialYears[this.financialYears.length-1].value.financialYearStarts.split("-").reverse().join("-")));
+
+                    console.log(this.fullCalendar);
                 }
             }
         });
@@ -1779,5 +1792,17 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public appendDatepickerToBody() {
         document.body.appendChild(document.getElementsByTagName("ngx-daterangepicker-material")[0]);
         this.isShown$.next(true);
+    }
+
+    public handleHighLightedItemEvent(item: any): void {
+        
+    }
+
+    @HostListener('scroll', ['$event'])
+    onScroll(event: any) {
+        // visible height + pixel scrolled >= total height - 200 (deducted 200 to load list little earlier before user reaches to end)
+        if (event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 200)) {
+            this.goToNextMonth();
+        }
     }
 }
