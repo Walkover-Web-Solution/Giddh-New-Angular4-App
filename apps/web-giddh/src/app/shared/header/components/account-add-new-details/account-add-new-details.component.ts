@@ -355,7 +355,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         let gstFields = this._fb.group({
             gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
-            address: ['', Validators.maxLength(120)],
+            address: [''],
             state: this._fb.group({
                 code: [''],
                 name: [''],

@@ -534,7 +534,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * @memberof InvoicePreviewDetailsComponent
      */
     public openInvoiceAdvanceReceiptModal(): void {
-        if (this.isAccountHaveAdvanceReceipts) {
+        if (this.onOpenAdvanceReceiptModal) {
             this.onOpenAdvanceReceiptModal.emit(true);
         }
     }

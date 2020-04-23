@@ -13,7 +13,7 @@ import {
     OnInit,
     SimpleChanges,
     ViewChild,
-    TemplateRef 
+    TemplateRef
 } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 import { BsModalRef, ModalOptions , BsModalService } from 'ngx-bootstrap/modal';
@@ -1547,7 +1547,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     public openAdvanceReceiptModal(event): void {
-        if (event && this.isAccountHaveAdvanceReceipts) {
+        if (event) {
             this.onPerformAdjustPaymentAction(this.selectedInvoice);
         }
     }
