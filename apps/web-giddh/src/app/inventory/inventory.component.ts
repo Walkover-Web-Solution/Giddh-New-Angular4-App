@@ -206,7 +206,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public setDefaultGroup() {
         // for first time load, show first group report
-
         this.groupsWithStocks$.pipe(take(2)).subscribe(a => {
             if (a && !this.activeView) {
                 this.GroupStockReportRequest = new GroupStockReportRequest();
@@ -242,7 +241,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 return;
             }
         }
-
         if (currentUrl) {
             this.router.navigateByUrl(this.currentUrl);
         } else {
@@ -350,7 +348,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public getAllBranches() {
         let branchFilterRequest = new BranchFilterRequest();
-
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
         this.store.dispatch(this.settingsBranchActions.GetParentCompany());
