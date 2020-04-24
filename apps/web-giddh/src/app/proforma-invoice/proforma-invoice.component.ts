@@ -655,7 +655,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         // get account details and set it to local var
         this.selectedAccountDetails$.subscribe(accountDetails => {
-            if (accountDetails && !this.isUpdateMode) {
+            if (accountDetails) {
                 this.assignAccountDetailsValuesInForm(accountDetails);
             }
         });
