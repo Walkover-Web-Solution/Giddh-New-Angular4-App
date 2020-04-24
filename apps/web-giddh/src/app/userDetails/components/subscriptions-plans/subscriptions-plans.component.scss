@@ -79,6 +79,20 @@
 .selected {
     background-color: $light-sky-blue;
 }
+
+.select-plan-head {
+    background: #EDEEF9;
+    font-size: 26px;
+    padding: 20px;
+    h2 {
+        color: $midnight-blue;
+        font-weight: bold;
+    }
+}
+.plans-box {
+    padding: 30px;
+}
+
 @media only screen and (max-width: 767px) {
     .note-wrap {
         position: relative;

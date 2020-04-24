@@ -29,9 +29,10 @@
                                         <h2>Multiple Company</h2>
                                     </div>
 
-                                    <p>Total Plan: 4</p>
-
+                                    <div class="plans-box">
+                                        <p class="bold">Total Plan: 4</p>
 									<div class="your-account">
+                                        <h3 class="mb-2">BONSAI 2.0</h3>
 										<div class="mb-3">
                                             <h3>₹0</h3>
                                             <p class="font-12">Three months</p>
@@ -51,11 +52,16 @@
 											<div class="col-xs-12">
                                                 <p><a href="javascript:void(0)">Check all features</a></p>
 												<button class="btn btn-primary mrT1 mrB2" (click)="choosePlan(item);"
-													[ladda]="this.isUpdateCompanyInProgress$ | async">Start Trial</button>
+                                                    [ladda]="this.isUpdateCompanyInProgress$ | async">Start Trial</button>
+                                                    <p>*prices excluding Tax</p>
 											</div>
 										</div>
-									</div>
-								</div>
+                                    </div>
+
+                                    <a href="#">See all Multiple Company Plans</a>
+
+                                </div>
+                                </div>
                             </div>
 
 
