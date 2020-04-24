@@ -512,7 +512,7 @@
                         <div class="form-group">
                             <input type="checkbox" [(ngModel)]="customTemplate.sections['table'].data['taxBifurcation'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null); checkedTaxBifurcation('taxRateBifurcation', 'table')" /> Tax Bifurcation
                         </div>
-                        <div class="mrL3">
+                        <div class="mrL3" *ngIf="customTemplate.sections['table'].data['taxBifurcation'].display">
                             <div class="clearfix mb-05">
                                 <input type="radio" class="radio_theme" name="tax-rate" (ngModelChange)='onFieldChange(null, null, null)' (change)="checkedTaxBifurcation('taxRateBifurcation','table' )" [checked]="customTemplate.sections['table'].data['taxBifurcation'].label === 'taxRateBifurcation'"
                                     [disabled]="!customTemplate.sections['table'].data['taxBifurcation'].display" /> Tax Rate
@@ -538,30 +538,21 @@
                 <ng-container *ngIf="customTemplate?.templateType === 'gst_template_a'">
 
                     <div class="form-group">
-                        <input type="checkbox" name="tcs" checked
-                            [(ngModel)]="customTemplate.sections['footer'].data['tcs'].display"
-                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked="true" />
-                        TCS
+                        <input type="checkbox" name="tcs" checked [(ngModel)]="customTemplate.sections['footer'].data['tcs'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked="true" /> TCS
                         <div class="mrL3">
                             <input type="text" value="TCS" class="form-control" [(ngModel)]="customTemplate.sections['footer'].data['tcs'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['tcs'].display" />
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <input type="checkbox" [value]="true" name="tds" checked
-                            [(ngModel)]="customTemplate.sections['footer'].data['tds'].display"
-                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"  />
-                        TDS
+                        <input type="checkbox" [value]="true" name="tds" checked [(ngModel)]="customTemplate.sections['footer'].data['tds'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> TDS
                         <div class="mrL3">
                             <input type="text" value="TDS" class="form-control" [(ngModel)]="customTemplate.sections['footer'].data['tds'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['tds'].display" />
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <input type="checkbox" [attr.checked]="true" name="totalDues"
-                            [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].display"
-                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Total
-                        Due
+                        <input type="checkbox" [attr.checked]="true" name="totalDues" [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Total Due
                         <div class="mrL3">
                             <input type="text" value="Total Due (in INR)" class="form-control" [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['totalDue'].display"
                             />
@@ -601,7 +592,7 @@
                     <div class="form-group">
                         <input type="checkbox" [(ngModel)]="customTemplate.sections['footer'].data['taxBifurcation'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null); checkedTaxBifurcation('taxRateBifurcation', 'footer')" /> Tax Bifurcation
                     </div>
-                    <div class="mrL3">
+                    <div class="mrL3" *ngIf="customTemplate.sections['footer'].data['taxBifurcation'].display">
                         <div class="clearfix mb-05">
                             <input type="radio" class="radio_theme" name="tax-rate" (ngModelChange)='onFieldChange(null, null, null)' (change)="checkedTaxBifurcation('taxRateBifurcation','footer')" [checked]="customTemplate.sections['footer'].data['taxBifurcation'].label === 'taxRateBifurcation'"
                                 [disabled]="!customTemplate.sections['footer'].data['taxBifurcation'].display" /> Tax Rate
