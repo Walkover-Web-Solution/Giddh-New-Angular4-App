@@ -93,7 +93,7 @@ export class PurchaseRegisterComponent implements OnInit {
 
     ngOnInit() {
         this.router.events.pipe(
-            filter(event => (event instanceof NavigationStart && !event.url.includes('/reports'))),
+            filter(event => (event instanceof NavigationStart && !(event.url.includes('/reports/purchase-register') || event.url.includes('/reports/purchase-detailed-expand')))),
             takeUntil(this.destroyed$)).subscribe(() => {
                 // Reset the chosen financial year when user leaves the module
                 this.store.dispatch(this.companyActions.resetUserChosenFinancialYear());

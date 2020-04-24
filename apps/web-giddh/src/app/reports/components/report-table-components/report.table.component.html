@@ -68,7 +68,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let item of reportRespone" [ngClass]="{'bgChange': item.reportType === 'combined'}">
-                <td data-title="Particular"><a class="cursor-pointer" (click)="GotoDetailedSales(item)">{{item.particular}}</a></td>
+                <td data-title="Particular"><a [class.cursor-pointer]="item.reportType !== 'combined'" (click)="GotoDetailedSales(item)">{{item.particular}}</a></td>
                 <td data-title="Sales" class="text-right">{{item.sales | giddhCurrency}}</td>
                 <td data-title="Return" *ngIf="salesRegisterTotal.returns" class="text-right">{{item.returns | giddhCurrency}}</td>
                 <td data-title="Tax" *ngIf="salesRegisterTotal.taxTotal" class="text-right">{{item.taxTotal | giddhCurrency}}</td>
@@ -80,9 +80,9 @@
             </tr>
         </tbody>
 
-        <tfoot class="bold">
+        <tfoot class="sales-register-footer bold">
             <tr>
-                <th><a href="javascript:void(0)">{{salesRegisterTotal.particular }}</a></th>
+                <th><a class="particular" href="javascript:void(0)">{{salesRegisterTotal.particular }}</a></th>
                 <th class="text-right">{{salesRegisterTotal.sales | giddhCurrency}}</th>
                 <th *ngIf="salesRegisterTotal.returns" class="text-right">{{salesRegisterTotal.returns | giddhCurrency}}</th>
                 <th *ngIf="salesRegisterTotal.taxTotal" class="text-right">{{salesRegisterTotal.taxTotal | giddhCurrency}}</th>

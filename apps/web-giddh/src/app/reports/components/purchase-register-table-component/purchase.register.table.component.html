@@ -64,7 +64,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let item of reportRespone" [ngClass]="{'bgChange': item.reportType === 'combined'}">
-                <td data-title="Particular"><a class="cursor-pointer" (click)="gotoDetailedPurchase(item)">{{item.particular}}</a></td>
+                <td data-title="Particular"><a [class.cursor-pointer]="item.reportType !== 'combined'" (click)="gotoDetailedPurchase(item)">{{item.particular}}</a></td>
                 <td data-title="Purchase" class="text-right">{{item.purchase | giddhCurrency}}</td>
                 <td data-title="Return" *ngIf="purchaseRegisterTotal.returns" class="text-right">{{item.returns | giddhCurrency}}</td>
                 <td data-title="Tax" *ngIf="purchaseRegisterTotal.taxTotal" class="text-right">{{item.taxTotal | giddhCurrency}}</td>
@@ -75,9 +75,9 @@
                 <td data-title="Cumulative" *ngIf="purchaseRegisterTotal.cumulative" class="text-right">{{item.cumulative | giddhCurrency}}</td>
             </tr>
         </tbody>
-        <tfoot class="bold">
+        <tfoot class="purchase-footer bold">
             <tr>
-                <th><a href="javascript:void(0)">{{purchaseRegisterTotal.particular }}</a></th>
+                <th><a class="particular" href="javascript:void(0)">{{purchaseRegisterTotal.particular }}</a></th>
                 <th class="text-right">{{purchaseRegisterTotal.purchase | giddhCurrency}}</th>
                 <th *ngIf="purchaseRegisterTotal.returns" class="text-right">{{purchaseRegisterTotal.returns | giddhCurrency}}</th>
                 <th *ngIf="purchaseRegisterTotal.taxTotal" class="text-right">{{purchaseRegisterTotal.taxTotal | giddhCurrency}}</th>
