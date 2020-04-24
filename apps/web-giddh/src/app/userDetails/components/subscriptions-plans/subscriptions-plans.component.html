@@ -1,8 +1,10 @@
 <div class="welcome-msg  ">
 	<div class="row">
-		<div class="col-md-9">
-			<p class="mb-2">Hi {{logedInUser?.name}} !</p>
-			<p class="mb-3">Please select a subscription for your company <strong>“{{this.currentCompany}}”.</strong>
+		<div class="col-md-9 font-14">
+			<p class="mb-1">Hi {{logedInUser?.name}} !</p>
+			<!-- <p class="mb-3">Please select a subscription for your company <strong>“{{this.currentCompany}}”.</strong>
+            </p> -->
+            <p class="mb-3">All the plan come with all the features with <span class="selected">90 days money back guaranty.</span>
 			</p>
 		</div>
 		<div class="col-md-3 text-right xs-left" *ngIf="subscriptions && subscriptions.length > 0">
@@ -11,30 +13,59 @@
 	</div>
 	<div *ngIf="!isSwitchPlanInProcess" class="choose-ur-plan noHeight">
 		<div class="row">
-			<div class="col-sm-9">
+			<div class="col-sm-12">
 				<div class="row">
 					<ng-container *ngFor="let item of SubscriptionPlans; let i=index">
 						<!-- Free plans -->
 						<ng-container *ngIf="!item?.planDetails?.amount && !item.subscriptionId">
-							<div class="col-sm-4">
+
+
+
+
+
+                            <div class="col-sm-4">
+								<div class="select-plan-block">
+                                    <div class="select-plan-head">
+                                        <h2>Multiple Company</h2>
+                                    </div>
+
+                                    <p>Total Plan: 4</p>
+
+									<div class="your-account">
+										<div class="mb-3">
+                                            <h3>₹0</h3>
+                                            <p class="font-12">Three months</p>
+										</div>
+
+										<div class="clearfix">
+                                            <ul class="plan-list">
+                                                <li>Transactions Limit: 10,000</li>
+                                                <li>Total Companies: 1</li>
+                                                <li>Unlimited Users</li>
+                                                <li>Unlimited Customers/Vendors</li>
+                                                <li>Desktop/Mobile App</li>
+                                            </ul>
+                                        </div>
+
+										<div class="row">
+											<div class="col-xs-12">
+                                                <p><a href="javascript:void(0)">Check all features</a></p>
+												<button class="btn btn-primary mrT1 mrB2" (click)="choosePlan(item);"
+													[ladda]="this.isUpdateCompanyInProgress$ | async">Start Trial</button>
+											</div>
+										</div>
+									</div>
+								</div>
+                            </div>
+
+
+
+
+                            <!-- <div class="col-sm-4">
 								<div class="select-plan-block">
 									{{item?.planDetails?.name}}
 									<div class="your-account">
 
-										<!-- <div class="row">
-                                                    <div class="col-xs-6">
-                                                        <span>
-                      Subscription ID
-                    </span>
-                                                    </div>
-                                                    <div class="col-xs-6">
-                                                        <p>
-                                                            -
-                                                        </p>
-                                                    </div>
-                                                </div> -->
-
-										<!--  -->
 										<div class="row">
 											<div class="col-xs-6">
 												<span>
@@ -50,7 +81,85 @@
 												</p>
 											</div>
 										</div>
-										<!--  -->
+
+										<div class="row">
+											<div class="col-xs-6">
+												<span>
+													Total Companies
+												</span>
+											</div>
+											<div class="col-xs-6">
+												<p class="">
+													{{item?.planDetails?.companiesLimit | number}}
+												</p>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-xs-6">
+												<span>
+													Transactions Limit
+												</span>
+											</div>
+											<div class="col-xs-6">
+												<p>
+													{{item?.planDetails?.transactionLimit | number}}
+												</p>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-xs-6">
+												<span>
+													Subscription Renewal
+												</span>
+											</div>
+											<div class="col-xs-6">
+												<p>
+													{{item?.planDetails?.duration }}
+													{{item?.planDetails?.durationUnit}}(s)
+												</p>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-xs-12">
+												<button class="btn btn-primary mrT1 mrB2" (click)="choosePlan(item);"
+													[ladda]="this.isUpdateCompanyInProgress$ | async">Select
+													Plan</button>
+											</div>
+										</div>
+									</div>
+								</div>
+                            </div> -->
+
+
+
+
+
+
+
+
+							<!-- <div class="col-sm-4">
+								<div class="select-plan-block">
+									{{item?.planDetails?.name}}
+									<div class="your-account">
+
+										<div class="row">
+											<div class="col-xs-6">
+												<span>
+													Subscription Price
+												</span>
+											</div>
+											<div class="col-xs-6">
+												<p *ngIf="item?.planDetails?.amount">
+													{{item?.planDetails?.amount | number}}
+												</p>
+												<p *ngIf="!item?.planDetails?.amount">
+													FREE
+												</p>
+											</div>
+										</div>
 
 										<div class="row">
 											<div class="col-xs-6">
@@ -103,8 +212,10 @@
 
 								</div>
 
-							</div>
-						</ng-container>
+							</div> -->
+                        </ng-container>
+
+
 						<!-- new plan after free -->
 						<ng-container *ngIf="item?.planDetails?.amount && !item.subscriptionId">
 							<div class="col-sm-4">

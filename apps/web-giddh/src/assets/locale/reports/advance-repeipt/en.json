@@ -1,0 +1,21 @@
+{
+    "receipt_no_label" : "Receipt #",
+    "receipt_no_placeholder" : "Search Receipt",
+    "customer_name_label" : "Customer Name",
+    "customer_name_placeholder" : "Search Customer",
+    "payment_mode_label" : "Payment Mode",
+    "payment_mode_placeholder" : "Search Payment Mode",
+    "invoice_no_label" : "Invoice #",
+    "invoice_no_placeholder" : "Search Invoice No.",
+    "unused_amount" : "Unused Amount",
+    "advanced_receipts" : "Advance Receipts",
+    "normal_receipts" : "Normal Receipts",
+    "total_receipts" : "Total Receipts",
+    "unused_receipts" : "Unused Receipts",
+    "adjustment_voucher_label" : "Adjustment Voucher",
+    "adjustment_voucher_placeholder" : "Select Account",
+    "receipt_types" : {
+        "normal_receipts" : "Normal Receipts",
+        "advance_receipts" : "Advance Receipts"
+    }
+}

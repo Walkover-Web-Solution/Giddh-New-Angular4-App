@@ -62,8 +62,17 @@
                                     <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                                         aria-labelledby="button-alignment">
                                         <li role="menuitem">
-                                            <a class="dropdown-item" href="javascript:void(0)"
-                                                (click)="openModal(template, company)">Delete</a>
+                                            <a class="dropdown-item" (click)="toggleActivityLogAsidePane($event)" href="javascript:void(0)"
+                                                (click)="openModal(template, company)">Activity Logs</a>
+                                        </li>
+                                        <li role="menuitem">
+                                            <a class="dropdown-item" href="javascript:void(0)">Upgrade Plan</a>
+                                        </li>
+                                        <li role="menuitem">
+                                            <a class="dropdown-item" href="javascript:void(0)">Downgrade Plan</a>
+                                        </li>
+                                        <li role="menuitem">
+                                            <a class="dropdown-item" href="javascript:void(0)">Cancel Subscription</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -200,8 +209,26 @@
 
                   <div class="d-flex justify-content-between pl-2">
                     <h2 class="section_head pb-0">Associated Companies</h2>
-                    <div class="active">
-                       <span class="green-dote"> </span> Active
+
+                    <div class="clearfix">
+                        <div class="btn-group d-inline-block custom-dropdown pt-05 ml-1 middle mr-1" dropdown placement="bottom right">
+                            <button id="button-alignment" dropdownToggle type="button" class="dropdown-toggle"
+                                aria-controls="dropdown-alignment">
+                                <span class="icon-dots-three-vertical"></span>
+                            </button>
+                            <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                                aria-labelledby="button-alignment">
+                                <li role="menuitem">
+                                    <a class="dropdown-item" href="javascript:void(0)">Move all </a>
+                                </li>
+                                <li role="menuitem">
+                                    <a class="dropdown-item" href="javascript:void(0)">Deactivate all</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="active d-inline-block middle">
+                            <span class="green-dote"> </span> Active
+                        </div>
                     </div>
                   </div>
 
@@ -215,7 +242,7 @@
                             <li *ngFor="let company of selectedPlanCompanies"><a href="javascript:void(0)"><span>{{company.transactions}}</span>{{company.name}}</a>
                             </li>
 
-                            <li *ngFor="let associatedCompany of associatedCompanies; let i = index"><a href="javascript:void(0)"><span>{{i+1}}</span>{{associatedCompany.companyName}}</a>
+                            <li *ngFor="let associatedCompany of associatedCompanies; let i = index"><a href="javascript:void(0)" (click)="toggleCompanyDetailsAsidePane($event)"><span>{{i+1}}</span>{{associatedCompany.companyName}}</a>
                                 <div class="btn-group d-inline-block custom-dropdown pt-05 ml-1 pull-right mt-05" dropdown placement="bottom right">
                                     <button id="button-alignment" dropdownToggle type="button" class="dropdown-toggle"
                                         aria-controls="dropdown-alignment">
@@ -224,8 +251,10 @@
                                     <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                                         aria-labelledby="button-alignment">
                                         <li role="menuitem">
-                                            <a class="dropdown-item" href="javascript:void(0)"
-                                                (click)="openModal(template, company)">Delete</a>
+                                            <a class="dropdown-item" href="javascript:void(0)">Move Company </a>
+                                        </li>
+                                        <li role="menuitem">
+                                            <a class="dropdown-item" href="javascript:void(0)">Deactivate Company</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -448,3 +477,14 @@
 
 
 <subscriptions-plans *ngIf="isPlanShow" [subscriptions]="subscriptions" (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)"></subscriptions-plans>
+
+
+<!-- activity-log-sidebar aside -->
+<div class="aside-overlay" *ngIf="activityLogAsideMenuState === 'in'"></div>
+<activity-log-sidebar [class]="activityLogAsideMenuState" *ngIf="activityLogAsideMenuState === 'in'" (closeEvent)="toggleActivityLogAsidePane()"></activity-log-sidebar>
+
+
+
+<!-- activity-log-sidebar aside -->
+<div class="aside-overlay" *ngIf="companyDetailsAsideMenuState === 'in'"></div>
+<company-details-sidebar [class]="companyDetailsAsideMenuState" *ngIf="companyDetailsAsideMenuState === 'in'" (closeEvent)="toggleCompanyDetailsAsidePane()"></company-details-sidebar>

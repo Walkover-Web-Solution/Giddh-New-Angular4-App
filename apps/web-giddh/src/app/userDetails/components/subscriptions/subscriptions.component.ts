@@ -35,6 +35,8 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     public companies$: Observable<CompanyResponse[]>;
     public activeCompany: any = {};
     public currentCompanyPlan: any = '';
+    public activityLogAsideMenuState: string = 'out';
+    public companyDetailsAsideMenuState: string = 'out';
 
     associatedCompanies = [
         {companyName: 'ABC Limited'},
@@ -152,6 +154,36 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
                     this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
                 }
             }
+        }
+    }
+
+    public toggleActivityLogAsidePane(event?): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.activityLogAsideMenuState = this.activityLogAsideMenuState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+
+    public toggleCompanyDetailsAsidePane(event?): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.companyDetailsAsideMenuState = this.companyDetailsAsideMenuState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+
+    public toggleBodyClass() {
+        if (this.activityLogAsideMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+
+        if (this.companyDetailsAsideMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
         }
     }
 

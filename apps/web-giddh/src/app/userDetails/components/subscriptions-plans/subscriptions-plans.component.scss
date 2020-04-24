@@ -1,3 +1,4 @@
+@import "../../../../assets/css/color.scss";
 .select-plan-block .your-account span {
     color: #9b9b9b;
     font-size: 14px;
@@ -6,8 +7,7 @@
 }
 .select-plan-block {
     margin-bottom: 30px;
-    background-color: #fff;
-    padding: 15px;
+    background-color: $white;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
 }
 .welcome-msg {
@@ -75,6 +75,9 @@
 }
 .aside-overlay {
     z-index: 999;
+}
+.selected {
+    background-color: $light-sky-blue;
 }
 @media only screen and (max-width: 767px) {
     .note-wrap {

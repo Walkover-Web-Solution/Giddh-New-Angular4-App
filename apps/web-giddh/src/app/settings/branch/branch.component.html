@@ -33,8 +33,8 @@
         </div>
     </div>
 </div>
-<div *ngIf="(branches$ | async)?.length > 0 && branchViewType === 'table'" class="table-responsive on-mobile-view">
-    <table class="table basic mt-2 giddh-table">
+<div *ngIf="(branches$ | async)?.length > 0 && branchViewType === 'table'" class="table-responsive">
+    <table class="table basic mt-2 giddh-table on-mobile-view">
         <thead>
             <tr>
                 <th>Branch Name</th>

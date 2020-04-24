@@ -1,0 +1,60 @@
+<div class="aside-pane" [keyboardShortcut]="'esc'" (onShortcutPress)="closeEvent.emit()">
+
+    <div class="form-header">
+        <h3 class="aside-title">Activity Log</h3>
+    </div>
+
+    <button id="close" class="" (click)="closeEvent.emit()"><i class="icon-cross"></i></button>
+
+    <div class="aside-body aside-create-tax-component">
+        <div class="aside-pane-form">
+            <h4 class="text-blue bold font-20 mb-1">STANDARD</h4>
+            <div class="row pb-1 bb-1">
+                <div class="col-md-9">
+                    <div class="table-responsive">
+                        <table class="table table-no-border mb-0">
+                            <tr>
+                                <th>Subscription ID</th>
+                                <td>3434</td>
+                            </tr>
+
+                            <tr>
+                                <th>Subscribed On</th>
+                                <td>17/04/2020</td>
+                            </tr>
+
+                            <tr>
+                                <th>Expiry Date</th>
+                                <td>23/07/2020</td>
+                            </tr>
+
+                            <tr>
+                                <th> Subscription Price</th>
+                                <td>INR 4,000</td>
+                            </tr>
+                            <tr>
+                                <th>Total Companies</th>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <th>Transactions Limit</th>
+                                <td>NIL</td>
+                            </tr>
+                            <tr>
+                                <th>Validity</th>
+                                <td>7 Days</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="activily-list mt-2">
+                <li>17-10-2018, plan subscribed</li>
+                <li>05-10-2018, amount $2,000 paid by 83XXXXXXXXX98</li>
+                <li>27-09-2018, plan subscribed</li>
+            </ul>
+
+        </div>
+    </div>
+</div>

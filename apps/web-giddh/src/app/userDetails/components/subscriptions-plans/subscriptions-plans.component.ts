@@ -16,7 +16,7 @@ import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'subscriptions-plans',
-    styleUrls: ['./subscriptions-plans.component.css'],
+    styleUrls: ['./subscriptions-plans.component.scss'],
     templateUrl: './subscriptions-plans.component.html'
 })
 
