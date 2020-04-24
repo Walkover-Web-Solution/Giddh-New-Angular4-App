@@ -763,7 +763,7 @@ $input-height: 3rem !default;
 
             .ranges,
             .calendar {
-                float: left;
+                float: none;
             }
         }
 
@@ -985,8 +985,8 @@ td span {
     background-position: center;
     opacity: 0.8;
     transition: background-color 0.2s ease;
-    height: 21px;
-    width: 21px;
+    height: 17px;
+    width: 17px;
     cursor: pointer;
     background-color: unset !important;
     border: unset !important;
@@ -1008,10 +1008,10 @@ td span {
     background-position: center;
     opacity: 0.8;
     transition: background-color 0.2s ease;
-    height: 21px;
+    height: 17px;
     background-color: unset !important;
     border: unset !important;
-    width: 21px;
+    width: 17px;
     cursor: pointer;
 
     &:hover {
@@ -1141,14 +1141,14 @@ td span {
 .month-field {
     display: flex;
     justify-content: space-between;
-    padding: 10px 10px 6px;
-    border-bottom: 1px solid $whiteSmoke;
+    padding:16px 10px 2px;
          .month-dropdown{
         display: flex;
         flex-direction: row;
         width: 180px;
         justify-content: flex-start;
-        align-items: flex-start;
+        align-items: center;
+        font-size: 13px;
         .prev.available{
             display: inline-flex;
             transform: rotate(270deg);
@@ -1338,7 +1338,7 @@ td span {
 }
 @media(max-height:768px){
     .drops-down-right{
-        height: 400px;
+         
         .ranges {
             height: 400px;
             overflow-y: auto;
@@ -1352,6 +1352,21 @@ td span {
                 border-bottom: 1px solid #d9d9d9;
                 border-radius: 0;
             }
+            .financial-year-dropdown{
+                height: auto;
+            }
         }
+    }
+}
+
+.upper-part{
+    border-bottom: 1px solid $whiteSmoke;
+}
+.sticky-header{
+    width: calc(100% - 20px) !important;
+    th.days-td {
+        position: sticky;
+        top: 100px;
+        z-index: 99;
     }
 }
