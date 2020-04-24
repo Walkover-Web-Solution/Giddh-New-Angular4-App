@@ -153,7 +153,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         filteredArr = this.getFilteredArrOfIOptionItems(array, term, action);
 
         startsWithArr = filteredArr.filter((item) => {
-            if (startsWith(item.label.toLocaleLowerCase(), term) || startsWith(item.value.toLocaleLowerCase(), term)) {
+            if (startsWith(String(item.label).toLocaleLowerCase(), term) || startsWith(String(item.value).toLocaleLowerCase(), term)) {
                 return item;
             } else {
                 includesArr.push(item);
@@ -175,17 +175,17 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                     stockName = _.cloneDeep(item.additional.stock.name);
                     stockUnqName = _.cloneDeep(item.additional.stock.uniqueName);
                 }
-                return _.includes(item.label.toLocaleLowerCase(), term) || _.includes(item.additional.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term) || _.includes(stockName.toLocaleLowerCase(), term) || _.includes(stockUnqName.toLocaleLowerCase(), term);
+                return _.includes(String(item.label).toLocaleLowerCase(), term) || _.includes(item.additional.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term) || _.includes(stockName.toLocaleLowerCase(), term) || _.includes(stockUnqName.toLocaleLowerCase(), term);
             });
         } else {
             return array.filter((item: IOption) => {
-                return includes(item.label.toLocaleLowerCase(), term) || includes(item.value.toLocaleLowerCase(), term);
+                return includes(String(item.label).toLocaleLowerCase(), term) || includes(String(item.value).toLocaleLowerCase(), term);
             });
         }
     }
 
     public updateFilter(filterProp) {
-        const lowercaseFilter = filterProp.toLocaleLowerCase();
+        const lowercaseFilter = String(filterProp).toLocaleLowerCase();
         if (this.useInBuiltFilterForFlattenAc && this._options) {
             this.filteredData = this.filterByIOption(this._options, lowercaseFilter, FLATTEN_SEARCH_TERM);
         } else if (this._options && this.useInBuiltFilterForIOptionTypeItems) {
@@ -195,7 +195,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                 if (this.customFilter) {
                     return this.customFilter(lowercaseFilter, item);
                 }
-                return !lowercaseFilter || (item.label).toLocaleLowerCase().indexOf(lowercaseFilter) !== -1;
+                return !lowercaseFilter || String(item.label).toLocaleLowerCase().indexOf(lowercaseFilter) !== -1;
             }) : [];
 
             if (this.customSorting) {
