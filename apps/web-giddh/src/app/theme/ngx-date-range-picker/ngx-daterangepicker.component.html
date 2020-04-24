@@ -357,10 +357,10 @@
                                                 </td>
                                                 <td *ngFor="let col of calendarMonth.start.calCols"
                                                     [class]="calendarMonth.start.classes[row][col]"
-                                                    [style.backgroundColor]="!(calendarMonth.end.calendar[1][1].month() ==calendarMonth.end.calendar[row][col].month())?'white':'inherit'"
+                                                    [style.backgroundColor]="!(calendarMonth.end && calendarMonth.end.calendar[1][1].month() ==calendarMonth.end.calendar[row][col].month())?'white':'inherit'"
                                                     (mouseenter)="mouseEnter(row,col,sideEnum.start)"
                                                     [ngClass]="{'in-range-hovered': (calendarMonth.start.calendar[row][col].isBetween(startDate, hoveredDate)
-                            && (calendarMonth.end.calendar[1][1].month() ==calendarMonth.end.calendar[row][col].month())),
+                            && (calendarMonth.end && calendarMonth.end.calendar[1][1].month() ==calendarMonth.end.calendar[row][col].month())),
                             'activatedDate': (calendarMonth.start.calendar[row][col].format('YYYY-MM-DD')===startDate.format('YYYY-MM-DD')
                             || calendarMonth.start.calendar[row][col].format('YYYY-MM-DD')===endDate.format('YYYY-MM-DD')) &&
                             ((calendarMonth.start.calendar[row][col].format('YYYY-MM-DD')===startDate.format('YYYY-MM-DD') && ActiveDate === 1) ||
