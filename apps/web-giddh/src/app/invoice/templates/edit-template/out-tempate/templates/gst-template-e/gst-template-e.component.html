@@ -305,9 +305,6 @@
                     </th>
                 </tr>
                 <tr>
-                    <td [attr.colspan]="columnsVisibled -2" class="text-left inwords">
-                        <p class="font-12" *ngIf="fieldsAndVisibility.footer.totalInWords?.display"> Eight Thousand One Hundred Sixty Six Only</p>
-                    </td>
                     <th class="text-right">
                         <strong>TCS</strong>
                     </th>
@@ -316,9 +313,6 @@
                     </th>
                 </tr>
                 <tr>
-                    <td [attr.colspan]="columnsVisibled -2" class="text-left inwords">
-                        <p class="font-12" *ngIf="fieldsAndVisibility.footer.totalInWords?.display"> Eight Thousand One Hundred Sixty Six Only</p>
-                    </td>
                     <th class="text-right">
                         <strong>TDS</strong>
                     </th>
@@ -327,10 +321,7 @@
                     </th>
                 </tr>
                 <tr>
-                    <th [attr.colspan]="columnsVisibled -2" class="text-left inwords">
-                        <p *ngIf="fieldsAndVisibility.footer.totalInWords?.display"> </p>
-                    </th>
-                    <ng-container *ngIf="fieldsAndVisibility.table.totalDue?.display">
+                    <ng-container>
                         <th class="text-right">
                             Total Due
                         </th>
