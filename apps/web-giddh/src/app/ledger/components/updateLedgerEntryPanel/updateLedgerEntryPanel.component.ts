@@ -1169,7 +1169,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public openHeaderDropDown() {
-        if (!this.vm.selectedLedger.voucherGenerated) {
+        if (!this.vm.selectedLedger.voucherGenerated || this.vm.selectedLedger.voucherGeneratedType === "sales") {
             this.openDropDown = true;
         } else {
             this.openDropDown = false;
