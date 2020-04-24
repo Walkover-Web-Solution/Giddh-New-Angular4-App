@@ -3,8 +3,8 @@
 
     <form #recurringForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker pr" (ngSubmit)="submit()">
 
-        <div class="d-flex">
-            <div class="search-icon-block" *ngIf="isMobileScreen" (click)="openModal(template)">
+        <div class="d-flex search-icon-block">
+            <div *ngIf="isMobileScreen" (click)="openModal(template)">
                 <i class="icon-search"></i>
             </div>
             <ng-template #template>
@@ -205,7 +205,7 @@
     </form>
 
     <div class="table-responsive">
-        <table class="table basic giddh-table table-bordered mt-15 onMobileView">
+        <table class="table basic giddh-table table-bordered on-mobile-view">
 
             <thead class="t-h-bg1">
                 <tr>
