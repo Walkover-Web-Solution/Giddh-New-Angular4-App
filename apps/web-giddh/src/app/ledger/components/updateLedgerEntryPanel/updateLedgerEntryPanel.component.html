@@ -1129,3 +1129,12 @@
     </div>
 </ng-template>
 <!-- Tourist scheme template block end-->
+<!--Advance receipt adjusted remove confirmation modal -->
+<div bsModal #advanceReceiptRemoveConfirmationModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
+    <div class="modal-dialog modal-md">
+        <!-- modal-liq90 class is removed for now-->
+        <div class="modal-content">
+            <delete-template-confirmation-modal [message]='removeAdvanceReceiptConfirmationMessage' [flag]="confirmationFlag" (closeModelEvent)="onAdvanceReceiptRemoveCloseConfirmationModal($event)"></delete-template-confirmation-modal>
+        </div>
+    </div>
+</div>
