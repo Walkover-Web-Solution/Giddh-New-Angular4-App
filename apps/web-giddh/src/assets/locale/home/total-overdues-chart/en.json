@@ -1,0 +1,6 @@
+{
+    "chart_title" : "Total Overdues",
+    "customer_due" : "Customer Due",
+    "vendor_due" : "Vendor Due",
+    "pending_invoices" : "Pending Invoices"
+}

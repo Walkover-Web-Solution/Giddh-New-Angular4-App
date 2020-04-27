@@ -176,7 +176,7 @@
                 </ul>
 
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <div class="giddh-logo" (click)="forceOpenNavigation = true;">
 
                     <!-- [attachOutsideOnClick]="true" [isOpen]="companyMenu.isopen"  [attachOutsideOnClick]="true" (clickOutside)="closeUserMenu(dropdown)"-->
@@ -203,7 +203,7 @@
                 </div>
 
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-8">
                 <div class="pull-right right-details">
                     <ul class="nav universal_date mr-2" *ngIf="(selectedCompany | async)">
                         <li [hidden]="isTodaysDateSelected">
@@ -371,8 +371,8 @@
                                         </li>
                                         <li><a (click)="analyzeOtherMenus('contact/vendor', {tab: 'vendor', tabIndex: 0})">Vendor</a>
                                         </li>
-                                        <li><a (click)="analyzeOtherMenus('accounting-voucher')">Journal Voucher</a>
-                                        </li>
+                                        <!-- <li><a (click)="analyzeOtherMenus('accounting-voucher')">Journal Voucher</a>
+                                        </li> -->
                                         <li><a (click)="analyzeOtherMenus('daybook')">Daybook</a></li>
                                         <li><a
                                                 (click)="analyzeOtherMenus('trial-balance-and-profit-loss', { tab: 'trial-balance', tabIndex: 0 })">

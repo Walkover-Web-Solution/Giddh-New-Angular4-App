@@ -1,0 +1,13 @@
+{
+    "inprogress" : "In-Progress",
+    "completed" : "Completed",
+    "time_placeholder" : "Select Interval",
+    "company_placeholder" : "Select Company",
+    "no_entries_found" : "No entries found",
+    "import_json" : "Import Json",
+    "last_import" : "Last Import on",
+    "complete" : "Complete",
+    "error_occured" : "error occured",
+    "error_report" : "Error Report:",
+    "filter_criteria" : "Please check your filter criteria"
+}

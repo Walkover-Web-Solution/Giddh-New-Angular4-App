@@ -314,11 +314,7 @@ span.icon-advance-search {
         padding-right: 0;
     }
 }
-@media (max-width: 575px) { 
-    .mobile-search {
-        display: block;
-        margin-bottom: 0 !important;
-    }
+@media (max-width: 575px) {
     button.btn.btn-filter{
         width: 100%;
         justify-content: center;
