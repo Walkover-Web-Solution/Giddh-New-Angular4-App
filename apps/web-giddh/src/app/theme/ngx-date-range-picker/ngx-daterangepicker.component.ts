@@ -184,6 +184,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     showMonthPicker = false;
     public isMobileScreen: boolean = false;
     public dropdownShow: boolean = false;
+    public rangeDropdownShow: number = -1;
     public goToPreviousMonthDisabled: boolean = false;
     public goToNextMonthDisabled: boolean = false;
     private mouseWheelEventsRequired: number = 20;
@@ -770,8 +771,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
      *  This is responsible for updating the calendars
      */
     updateCalendars() {
-        this.renderCalendar(DateType.start);
-        this.renderCalendar(DateType.end);
+        this.initCalendar();
 
         if (this.endDate === null) {
             return;
@@ -1315,6 +1315,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
         this.chosenRange = range.name;
         const dates = this.findRange(this.ranges, range.name);
+        
+        if(!dates.value || dates.value.length === 0) {
+            return false;
+        }
+
         this.startDate = dates.value[0].clone();
         this.endDate = dates.value[1].clone();
         if (this.showRangeLabelOnInput && range.name !== this.locale.customRangeLabel) {
@@ -1338,8 +1343,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         if (!this.keepCalendarOpeningWithRange) {
             this.clickApply();
         } else {
-            this.renderCalendar(DateType.start);
-            this.renderCalendar(DateType.end);
+            this.initCalendar();
         }
 
         this.updateView();
@@ -1771,8 +1775,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         if (!this.keepCalendarOpeningWithRange) {
             this.clickApply();
         } else {
-            this.renderCalendar(DateType.start);
-            this.renderCalendar(DateType.end);
+            this.initCalendar();
         }
 
         this.updateView();
@@ -1810,7 +1813,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
             this.initialCalendarMonths = false;
             this.lastScrollTopPosition = event.target.scrollTop;
             this.goToNextMonth();
-        } else if(this.lastScrollTopPosition - event.target.scrollTop >= 40) {
+        } else if(this.lastScrollTopPosition - event.target.scrollTop >= 20) {
             this.initialCalendarMonths = false;
             this.lastScrollTopPosition = event.target.scrollTop;
             this.goToPrevMonth(); 
@@ -1840,32 +1843,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
             if(!this.renderedCalendarMonths.includes(startKey)) {
                 this.renderedCalendarMonths.push(startKey);
-
-                //let processed = false;
-
-                // if(this.calendarMonths && this.calendarMonths[0] && this.calendarMonths[0].start && (new Date(this.calendarVariables.end.year + "-" + this.calendarVariables.end.month + "-01")).getTime() < (new Date(this.calendarMonths[0].start.year + "-" + this.calendarMonths[0].start.month + "-01")).getTime()) {
-                //     console.log("IF 1");
-                //     this.calendarMonths.unshift({end: this.calendarVariables.end});
-                //     processed = true;
-                // } else {
-                //     console.log("ELSE 1");
-                //     console.log(new Date(this.calendarVariables.end.year + "-" + this.calendarVariables.end.month + "-01"));
-                //     if(this.calendarMonths && this.calendarMonths[0]) {
-                //         console.log(new Date(this.calendarMonths[0].start.year + "-" + this.calendarMonths[0].start.month + "-01"));
-                //     }
-                // }
-
-                // if(this.calendarMonths && this.calendarMonths[0] && this.calendarMonths[0].start && (new Date(this.calendarVariables.start.year + "-" + this.calendarVariables.start.month + "-01")).getTime() < (new Date(this.calendarMonths[0].start.year + "-" + this.calendarMonths[0].start.month + "-01")).getTime()) {
-                //     console.log("IF 2");
-                //     this.calendarMonths.unshift({start: this.calendarVariables.start});
-                //     processed = true;
-                // } else {
-                //     console.log("ELSE 2");
-                //     console.log(new Date(this.calendarVariables.start.year + "-" + this.calendarVariables.start.month + "-01"));
-                //     if(this.calendarMonths && this.calendarMonths[0]) {
-                //         console.log(new Date(this.calendarMonths[0].start.year + "-" + this.calendarMonths[0].start.month + "-01"));
-                //     }
-                // }
                 
                 if(this.isPreviousMonth === true) {
                     this.calendarMonths.unshift({start: this.calendarVariables.start});
@@ -1900,5 +1877,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public initCalendar() {
         this.renderCalendar(DateType.start);
         this.renderCalendar(DateType.end);
+
+        // setTimeout(() => {
+        //     this.goToPrevMonth();
+        //     this.goToNextMonth();
+        // }, 500);
     }
 }

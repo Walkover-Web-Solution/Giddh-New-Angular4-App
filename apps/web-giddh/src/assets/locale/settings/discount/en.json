@@ -1,0 +1,16 @@
+{
+    "tab_heading" : "Create Discount",
+    "discount_type_placeholder" : "Select Discount Type",
+    "name_label" : "Name",
+    "name_placeholder" : "Name",
+    "value_label" : "Value",
+    "value_placeholder" : "Value",
+    "linked_accounts_label" : "Linked Accounts",
+    "linked_accounts_placeholder" : "Select Discount",
+    "no_record_found" : "No Discount Found !!",
+    "discount_types" : {
+        "as_per_value" : "As per value",
+        "as_per_percent" : "As per percent"
+    },
+    "delete_discount" : "Do You Really Want to Delete This Discount"
+}

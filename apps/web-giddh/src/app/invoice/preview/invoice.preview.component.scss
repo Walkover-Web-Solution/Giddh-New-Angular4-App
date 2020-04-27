@@ -452,7 +452,6 @@ span.icon-export-icon{
 color:$gray;
 }
 /* responsive */
-
 @media (max-width: 768px) {
     .search-icon-block{
         display: flex;
@@ -553,11 +552,6 @@ color:$gray;
             display: none;
         }
     }
-    
-}
-
-@media (max-width: 767px) {
-
     .mobile-search {
         display: flex;
         margin-bottom: 0;
@@ -566,6 +560,8 @@ color:$gray;
     .mobile-search .input-container input {
         font-size: 13px;
     }
+}
+@media (max-width: 767px) {
     .invoice-modal-content:after,
     .invoice-modal-content {
         top: 131px;

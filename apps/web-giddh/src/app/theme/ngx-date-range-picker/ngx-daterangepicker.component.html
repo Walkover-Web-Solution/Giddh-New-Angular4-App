@@ -26,13 +26,13 @@
                     </ul>
                 </li>
                 <li *ngFor="let range of ranges; let i = index" class="menu-li">
-                    <button type="button" class="btn-angle-down" (click)="clickRange($event, range)"
+                    <button type="button" class="btn-angle-down" (click)="rangeDropdownShow = i; clickRange($event, range);"
                         (dblclick)="dblClickRange($event, range)" [disabled]="disableRange(ranges, range)"
                         [ngClass]="{'active': range.isSelected}">{{range.name}}
 
                         <span *ngIf="range.ranges.length" class="available prev angle-down"></span>
                     </button>
-                    <ul *ngIf="range.ranges.length && dropdownShow " class="sub-ranges-cal menu-drawer">
+                    <ul *ngIf="range.ranges.length && rangeDropdownShow === i" class="sub-ranges-cal menu-drawer">
                         <li *ngFor="let subRange of range.ranges">
                             <button type="button" (click)="clickRange($event,subRange)"
                                 (dblclick)="dblClickRange($event, subRange)"

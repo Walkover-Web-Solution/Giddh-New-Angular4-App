@@ -1,0 +1,14 @@
+{
+    "backup" : "Backup",
+    "export" : "Export",
+    "import" : "Import",
+    "import_export_note" : "Import or export your account master data",
+    "file_type" : "File Type",
+    "data_range" : "Data Range",
+    "select_file" : "Select File",
+    "browse_file" : "Browse file",
+    "file_types" : {
+        "accounting_entries" : "Accounting Entries",
+        "master" : "Master Except Accounting Entries"
+    }
+}
