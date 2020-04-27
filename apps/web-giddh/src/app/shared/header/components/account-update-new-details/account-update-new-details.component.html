@@ -153,7 +153,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4" *ngIf="gst.get('gstNumber').value && isGstValid">
+                                    <div class="col-sm-4" *ngIf="gst.get('gstNumber').value && (isGstValid$ | async)">
                                         <div class="form-group">
                                             <label class="d-block">&nbsp;</label>
                                             <label>
