@@ -565,6 +565,8 @@ $input-height: 3rem !default;
                 margin: 0 auto;
                 padding: 0;
                 width: 201px;
+                display: flex;
+                flex-direction: column;
 
                 li {
                     position: relative;
@@ -627,6 +629,54 @@ $input-height: 3rem !default;
                 li:hover {
                     background-color: $whiteSmoke;
                 }
+            }
+            ul.range-list{
+                li:first-child{
+                    order:1;
+                }
+                li:nth-child(2){
+                    order:2;
+                }
+                li:nth-child(3){
+                    order:3;
+                }
+                li:nth-child(4){
+                    order:4;
+                }
+                li:nth-child(5){
+                    order:5;
+                }
+                li:nth-child(6){
+                    order:6;
+                }
+                li:nth-child(7){
+                    order:7;
+                }
+                li:nth-child(8){
+                    order:8;
+                }
+                li:nth-child(9){
+                    order:9;
+                }
+                li:nth-child(10){
+                    order:10;
+                }
+                li:nth-child(11){
+                    order:11;
+                }
+                li:nth-child(12){
+                    order:12;
+                }
+                li:nth-child(13){
+                    order:13;
+                }
+                li:nth-child(14){
+                    order:15;
+                }
+                li:nth-child(15){
+                    order:14;
+                }
+
             }
         }
     }
@@ -1110,6 +1160,10 @@ td span {
             flex-direction: column;
             .upper-part{
                 border-bottom: 1px solid $whiteSmoke;
+                position: sticky;
+                top: 0;
+                z-index: 1;
+                background-color:$white;
                 .sticky-header{
                     width:calc(100% - 20px) !important;
                     th.days-td {
@@ -1429,6 +1483,7 @@ td span {
 @media(max-height:768px){
     .drops-down-right{
         height: 400px;
+        overflow-y: auto;
         .ranges {
             height: 400px;
             overflow-y: auto;

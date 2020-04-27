@@ -15,16 +15,7 @@
                        Custom
                     </button>
                 </li>
-                <li class="menu-li select-financial-year">
-                    <button type="button" class="btn-angle-down" (click)="dropdownShow = !dropdownShow">Select Financial Year
-                        <span class="available prev angle-down"></span>
-                    </button>
-                    <ul class="sub-ranges-cal menu-drawer financial-year-dropdown" *ngIf="dropdownShow && financialYears && financialYears.length > 0">
-                        <li *ngFor="let financialYear of financialYears;">
-                            <button type="button" (click)="clickFinancialYear(financialYear)">{{financialYear.label}}</button>
-                        </li>
-                    </ul>
-                </li>
+                
                 <li *ngFor="let range of ranges; let i = index" class="menu-li">
                     <button type="button" class="btn-angle-down" (click)="rangeDropdownShow = i; clickRange($event, range);"
                         (dblclick)="dblClickRange($event, range)" [disabled]="disableRange(ranges, range)"
@@ -39,6 +30,16 @@
                                 [disabled]="disableRange(range.ranges, subRange)"
                                 [ngClass]="{'active': subRange.isSelected}">{{subRange.name}}
                             </button>
+                        </li>
+                    </ul>
+                </li>
+                <li class="menu-li select-financial-year">
+                    <button type="button" class="btn-angle-down" (click)="dropdownShow = !dropdownShow">Select Financial Year
+                        <span class="available prev angle-down"></span>
+                    </button>
+                    <ul class="sub-ranges-cal menu-drawer financial-year-dropdown" *ngIf="dropdownShow && financialYears && financialYears.length > 0">
+                        <li *ngFor="let financialYear of financialYears;">
+                            <button type="button" (click)="clickFinancialYear(financialYear)">{{financialYear.label}}</button>
                         </li>
                     </ul>
                 </li>
@@ -82,7 +83,7 @@
                     </div>
             </div>
       </div>
-      <ng-template #template class="">
+      <ng-template #template>
         <div class="modal-body edit-date-modal">
           <h5>Custom</h5>
           <div class="modal-date-range">
@@ -346,7 +347,12 @@
                     <!-- month selection -->
                 </div>
                 <!-- start date calendar container -->
-                <calendar-scroll [items]="calendarMonths" [childHeight]="itemHeight" [style.max-height.px]="430" (highLightedItemEmitter)="handleHighLightedItemEvent($event)" (scroll)="onScroll($event)" *ngIf="showCalInRanges && !showMonthPicker">
+                <calendar-scroll [items]="calendarMonths" 
+                    [childHeight]="itemHeight" 
+                    [style.max-height.px]="430" 
+                    (highLightedItemEmitter)="handleHighLightedItemEvent($event)" 
+                    (scroll)="onScroll($event)" 
+                    *ngIf="showCalInRanges && !showMonthPicker">
                     <div *ngFor="let calendarMonth of calendarMonths;">
                         <div class="calendar" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
                             <div class="calendar-table" *ngIf="calendarMonth && calendarMonth.start">

@@ -20,11 +20,12 @@ interface IUpdateEmit {
   `,
     // tslint:disable-next-line:use-host-property-decorator
     host: {
-        '[style.overflow-y]': "parentScroll ? 'hidden' : 'auto'"
+       // '[style.overflow-y]': "parentScroll ? 'hidden' : 'auto'"
+      
     },
     styles: [`
     :host {
-      overflow: hidden;
+      overflow: initial;
       position: relative;
 	    display: block;
       -webkit-overflow-scrolling: touch;
