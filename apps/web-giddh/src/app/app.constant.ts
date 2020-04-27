@@ -159,3 +159,12 @@ export const FILE_ATTACHMENT_TYPE = {
 
 /** Error message to display if the stock is invalid */
 export const INVALID_STOCK_ERROR_MESSAGE = 'Both Unit and Rate fields are mandatory if you provide data for either of them.';
+
+
+/** Vat supported country codes */
+export const VAT_SUPPORTED_COUNTRIES = [
+    'QA', 'BH', 'AE', 'SA', 'OM', 'KW'
+];
+
+export const API_POSTMAN_DOC_URL='https://documenter.getpostman.com/view/117343/S1Zw8WF1?version=latest';
+
