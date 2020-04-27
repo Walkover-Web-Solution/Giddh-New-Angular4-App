@@ -135,7 +135,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
                                 m.grandTotal.amountForAccount = result.body.voucherDetails.grandTotal;
                             }
 
-                            if(result.body.type === VoucherTypeEnum.sales || result.body.type === VoucherTypeEnum.cash) {
+                            if(result && result.body && (result.body.type === VoucherTypeEnum.sales || result.body.type === VoucherTypeEnum.cash)) {
                                 m.account = result.body.account;
                             }
 
