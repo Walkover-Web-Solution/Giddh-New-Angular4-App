@@ -1134,7 +1134,7 @@
     <div class="modal-dialog modal-md">
         <!-- modal-liq90 class is removed for now-->
         <div class="modal-content">
-            <delete-template-confirmation-modal [message]='removeAdvanceReceiptConfirmationMessage' [flag]="confirmationFlag" (closeModelEvent)="onAdvanceReceiptRemoveCloseConfirmationModal($event)"></delete-template-confirmation-modal>
+            <delete-template-confirmation-modal *ngIf="advanceReceiptRemoveConfirmationModal.isShown" [message]='removeAdvanceReceiptConfirmationMessage' [flag]="confirmationFlag" (closeModelEvent)="onAdvanceReceiptRemoveCloseConfirmationModal($event)"></delete-template-confirmation-modal>
         </div>
     </div>
 </div>

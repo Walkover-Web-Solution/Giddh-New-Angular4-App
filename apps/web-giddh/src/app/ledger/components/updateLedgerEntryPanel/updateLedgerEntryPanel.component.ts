@@ -86,6 +86,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @ViewChild('tax') public taxControll: TaxControlComponent;
     @ViewChild('updateBaseAccount') public updateBaseAccount: ModalDirective;
     @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
+    /** Advance receipt remove confirmation modal reference */
     @ViewChild('advanceReceiptRemoveConfirmationModal') public advanceReceiptRemoveConfirmationModal: ModalDirective;
 
     /** RCM popup instance */
@@ -183,7 +184,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** Remove Advance receipt confirmation flag */
     public confirmationFlag: string = '';
     /** Remove Advance receipt confirmation message */
-    public removeAdvanceReceiptConfirmationMessage: string = 'If you change the type of this receipt, all the related advance receipt adjustments in invoices will be removed. Are you sure you want to proceed';
+    public removeAdvanceReceiptConfirmationMessage: string = 'If you change the type of this receipt, all the related advance receipt adjustments in invoices will be removed. Are you sure you want to proceed?';
     constructor(
         private _accountService: AccountService,
         private _ledgerService: LedgerService,
@@ -1520,12 +1521,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public onAdvanceReceiptRemoveCloseConfirmationModal(userResponse: any): void {
-        if (userResponse.response) {
-             this.isAdvanceReceipt = false;
-            this.handleAdvanceReceiptChange();
-            this.advanceReceiptRemoveConfirmationModal.hide();
-        } else {
-            this.isAdvanceReceipt = true;
+        if (userResponse) {
+             this.isAdvanceReceipt = !userResponse.response;
             this.handleAdvanceReceiptChange();
             this.advanceReceiptRemoveConfirmationModal.hide();
         }
