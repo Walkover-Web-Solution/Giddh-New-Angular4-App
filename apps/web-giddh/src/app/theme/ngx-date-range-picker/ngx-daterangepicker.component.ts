@@ -191,6 +191,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public financialYears: any[] = [];
     public itemHeight: number = 210;
     public initialCalendarMonths: boolean = true;
+    public lastScrollTopPosition: number = 0;
+    public isPreviousMonth: boolean = false;
     @ViewChild(ScrollComponent) public virtualScrollElem: ScrollComponent;
 
     constructor(
@@ -267,8 +269,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
                 this.locale.format = moment.localeData().longDateFormat('L');
             }
         }
-        this.renderCalendar(DateType.start);
-        this.renderCalendar(DateType.end);
+        
+        this.initCalendar();
 
         this.router.events.subscribe(event => {
             if (event instanceof NavigationStart) {
@@ -977,6 +979,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
      * Click on previous month
      */
     goToPrevMonth() {
+        this.isPreviousMonth = true;
         if (!this.singleDatePicker) {
             this.startCalendar.month.subtract(1, 'month');
             if (this.linkedCalendars) {
@@ -992,6 +995,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
      * Click on next month
      */
     goToNextMonth() {
+        this.isPreviousMonth = false;
         if (!this.singleDatePicker) {
             this.endCalendar.month.add(1, 'month');
             if (this.linkedCalendars) {
@@ -1792,9 +1796,14 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     @HostListener('scroll', ['$event'])
     onScroll(event: any) {
         // visible height + pixel scrolled >= total height - 200 (deducted 200 to load list little earlier before user reaches to end)
-        if (event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 200)) {
+        if (event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 300)) {
             this.initialCalendarMonths = false;
+            this.lastScrollTopPosition = event.target.scrollTop;
             this.goToNextMonth();
+        } else if(this.lastScrollTopPosition - event.target.scrollTop >= 40) {
+            this.initialCalendarMonths = false;
+            this.lastScrollTopPosition = event.target.scrollTop;
+            this.goToPrevMonth(); 
         }
     }
 
@@ -1806,16 +1815,57 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
             }
 
             let existingMonthsLength = (Math.ceil(Object.keys(this.renderedCalendarMonths).length)) ? Math.ceil(Object.keys(this.renderedCalendarMonths).length) : 0;
-            let key = this.calendarVariables.start.month + "-" + this.calendarVariables.start.year;
+            let startKey = this.calendarVariables.start.month + "-" + this.calendarVariables.start.year;
+            let endKey = this.calendarVariables.end.month + "-" + this.calendarVariables.end.year;
 
-            if(!this.renderedCalendarMonths.includes(key)) {
-                this.renderedCalendarMonths.push(key);
+            let processed = false;
 
-                if(this.calendarMonths[existingMonthsLength] === undefined) {
-                    this.calendarMonths[existingMonthsLength] = [];
+            if(!this.renderedCalendarMonths.includes(endKey)) {
+                if(this.isPreviousMonth === true) {
+                    this.renderedCalendarMonths.push(endKey);
+
+                    this.calendarMonths.unshift({end: this.calendarVariables.end});
                 }
+            }
 
-                this.calendarMonths[existingMonthsLength].start = this.calendarVariables.start;
+            if(!this.renderedCalendarMonths.includes(startKey)) {
+                this.renderedCalendarMonths.push(startKey);
+
+                //let processed = false;
+
+                // if(this.calendarMonths && this.calendarMonths[0] && this.calendarMonths[0].start && (new Date(this.calendarVariables.end.year + "-" + this.calendarVariables.end.month + "-01")).getTime() < (new Date(this.calendarMonths[0].start.year + "-" + this.calendarMonths[0].start.month + "-01")).getTime()) {
+                //     console.log("IF 1");
+                //     this.calendarMonths.unshift({end: this.calendarVariables.end});
+                //     processed = true;
+                // } else {
+                //     console.log("ELSE 1");
+                //     console.log(new Date(this.calendarVariables.end.year + "-" + this.calendarVariables.end.month + "-01"));
+                //     if(this.calendarMonths && this.calendarMonths[0]) {
+                //         console.log(new Date(this.calendarMonths[0].start.year + "-" + this.calendarMonths[0].start.month + "-01"));
+                //     }
+                // }
+
+                // if(this.calendarMonths && this.calendarMonths[0] && this.calendarMonths[0].start && (new Date(this.calendarVariables.start.year + "-" + this.calendarVariables.start.month + "-01")).getTime() < (new Date(this.calendarMonths[0].start.year + "-" + this.calendarMonths[0].start.month + "-01")).getTime()) {
+                //     console.log("IF 2");
+                //     this.calendarMonths.unshift({start: this.calendarVariables.start});
+                //     processed = true;
+                // } else {
+                //     console.log("ELSE 2");
+                //     console.log(new Date(this.calendarVariables.start.year + "-" + this.calendarVariables.start.month + "-01"));
+                //     if(this.calendarMonths && this.calendarMonths[0]) {
+                //         console.log(new Date(this.calendarMonths[0].start.year + "-" + this.calendarMonths[0].start.month + "-01"));
+                //     }
+                // }
+                
+                if(this.isPreviousMonth === true) {
+                    this.calendarMonths.unshift({start: this.calendarVariables.start});
+                } else if(processed === false) {
+                    if(this.calendarMonths[existingMonthsLength] === undefined) {
+                        this.calendarMonths[existingMonthsLength] = [];
+                    }
+
+                    this.calendarMonths[existingMonthsLength].start = this.calendarVariables.start;
+                }
             }
         }
 
@@ -1833,5 +1883,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
                 this.calendarMonths[existingMonthsLength].end = this.calendarVariables.end;
             }
         }
+
+        //console.log(this.calendarMonths);
+    }
+
+    public initCalendar() {
+        this.renderCalendar(DateType.start);
+        this.renderCalendar(DateType.end);
     }
 }
