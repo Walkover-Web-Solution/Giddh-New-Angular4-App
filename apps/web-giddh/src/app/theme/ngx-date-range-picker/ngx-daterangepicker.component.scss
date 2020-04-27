@@ -1108,6 +1108,21 @@ td span {
         .calender-body {
             display: flex;
             flex-direction: column;
+            .upper-part{
+                border-bottom: 1px solid $whiteSmoke;
+                .sticky-header{
+                    width:calc(100% - 20px) !important;
+                    th.days-td {
+                        position: sticky;
+                        top: 100px;
+                        z-index: 99;
+                        
+                    }
+                }
+                .calendar-table{
+                    padding-top: 10px;
+                }
+            }
             .select-date-range {
                 display: flex;
                 justify-content: space-between;
@@ -1311,12 +1326,26 @@ td span {
             .calender-container-wrapper {
                 padding-top: 0;
                 .calender-body {
+                    .upper-part{                   
+                        .sticky-header{
+                            width: calc(100% - 0px) !important;    
+                            th.days-td{
+                                span{
+                                    display: flex;
+                                    width: 27px;
+                                    align-items: center;
+                                    justify-content: center;
+                                }
+                            }
+                        }
+                    }
                     .select-date-range {
                         display: none;
                     }
                     .month-field{
                         display: none;
                     }
+                    
                 }
             }
     
@@ -1330,6 +1359,7 @@ td span {
                 font-size: 17px;
                 font-style: initial;
                 flex-direction: column;
+                box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
                 .close-save-btn{
                     display: flex;
                     align-items: center;
@@ -1338,6 +1368,7 @@ td span {
                     a{
                         color: $deep-sky-blue;
                         padding-right: 15px;
+                        font-size: 14px;
                     }
                 }
                 img.close-custom-btn{
@@ -1354,24 +1385,26 @@ td span {
                 padding: 14px 10px;
                 flex-direction: column;
                 width: 100%; 
-                span{
+                span.custom-label{
                     font-size: 12px;
                     display: block;
                     padding-bottom: 2px;
                     color: $gray;
+                    padding-left: 50px;
                 }
                 .custom-edit-block{
                     display: flex;
                     justify-content: space-between;
-                    align-items: center;
+                    align-items: center;  
                     .custom-date-range{
                         font-size: 18px;
                         color: $nero;
+                        padding-left: 50px;
                     }
                    .edit-dates{
                        img{
                         width: 15px;
-                        margin-right: 5px;
+                        margin-right: 15px;
                        }
                    }
                 }
@@ -1395,7 +1428,7 @@ td span {
 }
 @media(max-height:768px){
     .drops-down-right{
-         
+        height: 400px;
         .ranges {
             height: 400px;
             overflow-y: auto;
@@ -1416,14 +1449,4 @@ td span {
     }
 }
 
-.upper-part{
-    border-bottom: 1px solid $whiteSmoke;
-}
-.sticky-header{
-    width: calc(100% - 20px) !important;
-    th.days-td {
-        position: sticky;
-        top: 100px;
-        z-index: 99;
-    }
-}
+

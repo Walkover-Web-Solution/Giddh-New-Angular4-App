@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, TemplateRef, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as _moment from 'moment';
 import { Moment } from 'moment';
@@ -11,6 +11,7 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
 import { Router, NavigationStart } from '@angular/router';
 import { ScrollComponent } from './virtual-scroll/vscroll';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 const moment = _moment;
 
@@ -94,6 +95,7 @@ export interface DateRangeClicked {
     }]
 })
 export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
+    modalRef: BsModalRef;
     chosenLabel: string;
     calendarVariables: CalendarVariables = { start: {}, end: {} };
     calendarMonths: any[] = [];
@@ -197,6 +199,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
     constructor(
         private _ref: ChangeDetectorRef,
+        private modalService: BsModalService,
         private _localeService: NgxDaterangepickerLocaleService,
         private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router) {
         this.choosedDate = new EventEmitter();
@@ -207,6 +210,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         this.getFinancialYears();
     }
 
+    
     _locale: LocaleConfig = {};
 
     get locale(): any {
@@ -298,6 +302,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public closeCalander() {
         this.isMobileScreen = !this.isMobileScreen;
     }
+    openModalWithClass(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(template,
+        Object.assign({}, { class: 'edit-modal modal-small' })
+        );
+    }
+
 
     /**
      * check whether go to previous and go to next month are allowed

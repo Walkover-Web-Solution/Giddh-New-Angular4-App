@@ -9697,6 +9697,7 @@ input.checkbox-custom[type="checkbox"] {
         font-size: 16px;
     }
 }
+/*datepicker common css*/
 .show-calendar {
     display: block !important;
 }
@@ -9707,4 +9708,60 @@ ngx-daterangepicker-material {
     z-index: 1000;
     overflow: hidden;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
+    z-index: 1;
+}
+.edit-modal{
+    max-width: 300px;
+    top: 50%;
+    margin: 0 auto;
+    transform: translateY(-50%) !important;
+    .edit-date-modal{
+        h5{
+            color: $gray;
+            font-size: 13px;
+        }
+        .modal-date-range {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid $whisper-color;
+            margin-bottom: 15px;
+            span{
+                img{
+                    width: 20px;
+                }
+            }
+        }
+        .start-end-date{
+            display: flex;
+            padding-top: 10px;
+            label{
+                position: absolute;
+                background-color: #fff;
+                padding: 0 5px;
+                top: -6px;
+                left: 9px;
+                font-size: 12px;
+                color: $gray;
+            }
+            input{
+                width: 130px;
+                height: 51px;
+                border: 1px solid #d9d9d9;
+                border-radius: 3px;
+                padding: 0 15px;
+                font-size: 14px;
+            }
+        }
+        .button-wrapper {
+            padding: 20px 0 0;
+            text-align: right;
+            font-size: 14px;
+            a{
+                color: $deep-sky-blue;
+            }
+        }
+    }
 }
