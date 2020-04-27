@@ -301,7 +301,7 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof ContentFilterComponent
      */
-    public changeDisableQuantity() {
+    public changeDisableQuantity(): void {
         let template = _.cloneDeep(this.customTemplate);
         if (!template.sections.table.data.quantity.display) {
             template.sections.table.data.totalQuantity.display = false;
@@ -310,26 +310,29 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
         }
         this._invoiceUiDataService.setCustomTemplate(template);
     }
+
     /**
      * Change Tax Bifurcation then total HSN/SAC or Tax table level will get change
      *
-     * @param {string} lebel: String that allow tabel section either HSN/SAC(hsnSac) or Tax (taxRateBifurcation)
-     * @param {string} sectionType:  Define section for template a will be 'footer' and for teamplate e will be 'table'
+     * @param {string} label: String that allow tabel section either HSN/SAC(hsnSac) or Tax (taxRateBifurcation)
+     * @param {string} sectionType:  Define section for template A will be 'footer' and for template E will be 'table'
      * @memberof ContentFilterComponent
      */
-    public checkedTaxBifurcation(lebel: string, sectionType: string) {
+    public checkedTaxBifurcation(label: string, sectionType: string) {
         let template = _.cloneDeep(this.customTemplate);
-        if (sectionType === 'table') {
+        if (sectionType === 'table' && template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.taxBifurcation) {
             if (template.sections.table.data.taxBifurcation.display) {
-                template.sections.table.data.taxBifurcation.label = lebel;
+                template.sections.table.data.taxBifurcation.label = label;
             } else {
                 template.sections.table.data.taxBifurcation.label = '';
             }
         } else {
-            if (template.sections.footer.data.taxBifurcation.display) {
-                template.sections.footer.data.taxBifurcation.label = lebel;
-            } else {
-                template.sections.footer.data.taxBifurcation.label = '';
+            if (template && template.sections && template.sections.footer && template.sections.footer.data && template.sections.footer.data.taxBifurcation) {
+                if (template.sections.footer.data.taxBifurcation.display) {
+                    template.sections.footer.data.taxBifurcation.label = label;
+                } else {
+                    template.sections.footer.data.taxBifurcation.label = '';
+                }
             }
         }
 

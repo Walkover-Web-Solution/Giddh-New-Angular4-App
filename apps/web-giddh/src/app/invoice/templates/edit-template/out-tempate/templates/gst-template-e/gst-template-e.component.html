@@ -304,31 +304,20 @@
                         2000.00
                     </th>
                 </tr>
-                <tr>
-                    <th class="text-right">
-                        <strong>TCS</strong>
-                    </th>
-                    <th class="text-right">
-                        00.00
-                    </th>
+                <tr *ngIf="fieldsAndVisibility.table.tcs?.display">
+                    <th [attr.colspan]="columnsVisibled - 2"></th>
+                    <th class="text-right">{{fieldsAndVisibility.table.tcs?.label}}</th>
+                    <th class="text-right"> 00.00</th>
                 </tr>
-                <tr>
-                    <th class="text-right">
-                        <strong>TDS</strong>
-                    </th>
-                    <th class="text-right">
-                        00.00
-                    </th>
+                <tr *ngIf="fieldsAndVisibility.table.tds?.display">
+                    <th [attr.colspan]="columnsVisibled - 2"></th>
+                    <th class="text-right">{{fieldsAndVisibility.table.tds?.label}}</th>
+                    <th class="text-right"> 00.00</th>
                 </tr>
-                <tr>
-                    <ng-container>
-                        <th class="text-right">
-                            Total Due
-                        </th>
-                        <th class="text-right">
-                            6166.00
-                        </th>
-                    </ng-container>
+                <tr *ngIf="fieldsAndVisibility.table.totalDue?.display">
+                    <th [attr.colspan]="columnsVisibled - 2"></th>
+                    <th class="text-right">{{fieldsAndVisibility.table.totalDue?.label}}</th>
+                    <th class="text-right"> 6166.00</th>
                 </tr>
             </tfoot>
         </table>
