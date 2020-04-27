@@ -1521,8 +1521,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public onAdvanceReceiptRemoveCloseConfirmationModal(userResponse: any) {
         if (userResponse.response) {
-            this.isAdjustedInvoicesWithAdvanceReceipt = false;
-            this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices = [];
+             this.isAdvanceReceipt = false;
+            this.handleAdvanceReceiptChange();
+            this.advanceReceiptRemoveConfirmationModal.hide();
         } else {
             this.isAdvanceReceipt = true;
             this.handleAdvanceReceiptChange();
