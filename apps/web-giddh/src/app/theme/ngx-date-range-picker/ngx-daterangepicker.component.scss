@@ -344,7 +344,7 @@ $input-height: 3rem !default;
 
             // TODO: Should this be static or should it be parameterized?
             border-radius: 0;
-            z-index: 999;
+            z-index:9;
             position: relative;
         }
         &.in-range::before {
@@ -1154,7 +1154,7 @@ td span {
     max-width: 260px;
     .calender-container-wrapper {
         flex: 1 1 auto;
-        overflow: auto;
+        // overflow: auto;
         .calender-body {
             display: flex;
             flex-direction: column;
@@ -1162,7 +1162,7 @@ td span {
                 border-bottom: 1px solid $whiteSmoke;
                 position: sticky;
                 top: 0;
-                z-index: 1;
+                z-index: 10;
                 background-color:$white;
                 .sticky-header{
                     width:calc(100% - 20px) !important;
@@ -1483,7 +1483,7 @@ td span {
 @media(max-height:768px){
     .drops-down-right{
         height: 400px;
-        overflow-y: auto;
+        overflow: hidden !important;
         .ranges {
             height: 400px;
             overflow-y: auto;

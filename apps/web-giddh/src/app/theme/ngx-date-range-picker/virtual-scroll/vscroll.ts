@@ -20,16 +20,27 @@ interface IUpdateEmit {
   `,
     // tslint:disable-next-line:use-host-property-decorator
     host: {
-       // '[style.overflow-y]': "parentScroll ? 'hidden' : 'auto'"
+        '[style.overflow-y]': "parentScroll ? 'hidden' : 'auto'"
       
     },
     styles: [`
     :host {
-      overflow: initial;
+      overflow: auto;
       position: relative;
 	    display: block;
       -webkit-overflow-scrolling: touch;
     }
+
+    /* :host::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    :host::-webkit-scrollbar-thumb {
+        background-color: darkgrey;
+        outline: 1px solid slategrey;
+        border-radius: 20px;
+    } */
+
     .scrollable-content {
       top: 0;
       left: 0;
