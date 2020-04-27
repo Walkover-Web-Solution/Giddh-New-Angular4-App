@@ -163,7 +163,7 @@ svg.icon {
 }
 
 .text-overdue {
-    color: $border-blue;
+    color: $chetwode-blue;
 }
 
 svg.icon.icon-xxlg-md {
@@ -382,7 +382,7 @@ hr {
 }
 
 .dropdown-menu > li > a:hover {
-    color: $border-blue;
+    color: $chetwode-blue;
     background: #e5e5e5;
 }
 
@@ -401,7 +401,7 @@ hr {
 }
 
 ::ng-deep #monthPicker .btn-info > .text-success {
-    color: $lightTextBlue !important;
+    color: $chetwode-blue !important;
 }
 ::ng-deep #monthPicker .btn-info:hover .text-success {
     color: #fff !important;
@@ -435,7 +435,7 @@ hr {
     top: 0px;
     width: 200px;
     height: 4px;
-    background-color: #ff9307;
+    background-color: #5b64c9;
     animation: loading 2s linear infinite;
 }
 

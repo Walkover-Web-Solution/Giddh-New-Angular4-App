@@ -123,11 +123,8 @@
                     <th [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-right">
                         {{(fieldsAndVisibility.table.sNo?.label?.length > 0) ? fieldsAndVisibility.table.sNo?.label : 'S No'}}
                     </th>
-                    <th [hidden]="!fieldsAndVisibility.table.date?.display" class="text-left">
-                        {{(fieldsAndVisibility.table.date?.label?.length > 0) ? fieldsAndVisibility.table.date?.label : 'Date'}}
-                    </th>
-                    <th [hidden]="!fieldsAndVisibility.table.item?.display" class="text-left">
-                        {{(fieldsAndVisibility.table.item?.label?.length > 0) ? fieldsAndVisibility.table.item?.label : 'Item'}}
+                    <th *ngIf="fieldsAndVisibility.table.item?.display || fieldsAndVisibility.table.date?.display" class="text-left">
+                            {{(fieldsAndVisibility.table.item?.display && fieldsAndVisibility.table.item?.label?.length > 0) ? fieldsAndVisibility.table.item?.label : (fieldsAndVisibility.table.date?.display && fieldsAndVisibility.table.date?.label?.length > 0) ? fieldsAndVisibility.table.date?.label : (fieldsAndVisibility.table.item?.display) ? 'Item' : 'Date'}}
                     </th>
                     <th [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right">
                         {{(fieldsAndVisibility.table.hsnSac?.label?.length > 0) ? fieldsAndVisibility.table.hsnSac?.label : 'HSN/SAC'}}
@@ -160,8 +157,9 @@
                 </tr>
                 <tr>
                     <td [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-right">1</td>
-                    <td [hidden]="!fieldsAndVisibility.table.date?.display" class="text-left">10-09-2017</td>
-                    <td [hidden]="!fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 1
+                    <td [hidden]="!fieldsAndVisibility.table.item?.display && !fieldsAndVisibility.table.date?.display" class="text-left">
+                        <span *ngIf="fieldsAndVisibility.table.item?.display">Dummy Product Edition 1 </span>
+                        <p *ngIf="fieldsAndVisibility.table.date?.display" [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'} ">10-09- 2017</p>
                     </td>
                     <td [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right">12345 (H)</td>
                     <td [hidden]="!fieldsAndVisibility.table.taxes?.display" class="text-right">18%
@@ -176,8 +174,9 @@
                 </tr>
                 <tr>
                     <td [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-right">2</td>
-                    <td [hidden]="!fieldsAndVisibility.table.date?.display" class="text-left">10-09-2017</td>
-                    <td [hidden]="!fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 2
+                    <td [hidden]="!fieldsAndVisibility.table.item?.display && !fieldsAndVisibility.table.date?.display" class="text-left">
+                        <span *ngIf="fieldsAndVisibility.table.item?.display">Dummy Product Edition 2 </span>
+                        <p *ngIf="fieldsAndVisibility.table.date?.display" [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'} ">10-09- 2017</p>
                     </td>
                     <td [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right">54321 (H)</td>
                     <td [hidden]="!fieldsAndVisibility.table.taxes?.display" class="text-right">12%

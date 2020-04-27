@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
-import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChange, SimpleChanges, ChangeDetectorRef, Output, EventEmitter, QueryList, ViewChildren, ElementRef } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChange, SimpleChanges, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import {
@@ -11,7 +11,6 @@ import {
 import * as moment from 'moment/moment';
 import { GeneralService } from '../../../services/general.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import {
     ILinkedStocksResult,
     LinkedStocksResponse, LinkedStocksVM,
@@ -23,7 +22,6 @@ import { CommonActions } from "../../../actions/common.actions";
 import { IOption } from "../../../theme/ng-select/option.interface";
 import { ToasterService } from "../../../services/toaster.service";
 import { IForceClear } from "../../../models/api-models/Sales";
-import { CompanyService } from "../../../services/companyService.service";
 import { IEwayBillfilter, IEwayBillTransporter, IAllTransporterDetails } from "../../../models/api-models/Invoice";
 import { InvoiceActions } from "../../../actions/invoice/invoice.actions";
 import { transporterModes } from "../../../shared/helpers/transporterModes";
@@ -33,6 +31,7 @@ import { NgForm } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap';
 import { SettingsWarehouseService } from '../../../services/settings.warehouse.service';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 
 @Component({
     selector: 'new-branch-transfer',
@@ -117,15 +116,18 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public tempDateParams: any = { dateOfSupply: new Date(), dispatchedDate: '' };
     public isLoading: boolean = false;
     public hsnNumber: any = '';
+    public sacNumber: any = '';
     public skuNumber: any = '';
     public myCurrentCompany: string = '';
     public innerEntryIndex: number;
     public isUpdateMode: boolean = false;
     public allowAutoFocusInField: boolean = false;
+    public inventorySettings: any;
 
-    constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig) {
+    constructor(private _router: Router, private store: Store<AppState>, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
-
+        this.getInventorySettings();
+        this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.store.dispatch(this.invoiceActions.resetTransporterListResponse());
 
         this.initFormFields();
@@ -247,6 +249,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             products: [{
                 name: null,
                 hsnNumber: null,
+                sacNumber: null,
                 skuCode: null,
                 uniqueName: null,
                 stockDetails: {
@@ -279,21 +282,29 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public selectCompany(event, type, index): void {
         if (type) {
             if (type === "sources") {
-                this.branchTransfer.sources[index].name = event.label;
-                this.branchTransfer.sources[index].warehouse.name = "";
-                this.branchTransfer.sources[index].warehouse.uniqueName = "";
-                this.branchTransfer.sources[index].warehouse.taxNumber = "";
-                this.branchTransfer.sources[index].warehouse.address = "";
-
-                this.resetSourceWarehouses(index);
+                if (this.branchTransfer.sources[index]) {
+                    this.branchTransfer.sources[index].name = event.label;
+                    if (this.branchTransfer.sources[index].warehouse) {
+                        this.branchTransfer.sources[index].warehouse.name = "";
+                        this.branchTransfer.sources[index].warehouse.uniqueName = "";
+                        this.branchTransfer.sources[index].warehouse.taxNumber = "";
+                        this.branchTransfer.sources[index].warehouse.address = "";
+                        this.branchTransfer.sources[index].warehouse.stockDetails.quantity = (event.value) ? 1 : null;
+                    }
+                    this.resetSourceWarehouses(index);
+                }
             } else {
-                this.branchTransfer.destinations[index].name = event.label;
-                this.branchTransfer.destinations[index].warehouse.name = "";
-                this.branchTransfer.destinations[index].warehouse.uniqueName = "";
-                this.branchTransfer.destinations[index].warehouse.taxNumber = "";
-                this.branchTransfer.destinations[index].warehouse.address = "";
-
-                this.resetDestinationWarehouses(index);
+                if (this.branchTransfer.destinations[index]) {
+                    this.branchTransfer.destinations[index].name = event.label;
+                    if (this.branchTransfer.destinations[index].warehouse) {
+                        this.branchTransfer.destinations[index].warehouse.name = "";
+                        this.branchTransfer.destinations[index].warehouse.uniqueName = "";
+                        this.branchTransfer.destinations[index].warehouse.taxNumber = "";
+                        this.branchTransfer.destinations[index].warehouse.address = "";
+                        this.branchTransfer.destinations[index].warehouse.stockDetails.quantity = (event.value) ? 1 : null;
+                    }
+                    this.resetDestinationWarehouses(index);
+                }
             }
         }
     }
@@ -386,6 +397,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.branchTransfer.products.push({
             name: null,
             hsnNumber: null,
+            sacNumber: null,
             skuCode: null,
             uniqueName: null,
             stockDetails: {
@@ -490,8 +502,14 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             product.name = event.additional.name;
             product.stockDetails.stockUnit = event.additional.stockUnit.code;
             product.stockDetails.rate = event.additional.rate;
+            product.stockDetails.quantity = product.stockDetails.quantity || 1;
             product.skuCode = event.additional.skuCode;
-            product.hsnNumber = event.additional.hsnNumber;
+
+            if (this.inventorySettings.manageInventory || !event.additional.sacNumber) {
+                product.hsnNumber = event.additional.hsnNumber;
+            } else {
+                product.sacNumber = event.additional.sacNumber;
+            }
 
             if (this.transferType === 'senders') {
                 this.branchTransfer.destinations[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
@@ -500,7 +518,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.focusDefaultSource();
             }
 
-            this.calculateOverallTotal();
+            this.calculateRowTotal(product);
 
             setTimeout(() => {
                 if (this.productDescription) {
@@ -779,7 +797,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public focusHsnNumber(): void {
         this.hideSkuNumberPopup();
-        this.hsnNumber = (this.branchTransfer.products[this.activeRow].hsnNumber) ? this.branchTransfer.products[this.activeRow].hsnNumber : "";
+        this.hsnNumber = ((this.inventorySettings.manageInventory && this.branchTransfer.products[this.activeRow].hsnNumber) || !this.branchTransfer.products[this.activeRow].sacNumber) ? this.branchTransfer.products[this.activeRow].hsnNumber : (this.branchTransfer.products[this.activeRow].sacNumber) ? this.branchTransfer.products[this.activeRow].sacNumber : "";
         this.hsnPopupShow = true;
         setTimeout(() => {
             this.productHsnNumber.nativeElement.focus();
@@ -812,7 +830,11 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public saveHsnNumberPopup(product): void {
-        product.hsnNumber = this.hsnNumber;
+        if ((this.inventorySettings.manageInventory || !product.sacNumber)) {
+            product.hsnNumber = this.hsnNumber;
+        } else {
+            product.sacNumber = this.hsnNumber;
+        }
         this.hsnPopupShow = false;
     }
 
@@ -1095,5 +1117,18 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.destinationQuantity.nativeElement.focus();
             }, 100);
         }
+    }
+
+    /**
+     * This function is used to get inventory settings from store
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public getInventorySettings(): void {
+        this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
+            if (settings && settings.companyInventorySettings) {
+                this.inventorySettings = settings.companyInventorySettings;
+            }
+        });
     }
 }

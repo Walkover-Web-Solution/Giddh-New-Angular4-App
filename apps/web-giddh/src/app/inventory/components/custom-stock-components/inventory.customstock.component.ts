@@ -1,21 +1,22 @@
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
+import { select, Store } from '@ngrx/store';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
 import { find, take, takeUntil } from 'rxjs/operators';
-import { AppState } from '../../../store/roots';
-import { Store } from '@ngrx/store';
-import { Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
-import { LoginActions } from '../services/actions/login.action';
-import { StockUnitRequest } from '../../../models/api-models/Inventory';
+
 import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
-import * as  _ from '../../../lodash-optimized';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
-import { StockUnits } from './stock-unit';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import * as _ from '../../../lodash-optimized';
+import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { IForceClear } from '../../../models/api-models/Sales';
-import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
-import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
+import { InventoryService } from '../../../services/inventory.service';
+import { giddhRoundOff, uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
+import { AppState } from '../../../store/roots';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { StockUnits } from './stock-unit';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'inventory-custom-stock',  // <home></home>
@@ -36,17 +37,28 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public deleteCustomStockInProcessCode$: Observable<any[]>;
     public createCustomStockSuccess$: Observable<boolean>;
     public stockUnitsList = StockUnits;
+
     public companyProfile: any;
     public country: string;
     public selectedUnitName: string;
     public isIndia: boolean;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public isStockUnitCodeAvailable$: Observable<boolean>;
+    public stockUnitCodeRegex: string = '';
     public isDivide: boolean = false;
+    /** User selected decimal places */
+    public giddhDecimalPlaces: number = 2;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private customStockActions: CustomStockUnitAction, private inventoryAction: InventoryAction,
-        private sidebarAction: SidebarAction, private settingsProfileActions: SettingsProfileActions) {
+    constructor(
+        private store: Store<AppState>,
+        private customStockActions: CustomStockUnitAction,
+        private inventoryAction: InventoryAction,
+        private inventoryService: InventoryService,
+        private sidebarAction: SidebarAction,
+        private settingsProfileActions: SettingsProfileActions,
+        private toasterService: ToasterService
+    ) {
         this.customUnitObj = new StockUnitRequest();
         this.stockUnit$ = this.store.select(p => p.inventory.stockUnits).pipe(takeUntil(this.destroyed$));
         this.isStockUnitCodeAvailable$ = this.store.select(state => state.inventory.isStockUnitCodeAvailable).pipe(takeUntil(this.destroyed$));
@@ -61,9 +73,15 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
             }
         });
 
-        this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
-            if (!_.isEmpty(o)) {
-                this.companyProfile = _.cloneDeep(o);
+        this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profileData) => {
+            if (!_.isEmpty(profileData)) {
+                this.companyProfile = _.cloneDeep(profileData);
+                this.giddhDecimalPlaces = this.companyProfile.balanceDecimalPlaces || 2;
+                this.inventoryService.getUnitCodeRegex('stockUnit', this.companyProfile.country || '').subscribe((data: any) => {
+                    if (data && data.body) {
+                        this.stockUnitCodeRegex = data.body.regex;
+                    }
+                });
                 if (this.companyProfile.country) {
                     this.country = this.companyProfile.country.toLocaleLowerCase();
                     if (this.country && this.country === 'india') {
@@ -145,9 +163,10 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
 
     public editUnit(item: StockUnitRequest) {
         this.customUnitObj = Object.assign({}, item);
-        this.setUnitName(this.customUnitObj.name);
+        this.selectedUnitName = item.name;
+        // this.setUnitName(this.customUnitObj.name);
         if (item.displayQuantityPerUnit) {
-            this.customUnitObj.quantityPerUnit = item.displayQuantityPerUnit;
+            this.customUnitObj.quantityPerUnit = giddhRoundOff(item.displayQuantityPerUnit, this.giddhDecimalPlaces);
         }
         if (this.customUnitObj.parentStockUnit) {
             this.customUnitObj.parentStockUnitCode = item.parentStockUnit.code;
@@ -264,4 +283,15 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         this.closeAsideEvent.emit();
     }
 
+    /**
+     * Displays the error message if unit code is invalid
+     *
+     * @param {boolean} isInvalid True, if unit code field has errors
+     * @memberof InventoryCustomStockComponent
+     */
+    public handleUnitCodeValidation(isInvalid: boolean): void {
+        if (isInvalid) {
+            this.toasterService.errorToast('Only numbers and lower case alphabets without spaces are allowed!', 'Invalid Unit Code');
+        }
+    }
 }

@@ -18,20 +18,19 @@
                             <table>
                                 <tbody>
                                     <tr>
-                                        <td class="text-right width-70"
-                                            ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}">
+                                        <td class="text-right width-70" ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}">
                                             <label class="mr-05 font-12">Qty</label>
                                             <input type="text" name="" class="form-control text-right"
-                                                (change)="changeQuantity($event.target.value)"
-                                                [(ngModel)]="currentTxn?.inventory.quantity" decimalDigitsDirective
-                                                [DecimalPlaces]="4" />
+                                                [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
+                                                (change)="changeQuantity($event.target.value)" [(ngModel)]="currentTxn?.inventory.quantity"
+                                                decimalDigitsDirective [DecimalPlaces]="4" />
                                         </td>
 
                                         <td *ngIf="currentTxn?.unitRate">
                                             <label class="font-12">Unit</label>
                                             <select class="form-control" style="width: 78px;"
-                                                (change)="unitChanged($event.target.value)"
-                                                [value]="currentTxn?.inventory.unit.code">
+                                                [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
+                                                (change)="unitChanged($event.target.value)" [value]="currentTxn?.inventory.unit.code">
                                                 <option *ngFor="let item of currentTxn.unitRate" [value]="item.code">
                                                     {{item.stockUnitCode}}
                                                 </option>
@@ -55,6 +54,7 @@
                             <label class="font-12">Price</label>
                             <input type="text" [(ngModel)]="currentTxn.inventory.unit.rate"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
+                                [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
                                 [mask]="inputMaskFormat" (ngModelChange)="changePrice($event)" name=""
                                 class="form-control text-right" />
                             <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
@@ -71,24 +71,28 @@
                         <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
                             class="pItem text-right amount">
                             <label class="primary_clr font-12">Amount</label>
-                            <input type="text" name="" class="form-control text-right"
+                            <input *ngIf="!isAdvanceReceipt" type="text" name="amount" class="form-control text-right"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat" [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
                                 (keyup)="amountChanged();calculateTotal()" />
+                            <input *ngIf="isAdvanceReceipt" type="text" name="advanceAmount" class="form-control text-right"
+                            [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency" disabled
+                            [mask]="inputMaskFormat" [(ngModel)]="currentTxn.advanceReceiptAmount" (focus)="hideDiscountTax()"
+                            (keyup)="amountChanged();calculateTotal()" />
                             <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 {{ currentTxn?.convertedAmount | giddhCurrency}}
                             </p>
                         </td>
 
-                        <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount)"
+                        <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount) && !shouldShowAdvanceReceiptMandatoryFields"
                             class="text-center table-minus">
                             <label class="d-block">&nbsp;</label>
                             <label class="fs20">-</label>
                         </td>
 
                         <!--discount-->
-                        <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount) || !shouldShowAdvanceReceiptMandatoryFields"
+                        <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount) && !shouldShowAdvanceReceiptMandatoryFields"
                             class="pItem text-right price new-ledger-text-right" (click)="$event.stopPropagation()">
                             <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts"
                                 [maskInput]="inputMaskFormat" [prefixInput]="selectedPrefixForCurrency"
@@ -119,7 +123,7 @@
                             <!--tax control component-->
                             <!-- Login Changes by Sagar  -->
                             <!-- [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes" -->
-                            <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate"
+                            <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate" 
                                 [taxRenderData]="currentTxn.taxesVm" [totalForTax]="totalForTax"
                                 [customHeading]="shouldShowAdvanceReceiptMandatoryFields ? 'Tax on Advance' : isRcmEntry ? 'Tax (RCM)' : ''"
                                 [isMandatory]="shouldShowAdvanceReceiptMandatoryFields || isRcmEntry"
@@ -127,7 +131,9 @@
                                 [prefixInput]="selectedPrefixForCurrency" [suffixInput]="selectedSuffixForCurrency"
                                 [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : []"
                                 (taxAmountSumEvent)="calculateTax()" (hideOtherPopups)="hideDiscount()"
-                                (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
+                                (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event"
+                                [isAdvanceReceipt]="isAdvanceReceipt"
+                                [allowedSelectionOfAType]="allowedSelectionOfAType">
                             </tax-control>
                             <!-- TODO: After design finalization
                                 <span class="eligible-ITC">Eligible for ITC <span class="icon-edit"></span> </span> -->
@@ -148,8 +154,9 @@
                             class="pItem text-right total-amn" id="totalTd" (resized)="onResized($event)">
                             <label class="primary_clr font-12">Total</label>
                             <input type="text" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
-                                [mask]="inputMaskFormat" name="" class="form-control text-right"
-                                [(ngModel)]="currentTxn.total" (blur)="calculateAmount()" />
+                                [mask]="inputMaskFormat" name="totalAmount" class="form-control text-right"
+                                [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"
+                                [disabled]="isAdvanceReceipt ? 'disabled' : null" />
                             <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 {{ currentTxn.convertedTotal | giddhCurrency}}
@@ -420,7 +427,7 @@
 
                     <label class="pull-left cp fs16">
 
-                        <input class="pull-left" type="checkbox" name="generateInvoice"
+                        <input class="pull-left" type="checkbox" name="generateInvoice" [disabled]="isAdvanceReceipt && blankLedger.generateInvoice ? 'disabled' : null"
                             [(ngModel)]="blankLedger.generateInvoice">
                         Generate Invoice
                     </label>
@@ -463,20 +470,19 @@
                     </ul>
                 </div>
 
-                <div class="pull-right">
-                    <label class="upload_div pr-15"
-                        [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}">
-                        <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions"
-                            ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
-                        <label for="invoiceFile" class="cp fs16">
-                            <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
-                    </label>
-                    <div class="file_attached clearfix text-right pr-15" *ngIf="blankLedger.attachedFile.length > 0">
-                        <span>{{ blankLedger.attachedFileName }}</span>
-                        <label class="remove cp text-danger pl-1"
-                            (click)="showDeleteAttachedFileModal()">(remove)</label>
-                    </div>
-                </div>
+        <div class="pull-right">
+            <input type="file" [hidden]="true" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect
+                   [uploadInput]="uploadInput" (uploadOutput)="onWebUpload($event)" #webFileInput>
+          <label class="upload_div pr-15" [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}" (click)="onUploadOutput()">
+
+            <label for="invoiceFile" class="cp fs16">
+              <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
+          </label>
+          <div class="file_attached clearfix text-right pr-15" *ngIf="blankLedger.attachedFile.length > 0">
+            <span>{{ blankLedger.attachedFileName }}</span>
+            <label class="remove cp text-danger pl-1" (click)="showDeleteAttachedFileModal()">(remove)</label>
+          </div>
+        </div>
 
 
             </div>

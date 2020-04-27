@@ -1,7 +1,7 @@
-import { Observable, of } from 'rxjs';
-import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
+import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class GiddhHttpInterceptor implements HttpInterceptor {
@@ -24,7 +24,11 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
             setTimeout(() => {
                 this._toasterService.warningToast('Please check your internet connection.', 'Internet disconnected');
             }, 100);
-            return of();
+            if (request.body && request.body.handleNetworkDisconnection) {
+                return of(new HttpResponse({ status: 200, body: { status: 'no-network' } }));
+            } else {
+                return of();
+            }
         }
     }
 }

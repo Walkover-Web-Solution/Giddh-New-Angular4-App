@@ -1,6 +1,5 @@
 /************ login page start *****************/
-@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900");
-
+@import "../../assets/css/color.scss";
 /*typography styles*/
 
 body.ununresponsive {
@@ -32,7 +31,7 @@ body.ununresponsive {
 }
 
 .modal-header h3 {
-    color: #fff;
+    color: $white;
     font-size: 1.3rem;
 }
 
@@ -47,7 +46,7 @@ body.ununresponsive {
 }
 
 #box {
-    background-color: #fff;
+    background-color: $white;
     padding: 20px 30px;
     margin: 0 auto;
     width: 360px;
@@ -78,7 +77,7 @@ body.ununresponsive {
 
 #box .btn:hover,
 #box .btn:hover {
-    color: #fff;
+    color: $white;
 }
 
 .mrB1 {
@@ -103,7 +102,7 @@ body.ununresponsive {
 
 .btn-login {
     text-transform: uppercase;
-    color: #fff;
+    color: $white;
     margin-bottom: 10px;
     display: inline-block;
     vertical-align: middle;
@@ -134,7 +133,7 @@ body.ununresponsive {
     background: #221f1f none repeat scroll 0 0;
     border: 7px solid #c63b13;
     border-radius: 50%;
-    box-shadow: 0 -10px 0 14px #fff inset;
+    box-shadow: 0 -10px 0 14px $white inset;
     box-sizing: border-box;
     height: 60px;
     width: 60px;
@@ -157,13 +156,13 @@ body.ununresponsive {
 
 .btn-login.btn-default {
     color: #333;
-    background-color: #fff;
+    background-color: $white;
     border-color: #ccc;
 }
 
 .btn-login.btn-default:hover {
     color: #000 !important;
-    background-color: #fff;
+    background-color: $white;
     border-color: #ccc;
     box-shadow: none;
 }
@@ -214,32 +213,19 @@ button.close {
     right: 6px !important;
 }
 
-:host ::ng-deep .btn-success {
-    background: #e34b26;
-    color: #fff;
+.btn-success {
+    background: $midnight-blue;
+    color: $white;
+    border-color: $midnight-blue;
 }
 
-:host ::ng-deep .btn-success:hover {
-    background: #2c2c43;
-    /*  */
+.btn-success:hover {
+    background: $midnight-blue-hover;
+    border-color: $midnight-blue-hover;
+    color: $white;
 }
 
 strong {
-    font-family: "Roboto", sans-serif;
-}
-
-.flex-container {
-    display: flex;
-    height: 100%;
-    align-items: center;
-    font-family: "Roboto", sans-serif;
-    justify-content: flex-start;
-}
-
-.flex-container > div {
-    align-items: center;
-    height: 100%;
-    display: flex;
     font-family: "Roboto", sans-serif;
 }
 
@@ -255,9 +241,9 @@ h1 {
     font-size: 24px;
 }
 
-.slide_content {
+.slide-content {
     padding: 80px 100px;
-    color: #fff;
+    color: $white;
     background: #2c2c43;
     text-align: center;
     flex-direction: column;
@@ -265,7 +251,7 @@ h1 {
 }
 
 .login_box {
-    background: #fff8ea url("/assets/images/new/banner-grid-design.png") repeat;
+    background: #fff8ea url("/assets/images/banner-grid-design.png") repeat;
     padding: 20px 70px;
 }
 
@@ -274,7 +260,7 @@ h1 {
     font-weight: 500;
 }
 
-.form_wrapper {
+.form-wrapper {
     display: flex;
     margin-bottom: 40px;
     flex-direction: column;
@@ -284,24 +270,25 @@ small {
     color: #333;
 }
 
-.form_wrapper form {
+.form-wrapper form {
     width: 300px;
 }
 
-/* social_login */
+/* social-login */
 
-.social_login {
+.social-login {
     overflow: hidden;
     display: flex;
+    margin-bottom: 20px;
 }
 
-.social_login li {
+.social-login li {
     list-style: none;
     display: inline-block;
     margin-right: 15px;
 }
 
-.social_login li a {
+.social-login li a {
     display: inline-block;
     height: 40px;
     border: 1px solid;
@@ -309,28 +296,29 @@ small {
     line-height: 40px;
     text-align: center;
     position: relative;
+    font-size: 14px;
 }
 
-.google_ico a {
-    color: #fff;
+.google-ico a {
+    color: $white;
     padding-left: 40px !important;
 }
 
-.google_ico span {
+.google-ico span {
     padding: 0 15px;
 }
 
 /* social icon */
 
-.linkedin_ico a {
-    color: #0d83b3;
-    border-color: #0d83b3;
+.linkedin-ico a {
+    color: $cerulean;
+    border-color: $cerulean;
 }
 
-.google_ico a {
-    background: #5092f3;
-    border-color: #5092f3 !important;
-    color: #fff;
+.google-ico a {
+    background: $corn-flower-blue;
+    border-color: $corn-flower-blue !important;
+    color: $white;
 }
 
 .ico-google {
@@ -348,29 +336,29 @@ small {
     height: 18px;
 }
 
-.login_option,
-.login_option a {
+.login-option,
+.login-option a {
     color: #0c5fc1;
     margin-top: 55px;
     font-weight: 500;
 }
 
-.login_option a {
+.login-option a {
     border-bottom: 2px dotted #0c5fc1;
 }
 
-.slide_content h1 {
+.slide-content h1 {
     font-size: 24px;
     font-weight: 400;
     text-align: center;
     line-height: 34px;
 }
 
-.hash_tag {
+.hash-tag {
     color: #e34b26;
 }
 
-.slide_content .btn {
+.slide-content .btn {
     font-size: 18px;
     font-weight: 500;
     margin-top: 55px;
@@ -378,137 +366,195 @@ small {
     padding: 4px 18px;
 }
 
-.slide_content .btn-white {
+.slide-content .btn-white {
     color: #fff7eb;
-    border: 1px solid #fff;
+    border: 1px solid $white;
 }
 
-.slide_content .btn-white:hover {
+.slide-content .btn-white:hover {
     color: #0f0f27;
-    background: #fff;
+    background: $white;
 }
 
-.slide_content > div > img {
+.slide-content > div > img {
     max-width: 400px;
     margin-bottom: 40px;
 }
 
-.app_ico,
-.download_app {
+.app-ico,
+.download-app {
     display: flex;
     width: 100%;
     justify-content: space-evenly;
 }
 
-.app_ico ul h1 {
+.app-ico ul h1 {
     margin-top: 10px;
 }
 
-.app_ico ul li,
-.download_app ul li {
+.app-ico ul li,
+.download-app ul li {
     display: inline-block;
     list-style: none;
     /* margin-right: 20px; */
     border-radius: 2px;
 }
 
-.app_ico ul li {
+.app-ico ul li {
     height: 40px;
 }
 
-.download_app ul li {
+.download-app ul li {
     margin-right: 0;
 }
 
-.app_ico ul li a,
-.download_app ul li a {
+.app-ico ul li a,
+.download-app ul li a {
     display: inline-block;
     height: 40px;
     border: 1px solid;
     min-width: 40px;
     line-height: 40px;
-    color: #fff;
+    color: $white;
     text-align: center;
     position: relative;
     overflow: hidden;
 }
 
-.app_ico ul li a:hover,
-.download_app ul li a:hover {
-    background: #fff;
+.app-ico ul li a:hover,
+.download-app ul li a:hover {
+    background: $white;
     color: #2c2d43;
 }
 
-.download_app ul li a:hover i {
+.download-app ul li a:hover i {
     border-color: #2c2d43;
 }
 
-.img_hover:hover img:last-child {
+.img-hover:hover img:last-child {
     display: block !important;
 }
 
-.img_hover:hover img:first-child {
+.img-hover:hover img:first-child {
     display: none;
+}
+/* new theme login page css start */
+.login-box {
+    position: relative;
+}
+.login-left {
+    background-color: $midnight-blue;
+    position: absolute;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+}
+.login-right {
+    background-image: url("../../assets/images/Login-Page-Image.png");
+    height: 100vh;
+    justify-content: flex-start;
+    background-position: top right;
+    background-size: cover;
+}
+.px-0 {
+    padding: 0;
+}
+.mx-0 {
+    margin: 0;
+}
+.giddh-login {
+    margin-left: -245px;
+    width: 495px;
+}
+.giddh-login-inner {
+    max-width: 476px;
+    width: 90%;
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.logo-login {
+    background-color: $dark-midnight-blue;
+    height: 98px;
+    display: flex;
+    align-items: center;
+    padding: 35px;
+    position: relative;
+}
+.accounting-space {
+    padding: 30px;
+    border-radius: 0;
+    background-color: $white;
+}
+.accounting-space h4 {
+    color: $midnight-blue;
+    font-weight: 600;
+    font-size: 20px;
+}
+.btn-outline-primary {
+    background-color: $deep-sky-blue;
+    border-radius: 3px;
+    min-width: 160px;
+    border-radius: 5px;
+    color: $white;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+    background-color: $deep-sky-blue-hover;
+    box-shadow: none;
+    outline: none;
+}
+.login-with {
+    color: $midnight-blue;
+    font-size: 0.9em;
+}
+.login-with a {
+    color: $midnight-blue;
+    text-decoration: none;
+}
+.btn-secondary {
+    background-color: $white;
+    color: $navy;
+    border: 1px solid $chetwode-blue;
+    border-radius: 5px;
+}
+.btn-secondary:hover {
+    color: $white !important;
+    background-color: $chetwode-blue;
+    border-color: $chetwode-blue;
 }
 
 @media only screen and (max-width: 768px) {
-    .flex-container {
-        background: #fff8ea url("/assets/images/banner-grid-design.png") repeat;
-        display: block;
-    }
-
-    .slide_content {
-        display: none !important;
-        padding: 110px 20px;
-    }
-
-    .login_box {
-        padding: 80px 20px;
-    }
-
-    .on_mobile {
-        display: block !important;
-    }
-
-    .flex-container > div {
-        display: block;
-        height: auto;
-        text-align: center;
-        overflow: hidden;
-    }
-
-    .social_login {
-        display: block;
-    }
-
-    .logo {
-        left: 20px;
-        top: 20px;
-    }
-
-    .logo img {
-        max-width: 130px;
-    }
-
-    .download_app ul li a {
-        height: 50px;
-        line-height: 50px;
-        padding: 0 16px;
-        border-radius: 2px;
-        display: flex;
-    }
-
-    .download_app ul li a i {
-        border-right: 1px solid #fff;
-        padding-right: 16px;
-        font-size: 28px;
-        position: relative;
-        margin-right: 16px;
-        height: 49px;
-        line-height: 49px;
-    }
-
-    .form_wrapper form {
+    .giddh-login {
         margin: 0 auto;
+    }
+}
+@media only screen and (max-width: 375px) {
+    .forget-pw {
+        margin: 5px 0;
+    }
+    .social-login {
+        flex-direction: column;
+        width: 100%;
+    }
+    .social-login li {
+        display: block;
+        margin-right: 0px;
+        margin-bottom: 10px;
+    }
+    .social-login li:first-child a {
+        display: block;
+        width: 100%;
+    }
+    .btn-secondary {
+        margin-left: 0;
+        margin-top: 8px;
+    }
+    .account {
+        display: flex;
+        flex-direction: column;
+        align-items: baseline;
     }
 }

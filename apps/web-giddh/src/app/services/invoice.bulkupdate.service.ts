@@ -7,7 +7,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BULK_UPDATE_VOUCHER } from './apiurls/invoice.api';
 import { map, catchError } from 'rxjs/operators';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 
 @Injectable()
 export class InvoiceBulkUpdateService {
@@ -16,7 +16,7 @@ export class InvoiceBulkUpdateService {
     private companyUniqueName: string;
     private _: any;
     private voucherType: string = '';
-    constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, private _httpClient: HttpClient, private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService, private _httpClient: HttpClient, private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this._ = config._;
         _ = config._;
     }

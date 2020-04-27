@@ -31,8 +31,8 @@ import { take } from 'rxjs/operators';
             <div style="padding: 0px;border-right: 0px;" [innerHTML]="account.name | lowercase | highlight:search">
             </div>
 
-            <span account-detail-modal-component *ngIf="ModalUniqueName && ModalUniqueName === account.uniqueName"
-                  [accountUniqueName]="account.uniqueName" [isModalOpen]="account.uniqueName === ModalUniqueName"
+            <span account-detail-modal-component *ngIf="modalUniqueName && modalUniqueName === account.uniqueName" [shouldShowGenerateInvoice]="false"
+                  [accountUniqueName]="account.uniqueName" [isModalOpen]="account.uniqueName === modalUniqueName"
                   [from]="from" [to]="to">
             </span>
 
@@ -57,7 +57,7 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
     @Input() public from: string;
     @Input() public to: string;
     @Input() public padding: string;
-    public ModalUniqueName: string = null;
+    public modalUniqueName: string = null;
     public accountDetails: IFlattenAccountsResultItem;
     public flattenAccounts$: Observable<IFlattenAccountsResultItem[]>;
 
@@ -78,16 +78,18 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
         //  this.accountDetails.map(f=> f.parentGroups.find(e=> e.name === this.groupDetail.groupName));
     }
 
-    public entryClicked(acc) {
-        let url = location.href + '?returnUrl=ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
-        if (isElectron) {
-            let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
-            ipcRenderer.send('open-url', url);
-        } else {
-            (window as any).open(url);
-        }
+  public entryClicked(acc) {
+    let url = location.href + '?returnUrl=ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
+    if (isElectron) {
+      let ipcRenderer = (window as any).require('electron').ipcRenderer;
+      url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
+      ipcRenderer.send('open-url', url);
+    }else if(isCordova){
+        //todo: entry Clicked
+    } else {
+      (window as any).open(url);
     }
+  }
 
     public accountInfo(acc, e: Event) {
         this.flattenAccounts$.pipe(
@@ -99,13 +101,13 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
                     let creditorsString = 'currentliabilities, sundrycreditors';
                     let debtorsString = 'currentassets, sundrydebtors';
                     if (account.uNameStr.indexOf(creditorsString) > -1 || account.uNameStr.indexOf(debtorsString) > -1) {
-                        this.ModalUniqueName = account.uniqueName;
+                        this.modalUniqueName = account.uniqueName;
                     } else {
-                        this.ModalUniqueName = '';
+                        this.modalUniqueName = '';
                         this.entryClicked(acc);
                     }
                 } else {
-                    this.ModalUniqueName = '';
+                    this.modalUniqueName = '';
                     this.entryClicked(acc);
                 }
             }
@@ -113,7 +115,7 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
     }
 
     public hideModal() {
-        this.ModalUniqueName = null;
+        this.modalUniqueName = null;
     }
 
     public trackByFn(index, item: Account) {

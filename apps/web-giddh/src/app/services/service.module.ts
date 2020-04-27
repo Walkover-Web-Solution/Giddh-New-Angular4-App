@@ -1,24 +1,24 @@
-import { MagicLinkService } from './magic-link.service';
-import { PermissionDataService } from '../permissions/permission-data.service';
-import { LogsService } from './logs.service';
-import { ErrorHandler } from './catchManager/catchmanger';
-import { ModuleWithProviders, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { MagicLinkService } from "./magic-link.service";
+import { PermissionDataService } from "../permissions/permission-data.service";
+import { LogsService } from "./logs.service";
+import { GiddhErrorHandler } from "./catchManager/catchmanger";
+import { ModuleWithProviders, NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { RouterModule } from "@angular/router";
 
-import { AuthenticationService } from './authentication.service';
-import { GroupService } from './group.service';
-import { StorageService } from './storage.service';
-import { HttpWrapperService } from './httpWrapper.service';
-import { ToasterService } from './toaster.service';
+import { AuthenticationService } from "./authentication.service";
+import { GroupService } from "./group.service";
+import { StorageService } from "./storage.service";
+import { HttpWrapperService } from "./httpWrapper.service";
+import { ToasterService } from "./toaster.service";
 
-import { CompanyService } from './companyService.service';
-import { LocationService } from './location.service';
-import { AccountService } from './account.service';
-import { InventoryService } from './inventory.service';
-import { PermissionService } from './permission.service';
-import { ManufacturingService } from './manufacturing.service';
+import { CompanyService } from "./companyService.service";
+import { LocationService } from "./location.service";
+import { AccountService } from "./account.service";
+import { InventoryService } from "./inventory.service";
+import { PermissionService } from "./permission.service";
+import { ManufacturingService } from "./manufacturing.service";
 /**
  * Home Module
  */
@@ -62,6 +62,7 @@ import { VatService } from './vat.service';
 import { CommandKService } from './commandk.service';
 import { PurchaseRecordService } from './purchase-record.service';
 import { InvoiceBulkUpdateService } from './invoice.bulkupdate.service';
+import { UserAgent } from "@ionic-native/user-agent/ngx";
 import { EcommerceService } from './ecommerce.service';
 import { ReverseChargeService } from './reversecharge.service';
 
@@ -70,8 +71,7 @@ import { ReverseChargeService } from './reversecharge.service';
  */
 
 @NgModule({
-    imports: [CommonModule, RouterModule
-    ],
+    imports: [CommonModule, RouterModule],
     exports: [CommonModule, FormsModule, RouterModule]
 })
 export class ServiceModule {
@@ -83,7 +83,8 @@ export class ServiceModule {
                 PermissionDataService,
                 LoaderService,
                 StorageService,
-                ErrorHandler,
+                GiddhErrorHandler,
+                UserAgent,
                 HttpWrapperService,
                 AuthenticationService,
                 ToasterService,

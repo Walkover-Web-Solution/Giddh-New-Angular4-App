@@ -3,6 +3,7 @@ import * as moment from 'moment';
 export const Configuration = {
     AppUrl,
     ApiUrl,
+    isCordova,
     isElectron,
     OtpToken: '73k6G_GDzvhy4XE33EQCaKUnC0PHwEZBvf0qsZ3Q9S3ZBcXH-f_6JT_4fH-Qx1Y5LxIIwzqy7cFQVMoyUSXBfLL5WBX6oQWifweWIQlJQ8YkRZ1lAmu3oqwvNJXP1Y5ZTXDHO1IV5-Q63zwNbzxTFw==',
     APP_FOLDER
@@ -25,6 +26,7 @@ export const DEFAULT_TOASTER_OPTIONS = {
 };
 
 export const DEFAULT_SERVER_ERROR_MSG = 'Something went wrong! Please try again.';
+export let IS_CORDOVA_WA = isCordova;
 export let IS_ELECTRON_WA = isElectron;
 export let APP_URL_WA = AppUrl;
 export let APP_FOLDER_WA = APP_FOLDER;

@@ -1,21 +1,8 @@
+@import '../../../assets/css/color.scss';
 :host {
     display: block;
     position: relative;
 }
-
-/* .header {
-    width: 100%;
-    margin: 0 !important;
-    padding: 2px 30px 2px 10px;
-    box-sizing: border-box;
-    background-color: white;
-    font-size: 1.0em;
-    border-radius: 2px;
-    border: 1px solid rgba(34, 36, 38, .15);
-    vertical-align: middle;
-    cursor: pointer;
-} */
-
 .header:hover {
     cursor: text;
 }
@@ -97,7 +84,7 @@ i.close.icon.clear:hover::after {
 
 .sh-select-disabled {
     background-color: #e3e3e3;
-    color: darkgray;
+    color: $bay-of-many;
     cursor: not-allowed;
 }
 

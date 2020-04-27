@@ -1,6 +1,5 @@
-import { skipWhile, take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
-import * as Highcharts from 'highcharts';
 import { Options } from 'highcharts';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -8,11 +7,9 @@ import { HomeActions } from '../../../actions/home/home.actions';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
-import { isNullOrUndefined } from 'util';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { DashboardService } from '../../../services/dashboard.service';
 import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
-import { ProfitLossRequest } from "../../../models/api-models/tb-pl-bs";
 import * as _ from "../../../lodash-optimized";
 
 @Component({
@@ -96,7 +93,6 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public activeCompanyUniqueName$: Observable<string>;
     public requestInFlight: boolean = true;
     public totaloverDueChart: Options;
-    public totalOverDuesResponse$: Observable<any>;
     public sundryDebtorResponse: any = {};
     public sundryCreditorResponse: any = {};
     public totalRecievable: number = 0;
@@ -114,7 +110,6 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef) {
         this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
         this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
-        this.totalOverDuesResponse$ = this.store.select(p => p.home.totalOverDues).pipe(takeUntil(this.destroyed$));
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -132,7 +127,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
             }
         });
         // img path
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron||isCordova)  ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         // listen for universal date
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
@@ -142,34 +137,6 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
                 this.getFilterDate(dates);
             }
         });
-
-        this.totalOverDuesResponse$.pipe(skipWhile(p => (isNullOrUndefined(p))))
-            .subscribe(p => {
-                if (p && p.length) {
-                    this.dataFound = true;
-
-                    this.overDueObj = p;
-                    this.overDueObj.forEach((grp) => {
-                        if (grp.uniqueName === 'sundrydebtors') {
-                            this.sundryDebtorResponse = grp;
-                            this.totalRecievable = this.sundryDebtorResponse.closingBalance.amount;
-                            this.ReceivableDurationAmt = this.sundryDebtorResponse.debitTotal - this.sundryDebtorResponse.creditTotal;
-                        } else {
-                            this.sundryCreditorResponse = grp;
-                            this.totalPayable = this.sundryCreditorResponse.closingBalance.amount;
-                            this.PaybaleDurationAmt = this.sundryCreditorResponse.creditTotal - this.sundryCreditorResponse.debitTotal;
-                        }
-                    });
-
-                    if (this.totalRecievable === 0 && this.totalPayable === 0) {
-                        this.resetChartData();
-                    } else {
-                        this.generateCharts();
-                    }
-                } else {
-                    this.resetChartData();
-                }
-            });
     }
 
     public resetChartData() {
@@ -260,14 +227,69 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
             this.toRequest.from = dates[0];
             this.toRequest.to = dates[1];
             this.toRequest.refresh = false;
-            this.store.dispatch(this._homeActions.getTotalOverdues(this.toRequest.from, this.toRequest.to, this.toRequest.refresh));
+            this.getTotalOverdues();
         }
     }
 
     public refreshChart() {
         this.requestInFlight = true;
         this.toRequest.refresh = true;
-        this.store.dispatch(this._homeActions.getTotalOverdues(this.toRequest.from, this.toRequest.to, this.toRequest.refresh));
+        this.getTotalOverdues();
     }
 
+    /**
+     * This will get total overdues for both sundry debtors and creditors
+     *
+     * @memberof TotalOverduesChartComponent
+     */
+    public getTotalOverdues(): void {
+        this.dataFound = false;
+        this.totalRecievable = 0;
+        this.totalPayable = 0;
+        this.PaybaleDurationAmt = 0
+        this.sundryDebtorResponse = [];
+        this.sundryCreditorResponse = [];
+
+        this.getTotalOverduesData('sundrydebtors');
+        this.getTotalOverduesData('sundrycreditors');
+    }
+
+    /**
+     * This will draw the chart if data available or will reset the chart
+     *
+     * @memberof TotalOverduesChartComponent
+     */
+    public checkPayableAndReceivable() : void {
+        if (this.totalRecievable === 0 && this.totalPayable === 0) {
+            this.resetChartData();
+        } else {
+            this.generateCharts();
+        }
+    }
+
+    /**
+     * This will call the api to get the data
+     *
+     * @param {string} group uniqueName (sundrydebtors or sundrycreditors)
+     * @memberof TotalOverduesChartComponent
+     */
+    public getTotalOverduesData(group: string): void {
+        this._dashboardService.getClosingBalance(group, this.toRequest.from, this.toRequest.to, this.toRequest.refresh).subscribe(response => {
+            if (response && response.status === 'success' && response.body && response.body[0]) {
+                this.dataFound = true;
+
+                if(group === "sundrycreditors") {
+                    this.sundryCreditorResponse = response.body[0];
+                    this.totalPayable = this.sundryCreditorResponse.closingBalance.amount;
+                    this.PaybaleDurationAmt = this.sundryCreditorResponse.creditTotal - this.sundryCreditorResponse.debitTotal;
+                } else {
+                    this.sundryDebtorResponse = response.body[0];
+                    this.totalRecievable = this.sundryDebtorResponse.closingBalance.amount;
+                    this.ReceivableDurationAmt = this.sundryDebtorResponse.debitTotal - this.sundryDebtorResponse.creditTotal;
+                }
+            }
+
+            this.checkPayableAndReceivable();
+        });
+    }
 }

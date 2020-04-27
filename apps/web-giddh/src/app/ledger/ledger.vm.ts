@@ -73,7 +73,6 @@ export class LedgerVM {
                     type: 'DEBIT',
                     discounts: [this.staticDefaultDiscount()],
                     selectedAccount: null,
-                    applyApplicableTaxes: true,
                     isInclusiveTax: true,
                 },
                 {
@@ -82,7 +81,6 @@ export class LedgerVM {
                     type: 'CREDIT',
                     discounts: [this.staticDefaultDiscount()],
                     selectedAccount: null,
-                    applyApplicableTaxes: true,
                     isInclusiveTax: true,
                 }],
             voucherType: 'sal',
@@ -209,13 +207,28 @@ export class LedgerVM {
             type,
             discounts: [this.staticDefaultDiscount()],
             selectedAccount: null,
-            applyApplicableTaxes: true,
             isInclusiveTax: true
         };
     }
 
-    public getUnderstandingText(selectedLedgerAccountType, accountName) {
-        let data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
+    public getUnderstandingText(selectedLedgerAccountType, accountName, parentGroups) {
+        let data;
+        let isReverseChargeAccount = false;
+
+        if(parentGroups) {
+            parentGroups.forEach(key => {
+                if(key.uniqueName === "reversecharge") {
+                    isReverseChargeAccount = true;
+                }
+            });
+        }
+
+        if(isReverseChargeAccount) {
+            data = _.cloneDeep(underStandingTextData.find(p => p.accountType === "ReverseCharge"));
+        } else {
+            data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
+        }
+
         if (data) {
             data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
             data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
@@ -372,6 +385,7 @@ export class TransactionVM {
     public itcAvailable?: string = '';
     public reverseChargeTaxableAmount?: number;
     public shouldShowRcmEntry?: boolean;
+    public advanceReceiptAmount?: number = 0;
 }
 
 export interface IInventory {

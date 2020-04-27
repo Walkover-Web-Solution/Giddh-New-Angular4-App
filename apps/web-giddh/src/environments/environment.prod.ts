@@ -11,6 +11,7 @@ export const environment: Environment = {
     AppUrl: 'https://app.giddh.com',
     ApiUrl: 'https://api.giddh.com/',
     isElectron: false,
+    isCordova: false,
     OtpToken: '73k6G_GDzvhy4XE33EQCaKUnC0PHwEZBvf0qsZ3Q9S3ZBcXH-f_6JT_4fH-Qx1Y5LxIIwzqy7cFQVMoyUSXBfLL5WBX6oQWifweWIQlJQ8YkRZ1lAmu3oqwvNJXP1Y5ZTXDHO1IV5-Q63zwNbzxTFw==',
     APP_FOLDER: '/',
     /** Angular debug tools in the dev console

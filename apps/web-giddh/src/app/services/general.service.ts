@@ -263,6 +263,20 @@ export class GeneralService {
         return false;
     }
 
+    public getGoogleCredentials() {
+        if (PRODUCTION_ENV) {
+            return {
+                GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
+                GOOGLE_CLIENT_SECRET: 'eWzLFEb_T9VrzFjgE40Bz6_l'
+            };
+        } else {
+            return {
+                GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com',
+                GOOGLE_CLIENT_SECRET: '8htr7iQVXfZp_n87c99-jm7a'
+            };
+        }
+    }
+
     /**
      * Covert UTC time zone( server time zone ) into local system timezone
      *
@@ -275,7 +289,7 @@ export class GeneralService {
 
         let hourOffset = convertdLocalTime.getTimezoneOffset() / 60;
 
-        convertdLocalTime.setHours(convertdLocalTime.getHours() + hourOffset);
+        convertdLocalTime.setMinutes(convertdLocalTime.getMinutes() - (hourOffset*60));
 
         return convertdLocalTime;
     }
@@ -305,6 +319,46 @@ export class GeneralService {
             return value.replace(/[^a-zA-Z0-9]/g, '');
         } else {
             return '';
+        }
+    }
+
+    /**
+     * This will remove the selectall value from array used for multi checkbox dropdown
+     *
+     * @param {Array<string>} array
+     * @returns {Array<string>}
+     * @memberof GeneralService
+     */
+    public removeSelectAllFromArray(array: Array<string>): Array<string> {
+        let newArray = [];
+        if(array && array.length > 0) {
+            array.forEach(key => {
+                if(key !== "selectall") {
+                    newArray.push(key);
+                }
+            });
+        }
+
+        return newArray;
+    }
+
+    /**
+     * Calculates tax inclusively for Advance receipt else exclusively
+     *
+     * @param {boolean} [inclusive=false] If true, inclusive tax will be calculated
+     * @param {number} amount Amount on which tax needs to be calculated
+     * @param {number} totalTaxPercentage  Tax percentage sum total
+     * @param {number} totalDiscount Discount amount (and not percentage) applicable on amount
+     * @returns {number} Tax value
+     * @memberof GeneralService
+     */
+    public calculateInclusiveOrExclusiveTaxes(inclusive = false, amount: number, totalTaxPercentage: number, totalDiscount: number): number {
+        if (inclusive) {
+            // Inclusive tax rate
+            return (totalTaxPercentage * (Number(amount) - totalDiscount)) / (100 + totalTaxPercentage);
+        } else {
+            // Exclusive tax rate
+            return ((totalTaxPercentage * (Number(amount) - totalDiscount)) / 100);
         }
     }
 }

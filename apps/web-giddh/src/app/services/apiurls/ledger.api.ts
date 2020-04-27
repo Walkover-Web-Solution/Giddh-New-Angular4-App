@@ -41,6 +41,7 @@ export const LEDGER_API = {
     GET_CURRENCY_RATE: 'currency/rate?from=:from&to=:to&date=:date',
 
     GET_UNPAID_INVOICE_LIST: 'v2/company/:companyUniqueName/invoices/list?accountUniqueName=:accountUniqueName&status=:accStatus',
-    GET_ACCOUNTS_WITH_VOUCHERS: '/ui/voucher-predictor'
+    GET_ACCOUNTS_WITH_VOUCHERS: '/ui/voucher-predictor',
+    GET_COLUMNAR_REPORT: 'v2/company/:companyUniqueName/groups/:groupUniqueName/export/account-balances'
 };
 

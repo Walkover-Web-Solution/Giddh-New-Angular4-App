@@ -38,11 +38,13 @@ export class ReportsTableComponent implements OnInit {
     public fromDate: string;
     public activeTab: any = 'customer';
     public purchaseOrSales: 'sales' | 'purchase';
+
     ngOnInit() {
     }
 
     constructor(private store: Store<AppState>, private _groupWithAccountsAction: GroupWithAccountsAction, private _router: Router) {
     }
+
     public performActions(type: number, account: any, event?: any) {
 
         switch (type) {
@@ -79,6 +81,7 @@ export class ReportsTableComponent implements OnInit {
                 break;
         }
     }
+
     public goToRoute(part: string, additionalParams: string = '', accUniqueName: string) {
         let url = location.href + `?returnUrl=${part}/${accUniqueName}`;
 
@@ -89,10 +92,14 @@ export class ReportsTableComponent implements OnInit {
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
             url = location.origin + location.pathname + `#./pages/${part}/${accUniqueName}`;
+            console.log(ipcRenderer.send('open-url', url));
+        } else if (isCordova) {
+            // todo: gotoroute in cordova
         } else {
             (window as any).open(url);
         }
     }
+
     // Open Modal for SMS
     public openSmsDialog() {
         this.messageBody.msg = '';
@@ -111,13 +118,14 @@ export class ReportsTableComponent implements OnInit {
         this.messageBody.header.set = this.messageBody.header.email;
         this.mailModal.show();
     }
+
     public GotoDetailedSales(item: ReportsModel) {
         let from = item.from;
         let to = item.to;
         let aa = this.activeFinacialYr;
 
         if (from != null && to != null) {
-            this._router.navigate(['pages', 'reports', 'sales-detailed-expand'], { queryParams: { from: from, to: to } });
+            this._router.navigate(['pages', 'reports', 'sales-detailed-expand'], {queryParams: {from: from, to: to}});
         }
     }
 }

@@ -11,7 +11,7 @@
 
 .td_in_searchBox div i {
     margin-top: 4px;
-    color: $iconColorTh;
+    color: $wild-blue-yonder;
     padding-right: 8px;
     cursor: pointer;
     padding-left: 8px;
@@ -46,7 +46,7 @@
 }
 
 .activeTextColor {
-    color: $activeIconTh !important;
+    color: $deep-sky-blue !important;
 }
 
 .basic > thead > tr > th {
@@ -60,7 +60,7 @@
 }
 
 .td_in_searchBox div i:hover {
-    color: $activeIconTh;
+    color: $deep-sky-blue;
 }
 
 .mh18_img img {
@@ -75,7 +75,7 @@
 }
 .icon-sort-asc,
 .icon-sort-dsc {
-    color: $iconColorTh;
+    color: $wild-blue-yonder;
 }
 .table-bordered .d-flex {
     align-items: center;

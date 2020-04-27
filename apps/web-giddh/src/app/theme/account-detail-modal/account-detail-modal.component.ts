@@ -1,16 +1,16 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { AppState } from '../../store';
-import { select, Store } from '@ngrx/store';
-import { Observable, ReplaySubject } from 'rxjs';
-import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap';
+import { ReplaySubject } from 'rxjs';
+
+import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
+import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { BulkEmailRequest } from '../../models/api-models/Search';
+import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { AccountService } from '../../services/account.service';
 import { CompanyService } from '../../services/companyService.service';
 import { ToasterService } from '../../services/toaster.service';
-import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { Router } from '@angular/router';
-import { VoucherTypeEnum } from '../../models/api-models/Sales';
-import { AccountService } from '../../services/account.service';
+import { AppState } from '../../store';
 
 @Component({
     selector: '[account-detail-modal-component]',
@@ -23,6 +23,8 @@ export class AccountDetailModalComponent implements OnChanges {
     @Input() public accountUniqueName: string;
     @Input() public from: string;
     @Input() public to: string;
+    /** Required to hide generate invoice from modules that don't support it, for eg. Trial balance */
+    @Input() public shouldShowGenerateInvoice: boolean = true;
 
     // take voucher type from parent component
     @Input() public voucherType: VoucherTypeEnum;
@@ -84,7 +86,7 @@ export class AccountDetailModalComponent implements OnChanges {
 
     constructor(private store: Store<AppState>, private _companyServices: CompanyService,
         private _toaster: ToasterService, private _groupWithAccountsAction: GroupWithAccountsAction, private _accountService: AccountService,
-        private _router: Router) {
+        private changeDetectorRef: ChangeDetectorRef) {
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -104,6 +106,7 @@ export class AccountDetailModalComponent implements OnChanges {
         this._accountService.GetAccountDetailsV2(accountUniqueName).subscribe(response => {
             if (response.status === 'success') {
                 this.accInfo = response.body;
+                this.changeDetectorRef.detectChanges();
             } else {
                 this._toaster.errorToast(response.message);
             }
@@ -238,7 +241,10 @@ export class AccountDetailModalComponent implements OnChanges {
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
             url = location.origin + location.pathname + `#./pages/${part}/${this.accountUniqueName}`;
-        } else {
+            console.log(ipcRenderer.send('open-url', url));
+        } else if(isCordova){
+            // todo: go to routes
+        }else {
             (window as any).open(url);
         }
     }

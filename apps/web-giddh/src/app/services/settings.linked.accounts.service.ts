@@ -4,7 +4,7 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { EBANKS, YODLEE_FASTLINK } from './apiurls/settings.linked.accounts.api';
 import { IAccessTokenResponse, IGetAllEbankAccountResponse, IGetEbankTokenResponse } from '../models/api-models/SettingsLinkedAccounts';
 import { GeneralService } from './general.service';
@@ -16,7 +16,7 @@ export class SettingsLinkedAccountsService {
     private user: UserDetails;
     private companyUniqueName: string;
 
-    constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
+    constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService,
         private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 

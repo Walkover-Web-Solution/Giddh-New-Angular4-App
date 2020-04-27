@@ -104,7 +104,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
-    public isGstValid: boolean;
+    public isGstValid$: Observable<boolean> = observableOf(true);
     public selectedTab: string = 'address';
     public moveAccountSuccess$: Observable<boolean>;
     public discountList$: Observable<IDiscountList[]>;
@@ -706,39 +706,45 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
         let gstVal: string = gstForm.get('gstNumber').value;
-
-        if (gstVal.length !== 15) {
-            gstForm.get('partyType').reset('NOT APPLICABLE');
-        }
-
-        if (gstVal.length >= 2) {
-            this.statesSource$.pipe(take(1)).subscribe(state => {
-                let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
-
-                let s = state.find(st => st.value === stateCode);
-                if (s) {
-                    gstForm.get('stateCode').patchValue(s.value);
-                    gstForm.get('state').get('code').patchValue(s.value);
-
-                } else {
-                    if (this.isIndia) {
-                        gstForm.get('stateCode').patchValue(null);
-                        gstForm.get('state').get('code').patchValue(null);
-                    }
-                    this._toaster.clearAllToaster();
-                    if (this.formFields['taxName']) {
-                        this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
-                    }
-                }
-            });
-        } else {
-            // statesEle.setDisabledState(false);
-            if (this.isIndia) {
-                gstForm.get('stateCode').patchValue(null);
-                gstForm.get('state').get('code').patchValue(null);
+        gstForm.get('gstNumber').setValue(gstVal.trim());
+        if (gstVal.length) {
+            if (gstVal.length !== 15) {
+                gstForm.get('partyType').reset('NOT APPLICABLE');
             }
 
+            if (gstVal.length >= 2) {
+                this.statesSource$.pipe(take(1)).subscribe(state => {
+                    let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
+                    let currentState = state.find(st => st.value === stateCode);
+                    if (currentState) {
+                        gstForm.get('stateCode').patchValue(currentState.value);
+                        gstForm.get('state').get('code').patchValue(currentState.value);
+
+                    } else {
+                        if (this.isIndia) {
+                            gstForm.get('stateCode').patchValue(null);
+                            gstForm.get('state').get('code').patchValue(null);
+                        }
+                        this._toaster.clearAllToaster();
+                        if (this.formFields['taxName']) {
+                            this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
+                        }
+                    }
+                });
+            } else {
+                if (this.isIndia) {
+                    statesEle.forceClearReactive.status = true;
+                    statesEle.clear();
+                    gstForm.get('stateCode').patchValue(null);
+                    gstForm.get('state').get('code').patchValue(null);
+                }
+            }
+        } else {
+            statesEle.forceClearReactive.status = true;
+            statesEle.clear();
+            gstForm.get('stateCode').patchValue(null);
+            gstForm.get('state').get('code').patchValue(null);
         }
     }
 
@@ -1012,7 +1018,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
 
-        if (ele.value) {
+        if (ele.value.trim()) {
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
@@ -1028,13 +1034,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (!isValid) {
                 this._toaster.errorToast('Invalid ' + this.formFields['taxName'].label);
                 ele.classList.add('error-box');
-                this.isGstValid = false;
+                this.isGstValid$ = observableOf(false);
             } else {
                 ele.classList.remove('error-box');
-                this.isGstValid = true;
+                this.isGstValid$ = observableOf(true);
             }
         } else {
             ele.classList.remove('error-box');
+            this.isGstValid$ = observableOf(true);
         }
     }
 
@@ -1313,7 +1320,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountAddNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
-        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === "sundrydebtors" || this.activeGroupUniqueName === "sundrycreditors")) {
+        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value &&
+            this.isCreditorOrDebtor(this.activeGroupUniqueName)) {
             return true;
         } else {
             return false;
@@ -1400,5 +1408,28 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 element.classList.remove('error-box');
             }
         }
+    }
+
+    /**
+     * Returns true if passed account belongs to creditor or debtor category
+     * required to make state mandatory
+     *
+     * @private
+     * @param {string} accountUniqueName Account unique name
+     * @returns {boolean} True if passed account belongs to creditor or debtor category
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private isCreditorOrDebtor(accountUniqueName: string): boolean {
+        if (this.flatGroupsOptions && _.isArray(this.flatGroupsOptions) && this.flatGroupsOptions.length && accountUniqueName) {
+            const groupDetails: any = this.flatGroupsOptions.filter((group) => group.value === accountUniqueName).pop();
+            if (groupDetails) {
+                return groupDetails.additional.some((parentGroup) => {
+                    const groups = [parentGroup.uniqueName, groupDetails.value]
+                    return groups.includes('sundrydebtors') || groups.includes('sundrycreditors');
+                });
+            }
+            return false;
+        }
+        return false;
     }
 }

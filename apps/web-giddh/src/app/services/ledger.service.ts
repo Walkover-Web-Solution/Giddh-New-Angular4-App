@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { LEDGER_API } from './apiurls/ledger.api';
 import { BlankLedgerVM } from '../ledger/ledger.vm';
 import { GeneralService } from './general.service';
@@ -22,7 +22,7 @@ export class LedgerService {
     private user: UserDetails;
 
     constructor(
-        private errorHandler: ErrorHandler,
+        private errorHandler: GiddhErrorHandler,
         public http: HttpWrapperService,
         private _httpClient: HttpClient,
         public _router: Router,
@@ -415,5 +415,27 @@ export class LedgerService {
      */
     public getAccountsWithVouchers(): Observable<BaseResponse<any, any>> {
         return this.http.get(this.config.apiUrl + LEDGER_API.GET_ACCOUNTS_WITH_VOUCHERS).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
+
+    /**
+     * This will download the columnar report
+     *
+     * @param {string} companyUniqueName
+     * @param {string} groupUniqueName
+     * @param {*} request
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof LedgerService
+     */
+    public downloadColumnarReport(companyUniqueName: string, groupUniqueName: string, request: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + LEDGER_API.GET_COLUMNAR_REPORT.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            .replace(':groupUniqueName', groupUniqueName), request
+        ).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = request;
+                data.queryString = { request };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 }

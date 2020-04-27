@@ -85,7 +85,7 @@ tfoot {
 }
 
 .dropdown-menu > li > a:hover {
-    color: $border-blue;
+    color: $chetwode-blue;
     background: #e5e5e5;
 }
 
@@ -141,7 +141,7 @@ tfoot {
     width: 100%;
 }
 .input-group input.form-control:focus {
-    border-color: $border-blue;
+    border-color: $chetwode-blue;
 }
 .icon-calender {
     position: absolute;
@@ -151,16 +151,16 @@ tfoot {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $border-blue;
+    border-right: 1px solid $chetwode-blue;
 }
 
-.inputWrapper {
+.input-wrapper {
     display: block !important;
     width: 200px !important;
     position: relative;
     height: 36px !important;
 }
-.inputWrapper:before {
+.input-wrapper:before {
     position: absolute;
     content: "";
     display: block;
@@ -218,6 +218,16 @@ tfoot {
     }
     #centerAlign td {
         padding: 0 !important;
+    }
+    .input-wrapper {
+        width: 100% !important;
+    }
+    .clear-filter.btn.btn-filter {
+        justify-content: center !important;
+        margin-bottom: 10px !important;
+    }
+    .mobile-width-100 {
+        width: 100%;
     }
 }
 

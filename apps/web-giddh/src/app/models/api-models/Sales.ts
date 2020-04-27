@@ -6,6 +6,7 @@ import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { TaxControlData } from '../../theme/tax-control/tax-control.component';
 import * as moment from 'moment';
+import { AdvanceReceiptAdjustment } from './AdvanceReceiptsAdjust';
 
 export enum VoucherTypeEnum {
     'sales' = 'sales',
@@ -65,16 +66,16 @@ export const VOUCHER_TYPE_LIST: any[] = [
     },
     {
         value: VoucherTypeEnum.generateProforma,
-        label: 'Proformas',
+        label: 'Proforma',
         additional: {
-            label: 'Proformas'
+            label: 'Proforma'
         }
     },
     {
         value: VoucherTypeEnum.generateEstimate,
-        label: 'Estimates',
+        label: 'Estimate',
         additional: {
-            label: 'Estimates (Beta)'
+            label: 'Estimate (Beta)'
         }
     }
 ];
@@ -438,6 +439,7 @@ export interface GenericRequestForGenerateSCD extends GenericRequest {
     uniqueName?: string,
     templateDetails?: TemplateDetailsClass
     deposit?: AmountClassMulticurrency;
+    roundOffApplicable?: boolean;
 }
 
 /**
@@ -527,6 +529,8 @@ export class VoucherClass {
     public passportNumber?: string;
     public number?: string;
     public subVoucher?: string;
+    public advanceReceiptAdjustment?: AdvanceReceiptAdjustment;
+    public subTotal?: AmountClassMulticurrency
 
     constructor() {
         this.accountDetails = new AccountDetailsClass();

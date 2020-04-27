@@ -51,6 +51,7 @@ import { WorkerService } from '../worker.service';
 import { WorkerMessage } from 'apps/web-giddh/web-workers/model/web-worker.class';
 import { WORKER_MODULES, WORKER_MODULES_OPERATIONS } from 'apps/web-giddh/web-workers/model/web-worker.constant';
 import { LedgerUtilityService } from './services/ledger-utility.service';
+import { download } from "@giddh-workspaces/utils";
 
 @Component({
     selector: 'ledger',
@@ -197,7 +198,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** True if company country will UAE and accounts involve Debtors/ Cash / bank / Sales */
     public isTouristSchemeApplicable: boolean;
     public allowParentGroup = ['sales', 'cash', 'sundrydebtors', 'bankaccounts'];
-
+    public shareLedgerDates: any = {
+        from: '',
+        to: ''
+    };
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
@@ -294,6 +298,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.trxRequest.from = moment(value.picker.startDate).format('DD-MM-YYYY');
         this.trxRequest.to = moment(value.picker.endDate).format('DD-MM-YYYY');
         this.todaySelected = true;
+        this.lc.blankLedger.entryDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         this.getTransactionData();
         // Después del éxito de la entrada. llamar para transacciones bancarias
         this.lc.activeAccount$.subscribe((data: AccountResponse) => {
@@ -725,7 +730,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let accountDetails: AccountResponse = data[0];
                 let parentOfAccount = accountDetails.parentGroups[0];
 
-                this.lc.getUnderstandingText(accountDetails.accountType, accountDetails.name);
+                this.lc.getUnderstandingText(accountDetails.accountType, accountDetails.name, accountDetails.parentGroups);
                 this.accountUniquename = accountDetails.uniqueName;
 
                 if (this.advanceSearchComp) {
@@ -1001,7 +1006,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.ledgerService.DownloadAttachement(fileName).subscribe(d => {
             if (d.status === 'success') {
                 let blob = base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
-                return saveAs(blob, d.body.name);
+                download(d.body.name, blob, `image/${d.body.fileType}`)
             } else {
                 this._toaster.errorToast(d.message);
             }
@@ -1018,8 +1023,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).subscribe(d => {
             if (d.status === 'success') {
+                // debugger;
                 let blob = base64ToBlob(d.body, 'application/pdf', 512);
-                return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
+                download(`${activeAccount.name} - ${invoiceName}.pdf`, blob, 'application/pdf');
             } else {
                 this._toaster.errorToast(d.message);
             }
@@ -1111,14 +1117,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
             });
 
             if (classList && classList instanceof Array) {
-                let notClose = classList.some((cls: DOMTokenList) => {
-                    if (!cls) {
+                const shouldNotClose = classList.some((className: DOMTokenList) => {
+                    if (!className) {
                         return;
                     }
-                    return cls.contains('chkclrbsdp') || cls.contains('currencyToggler');
+                    return className.contains('chkclrbsdp') || className.contains('currencyToggler') || className.contains('bs-datepicker');
                 });
 
-                if (notClose) {
+                if (shouldNotClose) {
                     return;
                 }
             }
@@ -1162,6 +1168,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public showShareLedgerModal() {
+        this.shareLedgerDates.from = moment(this.datePickerOptions.startDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+        this.shareLedgerDates.to = moment(this.datePickerOptions.endDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+
         this.sharLedger.clear();
         this.shareLedgerModal.show();
         this.sharLedger.checkAccountSharedWith();
@@ -1378,9 +1387,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * onOpenAdvanceSearch
+     * To open advance search modal
+     *
+     * @memberof LedgerComponent
      */
-    public onOpenAdvanceSearch() {
+    public onOpenAdvanceSearch(): void {
+        if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.datePickerOptions && this.datePickerOptions.startDate && this.datePickerOptions.endDate ) {
+            this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+                page: 0,
+                dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+                    bsRangeValue: [this.datePickerOptions.startDate, this.datePickerOptions.endDate]
+                })
+            });
+        }
         this.advanceSearchModel.show();
     }
 
@@ -1593,9 +1612,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
-    public toggleAsidePane(event?): void {
+    public toggleAsidePane(event?, shSelectElement?: ShSelectComponent): void {
         if (event) {
             event.preventDefault();
+        }
+        if (shSelectElement) {
+            this.closeActiveEntry(shSelectElement);
         }
         this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
@@ -1706,6 +1728,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Handle amount input
+     *
+     * @param {TransactionVM} transaction Current transaction
+     * @memberof LedgerComponent
+     */
+    public handleAmountInput(transaction: TransactionVM): void {
+        if (transaction.amount !== undefined) {
+            transaction.amount = Number(transaction.amount);
+            this.needToReCalculate.next(true);
+        }
+    }
+
+    /**
      * Handles RCM section visinility based on provided transaction details
      *
      * @private
@@ -1792,6 +1827,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Closes the active incomplete entry in ledger if user
+     * presses the shortcut key 'Alt + C'
+     *
+     * @private
+     * @param {ShSelectComponent} shSelectElement Current Sh select element instance
+     * @memberof LedgerComponent
+     */
+    private closeActiveEntry(shSelectElement: ShSelectComponent): void {
+        if (shSelectElement) {
+            shSelectElement.hide();
+        }
+        this.hideBankLedgerPopup(true);
+    }
+
+    /**
      * To check tourist scheme applicable or not
      *
      * @param {string} [activeLedgerParentgroup] active ledger parent group unique name
@@ -1799,7 +1849,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public checkTouristSchemeApplicable(activeLedgerParentgroup: string, selectedAccountParentGroup: string): void {
-        if (this.profileObj && this.profileObj.countryV2 && this.profileObj.countryV2.alpha2CountryCode && this.profileObj.countryV2.alpha2CountryCode === 'AE' && activeLedgerParentgroup && selectedAccountParentGroup && (this.allowParentGroup.includes(activeLedgerParentgroup)) && ( this.allowParentGroup.includes(selectedAccountParentGroup))) {
+        if (this.profileObj && this.profileObj.countryV2 && this.profileObj.countryV2.alpha2CountryCode && this.profileObj.countryV2.alpha2CountryCode === 'AE' && activeLedgerParentgroup && selectedAccountParentGroup && (this.allowParentGroup.includes(activeLedgerParentgroup)) && (this.allowParentGroup.includes(selectedAccountParentGroup))) {
             this.isTouristSchemeApplicable = true;
         } else {
             this.isTouristSchemeApplicable = false;

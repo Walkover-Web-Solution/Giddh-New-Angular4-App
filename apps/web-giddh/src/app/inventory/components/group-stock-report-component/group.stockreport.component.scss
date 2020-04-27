@@ -123,7 +123,7 @@ tfoot {
 }
 
 .dropdown-menu > li > a:hover {
-    color: $border-blue;
+    color: $chetwode-blue;
     background: #e5e5e5;
 }
 .stock-input {
@@ -195,11 +195,11 @@ tfoot {
     color: #757bb9;
 }
 .icon-pointer .activeTextColor {
-    color: $activeIconTh;
+    color: $deep-sky-blue;
 }
 
-.stickyFooterSaleAmount {
-    .innerContentFooter {
+.sticky-footer-sale-amount {
+    .inner-content-footer {
         padding-left: 0;
         padding-right: 80px;
         min-height: 60px;
@@ -213,7 +213,7 @@ tfoot {
             min-width: 105px;
         }
         .flex-col:nth-child(even) {
-            min-width: 55px;
+            min-width: 20px;
         }
         .operators {
             font-size: 39px;
@@ -241,7 +241,7 @@ tfoot {
         }
     }
 }
-.countText h4 {
+.count-text h4 {
     text-align: left;
     padding-left: 30px;
 }
@@ -309,4 +309,7 @@ button.btn.btn-filter {
 }
 .mt-0 {
     margin-top: 0px !important;
+}
+.group-not-found {
+    text-transform: none;
 }

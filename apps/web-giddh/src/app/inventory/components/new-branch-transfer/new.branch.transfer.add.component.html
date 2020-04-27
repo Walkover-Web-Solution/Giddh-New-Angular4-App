@@ -26,9 +26,9 @@
 
         </div>
         <div class="mb-2" *ngIf="editBranchTransferUniqueName"></div>
-        <div class="multipleProductsWrapper ">
+        <div class="multiple-products-wrapper  ">
             <form #newBranchTransferForm="ngForm" novalidate="">
-                <div class="multipleProducts row clearfix pl-15 pr-15">
+                <div class="multiple-products row clearfix pl-15 pr-15">
                     <div class="col-sm-6" *ngIf="branchTransferMode === 'deliverynote'">
                         <div class="row mrB2">
                             <div class="col-md-3">
@@ -69,7 +69,8 @@
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <input name="productHsnCode" class="form-control" maxlength="8" [(ngModel)]="branchTransfer.products[0].hsnNumber">
+                                <input name="productHsnCode" class="form-control" maxlength="8" *ngIf="(inventorySettings?.manageInventory || !branchTransfer.products[0].sacNumber)" [(ngModel)]="branchTransfer.products[0].hsnNumber">
+                                <input name="productHsnCode" class="form-control" maxlength="8" *ngIf="(!inventorySettings?.manageInventory && branchTransfer.products[0].sacNumber)" [(ngModel)]="branchTransfer.products[0].sacNumber">
                             </div>
                         </div>
                         <div class="row mrB2">
@@ -199,7 +200,8 @@
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <input name="productHsnCode" maxlength="8" class="form-control" [(ngModel)]="branchTransfer.products[0].hsnNumber">
+                                <input name="productHsnCode" class="form-control" maxlength="8" *ngIf="(inventorySettings?.manageInventory || !branchTransfer.products[0].sacNumber)" [(ngModel)]="branchTransfer.products[0].hsnNumber">
+                                <input name="productHsnCode" class="form-control" maxlength="8" *ngIf="(!inventorySettings?.manageInventory && branchTransfer.products[0].sacNumber)" [(ngModel)]="branchTransfer.products[0].sacNumber">
                             </div>
                         </div>
                         <div class="row mrB2" *ngIf="transferType !== 'senders'">
@@ -343,13 +345,14 @@
                                     <div *ngIf="activeRow !== i">
                                         <div *ngIf="product.name">{{product.name}}</div>
                                         <div *ngIf="product.skuCode">SKU Code: {{product.skuCode}}</div>
-                                        <div *ngIf="product.hsnNumber">HSN/SAC Code: {{product.hsnNumber}}</div>
+                                        <div *ngIf="(inventorySettings?.manageInventory || !product.sacNumber)">HSN/SAC Code: {{product.hsnNumber}}</div>
+                                        <div *ngIf="(!inventorySettings?.manageInventory && product.sacNumber)">HSN/SAC Code: {{product.sacNumber}}</div>
                                         <div *ngIf="product.description">{{product.description}}</div>
                                     </div>
                                     <div class="pos-rel">
                                         <div class="hsnCode text-right" (click)="focusHsnNumber();" *ngIf="activeRow == i">
                                             <label>HSN/SAC Code: </label>
-                                            <span>{{product.hsnNumber}}
+                                            <span>{{ (inventorySettings?.manageInventory || !product.sacNumber) ? product.hsnNumber : product.sacNumber}}
                                                 <span class="edit-icon cp">
                                                     <img src="assets/images/edit-pencilicon.svg">
                                                 </span>
