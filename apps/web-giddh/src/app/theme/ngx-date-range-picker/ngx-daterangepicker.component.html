@@ -68,8 +68,19 @@
     <!-- ranges container -->
     <!-- calender container -->
     <div  *ngIf="!isMobileScreen" class="calender-container">
-      <div class="close-calender" (click)="closeCalander();">
-       <img src="../../../assets/images/close-icon.svg" alt="close-btn"> Custom
+      <div class="close-calender">
+        <div class="close-save-btn">      
+            <img (click)="closeCalander();" class="close-custom-btn" src="../../../assets/images/close-icon.svg" alt="close-btn">
+            <a>Save</a>
+        </div>
+
+             <div class="custom-date">
+                <span class="">Custom</span>
+                    <div class="custom-edit-block">
+                        <span class="custom-date-range">Apr 14 - apr 23</span>
+                        <span class="edit-dates"><img src="../../../assets/images/edit-pencilicon.svg"></span>
+                    </div>
+            </div>
       </div>
         <div class="calender-container-wrapper">
             <div class="calender-body" (mouseout)="hoveredDate = null">

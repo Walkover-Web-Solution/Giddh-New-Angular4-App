@@ -1307,10 +1307,21 @@ td span {
             background-color: #fff;
             z-index: 1;
             min-width: 100%;
-            padding-top: 30px;
+            padding-top: 0;
+            .calender-container-wrapper {
+                padding-top: 0;
+                .calender-body {
+                    .select-date-range {
+                        display: none;
+                    }
+                    .month-field{
+                        display: none;
+                    }
+                }
+            }
     
             .close-calender{
-                position: absolute;
+                position: relative;
                 top: 10px;
                 left: 0;
                 display: flex;
@@ -1318,10 +1329,55 @@ td span {
                 width: 100%;
                 font-size: 17px;
                 font-style: initial;
-                padding-left:15px;
-                img{
-                    margin-right: 15px;
+                flex-direction: column;
+                .close-save-btn{
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    width: 100%;
+                    a{
+                        color: $deep-sky-blue;
+                        padding-right: 15px;
+                    }
                 }
+                img.close-custom-btn{
+                    margin-right: 0;
+                    padding: 0 15px;
+                    width: 15px;
+                }
+                img.edit-dates{
+                    width: 20px;
+                }
+            }
+            .custom-date {
+                display: flex;
+                padding: 14px 10px;
+                flex-direction: column;
+                width: 100%; 
+                span{
+                    font-size: 12px;
+                    display: block;
+                    padding-bottom: 2px;
+                    color: $gray;
+                }
+                .custom-edit-block{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    .custom-date-range{
+                        font-size: 18px;
+                        color: $nero;
+                    }
+                   .edit-dates{
+                       img{
+                        width: 15px;
+                        margin-right: 5px;
+                       }
+                   }
+                }
+
+                
+               
             }
           }
     
@@ -1334,7 +1390,8 @@ td span {
       } 
      .d-container{
         width: 280px;
-    }    
+    }   
+
 }
 @media(max-height:768px){
     .drops-down-right{
