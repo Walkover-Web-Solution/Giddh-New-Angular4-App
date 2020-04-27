@@ -1519,7 +1519,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @param {*} userResponse  Action message
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public onAdvanceReceiptRemoveCloseConfirmationModal(userResponse: any) {
+    public onAdvanceReceiptRemoveCloseConfirmationModal(userResponse: any): void {
         if (userResponse.response) {
              this.isAdvanceReceipt = false;
             this.handleAdvanceReceiptChange();
