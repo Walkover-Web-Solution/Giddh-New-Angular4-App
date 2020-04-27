@@ -52,7 +52,7 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
 	@Input() public searchInput: string = '';
 	@Output() public searchChange = new EventEmitter<string>();
 	@Input() public plData: ProfitLossData;
-	@Input() public cogsData: ChildGroup;
+	@Input() public cogsData: ChildGroup; 
 	@Input() public padding: string;
 	@Input() public expandAll: boolean;
 	@Input() public from: string = '';
