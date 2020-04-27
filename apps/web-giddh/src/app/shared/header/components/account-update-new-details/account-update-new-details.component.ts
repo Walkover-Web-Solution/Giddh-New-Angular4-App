@@ -104,7 +104,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
-    public isGstValid$: Observable<boolean>;
+    public isGstValid$: Observable<boolean> = observableOf(true);
     public selectedTab: string = 'address';
     public moveAccountSuccess$: Observable<boolean>;
     public discountList$: Observable<IDiscountList[]>;

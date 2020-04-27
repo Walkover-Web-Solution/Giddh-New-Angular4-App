@@ -74,7 +74,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
-    public isGstValid$: Observable<boolean>;
+    public isGstValid$: Observable<boolean>= observableOf(true);
     public GSTIN_OR_TRN: string;
     public selectedCountry: string;
     public selectedCountryCode: string;
