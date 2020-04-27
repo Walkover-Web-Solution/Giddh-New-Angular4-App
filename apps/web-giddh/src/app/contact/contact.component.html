@@ -18,7 +18,7 @@
                                 [style.width.px]="'200'">
                                 <li role="menuitem">
                                     <a class="dropdown-item">
-                                        <input type="checkbox" name="select all" />Select All
+                                        <input type="checkbox" name="selectAll" [(ngModel)]="selectAll" (ngModelChange)="selectAllColumns($event)"> Select All
                                     </a>
                                 </li>
 
