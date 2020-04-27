@@ -86,6 +86,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @ViewChild('tax') public taxControll: TaxControlComponent;
     @ViewChild('updateBaseAccount') public updateBaseAccount: ModalDirective;
     @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
+    /** Advance receipt remove confirmation modal reference */
+    @ViewChild('advanceReceiptRemoveConfirmationModal') public advanceReceiptRemoveConfirmationModal: ModalDirective;
 
     /** RCM popup instance */
     @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
@@ -177,10 +179,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public totalAdjustedAmount: number = 0;
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
-
     /** True, if all the transactions are of type 'Tax' or 'Reverse Charge' */
     private taxOnlyTransactions: boolean;
-
+    /** Remove Advance receipt confirmation flag */
+    public confirmationFlag: string = '';
+    /** Remove Advance receipt confirmation message */
+    public removeAdvanceReceiptConfirmationMessage: string = 'If you change the type of this receipt, all the related advance receipt adjustments in invoices will be removed. Are you sure you want to proceed?';
     constructor(
         private _accountService: AccountService,
         private _ledgerService: LedgerService,
@@ -1278,6 +1282,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.shouldShowAdvanceReceiptMandatoryFields) {
             this.vm.generatePanelAmount();
         }
+        if (!this.isAdvanceReceipt) {
+            if (this.isAdjustedInvoicesWithAdvanceReceipt && this.vm.selectedLedger && this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.receipt) {
+                this.advanceReceiptRemoveConfirmationModal.show();
+            }
+        }
         this.vm.generateGrandTotal();
         this.vm.generateCompoundTotal();
     }
@@ -1503,6 +1512,19 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.adjustedInvoiceAmountChange();
         } else if (this.isAdjustedWithAdvanceReceipt && this.vm.selectedLedger.voucherGeneratedType === 'sales') {
             this.adjustedReceiptsAmountChange();
+        }
+    }
+    /**
+     * Advance receipt adjustment remove model action response
+     *
+     * @param {*} userResponse  Action message
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public onAdvanceReceiptRemoveCloseConfirmationModal(userResponse: any): void {
+        if (userResponse) {
+            this.isAdvanceReceipt = !userResponse.response;
+            this.handleAdvanceReceiptChange();
+            this.advanceReceiptRemoveConfirmationModal.hide();
         }
     }
 }
