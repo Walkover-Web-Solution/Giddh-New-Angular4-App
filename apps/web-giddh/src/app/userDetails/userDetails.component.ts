@@ -68,7 +68,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public activeTab: string;
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCreateAndSwitchCompanyInProcess: boolean;
-    public apiPostmanDocUrl=API_POSTMAN_DOC_URL;
+    public apiPostmanDocUrl: String = API_POSTMAN_DOC_URL;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>,
