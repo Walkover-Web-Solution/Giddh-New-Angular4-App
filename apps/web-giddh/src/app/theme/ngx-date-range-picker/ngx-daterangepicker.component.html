@@ -75,7 +75,6 @@
       <div class="close-calender">
         <div class="close-save-btn">      
             <img (click)="closeCalander();" class="close-custom-btn" src="../../../assets/images/close-icon.svg" alt="close-btn">
-            <a>Save</a>
         </div>
 
              <div class="custom-date">
@@ -190,7 +189,7 @@
                     </div>
                     <!-- month name -->
                     <!-- month selection -->
-                    <div class="d-container" *ngIf="showMonthPicker" (mousewheel)="mouseUpYear($event)">
+                    <div class="d-container" [style.max-height.px]="300"  (scroll)="onScroll($event)" *ngIf="showMonthPicker" (mousewheel)="mouseUpYear($event)">
                         <div>
                             <h2>
                                 {{ calendarVariables?.start?.calendar[1][1].format(" YYYY")}}</h2>

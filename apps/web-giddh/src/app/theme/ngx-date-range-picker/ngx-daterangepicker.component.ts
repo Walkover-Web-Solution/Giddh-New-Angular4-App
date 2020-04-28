@@ -288,6 +288,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
             if (document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material").length > 0) {
                 if (response) {
                     document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("show-calendar");
+                    document.querySelector('body').classList.add('hide-scroll-body')
                 } else {
                     this.initialCalendarMonths = true;
                     document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
@@ -305,6 +306,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     }
     public closeDatePicker(){
         document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
+        document.querySelector('body').classList.remove('hide-scroll-body')
     }
     openModalWithClass(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(template,

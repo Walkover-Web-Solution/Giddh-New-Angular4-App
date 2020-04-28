@@ -903,7 +903,7 @@ $input-height: 3rem !default;
     }
 }
 
-@media(min-width:769px){
+@media(min-width:768px){
     .custom-select-btn{
         display: none;
     }
@@ -991,7 +991,8 @@ td span {
     width: 100%;
     background-color: white;
     z-index: 100;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     transition: 30ms all;
 
     h2 {
@@ -1162,7 +1163,7 @@ td span {
                 border-bottom: 1px solid $whiteSmoke;
                 position: sticky;
                 top: 0;
-                z-index: 10;
+                z-index: 1;
                 background-color:$white;
                 .sticky-header{
                     width:calc(100% - 20px) !important;
@@ -1425,6 +1426,7 @@ td span {
                 font-style: initial;
                 flex-direction: column;
                 box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+                z-index: 2;
                 .close-save-btn{
                     display: flex;
                     align-items: center;
@@ -1487,8 +1489,11 @@ td span {
        
       } 
      .d-container{
-        width: 280px;
-    }   
+        width: 100%;
+    }  
+    .angle-down{
+        top: 10px;
+    } 
 
 }
 
@@ -1544,9 +1549,6 @@ td span {
                         button {
                             padding: 12px 10px;
                             border-bottom: 1px solid $gainsboro;
-                        }
-                        &:last-child button{
-                            border-bottom:none;
                         }
                     }
                 }
