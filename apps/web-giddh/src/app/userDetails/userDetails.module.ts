@@ -21,6 +21,8 @@ import { SubscriptionsPlansComponent } from './components/subscriptions-plans/su
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { CompanyDetailsSidebarComponent } from './components/company-details-sidebar/company-details-sidebar.component';
 import { ActiveLogSidebarComponent } from './components/activity-log/activity-log-sidebar.component';
+import { DeactivateCompanyComponent } from './components/deactivate-company/deactivate-company.component';
+import { MoveCompanyComponent } from './components/move-company/move-company.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -37,7 +39,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         UserDetailsCompanyComponent,
         SubscriptionsPlansComponent,
         CompanyDetailsSidebarComponent,
-        ActiveLogSidebarComponent
+        ActiveLogSidebarComponent,
+        DeactivateCompanyComponent,
+        MoveCompanyComponent
     ],
     exports: [],
     imports: [

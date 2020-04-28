@@ -251,10 +251,10 @@
                                     <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                                         aria-labelledby="button-alignment">
                                         <li role="menuitem">
-                                            <a class="dropdown-item" href="javascript:void(0)">Move Company </a>
+                                            <a class="dropdown-item" (click)="openModal(MoveCompany)" href="javascript:void(0)">Move Company </a>
                                         </li>
                                         <li role="menuitem">
-                                            <a class="dropdown-item" href="javascript:void(0)">Deactivate Company</a>
+                                            <a class="dropdown-item" href="javascript:void(0)" (click)="openModal(deactivateCompany)">Deactivate Company</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -488,3 +488,14 @@
 <!-- activity-log-sidebar aside -->
 <div class="aside-overlay" *ngIf="companyDetailsAsideMenuState === 'in'"></div>
 <company-details-sidebar [class]="companyDetailsAsideMenuState" *ngIf="companyDetailsAsideMenuState === 'in'" (closeEvent)="toggleCompanyDetailsAsidePane()"></company-details-sidebar>
+
+
+<!-- MoveCompany Modal -->
+<ng-template #MoveCompany>
+    <move-company></move-company>
+</ng-template>
+
+<!-- MoveCompany Modal -->
+<ng-template #deactivateCompany>
+    <deactivate-company></deactivate-company>
+</ng-template>

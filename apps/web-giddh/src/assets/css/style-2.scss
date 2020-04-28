@@ -1813,7 +1813,14 @@ fieldset[disabled] .btn-primary:hover {
     color: $white;
     border-color: $chetwode-blue;
 }
-
+.success-btn {
+    font-size: 14px;
+    background: $success-green;
+    color: $white;
+}
+.btn-round {
+    border-radius: 90px;
+}
 #actionPane .btn-default {
     background: #e6e6e6;
     color: #333;

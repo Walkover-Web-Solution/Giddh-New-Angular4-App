@@ -29,6 +29,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     public companyTransactions: any;
     public moment = moment;
     public modalRef: BsModalRef;
+    public message: BsModalRef;
     public isLoading: boolean = true;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public activeCompanyUniqueName$: Observable<string>;
@@ -186,6 +187,20 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
             document.querySelector('body').classList.remove('fixed');
         }
     }
+
+    openModal(MoveCompany: TemplateRef<any>, deactivateCompany: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(MoveCompany);
+        this.modalRef = this.modalService.show(deactivateCompany);
+    }
+
+    confirm(): void {
+        this.modalRef.hide();
+      }
+
+      decline(): void {
+        this.modalRef.hide();
+      }
+
 
 
     // public getSubscriptionList() {

@@ -36,6 +36,11 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public isUpdateCompanySuccess$: Observable<boolean>;
     public isSwitchPlanInProcess: boolean = false;
     public selectNewPlan: boolean = false;
+    public isShow = true;
+
+    toggleDisplay() {
+        this.isShow = !this.isShow;
+    }
 
     @Output() public isSubscriptionPlanShow = new EventEmitter<boolean>();
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
