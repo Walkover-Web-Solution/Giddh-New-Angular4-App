@@ -8869,6 +8869,13 @@ input.checkbox-custom[type="checkbox"] {
 .select2-parent.select2-ledger .update-ledger-account input {
     padding-left: 4px !important;
 }
+.select2-parent.select2-ledger .update-ledger-account  sh-select .header.open input:placeholder-shown {
+    padding-left: 10px !important;
+}
+.select2-parent.select2-ledger .update-ledger-account sh-select .header input {
+    padding-left: 3px !important;
+    font-size: 13px !important;
+}
 .select2-parent.select2-ledger
     .update-ledger-account
     input.form-control.focused {
@@ -8887,7 +8894,7 @@ input.checkbox-custom[type="checkbox"] {
 .select2-parent.select2-ledger
     .ledger-account-label
     input.form-control.focused {
-    padding-left: 10px !important;
+    padding-left: 13px !important;
 }
 
 .inventory-page.modal-open .receipt-note-modal  {
