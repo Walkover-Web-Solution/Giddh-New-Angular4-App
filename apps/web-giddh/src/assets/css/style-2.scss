@@ -1822,7 +1822,7 @@ fieldset[disabled] .btn-primary:hover {
 
 .ledger-main .form-control {
     background: $white !important;
-    height: 45px;
+    height: 48px;
 }
 
 .ledger-header thead th {
@@ -3115,6 +3115,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .ledger-main .form-control:focus {
     border: 1px solid $deep-sky-blue !important;
     border-radius: 0 !important;
+    box-shadow: none;
 }
 
 .uncfr .form-control {
@@ -8871,10 +8872,17 @@ input.checkbox-custom[type="checkbox"] {
 .select2-parent.select2-ledger
     .update-ledger-account
     input.form-control.focused {
+    padding-left: 13px !important;
+}
+.select2-parent.select2-ledger .ledger-account-label sh-select .header.open input:placeholder-shown {
     padding-left: 10px !important;
 }
 .select2-parent.select2-ledger .ledger-account-label input.form-control {
-    padding-left: 1px !important;
+    padding-left: 5px !important;
+}
+.select2-parent.select2-ledger .ledger-account-label sh-select .header input {
+    padding-left: 3px !important;
+    font-size: 13px !important;
 }
 .select2-parent.select2-ledger
     .ledger-account-label
