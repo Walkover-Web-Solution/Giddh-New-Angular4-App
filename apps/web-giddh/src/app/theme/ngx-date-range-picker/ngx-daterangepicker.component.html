@@ -9,6 +9,9 @@
     <div class="ranges" *ngIf="ranges?.length">
         <!-- loop over ranges -->
         <div class="range-container">  
+            <div class="date-range-close" *ngIf="isMobileScreen" (click)="closeDatePicker()">
+              <img src="../../../assets/images/close-icon.svg">  <span class="pl-2">Date range</span>
+            </div>
             <ul class="range-list">
                 <li class="menu-li custom-select-btn"  type="button"  (click)="visibleCalnderOn();">
                     <button>
@@ -38,7 +41,7 @@
                         <span class="available prev angle-down"></span>
                     </button>
                     <ul class="sub-ranges-cal menu-drawer financial-year-dropdown" *ngIf="dropdownShow && financialYears && financialYears.length > 0">
-                        <li *ngFor="let financialYear of financialYears;">
+                        <li *ngFor="let financialYear of financialYears;" (click)="closeDatePicker()">
                             <button type="button" (click)="clickFinancialYear(financialYear)">{{financialYear.label}}</button>
                         </li>
                     </ul>
