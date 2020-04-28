@@ -89,7 +89,7 @@ tr.aging-table-top td {
 }
 
 @media (max-width: 768px) {
-    .custumerRightWrap h4.mb-1.pdR2 {
+    .customer-right-wrap h4.mb-1.pdR2 {
         margin-bottom: 0;
     }
     .contact-main .table-aging-report {
@@ -109,7 +109,7 @@ tr.aging-table-top td {
         z-index: 1;
         padding-top: 10px;
     }
-    .custumerRightWrap {
+    .customer-right-wrap {
         padding-bottom: 10px;
         padding: 0 15px 10px;
     }
@@ -126,7 +126,7 @@ tr.aging-table-top td {
     }
 }
 @media (max-width: 575px) {
-    .custumerRightWrap h4.mb-1.pdR2 {
+    .customer-right-wrap h4.mb-1.pdR2 {
         margin-bottom: 10px;
         padding-left: 15px;
     }
@@ -162,7 +162,7 @@ tr.aging-table-top td {
         padding: 0;
         float: none;
     }
-    .custumerRightWrap .text-right {
+    .customer-right-wrap .text-right {
         text-align: left !important;
         padding-left: 5px !important;
     }

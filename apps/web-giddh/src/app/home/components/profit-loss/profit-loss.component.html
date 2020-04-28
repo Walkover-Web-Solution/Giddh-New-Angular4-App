@@ -29,24 +29,24 @@
                     <div class="noDataAvailable" *ngIf="!dataFound">
                         <img src="{{imgPath}}noDataChart.svg" alt="no data found">
                     </div>
-                    <div class="clearfix mrB2">
-                        <div class="">
+                    <div class="clearfix mb-2 total-income">
+                        <div>
                             <span class="mrB1 due-amount">Net Profit/Loss</span>
                             <span class="total-amount pull-right">
                                 {{netProfitLossType}}<span>{{amountSettings.baseCurrencySymbol}}</span>
                                 {{ netProfitLoss | giddhCurrency }}</span>
                         </div>
                     </div>
-                    <div class="clearfix mrB2">
-                        <div class="">
+                    <div class="clearfix mb-2 total-income">
+                        <div>
                             <span class="mrB1 due-amount">Total Income</span>
                             <span
                                 class="total-amount pull-right total-expenses-text"><span>{{amountSettings.baseCurrencySymbol}}</span>
                                 {{ totalIncome | giddhCurrency }} {{totalIncomeType}}</span>
                         </div>
                     </div>
-                    <div class="clearfix mrB2">
-                        <div class="">
+                    <div class="clearfix mb-2 total-income">
+                        <div>
                             <span class="mrB1 due-amount">Total Expenses</span>
                             <span
                                 class="total-amount pull-right total-income-text"><span>{{amountSettings.baseCurrencySymbol}}</span>

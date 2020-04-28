@@ -57,3 +57,25 @@ span.icon-rupees {
 .panel-body small {
     color: $dark-gray;
 }
+@media(max-width:360px){
+    .dashboard-filter{
+        display: flex;
+        float: none !important;
+        margin-top: 10px;
+    }
+    .due-amount{
+        font-size: 14px;
+        display: block;
+    }
+    .vendor-due-text , .customer-due-text{
+        font-size: 14px;
+        float: none !important;
+    }
+    .panel-body  small{
+        display: block;
+        float: none !important;
+    }
+    .due{
+        margin-bottom: 10px;
+    }
+}

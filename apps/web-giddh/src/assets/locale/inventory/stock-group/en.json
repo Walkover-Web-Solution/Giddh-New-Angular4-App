@@ -1,0 +1,7 @@
+{
+    "name" : "Name",
+    "unique_name" : "Unique Name",
+    "is_subgroup" : "Is it a sub group?",
+    "parent_group" : "Parent Group",
+    "parent_group_placeholder" : "Select Parent Group"
+}

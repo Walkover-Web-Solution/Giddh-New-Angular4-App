@@ -1,0 +1,51 @@
+{
+    "page_heading" : "Search",
+    "filter_by_account" : "Filter by account",
+    "whose" : "whose",
+    "is" : "is",
+    "than" : "than",
+    "to" : "to",
+    "and" : "and",
+    "add_new_query" : "Add New Query",
+    "delete_row" : "Delete Row",
+    "send_as" : "Send as",
+    "query_types" : {
+        "closing_balance" : "Closing Balance",
+        "opening_balance" : "Opening Balance",
+        "cr_total" : "Cr. total",
+        "dr_total" : "Dr. total"
+    },
+    "query_differs" : {
+        "less" : "Less",
+        "greater" : "Greater",
+        "equals" : "Equals"
+    },
+    "balance_type" : {
+        "cr" : "CR",
+        "dr" : "DR"
+    },
+    "unique_name" : "UniqueName",
+    "parent" : "Parent",
+    "opening_balance" : "Opening Bal.",
+    "dr_total" : "DR Total",
+    "cr_total" : "CR Total",
+    "closing_balance" : "Closing Bal.",
+    "subject_label" : "Enter Subject",
+    "subject_placeholder" : "Enter subject here",
+    "message_body_label" : "Type message body",
+    "message_body_placeholder" : "start typing your message here",
+    "message_body_tips" : "Tip: Click on the tabs below to insert data in your message body. Anything followed by '%s_' represents the position where actual data will be placed.",
+    "email_variables" : {
+        "opening_balance" : "Opening Balance",
+        "closing_balance" : "Closing Balance",
+        "credit_total" : "Credit Total",
+        "debit_total" : "Debit Total",
+        "from_date" : "From Date",
+        "to_date" : "To Date",
+        "magic_link" : "Magic Link",
+        "account_name" : "Account Name"
+    },
+    "select_groups_label" : "Select Groups",
+    "select_groups_placeholder" : "Search Groups",
+    "from_to" : "From - To"
+}

@@ -1171,17 +1171,10 @@ ul.sub-list {
 .aging-table .table-checkbox {
     position: absolute;
     left: 5px;
-    top: 7px;
 }
-
 .sorting-box a.active {
     background: none;
 }
-
-/* .pagination-main {
-    background: $white;
-} */
-
 .invoice-btn.show {
     display: inline-block !important;
 }
@@ -1822,7 +1815,7 @@ fieldset[disabled] .btn-primary:hover {
 
 .ledger-main .form-control {
     background: $white !important;
-    height: 45px;
+    height: 48px;
 }
 
 .ledger-header thead th {
@@ -3115,6 +3108,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .ledger-main .form-control:focus {
     border: 1px solid $deep-sky-blue !important;
     border-radius: 0 !important;
+    box-shadow: none;
 }
 
 .uncfr .form-control {
@@ -6684,20 +6678,9 @@ table td[class*=col-]:last-child {
     margin-left: 5px;
 }
 
-.overdue_chart {
+.overdue-chart , .profit-loss-chart {
     margin: 0 auto;
 }
-
-/* .overdue_chart {
-    width: 100% !important;
-    height: 174px !important;
-}
-
-.overdue_chart svg {
-    width: 100% !important;
-    height: 174px !important;
-} */
-
 .condition_tag {
     position: absolute;
     top: 2px;
@@ -7901,17 +7884,6 @@ section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
 .contact-main.customerPage .ps-content {
     padding-bottom: 0;
 }
-
-.aging-table .vendor-customer-name .table-checkbox {
-    position: absolute;
-    left: 5px;
-    top: 13px;
-}
-
-.aging-table tr:hover .vendor-customer-name .table-checkbox {
-    top: 13px;
-}
-
 .noBrdRdsModal {
     font-family: "opensans-regular";
 }
@@ -8037,7 +8009,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     color: var(--dark-blue01);
 }
 
-.custumerRightWrap {
+.customer-right-wrap {
     padding-right: 0;
 }
 
@@ -8180,24 +8152,24 @@ span.red-text {
     font-size: 14px;
 }
 
-.total-salesTabs .nav.nav-tabs {
+.total-sales-tabs .nav.nav-tabs {
     position: absolute;
     top: 0;
     right: 12px;
 }
 
-.total-salesTabs .nav-tabs {
+.total-sales-tabs .nav-tabs {
     border-bottom: none;
 }
 
-.total-salesTabs .nav-tabs li a {
+.total-sales-tabs .nav-tabs li a {
     color: #484848;
     font-size: 16px;
     padding: 0 5px;
     position: relative;
 }
 
-.total-salesTabs .nav-tabs li a:after {
+.total-sales-tabs .nav-tabs li a:after {
     position: absolute;
     content: "";
     height: 15px;
@@ -8207,28 +8179,28 @@ span.red-text {
     top: 5px;
 }
 
-.total-salesTabs .nav-tabs li:last-child a:after {
+.total-sales-tabs .nav-tabs li:last-child a:after {
     display: none;
 }
 
-.total-salesTabs .nav-tabs > li.active a {
+.total-sales-tabs .nav-tabs > li.active a {
     font-family: "LatoWebBold";
 }
 
-.total-salesTabs .nav-tabs > li.active > a,
-.total-salesTabs .nav-tabs > li.active > a:focus,
-.total-salesTabs .nav-tabs > li.active > a:hover {
+.total-sales-tabs .nav-tabs > li.active > a,
+.total-sales-tabs .nav-tabs > li.active > a:focus,
+.total-sales-tabs .nav-tabs > li.active > a:hover {
     border: none;
 }
 
-.total-salesTabs .nav > li > a:focus,
-.total-salesTabs .nav > li > a:hover {
+.total-sales-tabs .nav > li > a:focus,
+.total-sales-tabs .nav > li > a:hover {
     text-decoration: none;
     background-color: transparent;
     border: none;
 }
 
-.total-salesTabs .nav-tabs > li > a {
+.total-sales-tabs .nav-tabs > li > a {
     border: none;
 }
 
@@ -8870,10 +8842,17 @@ input.checkbox-custom[type="checkbox"] {
 .select2-parent.select2-ledger
     .update-ledger-account
     input.form-control.focused {
+    padding-left: 13px !important;
+}
+.select2-parent.select2-ledger .ledger-account-label sh-select .header.open input:placeholder-shown {
     padding-left: 10px !important;
 }
 .select2-parent.select2-ledger .ledger-account-label input.form-control {
-    padding-left: 1px !important;
+    padding-left: 5px !important;
+}
+.select2-parent.select2-ledger .ledger-account-label sh-select .header input {
+    padding-left: 3px !important;
+    font-size: 13px !important;
 }
 .select2-parent.select2-ledger
     .ledger-account-label
@@ -8891,6 +8870,9 @@ input.checkbox-custom[type="checkbox"] {
 .modal-content{
     border: none !important;
 }
+.panel-block  .panel-body{
+    min-height: 350px;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -8904,7 +8886,7 @@ input.checkbox-custom[type="checkbox"] {
         top: 96px;
     }
     #setting-tab .tab-container .nav.nav-tabs {
-        margin: 0;
+        margin: 0 0 10px;
         padding: 10px 0px 0;
         white-space: nowrap;
         display: inline-block;
@@ -9386,6 +9368,9 @@ input.checkbox-custom[type="checkbox"] {
     body.hide-scroll-body{
         overflow-y: hidden;
     }
+    .panel-block .panel-body{
+        min-height: auto;
+    } 
 }
 
 @media (max-width: 575px) {
@@ -9533,7 +9518,7 @@ input.checkbox-custom[type="checkbox"] {
     .xs-left {
         text-align: left !important;
     }
-    .custumerRightWrap .text-right.xs-left {
+    .customer-right-wrap .text-right.xs-left {
         text-align: right !important;
     }
     .form_box.form-bg {

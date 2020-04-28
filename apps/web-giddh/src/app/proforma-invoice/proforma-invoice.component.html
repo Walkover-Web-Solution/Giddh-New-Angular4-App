@@ -101,7 +101,7 @@
                                                 <ng-container *ngIf="!isCashInvoice">
                                                     <sales-sh-select style="width:62.7%; float: left;" name="voucherDetails.customerName" #customerNameDropDown [options]="customerAcList$ | async" [(ngModel)]="invFormData.voucherDetails.customerUniquename" [customFilter]="customMoveGroupFilter" (noOptionsFound)="noResultsForCustomer($event)"
                                                         (selected)="onSelectCustomer($event);" [placeholder]="customerPlaceHolder" [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" (noResultsClicked)="addNewAccount()"
-                                                        [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="customerNotFoundText" (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)" [disabled]="isUpdateMode">
+                                                        [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="customerNotFoundText" (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)" [disabled]="isUpdateMode && invoiceType !== 'sales' && invoiceType !== 'cash'">
 
                                                         <ng-template #optionTemplate let-option="option">
                                                             <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
@@ -122,8 +122,7 @@
                                                 <!-- endregion -->
                                                 <!-- region if not cashinvoice show customer dropdown -->
                                                 <ng-container *ngIf="isCashInvoice">
-                                                    <input type="text" name="voucherDetails.customerName" [autofocus]="true" #inputCustomerName class="form-control cashInvoiceInput" [(ngModel)]="invFormData.voucherDetails.customerName" (change)="handleCustomerChange($event)" (blur)='selectDefaultbank()'
-                                                        [readOnly]="isUpdateMode">
+                                                    <input type="text" name="voucherDetails.customerName" [autofocus]="true" #inputCustomerName class="form-control cashInvoiceInput" [(ngModel)]="invFormData.voucherDetails.customerName" (change)="handleCustomerChange($event)" (blur)='selectDefaultbank()' [readOnly]="isUpdateMode && invoiceType !== 'sales' && invoiceType !== 'cash'">
                                                 </ng-container>
                                                 <!-- endregion -->
 
