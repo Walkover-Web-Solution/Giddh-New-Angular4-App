@@ -172,9 +172,9 @@
                         <!-- navigate to previous and next month buttons -->
                     </div>
                     <!-- table sticky days -->
-                    <div *ngFor="let calendarMonth of calendarMonths;">
+                    <div>
                         <div class="calendar" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
-                            <div class="calendar-table" *ngIf="calendarMonth && calendarMonth.start">
+                            <div class="calendar-table" *ngIf="!showMonthPicker">
                                 <table class="table-condensed sticky-header">
                                     <thead>
                                         <tr>
@@ -188,7 +188,6 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- month name -->
                     <!-- month selection -->
                     <div class="d-container" *ngIf="showMonthPicker" (mousewheel)="mouseUpYear($event)">
@@ -253,10 +252,10 @@
                 <!-- start date calendar container -->
                 <calendar-scroll [items]="calendarMonths" 
                     [childHeight]="itemHeight" 
-                    [style.max-height.px]="430" 
+                    [style.max-height.px]="300" 
                     (highLightedItemEmitter)="handleHighLightedItemEvent($event)" 
                     (scroll)="onScroll($event)" 
-                    *ngIf="showCalInRanges && !showMonthPicker">
+                    *ngIf="showCalInRanges && !showMonthPicker" (mousewheel)="mouseUp($event)">
                     <div *ngFor="let calendarMonth of calendarMonths;">
                         <div class="calendar" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
                             <div class="calendar-table" *ngIf="calendarMonth && calendarMonth.start">

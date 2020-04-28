@@ -197,6 +197,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public lastScrollTopPosition: number = 0;
     public isPreviousMonth: boolean = false;
     public allowedYears: any[] = [];
+    public scrollPosition: string = '';
     @ViewChild(ScrollComponent) public virtualScrollElem: ScrollComponent;
 
     constructor(
@@ -302,6 +303,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
     public closeCalander() {
         this.isMobileScreen = !this.isMobileScreen;
+    }
+    public closeDatePicker(){
+        document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
     }
     openModalWithClass(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(template,
@@ -1055,44 +1059,59 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     }
 
     mouseUp(e: MouseWheelEvent) {
-        if (e.deltaY < 0) {
-            if (this.mouseWheelEvents >= this.mouseWheelEventsRequired) {
-                this.mouseWheelEvents = 0;
-                if (this.singleDatePicker) {
-                    if ((!this.calendarVariables.start.maxDate ||
-                        this.calendarVariables.start.maxDate.isAfter(this.calendarVariables.start.calendar.lastDay)) &&
-                        (!this.linkedCalendars || this.singleDatePicker)) {
-                        this.goToNextMonth();
-                    }
-                } else {
-                    if (!this.calendarVariables.end.maxDate ||
-                        this.calendarVariables.end.maxDate.isAfter(this.calendarVariables.end.calendar.lastDay)) {
-                        this.goToNextMonth();
-                    }
-                }
+        if(e.deltaY < 0) {
+            this.scrollPosition = "top";
+
+            if(this.lastScrollTopPosition < 50) {
+                this.initialCalendarMonths = false;
+                this.goToPrevMonth();
             }
-        }
-        if (e.deltaY > 0) {
-            if (this.mouseWheelEvents >= this.mouseWheelEventsRequired) {
-                this.mouseWheelEvents = 0;
-                if (this.singleDatePicker) {
-                    if (!this.calendarVariables.start.minDate ||
-                        this.calendarVariables.start.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
-                        this.goToPrevMonth();
-                    }
-                } else {
-                    if (!this.calendarVariables.start.minDate ||
-                        this.calendarVariables.start.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
-                        this.goToPrevMonth();
-                    }
-                }
-            }
+
+            // e.stopPropagation();
+            // e.stopImmediatePropagation();
+            // return false;
+        } else if (e.deltaY > 0) {
+            this.scrollPosition = "bottom";
         }
 
-        this.mouseWheelEvents++;
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-        return false;
+        // if (e.deltaY < 0) {
+        //     if (this.mouseWheelEvents >= this.mouseWheelEventsRequired) {
+        //         this.mouseWheelEvents = 0;
+        //         if (this.singleDatePicker) {
+        //             if ((!this.calendarVariables.start.maxDate ||
+        //                 this.calendarVariables.start.maxDate.isAfter(this.calendarVariables.start.calendar.lastDay)) &&
+        //                 (!this.linkedCalendars || this.singleDatePicker)) {
+        //                 this.goToNextMonth();
+        //             }
+        //         } else {
+        //             if (!this.calendarVariables.end.maxDate ||
+        //                 this.calendarVariables.end.maxDate.isAfter(this.calendarVariables.end.calendar.lastDay)) {
+        //                 this.goToNextMonth();
+        //             }
+        //         }
+        //     }
+        // }
+        // if (e.deltaY > 0) {
+        //     if (this.mouseWheelEvents >= this.mouseWheelEventsRequired) {
+        //         this.mouseWheelEvents = 0;
+        //         if (this.singleDatePicker) {
+        //             if (!this.calendarVariables.start.minDate ||
+        //                 this.calendarVariables.start.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
+        //                 this.goToPrevMonth();
+        //             }
+        //         } else {
+        //             if (!this.calendarVariables.start.minDate ||
+        //                 this.calendarVariables.start.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
+        //                 this.goToPrevMonth();
+        //             }
+        //         }
+        //     }
+        // }
+
+        // this.mouseWheelEvents++;
+        // e.stopPropagation();
+        // e.stopImmediatePropagation();
+        // return false;
     }
 
     mouseUpYear(e: MouseWheelEvent) {
@@ -1819,15 +1838,14 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     @HostListener('scroll', ['$event'])
     onScroll(event: any) {
         // visible height + pixel scrolled >= total height - 200 (deducted 200 to load list little earlier before user reaches to end)
-        if (event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 300)) {
+        if (this.scrollPosition === "bottom" && event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 300)) {
             this.initialCalendarMonths = false;
-            this.lastScrollTopPosition = event.target.scrollTop;
             this.goToNextMonth();
-        } else if(this.lastScrollTopPosition - event.target.scrollTop >= 20) {
-            this.initialCalendarMonths = false;
-            this.lastScrollTopPosition = event.target.scrollTop;
-            this.goToPrevMonth(); 
         }
+
+        this.lastScrollTopPosition = event.target.scrollTop;
+
+        console.log(this.lastScrollTopPosition);
     }
 
     public addMonthInCalendarMonths(side: string): void {
@@ -1880,11 +1898,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
                 this.calendarMonths[existingMonthsLength].end = this.calendarVariables.end;
             }
         }
-
-        //console.log(this.calendarMonths);
     }
 
-    public initCalendar() {
+    public initCalendar(): void {
         this.renderCalendar(DateType.start);
         this.renderCalendar(DateType.end);
 
