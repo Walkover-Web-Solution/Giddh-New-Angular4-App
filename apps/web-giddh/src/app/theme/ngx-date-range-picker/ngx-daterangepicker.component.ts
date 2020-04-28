@@ -114,9 +114,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     @ViewChild('startDateElement') startDateElement: ElementRef;
     @ViewChild('endDateElement') endDateElement: ElementRef;
     @Input()
-    minDate: _moment.Moment = moment().subtract(10, 'years');
+    minDate: _moment.Moment;
     @Input()
-    maxDate: _moment.Moment = moment().add(5, 'years');
+    maxDate: _moment.Moment;
     @Input()
     autoApply: boolean = false;
     @Input()
@@ -196,6 +196,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public initialCalendarMonths: boolean = true;
     public lastScrollTopPosition: number = 0;
     public isPreviousMonth: boolean = false;
+    public allowedYears: any[] = [];
     @ViewChild(ScrollComponent) public virtualScrollElem: ScrollComponent;
 
     constructor(
@@ -211,7 +212,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         this.getFinancialYears();
     }
 
-    
     _locale: LocaleConfig = {};
 
     get locale(): any {
@@ -1750,6 +1750,16 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
                             moment()
                         ];
                     }
+
+                    if(this.minDate === undefined) {
+                        this.minDate = moment(moment(res.body.financialYears[0].financialYearStarts, GIDDH_DATE_FORMAT).toDate());
+                    }
+
+                    if(this.maxDate === undefined) {
+                        this.maxDate = moment(moment(res.body.financialYears[res.body.financialYears.length - 1].financialYearEnds, GIDDH_DATE_FORMAT).toDate());
+                    }
+
+                    this.getAllYearsBetweenDates();
                 }
             }
         });
@@ -1882,5 +1892,17 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         //     this.goToPrevMonth();
         //     this.goToNextMonth();
         // }, 500);
+    }
+
+    public getAllYearsBetweenDates(): void {
+        let difference: number;
+        difference = new Date(this.maxDate.toDate()).getFullYear() - new Date(this.minDate.toDate()).getFullYear();
+        
+        for(let loop = 0; loop < difference; loop++) {
+            let loopYear = new Date(this.minDate.toDate());
+            loopYear.setFullYear(loopYear.getFullYear() + loop);
+
+            this.allowedYears.push(loopYear.getFullYear());
+        }
     }
 }

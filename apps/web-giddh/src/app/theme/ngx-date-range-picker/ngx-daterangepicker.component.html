@@ -189,159 +189,60 @@
                         </div>
                     </div>
 
-
-
                     <!-- month name -->
                     <!-- month selection -->
                     <div class="d-container" *ngIf="showMonthPicker" (mousewheel)="mouseUpYear($event)">
-                        <div>
+                        <div *ngFor="let year of allowedYears; let i = index;">
                             <h2>
-                                {{ calendarVariables?.start?.calendar[1][1].format(" YYYY")}}</h2>
-                            <div class="dropdown-containt">
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),0)">Jan
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),1)">Feb
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),2)">Mar
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),3)">Apr
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),4)">May
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),5)">June
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),6)">July
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),7)">Aug
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),8)">Sept
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),9)">Oct
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),10)">Nov
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().year(),11)">Dec
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <h2>
-                                {{ calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').format(" YYYY")}}
+                                {{ minDate.clone().add(i, 'year').format(" YYYY")}}
                             </h2>
                             <div class="dropdown-containt">
                                 <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),0)">
+                                    (click)="setMonth(minDate.clone().add(i, 'year').year(),00)">
                                     Jan
                                 </div>
                                 <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),1)">
+                                    (click)="setMonth(minDate.clone().add(i, 'year').year(),01)">
                                     Feb
                                 </div>
                                 <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),2)">
+                                    (click)="setMonth(minDate.clone().add(i, 'year').year(),02)">
                                     Mar
                                 </div>
                                 <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),3)">
+                                    (click)="setMonth(minDate.clone().add(i, 'year').year(),03)">
                                     Apr
                                 </div>
                                 <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),4)">
+                                    (click)="setMonth(minDate.clone().add(i, 'year').year(),04)">
                                     May
                                 </div>
                                 <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),5)">
+                                    (click)="setMonth(minDate.clone().add(i, 'year').year(),05)">
                                     June
                                 </div>
                                 <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),6)">
+                                    (click)="setMonth(minDate.clone().add(i, 'year').year(),06)">
                                     July
                                 </div>
                                 <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),7)">
+                                    (click)="setMonth(minDate.clone().add(i, 'year').year(),07)">
                                     Aug
                                 </div>
                                 <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),8)">
+                                    (click)="setMonth(minDate.clone().add(i, 'year').year(),08)">
                                     Sept
                                 </div>
                                 <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),9)">
+                                    (click)="setMonth(minDate.clone().add(i, 'year').year(),09)">
                                     Oct
                                 </div>
                                 <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),10)">
+                                    (click)="setMonth(minDate.clone().add(i, 'year').year(),10)">
                                     Nov
                                 </div>
                                 <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(1, 'year').year(),11)">
-                                    Dec
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <h2>
-                                {{ calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').format(" YYYY")}}
-                            </h2>
-                            <div class="dropdown-containt">
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),00)">
-                                    Jan
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),01)">
-                                    Feb
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),02)">
-                                    Mar
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),03)">
-                                    Apr
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),04)">
-                                    May
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),05)">
-                                    June
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),06)">
-                                    July
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),07)">
-                                    Aug
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),08)">
-                                    Sept
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),09)">
-                                    Oct
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),10)">
-                                    Nov
-                                </div>
-                                <div class="d-month"
-                                    (click)="setMonth(calendarVariables?.start?.calendar[1][1].clone().add(2, 'year').year(),11)">
+                                    (click)="setMonth(minDate.clone().add(i, 'year').year(),11)">
                                     Dec
                                 </div>
                             </div>
