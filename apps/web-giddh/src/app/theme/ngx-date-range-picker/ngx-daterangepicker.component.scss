@@ -1484,7 +1484,7 @@ td span {
 @media(max-height:768px){
     .drops-down-right{
         height: 400px;
-        overflow: hidden !important;
+        overflow: auto !important;
         .ranges {
             height: 400px;
             overflow-y: auto;
