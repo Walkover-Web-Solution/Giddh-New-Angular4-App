@@ -303,6 +303,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public closeCalander() {
         this.isMobileScreen = !this.isMobileScreen;
     }
+    public closeDatePicker(){
+        document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
+    }
     openModalWithClass(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(template,
         Object.assign({}, { class: 'edit-modal modal-small' })
