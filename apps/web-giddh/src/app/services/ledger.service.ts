@@ -408,16 +408,23 @@ export class LedgerService {
     }
 
     /**
-     * This will download the columnar report
+     * This will download/JSON to show the columnar report
      *
-     * @param {string} companyUniqueName
-     * @param {string} groupUniqueName
-     * @param {*} request
+     * @param {string} companyUniqueName Company unique name
+     * @param {string} groupUniqueName Group unique name
+     * @param {*} request Object, Request body
+     * @param {boolean} isShowData True if columnar report table need to show instead of download
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof LedgerService
      */
-    public downloadColumnarReport(companyUniqueName: string, groupUniqueName: string, request: any): Observable<BaseResponse<any, any>> {
-        return this._http.post(this.config.apiUrl + LEDGER_API.GET_COLUMNAR_REPORT.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+    public downloadColumnarReport(companyUniqueName: string, groupUniqueName: string, request: any, isShowData?: boolean): Observable<BaseResponse<any, any>> {
+        let URL: string = '';
+        if (isShowData) {
+            URL = this.config.apiUrl + LEDGER_API.GET_COLUMNAR_REPORT + '?fileType=json';
+        } else {
+            URL = this.config.apiUrl + LEDGER_API.GET_COLUMNAR_REPORT;
+        }
+        return this._http.post(URL.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             .replace(':groupUniqueName', groupUniqueName), request
         ).pipe(
             map((res) => {

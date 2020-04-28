@@ -26,8 +26,7 @@
         </div>
         <div class="row">
             <div class="col-sm-3 col-xs-12 mb-2 clear-both">
-                <sh-select [options]="flatGroupsOptions" [placeholder]="'Group *'" name="group"
-                    (selected)="selectGroup($event);" [forceClearReactive]="forceClear$ | async"></sh-select>
+                <sh-select [options]="flatGroupsOptions" [placeholder]="'Group *'" name="group" (selected)="selectGroup($event);" [forceClearReactive]="forceClear$ | async"></sh-select>
             </div>
         </div>
         <div class="row">
@@ -41,10 +40,14 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-3 col-xs-12 mb-2 clear-both">
-                <button class="btn btn-pink " [disabled]="!isFormValid() || isLoading" (click)="exportReport();">Export</button>
+            <div class="col-sm-3 col-xs-6 mb-2 clear-both">
+                <button class="btn btn-pink " [disabled]="!isFormValid() || isLoading" (click)="exportReport(false);">Export</button>
+            </div>
+            <div class="col-sm-3 col-xs-6 mb-2 clear-both">
+                <button class="btn btn-pink " [disabled]="!isFormValid() || isLoading" (click)="exportReport(true);">Show</button>
             </div>
         </div>
-        
+
     </div>
 </div>
+<columnar-report-table-component [columnarReportResponse]="columnarReportResponse"></columnar-report-table-component>
