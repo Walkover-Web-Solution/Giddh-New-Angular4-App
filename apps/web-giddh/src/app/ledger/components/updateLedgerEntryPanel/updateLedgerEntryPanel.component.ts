@@ -32,7 +32,7 @@ import { AccountResponse } from '../../../models/api-models/Account';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { PettyCashResonse } from '../../../models/api-models/Expences';
 import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
-import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
@@ -86,6 +86,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @ViewChild('tax') public taxControll: TaxControlComponent;
     @ViewChild('updateBaseAccount') public updateBaseAccount: ModalDirective;
     @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
+    /** Advance receipt remove confirmation modal reference */
+    @ViewChild('advanceReceiptRemoveConfirmationModal') public advanceReceiptRemoveConfirmationModal: ModalDirective;
 
     /** RCM popup instance */
     @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
@@ -177,10 +179,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public totalAdjustedAmount: number = 0;
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
-
     /** True, if all the transactions are of type 'Tax' or 'Reverse Charge' */
     private taxOnlyTransactions: boolean;
-
+    /** Remove Advance receipt confirmation flag */
+    public confirmationFlag: string = '';
+    /** Remove Advance receipt confirmation message */
+    public removeAdvanceReceiptConfirmationMessage: string = 'If you change the type of this receipt, all the related advance receipt adjustments in invoices will be removed. Are you sure you want to proceed?';
     constructor(
         private _accountService: AccountService,
         private _ledgerService: LedgerService,
@@ -232,7 +236,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
             }
         });
-        this.store.pipe(select(appState => appState.company), take(1)).subscribe((companyData: CurrentCompanyState) => {
+        this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
             }
@@ -1169,7 +1173,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public openHeaderDropDown() {
-        if (!this.vm.selectedLedger.voucherGenerated) {
+        if (!this.vm.selectedLedger.voucherGenerated || this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.sales) {
             this.openDropDown = true;
         } else {
             this.openDropDown = false;
@@ -1278,6 +1282,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.shouldShowAdvanceReceiptMandatoryFields) {
             this.vm.generatePanelAmount();
         }
+        if (!this.isAdvanceReceipt) {
+            if (this.isAdjustedInvoicesWithAdvanceReceipt && this.vm.selectedLedger && this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.receipt) {
+                this.advanceReceiptRemoveConfirmationModal.show();
+            }
+        }
         this.vm.generateGrandTotal();
         this.vm.generateCompoundTotal();
     }
@@ -1310,7 +1319,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public handleQuantityChange(value: string): void {
-        this.vm.stockTrxEntry.inventory.quantity = Number(this.vm.stockTrxEntry.inventory.quantity);
+        if (this.vm && this.vm.stockTrxEntry && this.vm.stockTrxEntry.inventory) {
+            this.vm.stockTrxEntry.inventory.quantity = Number(this.vm.stockTrxEntry.inventory.quantity);
+        }
         this.vm.inventoryQuantityChanged(value);
     }
 
@@ -1501,6 +1512,19 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.adjustedInvoiceAmountChange();
         } else if (this.isAdjustedWithAdvanceReceipt && this.vm.selectedLedger.voucherGeneratedType === 'sales') {
             this.adjustedReceiptsAmountChange();
+        }
+    }
+    /**
+     * Advance receipt adjustment remove model action response
+     *
+     * @param {*} userResponse  Action message
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public onAdvanceReceiptRemoveCloseConfirmationModal(userResponse: any): void {
+        if (userResponse) {
+            this.isAdvanceReceipt = !userResponse.response;
+            this.handleAdvanceReceiptChange();
+            this.advanceReceiptRemoveConfirmationModal.hide();
         }
     }
 }

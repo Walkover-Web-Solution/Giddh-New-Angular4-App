@@ -2,7 +2,7 @@ import { IUlist } from './interfaces/ulist.interface';
 
 export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
-    { type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher' },
+    // { type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher' },
     { type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', additional: { tab: 'sales', tabIndex: 0 } },
     { type: 'MENU', name: 'E-way bill', uniqueName: '/pages/invoice/ewaybill' },
     // {type: 'MENU', name: 'E-way Generate', uniqueName: '/pages/invoice/ewaybill/create'},
@@ -76,7 +76,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
     { type: 'MENU', name: 'Vat Report', uniqueName: '/pages/vat-report' },
     { type: 'MENU', name: 'Import Data from TALLY', uniqueName: '/pages/tallysync' },
-    // { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
+    { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules'},
     { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: { tab: 'customer', tabIndex: 0 } },
     { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: { tab: 'vendor', tabIndex: 0 } },
     { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/aging-report', additional: { tab: 'aging-report', tabIndex: 1 } },
@@ -117,9 +117,9 @@ export let DEFAULT_MENUS_ORIGINAL: IUlist[] = [
     {
         type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', isRemoved: false, pIndex: 2, additional: { tab: 'sales', tabIndex: 0 }
     },
-    {
-        type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher', isRemoved: false, pIndex: 1
-    },
+    // {
+    //     type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher', isRemoved: false, pIndex: 1
+    // },
     {
         type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report', isRemoved: false, pIndex: 9
     },

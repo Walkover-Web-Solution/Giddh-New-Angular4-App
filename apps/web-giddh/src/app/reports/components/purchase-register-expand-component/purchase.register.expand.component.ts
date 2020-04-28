@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
-import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
+import { ReportsDetailedRequestFilter, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ReplaySubject, Observable } from 'rxjs';
@@ -11,6 +10,8 @@ import { BsDropdownDirective } from 'ngx-bootstrap';
 import { FormControl } from '@angular/forms';
 import { CurrentPage } from '../../../models/api-models/Common';
 import { GeneralActions } from '../../../actions/general/general.actions';
+import { PAGINATION_LIMIT } from '../../../app.constant';
+import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 
 @Component({
     selector: 'purchase-register-expand',
@@ -22,12 +23,16 @@ export class PurchaseRegisterExpandComponent implements OnInit {
     public PurchaseRegisteDetailedItems: PurchaseRegisteDetailedResponse;
     public from: string;
     public to: string;
-    public PurchaseRegisteDetailedResponse$: Observable<PurchaseRegisteDetailedResponse>;
+    public purchaseRegisteDetailedResponse$: Observable<PurchaseRegisteDetailedResponse>;
     public isGetPurchaseDetailsInProcess$: Observable<boolean>;
     public isGetPurchaseDetailsSuccess$: Observable<boolean>;
     public getDetailedPurchaseRequestFilter: ReportsDetailedRequestFilter = new ReportsDetailedRequestFilter();
     public selectedMonth: string;
     public showSearchInvoiceNo: boolean = false;
+    /** Pagination limit for records */
+    public paginationLimit: number = PAGINATION_LIMIT;
+    /** True, if company country supports other tax (TCS/TDS) */
+    public isTcsTdsApplicable: boolean;
 
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     // searching
@@ -54,7 +59,7 @@ export class PurchaseRegisterExpandComponent implements OnInit {
     bsValue = new Date();
 
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private _generalActions: GeneralActions) {
-        this.PurchaseRegisteDetailedResponse$ = this.store.pipe(select(p => p.receipt.PurchaseRegisteDetailedResponse), takeUntil(this.destroyed$));
+        this.purchaseRegisteDetailedResponse$ = this.store.pipe(select(p => p.receipt.PurchaseRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetPurchaseDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetPurchaseDetailsInProcess), takeUntil(this.destroyed$));
         this.isGetPurchaseDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetPurchaseDetailsSuccess), takeUntil(this.destroyed$));
     }
@@ -66,7 +71,11 @@ export class PurchaseRegisterExpandComponent implements OnInit {
         this.getDetailedPurchaseRequestFilter.count = 50;
         this.getDetailedPurchaseRequestFilter.q = '';
 
-
+        this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            }
+        });
         this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
             if (params.from && params.to) {
                 this.from = params.from;
@@ -77,7 +86,7 @@ export class PurchaseRegisterExpandComponent implements OnInit {
         });
         this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
         this.getCurrentMonthYear();
-        this.PurchaseRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: PurchaseRegisteDetailedResponse) => {
+        this.purchaseRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: PurchaseRegisteDetailedResponse) => {
             if (res) {
                 this.PurchaseRegisteDetailedItems = res;
                 _.map(this.PurchaseRegisteDetailedItems.items, (obj: any) => {

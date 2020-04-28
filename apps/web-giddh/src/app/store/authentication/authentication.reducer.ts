@@ -84,6 +84,7 @@ export interface SessionState {
     currentCompanySubscriptionPlan: CreateCompanyUsersPlan;
     totalNumberOfcompanies: number;
     currentCompanyCurrency: CompanyCountry;
+    financialYearChosenInReport: string;
 }
 
 /**
@@ -139,7 +140,8 @@ const sessionInitialState: SessionState = {
     userSelectedSubscriptionPlan: null,
     currentCompanySubscriptionPlan: null,
     currentCompanyCurrency: null,
-    totalNumberOfcompanies: 0
+    totalNumberOfcompanies: 0,
+    financialYearChosenInReport: ''
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
@@ -745,6 +747,10 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
 
         case CompanyActions.USER_REMOVE_COMPANY_CREATE_SESSION:
             return Object.assign({}, state, { createCompanyUserStoreRequestObj: null });
+        case CompanyActions.SET_USER_CHOSEN_FINANCIAL_YEAR:
+            return Object.assign({}, state, { financialYearChosenInReport: action.payload });
+        case CompanyActions.RESET_USER_CHOSEN_FINANCIAL_YEAR:
+            return Object.assign({}, state, { financialYearChosenInReport: '' });
         default:
             return state;
     }

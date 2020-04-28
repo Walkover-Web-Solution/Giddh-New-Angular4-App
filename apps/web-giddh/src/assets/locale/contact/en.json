@@ -1,0 +1,23 @@
+{
+    "filter_toggle" : "Enable / Disable Column",
+    "aging_report" : "Aging Report",
+    "opening" : "Opening",
+    "closing" : "Closing",
+    "comment" : "Comment",
+    "new_customer" : "+ New Customer",
+    "new_vendor" : "+ New Vendor",
+    "contacts" : "Contacts",
+    "pay_to" : "Pay to",
+    "amount_due" : "Amount Due Rs",
+    "pay_through_cashfree" : "Pay through Cash Free",
+    "balance_in_account" : "Balance in account Rs.",
+    "add_cashfree_details" : "Add Cashfree details",
+    "client_id" : "Client Id",
+    "client_secret_key" : "Client Secret Key",
+    "link_account" : "Link Account",
+    "automatic_capture_on_payment" : "Automatic capture on payment",
+    "enter_subject" : "Enter Subject",
+    "type_message_body" : "Type message body",
+    "tip" : "Tip: Click on the tabs below to insert data in your message body. Anything followed by '%s_' represents the position where actual data will be placed.",
+    "enter_comment_here" : "Enter comment here"
+}
