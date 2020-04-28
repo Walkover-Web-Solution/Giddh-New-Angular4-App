@@ -1480,6 +1480,7 @@ td span {
     }   
 
 }
+
 @media(max-height:768px){
     .drops-down-right{
         height: 400px;
@@ -1503,5 +1504,19 @@ td span {
         }
     }
 }
-
+@media(max-width:767px){
+    .md-drppicker{
+        &.double {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            border-radius: 0;
+    
+        } 
+        &.calendar {
+            max-width: 100%;
+            margin: 4px;
+        }
+    }
+}
 
