@@ -121,6 +121,7 @@
 }
 .active {
     color: $light-green;
+    font-size: 14px;
 }
 .green-dote, .red-dote {
     width: 9px;
@@ -170,6 +171,9 @@
 .associated-companies-list {
     max-height: 600px;
     overflow-y: auto;
+}
+.plan-row {
+    color: $nero;
 }
 
 @media only screen and (max-width: 1024px) {

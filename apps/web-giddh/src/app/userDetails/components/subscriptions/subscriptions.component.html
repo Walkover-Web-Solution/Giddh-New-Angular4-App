@@ -65,10 +65,10 @@
                                             <a class="dropdown-item" (click)="toggleActivityLogAsidePane($event)" href="javascript:void(0)">Activity Logs</a>
                                         </li>
                                         <li role="menuitem">
-                                            <a class="dropdown-item" href="javascript:void(0)">Upgrade Plan</a>
+                                            <a class="dropdown-item" href="javascript:void(0)" (click)="isPlanShow=true">Upgrade Plan</a>
                                         </li>
                                         <li role="menuitem">
-                                            <a class="dropdown-item" href="javascript:void(0)">Downgrade Plan</a>
+                                            <a class="dropdown-item" href="javascript:void(0)" (click)="isPlanShow=true">Downgrade Plan</a>
                                         </li>
                                         <li role="menuitem">
                                             <a class="dropdown-item" href="javascript:void(0)">Cancel Subscription</a>
@@ -209,7 +209,10 @@
                     <h2 class="section_head pb-0">Associated Companies</h2>
 
                     <div class="clearfix">
-                        <div class="btn-group d-inline-block custom-dropdown pt-05 ml-1 middle mr-1" dropdown placement="bottom right">
+                        <div class="active d-inline-block middle">
+                            <span class="green-dote"> </span> Active
+                        </div>
+                        <div class="btn-group d-inline-block custom-dropdown pt-05 ml-1 middle" dropdown placement="bottom right">
                             <button id="button-alignment" dropdownToggle type="button" class="dropdown-toggle"
                                 aria-controls="dropdown-alignment">
                                 <span class="icon-dots-three-vertical"></span>
@@ -223,9 +226,6 @@
                                     <a class="dropdown-item" href="javascript:void(0)">Deactivate all</a>
                                 </li>
                             </ul>
-                        </div>
-                        <div class="active d-inline-block middle">
-                            <span class="green-dote"> </span> Active
                         </div>
                     </div>
                   </div>
@@ -287,7 +287,7 @@
                     </div>
 
                     <div class="pl-2 mt-3 buy-transactions">
-                        <button class="btn btn-primary" type="button">Buy Transactions</button>
+                        <button class="btn btn-primary" type="button">Add Company</button>
                     </div>
                   </div>
                 </div>
@@ -375,64 +375,82 @@
     </div>
 
 
-    <div class="box mt-2">
-        <div class="row d-flex justify-content-between align-items-center xs-d-block">
-            <div class="col-md-8 col-sm-8 col-xs-12">
-                <p class="bold">Plan 2</p>
-            <ul class="list-inline plan-list">
-                <li>Expiry Date: 25/05/2020  </li>
-                <li>No. of companies : 4/10</li>
-                <li>Transaction Limit: 40,000</li>
-            </ul>
+    <div class="clearfix">
+        <a href="javascript:void(0)">
+            <div class="box mt-2">
+                <div class="row d-flex justify-content-between align-items-center xs-d-block plan-row">
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <p class="bold">Plan 2</p>
+                    <ul class="list-inline plan-list">
+                        <li>Expiry Date: 25/05/2020  </li>
+                        <li>No. of companies : 4/10</li>
+                        <li>Transaction Limit: 40,000</li>
+                    </ul>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
+                        <span class="font-26">5</span> days remaining
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
-                <span class="font-26">5</span> days remaining
-            </div>
-        </div>
+        </a>
     </div>
 
-    <div class="box mt-2">
-        <div class="row d-flex justify-content-between align-items-center xs-d-block">
-            <div class="col-md-8 col-sm-8 col-xs-12">
-                <p class="bold">Professional</p>
-            <ul class="list-inline plan-list">
-                <li>Expiry Date: 25/05/2020  </li>
-                <li>No. of companies : 4/10</li>
-                <li>Transaction Limit: 40,000</li>
-            </ul>
-            </div>
-            <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
-                <div class="active"><span class="green-dote"></span> Active </div>
+
+    <div class="clearfix">
+        <a href="javascript:void(0)">
+        <div class="box mt-2">
+            <div class="row d-flex justify-content-between align-items-center xs-d-block plan-row">
+                <div class="col-md-8 col-sm-8 col-xs-12">
+                    <p class="bold">Professional</p>
+                <ul class="list-inline plan-list">
+                    <li>Expiry Date: 25/05/2020  </li>
+                    <li>No. of companies : 4/10</li>
+                    <li>Transaction Limit: 40,000</li>
+                </ul>
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
+                    <div class="active font-14"><span class="green-dote"></span> Active </div>
+                </div>
             </div>
         </div>
+        </a>
     </div>
 
-    <div class="box mt-2">
-        <div class="row d-flex justify-content-between align-items-center xs-d-block">
-            <div class="col-md-8 col-sm-8 col-xs-12">
-                <p class="bold">TRIAL</p>
-            <ul class="list-inline plan-list">
-                <li>Expired on: 25/05/2020</li>
-            </ul>
+    <div class="clearfix">
+        <a href="javascript:void(0)">
+            <div class="box mt-2">
+                <div class="row d-flex justify-content-between align-items-center xs-d-block plan-row">
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <p class="bold">TRIAL</p>
+                    <ul class="list-inline plan-list">
+                        <li>Expired on: 25/05/2020</li>
+                    </ul>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
+                        <div class="text-danger font-14"><span class="red-dote"></span> Expired </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
-                <div class="text-danger"><span class="red-dote"></span> Active </div>
-            </div>
-        </div>
+        </a>
     </div>
 
-    <div class="box mt-2">
-        <div class="row d-flex justify-content-between align-items-center xs-d-block">
-            <div class="col-md-8 col-sm-8 col-xs-12">
-                <p class="bold">Professional</p>
-            <ul class="list-inline plan-list">
-                <li>Expired on: 25/05/2020</li>
-            </ul>
+
+    <div class="clearfix">
+        <a href="javascript:void(0)">
+            <div class="box mt-2">
+                <div class="row d-flex justify-content-between align-items-center xs-d-block plan-row">
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <p class="bold">Professional</p>
+                    <ul class="list-inline plan-list">
+                        <li>Expired on: 25/05/2020</li>
+                    </ul>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
+                        <div class="text-danger font-14"><span class="red-dote"></span> Expired </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
-                <div class="text-danger"><span class="red-dote"></span> Active </div>
-            </div>
-        </div>
+        </a>
     </div>
 
 

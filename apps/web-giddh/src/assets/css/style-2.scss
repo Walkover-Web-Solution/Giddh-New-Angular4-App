@@ -1579,6 +1579,8 @@ modal-container.modal {
     margin-top: 0px;
     .modal-body {
         padding: 15px 30px;
+    height: 80vh;
+    overflow-y: auto;
     }
 }
 .custom-input-search {
