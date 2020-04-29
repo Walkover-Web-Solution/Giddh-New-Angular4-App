@@ -1347,7 +1347,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
         this.chosenRange = range.name;
         const dates = this.findRange(this.ranges, range.name);
-
         if (!dates.value || dates.value.length === 0) {
             return false;
         }
@@ -1379,6 +1378,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         }
 
         this.updateView();
+
+        if(this.isMobileScreen) {
+            this.closeDatePicker();
+        }
     }
 
     /**

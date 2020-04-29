@@ -132,7 +132,7 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
      */
     public ngOnDestroy() {
         this.lastActiveItemIdx = 0;
-        this.items.forEach(p => p.isHilighted = false);
+        //this.items.forEach(p => p.isHilighted = false);
         this.removeParentEventHandlers();
     }
 
@@ -211,8 +211,8 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
 
         // to make row is highlighted for ui purpose
         // it will make an effect
-        this.items.forEach(p => p.isHilighted = false);
-        item.isHilighted = true;
+        //this.items.forEach(p => p.isHilighted = false);
+        //item.isHilighted = true;
         // end
 
         // totally disable animate
@@ -280,13 +280,13 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
     public refreshView() {
         if (this.items) {
             this.lastActiveItemIdx = null;
-            this.items.map(p => p.isHilighted = false);
+            //this.items.map(p => p.isHilighted = false);
         }
     }
 
     public getHighLightedItemIndex(): number {
         if (this.items) {
-            return this.items.findIndex(p => p.isHilighted);
+            return 0;
         } else {
             return null;
         }
@@ -536,10 +536,10 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
                 let _end = end >= 0 ? end : 0; // To prevent from accidentally selecting the entire array with a negative 1 (-1) in the end position.
                 this.viewPortItems = items.slice(start, _end);
                 // looping again due to some issues
-                this.viewPortItems.map((t: any, index: number) => {
-                    t.isHilighted = (index === this.lastActiveItemIdx - start) ? true : false;
-                    return t;
-                });
+                // this.viewPortItems.map((t: any, index: number) => {
+                //     t.isHilighted = (index === this.lastActiveItemIdx - start) ? true : false;
+                //     return t;
+                // });
                 let o: IUpdateEmit = {
                     items: this.viewPortItems,
                     idx: this.lastActiveItemIdx
