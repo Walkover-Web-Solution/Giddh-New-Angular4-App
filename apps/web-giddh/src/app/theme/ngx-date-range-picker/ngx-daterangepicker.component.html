@@ -85,7 +85,7 @@
             <div class="custom-date">
                 <span class="custom-label">Custom</span>
                 <div class="custom-edit-block">
-                    <span class="custom-date-range">Apr 14 - Apr 23</span>
+                    <span class="custom-date-range">{{startDate.format("MMM DD")}} - {{endDate.format("MMM DD")}}</span>
                     <span class="edit-dates" (click)="openModalWithClass(template)"><img
                             src="../../../assets/images/edit-pencilicon.svg"></span>
                 </div>
@@ -95,7 +95,7 @@
             <div class="modal-body edit-date-modal">
                 <h5>Custom</h5>
                 <div class="modal-date-range">
-                    <p>Apr 14 - Apr 23</p>
+                    <p>{{startDate.format("MMM DD")}} - {{endDate.format("MMM DD")}}</p>
                     <span><img src="../../../assets/images/calender.svg"></span>
                 </div>
 
@@ -112,7 +112,7 @@
 
                 <div class="button-wrapper">
                     <a (click)="modalRef.hide()" class="mr-2">Cancel</a>
-                    <a>Ok</a>
+                    <a (click)="modalRef.hide()">Ok</a>
                 </div>
 
             </div>
