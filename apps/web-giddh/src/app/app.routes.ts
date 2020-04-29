@@ -19,6 +19,7 @@ import { SelectPlanComponent } from './selectPlan/selectPlan.component';
 import { BillingDetailComponent } from './billing-details/billingDetail.component';
 import { TokenVerifyComponent } from './login/token-verify.component';
 import {AppLoginSuccessComponent} from "./app-login-success/app-login-success";
+import { MobileHomeComponent } from "./mobile-home/mobile-home.component";
 
 export const ROUTES: Routes = [
     {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -67,6 +68,7 @@ export const ROUTES: Routes = [
     { path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full' },
     { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
     { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice', pathMatch: 'full' },
+    { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
     { path: 'select-plan', component: SelectPlanComponent },
     { path: 'billing-detail', component: BillingDetailComponent },
     { path: 'billing-detail/buy-plan', component: BillingDetailComponent },
@@ -114,6 +116,7 @@ export const ROUTES: Routes = [
             { path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization] },
             { path: 'select-plan', component: SelectPlanComponent, canActivate: [NeedsAuthorization] },
             { path: 'billing-detail', component: BillingDetailComponent, canActivate: [NeedsAuthorization] },
+            { path: 'mobile-home', component: MobileHomeComponent, canActivate: [NeedsAuthorization] },
             { path: 'tallysync', loadChildren: './tallysync/tallysync.module#TallysyncModule', canActivate: [NeedsAuthorization] },
 
             { path: 'expenses-manager', loadChildren: './expenses/expenses.module#ExpensesModule', canActivate: [NeedsAuthorization] },
@@ -121,6 +124,7 @@ export const ROUTES: Routes = [
             { path: 'vat-report', loadChildren: './vat-report/vatReport.module#VatReportModule', canActivate: [NeedsAuthorization] },
             { path: 'purchase-management', loadChildren: './purchase/purchase.module#PurchaseModule', canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
+            
             // {path: '**', pathMatch: 'full', component: NotFoundComponent},
 
         ]

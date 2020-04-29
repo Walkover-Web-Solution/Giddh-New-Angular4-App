@@ -62,6 +62,7 @@ import {BillingDetailComponent} from './billing-details/billingDetail.component'
 import {TokenVerifyComponent} from './login/token-verify.component';
 import {AppLoginSuccessComponent} from "./app-login-success/app-login-success";
 import { ExceptionLogService } from './services/exception-log.service';
+import { MobileHomeComponent } from './mobile-home/mobile-home.component';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -122,6 +123,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         LoaderComponent,
         SocialLoginCallbackComponent,
         SelectPlanComponent,
+        MobileHomeComponent,
         // SignupComponent
     ],
     /**

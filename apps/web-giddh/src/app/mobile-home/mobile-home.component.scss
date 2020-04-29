@@ -1,0 +1,44 @@
+.mobile-home-view {
+    max-width: 320px;
+    width: 100%;
+    margin: 0 auto;
+    background-color: #040A58;
+    color: #fff;
+    .search-field{
+        padding: 10px 5px;
+        input{
+            width: 100%;
+            border: 1px solid #d9d9d9;
+            padding: 5px 15px;
+            border-radius: 30px;
+        }
+    }
+    .mobile-item-wrapper{
+        padding: 2px 0 2px 4px;
+        .mobile-single-item {
+            float: left;
+            width: 48%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100px;
+            align-items: center;
+            background-color: #1a237e;
+            margin: 2px;
+            .mobile-item-icon{
+                i{
+                    font-size: 30px;
+                    display: block;
+                    margin-bottom: 5px;
+                }
+            }
+            .mobile-item-name{
+                h4{
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+    
+
+}
