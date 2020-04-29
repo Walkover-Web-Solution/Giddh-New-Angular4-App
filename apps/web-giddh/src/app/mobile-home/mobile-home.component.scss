@@ -1,44 +1,98 @@
+@import "../../assets/css/color.scss";
 .mobile-home-view {
-    max-width: 320px;
+    max-width: 767px;
     width: 100%;
     margin: 0 auto;
-    background-color: #040A58;
-    color: #fff;
+    background-color:#EEEFFB;
+    padding: 5px;
+    height: 100vh;
     .search-field{
         padding: 10px 5px;
         input{
             width: 100%;
             border: 1px solid #d9d9d9;
-            padding: 5px 15px;
+            padding: 5px 20px;
             border-radius: 30px;
+            height: 36px;
+            font-size: 14px;
         }
     }
     .mobile-item-wrapper{
-        padding: 2px 0 2px 4px;
         .mobile-single-item {
             float: left;
-            width: 48%;
+            width: 25%;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            min-height: 100px;
             align-items: center;
-            background-color: #1a237e;
-            margin: 2px;
+            padding: 8px;
+            box-sizing: border-box;
+            &:nth-child(2n){
+                margin-right: 0;
+            }
+            .single-item-wrapper{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                background-color: #fff;
+                min-height: 85px;
+                border: 1px solid #d9d9d9;
+                border-radius: 2px;
+                &:hover {
+                    border-color:$midnight-blue;
+                }
+            }
             .mobile-item-icon{
                 i{
-                    font-size: 30px;
+                    font-size: 20px;
                     display: block;
-                    margin-bottom: 5px;
+                    margin-bottom: 10px;
+                    color: $gray;
                 }
             }
             .mobile-item-name{
                 h4{
-                    font-size: 14px;
+                    font-size: 12px;
+                    color: #1c1c1c;
+                    text-align: center;
+                    font-family: 'opensans-semibold';
+                }
+            }
+            &:hover {
+                border-color:$midnight-blue;
+                .mobile-item-icon{
+                    i{
+                        color:$midnight-blue;
+                    }
+                }
+                .mobile-item-name{
+                    h4{        
+                        color:$midnight-blue;
+                    }
                 }
             }
         }
     }
-    
+}
 
+/*responsive*/
+@media(max-width:375px){
+    .mobile-home-view {
+        .mobile-item-wrapper{
+            .mobile-single-item {
+                padding: 4px;
+            }
+        }
+    }
+}
+@media(max-width:360px){
+    .mobile-home-view {
+        .mobile-item-wrapper{
+            .mobile-single-item {
+                width: 33%;
+            }
+        }
+    }
 }

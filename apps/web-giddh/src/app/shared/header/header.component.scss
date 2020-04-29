@@ -651,6 +651,25 @@ ul.sub-list {
     top: 60px;
     z-index: 10;
 }
+.mobile-home-search{
+    background-color: #EEEFFB;
+    .input-group.account-search{
+        margin: 0;
+        padding: 13px 8px 5px;
+        .input-group-addon{
+            background-color: #fff;
+            border-radius: 20px 0 0 20px;
+            padding-left: 20px;
+        }
+        input{
+            border-radius: 0 20px 20px 0 !important;
+            background: #fff !important;
+        }
+    }
+}
+
+
+
 /* responsive */
 
 @media (max-height: 800px) {

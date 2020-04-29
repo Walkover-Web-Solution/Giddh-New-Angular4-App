@@ -583,6 +583,18 @@
         </nav>
     </header>
 </div>
+
+<!-- jump to account for mobile view -->
+<div class="mobile-home-search">
+    <div class="input-group account-search" (click)="showNavigationModal()">
+        <span class="input-group-addon" id="">
+            <i class="icon-search"></i>
+        </span>
+        <input type="text" class="form-control jumpToAccount" placeholder="Jump to Account" aria-describedby="">
+    </div>
+</div>
+
+
 <!--add and manage group account modal -->
 <div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy mangeAccountPopup addManageGroupAcc" role="dialog" (onShown)="onShown()">
     <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
