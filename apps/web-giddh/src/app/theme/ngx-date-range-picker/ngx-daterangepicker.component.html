@@ -98,7 +98,6 @@
                     <p>{{startDate.format("MMM DD")}} - {{endDate.format("MMM DD")}}</p>
                     <span><img src="../../../assets/images/calender.svg"></span>
                 </div>
-
                 <div class="start-end-date">
                     <div class="pos-rel mr-1">
                         <label>Start Date</label>
@@ -109,16 +108,12 @@
                         <input type="text">
                     </div>
                 </div>
-
                 <div class="button-wrapper">
                     <a (click)="modalRef.hide()" class="mr-2">Cancel</a>
                     <a (click)="modalRef.hide()">Ok</a>
                 </div>
-
             </div>
         </ng-template>
-
-
         <div class="calender-container-wrapper">
             <div class="calender-body" (mouseout)="hoveredDate = null">
                 <div class="upper-part">
