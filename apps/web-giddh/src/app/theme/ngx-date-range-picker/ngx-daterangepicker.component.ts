@@ -198,6 +198,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public isPreviousMonth: boolean = false;
     public allowedYears: any[] = [];
     public scrollPosition: string = '';
+    public openMobileDatepickerPopup: boolean = false;
     @ViewChild(ScrollComponent) public virtualScrollElem: ScrollComponent;
 
     constructor(
@@ -242,6 +243,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
             '(max-width: 767px)'
         ]).subscribe(result => {
             this.isMobileScreen = result.matches;
+            this.closeCalender();
+            this.closeDatePicker();
         });
 
         this._buildLocale();
@@ -298,23 +301,20 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public visibleCalnderOn() {
-        this.isMobileScreen = !this.isMobileScreen;
+    public closeCalender() {
+        this.openMobileDatepickerPopup = false;
     }
 
-    public closeCalander() {
-        this.isMobileScreen = !this.isMobileScreen;
-    }
     public closeDatePicker() {
         document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
         document.querySelector('body').classList.remove('hide-scroll-body')
     }
+
     openModalWithClass(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(template,
             Object.assign({}, { class: 'edit-modal modal-small' })
         );
     }
-
 
     /**
      * check whether go to previous and go to next month are allowed
@@ -868,12 +868,24 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     }
 
     clickCancel(e) {
-        this.startDate = this._old.start;
-        this.endDate = this._old.end;
+        if(this._old && this._old.start) {
+            this.startDate = this._old.start;
+        }
+
+        if(this._old && this._old.end) {
+            this.endDate = this._old.end;
+        }
+
         if (this.inline) {
             this.updateView();
         }
+        
         this.hide();
+
+        if(this.isMobileScreen) {
+            this.closeCalender();
+            this.closeDatePicker();
+        }
     }
 
     /**

@@ -9,11 +9,11 @@
     <div class="ranges" *ngIf="ranges?.length">
         <!-- loop over ranges -->
         <div class="range-container">  
-            <div class="date-range-close" *ngIf="isMobileScreen" (click)="closeDatePicker()">
+            <div class="date-range-close" *ngIf="isMobileScreen" (click)="closeCalender(); closeDatePicker()">
               <img src="../../../assets/images/close-icon.svg">  <span class="pl-2">Date range</span>
             </div>
             <ul class="range-list">
-                <li class="menu-li custom-select-btn"  type="button"  (click)="visibleCalnderOn();">
+                <li class="menu-li custom-select-btn"  type="button"  (click)="openMobileDatepickerPopup = true;">
                     <button>
                        Custom
                     </button>
@@ -71,10 +71,10 @@
     </div>
     <!-- ranges container -->
     <!-- calender container -->
-    <div  *ngIf="!isMobileScreen" class="calender-container">
-      <div class="close-calender">
+    <div class="calender-container" *ngIf="!isMobileScreen || (isMobileScreen && openMobileDatepickerPopup)">
+      <div class="close-calender" *ngIf="openMobileDatepickerPopup">
         <div class="close-save-btn">      
-            <img (click)="closeCalander();" class="close-custom-btn" src="../../../assets/images/close-icon.svg" alt="close-btn">
+            <img (click)="closeCalender();" class="close-custom-btn" src="../../../assets/images/close-icon.svg" alt="close-btn">
         </div>
 
              <div class="custom-date">
@@ -513,8 +513,10 @@
                 <!-- cancel button -->
 
                 <!-- apply button -->
-                <button class="btn btn-success" [disabled]="applyBtn.disabled" type="button"
+                <button class="btn btn-success" *ngIf="!isMobileScreen" [disabled]="applyBtn.disabled" type="button"
                     (click)="clickApply($event)">{{locale.applyLabel}}</button>
+                <button class="btn btn-success" *ngIf="isMobileScreen" [disabled]="applyBtn.disabled" type="button"
+                    (click)="clickApply($event); closeCalender(); closeDatePicker();">{{locale.applyLabel}}</button>    
                 <!-- apply button -->
             </div>
         </div>
