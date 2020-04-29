@@ -189,6 +189,17 @@
 }
 .close.close-2 {
     opacity: 1;
+    position: absolute;
+    right: 25px;
+    z-index: 999;
+    top: 20px;
+}
+
+@media only screen and (max-width: 1199px) {
+    .transactions-popup {
+        left: 0;
+        width: 100%;
+    }
 }
 
 
@@ -199,5 +210,14 @@
     }
     .choose-ur-plan {
         height: initial;
+    }
+    .xs-pr-0 {
+        padding-right: 0px !important;
+    }
+    .xs-pl-0 {
+        padding-left: 0px !important;
+    }
+    .inner-your-account {
+        margin-bottom: 20px;
     }
 }

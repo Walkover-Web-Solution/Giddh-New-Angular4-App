@@ -160,3 +160,8 @@
         margin-bottom: 5px;
     }
 }
+@media(min-width:769px){
+    .search-icon-block{
+        display: none;
+    }
+}

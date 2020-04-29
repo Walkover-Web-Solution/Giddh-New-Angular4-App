@@ -93,6 +93,15 @@
     :host .aside-pane {
         max-width: 600px;
     }
+
+    .activily-list {
+            li {
+                line-height: 20px;
+        }
+        &:last-child {
+            top: 6px;
+        }
+    }
 }
 @media (max-width: 575px) {
     :host {

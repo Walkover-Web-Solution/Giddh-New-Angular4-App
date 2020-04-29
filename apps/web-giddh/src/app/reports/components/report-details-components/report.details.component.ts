@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { Router } from "@angular/router";
+import { Router, NavigationStart } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { CompanyActions } from "../../../actions/company.actions";
@@ -8,7 +8,7 @@ import { CompanyService } from "../../../services/companyService.service";
 import { ReportsModel, ReportsRequestModel, ReportsResponseModel } from "../../../models/api-models/Reports";
 import { ToasterService } from "../../../services/toaster.service";
 import { createSelector } from "reselect";
-import { takeUntil } from "rxjs/operators";
+import { takeUntil, filter } from "rxjs/operators";
 import * as moment from 'moment/moment';
 import { ReplaySubject } from "rxjs";
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
@@ -90,6 +90,12 @@ export class ReportsDetailsComponent implements OnInit {
     public currentActiveFinacialYear: IOption;
     // @ViewChild(DaterangePickerComponent) public dp: DaterangePickerComponent;
     ngOnInit() {
+        this.router.events.pipe(
+            filter(event => (event instanceof NavigationStart && !(event.url.includes('/reports/sales-register') || event.url.includes('/reports/sales-detailed-expand')))),
+            takeUntil(this.destroyed$)).subscribe(() => {
+                // Reset the chosen financial year when user leaves the module
+                this.store.dispatch(this.companyActions.resetUserChosenFinancialYear());
+            });
     }
 
     constructor(private router: Router, private store: Store<AppState>, private companyActions: CompanyActions, private companyService: CompanyService, private _toaster: ToasterService) {
@@ -170,36 +176,49 @@ export class ReportsDetailsComponent implements OnInit {
     }
 
     public setCurrentFY() {
+        let financialYearChosenInReportUniqueName = '';
         // set financial years based on company financial year
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
+        this.store.pipe(select(createSelector(
+            [(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName, (state: AppState) => state.session.financialYearChosenInReport], (companies, uniqueName, financialYearChosenInReport) => {
+                financialYearChosenInReportUniqueName = financialYearChosenInReport;
+                if (!companies) {
+                    return;
+                }
 
-            return companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
+                return companies.find(cmp => {
+                    if (cmp && cmp.uniqueName) {
+                        return cmp.uniqueName === uniqueName;
+                    } else {
+                        return false;
+                    }
+                });
+            })), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
+                if (selectedCmp) {
+                    this.selectedCompany = selectedCmp;
+                    this.financialOptions = selectedCmp.financialYears.map(q => {
+                        return { label: q.uniqueName, value: q.uniqueName };
+                    });
+                    let selectedFinancialYear, activeFinancialYear, uniqueNameToSearch;
+                    if (financialYearChosenInReportUniqueName) {
+                        // User is navigating back from details page hence show the selected filter as pre-filled
+                        uniqueNameToSearch = financialYearChosenInReportUniqueName;
+                    } else {
+                        uniqueNameToSearch = selectedCmp.activeFinancialYear.uniqueName;
+                    }
+                    selectedFinancialYear = this.financialOptions.find(p => p.value === uniqueNameToSearch);
+                    activeFinancialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === uniqueNameToSearch);
+                    this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
+                    this.store.dispatch(this.companyActions.setUserChosenFinancialYear(this.currentActiveFinacialYear.value));
+                    this.activeFinacialYr = activeFinancialYear;
+                    this.populateRecords('monthly');
+                    this.salesRegisterTotal.particular = this.activeFinacialYr.uniqueName;
                 }
             });
-        })), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if (selectedCmp) {
-                this.selectedCompany = selectedCmp;
-                this.financialOptions = selectedCmp.financialYears.map(q => {
-                    return { label: q.uniqueName, value: q.uniqueName };
-                });
-                let financialYear = this.financialOptions.find(p => p.value === selectedCmp.activeFinancialYear.uniqueName);
-                this.currentActiveFinacialYear = _.cloneDeep(financialYear);
-                this.activeFinacialYr = selectedCmp.activeFinancialYear;
-                this.populateRecords('monthly');
-                this.salesRegisterTotal.particular = this.activeFinacialYr.uniqueName;
-            }
-        });
     }
     public selectFinancialYearOption(v: IOption) {
         if (v.value) {
             let financialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === v.value);
+            this.store.dispatch(this.companyActions.setUserChosenFinancialYear(this.currentActiveFinacialYear.value));
             this.activeFinacialYr = financialYear;
             this.populateRecords(this.interval, this.selectedMonth);
         }

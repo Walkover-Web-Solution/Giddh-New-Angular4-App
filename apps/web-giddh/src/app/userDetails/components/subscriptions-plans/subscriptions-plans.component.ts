@@ -92,6 +92,10 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         this.modalRef = this.modalService.show(modalTwo);
     }
 
+    allFeaturesModal(AllFeatures: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(AllFeatures, { class: 'modal-lg all-features-modal'});
+    }
+
     public backClicked() {
         this.isSubscriptionPlanShow.emit(true);
     }

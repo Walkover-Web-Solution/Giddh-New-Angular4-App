@@ -23,6 +23,7 @@ import { CompanyDetailsSidebarComponent } from './components/company-details-sid
 import { ActiveLogSidebarComponent } from './components/activity-log/activity-log-sidebar.component';
 import { DeactivateCompanyComponent } from './components/deactivate-company/deactivate-company.component';
 import { MoveCompanyComponent } from './components/move-company/move-company.component';
+import { AllFeaturesComponent } from './components/all-features/all-features.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -41,7 +42,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CompanyDetailsSidebarComponent,
         ActiveLogSidebarComponent,
         DeactivateCompanyComponent,
-        MoveCompanyComponent
+        MoveCompanyComponent,
+        AllFeaturesComponent
     ],
     exports: [],
     imports: [

@@ -188,18 +188,13 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         }
     }
 
-    openModal(MoveCompany: TemplateRef<any>, deactivateCompany: TemplateRef<any>) {
+    openModal(MoveCompany: TemplateRef<any>) {
         this.modalRef = this.modalService.show(MoveCompany);
-        this.modalRef = this.modalService.show(deactivateCompany);
     }
 
-    confirm(): void {
-        this.modalRef.hide();
-      }
-
-      decline(): void {
-        this.modalRef.hide();
-      }
+    openModalMove(deactivateCompany: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(deactivateCompany);
+    }
 
 
 

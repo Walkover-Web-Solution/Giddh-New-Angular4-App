@@ -655,7 +655,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         // get account details and set it to local var
         this.selectedAccountDetails$.subscribe(accountDetails => {
-            if (accountDetails && !this.isUpdateMode) {
+            if (accountDetails && (!this.isUpdateMode || (this.isUpdateMode && (this.invoiceType === VoucherTypeEnum.sales || this.invoiceType === VoucherTypeEnum.cash)))) {
                 this.assignAccountDetailsValuesInForm(accountDetails);
             }
         });
@@ -1573,10 +1573,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (data.accountDetails && data.accountDetails.billingDetails && data.accountDetails.shippingDetails && data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
             this.checkGstNumValidation(data.accountDetails.billingDetails.gstNumber, 'Billing Address');
             if (!this.isValidGstinNumber) {
+                this.startLoader(false);
                 return;
             }
             this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber, 'Shipping Address');
             if (!this.isValidGstinNumber) {
+                this.startLoader(false);
                 return;
             }
         }
@@ -2912,11 +2914,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
             this.checkGstNumValidation(data.accountDetails.billingDetails.gstNumber, 'Billing Address');
             if (!this.isValidGstinNumber) {
+                this.startLoader(false);
                 return;
             }
             if (!this.autoFillShipping) {
                 this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber, 'Shipping Address');
                 if (!this.isValidGstinNumber) {
+                    this.startLoader(false);
                     return;
                 }
             }

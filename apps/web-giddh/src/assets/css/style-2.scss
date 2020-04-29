@@ -839,7 +839,6 @@ ul.sub-list {
 .bold {
     font-family: $opensans-semibold;
 }
-
 .font-bold {
     font-family: $opensans-bold;
 }
@@ -1575,6 +1574,27 @@ modal-container.modal {
 .text-blue {
     color: $midnight-blue;
 }
+.all-features-modal {
+    width: 60%;
+    margin-top: 0px;
+    .modal-body {
+        padding: 15px 30px;
+    }
+}
+.custom-input-search {
+    position: relative;
+    i {
+        position: absolute;
+        z-index: 11;
+        font-size: 13px;
+        top: 11px;
+        left: 10px;
+        color: #808080;
+    }
+    .form-control {
+        padding-left: 30px !important;
+    }
+}
 
 /* my css end */
 
@@ -1817,6 +1837,9 @@ fieldset[disabled] .btn-primary:hover {
     font-size: 14px;
     background: $success-green;
     color: $white;
+    &:hover {
+        color: $white;
+    }
 }
 .btn-round {
     border-radius: 90px;
@@ -8889,6 +8912,10 @@ input.checkbox-custom[type="checkbox"] {
 }
 
 @media (max-width: 1024px) {
+    .all-features-modal {
+        width: 90%;
+        margin: 0 auto;
+    }
     .auto_save {
         top: 96px;
     }
@@ -9366,6 +9393,18 @@ input.checkbox-custom[type="checkbox"] {
     .xs-mb-1 {
         margin-bottom: 10px;
     }
+    .xs-mt-1 {
+        margin-top: 10px;
+    }
+    .xs-mb-2 {
+        margin-bottom: 20px;
+    }
+    .xs-mt-2 {
+        margin-top: 20px;
+    }
+    .xs-mt-4 {
+        margin-top: 40px;
+    }
     .xs-mr-0 {
         margin-right: 0px;
     }
@@ -9493,7 +9532,9 @@ input.checkbox-custom[type="checkbox"] {
     .form-bg {
         width: 100%;
     }
-
+    .buy-transactions {
+        position: relative !important;
+    }
     /* .col_wrapper:nth-child(1) {
                      position: relative;
                      height: auto;

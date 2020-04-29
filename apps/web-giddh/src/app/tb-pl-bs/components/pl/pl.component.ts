@@ -132,7 +132,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
                     cogsGrp.accounts = [];
                     cogsGrp.childGroups = [];
 
-                    Object.keys(cogs).filter(f => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses'].includes(f)).forEach(f => {
+                    Object.keys(cogs).filter(f => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(f)).forEach(f => {
                         let cg = new ChildGroup();
                         cg.isCreated = false;
                         cg.isVisible = false;
@@ -151,7 +151,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
                         cg.childGroups = [];
                         if (['purchasesStockAmount', 'manufacturingExpenses'].includes(f)) {
                             cg.groupName = `+ ${cg.groupName}`;
-                        } else if (f === 'closingInventory') {
+                        } else if (['closingInventory', 'debitNoteStockAmount'].includes(f)) {
                             cg.groupName = `- ${cg.groupName}`;
                         }
                         cogsGrp.childGroups.push(cg);

@@ -15,7 +15,7 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-md-4 col-sm-6">
                         <div class="select-plan-block">
                             <div class="select-plan-head">
                                 <h2>Multiple Company</h2>
@@ -38,7 +38,7 @@
                                                     <a href="javascript:void(0)" class="close"><i class="icon-cross"></i></a>
                                                     <p class="bold mb-1">Transactions Limit</p>
                                                     <p class="font-12 text-gray mb-1">Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.</p>
-                                                    <p><a href="#" class="color-primary bold">More Details</a></p>
+                                                    <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                 </div>
                                             </div>
                                             </li>
@@ -50,21 +50,21 @@
                                     </div>
 
                                     <div class="plan-footer">
-                                        <p><a href="javascript:void(0)" class="color-primary font-14">Check all features</a></p>
+                                        <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)" class="color-primary font-14">Check all features</a></p>
                                         <button class="btn success-btn btn-round" (click)="choosePlan(item);"
                                             [ladda]="this.isUpdateCompanyInProgress$ | async">Start Trial</button>
                                             <p class="font-12">*prices excluding Tax</p>
                                     </div>
                                 </div>
                             </div>
-                            <a href="#" class="btn btn-green btn-round">See all Multiple Company Plans</a>
+                            <a href="javascript:void(0)" class="btn btn-green btn-round">See all Multiple Company Plans</a>
                         </div>
                         </div>
                     </div>
 
 
 
-                    <div class="col-sm-4">
+                    <div class="col-md-4 col-sm-6">
                         <div class="select-plan-block">
                             <div class="select-plan-head">
                                 <h2>Single Company</h2>
@@ -92,7 +92,7 @@
                                                     <a href="javascript:void(0)" class="close"><i class="icon-cross"></i></a>
                                                     <p class="bold mb-1">Transactions Limit</p>
                                                     <p class="font-12 text-gray mb-1">Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.</p>
-                                                    <p><a href="#" class="color-primary bold">More Details</a></p>
+                                                    <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                 </div>
                                             </div></li>
                                             <li>Total Companies: 10</li>
@@ -109,19 +109,19 @@
                                         </ul>
                                     </div>
                                     <div class="plan-footer">
-                                        <p><a href="javascript:void(0)" class="color-primary font-14">Check all features</a></p>
+                                        <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)" class="color-primary font-14">Check all features</a></p>
                                         <button class="btn success-btn btn-round" (click)="choosePlan(item);"
-                                            [ladda]="this.isUpdateCompanyInProgress$ | async">Start Trial</button>
+                                            [ladda]="this.isUpdateCompanyInProgress$ | async">Buy Plan</button>
                                             <p class="font-12">*prices excluding Tax</p>
                                     </div>
                                 </div>
                             </div>
-                            <a href="#" class="btn btn-green btn-round">See all Multiple Company Plans</a>
+                            <a href="javascript:void(0)" class="btn btn-green btn-round">See all Multiple Company Plans</a>
                         </div>
                         </div>
                     </div>
 
-                    <div class="col-sm-4">
+                    <div class="col-md-4 col-sm-6">
                         <div class="select-plan-block">
                             <div class="select-plan-head">
                                 <h2>Professional</h2>
@@ -146,7 +146,7 @@
                                                     <a href="javascript:void(0)" class="close"><i class="icon-cross"></i></a>
                                                     <p class="bold mb-1">Transactions Limit</p>
                                                     <p class="font-12 text-gray mb-1">Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.</p>
-                                                    <p><a href="#" class="color-primary bold">More Details</a></p>
+                                                    <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                 </div>
                                             </div></li>
                                             <li>Total Companies: 100</li>
@@ -163,14 +163,14 @@
                                         </ul>
                                     </div>
                                     <div class="plan-footer">
-                                        <p><a href="javascript:void(0)" class="color-primary font-14">Check all features</a></p>
+                                        <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)" class="color-primary font-14">Check all features</a></p>
                                         <button class="btn success-btn btn-round" (click)="choosePlan(item);"
-                                            [ladda]="this.isUpdateCompanyInProgress$ | async">Start Trial</button>
+                                            [ladda]="this.isUpdateCompanyInProgress$ | async">Buy Plan</button>
                                             <p class="font-12">*prices excluding Tax</p>
                                     </div>
                                 </div>
                             </div>
-                            <a href="#" class="btn btn-green btn-round">See all Multiple Company Plans</a>
+                            <a href="javascript:void(0)" class="btn btn-green btn-round">See all Multiple Company Plans</a>
                         </div>
                         </div>
                     </div>
@@ -337,26 +337,14 @@
 
 
 						<!-- new plan after free -->
-						<ng-container *ngIf="item?.planDetails?.amount && !item.subscriptionId">
+						<!-- <ng-container *ngIf="item?.planDetails?.amount && !item.subscriptionId">
 							<div class="col-sm-4">
 								<div class="select-plan-block">
 									{{item?.planDetails?.name}}
 									<div class="your-account">
 
-										<!-- <div class="row">
-                                                    <div class="col-xs-6">
-                                                        <span>
-                      Subscription ID
-                    </span>
-                                                    </div>
-                                                    <div class="col-xs-6">
-                                                        <p>
-                                                            -
-                                                        </p>
-                                                    </div>
-                                                </div> -->
 
-										<!--  -->
+
 										<div class="row">
 											<div class="col-xs-6">
 												<span>
@@ -369,7 +357,6 @@
 												</p>
 											</div>
 										</div>
-										<!--  -->
 
 										<div class="row">
 											<div class="col-xs-6">
@@ -422,10 +409,10 @@
 								</div>
 
 							</div>
-						</ng-container>
+						</ng-container> -->
 					</ng-container>
 				</div>
-				<div class="row">
+				<!-- <div class="row">
 					<ng-container *ngFor="let paidItem of SubscriptionPlans">
 						<ng-container
 							*ngIf="paidItem?.subscriptionId && paidItem?.totalCompanies!==paidItem?.planDetails?.companiesLimit">
@@ -448,7 +435,6 @@
 											</div>
 										</div>
 
-										<!--  -->
 										<div class="row">
 											<div class="col-xs-6">
 												<span>
@@ -461,7 +447,6 @@
 												</p>
 											</div>
 										</div>
-										<!--  -->
 
 										<div class="row">
 											<div class="col-xs-6">
@@ -517,7 +502,7 @@
 							</div>
 						</ng-container>
 					</ng-container>
-				</div>
+				</div> -->
 			</div>
         </div>
 
@@ -557,13 +542,13 @@
     </div> -->
 
 
-    <div class="box clearfix mt-2 pl-5 pt-3 pb-3">
+    <div class="box clearfix mt-2 pl-5 xs-pl-0 pt-3 pb-3 relative">
 
         <a class="close close-2" href="javascript:void(0)">
             <i class="icon-cross"></i>
         </a>
 
-        <div class="col-sm-3">
+        <div class="col-sm-6 col-md-3">
             <div class="inner-your-account">
                 <h3 class="mb-2">BONSAI 2.0</h3>
                 <div class="mb-3">
@@ -582,14 +567,14 @@
                 </div>
 
                 <div class="plan-footer">
-                    <p><a href="javascript:void(0)" class="color-primary font-14">Check all features</a></p>
+                    <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)" class="color-primary font-14">Check all features</a></p>
                     <button class="btn success-btn btn-round" (click)="choosePlan(item);"
                         [ladda]="this.isUpdateCompanyInProgress$ | async">Start Trial</button>
                 </div>
             </div>
         </div>
 
-        <div class="col-sm-3">
+        <div class="col-sm-6 col-md-3">
             <div class="inner-your-account">
                 <img src="assets/images/popular.svg" class="popular-icon" alt="">
                 <h3 class="mb-2">BONSAI 2.0</h3>
@@ -609,14 +594,14 @@
                 </div>
 
                 <div class="plan-footer">
-                    <p><a href="javascript:void(0)" class="color-primary font-14">Check all features</a></p>
+                    <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)" class="color-primary font-14">Check all features</a></p>
                     <button class="btn success-btn btn-round" (click)="choosePlan(item);"
                         [ladda]="this.isUpdateCompanyInProgress$ | async">Start Trial</button>
                 </div>
             </div>
         </div>
 
-        <div class="col-sm-3">
+        <div class="col-sm-6 col-md-3">
             <div class="inner-your-account">
                 <h3 class="mb-2">BONSAI 2.0</h3>
                 <div class="mb-3">
@@ -635,7 +620,7 @@
                 </div>
 
                 <div class="plan-footer">
-                    <p><a href="javascript:void(0)" class="color-primary font-14">Check all features</a></p>
+                    <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)" class="color-primary font-14">Check all features</a></p>
                     <button class="btn success-btn btn-round" (click)="choosePlan(item);"
                         [ladda]="this.isUpdateCompanyInProgress$ | async">Start Trial</button>
                 </div>
@@ -702,3 +687,10 @@
     </div>
   </div> -->
 <!-- asid bar end -->
+
+
+
+<!-- All features Modal -->
+<ng-template #AllFeatures>
+    <all-features></all-features>
+</ng-template>

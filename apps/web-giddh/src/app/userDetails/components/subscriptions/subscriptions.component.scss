@@ -164,10 +164,28 @@
 .plan-list > li {
     padding-right: 40px;
 }
+.section_head {
+    margin-bottom: 10px;
+}
+.associated-companies-list {
+    max-height: 600px;
+    overflow-y: auto;
+}
 
+@media only screen and (max-width: 1024px) {
+    .table-subscription {
+        margin-bottom: 20px;
+    }
+}
 @media only screen and (max-width: 767px) {
     .transection-popup {
         position: relative;
         top: 0px;
+    }
+    .xs-pr-0 {
+        padding-right: 0px !important;
+    }
+    .xs-pl-0 {
+        padding-left: 0px !important;
     }
 }
