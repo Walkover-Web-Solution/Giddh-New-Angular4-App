@@ -249,7 +249,7 @@
                     <!-- month selection -->
                 </div>
                 <!-- start date calendar container -->
-                <calendar-scroll [items]="calendarMonths" 
+                <calendar-scroll [items]="renderedCalendarMonths" 
                     [childHeight]="itemHeight" 
                     [style.max-height.px]="300" 
                     (highLightedItemEmitter)="handleHighLightedItemEvent($event)" 

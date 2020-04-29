@@ -1853,7 +1853,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         if (this.singleDatePicker) {
             if ((!this.calendarVariables.start.maxDate || this.calendarVariables.start.maxDate.isAfter(this.calendarVariables.start.calendar.lastDay)) && (!this.linkedCalendars || this.singleDatePicker)) {
                 // visible height + pixel scrolled >= total height - 300 (deducted 300 to load list little earlier before user reaches to end)
-                if (this.scrollPosition === "bottom" && event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 300)) {
+                if (this.scrollPosition === "bottom" && event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 450)) {
                     this.initialCalendarMonths = false;
                     this.goToNextMonth();
                 }
@@ -1863,7 +1863,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         } else {
             if (!this.calendarVariables.end.maxDate || this.calendarVariables.end.maxDate.isAfter(this.calendarVariables.end.calendar.lastDay)) {
                 // visible height + pixel scrolled >= total height - 300 (deducted 300 to load list little earlier before user reaches to end)
-                if (this.scrollPosition === "bottom" && event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 300)) {
+                if (this.scrollPosition === "bottom" && event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 450)) {
                     this.initialCalendarMonths = false;
                     this.goToNextMonth();
                 }
