@@ -253,8 +253,8 @@
                 <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true"
                     [config]="{suppressScrollX: false, suppressScrollY: false}" [style.max-height.px]="300"
                     (highLightedItemEmitter)="handleHighLightedItemEvent($event)"
-                    *ngIf="showCalInRanges && !showMonthPicker">
-                    <div (scroll)="onScroll($event)" (mousewheel)="mouseUp($event)">
+                    *ngIf="showCalInRanges && !showMonthPicker" (psScrollDown)="onScroll('bottom')" (psScrollUp)="onScroll('top')">
+                    <div>
                         <div *ngFor="let calendarMonth of calendarMonths;">
                             <div class="calendar" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
                                 <div class="calendar-table" *ngIf="calendarMonth && calendarMonth.start">

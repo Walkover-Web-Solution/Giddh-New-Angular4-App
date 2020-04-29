@@ -187,8 +187,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public rangeDropdownShow: number = -1;
     public goToPreviousMonthDisabled: boolean = false;
     public goToNextMonthDisabled: boolean = false;
-    private mouseWheelEventsRequired: number = 20;
-    private mouseWheelEvents: number = 0;
+
     private _old: { start: any, end: any } = { start: null, end: null };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public financialYears: any[] = [];
@@ -868,21 +867,21 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     }
 
     clickCancel(e) {
-        if(this._old && this._old.start) {
+        if (this._old && this._old.start) {
             this.startDate = this._old.start;
         }
 
-        if(this._old && this._old.end) {
+        if (this._old && this._old.end) {
             this.endDate = this._old.end;
         }
 
         if (this.inline) {
             this.updateView();
         }
-        
+
         this.hide();
 
-        if(this.isMobileScreen) {
+        if (this.isMobileScreen) {
             this.closeCalender();
             this.closeDatePicker();
         }
@@ -1074,69 +1073,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
     mouseUp(e: MouseWheelEvent) {
         if (e.deltaY < 0) {
-            this.scrollPosition = "top";
-
-            if (this.singleDatePicker) {
-                if (!this.calendarVariables.start.minDate || this.calendarVariables.start.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
-                    if (this.lastScrollTopPosition < 50) {
-                        this.initialCalendarMonths = false;
-                        this.goToPrevMonth();
-                    }
-                }
-            } else {
-                if (!this.calendarVariables.start.minDate || this.calendarVariables.start.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
-                    if (this.lastScrollTopPosition < 50) {
-                        this.initialCalendarMonths = false;
-                        this.goToPrevMonth();
-                    }
-                }
-            }
-
-            // e.stopPropagation();
-            // e.stopImmediatePropagation();
-            // return false;
+            this.onScroll('top');
         } else if (e.deltaY > 0) {
-            this.scrollPosition = "bottom";
+            this.onScroll('bottom');
         }
-
-        // if (e.deltaY < 0) {
-        //     if (this.mouseWheelEvents >= this.mouseWheelEventsRequired) {
-        //         this.mouseWheelEvents = 0;
-        //         if (this.singleDatePicker) {
-        //             if ((!this.calendarVariables.start.maxDate ||
-        //                 this.calendarVariables.start.maxDate.isAfter(this.calendarVariables.start.calendar.lastDay)) &&
-        //                 (!this.linkedCalendars || this.singleDatePicker)) {
-        //                 this.goToNextMonth();
-        //             }
-        //         } else {
-        //             if (!this.calendarVariables.end.maxDate ||
-        //                 this.calendarVariables.end.maxDate.isAfter(this.calendarVariables.end.calendar.lastDay)) {
-        //                 this.goToNextMonth();
-        //             }
-        //         }
-        //     }
-        // }
-        // if (e.deltaY > 0) {
-        //     if (this.mouseWheelEvents >= this.mouseWheelEventsRequired) {
-        //         this.mouseWheelEvents = 0;
-        //         if (this.singleDatePicker) {
-        //             if (!this.calendarVariables.start.minDate ||
-        //                 this.calendarVariables.start.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
-        //                 this.goToPrevMonth();
-        //             }
-        //         } else {
-        //             if (!this.calendarVariables.start.minDate ||
-        //                 this.calendarVariables.start.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
-        //                 this.goToPrevMonth();
-        //             }
-        //         }
-        //     }
-        // }
-
-        // this.mouseWheelEvents++;
-        // e.stopPropagation();
-        // e.stopImmediatePropagation();
-        // return false;
     }
 
     mouseUpYear(e: MouseWheelEvent) {
@@ -1162,7 +1102,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
                     (!this.linkedCalendars)) {
                     this.clickPrevYear(DateType.start);
                 }
-                // this.goToNextMonth(DateType.start);
             } else {
                 if (!this.calendarVariables.start.minDate ||
                     this.calendarVariables.start.minDate.isBefore(this.calendarVariables.start.calendar.firstDay) &&
@@ -1391,7 +1330,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
         this.updateView();
 
-        if(this.isMobileScreen) {
+        if (this.isMobileScreen) {
             this.closeDatePicker();
         }
     }
@@ -1863,27 +1802,32 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
     }
 
-    @HostListener('scroll', ['$event'])
-    onScroll(event: any) {
-        if (this.singleDatePicker) {
-            if ((!this.calendarVariables.start.maxDate || this.calendarVariables.start.maxDate.isAfter(this.calendarVariables.start.calendar.lastDay)) && (!this.linkedCalendars || this.singleDatePicker)) {
-                // visible height + pixel scrolled >= total height - 300 (deducted 300 to load list little earlier before user reaches to end)
-                if (this.scrollPosition === "bottom" && event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 450)) {
+    onScroll(direction: string) {
+        if (direction === "bottom") {
+            if (this.singleDatePicker) {
+                if ((!this.calendarVariables.start.maxDate || this.calendarVariables.start.maxDate.isAfter(this.calendarVariables.start.calendar.lastDay)) && (!this.linkedCalendars || this.singleDatePicker)) {
                     this.initialCalendarMonths = false;
                     this.goToNextMonth();
                 }
-
-                this.lastScrollTopPosition = event.target.scrollTop;
+            } else {
+                if (!this.calendarVariables.end.maxDate || this.calendarVariables.end.maxDate.isAfter(this.calendarVariables.end.calendar.lastDay)) {
+                    this.initialCalendarMonths = false;
+                    this.goToNextMonth();
+                }
             }
-        } else {
-            if (!this.calendarVariables.end.maxDate || this.calendarVariables.end.maxDate.isAfter(this.calendarVariables.end.calendar.lastDay)) {
-                // visible height + pixel scrolled >= total height - 300 (deducted 300 to load list little earlier before user reaches to end)
-                if (this.scrollPosition === "bottom" && event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 450)) {
-                    this.initialCalendarMonths = false;
-                    this.goToNextMonth();
-                }
+        }
 
-                this.lastScrollTopPosition = event.target.scrollTop;
+        if (direction === "top") {
+            if (this.singleDatePicker) {
+                if (!this.calendarVariables.start.minDate || this.calendarVariables.start.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
+                    this.initialCalendarMonths = false;
+                    this.goToPrevMonth();
+                }
+            } else {
+                if (!this.calendarVariables.start.minDate || this.calendarVariables.start.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
+                    this.initialCalendarMonths = false;
+                    this.goToPrevMonth();
+                }
             }
         }
     }
