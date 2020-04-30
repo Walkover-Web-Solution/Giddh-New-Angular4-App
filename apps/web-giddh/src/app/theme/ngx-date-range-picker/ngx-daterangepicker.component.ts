@@ -1943,10 +1943,14 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     }
 
     public applyInlineDates(): void {
-        this.startDate = this.inlineStartDate;
-        this.endDate = this.inlineEndDate;
-        this.clickApply();
-        this.modalRef.hide();
+        if(this.startDate <= this.endDate) {
+            this.startDate = this.inlineStartDate;
+            this.endDate = this.inlineEndDate;
+            this.clickApply();
+            this.modalRef.hide();
+        } else {
+            // Need to show message here that start date can't be greater than end date
+        }
     }
 
     public openMobileDatepicker() {
