@@ -13,7 +13,7 @@
                 <img src="../../../assets/images/close-icon.svg"> <span class="pl-2">Date range</span>
             </div>
             <ul class="range-list">
-                <li class="menu-li custom-select-btn" type="button" (click)="openMobileDatepickerPopup = true;">
+                <li class="menu-li custom-select-btn" type="button" (click)="openMobileDatepicker()">
                     <button>
                         Custom
                     </button>
@@ -95,22 +95,24 @@
             <div class="modal-body edit-date-modal">
                 <h5>Custom</h5>
                 <div class="modal-date-range">
-                    <p>{{startDate.format("MMM DD")}} - {{endDate.format("MMM DD")}}</p>
-                    <span><img src="../../../assets/images/calender.svg"></span>
+                    <p>{{inlineStartDate.format("MMM DD")}} - {{inlineEndDate.format("MMM DD")}}</p>
+                    <span (click)="modalRef.hide()"><img src="../../../assets/images/calender.svg"></span>
                 </div>
                 <div class="start-end-date">
                     <div class="pos-rel mr-1">
                         <label>Start Date</label>
-                        <input type="text">
+                        <input type="tel" name="inlineStartDate" mask="00/00/0000" (blur)="saveInlineDates($event)">
+                        {{invalidInlineStartDate ? "Invalid Date" : ""}}
                     </div>
                     <div class="pos-rel">
                         <label>End Date</label>
-                        <input type="text">
+                        <input type="tel" name="inlineEndDate" mask="00/00/0000" (blur)="saveInlineDates($event)">
+                        {{invalidInlineEndDate ? "Invalid Date" : ""}}
                     </div>
                 </div>
                 <div class="button-wrapper">
                     <a (click)="modalRef.hide()" class="mr-2">Cancel</a>
-                    <a (click)="modalRef.hide()">Ok</a>
+                    <a (click)="applyInlineDates()">Ok</a>
                 </div>
             </div>
         </ng-template>

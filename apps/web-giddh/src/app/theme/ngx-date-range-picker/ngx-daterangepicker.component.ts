@@ -10,7 +10,6 @@ import { ReplaySubject, Subject } from 'rxjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
 import { Router, NavigationStart } from '@angular/router';
-import { ScrollComponent } from './virtual-scroll/vscroll';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 const moment = _moment;
@@ -187,7 +186,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public rangeDropdownShow: number = -1;
     public goToPreviousMonthDisabled: boolean = false;
     public goToNextMonthDisabled: boolean = false;
-
     private _old: { start: any, end: any } = { start: null, end: null };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public financialYears: any[] = [];
@@ -198,7 +196,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public allowedYears: any[] = [];
     public scrollPosition: string = '';
     public openMobileDatepickerPopup: boolean = false;
-    @ViewChild(ScrollComponent) public virtualScrollElem: ScrollComponent;
+    public inlineStartDate: any;
+    public inlineEndDate: any;
+    public invalidInlineStartDate: boolean = false;
+    public invalidInlineEndDate: boolean = false;
+    public isInlineDateFieldsShowing: boolean = false;
 
     constructor(
         private _ref: ChangeDetectorRef,
@@ -292,11 +294,21 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
                 if (response) {
                     document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("show-calendar");
                     document.querySelector('body').classList.add('hide-scroll-body')
-                } else {
+                } else if(!this.isInlineDateFieldsShowing) {
                     this.initialCalendarMonths = true;
                     document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
                 }
             }
+        });
+
+        this.modalService.onShow.subscribe(response => {
+            this.isInlineDateFieldsShowing = true;
+        });
+
+        this.modalService.onHide.subscribe(response => {
+            this.isInlineDateFieldsShowing = false;
+            this.invalidInlineStartDate = false;
+            this.invalidInlineEndDate = false;
         });
     }
 
@@ -309,7 +321,13 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         document.querySelector('body').classList.remove('hide-scroll-body')
     }
 
-    openModalWithClass(template: TemplateRef<any>) {
+    public openModalWithClass(template: TemplateRef<any>) {
+        let inlineStartDate = _.cloneDeep(this.startDate);
+        let inlineEndDate = _.cloneDeep(this.endDate);
+
+        this.inlineStartDate = inlineStartDate;
+        this.inlineEndDate = inlineEndDate;
+
         this.modalRef = this.modalService.show(template,
             Object.assign({}, { class: 'edit-modal modal-small' })
         );
@@ -878,7 +896,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         if (this.inline) {
             this.updateView();
         }
-
         this.hide();
 
         if (this.isMobileScreen) {
@@ -1392,7 +1409,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         this.isShown = false;
 
         this._ref.detectChanges();
-
     }
 
     /**
@@ -1904,5 +1920,36 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
             this.allowedYears.push(loopYear.getFullYear());
         }
+    }
+
+    public saveInlineDates(event): void {
+        if (event.target.name === "inlineStartDate") {
+            this.invalidInlineStartDate = false;
+            if (moment(new Date(event.target.value.split("/").reverse().join("-"))).format("dddd") !== "Invalid date") {
+                this.inlineStartDate = moment(new Date(event.target.value.split("/").reverse().join("-")));
+            } else {
+                this.invalidInlineStartDate = true;
+            }
+        }
+
+        if (event.target.name === "inlineEndDate") {
+            this.invalidInlineEndDate = false;
+            if (moment(new Date(event.target.value.split("/").reverse().join("-"))).format("dddd") !== "Invalid date") {
+                this.inlineEndDate = moment(new Date(event.target.value.split("/").reverse().join("-")));
+            } else {
+                this.invalidInlineEndDate = true;
+            }
+        }
+    }
+
+    public applyInlineDates(): void {
+        this.startDate = this.inlineStartDate;
+        this.endDate = this.inlineEndDate;
+        this.clickApply();
+        this.modalRef.hide();
+    }
+
+    public openMobileDatepicker() {
+        this.openMobileDatepickerPopup = true;
     }
 }
