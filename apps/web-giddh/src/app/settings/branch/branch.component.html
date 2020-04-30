@@ -1,15 +1,12 @@
 <div class="clearfix" *ngIf="!parentCompanyName && (branches$ | async)?.length > 0">
     <div class="d-flex date-advanceSearch row xs-d-block">
-        <form class="form-inline input-grp-dateRangePicker pr col-sm-8 xs-mb-1">
+        <form class="form-inline input-group-date-range-picker pr col-xs-6 col-sm-8 xs-mb-1">
             <div class="mr-1 d-flex branch-header-content">
                 <div class="input-group">
                     <div class="form-group">
                         <span class="icon-calender" (click)="dp.toggle()"></span> <input type="text" readonly
                             placeholder="Select Date" class="form-control" #dp="bsDaterangepicker"
                             [bsValue]="dateRangePickerValue" (bsValueChange)="setFilterDate($event)" bsDaterangepicker>
-                    </div>
-                    <div *ngIf="isMobileScreen">
-                        <button class="btn btn-pink pull-right xs-pull-left" (click)="openAddBranchModal()"> +New Branch</button>
                     </div>
                 </div>
                 <div class="content-view  mrL2">
@@ -28,12 +25,12 @@
                 </div>
             </div>
         </form>
-        <div class="col-sm-4"  *ngIf="!isMobileScreen">
+        <div class="col-sm-4 col-xs-6">
             <button class="btn btn-pink pull-right xs-pull-left" (click)="openAddBranchModal()"> +New Branch</button>
         </div>
     </div>
 </div>
-<div *ngIf="(branches$ | async)?.length > 0 && branchViewType === 'table'" class="table-responsive">
+<div *ngIf="(branches$ | async)?.length > 0 && branchViewType === 'table' && !isMobileScreen " class="table-responsive">
     <table class="table basic mt-2 giddh-table on-mobile-view">
         <thead>
             <tr>
@@ -69,12 +66,12 @@
         </tbody>
     </table>
 </div>
-    <div *ngIf="(branches$ | async)?.length > 0">
+<div *ngIf="(branches$ | async)?.length > 0">
     <div class="branch-card-view mt-2" *ngIf="branchViewType === 'card'">
         <div class="row">
             <div class="col-md-4 col-sm-6 col-xs-12" *ngFor="let branch of branches$ | async">
                 <div class="branch-card">
-                    <div class="cardBasicDetails">
+                    <div class="card-basic-details">
                         <div class="clearfix">
                             <h2 class="pull-left">{{branch.name}}</h2>
                             <div class="pull-right">
