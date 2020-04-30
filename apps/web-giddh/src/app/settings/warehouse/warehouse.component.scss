@@ -112,27 +112,27 @@ span.setAsDefault {
         cursor: not-allowed;
     }
 }
-
-@media only screen and (max-width: 767px) {
-    .warehouse-card .d-flex {
-        display: block;
-        position: relative;
-    }
+@media only screen and (max-width: 768px) {
     .warehouse-card h3 {
         float: none;
         width: 90%;
         margin-bottom: 15px;
-    }
-    .warehouse-options {
-        text-align: left;
-    }
-    .warehouse-card {
-        min-height: auto;
     }
     .warehouse-card .btn-group{
         position: absolute;
         top: 0;
         right: 0;
     }
-
+    .warehouse-card .d-flex {
+        position: relative;
+        display: block;
+    }
+    .warehouse-options {
+        text-align: left;
+    }
+}
+@media only screen and (max-width: 767px) {
+    .warehouse-card {
+        min-height: auto;
+    }
 }
