@@ -116,17 +116,24 @@ span.setAsDefault {
 @media only screen and (max-width: 767px) {
     .warehouse-card .d-flex {
         display: block;
+        position: relative;
     }
     .warehouse-card h3 {
         float: none;
-        width: 100%;
+        width: 90%;
         margin-bottom: 15px;
+        
     }
     .warehouse-options {
-        text-align: right;
+        text-align: left;
     }
     .warehouse-card {
         min-height: auto;
+    }
+    .warehouse-card .btn-group{
+        position: absolute;
+        top: 0;
+        right: 0;
     }
 
 }
