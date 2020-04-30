@@ -655,7 +655,7 @@ ul.sub-list {
     background-color: #EEEFFB;
     .input-group.account-search{
         margin: 0;
-        padding: 13px 8px 5px;
+        padding: 13px 12px 5px;
         .input-group-addon{
             background-color: #fff;
             border-radius: 20px 0 0 20px;
@@ -667,11 +667,7 @@ ul.sub-list {
         }
     }
 }
-
-
-
 /* responsive */
-
 @media (max-height: 800px) {
     .nav-wrapper {
         height: calc(100vh - 150px);
