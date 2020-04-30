@@ -101,7 +101,7 @@ import { SettingsServiceModule } from '../settings/settings-service.module';
         AngularResizedEventModule,
         NgxMaskModule.forRoot(),
         NgbTooltipModule,
-        SettingsServiceModule
+        SettingsServiceModule,
     ],
 })
 export class LedgerModule {
