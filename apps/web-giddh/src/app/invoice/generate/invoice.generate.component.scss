@@ -181,8 +181,10 @@ button.btn.btn-filter {
     align-items: center;
     padding: 6px 10px !important;
 }
+.pending-table-discription{
+    white-space: normal;
+}
 // responsive
-
 @media (max-width: 768px) {
     .basic.onMobileView {
         background: transparent;
