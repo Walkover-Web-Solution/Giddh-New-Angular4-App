@@ -146,4 +146,5 @@
             <span *ngIf="isUpdtCase">Update</span>
         </button>
     </div>
+    <a href="javascript:void(0)" *ngIf="!isUpdtCase" class="btn btn-pink pull-right" [routerLink]="['/pages/permissions/list']" [queryParams]="{ tab: 'settings' }">Create Custom Role</a>
 </form>
