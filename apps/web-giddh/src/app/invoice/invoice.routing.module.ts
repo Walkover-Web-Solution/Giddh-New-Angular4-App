@@ -40,9 +40,9 @@ import { RecurringComponent } from './recurring/recurring.component';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TextMaskModule } from 'angular2-text-mask';
-// import { ReceiptComponent } from './receipt/receipt.component';
-// import { PreviewDownloadReceiptComponent } from './receipt/models/preview-download-receipt.component';
-// import { ReceiptUpdateComponent } from './receipt/receipt-update/receiptUpdate.component';
+import { ReceiptComponent } from './receipt/receipt.component';
+import { PreviewDownloadReceiptComponent } from './receipt/models/preview-download-receipt.component';
+import { ReceiptUpdateComponent } from './receipt/receipt-update/receiptUpdate.component';
 import { WebviewDirective } from './webview.directive';
 import { Daterangepicker } from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
@@ -117,9 +117,9 @@ const INVOICE_ROUTES: Routes = [
         EsignModalComponent,
         InvoicePageDDComponent,
         RecurringComponent,
-        // ReceiptComponent,
-        // ReceiptUpdateComponent,
-        // PreviewDownloadReceiptComponent,
+        ReceiptComponent,
+        ReceiptUpdateComponent,
+        PreviewDownloadReceiptComponent,
         WebviewDirective,
         InvoiceAdvanceSearchComponent,
         InvoiceRendererComponent,
@@ -182,8 +182,8 @@ const INVOICE_ROUTES: Routes = [
         InvoiceCreateComponent,
         InvoicePreviewComponent
     ],
-    entryComponents: [DownloadOrSendInvoiceOnMailComponent/*, PreviewDownloadReceiptComponent,
-    ReceiptUpdateComponent*/],
+    entryComponents: [DownloadOrSendInvoiceOnMailComponent, PreviewDownloadReceiptComponent,
+    ReceiptUpdateComponent],
     providers: [InvoiceUiDataService, {
         provide: FONT_PICKER_CONFIG,
         useValue: DEFAULT_FONT_PICKER_CONFIG
