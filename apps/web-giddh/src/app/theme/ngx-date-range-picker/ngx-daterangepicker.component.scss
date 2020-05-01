@@ -1363,6 +1363,11 @@ td span {
                     border: none;
                     border-bottom: 1px solid $gainsboro;
                     border-radius: 0;
+                    li:last-child{
+                        button{
+                            border-bottom: none !important;
+                        }
+                    }
                    
                 }
                 .select-financial-year {
@@ -1518,6 +1523,21 @@ td span {
     .angle-down{
         top: 10px;
     } 
+}
+
+@media(max-width:375px){
+    .md-drppicker{
+        .calender-container{
+            .calender-container-wrapper {
+                .calendar-table{
+                    .start-date::before{
+                        width: 80%;
+                        left: 10px;
+                    }
+                }
+            } 
+          }
+    }
 }
 
 @media(max-height:768px){

@@ -102,12 +102,12 @@
                     <div class="pos-rel mr-1">
                         <label>Start Date</label>
                         <input type="tel" name="inlineStartDate" mask="00/00/0000" (blur)="saveInlineDates($event)">
-                        {{invalidInlineStartDate ? "Invalid Date" : ""}}
+                         <span class="error-msg">{{invalidInlineStartDate ? "Invalid Date" : ""}}</span>
                     </div>
                     <div class="pos-rel">
                         <label>End Date</label>
                         <input type="tel" name="inlineEndDate" mask="00/00/0000" (blur)="saveInlineDates($event)">
-                        {{invalidInlineEndDate ? "Invalid Date" : ""}}
+                        <span class="error-msg">{{invalidInlineEndDate ? "Invalid Date" : ""}}</span>
                     </div>
                 </div>
                 <div class="button-wrapper">
@@ -193,7 +193,8 @@
                     </div>
                     <!-- month name -->
                     <!-- month selection -->
-                    <div class="d-container" *ngIf="showMonthPicker" (mousewheel)="mouseUpYear($event)">
+                     
+                    <div class="d-container"  [style.max-height.px]="320" *ngIf="showMonthPicker" (mousewheel)="mouseUpYear($event)" (psScrollDown)="onScroll('bottom')" (psScrollUp)="onScroll('top')">
                         <div *ngFor="let year of allowedYears; let i = index;">
                             <h2>
                                 {{ minDate.clone().add(i, 'year').format(" YYYY")}}
@@ -238,6 +239,7 @@
                             </div>
                         </div>
                     </div>
+                    
                     <!-- month selection -->
                 </div>
                 <!-- start date calendar container -->
