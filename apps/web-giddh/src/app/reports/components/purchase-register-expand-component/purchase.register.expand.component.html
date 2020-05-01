@@ -252,9 +252,7 @@
                             {{ item.voucherType }}
                         </td>
                         <td data-title="Voucher No" *ngIf="showFieldFilter.voucherNo" class="verticle-align-top">
-                            <a href="javascript:void(0) ">{{
-                                item.voucherNumber
-                            }}</a>
+                            {{ item.voucherNumber }}
                         </td>
                         <td data-title="Purchase" *ngIf="(purchaseRegisteDetailedResponse$ | async).debitTotal" class="text-right">
                             {{ item.debitTotal | giddhCurrency }}
