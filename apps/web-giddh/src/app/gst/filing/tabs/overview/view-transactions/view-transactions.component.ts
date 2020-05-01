@@ -146,7 +146,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
         let downloadVoucherRequestObject = {
             voucherNumber: [invoice.voucherNumber],
             voucherType: invoice.voucherType,
-            accountUniqueName: invoice.account.uniqueName
+            accountUniqueName: (invoice.account) ? invoice.account.uniqueName : ''
         };
         this._store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
         // this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.voucherNumber));
