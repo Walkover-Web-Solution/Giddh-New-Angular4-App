@@ -314,6 +314,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
     public closeCalender() {
         this.openMobileDatepickerPopup = false;
+         
     }
 
     public closeDatePicker() {
@@ -1985,5 +1986,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
     public openMobileDatepicker() {
         this.openMobileDatepickerPopup = true;
+        document.querySelector('body').classList.add('hide-scroll-body')
     }
 }
