@@ -1522,7 +1522,22 @@ td span {
     }  
     .angle-down{
         top: 10px;
+    }
+    perfect-scrollbar{
+        max-height: 90% !important;
+        height: calc(100% - 100px) !important;
     } 
+
+    .bottom-botton{
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        background-color: #fff;
+        z-index: 999;
+        width: 100%;
+        margin: 0;
+        padding-bottom: 10px;
+    }
 }
 
 @media(max-width:375px){
