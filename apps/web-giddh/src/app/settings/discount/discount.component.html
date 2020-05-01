@@ -1,11 +1,11 @@
-<div class="box clearfix mrT1">
+<div class="box clearfix">
 	<div class="row">
 		<h1 class="section_head pdT0 col-xs-12">Create Discount</h1>
 	</div>
 
-	<form #discountForm="ngForm" novalidate (submit)="submit()" class="discountFormSettingTab">
+	<form #discountForm="ngForm" novalidate (submit)="submit()" class="discount-form-setting-tab">
 		<div class="row ">
-			<div class="form-group col-sm-2 col-md-2 col-xs-12">
+			<div class="form-group col-sm-4 col-md-2 col-xs-12">
 				<label>&nbsp;</label><br>
 				<sh-select [options]="discountTypeList" [isFilterEnabled]="false" name="type"
 					[(ngModel)]="createRequest.type" [placeholder]="'Select Discount Type'" [ItemHeight]="33"></sh-select>
