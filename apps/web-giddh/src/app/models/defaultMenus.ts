@@ -6,7 +6,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', additional: { tab: 'sales', tabIndex: 0 } },
     { type: 'MENU', name: 'E-way bill', uniqueName: '/pages/invoice/ewaybill' },
     // {type: 'MENU', name: 'E-way Generate', uniqueName: '/pages/invoice/ewaybill/create'},
-    { type: 'MENU', name: 'Receipt', uniqueName: '/pages/invoice/receipt' },
+    //{ type: 'MENU', name: 'Receipt', uniqueName: '/pages/invoice/receipt' },
 
     { type: 'MENU', name: 'Debit Note', uniqueName: '/pages/invoice/preview/debit note', additional: { tab: 'debit note', tabIndex: 0 } },
     { type: 'MENU', name: 'Credit Note', uniqueName: '/pages/invoice/preview/credit note', additional: { tab: 'credit note', tabIndex: 1 } },
