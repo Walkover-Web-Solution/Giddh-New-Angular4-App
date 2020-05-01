@@ -191,10 +191,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public financialYears: any[] = [];
     public itemHeight: number = 210;
     public initialCalendarMonths: boolean = true;
-    public lastScrollTopPosition: number = 0;
+    public numberOfScrolls: number = 0;
     public isPreviousMonth: boolean = false;
     public allowedYears: any[] = [];
-    public scrollPosition: string = '';
+    public scrollPosition: string = 'bottom';
     public openMobileDatepickerPopup: boolean = false;
     public inlineStartDate: any;
     public inlineEndDate: any;
@@ -294,7 +294,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
                 if (response) {
                     document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("show-calendar");
                     document.querySelector('body').classList.add('hide-scroll-body')
-                } else if(!this.isInlineDateFieldsShowing) {
+                } else if (!this.isInlineDateFieldsShowing) {
                     this.initialCalendarMonths = true;
                     document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
                 }
@@ -1089,11 +1089,37 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     }
 
     mouseUp(e: MouseWheelEvent) {
+        let scrollPosition = "";
+
         if (e.deltaY < 0) {
-            this.onScroll('top');
+            if (this.scrollPosition === "top") {
+                this.numberOfScrolls++;
+            } else {
+                this.numberOfScrolls = 1;
+            }
+
+            scrollPosition = "top";
+
+            if (this.numberOfScrolls >= 20) {
+                this.numberOfScrolls = 0;
+                this.onScroll('top');
+            }
         } else if (e.deltaY > 0) {
-            this.onScroll('bottom');
+            if (this.scrollPosition === "bottom") {
+                this.numberOfScrolls++;
+            } else {
+                this.numberOfScrolls = 1;
+            }
+
+            scrollPosition = "bottom";
+
+            if (this.numberOfScrolls >= 20) {
+                this.numberOfScrolls = 0;
+                this.onScroll('bottom');
+            }
         }
+
+        this.scrollPosition = scrollPosition;
     }
 
     mouseUpYear(e: MouseWheelEvent) {
@@ -1905,8 +1931,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         this.renderCalendar(DateType.end);
 
         // setTimeout(() => {
-        //     this.goToPrevMonth();
-        //     this.goToNextMonth();
+        //     for(let loop = 0; loop < 5; loop++) {
+        //         this.goToPrevMonth();
+        //     }
+        //     for(let loop = 0; loop < 10; loop++) {
+        //         this.goToNextMonth();
+        //     }
         // }, 500);
     }
 
@@ -1943,7 +1973,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     }
 
     public applyInlineDates(): void {
-        if(this.startDate <= this.endDate) {
+        if (this.startDate <= this.endDate) {
             this.startDate = this.inlineStartDate;
             this.endDate = this.inlineEndDate;
             this.clickApply();
