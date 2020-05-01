@@ -1214,84 +1214,76 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         }
         let date = side === DateType.start ? this.startCalendar.calendar[row][col] : this.endCalendar.calendar[row][col];
 
-        if (this.ActiveDate === ActiveDateEnum.Start) {
-            if (this.startDate) {
+        console.log("SELECTED : " + date.format(GIDDH_DATE_FORMAT));
+        console.log("START : " + this.startDate.format(GIDDH_DATE_FORMAT));
+        console.log("END : " + this.endDate.format(GIDDH_DATE_FORMAT));
 
+        if (this.ActiveDate === ActiveDateEnum.Start) {
+            // if start date is available
+            if (this.startDate) {
+                // if no end date available
                 if (!this.endDate) {
-                    if (date.isAfter(this.startDate, 'day')) {
+                    // if selected date is greater or equal to start date, then set end date
+                    if (date.isAfter(this.startDate, 'day') || date.isSame(this.startDate, 'day')) {
+                        this.setActiveDate(ActiveDateEnum.Start);
+                        this.setEndDate(date.clone());
+                    } else { // if selected date is less to start date, then set selected date as start and end date
                         this.setActiveDate(ActiveDateEnum.End);
+                        this.setStartDate(date.clone());
                         this.setEndDate(date.clone());
                     }
                 } else {
-
-                    // check if start date and end date are set
-                    if (this.startDate.isSame(this.endDate, 'day')) {
-                        if (date.isAfter(this.endDate, 'day')) {
-                            this.setActiveDate(ActiveDateEnum.End);
-                            this.setEndDate(date.clone());
-                        }
-
-                        if (date.isBefore(this.startDate, 'day')) {
-                            this.setStartDate(date.clone());
-                            this.setActiveDate(ActiveDateEnum.End);
-                        }
-                    } else {
-                        if (date.isAfter(this.endDate, 'day')) {
-                            this.setActiveDate(ActiveDateEnum.End);
-                            this.setStartDate(date.clone());
-                            this.setEndDate(date.clone());
-                        }
-
-                        if (date.isBefore(this.startDate, 'day')) {
-                            this.setStartDate(date.clone());
-                        }
-
-                        if (date.isAfter(this.startDate, 'day') && date.isBefore(this.endDate, 'day')) {
-                            this.setEndDate(date.clone());
-                            this.setActiveDate(ActiveDateEnum.End);
-                        }
+                    // if date less than or equal to end date then set start date
+                    if (date.isBefore(this.endDate, 'day') || date.isSame(this.endDate, 'day')) {
+                        this.setActiveDate(ActiveDateEnum.End);
+                        this.setStartDate(date.clone());
+                    } else if (date.isBefore(this.startDate, 'day') || date.isSame(this.startDate, 'day')) {
+                        // if end date available and selected date is less or equal to start date then set selected date as start and end date
+                        this.setActiveDate(ActiveDateEnum.End);
+                        this.setStartDate(date.clone());
+                        this.setEndDate(date.clone());
+                    } else if(date.isAfter(this.endDate, 'day')) {
+                        // if date is after end date then set end date
+                        this.setActiveDate(ActiveDateEnum.End);
+                        this.setStartDate(date.clone());
+                        this.setEndDate(date.clone());
                     }
                 }
-
-                if (date.isBefore(this.startDate, 'day')) {
-                    this.setStartDate(date.clone());
-                }
-
+            } else {
+                this.setStartDate(date.clone());
+                this.setActiveDate(ActiveDateEnum.End);
             }
         } else {
             if (this.endDate) {
-
-                if (this.startDate) {
-
-                    if (date.isBefore(this.startDate, 'day')) {
+                // if no start date available
+                if (!this.startDate) {
+                    // if selected date is less or equal to end date, then set selected date as start and end date
+                    if (date.isBefore(this.endDate, 'day') || date.isSame(this.endDate, 'day')) {
+                        this.setActiveDate(ActiveDateEnum.End);
+                        this.setStartDate(date.clone());
+                    } else if(date.isAfter(this.endDate, 'day')) { // if selected date is greater than end date, then set end date
+                        this.setActiveDate(ActiveDateEnum.End);
                         this.setStartDate(date.clone());
                         this.setEndDate(date.clone());
-                        this.setActiveDate(ActiveDateEnum.End);
-                        return;
                     }
-
-                    if (date.isAfter(this.endDate, 'day')) {
-                        this.setEndDate(date.clone());
+                } else {
+                    // if end date available and selected date is less or equal to start date then set selected date as start and end date
+                    if (date.isAfter(this.startDate, 'day') || date.isSame(this.startDate, 'day')) {
                         this.setActiveDate(ActiveDateEnum.Start);
+                        this.setEndDate(date.clone());
+                    } else if(date.isBefore(this.startDate, 'day')) {
+                        this.setActiveDate(ActiveDateEnum.End);
+                        this.setStartDate(date.clone());
+                        this.setEndDate(date.clone());
+                    } else if(date.isAfter(this.endDate, 'day')) {
+                        // if date is after end date then set end date
+                        this.setActiveDate(ActiveDateEnum.Start);
+                        this.setEndDate(date.clone());
                     }
-                }
-
-                if (this.endDate.isBefore(date, 'day')) {
-                    this.setEndDate(date.clone());
-                }
-
-                if (this.endDate.isAfter(date, 'day')) {
-                    this.setEndDate(date.clone());
-                    this.setActiveDate(ActiveDateEnum.Start);
-                }
-
-                if (date.isBefore(this.startDate, 'day')) {
-                    this.endDate = null;
-                    this.setActiveDate(ActiveDateEnum.Start);
-                    this.setStartDate(date.clone());
                 }
             } else {
                 this.setEndDate(date.clone());
+                this.setActiveDate(ActiveDateEnum.Start);
             }
         }
 
