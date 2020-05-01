@@ -1541,6 +1541,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
+     * Opens new company modal
+     *
+     * @memberof HeaderComponent
+     */
+    public createNewCompany(): void {
+        this.removeCompanySessionData();
+        this.showAddCompanyModal();
+    }
+
+    /**
      * Fetches whether company country has other taxes (TCS/TDS)
      *
      * @private
