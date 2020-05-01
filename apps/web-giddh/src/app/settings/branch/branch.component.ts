@@ -157,9 +157,10 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
         this._breakPointObservar.observe([
-            '(max-width: 1023px)'
+            '(max-width:768px)'
         ]).subscribe(result => {
             this.isMobileScreen = result.matches;
+            this.changeBranchViewType('card')
         });
     }
 
