@@ -5,7 +5,7 @@ import { Inject, Injectable, Optional } from '@angular/core';
 
 import { HttpWrapperService } from './httpWrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { LEDGER_API } from './apiurls/ledger.api';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
@@ -13,7 +13,7 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 export class MagicLinkService {
 
     constructor(
-        private errorHandler: ErrorHandler,
+        private errorHandler: GiddhErrorHandler,
         public _http: HttpWrapperService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }

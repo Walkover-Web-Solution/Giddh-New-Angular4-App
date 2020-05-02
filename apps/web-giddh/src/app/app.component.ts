@@ -127,7 +127,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.sideBarStateChange(true);
         // Need to implement for Web app only
         // debugger;
-        if (!LOCAL_ENV && !(isElectron || isCordova)) {
+        if (!LOCAL_ENV && !(isElectron || isCordova())) {
             this._versionCheckService.initVersionCheck(AppUrl + '/version.json');
             this._versionCheckService.onVersionChange$.subscribe((isChanged: boolean) => {
                 if (isChanged) {
@@ -164,7 +164,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         if (location.href.includes('returnUrl')) {
             let tUrl = location.href.split('returnUrl=');
             if (tUrl[1]) {
-                if (!(isElectron || isCordova)) {
+                if (!(isElectron || isCordova())) {
                     this.router.navigate(['pages/' + tUrl[1]]);
                 }
             }

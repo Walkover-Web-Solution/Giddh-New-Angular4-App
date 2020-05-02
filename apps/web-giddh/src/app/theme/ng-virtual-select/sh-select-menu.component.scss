@@ -26,17 +26,17 @@
 }
 
 // .item:hover {
-//       color: $border-blue !important;
+//       color: $chetwode-blue !important;
 //     background: #e3e4ed !important;
 // }
 
 .item.selected {
-    color: $border-blue !important;
+    color: $chetwode-blue !important;
     background: #eeeff9 !important;
 }
 
 .item.hilighted {
-    color: $border-blue !important;
+    color: $chetwode-blue !important;
     background: #e3e4ed !important;
 }
 
@@ -50,4 +50,15 @@
 
 #noresult:hover {
     background: transparent;
+}
+.item span {
+    float: left;
+}
+.item span input[type="checkbox"]:after {
+    top: -1px !important;
+    left: -1px !important;
+}
+.disabled a, .disabled a .item{
+    cursor: not-allowed !important;
+    color: gray !important;
 }

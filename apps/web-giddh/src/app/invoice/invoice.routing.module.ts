@@ -73,6 +73,7 @@ import { VoucherTypeToNamePipeModule } from '../shared/header/pipe/voucherTypeTo
 import { SendEmailInvoiceModule } from '../shared/send-email-invoice/send-email-invoice.module';
 import { DownloadVoucherComponent } from './preview/models/download-voucher/download-voucher.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
+import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
 
 // import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
@@ -172,7 +173,8 @@ const INVOICE_ROUTES: Routes = [
         ConfirmModalModule,
         SharedModule,
         VoucherTypeToNamePipeModule,
-        SendEmailInvoiceModule
+        SendEmailInvoiceModule,
+        AdvanceReceiptAdjustmentModule
     ],
     exports: [
         RouterModule,

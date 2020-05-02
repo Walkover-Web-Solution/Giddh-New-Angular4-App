@@ -68,7 +68,7 @@
 }
 
 .dropdown-menu > li > a:hover {
-    color: $border-blue;
+    color: $chetwode-blue;
     background: #e5e5e5;
 }
 .stock-input {
@@ -237,11 +237,11 @@ button[aria-expanded="true"] i {
     color: #757bb9;
 }
 .icon-pointer .activeTextColor {
-    color: $activeIconTh;
+    color: $deep-sky-blue;
 }
-.stickyFooterSaleAmount {
-    .innerContentFooter {
-        padding-left: 260px;
+.sticky-footer-sale-amount {
+    .inner-content-footer {
+        padding-left: 15px;
         padding-right: 80px;
         min-height: 60px;
         .flex-col {
@@ -249,12 +249,7 @@ button[aria-expanded="true"] i {
             justify-content: center;
             align-items: center;
             vertical-align: middle;
-        }
-        .flex-col:nth-child(odd) {
             min-width: 120px;
-        }
-        .flex-col:nth-child(even) {
-            min-width: 50px;
         }
         .operators {
             font-size: 39px;
@@ -317,4 +312,7 @@ button.btn.btn-filter {
     justify-content: space-between;
     align-items: center;
     padding: 4px 10px;
+}
+.stock-not-found {
+    text-transform: none;
 }

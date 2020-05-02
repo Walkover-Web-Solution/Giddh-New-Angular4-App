@@ -5,7 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { PurchaseRecordRequest } from '../models/api-models/Sales';
 import { PURCHASE_RECORD_API } from './apiurls/purchase-record.api';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { HttpWrapperService } from './httpWrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
@@ -17,7 +17,7 @@ export class PurchaseRecordService {
     /** @ignore */
     constructor(
         private _http: HttpWrapperService,
-        private errorHandler: ErrorHandler,
+        private errorHandler: GiddhErrorHandler,
         private _generalService: GeneralService,
         @Optional() @Inject(ServiceConfig)
         private config: IServiceConfigArgs

@@ -32,6 +32,8 @@ export class ExportDaybookComponent implements OnInit, OnDestroy {
                 this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
                 this.emailTypeMini = isAdmin ? 'admin-condensed' : 'view-condensed';
                 this.emailTypeDetail = isAdmin ? 'admin-detailed' : 'view-detailed';
+
+
             }
         });
     }

@@ -1,33 +1,34 @@
-import { Component, TemplateRef } from '@angular/core';
-import { ToasterService } from '../../../services/toaster.service';
-import { InventoryService } from '../../../services/inventory.service';
-import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
-
-import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
-import { GroupStockReportRequest, GroupStockReportResponse, InventoryDownloadRequest, StockGroupResponse } from '../../../models/api-models/Inventory';
-import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
-import { AppState } from '../../../store';
-
-import { select, Store } from '@ngrx/store';
-
-import { ChangeDetectorRef, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import * as moment from 'moment/moment';
-import * as _ from '../../../lodash-optimized';
-import { InventoryAction } from '../../../actions/inventory/inventory.actions';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { createSelector } from 'reselect';
-import { ModalDirective, PaginationComponent, BsModalService, BsModalRef } from 'ngx-bootstrap';
-import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
-import { CompanyResponse } from '../../../models/api-models/Company';
-import { InvViewService } from '../../inv.view.service';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
-import { isInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
-import { GeneralService } from '../../../services/general.service';
 import { ESCAPE } from '@angular/cdk/keycodes';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import * as moment from 'moment/moment';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
+import { createSelector } from 'reselect';
+import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, publishReplay, refCount, takeUntil } from 'rxjs/operators';
+
+import { InventoryAction } from '../../../actions/inventory/inventory.actions';
+import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
+import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import * as _ from '../../../lodash-optimized';
+import { CompanyResponse } from '../../../models/api-models/Company';
+import {
+    GroupStockReportRequest,
+    GroupStockReportResponse,
+    InventoryDownloadRequest,
+    StockGroupResponse,
+} from '../../../models/api-models/Inventory';
+import { GeneralService } from '../../../services/general.service';
+import { InventoryService } from '../../../services/inventory.service';
+import { ToasterService } from '../../../services/toaster.service';
+import { AppState } from '../../../store';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { InvViewService } from '../../inv.view.service';
 
 @Component({
     selector: 'invetory-group-stock-report',  // <home></home>
@@ -47,7 +48,7 @@ import { ESCAPE } from '@angular/cdk/keycodes';
     ]
 })
 
-export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
+export class InventoryGroupStockReportComponent implements OnChanges, OnInit, OnDestroy {
     @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
     @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
     @ViewChild("productName") productName: ElementRef;
@@ -57,6 +58,9 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
     @ViewChild('shCategoryType') public shCategoryType: ShSelectComponent;
     @ViewChild('shValueCondition') public shValueCondition: ShSelectComponent;
     @ViewChild('template') public template: ElementRef;
+
+    /** Stores the branch details along with their warehouses */
+    @Input() public currentBranchAndWarehouse: any;
 
     public today: Date = new Date();
     public activeGroup$: Observable<StockGroupResponse>;
@@ -198,6 +202,8 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
         endDate: moment()
     };
     public groupStockReport: GroupStockReportResponse;
+    /** Stores the message when particular group is not found */
+    public groupNotFoundMessage: string;
     public groupStockReportInProcess: boolean = false;
     public universalDate$: Observable<any>;
     public showAdvanceSearchModal: boolean = false;
@@ -225,7 +231,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
         private cdr: ChangeDetectorRef
     ) {
         this.groupStockReport$ = this.store.select(p => p.inventory.groupStockReport).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount());
-
         this.GroupStockReportRequest = new GroupStockReportRequest();
         this.activeGroup$ = this.store.select(state => state.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
@@ -256,8 +261,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-
-
         // get view from sidebar while clicking on group/stock
         let len = document.location.pathname.split('/').length;
         this.groupUniqueNameFromURL = document.location.pathname.split('/')[len - 2];
@@ -281,9 +284,17 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.groupStockReport$.subscribe(res => {
-            this.groupStockReport = res;
-            this.cdr.detectChanges();
+        this.groupStockReport$.subscribe((res: any) => {
+            if (res) {
+                if (res.isGroupNotFound) {
+                    this.groupStockReport = undefined;
+                    this.groupNotFoundMessage = res.message;
+                } else {
+                    this.groupStockReport = res;
+                    this.groupNotFoundMessage = '';
+                }
+                this.cdr.detectChanges();
+            }
         });
 
         this.store.pipe(select(s => s.inventory.groupStockReportInProcess), takeUntil(this.destroyed$)).subscribe(res => {
@@ -355,6 +366,25 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
             filterCategoryType: [''],
             filterValueCondition: ['']
         });
+    }
+
+    /**
+     * Lifecycle hook to fetch records based on warehouse and branch selected
+     *
+     * @param {SimpleChanges} changes SimpleChanges object
+     * @memberof InventoryGroupStockReportComponent
+     */
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes.currentBranchAndWarehouse && !_.isEqual(changes.currentBranchAndWarehouse.previousValue, changes.currentBranchAndWarehouse.currentValue)) {
+            if (this.currentBranchAndWarehouse) {
+                this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouse.warehouse !== 'all-entities') ? this.currentBranchAndWarehouse.warehouse : null;
+                this.GroupStockReportRequest.branchUniqueName = this.currentBranchAndWarehouse.branch;
+                if (!changes.currentBranchAndWarehouse.firstChange) {
+                    // Make a manual service call only when it is not first change
+                    this.getGroupReport(true);
+                }
+            }
+        }
     }
 
     @HostListener('document:keyup', ['$event'])
@@ -726,6 +756,8 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
         obj.reportType = reportType;
         obj.from = this.fromDate;
         obj.to = this.toDate;
+        obj.warehouseUniqueName = this.currentBranchAndWarehouse.warehouse;
+        obj.branchUniqueName = this.currentBranchAndWarehouse.branch;
         this.inventoryService.downloadAllInventoryReports(obj)
             .subscribe(res => {
                 if (res.status === 'success') {
@@ -763,7 +795,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
     openModal() {
         this.modalRef = this.modalService.show(
             this.template,
-            Object.assign({}, { class: 'modal-lg reciptNoteModal' })
+            Object.assign({}, { class: 'modal-lg receipt-note-modal ' })
         );
     }
 

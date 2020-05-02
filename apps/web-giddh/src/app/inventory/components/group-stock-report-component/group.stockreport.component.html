@@ -52,7 +52,7 @@
 
 
                 <div class="advance-icon" tooltip="Advance Search">
-                    <span class="icon-advance-serch" (click)="onOpenAdvanceSearch()"></span>
+                    <span class="icon-advance-search" (click)="onOpenAdvanceSearch()"></span>
                 </div>
 
                 <!-- <i *ngIf="isFilterCorrect" class="fa fa-refresh ml-1 cp" (click)="resetFilter()"></i> -->
@@ -304,15 +304,17 @@
                 </tr>
             </tbody>
 
-            <tbody *ngIf="groupStockReport && groupStockReport.count < 1 && !groupStockReportInProcess">
+            <tbody *ngIf="(groupStockReport && groupStockReport.count < 1 && !groupStockReportInProcess) || groupNotFoundMessage">
                 <tr>
                     <!-- in case of all entity with group -->
-                    <td colspan="10" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'" class="text-center empty_table">
-                        <td colspan="10" *ngIf="GroupStockReportRequest.branchDetails!='allEntity'" class="text-center empty_table">
-                            <!-- in case of all entity with group -->
-                            <img src="assets/images/search-data-not-found.svg" />
-                            <h1>No Report Found !!</h1>
-                        </td>
+                    <td colspan="10" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'"
+                        class="text-center empty_table">
+                    <td colspan="10" *ngIf="GroupStockReportRequest.branchDetails!='allEntity'"
+                        class="text-center empty_table">
+                        <!-- in case of all entity with group -->
+                        <img src="assets/images/search-data-not-found.svg" />
+                        <h1 [class.group-not-found]="groupNotFoundMessage">{{ (groupNotFoundMessage) ? groupNotFoundMessage : 'No Report Found !!' }}</h1>
+                    </td>
                 </tr>
             </tbody>
 
@@ -330,13 +332,13 @@
         <!-- sticky Footer -->
         <section class="mt-5" *ngIf="groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length>0">
             <!-- <span>{{activeGroupName}} Value:</span> -->
-            <div class="sticky-footer stickyFooterSaleAmount">
-                <div class="innerContentFooter">
+            <div class="sticky-footer sticky-footer-sale-amount">
+                <div class="inner-content-footer">
                     <div class="row">
 
-                        <div class="col-sm-4 pr-0">
+                        <div class="col-sm-5 pr-0">
                             <div class="row">
-                                <div class="col-xs-3 p0 countText">
+                                <div class="col-xs-4 p0 count-text">
                                     <h4 class="text-light">
                                         <div *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">Transaction Count
                                         </div>
@@ -345,7 +347,7 @@
                                         <div class="mt-2">Profit/Loss</div>
                                     </h4>
                                 </div>
-                                <div class="col-xs-6 p0">
+                                <div class="col-xs-8 p0">
                                     <h4 class="text-orange text-left">
                                         <div *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
                                             <span class="text-orange" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems}}</span>
@@ -354,7 +356,8 @@
                                             <span class="text-orange" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems}}</span>
                                         </div>
                                         <div class="mt-2">
-                                            <span class="text-orange">&nbsp;{{groupStockReport.profit | giddhCurrency}}
+                                            <span class="text-orange">{{groupStockReport.profit | giddhCurrency}}
+                                                <br>
                                                 ({{dateRangePickerCmp?.nativeElement?.value | replaceHyphens}})</span>
                                         </div>
                                     </h4>
@@ -377,7 +380,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-8">
+                        <div class="col-sm-7">
                             <div class="flex-col">
                                 <div class="cont">
                                     <h4 class="text-light">Opening Value</h4>

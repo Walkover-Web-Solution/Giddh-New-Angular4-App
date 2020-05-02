@@ -20,7 +20,6 @@
 }
 
 .item {
-    /* padding: 4px; */
     cursor: pointer;
     white-space: inherit;
     display: table;
@@ -28,12 +27,12 @@
     word-break: break-word;
 }
 .item.selected {
-    color: $border-blue !important;
+    color: $chetwode-blue !important;
     background: #eeeff9 !important;
 }
 
 .item.hilighted {
-    color: $border-blue !important;
+    color: $chetwode-blue !important;
     background: #e3e4ed !important;
 }
 

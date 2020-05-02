@@ -1,20 +1,39 @@
-import { catchError, map } from 'rxjs/operators';
-import { Inject, Injectable, OnInit, Optional } from '@angular/core';
-import { GeneralService } from './general.service';
-import { DownloadVoucherRequest, InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptRequest, ReciptResponse, Voucher } from '../models/api-models/recipt';
-import { Observable } from 'rxjs';
-import { BaseResponse } from '../models/api-models/BaseResponse';
-import { HttpWrapperService } from './httpWrapper.service';
 import { HttpClient } from '@angular/common/http';
-import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { RECEIPT_API } from './apiurls/recipt.api';
-import { ErrorHandler } from './catchManager/catchmanger';
-import { UserDetails } from '../models/api-models/loginModels';
+import { Inject, Injectable, OnInit, Optional } from '@angular/core';
+import { Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+
 import { LoaderService } from '../loader/loader.service';
-import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from '../models/api-models/Reports';
-import { COMPANY_API } from './apiurls/comapny.api';
+import { BaseResponse } from '../models/api-models/BaseResponse';
+import { UserDetails } from '../models/api-models/loginModels';
+import {
+    DownloadVoucherRequest,
+    InvoiceReceiptFilter,
+    ReceiptVoucherDetailsRequest,
+    ReciptDeleteRequest,
+    ReciptRequest,
+    ReciptResponse,
+    Voucher,
+} from '../models/api-models/recipt';
+import {
+    AdvanceReceiptSummaryRequest,
+    GetAllAdvanceReceiptsRequest,
+    ReportsDetailedRequestFilter,
+    SalesRegisteDetailedResponse,
+} from '../models/api-models/Reports';
 import { VoucherTypeEnum } from '../models/api-models/Sales';
-import { PurchaseRecordAdvanceSearch, PURCHASE_RECORD_DATE_OPERATION, PURCHASE_RECORD_DUE_DATE_OPERATION, PURCHASE_RECORD_GRAND_TOTAL_OPERATION } from '../purchase/purchase-record/constants/purchase-record.interface';
+import {
+    PURCHASE_RECORD_DATE_OPERATION,
+    PURCHASE_RECORD_DUE_DATE_OPERATION,
+    PURCHASE_RECORD_GRAND_TOTAL_OPERATION,
+    PurchaseRecordAdvanceSearch,
+} from '../purchase/purchase-record/constants/purchase-record.interface';
+import { COMPANY_API } from './apiurls/comapny.api';
+import { RECEIPT_API } from './apiurls/recipt.api';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
+import { GeneralService } from './general.service';
+import { HttpWrapperService } from './httpWrapper.service';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()
 export class ReceiptService implements OnInit {
@@ -22,7 +41,7 @@ export class ReceiptService implements OnInit {
     private user: UserDetails;
 
     constructor(private _generalService: GeneralService, private _http: HttpWrapperService,
-        private _httpClient: HttpClient, private errorHandler: ErrorHandler,
+        private _httpClient: HttpClient, private errorHandler: GiddhErrorHandler,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs, private _loaderService: LoaderService) {
         this.companyUniqueName = this._generalService.companyUniqueName;
     }
@@ -47,12 +66,12 @@ export class ReceiptService implements OnInit {
 
     public GetAllReceipt(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
-        const requestPayload = type === VoucherTypeEnum.purchase ? this.getPurchaseRecordPayload(body): body;
+        const requestPayload = type === VoucherTypeEnum.purchase ? this.getPurchaseRecordPayload(body) : body;
         const contextPath = type === VoucherTypeEnum.purchase ? RECEIPT_API.GET_ALL_PURCHASE_RECORDS : RECEIPT_API.GET_ALL;
         const requestParameter = {
-            page: body.page, count: body.count, from: body.from, to: body.to, q: body.q, sort: body.sort, sortBy: body.sortBy
+            page: body.page, count: body.count, from: body.from, to: body.to, q: (body.q) ? encodeURIComponent(body.q) : body.q, sort: body.sort, sortBy: body.sortBy
         };
-        let url = this.createQueryString(this.config.apiUrl + contextPath, (type === VoucherTypeEnum.purchase) ? requestParameter : {...requestParameter, type});
+        let url = this.createQueryString(this.config.apiUrl + contextPath, (type === VoucherTypeEnum.purchase) ? requestParameter : { ...requestParameter, type });
 
         return this._http.post(url
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), requestPayload).pipe(
@@ -85,7 +104,7 @@ export class ReceiptService implements OnInit {
         }
         advanceSearchRequest.dueDate = request.dueDate;
         if (request.dueDateEqual) {
-            advanceSearchRequest.dueDateOperation = PURCHASE_RECORD_DUE_DATE_OPERATION .ON;
+            advanceSearchRequest.dueDateOperation = PURCHASE_RECORD_DUE_DATE_OPERATION.ON;
         } else if (request.dueDateAfter) {
             advanceSearchRequest.dueDateOperation = PURCHASE_RECORD_DUE_DATE_OPERATION.AFTER;
         } else if (request.dueDateBefore) {
@@ -259,7 +278,7 @@ export class ReceiptService implements OnInit {
         this.companyUniqueName = this._generalService.companyUniqueName;
         let requestType = type;
         let url = this.createQueryString(this.config.apiUrl + RECEIPT_API.GET_ALL_BAL_SALE_DUE, {
-            page: body.page, count: body.count, from: body.from, to: body.to, type: requestType, q: body.q, sort: body.sort, sortBy: body.sortBy
+            page: body.page, count: body.count, from: body.from, to: body.to, type: requestType, q: body.q ? encodeURIComponent(body.q) : body.q, sort: body.sort, sortBy: body.sortBy
         });
 
         return this._http.post(url
@@ -288,5 +307,47 @@ export class ReceiptService implements OnInit {
             .replace(':accountUniqueName', accountUniqueName)
             .replace(':purchaseRecordUniqueNumber', purchaseRecordUniqueName)
         ).pipe(catchError((e) => this.errorHandler.HandleCatch<Voucher, any>(e)));
+    }
+
+    /**
+     * Fetches all the advance receipts
+     *
+     * @param {GetAllAdvanceReceiptsRequest} requestObject Request object
+     * @returns {Observable<BaseResponse<any, GetAllAdvanceReceiptsRequest>>} Observable to carry out further operations
+     * @memberof ReceiptService
+     */
+    public getAllAdvanceReceipts(requestObject: GetAllAdvanceReceiptsRequest): Observable<BaseResponse<any, GetAllAdvanceReceiptsRequest>> {
+        const companyUniqueName = String(requestObject.companyUniqueName);
+        delete requestObject.companyUniqueName;
+        return this._http.post(
+            `${this.config.apiUrl}${RECEIPT_API.GET_ALL_ADVANCE_RECEIPTS}`
+                .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+                .replace(':sortBy', requestObject && requestObject.sortBy ? requestObject.sortBy : '')
+                .replace(':sort', requestObject && requestObject.sort ? requestObject.sort : '')
+                .replace(':page', (requestObject && requestObject.page) ? String(requestObject.page) : '')
+                .replace(':count', requestObject && requestObject.count ? String(requestObject.count) : '')
+                .replace(':from', requestObject && requestObject.from ? requestObject.from : '')
+                .replace(':to', requestObject && requestObject.to ? requestObject.to : ''),
+            requestObject
+        ).pipe(catchError((error) => this.errorHandler.HandleCatch<any, GetAllAdvanceReceiptsRequest>(error)));
+    }
+
+    /**
+     * Fetches the summary advance receipts based on date filters
+     *
+     * @param {AdvanceReceiptSummaryRequest} requestObject Request object
+     * @returns {Observable<BaseResponse<any, AdvanceReceiptSummaryRequest>>} Observable to carry out further operations
+     * @memberof ReceiptService
+     */
+    public fetchSummary(requestObject: AdvanceReceiptSummaryRequest): Observable<BaseResponse<any, AdvanceReceiptSummaryRequest>> {
+        const companyUniqueName = String(requestObject.companyUniqueName);
+        delete requestObject.companyUniqueName;
+        return this._http.get(
+            `${this.config.apiUrl}${RECEIPT_API.GET_ADVANCE_RECEIPTS_SUMMARY}`
+                .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+                .replace(':from', requestObject && requestObject.from ? requestObject.from : '')
+                .replace(':to', requestObject && requestObject.to ? requestObject.to : ''),
+            {}
+        ).pipe(catchError((error) => this.errorHandler.HandleCatch<any, AdvanceReceiptSummaryRequest>(error)));
     }
 }
