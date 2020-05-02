@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 
 @Component({
@@ -6,11 +6,12 @@ import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permis
     templateUrl: './confirmation.modal.component.html'
 })
 
-export class DeleteTemplateConfirmationModelComponent {
+export class DeleteTemplateConfirmationModelComponent implements OnChanges {
 
     @Input() public message: string;
     @Input() public flag: string;
     @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter(null);
+    public isMessageTextOrHeading: boolean = false;
 
     public onConfirmation() {
         if (this.flag === 'closeConfirmation') {
@@ -25,6 +26,23 @@ export class DeleteTemplateConfirmationModelComponent {
             this.closeModelEvent.emit({ response: false, close: 'closeConfirmation' });
         } else {
             this.closeModelEvent.emit({ response: false, close: 'deleteConfirmation' });
+        }
+    }
+
+    /**
+     * hook to detect input directive changes
+     *
+     * @param {SimpleChanges} changes params to detect simple changes
+     *
+     * @memberof DeleteTemplateConfirmationModelComponent
+     */
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes && changes['flag'] && changes['flag'].currentValue) {
+            if (changes['flag'].currentValue === 'text-paragraph') {
+                this.isMessageTextOrHeading = true;
+            } else {
+                this.isMessageTextOrHeading = false;
+            }
         }
     }
 }

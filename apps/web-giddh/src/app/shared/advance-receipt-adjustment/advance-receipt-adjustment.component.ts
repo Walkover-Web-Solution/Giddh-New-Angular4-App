@@ -252,6 +252,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.toaster.warningToast(this.exceedDueErrorMessage);
             this.isInvalidForm = true;
         }
+        this.checkValidations();
     }
 
     /**
@@ -529,6 +530,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = 0.0;
         }
         this.calculateBalanceDue();
+        this.checkValidations();
     }
 
     /**
@@ -563,5 +565,24 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      */
     public getBalanceDue(): number {
         return parseFloat(Number(this.adjustPayment.grandTotal + this.adjustPayment.tcsTotal - this.adjustPayment.totalAdjustedAmount - this.depositAmount - this.adjustPayment.tdsTotal).toFixed(2));
+    }
+
+    /**
+     * To check form validation
+     *
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    public checkValidations() {
+        if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 0) {
+            this.adjustVoucherForm.adjustments.forEach((item) => {
+                if (!item.voucherNumber && item.dueAmount.amountForAccount) {
+                    this.isInvalidForm = true;
+                } else if (item.voucherNumber && !item.dueAmount.amountForAccount) {
+                    this.isInvalidForm = true;
+                } else {
+                    this.isInvalidForm = false;
+                }
+            })
+        }
     }
 }

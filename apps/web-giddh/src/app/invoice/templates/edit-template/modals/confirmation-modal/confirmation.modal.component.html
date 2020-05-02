@@ -5,7 +5,8 @@
     </div>
     <div class="modal-body clearfix" id="export-body">
         <form name="newRole" novalidate class="" autocomplete="off">
-            <h3 [innerHTML]="message"></h3>
+            <h3 *ngIf="!isMessageTextOrHeading" [innerHTML]="message"></h3>
+            <p *ngIf="isMessageTextOrHeading"> [innerHTML]="message"> </p>
             <div class="text-right mrT4">
                 <button type="button" class="btn btn-sm btn-success" (click)="onConfirmation()">Yes</button>
                 <button type="button" class="btn btn-sm btn-primary" (click)="onCancel()">No</button>
