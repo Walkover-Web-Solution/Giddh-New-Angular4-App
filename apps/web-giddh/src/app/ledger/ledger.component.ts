@@ -29,7 +29,7 @@ import { AccountResponse } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
-import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest, TransactionsResponse, } from '../models/api-models/Ledger';
+import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, } from '../models/api-models/Ledger';
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
@@ -196,7 +196,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         from: '',
         to: ''
     };
-
+    /** True if columnar report show*/
+    public isShowLedgerColumnarReportTable: boolean = false;
+    public columnarReportExportRequest: ExportLedgerRequest;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
 
@@ -1339,7 +1341,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public onOpenAdvanceSearch(): void {
-        if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.datePickerOptions && this.datePickerOptions.startDate && this.datePickerOptions.endDate ) {
+        if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.datePickerOptions && this.datePickerOptions.startDate && this.datePickerOptions.endDate) {
             this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                 page: 0,
                 dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
@@ -1802,6 +1804,29 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.isTouristSchemeApplicable = false;
         }
 
+    }
+
+    /**
+     * To show columnar report table
+     *
+     * @param {} event true if show columnar report table event fire
+     * @memberof LedgerComponent
+     */
+    public onShowColumnarReportTable(event: { isShowColumnarTable: boolean, exportRequest: ExportLedgerRequest }) {
+
+        let advanceSearch = cloneDeep(this.advanceSearchRequest)
+        if (!advanceSearch.dataToSend.bsRangeValue) {
+            this.universalDate$.pipe(take(1)).subscribe(date => {
+                if (date) {
+                    advanceSearch.dataToSend.bsRangeValue = [moment(date[0], 'DD-MM-YYYY').toDate(), moment(date[1], 'DD-MM-YYYY').toDate()];
+                }
+            });
+        }
+        event.exportRequest.from = moment(advanceSearch.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(advanceSearch.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+        event.exportRequest.to = moment(advanceSearch.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(advanceSearch.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
+        this.isShowLedgerColumnarReportTable = event.isShowColumnarTable;
+        this.columnarReportExportRequest = event.exportRequest;
+        this.hideExportLedgerModal();
     }
 
 }

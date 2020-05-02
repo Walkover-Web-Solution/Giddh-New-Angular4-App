@@ -15,6 +15,7 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { DaybookQueryRequest, DayBookRequestModel } from '../models/api-models/DaybookRequest';
 import { HttpClient } from '@angular/common/http';
 import { ToasterService } from './toaster.service';
+import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
 
 @Injectable()
 export class LedgerService {
@@ -434,5 +435,38 @@ export class LedgerService {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
+    }
+
+    /**
+     * To get export Ledger's columnar report table
+     *
+     * @param {ReportsDetailedRequestFilter} model request model
+     * @param {string} companyUniqueName Company unique name
+     * @param {string} accountUniqueName Account unique name
+     * @param {*} [body] body
+     * @returns {Observable<BaseResponse<any, ReportsDetailedRequestFilter>>}
+     * @memberof LedgerService
+     */
+    public ExportLedgerColumnarReportTable(model: ReportsDetailedRequestFilter, companyUniqueName: string, accountUniqueName: string, body?: any): Observable<BaseResponse<any, ReportsDetailedRequestFilter>> {
+        this.user = this._generalService.user;
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        let URL = this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_COLUMNAR_REPORT_TABLE
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+            .replace(':from', model.from)
+            .replace(':to', model.to);
+        if (model.page) {
+            URL = `${URL}&page=${model.page}`;
+        }
+        if (model.count) {
+            URL = `${URL}&count=${model.count}`;
+        }
+        return this._http.post(URL, body).pipe(map((res) => {
+            let data: BaseResponse<any, ReportsDetailedRequestFilter> = res;
+            data.request = body;
+            data.queryString = { accountUniqueName };
+            return data;
+        }),
+            catchError((e) => this.errorHandler.HandleCatch<string, ReportsDetailedRequestFilter>(e, model, { accountUniqueName })));
     }
 }

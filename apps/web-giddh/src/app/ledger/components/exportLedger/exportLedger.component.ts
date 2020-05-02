@@ -24,6 +24,8 @@ export class ExportLedgerComponent implements OnInit {
     // @Input() public to: string = '';
     @Input() public advanceSearchRequest: any;
     @Output() public closeExportLedgerModal: EventEmitter<boolean> = new EventEmitter();
+    /** Event emmiter to show columnar report table */
+    @Output() public showColumnarTable: EventEmitter<{ isShowColumnarTable: boolean, exportRequest: ExportLedgerRequest }> = new EventEmitter();
     public emailTypeSelected: string = '';
     public exportAs: string = 'xlsx';
     public order: string = 'asc';
@@ -33,6 +35,8 @@ export class ExportLedgerComponent implements OnInit {
     public emailData: string = '';
     public withInvoiceNumber: boolean = false;
     public universalDate$: Observable<any>;
+    /** Columnar report in balance type for Credit/Debit as +/- sign */
+    public balanceTypeAsSign: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _ledgerService: LedgerService, private _toaster: ToasterService, private _permissionDataService: PermissionDataService, private store: Store<AppState>) {
@@ -57,8 +61,9 @@ export class ExportLedgerComponent implements OnInit {
         exportRequest.type = this.emailTypeSelected;
         exportRequest.sort = this.order;
         exportRequest.format = this.exportAs;
-
+        exportRequest.balanceTypeAsSign = this.balanceTypeAsSign;
         const body = _.cloneDeep(this.advanceSearchRequest);
+        body.dataToSend.balanceTypeAsSign = this.balanceTypeAsSign;
         if (!body.dataToSend.bsRangeValue) {
             this.universalDate$.pipe(take(1)).subscribe(a => {
                 if (a) {
@@ -153,5 +158,22 @@ export class ExportLedgerComponent implements OnInit {
         if (reportType === 'columnar') {
             this.exportAs = 'xlsx';
         }
+    }
+
+    /**
+     * To show columnar report table on ledeger
+     *
+     * @memberof ExportLedgerComponent
+     */
+    public showColumnarReport() {
+        let exportRequest = new ExportLedgerRequest();
+        exportRequest.type = this.emailTypeSelected;
+        exportRequest.sort = this.order;
+        exportRequest.format = this.exportAs;
+        exportRequest.balanceTypeAsSign = this.balanceTypeAsSign;
+        this.showColumnarTable.emit({
+            isShowColumnarTable: true,
+            exportRequest: exportRequest
+        });
     }
 }

@@ -1,0 +1,44 @@
+<div class="reverse-table-report">
+    <div class="container-fluid">
+        <div class="invoice-preview  table-responsive" *ngIf="columnarReportResponse">
+            <table class="table basic giddh-table onMobileView">
+                <thead class="t-h-bg1">
+                    <tr>
+                        <ng-container *ngFor="let item of columnsName">
+                            <th class="text-center">{{item}}</th>
+                        </ng-container>
+                    </tr>
+                </thead>
+                <tbody *ngIf="columnarReportResponse.accounts">
+                    <tr *ngFor="let item of columnarReportResponse.accounts;let inx = index;">
+                        <!-- S No -->
+                        <td class="text-center"> {{ inx + 1}} </td>
+                        <!--Ledger Name -->
+                        <td class="text-center"> {{ item.name}} </td>
+                        <!--Parent  Name -->
+                        <td class="text-center"> {{ item.name}} </td>
+                        <!--Opening balance  -->
+                        <td class="text-center" *ngIf="(isShowClosingOpeningBalance$ | async)"> {{ columnarReportResponse.openingBalance[item.uniqueName].amount}} </td>
+                        <!--Closing balance  -->
+                        <td class="text-center" *ngIf="(isShowClosingOpeningBalance$ | async)"> {{ columnarReportResponse.closingBalance[item.uniqueName].amount}} </td>
+                        <!--Grand  Total -->
+                        <td class="text-center"> {{ columnarReportResponse.grandTotal[item.uniqueName].amount}} </td>
+                        <ng-container *ngFor="let months of columnarReportResponse.data;let inx2 = index;">
+                            <!-- months data -->
+                            <td class="text-center"> {{ months.accountsData[inx].monthlyBalance.amount}} </td>
+                        </ng-container>
+                    </tr>
+                </tbody>
+                <tbody *ngIf="columnarReportResponse && columnarReportResponse.accounts && columnarReportResponse.accounts.length === 0">
+                    <tr>
+                        <td [attr.colspan]="columnsName.length" align="center">No records found.</td>
+                        <!-- <td  colspan="10">&nbsp;</td> -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- <div class="paginationWrapper" *ngIf="reverseChargeReportResults.totalPages > 1">
+            <pagination [totalItems]="reverseChargeReportResults.totalPages" [(ngModel)]="reverseChargeReportResults.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+        </div> -->
+    </div>
+</div>

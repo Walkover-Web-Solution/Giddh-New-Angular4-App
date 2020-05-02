@@ -144,7 +144,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                     this.selectActiveFinancialYear();
                     this.exportRequest.balanceTypeAsSign = true;
                     if (isShowReport) {
-                       this.columnarReportResponse = res;
+                       this.columnarReportResponse = res.body;
                     } else {
                         let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
                         return saveAs(blob, `ColumnarReport.xlsx`);
