@@ -254,9 +254,7 @@
                             {{ item.voucherType }}
                         </td>
                         <td data-title="Voucher No" *ngIf="showFieldFilter.voucherNo" class="verticle-align-top">
-                            <a href="javascript:void(0) ">{{
-                                item.voucherNumber
-                            }}</a>
+                            {{ item.voucherNumber }}
                         </td>
                         <td data-title="Sales" *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal" class="text-right ">
                             {{ item.creditTotal | giddhCurrency }}
