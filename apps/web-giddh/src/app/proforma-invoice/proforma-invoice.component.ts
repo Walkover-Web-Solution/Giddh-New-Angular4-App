@@ -86,6 +86,7 @@ import { CommonActions } from '../actions/common.actions';
 import { PurchaseRecordActions } from '../actions/purchase-record/purchase-record.action';
 import { AdvanceReceiptAdjustmentComponent } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.component';
 import { AdvanceReceiptAdjustment, AdjustAdvancePaymentModal } from '../models/api-models/AdvanceReceiptsAdjust';
+import { ProformaState } from '../store/proforma/proforma.reducer';
 
 const THEAD_ARR_READONLY = [
     {
@@ -350,7 +351,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private updateAccountSuccess$: Observable<boolean>;
     private createdAccountDetails$: Observable<AccountResponseV2>;
     private updatedAccountDetails$: Observable<AccountResponseV2>;
-    private generateVoucherSuccess$: Observable<boolean>;
+    private generateVoucherSuccess$: Observable<ProformaState>;
     private updateVoucherSuccess$: Observable<boolean>;
     private lastGeneratedVoucherNo$: Observable<{ voucherNo: string, accountUniqueName: string }>;
     private entriesListBeforeTax: SalesEntryClass[];
@@ -464,7 +465,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.createdAccountDetails$ = this.store.pipe(select(p => p.sales.createdAccountDetails), takeUntil(this.destroyed$));
         this.updatedAccountDetails$ = this.store.pipe(select(p => p.sales.updatedAccountDetails), takeUntil(this.destroyed$));
         this.updateAccountSuccess$ = this.store.pipe(select(p => p.sales.updateAccountSuccess), takeUntil(this.destroyed$));
-        this.generateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isGenerateSuccess), takeUntil(this.destroyed$));
+        this.generateVoucherSuccess$ = this.store.pipe(select(p => p.proforma), takeUntil(this.destroyed$));
         this.updateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isUpdateProformaSuccess), takeUntil(this.destroyed$));
         this.lastGeneratedVoucherNo$ = this.store.pipe(select(p => p.proforma.lastGeneratedVoucherDetails), takeUntil(this.destroyed$));
         this.lastInvoices$ = this.store.pipe(select(p => p.receipt.lastVouchers), takeUntil(this.destroyed$));
@@ -1145,8 +1146,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.showBulkItemModal = false;
         });
 
-        this.generateVoucherSuccess$.subscribe(result => {
-            if (result) {
+        this.generateVoucherSuccess$.subscribe((result: ProformaState) => {
+            if (result.isGenerateSuccess) {
                 this.resetInvoiceForm(this.invoiceForm);
 
                 let lastGenVoucher: { voucherNo: string, accountUniqueName: string } = {
@@ -1160,6 +1161,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (!this.isUpdateMode) {
                     this.getAllLastInvoices();
                 }
+            } else if (!result.isGenerateInProcess) {
+                this.startLoader(false);
             }
         });
 
