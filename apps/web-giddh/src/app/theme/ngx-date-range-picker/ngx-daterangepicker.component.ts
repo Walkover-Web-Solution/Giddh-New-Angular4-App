@@ -326,7 +326,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     }
 
     public closeDatePicker() {
-        document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
+        if(document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material")[0]) {
+            document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
+        }
         document.querySelector('body').classList.remove('hide-scroll-body')
     }
 
@@ -1834,8 +1836,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     }
 
     public appendDatepickerToBody() {
-        document.body.appendChild(document.getElementsByTagName("ngx-daterangepicker-material")[0]);
-        this.isShown$.next(true);
+        if(document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material")[0]) {
+            document.body.appendChild(document.getElementsByTagName("ngx-daterangepicker-material")[0]);
+            this.isShown$.next(true);
+        }
     }
 
     public handleHighLightedItemEvent(item: any): void {
@@ -1929,12 +1933,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         this.renderCalendar(DateType.end);
 
         // setTimeout(() => {
-        //     for(let loop = 0; loop < 5; loop++) {
-        //         this.goToPrevMonth();
-        //     }
-        //     for(let loop = 0; loop < 10; loop++) {
-        //         this.goToNextMonth();
-        //     }
+            // for(let loop = 0; loop < 5; loop++) {
+            //     this.goToPrevMonth();
+            // }
+            // for(let loop = 0; loop < 10; loop++) {
+            //     this.goToNextMonth();
+            // }
         // }, 500);
     }
 
