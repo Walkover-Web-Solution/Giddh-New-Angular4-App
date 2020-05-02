@@ -11,6 +11,7 @@ export class DeleteTemplateConfirmationModelComponent implements OnChanges {
     @Input() public message: string;
     @Input() public flag: string;
     @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter(null);
+    /** True, if message contails body and header message  */
     public isMessageTextOrHeading: boolean = false;
 
     public onConfirmation() {
@@ -42,6 +43,9 @@ export class DeleteTemplateConfirmationModelComponent implements OnChanges {
                 this.isMessageTextOrHeading = true;
             } else {
                 this.isMessageTextOrHeading = false;
+            }
+            if(changes['flag'].currentValue === 'text-paragraph' && changes['message'].currentValue) {
+             let msg = changes['message'].currentValue.split('&');
             }
         }
     }

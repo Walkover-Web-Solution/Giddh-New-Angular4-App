@@ -572,7 +572,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      *
      * @memberof AdvanceReceiptAdjustmentComponent
      */
-    public checkValidations() {
+    public checkValidations(): void {
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 0) {
             this.adjustVoucherForm.adjustments.forEach((item, key) => {
                 if ((!item.voucherNumber && item.dueAmount.amountForAccount) || (item.voucherNumber && !item.dueAmount.amountForAccount) || (!item.voucherNumber && !item.dueAmount.amountForAccount && key>0)) {

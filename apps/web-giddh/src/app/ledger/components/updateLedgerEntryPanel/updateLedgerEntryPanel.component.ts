@@ -184,7 +184,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** Remove Advance receipt confirmation flag */
     public confirmationFlag: string = 'text-paragraph';
     /** Remove Advance receipt confirmation message */
-    public removeAdvanceReceiptConfirmationMessage: string = 'If you change the type of this receipt, all the related advance receipt adjustments in invoices will be removed. Are you sure you want to proceed?';
+    public removeAdvanceReceiptConfirmationMessage: string = 'If you change the type of this receipt, all the related advance receipt adjustments in invoices will be removed & Are you sure you want to proceed?';
     constructor(
         private _accountService: AccountService,
         private _ledgerService: LedgerService,
