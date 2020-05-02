@@ -24,6 +24,7 @@ import { IGroupsWithStocksHierarchyMinItem } from "../models/interfaces/groupsWi
 import { InventoryService } from '../services/inventory.service';
 import { ToasterService } from '../services/toaster.service';
 import { SettingsUtilityService } from '../settings/services/settings-utility.service';
+import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -45,6 +46,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
     @ViewChild('confirmationModal') public confirmationModal: ModalDirective;
     @ViewChild('inventoryStaticTabs') public inventoryStaticTabs: TabsetComponent;
+    /** Warehouse filter instance */
+    @ViewChild('warehouseFilter') warehouseFilter: ShSelectComponent;
 
     public dataSyncOption = IsyncData;
     public currentBranch: string = null;
@@ -247,9 +250,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             switch (type) {
                 case 'inventory':
                     this.navigateToInventoryTab();
-                    this.loadInventoryTab(() => {
-                        this.loadBranchWithWarehouse();
-                    });
                     break;
                 case 'jobwork':
                     this.router.navigate(['/pages', 'inventory', 'jobwork'], { relativeTo: this.route });
@@ -370,7 +370,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public loadReportByBranch(selectedBranch: string): void {
         this.loadBranchWarehouse(selectedBranch);
-        this.currentBranchAndWarehouseFilterValues = { ...this.currentBranchAndWarehouseFilterValues, branch: selectedBranch };
     }
 
     private isAllCompaniesSelected() {
@@ -464,6 +463,10 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                     warehouse = 'all-entities';
                 } else {
                     warehouse = warehouseData.formattedWarehouses[0].uniqueName;
+                }
+                const currentWarehouse = warehouseData.formattedWarehouses.find((data) => data.uniqueName === warehouse || data.value === warehouse);
+                if (currentWarehouse) {
+                    this.warehouseFilter.filter = currentWarehouse.label;
                 }
                 this.currentBranchAndWarehouseFilterValues = { warehouse, branch: branchDetails.uniqueName };
             }
