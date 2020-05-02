@@ -132,26 +132,26 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
                     cogsGrp.accounts = [];
                     cogsGrp.childGroups = [];
 
-                    Object.keys(cogs).filter(f => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(f)).forEach(f => {
+                    Object.keys(cogs).filter(cogsElement => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(cogsElement)).forEach(cogsElement => {
                         let cg = new ChildGroup();
                         cg.isCreated = false;
                         cg.isVisible = false;
                         cg.isIncludedInSearch = true;
                         cg.isOpen = false;
-                        cg.uniqueName = f;
-                        cg.groupName = f.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+                        cg.uniqueName = cogsElement;
+                        cg.groupName = cogsElement.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
                         // removed following line in favour of G0-908
                         // cg.category = f === 'closingInventory' ? 'expenses' : 'income';
-                        cg.category = f === 'income';
+                        cg.category = cogsElement === 'income';
                         cg.closingBalance = {
-                            amount: cogs[f],
+                            amount: cogs[cogsElement],
                             type: 'CREDIT'
                         };
                         cg.accounts = [];
                         cg.childGroups = [];
-                        if (['purchasesStockAmount', 'manufacturingExpenses'].includes(f)) {
+                        if (['purchasesStockAmount', 'manufacturingExpenses'].includes(cogsElement)) {
                             cg.groupName = `+ ${cg.groupName}`;
-                        } else if (['closingInventory', 'debitNoteStockAmount'].includes(f)) {
+                        } else if (['closingInventory', 'debitNoteStockAmount'].includes(cogsElement)) {
                             cg.groupName = `- ${cg.groupName}`;
                         }
                         cogsGrp.childGroups.push(cg);
