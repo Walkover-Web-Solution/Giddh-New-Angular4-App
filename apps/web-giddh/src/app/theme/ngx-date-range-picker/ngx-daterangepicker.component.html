@@ -101,13 +101,13 @@
                 <div class="start-end-date">
                     <div class="pos-rel mr-1">
                         <label>Start Date</label>
-                        <input type="tel" name="inlineStartDate" mask="00/00/0000" (blur)="saveInlineDates($event)">
-                         <span class="error-msg">{{invalidInlineStartDate ? "Invalid Date" : ""}}</span>
+                        <input type="tel" name="inlineStartDate" [value]="viewOnlyStartDate" mask="00-00-0000" (blur)="saveInlineDates($event)">
+                        <span class="error-msg" *ngIf="invalidInlineStartDate">{{invalidInlineStartDate}}</span>
                     </div>
                     <div class="pos-rel">
                         <label>End Date</label>
-                        <input type="tel" name="inlineEndDate" mask="00/00/0000" (blur)="saveInlineDates($event)">
-                        <span class="error-msg">{{invalidInlineEndDate ? "Invalid Date" : ""}}</span>
+                        <input type="tel" name="inlineEndDate" [value]="viewOnlyEndDate" mask="00-00-0000" (blur)="saveInlineDates($event)">
+                        <span class="error-msg" *ngIf="invalidInlineEndDate">{{invalidInlineEndDate}}</span>
                     </div>
                 </div>
                 <div class="button-wrapper">

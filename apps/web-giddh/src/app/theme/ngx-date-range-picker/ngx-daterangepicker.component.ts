@@ -196,10 +196,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public allowedYears: any[] = [];
     public scrollPosition: string = 'bottom';
     public openMobileDatepickerPopup: boolean = false;
+    public viewOnlyStartDate: any;
+    public viewOnlyEndDate: any;
     public inlineStartDate: any;
     public inlineEndDate: any;
-    public invalidInlineStartDate: boolean = false;
-    public invalidInlineEndDate: boolean = false;
+    public invalidInlineStartDate: string = "";
+    public invalidInlineEndDate: string = "";
     public isInlineDateFieldsShowing: boolean = false;
 
     constructor(
@@ -315,8 +317,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
         this.modalService.onHide.subscribe(response => {
             this.isInlineDateFieldsShowing = false;
-            this.invalidInlineStartDate = false;
-            this.invalidInlineEndDate = false;
+            this.invalidInlineStartDate = "";
+            this.invalidInlineEndDate = "";
         });
     }
 
@@ -333,11 +335,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     }
 
     public openModalWithClass(template: TemplateRef<any>) {
-        let inlineStartDate = _.cloneDeep(this.startDate);
-        let inlineEndDate = _.cloneDeep(this.endDate);
+        this.inlineStartDate = _.cloneDeep(this.startDate);
+        this.inlineEndDate = _.cloneDeep(this.endDate);
 
-        this.inlineStartDate = inlineStartDate;
-        this.inlineEndDate = inlineEndDate;
+        this.viewOnlyStartDate = this.inlineStartDate.format(GIDDH_DATE_FORMAT);
+        this.viewOnlyEndDate = this.inlineEndDate.format(GIDDH_DATE_FORMAT);
 
         this.modalRef = this.modalService.show(template,
             Object.assign({}, { class: 'edit-modal modal-small' })
@@ -1956,32 +1958,32 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
     public saveInlineDates(event): void {
         if (event.target.name === "inlineStartDate") {
-            this.invalidInlineStartDate = false;
-            if (moment(new Date(event.target.value.split("/").reverse().join("-"))).format("dddd") !== "Invalid date") {
-                this.inlineStartDate = moment(new Date(event.target.value.split("/").reverse().join("-")));
+            this.invalidInlineStartDate = "";
+            if (moment(new Date(event.target.value.split("-").reverse().join("-"))).format("dddd") !== "Invalid date") {
+                this.inlineStartDate = moment(new Date(event.target.value.split("-").reverse().join("-")));
             } else {
-                this.invalidInlineStartDate = true;
+                this.invalidInlineStartDate = "Invalid date";
             }
         }
 
         if (event.target.name === "inlineEndDate") {
-            this.invalidInlineEndDate = false;
-            if (moment(new Date(event.target.value.split("/").reverse().join("-"))).format("dddd") !== "Invalid date") {
-                this.inlineEndDate = moment(new Date(event.target.value.split("/").reverse().join("-")));
+            this.invalidInlineEndDate = "";
+            if (moment(new Date(event.target.value.split("-").reverse().join("-"))).format("dddd") !== "Invalid date") {
+                this.inlineEndDate = moment(new Date(event.target.value.split("-").reverse().join("-")));
             } else {
-                this.invalidInlineEndDate = true;
+                this.invalidInlineEndDate = "Invalid date";
             }
         }
     }
 
     public applyInlineDates(): void {
-        if (this.startDate <= this.endDate) {
+        if (this.inlineStartDate.isBefore(this.inlineEndDate, 'day')) {
             this.startDate = this.inlineStartDate;
             this.endDate = this.inlineEndDate;
             this.clickApply();
             this.modalRef.hide();
         } else {
-            // Need to show message here that start date can't be greater than end date
+            this.invalidInlineStartDate = "Start date must not be greater than End date";
         }
     }
 
