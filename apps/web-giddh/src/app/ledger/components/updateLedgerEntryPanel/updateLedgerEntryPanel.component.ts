@@ -182,9 +182,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** True, if all the transactions are of type 'Tax' or 'Reverse Charge' */
     private taxOnlyTransactions: boolean;
     /** Remove Advance receipt confirmation flag */
-    public confirmationFlag: string = '';
+    public confirmationFlag: string = 'text-paragraph';
     /** Remove Advance receipt confirmation message */
-    public removeAdvanceReceiptConfirmationMessage: string = 'If you change the type of this receipt, all the related advance receipt adjustments in invoices will be removed. Are you sure you want to proceed?';
+    public removeAdvanceReceiptConfirmationMessage: string = 'If you change the type of this receipt, all the related advance receipt adjustments in invoices will be removed. & Are you sure you want to proceed?';// & symbol is not part of message it to split sentance by '&'
     constructor(
         private _accountService: AccountService,
         private _ledgerService: LedgerService,
