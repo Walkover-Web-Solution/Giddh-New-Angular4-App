@@ -14,7 +14,7 @@
                         <section class="container-fluid  clearfix pdT2">
                             <div *ngIf="activeView" class="d-flex mrB1 branch-warehouse-filter">
                                 <sh-select class="multi-select branch-filter" (ngModelChange)="loadReportByBranch($event)" [options]="branches" [ngModel]="currentBranchAndWarehouseFilterValues.branch"></sh-select>
-                                <sh-select class="multi-select warehouse-filter" (ngModelChange)="loadReportByWarehouse($event)" [options]="warehouses" [ngModel]="currentBranchAndWarehouseFilterValues.warehouse"></sh-select>
+                                <sh-select class="multi-select warehouse-filter" #warehouseFilter (ngModelChange)="loadReportByWarehouse($event)" [options]="warehouses" [ngModel]="currentBranchAndWarehouseFilterValues.warehouse"></sh-select>
                             </div>
                             <div *ngIf="activeView === 'stock'">
                                 <invetory-stock-report [currentBranchAndWarehouse]="currentBranchAndWarehouseFilterValues"></invetory-stock-report>
