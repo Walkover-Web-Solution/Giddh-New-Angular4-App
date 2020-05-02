@@ -14,15 +14,15 @@
                         <!-- S No -->
                         <td class="text-center"> {{ inx + 1}} </td>
                         <!--Ledger Name -->
-                        <td class="text-center"> {{ item.name}} </td>
+                        <td class="text-center"> {{ item.accountName}} </td>
                         <!--Parent  Name -->
-                        <td class="text-center"> {{ item.name}} </td>
+                        <td class="text-center"> {{ item.groupName}} </td>
                         <!--Opening balance  -->
-                        <td class="text-center" *ngIf="(isShowClosingOpeningBalance$ | async)"> {{ columnarReportResponse.openingBalance[item.uniqueName].amount}} </td>
+                        <td class="text-center" *ngIf="(isShowClosingOpeningBalance$ | async)"> {{ columnarReportResponse.openingBalance[item.accountUniqueName].amount}} </td>
                         <!--Closing balance  -->
-                        <td class="text-center" *ngIf="(isShowClosingOpeningBalance$ | async)"> {{ columnarReportResponse.closingBalance[item.uniqueName].amount}} </td>
+                        <td class="text-center" *ngIf="(isShowClosingOpeningBalance$ | async)"> {{ columnarReportResponse.closingBalance[item.accountUniqueName].amount}} </td>
                         <!--Grand  Total -->
-                        <td class="text-center"> {{ columnarReportResponse.grandTotal[item.uniqueName].amount}} </td>
+                        <td class="text-center"> {{ columnarReportResponse.grandTotal[item.accountUniqueName].amount}} </td>
                         <ng-container *ngFor="let months of columnarReportResponse.data;let inx2 = index;">
                             <!-- months data -->
                             <td class="text-center"> {{ months.accountsData[inx].monthlyBalance.amount}} </td>
@@ -37,8 +37,16 @@
                 </tbody>
             </table>
         </div>
-        <!-- <div class="paginationWrapper" *ngIf="reverseChargeReportResults.totalPages > 1">
-            <pagination [totalItems]="reverseChargeReportResults.totalPages" [(ngModel)]="reverseChargeReportResults.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+        <!-- <div class="paginationWrapper" *ngIf="columnarReportResponse.totalPages > 1">
+            <pagination [totalItems]="columnarReportResponse.totalPages" [(ngModel)]="columnarReportResponse.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
         </div> -->
     </div>
 </div>
+<!-- <div *ngIf="isLoading">
+    <div class="no-data mrT2 loader-main">
+        <div class="spinner2">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
+    </div>
+</div> -->

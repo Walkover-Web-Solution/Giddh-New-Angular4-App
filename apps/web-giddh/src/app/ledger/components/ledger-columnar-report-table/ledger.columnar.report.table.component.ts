@@ -37,224 +37,6 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     /** Subject to destroye all observers  */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    // public reportTableData: any = {
-    //     status: "success",
-    //     body: {
-    //         page: 1,
-    //         count: 50,
-    //         totalPages: 20,
-    //         totalItems: 8,
-    //         results: [
-    //             {
-    //                 entryId: 129,
-    //                 accountId: 214,
-    //                 date: "04-04-2020",
-    //                 baseAccount: "Cash",
-    //                 address: null,
-    //                 voucherType: "sales",
-    //                 voucherNumber: "5",
-    //                 voucherRefNo: null,
-    //                 voucherRefDate: "",
-    //                 taxNumber: null,
-    //                 narration: "",
-    //                 stockName: null,
-    //                 quantity: "",
-    //                 stockUnitCode: null,
-    //                 rate: null,
-    //                 value: null,
-    //                 grossTotal: "100.00 dr",
-    //                 balance: null,
-    //                 accountNameAndAmountMap: null,
-    //                 accountNameAndBalanceMap: {
-    //                     Sales: "100.00 cr"
-    //                 }
-    //             },
-    //             {
-    //                 entryId: 125,
-    //                 accountId: 214,
-    //                 date: "04-04-2020",
-    //                 baseAccount: "Cash",
-    //                 address: null,
-    //                 voucherType: "sales",
-    //                 voucherNumber: "1",
-    //                 voucherRefNo: null,
-    //                 voucherRefDate: "",
-    //                 taxNumber: null,
-    //                 narration: "",
-    //                 stockName: null,
-    //                 quantity: "",
-    //                 stockUnitCode: null,
-    //                 rate: null,
-    //                 value: null,
-    //                 grossTotal: "100.00 dr",
-    //                 balance: null,
-    //                 accountNameAndAmountMap: null,
-    //                 accountNameAndBalanceMap: {
-    //                     Sales: "100.00 cr"
-    //                 }
-    //             },
-    //             {
-    //                 entryId: 126,
-    //                 accountId: 214,
-    //                 date: "04-04-2020",
-    //                 baseAccount: "Cash",
-    //                 address: null,
-    //                 voucherType: "sales",
-    //                 voucherNumber: "2",
-    //                 voucherRefNo: null,
-    //                 voucherRefDate: "",
-    //                 taxNumber: null,
-    //                 narration: "",
-    //                 stockName: null,
-    //                 quantity: "",
-    //                 stockUnitCode: null,
-    //                 rate: null,
-    //                 value: null,
-    //                 grossTotal: "100.00 dr",
-    //                 balance: null,
-    //                 accountNameAndAmountMap: null,
-    //                 accountNameAndBalanceMap: {
-    //                     Sales: "100.00 cr"
-    //                 }
-    //             },
-    //             {
-    //                 entryId: 128,
-    //                 accountId: 214,
-    //                 date: "04-04-2020",
-    //                 baseAccount: "Cash",
-    //                 address: null,
-    //                 voucherType: "sales",
-    //                 voucherNumber: "4",
-    //                 voucherRefNo: null,
-    //                 voucherRefDate: "",
-    //                 taxNumber: null,
-    //                 narration: "",
-    //                 stockName: null,
-    //                 quantity: "",
-    //                 stockUnitCode: null,
-    //                 rate: null,
-    //                 value: null,
-    //                 grossTotal: "100.00 dr",
-    //                 balance: null,
-    //                 accountNameAndAmountMap: null,
-    //                 accountNameAndBalanceMap: {
-    //                     Sales: "100.00 cr"
-    //                 }
-    //             },
-    //             {
-    //                 entryId: 127,
-    //                 accountId: 214,
-    //                 date: "04-04-2020",
-    //                 baseAccount: "Cash",
-    //                 address: null,
-    //                 voucherType: "sales",
-    //                 voucherNumber: "3",
-    //                 voucherRefNo: null,
-    //                 voucherRefDate: "",
-    //                 taxNumber: null,
-    //                 narration: "",
-    //                 stockName: null,
-    //                 quantity: "",
-    //                 stockUnitCode: null,
-    //                 rate: null,
-    //                 value: null,
-    //                 grossTotal: "110.00 dr",
-    //                 balance: null,
-    //                 accountNameAndAmountMap: null,
-    //                 accountNameAndBalanceMap: {
-    //                     Sales: "100.00 cr",
-    //                     GST: "10.00 cr"
-    //                 }
-    //             },
-    //             {
-    //                 entryId: 132,
-    //                 accountId: 226,
-    //                 date: "07-04-2020",
-    //                 baseAccount: "debb1",
-    //                 address: "",
-    //                 voucherType: "receipt",
-    //                 voucherNumber: "1",
-    //                 voucherRefNo: "RCPT-20200407-1",
-    //                 voucherRefDate: "07-04-2020",
-    //                 taxNumber: "",
-    //                 narration: "",
-    //                 stockName: null,
-    //                 quantity: "",
-    //                 stockUnitCode: null,
-    //                 rate: null,
-    //                 value: null,
-    //                 grossTotal: "1000.00 cr",
-    //                 balance: null,
-    //                 accountNameAndAmountMap: null,
-    //                 accountNameAndBalanceMap: {
-    //                     Cash: "1000.00 dr"
-    //                 }
-    //             },
-    //             {
-    //                 entryId: 141,
-    //                 accountId: 235,
-    //                 date: "14-04-2020",
-    //                 baseAccount: "abudebb",
-    //                 address: "",
-    //                 voucherType: "receipt",
-    //                 voucherNumber: "2",
-    //                 voucherRefNo: "RCPT-20200414-1",
-    //                 voucherRefDate: "14-04-2020",
-    //                 taxNumber: "",
-    //                 narration: "",
-    //                 stockName: null,
-    //                 quantity: "",
-    //                 stockUnitCode: null,
-    //                 rate: null,
-    //                 value: null,
-    //                 grossTotal: "18706.05 cr",
-    //                 balance: null,
-    //                 accountNameAndAmountMap: null,
-    //                 accountNameAndBalanceMap: {
-    //                     Cash: "18706.05 dr"
-    //                 }
-    //             },
-    //             {
-    //                 entryId: 144,
-    //                 accountId: 235,
-    //                 date: "15-04-2020",
-    //                 baseAccount: "abudebb",
-    //                 address: "",
-    //                 voucherType: "payment",
-    //                 voucherNumber: "2",
-    //                 voucherRefNo: null,
-    //                 voucherRefDate: "",
-    //                 taxNumber: "",
-    //                 narration: "This is the refund entry of advance receipt number RCPT-20200414-1.",
-    //                 stockName: null,
-    //                 quantity: "",
-    //                 stockUnitCode: null,
-    //                 rate: null,
-    //                 value: null,
-    //                 grossTotal: "100.00 dr",
-    //                 balance: null,
-    //                 accountNameAndAmountMap: null,
-    //                 accountNameAndBalanceMap: {
-    //                     Cash: "100.00 cr"
-    //                 }
-    //             }
-    //         ],
-    //         size: 8,
-    //         fromDate: "04-04-2020",
-    //         toDate: "18-04-2020",
-    //         openingBalance: {
-    //             amount: 0,
-    //             type: "DEBIT"
-    //         },
-    //         closingBalance: {
-    //             amount: 0,
-    //             type: "DEBIT"
-    //         },
-    //         debitTotal: 0,
-    //         creditTotal: 0
-    //     }
-    // };
-
     constructor(public settingsFinancialYearService: SettingsFinancialYearService, private store: Store<AppState>, private toaster: ToasterService, private ledgerService: LedgerService, private generalService: GeneralService) {
         this.store.pipe(takeUntil(this.destroyed$)).subscribe(state => {
             if (state && state.session && state.session.companyUniqueName) {
@@ -355,4 +137,20 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     public getTotalNoOfColumn() {
         return this.columnarTableColumn.length + 16;
     }
+
+    /**
+     * To call API according to pagination
+     *
+     * @param {*} event Pagination page change event
+     * @returns {void}
+     * @memberof LedgerColumnarReportTableComponent
+     */
+    public pageChanged(event: any): void {
+        if (event.page === this.getColumnarRequestModel.page) {
+            return;
+        }
+        this.getColumnarRequestModel.page = event.page;
+        this.getColumnarReportTable(this.columnarReportExportRequest);
+    }
+
 }
