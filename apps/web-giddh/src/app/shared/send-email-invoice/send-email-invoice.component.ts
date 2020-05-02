@@ -10,7 +10,7 @@ import { InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
 
 export class SendEmailInvoiceComponent implements OnInit, OnDestroy {
     @Input() voucherType: VoucherTypeEnum;
-    @Input() selectedItem: { voucherNumber: string, uniqueName: string };
+    @Input() selectedItem: { voucherNumber: string, uniqueName: string, account: {email: string} };
     @Output() public successEvent: EventEmitter<any> = new EventEmitter<any>();
     @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
     public emailAddresses: string = '';
@@ -23,6 +23,9 @@ export class SendEmailInvoiceComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        if(this.selectedItem && this.selectedItem.account && this.selectedItem.account.email) {
+            this.emailAddresses = this.selectedItem.account.email;
+        }
     }
 
     invoiceTypeChanged(event) {
@@ -49,7 +52,9 @@ export class SendEmailInvoiceComponent implements OnInit, OnDestroy {
     }
 
     resetModal() {
-        this.emailAddresses = '';
+        if(this.selectedItem && this.selectedItem.account && this.selectedItem.account.email) {
+            this.emailAddresses = this.selectedItem.account.email;
+        }
         this.invoiceType = [];
         this.isTransport = false;
         this.isCustomer = false;

@@ -68,7 +68,7 @@
 }
 
 .dropdown-menu > li > a:hover {
-    color: $border-blue;
+    color: $chetwode-blue;
     background: #e5e5e5;
 }
 .stock-input {
@@ -237,7 +237,7 @@ button[aria-expanded="true"] i {
     color: #757bb9;
 }
 .icon-pointer .activeTextColor {
-    color: $activeIconTh;
+    color: $deep-sky-blue;
 }
 .sticky-footer-sale-amount {
     .inner-content-footer {
@@ -312,4 +312,7 @@ button.btn.btn-filter {
     justify-content: space-between;
     align-items: center;
     padding: 4px 10px;
+}
+.stock-not-found {
+    text-transform: none;
 }

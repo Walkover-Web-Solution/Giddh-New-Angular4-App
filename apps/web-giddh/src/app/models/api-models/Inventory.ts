@@ -123,6 +123,8 @@ export class StockReportRequest {
     public param?: string;
     public expression?: string;
     public val?: number;
+    public warehouseUniqueName?: string;
+    public branchUniqueName?: string;
 }
 
 export class GroupStockReportRequest {
@@ -143,6 +145,8 @@ export class GroupStockReportRequest {
     public stockName: string;
     public source?: string;
     public reportDownloadType?: string;
+    public warehouseUniqueName?: string;
+    public branchUniqueName?: string;
 }
 
 export class AdvanceFilterOptions {
@@ -278,4 +282,6 @@ export class InventoryDownloadRequest {
     public number?: number;
     public sort?: string;
     public sortBy?: string;
+    public warehouseUniqueName?: string;
+    public branchUniqueName?: string;
 }

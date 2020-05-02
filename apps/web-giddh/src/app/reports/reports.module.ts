@@ -28,6 +28,11 @@ import { AccountDetailModalModule } from '../theme/account-detail-modal/account-
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ReverseChargeReport } from './components/reverse-charge-report-component/reverse-charge-report.component';
 import { ColumnarReportComponent } from './components/columnar-report-component/columnar.report.component';
+import { AdvanceReceiptReportComponent } from './components/advance-receipt-report/advance-receipt-report.component';
+import { ReceiptAdvanceSearchComponent } from './components/receipt-advance-search/receipt-advance-search.component';
+import { RefundAmountComponent } from './components/refund-amount/refund-amount.component';
+import { AdjustInvoiceModalComponent } from './components/adjust-invoice-modal/adjust-invoice-modal.component';
+import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 
 @NgModule({
     declarations: [
@@ -43,7 +48,14 @@ import { ColumnarReportComponent } from './components/columnar-report-component/
         PurchaseRegisterTableComponent,
         PurchaseRegisterExpandComponent,
         ReverseChargeReport,
-        ColumnarReportComponent
+        ColumnarReportComponent,
+        AdvanceReceiptReportComponent,
+        ReceiptAdvanceSearchComponent,
+        RefundAmountComponent,
+        AdjustInvoiceModalComponent
+    ],
+    entryComponents: [
+        ReceiptAdvanceSearchComponent
     ],
     exports: [
         ReportsComponent,
@@ -59,6 +71,7 @@ import { ColumnarReportComponent } from './components/columnar-report-component/
         BsDatepickerModule.forRoot(),
         CommonModule,
         ChartModule,
+        Daterangepicker,
         BsDropdownModule,
         PaginationModule,
         ShSelectModule,
@@ -68,6 +81,7 @@ import { ColumnarReportComponent } from './components/columnar-report-component/
         ReactiveFormsModule,
         ClickOutsideModule,
         TooltipModule,
+        ElementViewChildModule,
         ModalModule.forRoot(),
     ]
 })

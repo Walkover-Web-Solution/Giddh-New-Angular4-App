@@ -173,7 +173,7 @@
                                         </label>
                                         <input type="text" class="form-control" autocomplete="false"
                                             autocomplete="false" #gstNumberField
-                                            (keyup)="getStateCode(gst, states); checkGstNumValidation(gstNumberField);"
+                                            (keyup)="getStateCode(gst, states);" (blur)="checkGstNumValidation(gstNumberField);"
                                             name="gstNumber" formControlName="gstNumber"
                                             placeholder="Enter {{formFields['taxName'].label}}" />
                                     </div>
@@ -189,7 +189,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4" *ngIf="gst.get('gstNumber').value && isGstValid">
+                                    <div class="col-sm-4" *ngIf="gst.get('gstNumber').value && (isGstValid$ | async)">
                                         <div class="form-group">
                                             <label class="d-block">&nbsp;</label>
                                             <label>
@@ -442,7 +442,7 @@
                 <div class="button-group">
                     <!-- <button class="btn btn-cancel">Cancel</button> -->
                     <button type="submit" class="btn btn-success" [ladda]="createAccountInProcess$ | async"
-                        [disabled]="addAccountForm.invalid">Save</button>
+                        [disabled]="addAccountForm.invalid || !(isGstValid$ | async)">Save</button>
                 </div>
             </div>
         </div>

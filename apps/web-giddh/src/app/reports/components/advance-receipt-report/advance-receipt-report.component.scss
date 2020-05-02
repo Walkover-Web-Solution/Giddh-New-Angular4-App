@@ -1,0 +1,158 @@
+@import "../../../../assets/css/color.scss";
+.td_in_searchBox {
+    div {
+        i {
+            margin-top: 1px;
+            color: $wild-blue-yonder;
+            padding-right: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding-left: 8px;
+        }
+    }
+}
+
+.td_in_searchBox div {
+    display: flex;
+}
+.d-flex {
+    display: flex;
+}
+.input-group {
+    position: relative;
+    input.form-control {
+        padding-left: 35px !important;
+        background-image: url("../../../../assets/images/calender.svg") !important;
+        background-size: 17px !important;
+        background-position: 9px 8px !important;
+        background-repeat: no-repeat !important;
+        padding-left: 45px !important;
+        position: relative;
+        z-index: 99;
+        cursor: default;
+        width: 100%;
+        &:focus {
+            border-color: $gainsboro;
+        }
+    }
+}
+.icon-calender {
+    position: absolute;
+    z-index: 9;
+    height: 32px;
+    width: 32px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid $gainsboro;
+    color: #999999;
+}
+.input-wrapper {
+    display: block !important;
+    width: 220px !important;
+    position: relative;
+    height: 36px !important;
+    &:before {
+        position: absolute;
+        content: "";
+        display: block;
+        height: 36px;
+        width: 1px;
+        background-color: #d9d9d9;
+        left: 37px !important;
+        z-index: 100;
+        top: 0;
+    }
+}
+.advance-icon {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    margin-left: 10px;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    color: #1a237e;
+    background: #fff;
+}
+
+.btn-filter {
+    background: $whisper-color;
+    border: 1px solid $whisper-color;
+    font-size: 16px;
+    color: $midnight-blue;
+    display: inline-flex;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    align-items: center;
+    padding: 6px 10px !important;
+    .icon-cross {
+        margin-right: 5px;
+    }
+    &:focus {
+        box-shadow: none;
+        outline: none;
+    }
+    &:active {
+        box-shadow: none;
+        outline: none;
+    }
+}
+
+.input-grp-dateRangePicker input.form-control {
+    padding-left: 45px !important;
+    width: 220px;
+}
+.voucher-type-dropdown {
+    display: inline-block;
+}
+.voucher-type-dropdown .btn {
+    padding: 0 8px;
+    margin-right: 0px;
+}
+.basic > tbody > tr > td,
+.basic > thead > tr > th {
+    padding: 8px 10px;
+}
+.invoice-footer h3 {
+    font-size: 16px;
+    color: #999999;
+    display: block;
+    margin-right: 10px;
+}
+.invoice-footer h1 {
+    font-size: 28px;
+    color: #333;
+    display: block;
+}
+.giddh-table .td_in_searchBox {
+    padding-right: 10px !important;
+}
+.entry-date {
+    padding-left: 0 !important;
+}
+
+
+@media only screen and (max-width: 767px) {
+    .invoice-footer {
+        h1 {
+            font-size: 20px;
+        }
+    }
+    .total-due-sale {
+        margin-bottom: 15px;
+    }
+    .total-due-sale:last-child {
+        margin-bottom: 0px;
+    }
+    .invoiceFooter {
+        position: relative;
+        margin-top: 10px;
+    }
+    .entry-date {
+        padding: 5px 10px 5px 50% !important;
+    }
+}

@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject, of } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
@@ -74,7 +74,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
-    public isGstValid: boolean;
+    public isGstValid$: Observable<boolean>= observableOf(true);
     public GSTIN_OR_TRN: string;
     public selectedCountry: string;
     public selectedCountryCode: string;
@@ -429,39 +429,45 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
         let gstVal: string = gstForm.get('gstNumber').value;
+        gstForm.get('gstNumber').setValue(gstVal.trim());
+        if (gstVal.length) {
+            if (gstVal.length !== 15) {
+                gstForm.get('partyType').reset('NOT APPLICABLE');
+            }
 
-        if (gstVal.length !== 15) {
-            gstForm.get('partyType').reset('NOT APPLICABLE');
-        }
+            if (gstVal.length >= 2) {
+                this.statesSource$.pipe(take(1)).subscribe(state => {
+                    let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
-        if (gstVal.length >= 2) {
-            this.statesSource$.pipe(take(1)).subscribe(state => {
-                let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
-
-                let s = state.find(st => st.value === stateCode);
+                    let currentState = state.find(st => st.value === stateCode);
+                    if (currentState) {
+                        gstForm.get('stateCode').patchValue(currentState.value);
+                        gstForm.get('state').get('code').patchValue(currentState.value);
+                    } else {
+                        if (this.isIndia) {
+                            gstForm.get('stateCode').patchValue(null);
+                            gstForm.get('state').get('code').patchValue(null);
+                        }
+                        this._toaster.clearAllToaster();
+                        if (this.formFields['taxName']) {
+                            this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
+                        }
+                    }
+                });
+            } else {
                 // statesEle.setDisabledState(false);
-                if (s) {
-                    gstForm.get('stateCode').patchValue(s.value);
-                    gstForm.get('state').get('code').patchValue(s.value);
-                    // statesEle.setDisabledState(true);
-                } else {
-                    if (this.isIndia) {
-                        gstForm.get('stateCode').patchValue(null);
-                        gstForm.get('state').get('code').patchValue(null);
-                    }
-                    // statesEle.setDisabledState(false);
-                    this._toaster.clearAllToaster();
-                    if (this.formFields['taxName']) {
-                        this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
-                    }
+                if (this.isIndia) {
+                    statesEle.forceClearReactive.status = true;
+                    statesEle.clear();
+                    gstForm.get('stateCode').patchValue(null);
+                    gstForm.get('state').get('code').patchValue(null);
                 }
-            });
+            }
         } else {
-            // statesEle.setDisabledState(false);
-            if (this.isIndia) {
+                statesEle.forceClearReactive.status = true;
+                statesEle.clear();
                 gstForm.get('stateCode').patchValue(null);
                 gstForm.get('state').get('code').patchValue(null);
-            }
         }
     }
 
@@ -702,7 +708,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
-        if (ele.value) {
+        if (ele.value.trim()) {
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
@@ -718,13 +724,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             if (!isValid) {
                 this._toaster.errorToast('Invalid ' + this.formFields['taxName'].label);
                 ele.classList.add('error-box');
-                this.isGstValid = false;
+                this.isGstValid$ = observableOf(false);
             } else {
                 ele.classList.remove('error-box');
-                this.isGstValid = true;
+                this.isGstValid$ = observableOf(true);
             }
         } else {
             ele.classList.remove('error-box');
+            this.isGstValid$ = observableOf(true);
         }
     }
     public getStates(countryCode) {
@@ -867,7 +874,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     this._toaster.errorToast('The IBAN must contain 23 to 34 characters.');
                     element.classList.add('error-box');
                 } else {
-                     element.classList.remove('error-box');
+                    element.classList.remove('error-box');
                 }
             }
         } else if (type === 'swiftCode') {
@@ -875,7 +882,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this._toaster.errorToast('The SWIFT Code/BIC must contain 8 to 11 characters.');
                 element.classList.add('error-box');
             } else {
-                 element.classList.remove('error-box');
+                element.classList.remove('error-box');
             }
         }
     }
