@@ -2021,9 +2021,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (isNaN(count)) {
             count = 0;
         }
-        if (!depositAmount) {
-            this.depositAmount = this.invFormData.voucherDetails.deposit;
-        }
+        // if (!depositAmount) {
+        //     this.depositAmount = this.invFormData.voucherDetails.deposit;
+        // }
         if ((this.isAccountHaveAdvanceReceipts || this.isInvoiceAdjustedWithAdvanceReceipts) && this.adjustPaymentData.totalAdjustedAmount) {
             this.adjustPaymentBalanceDueData = this.getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment();
         } else {
