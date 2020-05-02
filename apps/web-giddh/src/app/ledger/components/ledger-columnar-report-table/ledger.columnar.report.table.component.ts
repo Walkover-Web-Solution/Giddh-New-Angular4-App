@@ -60,6 +60,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     /**
      *  Life cycle hook for data-bound property of a directive changed
      *
+     * @returns {void}
      * @param {SimpleChanges} changes
      * @memberof LedgerColumnarReportTableComponent
      */
@@ -72,6 +73,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     /**
      * Destroyes the data stored
      *
+     * @returns {void}
      * @memberof LedgerColumnarReportTableComponent
      */
     public ngOnDestroy(): void {
@@ -82,10 +84,11 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     /**
      * API call to get columnar report table
      *
+     * @returns {void}
      * @param {*} columnarReq Request model
      * @memberof LedgerColumnarReportTableComponent
      */
-    public getColumnarReportTable(columnarReq: ExportLedgerRequest) {
+    public getColumnarReportTable(columnarReq: ExportLedgerRequest): void {
         let body = {
             balanceTypeAsSign: columnarReq.balanceTypeAsSign
         }
@@ -111,9 +114,10 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     /**
      *  To prepare extra columns for table
      *
+     * @returns {void}
      * @memberof LedgerColumnarReportTableComponent
      */
-    public prepareColumnForTable() {
+    public prepareColumnForTable(): void {
         this.columnarTableColumn = [];
         let newColumns = [];
         this.reportResponseResult.forEach((item, index) => {
@@ -132,9 +136,10 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     /**
      * To get total number of column as column is dynamic
      *
+     * @returns {number} Length of array
      * @memberof LedgerColumnarReportTableComponent
      */
-    public getTotalNoOfColumn() {
+    public getTotalNoOfColumn(): number {
         return this.columnarTableColumn.length + 16;
     }
 
@@ -146,11 +151,14 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
      * @memberof LedgerColumnarReportTableComponent
      */
     public pageChanged(event: any): void {
-        if (event.page === this.getColumnarRequestModel.page) {
-            return;
+        if (event && this.columnarReportExportRequest) {
+            if (event && event.page === this.getColumnarRequestModel.page) {
+                return;
+            }
+            this.getColumnarRequestModel.page = event.page;
+            this.getColumnarReportTable(this.columnarReportExportRequest);
         }
-        this.getColumnarRequestModel.page = event.page;
-        this.getColumnarReportTable(this.columnarReportExportRequest);
+
     }
 
 }

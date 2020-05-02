@@ -65,9 +65,9 @@ export class ExportLedgerComponent implements OnInit {
         const body = _.cloneDeep(this.advanceSearchRequest);
         body.dataToSend.balanceTypeAsSign = this.balanceTypeAsSign;
         if (!body.dataToSend.bsRangeValue) {
-            this.universalDate$.pipe(take(1)).subscribe(a => {
-                if (a) {
-                    body.dataToSend.bsRangeValue = [moment(a[0], 'DD-MM-YYYY').toDate(), moment(a[1], 'DD-MM-YYYY').toDate()];
+            this.universalDate$.pipe(take(1)).subscribe(res => {
+                if (res) {
+                    body.dataToSend.bsRangeValue = [moment(res[0], 'DD-MM-YYYY').toDate(), moment(res[1], 'DD-MM-YYYY').toDate()];
                 }
             });
         }
@@ -165,7 +165,7 @@ export class ExportLedgerComponent implements OnInit {
      *
      * @memberof ExportLedgerComponent
      */
-    public showColumnarReport() {
+    public showColumnarReport(): void {
         let exportRequest = new ExportLedgerRequest();
         exportRequest.type = this.emailTypeSelected;
         exportRequest.sort = this.order;

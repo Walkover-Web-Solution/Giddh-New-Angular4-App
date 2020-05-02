@@ -38,6 +38,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public financialYearSelected: any;
     public activeFinancialYear: string = '';
     public activeFinancialYearLabel: string = '';
+    /** API response object of columnar report */
     public columnarReportResponse: any;
 
     constructor(public settingsFinancialYearService: SettingsFinancialYearService, private store: Store<AppState>, private toaster: ToasterService, private ledgerService: LedgerService, private generalService: GeneralService) {

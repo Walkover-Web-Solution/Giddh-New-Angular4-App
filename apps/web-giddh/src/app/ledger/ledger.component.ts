@@ -198,6 +198,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     };
     /** True if columnar report show*/
     public isShowLedgerColumnarReportTable: boolean = false;
+    /** Export ledger request object */
     public columnarReportExportRequest: ExportLedgerRequest;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
@@ -1809,10 +1810,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * To show columnar report table
      *
-     * @param {} event true if show columnar report table event fire
+     * @param {{ isShowColumnarTable: boolean, exportRequest: ExportLedgerRequest }} event Ccolumnar report emmiter event object
      * @memberof LedgerComponent
      */
-    public onShowColumnarReportTable(event: { isShowColumnarTable: boolean, exportRequest: ExportLedgerRequest }) {
+    public onShowColumnarReportTable(event: { isShowColumnarTable: boolean, exportRequest: ExportLedgerRequest }): void {
 
         let advanceSearch = cloneDeep(this.advanceSearchRequest)
         if (!advanceSearch.dataToSend.bsRangeValue) {

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, OnChanges, Input, SimpleChanges } from '@angular/core';
 import { SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
-import {  Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, of as observableOf, of } from 'rxjs';
 import { AppState } from '../../../store';
 import { ToasterService } from '../../../services/toaster.service';
@@ -67,7 +67,7 @@ export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChange
      * @param {*} columnarRes columnar report table response object
      * @memberof ColumnarReportTableComponent
      */
-    public reformationOfColumnarReport(columnarRes: any) {
+    public reformationOfColumnarReport(columnarRes: any): void {
         this.columnsName = [];
         this.columnsName = ['#', 'Name of Ledger', 'Parent Group', 'Opening Balance', 'Closing Balance', 'Grand Total'];
         let response = cloneDeep(columnarRes);
@@ -82,11 +82,12 @@ export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChange
         if (columnarRes && columnarRes.data && columnarRes.data.length) {
             if (columnarRes && columnarRes.data && columnarRes.data.length) {
                 columnarRes.data.forEach((key, index) => {
-                    let monthNo = response.data[index].monthYear.split('-')[0];
-                    this.columnsName.push(this.months[Number(monthNo) - 1]);
+                    if (key && response) {
+                        let monthNo = response.data[index].monthYear.split('-')[0];
+                        this.columnsName.push(this.months[Number(monthNo) - 1]);
+                    }
                 });
             }
-
         }
     }
 
