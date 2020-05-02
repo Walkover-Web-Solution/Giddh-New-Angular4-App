@@ -89,7 +89,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
 			}
 			return {
 				...state,
-				isGenerateInProcess: true,
+				isGenerateInProcess: false,
 				isGenerateSuccess: false,
 				lastGeneratedVoucherDetails: null
 			}
