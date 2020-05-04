@@ -195,11 +195,15 @@
 @media (max-width: 767px) {
     :host {
         .search-wrapper {
-            padding: .7rem 2rem .7rem 3.2rem;
+            padding: 1rem 2rem 1rem 3.9rem;
+            margin-bottom: 10px;
+            .searh-ico {
+                left: -3px;
+            }
         }
     }
     .close-navigation {
-        top: 2px;
+        top: 6px;
         font-size: 17px;
     }
     .universal-data-list-wrapper {
@@ -211,7 +215,7 @@
                     height: 40px;
                 }
                 .item-details {
-                    padding-left: 10px;
+                    padding-left: 24px;
                     line-height: 1.4;
                     font-size: 12px;
                 }
