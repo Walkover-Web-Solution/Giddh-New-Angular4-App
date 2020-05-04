@@ -139,11 +139,12 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group add-btn">
         <button [ladda]="createPermissionInProcess$ | async" [disabled]="permissionForm.invalid"
             class="btn btn-success">
             <span *ngIf="!isUpdtCase">Add</span>
             <span *ngIf="isUpdtCase">Update</span>
         </button>
     </div>
+    <a href="javascript:void(0)" *ngIf="!isUpdtCase" class="btn btn-pink pull-right create-btn" [routerLink]="['/pages/permissions/list']" [queryParams]="{ tab: 'settings' }">Create Custom Role</a>
 </form>
