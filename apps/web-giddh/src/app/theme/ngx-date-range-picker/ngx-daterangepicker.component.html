@@ -193,7 +193,10 @@
                     </div>
                     <!-- month name -->
                     <!-- month selection -->
-                     
+                    
+                    <!-- month selection -->
+                </div>
+                <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true" [config]="{suppressScrollX: false, suppressScrollY: false}">
                     <div class="d-container"  [style.max-height.px]="320" *ngIf="showMonthPicker" (mousewheel)="mouseUpYear($event)" (psScrollDown)="onScroll('bottom')" (psScrollUp)="onScroll('top')">
                         <div *ngFor="let year of allowedYears; let i = index;">
                             <h2>
@@ -239,9 +242,7 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- month selection -->
-                </div>
+                </perfect-scrollbar>
                 <!-- start date calendar container -->
                 <!-- <calendar-scroll [items]="calendarMonths" 
                     [childHeight]="itemHeight" 
