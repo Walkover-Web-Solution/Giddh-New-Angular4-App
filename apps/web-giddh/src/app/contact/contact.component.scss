@@ -288,8 +288,14 @@ span.inputAddon {
     align-items: center;
     justify-content: space-between;
 }
-// responsive
-
+.customer-name .icon-ellipse{
+    height: 20px;
+    width: 20px;
+}
+.icon-ellipse.open.show{
+    display: inline-block !important;
+}
+/*responsive*/
 @media (max-width: 768px) {
     .aging-table > tbody > tr input[type="checkbox"] {
         top: 2px;
