@@ -454,7 +454,7 @@
         </tr>-->
 
                     <ng-container *ngIf="templateUISectionVisibility.table && customTemplate?.templateType === 'gst_template_e'">
-                        <tr>
+                        <tr *ngIf="isTcsTdsApplicable">
                             <td>
                                 <label><input type="checkbox"
                                         [(ngModel)]="customTemplate.sections['table'].data['tcs'].display"
@@ -467,7 +467,7 @@
                             </td>
                         </tr>
 
-                        <tr>
+                        <tr *ngIf="isTcsTdsApplicable">
                             <td>
                                 <label><input type="checkbox"
                                         [(ngModel)]="customTemplate.sections['table'].data['tds'].display"
@@ -537,14 +537,14 @@
             <div class="clearfix bdrB scrollAuto">
                 <ng-container *ngIf="customTemplate?.templateType === 'gst_template_a'">
 
-                    <div class="form-group">
+                    <div *ngIf="isTcsTdsApplicable" class="form-group">
                         <input type="checkbox" name="tcs" checked [(ngModel)]="customTemplate.sections['footer'].data['tcs'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked="true" /> TCS
                         <div class="mrL3">
                             <input type="text" value="TCS" class="form-control" [(ngModel)]="customTemplate.sections['footer'].data['tcs'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['tcs'].display" />
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div *ngIf="isTcsTdsApplicable" class="form-group">
                         <input type="checkbox" [value]="true" name="tds" checked [(ngModel)]="customTemplate.sections['footer'].data['tds'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> TDS
                         <div class="mrL3">
                             <input type="text" value="TDS" class="form-control" [(ngModel)]="customTemplate.sections['footer'].data['tds'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['tds'].display" />

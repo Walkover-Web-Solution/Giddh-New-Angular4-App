@@ -6,12 +6,13 @@ import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../
 import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice';
 import * as _ from '../../../../../lodash-optimized';
 import { Observable, ReplaySubject } from 'rxjs';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../../store';
 import { Configuration } from '../../../../../app.constant';
 import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
 // import {ViewChild, ElementRef} from '@angular/core';
 import { INVOICE_API } from 'apps/web-giddh/src/app/services/apiurls/invoice';
+import { CurrentCompanyState } from 'apps/web-giddh/src/app/store/Company/company.reducer';
 
 @Component({
     selector: 'content-selector',
@@ -44,7 +45,8 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
     public companyUniqueName = null;
     public sessionId$: Observable<string>;
     public companyUniqueName$: Observable<string>;
-    // @ViewChild('signatureImg') public signatureImgzRef: ElementRef<HTMLInputElement>;
+    /** True, if company country supports other tax (TCS/TDS) */
+    public isTcsTdsApplicable: boolean;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private _invoiceUiDataService: InvoiceUiDataService,
@@ -69,8 +71,17 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
 
     }
 
-    public ngOnInit() {
-
+    /**
+     * Initializes and subscribes to observables
+     *
+     * @memberof ContentFilterComponent
+     */
+    public ngOnInit(): void {
+        this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            }
+        });
         this._activatedRoute.params.subscribe(a => {
             if (!a) {
                 return;
