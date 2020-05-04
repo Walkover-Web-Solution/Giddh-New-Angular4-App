@@ -1239,32 +1239,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         });
         this.store.pipe(select(appState => appState.invoiceTemplate), takeUntil(this.destroyed$)).subscribe((templateData: CustomTemplateState) => {
-            try {
-                if (templateData && templateData.customCreatedTemplates && templateData.customCreatedTemplates.length > 0) {
-                    const defaultTemplate = templateData.customCreatedTemplates.find(template => template.isDefault);
-                    if (defaultTemplate && defaultTemplate.sections) {
-                        const sections = defaultTemplate.sections;
-                        if (sections.header && sections.header.data) {
-                            const {
-                                customField1: { label: customField1Label },
-                                customField2: { label: customField2Label },
-                                customField3: { label: customField3Label },
-                                shippedVia: { label: shippedViaLabel },
-                                trackingNumber: { label: trackingNumber }
-                            } = sections.header.data;
-                            this.templatePlaceholder = {
-                                customField1Label,
-                                customField2Label,
-                                customField3Label,
-                                shippedViaLabel,
-                                trackingNumber
-                            };
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error(error);
-            }
+            this.setTemplatePlaceholder(templateData);
         });
         this.prepareInvoiceTypeFlags();
     }
@@ -4554,6 +4529,38 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private getDefaultTemplateData(): void {
         const templateType = [VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].includes(this.invoiceType) ? 'voucher' : 'invoice';
         this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(templateType));
+    }
+
+    /**
+     * Sets the template placeholder text based on API response
+     *
+     * @private
+     * @param {CustomTemplateState} templateData Template data received from API
+     * @memberof ProformaInvoiceComponent
+     */
+    private setTemplatePlaceholder(templateData: CustomTemplateState): void {
+        if (templateData && templateData.customCreatedTemplates && templateData.customCreatedTemplates.length > 0) {
+            const defaultTemplate = templateData.customCreatedTemplates.find(template => template.isDefault);
+            if (defaultTemplate && defaultTemplate.sections) {
+                const sections = defaultTemplate.sections;
+                if (sections.header && sections.header.data) {
+                    const {
+                        customField1: { label: customField1Label },
+                        customField2: { label: customField2Label },
+                        customField3: { label: customField3Label },
+                        shippedVia: { label: shippedViaLabel },
+                        trackingNumber: { label: trackingNumber }
+                    } = sections.header.data;
+                    this.templatePlaceholder = {
+                        customField1Label,
+                        customField2Label,
+                        customField3Label,
+                        shippedViaLabel,
+                        trackingNumber
+                    };
+                }
+            }
+        }
     }
 }
 
