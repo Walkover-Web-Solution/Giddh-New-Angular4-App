@@ -38,7 +38,7 @@
                     </ul>
                 </li>
                 <li class="menu-li select-financial-year">
-                    <button type="button" class="btn-angle-down" (click)="dropdownShow = !dropdownShow">Select Financial
+                    <button type="button"  class="btn-angle-down" (click)="dropdownShow = !dropdownShow">Select Financial
                         Year
                         <span class="available prev angle-down"></span>
                     </button>
@@ -49,6 +49,7 @@
                                 (click)="clickFinancialYear(financialYear)">{{financialYear.label}}</button>
                         </li>
                     </ul>
+                 
                 </li>
 
             </ul>
@@ -253,8 +254,8 @@
                 <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true"
                     [config]="{suppressScrollX: false, suppressScrollY: false}" [style.max-height.px]="300"
                     (highLightedItemEmitter)="handleHighLightedItemEvent($event)"
-                    *ngIf="showCalInRanges && !showMonthPicker">
-                    <div (mousewheel)="mouseUp($event)">
+                   >
+                    <div (mousewheel)="mouseUp($event)"  *ngIf="showCalInRanges && !showMonthPicker">
                         <div *ngFor="let calendarMonth of calendarMonths;">
                             <div class="calendar" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
                                 <div class="calendar-table" *ngIf="calendarMonth && calendarMonth.start">

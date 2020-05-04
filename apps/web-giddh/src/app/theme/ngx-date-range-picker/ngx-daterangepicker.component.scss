@@ -932,13 +932,6 @@ td:hover span {
     }
 }
 
-.in-range-hovered.in-range {
-    &::before {
-        content: "";
-        border-bottom: 1px dashed gray;
-        border-top: 1px dashed gray;
-    }
-}
 
 .md-drppicker td.start-date.active {
     span {
@@ -1009,7 +1002,7 @@ td span {
 .dropdown-containt {
     display: flex;
     flex-wrap: wrap;
-    width: 100%;
+    width:95%;
     padding: 7px;
 
     .d-month {
@@ -1320,6 +1313,36 @@ td span {
         }
     }
 }
+.in-range-hovered{
+    position: relative;
+}
+.off.in-range-hovered{
+    &::before{
+        display: none;
+    }
+}
+.in-range-hovered {
+        &::before {
+            content: "";
+            border-bottom: 1px dashed gray;
+            border-top: 1px dashed gray;
+            width: 100%;
+            height: 100%;
+            left: 0px;
+            top: -1px;
+            position: absolute;
+            display: inline-block;
+        }
+    }
+    tr:first-child.in-range-hovered.available{
+        &::before {
+            border-radius: 50% 0 0 50%;
+        }
+    }
+
+
+    
+
 /*media query*/
 @media(max-width:767px){
     .md-drppicker{
