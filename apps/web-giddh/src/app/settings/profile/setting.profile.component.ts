@@ -638,4 +638,19 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             }
         });
     }
+
+    /**
+     * This will return the state code/name if available
+     *
+     * @param {*} gst
+     * @returns {string}
+     * @memberof SettingProfileComponent
+     */
+    public getState(gst): string {
+        let state = "";
+        if(gst.stateCode) {
+            state = gst.stateCode + " - " + gst.stateName;
+        }
+        return state;
+    }
 }
