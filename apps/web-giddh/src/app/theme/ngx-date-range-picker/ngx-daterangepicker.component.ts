@@ -1510,10 +1510,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    public mouseEnter(row, col, side) {
-        if ((this.calendarVariables[side].calendar[1][1].month() === this.calendarVariables[side].calendar[row][col].month())) {
-            this.hoveredDate = this.calendarVariables[side].calendar[row][col];
-        }
+    public mouseEnter(date) {
+        this.hoveredDate = date;
     }
 
     /**

@@ -321,13 +321,13 @@
                                                     <td *ngFor="let col of calendarMonth.start.calCols"
                                                         [class]="calendarMonth.start.classes[row][col]"
                                                         [style.backgroundColor]="!(calendarMonth.end && calendarMonth.end.calendar[1][1].month() ==calendarMonth.end.calendar[row][col].month())?'white':'inherit'"
-                                                        (mouseenter)="mouseEnter(row,col,sideEnum.start)"
-                                                        [ngClass]="{'in-range-hovered': (calendarMonth.start.calendar[row][col].isBetween(startDate, hoveredDate)
-                                    && (calendarMonth.end && calendarMonth.end.calendar[1][1].month() ==calendarMonth.end.calendar[row][col].month())),
+                                                        (mouseenter)="mouseEnter(calendarMonth.start.calendar[row][col])"
+                                                        [ngClass]="{'in-range-hovered': (calendarMonth.start && (ActiveDate === 0 &&  (calendarMonth.start.calendar[row][col].isBetween(hoveredDate, startDate) || calendarMonth.start.calendar[row][col].isSame(hoveredDate)))
+                                    || (calendarMonth.end && (ActiveDate === 1 && (calendarMonth.end.calendar[row][col].isBetween(endDate, hoveredDate) || calendarMonth.end.calendar[row][col].isSame(hoveredDate))))),
                                     'activatedDate': (calendarMonth.start.calendar[row][col].format('YYYY-MM-DD')===startDate.format('YYYY-MM-DD')
                                     || calendarMonth.start.calendar[row][col].format('YYYY-MM-DD')===endDate.format('YYYY-MM-DD')) &&
                                     ((calendarMonth.start.calendar[row][col].format('YYYY-MM-DD')===startDate.format('YYYY-MM-DD') && ActiveDate === 1) ||
-                                    (calendarMonth.start.calendar[row][col].format('YYYY-MM-DD')===endDate.format('YYYY-MM-DD') && ActiveDate === 0))}"
+                                    (calendarMonth.start.calendar[row][col].format('YYYY-MM-DD')===endDate.format('YYYY-MM-DD') && ActiveDate === 0)), 'in-range': ((calendarMonth.start && calendarMonth.start.calendar[row][col] && calendarMonth.start.calendar[row][col].isBetween(startDate, endDate)) || (calendarMonth.end && calendarMonth.end.calendar[row][col] && calendarMonth.end.calendar[row][col].isBetween(startDate, endDate)))}"
                                                         (click)="clickDate($event, sideEnum.start, row, col)">
                                                         <span
                                                             *ngIf="(calendarMonth.start.calendar[1][1].month() ==calendarMonth.start.calendar[row][col].month())">{{calendarMonth.start.calendar[row][col].date()}}</span>
@@ -452,9 +452,9 @@
                                                     <td *ngFor="let col of calendarMonth.end.calCols"
                                                         [class]="calendarMonth.end.classes[row][col]"
                                                         [style.backgroundColor]="!(calendarMonth.end.calendar[1][1].month() ==calendarMonth.end.calendar[row][col].month())?'white':'inherit'"
-                                                        (mouseenter)="mouseEnter(row,col,sideEnum.end)"
-                                                        [ngClass]="{'in-range-hovered': (calendarMonth.end.calendar[row][col].isBetween(startDate, hoveredDate)&&
-                                    (calendarMonth.end.calendar[1][1].month() ==calendarMonth.end.calendar[row][col].month())),
+                                                        (mouseenter)="mouseEnter(calendarMonth.end.calendar[row][col])"
+                                                        [ngClass]="{'in-range-hovered': (calendarMonth.start && (ActiveDate === 0 &&  (calendarMonth.start.calendar[row][col].isBetween(hoveredDate, startDate) || calendarMonth.start.calendar[row][col].isSame(hoveredDate)))
+                                                        || (calendarMonth.end && (ActiveDate === 1 && (calendarMonth.end.calendar[row][col].isBetween(endDate, hoveredDate) || calendarMonth.end.calendar[row][col].isSame(hoveredDate))))),
                                     'activatedDate': (calendarMonth.end.calendar[row][col].format('YYYY-MM-DD')===startDate.format('YYYY-MM-DD')
                                     || calendarMonth.end.calendar[row][col].format('YYYY-MM-DD')===endDate.format('YYYY-MM-DD')) &&
                                     ((calendarMonth.end.calendar[row][col].format('YYYY-MM-DD')===startDate.format('YYYY-MM-DD') && ActiveDate === 1) ||
