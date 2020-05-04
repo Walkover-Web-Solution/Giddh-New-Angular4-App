@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren, TemplateRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { BsDatepickerDirective, BsModalRef, ModalDirective, ModalOptions, PopoverDirective, BsModalService } from 'ngx-bootstrap';
 import { select, Store } from '@ngrx/store';
@@ -86,7 +86,6 @@ import { CommonActions } from '../actions/common.actions';
 import { PurchaseRecordActions } from '../actions/purchase-record/purchase-record.action';
 import { AdvanceReceiptAdjustmentComponent } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.component';
 import { AdvanceReceiptAdjustment, AdjustAdvancePaymentModal } from '../models/api-models/AdvanceReceiptsAdjust';
-import { ProformaState } from '../store/proforma/proforma.reducer';
 
 const THEAD_ARR_READONLY = [
     {
@@ -351,7 +350,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private updateAccountSuccess$: Observable<boolean>;
     private createdAccountDetails$: Observable<AccountResponseV2>;
     private updatedAccountDetails$: Observable<AccountResponseV2>;
-    private generateVoucherSuccess$: Observable<ProformaState>;
+    private generateVoucherSuccess$: Observable<any>;
     private updateVoucherSuccess$: Observable<boolean>;
     private lastGeneratedVoucherNo$: Observable<{ voucherNo: string, accountUniqueName: string }>;
     private entriesListBeforeTax: SalesEntryClass[];
@@ -465,7 +464,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.createdAccountDetails$ = this.store.pipe(select(p => p.sales.createdAccountDetails), takeUntil(this.destroyed$));
         this.updatedAccountDetails$ = this.store.pipe(select(p => p.sales.updatedAccountDetails), takeUntil(this.destroyed$));
         this.updateAccountSuccess$ = this.store.pipe(select(p => p.sales.updateAccountSuccess), takeUntil(this.destroyed$));
-        this.generateVoucherSuccess$ = this.store.pipe(select(p => p.proforma), takeUntil(this.destroyed$));
+        this.generateVoucherSuccess$ = combineLatest([this.store.pipe(select(appState => appState.proforma.isGenerateSuccess)),
+            this.store.pipe(select(appState => appState.proforma.isGenerateInProcess))]).pipe(debounceTime(0), takeUntil(this.destroyed$));
         this.updateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isUpdateProformaSuccess), takeUntil(this.destroyed$));
         this.lastGeneratedVoucherNo$ = this.store.pipe(select(p => p.proforma.lastGeneratedVoucherDetails), takeUntil(this.destroyed$));
         this.lastInvoices$ = this.store.pipe(select(p => p.receipt.lastVouchers), takeUntil(this.destroyed$));
@@ -1146,23 +1146,27 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.showBulkItemModal = false;
         });
 
-        this.generateVoucherSuccess$.subscribe((result: ProformaState) => {
-            if (result.isGenerateSuccess) {
-                this.resetInvoiceForm(this.invoiceForm);
+        this.generateVoucherSuccess$.subscribe((result: any) => {
+            if (result) {
+                const isGenerateSuccess = result[0];
+                const isGenerateInProcess = result[1];
+                if (isGenerateSuccess) {
+                    this.resetInvoiceForm(this.invoiceForm);
 
-                let lastGenVoucher: { voucherNo: string, accountUniqueName: string } = {
-                    voucherNo: '',
-                    accountUniqueName: ''
-                };
-                this.lastGeneratedVoucherNo$.pipe(take(1)).subscribe(s => lastGenVoucher = s);
-                this.invoiceNo = lastGenVoucher.voucherNo;
-                this.accountUniqueName = lastGenVoucher.accountUniqueName;
-                this.postResponseAction(this.invoiceNo);
-                if (!this.isUpdateMode) {
-                    this.getAllLastInvoices();
+                    let lastGenVoucher: { voucherNo: string, accountUniqueName: string } = {
+                        voucherNo: '',
+                        accountUniqueName: ''
+                    };
+                    this.lastGeneratedVoucherNo$.pipe(take(1)).subscribe(s => lastGenVoucher = s);
+                    this.invoiceNo = lastGenVoucher.voucherNo;
+                    this.accountUniqueName = lastGenVoucher.accountUniqueName;
+                    this.postResponseAction(this.invoiceNo);
+                    if (!this.isUpdateMode) {
+                        this.getAllLastInvoices();
+                    }
+                } else if (!isGenerateInProcess) {
+                    this.startLoader(false);
                 }
-            } else if (!result.isGenerateInProcess) {
-                this.startLoader(false);
             }
         });
 
