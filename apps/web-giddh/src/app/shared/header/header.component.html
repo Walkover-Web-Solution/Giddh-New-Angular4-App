@@ -384,8 +384,11 @@
                             <i class="icon-bar"></i>
                         </button>
 
-                        <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
-                            <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span></h4>
+                        <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="navigationEnd && !navigateToUser">
+                            {{selectedPage}}
+                            <span *ngIf="isLedgerAccSelected">A/</span>
+                            <span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span>
+                        </h4>
 
                         <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="!navigationEnd && !navigateToUser">{{oldSelectedPage}}
                             <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected"
