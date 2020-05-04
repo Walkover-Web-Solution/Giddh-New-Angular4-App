@@ -324,8 +324,8 @@
                                                         [class]="calendarMonth.start.classes[row][col]"
                                                         [style.backgroundColor]="!(calendarMonth.end && calendarMonth.end.calendar[1][1].month() ==calendarMonth.end.calendar[row][col].month())?'white':'inherit'"
                                                         (mouseenter)="mouseEnter(calendarMonth.start.calendar[row][col])"
-                                                        [ngClass]="{'in-range-hovered': (calendarMonth.start && (ActiveDate === 0 &&  (calendarMonth.start.calendar[row][col].isBetween(hoveredDate, startDate) || calendarMonth.start.calendar[row][col].isSame(hoveredDate)))
-                                    || (calendarMonth.end && (ActiveDate === 1 && (calendarMonth.end.calendar[row][col].isBetween(endDate, hoveredDate) || calendarMonth.end.calendar[row][col].isSame(hoveredDate))))),
+                                                        [ngClass]="{'in-range-hovered': (calendarMonth.start.calendar[row][col].isBetween(startDate, hoveredDate)
+                                                        && (calendarMonth.end && calendarMonth.end.calendar[1][1].month() ==calendarMonth.end.calendar[row][col].month())),
                                     'activatedDate': (calendarMonth.start.calendar[row][col].format('YYYY-MM-DD')===startDate.format('YYYY-MM-DD')
                                     || calendarMonth.start.calendar[row][col].format('YYYY-MM-DD')===endDate.format('YYYY-MM-DD')) &&
                                     ((calendarMonth.start.calendar[row][col].format('YYYY-MM-DD')===startDate.format('YYYY-MM-DD') && ActiveDate === 1) ||
@@ -455,8 +455,8 @@
                                                         [class]="calendarMonth.end.classes[row][col]"
                                                         [style.backgroundColor]="!(calendarMonth.end.calendar[1][1].month() ==calendarMonth.end.calendar[row][col].month())?'white':'inherit'"
                                                         (mouseenter)="mouseEnter(calendarMonth.end.calendar[row][col])"
-                                                        [ngClass]="{'in-range-hovered': (calendarMonth.start && (ActiveDate === 0 &&  (calendarMonth.start.calendar[row][col].isBetween(hoveredDate, startDate) || calendarMonth.start.calendar[row][col].isSame(hoveredDate)))
-                                                        || (calendarMonth.end && (ActiveDate === 1 && (calendarMonth.end.calendar[row][col].isBetween(endDate, hoveredDate) || calendarMonth.end.calendar[row][col].isSame(hoveredDate))))),
+                                                        [ngClass]="{'in-range-hovered': (calendarMonth.end.calendar[row][col].isBetween(startDate, hoveredDate)&&
+                                                        (calendarMonth.end.calendar[1][1].month() ==calendarMonth.end.calendar[row][col].month())),
                                     'activatedDate': (calendarMonth.end.calendar[row][col].format('YYYY-MM-DD')===startDate.format('YYYY-MM-DD')
                                     || calendarMonth.end.calendar[row][col].format('YYYY-MM-DD')===endDate.format('YYYY-MM-DD')) &&
                                     ((calendarMonth.end.calendar[row][col].format('YYYY-MM-DD')===startDate.format('YYYY-MM-DD') && ActiveDate === 1) ||
