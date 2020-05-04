@@ -242,6 +242,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public searchBranchQuery: string;
     /** Current organization type */
     public currentOrganizationType: OrganizationType;
+    public pageHasTabs: boolean = false;
 
     /**
      * Returns whether the account section needs to be displayed or not
@@ -307,6 +308,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         // SETTING CURRENT PAGE ON INIT
         this.setCurrentPage();
+        this.checkIfPageHasTabs();
 
         // SETTING CURRENT PAGE ON ROUTE CHANGE
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
@@ -326,6 +328,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
+                this.checkIfPageHasTabs();
 
                 if (this.router.url.includes("/ledger")) {
                     this.currentState = this.router.url;
@@ -2037,6 +2040,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 let version = res.split('files')[0];
                 let versNum = version.split(' ')[1];
                 this.macAppVersion = versNum;
+            }
+        })
+    }
+    /**
+     * This function will check if page has tabs to show/hide page heading
+     *
+     * @memberof HeaderComponent
+     */
+    public checkIfPageHasTabs(): void | boolean {
+        this.pageHasTabs = false;
+        let currentUrl = this.router.url;
+
+        NAVIGATION_ITEM_LIST.find((page) => {
+            if (page.uniqueName === decodeURI(currentUrl) && page.hasTabs === true) {
+                this.pageHasTabs = true;
+                return true;
             }
         });
     }
