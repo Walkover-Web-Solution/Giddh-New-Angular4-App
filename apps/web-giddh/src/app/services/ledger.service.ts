@@ -447,21 +447,19 @@ export class LedgerService {
      * @returns {Observable<BaseResponse<any, ReportsDetailedRequestFilter>>}
      * @memberof LedgerService
      */
-    public ExportLedgerColumnarReportTable(model: ReportsDetailedRequestFilter, companyUniqueName: string, accountUniqueName: string, body?: any): Observable<BaseResponse<any, ReportsDetailedRequestFilter>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        let URL = this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_COLUMNAR_REPORT_TABLE
+    public exportLedgerColumnarReportTable(model: ReportsDetailedRequestFilter, companyUniqueName: string, accountUniqueName: string, body?: any): Observable<BaseResponse<any, ReportsDetailedRequestFilter>> {
+        let url = this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_COLUMNAR_REPORT_TABLE
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
             .replace(':from', model.from)
             .replace(':to', model.to);
         if (model.page) {
-            URL = `${URL}&page=${model.page}`;
+            url = `${url}&page=${model.page}`;
         }
         if (model.count) {
-            URL = `${URL}&count=${model.count}`;
+            url = `${url}&count=${model.count}`;
         }
-        return this._http.post(URL, body).pipe(map((res) => {
+        return this._http.post(url, body).pipe(map((res) => {
             let data: BaseResponse<any, ReportsDetailedRequestFilter> = res;
             data.request = body;
             data.queryString = { accountUniqueName };

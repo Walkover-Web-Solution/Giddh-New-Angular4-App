@@ -37,7 +37,11 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     /** Subject to destroye all observers  */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(public settingsFinancialYearService: SettingsFinancialYearService, private store: Store<AppState>, private toaster: ToasterService, private ledgerService: LedgerService, private generalService: GeneralService) {
+    constructor(public settingsFinancialYearService: SettingsFinancialYearService,
+        private store: Store<AppState>,
+        private toaster: ToasterService,
+        private ledgerService: LedgerService,
+        private generalService: GeneralService) {
         this.store.pipe(takeUntil(this.destroyed$)).subscribe(state => {
             if (state && state.session && state.session.companyUniqueName) {
                 this.companyUniqueName = _.cloneDeep(state.session.companyUniqueName);
@@ -95,7 +99,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
         this.getColumnarRequestModel.from = columnarReq.from;
         this.getColumnarRequestModel.to = columnarReq.to;
         this.isLoading = true;
-        this.ledgerService.ExportLedgerColumnarReportTable(this.getColumnarRequestModel, this.companyUniqueName, this.accountUniquename, body).subscribe(response => {
+        this.ledgerService.exportLedgerColumnarReportTable(this.getColumnarRequestModel, this.companyUniqueName, this.accountUniquename, body).subscribe(response => {
             this.isLoading = false;
             if (response && response.status === 'success') {
                 if (response.body && response.body.results) {

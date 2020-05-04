@@ -1819,7 +1819,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (!advanceSearch.dataToSend.bsRangeValue) {
             this.universalDate$.pipe(take(1)).subscribe(date => {
                 if (date) {
-                    advanceSearch.dataToSend.bsRangeValue = [moment(date[0], 'DD-MM-YYYY').toDate(), moment(date[1], 'DD-MM-YYYY').toDate()];
+                    advanceSearch.dataToSend.bsRangeValue = [moment(date[0], GIDDH_DATE_FORMAT).toDate(), moment(date[1], GIDDH_DATE_FORMAT).toDate()];
                 }
             });
         }

@@ -24,7 +24,7 @@ export class ExportLedgerComponent implements OnInit {
     // @Input() public to: string = '';
     @Input() public advanceSearchRequest: any;
     @Output() public closeExportLedgerModal: EventEmitter<boolean> = new EventEmitter();
-    /** Event emmiter to show columnar report table */
+    /** Event emitter to show columnar report table */
     @Output() public showColumnarTable: EventEmitter<{ isShowColumnarTable: boolean, exportRequest: ExportLedgerRequest }> = new EventEmitter();
     public emailTypeSelected: string = '';
     public exportAs: string = 'xlsx';
@@ -63,11 +63,13 @@ export class ExportLedgerComponent implements OnInit {
         exportRequest.format = this.exportAs;
         exportRequest.balanceTypeAsSign = this.balanceTypeAsSign;
         const body = _.cloneDeep(this.advanceSearchRequest);
-        body.dataToSend.balanceTypeAsSign = this.balanceTypeAsSign;
+        if (body && body.dataToSend) {
+            body.dataToSend.balanceTypeAsSign = this.balanceTypeAsSign;
+        }
         if (!body.dataToSend.bsRangeValue) {
             this.universalDate$.pipe(take(1)).subscribe(res => {
                 if (res) {
-                    body.dataToSend.bsRangeValue = [moment(res[0], 'DD-MM-YYYY').toDate(), moment(res[1], 'DD-MM-YYYY').toDate()];
+                    body.dataToSend.bsRangeValue = [moment(res[0], GIDDH_DATE_FORMAT).toDate(), moment(res[1], GIDDH_DATE_FORMAT).toDate()];
                 }
             });
         }

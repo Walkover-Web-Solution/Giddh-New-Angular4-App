@@ -80,14 +80,12 @@ export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChange
             }
         }
         if (columnarRes && columnarRes.data && columnarRes.data.length) {
-            if (columnarRes && columnarRes.data && columnarRes.data.length) {
-                columnarRes.data.forEach((key, index) => {
-                    if (key && response) {
-                        let monthNo = response.data[index].monthYear.split('-')[0];
-                        this.columnsName.push(this.months[Number(monthNo) - 1]);
-                    }
-                });
-            }
+            columnarRes.data.forEach((key, index) => {
+                if (key && response && response.data) {
+                    let monthNo = response.data[index].monthYear.split('-')[0];
+                    this.columnsName.push(this.months[Number(monthNo) - 1]);
+                }
+            });
         }
     }
 
