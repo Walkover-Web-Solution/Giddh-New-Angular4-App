@@ -468,11 +468,11 @@
                             <i class="icon-bar"></i>
                         </button>
 
-                        <h4 class="inline text-capitalize" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
-                            <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txtLwc">c</span></h4>
+                        <h4 class="inline text-capitalize" *ngIf="navigationEnd && !navigateToUser"><span *ngIf="!pageHasTabs">{{selectedPage}}
+                            <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txtLwc">c</span></span></h4>
 
-                        <h4 class="inline text-capitalize" *ngIf="!navigationEnd && !navigateToUser">{{oldSelectedPage}}
-                            <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txtLwc">c</span></h4>
+                        <h4 class="inline text-capitalize" *ngIf="!navigationEnd && !navigateToUser"><span *ngIf="!pageHasTabs">{{oldSelectedPage}}
+                            <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txtLwc">c</span></span></h4>
 
                     </li>
 

@@ -233,6 +233,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public forceOpenNavigation: boolean = false;
     /** VAT supported countries to show the Vat Report section in all modules */
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+    public pageHasTabs: boolean = false;
 
     /**
      *
@@ -272,11 +273,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         // SETTING CURRENT PAGE ON INIT
         this.setCurrentPage();
+        this.checkIfPageHasTabs();
 
         // SETTING CURRENT PAGE ON ROUTE CHANGE
         this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd) {
                 this.setCurrentPage();
+                this.checkIfPageHasTabs();
 
                 if (this.router.url.includes("/ledger")) {
                     this.currentState = this.router.url;
@@ -1571,6 +1574,23 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }, () => {
             // Set to false in error scenarios
             this.store.dispatch(this.companyActions.setCompanyTcsTdsApplicability(false));
+        });
+    }
+
+    /**
+     * This function will check if page has tabs to show/hide page heading
+     *
+     * @memberof HeaderComponent
+     */
+    public checkIfPageHasTabs(): void | boolean {
+        this.pageHasTabs = false;
+        let currentUrl = this.router.url;
+
+        NAVIGATION_ITEM_LIST.find((page) => {
+            if (page.uniqueName === decodeURI(currentUrl) && page.hasTabs === true) {
+                this.pageHasTabs = true;
+                return true;
+            }
         });
     }
 }

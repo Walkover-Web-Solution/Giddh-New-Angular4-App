@@ -12,7 +12,8 @@ export interface IUlist extends INameUniqueName, IHelpersForSearch {
 	parentGroups?: INameUniqueName[];
 	pIndex?: number;
 	isRemoved?: boolean;
-	isInvalidState?: boolean;
+    isInvalidState?: boolean;
+    hasTabs?: boolean;
 }
 
 export interface ICompAidata extends INameUniqueName {
