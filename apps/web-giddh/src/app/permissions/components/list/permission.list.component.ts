@@ -29,6 +29,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     public selectedRoleForDelete: IRoleCommonResponseAndRequest;
     public session$: Observable<any>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    // showBackButton will be used to show/hide the back button
     public showBackButton: boolean = false;
 
     constructor(
@@ -85,6 +86,11 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
         this.store.select(p => p.permission.roles).pipe(takeUntil(this.destroyed$)).subscribe((roles: IRoleCommonResponseAndRequest[]) => this.allRoles = roles);
     }
 
+    /**
+     * This function will check if showBackButton is true then will open the add new role modal
+     *
+     * @memberof PermissionListComponent
+     */
     public ngAfterViewInit(): void {
         if(this.showBackButton) {
             this.openPermissionModal();
