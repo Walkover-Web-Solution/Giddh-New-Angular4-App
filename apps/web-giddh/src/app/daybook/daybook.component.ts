@@ -75,6 +75,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
         startDate: moment().subtract(30, 'days'),
         endDate: moment()
     };
+    /** True, if entry expanded (at least one entry) */
+    public isEntryExpanded: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private searchFilterData: any = null;
 
@@ -179,6 +181,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             sc.entries.map(e => e.isExpanded = this.isAllExpanded);
             return sc;
         }));
+        this.checkIsStockEntryAvailable();
     }
 
     public initialRequest() {
@@ -255,6 +258,32 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
 
     public expandEntry(entry) {
+
         entry.isExpanded = !entry.isExpanded;
+        this.checkIsStockEntryAvailable();
+    }
+
+    /**
+     *To check is there any stock entry available
+     *
+     * @memberof DaybookComponent
+     */
+    public checkIsStockEntryAvailable(): any {
+        this.daybookData$.subscribe(item => {
+            this.isEntryExpanded = item.entries.some(element => {
+                if (element.isExpanded && element.otherTransactions) {
+                    return element.otherTransactions.some(otherTrasaction => {
+                        if (otherTrasaction && otherTrasaction.inventory) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    });
+                } else {
+                    return false;
+                };
+            });
+        });
     }
 }
+
