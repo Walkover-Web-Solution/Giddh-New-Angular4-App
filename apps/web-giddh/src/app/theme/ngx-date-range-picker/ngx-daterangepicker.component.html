@@ -111,6 +111,7 @@
                         <span class="error-msg" *ngIf="invalidInlineEndDate">{{invalidInlineEndDate}}</span>
                     </div>
                 </div>
+                <span class="error-msg">Start date must not be greater than End date</span>
                 <div class="button-wrapper">
                     <a (click)="modalRef.hide()" class="mr-2">Cancel</a>
                     <a (click)="applyInlineDates()">Ok</a>
