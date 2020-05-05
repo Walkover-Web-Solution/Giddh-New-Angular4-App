@@ -39,13 +39,20 @@
                     </button>
 
                 </div>
-                <div class="expand-export"> <button type="button" class="btn btn-default expandBtnHideDesktop" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
+                <div class="expand-export">
+                    <button type="button" class="btn btn-default expandBtnHideDesktop" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
                                               'Expand All'}}
                     </button>
+                    <div class="clear-filter">
+                        <button class="btn btn-filter" (click)="resetAdvanceSearch();">
+                    <span class="icon-cross"></span> Clear Filter
+                </button>
+                    </div>
                     <button type="button" class="btn btn-default export-btn pull-right" (click)="exportDaybook()">Export</button>
                 </div>
 
             </div>
+
 
         </div>
     </div>
@@ -72,7 +79,7 @@
                         <th class=" text-right">Debit Amt</th>
                         <th class=" text-right">Credit Amt</th>
 
-                        <ng-container *ngIf="isAllExpanded || isEntryExpanded">
+                        <ng-container *ngIf="isEntryExpanded">
                             <th>Product/Service
                             </th>
                             <th class=" text-right">Qty.
@@ -99,7 +106,7 @@
                         <td class="text-right" data-title="Vch. No.">{{ entry.voucherNo }}</td>
                         <td class="text-right" data-title="Debit Amt">{{ entry.debitAmount || '-' }}</td>
                         <td class="text-right" data-title="Credit Amt">{{ entry.creditAmount || '-' }}</td>
-                        <td *ngIf="isAllExpanded || isEntryExpanded" colspan="7"> </td>
+                        <td *ngIf="isEntryExpanded" colspan="7"> </td>
                     </tr>
                     <ng-container *ngIf="entry !== undefined && entry.isExpanded">
                         <tr *ngFor="let details of entry.otherTransactions">
@@ -116,7 +123,7 @@
                                 <span *ngIf="details.type === 'CREDIT'">{{ details.amount}}</span>
                                 <span *ngIf="details.type !== 'CREDIT'">-</span>
                             </td>
-                            <ng-container *ngIf="isAllExpanded || isEntryExpanded">
+                            <ng-container *ngIf="isEntryExpanded">
                                 <td>{{details.inventory?details.inventory.stock.name:''}}
                                 </td>
                                 <td class=" text-right">{{details.inventory?details.inventory.quantity:''}}
@@ -141,42 +148,6 @@
 
 
             <div>
-                <!-- loop over entries -->
-                <!-- <section class="row row-1" *ngFor="let entry of (daybookData$ | async)?.entries"
-                    (click)="entry.isExpanded = !entry.isExpanded">
-                    <div class="row">
-                        <div class="col-xs-1 group">{{ entry.entryDate }}</div>
-                        <div class="col-xs-3 group">{{ entry.particular.name }}
-                        </div>
-                        <div class="col-xs-2 group">{{ entry.voucherName }}
-                        </div>
-                        <div class="col-xs-2 group text-right">{{ entry.voucherNo }}</div>
-                        <div class="col-xs-2 group text-right">{{ entry.debitAmount }}</div>
-                        <div class="col-xs-2 group text-right">{{ entry.creditAmount }}
-                        </div>
-                    </div>
-
-
-                    <ng-container *ngIf="entry.isExpanded">
-                        <section class="row row-2 account" *ngFor="let details of entry.otherTransactions">
-                            <div class="row">
-                                <div class="col-xs-1 account"></div>
-                                <div class="col-xs-3 account" style="padding-left: 15px;">{{ details.particular.name }}
-                                </div>
-                                <div class="col-xs-2 account"></div>
-                                <div class="col-xs-2 account"></div>
-                                <div class="col-xs-2 account text-right">
-                                    <span *ngIf="details.type === 'DEBIT'">{{ details.amount }}</span>
-                                </div>
-                                <div class="col-xs-2 account text-right">
-                                    <span *ngIf="details.type === 'CREDIT'">{{ details.amount }}</span>
-                                </div>
-                            </div>
-                        </section>
-                    </ng-container>
-
-                </section> -->
-                <!-- loop over entries -->
             </div>
         </div>
 
