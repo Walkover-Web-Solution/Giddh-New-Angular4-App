@@ -1,38 +1,19 @@
 @import "../../../../assets/css/color.scss";
-.invoice-footer {
-    h3 {
-        font-size: 16px;
-        color: #999999;
-        display: inline-block;
-        margin-right: 10px;
-    }
-}
-
-.invoice-footer {
-    h1 {
-        font-size: 28px;
-        color: #333;
-        display: inline-block;
-    }
-}
-
 .branch-transfer-report .basic>thead>tr>th {
     border-top: 1px solid $gainsboro !important;
 }
 
 .icon-pointer.activeTextColor {
-    color: #01a9f4;
+    color:$deep-sky-blue;
 }
 
 .voucher-type-dropdown {
     display: inline-block;
-}
-
-.voucher-type-dropdown .btn {
-    padding: 0 8px;
-    margin-right: 0px;
-}
-
+    .btn {
+        padding: 0 8px;
+        margin-right: 0px;
+    }
+} 
 .icon-calender {
     position: absolute;
     z-index: 9;
@@ -42,19 +23,10 @@
     justify-content: center;
     align-items: center;
     border-right: 1px solid $gainsboro;
-    color: #999999;
+    color:$nobel;
     left: 0;
     font-size: 18px;
 }
-
-.input-grp-dateRangePicker input.form-control {
-    padding-left: 45px !important;
-    width: 210px;
-    &:focus {
-        border-color: $gainsboro !important;
-    }
-}
-
 .btn-filter {
     background: $whisper-color;
     border: 1px solid $whisper-color;
