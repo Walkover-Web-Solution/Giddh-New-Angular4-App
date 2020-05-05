@@ -1413,8 +1413,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     private parseBalRes(res) {
-        this.totalSale = res.body.grandTotal;
-        this.totalDue = res.body.totalDue;
+        if (res && res.body) {
+            this.totalSale = res.body.grandTotal;
+            this.totalDue = res.body.totalDue;
+        }
         // get user country from his profile
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile) {
