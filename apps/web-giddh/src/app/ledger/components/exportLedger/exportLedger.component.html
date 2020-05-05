@@ -64,13 +64,13 @@
             </div>
             <div class="pdB2 clearfix" [hidden]="emailTypeSelected === 'admin-condensed' || emailTypeSelected === 'columnar'">
                 <label class="w100">Invoice no.:</label>
-                <label class="radio-inline pd0" style="margin-left: 6px;">
+                <label class="radio-inline pd0">
                     <input type="checkbox" name="withInvoiceNumber" [(ngModel)]="withInvoiceNumber">
                 </label>
             </div>
             <div class="pdB2 clearfix" [hidden]="emailTypeSelected !== 'columnar'">
                 <label class="w100">Cr/Dr with +/-</label>
-                <label class="radio-inline pd0" style="margin-left: 6px;">
+                <label class="radio-inline pd0">
                     <input type="checkbox"  name="balanceTypeAsSign" [(ngModel)]="balanceTypeAsSign">
                 </label>
             </div>
