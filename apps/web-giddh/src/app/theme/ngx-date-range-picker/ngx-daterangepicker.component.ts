@@ -328,7 +328,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     }
 
     public closeDatePicker() {
-        if(document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material")[0]) {
+        if (document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material")[0]) {
             document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
         }
         document.querySelector('body').classList.remove('hide-scroll-body')
@@ -1206,27 +1206,25 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
      * @param row row position of the current date clicked
      * @param col col position of the current date clicked
      */
-    clickDate(e, side: DateType, row: number, col: number) {
-        if (e.target.tagName === 'TD') {
-            if (!e.target.classList.contains('available')) {
-                return;
-            }
-        } else if (e.target.tagName === 'SPAN') {
-            if (!e.target.parentElement.classList.contains('available')) {
-                return;
-            }
-        }
+    clickDate(e, date: Moment) {
+
+        // if (e.target.tagName === 'TD') {
+        //     if (!e.target.classList.contains('available')) {
+        //         return;
+        //     }
+        // } else if (e.target.tagName === 'SPAN') {
+        //     if (!e.target.parentElement.classList.contains('available')) {
+        //         return;
+        //     }
+        // }
+
         if (this.ranges.length) {
             this.chosenRange = this.locale.customRangeLabel;
         }
-        if (!(this.calendarVariables[side].calendar[1][1].month() === this.calendarVariables[side].calendar[row][col].month())) {
-            return;
-        }
-        let date = side === DateType.start ? this.startCalendar.calendar[row][col] : this.endCalendar.calendar[row][col];
 
-        console.log("SELECTED : " + date.format(GIDDH_DATE_FORMAT));
-        console.log("START : " + this.startDate.format(GIDDH_DATE_FORMAT));
-        console.log("END : " + this.endDate.format(GIDDH_DATE_FORMAT));
+        // console.log("SELECTED : " + date.format(GIDDH_DATE_FORMAT));
+        // console.log("START : " + this.startDate.format(GIDDH_DATE_FORMAT));
+        // console.log("END : " + this.endDate.format(GIDDH_DATE_FORMAT));
 
         if (this.ActiveDate === ActiveDateEnum.Start) {
             // if start date is available
@@ -1629,9 +1627,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
                     }
                 }
                 // highlight dates in-between the selected dates
-                if (this.endDate != null && calendar[row][col] > this.startDate && calendar[row][col] < this.endDate) {
-                    classes.push('in-range');
-                }
+                // if (this.endDate != null && calendar[row][col] > this.startDate && calendar[row][col] < this.endDate) {
+                //     classes.push('in-range');
+                // }
                 // apply custom classes for this date
                 const isCustom = this.isCustomDate(calendar[row][col]);
                 if (isCustom !== false) {
@@ -1836,7 +1834,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     }
 
     public appendDatepickerToBody() {
-        if(document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material")[0]) {
+        if (document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material")[0]) {
             document.body.appendChild(document.getElementsByTagName("ngx-daterangepicker-material")[0]);
             this.isShown$.next(true);
         }
@@ -1847,6 +1845,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     }
 
     onScroll(direction: string) {
+        console.log(direction);
+
         if (direction === "bottom") {
             if (this.singleDatePicker) {
                 if ((!this.calendarVariables.start.maxDate || this.calendarVariables.start.maxDate.isAfter(this.calendarVariables.start.calendar.lastDay)) && (!this.linkedCalendars || this.singleDatePicker)) {
@@ -1933,12 +1933,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         this.renderCalendar(DateType.end);
 
         // setTimeout(() => {
-            // for(let loop = 0; loop < 5; loop++) {
-            //     this.goToPrevMonth();
-            // }
-            // for(let loop = 0; loop < 10; loop++) {
-            //     this.goToNextMonth();
-            // }
+        // for(let loop = 0; loop < 5; loop++) {
+        //     this.goToPrevMonth();
+        // }
+        // for(let loop = 0; loop < 10; loop++) {
+        //     this.goToNextMonth();
+        // }
         // }, 500);
     }
 
