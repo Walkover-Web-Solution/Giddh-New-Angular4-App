@@ -26,21 +26,7 @@
                             <h4 class="sub_head" *ngIf="fieldsAndVisibility.header.formNameTaxInvoice?.display">This is your
                                 <strong>{{fieldsAndVisibility.header.formNameTaxInvoice?.label}}</strong>
                             </h4>
-                        </td>
 
-                        <td class="text-center">
-                            <img src="assets/images/dublicate.svg" alt="">
-                        </td>
-                        <td class="text-right" *ngIf="showLogo">
-                            <figure class="col-xs-12">
-                                <img [hidden]='!showLogo' [src]="logoSrc" class="text-left max-width-180" alt="" [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
-                            </figure>
-                            <p class="bold">Walkover Web Solutions Pvt Ltd.</p>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="3">
                             <p class="mt-05">
                                 <ng-container *ngIf="voucherType==='sales'">
                                     <span *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label
@@ -56,9 +42,20 @@
                                                 : 'Voucher Date'}}: 11/09/2017</span>
                                 </ng-container>
                             </p>
+
+                        </td>
+
+                        <td class="text-center img-duplicate">
+                            <img src="assets/images/dublicate.svg" alt="">
+                        </td>
+                        <td class="text-right" *ngIf="showLogo">
+                            <figure class="col-xs-12">
+                                <img [hidden]='!showLogo' [src]="logoSrc" class="text-left max-width-180" alt="" [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
+                            </figure>
+                            <p class="bold">Walkover Web Solutions Pvt Ltd.</p>
+                            <p class="font-12">Due on 30/08/2017</p>
                         </td>
                     </tr>
-
                 </tbody>
             </table>
         </header>
@@ -287,10 +284,10 @@
                         <p class="font-12" *ngIf="fieldsAndVisibility.footer.totalInWords?.display"> Eight Thousand One Hundred Sixty Six Only</p>
                     </td>
                     <th class="text-right">
-                        <strong>Total</strong>
+                        <strong>TOTAL</strong>
                     </th>
                     <th class="text-right">
-                        8166.00
+                        <strong>8166.00</strong>
                     </th>
                 </tr>
                 <tr>
@@ -324,20 +321,20 @@
         <table class="tax-table item text-right" cellspacing="0" cellpadding="0" *ngIf="fieldsAndVisibility.table.taxBifurcation?.display">
             <thead>
                 <tr>
-                    <th class="text-left " [ngStyle]="{ 'background-color': inputTemplate.tableColor} " *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'hsnSac'">HSN/SAC</th>
-                    <th class="text-left " [ngStyle]="{ 'background-color': inputTemplate.tableColor} " *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'">Tax %</th>
+                    <th class="text-left" *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'hsnSac'">HSN/SAC</th>
+                    <th class="text-left" *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'">Tax %</th>
                     <ng-container>
-                        <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">Taxable Amt.</th>
-                        <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">CGST %</th>
-                        <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">CGST Amt.</th>
-                        <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">SGST %</th>
-                        <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">SGST Amt.</th>
+                        <th class="text-right">Taxable Amt.</th>
+                        <th class="text-right">CGST %</th>
+                        <th class="text-right">CGST Amt.</th>
+                        <th class="text-right">SGST %</th>
+                        <th class="text-right">SGST Amt.</th>
                     </ng-container>
                     <ng-container>
-                        <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} " *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'">IGST %</th>
-                        <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} " *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'">IGST Amt.</th>
+                        <th class="text-right" *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'">IGST %</th>
+                        <th class="text-right" *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'">IGST Amt.</th>
                     </ng-container>
-                    <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} " *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'">Total Amt.</th>
+                    <th class="text-right" *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'">Total Amt.</th>
                 </tr>
             </thead>
             <tbody>
