@@ -27,6 +27,7 @@ export interface OtherTransaction {
     particular: Particular;
     amount: number;
     type: string;
+    inventory: any
 }
 
 export interface Particular {
