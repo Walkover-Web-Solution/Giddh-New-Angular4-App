@@ -586,15 +586,13 @@
 
 <!-- jump to account for mobile view -->
 <div class="mobile-home-search">
-    <div class="input-group account-search" (click)="showNavigationModal()">
-        <span class="input-group-addon" id="">
+    <div class="input-group account-search">
+        <span class="input-group-addon">
             <i class="icon-search"></i>
         </span>
-        <input type="text" class="form-control jumpToAccount" placeholder="Search anything" aria-describedby="">
+        <input type="text" class="form-control" placeholder="Search anything" aria-describedby="">
     </div>
 </div>
-
-
 <!--add and manage group account modal -->
 <div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy mangeAccountPopup addManageGroupAcc" role="dialog" (onShown)="onShown()">
     <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
@@ -604,7 +602,6 @@
         </div>
     </div>
 </div>
-
 <!--add company modal  -->
 <div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog" (onHidden)="onHide()">
     <div class="modal-dialog modal-lg">
@@ -614,7 +611,6 @@
         </div>
     </div>
 </div>
-
 <!--add company new modal  -->
 <div bsModal #addCompanyNewModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog" (onHidden)="onHide()">
     <div class="modal-dialog modal-lg">
@@ -624,7 +620,6 @@
         </div>
     </div>
 </div>
-
 <!--delete company modal  -->
 <div bsModal #deleteCompanyModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -634,7 +629,6 @@
         </div>
     </div>
 </div>
-
 <!--CMD + G modal  -->
 <ng-template #navigationModal>
 
