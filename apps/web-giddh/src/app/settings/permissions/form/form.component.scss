@@ -64,6 +64,13 @@
 .custom_dropdown .caret {
     transform: rotate(-90deg);
 }
+@media (max-width: 1199px) {
+    .create-btn {
+        float: none !important;
+        margin-top: 10px;
+    }
+}
+
 @media (max-width: 1024px) {
     .permissionForm {
         .form-group {
@@ -72,6 +79,12 @@
             .btn-group {
                 width: 188px;
             }
+        }
+        .create-btn {
+            margin-top: 0px;
+        }
+        .add-btn {
+            width: initial !important;
         }
     }
 }
@@ -86,6 +99,13 @@
             .btn-group {
                 width: 100%;
             }
+        }
+        .create-btn {
+            float: none !important;
+        }
+        .add-btn {
+            width: auto;
+            display: inline-block;
         }
     }
 }
