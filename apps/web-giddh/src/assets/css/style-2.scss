@@ -6627,9 +6627,10 @@ table td[class*=col-]:last-child {
 }
 
 .illustration_box img {
-    /* max-width: 85%; */
-    opacity: 0.7;
-    max-width: 600px;
+    opacity: .7;
+    max-width: 400px;
+    margin: 0 auto;
+    width: 100%;
 }
 
 .cursor-pointer {
@@ -8497,7 +8498,9 @@ button.btn.btn-filter {
     float: right !important;
     margin-left: 10px !important;
 }
-
+.td_in_searchBox{
+    min-width: 190px !important;
+}
 .td_in_searchBox div i.icon-search:hover {
     color: $deep-sky-blue !important;
 }
@@ -9248,7 +9251,7 @@ ngx-daterangepicker-material {
     .setting-container {
         margin-top: 55px;
     }
-    .hideLableOnMobile button {
+    .hide-lable-on-mobile button {
         margin-top: 0 !important;
     }
     .basic > tbody > tr td:last-child,
