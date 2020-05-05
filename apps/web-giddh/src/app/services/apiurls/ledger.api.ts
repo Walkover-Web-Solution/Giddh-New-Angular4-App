@@ -41,6 +41,8 @@ export const LEDGER_API = {
     GET_CURRENCY_RATE: 'currency/rate?from=:from&to=:to&date=:date',
 
     GET_UNPAID_INVOICE_LIST: 'v2/company/:companyUniqueName/invoices/list?accountUniqueName=:accountUniqueName&status=:accStatus',
-    GET_COLUMNAR_REPORT: 'v2/company/:companyUniqueName/groups/:groupUniqueName/export/account-balances'
+    GET_COLUMNAR_REPORT: 'v2/company/:companyUniqueName/groups/:groupUniqueName/export/account-balances',
+    // Export Ledger get columnar report table
+    EXPORT_LEDGER_COLUMNAR_REPORT_TABLE: 'company/:companyUniqueName/accounts/:accountUniqueName/columnar-report?from=:from&to=:to'
 };
 

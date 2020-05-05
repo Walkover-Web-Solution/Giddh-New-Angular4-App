@@ -428,14 +428,14 @@ button.btn.btn-filter span.icon-cross {
     z-index: 100;
     top: 0;
 }
-.invoiceFooter h3 {
+.invoice-footer h3 {
     font-size: 16px;
     color: #999999;
     display: inline-block;
     margin-right: 10px;
 }
 
-.invoiceFooter h1 {
+.invoice-footer h1 {
     font-size: 28px;
     color: #333;
     display: inline-block;
@@ -509,7 +509,7 @@ color:$gray;
         left: auto;
         right: 0;
     }
-    .invoiceFooter .font-xxlarge {
+    .invoice-footer .font-xxlarge {
         font-size: 20px;
     }
     .click-dropdwon ul {
@@ -566,10 +566,10 @@ color:$gray;
     .invoice-modal-content {
         top: 131px;
     }
-    .invoiceFooter .font-xxlarge {
+    .invoice-footer .font-xxlarge {
         font-size: 16px;
     }
-    .invoiceFooter h1 {
+    .invoice-footer h1 {
         font-size: 18px !important;
     }
     .invoice-container {
@@ -596,7 +596,7 @@ color:$gray;
     #dropdown-ddl-newinv {
         right: -20px !important;
     }
-    .invoiceFooter {
+    .invoice-footer {
         display: flex;
         padding: 10px 0;
     }

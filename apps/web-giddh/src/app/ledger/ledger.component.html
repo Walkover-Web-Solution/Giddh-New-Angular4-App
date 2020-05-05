@@ -1,4 +1,4 @@
-<section class="container">
+<section class="container" *ngIf="!isShowLedgerColumnarReportTable">
 
     <!-- region ledger table-->
     <div class="ledgHead transactions-page mt-2 pos-rel">
@@ -1065,7 +1065,7 @@
 
 </section>
 
-<div class="container">
+<div class="container" *ngIf="!isShowLedgerColumnarReportTable">
     <div class="row">
         <div class="col-xs-12 text-right mrT1" [hidden]="!isBankOrCashAccount">
             <button [hidden]="!closingBalanceBeforeReconcile || showLoader" class="btn btn-primary btn-sm"
@@ -1092,7 +1092,7 @@
 
 <!-- region total section -->
 <!-- commented due to API  -->
-<div class="transaction-in-short">
+<div class="transaction-in-short" *ngIf="!isShowLedgerColumnarReportTable">
     <div class="container">
         <section class="ledger-stat mrT3"
             *ngIf="!(showLoader) && (lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
@@ -1212,6 +1212,14 @@
 </div>
 <!-- modal sections -->
 
+<div *ngIf="isShowLedgerColumnarReportTable">
+    <div class="back-btn text-right pr-1 mt-1 mb-1" >
+        <button class="btn btn-default" (click)="isShowLedgerColumnarReportTable=false" >Back</button>
+    </div>
+    <ledger-columnar-report-table [columnarReportExportRequest]="columnarReportExportRequest" [accountUniquename]="accountUniquename"></ledger-columnar-report-table>
+</div>
+
+
 <!-- aside menu section -->
 <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
 <ledger-aside-pane [class]="asideMenuState" *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState"
@@ -1236,7 +1244,7 @@
         <div class="modal-content">
             <!-- [from]="advanceSearchRequest?.from" [to]="advanceSearchRequest?.to"  -->
             <export-ledger [advanceSearchRequest]="advanceSearchRequest" [accountUniqueName]="lc.accountUnq"
-                (closeExportLedgerModal)="hideExportLedgerModal()"></export-ledger>
+                (closeExportLedgerModal)="hideExportLedgerModal()" (showColumnarTable)="onShowColumnarReportTable($event)"></export-ledger>
         </div>
     </div>
 </div>
