@@ -36,6 +36,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public daybookQueryRequest: DaybookQueryRequest;
     public daybookData$: Observable<DayBookResponseModel>;
     public daybookExportRequestType: 'get' | 'post';
+    /** Universal date observer */
+    public universalDate$: Observable<any>;
+    /** True, If advance search applied */
+    public showAdvanceSearchIcon: boolean = false;
     @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
     @ViewChild('exportDaybookModal') public exportDaybookModal: ModalDirective;
     @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent }) public dateRangePickerCmp: DaterangePickerComponent;
@@ -80,6 +84,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private searchFilterData: any = null;
 
+
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private _companyActions: CompanyActions,
@@ -87,23 +92,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
         private _daybookActions: DaybookActions,
         private store: Store<AppState>
     ) {
+
         this.daybookQueryRequest = new DaybookQueryRequest();
-        this.store.select(s => s.daybook.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
-            if (data && data.entries) {
-                this.daybookQueryRequest.page = data.page;
-                // data.entries.sort((a, b) => {
-                //   return new Date(a.entryDate).getTime() - new Date(b.entryDate).getTime();
-                // }).map(a => {
-                //   a.isExpanded = false;
-                // });
-                data.entries.map(a => {
-                    a.isExpanded = false;
-                });
-                this.loadPaginationComponent(data);
-                this.daybookData$ = observableOf(data);
-                this.changeDetectorRef.detectChanges();
-            }
-        });
+        this.initialRequest();
         let companyUniqueName;
         let company;
         store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$))
@@ -114,8 +105,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 company = p.find(q => q.uniqueName === companyUniqueName);
             });
         this.companyName = company.name;
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
-        this.initialRequest();
     }
 
     public ngOnInit() {
@@ -126,6 +117,17 @@ export class DaybookComponent implements OnInit, OnDestroy {
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'daybook';
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+        this.store.pipe(select(state => state.daybook.data), takeUntil(this.destroyed$)).subscribe((data) => {
+            if (data && data.entries) {
+                this.daybookQueryRequest.page = data.page;
+                data.entries.map(a => {
+                    a.isExpanded = false;
+                });
+                this.loadPaginationComponent(data);
+                this.daybookData$ = observableOf(data);
+                this.changeDetectorRef.detectChanges();
+            }
+        });
     }
 
     public selectedDate(value: any) {
@@ -284,6 +286,32 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 };
             });
         });
+    }
+
+/**
+ * To reset advance search form
+ *
+ * @memberof DaybookComponent
+ */
+public resetAdvanceSearch(): void {
+        this.showAdvanceSearchIcon = false;
+        let universalDate;
+        // get application date
+        this.universalDate$.pipe(take(1)).subscribe(date => {
+            universalDate = date;
+        });
+
+        // set date picker date as application date
+        if (universalDate.length > 1) {
+            this.daybookQueryRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+            this.daybookQueryRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+            this.datePickerOptions = {
+                ...this.datePickerOptions,
+                startDate: moment(new Date(universalDate[0]), 'DD-MM-YYYY').toDate(),
+                endDate: moment(new Date(universalDate[1]), 'DD-MM-YYYY').toDate(),
+                chosenLabel: universalDate[2]
+            };
+        }
     }
 }
 
