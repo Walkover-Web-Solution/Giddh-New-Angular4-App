@@ -34,7 +34,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     public columnarTableColumn: string[] = [];
     /** Loader for API request */
     public isLoading: boolean = true;
-    /** Subject to destroye all observers  */
+    /** Subject to destroy all observers  */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(public settingsFinancialYearService: SettingsFinancialYearService,
