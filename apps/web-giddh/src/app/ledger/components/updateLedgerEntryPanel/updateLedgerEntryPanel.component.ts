@@ -50,6 +50,7 @@ import { TaxControlComponent } from '../../../theme/tax-control/tax-control.comp
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { UpdateLedgerVm } from './updateLedger.vm';
 import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
+import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 
 @Component({
     selector: 'update-ledger-entry-panel',
@@ -174,6 +175,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public adjustedExcessAmount: number = 0;
     /** To check advance receipt/invoice amount is exceed by compound total */
     public totalAdjustedAmount: number = 0;
+    /** True, if company country supports other tax (TCS/TDS) */
+    public isTcsTdsApplicable: boolean;
 
     /** True, if all the transactions are of type 'Tax' or 'Reverse Charge' */
     private taxOnlyTransactions: boolean;
@@ -227,6 +230,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
                 this.warehouses = warehouseData.formattedWarehouses;
                 this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
+            }
+        });
+        this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
             }
         });
         this.showAdvanced = false;

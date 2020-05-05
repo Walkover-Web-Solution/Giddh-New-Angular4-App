@@ -192,7 +192,7 @@
                                                                         </sales-sh-select>
                                                                     </div>
 
-                                                                    <div class="col-sm-12 pd ">
+                                                                    <div class="col-sm-12 pd " *ngIf="shouldShowTrnGstField">
                                                                         <!-- <label>GSTIN</label> -->
                                                                         <input maxLength="15" autocomplete="None" type="text" name="billingDetails.gstNumber" class="form-control input-custom" *ngIf="showGSTINNo" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber" (change)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
                                                                             placeholder="GSTIN" />
@@ -245,7 +245,7 @@
                                                                             </sales-sh-select>
                                                                         </div>
 
-                                                                        <div class="col-sm-12 pd ">
+                                                                        <div class="col-sm-12 pd " *ngIf="shouldShowTrnGstField">
                                                                             <input [readonly]="autoFillShipping" autocomplete="None" maxLength="15" type="text" name="shippingDetails.gstNumber" *ngIf="showGSTINNo" class="form-control input-custom" [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber" (change)="getStateCode('shippingDetails', statesShipping)"
                                                                                 placeholder="GSTIN" />
                                                                             <input [readonly]="autoFillShipping" maxLength="15" autocomplete="None" type="text" name="shippingDetails.gstNumber" class="form-control input-custom" *ngIf="showTRNNo" [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber" (change)="getStateCode('shippingDetails', statesShipping);"
@@ -911,7 +911,7 @@
                                                 <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.total" readonly decimalDigitsDirective [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                                 />
 
-                                                <div class="wrap-otherTax">
+                                                <div *ngIf="isTcsTdsApplicable" class="wrap-otherTax">
                                                     <input type="checkbox" class="other-taxes-checkobx" [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable" name="entry.isOtherTaxApplicable_{{entryIdx}}" id="entry.isOtherTaxApplicable_{{entryIdx}}" (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
                                                     <label for="entry.isOtherTaxApplicable_{{entryIdx}}" *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable" style="font-size:13px;vertical-align: middle">Other Tax?</label>
                                                 </div>
@@ -1698,7 +1698,7 @@
                                         <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.total" readonly decimalDigitsDirective [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                         />
 
-                                        <div class="wrap-otherTax">
+                                        <div *ngIf="isTcsTdsApplicable" class="wrap-otherTax">
                                             <input type="checkbox" class="other-taxes-checkobx" [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable" name="entry.isOtherTaxApplicable_{{entryIdx}}" id="entry.isOtherTaxApplicable_{{entryIdx}}" (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
                                             <label for="entry.isOtherTaxApplicable_{{entryIdx}}" *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable" style="font-size:13px;vertical-align: middle">Other
                                                             Tax?</label>

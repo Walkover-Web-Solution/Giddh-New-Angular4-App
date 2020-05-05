@@ -224,15 +224,19 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                Object.keys(res.fields).forEach(key => {
-                    this.formFields[res.fields[key].name] = [];
-                    this.formFields[res.fields[key].name] = res.fields[key];
-                });
-                this.GSTIN_OR_TRN = res.fields[0].label;
-
-                // Object.keys(res.applicableTaxes).forEach(key => {
-                //     this.taxesList.push({ label: res.applicableTaxes[key].name, value: res.applicableTaxes[key].uniqueName, isSelected: false });
-                // });
+                if (res.fields) {
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            this.formFields[res.fields[key].name] = [];
+                            this.formFields[res.fields[key].name] = res.fields[key];
+                        }
+                    });
+                }
+                if (this.formFields['taxName'] && this.formFields['taxName'].label) {
+                    this.GSTIN_OR_TRN = this.formFields['taxName'].label;
+                } else {
+                    this.GSTIN_OR_TRN = '';
+                }
             }
         });
     }
@@ -284,17 +288,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public setCountryByCompany(company: CompanyResponse) {
-        let result: IContriesWithCodes = contriesWithCodes.find((c) => c.countryName === company.country);
-        if (result) {
-            this.addAccountForm.get('country').get('countryCode').setValue(result.countryflag);
-            this.selectedCountry = result.countryflag + ' - ' + result.countryName;
-            this.selectedCountryCode = result.countryflag;
-            this.addAccountForm.get('mobileCode').setValue(result.value);
-            let stateObj = this.getStateGSTCode(this.stateList, result.countryflag)
+        if (this.activeCompany && this.activeCompany.countryV2) {
+            const countryCode = this.activeCompany.countryV2.alpha2CountryCode;
+            const countryName = this.activeCompany.countryV2.countryName;
+            const callingCode = this.activeCompany.countryV2.callingCode;
+            this.addAccountForm.get('country').get('countryCode').setValue(countryCode);
+            this.selectedCountry = `${countryCode} - ${countryName}`;
+            this.selectedCountryCode = countryCode;
+            this.addAccountForm.get('mobileCode').setValue(callingCode);
             this.addAccountForm.get('currency').setValue(company.baseCurrency);
-            this.getOnboardingForm(result.countryflag);
-            this.companyCountry = result.countryflag;
-
+            this.getOnboardingForm(countryCode);
+            this.companyCountry = countryCode;
         } else {
             this.addAccountForm.get('country').get('countryCode').setValue('IN');
             this.addAccountForm.get('mobileCode').setValue('91');

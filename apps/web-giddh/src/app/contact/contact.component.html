@@ -54,7 +54,7 @@
                                             [(ngModel)]="showFieldFilter.state" /> State</a>
                                 </li>
 
-                                <li role="menuitem">
+                                <li *ngIf="shouldShowTaxFilter" role="menuitem">
                                     <a class="dropdown-item">
                                         <input type="checkbox" name="field_filter.gstin"
                                             (ngModelChange)="columnFilter($event, 'gstin')"
@@ -473,7 +473,7 @@
                     <td *ngIf="activeTab === 'vendor' && isICICIIntegrated"></td>
                     <td class="text-lovercase" *ngIf="showFieldFilter.email"></td>
                     <td *ngIf="showFieldFilter.mobile"></td>
-                    <td *ngIf="showFieldFilter.gstin"></td>
+                    <td *ngIf="showFieldFilter.gstin && shouldShowTaxFilter"></td>
                     <td *ngIf="showFieldFilter.state"></td>
                     <td *ngIf="showFieldFilter.comment"></td>
                 </tr>
@@ -546,7 +546,7 @@
 
                     <th *ngIf="showFieldFilter.mobile">Mobile No.</th>
 
-                    <th *ngIf="showFieldFilter.gstin">
+                    <th *ngIf="showFieldFilter.gstin && shouldShowTaxFilter">
                         <div class="d-flex align-items-center">Tax Number
                             <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'gstin'}">
                             </ng-container>
@@ -738,7 +738,7 @@
                         <td class="WordWrap " *ngIf="showFieldFilter.mobile " data-title="Mobile No">
                             {{account.mobileNo || '-'}}
                         </td>
-                        <td class="WordWrap " *ngIf="showFieldFilter.gstin " data-title="GSTIN">
+                        <td class="WordWrap " *ngIf="showFieldFilter.gstin && shouldShowTaxFilter" data-title="GSTIN">
                             {{account.gstIn || '-' }}</td>
                         <td class="WordWrap " *ngIf="showFieldFilter.state " data-title="State">
                             {{account?.state?.name || '-'}}</td>
@@ -937,7 +937,7 @@
                         <td class="WordWrap " *ngIf="showFieldFilter.mobile " data-title="Mobile No.">
                             {{account.mobileNo || '-' }}
                         </td>
-                        <td class="WordWrap " *ngIf="showFieldFilter.gstin " data-title="GSTIN">
+                        <td class="WordWrap " *ngIf="showFieldFilter.gstin  && shouldShowTaxFilter" data-title="GSTIN">
                             {{account.gstIn || '-' }}</td>
                         <td class="WordWrap " *ngIf="showFieldFilter.state " data-title="State">{{account?.state?.name}}
                         </td>

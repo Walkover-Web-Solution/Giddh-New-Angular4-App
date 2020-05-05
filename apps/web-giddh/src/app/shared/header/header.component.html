@@ -103,7 +103,7 @@
                                     </li>
 
                                     <li>
-                                        <button href="javascript:void(0)" (click)="removeCompanySessionData(); showAddCompanyModal();" class="btn-link pd0">Create
+                                        <button href="javascript:void(0)" (click)="createNewCompany()" class="btn-link pd0">Create
                                             Company
                                         </button>
                                     </li>
@@ -337,7 +337,7 @@
                             <span class="icon-dashboard"></span>
                             <span class="label">{{menu.name}}</span>
                         </a>
-                        <a *ngIf="menu.uniqueName == '/pages/vat-report' && activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode != 'IN'" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage && selectedPage.toLowerCase() == menu.name.toLowerCase()}"
+                        <a *ngIf="menu.uniqueName == '/pages/vat-report' && activeCompany && vatSupportedCountries?.includes(activeCompany.countryV2.alpha2CountryCode)" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage && selectedPage.toLowerCase() == menu.name.toLowerCase()}"
                             (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
                             <span class="icon-dashboard"></span>
                             <span class="label">{{menu.name}}</span>
@@ -422,7 +422,7 @@
                                                 *ngIf="activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode == 'IN'">GSTR</a>
                                         </li>
                                         <li><a (click)="analyzeOtherMenus('vat-report')"
-                                                *ngIf="activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode != 'IN'">Vat
+                                                *ngIf="activeCompany && activeCompany.countryV2 && vatSupportedCountries?.includes(activeCompany.countryV2.alpha2CountryCode)">Vat
                                                 Report</a></li>
                                         <li><a (click)="analyzeOtherMenus('home')">Dashboard</a></li>
                                         <li><a (click)="analyzeOtherMenus('reports/reports-dashboard')">Reports</a></li>
@@ -823,7 +823,7 @@
                 </li>
 
                 <li>
-                    <button href="javascript:void(0)" (click)="showAddCompanyModal()" class="btn-link pd0">Create
+                    <button href="javascript:void(0)" (click)="createNewCompany()" class="btn-link pd0">Create
                         Company
                     </button>
                 </li>
