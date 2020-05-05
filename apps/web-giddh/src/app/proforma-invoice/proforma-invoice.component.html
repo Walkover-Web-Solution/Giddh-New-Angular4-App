@@ -831,7 +831,7 @@
                                     </td>
 
                                     <td class="text-right stockUnit">
-                                        <input type="text" [disabled]="!transaction.isStockTxn" (blur)="calculateStockEntryAmount(transaction); calculateWhenTrxAltered(entry, transaction);" placeholder="Quantity" decimalDigitsDirective name="transaction.quantity_{{entryIdx}}" class="form-control text-right"
+                                        <input type="text" [disabled]="!transaction.isStockTxn" (blur)="handleQuantityBlur(entry, transaction);" placeholder="Quantity" decimalDigitsDirective name="transaction.quantity_{{entryIdx}}" class="form-control text-right"
                                             [(ngModel)]="transaction.quantity" />
 
                                         <select class="form-control" [disabled]="!transaction.isStockTxn" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit" (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
@@ -1155,7 +1155,7 @@
                     </div>
 
                     <!--region balance due for non-purchase-->
-                    <div class="tableRow" *ngIf="((isSalesInvoice || isCashInvoice))">
+                    <div class="tableRow" *ngIf="((isSalesInvoice || isCashInvoice) && !isUpdateMode)">
 
                         <div class="tableCell depositeSection">
 
@@ -1164,7 +1164,7 @@
                                 <div (click)="clickedInside($event)" id="deposit-dropdown" class="form-group pd1">
                                     <p>Deposit</p>
                                     <ul>
-                                        <ng-container *ngIf="isSalesInvoice && (isAccountHaveAdvanceReceipts || isInvoiceAdjustedWithAdvanceReceipts)">
+                                        <!-- <ng-container *ngIf="isSalesInvoice && (isAccountHaveAdvanceReceipts || isInvoiceAdjustedWithAdvanceReceipts)">
                                             <li role="menuitem" class="mrT1 ">
                                                 <div class="clearfix paymentMode">
 
@@ -1214,7 +1214,7 @@
                                                     <label class="pull-right">Adjust Amount</label>
                                                 </div>
                                             </li>
-                                        </ng-container>
+                                        </ng-container> -->
 
                                         <ng-container *ngIf="!isUpdateMode">
                                             <li role="menuitem" class="mrT1 ">
@@ -1580,7 +1580,7 @@
 
                                         <div class="col-xs-6" style="padding-right:0;">
                                             <label class="card-label text-right">Qty</label>
-                                            <input type="text" [disabled]="!transaction.isStockTxn" (blur)="calculateStockEntryAmount(transaction); calculateWhenTrxAltered(entry, transaction);" placeholder="Quantity" decimalDigitsDirective name="transaction.quantity_{{entryIdx}}" class="form-control text-right"
+                                            <input type="text" [disabled]="!transaction.isStockTxn" (blur)="handleQuantityBlur(entry, transaction);" placeholder="Quantity" decimalDigitsDirective name="transaction.quantity_{{entryIdx}}" class="form-control text-right"
                                                 [(ngModel)]="transaction.quantity" />
                                         </div>
                                         <div class="col-xs-6">

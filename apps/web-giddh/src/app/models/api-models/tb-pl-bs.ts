@@ -30,6 +30,7 @@ export class GetCogsResponse {
 	public manufacturingExpenses: number = 0;
 	public openingInventory: number = 0;
 	public purchasesStockAmount: number = 0;
+	public debitNoteStockAmount: number = 0; /**This key refers to the total debit notes stock transaction amount for particular date period, added by Aditya Soni */
 	public toDate: string = '';
 }
 

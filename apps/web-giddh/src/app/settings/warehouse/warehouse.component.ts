@@ -319,15 +319,15 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      */
     private hideAddCompanyModal(): Promise<any> {
         return new Promise((resolve) => {
-            if (this.warehouseOnBoardingModal) {
+            if (this.warehouseOnBoardingModal && this.warehouseOnBoardingModal.isShown) {
                 this.warehouseOnBoardingModal.hide();
+                setTimeout(() => {
+                    document.querySelectorAll('.modal-backdrop').forEach((backdrop: HTMLElement) => {
+                        backdrop.style.setProperty('display', 'none', 'important');
+                    });
+                    resolve();
+                }, 1000);
             }
-            setTimeout(() => {
-                document.querySelectorAll('.modal-backdrop').forEach((backdrop: HTMLElement) => {
-                    backdrop.style.setProperty('display', 'none', 'important');
-                });
-                resolve();
-            }, 1000);
         });
     }
 

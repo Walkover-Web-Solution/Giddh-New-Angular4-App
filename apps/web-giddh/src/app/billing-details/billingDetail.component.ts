@@ -244,6 +244,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     public prepareSelectedPlanFromSubscriptions(plan: CreateCompanyUsersPlan) {
+        this.isCreateAndSwitchCompanyInProcess = true;
         this.subscriptionPrice = plan.planDetails.amount;
         this.SubscriptionRequestObj.userUniqueName = this.logedInuser.uniqueName;
         this.SubscriptionRequestObj.planUniqueName = plan.planDetails.uniqueName;
@@ -256,6 +257,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         }
         if (this.subscriptionPrice && this.UserCurrency) {
             this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).subscribe((res: any) => {
+                this.isCreateAndSwitchCompanyInProcess = false;
                 if (res.status === 'success') {
                     this.ChangePaidPlanAMT = res.body.amount;
                     this.orderId = res.body.id;
