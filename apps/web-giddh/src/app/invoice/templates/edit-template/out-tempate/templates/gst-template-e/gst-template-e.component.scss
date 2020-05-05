@@ -1,17 +1,4 @@
-/* #royal * {
-  box-sizing: content-box;
-  color: #231f20;
-  font-family: inherit;
-  font-style: inherit;
-  font-weight: inherit;
-  line-height: 18px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  text-decoration: none;
-  vertical-align: top;
-} */
-
+@import "../../../../../../../assets/css/color.scss";
 strong,
 .strong {
     font-weight: bold;
@@ -411,15 +398,14 @@ img {
 
 .warehouse-table {
     width: 100%;
-    border-bottom: 1px solid #D6D6D6;
-    /* border-top: 1px solid #D6D6D6; */
+    border-bottom: 1px solid $gray;
     padding-bottom: 5px;
     padding-right: 0px;
     padding-left: 0px;
 }
 
 header.bottom-border {
-    border-bottom: 1px solid #D6D6D6;
+    border-bottom: 1px solid $gray;
 }
 
 .warehouse-table tbody tr td {
