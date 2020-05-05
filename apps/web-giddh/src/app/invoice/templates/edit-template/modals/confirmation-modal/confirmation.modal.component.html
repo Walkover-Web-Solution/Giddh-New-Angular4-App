@@ -7,8 +7,10 @@
         <form name="newRole" novalidate class="" autocomplete="off">
             <h3 *ngIf="!isMessageTextOrHeading" [innerHTML]="message"></h3>
             <ng-container *ngIf="isMessageTextOrHeading">
-                <p [innerHTML]="messageHeader" class="mt-1"></p>
-                <p [innerHTML]="messageBody"> </p>
+                <div class="modal_wrap mrB2">
+                    <h3>{{messageHeader}} </h3>
+                    <p class="text-gray font-14 mt-05">{{messageBody}}</p>
+                </div>
             </ng-container>
 
             <div class="text-right mrT4">
