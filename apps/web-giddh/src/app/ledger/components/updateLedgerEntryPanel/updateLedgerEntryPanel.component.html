@@ -723,98 +723,98 @@
                     </div>
 
                     <!-- Advance receipts adjusted Invoice -->
-<!--                    <div class="clearfix adjust-receipt font-14"-->
-<!--                         *ngIf="isAdjustedInvoicesWithAdvanceReceipt && vm.selectedLedger && vm.selectedLedger.voucherGeneratedType ==='receipt'">-->
-<!--                        <p class="bold">Adjusted Amount-->
-<!--                            <a href="javascript:void(0)" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"-->
-<!--                               (click)="openAdjustInvoiceEditMode();$event.stopPropagation();"><i class="icon-edit11 font-10"></i></a>-->
-<!--                        </p>-->
-<!--                        <p class="font-12 text-light mb-1">-->
-<!--                            {{ vm.baseCurrencyDetails?.symbol}}{{vm.selectedLedger?.invoiceAdvanceReceiptAdjustment?.totalAdjustmentAmount | giddhCurrency}}-->
-<!--                        </p>-->
-<!--                        <div class="clearfix adjustment-field">-->
-<!--                            <div class="row"-->
-<!--                                 *ngFor="let item of vm.selectedLedger?.invoiceAdvanceReceiptAdjustment?.adjustedInvoices; let entryIdx = index;">-->
-<!--                                <div class="col-md-4 col-sm-5 pr-05">-->
-<!--                                    <div class="form-group">-->
-<!--                                        <label>Adjustment Invoices-->
-<!--                                            <span class="text-danger">*</span>-->
-<!--                                        </label>-->
-<!--                                        <input type="text" class="form-control mb-1" [(ngModel)]="item.invoiceNumber" disabled>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <div class="col-md-4 col-sm-5 pl-05 pr-05">-->
-<!--                                    <div class="form-group">-->
-<!--                                        <label>Amount<span class="text-danger">*</span> <span class="text-light font-12 ml-05">(Inclusive-->
-<!--                            Tax)</span></label>-->
-<!--                                        <input type="text" class="form-control mb-1" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"-->
-<!--                                               [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective-->
-<!--                                               [(ngModel)]="item.adjustedAmount.amountForAccount" disabled>-->
-<!--                                        <input type="text" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat"-->
-<!--                                               [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedInvoiceAmountChange()"-->
-<!--                                               *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"-->
-<!--                                               [(ngModel)]="item.adjustedAmount.amountForAccount">-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <div class="col-sm-2 pl-05">-->
-<!--                                    <div class="form-group">-->
-<!--                                        <label>Tax</label>-->
-<!--                                        <input type="text" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat"-->
-<!--                                               [prefix]="vm.selectedPrefixForCurrency" [(ngModel)]="item.taxAmount" disabled>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <p *ngIf="isAdjustedAmountExcess" class="font-12 text-light">Excess-->
-<!--                            amount:{{ vm.baseCurrencyDetails?.symbol}}{{adjustedExcessAmount | giddhCurrency}} <i class="icon-info pointer"-->
-<!--                                                                                                                  tooltip="Adjustment amount is more than receipts."></i></p>-->
-<!--                    </div>-->
+                   <div class="clearfix adjust-receipt font-14"
+                         *ngIf="isAdjustedInvoicesWithAdvanceReceipt && vm.selectedLedger && vm.selectedLedger.voucherGeneratedType ==='receipt'">
+                        <p class="bold">Adjusted Amount
+                            <a href="javascript:void(0)" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
+                               (click)="openAdjustInvoiceEditMode();$event.stopPropagation();"><i class="icon-edit11 font-10"></i></a>
+                        </p>
+                        <p class="font-12 text-light mb-1">
+                            {{ vm.baseCurrencyDetails?.symbol}}{{vm.selectedLedger?.invoiceAdvanceReceiptAdjustment?.totalAdjustmentAmount | giddhCurrency}}
+                        </p>
+                        <div class="clearfix adjustment-field">
+                            <div class="row"
+                                 *ngFor="let item of vm.selectedLedger?.invoiceAdvanceReceiptAdjustment?.adjustedInvoices; let entryIdx = index;">
+                                <div class="col-md-4 col-sm-5 pr-05">
+                                    <div class="form-group">
+                                        <label>Adjustment Invoices
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" class="form-control mb-1" [(ngModel)]="item.invoiceNumber" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-5 pl-05 pr-05">
+                                    <div class="form-group">
+                                        <label>Amount<span class="text-danger">*</span> <span class="text-light font-12 ml-05">(Inclusive
+                            Tax)</span></label>
+                                        <input type="text" class="form-control mb-1" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
+                                               [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective
+                                               [(ngModel)]="item.adjustedAmount.amountForAccount" disabled>
+                                        <input type="text" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat"
+                                               [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedInvoiceAmountChange()"
+                                               *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"
+                                               [(ngModel)]="item.adjustedAmount.amountForAccount">
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 pl-05">
+                                    <div class="form-group">
+                                        <label>Tax</label>
+                                        <input type="text" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat"
+                                               [prefix]="vm.selectedPrefixForCurrency" [(ngModel)]="item.taxAmount" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p *ngIf="isAdjustedAmountExcess" class="font-12 text-light">Excess
+                            amount:{{ vm.baseCurrencyDetails?.symbol}}{{adjustedExcessAmount | giddhCurrency}} <i class="icon-info pointer"
+                                                                                                                  tooltip="Adjustment amount is more than receipts."></i></p>
+                    </div>
                     <!-- End advance receipts adjusted Invoice -->
                     <!--Adjusted advance receipts list  -->
-<!--                    <div class="clearfix adjust-receipt font-14"-->
-<!--                         *ngIf="isAdjustedWithAdvanceReceipt && vm.selectedLedger.voucherGeneratedType ==='sales'">-->
-<!--                        <p class="bold">Adjusted Receipts-->
-<!--                            <a href="javascript:void(0)" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"-->
-<!--                               (click)="openAdjustInvoiceEditMode();$event.stopPropagation();"><i class="icon-edit11 font-10"></i></a>-->
-<!--                        </p>-->
-<!--                        <p class="font-12 text-light mb-1">-->
-<!--                            {{ vm.baseCurrencyDetails?.symbol}}{{totalAdjustedAmount | giddhCurrency}}-->
-<!--                        </p>-->
-<!--                        <div class="clearfix adjustment-field">-->
-<!--                            <div class="row"-->
-<!--                                 *ngFor="let item of vm.selectedLedger?.advanceReceiptAdjustment?.adjustments; let entryIdx = index;">-->
-<!--                                <div class="col-md-4 col-sm-5 pr-05">-->
-<!--                                    <div class="form-group">-->
-<!--                                        <label>Adjustment Voucher<span class="text-danger">*</span>-->
-<!--                                        </label>-->
-<!--                                        <input type="text" class="form-control mb-1" name="voucherNumber" [(ngModel)]="item.voucherNumber" disabled>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <div class="col-md-4 col-sm-5 pl-05 pr-05">-->
-<!--                                    <div class="form-group">-->
-<!--                                        <label>Amount<span class="text-danger">*</span> <span class="text-light font-12 ml-05">(Inclusive-->
-<!--                            Tax)</span></label>-->
-<!--                                        <input type="text" class="form-control mb-1" name="amountForAccount" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"-->
-<!--                                               [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective-->
-<!--                                               [(ngModel)]="item.dueAmount.amountForAccount" disabled>-->
-<!--                                        <input type="text" class="form-control mb-1" name="amountForAccount" decimalDigitsDirective [mask]="vm.inputMaskFormat"-->
-<!--                                               [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedReceiptsAmountChange()"-->
-<!--                                               *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"-->
-<!--                                               [(ngModel)]="item.dueAmount.amountForAccount">-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <div class="col-sm-2 pl-05">-->
-<!--                                    <div class="form-group">-->
-<!--                                        <label>Tax</label>-->
-<!--                                        <input type="text" class="form-control mb-1" name="calculatedTaxAmount" decimalDigitsDirective [mask]="vm.inputMaskFormat"-->
-<!--                                               [prefix]="vm.selectedPrefixForCurrency" [(ngModel)]="item.calculatedTaxAmount" disabled>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <p *ngIf="isAdjustedAmountExcess" class="font-12 text-light">Excess amount:{{ vm.baseCurrencyDetails?.symbol}}{{adjustedExcessAmount | giddhCurrency}} <i class="icon-info pointer"-->
-<!--                                                                                                                                                                                  tooltip="Adjustment amount is more than receipts."></i></p>-->
-<!--                    </div>-->
+                    <div class="clearfix adjust-receipt font-14"
+                         *ngIf="isAdjustedWithAdvanceReceipt && vm.selectedLedger.voucherGeneratedType ==='sales'">
+                        <p class="bold">Adjusted Receipts
+                            <a href="javascript:void(0)" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
+                               (click)="openAdjustInvoiceEditMode();$event.stopPropagation();"><i class="icon-edit11 font-10"></i></a>
+                        </p>
+                        <p class="font-12 text-light mb-1">
+                            {{ vm.baseCurrencyDetails?.symbol}}{{totalAdjustedAmount | giddhCurrency}}
+                        </p>
+                        <div class="clearfix adjustment-field">
+                            <div class="row"
+                                 *ngFor="let item of vm.selectedLedger?.advanceReceiptAdjustment?.adjustments; let entryIdx = index;">
+                                <div class="col-md-4 col-sm-5 pr-05">
+                                    <div class="form-group">
+                                        <label>Adjustment Voucher<span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" class="form-control mb-1" name="voucherNumber" [(ngModel)]="item.voucherNumber" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-5 pl-05 pr-05">
+                                    <div class="form-group">
+                                        <label>Amount<span class="text-danger">*</span> <span class="text-light font-12 ml-05">(Inclusive
+                            Tax)</span></label>
+                                        <input type="text" class="form-control mb-1" name="amountForAccount" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
+                                               [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective
+                                               [(ngModel)]="item.dueAmount.amountForAccount" disabled>
+                                        <input type="text" class="form-control mb-1" name="amountForAccount" decimalDigitsDirective [mask]="vm.inputMaskFormat"
+                                               [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedReceiptsAmountChange()"
+                                               *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"
+                                               [(ngModel)]="item.dueAmount.amountForAccount">
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 pl-05">
+                                    <div class="form-group">
+                                        <label>Tax</label>
+                                        <input type="text" class="form-control mb-1" name="calculatedTaxAmount" decimalDigitsDirective [mask]="vm.inputMaskFormat"
+                                               [prefix]="vm.selectedPrefixForCurrency" [(ngModel)]="item.calculatedTaxAmount" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p *ngIf="isAdjustedAmountExcess" class="font-12 text-light">Excess amount:{{ vm.baseCurrencyDetails?.symbol}}{{adjustedExcessAmount | giddhCurrency}} <i class="icon-info pointer"
+                                                                                                                                                                                  tooltip="Adjustment amount is more than receipts."></i></p>
+                    </div>
                     <!--End adjusted advance receipts list  -->
 
                 </div>
@@ -1033,14 +1033,14 @@
                         </div>
 
                         <div class="col-xs-12 pdT1 d-flex align-items-center xs-d-block" *ngIf="!isPettyCash">
-                            <div class="width-100 mb-05">
-                                    <p *ngIf="isAdjustedAmountExcess">Note: The adjusted amount of the linked invoice/s is more than the receipt;
-                                        update them first and try again.</p>
-                            </div>
+<!--                            <div class="width-100 mb-05">-->
+<!--                                    <p *ngIf="isAdjustedAmountExcess">Note: The adjusted amount of the linked invoice/s is more than the receipt;-->
+<!--                                        update them first and try again.</p>-->
+<!--                            </div>-->
 
                             <div class="d-flex">
                                 <button class="btn btn-danger" (click)="showDeleteEntryModal()">Delete</button>
-                                <button class="btn btn-success" [ladda]="isTxnUpdateInProcess$ | async" [disabled]="isAdjustedAmountExcess"
+                                <button class="btn btn-success" [ladda]="isTxnUpdateInProcess$ | async"
                                         (click)="saveLedgerTransaction()">Update
                                 </button>
                             </div>
@@ -1129,3 +1129,12 @@
     </div>
 </ng-template>
 <!-- Tourist scheme template block end-->
+<!--Advance receipt adjusted remove confirmation modal -->
+<div bsModal #advanceReceiptRemoveConfirmationModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
+    <div class="modal-dialog modal-md">
+        <!-- modal-liq90 class is removed for now-->
+        <div class="modal-content">
+            <delete-template-confirmation-modal *ngIf="advanceReceiptRemoveConfirmationModal.isShown" [message]='removeAdvanceReceiptConfirmationMessage' [flag]="confirmationFlag" (closeModelEvent)="onAdvanceReceiptRemoveCloseConfirmationModal($event)"></delete-template-confirmation-modal>
+        </div>
+    </div>
+</div>

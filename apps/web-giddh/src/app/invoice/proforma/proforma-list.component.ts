@@ -6,7 +6,8 @@ import {
     OnDestroy,
     OnInit,
     SimpleChanges,
-    ViewChild
+    ViewChild,
+    TemplateRef
 } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {
@@ -23,7 +24,7 @@ import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operator
 import {combineLatest, Observable, ReplaySubject} from 'rxjs';
 import * as moment from 'moment/moment';
 import {cloneDeep, uniqBy} from '../../lodash-optimized';
-import {ModalDirective, ModalOptions} from 'ngx-bootstrap';
+import {ModalDirective, BsModalRef, ModalOptions , BsModalService} from 'ngx-bootstrap';
 import {InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm} from '../../models/api-models/Invoice';
 import {InvoiceAdvanceSearchComponent} from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
 import {GIDDH_DATE_FORMAT} from '../../shared/helpers/defaultDateFormat';
@@ -48,7 +49,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.proforma;
     public voucherData: ProformaResponse;
     public selectedDateRange: any;
-
+    public modalRef: BsModalRef;
     public showAdvanceSearchModal: boolean = false;
     public showResetAdvanceSearchIcon: boolean = false;
     public selectedItems: string[] = [];
@@ -149,7 +150,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public isMobileView = false;
 
     constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private activatedRouter: ActivatedRoute,
-                private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private _generalService: GeneralService) {
+                private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private _generalService: GeneralService,private modalService: BsModalService) {
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = 20;
         this.advanceSearchFilter.from = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
@@ -166,7 +167,9 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             this.isMobileView = result.matches;
         });
     }
-
+    openModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(template);
+    }
     ngOnInit() {
         combineLatest([
             this.store.pipe(select(s => s.proforma.vouchers)),

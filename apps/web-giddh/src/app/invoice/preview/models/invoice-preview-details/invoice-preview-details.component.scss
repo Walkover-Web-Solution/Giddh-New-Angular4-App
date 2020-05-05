@@ -28,9 +28,8 @@
     background-color: #fff;
     margin: 0 0;
     height: 100vh;
-    z-index: 990;
+    z-index: 9991;
     left: 0;
-    //padding-left: 215px;
 }
 
 .invoice-sidebar {
@@ -149,7 +148,7 @@
         }
     }
     .disabled {
-        background: #d9d9d9 !important;
+        background: $gainsboro !important;
         cursor: not-allowed;
         a {
             cursor: not-allowed;
@@ -289,7 +288,7 @@ span.close-modal.cp.pull-right {
     height: 32px;
     width: 32px;
     background-color: #ddd;
-    border: 1px solid #d1d1d1;
+    border: 1px solid $gainsboro;
 }
 
 .changeStatus-dropdown .dropdown-menu {
@@ -371,7 +370,7 @@ span.close-modal.cp.pull-right {
             height: 32px;
             width: 32px;
             background-color: #ddd;
-            border: 1px solid #d1d1d1;
+            border: 1px solid $gainsboro;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -383,7 +382,7 @@ span.close-modal.cp.pull-right {
     }
 }
 
-.changeStatus-dropdown #settingTab {
+.changeStatus-dropdown #setting-tab {
     width: 340px;
     left: auto;
     right: 0;
@@ -507,7 +506,7 @@ label.labeled {
     max-width: 500px;
 }
 .dashed-bdr {
-    border: 2px dashed #d9d9d9;
+    border: 2px dashed $gainsboro;
 }
 #csv-upload-input {
     opacity: 0;

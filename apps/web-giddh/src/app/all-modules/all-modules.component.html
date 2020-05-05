@@ -1,0 +1,80 @@
+<div class="container-fluid pt-2 pb-2">
+    <div class="clearfix reports-main">
+        <div class="row">
+            <div class="col-md-3 col-sm-3 mb-5 col-xs-6">
+                <p>General</p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/contact/customer']" [queryParams]="{tab: 'customer', tabIndex: 0}">Customer</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/contact/aging-report']">Aging Report </a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/contact/vendor']" [queryParams]="{tab: 'vendor', tabIndex: 0}">Vendor</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/accounting-voucher']">Journal Voucher</a></p>
+                <p><a href="javascript:void(0)" (click)="showManageGroupsModal();">Create Account</a></p>
+            </div>
+            <div class="col-md-3 col-sm-3 mb-5 col-xs-6">
+                <p>Invoice</p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/proforma-invoice/invoice/sales']">Sales Invoice</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/proforma-invoice/invoice/purchase']">Purchase Record</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/invoice/preview/credit note']" [queryParams]="{tab: 'credit note', tabIndex: 1}">Dr/Cr Note</a></p>
+                <p><a href="javascript:void(0)">Receipt Voucher <small class="coming-soon-report italic">Coming soon</small></a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/invoice/preview/sales']">Invoice Management</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/purchase-management/purchase']">Purchase Management</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/expenses-manager']">Petty Cash Management</a></p>
+            </div>
+            <div class="col-md-3 col-sm-3 mb-5 col-xs-6">
+                <p>Inventory</p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/inventory']">Inventory</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/manufacturing/report']">Manufacturing</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/inventory/report']">Branch Transfer</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/settings/warehouse']">Warehouse</a></p>
+            </div>
+            <div class="col-md-3 col-sm-3 mb-5 col-xs-6">
+                <p>Security</p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/import/select-type']">Import Data</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/tallysync']">TALLY Import</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/company-import-export']">Company Import/Export</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/permissions/list']">Permission</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/settings/integration']" [queryParams]="{ tab: 'integration', tabIndex: 1 }">Integration</a></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-sm-3 mb-5 col-xs-6">
+                <p>Analysis</p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/home']">Dashboard</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/reports/reports-dashboard']">Report</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/new-vs-old-invoices']">Sales Bifurcation</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/daybook']">Daybook</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/audit-logs']">Audit Log</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/search']">Search</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/trial-balance-and-profit-loss']" [queryParams]="{ tab: 'trial-balance', tabIndex: 0 }">Trial Balance</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/trial-balance-and-profit-loss']" [queryParams]="{ tab: 'trial-balance', tabIndex: 1 }">P&L, B/S</a></p>
+            </div>
+
+            <div class="col-md-3 col-sm-3 mb-5 col-xs-6">
+                <p>Others</p>
+                <p><a href="javascript:void(0)"
+                    *ngIf="activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode == 'IN'" [routerLink]="['/pages/gstfiling']">GSTR</a></p>
+                <p><a href="javascript:void(0)"
+                    *ngIf="activeCompany && activeCompany.countryV2 && vatSupportedCountries?.includes(activeCompany.countryV2.alpha2CountryCode)" [routerLink]="['/pages/vat-report']">Vat
+                    Report</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/invoice/ewaybill']">E-way Bill</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/settings/taxes']" [queryParams]="{ tab: 'taxes', tabIndex: 0 }">Settings</a></p>
+            </div>
+
+            <div class="col-md-3 col-sm-3 mb-5 col-xs-6">
+                <p>User</p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/settings/profile']">Profile</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/user-details/subscription']">Subscription</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/settings/linked-accounts']">Linked Accounts</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/onboarding']">Onboarding</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+<!--add and manage group account modal -->
+<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy mangeAccountPopup addManageGroupAcc" role="dialog">
+    <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
+        <div class="modal-content fullScreenMy">
+            <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
+            </ng-template>
+        </div>
+    </div>
+</div>

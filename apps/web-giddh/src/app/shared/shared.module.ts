@@ -70,6 +70,7 @@ import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCa
 import { LayoutComponent } from './layout/layout.component';
 import { OnBoardingComponent } from './on-boarding/on-boarding.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
+import { DeleteTemplateConfirmationModelComponent } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -132,7 +133,8 @@ export function provideConfig() {
         AccountAddNewDetailsComponent,
         AccountUpdateNewDetailsComponent,
         WelcomeComponent,
-        ConfirmationModalComponent
+        ConfirmationModalComponent,
+        DeleteTemplateConfirmationModelComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -212,7 +214,8 @@ export function provideConfig() {
         ElementViewChildModule,
         TooltipModule,
         BsDatepickerModule,
-        NgxDaterangepickerMd
+        NgxDaterangepickerMd,
+        DeleteTemplateConfirmationModelComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,

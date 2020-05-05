@@ -111,7 +111,7 @@ tfoot {
     outline: none !important;
 }
 
-.spcl_dropdown {
+.more-btn-dropdown {
     border: 0 !important;
     background: transparent !important;
     box-shadow: none !important;
@@ -166,13 +166,25 @@ tfoot {
     display: block;
     height: 36px;
     width: 1px;
-    background-color: #d9d9d9;
+    background-color: $gainsboro;
     left: 37px !important;
     z-index: 100;
     top: 0;
 }
+button.btn.btn-filter {
+    background: #e4e4e4;
+    border: 1px solid #e4e4e4;
+    font-size: 14px;
+    color: #1a237e;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px !important;
+}
+.pending-table-description{
+    white-space: normal;
+}
 // responsive
-
 @media (max-width: 768px) {
     .basic.onMobileView {
         background: transparent;
@@ -201,11 +213,9 @@ tfoot {
     }
     .form-group button,
     .form-group .input-group {
-        width: 48.5%;
         float: left;
-
         margin-bottom: 10px;
-        min-height: 34px;
+        min-height: 36px;
     }
     .form-inline .d-flex,
     .form-inline .form-group {
@@ -221,6 +231,7 @@ tfoot {
     }
     .input-wrapper {
         width: 100% !important;
+        max-width: 220px;
     }
     .clear-filter.btn.btn-filter {
         justify-content: center !important;
@@ -230,44 +241,38 @@ tfoot {
         width: 100%;
     }
 }
+@media(max-width:767px){
+    .invoice-genrate-container {
+        padding-top:55px;
+    }
+    .form-inline .form-group {
+        display: flex;
+        flex-direction: row;
+    }
+    .clear-filter.btn.btn-filter{
+        flex-direction: row !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        width: 120px;
+    }
 
-@media (max-width: 550px) {
-    .form-group button,
-    .form-group .input-group {
-        width: 48%;
-    }
 }
-@media (max-width: 414px) {
-    .form-group button,
-    .form-group .input-group {
-        width: 47%;
-    }
-}
+ 
 @media (max-width: 375px) {
     .form-group button,
     .form-group .input-group {
         width: 100%;
         margin-bottom: 0;
-        margin-top: 10px;
     }
     div#dp-parent {
         margin-bottom: 0;
         width: 100%;
     }
 }
-button.btn.btn-filter {
-    background: #e4e4e4;
-    border: 1px solid #e4e4e4;
-    font-size: 16px;
-    color: #1a237e;
-    display: inline-flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 6px 10px !important;
-}
+
 @media (min-width: 768px) {
     .form-inline .form-group {
-        display: inline-block;
+        display: inline-flex;
         margin-bottom: 0;
         vertical-align: middle;
     }
@@ -275,3 +280,15 @@ button.btn.btn-filter {
 .clear-filter.desktop-view-btn {
     display: inline-block;
 }
+@media(max-width:320px){
+    .form-inline .form-group {
+        flex-direction: column;
+    }
+    .clear-filter.btn.btn-filter{
+        flex-direction: row !important;
+        margin-top: 10px !important;
+        width: 100%;
+    }
+
+}
+ 

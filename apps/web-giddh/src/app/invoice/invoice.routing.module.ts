@@ -27,7 +27,6 @@ import { InvoiceGenerateModelComponent } from './generate/model/invoice.generate
 import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
 import { InvoiceTemplateModalComponent } from './templates/edit-template/modals/template-modal/template-modal.component';
 import { InvoiceEmailFilterComponent } from './templates/edit-template/filters-container/email-filter/email-filter.component';
-import { DeleteTemplateConfirmationModelComponent } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
 import { InvoiceTemplatePreviewModelComponent } from './templates/edit-template/modals/template-preview-modal/template-preview.modal.component';
 import { EsignModalComponent } from './preview/models/e-Sign/e-Sign.component';
 import { InvoicePageDDComponent } from '../shared/invoice-page-dd/invoice.page.dd.component';
@@ -89,9 +88,9 @@ const INVOICE_ROUTES: Routes = [
         children: [
             { path: '', redirectTo: 'preview/sales', pathMatch: 'full' },
             { path: 'preview/:voucherType', component: InvoiceComponent },
-             { path: 'preview/:voucherType/:selectedType', component: InvoiceComponent },
+            { path: 'preview/:voucherType/:selectedType', component: InvoiceComponent },
             { path: 'preview/:voucherType/:voucherNoForDetail/:voucherAction', component: InvoiceComponent },
-            { path: 'receipt', component: ReceiptComponent },
+            //{ path: 'receipt', component: ReceiptComponent },
             { path: 'ewaybill/create', component: EWayBillCreateComponent },
         ]
     },
@@ -114,7 +113,6 @@ const INVOICE_ROUTES: Routes = [
         DownloadOrSendInvoiceOnMailComponent,
         InvoiceTemplateModalComponent,
         InvoiceEmailFilterComponent,
-        DeleteTemplateConfirmationModelComponent,
         InvoiceTemplatePreviewModelComponent,
         EsignModalComponent,
         InvoicePageDDComponent,
@@ -185,7 +183,7 @@ const INVOICE_ROUTES: Routes = [
         InvoicePreviewComponent
     ],
     entryComponents: [DownloadOrSendInvoiceOnMailComponent, PreviewDownloadReceiptComponent,
-        ReceiptUpdateComponent],
+    ReceiptUpdateComponent],
     providers: [InvoiceUiDataService, {
         provide: FONT_PICKER_CONFIG,
         useValue: DEFAULT_FONT_PICKER_CONFIG

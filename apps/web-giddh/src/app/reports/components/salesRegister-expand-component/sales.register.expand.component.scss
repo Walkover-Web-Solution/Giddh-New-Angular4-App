@@ -33,7 +33,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    padding-left: 8px;
+    padding-left: 10px;
 }
 
 .td_in_searchBox div {
@@ -120,7 +120,7 @@ ul.list-unstyled li a {
     color: #333333;
 }
 
-.sales-ragister p {
+.sales-register p {
     color: #8f9091;
     margin-bottom: 5px;
 }
@@ -153,7 +153,7 @@ ul.list-unstyled li a {
     color: #5b64c9 !important;
 }
 
-.sales-ragister {
+.sales-register {
     background: $white;
     padding: 15px;
     box-shadow: 0px -3px 6px #d7d7d7;
@@ -278,15 +278,15 @@ table th {
     background-color: #fff;
     font-size: 18px;
     color: $midnight-blue;
-    border: 1px solid #d9d9d9;
+    border: 1px solid $gainsboro;
 }
 .top_bar {
     .icon-options {
         width: 36px;
         height: 36px;
-        border: 1px solid #d9d9d9;
+        border: 1px solid $gainsboro;
         background-color: #fff;
-        color: #999;
+        color: $gray;
         font-size: 20px;
         position: relative;
         padding: 7px;
@@ -305,7 +305,7 @@ table th {
 }
 
 @media (max-width: 1366px) {
-    .sales-ragister {
+    .sales-register {
         width: 100%;
     }
 }
@@ -316,15 +316,13 @@ table th {
     }
 }
 @media (max-width: 767px) {
-    .sales-ragister {
+    .sales-register {
         display: block;
         position: relative;
     }
     .main-sale-register-box {
         justify-content: start;
         text-align: left;
-    }
-    .main-sale-register-box {
         .sale-register-box {
             margin: 10px 20px 10px 0px;
             text-align: left;

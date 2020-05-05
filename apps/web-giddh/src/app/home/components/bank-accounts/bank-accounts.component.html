@@ -8,7 +8,7 @@
                 <perfect-scrollbar [scrollIndicators]="true" *ngIf="bankAccounts.length > 0">
                     <div class="wrap-single-bank-detail">
                         <div class="single-bank-detatil" *ngFor="let bankaccount of bankAccounts;">
-                            <p class="bankName "> {{bankaccount.name}} </p>
+                            <p class="bank-name "> {{bankaccount.name}} </p>
                             <p class="bankBalnc">
                                 <span>In Giddh </span>
                                 <span>{{activeCompany.baseCurrencySymbol}}

@@ -18,10 +18,10 @@
                             </button>
                             <ul id="dropdown-basic3" *dropdownMenu class="dropdown-menu ddl-width-small" role="menu" aria-labelledby="button-basic2">
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript: void 0" (click)="goToInvoice('cash')">Cash Invoice</a>
+                                    <a class="dropdown-item" href="javascript:void(0)" (click)="goToInvoice('cash')">Cash Invoice</a>
                                 </li>
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript: void 0" (click)="goToInvoice('sales')">Sales Invoice</a>
+                                    <a class="dropdown-item" href="javascript:void(0)" (click)="goToInvoice('sales')">Sales Invoice</a>
                                 </li>
                             </ul>
                         </div>
@@ -125,14 +125,19 @@
                                                 {{ selectedItem.voucherStatus }}
                                             </label>
 
-                                            <button id="button-basic2" dropdownToggle type="button" class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic2" (click)="clickChangeStatusToggle(selectedItem)" *ngIf="selectedItem.voucherStatus !== 'cancel'">Change Status <span class="caret"></span>
+                                            <button id="button-basic2" dropdownToggle type="button"
+                                                class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic2"
+                                                *ngIf="selectedItem.voucherStatus !== 'cancel'">Change Status <span class="caret"></span>
                                             </button>
 
-                                            <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic2">
-                                                <li class="cp" role="menuitem" (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"><a class="dropdown-item">Paid</a></li>
-                                                <!-- <li [ngClass]="{'no-click': !isAccountHaveAdvanceReceipts}" (click)="openInvoiceAdvanceReceiptModal()">
+                                            <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu" role="menu"
+                                                aria-labelledby="button-basic2">
+                                                <li class="cp" role="menuitem"
+                                                    (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"><a
+                                                        class="dropdown-item">Paid</a></li>
+                                                <li  *ngIf="voucherType === 'sales'" (click)="openInvoiceAdvanceReceiptModal()" >
                                                     <a class="cp" href="javascript:void(0)">Adjust Amount</a>
-                                                </li> -->
+                                                </li>
 
                                                 <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('unpaid')"><a class="dropdown-item">Unpaid</a></li>
 

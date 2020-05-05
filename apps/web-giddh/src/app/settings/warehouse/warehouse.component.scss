@@ -1,3 +1,5 @@
+@import "../../../assets/css/color.scss";
+
 .createWarehouse {
     display: flex;
     flex-direction: column;
@@ -20,7 +22,7 @@
 .createWarehouse img {
     margin-bottom: 20px;
 }
-.warehouseCard {
+.warehouse-card {
     background-color: #ebecee;
     padding: 15px;
     min-height: 300px;
@@ -53,14 +55,14 @@
         min-width: 100px;
     }
 }
-.warehouseCard .d-flex {
+.warehouse-card .d-flex {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #cbcbcb;
     padding-bottom: 10px;
 }
 
-.warehouseCard h3 {
+.warehouse-card h3 {
     font-size: 16px;
     font-family: "opensans-semibold";
     float: left;
@@ -68,7 +70,7 @@
     word-break: break-all;
 }
 span.setAsDefault {
-    background-color: #d9d9d9;
+    background-color: $gainsboro;
     padding: 5px 10px;
     font-size: 14px;
     border-radius: 13px;
@@ -110,17 +112,27 @@ span.setAsDefault {
         cursor: not-allowed;
     }
 }
-
-@media only screen and (max-width: 767px) {
-    .warehouseCard .d-flex {
-        display: block;
-    }
-    .warehouseCard h3 {
+@media only screen and (max-width: 768px) {
+    .warehouse-card h3 {
         float: none;
-        width: 100%;
+        width: 90%;
         margin-bottom: 15px;
     }
+    .warehouse-card .btn-group{
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+    .warehouse-card .d-flex {
+        position: relative;
+        display: block;
+    }
     .warehouse-options {
-        text-align: right;
+        text-align: left;
+    }
+}
+@media only screen and (max-width: 767px) {
+    .warehouse-card {
+        min-height: auto;
     }
 }

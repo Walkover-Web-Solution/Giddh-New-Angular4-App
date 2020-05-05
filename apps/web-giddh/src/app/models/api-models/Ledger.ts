@@ -298,6 +298,7 @@ export class ExportLedgerRequest {
     public format?: string = 'excel';
     public sort?: string = 'asc';
     public withInvoice?: boolean = false;
+    public balanceTypeAsSign?: boolean = false;
 }
 
 /**
