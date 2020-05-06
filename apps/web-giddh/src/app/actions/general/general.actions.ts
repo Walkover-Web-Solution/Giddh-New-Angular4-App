@@ -172,9 +172,17 @@ export class GeneralActions {
             payload: currentPageObj
         }
     }
+
     public isOpenCalendlyModel(isOpen: boolean) {
         return {
             type: GENERAL_ACTIONS.OPEN_CALENDLY_MODEL,
+            payload: isOpen
+        }
+    }
+
+    public openSideMenu(isOpen: boolean) {
+        return {
+            type: GENERAL_ACTIONS.OPEN_SIDE_MENU,
             payload: isOpen
         }
     }

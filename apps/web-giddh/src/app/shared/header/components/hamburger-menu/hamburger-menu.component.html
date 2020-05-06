@@ -1,0 +1,8 @@
+<ul class="nav navbar-nav">
+    <li class="hamburger_menu cp" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
+        <button class="btn mrR0" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right">
+            <i class="icon-bar"></i>
+        </button>
+        <h4 class="inline text-capitalize" *ngIf="pageHeading"><span>{{pageHeading}}</span></h4>
+    </li>
+</ul>

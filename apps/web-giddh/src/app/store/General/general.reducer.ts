@@ -32,6 +32,7 @@ export interface GeneralState {
     headerTitle: { uniqueName: string, additional: { tab: string, tabIndex: number } };
     currentPage: CurrentPage;
     isCalendlyModelOpen: boolean;
+    openSideMenu: boolean;
 }
 
 const initialState: GeneralState = {
@@ -45,7 +46,8 @@ const initialState: GeneralState = {
     sideMenuBarOpen: false,
     headerTitle: null,
     currentPage: null,
-    isCalendlyModelOpen: false
+    isCalendlyModelOpen: false,
+    openSideMenu: false
 };
 
 export function GeneRalReducer(state: GeneralState = initialState, action: CustomActions): GeneralState {
@@ -351,9 +353,16 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
                 ...state, currentPage: action.payload
             }
         }
+        
         case GENERAL_ACTIONS.OPEN_CALENDLY_MODEL: {
             return {
                 ...state, isCalendlyModelOpen: action.payload
+            }
+        }
+
+        case GENERAL_ACTIONS.OPEN_SIDE_MENU: {
+            return {
+                ...state, openSideMenu: action.payload
             }
         }
 
