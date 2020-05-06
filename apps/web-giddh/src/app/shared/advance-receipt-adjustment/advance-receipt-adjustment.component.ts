@@ -367,22 +367,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      */
     public saveAdjustAdvanceReceipt(form: NgForm): void {
         let isValid: boolean = true;
-        if (this.isTaxDeducted) {
-            if (this.adjustVoucherForm.tdsTaxUniqueName === '') {
-                if (this.tdsTypeBox && this.tdsTypeBox.nativeElement)
-                    this.tdsTypeBox.nativeElement.classList.add('error-box');
-                isValid = false;
-            } else if (this.adjustVoucherForm.tdsAmount === 0) {
-                if (this.tdsAmountBox && this.tdsAmountBox.nativeElement) {
-                    this.tdsAmountBox.nativeElement.classList.add('error-box');
-                    isValid = false;
-                }
-            }
-        } else {
-            delete this.adjustVoucherForm['tdsAmount'];
-            delete this.adjustVoucherForm['description'];
-            delete this.adjustVoucherForm['tdsTaxUniqueName'];
-        }
         if (this.getBalanceDue() < 0) {
             this.toaster.errorToast(this.exceedDueErrorMessage);
             isValid = false;
@@ -407,6 +391,22 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments.filter(item => {
                 return item.voucherNumber !== '' || item.dueAmount.amountForAccount > 0;
             });
+        }
+        if (this.isTaxDeducted) {
+            if (this.adjustVoucherForm.tdsTaxUniqueName === '') {
+                if (this.tdsTypeBox && this.tdsTypeBox.nativeElement)
+                    this.tdsTypeBox.nativeElement.classList.add('error-box');
+                    isValid = false;
+            } else if (this.adjustVoucherForm.tdsAmount === 0) {
+                if (this.tdsAmountBox && this.tdsAmountBox.nativeElement) {
+                    this.tdsAmountBox.nativeElement.classList.add('error-box');
+                    isValid = false;
+                }
+            }
+        } else {
+            delete this.adjustVoucherForm['tdsAmount'];
+            delete this.adjustVoucherForm['description'];
+            delete this.adjustVoucherForm['tdsTaxUniqueName'];
         }
         if (isValid) {
             this.submitClicked.emit({

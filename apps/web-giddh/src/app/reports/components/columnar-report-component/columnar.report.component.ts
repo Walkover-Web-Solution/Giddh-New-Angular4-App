@@ -38,6 +38,8 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public financialYearSelected: any;
     public activeFinancialYear: string = '';
     public activeFinancialYearLabel: string = '';
+    /** API response object of columnar report */
+    public columnarReportResponse: any;
 
     constructor(public settingsFinancialYearService: SettingsFinancialYearService, private store: Store<AppState>, private toaster: ToasterService, private ledgerService: LedgerService, private generalService: GeneralService) {
         this.exportRequest.fileType = 'xls';
@@ -75,6 +77,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     ngOnInit(): void {
+        this.columnarReportResponse = null;
         this.getFinancialYears();
     }
 
@@ -111,11 +114,11 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      *
      * @memberof ColumnarReportComponent
      */
-    public exportReport(): void {
+    public exportReport(isShowReport: boolean): void {
         if (!this.isLoading) {
             this.isLoading = true;
 
-            if(this.fromMonth && this.toMonth) {
+            if (this.fromMonth && this.toMonth) {
                 let monthYear = [];
                 let startDate = moment(new Date(this.fromMonth));
                 let monthsCount = moment(new Date(this.toMonth)).diff(startDate, 'months');
@@ -130,7 +133,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 this.exportRequest.monthYear = monthYear;
             }
 
-            this.ledgerService.downloadColumnarReport(this.companyUniqueName, this.groupUniqueName, this.exportRequest).subscribe((res) => {
+            this.ledgerService.downloadColumnarReport(this.companyUniqueName, this.groupUniqueName, this.exportRequest, isShowReport).subscribe((res) => {
                 this.isLoading = false;
                 if (res.status === "success") {
                     this.exportRequest = {};
@@ -141,9 +144,13 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                     this.toMonthNames = [];
                     this.selectActiveFinancialYear();
                     this.exportRequest.balanceTypeAsSign = true;
+                    if (isShowReport) {
+                       this.columnarReportResponse = res.body;
+                    } else {
+                        let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
+                        return saveAs(blob, `ColumnarReport.xlsx`);
+                    }
 
-                    let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                    return saveAs(blob, `ColumnarReport.xlsx`);
                 } else {
                     this.toaster.clearAllToaster();
                     this.toaster.errorToast(res.message);
@@ -259,9 +266,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public selectActiveFinancialYear(): void {
-        if(this.selectYear && this.selectYear.length > 0 && this.activeFinancialYear) {
+        if (this.selectYear && this.selectYear.length > 0 && this.activeFinancialYear) {
             this.selectYear.forEach(key => {
-                if(key.value.uniqueName === this.activeFinancialYear) {
+                if (key.value.uniqueName === this.activeFinancialYear) {
                     this.selectFinancialYear(key);
 
                     let financialYearStarts = moment(key.value.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");

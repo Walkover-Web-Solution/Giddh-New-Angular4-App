@@ -49,8 +49,8 @@ export class DeleteTemplateConfirmationModelComponent implements OnChanges {
             }
             if (changes['flag'].currentValue === 'text-paragraph' && changes['message'].currentValue) {
                 let msg = changes['message'].currentValue.split('&');
-                this.messageHeader = msg[0];
-                this.messageBody = msg[1];
+                this.messageHeader = msg[1];
+                this.messageBody = msg[0];
             }
         }
     }
