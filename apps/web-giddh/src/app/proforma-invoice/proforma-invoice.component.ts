@@ -2897,7 +2897,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             // To get re-assign receipts voucher store 
             this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(response.body.account.uniqueName, { 
                 invoiceNumber: response.body.number, 
-                voucherType: VoucherTypeEnum.sales 
+                voucherType: response.body.type 
             }));
             // reset form and other
             this.resetInvoiceForm(invoiceForm);
