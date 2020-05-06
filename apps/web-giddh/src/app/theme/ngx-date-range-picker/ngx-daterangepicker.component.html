@@ -140,7 +140,7 @@
                         <div class="month-dropdown">
                             <span class="month-name" (click)="monthPickerClick()">
                                 <ng-container *ngIf="showDropdowns && calendarVariables.start.dropdowns">
-                                    {{this.locale.monthNames[calendarVariables?.start?.calendar[1][1].month()]}}
+                                    {{activeMonth ? this.locale.monthNames[activeMonth.calendar[1][1].month()] : ''}}
                                     <select class="monthselect" (change)="monthChanged($event, sideEnum.start)">
                                         <option
                                             [disabled]="(calendarVariables.start.dropdowns.inMinYear && m < calendarVariables.start.minDate.month()) || (calendarVariables.start.dropdowns.inMaxYear && m > calendarVariables.start.maxDate.month())"
@@ -150,7 +150,7 @@
                                         </option>
                                     </select>
 
-                                    {{ calendarVariables?.start?.calendar[1][1].format(" YYYY")}}
+                                    {{ activeMonth ? activeMonth.calendar[1][1].format(" YYYY") : ''}}
                                     <select class="yearselect" (change)="yearChanged($event, sideEnum.start)">
                                         <option *ngFor="let y of calendarVariables.start.dropdowns.yearArrays"
                                             [selected]="y === calendarVariables.start.dropdowns.currentYear">
@@ -160,8 +160,8 @@
                                     <button class="prev available"></button>
                                 </ng-container>
                                 <ng-container *ngIf="!showDropdowns || !calendarVariables.start.dropdowns">
-                                    {{this.locale.monthNames[calendarVariables?.start?.calendar[1][1].month()]}}
-                                    {{ calendarVariables?.start?.calendar[1][1].format(" YYYY")}}
+                                    {{ activeMonth ? this.locale.monthNames[activeMonth.calendar[1][1].month()] : ''}}
+                                    {{ activeMonth ? activeMonth.calendar[1][1].format(" YYYY") : ''}}
                                 </ng-container>
                             </span>
                         </div>
@@ -258,7 +258,7 @@
                     <div *ngIf="showCalInRanges && !showMonthPicker" (mousewheel)="mouseUp($event)">
                         <div *ngFor="let calendarMonth of calendarMonths;">
                             <div class="calendar" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
-                                <div class="calendar-table" *ngIf="calendarMonth && calendarMonth.start">
+                                <div class="calendar-table" *ngIf="calendarMonth && calendarMonth.start" (mouseenter)="setActiveMonth(calendarMonth.start);">
                                     <table class="table-condensed">
                                         <thead>
                                             <tr>
@@ -366,10 +366,9 @@
                             </div>
                             <!-- start date calendar container -->
                             <!-- end date calendar container -->
-                            <div class="calendar right"
-                                *ngIf="showCalInRanges && !singleDatePicker && !showMonthPicker">
+                            <div class="calendar right" *ngIf="showCalInRanges && !singleDatePicker && !showMonthPicker">
                                 <div class="calendar-table">
-                                    <table class="table-condensed" *ngIf="calendarMonth && calendarMonth.end">
+                                    <table class="table-condensed" *ngIf="calendarMonth && calendarMonth.end" (mouseenter)="setActiveMonth(calendarMonth.end);">
                                         <thead>
                                             <tr>
                                                 <th colspan="5" class="month drp-animate">

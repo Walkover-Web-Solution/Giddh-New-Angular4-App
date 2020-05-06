@@ -204,6 +204,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public invalidInlineEndDate: string = "";
     public isInlineDateFieldsShowing: boolean = false;
     public scrollSubject$: Subject<any> = new Subject();
+    public activeMonth: any;
+    public activeMonthHover: boolean = false;
 
     constructor(
         private _ref: ChangeDetectorRef,
@@ -1893,6 +1895,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
                 this.renderedCalendarMonths = [];
             }
 
+            if(this.activeMonthHover === false) {
+                this.activeMonth = this.calendarVariables.start;
+            }
+
             let existingMonthsLength = (Math.ceil(Object.keys(this.renderedCalendarMonths).length)) ? Math.ceil(Object.keys(this.renderedCalendarMonths).length) : 0;
             let startKey = this.calendarVariables.start.month + "-" + this.calendarVariables.start.year;
             let endKey = this.calendarVariables.end.month + "-" + this.calendarVariables.end.year;
@@ -1923,6 +1929,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         }
 
         if (side === "end") {
+
+            if(this.activeMonthHover === false) {
+                this.activeMonth = this.calendarVariables.end;
+            }
+
             let existingMonthsLength = (Math.ceil(Object.keys(this.renderedCalendarMonths).length)) ? Math.ceil(Object.keys(this.renderedCalendarMonths).length) - 1 : 0;
             let key = this.calendarVariables.end.month + "-" + this.calendarVariables.end.year;
 
@@ -2014,5 +2025,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
     public allowBodyScroll() {
         document.querySelector('body').classList.remove('restrict-body-scroll');
-    }    
+    }
+
+    public setActiveMonth(calendar: any): void {
+        this.activeMonthHover = true;
+        this.activeMonth = calendar;
+    }
 }
