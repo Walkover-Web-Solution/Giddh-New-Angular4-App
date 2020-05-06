@@ -1598,6 +1598,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * This will update the updated account in voucher list of item
+     *
+     * @param {*} voucherUpdatedDetails
+     * @memberof InvoicePreviewComponent
+     */
     public updateNewAccountInVoucher(voucherUpdatedDetails: any): void {
         if (this.voucherData && this.voucherData.items && voucherUpdatedDetails) {            
             let loop = 0;
@@ -1612,6 +1618,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * This will give the updated account uniquename
+     *
+     * @param {string} voucherNo
+     * @param {string} currentAccountUniqueName
+     * @returns {string}
+     * @memberof InvoicePreviewComponent
+     */
     public getUpdatedAccountUniquename(voucherNo: string, currentAccountUniqueName: string): string {
         let newAccountUniqueName = currentAccountUniqueName;
         if (this.voucherData && this.voucherData.items && voucherNo) {            
