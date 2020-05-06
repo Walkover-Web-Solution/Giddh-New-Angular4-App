@@ -1,4 +1,13 @@
-.nav.navbar-nav {
+.hamburger-menu-icon {
+    width: 32px;
+    height: 31px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
     z-index: 10;
+    button{
+        margin: 0;
+        padding: 0;
+    }
 }
