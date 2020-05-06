@@ -457,6 +457,18 @@ span.icon-export-icon {
     color: $gray;
 }
 
+.invoice-footer {
+    display: flex;
+    padding: 20px;
+    background: #fff;
+    margin-top: 60px;
+    position: fixed;
+    width: 100%;
+    left: 215px;
+    bottom: 0;
+    z-index: 10;
+}
+
 
 /* responsive */
 
