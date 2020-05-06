@@ -368,6 +368,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
                 ...state, currentPage: action.payload
             }
         }
+
         case GENERAL_ACTIONS.OPEN_CALENDLY_MODEL: {
             return {
                 ...state, isCalendlyModelOpen: action.payload
