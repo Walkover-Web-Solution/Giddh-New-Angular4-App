@@ -5,7 +5,7 @@ import { Moment } from 'moment';
 import { LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, debounceTime } from 'rxjs/operators';
 import { ReplaySubject, Subject } from 'rxjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
@@ -203,6 +203,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public invalidInlineStartDate: string = "";
     public invalidInlineEndDate: string = "";
     public isInlineDateFieldsShowing: boolean = false;
+    public scrollSubject$: Subject<any> = new Subject();
 
     constructor(
         private _ref: ChangeDetectorRef,
@@ -320,11 +321,14 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
             this.invalidInlineStartDate = "";
             this.invalidInlineEndDate = "";
         });
+
+        this.scrollSubject$.pipe(debounceTime(25)).subscribe((response) => {
+            this.onScroll(response);
+        });
     }
 
     public closeCalender() {
         this.openMobileDatepickerPopup = false;
-
     }
 
     public closeDatePicker() {
@@ -1099,37 +1103,43 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     }
 
     mouseUp(e: MouseWheelEvent) {
-        let scrollPosition = "";
-
-        if (e.deltaY < 0) {
-            if (this.scrollPosition === "top") {
-                this.numberOfScrolls++;
-            } else {
-                this.numberOfScrolls = 1;
-            }
-
-            scrollPosition = "top";
-
-            if (this.numberOfScrolls >= 20) {
-                this.numberOfScrolls = 0;
-                this.onScroll('top');
-            }
-        } else if (e.deltaY > 0) {
-            if (this.scrollPosition === "bottom") {
-                this.numberOfScrolls++;
-            } else {
-                this.numberOfScrolls = 1;
-            }
-
-            scrollPosition = "bottom";
-
-            if (this.numberOfScrolls >= 20) {
-                this.numberOfScrolls = 0;
-                this.onScroll('bottom');
-            }
+        if(e.deltaY < 0) {
+            this.scrollSubject$.next("top");
+        } else {
+            this.scrollSubject$.next("bottom");
         }
 
-        this.scrollPosition = scrollPosition;
+        // let scrollPosition = "";
+
+        // if (e.deltaY < 0) {
+        //     if (this.scrollPosition === "top") {
+        //         this.numberOfScrolls++;
+        //     } else {
+        //         this.numberOfScrolls = 1;
+        //     }
+
+        //     scrollPosition = "top";
+
+        //     if (this.numberOfScrolls >= 20) {
+        //         this.numberOfScrolls = 0;
+        //         this.onScroll('top');
+        //     }
+        // } else if (e.deltaY > 0) {
+        //     if (this.scrollPosition === "bottom") {
+        //         this.numberOfScrolls++;
+        //     } else {
+        //         this.numberOfScrolls = 1;
+        //     }
+
+        //     scrollPosition = "bottom";
+
+        //     if (this.numberOfScrolls >= 20) {
+        //         this.numberOfScrolls = 0;
+        //         this.onScroll('bottom');
+        //     }
+        // }
+
+        // this.scrollPosition = scrollPosition;
     }
 
     mouseUpYear(e: MouseWheelEvent) {
@@ -1987,7 +1997,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
     public openMobileDatepicker(): void {
         this.openMobileDatepickerPopup = true;
-        document.querySelector('body').classList.add('hide-scroll-body')
+        document.querySelector('body').classList.add('hide-scroll-body');
     }
 
     public emitSelectedDates(sendBlankDates: boolean): void {
@@ -1997,4 +2007,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
             this.datesUpdated.emit({ name: '', startDate: this.startDate, endDate: this.endDate });
         }
     }
+
+    public restrictBodyScroll() {
+        document.querySelector('body').classList.add('restrict-body-scroll');
+    }
+
+    public allowBodyScroll() {
+        document.querySelector('body').classList.remove('restrict-body-scroll');
+    }    
 }

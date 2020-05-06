@@ -1139,6 +1139,9 @@ td span {
     border:none;
     border-top: 1px solid transparent;
 }
+.md-drppicker .calendar td.hide-date {
+    visibility: hidden;
+}
 .close-calender{
     display:none;
 }
