@@ -194,6 +194,9 @@
 }
 .clear-both{clear: both;}
 /* start MDB tweaks */
+.border-none{
+    border: none !important;
+}
 .pt-0 {
     padding-top: 0px !important;
 }
@@ -703,7 +706,15 @@ input {
 .mb-15 {
     margin-bottom: 15px;
 }
-
+.ml-15{
+    margin-left: 15px;
+}
+.mr-15{
+    margin-right: 15px;
+}
+.mt-15{
+    margin-top: 15px;
+}
 .mr-1 {
     margin-right: 10px;
 }
@@ -6431,11 +6442,11 @@ table td[class*=col-]:last-child {
     background: $white !important;
 }
 
-/* .universal_date label {
+/* .universal-date label {
     color: $white;
 } */
 
-.universal_date .btn-link {
+.universal-date .btn-link {
     color: #f5f5f5 !important;
     padding-top: 3px;
     padding-left: 0px;
@@ -6445,11 +6456,11 @@ table td[class*=col-]:last-child {
     border-radius: 0;
 }
 
-.universal_date .btn-link:hover {
+.universal-date .btn-link:hover {
     text-decoration: none;
 }
 
-.universal_date {
+.universal-date {
     float: none !important;
     display: inline-block;
 }
@@ -9122,7 +9133,7 @@ input.checkbox-custom[type="checkbox"] {
         white-space: initial !important;
     }
 
-    .universal_date label.btn.btn-link {
+    .universal-date label.btn.btn-link {
         display: none;
     }
     .invoce-controll .nav.nav-tabs {

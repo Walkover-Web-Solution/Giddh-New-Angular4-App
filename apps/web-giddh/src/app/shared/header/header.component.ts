@@ -81,6 +81,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public imgPath: string = '';
     public subscribedPlan: SubscriptionsUser;
     public isLedgerAccSelected: boolean = false;
+    public asideHelpSupportMenuState: string = 'out';
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -743,6 +744,27 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public handleNewTeamCreationEmitter(e: any) {
         this.modelRef.hide();
         this.showManageGroupsModal();
+    }
+
+    public openHelpSupportAside() {
+         
+        this.toggleHelpSupportPane();
+    }
+
+    public toggleBodyClass() {
+        if (this.asideHelpSupportMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
+
+    public toggleHelpSupportPane(event?) {
+        if (event) {
+            event.preventDefault();
+        }
+        this.asideHelpSupportMenuState = this.asideHelpSupportMenuState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
     }
 
     /**

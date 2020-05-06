@@ -176,7 +176,7 @@
                 </ul>
 
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <div class="giddh-logo" (click)="forceOpenNavigation = true;">
 
                     <!-- [attachOutsideOnClick]="true" [isOpen]="companyMenu.isopen"  [attachOutsideOnClick]="true" (clickOutside)="closeUserMenu(dropdown)"-->
@@ -203,13 +203,16 @@
                 </div>
 
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-8">
                 <div class="pull-right right-details">
-                    <ul class="nav universal_date mr-2" *ngIf="(selectedCompany | async)">
-                        <li [hidden]="isTodaysDateSelected">
+                    <ul class="nav universal-date mr-15" *ngIf="(selectedCompany | async)">
+                        <li class="border-none pr-15">
+                            <img src="../../../assets/images/notification.svg">
+                        </li>
+                        <li [hidden]="isTodaysDateSelected" class="border-none pl-0">
                             <button class="btn btn-link" (click)="jumpToToday();">Today</button>
                         </li>
-                        <li [hidden]="isTodaysDateSelected" class="notToday">
+                        <li [hidden]="isTodaysDateSelected" class="not-today">
                             <span class="icon-calender calender-addone"></span>
                             <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />
                         </li>
@@ -222,13 +225,19 @@
                     </ul>
 
 
-                    <button id="AddManage" type="button" class="btn btn-gray btn-sm" [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"> <span
-                            class="icon-edit-ico"></span>Accounts
+                    <button id="add-manage" type="button" class="btn btn-gray btn-sm" [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"> 
+                        <i class="icon-plus"></i> Master
                     </button>
-                    <div class="btn-group cp mrL1 d-inline-block" dropdown>
-                        <span class="icon-support dropdown-toggle" dropdownToggle></span>
-
-                        <!-- <img src="{{imgPath}}support.svg" dropdownToggle class="dropdown-toggle" [style.max-width.px]="24" /> -->
+                    <div class="btn-group cp d-inline-block help-setting-icons " dropdown>
+                       
+                            <span class="mr-15">
+                                <img src="../../../assets/images/setting-icon.svg">
+                            </span>
+                            <span (click)="openHelpSupportAside()">
+                                <img src="../../../assets/images/help-support-icon.svg">
+                            </span>
+                        
+                        <!-- <span class="icon-support dropdown-toggle" dropdownToggle></span>
                         <ul *dropdownMenu class="dropdown-menu dropdown-menu-right mrT1 pd1" role="menu" aria-labelledby="button-basic" [style.min-width.px]="230">
                             <li>
                                 <button class="btn btn-block btn-gray">
@@ -237,7 +246,7 @@
                                 </button>
                             </li>
                             <li class="mrT2 text-center mrB2">
-                                <!-- <span><a href="tel:02268210057" target="_blank" class="grey_clr">022-68210057</a></span>  openScheduleModal() -->
+                               
                                 <p><a href="mailto:support@giddh.com" target="_blank" class="grey_clr">support@giddh.com</a></p>
                             </li>
                             <li class="row text-center">
@@ -245,9 +254,9 @@
                                 <span class="text-center"><a href="http://faq.giddh.com/" target="_blank"
                                         class="btn btn-link tdUndr">FAQs</a></span>
                             </li>
-                            <!-- <h3 class="mrT2 mrB2 fs20 text-center grey_clr">FAQs?</h3> -->
+ 
 
-                        </ul>
+                        </ul> -->
                     </div>
                 </div>
 
@@ -548,14 +557,15 @@
                                 </ul>
                             </div>
                         </li>
-
-
+                        <li class="border-none pr-0 pull-right">
+                            <img src="../../../assets/images/notification.svg">
+                        </li>
                     </ul>
                 </div>
 
                 <div class="lowerLayerHeader clearfix">
-                    <ul class="nav universal_date  pull-left" *ngIf="(selectedCompany | async)">
-                        <li [hidden]="isTodaysDateSelected">
+                    <ul class="nav universal-date  pull-left" *ngIf="(selectedCompany | async)">
+                        <li [hidden]="isTodaysDateSelected" class="border-none pl-0"> 
                             <button class="btn btn-link" (click)="jumpToToday();">Today</button>
                         </li>
                         <li [hidden]="isTodaysDateSelected" class="dateRangPicker">
@@ -568,9 +578,8 @@
                             <label class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
                         </li>
                     </ul>
-                    <button id="AddManage" type="button" class="btn btn-gray btn-xs btn-sm pull-right mrR0 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"><span
-                            class="icon-edit-ico"></span>
-                        Accounts
+                    <button id="add-manage" type="button" class="btn btn-gray btn-sm pull-right mrR0 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
+                        <i class="icon-plus"></i> Master
                     </button>
                 </div>
             </div>
@@ -733,8 +742,6 @@
         </div>
     </div>
 </div>
-
-
 <ng-template #headDropdownMenu>
 
         <li>
@@ -890,3 +897,10 @@
         </li>
 
 </ng-template>
+
+<!--  -->
+<div class="aside-overlay help-support-aside" *ngIf="asideHelpSupportMenuState === 'in'"></div>
+<div class="help-support-aside" *ngIf="asideHelpSupportMenuState === 'in'">
+    <aside-help-support (closeAsideEvent)="toggleHelpSupportPane($event)">
+    </aside-help-support>
+</div>

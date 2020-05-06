@@ -416,26 +416,29 @@ a[vr-item]:focus {
     display: inline-block !important;
 }
 
-.universal_date li {
+.universal-date li {
     display: inline-block;
     position: relative;
+    border: 1px solid $white;
+    border-radius: 20px;
+    padding: 0 10px;
+    img{
+        vertical-align: bottom;
+        display: inline-block;
+    }
 }
 
-.universal_date li input {
-    background: $governor-bay !important;
+.universal-date li input {
     padding-left: 29px !important;
     color: #fff !important;
     padding-right: 5px !important;
-    border: 1px solid $governor-bay;
     text-align: left;
 }
 
-.universal_date li input:focus {
-    border: 1px solid $governor-bay !important;
+.universal-date li input:focus {
+    border:none;
 }
-
 .header-date {
-    background: $governor-bay !important;
     padding: 5px 11px;
     border-radius: 0px 2px 2px 0px;
     color: #fff;
@@ -447,7 +450,6 @@ a[vr-item]:focus {
 }
 
 .calender-addone {
-    background-color: $governor-bay;
     color: #fff;
     padding: 9px 8px 9px 10px;
     vertical-align: bottom;
@@ -456,34 +458,27 @@ a[vr-item]:focus {
     display: inline-flex;
 }
 
-.notToday .calender-addone {
+.not-today .calender-addone {
     position: absolute;
-    border: 1px solid $governor-bay;
     padding: 8px 8px;
 }
 
-#AddManage.btn-gray {
-    background: $governor-bay;
+#add-manage.btn-gray {
+    background:transparent;
     color: #fff;
     position: relative;
-    padding-left: 32px;
+    padding-left: 15px;
     padding-top: 4px;
     padding-bottom: 5px;
-    padding-right: 12px;
-    border: 1px solid $governor-bay;
+    padding-right: 15px;
+    border: 1px solid #fff;
+    border-radius: 20px;
+    margin-right: 15px;
+    i{
+        font-size: 12px;
+        padding-right: 5px;
+    }
 }
-
-#AddManage .icon-edit-ico {
-    position: absolute;
-    left: 0px;
-    background-color: $governor-bay;
-    padding: 8px 6px 8px 7px;
-    top: 0px;
-    text-align: center;
-    display: inline-flex;
-    color: #fff;
-}
-
 span.icon-support.dropdown-toggle {
     background-color: $governor-bay;
     color: #fff;
@@ -495,10 +490,12 @@ span.icon-support.dropdown-toggle {
     top: 1px;
 }
 
-.notToday .date-range-picker {
+.not-today .date-range-picker {
     height: 32px;
 }
-
+.date-range-picker{
+    max-width: 150px;
+}
 #other a {
     color: #262626;
     text-transform: uppercase;
@@ -638,7 +635,15 @@ ul.sub-list {
     background: #f1f1f1;
     border-bottom: 1px solid #e4e4e4;
 }
-
+.help-setting-icons{
+    color: $white; 
+    img{
+        width: 18px;
+    }
+}
+.help-support-aside{
+    top: 60px;
+}
 /* responsive */
 
 @media (max-height: 800px) {
@@ -660,10 +665,6 @@ ul.sub-list {
     .primary-header .btn-group.cp.mrL1.d-inline-block {
         margin-left: 0;
     }
-    .primary-header ul.nav.universal_date.mr-2,
-    .primary-header #AddManage.btn-gray {
-        margin-right: 5px;
-    }
     .primary-header .row .col-sm-5:nth-child(3) {
         padding-left: 0;
     }
@@ -673,9 +674,6 @@ ul.sub-list {
 }
 
 @media (max-width: 768px) {
-    .mobileHeader .btn-xs {
-        padding: 3px 8px 8px 28px !important;
-    }
     span.icon-support.dropdown-toggle {
         top: 7px;
     }
@@ -686,9 +684,6 @@ ul.sub-list {
         padding-top: 0;
         padding-bottom: 0;
         font-size: 18px;
-    }
-    .primary-header .btn-group.cp.mrL1.d-inline-block {
-        height: 34px;
     }
 }
 
@@ -738,12 +733,12 @@ ul.sub-list {
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     }
     .calender-addone {
-        height: 36px;
+        height: 32px;
         vertical-align: middle;
         align-items: center;
     }
     .header-date {
-        height: 36px;
+        height: 32px;
         vertical-align: top;
         display: inline-flex !important;
         align-items: center;
@@ -758,6 +753,10 @@ ul.sub-list {
     .cText.head-nav {
         display: none;
     }
+    .universal-date li input {
+       height: 32px;
+    }
+    
 }
 
 @media (min-width: 412px) and (max-width: 840px) {
@@ -778,22 +777,22 @@ ul.sub-list {
 }
 
 @media (max-width: 375px) {
-    .universal_date li.dateRangPicker {
+    .universal-date li.dateRangPicker {
         display: block;
     }
-    .universal_date .header-date {
+    .universal-date .header-date {
         display: inline-block;
     }
-    button#AddManage {
+    button#add-manage {
         position: absolute;
         right: 0;
         bottom: 0;
     }
-    .universal_date li {
+    .universal-date li {
         display: block;
         position: relative;
     }
-    .universal_date .btn-link {
+    .universal-date .btn-link {
         border-bottom: none;
         text-align: left;
         height: 24px !important;
