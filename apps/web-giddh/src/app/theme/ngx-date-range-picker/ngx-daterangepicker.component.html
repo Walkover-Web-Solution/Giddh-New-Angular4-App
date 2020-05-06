@@ -199,7 +199,7 @@
                     <!-- month selection -->
                 </div>
                 <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true" [config]="{suppressScrollX: false, suppressScrollY: false}">
-                    <div class="d-container"  [style.max-height.px]="320" *ngIf="showMonthPicker" (mousewheel)="mouseUpYear($event)">
+                    <div class="d-container"  [style.max-height.px]="320" *ngIf="showMonthPicker">
                         <div *ngFor="let year of allowedYears; let i = index;">
                             <h2>
                                 {{ minDate.clone().add(i, 'year').format(" YYYY")}}
