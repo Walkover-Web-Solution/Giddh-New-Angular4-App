@@ -7963,7 +7963,7 @@ div#getGroupModal {
     animation-name: fadeIn;
 }
 
-.invoiceFooter {
+.invoice-footer {
     display: flex;
     padding: 20px;
     background: $white;
@@ -7976,7 +7976,7 @@ div#getGroupModal {
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
 }
 
-.menu_open .invoiceFooter {
+.menu_open .invoice-footer {
     left: 215px;
     display: flex;
     padding: 20px;
