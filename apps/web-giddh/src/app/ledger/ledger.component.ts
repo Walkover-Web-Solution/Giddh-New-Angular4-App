@@ -873,7 +873,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public saveBankTransaction() {
-        // Api llama para mover la transacción bancaria al libro mayor
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject();
         blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
         delete blankTransactionObj['voucherType'];
