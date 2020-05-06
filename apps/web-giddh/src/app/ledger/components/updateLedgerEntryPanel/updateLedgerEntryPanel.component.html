@@ -1033,14 +1033,14 @@
                         </div>
 
                         <div class="col-xs-12 pdT1 d-flex align-items-center xs-d-block" *ngIf="!isPettyCash">
-                            <div class="width-100 mb-05">
-                                    <p *ngIf="isAdjustedAmountExcess">Note: The adjusted amount of the linked invoice/s is more than the receipt;
-                                        update them first and try again.</p>
-                            </div>
+<!--                            <div class="width-100 mb-05">-->
+<!--                                    <p *ngIf="isAdjustedAmountExcess">Note: The adjusted amount of the linked invoice/s is more than the receipt;-->
+<!--                                        update them first and try again.</p>-->
+<!--                            </div>-->
 
                             <div class="d-flex">
                                 <button class="btn btn-danger" (click)="showDeleteEntryModal()">Delete</button>
-                                <button class="btn btn-success" [ladda]="isTxnUpdateInProcess$ | async" [disabled]="isAdjustedAmountExcess"
+                                <button class="btn btn-success" [ladda]="isTxnUpdateInProcess$ | async"
                                         (click)="saveLedgerTransaction()">Update
                                 </button>
                             </div>

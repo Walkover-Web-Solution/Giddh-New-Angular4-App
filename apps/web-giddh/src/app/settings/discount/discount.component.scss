@@ -1,10 +1,9 @@
-@media (max-width: 800px) and (min-width: 768px) {
-    .discount-form-setting-tab .col-sm-2 {
-        width: 20%;
-        padding-right: 0 !important;
+@media(max-width:1024px) and (min-width: 768px) {
+    .discount-form-setting-tab label, .discount-form-setting-tab br {
+        display: none;
     }
 }
-@media(max-width:768px){
+@media(max-width:767px) {
     .discount-form-setting-tab label, .discount-form-setting-tab br {
         display: none;
     }

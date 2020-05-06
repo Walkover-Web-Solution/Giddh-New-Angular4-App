@@ -177,6 +177,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             if (this.only4ProformaEstimates) {
                 this.getVoucherVersions();
             }
+            this.downloadVoucher('base64');
         }
 
         if ('invoiceSetting' in changes && changes.invoiceSetting.currentValue && changes.invoiceSetting.currentValue !== changes.invoiceSetting.previousValue) {
