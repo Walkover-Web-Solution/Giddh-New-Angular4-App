@@ -1,6 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { select, Store } from '@ngrx/store';
-import { AppState } from '../../store';
 @Component({
     selector: 'aside-help-support',
     templateUrl: './aside-help-support.component.html',
@@ -14,6 +12,6 @@ export class AsideHelpSupportComponent implements OnInit {
         this.closeAsideEvent.emit(event);
     }
     public ngOnInit() {
-    }
 
+    }
 }
