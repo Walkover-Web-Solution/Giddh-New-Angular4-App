@@ -54,6 +54,8 @@ export class MfEditComponent implements OnInit {
     };
     public expenseGroupAccounts$: Observable<IOption[]>;
     public liabilityGroupAccounts$: Observable<IOption[]>;
+    /** To check which index of expense is in editable mode */
+    public isEditableIndex:number = null;
     private initialQuantity: number = 1;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -465,11 +467,13 @@ export class MfEditComponent implements OnInit {
 
     public getAccountName(uniqueName: string, category: string) {
         let name;
+        let uniqueNameOfAcc;
         if (category === 'liabilityGroupAccounts') {
             this.liabilityGroupAccounts$.subscribe((data) => {
                 let account = data.find((acc) => acc.value === uniqueName);
                 if (account) {
                     name = account.label;
+                    uniqueNameOfAcc = account.value;
                 }
             });
         } else if (category === 'expenseGroupAccounts') {
@@ -477,9 +481,10 @@ export class MfEditComponent implements OnInit {
                 let account = data.find((acc) => acc.value === uniqueName);
                 if (account) {
                     name = account.label;
+                    uniqueNameOfAcc = account.value;
                 }
             });
         }
-        return observableOf(name);
+        return observableOf(uniqueNameOfAcc);
     }
 }
