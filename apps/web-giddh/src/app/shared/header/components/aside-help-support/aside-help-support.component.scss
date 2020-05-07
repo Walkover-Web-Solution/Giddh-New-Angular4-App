@@ -40,6 +40,9 @@
         justify-content: space-between;
         padding: 18px 15px;
         border-bottom: 1px solid $gainsboro;
+        position:sticky;
+        top: 0;
+        background-color: inherit;
         h2 {
             font-family: 'opensans-semibold';
             font-size: 18px;
@@ -51,14 +54,18 @@
         .faq-block{
             padding: 15px;
             border-bottom: 1px solid $gainsboro;
+            a{
+                display: block;
+                color:$nero;
 
-            p{
-                font-size: 14px;
-                font-family: 'opensans-semibold'; 
-            }
-            small{
-                font-size: 12px;
-            }
+                p{
+                    font-size: 14px;
+                    font-family: 'opensans-semibold'; 
+                }
+                small{
+                    font-size: 12px;
+                }
+            }       
     }
     .feature-block{
         padding: 15px;

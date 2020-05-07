@@ -499,11 +499,7 @@ span.icon-support.dropdown-toggle {
 .date-range-picker{
     max-width: 150px;
 }
-#other a {
-    color: #262626;
-    text-transform: uppercase;
-    font-family: opensans-semibold;
-}
+
 
 .showMoreOpt {
     font-size: 14px;
@@ -534,7 +530,7 @@ span.icon-support.dropdown-toggle {
 }
 
 .primary-header .right-details {
-    transform: translateY(14px);
+    transform: translateY(13px);
 }
 
 .primary-header li.company-name {
@@ -649,6 +645,43 @@ ul.sub-list {
 .help-support-aside{
     top: 60px;
 }
+.show-more-module a{
+    font-size: 14px;
+    color: $deep-sky-blue !important;
+    font-family: 'opensans-semibold';
+}
+/*notification css*/
+.white-row {
+    background-color: $white;
+    padding: 10px 15px;
+    margin-bottom:2px;
+    font-size: 16px;
+    box-shadow: 1px 1px 3px #00000029;
+    margin-top: 10px;
+    p{
+        font-family: 'opensans-semibold';
+        font-size: 14px;
+    }
+    .click-here {
+        color: $chetwode-blue;
+        cursor:pointer;
+    }
+    
+    span.icon-traingle-info {
+        color: $bitter-sweet;
+        font-size: 15px;
+        margin-right: 10px;
+    }
+    span.icon-info-icon {
+        color: $nobel;
+        font-size: 18px;
+        margin-right: 10px;
+    }
+}
+.white-row.menu_open {
+    margin-left: 215px;
+}
+
 /* responsive */
 
 @media (max-height: 800px) {
@@ -691,7 +724,6 @@ ul.sub-list {
         font-size: 18px;
     }
 }
-
 @media (max-width: 767px) {
     .nav-left-bar {
         width: 270px;
