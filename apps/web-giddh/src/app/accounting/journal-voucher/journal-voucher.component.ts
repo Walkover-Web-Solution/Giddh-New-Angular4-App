@@ -7,7 +7,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../actions/company.actions';
 import { SidebarAction } from '../../actions/inventory/sidebar.actions';
 import { AppState } from '../../store';
-import { StateDetailsRequest } from '../models/api-models/Company';
+import { StateDetailsRequest } from '../../models/api-models/Company';
 import { TallyModuleService } from '../tally-service';
 
 export const PAGE_SHORTCUT_MAPPING = [
@@ -86,7 +86,7 @@ export const PAGES_WITH_CHILD = ['Purchase', 'Sales', 'Credit note', 'Debit note
     styleUrls: ['./journal-voucher.component.scss']
 })
 
-export class AccountingComponent implements OnInit, OnDestroy {
+export class JournalVoucherComponent implements OnInit, OnDestroy {
 
     public gridType: string = 'voucher';
     public selectedPage: string = 'journal';

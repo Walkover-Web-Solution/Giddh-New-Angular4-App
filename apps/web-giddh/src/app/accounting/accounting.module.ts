@@ -23,10 +23,12 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
 import { QuickAccountModule } from '../theme/quick-account-component/quickAccount.module';
 import { AVShSelectModule } from './ng-virtual-list/virtual-list.module';
 import { OnReturnDirective } from './keyboard.directive';
+import { JournalVoucherComponent } from './journal-voucher/journal-voucher.component';
 
 @NgModule({
     declarations: [
         AccountingComponent,
+        JournalVoucherComponent,
         AccountAsInvoiceComponent,
         AccountingSidebarComponent,
         AccountAsVoucherComponent,
