@@ -765,6 +765,13 @@ $input-height: 3rem !default;
     }
 }
 
+perfect-scrollbar.hide-horizontal-scroll > .ps.ps--active-x > .ps__rail-x{
+    display: none !important;
+   
+}
+.md-drppicker td.in-range.activatedDate::before{
+border-radius: 0 50% 50% 0 !important;
+}
 @media (min-width: 564px) {
     .md-drppicker {
         width: auto;
@@ -1077,7 +1084,7 @@ td span {
 
 .activatedDate span {
     color: #1c1c1c !important;
-    background-color: #c6dafc !important;
+    background-color:transparent !important;
 }
 
 .btn-angle-down {

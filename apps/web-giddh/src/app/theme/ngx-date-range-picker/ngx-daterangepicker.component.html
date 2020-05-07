@@ -198,7 +198,7 @@
                     
                     <!-- month selection -->
                 </div>
-                <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true" [config]="{suppressScrollX: false, suppressScrollY: false}">
+                <perfect-scrollbar fxFlex="auto" class="hide-horizontal-scroll" [scrollIndicators]="true" [config]="{suppressScrollX: false, suppressScrollY: false}">
                     <div class="d-container"  [style.max-height.px]="320" *ngIf="showMonthPicker">
                         <div *ngFor="let year of allowedYears; let i = index;">
                             <h2>
