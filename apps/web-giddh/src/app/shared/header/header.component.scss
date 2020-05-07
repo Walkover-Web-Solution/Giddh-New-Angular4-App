@@ -24,7 +24,7 @@
 
 .account-search .input-group-addon {
     border-color: $gainsboro;
-    border-radius: 2px 0 0 2px;
+    border-radius: 20px 0 0 20px;
     color: #484848;
     font-size: 12px;
     padding-right: 0px;
@@ -43,7 +43,7 @@
     background: none !important;
     border-color: $gainsboro;
     border-left: 0px;
-    border-radius: 0px 2px 2px 0 !important;
+    border-radius: 0px 20px 20px 0 !important;
     height: 36px;
     padding-left: 3px !important;
 }
@@ -77,7 +77,7 @@ a[vr-item]:focus {
     clear: both;
     top: 0;
     right: 10px;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 36px;
     color: #484848;
 }
@@ -199,7 +199,7 @@ a[vr-item]:focus {
     color: #262626;
     letter-spacing: 0.6px;
     font-weight: normal;
-    font-family: "opensans-regular";
+    font-family: "opensans-semibold";
     padding: 0;
 }
 
@@ -266,10 +266,13 @@ a[vr-item]:focus {
 
 .left_fixed_header h6 {
     color: $midnight-blue;
-    font-size: 14px;
+    font-size: 16px;
     padding-left: 15px;
     padding-right: 15px;
     font-family: "opensans-semibold";
+    img{
+        width: 18px;
+    }
 }
 
 .left_fixed_header > h6 > i {
@@ -505,6 +508,8 @@ span.icon-support.dropdown-toggle {
 .showMoreOpt {
     font-size: 14px;
     padding: 0 15px;
+    font-family: 'opensans-semibold';
+    color: $deep-sky-blue;
 }
 
 // top header css

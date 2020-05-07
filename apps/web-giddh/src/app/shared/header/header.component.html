@@ -307,7 +307,7 @@
                 <span class="input-group-addon" id="">
                     <i class="icon-search"></i>
                 </span>
-                <input type="text" class="form-control jumpToAccount" placeholder="Jump to Account" aria-describedby="">
+                <input type="text" class="form-control jumpToAccount" placeholder="Search Anything" aria-describedby="">
             </div>
 
         </ul>
@@ -318,7 +318,12 @@
 
                 <!-- Accounts menu -->
                 <ul class="left_fixed_header mrT1" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
-                    <h6 class="mrB1">ACCOUNTS <i *ngIf="!isMobileSite" tooltip="Create account" placement="bottom" container="body" class="fa fa-plus cp" (click)="showManageGroupsModal()"></i>
+                    <h6 class="mrB1">ACCOUNTS 
+
+                        <img src="../../../assets/images/plus-around-icon.svg" *ngIf="!isMobileSite" (click)="showManageGroupsModal()" tooltip="Create account" class="pull-right" placement="bottom" container="body">
+                        <!-- <i  class="fa fa-plus cp" >
+
+                        </i> -->
                     </h6>
                     <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
                     <li *ngFor="let acc of accountItemsFromIndexDB">
@@ -337,8 +342,10 @@
                 <!-- Main menu -->
                 <ul class="left_fixed_header mrT4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
                     <h6 class="mrB1">MENU
-                        <!-- <i *ngIf="!isMobileSite" tooltip="Menu" placement="bottom" container="body"
+                        <!-- <i 
               class="fa fa-plus cp"></i>  -->
+
+                        <img src="../../../assets/images/angle-round-icon.svg" class="pull-right" *ngIf="!isMobileSite" tooltip="Menu" placement="bottom" container="body"> 
                     </h6>
                     <li *ngFor="let menu of menuItemsFromIndexDB">
                         <a *ngIf="menu.uniqueName == '/pages/gstfiling' && activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode == 'IN'" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage && selectedPage.toLowerCase() == menu.name.toLowerCase()}"
