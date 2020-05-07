@@ -911,3 +911,12 @@
     <aside-help-support (closeAsideEvent)="toggleHelpSupportPane($event)">
     </aside-help-support>
 </div>
+
+
+<!--  -->
+<div class="white-row">
+    <p> <span class="icon-traingle-info"></span> Your {{subscribedPlan.planDetails.duration}}
+        {{subscribedPlan.planDetails.durationUnit}} {{subscribedPlan.planDetails.name}} ended on
+        {{subscribedPlan.expiry}}. Apply to upgrade your subscription. <a class="clickHere"
+            (click)="goToSelectPlan()">Click here</a></p>
+</div>
