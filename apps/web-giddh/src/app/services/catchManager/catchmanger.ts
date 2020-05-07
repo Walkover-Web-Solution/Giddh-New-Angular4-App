@@ -1,17 +1,23 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional, Inject } from '@angular/core';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { ToasterService } from '../toaster.service';
 import { Observable } from 'rxjs';
-// import { LoginActions } from '../actions/login.action';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { HttpWrapperService } from '../httpWrapper.service';
+import { IServiceConfigArgs, ServiceConfig } from '../service.config';
+import { ERROR_LOG_API } from '../apiurls/exception-log.api';
 
 @Injectable()
 export class GiddhErrorHandler {
 
-    constructor(private _toaster: ToasterService, private store: Store<AppState>) {
-    }
+    constructor(
+        @Optional() @Inject(ServiceConfig)  private config: IServiceConfigArgs,
+        private router: Router,
+        private http: HttpWrapperService,
+        private store: Store<AppState>
+    ) {}
 
     public HandleCatch<TResponce, TRequest>(r: HttpErrorResponse, request?: any, queryString?: any): Observable<BaseResponse<TResponce, TRequest>> {
         let data: BaseResponse<TResponce, TRequest> = new BaseResponse<TResponce, TRequest>();
@@ -26,6 +32,7 @@ export class GiddhErrorHandler {
             data.request = request;
             data.queryString = queryString;
         } else {
+            this.logApiError(r);
             if (r.status === 500 ||
                 r.status === 501 ||
                 r.status === 502 ||
@@ -78,6 +85,25 @@ export class GiddhErrorHandler {
         });
     }
 
+    /**
+     * Logs API error
+     *
+     * @private
+     * @param {HttpErrorResponse} response Error response received from the API
+     * @memberof GiddhErrorHandler
+     */
+    private logApiError(response: HttpErrorResponse): void {
+        const apiError = response.error as any;
+        const errorCode = apiError.code ? apiError.code : response.status;
+        const errorMessage = apiError.message ? apiError.message : 'Bad Gateway';
+        const requestObject = {
+            apiErrorMessage: `Code: ${errorCode}, Message: ${errorMessage}`,
+            apiUrl: response.url,
+            uiPageUrl: this.router.url
+        };
+        const url = `${this.config ? this.config.apiUrl : ''}${ERROR_LOG_API}`;
+        this.http.post(url, requestObject).subscribe(() => {}, () => {});
+    }
 }
 
 export function HandleCatch<TResponce, TRequest>(r: any, request?: any, queryString?: any): Observable<BaseResponse<TResponce, TRequest>> {
