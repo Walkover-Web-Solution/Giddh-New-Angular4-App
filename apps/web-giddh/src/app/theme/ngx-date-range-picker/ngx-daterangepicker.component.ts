@@ -206,6 +206,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public scrollSubject$: Subject<any> = new Subject();
     public activeMonth: any;
     public activeMonthHover: boolean = false;
+    public invalidStartDate: string = "";
+    public invalidEndDate: string = "";
 
     constructor(
         private _ref: ChangeDetectorRef,
@@ -673,9 +675,13 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     }
 
     setStartDate(startDate) {
+        this.invalidStartDate = "";
+
         if (!moment(startDate, this.locale.format, true).isValid()) {
+            this.invalidStartDate = "Enter a day,month and year";
             return;
         }
+
         if (typeof startDate === 'string') {
             this.startDate = moment(startDate, this.locale.format);
         }
@@ -715,6 +721,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     }
 
     setEndDate(endDate) {
+        this.invalidEndDate = "";
+        if (!moment(endDate, this.locale.format, true).isValid()) {
+            this.invalidEndDate = "Enter a day,month and year";
+            return;
+        }
+
         if (typeof endDate === 'string') {
             this.endDate = moment(endDate, this.locale.format);
         }
@@ -1220,6 +1232,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
      * @param col col position of the current date clicked
      */
     clickDate(e, date: Moment) {
+        this.inlineStartDate = "";
+        this.invalidEndDate = "";
 
         // if (e.target.tagName === 'TD') {
         //     if (!e.target.classList.contains('available')) {
