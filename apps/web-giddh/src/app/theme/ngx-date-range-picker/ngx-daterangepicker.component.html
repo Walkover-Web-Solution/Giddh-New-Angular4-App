@@ -118,12 +118,14 @@
                         <input placeholder="start date" #startDateElement [value]="startDateString"
                             (change)="setStartDate($event.target.value)" (click)="ActiveDate =0"
                             [class]="ActiveDate ===0 ?ActiveSelectedDateClass :''">
+                        <span *ngIf="invalidStartDate">{{invalidStartDate}}</span>
                         <span>
                             _
                         </span>
                         <input placeholder="end date" #endDateElement [value]="endDateString"
                             (change)="setEndDate($event.target.value)" (click)="ActiveDate =1"
                             [class]="ActiveDate ===1 ?ActiveSelectedDateClass :''">
+                        <span *ngIf="invalidEndDate">{{invalidEndDate}}</span>    
                     </div>
                     <!-- start date/ end date inputs container -->
                     <!-- month name -->

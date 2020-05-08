@@ -305,6 +305,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         });
 
         this.isShown$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.invalidStartDate = "";
+            this.inlineEndDate = "";
             if (document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material").length > 0) {
                 if (response) {
                     document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("show-calendar");
@@ -1118,7 +1120,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     }
 
     mouseUp(e: MouseWheelEvent) {
-        if(e.deltaY < 0) {
+        if (e.deltaY < 0) {
             this.scrollSubject$.next("top");
         } else {
             this.scrollSubject$.next("bottom");
@@ -1232,7 +1234,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
      * @param col col position of the current date clicked
      */
     clickDate(e, date: Moment) {
-        this.inlineStartDate = "";
+        this.invalidStartDate = "";
         this.invalidEndDate = "";
 
         // if (e.target.tagName === 'TD') {
@@ -1364,6 +1366,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
      * @param range
      */
     clickRange(e, range) {
+        this.invalidStartDate = "";
+        this.inlineEndDate = "";
+
         this.selectRange(this.ranges, range.name);
 
         this.chosenRange = range.name;
@@ -1910,7 +1915,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
                 this.renderedCalendarMonths = [];
             }
 
-            if(this.activeMonthHover === false) {
+            if (this.activeMonthHover === false) {
                 this.activeMonth = this.calendarVariables.start;
             }
 
@@ -1945,7 +1950,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
         if (side === "end") {
 
-            if(this.activeMonthHover === false) {
+            if (this.activeMonthHover === false) {
                 this.activeMonth = this.calendarVariables.end;
             }
 
