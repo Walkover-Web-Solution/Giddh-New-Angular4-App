@@ -769,8 +769,11 @@ perfect-scrollbar.hide-horizontal-scroll > .ps.ps--active-x > .ps__rail-x{
     display: none !important;
    
 }
-.md-drppicker td.in-range.activatedDate::before{
-border-radius: 0 50% 50% 0 !important;
+.md-drppicker td.in-range.in-range-start::before{
+border-radius:50% 0 0 50% !important;
+}
+.md-drppicker td.in-range.in-range-end::before{
+    border-radius: 0 50% 50% 0 !important;
 }
 @media (min-width: 564px) {
     .md-drppicker {
