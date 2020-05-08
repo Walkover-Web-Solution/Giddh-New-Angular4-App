@@ -97,7 +97,8 @@
                                 <tr *ngFor="let stock of manufacturingDetails.linkedStocks; let i = index;">
                                     <td colspan="2"><span class="hr"></span>{{ stock.stockUniqueName }}</td>
                                     <td>{{ stock.quantity | number:'1.0-4'}}</td>
-                                    <td *ngIf="stock.manufacturingUnit; else unitCode">{{ stock.manufacturingUnit }}</td>
+                                    <td *ngIf="stock.manufacturingUnit; else unitCode">{{ stock.manufacturingUnit }}
+                                    </td>
                                     <ng-template #unitCode>
                                         <td>{{ stock.stockUnitCode }}</td>
                                     </ng-template>
@@ -125,7 +126,7 @@
                                     </td>
                                     <td class="action">
                                         <button [disabled]="linkedStockQuantity.invalid || linkedStockRate.invalid || linkedStockList.invalid" (click)="addConsumption(linkedStocks, $event)" class="ico-btn pd0"><i
-                                            class="fa fa-plus text-danger" aria-hidden="true"></i></button>
+                                                class="fa fa-plus text-danger" aria-hidden="true"></i></button>
                                     </td>
                                 </tr>
 
@@ -138,10 +139,12 @@
                             <tfoot class="bdrT pdT2 pdB2 bdrB">
                                 <tr>
                                     <th colspan="2">Total:</th>
-                                    <th class="text-right"> {{ getTotal('linkedStocks', 'quantity') | number:'1.0-4' }}</th>
+                                    <th class="text-right"> {{ getTotal('linkedStocks', 'quantity') | number:'1.0-4' }}
+                                    </th>
                                     <th></th>
                                     <th></th>
-                                    <th class="text-right"> {{ getTotal('linkedStocks', 'amount') | number:'1.0-2' }}</th>
+                                    <th class="text-right"> {{ getTotal('linkedStocks', 'amount') | number:'1.0-2' }}
+                                    </th>
                                     <th></th>
                                 </tr>
                             </tfoot>
@@ -211,7 +214,7 @@
                                     </td>
                                     <td>
                                         <button [disabled]="transactionAmount.invalid" (click)="addExpense(otherExpenses)" style="margin-top: 12px;" class="ico-btn pd0"><i class="fa fa-plus text-danger"
-                                            aria-hidden="true"></i></button>
+                                                aria-hidden="true"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -243,19 +246,20 @@
             </div>
         </div>
     </ng-container>
-    <div class="no-data mrT2 loader-main col-xs-12" *ngIf="(isStockWithRateInprogress$ | async)">
-        <div class="spinner2">
-            <div class="cube1"></div>
-            <div class="cube2"></div>
+    <ng-container *ngTemplateOutlet="loaderTemplate;context: { $implicit: (isStockWithRateInprogress$ | async),  isColumn: true}">
+    </ng-container>
+</section>
+<ng-container *ngTemplateOutlet="loaderTemplate;context: { $implicit: (isGetManufactureStockInProgress$ | async),  isColumn: false}">
+</ng-container>
+<ng-template #loaderTemplate let-isShow let-isColumn="isColumn">
+    <div class="no-data mrT2 loader-main" [ngClass]="{'col-xs-12' : isColumn}" *ngIf="isShow ">
+        <div class="spinner2 ">
+            <div class="cube1 "></div>
+            <div class="cube2 "></div>
         </div>
     </div>
-</section>
-<div class="no-data mrT2 loader-main" *ngIf="(isGetManufactureStockInProgress$ | async)">
-    <div class="spinner2">
-        <div class="cube1"></div>
-        <div class="cube2"></div>
-    </div>
-</div>
+</ng-template>
+
 <!--delete manufacturing confirmation modal -->
 <div bsModal #manufacturingConfirmationModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-md">
