@@ -35,7 +35,7 @@ export class MfEditComponent implements OnInit {
     public isUpdateCase: boolean = false;
     public manufacturingDetails: ManufacturingItemRequest;
     public otherExpenses: any = {};
-    public toggleAddExpenses: boolean = false;
+    public toggleAddExpenses: boolean = true;
     public toggleAddLinkedStocks: boolean = false;
     public linkedStocks: IStockItemDetail = new IStockItemDetail();
     public expenseGroupAccounts: any = [];
@@ -45,7 +45,9 @@ export class MfEditComponent implements OnInit {
     public showFromDatePicker: boolean = false;
     public moment = moment;
     public initialQuantityObj: any = [];
-    public needForceClear$: Observable<IForceClear> = observableOf({ status: false });
+    public needForceClearLiability$: Observable<IForceClear> = observableOf({ status: false });
+    public needForceClearGroup$: Observable<IForceClear> = observableOf({ status: false });
+
     public needForceClearProductList$: Observable<IForceClear> = observableOf({ status: false });
 
     public options: Select2Options = {
@@ -55,7 +57,7 @@ export class MfEditComponent implements OnInit {
     public expenseGroupAccounts$: Observable<IOption[]>;
     public liabilityGroupAccounts$: Observable<IOption[]>;
     /** To check which index of expense is in editable mode */
-    public isEditableIndex:number = null;
+    public isEditableIndex: number = null;
     private initialQuantity: number = 1;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -301,7 +303,9 @@ export class MfEditComponent implements OnInit {
             this.manufacturingDetails = manufacturingObj;
 
             this.otherExpenses = {};
-            this.needForceClear$ = observableOf({ status: true });
+            this.needForceClearLiability$ = observableOf({ status: true });
+            this.needForceClearGroup$ = observableOf({ status: true });
+
             this.initializeOtherExpenseObj();
         }
     }
@@ -486,5 +490,17 @@ export class MfEditComponent implements OnInit {
             });
         }
         return observableOf(uniqueNameOfAcc);
+    }
+
+    /**
+     * To toggle add expense entry block
+     *
+     * @param {boolean} isToggle True, if need to add an expense entry
+     * @memberof MfEditComponent
+     */
+    public onToggleAddExpensesBlock(isToggle: boolean) {
+        this.toggleAddExpenses = !isToggle;
+        this.needForceClearLiability$ = observableOf({ status: true });
+        this.needForceClearGroup$ = observableOf({ status: true });
     }
 }
