@@ -18,18 +18,16 @@
                         Custom
                     </button>
                 </li>
-
                 <li *ngFor="let range of ranges; let i = index" class="menu-li">
                     <button type="button" class="btn-angle-down"
                         (click)="rangeDropdownShow = i; clickRange($event, range);"
                         (dblclick)="dblClickRange($event, range)"
                         [ngClass]="{'active': range.isSelected}">{{range.name}}
-
                         <span *ngIf="range.ranges.length" class="available prev angle-down"></span>
                     </button>
                     <ul *ngIf="range.ranges.length && rangeDropdownShow === i" class="sub-ranges-cal menu-drawer">
                         <li *ngFor="let subRange of range.ranges">
-                            <button type="button" (click)="clickRange($event,subRange)"
+                            <button type="button" (click)="clickRange($event,subRange); rangeDropdownShow != rangeDropdownShow;"
                                 (dblclick)="dblClickRange($event, subRange)"
                                 [ngClass]="{'active': subRange.isSelected}">{{subRange.name}}
                             </button>
@@ -37,20 +35,15 @@
                     </ul>
                 </li>
                 <li class="menu-li select-financial-year">
-                    <button type="button"  class="btn-angle-down" (click)="dropdownShow = !dropdownShow">Select Financial
-                        Year
+                    <button type="button"  class="btn-angle-down" (click)="dropdownShow = !dropdownShow">Select Financial Year
                         <span class="available prev angle-down"></span>
                     </button>
-                    <ul class="sub-ranges-cal menu-drawer financial-year-dropdown"
-                        *ngIf="dropdownShow && financialYears && financialYears.length > 0">
+                    <ul class="sub-ranges-cal menu-drawer financial-year-dropdown" *ngIf="dropdownShow && financialYears && financialYears.length > 0">
                         <li *ngFor="let financialYear of financialYears;" (click)="closeDatePicker()">
-                            <button type="button"
-                                (click)="clickFinancialYear(financialYear)">{{financialYear.label}}</button>
+                            <button type="button" (click)="clickFinancialYear(financialYear); dropdownShow != dropdownShow;">{{financialYear.label}}</button>
                         </li>
                     </ul>
-                 
                 </li>
-
             </ul>
         </div>
         <!-- loop over ranges -->
