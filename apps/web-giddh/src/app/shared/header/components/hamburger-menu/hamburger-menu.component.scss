@@ -1,0 +1,13 @@
+.hamburger-menu-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 10;
+    button{
+        margin: 0;
+        padding: 0;
+    }
+}
