@@ -456,7 +456,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         const optionalParams = cloneDeep(additionalRequestParameters);
         if (optionalParams) {
             for (let key in optionalParams) {
-                if (!optionalParams[key] || (optionalParams[key] && isArray(optionalParams[key]) && !optionalParams[key].length)) {
+                if ((optionalParams[key] === undefined || optionalParams[key] === null) || (optionalParams[key] && isArray(optionalParams[key]) && !optionalParams[key].length)) {
                     // Delete empty keys or keys with empty arrays as values
                     delete optionalParams[key]; // Delete falsy values
                 }
