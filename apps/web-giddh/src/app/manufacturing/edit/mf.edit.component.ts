@@ -469,28 +469,36 @@ export class MfEditComponent implements OnInit {
         this.manufacturingDetails.date = '';
     }
 
-    public getAccountName(uniqueName: string, category: string) {
-        let name;
-        let uniqueNameOfAcc;
-        if (category === 'liabilityGroupAccounts') {
-            this.liabilityGroupAccounts$.subscribe((data) => {
-                let account = data.find((acc) => acc.value === uniqueName);
-                if (account) {
-                    name = account.label;
-                    uniqueNameOfAcc = account.value;
-                }
-            });
-        } else if (category === 'expenseGroupAccounts') {
-            this.expenseGroupAccounts$.subscribe((data) => {
-                let account = data.find((acc) => acc.value === uniqueName);
-                if (account) {
-                    name = account.label;
-                    uniqueNameOfAcc = account.value;
-                }
-            });
-        }
-        return observableOf(uniqueNameOfAcc);
-    }
+// /**   will be useful in version 2
+//  *TODO:  To return account details
+//  *
+//  * @param {string} uniqueName Unique name of
+//  * @param {string} category
+//  * @returns
+//  * @memberof MfEditComponent
+//  */
+// public getAccountName(uniqueName: string, category: string) {
+//         let name;
+//         let uniqueNameOfAcc;
+//         if (category === 'liabilityGroupAccounts') {
+//             this.liabilityGroupAccounts$.subscribe((data) => {
+//                 let account = data.find((acc) => acc.value === uniqueName);
+//                 if (account) {
+//                     name = account.label;
+//                     uniqueNameOfAcc = account.value;
+//                 }
+//             });
+//         } else if (category === 'expenseGroupAccounts') {
+//             this.expenseGroupAccounts$.subscribe((data) => {
+//                 let account = data.find((acc) => acc.value === uniqueName);
+//                 if (account) {
+//                     name = account.label;
+//                     uniqueNameOfAcc = account.value;
+//                 }
+//             });
+//         }
+//         return observableOf(uniqueNameOfAcc);
+//     }
 
     /**
      * To toggle add expense entry block
