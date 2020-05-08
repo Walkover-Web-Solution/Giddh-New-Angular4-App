@@ -114,18 +114,22 @@
             <div class="calender-body" (mouseout)="hoveredDate = null">
                 <div class="upper-part">
                     <!-- start date/ end date inputs container -->
-                    <div class="select-date-range">
-                        <input placeholder="start date" #startDateElement [value]="startDateString"
-                            (change)="setStartDate($event.target.value)" (click)="ActiveDate =0"
-                            [class]="ActiveDate ===0 ?ActiveSelectedDateClass :''">
-                        <span *ngIf="invalidStartDate">{{invalidStartDate}}</span>
+                    <div class="select-date-range" [ngClass]="{'mb-3':invalidStartDate || invalidEndDate}">
+                        <div class="pos-rel">
+                            <input [ngClass]="{'invalid-date-input':invalidStartDate}" placeholder="start date" #startDateElement [value]="startDateString"
+                                (change)="setStartDate($event.target.value)" (click)="ActiveDate =0"
+                                [class]="ActiveDate ===0 ?ActiveSelectedDateClass :''">
+                            <span *ngIf="invalidStartDate" class="invalid-date error-msg">{{invalidStartDate}}</span>
+                        </div>
                         <span>
                             _
                         </span>
-                        <input placeholder="end date" #endDateElement [value]="endDateString"
-                            (change)="setEndDate($event.target.value)" (click)="ActiveDate =1"
-                            [class]="ActiveDate ===1 ?ActiveSelectedDateClass :''">
-                        <span *ngIf="invalidEndDate">{{invalidEndDate}}</span>    
+                        <div class="pos-rel">
+                            <input  [ngClass]="{'invalid-date-input':invalidEndDate}"  placeholder="end date" #endDateElement [value]="endDateString"
+                                (change)="setEndDate($event.target.value)" (click)="ActiveDate =1"
+                                [class]="ActiveDate ===1 ?ActiveSelectedDateClass :''">
+                            <span *ngIf="invalidEndDate"  class="invalid-date error-msg">{{invalidEndDate}}</span>   
+                        </div>
                     </div>
                     <!-- start date/ end date inputs container -->
                     <!-- month name -->
