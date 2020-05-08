@@ -307,6 +307,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         this.isShown$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.invalidStartDate = "";
             this.inlineEndDate = "";
+            this.rangeDropdownShow = -1;
+            this.dropdownShow = false;
+
             if (document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material").length > 0) {
                 if (response) {
                     document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("show-calendar");
