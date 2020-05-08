@@ -1,4 +1,4 @@
-<section id="manufacture" class="clearfix">
+<section id="manufacture" class="clearfix" *ngIf="!(isGetManufactureStockInProgress$ | async)">
     <!--<div>
       {{ manufacturingDetails | json }}
   </div>-->
@@ -18,15 +18,16 @@
                     <div class="col-xs-4">
                         <div class="form-group">
                             <label class="d-block">Product Name</label>
-                            <sh-select [options]="stockListDropDown$ | async" [disabled]="isUpdateCase" (selected)="getStocksWithRate($event)" [(ngModel)]="manufacturingDetails.stockUniqueName" name="stockUniqueName" placeholder="--Select product--" [ItemHeight]="33">
+                            <sh-select [options]="stockListDropDown$ | async" [disabled]="isUpdateCase" defaultValue="{{selectedProductName}}" (selected)="getStocksWithRate($event)" [(ngModel)]="manufacturingDetails.stockUniqueName" name="stockUniqueName" placeholder="--Select product--"
+                                [ItemHeight]="33">
                             </sh-select>
                         </div>
                     </div>
                     <div class="col-xs-3 row">
                         <div class="form-group pos-rel">
                             <label class="d-block">Quantity</label>
-                            <input type="text" class="form-control" [disabled]="!manufacturingDetails.stockUniqueName" decimalDigitsDirective [DecimalPlaces]="4" (keyup)="onQuantityChange(manufacturingDetails.manufacturingMultipleOf)" [(ngModel)]="manufacturingDetails.manufacturingMultipleOf"
-                                name="manufacturingMultipleOf" />
+                            <input type="text" class="form-control" [disabled]="!manufacturingDetails.stockUniqueName" decimalDigitsDirective [DecimalPlaces]="4" (keyup)="onQuantityChange(manufacturingDetails.manufacturingMultipleOf)" (blur)="onQuantityChange(manufacturingDetails.manufacturingMultipleOf)"
+                                [(ngModel)]="manufacturingDetails.manufacturingMultipleOf" name="manufacturingMultipleOf" />
                             <small class="pos-abs" style="right:0;">Multiple of <span
                                     *ngIf="manufacturingDetails.multipleOf">{{manufacturingDetails.multipleOf | json}}</span>
                             </small>
@@ -73,175 +74,188 @@
     <!-- form end -->
 
     <!--  -->
-    <div class="col-xs-12 clearfix" *ngIf="manufacturingDetails.stockUniqueName">
+    <ng-container *ngIf="!(isStockWithRateInprogress$ | async)">
+        <div class="col-xs-12 clearfix" *ngIf="manufacturingDetails.stockUniqueName">
 
-        <div class="box clearfix">
-            <!-- right column / add more resources -->
-            <div class="col-xs-6 source bdrR pdL0">
-                <h1 class="section_head">Source(Consumption)</h1>
-                <section class="linkstock">
-                    <table class="col-xs-12 linkStockTbl" *ngIf="manufacturingDetails">
-                        <thead>
-                            <tr>
-                                <th colspan="2">Product Name</th>
-                                <th>Quantity</th>
-                                <th>Unit</th>
-                                <th>Rate</th>
-                                <th>Amount</th>
-                                <th>&nbsp;</th>
-                            </tr>
-                        </thead>
-                        <tbody *ngIf="manufacturingDetails">
-                            <tr *ngFor="let stock of manufacturingDetails.linkedStocks; let i = index;">
-                                <td colspan="2"><span class="hr"></span>{{ stock.stockUniqueName }}</td>
-                                <td>{{ stock.quantity | number:'1.0-4'}}</td>
-                                <td *ngIf="stock.manufacturingUnit; else unitCode">{{ stock.manufacturingUnit }}</td>
-                                <ng-template #unitCode>
-                                    <td>{{ stock.stockUnitCode }}</td>
-                                </ng-template>
-                                <!--<td><input type="text" [(ngModel)]="stock.quantity" name="quantity_{{i}}"></td>-->
-                                <td>{{ stock.rate | number:'1.0-4'}}</td>
-                                <!--<td><input type="text" [(ngModel)]="stock.rate" name="rate_{{i}}"></td>-->
-                                <td>{{ stock.amount | number:'1.0-2'}}</td>
-                                <td class="action"><i class="fa fa-times" (click)="removeConsumptionItem(i)" aria-hidden="true"></i>
-                                </td>
-                            </tr>
+            <div class="box clearfix">
+                <!-- right column / add more resources -->
+                <div class="col-xs-6 source bdrR pdL0">
+                    <h1 class="section_head">Source(Consumption)</h1>
+                    <section class="linkstock">
+                        <table class="col-xs-12 linkStockTbl" *ngIf="manufacturingDetails">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Product Name</th>
+                                    <th>Quantity</th>
+                                    <th>Unit</th>
+                                    <th>Rate</th>
+                                    <th>Amount</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf="manufacturingDetails">
+                                <tr *ngFor="let stock of manufacturingDetails.linkedStocks; let i = index;">
+                                    <td colspan="2"><span class="hr"></span>{{ stock.stockUniqueName }}</td>
+                                    <td>{{ stock.quantity | number:'1.0-4'}}</td>
+                                    <td *ngIf="stock.manufacturingUnit; else unitCode">{{ stock.manufacturingUnit }}</td>
+                                    <ng-template #unitCode>
+                                        <td>{{ stock.stockUnitCode }}</td>
+                                    </ng-template>
+                                    <!--<td><input type="text" [(ngModel)]="stock.quantity" name="quantity_{{i}}"></td>-->
+                                    <td>{{ stock.rate | number:'1.0-4'}}</td>
+                                    <!--<td><input type="text" [(ngModel)]="stock.rate" name="rate_{{i}}"></td>-->
+                                    <td>{{ stock.amount | number:'1.0-2'}}</td>
+                                    <td class="action"><i class="fa fa-times" (click)="removeConsumptionItem(i)" aria-hidden="true"></i>
+                                    </td>
+                                </tr>
 
-                            <tr *ngIf="toggleAddLinkedStocks" class="new-row">
-                                <td colspan="2">
-                                    <span class="hr"></span>
-                                    <sh-select [forceClearReactive]="needForceClearProductList$ | async" placeholder="--Select--" [options]="allStocksDropDown$ | async" name="linkedStocks.stockUniqueName" [(ngModel)]="linkedStocks.stockUniqueName" required #linkedStockList="ngModel" (selected)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)"
-                                        [ItemHeight]="33"></sh-select>
-                                </td>
-                                <td>
-                                    <input type="text" decimalDigitsDirective [DecimalPlaces]="4" required class="form-control text-right" (blur)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)" [(ngModel)]="linkedStocks.quantity" #linkedStockQuantity="ngModel">
-                                </td>
-                                <td><input type="text" class="form-control text-right" [(ngModel)]="linkedStocks.manufacturingUnit" [disabled]="true"></td>
-
-                                <td><input type="number" [disabled]="true" required class="form-control text-right" [(ngModel)]="linkedStocks.rate" #linkedStockRate="ngModel"></td>
-                                <td> {{ getCalculatedAmount(linkedStockQuantity, linkedStockRate) | number:'1.0-2' }}
-                                </td>
-                                <td class="action">
-                                    <button [disabled]="linkedStockQuantity.invalid || linkedStockRate.invalid || linkedStockList.invalid" (click)="addConsumption(linkedStocks, $event)" class="ico-btn pd0"><i
-                                            class="fa fa-plus text-danger" aria-hidden="true"></i></button>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td colspan="7">
-                                    <button class="btn-link" (click)="toggleAddLinkedStocks = !toggleAddLinkedStocks">Add New</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot class="bdrT pdT2 pdB2 bdrB">
-                            <tr>
-                                <th colspan="2">Total:</th>
-                                <th class="text-right"> {{ getTotal('linkedStocks', 'quantity') | number:'1.0-4' }}</th>
-                                <th></th>
-                                <th></th>
-                                <th class="text-right"> {{ getTotal('linkedStocks', 'amount') | number:'1.0-2' }}</th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </section>
-            </div>
-            <!-- end right column -->
-
-            <!-- left column / total cost table -->
-            <div class="col-xs-5 mrL2">
-                <div class="form_title">
-                    <p>Total Cost</p>
-                </div>
-                <form class="form-theme clearfix" name="expenseForm">
-                    <div class="mrB2 clearfix">
-                        <p class="col-xs-9 pd0">Total Consumption Cost:</p>
-                        <p class="col-xs-3 text-right">{{ getTotal('linkedStocks', 'amount') | number:'1.0-2' }}</p>
-                    </div>
-                    <table class="width100">
-                        <thead class="tcaption">
-                            <tr>
-                                <td class="cp btn-link" (click)="onToggleAddExpensesBlock(toggleAddExpenses);" tooltip="Add A/C where expense entries will be done." placement="top" colspan="5"><i class="fa fa-plus" aria-hidden="true"></i> Add Expense
-                                </td>
-                            </tr>
-                        </thead>
-                        <tbody *ngIf="manufacturingDetails && liabilityGroupAccounts$ | async">
-                            <tr *ngFor="let expense of manufacturingDetails.otherExpenses; let i = index;">
-                                <td colspan="1">
-                                    <div class="custom-select pos-rel">
-                                        <sh-select [options]="liabilityGroupAccounts$ | async" [isFilterEnabled]="true" name="baseAccount{{i}}" [(ngModel)]="expense.baseAccount.uniqueName" class="pull-left  select-caret" style="width: 100%">
-                                        </sh-select>
-                                    </div>
-                                </td>
-                                <td class="text-center">
-                                    <label class="pd">to</label>
-                                </td>
-                                <td>
-                                    <div class="custom-select pos-rel">
-                                        <sh-select [options]="expenseGroupAccounts$ | async" [isFilterEnabled]="true" name="expense{{i}}" [(ngModel)]="expense.transactions[0].account.uniqueName" class="pull-left  select-caret" style="width: 100%">
-                                        </sh-select>
-                                    </div>
-                                </td>
-                                <td class="text-right w100">
-                                    <div class="pd"><input type="text" decimalDigitsDirective [DecimalPlaces]="2" required placeholder="Amount" [(ngModel)]="expense.transactions[0].amount" name="amount{{i}}" class="form-control text-right"></div>
-                                </td>
-                                <td class="text-center"><i class="fa fa-times" aria-hidden="true" (click)="removeExpenseItem(i)"></i></td>
-                            </tr>
-
-                            <tr *ngIf="toggleAddExpenses">
-                                <td colspan="1">
-                                    <sh-select [forceClearReactive]="needForceClearLiability$ | async" (selected)="addExpense(otherExpenses)" [options]="liabilityGroupAccounts$ | async" [(ngModel)]="otherExpenses.transactionAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Liability/Asset A/c'"
-                                        [ItemHeight]="33"></sh-select>
-                                </td>
-                                <td class="text-center">
-                                    <label class="pd">to</label>
-                                </td>
-                                <td>
-                                    <div class="custom-select pos-rel">
-                                        <sh-select [forceClearReactive]="needForceClearGroup$ | async" (selected)="addExpense(otherExpenses)" [options]="expenseGroupAccounts$ | async" [(ngModel)]="otherExpenses.baseAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Expense A/c'"
+                                <tr *ngIf="toggleAddLinkedStocks" class="new-row">
+                                    <td colspan="2">
+                                        <span class="hr"></span>
+                                        <sh-select [forceClearReactive]="needForceClearProductList$ | async" placeholder="--Select--" [options]="allStocksDropDown$ | async" name="linkedStocks.stockUniqueName" [(ngModel)]="linkedStocks.stockUniqueName" required #linkedStockList="ngModel" (selected)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)"
                                             [ItemHeight]="33"></sh-select>
-                                    </div>
-                                </td>
-                                <!--|| transactionAccountUniqueName.invalid  || baseAccountUniqueName.invalid-->
-                                <td class="text-right w100">
-                                    <div class="pd"><input type="text" (blur)="addExpense(otherExpenses)" decimalDigitsDirective [DecimalPlaces]="2" required placeholder="Amount" [(ngModel)]="otherExpenses.transactionAmount" name="transactionAmounts" class="form-control text-right"
-                                            #transactionAmount></div>
-                                </td>
-                                <td>
-                                    <button [disabled]="transactionAmount.invalid" (click)="addExpense(otherExpenses)" style="margin-top: 12px;" class="ico-btn pd0"><i class="fa fa-plus text-danger"
-                                            aria-hidden="true"></i></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="bdrT clearfix pdT1 mrT1 mrB1">
-                        <span class="col-xs-7 pd0"><strong>Total Manufacturing Expense:</strong></span>
-                        <span class="col-xs-5 text-right"><strong>{{ getTotal('otherExpenses', 'amount') | number:'1.0-2' }}</strong></span>
-                    </div>
-                    <div class="mrB1 clearfix">
-                        <span class="col-xs-7 pd0"><strong>Grand Total:</strong></span>
-                        <span class="col-xs-5 text-right"><strong>{{ (getTotal('otherExpenses', 'amount') + getTotal('linkedStocks', 'amount')) | number:'1.0-2' }}</strong></span>
-                    </div>
-                    <div class="mrB1 clearfix">
-                        <span class="col-xs-7 pd0"><strong>Cost per {{selectedProductName}}:</strong></span>
-                        <span class="col-xs-5 text-right"><strong>{{ getCostPerProduct() | number:'1.0-2'}}</strong></span>
-                    </div>
-                    <div class="pull-right mrT1 clearfix" *ngIf="!isUpdateCase">
-                        <button type="submit" class="btn btn-sm btn-success" (click)="createEntry();">Save</button>
-                        <button type="button" class="btn btn-sm btn-primary" (click)="goBackToListPage()">Cancel</button>
-                    </div>
-                    <div class="pull-right mrT1 clearfix" *ngIf="isUpdateCase">
-                        <button type="submit" class="btn btn-sm btn-success" (click)="updateEntry()">Update</button>
-                        <button type="button" class="btn btn-sm btn-danger" (click)="deleteEntry()">Delete</button>
-                    </div>
-                </form>
-            </div>
-            <!-- end left column -->
+                                    </td>
+                                    <td>
+                                        <input type="text" decimalDigitsDirective [DecimalPlaces]="4" required class="form-control text-right" (blur)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)" [(ngModel)]="linkedStocks.quantity" #linkedStockQuantity="ngModel">
+                                    </td>
+                                    <td><input type="text" class="form-control text-right" [(ngModel)]="linkedStocks.manufacturingUnit" [disabled]="true"></td>
 
+                                    <td><input type="number" [disabled]="true" required class="form-control text-right" [(ngModel)]="linkedStocks.rate" #linkedStockRate="ngModel"></td>
+                                    <td> {{ getCalculatedAmount(linkedStockQuantity, linkedStockRate) | number:'1.0-2' }}
+                                    </td>
+                                    <td class="action">
+                                        <button [disabled]="linkedStockQuantity.invalid || linkedStockRate.invalid || linkedStockList.invalid" (click)="addConsumption(linkedStocks, $event)" class="ico-btn pd0"><i
+                                            class="fa fa-plus text-danger" aria-hidden="true"></i></button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="7">
+                                        <button class="btn-link" (click)="toggleAddLinkedStocks = !toggleAddLinkedStocks">Add New</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot class="bdrT pdT2 pdB2 bdrB">
+                                <tr>
+                                    <th colspan="2">Total:</th>
+                                    <th class="text-right"> {{ getTotal('linkedStocks', 'quantity') | number:'1.0-4' }}</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="text-right"> {{ getTotal('linkedStocks', 'amount') | number:'1.0-2' }}</th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </section>
+                </div>
+                <!-- end right column -->
+
+                <!-- left column / total cost table -->
+                <div class="col-xs-5 mrL2">
+                    <div class="form_title">
+                        <p>Total Cost</p>
+                    </div>
+                    <form class="form-theme clearfix" name="expenseForm">
+                        <div class="mrB2 clearfix">
+                            <p class="col-xs-9 pd0">Total Consumption Cost:</p>
+                            <p class="col-xs-3 text-right">{{ getTotal('linkedStocks', 'amount') | number:'1.0-2' }}</p>
+                        </div>
+                        <table class="width100">
+                            <thead class="tcaption">
+                                <tr>
+                                    <td class="cp btn-link" (click)="onToggleAddExpensesBlock(toggleAddExpenses);" tooltip="Add A/C where expense entries will be done." placement="top" colspan="5"><i class="fa fa-plus" aria-hidden="true"></i> Add Expense
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf="manufacturingDetails && liabilityGroupAccounts$ | async">
+                                <tr *ngFor="let expense of manufacturingDetails.otherExpenses; let i = index;">
+                                    <td colspan="1">
+                                        <div class="custom-select pos-rel">
+                                            <sh-select [options]="liabilityGroupAccounts$ | async" [isFilterEnabled]="true" name="baseAccount{{i}}" [(ngModel)]="expense.baseAccount.uniqueName" class="pull-left  select-caret" style="width: 100%">
+                                            </sh-select>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <label class="pd">to</label>
+                                    </td>
+                                    <td>
+                                        <div class="custom-select pos-rel">
+                                            <sh-select [options]="expenseGroupAccounts$ | async" [isFilterEnabled]="true" name="expense{{i}}" [(ngModel)]="expense.transactions[0].account.uniqueName" class="pull-left  select-caret" style="width: 100%">
+                                            </sh-select>
+                                        </div>
+                                    </td>
+                                    <td class="text-right w100">
+                                        <div class="pd"><input type="text" decimalDigitsDirective [DecimalPlaces]="2" required placeholder="Amount" [(ngModel)]="expense.transactions[0].amount" name="amount{{i}}" class="form-control text-right"></div>
+                                    </td>
+                                    <td class="text-center"><i class="fa fa-times" aria-hidden="true" (click)="removeExpenseItem(i)"></i></td>
+                                </tr>
+
+                                <tr *ngIf="toggleAddExpenses">
+                                    <td colspan="1">
+                                        <sh-select [forceClearReactive]="needForceClearLiability$ | async" (selected)="addExpense(otherExpenses)" [options]="liabilityGroupAccounts$ | async" [(ngModel)]="otherExpenses.transactionAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Liability/Asset A/c'"
+                                            [ItemHeight]="33"></sh-select>
+                                    </td>
+                                    <td class="text-center">
+                                        <label class="pd">to</label>
+                                    </td>
+                                    <td>
+                                        <div class="custom-select pos-rel">
+                                            <sh-select [forceClearReactive]="needForceClearGroup$ | async" (selected)="addExpense(otherExpenses)" [options]="expenseGroupAccounts$ | async" [(ngModel)]="otherExpenses.baseAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Expense A/c'"
+                                                [ItemHeight]="33"></sh-select>
+                                        </div>
+                                    </td>
+                                    <!--|| transactionAccountUniqueName.invalid  || baseAccountUniqueName.invalid-->
+                                    <td class="text-right w100">
+                                        <div class="pd"><input type="text" (blur)="addExpense(otherExpenses)" decimalDigitsDirective [DecimalPlaces]="2" required placeholder="Amount" [(ngModel)]="otherExpenses.transactionAmount" name="transactionAmounts" class="form-control text-right"
+                                                #transactionAmount></div>
+                                    </td>
+                                    <td>
+                                        <button [disabled]="transactionAmount.invalid" (click)="addExpense(otherExpenses)" style="margin-top: 12px;" class="ico-btn pd0"><i class="fa fa-plus text-danger"
+                                            aria-hidden="true"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="bdrT clearfix pdT1 mrT1 mrB1">
+                            <span class="col-xs-7 pd0"><strong>Total Manufacturing Expense:</strong></span>
+                            <span class="col-xs-5 text-right"><strong>{{ getTotal('otherExpenses', 'amount') | number:'1.0-2' }}</strong></span>
+                        </div>
+                        <div class="mrB1 clearfix">
+                            <span class="col-xs-7 pd0"><strong>Grand Total:</strong></span>
+                            <span class="col-xs-5 text-right"><strong>{{ (getTotal('otherExpenses', 'amount') + getTotal('linkedStocks', 'amount')) | number:'1.0-2' }}</strong></span>
+                        </div>
+                        <div class="mrB1 clearfix">
+                            <span class="col-xs-7 pd0"><strong>Cost per {{selectedProductName}}:</strong></span>
+                            <span class="col-xs-5 text-right"><strong>{{ getCostPerProduct() | number:'1.0-2'}}</strong></span>
+                        </div>
+                        <div class="pull-right mrT1 clearfix" *ngIf="!isUpdateCase">
+                            <button type="submit" class="btn btn-sm btn-success" (click)="createEntry();">Save</button>
+                            <button type="button" class="btn btn-sm btn-primary" (click)="goBackToListPage()">Cancel</button>
+                        </div>
+                        <div class="pull-right mrT1 clearfix" *ngIf="isUpdateCase">
+                            <button type="submit" class="btn btn-sm btn-success" (click)="updateEntry()">Update</button>
+                            <button type="button" class="btn btn-sm btn-danger" (click)="deleteEntry()">Delete</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- end left column -->
+
+            </div>
+        </div>
+    </ng-container>
+    <div class="no-data mrT2 loader-main col-xs-12" *ngIf="(isStockWithRateInprogress$ | async)">
+        <div class="spinner2">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
         </div>
     </div>
 </section>
-
+<div class="no-data mrT2 loader-main" *ngIf="(isGetManufactureStockInProgress$ | async)">
+    <div class="spinner2">
+        <div class="cube1"></div>
+        <div class="cube2"></div>
+    </div>
+</div>
 <!--delete manufacturing confirmation modal -->
 <div bsModal #manufacturingConfirmationModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-md">

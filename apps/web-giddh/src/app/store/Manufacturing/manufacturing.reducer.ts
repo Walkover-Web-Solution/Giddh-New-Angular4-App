@@ -13,13 +13,15 @@ export interface ManufacturingState {
     stockWithRate: StockDetailResponse;
     stockToUpdate: string;
     isMFReportLoading: boolean;
+    isStockWithRateInprogress: boolean;
 }
 
 export const initialState: ManufacturingState = {
     reportData: null,
     stockWithRate: null,
     stockToUpdate: null,
-    isMFReportLoading: false
+    isMFReportLoading: false,
+    isStockWithRateInprogress: false
 };
 
 export function ManufacturingReducer(state = initialState, action: CustomActions): ManufacturingState {
@@ -45,10 +47,11 @@ export function ManufacturingReducer(state = initialState, action: CustomActions
             return Object.assign({}, state, newState);
         }
         case MANUFACTURING_ACTIONS.GET_STOCK_WITH_RATE: {
-            return state;
+            return Object.assign({}, state, { isStockWithRateInprogress: true });
         }
         case MANUFACTURING_ACTIONS.GET_STOCK_WITH_RATE_RESPONSE: {
             let newState = _.cloneDeep(state);
+            newState.isStockWithRateInprogress = false;
             let res: BaseResponse<StockDetailResponse, IMfStockSearchRequest> = action.payload;
             if (res.status === 'success') {
                 newState.stockWithRate = res.body;
