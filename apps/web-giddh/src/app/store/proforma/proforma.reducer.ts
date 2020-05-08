@@ -3,6 +3,7 @@ import { PROFORMA_ACTIONS } from '../../actions/proforma/proforma.const';
 import { ProformaFilter, ProformaGetAllVersionsResponse, ProformaGetRequest, ProformaResponse, ProformaVersionItem } from '../../models/api-models/proforma';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GenericRequestForGenerateSCD, VoucherTypeEnum } from '../../models/api-models/Sales';
+import { cloneDeep } from '../../lodash-optimized';
 
 export interface ProformaState {
 	isGenerateInProcess: boolean;
@@ -80,19 +81,19 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
 					default:
 						no = response.body.voucher.voucherDetails.voucherNumber;
 				}
-				return {
+				return cloneDeep({
 					...state,
 					isGenerateInProcess: false,
 					isGenerateSuccess: true,
 					lastGeneratedVoucherDetails: { voucherNo: no, accountUniqueName: response.request.voucher.accountDetails.uniqueName }
-				}
+				});
 			}
-			return {
+			return cloneDeep({
 				...state,
-				isGenerateInProcess: true,
+				isGenerateInProcess: false,
 				isGenerateSuccess: false,
 				lastGeneratedVoucherDetails: null
-			}
+			});
 		}
 		// endregion
 

@@ -252,6 +252,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.toaster.warningToast(this.exceedDueErrorMessage);
             this.isInvalidForm = true;
         }
+        this.checkValidations();
     }
 
     /**
@@ -366,22 +367,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      */
     public saveAdjustAdvanceReceipt(form: NgForm): void {
         let isValid: boolean = true;
-        if (this.isTaxDeducted) {
-            if (this.adjustVoucherForm.tdsTaxUniqueName === '') {
-                if (this.tdsTypeBox && this.tdsTypeBox.nativeElement)
-                    this.tdsTypeBox.nativeElement.classList.add('error-box');
-                isValid = false;
-            } else if (this.adjustVoucherForm.tdsAmount === 0) {
-                if (this.tdsAmountBox && this.tdsAmountBox.nativeElement) {
-                    this.tdsAmountBox.nativeElement.classList.add('error-box');
-                    isValid = false;
-                }
-            }
-        } else {
-            delete this.adjustVoucherForm['tdsAmount'];
-            delete this.adjustVoucherForm['description'];
-            delete this.adjustVoucherForm['tdsTaxUniqueName'];
-        }
         if (this.getBalanceDue() < 0) {
             this.toaster.errorToast(this.exceedDueErrorMessage);
             isValid = false;
@@ -406,6 +391,22 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments.filter(item => {
                 return item.voucherNumber !== '' || item.dueAmount.amountForAccount > 0;
             });
+        }
+        if (this.isTaxDeducted) {
+            if (this.adjustVoucherForm.tdsTaxUniqueName === '') {
+                if (this.tdsTypeBox && this.tdsTypeBox.nativeElement)
+                    this.tdsTypeBox.nativeElement.classList.add('error-box');
+                    isValid = false;
+            } else if (this.adjustVoucherForm.tdsAmount === 0) {
+                if (this.tdsAmountBox && this.tdsAmountBox.nativeElement) {
+                    this.tdsAmountBox.nativeElement.classList.add('error-box');
+                    isValid = false;
+                }
+            }
+        } else {
+            delete this.adjustVoucherForm['tdsAmount'];
+            delete this.adjustVoucherForm['description'];
+            delete this.adjustVoucherForm['tdsTaxUniqueName'];
         }
         if (isValid) {
             this.submitClicked.emit({
@@ -529,6 +530,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = 0.0;
         }
         this.calculateBalanceDue();
+        this.checkValidations();
     }
 
     /**
@@ -563,5 +565,22 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      */
     public getBalanceDue(): number {
         return parseFloat(Number(this.adjustPayment.grandTotal + this.adjustPayment.tcsTotal - this.adjustPayment.totalAdjustedAmount - this.depositAmount - this.adjustPayment.tdsTotal).toFixed(2));
+    }
+
+    /**
+     * To check form validation
+     *
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    public checkValidations(): void {
+        if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 0) {
+            this.adjustVoucherForm.adjustments.forEach((item, key) => {
+                if ((!item.voucherNumber && item.dueAmount.amountForAccount) || (item.voucherNumber && !item.dueAmount.amountForAccount) || (!item.voucherNumber && !item.dueAmount.amountForAccount && key>0)) {
+                    this.isInvalidForm = true;
+                } else {
+                    this.isInvalidForm = false;
+                }
+            });
+        }
     }
 }

@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren, TemplateRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { BsDatepickerDirective, BsModalRef, ModalDirective, ModalOptions, PopoverDirective, BsModalService } from 'ngx-bootstrap';
 import { select, Store } from '@ngrx/store';
@@ -364,7 +364,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private updateAccountSuccess$: Observable<boolean>;
     private createdAccountDetails$: Observable<AccountResponseV2>;
     private updatedAccountDetails$: Observable<AccountResponseV2>;
-    private generateVoucherSuccess$: Observable<boolean>;
+    private generateVoucherSuccess$: Observable<any>;
     private updateVoucherSuccess$: Observable<boolean>;
     private lastGeneratedVoucherNo$: Observable<{ voucherNo: string, accountUniqueName: string }>;
     private entriesListBeforeTax: SalesEntryClass[];
@@ -479,7 +479,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.createdAccountDetails$ = this.store.pipe(select(p => p.sales.createdAccountDetails), takeUntil(this.destroyed$));
         this.updatedAccountDetails$ = this.store.pipe(select(p => p.sales.updatedAccountDetails), takeUntil(this.destroyed$));
         this.updateAccountSuccess$ = this.store.pipe(select(p => p.sales.updateAccountSuccess), takeUntil(this.destroyed$));
-        this.generateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isGenerateSuccess), takeUntil(this.destroyed$));
+        this.generateVoucherSuccess$ = combineLatest([this.store.pipe(select(appState => appState.proforma.isGenerateSuccess)),
+        this.store.pipe(select(appState => appState.proforma.isGenerateInProcess))]).pipe(debounceTime(0), takeUntil(this.destroyed$));
         this.updateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isUpdateProformaSuccess), takeUntil(this.destroyed$));
         this.lastGeneratedVoucherNo$ = this.store.pipe(select(p => p.proforma.lastGeneratedVoucherDetails), takeUntil(this.destroyed$));
         this.lastInvoices$ = this.store.pipe(select(p => p.receipt.lastVouchers), takeUntil(this.destroyed$));
@@ -958,7 +959,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         } else {
                             this.isInvoiceAdjustedWithAdvanceReceipts = false;
                         }
-
+                        this._cdr.detectChanges();
                     }
 
                     if (obj.voucherDetails) {
@@ -1164,20 +1165,26 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.showBulkItemModal = false;
         });
 
-        this.generateVoucherSuccess$.subscribe(result => {
+        this.generateVoucherSuccess$.subscribe((result: any) => {
             if (result) {
-                this.resetInvoiceForm(this.invoiceForm);
+                const isGenerateSuccess = result[0];
+                const isGenerateInProcess = result[1];
+                if (isGenerateSuccess) {
+                    this.resetInvoiceForm(this.invoiceForm);
 
-                let lastGenVoucher: { voucherNo: string, accountUniqueName: string } = {
-                    voucherNo: '',
-                    accountUniqueName: ''
-                };
-                this.lastGeneratedVoucherNo$.pipe(take(1)).subscribe(s => lastGenVoucher = s);
-                this.invoiceNo = lastGenVoucher.voucherNo;
-                this.accountUniqueName = lastGenVoucher.accountUniqueName;
-                this.postResponseAction(this.invoiceNo);
-                if (!this.isUpdateMode) {
-                    this.getAllLastInvoices();
+                    let lastGenVoucher: { voucherNo: string, accountUniqueName: string } = {
+                        voucherNo: '',
+                        accountUniqueName: ''
+                    };
+                    this.lastGeneratedVoucherNo$.pipe(take(1)).subscribe(s => lastGenVoucher = s);
+                    this.invoiceNo = lastGenVoucher.voucherNo;
+                    this.accountUniqueName = lastGenVoucher.accountUniqueName;
+                    this.postResponseAction(this.invoiceNo);
+                    if (!this.isUpdateMode) {
+                        this.getAllLastInvoices();
+                    }
+                } else if (!isGenerateInProcess) {
+                    this.startLoader(false);
                 }
             }
         });
@@ -2059,9 +2066,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (isNaN(count)) {
             count = 0;
         }
-        if (!depositAmount) {
-            this.depositAmount = this.invFormData.voucherDetails.deposit;
-        }
         if ((this.isAccountHaveAdvanceReceipts || this.isInvoiceAdjustedWithAdvanceReceipts) && this.adjustPaymentData.totalAdjustedAmount) {
             this.adjustPaymentBalanceDueData = this.getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment();
         } else {
@@ -2903,6 +2907,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     private actionsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD> | BaseResponse<any, PurchaseRecordRequest>, invoiceForm: NgForm) {
         if (response.status === 'success' && response.body) {
+            // To clear receipts voucher store 
+            
+            this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails()); 
+            // To get re-assign receipts voucher store 
+            this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(response.body.account.uniqueName, { 
+                invoiceNumber: response.body.number, 
+                voucherType: response.body.type 
+            }));
             // reset form and other
             this.resetInvoiceForm(invoiceForm);
             this._toasty.successToast('Voucher updated Successfully');

@@ -78,7 +78,7 @@
         cursor: pointer;
         display: block;
         padding: 5px 0 10px 0px;
-        margin: 22px auto 0;
+        margin: 10px auto 22px;
         width: 100%;
         max-width: 100%;
     }
@@ -312,6 +312,9 @@
 
 .pl-15 {
     padding-left: 15px;
+}
+.pt-15{
+    padding-top: 15px;
 }
 .pl-05 {
     padding-left: 5px;
@@ -4664,9 +4667,6 @@ label {
     color: #525252;
 }
 
-#manufacture .form-theme tbody tr td:nth-child(1) {
-    padding-left: 10px;
-}
 
 #manufacture select {
     border-radius: 0;
@@ -6623,9 +6623,10 @@ table td[class*=col-]:last-child {
 }
 
 .illustration_box img {
-    /* max-width: 85%; */
-    opacity: 0.7;
-    max-width: 600px;
+    opacity: .7;
+    max-width: 400px;
+    margin: 0 auto;
+    width: 100%;
 }
 
 .cursor-pointer {
@@ -7958,7 +7959,7 @@ div#getGroupModal {
     animation-name: fadeIn;
 }
 
-.invoiceFooter {
+.invoice-footer {
     display: flex;
     padding: 20px;
     background: $white;
@@ -7971,7 +7972,7 @@ div#getGroupModal {
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
 }
 
-.menu_open .invoiceFooter {
+.menu_open .invoice-footer {
     left: 215px;
     display: flex;
     padding: 20px;
@@ -8493,7 +8494,9 @@ button.btn.btn-filter {
     float: right !important;
     margin-left: 10px !important;
 }
-
+.td_in_searchBox{
+    min-width: 190px !important;
+}
 .td_in_searchBox div i.icon-search:hover {
     color: $deep-sky-blue !important;
 }
@@ -9032,6 +9035,9 @@ input.checkbox-custom[type="checkbox"] {
     .tab-integraton .nav-tabs > li > a > span{
         font-size: 22px;
     }
+    .tab-integraton .nav-tabs > li > a span:first-child {
+        display: none;
+    }
     #setting-tab .tab-integraton .nav-tabs > li{
         width: 70px;
         margin-bottom: 15px;
@@ -9172,7 +9178,7 @@ input.checkbox-custom[type="checkbox"] {
     .setting-container {
         margin-top: 55px;
     }
-    .hideLableOnMobile button {
+    .hide-lable-on-mobile button {
         margin-top: 0 !important;
     }
     .basic > tbody > tr td:last-child,
@@ -9181,7 +9187,7 @@ input.checkbox-custom[type="checkbox"] {
     }
     header .navbar {
         background-color: $midnight-blue !important;
-        /*border-bottom: 2px solid #e6e7e8;*/
+        border-bottom:none !important;
     }
     header .hamburger_menu h4 {
         color: $white;

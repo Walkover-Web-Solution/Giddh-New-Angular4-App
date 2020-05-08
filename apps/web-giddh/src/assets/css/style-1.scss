@@ -2343,7 +2343,7 @@ padding: 0;
 }*/
 
 .account-card {
-    width: 300px;
+    max-width: 300px;
     min-height: 240px;
     float: left;
     display: inline-block;
@@ -4938,9 +4938,6 @@ border-bottom: 1px solid #e0e0e0;
 #setting-tab .nav > li > a:focus,
 #setting-tab .nav > li > a:hover {
     background: transparent;
-}
-#setting-tab .nav > li > a:hover {
-    color: #01a9f4 !important;
 }
 .navbar-inverse .navbar-nav > .open > a {
     background-color: #292929;

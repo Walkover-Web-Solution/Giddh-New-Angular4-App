@@ -5,7 +5,14 @@
     </div>
     <div class="modal-body clearfix" id="export-body">
         <form name="newRole" novalidate class="" autocomplete="off">
-            <h3 [innerHTML]="message"></h3>
+            <h3 *ngIf="!isMessageTextOrHeading" [innerHTML]="message"></h3>
+            <ng-container *ngIf="isMessageTextOrHeading">
+                <div class="modal_wrap mrB2">
+                    <h3>{{messageHeader}} </h3>
+                    <p class="text-gray font-14 mt-05">{{messageBody}}</p>
+                </div>
+            </ng-container>
+
             <div class="text-right mrT4">
                 <button type="button" class="btn btn-sm btn-success" (click)="onConfirmation()">Yes</button>
                 <button type="button" class="btn btn-sm btn-primary" (click)="onCancel()">No</button>

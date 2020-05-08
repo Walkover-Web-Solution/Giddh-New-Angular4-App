@@ -724,7 +724,7 @@
 
                                         <div class="productName">
                                             <div class="ng-select-wrap">
-                                                <sh-select [options]="salesAccounts$ | async" #selectAccount [(ngModel)]="transaction.fakeAccForSelect2" name="transaction.fakeAccForSelect2_{{entryIdx}}" (selected)="onSelectSalesAccount($event,transaction, entry)" [placeholder]="'Select A/c'" [notFoundLink]="true"
+                                                <sh-select [options]="salesAccounts$ | async" #selectAccount [(ngModel)]="transaction.fakeAccForSelect2" name="transaction.fakeAccForSelect2_{{entryIdx}}" (selected)="onSelectSalesAccount($event,transaction, entry)" [placeholder]="'Select A/c'" [notFoundLink]="true" [fixedValue]="(transaction.stockDetails && transaction.stockDetails.name) ? transaction.accountName+' ('+transaction.stockDetails?.name+')' : transaction.accountName"
                                                     [forceClearReactive]="forceClear$ | async" (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67" (onClear)="onClearSalesAccount(transaction)" [useInBuiltFilterForFlattenAc]="true">
 
                                                     <ng-template #optionTemplate let-option="option">

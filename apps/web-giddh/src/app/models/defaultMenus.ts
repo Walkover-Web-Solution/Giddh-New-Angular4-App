@@ -6,7 +6,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', additional: { tab: 'sales', tabIndex: 0 } },
     { type: 'MENU', name: 'E-way bill', uniqueName: '/pages/invoice/ewaybill' },
     // {type: 'MENU', name: 'E-way Generate', uniqueName: '/pages/invoice/ewaybill/create'},
-    { type: 'MENU', name: 'Receipt', uniqueName: '/pages/invoice/receipt' },
+    //{ type: 'MENU', name: 'Receipt', uniqueName: '/pages/invoice/receipt' },
 
     { type: 'MENU', name: 'Debit Note', uniqueName: '/pages/invoice/preview/debit note', additional: { tab: 'debit note', tabIndex: 0 } },
     { type: 'MENU', name: 'Credit Note', uniqueName: '/pages/invoice/preview/credit note', additional: { tab: 'credit note', tabIndex: 1 } },
@@ -76,7 +76,6 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
     { type: 'MENU', name: 'Vat Report', uniqueName: '/pages/vat-report' },
     { type: 'MENU', name: 'Import Data from TALLY', uniqueName: '/pages/tallysync' },
-    { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules'},
     { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: { tab: 'customer', tabIndex: 0 } },
     { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: { tab: 'vendor', tabIndex: 0 } },
     { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/aging-report', additional: { tab: 'aging-report', tabIndex: 1 } },
