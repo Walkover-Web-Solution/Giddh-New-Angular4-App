@@ -192,6 +192,9 @@
     vertical-align: middle;
 }
 .clear-both{clear: both;}
+.border-bottom{
+    border-bottom: 1px solid $gainsboro;
+}
 /* start MDB tweaks */
 .pt-0 {
     padding-top: 0px !important;
@@ -978,7 +981,7 @@ ul.sub-list {
 
 .custom-tabs .nav.nav-tabs {
     border-bottom: 1px solid #e0e0e0;
-    padding: 0px 0px 0 15px !important;
+    padding:10px 0px 0 43px !important;
     background-color: #f7f8fa;
     z-index: 9;
     position: relative;

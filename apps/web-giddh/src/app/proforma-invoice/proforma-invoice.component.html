@@ -1,4 +1,4 @@
-<hamburger-menu></hamburger-menu>
+
 
 <div class="no-data mrT2 loader-main" *ngIf="showLoader">
     <div class="spinner2">
@@ -6,37 +6,37 @@
         <div class="cube2"></div>
     </div>
 </div>
-
 <div *ngIf="!showLoader">
     <!-- region page change menu -->
-    <div class="form-group mrB mrT2 clearfix">
+    <div class="d-flex border-bottom">
+    <hamburger-menu></hamburger-menu>
+        <div class="form-group mb-0 d-flex clearfix">
+            <div class="clearfix">
+                <div class="btn-group proformaSalesTime" dropdown>
 
-        <div class="col-xs-12 clearfix">
+                    <button id="button1-basic" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle" aria-controls="dropdown-basic">
 
-            <div class="btn-group proformaSalesTime" dropdown>
+                        <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
+                            Cash
+                        </span>
 
-                <button id="button1-basic" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle" aria-controls="dropdown-basic">
+                        <small *ngIf="invoiceType==='estimates'">(Beta)</small>
+                        <span class="caret" *ngIf="!isUpdateMode"></span>
+                    </button>
 
-                    <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
-                        Cash
-                    </span>
-
-                    <small *ngIf="invoiceType==='estimates'">(Beta)</small>
-                    <span class="caret" *ngIf="!isUpdateMode"></span>
-                </button>
-
-                <ng-container *ngIf="!isUpdateMode">
-                    <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                        <li role="menuitem" (click)="pageChanged(item.value, item.additional.label)" *ngFor="let item of pageList">
-                            <a class="dropdown-item cp">{{ item.additional?.label }}</a>
-                        </li>
-                    </ul>
-                </ng-container>
+                    <ng-container *ngIf="!isUpdateMode">
+                        <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                            <li role="menuitem" (click)="pageChanged(item.value, item.additional.label)" *ngFor="let item of pageList">
+                                <a class="dropdown-item cp">{{ item.additional?.label }}</a>
+                            </li>
+                        </ul>
+                    </ng-container>
+                </div>
             </div>
 
         </div>
-
     </div>
+
     <!-- endregion -->
 
     <!-- region update mode loader-->
