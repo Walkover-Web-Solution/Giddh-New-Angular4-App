@@ -1096,6 +1096,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     }
 
     setMonth(year: number, month: number) {
+        this.initialCalendarMonths = true;
         this.startCalendar.month = moment({ y: year, M: month, d: 1 });
         if (this.linkedCalendars) {
             this.endCalendar.month = moment({ y: year, M: month, d: 1 }).add(1, 'month');
