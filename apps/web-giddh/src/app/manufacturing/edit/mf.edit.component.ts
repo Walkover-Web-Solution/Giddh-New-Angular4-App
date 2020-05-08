@@ -506,7 +506,7 @@ export class MfEditComponent implements OnInit {
      * @param {boolean} isToggle True, if need to add an expense entry
      * @memberof MfEditComponent
      */
-    public onToggleAddExpensesBlock(isToggle: boolean) {
+    public onToggleAddExpensesBlock(isToggle: boolean): void {
         this.toggleAddExpenses = !isToggle;
         this.needForceClearLiability$ = observableOf({ status: true });
         this.needForceClearGroup$ = observableOf({ status: true });
