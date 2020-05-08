@@ -2606,7 +2606,7 @@ input[type="checkbox"]:checked:after {
 .font-26 {
     font-size: 26px;
 }
-.WordWrap {
+.word-wrap {
     word-break: normal;
     white-space: nowrap;
 }
@@ -8929,7 +8929,7 @@ ngx-daterangepicker-material {
             padding-top: 10px;
             label{
                 position: absolute;
-                background-color: #fff;
+                background-color:$white;
                 padding: 0 5px;
                 top: -6px;
                 left: 9px;
@@ -8939,7 +8939,7 @@ ngx-daterangepicker-material {
             input{
                 width: 130px;
                 height: 51px;
-                border: 1px solid #d9d9d9;
+                border: 1px solid $gainsboro;
                 border-radius: 3px;
                 padding: 0 15px;
                 font-size: 14px;

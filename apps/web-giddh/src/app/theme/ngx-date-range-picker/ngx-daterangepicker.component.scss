@@ -627,7 +627,7 @@ $input-height: 3rem !default;
                 }
 
                 li:hover {
-                    background-color: $whiteSmoke;
+                    background-color: $white-smoke;
                 }
             }
             ul.range-list{
@@ -798,9 +798,10 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before{
 .mb-3{
     margin-bottom: 30px;
 }
-.pos-rel{
+.relative{
     position: relative;
 }
+
 @media (min-width: 564px) {
     .md-drppicker {
         width: auto;
@@ -1192,7 +1193,7 @@ td span {
             display: flex;
             flex-direction: column;
             .upper-part{
-                border-bottom: 1px solid $whiteSmoke;
+                border-bottom: 1px solid $white-smoke;
                 position: sticky;
                 top: 0;
                 z-index: 1;
@@ -1360,7 +1361,7 @@ td span {
         }
 
         li:hover {
-            background-color: $whiteSmoke;
+            background-color: $white-smoke;
         }
     }
 }
