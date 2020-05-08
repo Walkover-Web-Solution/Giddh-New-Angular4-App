@@ -4,9 +4,10 @@
         <div class="cube2"></div>
     </div>
 </div>
-
 <div *ngIf="!showLoader">
     <!-- region page change menu -->
+
+    <hamburger-menu></hamburger-menu>
     <div class="form-group mrB mr-t2 clearfix">
 
         <div class="col-12 col-sm-12 clearfix">
@@ -16,9 +17,9 @@
                 <button id="button1-basic" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                     aria-controls="dropdown-basic">
 
-                    <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
-                        Cash
-                    </span>
+                        <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
+                            Cash
+                        </span>
 
                     <small *ngIf="invoiceType==='estimates'"> (Beta) </small>
                     <span class="caret" *ngIf="!isUpdateMode"></span>
@@ -36,8 +37,9 @@
             </div>
 
         </div>
-
     </div>
+
+
     <!-- endregion -->
 
     <!-- region update mode loader-->
