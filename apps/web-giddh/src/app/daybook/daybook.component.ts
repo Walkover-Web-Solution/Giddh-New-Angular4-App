@@ -45,6 +45,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     @ViewChild('exportDaybookModal') public exportDaybookModal: ModalDirective;
     @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent }) public dateRangePickerCmp: DaterangePickerComponent;
     @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
+    /** Daybook advance search component reference */
     @ViewChild('daybookAdvanceSearch') public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
     public datePickerOptions: any = {
         locale: {
@@ -272,7 +273,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @param {*} entry Transaction object
      * @memberof DaybookComponent
      */
-    public expandEntry(entry) {
+    public expandEntry(entry): any {
         let isInventory: boolean = false;
         entry.isExpanded = !entry.isExpanded;
         if (entry && entry.otherTransactions) {
