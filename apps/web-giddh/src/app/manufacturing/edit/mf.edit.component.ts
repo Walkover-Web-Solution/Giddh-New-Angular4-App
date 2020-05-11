@@ -64,6 +64,8 @@ export class MfEditComponent implements OnInit {
     public isGetManufactureStockInProgress$: Observable<boolean> = observableOf(false);
     /** To get stock with rate in-progress */
     public isStockWithRateInprogress$: Observable<boolean> = observableOf(false);
+    /** set default value to date picker */
+    public bsValue = new Date();
     private initialQuantity: number = 1;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -79,8 +81,8 @@ export class MfEditComponent implements OnInit {
 
         this.store.dispatch(this.inventoryAction.GetManufacturingCreateStock());
         this.store.dispatch(this.inventoryAction.GetStock());
-        this.isGetManufactureStockInProgress$ = this.store.pipe(select(state => state.inventory.isGetManufactureStockInProgress),takeUntil(this.destroyed$));
-        this.isStockWithRateInprogress$ = this.store.pipe(select(state => state.manufacturing.isStockWithRateInprogress),takeUntil(this.destroyed$));
+        this.isGetManufactureStockInProgress$ = this.store.pipe(select(state => state.inventory.isGetManufactureStockInProgress), takeUntil(this.destroyed$));
+        this.isStockWithRateInprogress$ = this.store.pipe(select(state => state.manufacturing.isStockWithRateInprogress), takeUntil(this.destroyed$));
 
         this.groupsList$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
 
@@ -145,6 +147,7 @@ export class MfEditComponent implements OnInit {
 
         this.manufacturingDetails.quantity = 1;
         this.setCurrentPageTitle();
+        this.setToday();
     }
 
     public ngOnInit() {
@@ -471,8 +474,13 @@ export class MfEditComponent implements OnInit {
         }
     }
 
-    public setToday() {
-        this.manufacturingDetails.date = String(moment());
+    /**
+     * To set current date
+     *
+     * @memberof MfEditComponent
+     */
+    public setToday(): void {
+        this.manufacturingDetails.date = String(moment(this.bsValue).format('DD-MM-YYYY'));
     }
 
     public clearDate() {
