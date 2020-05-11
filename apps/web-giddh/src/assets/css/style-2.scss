@@ -562,11 +562,11 @@ input {
 
 .invoce-controll .nav.nav-tabs {
     margin-bottom: 15px;
-    padding: 0 0px 0 15px !important;
+    padding: 0 0px 0 43px !important;
     background-color: #f7f8fd;
     z-index: 9;
     position: relative;
-    top: -4px;
+    top: 1px;
     border-color:$gainsboro !important;
 }
 
@@ -956,7 +956,7 @@ ul.sub-list {
 }
 
 .custom-tabs .nav.nav-tabs > li {
-    padding-right: 35px;
+    padding-right: 15px;
 }
 
 .custom-tabs .nav.nav-tabs > li a {
@@ -8884,6 +8884,11 @@ input.checkbox-custom[type="checkbox"] {
 .panel-block  .panel-body{
     min-height: 350px;
 }
+.hamburger-heading-wrapper{
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid $gainsboro;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9173,6 +9178,16 @@ input.checkbox-custom[type="checkbox"] {
 }
 
 @media (max-width: 767px) {
+    .hamburger-heading-wrapper{
+        display: none;
+    }
+    .custom-tabs .nav.nav-tabs{
+        padding:0px 0px 0 15px !important;
+    }
+    .hamburger-dropdown{
+        padding:7px 15px;
+        margin-bottom: 10px;
+    }
     .btn{
         padding: 7px 8px;
     }

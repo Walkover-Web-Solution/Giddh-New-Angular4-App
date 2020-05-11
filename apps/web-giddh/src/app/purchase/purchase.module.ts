@@ -8,7 +8,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-
+import { SharedModule } from '../shared/shared.module';
 import { InvoiceRoutingModule } from '../invoice/invoice.routing.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
@@ -48,7 +48,8 @@ import { PurchaseRoutingModule } from './purchase.routing.module';
         AlertModule,
         ElementViewChildModule,
         PerfectScrollbarModule,
-        InvoiceRoutingModule
+        InvoiceRoutingModule,
+        SharedModule
     ],
     entryComponents: [],
     exports: [

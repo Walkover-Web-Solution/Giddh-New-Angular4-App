@@ -2,6 +2,7 @@ import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { SharedModule } from '../shared/shared.module';
 import { DaybookRoutingModule } from './daybook.routing.module';
 import { DaybookComponent } from './daybook.component';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
@@ -26,6 +27,7 @@ import { ExportDaybookComponent } from './export-daybook/export-daybook.componen
         ShSelectModule,
         TooltipModule,
         ElementViewChildModule,
+        SharedModule
     ],
     entryComponents: [
         PaginationComponent

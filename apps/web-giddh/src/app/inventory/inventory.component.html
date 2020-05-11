@@ -1,7 +1,8 @@
 <div style="min-height:100%;">
-    <div class="inventory-controll">
+    <hamburger-menu></hamburger-menu>
+    <div class="custom-tabs">
+       <!-- inventory-controll -->
         <tabset #inventoryStaticTabs>
-
             <tab heading="Inventory" (select)="redirectUrlToActiveTab('inventory', $event)"
                 [active]="activeTabIndex === 0">
                 <!--sidebar-->
@@ -31,32 +32,23 @@
                     </section>
                 </ng-container>
             </tab>
-
             <tab heading="Job Work" (select)="redirectUrlToActiveTab('jobwork', $event)"
                 [active]="activeTabIndex === 1">
-
                 <ng-container *ngIf="activeTabIndex === 1">
                     <jobwork></jobwork>
                 </ng-container>
-
             </tab>
-
-
             <tab heading="Manufacturing" (select)="redirectUrlToActiveTab('manufacturing', $event)"
                 [active]="activeTabIndex === 2">
-
                 <ng-container *ngIf="activeTabIndex === 2">
                     <manufacturing></manufacturing>
                 </ng-container>
-
             </tab>
-
             <tab heading="Report" (select)="redirectUrlToActiveTab('report', $event)" [active]="activeTabIndex === 3">
                 <ng-container *ngIf="activeTabIndex === 3">
                     <new-branch-transfer-list></new-branch-transfer-list>
                 </ng-container>
             </tab>
-
         </tabset>
     </div>
 </div>

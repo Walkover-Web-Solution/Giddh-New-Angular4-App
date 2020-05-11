@@ -17,7 +17,7 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { BsComponent } from './components/bs/bs.component';
 import { BsGridComponent } from './components/bs/bs-grid/bs-grid.component';
 import { BsGridRowComponent } from './components/bs/bs-grid/bs-grid-row.component';
-
+import { SharedModule } from '../shared/shared.module';
 import { PlExportXlsComponent } from './components/export/pl-export-xls.component';
 import { TbExportCsvComponent } from './components/export/tb-export-csv.component';
 import { TbExportPdfComponent } from './components/export/tb-export-pdf.component';
@@ -78,6 +78,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
         CurrencyModule,
         TooltipModule,
         AccountDetailModalModule,
+        SharedModule
     ],
 })
 export class TBPlBsModule {

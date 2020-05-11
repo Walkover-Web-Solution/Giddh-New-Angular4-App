@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -31,7 +32,8 @@ import { AuditLogsServiceModule } from './services/audit-logs.service.module';
         BsDatepickerModule,
         LaddaModule,
         ShSelectModule,
-        AuditLogsServiceModule
+        AuditLogsServiceModule,
+        SharedModule
     ],
 })
 export class AuditLogsModule {

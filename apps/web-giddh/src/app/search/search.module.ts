@@ -2,6 +2,7 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { SharedModule } from '../shared/shared.module';
 import { SearchComponent } from './search.component';
 import { SearchRoutingModule } from './search.routing.module';
 import { SearchSidebarComponent } from './components/sidebar-components/search.sidebar.component';
@@ -41,7 +42,8 @@ import { ClickOutsideModule } from 'ng-click-outside';
         DecimalDigitsModule,
         Daterangepicker,
         BsDropdownModule,
-        ClickOutsideModule
+        ClickOutsideModule,
+        SharedModule
     ]
 })
 export class SearchModule {

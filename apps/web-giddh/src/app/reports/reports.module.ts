@@ -7,7 +7,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { CommonModule } from '@angular/common';
 import { Options } from 'highcharts';
 import { BsDropdownModule, DatepickerModule, TooltipModule, } from 'ngx-bootstrap';
-
+import { SharedModule } from '../shared/shared.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { ReportsGraphComponent } from './components/report-graph-component/report.graph.component';
 import { ReportsTableComponent } from './components/report-table-components/report.table.component';
@@ -85,6 +85,7 @@ import { ColumnarReportTableComponent } from './components/columnar-report-table
         TooltipModule,
         ElementViewChildModule,
         ModalModule.forRoot(),
+        SharedModule
     ]
 })
 

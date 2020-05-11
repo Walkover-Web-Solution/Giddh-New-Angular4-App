@@ -6,6 +6,7 @@ import { FilingComponent } from './filing/filing.component';
 import { NgModule } from '@angular/core';
 import { FileGstR1Component } from './gstR1/gstR1.component';
 import { OverviewSummaryComponent } from './filing/tabs/overview/summary/summary.component';
+import { SharedModule } from '../shared/shared.module';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { FileGstR2Component } from './gstR2/gstR2.component';
@@ -58,7 +59,8 @@ import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.co
         InvoiceModule,
         PerfectScrollbarModule,
         CurrencyModule,
-        ConfirmModalModule
+        ConfirmModalModule,
+        SharedModule
     ],
     providers: [],
     entryComponents: [

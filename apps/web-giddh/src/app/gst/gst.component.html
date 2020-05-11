@@ -3,7 +3,7 @@
     <div class="text-overdue ss" style="margin: 20px 0px 0px;" *ngIf="!activeCompanyGstNumber">
         <i class="text-middle" style="padding: 0 2%;">Please add GSTIN in company setting to view report.</i>
     </div>
-
+    <hamburger-menu [pageHeading]="'GST'" class="hamburger-heading-wrapper"></hamburger-menu>
     <div class="tax-engine"
         [ngClass]="{'content-disabled': ((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async)) || !activeCompanyGstNumber}">
         <div class="header-band filings-header clearfix">

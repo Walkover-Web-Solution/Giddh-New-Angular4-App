@@ -1,4 +1,5 @@
 <section>
+    <hamburger-menu></hamburger-menu>
     <nav class="navbar">
         <div class="invoce-controll">
             <div class="row" style="margin: 0 !important;">
@@ -53,12 +54,9 @@
                 </div>
 
                 <!--<invoice-page-dd (pageChanged)="goToRoute($event)" (selectVoucher)="voucherChange($event)"></invoice-page-dd>-->
-                <div class="" id="setting-tab">
+                <div id="setting-tab">
                     <ng-template [ngIf]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'">
-
-                        
                         <tabset #staticTabs>
-
                             <tab heading="Debit Note" [active]="activeTab === 'debit note'" (select)="tabChanged('debit note', $event);voucherChanged('debitNote')">
                                 <div *ngIf="activeTab === 'debit note'" class="debit-note">
                                     <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
