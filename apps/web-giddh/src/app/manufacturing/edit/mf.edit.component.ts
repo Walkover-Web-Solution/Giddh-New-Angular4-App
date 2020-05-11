@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ToasterService } from './../../services/toaster.service';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
@@ -20,6 +20,8 @@ import { AccountService } from '../../services/account.service';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { createSelector } from 'reselect';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
+import { CurrentPage } from '../../models/api-models/Common';
+import { GeneralActions } from '../../actions/general/general.actions';
 
 @Component({
     templateUrl: './mf.edit.component.html'
@@ -58,6 +60,12 @@ export class MfEditComponent implements OnInit {
     public liabilityGroupAccounts$: Observable<IOption[]>;
     /** To check which index of expense is in editable mode */
     public isEditableIndex: number = null;
+    /** To get manufacture stock list in-progress */
+    public isGetManufactureStockInProgress$: Observable<boolean> = observableOf(false);
+    /** To get stock with rate in-progress */
+    public isStockWithRateInprogress$: Observable<boolean> = observableOf(false);
+    /** set default value to date picker */
+    public bsValue = new Date();
     private initialQuantity: number = 1;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -68,10 +76,13 @@ export class MfEditComponent implements OnInit {
         private _location: Location,
         private _inventoryService: InventoryService,
         private _accountService: AccountService,
+        private generalAction: GeneralActions,
         private _toasty: ToasterService) {
 
         this.store.dispatch(this.inventoryAction.GetManufacturingCreateStock());
         this.store.dispatch(this.inventoryAction.GetStock());
+        this.isGetManufactureStockInProgress$ = this.store.pipe(select(state => state.inventory.isGetManufactureStockInProgress), takeUntil(this.destroyed$));
+        this.isStockWithRateInprogress$ = this.store.pipe(select(state => state.manufacturing.isStockWithRateInprogress), takeUntil(this.destroyed$));
 
         this.groupsList$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
 
@@ -135,6 +146,8 @@ export class MfEditComponent implements OnInit {
         });
 
         this.manufacturingDetails.quantity = 1;
+        this.setCurrentPageTitle();
+        this.setToday();
     }
 
     public ngOnInit() {
@@ -461,44 +474,49 @@ export class MfEditComponent implements OnInit {
         }
     }
 
-    public setToday() {
-        this.manufacturingDetails.date = String(moment());
+    /**
+     * To set current date
+     *
+     * @memberof MfEditComponent
+     */
+    public setToday(): void {
+        this.manufacturingDetails.date = String(moment(this.bsValue).format('DD-MM-YYYY'));
     }
 
     public clearDate() {
         this.manufacturingDetails.date = '';
     }
 
-// /**   will be useful in version 2
-//  *TODO:  To return account details
-//  *
-//  * @param {string} uniqueName Unique name of
-//  * @param {string} category
-//  * @returns
-//  * @memberof MfEditComponent
-//  */
-// public getAccountName(uniqueName: string, category: string) {
-//         let name;
-//         let uniqueNameOfAcc;
-//         if (category === 'liabilityGroupAccounts') {
-//             this.liabilityGroupAccounts$.subscribe((data) => {
-//                 let account = data.find((acc) => acc.value === uniqueName);
-//                 if (account) {
-//                     name = account.label;
-//                     uniqueNameOfAcc = account.value;
-//                 }
-//             });
-//         } else if (category === 'expenseGroupAccounts') {
-//             this.expenseGroupAccounts$.subscribe((data) => {
-//                 let account = data.find((acc) => acc.value === uniqueName);
-//                 if (account) {
-//                     name = account.label;
-//                     uniqueNameOfAcc = account.value;
-//                 }
-//             });
-//         }
-//         return observableOf(uniqueNameOfAcc);
-//     }
+    // /**   will be useful in version 2
+    //  *TODO:  To return account details
+    //  *
+    //  * @param {string} uniqueName Unique name of
+    //  * @param {string} category
+    //  * @returns
+    //  * @memberof MfEditComponent
+    //  */
+    // public getAccountName(uniqueName: string, category: string) {
+    //         let name;
+    //         let uniqueNameOfAcc;
+    //         if (category === 'liabilityGroupAccounts') {
+    //             this.liabilityGroupAccounts$.subscribe((data) => {
+    //                 let account = data.find((acc) => acc.value === uniqueName);
+    //                 if (account) {
+    //                     name = account.label;
+    //                     uniqueNameOfAcc = account.value;
+    //                 }
+    //             });
+    //         } else if (category === 'expenseGroupAccounts') {
+    //             this.expenseGroupAccounts$.subscribe((data) => {
+    //                 let account = data.find((acc) => acc.value === uniqueName);
+    //                 if (account) {
+    //                     name = account.label;
+    //                     uniqueNameOfAcc = account.value;
+    //                 }
+    //             });
+    //         }
+    //         return observableOf(uniqueNameOfAcc);
+    //     }
 
     /**
      * To toggle add expense entry block
@@ -510,5 +528,18 @@ export class MfEditComponent implements OnInit {
         this.toggleAddExpenses = !isToggle;
         this.needForceClearLiability$ = observableOf({ status: true });
         this.needForceClearGroup$ = observableOf({ status: true });
+    }
+
+    /**
+     *To set menu title name
+     *
+     * @memberof MfEditComponent
+     */
+    public setCurrentPageTitle() {
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = "Manufacturing";
+        currentPageObj.url = "";
+        currentPageObj.additional = "";
+        this.store.dispatch(this.generalAction.setPageTitle(currentPageObj));
     }
 }
