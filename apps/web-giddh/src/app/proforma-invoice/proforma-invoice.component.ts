@@ -4505,9 +4505,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 } else {
                     this.isAccountHaveAdvanceReceipts = false;
                 }
+                this._cdr.detectChanges();
             });
         } else {
             this.isAccountHaveAdvanceReceipts = false;
+            this._cdr.detectChanges();
         }
     }
 }

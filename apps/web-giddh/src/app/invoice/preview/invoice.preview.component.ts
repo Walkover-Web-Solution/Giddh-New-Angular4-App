@@ -16,7 +16,7 @@ import {
     TemplateRef
 } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
-import { BsModalRef, ModalOptions , BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
@@ -1413,8 +1413,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     private parseBalRes(res) {
-        this.totalSale = res.body.grandTotal;
-        this.totalDue = res.body.totalDue;
+        if (res && res.body) {
+            this.totalSale = res.body.grandTotal;
+            this.totalDue = res.body.totalDue;
+        }
+
         // get user country from his profile
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile) {
