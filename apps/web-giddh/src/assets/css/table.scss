@@ -24,6 +24,9 @@
         border-bottom: none !important;
         white-space: nowrap;
     }
+    thead > tr > th.td_in_searchBox{
+        min-width: 190px !important;
+    }
     tbody > tr > td {
         font-weight: 400;
         padding: 14px 10px;
@@ -160,7 +163,7 @@
             cursor: pointer;
             display: block;
             padding: 5px 0 10px 0px;
-            margin: 0 auto 22px;
+            margin: 10px auto 22px;
             width: 100%;
             max-width: 100%;
         }

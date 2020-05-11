@@ -16,7 +16,7 @@ import {
     TemplateRef
 } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
-import { BsModalRef, ModalOptions , BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
@@ -632,6 +632,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
         this.voucherDetails$.subscribe(response => {
             if (response) {
+                this.updateNewAccountInVoucher(response);
                 if (response.subTotal) {
                     this.invFormData.voucherDetails.totalTaxableValue = response.subTotal.amountForAccount
                     this.invFormData.voucherDetails.subTotal = response.subTotal.amountForAccount;
@@ -1484,10 +1485,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     public onPerformAdjustPaymentAction(item: ReceiptItem): void {
+        let customerUniqueName = this.getUpdatedAccountUniquename(item.voucherNumber, item.account.uniqueName);
+
         this.invFormData.voucherDetails.balanceDue = item.balanceDue.amountForAccount;
         this.invFormData.voucherDetails.grandTotal = item.grandTotal.amountForAccount;
         this.invFormData.voucherDetails.customerName = item.account.name;
-        this.invFormData.voucherDetails.customerUniquename = item.account.uniqueName;
+        this.invFormData.voucherDetails.customerUniquename = customerUniqueName;
         this.invFormData.voucherDetails.voucherDate = item.voucherDate
         this.invFormData.accountDetails.currencySymbol = item.accountCurrencySymbol;
         this.changeStatusInvoiceUniqueName = item.uniqueName;
@@ -1495,7 +1498,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         // To clear receipts voucher store
         this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
         // To get re-assign receipts voucher store
-        this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(item.account.uniqueName, {
+        this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(customerUniqueName, {
             invoiceNumber: item.voucherNumber,
             voucherType: VoucherTypeEnum.sales
         }));
@@ -1593,5 +1596,45 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 }
             });
         }
+    }
+
+    /**
+     * This will update the updated account in voucher list of item
+     *
+     * @param {*} voucherUpdatedDetails
+     * @memberof InvoicePreviewComponent
+     */
+    public updateNewAccountInVoucher(voucherUpdatedDetails: any): void {
+        if (this.voucherData && this.voucherData.items && voucherUpdatedDetails) {            
+            let loop = 0;
+            this.voucherData.items.forEach(voucher => {
+                if (voucher.voucherNumber === voucherUpdatedDetails.number) {
+                    if (voucher.account.uniqueName !== voucherUpdatedDetails.account.uniqueName) {
+                        this.voucherData.items[loop].account = voucherUpdatedDetails.account;
+                    }
+                }
+                loop++;
+            });
+        }
+    }
+
+    /**
+     * This will give the updated account uniquename
+     *
+     * @param {string} voucherNo
+     * @param {string} currentAccountUniqueName
+     * @returns {string}
+     * @memberof InvoicePreviewComponent
+     */
+    public getUpdatedAccountUniquename(voucherNo: string, currentAccountUniqueName: string): string {
+        let newAccountUniqueName = currentAccountUniqueName;
+        if (this.voucherData && this.voucherData.items && voucherNo) {            
+            this.voucherData.items.forEach(voucher => {
+                if (voucher.voucherNumber === voucherNo) {
+                    newAccountUniqueName = voucher.account.uniqueName;
+                }
+            });
+        }
+        return newAccountUniqueName;
     }
 }
