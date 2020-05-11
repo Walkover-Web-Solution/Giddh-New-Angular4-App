@@ -39,15 +39,15 @@
                     </button>
 
                 </div>
+                <div class="clear-filter form-group" *ngIf="showAdvanceSearchIcon">
+                    <button class="btn btn-filter" (click)="initialRequest();">
+                           <span class="icon-cross"></span> Clear Filter
+                        </button>
+                </div>
                 <div class="expand-export">
                     <button type="button" class="btn btn-default expandBtnHideDesktop" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
                                               'Expand All'}}
                     </button>
-                    <div class="clear-filter">
-                        <button class="btn btn-filter" (click)="resetAdvanceSearch();">
-                    <span class="icon-cross"></span> Clear Filter
-                </button>
-                    </div>
                     <button type="button" class="btn btn-default export-btn pull-right" (click)="exportDaybook()">Export</button>
                 </div>
 
@@ -173,7 +173,7 @@
 <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <daybook-advance-search-model [startDate]="daybookQueryRequest.from" [endDate]="daybookQueryRequest.to" (closeModelEvent)="closeAdvanceSearchPopup($event)"></daybook-advance-search-model>
+            <daybook-advance-search-model #daybookAdvanceSearch [startDate]="daybookQueryRequest.from" [endDate]="daybookQueryRequest.to" (closeModelEvent)="closeAdvanceSearchPopup($event)"></daybook-advance-search-model>
         </div>
     </div>
 </div>
