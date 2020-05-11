@@ -48,19 +48,16 @@
                                         (keydown)="detectKey($event)"
                                         (keydown.Tab)="validateAccount(transaction, $event, i)"
                                         (keydown.arrowDown)="openCreateAccountPopupIfRequired($event)">
-                                    <!-- *ngIf="transaction.inventory" -->
-                                    <!-- [hidden]="!transaction.stocks" Alok Sir -->
-                                    <table>
+                                    <table *ngIf="requestObj.voucherType !== 'Contra'">
                                         <tbody>
                                             <ng-container *ngIf="transaction.inventory && transaction.inventory.length">
                                                 <tr *ngFor="let inventory of transaction.inventory;let idx=index;let l=last"
                                                     [ngClass]="{'activeRow': isSelectedRow && selectedStockIdx === idx && selectedIdx === i}">
-                                                    <!-- #Item " -->
-                                                    <td colspan="" [style.width.px]="250"><input onReturn
+                                                    <td [style.width.px]="250"><input onReturn
                                                             (keydown)="detectKey($event)"
                                                             (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)"
                                                             (keyup)="searchStock($event?.target?.value);" type="text"
-                                                            placeholder="Type to search stock"
+                                                            placeholder="Type to search stock - {{requestObj.voucherType}}"
                                                             class="form-control stock-field"
                                                             [(ngModel)]="inventory.stock.name"
                                                             [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}"
@@ -108,7 +105,6 @@
                                         </tbody>
                                     </table>
                                 </td>
-                                <!-- (blur)="onAccountBlur();selectRow(false,null)"  -->
                                 <td>
                                     <input onReturn
                                         [disabled]="!transaction.selectedAccount.name || transaction.type !== 'by'"
@@ -176,7 +172,6 @@
     <div class="sidebar_list form-control" [hidden]="!showLedgerAccountList">
         <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
         <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
-        <!-- (noToggleClick)="toggleSelected($event)" (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight" [dropdownMinHeight]="dropdownMinHeight"-->
         <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList"
             [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)"
             [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'"
@@ -194,7 +189,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- Cheque Detail Modal-->
 <div bsModal #chequeEntryModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">

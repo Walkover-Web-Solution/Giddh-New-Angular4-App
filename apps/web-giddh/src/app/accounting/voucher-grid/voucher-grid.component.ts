@@ -61,9 +61,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
     @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
-
     @ViewChild('chequeEntryModal') public chequeEntryModal: ModalDirective;
-
     @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
     @ViewChild('particular') public accountField: any;
     @ViewChild('dateField') public dateField: ElementRef;
@@ -73,8 +71,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChild('chqFormSubmitBtn') public chqFormSubmitBtn: ElementRef;
     @ViewChild('submitButton') public submitButton: ElementRef;
     @ViewChild('resetButton') public resetButton: ElementRef;
-
     @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
+    @ViewChild('byAmountField') public byAmountField: ElementRef;
+    @ViewChild('toAmountField') public toAmountField: ElementRef;
 
     public showLedgerAccountList: boolean = false;
     public selectedInput: 'by' | 'to' = 'by';
@@ -434,17 +433,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 }
             }
 
-            // Alok Sir
-            // if (acc && acc.stocks) {
-            //   this.groupUniqueName = accModel.groupUniqueName;
-            //   this.selectAccUnqName = acc.uniqueName;
-            //   this.requestObj.transactions[idx].inventory.push(this.initInventory());
-            // } else if (!acc.stocks) {
-            //   setTimeout(() => {
-            //     this.selectedParticular.focus();
-            //   }, 200);
-            // }
-
+            setTimeout(() => {
+                if(transaction.type === 'by') {
+                    this.byAmountField.nativeElement.focus();
+                } else {
+                    this.toAmountField.nativeElement.focus();
+                }
+            }, 20);
+            
         } else {
             this.deleteRow(idx);
         }
@@ -873,7 +869,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             ev.preventDefault();
             return;
         }
-        // console.log(transactionObj, ev);
     }
 
     public onItemSelected(ev: IOption) {
