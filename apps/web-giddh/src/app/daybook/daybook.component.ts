@@ -123,8 +123,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.daybook.data), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data && data.entries) {
                 this.daybookQueryRequest.page = data.page;
-                data.entries.map(a => {
-                    a.isExpanded = false;
+                data.entries.map(item => {
+                    item.isExpanded = false;
                 });
                 this.loadPaginationComponent(data);
                 this.daybookData$ = observableOf(data);
@@ -313,7 +313,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
         });
     }
 
-    // /**
+    // /** TODO: it is a suggestion may be use later
     //  * To reset advance search form
     //  *
     //  * @memberof DaybookComponent
