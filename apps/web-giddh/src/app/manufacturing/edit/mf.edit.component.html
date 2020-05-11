@@ -34,8 +34,14 @@
                         </div>
                     </div>
                     <div class="col-xs-3">
+                        <div class="form-group mrR1">
+                            <label class="d-block">Date</label>
+                            <div class="col-xs-8" style="padding: 0">
+                                <input type="text" name="invoiceDateRange" bsDatepicker required class="form-control" style="width: 100%" [(ngModel)]="manufacturingDetails.date" [bsValue]="bsValue" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" />
+                            </div>
+                        </div>
 
-                        <div class="form-group mrR1" [attachOutsideOnClick]="true" (clickOutside)="showFromDatePicker=false;">
+                        <!-- <div class="form-group mrR1" [attachOutsideOnClick]="true" (clickOutside)="showFromDatePicker=false;">
                             <label class="d-block">Date</label>
                             <div class="input-group">
                                 <input type="text" name="from" [ngModel]="moment(manufacturingDetails.date).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control" required />
@@ -64,7 +70,7 @@
 
                                 </ul>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </form>
