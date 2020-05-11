@@ -15,6 +15,7 @@ import { DaybookQueryRequest } from '../models/api-models/DaybookRequest';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { DaybookAdvanceSearchModelComponent } from './advance-search/daybook-advance-search.component';
 
 @Component({
     selector: 'daybook',
@@ -44,6 +45,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     @ViewChild('exportDaybookModal') public exportDaybookModal: ModalDirective;
     @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent }) public dateRangePickerCmp: DaterangePickerComponent;
     @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
+    @ViewChild('daybookAdvanceSearch') public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
     public datePickerOptions: any = {
         locale: {
             applyClass: 'btn-green',
@@ -164,6 +166,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             if (obj.action === 'search') {
                 this.advanceSearchModel.hide();
                 this.go(this.searchFilterData);
+                this.showAdvanceSearchIcon = true;
             } else if (obj.action === 'export') {
                 this.daybookExportRequestType = 'post';
                 this.exportDaybookModal.show();
@@ -200,6 +203,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 this.go();
             }
         });
+        this.showAdvanceSearchIcon = false;
+        if (this.daybookAdvanceSearchModelComponent) {
+            this.daybookAdvanceSearchModelComponent.advanceSearchForm.reset();
+        }
     }
 
     public pageChanged(event: any): void {
@@ -259,10 +266,27 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * To check is entry expanded
+     *
+     * @param {*} entry Transaction object
+     * @memberof DaybookComponent
+     */
     public expandEntry(entry) {
-
+        let isInventory: boolean = false;
         entry.isExpanded = !entry.isExpanded;
-        this.checkIsStockEntryAvailable();
+        if (entry && entry.otherTransactions) {
+            isInventory = entry.otherTransactions.some(otherTrasaction => {
+                if (otherTrasaction && otherTrasaction.inventory) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        }
+        if (isInventory && entry.isExpanded) {
+            this.checkIsStockEntryAvailable();
+        }
     }
 
     /**
@@ -288,30 +312,31 @@ export class DaybookComponent implements OnInit, OnDestroy {
         });
     }
 
-/**
- * To reset advance search form
- *
- * @memberof DaybookComponent
- */
-public resetAdvanceSearch(): void {
-        this.showAdvanceSearchIcon = false;
-        let universalDate;
-        // get application date
-        this.universalDate$.pipe(take(1)).subscribe(date => {
-            universalDate = date;
-        });
+    // /**
+    //  * To reset advance search form
+    //  *
+    //  * @memberof DaybookComponent
+    //  */
+    // public resetAdvanceSearch(): void {
+    //     this.showAdvanceSearchIcon = false;
+    //     let universalDate;
+    //     // get application date
+    //     this.universalDate$.pipe(take(1)).subscribe(date => {
+    //         universalDate = date;
+    //     });
 
-        // set date picker date as application date
-        if (universalDate.length > 1) {
-            this.daybookQueryRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-            this.daybookQueryRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-            this.datePickerOptions = {
-                ...this.datePickerOptions,
-                startDate: moment(new Date(universalDate[0]), 'DD-MM-YYYY').toDate(),
-                endDate: moment(new Date(universalDate[1]), 'DD-MM-YYYY').toDate(),
-                chosenLabel: universalDate[2]
-            };
-        }
-    }
+    //     // set date picker date as application date
+    //     if (universalDate.length > 1) {
+    //         this.daybookQueryRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+    //         this.daybookQueryRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+    //         this.datePickerOptions = {
+    //             ...this.datePickerOptions,
+    //             startDate: moment(new Date(universalDate[0]), 'DD-MM-YYYY').toDate(),
+    //             endDate: moment(new Date(universalDate[1]), 'DD-MM-YYYY').toDate(),
+    //             chosenLabel: universalDate[2]
+    //         };
+    //     }
+    //      this.go(this.searchFilterData);
+    // }
 }
 
