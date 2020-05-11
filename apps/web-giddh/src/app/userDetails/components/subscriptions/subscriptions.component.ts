@@ -5,11 +5,14 @@ import { ReplaySubject, Observable } from 'rxjs';
 import { AppState } from '../../../store/roots';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { SubscriptionsActions } from '../../../actions/userSubscriptions/subscriptions.action';
-import { SubscriptionsUser, CompaniesWithTransaction } from '../../../models/api-models/Subscriptions';
+import { SubscriptionsUser, CompaniesWithTransaction, UserDetails } from '../../../models/api-models/Subscriptions';
 import * as moment from 'moment';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SubscriptionsService } from '../../../services/subscriptions.service';
-import { CompanyResponse } from '../../../models/api-models/Company';
+import { CompanyResponse, SubscriptionRequest, CreateCompanyUsersPlan } from '../../../models/api-models/Company';
+import { GeneralService } from '../../../services/general.service';
+import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
+import { CompanyActions } from '../../../actions/company.actions';
 
 @Component({
     selector: 'subscriptions',
@@ -38,21 +41,25 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     public currentCompanyPlan: any = '';
     public activityLogAsideMenuState: string = 'out';
     public companyDetailsAsideMenuState: string = 'out';
-
-    associatedCompanies = [
-        {companyName: 'ABC Limited'},
-        {companyName: 'ABC Limited'},
-        {companyName: 'ABC Limited'},
-        {companyName: 'ABC Limited'},
-        {companyName: 'ABC Limited'},
-        {companyName: 'ABC Limited'},
-        {companyName: 'ABC Limited'},
+    public associatedCompanies = [
+        { companyName: 'ABC Limited' },
+        { companyName: 'ABC Limited' },
+        { companyName: 'ABC Limited' },
+        { companyName: 'ABC Limited' },
+        { companyName: 'ABC Limited' },
+        { companyName: 'ABC Limited' },
+        { companyName: 'ABC Limited' },
     ];
+    public subscriptionRequestObj: SubscriptionRequest = {
+        planUniqueName: '',
+        subscriptionId: '',
+        userUniqueName: '',
+        licenceKey: ''
+    };
+    public loggedInUser: UserDetails;
+    public subscriptionPlan: CreateCompanyUsersPlan;
 
-    constructor(private store: Store<AppState>,
-        private _subscriptionsActions: SubscriptionsActions,
-        private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService) {
-
+    constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions) {
         this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
         this.subscriptions$ = this.store.pipe(select(s => s.subscriptions.subscriptions), takeUntil(this.destroyed$));
         this.companies$ = this.store.select(cmp => cmp.session.companies).pipe(takeUntil(this.destroyed$));
@@ -60,6 +67,10 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     public ngOnInit() {
+        if (this.generalService.user) {
+            this.loggedInUser = this.generalService.user;
+        }
+
         this.companies$.subscribe(company => {
             if (company) {
                 this.activeCompanyUniqueName$.pipe(take(1)).subscribe(active => {
@@ -73,8 +84,8 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         this.subscriptionService.getSubScribedCompanies().subscribe((res) => {
             this.isLoading = false;
 
-            if(res && res.status === "success") {
-                if(!res.body || !res.body[0]) {
+            if (res && res.status === "success") {
+                if (!res.body || !res.body[0]) {
                     this.isPlanShow = true;
                 }
             } else {
@@ -137,10 +148,10 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
      * @memberof SubscriptionsComponent
      */
     public showCurrentCompanyPlan() {
-        if(this.activeCompany && this.subscriptions) {
+        if (this.activeCompany && this.subscriptions) {
             let planMatched = false;
             this.subscriptions.forEach(key => {
-                if(this.activeCompany.subscription && key.subscriptionId === this.activeCompany.subscription.subscriptionId) {
+                if (this.activeCompany.subscription && key.subscriptionId === this.activeCompany.subscription.subscriptionId) {
                     planMatched = true;
                     this.seletedUserPlans = key;
                     if (this.seletedUserPlans && this.seletedUserPlans.companiesWithTransactions) {
@@ -149,13 +160,15 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
                 }
             });
 
-            if(!planMatched) {
+            if (!planMatched) {
                 this.seletedUserPlans = this.subscriptions[0];
                 if (this.seletedUserPlans && this.seletedUserPlans.companiesWithTransactions) {
                     this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
                 }
             }
         }
+
+        console.log(this.seletedUserPlans);
     }
 
     public toggleActivityLogAsidePane(event?): void {
@@ -188,15 +201,58 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         }
     }
 
-    openModal(MoveCompany: TemplateRef<any>) {
+    public openModal(MoveCompany: TemplateRef<any>) {
         this.modalRef = this.modalService.show(MoveCompany);
     }
 
-    openModalMove(deactivateCompany: TemplateRef<any>) {
+    public openModalMove(deactivateCompany: TemplateRef<any>) {
         this.modalRef = this.modalService.show(deactivateCompany);
     }
 
+    public renewPlan(): void {
+        if(this.seletedUserPlans && this.seletedUserPlans.planDetails && this.seletedUserPlans.planDetails.amount > 0) {
 
+            this.subscriptionPlan = {
+                companies: this.seletedUserPlans.companies,
+                totalCompanies: this.seletedUserPlans.totalCompanies,
+                userDetails: {
+                    name: this.seletedUserPlans.userDetails.name,
+                    uniqueName: this.seletedUserPlans.userDetails.uniqueName,
+                    email: this.seletedUserPlans.userDetails.email,
+                    signUpOn: this.seletedUserPlans.userDetails.signUpOn,
+                    mobileno: this.seletedUserPlans.userDetails.mobileno
+                },
+                additionalTransactions: this.seletedUserPlans.additionalTransactions,
+                createdAt: this.seletedUserPlans.createdAt,
+                planDetails: this.seletedUserPlans.planDetails,
+                additionalCharges: this.seletedUserPlans.additionalCharges,
+                status: this.seletedUserPlans.status,
+                subscriptionId: this.seletedUserPlans.subscriptionId,
+                balance: this.seletedUserPlans.balance,
+                expiry: this.seletedUserPlans.expiry,
+                startedAt: this.seletedUserPlans.startedAt,
+                companiesWithTransactions: this.seletedUserPlans.companiesWithTransactions,
+                companyTotalTransactions: this.seletedUserPlans.companyTotalTransactions,
+                totalTransactions: this.seletedUserPlans.totalTransactions
+            };
+
+            this._route.navigate(['billing-detail', 'buy-plan']);
+            this.store.dispatch(this.companyActions.selectedPlan(this.subscriptionPlan));
+        } else {
+            this.subscriptionRequestObj.userUniqueName = this.loggedInUser.uniqueName;
+            if (this.seletedUserPlans.subscriptionId) {
+                this.subscriptionRequestObj.subscriptionId = this.seletedUserPlans.subscriptionId;
+                this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true });
+            } else if (!this.seletedUserPlans.subscriptionId) {
+                this.subscriptionRequestObj.planUniqueName = this.seletedUserPlans.planDetails.uniqueName;
+                this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true });
+            }
+        }
+    }
+
+    public patchProfile(obj): void {
+        this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
+    }
 
     // public getSubscriptionList() {
     //   this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
