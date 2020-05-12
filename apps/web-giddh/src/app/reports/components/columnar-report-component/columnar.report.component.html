@@ -1,12 +1,5 @@
-<div class="columnar-report-page">
+<div class="columnar-report-page mrT2">
     <div class="container-fluid font-14">
-        <div class="clearfix mt-2 mb-2">
-            <ul class="list-inline d-inline-block middle nav-report">
-                <li class="active"><a href="javascript:void(0)" [routerLink]="['/pages/reports/reports-dashboard']">Report</a>
-                    <span class="d-inline-block pl-1"> ></span></li>
-                <li><a href="javascript:void(0)">Monthly Columnar Report</a></li>
-            </ul>
-        </div>
         <div class="row">
             <div class="col-sm-3 col-xs-12 mb-2">
                 <sh-select [options]="selectYear" [fixedValue]="activeFinancialYearLabel" [placeholder]="'Select Year'" name="financialYear" (selected)="selectFinancialYear($event);" [forceClearReactive]="forceClear$ | async"></sh-select>
@@ -43,13 +36,25 @@
             <div class="col-sm-3 col-xs-6 mb-2 clear-both">
                 <button class="btn btn-pink " [disabled]="!isFormValid() || isLoading" (click)="exportReport(false);">Export</button>
                 <button class="btn btn-pink " [disabled]="!isFormValid() || isLoading" (click)="exportReport(true);">Show</button>
+                <button class="btn btn-pink " (click)="clearFilter();">Reset</button>
             </div>
         </div>
 
     </div>
 </div>
 
-<div *ngIf="columnarReportResponse" class="back-btn text-center pr-1 mt-1 mb-1">
+<!-- <div *ngIf="columnarReportResponse" class="back-btn text-center pr-1 mt-1 mb-1">
     <button class="btn btn-default" (click)="clearFilter()"> <span class="icon-cross"></span>Clear Filter</button>
-</div>
+</div> -->
 <columnar-report-table-component [columnarReportResponse]="columnarReportResponse"></columnar-report-table-component>
+<div class="paginationWrapper" *ngIf="columnarReportResponse && columnarReportResponse?.totalPages > 1">
+    <pagination [totalItems]="columnarReportResponse.totalItems" [(ngModel)]="columnarReportResponse.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" [itemsPerPage]="paginationCount" (pageChanged)="pageChanged($event)"></pagination>
+</div>
+<div *ngIf="isLoading && isShowColumnarReport">
+    <div class="no-data mrT2 loader-main">
+        <div class="spinner2">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
+    </div>
+</div>

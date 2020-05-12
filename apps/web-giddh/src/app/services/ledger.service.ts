@@ -419,13 +419,19 @@ export class LedgerService {
      * @memberof LedgerService
      */
     public downloadColumnarReport(companyUniqueName: string, groupUniqueName: string, request: any, isShowData?: boolean): Observable<BaseResponse<any, any>> {
-        let URL: string = '';
+        let url: string = '';
         if (isShowData) {
-            URL = this.config.apiUrl + LEDGER_API.GET_COLUMNAR_REPORT + '?fileType=json';
-        } else {
-            URL = this.config.apiUrl + LEDGER_API.GET_COLUMNAR_REPORT;
+            url = this.config.apiUrl + LEDGER_API.GET_COLUMNAR_REPORT + '?fileType=json';
+            if (request.page) {
+            url = `${url}&page=${request.page}`;
         }
-        return this._http.post(URL.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+        if (request.count) {
+            url = `${url}&count=${request.count}`;
+        }
+        } else {
+            url = this.config.apiUrl + LEDGER_API.GET_COLUMNAR_REPORT;
+        }
+        return this._http.post(url.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             .replace(':groupUniqueName', groupUniqueName), request
         ).pipe(
             map((res) => {
