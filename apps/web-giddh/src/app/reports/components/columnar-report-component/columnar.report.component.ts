@@ -136,21 +136,13 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             this.ledgerService.downloadColumnarReport(this.companyUniqueName, this.groupUniqueName, this.exportRequest, isShowReport).subscribe((res) => {
                 this.isLoading = false;
                 if (res.status === "success") {
-                    this.exportRequest = {};
-                    this.groupUniqueName = '';
-                    this.forceClear$ = observableOf({ status: true });
-                    this.forceClearMonths$ = observableOf({ status: true });
-                    this.fromMonthNames = [];
-                    this.toMonthNames = [];
-                    this.selectActiveFinancialYear();
-                    this.exportRequest.balanceTypeAsSign = true;
                     if (isShowReport) {
-                       this.columnarReportResponse = res.body;
+                        this.columnarReportResponse = res.body;
                     } else {
+                        this.clearFilter();
                         let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
                         return saveAs(blob, `ColumnarReport.xlsx`);
                     }
-
                 } else {
                     this.toaster.clearAllToaster();
                     this.toaster.errorToast(res.message);
@@ -277,5 +269,22 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 }
             });
         }
+    }
+
+    /**
+     * To clear applied filter
+     *
+     * @memberof ColumnarReportComponent
+     */
+    public clearFilter() {
+        this.exportRequest = {};
+        this.groupUniqueName = '';
+        this.forceClear$ = observableOf({ status: true });
+        this.forceClearMonths$ = observableOf({ status: true });
+        this.fromMonthNames = [];
+        this.toMonthNames = [];
+        this.selectActiveFinancialYear();
+        this.columnarReportResponse = null;
+        this.exportRequest.balanceTypeAsSign = false;
     }
 }
