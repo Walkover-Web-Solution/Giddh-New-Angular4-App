@@ -378,9 +378,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.chequeEntryModal.hide();
     }
 
-    public openChequeDetailForm(account) {
+    public openChequeDetailForm() {
         this.chequeEntryModal.show();
-        return setTimeout(() => {
+        setTimeout(() => {
             this.chequeNumberInput.nativeElement.focus();
         }, 200);
     }
@@ -389,8 +389,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * setAccount` in particular, on accountList click
      */
     public setAccount(acc) {
+        let openChequePopup = false;
         if (acc.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts') && (!this.requestObj.chequeNumber && !this.requestObj.chequeClearanceDate)) {
-            this.openChequeDetailForm(acc);
+            openChequePopup = true;
+            this.openChequeDetailForm();
         }
         let idx = this.selectedIdx;
         let transaction = this.requestObj.transactions[idx];
@@ -420,13 +422,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 }
             }
 
-            setTimeout(() => {
-                if (transaction.type === 'by') {
-                    this.byAmountField.nativeElement.focus();
-                } else {
-                    this.toAmountField.nativeElement.focus();
-                }
-            }, 200);
+            if(openChequePopup === false) {
+                setTimeout(() => {
+                    if (transaction.type === 'by') {
+                        this.byAmountField.nativeElement.focus();
+                    } else {
+                        this.toAmountField.nativeElement.focus();
+                    }
+                }, 200);
+            }
         } else {
             this.deleteRow(idx);
         }
