@@ -459,6 +459,9 @@ export class LedgerService {
         if (model.count) {
             url = `${url}&count=${model.count}`;
         }
+        if (model.sort) {
+            url = `${url}&sort=${model.sort}`;
+        }
         return this._http.post(url, body).pipe(map((res) => {
             let data: BaseResponse<any, ReportsDetailedRequestFilter> = res;
             data.request = body;
