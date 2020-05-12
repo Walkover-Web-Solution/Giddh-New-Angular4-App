@@ -63,7 +63,9 @@ import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from 
 import { userLoginStateEnum } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { environment } from 'apps/web-giddh/src/environments/environment';
-import { CountryRequest, CurrentPage } from '../../models/api-models/Common';
+import { CountryRequest, CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
+import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { CommonService } from '../../services/common.service';
 
 @Component({
     selector: 'app-header',
@@ -230,11 +232,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isCalendlyModelActivate: boolean = false;
     public companyInitials: any = '';
     public forceOpenNavigation: boolean = false;
+    /** VAT supported countries to show the Vat Report section in all modules */
+    public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+
     /**
      *
      */
     // tslint:disable-next-line:no-empty
     constructor(
+        private commonService: CommonService,
         private loginAction: LoginActions,
         private socialAuthService: AuthService,
         private store: Store<AppState>,
@@ -419,7 +425,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 });
             }
         });
-
         this.sideBarStateChange(true);
         this.getElectronAppVersion();
         this.store.dispatch(this.companyActions.GetApplicationDate());
@@ -666,6 +671,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         this.selectedPlanStatus = res.subscription.status;
                     }
                     this.activeCompany = res;
+                    this.checkIfCompanyTcsTdsApplicable();
                 }
             });
         }
@@ -1537,5 +1543,39 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public openScheduleCalendlyModel() {
         this.store.dispatch(this._generalActions.isOpenCalendlyModel(true));
+    }
+
+    /**
+     * Opens new company modal
+     *
+     * @memberof HeaderComponent
+     */
+    public createNewCompany(): void {
+        this.removeCompanySessionData();
+        this.showAddCompanyModal();
+    }
+
+    /**
+     * Fetches whether company country has other taxes (TCS/TDS)
+     *
+     * @private
+     * @memberof HeaderComponent
+     */
+    private checkIfCompanyTcsTdsApplicable(): void {
+        const request: OnboardingFormRequest = {
+            country: (this.activeCompany && this.activeCompany.countryV2) ? this.activeCompany.countryV2.alpha2CountryCode : '',
+            formName: 'otherTaxes'
+        };
+        this.commonService.getOnboardingForm(request).subscribe((response) => {
+            if (response && response.status === 'success' && response.body) {
+                this.store.dispatch(this.companyActions.setCompanyTcsTdsApplicability(response.body.isTcsTdsApplicable))
+            } else {
+                // Set to false in error scenarios
+                this.store.dispatch(this.companyActions.setCompanyTcsTdsApplicability(false));
+            }
+        }, () => {
+            // Set to false in error scenarios
+            this.store.dispatch(this.companyActions.setCompanyTcsTdsApplicability(false));
+        });
     }
 }

@@ -750,6 +750,18 @@
                             </div>
                         </div>
 
+                        <div class="clearfix  pdT1">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <input type="checkbox" [(ngModel)]="invoiceSetting.autoDeleteEntries" name="invoiceAutoDeleteEntries" class="showOnMobile" />
+                                    <label>Auto Delete entries when deleting their invoice</label>
+                                </div>
+                                <div class="col-xs-12 col-sm-9 form-group ">
+                                    <input type="checkbox" [(ngModel)]="invoiceSetting.autoDeleteEntries" name="invoiceAutoDeleteEntries" class="hideOnMobile" />
+                                </div>
+                            </div>
+                        </div>
+
                         <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                     </div>
 

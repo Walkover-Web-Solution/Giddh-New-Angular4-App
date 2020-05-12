@@ -1,5 +1,4 @@
 @import "../../../../../assets/css/color.scss";
-
 .invoice-modal-content:after {
     position: fixed;
     content: "";
@@ -28,9 +27,8 @@
     background-color: #fff;
     margin: 0 0;
     height: 100vh;
-    z-index: 990;
+    z-index: 9991;
     left: 0;
-    //padding-left: 215px;
 }
 
 .invoice-sidebar {
@@ -149,7 +147,7 @@
         }
     }
     .disabled {
-        background: #d9d9d9 !important;
+        background: $gainsboro !important;
         cursor: not-allowed;
         a {
             cursor: not-allowed;
@@ -289,7 +287,7 @@ span.close-modal.cp.pull-right {
     height: 32px;
     width: 32px;
     background-color: #ddd;
-    border: 1px solid #d1d1d1;
+    border: 1px solid $gainsboro;
 }
 
 .changeStatus-dropdown .dropdown-menu {
@@ -310,7 +308,7 @@ span.close-modal.cp.pull-right {
     display: inline-block !important;
 }
 
-.dropdown-menu > li > a:hover {
+.dropdown-menu>li>a:hover {
     color: $chetwode-blue;
     background: #e5e5e5;
 }
@@ -351,7 +349,6 @@ span.close-modal.cp.pull-right {
 .invoice-editWrapper {
     height: 100vh;
     overflow-y: auto;
-
     .invoice-editHeader {
         display: flex;
         justify-content: space-between;
@@ -371,7 +368,7 @@ span.close-modal.cp.pull-right {
             height: 32px;
             width: 32px;
             background-color: #ddd;
-            border: 1px solid #d1d1d1;
+            border: 1px solid $gainsboro;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -383,7 +380,7 @@ span.close-modal.cp.pull-right {
     }
 }
 
-.changeStatus-dropdown #settingTab {
+.changeStatus-dropdown #setting-tab {
     width: 340px;
     left: auto;
     right: 0;
@@ -506,9 +503,11 @@ label.labeled {
 .max500 {
     max-width: 500px;
 }
+
 .dashed-bdr {
-    border: 2px dashed #d9d9d9;
+    border: 2px dashed $gainsboro;
 }
+
 #csv-upload-input {
     opacity: 0;
     position: absolute;
@@ -519,9 +518,11 @@ label.labeled {
     height: 100%;
     z-index: 2;
 }
+
 .select-file {
     color: #089328;
 }
+
 .file-uplod-penal {
     width: 100%;
     text-align: left;
@@ -530,6 +531,7 @@ label.labeled {
     border-radius: 4px;
     color: #cccccc;
 }
+
 .file-input-wrapper img {
     width: 100px;
 }
@@ -547,6 +549,7 @@ label.labeled {
 
 
 /*responsive*/
+
 @media (max-width: 1024px) {
     .invoice-search-box {
         display: block;
@@ -582,10 +585,7 @@ label.labeled {
         height: 12px;
         top: 3px;
     }
-    .invoice-sidebar
-        li.activeItem
-        .invoice-number-date
-        span.inoviceDate:before {
+    .invoice-sidebar li.activeItem .invoice-number-date span.inoviceDate:before {
         background-color: #f0f0f0;
     }
 }
@@ -619,7 +619,6 @@ label.labeled {
         height: 100vh !important;
         overflow-y: auto !important;
     }
-
     .single-paymentDetail {
         margin-bottom: 10px;
     }

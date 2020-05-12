@@ -45,6 +45,8 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { GeneralService } from '../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT } from './../shared/helpers/defaultDateFormat';
+import { OnboardingFormRequest } from '../models/api-models/Common';
+import { CommonActions } from '../actions/common.actions';
 
 const CustomerType = [
     {label: 'Customer', value: 'customer'},
@@ -211,12 +213,17 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public advanceSearchRequestModal: ContactAdvanceSearchModal = new ContactAdvanceSearchModal();
     public commonRequest: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
     public tableColsPan: number = 3;
+    /** True, if company country's taxation is supported in Giddh */
+    public shouldShowTaxFilter: boolean;
+
     private checkboxInfo: any = {
         selectedPage: 1
     };
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private createAccountIsSuccess$: Observable<boolean>;
+    /** Selected company */
+    private selectedCompany: any;
     public universalDate: any;
 
     constructor(
@@ -224,6 +231,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         private _toasty: ToasterService,
         private router: Router,
         private _companyServices: CompanyService,
+        private commonActions: CommonActions,
         private _toaster: ToasterService,
         private _dashboardService: DashboardService,
         private _contactService: ContactService,
@@ -260,6 +268,17 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             }
             this.dueAmountReportData$ = observableOf(data);
         });
+        this.store.pipe(select(store => {
+            if (!store.session.companies) {
+                return;
+            }
+            // store.session.companies.forEach(company => {
+            //     if (company.uniqueName === store.session.companyUniqueName) {
+            //         this.selectedCompany = company;
+            //     }
+            // });
+            this.selectedCompany = store.session.companies.find((company) => company.uniqueName === store.session.companyUniqueName);
+        }), takeUntil(this.destroyed$)).subscribe();
         this.store.dispatch(this._companyActions.getAllRegistrations());
     }
 
@@ -398,6 +417,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                     this.isICICIIntegrated = false;
                 }
             });
+        if (this.selectedCompany && this.selectedCompany.countryV2) {
+            this.getOnboardingForm(this.selectedCompany.countryV2.alpha2CountryCode);
+        }
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -1090,6 +1112,39 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer'], JSON.stringify(this.showFieldFilter));
         }
         // }
+    }
+
+    /**
+     * Fetches the details for country and sets the visibility of tax filter
+     * if country taxation is supported in Giddh
+     *
+     * @param {string} countryCode Active company country code
+     * @memberof ContactComponent
+     */
+    public getOnboardingForm(countryCode: string): void {
+        this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                if (res.fields) {
+                    const formFields = [];
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            formFields[res.fields[key].name] = [];
+                            formFields[res.fields[key].name] = res.fields[key];
+                        }
+                    });
+                    if (formFields && formFields['taxName']) {
+                        this.shouldShowTaxFilter = true;
+                    } else {
+                        this.shouldShowTaxFilter = false;
+                    }
+                }
+            } else {
+                let onboardingFormRequest = new OnboardingFormRequest();
+                onboardingFormRequest.formName = 'onboarding';
+                onboardingFormRequest.country = countryCode;
+                this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
+            }
+        });
     }
 
     private getCashFreeBalance() {

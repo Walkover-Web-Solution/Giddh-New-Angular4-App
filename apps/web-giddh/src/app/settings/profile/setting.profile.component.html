@@ -269,7 +269,7 @@
                                             <div class="form-group select2-parent">
                                                 <label>State</label><br>
                                                 <sh-select [disabled]="gst.stateCode"
-                                                    (selected)="stateSelected($event, i)" [defaultValue]="gst.stateCode + ' - ' + gst.stateName" placeholder="Select state"
+                                                    (selected)="stateSelected($event, i)" [defaultValue]="getState(gst)" placeholder="Select state"
                                                     name="newstateCode+{{i}}" [options]="statesSource$ | async"
                                                     [(ngModel)]="gst.stateCode"></sh-select>
                                             </div>
