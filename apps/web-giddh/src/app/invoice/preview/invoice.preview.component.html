@@ -21,7 +21,7 @@
                 </div>
             </form>
 
-            
+
             <!-- Invoice filter section ends -->
             <div class="clear-filter" *ngIf="showAdvanceSearchIcon" (click)="resetAdvanceSearch()">
                 <button class="btn btn-filter">
@@ -144,42 +144,42 @@
                                 Note
                             </button>
                         </div>
-                        
+
                     </div>
-                    
+
                 </div>
             </div>
             <!-- Invoice E-way bill, export to excel for a single selected item along with
             New Sales Invoice, Cash Invoice, Credit Note and Debit Note ends -->
         </div>
         <!-- For mobile screen sizes -->
-       
+
 
         <ng-template #template>
             <div class="modal-header">
-              <h4 class="modal-title bg pull-left">Search here...</h4>
-              <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <h4 class="modal-title bg pull-left">Search here...</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-6 col-xs-6 full-width-on-mobile">
-                            <div class="input-container">
-                                <input type="text" placeholder="Search Invoice No." class=" form-control" #searchBox name="voucherNumberInput" [formControl]="voucherNumberInput" />
-                            </div>
+                <div class="row">
+                    <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+                        <div class="input-container">
+                            <input type="text" placeholder="Search Invoice No." class=" form-control" #searchBox name="voucherNumberInput" [formControl]="voucherNumberInput" />
                         </div>
-                        <div class="col-sm-6 col-xs-6 full-width-on-mobile">
-                            <div class="input-container">
-                                <input type="text" placeholder="Search Customer Name" class=" form-control" #searchBox name="accountUniqueNameInput" [formControl]="accountUniqueNameInput" />
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-xs-6 mt-2">
-                            <button class="btn btn-pink">Submit</button>
-                        </div>
-                       
                     </div>
-                
+                    <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+                        <div class="input-container">
+                            <input type="text" placeholder="Search Customer Name" class=" form-control" #searchBox name="accountUniqueNameInput" [formControl]="accountUniqueNameInput" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-6 mt-2">
+                        <button class="btn btn-pink">Submit</button>
+                    </div>
+
+                </div>
+
             </div>
         </ng-template>
 
@@ -439,7 +439,7 @@
                         <!-- CR Note No. / DR Note No. -->
                         <td>
                             <a style="cursor: pointer" (click)="onSelectInvoice(item)">
-                                {{item.voucherNumber }}</a>
+                            {{item.voucherNumber }}</a>
                         </td>
 
                         <!-- open account details on double click on customer name -->
@@ -705,12 +705,7 @@
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex total-due-sale-wrap">
             <div class="col-sm-6 totalDueSale">
                 <h3>
-                    Total
-                    {{!(selectedVoucher === 'credit note' 
-                    || selectedVoucher === 'debit note') ?
-                     (selectedVoucher === 'purchase') ? ' 
-                     Purchases:' : ' Sale:' : ':' 
-                    }}
+                    Total {{!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note') ? (selectedVoucher === 'purchase') ? ' Purchases:' : ' Sale:' : ':' }}
                 </h3>
                 <h1>{{baseCurrencySymbol}}{{ totalSale | giddhCurrency }}<span *ngIf="baseCurrency==='INR'">/-</span>
                 </h1>

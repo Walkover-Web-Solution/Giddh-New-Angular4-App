@@ -1494,7 +1494,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public checkAdjustedAmountExceed(totalAmount: number): void {
         if (Number(this.vm.compoundTotal) < Number(totalAmount)) {
             this.isAdjustedAmountExcess = true;
-            this.adjustedExcessAmount = totalAmount - this.vm.compoundTotal;
+            this.adjustedExcessAmount = Number(totalAmount) - Number(this.vm.compoundTotal);
         } else {
             this.isAdjustedAmountExcess = false;
             this.adjustedExcessAmount = 0;
