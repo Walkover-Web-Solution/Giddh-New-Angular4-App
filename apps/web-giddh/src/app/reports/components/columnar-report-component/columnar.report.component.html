@@ -48,4 +48,8 @@
 
     </div>
 </div>
+
+<div *ngIf="columnarReportResponse" class="back-btn text-center pr-1 mt-1 mb-1">
+    <button class="btn btn-default" (click)="clearFilter()"> <span class="icon-cross"></span>Clear Filter</button>
+</div>
 <columnar-report-table-component [columnarReportResponse]="columnarReportResponse"></columnar-report-table-component>
