@@ -8,7 +8,7 @@
     <!-- form -->
     <div class="col-xs-12">
         <div class="mfStockSearchRequestForm clearfix">
-            <form #mfStockSearchRequestForm="ngForm" class="col-xs-12 pl-0 pr-0 mt-2 mb-05" (submit)="getReports()"
+            <form #mfStockSearchRequestForm="ngForm" class="col-xs-12 pl-0 pr-0 mt-2 mb-05 manufacturing-form" (submit)="getReports()"
                 autocomplete="off">
                 <div class="row">
                     <div class="form-group col-md-2 col-sm-2">
@@ -48,8 +48,8 @@
                         <input type="text" decimalDigitsDirective [DecimalPlaces]="4" class="form-control"
                             placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue" />
                     </div>
-                    <div class="form-group pull-left mrL2">
-                        <label class="d-block">&nbsp;</label>
+                    <div class="form-group pull-left ml-15">
+                        <label class="d-block d-none-sm">&nbsp;</label>
                         <!-- [disabled]="mfStockSearchRequestForm.invalid" -->
                         <button class="btn btn-success" type="submit">Go</button>
                     </div>
