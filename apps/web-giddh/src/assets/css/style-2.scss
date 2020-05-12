@@ -4646,11 +4646,11 @@ label {
     height: 100%;
 }
 
-.section_title {
+.section-title {
     font-size: 1.2rem;
 }
 
-.top_bar h1.section_title.inline {
+.top-bar h1.section-title.inline {
     margin-top: 7px;
 }
 
@@ -4986,7 +4986,7 @@ label {
     border-color: #ddd;
 }
 
-#manufacture .section_title {
+#manufacture .section-title {
     color: #616161;
     font-size: 20px;
     line-height: 34px;
@@ -5504,7 +5504,7 @@ input[type="checkbox"][disabled] {
     padding: 8px 0;
 }
 
-.top_bar {
+.top-bar {
     padding-top: 15px;
     padding-bottom: 15px;
     /* padding-left: 240px; */
@@ -9283,10 +9283,10 @@ input.checkbox-custom[type="checkbox"] {
         width: 100%;
         top: 0;
     }
-    .custom-tabs .top_bar {
+    .custom-tabs .top-bar {
         margin-top: 45px;
     }
-    .custom-tabs.hide-header .top_bar {
+    .custom-tabs.hide-header .top-bar {
         margin-top: 0;
     }
     .invoce-controll .nav.nav-tabs {
@@ -9390,7 +9390,7 @@ input.checkbox-custom[type="checkbox"] {
         float: left;
     }
 
-    .custom-tabs .top_bar {
+    .custom-tabs .top-bar {
         padding-top: 10px;
         padding-bottom: 10px;
     }

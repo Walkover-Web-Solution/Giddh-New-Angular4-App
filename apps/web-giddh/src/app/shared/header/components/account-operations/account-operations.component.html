@@ -1,7 +1,7 @@
 <div class="bdrR row view_forms" id="middleBody" style="margin:0" [perfectScrollbar]="config"
     *ngIf="!(showNewForm$ | async)">
     <!--breadcrumbs-->
-    <div class="breadcrumbs container-fluid top_bar bdrB" *ngIf="breadcrumbPath?.length > 0">
+    <div class="breadcrumbs container-fluid top-bar bdrB" *ngIf="breadcrumbPath?.length > 0">
         <div class="col-xs-8">
             <ol class="breadcrumb row">
                 <li *ngFor="let value of breadcrumbPath;let last = last;" [ngClass]="{'active': last}">
