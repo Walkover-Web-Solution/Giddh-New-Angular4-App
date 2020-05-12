@@ -127,7 +127,7 @@
                                 <div class="col-sm-4" *ngIf="GSTIN_OR_TRN">
                                     <div class="form-group mb-05">
                                         <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}</label>
-                                        <input type="text" class="form-control" autocomplete="false" autocomplete="false" #gstNumberField (keyup)="getStateCode(gst, states); checkGstNumValidation(gstNumberField);" name="gstNumber" formControlName="gstNumber" placeholder="Enter {{formFields['taxName'].label}}"
+                                        <input type="text" class="form-control" autocomplete="false" autocomplete="false" #gstNumberField (keyup)="getStateCode(gst, states);"  (blur)="checkGstNumValidation(gstNumberField);" name="gstNumber" formControlName="gstNumber" placeholder="Enter {{formFields['taxName'].label}}"
                                         />
                                     </div>
                                     <div class="form-group mb-1" *ngIf="gst.get('gstNumber').value && isGstValid">
@@ -358,7 +358,7 @@
                 <button type="button" *ngIf="showDeleteButton" class="btn btn-danger " (click)="deleteClicked.emit(true)">
                     Delete
                 </button>
-                <button (click)="submit()" class="btn btn-primary mrL1 updateBtnZindex" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Update
+                <button (click)="submit()" class="btn btn-primary mrL1 updateBtnZindex" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid || !(isGstValid$ | async)">Update
                 </button>
             </div>
         </div>
@@ -502,7 +502,7 @@
                 <button type="button" *ngIf="showDeleteButton" class="btn btn-danger " (click)="deleteClicked.emit(true)">
                     Delete
                 </button>
-                <button (click)="submit()" class="btn btn-primary mrL1 updateBtnZindex" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Update
+                <button (click)="submit()" class="btn btn-primary mrL1 updateBtnZindex" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid || !(isGstValid$ | async)">Update
                 </button>
             </div>
         </div>

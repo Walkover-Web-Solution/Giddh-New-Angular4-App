@@ -462,7 +462,6 @@
                                       [DecimalPlaces]="4" (paste)="vm.inventoryQuantityChanged($event)" (change)="vm.inventoryQuantityChanged($event.target.value)"
                                     />
                                   </td>
-
                                   <td class="text-right" style="width: 115px;">
                                     <label class="font-12">Unit</label>
                                     <select class="form-control text-right no-padding" [(ngModel)]="vm.stockTrxEntry.inventory.unit.code" (change)="vm.unitChanged($event.target.value)">
@@ -679,7 +678,6 @@
                                         (change)="vm.inventoryQuantityChanged($event.target.value)" />
                                 </div>
                             </div>
-
                             <div class="col-sm-3 pdL1">
                                 <div class="text-right table-amount">
                                     <label class="font-12">Unit</label>
@@ -723,7 +721,7 @@
                     </div>
 
                     <!-- Advance receipts adjusted Invoice -->
-                   <div class="clearfix adjust-receipt font-14"
+                    <div class="clearfix adjust-receipt font-14"
                          *ngIf="isAdjustedInvoicesWithAdvanceReceipt && vm.selectedLedger && vm.selectedLedger.voucherGeneratedType ==='receipt'">
                         <p class="bold">Adjusted Amount
                             <a href="javascript:void(0)" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
@@ -1033,10 +1031,10 @@
                         </div>
 
                         <div class="col-xs-12 pdT1 d-flex align-items-center xs-d-block" *ngIf="!isPettyCash">
-<!--                            <div class="width-100 mb-05">-->
-<!--                                    <p *ngIf="isAdjustedAmountExcess">Note: The adjusted amount of the linked invoice/s is more than the receipt;-->
-<!--                                        update them first and try again.</p>-->
-<!--                            </div>-->
+                            <!--                            <div class="width-100 mb-05">-->
+                            <!--                                    <p *ngIf="isAdjustedAmountExcess">Note: The adjusted amount of the linked invoice/s is more than the receipt;-->
+                            <!--                                        update them first and try again.</p>-->
+                            <!--                            </div>-->
 
                             <div class="d-flex">
                                 <button class="btn btn-danger" (click)="showDeleteEntryModal()">Delete</button>

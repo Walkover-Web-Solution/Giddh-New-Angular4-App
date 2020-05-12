@@ -9,7 +9,7 @@
             <label>Search Provider <sup>*</sup></label>
             <input [ngbTypeahead]="dataSource" type="text" [(ngModel)]="selectedProvider.name" name="providers"
                 [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" autocomplete="off"
-                required maxlength="50" placeholder="Search Provider" pattern="^[^\s]+(\s+[^\s]+)*$">
+                required maxlength="50" placeholder="Search Provider" pattern="^[^\s]+(\s+[^\s]+)*$" (click)="click$.next($any($event).target.value)">
 
             <ng-template #rt let-r="result" let-t="term">
                 <span (keyup.enter)="typeaheadOnSelect(r)"> <span class="provider_ico"><img

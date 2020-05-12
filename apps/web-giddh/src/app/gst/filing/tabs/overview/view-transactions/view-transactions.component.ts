@@ -110,7 +110,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron|| isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
         this.filterParam.from = this.currentPeriod.from;
         this.filterParam.to = this.currentPeriod.to;
         this.filterParam.gstin = this.activeCompanyGstNumber;
@@ -143,12 +143,15 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public onSelectInvoice(invoice) {
-        let downloadVoucherRequestObject = {
-            voucherNumber: [invoice.voucherNumber],
-            voucherType: invoice.voucherType,
-            accountUniqueName: invoice.account.uniqueName
-        };
-        this._store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+        let downloadVoucherRequestObject;
+        if (invoice && invoice.account) {
+            downloadVoucherRequestObject = {
+                voucherNumber: [invoice.voucherNumber],
+                voucherType: invoice.voucherType,
+                accountUniqueName: invoice.account.uniqueName
+            };
+            this._store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+        }
         // this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.voucherNumber));
         this.loadDownloadOrSendMailComponent();
         this.downloadOrSendMailModel.show();
