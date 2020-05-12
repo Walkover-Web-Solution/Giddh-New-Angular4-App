@@ -230,7 +230,7 @@
                     </button>
                     <div class="btn-group cp d-inline-block help-setting-icons " dropdown>
                        
-                            <span class="mr-15">
+                            <span class="mr-15" (click)="openSettingAside()">
                                 <img src="{{imgPath}}setting-icon.svg">
                             </span>
                             <span (click)="openHelpSupportAside()">
@@ -910,10 +910,16 @@
 </ng-template>
 
 <!--  -->
-<div class="aside-overlay help-support-aside" *ngIf="asideHelpSupportMenuState === 'in'"></div>
+<div class="help-support-aside" *ngIf="asideHelpSupportMenuState === 'in'"></div>
 <div class="help-support-aside" *ngIf="asideHelpSupportMenuState === 'in'">
     <aside-help-support (closeAsideEvent)="toggleHelpSupportPane($event)">
     </aside-help-support>
+</div>
+
+<div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'"></div>
+<div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'">
+    <aside-setting (closeAsideEvent)="toggleSettingPane($event)">
+    </aside-setting>
 </div>
 
 

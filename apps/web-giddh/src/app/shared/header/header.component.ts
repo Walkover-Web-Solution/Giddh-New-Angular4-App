@@ -82,6 +82,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public subscribedPlan: SubscriptionsUser;
     public isLedgerAccSelected: boolean = false;
     public asideHelpSupportMenuState: string = 'out';
+    public asideSettingMenuState: string = 'out';
+    
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -747,18 +749,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public openHelpSupportAside() {
-         
         this.toggleHelpSupportPane();
     }
 
+    public openSettingAside() {
+        this.toggleSettingPane();
+    }
+    
     public toggleBodyClass() {
-        if (this.asideHelpSupportMenuState === 'in') {
+        if (this.asideHelpSupportMenuState === 'in' || this.asideSettingMenuState === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('body').classList.remove('fixed');
         }
     }
-
     public toggleHelpSupportPane(event?) {
         if (event) {
             event.preventDefault();
@@ -766,6 +770,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.asideHelpSupportMenuState = this.asideHelpSupportMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
     }
+
+    public toggleSettingPane(event?) {
+        if (event) {
+            event.preventDefault();
+        }
+        this.asideSettingMenuState = this.asideSettingMenuState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+
+    
 
     /**
      * redirect to route and save page entry into db

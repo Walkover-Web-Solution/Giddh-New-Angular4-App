@@ -71,6 +71,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { OnBoardingComponent } from './on-boarding/on-boarding.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { AsideHelpSupportComponent } from './header/components/aside-help-support/aside-help-support.component'
+import { AsideSettingComponent } from './header/components/aside-setting/aside-setting.component'
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -116,6 +117,7 @@ export function provideConfig() {
         FixedFooterComponent,
         AccountsSideBarComponent,
         AsideHelpSupportComponent,
+        AsideSettingComponent,
         ManageGroupsAccountsComponent,
         CompanyAddComponent,
         CompanyAddNewUiComponent,
@@ -201,6 +203,7 @@ export function provideConfig() {
         VsForDirective,
         AccountsSideBarComponent,
         AsideHelpSupportComponent,
+        AsideSettingComponent,
         TextCaseChangeModule,
         KeyboardShortutModule,
         CompanyAddNewUiComponent,

@@ -2,7 +2,7 @@
 :host {
     position: fixed;
     left: auto;
-    top: 55px;
+    top:55px;
     right: 0;
     bottom: 0;
     max-width: 330px;
@@ -16,7 +16,7 @@
         height: 12px;
         background-color:$alice-blue;
         top: -6px;
-        right: 18px;
+        right: 50px;
         z-index: 1;
         transform: rotate(45deg);
     }
@@ -28,9 +28,10 @@
     top: 0;
     z-index: 5;
     border: 0;
-    cursor: pointer;
     border-radius: 0;
+    cursor: pointer;
 }
+
 :host .container-fluid {
     padding-left: 0;
     padding-right: 0;
@@ -41,7 +42,7 @@
     width: 100%;
 }
 .aside-header {
-    background-color:$alice-blue;
+    background-color:$white;
     padding: 20px 10px;
 }
 .aside-pane {
@@ -55,6 +56,7 @@
         position:sticky;
         top: 0;
         background-color: inherit;
+        z-index: 1;
         h2 {
             font-family: 'opensans-semibold';
             font-size: 18px;
@@ -63,77 +65,18 @@
     }
     .help-aside-body{
         padding-bottom: 25%;
-        .faq-block{
+        .search-field{
             padding: 15px;
-            border-bottom: 1px solid $gainsboro;
-            a{
-                display: block;
-                color:$nero;
-
-                p{
-                    font-size: 14px;
-                    font-family: 'opensans-semibold'; 
-                }
-                small{
-                    font-size: 12px;
-                }
-            }       
-    }
-    .feature-block{
-        padding: 15px;
-        border-bottom: 1px solid $gainsboro;
-        ul{
-            list-style: none;
-            li{
-                font-size: 14px;
-                font-family: 'opensans-semibold';
-                margin-bottom: 10px;
-                a{
-                    color:$nero;
-                }
+            input{
+                border-radius: 20px !important;
+                padding-left: 40px !important;
+            }
+            i{
+                top: 25px;
+                left: 30px;
+                color: gray;
             }
         }
-    }
-    .download-block{
-        padding: 15px;
-        border-bottom: 1px solid $gainsboro;
-        h4{
-            padding-bottom: 15px;
-            font-size: 14px;
-            font-family: 'opensans-semibold';
-
-        }
-        ul{
-            list-style: none;
-            li{
-                float: left;
-                width: 50%;
-                padding-bottom: 10px;
-                a{
-                    color: $nero;
-                    padding-bottom: 15px;
-                    font-size: 14px;
-                }
-            }
-        }
-    }
-    .file-image{
-        padding: 15px 15px 0;
-        text-align: center;
-        img{
-            display: block;
-            margin: 15px auto 30px;
-        }
-        p{
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-    }
-    .contact-block{
-        text-align: center;
-        font-size: 20px;
-        line-height: 1.5;
-    }
     }
 }
 .aside-pane-form {
@@ -145,6 +88,30 @@
     scroll-behavior: smooth;
     position: relative;
     margin-top: 15px;
+}
+.setting-items{
+    ul{
+        padding: 0 ;
+        list-style: none;
+        font-size: 14px;
+        font-family:'opensans-semibold';
+        li{
+            padding: 4px 20px;
+            margin-bottom:8px;
+            a{
+                cursor: pointer;
+                img{
+                    margin-right: 12px;
+                }
+                span{
+                    color: $nero;
+                }
+            }
+            &:hover{
+                background-color:$lavender;
+            }
+        }
+    }
 }
 @media (max-width: 768px) {
     :host {
