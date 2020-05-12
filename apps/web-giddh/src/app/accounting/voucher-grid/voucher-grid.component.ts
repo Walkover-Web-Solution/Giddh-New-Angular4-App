@@ -14,7 +14,6 @@ import { AppState } from '../../store/roots';
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import * as moment from 'moment';
-import { FlyAccountsActions } from 'apps/web-giddh/src/app/actions/fly-accounts.actions';
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
@@ -122,13 +121,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     private allStocks: any[];
     private isNoAccFound: boolean = false;
     private isComponentLoaded: boolean = false;
+    public allAccounts: any;
+    public previousVoucherType: string = "";
 
     constructor(
         private _accountService: AccountService,
         private _ledgerActions: LedgerActions,
         private store: Store<AppState>,
         private _keyboardService: KeyboardService,
-        private flyAccountActions: FlyAccountsActions,
         private _toaster: ToasterService, private _router: Router,
         private _tallyModuleService: TallyModuleService,
         private componentFactoryResolver: ComponentFactoryResolver,
@@ -150,11 +150,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         })).subscribe((d) => {
             if (d && d.gridType === 'voucher') {
                 this.requestObj.voucherType = d.page;
+                this.createAccountsList();
+                this.resetEntriesIfVoucherChanged();
                 setTimeout(() => {
-                    // document.getElementById('first_element_0').focus();
                     this.dateField.nativeElement.focus();
                 }, 50);
             } else if (d) {
+                this.createAccountsList();
+                this.resetEntriesIfVoucherChanged();
                 this._tallyModuleService.requestData.next(this.requestObj);
             }
         });
@@ -196,26 +199,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         this.refreshEntry();
 
-        // this._tallyModuleService.selectedPageInfo.distinctUntilChanged((p, q) => {
-        //   if (p && q) {
-        //     return (_.isEqual(p, q));
-        //   }
-        //   if ((p && !q) || (!p && q)) {
-        //     return false;
-        //   }
-        //   return true;
-        //  }).subscribe(() => {
-
-        // });
-
         this._tallyModuleService.filteredAccounts.subscribe((accounts) => {
             if (accounts) {
-                let accList: IOption[] = [];
-                accounts.forEach((acc: IFlattenAccountsResultItem) => {
-                    accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
-                });
-                this.flattenAccounts = accList;
-                this.inputForList = _.cloneDeep(this.flattenAccounts);
+                this.allAccounts = accounts;
+                this.createAccountsList();
             }
         });
 
@@ -434,7 +421,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
 
             setTimeout(() => {
-                if(transaction.type === 'by') {
+                if (transaction.type === 'by') {
                     this.byAmountField.nativeElement.focus();
                 } else {
                     this.toAmountField.nativeElement.focus();
@@ -528,11 +515,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * saveEntry
      */
     public saveEntry() {
-        let idx = 0;
         let data = _.cloneDeep(this.requestObj);
-        const voucherType = _.clone(data.voucherType);
         data.entryDate = this.journalDate;
-        // data.transactions = this.removeBlankTransaction(data.transactions);
         data.transactions = this.validateTransaction(data.transactions);
 
         if (!data.transactions) {
@@ -1101,5 +1085,41 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public acceptCancel(): void {
         this.showConfirmationBox = false;
+    }
+
+    /**
+     * This will create list of accounts depending on voucher type
+     *
+     * @memberof AccountAsVoucherComponent
+     */
+    public createAccountsList(): void {
+        if (this.allAccounts) {
+            let accList: IOption[] = [];
+            this.allAccounts.forEach((acc: IFlattenAccountsResultItem) => {
+                if (this.requestObj.voucherType === "Contra") {
+                    const checkIfBankCash = acc.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash'));
+                    if (checkIfBankCash) {
+                        accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
+                    }
+                } else {
+                    accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
+                }
+            });
+            this.flattenAccounts = accList;
+            this.inputForList = _.cloneDeep(this.flattenAccounts);
+        }
+    }
+
+    /**
+     * This will reset the entries if voucher type changed
+     *
+     * @memberof AccountAsVoucherComponent
+     */
+    public resetEntriesIfVoucherChanged(): void {
+        if(this.requestObj && this.previousVoucherType !== this.requestObj.voucherType) {
+            this.previousVoucherType = this.requestObj.voucherType;
+
+            this.refreshEntry();
+        }
     }
 }
