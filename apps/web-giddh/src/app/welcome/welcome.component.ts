@@ -10,30 +10,31 @@ import {
     ViewChild,
     ElementRef, NgZone,
 } from '@angular/core';
-import {NgForm} from '@angular/forms';
-import {Router} from '@angular/router';
-import {select, Store} from '@ngrx/store';
-import {ModalOptions} from 'ngx-bootstrap';
-import {combineLatest, Observable, of as observableOf, ReplaySubject} from 'rxjs';
-import {take, takeUntil} from 'rxjs/operators';
+import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { ModalOptions } from 'ngx-bootstrap';
+import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import * as googleLibPhoneNumber from 'google-libphonenumber';
 
-import {CommonActions} from '../actions/common.actions';
-import {CompanyActions} from '../actions/company.actions';
-import {GeneralActions} from '../actions/general/general.actions';
-import {SettingsProfileActions} from '../actions/settings/profile/settings.profile.action';
-import {OnBoardingType} from '../app.constant';
+import { CommonActions } from '../actions/common.actions';
+import { CompanyActions } from '../actions/company.actions';
+import { GeneralActions } from '../actions/general/general.actions';
+import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
+import { OnBoardingType } from '../app.constant';
 import * as _ from '../lodash-optimized';
-import {CountryRequest, OnboardingFormRequest} from '../models/api-models/Common';
-import {Addresses, CompanyCreateRequest, StatesRequest} from '../models/api-models/Company';
-import {IForceClear} from '../models/api-models/Sales';
-import {CompanyService} from '../services/companyService.service';
-import {GeneralService} from '../services/general.service';
-import {ToasterService} from '../services/toaster.service';
-import {AppState} from '../store';
-import {ItemOnBoardingState} from '../store/item-on-boarding/item-on-boarding.reducer';
-import {IOption} from '../theme/ng-select/option.interface';
-import {ShSelectComponent} from '../theme/ng-virtual-select/sh-select.component';
+import { CountryRequest, OnboardingFormRequest } from '../models/api-models/Common';
+import { Addresses, CompanyCreateRequest, StatesRequest, CreateCompanyUsersPlan, SubscriptionRequest } from '../models/api-models/Company';
+import { IForceClear } from '../models/api-models/Sales';
+import { CompanyService } from '../services/companyService.service';
+import { GeneralService } from '../services/general.service';
+import { ToasterService } from '../services/toaster.service';
+import { AppState } from '../store';
+import { ItemOnBoardingState } from '../store/item-on-boarding/item-on-boarding.reducer';
+import { IOption } from '../theme/ng-select/option.interface';
+import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
+import { UserDetails } from '../models/api-models/loginModels';
 
 @Component({
     selector: 'welcome-component',
@@ -117,9 +118,49 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         taxNumber: ''
     };
 
+    public subscriptionPlan: CreateCompanyUsersPlan = {
+        companies: null,
+        totalCompanies: 0,
+        userDetails: null,
+        additionalTransactions: 0,
+        createdAt: null,
+        planDetails: {
+            countries: [],
+            name: "Test Plan 12 Feb",
+            uniqueName: "4z01581500278547",
+            createdAt: "12-02-2020 09:37:58",
+            amount: 0,
+            ratePerExtraTransaction: 1,
+            isCommonPlan: true,
+            duration: 15,
+            companiesLimit: 5,
+            durationUnit: "YEAR",
+            transactionLimit: 1000
+        },
+        additionalCharges: null,
+        status: null,
+        subscriptionId: null,
+        balance: null,
+        expiry: null,
+        startedAt: null,
+        companiesWithTransactions: null,
+        companyTotalTransactions: null,
+        totalTransactions: 0
+    };
+
+    public subscriptionRequestObj: SubscriptionRequest = {
+        planUniqueName: '',
+        subscriptionId: '',
+        userUniqueName: '',
+        licenceKey: ''
+    };
+
+    public createNewCompanyPreObj: CompanyCreateRequest;
+    public loggedInUser: UserDetails;
+
     public businessType: IOption[] = [];
     public formFields: any[] = [];
-    public forceClear$: Observable<IForceClear> = observableOf({status: false});
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public isTaxNumberSameAsHeadQuarter: number = 0;
     public activeCompany: any;
     public currentTaxList: any[] = [];
@@ -165,9 +206,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     private phoneUtility: any = googleLibPhoneNumber.PhoneNumberUtil.getInstance();
 
     constructor(
-        private componentFactoryResolver: ComponentFactoryResolver,
         private store: Store<AppState>,
-        private settingsProfileActions: SettingsProfileActions,
         private _router: Router,
         private _generalService: GeneralService,
         private _toasty: ToasterService,
@@ -223,12 +262,21 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this._companyService.GetAllBusinessNatureList().subscribe((businessNatureResponse) => {
                 if (businessNatureResponse && businessNatureResponse.body) {
                     _.map(businessNatureResponse.body, (businessNature) => {
-                        this.businessNatureList.push({label: businessNature, value: businessNature});
+                        this.businessNatureList.push({ label: businessNature, value: businessNature });
                     });
                 }
                 this.reFillForm();
             });
         }
+
+        this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                this.createNewCompanyPreObj = res;
+            }
+        });
+
+        this.loggedInUser = this._generalService.user;
+        this.subscriptionRequestObj.userUniqueName = this.loggedInUser.uniqueName;
     }
 
     public ngAfterViewInit() {
@@ -322,7 +370,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
             this._generalService.createNewCompany = this.createNewCompanyPreparedObj;
             this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompanyPreparedObj));
-            this._router.navigate(['select-plan']);
+            setTimeout(() => {
+                this.createCompany();
+            }, 100);
+            //this._router.navigate(['select-plan']);
         } else {
             if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
                 if (this.isItemUpdateInProgress) {
@@ -337,7 +388,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 const addressField = this.welcomeForm.form.controls['address'];
                 addressField.setValue(addressField.value.trim());
                 if (!this.isAddressValid(addressField.value)) {
-                    addressField.setErrors({'required': true});
+                    addressField.setErrors({ 'required': true });
                     if (this.addressField) {
                         (this.addressField.nativeElement as HTMLElement).classList.add('error-box');
                     }
@@ -446,7 +497,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.companyProfileObj.taxType = '';
             this.companyProfileObj.selectedState = '';
             this.companyProfileObj.state = '';
-            this.forceClear$ = observableOf({status: true});
+            this.forceClear$ = observableOf({ status: true });
             this.isTaxNumberSameAsHeadQuarter = 0;
 
             if (this.selectedBusinesstype === 'Unregistered' || this.selectedBusinesstype === 'Others') {
@@ -534,7 +585,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
-                    this.currencies.push({label: res[key].code, value: res[key].code});
+                    this.currencies.push({ label: res[key].code, value: res[key].code });
                 });
                 this.currencySource$ = observableOf(this.currencies);
             } else {
@@ -547,7 +598,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res.callingCodes).forEach(key => {
-                    this.countryPhoneCode.push({label: res.callingCodes[key], value: res.callingCodes[key]});
+                    this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
                 });
                 this.callingCodesSource$ = observableOf(this.countryPhoneCode);
             } else {
@@ -582,7 +633,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
                 if (res.businessType) {
                     _.map(res.businessType, (businessType) => {
-                        this.businessTypeList.push({label: businessType, value: businessType});
+                        this.businessTypeList.push({ label: businessType, value: businessType });
                     });
                     if (this.businessTypeList && this.businessTypeList.length === 1) {
                         this.selectedBusinesstype = this.businessTypeList[0].value;
@@ -672,7 +723,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 gstNo.value = '';
                 this.companyProfileObj.selectedState = '';
                 this.companyProfileObj.state = '';
-                this.forceClear$ = observableOf({status: true});
+                this.forceClear$ = observableOf({ status: true });
 
                 if (this.selectedBusinesstype === 'Unregistered') {
                     this.isGstValid = true;
@@ -686,7 +737,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             gstNo.value = '';
             this.companyProfileObj.selectedState = '';
             this.companyProfileObj.state = '';
-            this.forceClear$ = observableOf({status: true});
+            this.forceClear$ = observableOf({ status: true });
 
             if (this.selectedBusinesstype === 'Unregistered') {
                 this.isGstValid = true;
@@ -749,7 +800,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public handleNameChange(itemName: string = ''): void {
         if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
             if (itemName.length > 100) {
-                this.welcomeForm.form.controls['name'].setErrors({'maxlength': true});
+                this.welcomeForm.form.controls['name'].setErrors({ 'maxlength': true });
             }
         }
     }
@@ -766,10 +817,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (itemName) {
                     itemName = itemName.trim();
                     if (!itemName) {
-                        this.welcomeForm.form.controls['name'].setErrors({'required': true});
+                        this.welcomeForm.form.controls['name'].setErrors({ 'required': true });
                     }
                     if (itemName.length > 100) {
-                        this.welcomeForm.form.controls['name'].setErrors({'maxlength': true});
+                        this.welcomeForm.form.controls['name'].setErrors({ 'maxlength': true });
                     }
                 }
             });
@@ -807,7 +858,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     }
                     break;
                 case 'DEFAULT_COMPANY':
-                    const {address: autoFillAddress = '', stateCode} = this.getDefaultCompanyDetails();
+                    const { address: autoFillAddress = '', stateCode } = this.getDefaultCompanyDetails();
                     const defaultCompany = {
                         address: autoFillAddress,
                         stateCode
@@ -921,5 +972,25 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     private isAddressValid(address: string = ''): boolean {
         return address.trim().length > 0;
+    }
+
+    /**
+     * This will create company with a predefined free plan
+     *
+     * @memberof WelcomeComponent
+     */
+    public createCompany(): void {
+        this.subscriptionRequestObj.licenceKey = "";
+        this.store.dispatch(this.companyActions.selectedPlan(this.subscriptionPlan));
+
+        if (this.subscriptionPlan.subscriptionId) {
+            this.subscriptionRequestObj.subscriptionId = this.subscriptionPlan.subscriptionId;
+            this.createNewCompanyPreObj.subscriptionRequest = this.subscriptionRequestObj;
+            this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompanyPreObj));
+        } else {
+            this.subscriptionRequestObj.planUniqueName = this.subscriptionPlan.planDetails.uniqueName;
+            this.createNewCompanyPreObj.subscriptionRequest = this.subscriptionRequestObj;
+            this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompanyPreObj));
+        }
     }
 }
