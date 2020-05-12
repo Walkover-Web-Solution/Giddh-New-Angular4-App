@@ -15,6 +15,7 @@ import { DaybookActions } from 'apps/web-giddh/src/app/actions/daybook/daybook.a
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { DayBookRequestModel } from 'apps/web-giddh/src/app/models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
+import {IForceClear} from "../../models/api-models/Sales";
 
 const COMPARISON_FILTER = [
 	{ label: 'Greater Than', value: 'greaterThan' },
@@ -49,6 +50,12 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 	public voucherTypeList: Observable<IOption[]>;
 	public stockListDropDown$: Observable<IOption[]>;
 	public comparisonFilterDropDown$: Observable<IOption[]>;
+    /** Sh-select force clear observable for voucher type  */
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    /** Sh-select force clear observable for amount range  */
+    public forceClearRange$: Observable<IForceClear> = observableOf({ status: false });
+    /** Sh-select force clear observable for account type  */
+    public forceClearParticulars$: Observable<IForceClear> = observableOf({ status: false });
 
 	public datePickerOptions: any = {
 		parentEl: '#date-range-picker-parent',
@@ -422,4 +429,15 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 		this.destroyed$.next(true);
 		this.destroyed$.complete();
 	}
+
+    /**
+     * To clear sh-selct value
+     *
+     * @memberof DaybookAdvanceSearchModelComponent
+     */
+    public resetShselctForceClear(): void {
+        this.forceClear$ = observableOf({ status: true });
+        this.forceClearParticulars$ = observableOf({ status: true });
+        this.forceClearRange$ = observableOf({ status: true });
+    }
 }
