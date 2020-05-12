@@ -647,7 +647,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         });
         if (this.vm) {
-            this.vm.compundTotalObserver.pipe(takeUntil(this.destroyed$))
+            this.vm.compoundTotalObserver.pipe(takeUntil(this.destroyed$))
                 .subscribe(res => {
                     if (res || res === 0) {
                         this.checkAdvanceReceiptOrInvoiceAdjusted();

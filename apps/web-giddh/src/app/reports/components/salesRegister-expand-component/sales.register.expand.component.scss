@@ -120,7 +120,7 @@ ul.list-unstyled li a {
     color: #333333;
 }
 
-.sales-ragister p {
+.sales-register p {
     color: #8f9091;
     margin-bottom: 5px;
 }
@@ -153,7 +153,7 @@ ul.list-unstyled li a {
     color: #5b64c9 !important;
 }
 
-.sales-ragister {
+.sales-register {
     background: $white;
     padding: 15px;
     box-shadow: 0px -3px 6px #d7d7d7;
@@ -305,7 +305,7 @@ table th {
 }
 
 @media (max-width: 1366px) {
-    .sales-ragister {
+    .sales-register {
         width: 100%;
     }
 }
@@ -316,7 +316,7 @@ table th {
     }
 }
 @media (max-width: 767px) {
-    .sales-ragister {
+    .sales-register {
         display: block;
         position: relative;
     }
