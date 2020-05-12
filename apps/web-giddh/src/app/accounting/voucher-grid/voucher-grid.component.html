@@ -10,13 +10,6 @@
                     {{ displayDay }}
                 </div>
             </div>
-            <!-- invoice num -->
-            <!-- <div class="clearfix form-inline mrB2">
-          <div class="mx-300 form-group">
-              <label>Invoice No:</label> <input type="text" placeholder="Invoice no." [(ngModel)]="requestObj.invoiceNumberAgainstVoucher" class="form-control max-height28 appearance_none" decimalDigitsDirective style="max-width:200px" />
-          </div>
-      </div> -->
-            <!-- /invoice num -->
             <div class="clearfix" [style.min-height.vh]="61">
                 <div class="table-responsive bdrT">
                     <table class="table entry_table">
@@ -154,7 +147,7 @@
                             <button class="btn btn-primary" #submitButton (keyup)="keyUpOnSubmitButton($event)"
                                 (click)="saveEntry();">Yes</button>
                             <button class="btn btn-default" #resetButton
-                                (keyup)="keyUpOnResetButton($event)">No</button>
+                                (keyup)="keyUpOnResetButton($event)" (click)="acceptCancel()">No</button>
                             <br />
                             <button class="btn btn-link mrT1" (click)="refreshEntry();">Reset</button>
 

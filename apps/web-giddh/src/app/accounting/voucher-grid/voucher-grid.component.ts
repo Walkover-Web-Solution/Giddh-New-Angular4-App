@@ -439,8 +439,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 } else {
                     this.toAmountField.nativeElement.focus();
                 }
-            }, 20);
-            
+            }, 200);
         } else {
             this.deleteRow(idx);
         }
@@ -1093,5 +1092,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 });
             }
         });
+    }
+
+    /**
+     * This function will close the confirmation popup on click of No
+     *
+     * @memberof AccountAsVoucherComponent
+     */
+    public acceptCancel(): void {
+        this.showConfirmationBox = false;
     }
 }
