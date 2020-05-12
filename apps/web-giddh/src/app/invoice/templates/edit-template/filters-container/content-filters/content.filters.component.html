@@ -61,7 +61,7 @@
                         </div>
                     </div>
                 </ng-container>
-                <div *ngIf="fieldsAndVisibility.header.dueDate && customTemplate?.templateType !== 'gst_template_e'" class="form-group">
+                <div *ngIf="fieldsAndVisibility.header.dueDate" class="form-group">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['dueDate'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Due Date
                     <div class="mrL3">
                         <input type="text" [maxlength]="15" class="form-control" name="dueDate1" [(ngModel)]="customTemplate.sections['header'].data['dueDate'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['dueDate'].display"
@@ -205,7 +205,7 @@
             </div>
 
 
-            <div class="clearfix customField mrB2" *ngIf="customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e'">
+            <div class="clearfix customField mrB2" *ngIf="customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d'">
                 <h3>
                     <i class="fa cp" aria-hidden="true" (click)="showCustomField = !showCustomField" [ngClass]="{'fa-minus-square-o': showCustomField, 'fa-plus-square-o': !showCustomField}"></i> Custom Field
                 </h3>
