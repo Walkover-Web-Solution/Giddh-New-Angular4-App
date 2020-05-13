@@ -10,13 +10,13 @@
         <div class="setting-items">
             <ul class="mb-3">
                 <li>
-                    <a>
+                    <a [routerLink]="['/pages/settings']">
                         <img src="{{imgPath}}setting-icons/company-profile.svg">
                         <span>Company Profile</span>
                     </a>
                 </li>
                 <li>
-                    <a>
+                    <a [routerLink]="['/pages/settings/profile']">
                         <img src="{{imgPath}}/setting-icons/user.svg">
                         <span>User Profile</span>
                     </a>
@@ -30,13 +30,13 @@
             </ul>
             <ul class="mb-3">
                 <li>
-                    <a>
+                    <a [routerLink]="['/pages/settings/integration']">
                         <img src="{{imgPath}}/setting-icons/integration.svg">
                         <span>Integration</span>
                     </a>
                 </li>
                 <li>
-                    <a>
+                    <a [routerLink]="['/pages/settings/linked-accounts']">
                         <img src="{{imgPath}}/setting-icons/linked-accounts.svg">
                         <span>Linked Accounts</span>
                     </a>
