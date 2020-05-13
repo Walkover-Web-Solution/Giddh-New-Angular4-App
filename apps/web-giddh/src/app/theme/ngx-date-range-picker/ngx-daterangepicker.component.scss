@@ -57,7 +57,7 @@ $md-drppicker-control-active-border-radius: $md-drppicker-control-border-radius 
 
 $md-drppicker-control-disabled-color: #ccc !default;
 // Select
-$select-border: 1px solid #f2f2f2 !default;
+$select-border: 1px solid $white-smoke !default;
 $select-background: rgba(255, 255, 255, 0.9) !default;
 $select-padding: 5px !default;
 $select-radius: 2px !default;
@@ -251,7 +251,7 @@ $input-height: 3rem !default;
         font-size: 12px;
         text-align: left;
 
-        color: #1c1c1c;
+        color:$nero;
         font-weight: 600;
         .year-name {
             padding-left: 5px;
@@ -349,7 +349,7 @@ $input-height: 3rem !default;
         }
         &.in-range::before {
             content: "";
-            background-color: #7d87e445;
+            background-color:$portage;
             width: 100%;
             height: 100%;
             left: 0px;
@@ -360,7 +360,7 @@ $input-height: 3rem !default;
 
         &.in-range.end-date::before {
             content: "";
-            background-color:#7d87e445;
+            background-color:$portage;
             width:84%;
             height: 100%;
             left: 0px;
@@ -372,7 +372,7 @@ $input-height: 3rem !default;
 
         &.start-date::before {
             content: "";
-            background-color:#7d87e445;
+            background-color:$portage;
             width: 100%;
             height: 100%;
             left: 0;
@@ -457,10 +457,10 @@ $input-height: 3rem !default;
             cursor: default;
         }
 
-        &.hourselect,
-        &.minuteselect,
-        &.secondselect,
-        &.ampmselect {
+        &.hours-select,
+        &.minute-select,
+        &.second-select,
+        &.ampm-select {
             width: 50px;
             margin: 0 auto;
             background: #eee;
@@ -555,7 +555,7 @@ $input-height: 3rem !default;
         float: none;
         text-align: left;
         margin: 0;
-        border-right: 1px solid gainsboro;
+        border-right: 1px solid $gainsboro;
         display: flex;
         flex-direction: column;
         .range-container {
@@ -589,7 +589,7 @@ $input-height: 3rem !default;
                             z-index: 1017;
                             min-width: 96px;
                             background-color: white;
-                            box-shadow: 0px 2px 8px #8e8383bf;
+                            box-shadow: 0px 2px 8px $moody-blue;
                             left: 28px;
                             top: -3px;
                             border-radius: 2px;
@@ -782,7 +782,7 @@ border-radius:50% 0 0 50% !important;
     display: none;
 }
 .md-drppicker td.in-range.in-range-start.in-range-end span{
-    background-color: #7d87e445 !important;
+    background-color:$portage!important;
     border-radius: 50%;
 }
 td.in-range.in-range-start.in-range-hovered.in-range-end::before{
@@ -958,8 +958,8 @@ td span {
     border: 1px solid transparent;
 }
 td:hover span {
-    background-color: #f2f2f2;
-    border: 1px solid #808080;
+    background-color: $white-smoke;
+    border: 1px solid $gray;
 }
 
 .off.in-range {
@@ -983,8 +983,8 @@ td:hover span {
 
 
     span {
-        background-color: #7d87e400 !important;
-        color: #1c1c1c !important;
+        background-color: $portage !important;
+        color: $nero !important;
     }
 
     .available:hover {
@@ -992,8 +992,8 @@ td:hover span {
     }
     &:hover{
         span{
-        background-color: #f2f2f2 !important;
-        border-color: #808080 !important;
+        background-color: $white-smoke !important;
+        border-color: $gray !important;
     }
     }
 }
@@ -1113,7 +1113,7 @@ td span {
 }
 
 .activatedDate span {
-    color: #1c1c1c !important;
+    color: $nero !important;
     background-color:transparent !important;
 }
 
@@ -1283,8 +1283,8 @@ td span {
     justify-content: space-around;
 }
 .days-upto-select {
-    border-bottom: 1px solid gainsboro;
-    border-top: 1px solid gainsboro;
+    border-bottom: 1px solid $gainsboro;
+    border-top: 1px solid $gainsboro;
     ul {
         list-style: none;
         margin: 0 auto;
@@ -1308,7 +1308,7 @@ td span {
                     z-index: 1017;
                     min-width: 96px;
                     background-color: white;
-                    box-shadow: 0px 2px 8px #8e8383bf;
+                    box-shadow: 0px 2px 8px $moody-blue;
                     left: 28px;
                     top: -3px;
                     border-radius: 2px;
@@ -1376,8 +1376,8 @@ td span {
 .in-range-hovered {
         &::before {
             content: "";
-            border-bottom: 1px dashed gray;
-            border-top: 1px dashed gray;
+            border-bottom: 1px dashed $gray;
+            border-top: 1px dashed $gray;
             width: 100%;
             height: 100%;
             left: 0px;
