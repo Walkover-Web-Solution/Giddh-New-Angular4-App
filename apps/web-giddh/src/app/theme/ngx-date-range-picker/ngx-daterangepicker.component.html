@@ -95,13 +95,13 @@
                     <span (click)="modalRef.hide()"><img src="../../../assets/images/calender.svg"></span>
                 </div>
                 <div class="start-end-date">
-                    <div class="pos-rel mr-1">
+                    <div class="relative mr-1">
                         <label>Start Date</label>
                         <input type="tel" name="inlineStartDate" [value]="viewOnlyStartDate" mask="00-00-0000"
                             (blur)="saveInlineDates($event)">
                         <span class="error-msg" *ngIf="invalidInlineStartDate">{{invalidInlineStartDate}}</span>
                     </div>
-                    <div class="pos-rel">
+                    <div class="relative">
                         <label>End Date</label>
                         <input type="tel" name="inlineEndDate" [value]="viewOnlyEndDate" mask="00-00-0000"
                             (blur)="saveInlineDates($event)">
@@ -110,8 +110,8 @@
                 </div>
                 <span class="error-msg">Start date must not be greater than End date</span>
                 <div class="button-wrapper">
-                    <a (click)="modalRef.hide()" class="mr-2">Cancel</a>
-                    <a (click)="applyInlineDates()">Ok</a>
+                    <a (click)="modalRef.hide()" class="mr-2 cursor-pointer">Cancel</a>
+                    <a (click)="applyInlineDates()" class="cursor-pointer">Ok</a>
                 </div>
             </div>
         </ng-template>
@@ -120,20 +120,20 @@
                 <div class="upper-part">
                     <!-- start date/ end date inputs container -->
                     <div class="select-date-range" [ngClass]="{'mb-3':invalidStartDate || invalidEndDate}">
-                        <div class="pos-rel">
-                            <input [ngClass]="{'invalid-date-input': invalidStartDate && ActiveDate === 0}" placeholder="start date"
-                                #startDateElement [value]="startDateString" (change)="setStartDate($event.target.value)"
-                                (click)="ActiveDate = 0" [class]="ActiveDate ===0 ? ActiveSelectedDateClass : ''">
-                            <span *ngIf="invalidStartDate && ActiveDate === 0" class="invalid-date error-msg">{{invalidStartDate}}</span>
+                        <div class="relative">
+                            <input [ngClass]="{'invalid-date-input':invalidStartDate}" placeholder="start date" #startDateElement [value]="startDateString"
+                                (change)="setStartDate($event.target.value)" (click)="ActiveDate =0"
+                                [class]="ActiveDate ===0 ?ActiveSelectedDateClass :''">
+                            <span *ngIf="invalidStartDate" class="invalid-date error-msg">{{invalidStartDate}}</span>
                         </div>
                         <span>
                             _
                         </span>
-                        <div class="pos-rel">
-                            <input [ngClass]="{'invalid-date-input': invalidEndDate && ActiveDate === 1}" placeholder="end date"
-                                #endDateElement [value]="endDateString" (change)="setEndDate($event.target.value)"
-                                (click)="ActiveDate = 1" [class]="ActiveDate ===1 ? ActiveSelectedDateClass : ''">
-                            <span *ngIf="invalidEndDate && ActiveDate === 1" class="invalid-date error-msg">{{invalidEndDate}}</span>
+                        <div class="relative">
+                            <input  [ngClass]="{'invalid-date-input':invalidEndDate}"  placeholder="end date" #endDateElement [value]="endDateString"
+                                (change)="setEndDate($event.target.value)" (click)="ActiveDate =1"
+                                [class]="ActiveDate ===1 ?ActiveSelectedDateClass :''">
+                            <span *ngIf="invalidEndDate"  class="invalid-date error-msg">{{invalidEndDate}}</span>   
                         </div>
                     </div>
                     <!-- start date/ end date inputs container -->

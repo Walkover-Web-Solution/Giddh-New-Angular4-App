@@ -74,7 +74,7 @@ $input-height: 3rem !default;
     display: flex;
     margin-top: 0;
     font-size: 14px;
-    background-color: #ffffff;
+    background-color:$white;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
 
     &.double {
@@ -607,13 +607,13 @@ $input-height: 3rem !default;
                             border-radius: 50%;
 
                             &:active {
-                                background-color: #afaaaabf;
+                                background-color: $wistful;
                             }
                         }
 
                         &.active {
-                            background-color: #e4e4e4 !important;
-                            border-left: 3px solid #3f51b5 !important;
+                            background-color:$whisper-color !important;
+                            border-left: 3px solid $speech-blue !important;
                         }
 
                         &[disabled] {
@@ -627,7 +627,7 @@ $input-height: 3rem !default;
                 }
 
                 li:hover {
-                    background-color: $whiteSmoke;
+                    background-color: $white-smoke;
                 }
             }
             ul.range-list{
@@ -717,18 +717,18 @@ $input-height: 3rem !default;
     }
 
     .btn.btn-danger {
-        background: #e4e4e4;
-        color: #e51f0c;
-        border: 1px solide #e4e4e4;
+        background:$whisper-color;
+        color: $scarlet;
+        border: 1px solid $whisper-color;
         margin-right: 10px;
 
         &:hover,
         &:active,
         &:focus,
         &:active:focus {
-            background: #d3d3d3;
-            color: #e51f0c;
-            border-color: #d3d3d3;
+            background: $gainsboro;
+            color: $scarlet;
+            border-color: $gainsboro;
             outline: none;
             box-shadow: none;
         }
@@ -738,16 +738,16 @@ $input-height: 3rem !default;
     }
 
     .btn.btn-success {
-        background: #0cb1af;
-        color: #fff;
-        border: 1px solid #0cb1af;
+        background: $light-sea-green;
+        color: $white;
+        border: 1px solid $light-sea-green;
         &:hover,
         &:active,
         &:focus,
         &:active:focus {
-            background: #087e7d;
-            color: #fff;
-            border: 1px solid #087e7d;
+            background: $teal;
+            color:$white;
+            border: 1px solid $teal;
         }
         &:disabled {
             opacity: 0.5;
@@ -756,7 +756,7 @@ $input-height: 3rem !default;
 
     .clear {
         box-shadow: none;
-        background-color: #ffffff !important;
+        background-color: $white !important;
 
         svg {
             color: #eb3232;
@@ -798,9 +798,10 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before{
 .mb-3{
     margin-bottom: 30px;
 }
-.pos-rel{
+.relative{
     position: relative;
 }
+
 @media (min-width: 564px) {
     .md-drppicker {
         width: auto;
@@ -972,7 +973,7 @@ td:hover span {
 .md-drppicker td.start-date.active {
     span {
         background-color: $midnight-blue !important;
-        color: #fff !important;
+        color:$white !important;
         border-color:$midnight-blue !important;
     }
 }
@@ -1051,7 +1052,7 @@ td span {
 
         &:hover {
             border-radius: 50px;
-            background-color:#e4e4e4;
+            background-color:$whisper-color;
             cursor: pointer;
         }
     }
@@ -1130,7 +1131,7 @@ td span {
 
 .sub-ranges-cal {
     position: absolute;
-    background-color: #fff;
+    background-color:$white;
     right: -100%;
     top: 0;
     z-index: 9999;
@@ -1192,7 +1193,7 @@ td span {
             display: flex;
             flex-direction: column;
             .upper-part{
-                border-bottom: 1px solid $whiteSmoke;
+                border-bottom: 1px solid $white-smoke;
                 position: sticky;
                 top: 0;
                 z-index: 1;
@@ -1325,13 +1326,13 @@ td span {
                     border-radius: 50%;
 
                     &:active {
-                        background-color: #afaaaabf;
+                        background-color: $wistful;
                     }
                 }
 
                 &.active {
-                    background-color: #e4e4e4 !important;
-                    border-left: 3px solid #3f51b5 !important;
+                    background-color: $whisper-color !important;
+                    border-left: 3px solid $speech-blue !important;
                 }
 
                 &[disabled] {
@@ -1360,7 +1361,7 @@ td span {
         }
 
         li:hover {
-            background-color: $whiteSmoke;
+            background-color: $white-smoke;
         }
     }
 }
@@ -1474,7 +1475,7 @@ td span {
             top: 0;
             width: 100%;
             left: 0;
-            background-color: #fff;
+            background-color:$white;
             z-index: 1;
             min-width: 100%;
             padding-top: 0;
@@ -1606,7 +1607,7 @@ td span {
         position: fixed;
         bottom: 0;
         right: 0;
-        background-color: #fff;
+        background-color:$white;
         z-index: 999;
         width: 100%;
         margin: 0;
