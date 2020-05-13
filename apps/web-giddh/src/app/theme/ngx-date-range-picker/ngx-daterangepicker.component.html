@@ -332,14 +332,14 @@
                                     </table>
                                 </div>
                                 <div class="calendar-time" *ngIf="timePicker">
-                                    <select class="hourselect" [disabled]="!endDate"
+                                    <select class="hours-select" [disabled]="!endDate"
                                         [(ngModel)]="timepickerVariables.start.selectedHour"
                                         (ngModelChange)="timeChanged($event, sideEnum.start)">
                                         <option *ngFor="let i of timepickerVariables.start.hours" [value]="i"
                                             [disabled]="timepickerVariables.start.disabledHours.indexOf(i) > -1">{{i}}
                                         </option>
                                     </select>
-                                    <select class="minuteselect" [disabled]="!endDate"
+                                    <select class="minute-select" [disabled]="!endDate"
                                         [(ngModel)]="timepickerVariables.start.selectedMinute"
                                         (ngModelChange)="timeChanged($event, sideEnum.start)">
                                         <option *ngFor="let i of timepickerVariables.start.minutes; let index = index;"
@@ -347,7 +347,7 @@
                                             [disabled]="timepickerVariables.start.disabledMinutes.indexOf(i) > -1">
                                             {{timepickerVariables.start.minutesLabel[index]}}</option>
                                     </select>
-                                    <select *ngIf="timePickerSeconds" class="secondselect" [disabled]="!endDate"
+                                    <select *ngIf="timePickerSeconds" class="second-select" [disabled]="!endDate"
                                         [(ngModel)]="timepickerVariables.start.selectedSecond"
                                         (ngModelChange)="timeChanged($event, sideEnum.start)">
                                         <option *ngFor="let i of timepickerVariables.start.seconds; let index = index;"
@@ -355,7 +355,7 @@
                                             [disabled]="timepickerVariables.start.disabledSeconds.indexOf(i) > -1">
                                             {{timepickerVariables.start.secondsLabel[index]}}</option>
                                     </select>
-                                    <select *ngIf="!timePicker24Hour" class="ampmselect"
+                                    <select *ngIf="!timePicker24Hour" class="ampm-select"
                                         [(ngModel)]="timepickerVariables.start.ampmModel"
                                         (ngModelChange)="timeChanged($event, sideEnum.start)">
                                         <option value="AM" [disabled]="timepickerVariables.start.amDisabled">AM</option>
@@ -458,14 +458,14 @@
                                     </table>
                                 </div>
                                 <div class="calendar-time" *ngIf="timePicker">
-                                    <select class="hourselect" [disabled]="!endDate"
+                                    <select class="hours-select" [disabled]="!endDate"
                                         [(ngModel)]="timepickerVariables.end.selectedHour"
                                         (ngModelChange)="timeChanged($event, sideEnum.end)">
                                         <option *ngFor="let i of timepickerVariables.end.hours" [value]="i"
                                             [disabled]="timepickerVariables.end.disabledHours.indexOf(i) > -1">{{i}}
                                         </option>
                                     </select>
-                                    <select class="minuteselect" [disabled]="!endDate"
+                                    <select class="minute-select" [disabled]="!endDate"
                                         [(ngModel)]="timepickerVariables.end.selectedMinute"
                                         (ngModelChange)="timeChanged($event, sideEnum.end)">
                                         <option *ngFor="let i of timepickerVariables.end.minutes; let index = index;"
@@ -473,7 +473,7 @@
                                             [disabled]="timepickerVariables.end.disabledMinutes.indexOf(i) > -1">
                                             {{timepickerVariables.end.minutesLabel[index]}}</option>
                                     </select>
-                                    <select *ngIf="timePickerSeconds" class="secondselect" [disabled]="!endDate"
+                                    <select *ngIf="timePickerSeconds" class="second-select" [disabled]="!endDate"
                                         [(ngModel)]="timepickerVariables.end.selectedSecond"
                                         (ngModelChange)="timeChanged($event, sideEnum.end)">
                                         <option *ngFor="let i of timepickerVariables.end.seconds; let index = index;"
@@ -481,7 +481,7 @@
                                             [disabled]="timepickerVariables.end.disabledSeconds.indexOf(i) > -1">
                                             {{timepickerVariables.end.secondsLabel[index]}}</option>
                                     </select>
-                                    <select *ngIf="!timePicker24Hour" class="ampmselect"
+                                    <select *ngIf="!timePicker24Hour" class="ampm-select"
                                         [(ngModel)]="timepickerVariables.end.ampmModel"
                                         (ngModelChange)="timeChanged($event, sideEnum.end)">
                                         <option value="AM" [disabled]="timepickerVariables.end.amDisabled">AM</option>
