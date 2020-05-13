@@ -438,7 +438,7 @@
                                             Count</div>
                                         <div class="" *ngIf="GroupStockReportRequest.branchDetails!=='allEntity'">
                                             Product Count</div>
-                                        <div class="mt-2">Profit/Loss</div>
+                                        <div class="mt-1">Profit/Loss</div>
                                     </h4>
                                 </div>
                                 <div class="col-xs-8 p0">
@@ -451,9 +451,8 @@
                                             <span class="text-orange"
                                                 *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems}}</span>
                                         </div>
-                                        <div class="mt-2">
-                                            <span class="text-orange">{{groupStockReport.profit | giddhCurrency}}
-                                                <br>
+                                        <div class="mt-1">
+                                            <span class="text-orange d-block">{{groupStockReport.profit | giddhCurrency}}
                                                 ({{dateRangePickerCmp?.nativeElement?.value | replaceHyphens}})</span>
                                         </div>
                                     </h4>

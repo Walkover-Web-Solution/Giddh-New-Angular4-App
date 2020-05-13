@@ -1,0 +1,16 @@
+{
+    "page_heading" : "Financial Year(s)",
+    "sr_no" : "Sr. No.",
+    "from" : "From",
+    "to" : "To",
+    "lock_status" : "Lock Status",
+    "locked" : "Locked",
+    "unlocked" : "Unlocked",
+    "current_financial_year" : "Current Financial Year (can not be locked)",
+    "switch_financial_year_label" : "Switch Financial Year",
+    "switch_financial_year_placeholder" : "Select Financial Year",
+    "add_financial_year_label" : "Add Financial Year",
+    "add_financial_year_placeholder" : "Select Financial Year",
+    "financial_year_period_label" : "Financial Year Period",
+    "financial_year_period_placeholder" : "Financial Year Period"
+}

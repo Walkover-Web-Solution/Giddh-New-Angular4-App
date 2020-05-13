@@ -10,7 +10,7 @@
     padding: 0 20px;
 }
 
-@media(max-waidth:768px) {
+@media(max-width:768px) {
     .empty-label label,
     .empty-label br {
         display: none;
@@ -25,5 +25,18 @@
     .inlnImg label {
         margin: 0;
         display: none;
+    }
+    .gmail-integration-message{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        h4{
+            align-self: self-start !important;
+            padding-bottom: 10px;
+            font-size: 14px;
+        }
+        .btn-danger{
+            margin-left: 0 !important;
+        }
     }
 }

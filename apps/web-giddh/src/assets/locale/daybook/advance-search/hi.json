@@ -1,0 +1,17 @@
+{
+    "date_range" : "Date Range",
+    "particulars_title" : "Particulars",
+    "particulars_content" : "By default all accounts are selected",
+    "vouchers_title" : "Voucher Type",
+    "vouchers_content" : "By default all vouchers are selected",
+    "included" : "Included",
+    "excluded" : "Excluded",
+    "include" : "Include",
+    "exclude" : "Exclude",
+    "other_details" : "Other Details",
+    "inventory" : "Inventory",
+    "select_accounts" : "Select Accounts",
+    "cheque_details" : "Cheque Details",
+    "cheque_number" : "Cheque Number",
+    "clearance_date" : "Clearance Date"
+}

@@ -55,6 +55,8 @@ export interface InventoryState {
     showBranchScreenSidebar: boolean;
     isStockUnitCodeAvailable: boolean;
     moveStockSuccess: boolean;
+    isGetManufactureStockInProgress: boolean;
+
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
@@ -117,7 +119,8 @@ const initialState: InventoryState = {
     showBranchScreen: false,
     showBranchScreenSidebar: false,
     isStockUnitCodeAvailable: false,
-    moveStockSuccess: false
+    moveStockSuccess: false,
+    isGetManufactureStockInProgress: false
 };
 
 export function InventoryReducer(state: InventoryState = initialState, action: CustomActions): InventoryState {
@@ -400,9 +403,13 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         case InventoryActionsConst.GetManufacturingStockForCreateResponse:
             let mfResponse: BaseResponse<StocksResponse, string> = action.payload;
             if (mfResponse.status === 'success') {
-                return Object.assign({}, state, { manufacturingStockListForCreateMF: mfResponse.body });
+                return Object.assign({}, state, { manufacturingStockListForCreateMF: mfResponse.body, isGetManufactureStockInProgress: false });
             }
             return state;
+
+        case InventoryActionsConst.GetManufacturingStockForCreate:
+            return Object.assign({}, state, { isGetManufactureStockInProgress: true });
+
         case InventoryActionsConst.CreateStock:
             return Object.assign({}, state, { isStockAddInProcess: true, createStockSuccess: false });
         case InventoryActionsConst.CreateStockResponse:

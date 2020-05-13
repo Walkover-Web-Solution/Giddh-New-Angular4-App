@@ -15,6 +15,7 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { DaybookQueryRequest, DayBookRequestModel } from '../models/api-models/DaybookRequest';
 import { HttpClient } from '@angular/common/http';
 import { ToasterService } from './toaster.service';
+import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
 
 @Injectable()
 export class LedgerService {
@@ -408,16 +409,29 @@ export class LedgerService {
     }
 
     /**
-     * This will download the columnar report
+     * This will download/JSON to show the columnar report
      *
-     * @param {string} companyUniqueName
-     * @param {string} groupUniqueName
-     * @param {*} request
+     * @param {string} companyUniqueName Company unique name
+     * @param {string} groupUniqueName Group unique name
+     * @param {*} request Object, Request body
+     * @param {boolean} isShowData True if columnar report table need to show instead of download
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof LedgerService
      */
-    public downloadColumnarReport(companyUniqueName: string, groupUniqueName: string, request: any): Observable<BaseResponse<any, any>> {
-        return this._http.post(this.config.apiUrl + LEDGER_API.GET_COLUMNAR_REPORT.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+    public downloadColumnarReport(companyUniqueName: string, groupUniqueName: string, request: any, isShowData?: boolean): Observable<BaseResponse<any, any>> {
+        let url: string = '';
+        if (isShowData) {
+            url = this.config.apiUrl + LEDGER_API.GET_COLUMNAR_REPORT + '?fileType=json';
+            if (request.page) {
+            url = `${url}&page=${request.page}`;
+        }
+        if (request.count) {
+            url = `${url}&count=${request.count}`;
+        }
+        } else {
+            url = this.config.apiUrl + LEDGER_API.GET_COLUMNAR_REPORT;
+        }
+        return this._http.post(url.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             .replace(':groupUniqueName', groupUniqueName), request
         ).pipe(
             map((res) => {
@@ -427,5 +441,39 @@ export class LedgerService {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
+    }
+
+    /**
+     * To get export Ledger's columnar report table
+     *
+     * @param {ReportsDetailedRequestFilter} model request model
+     * @param {string} companyUniqueName Company unique name
+     * @param {string} accountUniqueName Account unique name
+     * @param {*} [body] body
+     * @returns {Observable<BaseResponse<any, ReportsDetailedRequestFilter>>}
+     * @memberof LedgerService
+     */
+    public exportLedgerColumnarReportTable(model: ReportsDetailedRequestFilter, companyUniqueName: string, accountUniqueName: string, body?: any): Observable<BaseResponse<any, ReportsDetailedRequestFilter>> {
+        let url = this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_COLUMNAR_REPORT_TABLE
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+            .replace(':from', model.from)
+            .replace(':to', model.to);
+        if (model.page) {
+            url = `${url}&page=${model.page}`;
+        }
+        if (model.count) {
+            url = `${url}&count=${model.count}`;
+        }
+        if (model.sort) {
+            url = `${url}&sort=${model.sort}`;
+        }
+        return this._http.post(url, body).pipe(map((res) => {
+            let data: BaseResponse<any, ReportsDetailedRequestFilter> = res;
+            data.request = body;
+            data.queryString = { accountUniqueName };
+            return data;
+        }),
+            catchError((e) => this.errorHandler.HandleCatch<string, ReportsDetailedRequestFilter>(e, model, { accountUniqueName })));
     }
 }
