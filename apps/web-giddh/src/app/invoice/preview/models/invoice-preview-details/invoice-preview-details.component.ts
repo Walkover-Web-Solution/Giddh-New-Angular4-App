@@ -177,6 +177,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             if (this.only4ProformaEstimates) {
                 this.getVoucherVersions();
             }
+            this.downloadVoucher('base64');
         }
 
         if ('invoiceSetting' in changes && changes.invoiceSetting.currentValue && changes.invoiceSetting.currentValue !== changes.invoiceSetting.previousValue) {
@@ -534,22 +535,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * @memberof InvoicePreviewDetailsComponent
      */
     public openInvoiceAdvanceReceiptModal(): void {
-        if (this.isAccountHaveAdvanceReceipts) {
+        if (this.onOpenAdvanceReceiptModal) {
             this.onOpenAdvanceReceiptModal.emit(true);
-        }
-    }
-
-    /**
-     * To toggle change status container
-     *
-     * @param {InvoicePreviewDetailsVm} item selected row item data
-     * @memberof InvoicePreviewDetailsComponent
-     */
-    public clickChangeStatusToggle(item: InvoicePreviewDetailsVm): void {
-        if (!this.isAccountHaveAdvanceReceipts) {
-            if (item && item.account && item.account.uniqueName && item.voucherDate) {
-                this.getAllAdvanceReceipts(item.account.uniqueName, item.voucherDate);
-            }
         }
     }
 

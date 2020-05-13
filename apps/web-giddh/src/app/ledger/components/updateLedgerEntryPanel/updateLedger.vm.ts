@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
 import { cloneDeep, filter, find, sumBy } from '../../../lodash-optimized';
@@ -72,6 +72,8 @@ export class UpdateLedgerVm {
     public giddhBalanceDecimalPlaces: number = 2;
     /** Advance receipt amount */
     public advanceReceiptAmount: number = 0;
+    /** To track compund total change for update ledger advance adjustment */
+    public compundTotalObserver = new BehaviorSubject(null);
 
     constructor() {
         this.voucherTypeList = [{
@@ -370,6 +372,7 @@ export class UpdateLedgerVm {
             this.compoundTotal = giddhRoundOff((this.entryTotal.drTotal - this.entryTotal.crTotal), this.giddhBalanceDecimalPlaces);
         }
         this.convertedCompoundTotal = this.calculateConversionRate(this.compoundTotal);
+        this.compundTotalObserver.next(this.compoundTotal);
     }
 
     public getUniqueName(txn: ILedgerTransactionItem) {
