@@ -93,6 +93,7 @@ export interface DateRangeClicked {
         multi: true
     }]
 })
+
 export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     modalRef: BsModalRef;
     chosenLabel: string;
@@ -103,6 +104,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     applyBtn: { disabled: boolean } = { disabled: false };
     startDate = moment().startOf('day');
     endDate = moment().endOf('day');
+    @Input()
+    inputStartDate: _moment.Moment;
+    @Input()
+    inputEndDate: _moment.Moment;
     ActiveDate: ActiveDateEnum = ActiveDateEnum.Start;
     @Input()
     ActiveSelectedDateClass = 'activeSelectedDate';
@@ -293,9 +298,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
         this.initCalendar();
 
-        this.router.events.subscribe(event => {
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
-                this.removeAllDatepickers();
+                this.removeDuplicateDatepickers();
                 this.hide();
             }
         });
@@ -390,8 +395,13 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         // set start date as start of start date
         // and end date as end of end date
         if (!this.timePicker) {
-            this.startDate = this.startDate.startOf('day');
-            this.endDate = this.endDate.endOf('day');
+            if(this.startDate) {
+                this.startDate = this.startDate.startOf('day');
+            }
+
+            if(this.endDate) {
+                this.endDate = this.endDate.endOf('day');
+            }
         }
 
         // can't be used together for now
@@ -1725,19 +1735,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
      */
     public removeDuplicateDatepickers(): void {
         if (document.getElementsByTagName("ngx-daterangepicker-material").length > 1) {
-            for (let loop = 0; loop < document.getElementsByTagName("ngx-daterangepicker-material").length; loop++) {
-                document.getElementsByTagName("ngx-daterangepicker-material")[loop].remove();
-            }
-        }
-    }
-
-    /**
-     * This is used to remove all datepickers from page
-     *
-     * @memberof NgxDaterangepickerComponent
-     */
-    public removeAllDatepickers(): void {
-        if (document.getElementsByTagName("ngx-daterangepicker-material").length > 0) {
             for (let loop = 0; loop < document.getElementsByTagName("ngx-daterangepicker-material").length; loop++) {
                 document.getElementsByTagName("ngx-daterangepicker-material")[loop].remove();
             }

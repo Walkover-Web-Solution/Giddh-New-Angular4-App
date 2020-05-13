@@ -44,7 +44,7 @@ import { createSelector } from 'reselect';
 import { GeneralActions } from '../actions/general/general.actions';
 import { GeneralService } from '../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { GIDDH_DATE_FORMAT } from './../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../shared/helpers/defaultDateFormat';
 import { OnboardingFormRequest } from '../models/api-models/Common';
 import { CommonActions } from '../actions/common.actions';
 
@@ -78,7 +78,9 @@ export interface PayNowRequest {
 })
 
 export class ContactComponent implements OnInit, OnDestroy, OnChanges {
+    /** Stores the current range of date picker */
     public selectedDateRange: any;
+    public selectedDateRangeUi: any;
     public flattenAccounts: any = [];
     public sundryDebtorsAccountsBackup: any = {};
     public sundryDebtorsAccountsForAgingReport: IOption[] = [];
@@ -225,6 +227,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     /** Selected company */
     private selectedCompany: any;
     public universalDate: any;
+    /** Selects/Unselects extra columns based on Select All Checkbox */
     public selectAll: boolean = false;
 
     constructor(
@@ -301,8 +304,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
-                this.selectedDateRange = { startDate: moment(universalDate[0], 'DD-MM-YYYY'), endDate: moment(universalDate[1], 'DD-MM-YYYY') };
-
+                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
+                this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
                 this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');
                 this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, this.searchStr);
@@ -846,6 +849,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
     public selectedDate(value: any) {
         if (value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
             this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, this.searchStr);
@@ -1178,22 +1183,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof ContactComponent
      */
     public selectAllColumns(event: boolean): void {
-        if (event === true) {
-            this.showFieldFilter.parentGroup = true;
-            this.showFieldFilter.openingBalance = true;
-            this.showFieldFilter.mobile = true;
-            this.showFieldFilter.email = true;
-            this.showFieldFilter.state = true;
-            this.showFieldFilter.gstin = true;
-            this.showFieldFilter.comment = true;
-        } else {
-            this.showFieldFilter.parentGroup = false;
-            this.showFieldFilter.openingBalance = false;
-            this.showFieldFilter.mobile = false;
-            this.showFieldFilter.email = false;
-            this.showFieldFilter.state = false;
-            this.showFieldFilter.gstin = false;
-            this.showFieldFilter.comment = false;
-        }
+        this.showFieldFilter.parentGroup = event;
+        this.showFieldFilter.openingBalance = event;
+        this.showFieldFilter.mobile = event;
+        this.showFieldFilter.email = event;
+        this.showFieldFilter.state = event;
+        this.showFieldFilter.gstin = event;
+        this.showFieldFilter.comment = event;
     }
 }

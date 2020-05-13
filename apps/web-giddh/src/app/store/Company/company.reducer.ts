@@ -6,7 +6,7 @@ import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
 import * as moment from 'moment/moment';
 import { IRegistration } from "../../models/interfaces/registration.interface";
-import { DEFAULT_DATE_RANGE_PICKER_RANGES, DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM } from '../../app.constant';
+import { DEFAULT_DATE_RANGE_PICKER_RANGES, DatePickerDefaultRangeEnum } from '../../app.constant';
 
 /**
  * Keeping Track of the CompanyState
@@ -161,9 +161,9 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                     dateRangePickerConfig: {
                         ...state.dateRangePickerConfig,
                         ranges: state.dateRangePickerConfig.ranges.map(range => {
-                            if (range.name === DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.ThisFinancialYearToDate) {
+                            if (range.name === DatePickerDefaultRangeEnum.ThisFinancialYearToDate) {
                                 range.value = [moment(res.financialYearStarts, 'DD-MM-YYYY').startOf('day'), moment()];
-                            } else if (range.name === DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.LastFinancialYear) {
+                            } else if (range.name === DatePickerDefaultRangeEnum.LastFinancialYear) {
                                 range.value = [
                                     moment(res.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
                                     moment(res.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year')

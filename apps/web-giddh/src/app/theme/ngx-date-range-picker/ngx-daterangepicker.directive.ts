@@ -16,13 +16,17 @@ const moment = _moment;
         }
     ]
 })
+
 export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     public picker: NgxDaterangepickerComponent;
     private _onChange = Function.prototype;
     private _onTouched = Function.prototype;
-    private _validatorChange = Function.prototype;
     private _value: any;
     private localeDiffer: KeyValueDiffer<string, any>;
+    @Input()
+    inputStartDate: _moment.Moment;
+    @Input()
+    inputEndDate: _moment.Moment;
     @Input()
     minDate: _moment.Moment;
     @Input()
@@ -164,6 +168,7 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
                 }
             }
         });
+
         this.picker.firstMonthDayClass = this.firstMonthDayClass;
         this.picker.lastMonthDayClass = this.lastMonthDayClass;
         this.picker.emptyWeekRowClass = this.emptyWeekRowClass;
@@ -172,6 +177,13 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         this.picker.drops = this.drops;
         this.picker.opens = this.opens;
         this.localeDiffer = this.differs.find(this.locale).create();
+
+        if(this.inputStartDate) {
+            this.picker.startDate = this.inputStartDate;
+        }
+        if(this.inputEndDate) {
+            this.picker.endDate = this.inputEndDate;
+        }
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -179,6 +191,12 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
             if (changes.hasOwnProperty(change)) {
                 if (this.notForChangesProperty.indexOf(change) === -1) {
                     this.picker[change] = changes[change].currentValue;
+                    if(change === "inputStartDate" && changes[change].currentValue) {
+                        this.picker.startDate = changes[change].currentValue;
+                    }
+                    if(change === "inputEndDate" && changes[change].currentValue) {
+                        this.picker.endDate = changes[change].currentValue;
+                    }
                 }
             }
         }
@@ -299,19 +317,21 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
      */
     setPosition() {
         const container = document.getElementsByTagName("ngx-daterangepicker-material")[0] as HTMLElement;
-        const element = this._el.nativeElement;
-        let position = this.getPosition(element);
-        let screenWidth = window.innerWidth;
-        let totalWidth = container.offsetWidth + position.x;
-        let positionX = position.x;
+        if(container) {
+            const element = this._el.nativeElement;
+            let position = this.getPosition(element);
+            let screenWidth = window.innerWidth;
+            let totalWidth = container.offsetWidth + position.x;
+            let positionX = position.x;
 
-        if(totalWidth > screenWidth) {
-            positionX = positionX - (totalWidth - screenWidth);
+            if(totalWidth > screenWidth) {
+                positionX = positionX - (totalWidth - screenWidth);
+            }
+
+            this._renderer.setStyle(container, 'top', position.y + 'px');
+            this._renderer.setStyle(container, 'left', positionX + 'px');
+            this._renderer.setStyle(container, 'right', 'auto');
         }
-
-        this._renderer.setStyle(container, 'top', position.y + 'px');
-        this._renderer.setStyle(container, 'left', positionX + 'px');
-        this._renderer.setStyle(container, 'right', 'auto');
     }
 
     /**
