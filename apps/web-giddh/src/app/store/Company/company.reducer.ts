@@ -7,6 +7,7 @@ import { CustomActions } from '../customActions';
 import * as moment from 'moment/moment';
 import { IRegistration } from "../../models/interfaces/registration.interface";
 import { DEFAULT_DATE_RANGE_PICKER_RANGES, DatePickerDefaultRangeEnum } from '../../app.constant';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 /**
  * Keeping Track of the CompanyState
@@ -162,11 +163,11 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                         ...state.dateRangePickerConfig,
                         ranges: state.dateRangePickerConfig.ranges.map(range => {
                             if (range.name === DatePickerDefaultRangeEnum.ThisFinancialYearToDate) {
-                                range.value = [moment(res.financialYearStarts, 'DD-MM-YYYY').startOf('day'), moment()];
+                                range.value = [moment(res.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'), moment()];
                             } else if (range.name === DatePickerDefaultRangeEnum.LastFinancialYear) {
                                 range.value = [
-                                    moment(res.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
-                                    moment(res.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year')
+                                    moment(res.financialYearStarts, GIDDH_DATE_FORMAT).subtract(1, 'year'),
+                                    moment(res.financialYearStarts, GIDDH_DATE_FORMAT).subtract(1, 'year')
                                 ];
                             }
                             return range;
