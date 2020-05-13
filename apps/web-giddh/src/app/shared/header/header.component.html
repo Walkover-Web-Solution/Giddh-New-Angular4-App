@@ -457,6 +457,11 @@
 
 
     </div>
+    <!-- setting page sidebar -->
+    <div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'">
+        <aside-setting class="setting-sidebar" (closeAsideEvent)="toggleSettingPane($event)">
+        </aside-setting>
+    </div>
 
     <div class="mobile_menu_icon" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
         <span class="icon-bar" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right"></span>
@@ -910,14 +915,13 @@
 </ng-template>
 
 <!--  -->
-<div class="help-support-aside" *ngIf="asideHelpSupportMenuState === 'in'"></div>
 <div class="help-support-aside" *ngIf="asideHelpSupportMenuState === 'in'">
     <aside-help-support (closeAsideEvent)="toggleHelpSupportPane($event)">
     </aside-help-support>
 </div>
 
-<div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'">
-    <aside-setting (closeAsideEvent)="toggleSettingPane($event)">
+<div class="help-support-aside " *ngIf="asideSettingMenuState === 'in'">
+    <aside-setting class="setting-sidebar" (closeAsideEvent)="toggleSettingPane($event)">
     </aside-setting>
 </div>
 
