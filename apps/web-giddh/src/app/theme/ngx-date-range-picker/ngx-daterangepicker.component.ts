@@ -1631,11 +1631,21 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This releases the memory
+     *
+     * @memberof NgxDaterangepickerComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * This will get all the financial years of the company which will be used to show financial years in dropdown, to find out date for All Time and to find min and max date in calendar
+     *
+     * @memberof NgxDaterangepickerComponent
+     */
     public getFinancialYears(): void {
         this.settingsFinancialYearService.GetAllFinancialYears().subscribe(res => {
             if (res && res.body && res.body.financialYears) {
@@ -1676,6 +1686,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * This will set the start and end date based on the choosen financial year
+     *
+     * @param {*} financialYear
+     * @memberof NgxDaterangepickerComponent
+     */
     public clickFinancialYear(financialYear): void {
         this.startDate = moment(new Date(financialYear.value.financialYearStarts.split("-").reverse().join("-")));
         this.endDate = moment(new Date(financialYear.value.financialYearEnds.split("-").reverse().join("-")));
@@ -1702,6 +1718,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         this.updateView();
     }
 
+    /**
+     * This is used to remove duplicate datepickers from page
+     *
+     * @memberof NgxDaterangepickerComponent
+     */
     public removeDuplicateDatepickers(): void {
         if (document.getElementsByTagName("ngx-daterangepicker-material").length > 1) {
             for (let loop = 0; loop < document.getElementsByTagName("ngx-daterangepicker-material").length; loop++) {
@@ -1710,6 +1731,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This is used to remove all datepickers from page
+     *
+     * @memberof NgxDaterangepickerComponent
+     */
     public removeAllDatepickers(): void {
         if (document.getElementsByTagName("ngx-daterangepicker-material").length > 0) {
             for (let loop = 0; loop < document.getElementsByTagName("ngx-daterangepicker-material").length; loop++) {
@@ -1718,6 +1744,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This is used to append datepicker to body
+     *
+     * @memberof NgxDaterangepickerComponent
+     */
     public appendDatepickerToBody(): void {
         if (document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material")[0]) {
             document.body.appendChild(document.getElementsByTagName("ngx-daterangepicker-material")[0]);
@@ -1725,10 +1756,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         }
     }
 
-    public handleHighLightedItemEvent(item: any): void {
-
-    }
-
+    /**
+     * This is used to add next/previous months in the list of months in calendar scroll
+     *
+     * @param {string} direction
+     * @memberof NgxDaterangepickerComponent
+     */
     public onScroll(direction: string): void {
         if (direction === "bottom") {
             if (this.singleDatePicker) {
@@ -1759,6 +1792,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This functions add the new months in the list of calendar months
+     *
+     * @param {string} side
+     * @memberof NgxDaterangepickerComponent
+     */
     public addMonthInCalendarMonths(side: string): void {
         if (side === "start") {
             if (this.initialCalendarMonths === true) {
@@ -1820,11 +1859,21 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This renders the initial 2 months in calendar
+     *
+     * @memberof NgxDaterangepickerComponent
+     */
     public initCalendar(): void {
         this.renderCalendar(DateType.start);
         this.renderCalendar(DateType.end);
     }
 
+    /**
+     * This is used to get all years between dates
+     *
+     * @memberof NgxDaterangepickerComponent
+     */
     public getAllYearsBetweenDates(): void {
         let difference: number;
         difference = new Date(this.maxDate.toDate()).getFullYear() - new Date(this.minDate.toDate()).getFullYear();
@@ -1837,6 +1886,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This is used to save dates in variables from mobile device edit popup
+     *
+     * @param {*} event
+     * @memberof NgxDaterangepickerComponent
+     */
     public saveInlineDates(event): void {
         if (event.target.name === "inlineStartDate") {
             this.invalidInlineStartDate = "";
@@ -1857,6 +1912,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This is used to apply the selected dates
+     *
+     * @memberof NgxDaterangepickerComponent
+     */
     public applyInlineDates(): void {
         if (this.inlineStartDate.isBefore(this.inlineEndDate, 'day')) {
             this.startDate = this.inlineStartDate;
@@ -1868,11 +1928,22 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This is used to mobile datepicker in mobile
+     *
+     * @memberof NgxDaterangepickerComponent
+     */
     public openMobileDatepicker(): void {
         this.openMobileDatepickerPopup = true;
         document.querySelector('body').classList.add('hide-scroll-body');
     }
 
+    /**
+     * This is used to emit the selected dates
+     *
+     * @param {boolean} sendBlankDates
+     * @memberof NgxDaterangepickerComponent
+     */
     public emitSelectedDates(sendBlankDates: boolean): void {
         if (sendBlankDates === true) {
             this.datesUpdated.emit({ name: '', startDate: null, endDate: null });
@@ -1881,14 +1952,30 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This is used to restrict scroll on page if focus of mouse is inside calendar
+     *
+     * @memberof NgxDaterangepickerComponent
+     */
     public restrictBodyScroll(): void {
         document.querySelector('body').classList.add('restrict-body-scroll');
     }
 
+    /**
+     * This is used to allow scroll on page if focus of mouse is outside calendar
+     *
+     * @memberof NgxDaterangepickerComponent
+     */
     public allowBodyScroll(): void {
         document.querySelector('body').classList.remove('restrict-body-scroll');
     }
 
+    /**
+     * This is used to set current hovered month as active on show on calendar as current month
+     *
+     * @param {*} calendar
+     * @memberof NgxDaterangepickerComponent
+     */
     public setActiveMonth(calendar: any): void {
         this.activeMonthHover = true;
         this.activeMonth = calendar;
