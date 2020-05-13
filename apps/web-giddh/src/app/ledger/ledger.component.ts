@@ -281,7 +281,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // if ((this.advanceSearchRequest.dataToSend.bsRangeValue[0] !== from) || (this.advanceSearchRequest.dataToSend.bsRangeValue[1] !== to)) {
 
         this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
-            page: 0,
+            page: 1,
             dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
                 bsRangeValue: [from, to]
             })
@@ -423,12 +423,23 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public hideEledgerWrap() {
         this.lc.showEledger = false;
     }
-
+    /**
+     * To change pagination page number
+     *
+     * @param {*} event Pagination change event
+     * @memberof LedgerComponent
+     */
     public pageChanged(event: any): void {
         // this.advanceSearchRequest.page = event.page;
         this.trxRequest.page = event.page;
         // this.lc.currentPage = event.page;
-        this.getTransactionData();
+
+        if (this.isAdvanceSearchImplemented) {
+            this.advanceSearchRequest.page = event.page;
+            this.getAdvanceSearchTxn();
+        } else {
+            this.getTransactionData();
+        }
     }
 
     public ngOnInit() {
@@ -1193,6 +1204,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public resetAdvanceSearch() {
         this.advanceSearchComp.resetAdvanceSearchModal();
+        this.trxRequest.page = 1;
         this.getTransactionData();
     }
 
@@ -1341,7 +1353,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public onOpenAdvanceSearch(): void {
         if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.datePickerOptions && this.datePickerOptions.startDate && this.datePickerOptions.endDate ) {
             this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
-                page: 0,
+                page: 1,
                 dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
                     bsRangeValue: [this.datePickerOptions.startDate, this.datePickerOptions.endDate]
                 })
