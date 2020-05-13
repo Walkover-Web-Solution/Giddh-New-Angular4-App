@@ -32,7 +32,7 @@ import { AccountResponse } from '../../../models/api-models/Account';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { PettyCashResonse } from '../../../models/api-models/Expences';
 import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
-import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
@@ -50,6 +50,7 @@ import { TaxControlComponent } from '../../../theme/tax-control/tax-control.comp
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { UpdateLedgerVm } from './updateLedger.vm';
 import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
+import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 
 @Component({
     selector: 'update-ledger-entry-panel',
@@ -85,6 +86,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @ViewChild('tax') public taxControll: TaxControlComponent;
     @ViewChild('updateBaseAccount') public updateBaseAccount: ModalDirective;
     @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
+    /** Advance receipt remove confirmation modal reference */
+    @ViewChild('advanceReceiptRemoveConfirmationModal') public advanceReceiptRemoveConfirmationModal: ModalDirective;
 
     /** RCM popup instance */
     @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
@@ -174,10 +177,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public adjustedExcessAmount: number = 0;
     /** To check advance receipt/invoice amount is exceed by compound total */
     public totalAdjustedAmount: number = 0;
-
+    /** True, if company country supports other tax (TCS/TDS) */
+    public isTcsTdsApplicable: boolean;
     /** True, if all the transactions are of type 'Tax' or 'Reverse Charge' */
     private taxOnlyTransactions: boolean;
-
+    /** Remove Advance receipt confirmation flag */
+    public confirmationFlag: string = 'text-paragraph';
+    /** Remove Advance receipt confirmation message */
+    public removeAdvanceReceiptConfirmationMessage: string = 'If you change the type of this receipt, all the related advance receipt adjustments in invoices will be removed. & Are you sure you want to proceed?';// & symbol is not part of message it to split sentance by '&'
     constructor(
         private _accountService: AccountService,
         private _ledgerService: LedgerService,
@@ -227,6 +234,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
                 this.warehouses = warehouseData.formattedWarehouses;
                 this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
+            }
+        });
+        this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
             }
         });
         this.showAdvanced = false;
@@ -634,6 +646,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 // this.closeUpdateLedgerModal.emit(true);
             }
         });
+        if (this.vm) {
+            this.vm.compoundTotalObserver.pipe(takeUntil(this.destroyed$))
+                .subscribe(res => {
+                    if (res || res === 0) {
+                        this.checkAdvanceReceiptOrInvoiceAdjusted();
+                    }
+                });
+        }
     }
 
     private prepareMultiCurrencyObject(accountUniqueName) {
@@ -914,6 +934,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         txn.convertedAmount = this.vm.calculateConversionRate(txn.amount);
         txn.isUpdated = true;
         this.vm.onTxnAmountChange(txn);
+        // TODO: may use later
+        // this.checkAdvanceReceiptOrInvoiceAdjusted();
     }
 
     public showDeleteAttachedFileModal() {
@@ -1151,7 +1173,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public openHeaderDropDown() {
-        if (!this.vm.selectedLedger.voucherGenerated) {
+        if (!this.vm.selectedLedger.voucherGenerated || this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.sales) {
             this.openDropDown = true;
         } else {
             this.openDropDown = false;
@@ -1259,6 +1281,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.selectedLedger.generateInvoice = this.isAdvanceReceipt;
         if (this.shouldShowAdvanceReceiptMandatoryFields) {
             this.vm.generatePanelAmount();
+        }
+        if (!this.isAdvanceReceipt) {
+            if (this.isAdjustedInvoicesWithAdvanceReceipt && this.vm.selectedLedger && this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.receipt) {
+                this.advanceReceiptRemoveConfirmationModal.show();
+            }
         }
         this.vm.generateGrandTotal();
         this.vm.generateCompoundTotal();
@@ -1411,14 +1438,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 totalAmount = Number(totalAmount) + Number(item.adjustedAmount.amountForAccount);
             });
             this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.totalAdjustmentAmount = totalAmount;
-            if (Number(this.vm.compoundTotal) < Number(totalAmount)) {
-                this.isAdjustedAmountExcess = true;
-                this.adjustedExcessAmount = totalAmount - this.vm.compoundTotal;
-            } else {
-                this.isAdjustedAmountExcess = false;
-                this.adjustedExcessAmount = 0;
-            }
-            this.selectedAdvanceReceiptAdjustInvoiceEditMode = false;
+            this.checkAdjustedAmountExceed(Number(totalAmount));
             this.calculateInclusiveTaxesForAdvanceReceiptsInvoices();
         }
     }
@@ -1446,14 +1466,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 totalAmount = Number(totalAmount) + Number(item.dueAmount.amountForAccount);
             });
             this.totalAdjustedAmount = totalAmount;
-            if (Number(this.vm.compoundTotal) < Number(totalAmount)) {
-                this.isAdjustedAmountExcess = true;
-                this.adjustedExcessAmount = totalAmount - this.vm.compoundTotal;
-            } else {
-                this.isAdjustedAmountExcess = false;
-                this.adjustedExcessAmount = 0;
-            }
-            this.selectedAdvanceReceiptAdjustInvoiceEditMode = false;
+            this.checkAdjustedAmountExceed(Number(totalAmount));
             this.calculateInclusiveTaxesForAdvanceReceipts();
         }
     }
@@ -1470,5 +1483,48 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             totalAmount = Number(totalAmount) + Number(item.dueAmount.amountForAccount);
         });
         this.totalAdjustedAmount = totalAmount;
+    }
+
+    /**
+     * To check adjusted advance amount is more  than advance receipt/invoice
+     *
+     * @param {number} totalAmount Total compound amount
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public checkAdjustedAmountExceed(totalAmount: number): void {
+        if (Number(this.vm.compoundTotal) < Number(totalAmount)) {
+            this.isAdjustedAmountExcess = true;
+            this.adjustedExcessAmount = Number(totalAmount) - Number(this.vm.compoundTotal);
+        } else {
+            this.isAdjustedAmountExcess = false;
+            this.adjustedExcessAmount = 0;
+        }
+        this.selectedAdvanceReceiptAdjustInvoiceEditMode = false;
+    }
+
+    /**
+     * To check advance Receipt/Invoice amount is exceed to adjusted amount when amount change
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public checkAdvanceReceiptOrInvoiceAdjusted(): void {
+        if (this.isAdjustedInvoicesWithAdvanceReceipt && this.vm.selectedLedger && this.vm.selectedLedger.voucherGeneratedType === 'receipt') {
+            this.adjustedInvoiceAmountChange();
+        } else if (this.isAdjustedWithAdvanceReceipt && this.vm.selectedLedger.voucherGeneratedType === 'sales') {
+            this.adjustedReceiptsAmountChange();
+        }
+    }
+    /**
+     * Advance receipt adjustment remove model action response
+     *
+     * @param {*} userResponse  Action message
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public onAdvanceReceiptRemoveCloseConfirmationModal(userResponse: any): void {
+        if (userResponse) {
+            this.isAdvanceReceipt = !userResponse.response;
+            this.handleAdvanceReceiptChange();
+            this.advanceReceiptRemoveConfirmationModal.hide();
+        }
     }
 }

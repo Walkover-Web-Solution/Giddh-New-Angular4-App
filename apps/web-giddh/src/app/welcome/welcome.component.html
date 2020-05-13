@@ -75,7 +75,7 @@
                         </span>
                     </div>
 
-                    <div class="col-xs-12 mrB2 selectBox" *ngIf="!isWarehouse">
+                    <div class="col-xs-12 mrB2 selectBox" *ngIf="businessTypeList?.length && !isWarehouse">
                         <div class="pos-rel">
                             <label for="businessType">Select Business Type</label>
                             <div class="custom-select pos-rel">
@@ -181,7 +181,8 @@
                     </div>
                     <div class="col-xs-12 ">
                         <p class="change-preference ">Note: You can always change your preferences later in Settings.
-                        </p>
+                        </p><br />
+                        <p class="taxation-not-supported" *ngIf="!formFields['taxName']">Taxation not supported for your country! If you want to use it, let us know at <a href="mailto:sales@giddh.com">sales@giddh.com</a>. In the meanwhile, continue using our other features.</p>
                     </div>
                     <div class="col-xs-12 d-flex mrT5">
                         <button class="btn btn-primary" (click)="back(isbranch)">Back</button>
