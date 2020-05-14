@@ -14,7 +14,7 @@ const FLATTEN_SEARCH_TERM = 'flatten';
 @Component({
     selector: 'sh-select',
     templateUrl: './sh-select.component.html',
-    styleUrls: ['./sh-select.component.css'],
+    styleUrls: ['./sh-select.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         {

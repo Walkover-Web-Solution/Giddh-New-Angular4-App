@@ -3758,9 +3758,9 @@ ul.pills li {
 }
 
 #dashboard .panel-body {
-    height: 340px;
+    height: auto;
     overflow-y: auto;
-    overflow-x: hidden;
+    width: 100%
 }
 
 tr.db-bnk-account {
@@ -3783,7 +3783,7 @@ tr.db-bnk-account > td.reconnectDiv {
 }
 
 .panel-body .chart-div {
-    height: 300px;
+    height: auto;
 }
 
 .maxWidth250 {
@@ -4915,12 +4915,12 @@ border-bottom: 1px solid #e0e0e0;
     /* margin: 20px 0; */
 }
 
-#settingTab .nav > li > a {
+#setting-tab .nav > li > a {
     color: #231f20;
     border: 0;
 }
 
-#settingTab .nav-tabs > li.active > a {
+#setting-tab .nav-tabs > li.active > a {
     background: transparent;
     border: 0;
 }
@@ -4994,11 +4994,11 @@ border-bottom: 1px solid #e0e0e0;
     background-color: white;
 }
 
-#settingTab .nav > li > a:focus,
-#settingTab .nav > li > a:hover {
+#setting-tab .nav > li > a:focus,
+#setting-tab .nav > li > a:hover {
     background: transparent;
 }
-#settingTab .nav > li > a:hover {
+#setting-tab .nav > li > a:hover {
     color: #01a9f4 !important;
 }
 .navbar-inverse .navbar-nav > .open > a {
@@ -5260,7 +5260,7 @@ form#groupDetailForm {
     .mobileHeader .upperLayerHeader .navbar-nav {
         float: none;
     }
-    .desktopHeader {
+    .desktop-header {
         display: block;
     }
 
@@ -5297,7 +5297,7 @@ form#groupDetailForm {
         top: 0;
         z-index: 101;
     }
-    .desktopHeader {
+    .desktop-header {
         display: none;
     }
     .ledger_book .h-table tbody .ledger-row td {

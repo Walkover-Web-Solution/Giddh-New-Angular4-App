@@ -132,7 +132,7 @@ a[vr-item]:focus {
 }
 
 .main-company-name > li > a {
-    padding: 7px 15px !important;
+    padding: 6px 15px !important;
 }
 
 .main-company-name > li > a:hover .cText .cName,
@@ -143,6 +143,7 @@ a[vr-item]:focus {
 .left_fixed_header > li {
     text-transform: capitalize;
     position: relative;
+    font-weight: bold;
 }
 .no-padding {
     padding: 0px !important;
@@ -157,7 +158,7 @@ a[vr-item]:focus {
 .left_fixed_header > li > a {
     display: block;
     padding: 7px 15px;
-    color: #1c1c1c;
+    color: $nero;
     position: relative;
 }
 
@@ -172,9 +173,8 @@ a[vr-item]:focus {
 }
 
 .left_fixed_header > li > a:hover {
-    color: #262626;
+    color: $nero;
 }
-
 .left_fixed_header > li > a:hover .label > span,
 .left_fixed_header > li > a:hover .label {
     color: #01a9f4;
@@ -186,9 +186,8 @@ a[vr-item]:focus {
 
 .left_fixed_header > li > a.active .label,
 .left_fixed_header > li > a.active .label > span {
-    color: #1c1c1c;
-    font-family: "opensans-semibold";
-}
+    color:$nero;
+ }
 
 .left_fixed_header > li > a .label {
     display: table-cell;
@@ -211,11 +210,13 @@ a[vr-item]:focus {
     line-height: 1.3;
 }
 
+/*
 .left_fixed_header > li:hover a,
 .left_fixed_header > li > a:hover span,
 .left_fixed_header > li:hover a span {
     color: #fff;
 }
+*/
 
 .left_fixed_header [class^="icon-"] {
     font-size: 20px;
@@ -290,7 +291,7 @@ a[vr-item]:focus {
     margin-right: 2px;
 }
 
-#other i {
+.other i {
     float: right;
     font-size: 20px;
     background: transparent;
@@ -500,6 +501,12 @@ span.icon-support.dropdown-toggle {
     max-width: 150px;
 }
 
+.other a {
+    color: $extra-dark-gray;
+    text-transform: uppercase;
+    // font-family:$opensans-semibold;
+}
+
 
 .showMoreOpt {
     font-size: 14px;
@@ -540,7 +547,7 @@ span.icon-support.dropdown-toggle {
 
 .primary-header .company-name-finance-year {
     display: inline-block;
-    padding-left: 10px;
+    padding-left: 15px;
     width: 90%;
 }
 
@@ -578,7 +585,7 @@ ul.sub-list {
 }
 
 .nav-left-bar .company-name .cText span {
-    color: #1c1c1c;
+    color: $nero;
     word-break: break-all;
 }
 
@@ -636,6 +643,11 @@ ul.sub-list {
     background: #f1f1f1;
     border-bottom: 1px solid #e4e4e4;
 }
+.ledger-page {
+    position: sticky;
+    top: 60px;
+    z-index: 10;
+}
 .help-setting-icons{
     color: $white; 
     img{
@@ -684,7 +696,6 @@ ul.sub-list {
 .setting-sidebar{
     box-shadow:-2px -2px 15px rgba(0, 0, 0, 0.2)
 }
-
 /* responsive */
 
 @media (max-height: 800px) {
@@ -718,7 +729,7 @@ ul.sub-list {
     span.icon-support.dropdown-toggle {
         top: 7px;
     }
-    .lowerLayerHeader {
+    .lower-layer-header {
         padding-top: 10px;
     }
     .hamburger_menu button {
@@ -761,7 +772,7 @@ ul.sub-list {
         display: flex;
     }
     .paddingTopFixed-mobile {
-        padding-top: 86px;
+        padding-top: 92px;
     }
     .upperLayerHeader .open .dropdown-menu {
         background-color: #fff;
@@ -838,7 +849,7 @@ ul.sub-list {
         height: 24px !important;
         display: none;
     }
-    .lowerLayerHeader {
+    .lower-layer-header {
         padding-top: 5px;
     }
 }

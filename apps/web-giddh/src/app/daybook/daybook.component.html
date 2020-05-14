@@ -1,6 +1,6 @@
 <section class="container nopad"></section>
-<!-- <div class="top_bar col-xs-12 bdrB">
-  <h1 class="section_title">DayBook</h1>
+<!-- <div class="top-bar col-xs-12 bdrB">
+  <h1 class="section-title">DayBook</h1>
 </div> -->
 <div class="container-fluid">
 
@@ -39,15 +39,20 @@
                     </button>
 
                 </div>
-                <div class="expand-export"> <button type="button" class="btn btn-default expandBtnHideDesktop"
-                        (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
+                <div class="clear-filter form-group" *ngIf="showAdvanceSearchIcon">
+                    <button class="btn btn-filter" (click)="initialRequest();">
+                           <span class="icon-cross"></span> Clear Filter
+                        </button>
+                </div>
+                <div class="expand-export">
+                    <button type="button" class="btn btn-default expandBtnHideDesktop" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
                                               'Expand All'}}
                     </button>
-                    <button type="button" class="btn btn-default export-btn pull-right"
-                        (click)="exportDaybook()">Export</button>
+                    <button type="button" class="btn btn-default export-btn pull-right" (click)="exportDaybook()">Export</button>
                 </div>
 
             </div>
+
 
         </div>
     </div>
@@ -67,17 +72,33 @@
             <table class="tb-head table-bordered table basic onMobileView">
                 <thead>
                     <tr>
-                        <th class="col-xs-1">Date</th>
-                        <th class="col-xs-3">Particular</th>
-                        <th class="col-xs-2" style="width: 16.5%;">Vch. Name</th>
-                        <th class="col-xs-2 text-right" style="width: 16.5%;">Vch. No.</th>
-                        <th class="col-xs-2 text-right">Debit Amt</th>
-                        <th class="col-xs-2 text-right">Credit Amt</th>
+                        <th>Date</th>
+                        <th>Particular</th>
+                        <th>Vch. Name</th>
+                        <th class=" text-right">Vch. No.</th>
+                        <th class=" text-right">Debit Amt</th>
+                        <th class=" text-right">Credit Amt</th>
+
+                        <ng-container *ngIf="isEntryExpanded">
+                            <th>Product/Service
+                            </th>
+                            <th class=" text-right">Qty.
+                            </th>
+                            <th>Unit
+                            </th>
+                            <th class=" text-right">Rate
+                            </th>
+                            <th>HSN/SAC
+                            </th>
+                            <th>SKU
+                            </th>
+                            <th>Warehouse
+                            </th>
+                        </ng-container>
                     </tr>
                 </thead>
 
-                <tbody *ngFor="let entry of (daybookData$ | async)?.entries" (click)="expandEntry(entry);"
-                    class="daybookTableTbody">
+                <tbody *ngFor="let entry of (daybookData$ | async)?.entries" (click)="expandEntry(entry);" class="daybookTableTbody">
                     <tr>
                         <td data-title="Date">{{ entry.entryDate }}</td>
                         <td data-title="Particular">{{ entry.particular.name }}</td>
@@ -85,6 +106,7 @@
                         <td class="text-right" data-title="Vch. No.">{{ entry.voucherNo }}</td>
                         <td class="text-right" data-title="Debit Amt">{{ entry.debitAmount || '-' }}</td>
                         <td class="text-right" data-title="Credit Amt">{{ entry.creditAmount || '-' }}</td>
+                        <td *ngIf="isEntryExpanded" colspan="7"> </td>
                     </tr>
                     <ng-container *ngIf="entry !== undefined && entry.isExpanded">
                         <tr *ngFor="let details of entry.otherTransactions">
@@ -101,6 +123,22 @@
                                 <span *ngIf="details.type === 'CREDIT'">{{ details.amount}}</span>
                                 <span *ngIf="details.type !== 'CREDIT'">-</span>
                             </td>
+                            <ng-container *ngIf="isEntryExpanded">
+                                <td>{{details.inventory?details.inventory.stock.name:''}}
+                                </td>
+                                <td class=" text-right">{{details.inventory?details.inventory.quantity:''}}
+                                </td>
+                                <td>{{details.inventory?details.inventory.unit.name:''}}
+                                </td>
+                                <td class=" text-right">{{details.inventory?details.inventory.rate:''}}
+                                </td>
+                                <td>{{details.inventory?details.inventory.hsnNumber? details.inventory.hsnNumber: details.inventory.sacNumber:''}}
+                                </td>
+                                <td>{{details.inventory?details.inventory.skuCode:''}}
+                                </td>
+                                <td>{{details.inventory?details.inventory.warehouse.name:''}}
+                                </td>
+                            </ng-container>
                         </tr>
                     </ng-container>
                 </tbody>
@@ -110,42 +148,6 @@
 
 
             <div>
-                <!-- loop over entries -->
-                <!-- <section class="row row-1" *ngFor="let entry of (daybookData$ | async)?.entries"
-                    (click)="entry.isExpanded = !entry.isExpanded">
-                    <div class="row">
-                        <div class="col-xs-1 group">{{ entry.entryDate }}</div>
-                        <div class="col-xs-3 group">{{ entry.particular.name }}
-                        </div>
-                        <div class="col-xs-2 group">{{ entry.voucherName }}
-                        </div>
-                        <div class="col-xs-2 group text-right">{{ entry.voucherNo }}</div>
-                        <div class="col-xs-2 group text-right">{{ entry.debitAmount }}</div>
-                        <div class="col-xs-2 group text-right">{{ entry.creditAmount }}
-                        </div>
-                    </div>
-
-
-                    <ng-container *ngIf="entry.isExpanded">
-                        <section class="row row-2 account" *ngFor="let details of entry.otherTransactions">
-                            <div class="row">
-                                <div class="col-xs-1 account"></div>
-                                <div class="col-xs-3 account" style="padding-left: 15px;">{{ details.particular.name }}
-                                </div>
-                                <div class="col-xs-2 account"></div>
-                                <div class="col-xs-2 account"></div>
-                                <div class="col-xs-2 account text-right">
-                                    <span *ngIf="details.type === 'DEBIT'">{{ details.amount }}</span>
-                                </div>
-                                <div class="col-xs-2 account text-right">
-                                    <span *ngIf="details.type === 'CREDIT'">{{ details.amount }}</span>
-                                </div>
-                            </div>
-                        </section>
-                    </ng-container>
-
-                </section> -->
-                <!-- loop over entries -->
             </div>
         </div>
 
@@ -171,8 +173,7 @@
 <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <daybook-advance-search-model [startDate]="daybookQueryRequest.from" [endDate]="daybookQueryRequest.to"
-                (closeModelEvent)="closeAdvanceSearchPopup($event)"></daybook-advance-search-model>
+            <daybook-advance-search-model #daybookAdvanceSearch [startDate]="daybookQueryRequest.from" [endDate]="daybookQueryRequest.to" (closeModelEvent)="closeAdvanceSearchPopup($event)"></daybook-advance-search-model>
         </div>
     </div>
 </div>

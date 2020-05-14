@@ -358,7 +358,7 @@
                             <span class="icon-dashboard"></span>
                             <span class="label">{{menu.name}}</span>
                         </a>
-                        <a *ngIf="menu.uniqueName != '/pages/gstfiling' && menu.uniqueName != '/pages/vat-report'" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage && selectedPage.toLowerCase() == menu.name.toLowerCase()}" (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
+                        <a *ngIf="menu.uniqueName != '/pages/gstfiling' && menu.uniqueName != '/pages/vat-report' && menu.uniqueName != '/pages/all-modules'" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage && selectedPage.toLowerCase() == menu.name.toLowerCase()}" (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
                             <span class="icon-dashboard"></span>
                             <span class="label">{{menu.name}}</span>
                         </a>
@@ -479,7 +479,7 @@
         {{subscribedPlan.expiry}}. Apply to upgrade your subscription. <a class="click-here"
             (click)="goToSelectPlan()">Click here</a></p>
 </div>
-<header class="clearfix header-container desktopHeader " [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen }">
+<header class="clearfix header-container desktopHeader" [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen }">
     <nav class="navbar ">
         <div class="container-fluid pdT1 pdB1">
             <div class="navbar_header">
@@ -583,7 +583,7 @@
                     </ul>
                 </div>
 
-                <div class="lowerLayerHeader clearfix">
+                <div class="lower-layer-header clearfix">
                     <ul class="nav universal-date  pull-left" *ngIf="(selectedCompany | async)">
                         <li [hidden]="isTodaysDateSelected" class="border-none pl-0"> 
                             <button class="btn btn-link" (click)="jumpToToday();">Today</button>
@@ -676,7 +676,7 @@
             </div>
 
             <div class="modal-body custom-body mrB3" [style.padding-top.px]="0" [style.padding-bottom.px]="0">
-                <div class="" id="settingTab">
+                <div class="" id="setting-tab">
                     <tabset #supportTab>
                         <tab heading="Arrange a Demo">
                             <div class="argdemo mrT2">
@@ -898,7 +898,7 @@
             <ul>
                 <h6>Downloads</h6>
                 <li>
-                    <a href="https://play.google.com/store/apps/details?id=com.giddh.app" target="_blank" title="android app">
+                    <a href="https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en" target="_blank" title="android app">
                         <i class="fa fa-android"></i> Android</a>
                 </li>
                 <li>

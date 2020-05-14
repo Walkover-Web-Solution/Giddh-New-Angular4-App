@@ -1,0 +1,15 @@
+{
+    "tabs" : {
+        "taxes" : "Taxes",
+        "integration" : "Integration",
+        "linked_accounts" : "Linked Accounts",
+        "profile" : "Profile",
+        "financial_year" : "Financial Year",
+        "permission" : "Permission",
+        "branch" : "Branch",
+        "tags" : "Tags",
+        "trigger" : "Trigger",
+        "discount" : "Discount",
+        "warehouse" : "Warehouse"
+    }
+}

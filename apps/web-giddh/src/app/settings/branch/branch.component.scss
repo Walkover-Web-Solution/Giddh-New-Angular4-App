@@ -39,36 +39,36 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid #d9d9d9;
+    border-right: 1px solid $gainsboro;
     color: #999999;
     left: 0;
 }
-.input-grp-dateRangePicker input.form-control {
+.input-group-date-range-picker input.form-control {
     padding-left: 35px !important;
     width: 210px;
 }
-.contentView {
+.content-view  {
     display: flex;
     align-items: center;
     font-size: 14px;
 }
-.branchCard {
+.branch-card {
     background-color: #eeeff1;
-    min-height: 340px;
+    min-height: 365px;
     margin-bottom: 15px;
     font-size: 14px;
 }
-.cardBasicDetails span:first-child {
+.card-basic-details span:first-child {
     width: 60px;
 }
-.cardBasicDetails span:nth-child(2) {
+.card-basic-details span:nth-child(2) {
     width: 83%;
 }
-.cardBasicDetails .clearfix {
+.card-basic-details .clearfix {
     margin-bottom: 10px;
     color: #1c1c1c;
 }
-.cardBasicDetails h2 {
+.card-basic-details h2 {
     font-size: 16px;
     color: #1a237e;
     font-family: "opensans-bold";
@@ -76,11 +76,11 @@
     white-space: normal;
     word-break: break-all;
     text-overflow: ellipsis;
-    width: 90%;
+    width: 85%;
 }
-.cardBasicDetails {
+.card-basic-details {
     padding: 20px;
-    border-bottom: 1px solid #d9d9d9;
+    border-bottom: 1px solid $gainsboro;
 }
 .branchSalesDetails {
     padding: 20px;
@@ -94,7 +94,7 @@
     cursor: pointer;
 }
 
-.cardBasicDetails ul.dropdown-menu {
+.card-basic-details ul.dropdown-menu {
     padding-left: 0;
     padding-right: 0;
     padding-bottom: 0;
@@ -103,11 +103,11 @@
     right: 0 !important;
     overflow: hidden;
 }
-.cardBasicDetails .dropdown-menu > li > a {
+.card-basic-details .dropdown-menu > li > a {
     padding: 5px 10px;
     cursor: default;
 }
-.cardBasicDetails a#button-basic {
+.card-basic-details a#button-basic {
     color: #333;
     font-size: 16px;
     width: 32px;
@@ -118,13 +118,43 @@
     vertical-align: middle;
     line-height: 2;
 }
-
+.branch-views {
+    cursor: pointer;
+}
 @media (max-width: 375px) {
     .grey_clr button.btn.btn-default {
         margin-left: 0;
         margin-top: 5px;
     }
 }
-.branch-views {
-    cursor: pointer;
+@media(max-width:768px){
+    .content-view{
+        display: none;
+    }
+}
+@media(max-width:767px){
+    .branch-card{
+        min-height: auto;
+    }
+    .branch-header-content{
+        margin-right: 0;
+        flex-direction: column;
+        .content-view {
+            margin-left: 0;
+        }
+        .input-group{
+            display: flex;
+            justify-content: space-between;
+            button{
+                margin-right: 0;
+            }
+        }
+
+    }
+    .input-group-date-range-picker {
+        width: 100%;
+        .form-group{
+            margin-bottom:0;
+        }
+    }
 }

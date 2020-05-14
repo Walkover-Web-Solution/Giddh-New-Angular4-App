@@ -1,5 +1,5 @@
 <div class="container-fluid clearfix" *ngIf="allRoles.length > 0">
-
+    <a href="javascript:void(0)" *ngIf="showBackButton" class="btn btn-pink pull-right mt-1" [routerLink]="['/pages/settings/permission']">Back</a>
     <div class="col-xs-12 mrT2 pd0 role clearfix" *ngFor="let role of allRoles">
         <div class="col-xs-3 pd0 rolehead cp">
             <span class="vcenter">
