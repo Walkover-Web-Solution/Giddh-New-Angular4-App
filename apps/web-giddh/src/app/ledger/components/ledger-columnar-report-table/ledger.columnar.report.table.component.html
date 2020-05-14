@@ -76,8 +76,8 @@
                 </tbody>
             </table>
         </div>
-        <div class="paginationWrapper" *ngIf="reportResponse && reportResponse?.totalItems > PAGINATION_LIMIT">
-            <pagination [totalItems]="reportResponse.totalItems" [(ngModel)]="reportResponse.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="PAGINATION_LIMIT" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+        <div class="paginationWrapper" *ngIf="reportResponse && reportResponse?.totalPages > 1">
+            <pagination [totalItems]="reportResponse.totalItems" [(ngModel)]="reportResponse.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
         </div>
     </div>
 </div>
