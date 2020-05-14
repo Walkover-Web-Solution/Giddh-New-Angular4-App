@@ -1,0 +1,77 @@
+@import "../../../../assets/css/color.scss";
+.total-amount {
+    font-size: 18px;
+}
+
+.total-income-text {
+    color: $cornflower-blue;
+}
+
+.total-expenses-text {
+    color:$grandis
+}
+
+span.month-dropdown {
+    font-size: 12px;
+    color: $dark-gray;
+    vertical-align: top;
+}
+
+.dashboard-filter .btn-group {
+    display: block;
+    line-height: 1;
+}
+
+.dashboard-filter .btn-group span {
+    vertical-align: middle;
+    color: $dark-gray;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.dashboard-filter {
+    display: inline-flex;
+    color: $dark-gray;
+    align-items: flex-end;
+
+}
+
+.dashboard-filter .icon-collapse-icon {
+    margin-left: 8px;
+    font-size: 14px;
+}
+
+.due-amount {
+    color: $nero;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+
+span.icon-rupees {
+    font-size: 15px;
+}
+
+.panel-body small {
+    color: $dark-gray;
+}
+.profit-loss-chart{
+    margin: 0 auto !important;
+}
+@media(max-width:767px){
+    .total-income {
+        margin-bottom: 10px;
+    }
+}
+@media(max-width:360px){
+    .dashboard-filter{
+        display: flex;
+        float: none !important;
+        margin-top: 10px;
+    }
+    .due-amount , .total-amount {
+        font-size: 14px;
+    }
+}

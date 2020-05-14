@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -18,7 +18,7 @@ import { GeneralService } from '../../../services/general.service';
     templateUrl: './permission-list.html',
     styleUrls: ['./permission.component.scss']
 })
-export class PermissionListComponent implements OnInit, OnDestroy {
+export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
     @ViewChild('permissionModel') public permissionModel: ModalDirective;
@@ -29,6 +29,8 @@ export class PermissionListComponent implements OnInit, OnDestroy {
     public selectedRoleForDelete: IRoleCommonResponseAndRequest;
     public session$: Observable<any>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    // showBackButton will be used to show/hide the back button
+    public showBackButton: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -43,6 +45,13 @@ export class PermissionListComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+
+        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
+            if (params && params["tab"] && params["tab"] === "settings") {
+                this.showBackButton = true;
+                this.router.navigate(['pages/permissions/list'], { replaceUrl: true });
+            }
+        });
 
         // This module should be accessible to superuser only
         this.session$ = this.store.select(s => {
@@ -75,6 +84,17 @@ export class PermissionListComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.permissionActions.GetRoles());
         this.store.dispatch(this.permissionActions.RemoveNewlyCreatedRoleFromStore());
         this.store.select(p => p.permission.roles).pipe(takeUntil(this.destroyed$)).subscribe((roles: IRoleCommonResponseAndRequest[]) => this.allRoles = roles);
+    }
+
+    /**
+     * This function will check if showBackButton is true then will open the add new role modal
+     *
+     * @memberof PermissionListComponent
+     */
+    public ngAfterViewInit(): void {
+        if(this.showBackButton) {
+            this.openPermissionModal();
+        }
     }
 
     public ngOnDestroy() {

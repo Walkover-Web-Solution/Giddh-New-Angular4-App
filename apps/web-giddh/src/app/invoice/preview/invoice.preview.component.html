@@ -8,7 +8,7 @@
                     <div class="input-group">
                         <span class="inputWrapper">
                             <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
-                                   (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
+                                (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
                         </span>
                     </div>
                     <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
@@ -159,8 +159,8 @@
             <div class="modal-header">
                 <h4 class="modal-title bg pull-left">Search here...</h4>
                 <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -354,7 +354,6 @@
                                 </div>
                             </div>
                         </td>
-
                         <!-- Invoice Date -->
                         <td>{{item.voucherDate}}</td>
 
@@ -385,6 +384,7 @@
                                 <div>
                                     <div dropdown container="body" class="icon-ellipse selectAction">
                                         <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic"></a>
+
 
                                         <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu" aria-labelledby="edit-model-basic">
                                             <ul class="selectActionDropdown">

@@ -1,3 +1,4 @@
+@import "../../../../assets/css/color.scss";
 .form-header {
     padding: 20px 15px;
     background: #1a237e;
@@ -71,7 +72,7 @@ form.gstinForm {
 .add-address-default {
     display: flex;
     justify-content: space-between;
-    background-color: #d9d9d9;
+    background-color: $gainsboro;
     padding: 6px 10px;
     align-items: center;
     margin: 20px 0;

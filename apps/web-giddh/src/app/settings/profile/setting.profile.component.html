@@ -1,4 +1,4 @@
-<div class="box clearfix mrT1">
+<div class="box clearfix">
     <div class="row">
         <form (ngSubmit)="updateProfile(companyProfileObj)" class="col-lg-10 col-md-11">
             <div class="row">
@@ -51,7 +51,7 @@
                                 <input id="isMultiple" (change)="changeEventOfForm('isMultipleCurrency')"
                                     [(ngModel)]="companyProfileObj.isMultipleCurrency" class="checkbox-custom"
                                     name="isMultiple" type="checkbox">
-                                <label for="isMultiple" class="checkbox-custom-label">Multicurrency?</label>
+                                <label for="isMultiple" class="checkbox-custom-label multicurrency-checkbox">Multicurrency?</label>
                             </span>
 
                         </div>
@@ -163,7 +163,7 @@
                 </div>
                 <div class=" col-lg-3 col-sm-4 col-xs-12 ">
                     <div class="row ">
-                        <div class="form-group col-xs-12 col-sm-6 ">
+                        <div class="form-group col-xs-12 col-sm-12 col-md-6">
                             <label>Digits After Decimal</label><br>
                             <div class="custom-select pos-rel ">
                                 <sh-select [options]="decimalDigitSource " placeholder="select type "
@@ -173,7 +173,7 @@
                             </div>
                             <!-- <input type="text " placeholder="Currency " class="form-control " [(ngModel)]="companyProfileObj.baseCurrency " name="baseCurrency " /> -->
                         </div>
-                        <div class="form-group col-xs-12 col-sm-6 ">
+                        <div class="form-group col-xs-12 col-sm-12 col-md-6 ">
                             <label>Number System</label><br>
                             <div class="custom-select pos-rel ">
                                 <!-- <sh-select [options]="numberSystemSource " placeholder="Select type " [isFilterEnabled]="true " name="numberSystem " [(ngModel)]="companyProfileObj.balanceDisplayFormat " (selected)="checkNumberSystem($event) "></sh-select> -->

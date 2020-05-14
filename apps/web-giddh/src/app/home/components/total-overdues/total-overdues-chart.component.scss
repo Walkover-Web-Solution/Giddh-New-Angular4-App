@@ -1,0 +1,81 @@
+@import "../../../../assets/css/color.scss";
+.total-amount {
+    font-size: 18px;
+}
+
+.customer-due-text {
+    color: $light-sea-green;
+}
+
+.vendor-due-text {
+    color: $brink-pink;
+}
+
+span.month-dropdown {
+    font-size: 12px;
+    color: $dark-gray;
+    vertical-align: top;
+}
+
+.dashboard-filter .btn-group {
+    display: block;
+    line-height: 1;
+}
+
+.dashboard-filter .btn-group span {
+    vertical-align: middle;
+    color: $dark-gray;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.dashboard-filter {
+    display: inline-flex;
+    color: $dark-gray;
+    align-items: flex-end;
+
+}
+
+.dashboard-filter .icon-collapse-icon {
+    margin-left: 8px;
+    font-size: 14px;
+}
+
+.due-amount {
+    color: $nero;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+
+span.icon-rupees {
+    font-size: 15px;
+}
+
+.panel-body small {
+    color: $dark-gray;
+}
+@media(max-width:360px){
+    .dashboard-filter{
+        display: flex;
+        float: none !important;
+        margin-top: 10px;
+    }
+    .due-amount{
+        font-size: 14px;
+        display: block;
+    }
+    .vendor-due-text , .customer-due-text{
+        font-size: 14px;
+        float: none !important;
+    }
+    .panel-body  small{
+        display: block;
+        float: none !important;
+    }
+    .due{
+        margin-bottom: 10px;
+    }
+}
