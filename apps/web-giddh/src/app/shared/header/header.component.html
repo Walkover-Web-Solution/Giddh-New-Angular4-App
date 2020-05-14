@@ -458,10 +458,14 @@
 
     </div>
     <!-- setting page sidebar -->
+
     <div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'">
+        <perfect-scrollbar [scrollIndicators]="true">
         <aside-setting class="setting-sidebar" (closeAsideEvent)="toggleSettingPane($event)">
         </aside-setting>
+    </perfect-scrollbar>
     </div>
+
 
     <div class="mobile_menu_icon" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
         <span class="icon-bar" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right"></span>
@@ -921,9 +925,12 @@
 </div>
 
 <div class="help-support-aside " *ngIf="asideSettingMenuState === 'in'">
-    <aside-setting class="setting-sidebar" (closeAsideEvent)="toggleSettingPane($event)">
-    </aside-setting>
+    <perfect-scrollbar class="" [scrollIndicators]="true">
+        <aside-setting class="setting-sidebar" (closeAsideEvent)="toggleSettingPane($event)">
+        </aside-setting>
+    </perfect-scrollbar>
 </div>
+
 
 
 

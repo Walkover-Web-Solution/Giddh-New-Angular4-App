@@ -7,51 +7,51 @@
             <i class="icon-search pos-abs"></i>
             <input type="text" class="form-control" placeholder="Search Settings">
         </div>
-        <div class="back-to-main-slider">
+        <div class="back-to-main-slider" (click)="closeAsidePane($event)">
             <a href="#"><img src="../../../../../assets/images/back.svg"> Back</a>
         </div>
         <div class="setting-items">
             <ul class="mb-3">
                 <li>
-                    <a [routerLink]="['/pages/settings']">
-                        <img src="{{imgPath}}setting-icons/company-profile.svg">
+                    <a [routerLink]="['/pages/settings']" (click)="closeAsidePane($event)">
+                        <span><img src="{{imgPath}}setting-icons/company-profile.svg"></span>
                         <span>Company Profile</span>
                     </a>
                 </li>
                 <li>
-                    <a [routerLink]="['/pages/settings/profile']">
-                        <img src="{{imgPath}}/setting-icons/user.svg">
+                    <a [routerLink]="['/pages/settings/profile']" (click)="closeAsidePane($event)">
+                        <span><img src="{{imgPath}}/setting-icons/user.svg"></span>
                         <span>User Profile</span>
                     </a>
                 </li>
                 <li>
-                    <a>
-                        <img src="{{imgPath}}/setting-icons/manage-user.svg">
+                    <a (click)="closeAsidePane($event)" [routerLink]="['pages/settings/permission']">
+                        <span> <img src="{{imgPath}}/setting-icons/manage-user.svg"></span>
                         <span>Manage User(Permission)</span>
                     </a>
                 </li>
             </ul>
             <ul class="mb-3">
                 <li>
-                    <a [routerLink]="['/pages/settings/integration']">
-                        <img src="{{imgPath}}/setting-icons/integration.svg">
+                    <a [routerLink]="['/pages/settings/integration']" (click)="closeAsidePane($event)">
+                        <span><img src="{{imgPath}}/setting-icons/integration.svg"></span>
                         <span>Integration</span>
                     </a>
                 </li>
                 <li>
-                    <a [routerLink]="['/pages/settings/linked-accounts']">
-                        <img src="{{imgPath}}/setting-icons/linked-accounts.svg">
+                    <a [routerLink]="['/pages/settings/linked-accounts']" (click)="closeAsidePane($event)">
+                        <span> <img src="{{imgPath}}/setting-icons/linked-accounts.svg"></span>
                         <span>Linked Accounts</span>
                     </a>
                 </li>
                 <li>
-                    <a>
-                        <img src="{{imgPath}}/setting-icons/tags.svg">
+                    <a [routerLink]="['/pages/settings/tag']" (click)="closeAsidePane($event)">
+                        <span><img src="{{imgPath}}/setting-icons/tags.svg"></span>
                         <span>Tags</span>
                     </a>
                 </li>
                 <li>
-                    <a>
+                    <a [routerLink]="['/pages/settings/trigger']" (click)="closeAsidePane($event)">
                         <img src="{{imgPath}}/setting-icons/trigger.svg">
                         <span>Trigger</span>
                     </a>
@@ -59,40 +59,40 @@
             </ul>
             <ul class="mb-3">
                 <li>
-                    <a>
-                        <img src="{{imgPath}}/setting-icons/financial-year.svg">
+                    <a [routerLink]="['/pages/settings/financial-year']" (click)="closeAsidePane($event)">
+                        <span> <img src="{{imgPath}}/setting-icons/financial-year.svg"></span>
                         <span>Financial Year</span>
                     </a>
                 </li>
                 <li>
-                    <a>
-                        <img src="{{imgPath}}/setting-icons/branch.svg">
+                    <a [routerLink]="['/pages/settings/branch']" (click)="closeAsidePane($event)">
+                        <span> <img src="{{imgPath}}/setting-icons/branch.svg"></span>
                         <span>Branch</span>
                     </a>
                 </li>
                 <li>
-                    <a>
-                        <img src="{{imgPath}}/setting-icons/discount.svg">
+                    <a [routerLink]="['/pages/settings/discount']" (click)="closeAsidePane($event)">
+                        <span><img src="{{imgPath}}/setting-icons/discount.svg"></span>
                         <span>Discount</span>
                     </a>
                 </li>
                 <li>
-                    <a>
-                        <img src="{{imgPath}}/setting-icons/warehouse.svg">
+                    <a [routerLink]="['/pages/settings/warehouse']" (click)="closeAsidePane($event)">
+                        <span><img src="{{imgPath}}/setting-icons/warehouse.svg"></span>
                         <span>Warehouse</span>
                     </a>
                 </li>
             </ul>
             <ul class="mb-3">
                 <li>
-                    <a>
-                        <img src="{{imgPath}}/setting-icons/invoice-managment.svg">
+                    <a [routerLink]="['/pages/invoice/preview/sales']" (click)="closeAsidePane($event)">
+                        <span> <img src="{{imgPath}}/setting-icons/invoice-managment.svg"></span>
                         <span>Invoice Management</span>
                     </a>
                 </li>
                 <li>
-                    <a>
-                        <img src="{{imgPath}}/setting-icons/subscription.svg">
+                    <a [routerLink]="['/pages/user-details/subscription']" (click)="closeAsidePane($event)">
+                        <span><img src="{{imgPath}}/setting-icons/subscription.svg"></span>
                         <span>Subscription</span>
                     </a>
                 </li>                   
