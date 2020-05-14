@@ -60,7 +60,7 @@
 							<input #magicLinkInput class="form-control dashed" [readonly]="true" type="text"
 								[(ngModel)]="magicLink" />
 							<span class="input-group-btn">
-								<button class="btn btn-success" (click)="toggleIsCopied()"
+								<button [disabled]="!magicLink ? 'disabled' : null" class="btn btn-success" (click)="toggleIsCopied()"
 									[ngxClipboard]="magicLinkInput">Copy</button>
 							</span>
 							<!-- /btn-group -->

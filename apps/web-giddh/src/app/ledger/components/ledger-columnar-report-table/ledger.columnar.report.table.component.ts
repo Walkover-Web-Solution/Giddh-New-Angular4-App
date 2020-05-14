@@ -127,7 +127,6 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
      */
     public prepareColumnForTable(): void {
         this.columnarTableColumn = [];
-        let newColumns = [];
         this.reportResponseResult.forEach((item, index) => {
             if (item && item.accountNameAndBalanceMap) {
                 let columns = Object.keys(item.accountNameAndBalanceMap);
