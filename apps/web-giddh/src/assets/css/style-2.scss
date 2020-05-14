@@ -1054,6 +1054,7 @@ ul.sub-list {
 
 .aging-table-top .top-aging-table-top span .date-range-picker {
     font-family: opensans-semibold;
+    text-align:left !important;
 }
 
 .aging-table {
@@ -1131,6 +1132,7 @@ ul.sub-list {
     margin-left: 10px;
     text-decoration: underline;
     font-size: 14px;
+  
 }
 
 .basic > thead > tr > th .fa-sort {
@@ -2645,7 +2647,7 @@ input[type="checkbox"]:checked:after {
 .font-26 {
     font-size: 26px;
 }
-.WordWrap {
+.word-wrap {
     word-break: normal;
     white-space: nowrap;
 }
@@ -4687,11 +4689,11 @@ label {
     height: 100%;
 }
 
-.section_title {
+.section-title {
     font-size: 1.2rem;
 }
 
-.top_bar h1.section_title.inline {
+.top-bar h1.section-title.inline {
     margin-top: 7px;
 }
 
@@ -5027,7 +5029,7 @@ label {
     border-color: #ddd;
 }
 
-#manufacture .section_title {
+#manufacture .section-title {
     color: #616161;
     font-size: 20px;
     line-height: 34px;
@@ -5545,7 +5547,7 @@ input[type="checkbox"][disabled] {
     padding: 8px 0;
 }
 
-.top_bar {
+.top-bar {
     padding-top: 15px;
     padding-bottom: 15px;
     /* padding-left: 240px; */
@@ -8923,6 +8925,75 @@ input.checkbox-custom[type="checkbox"] {
 .panel-block  .panel-body{
     min-height: 350px;
 }
+/*datepicker common css*/
+.show-calendar {
+    display: block !important;
+}
+
+ngx-daterangepicker-material {
+    display: none;
+    position: absolute;
+    z-index: 1000;
+    overflow: hidden;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
+    z-index: 1;
+}
+.edit-modal{
+    max-width: 300px;
+    top: 50%;
+    margin: 0 auto;
+    transform: translateY(-50%) !important;
+    .edit-date-modal{
+        h5{
+            color: $gray;
+            font-size: 13px;
+        }
+        .modal-date-range {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid $whisper-color;
+            margin-bottom: 15px;
+            span{
+                img{
+                    width: 20px;
+                }
+            }
+        }
+        .start-end-date{
+            display: flex;
+            padding-top: 10px;
+            label{
+                position: absolute;
+                background-color:$white;
+                padding: 0 5px;
+                top: -6px;
+                left: 9px;
+                font-size: 12px;
+                color: $gray;
+            }
+            input{
+                width: 130px;
+                height: 51px;
+                border: 1px solid $gainsboro;
+                border-radius: 3px;
+                padding: 0 15px;
+                font-size: 14px;
+            }
+        }
+        .button-wrapper {
+            padding: 20px 0 0;
+            text-align: right;
+            font-size: 14px;
+            a{
+                color: $deep-sky-blue;
+            }
+        }
+    }
+}
+
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9328,10 +9399,10 @@ input.checkbox-custom[type="checkbox"] {
         width: 100%;
         top: 0;
     }
-    .custom-tabs .top_bar {
+    .custom-tabs .top-bar {
         margin-top: 45px;
     }
-    .custom-tabs.hide-header .top_bar {
+    .custom-tabs.hide-header .top-bar {
         margin-top: 0;
     }
     .invoce-controll .nav.nav-tabs {
@@ -9440,6 +9511,14 @@ input.checkbox-custom[type="checkbox"] {
     .panel-block .panel-body{
         min-height: auto;
     }
+    ngx-daterangepicker-material {
+        position: fixed;
+        top:0 !important;
+        left: 0 !important;
+        z-index: 999;
+        width: 100%;
+        height: 100vh;
+     }
 }
 
 @media (max-width: 575px) {
@@ -9447,7 +9526,7 @@ input.checkbox-custom[type="checkbox"] {
         float: left;
     }
 
-    .custom-tabs .top_bar {
+    .custom-tabs .top-bar {
         padding-top: 10px;
         padding-bottom: 10px;
     }
@@ -9759,4 +9838,7 @@ input.checkbox-custom[type="checkbox"] {
     input[type="url"] {
         font-size: 16px;
     }
+}
+.restrict-body-scroll {
+    overflow-y: hidden !important;
 }

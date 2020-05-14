@@ -18,14 +18,22 @@
                         <!--Parent  Name -->
                         <td class="text-center"> {{ item.groupName}} </td>
                         <!--Opening balance  -->
-                        <td class="text-center" *ngIf="(isShowClosingOpeningBalance$ | async)"> {{ columnarReportResponse.openingBalance[item.accountUniqueName].amount}} </td>
+                        <td class="text-center" *ngIf="(isShowClosingOpeningBalance$ | async)">
+                            {{columnarReportResponse?.openingBalance[item.accountUniqueName]?.type ==='DEBIT'? '-': ''}}{{ columnarReportResponse?.openingBalance[item.accountUniqueName]?.amount}}
+                        </td>
                         <!--Closing balance  -->
-                        <td class="text-center" *ngIf="(isShowClosingOpeningBalance$ | async)"> {{ columnarReportResponse.closingBalance[item.accountUniqueName].amount}} </td>
+                        <td class="text-center" *ngIf="(isShowClosingOpeningBalance$ | async)">
+                            {{columnarReportResponse?.closingBalance[item.accountUniqueName]?.type ==='DEBIT'?'-':''}}{{columnarReportResponse?.closingBalance[item.accountUniqueName]?.amount}}
+                        </td>
                         <!--Grand  Total -->
-                        <td class="text-center"> {{ columnarReportResponse.grandTotal[item.accountUniqueName].amount}} </td>
+                        <td class="text-center">
+                            {{columnarReportResponse?.grandTotal[item.accountUniqueName]?.type ==='DEBIT'?'-':''}}{{columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount}}
+                        </td>
                         <ng-container *ngFor="let months of columnarReportResponse.data;let inx2 = index;">
                             <!-- months data -->
-                            <td class="text-center"> {{ months.accountsData[inx].monthlyBalance.amount}} </td>
+                            <td class="text-center">
+                                {{months?.accountsData[inx]?.monthlyBalance?.type ==='DEBIT'?'-':'' }}{{months.accountsData[inx]?.monthlyBalance?.amount}}
+                            </td>
                         </ng-container>
                     </tr>
                 </tbody>
@@ -37,9 +45,6 @@
                 </tbody>
             </table>
         </div>
-        <!-- <div class="paginationWrapper" *ngIf="columnarReportResponse.totalPages > 1">
-            <pagination [totalItems]="columnarReportResponse.totalPages" [(ngModel)]="columnarReportResponse.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
-        </div> -->
     </div>
 </div>
 <!-- <div *ngIf="isLoading">
