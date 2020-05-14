@@ -5,10 +5,10 @@
             <div class="col-md-3 col-sm-6">
                 <div class="form-group">
 
-                    <sh-select placeholder="Search Subscribed Plan" name="currentCompanyFinancialYearUN">
-                    </sh-select>
+                    <!-- <sh-select placeholder="Search Subscribed Plan" name="currentCompanyFinancialYearUN">
+                    </sh-select> -->
 
-                    <!-- <label class="d-block mb-1">Select Subscribed Plan</label>
+                    <!-- <label class="d-block mb-1">Select Subscribed Plan</label> -->
                     <div class="btn-group d-block subscription-dropdown mb-2" dropdown>
                         <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle" aria-controls="dropdown-basic">
                             {{seletedUserPlans?.planDetails?.name}} <span class="caret"></span>
@@ -29,7 +29,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </div> -->
+                    </div>
                 </div>
             </div>
             <div class="col-md-9 col-sm-6 text-right xs-left">
@@ -40,281 +40,219 @@
         </div>
 
         <div class="box">
-        <div class="clearfix mrT2">
-            <div class="row d-flex sm-d-block">
-                <div class="col-md-7 col-sm-12">
-                    <div class="pr-2 xs-pr-0">
-                    <div class="clearfix">
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6">
-                                <h2 class="section_head pb-0">Financial Year(s) - Shreya040</h2>
-                            </div>
-                            <div class="col-md-6 col-sm-6 text-right xs-left">
+            <div class="clearfix mrT2">
+                <div class="row d-flex sm-d-block">
+                    <div class="col-md-7 col-sm-12">
+                        <div class="pr-2 xs-pr-0">
+                            <div class="clearfix">
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6">
+                                        <h2 class="section_head pb-0">{{seletedUserPlans?.planDetails?.name}}</h2>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 text-right xs-left">
 
-                                <button type="button" class="btn btn-primary" (click)="isPlanShow=true">Buy Transactions</button>
-                                <button type="button" class="btn btn-success" (click)="renewPlan()">Renew</button>
+                                        <button type="button" class="btn btn-primary" (click)="isPlanShow=true">Buy
+                                            Transactions</button>
+                                        <button type="button" class="btn btn-success"
+                                            (click)="renewPlan()">Renew</button>
 
-                                <div class="btn-group d-inline-block custom-dropdown pt-05 ml-1" dropdown placement="bottom right">
-                                    <button id="button-alignment" dropdownToggle type="button" class="dropdown-toggle"
-                                        aria-controls="dropdown-alignment">
-                                        <span class="icon-dots-three-vertical"></span>
-                                    </button>
-                                    <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-                                        aria-labelledby="button-alignment">
-                                        <li role="menuitem">
+                                        <div class="btn-group d-inline-block custom-dropdown pt-05 ml-1" dropdown
+                                            placement="bottom right">
+                                            <button id="button-alignment" dropdownToggle type="button"
+                                                class="dropdown-toggle" aria-controls="dropdown-alignment">
+                                                <span class="icon-dots-three-vertical"></span>
+                                            </button>
+                                            <ul id="dropdown-alignment" *dropdownMenu
+                                                class="dropdown-menu dropdown-menu-right" role="menu"
+                                                aria-labelledby="button-alignment">
+                                                <!-- <li role="menuitem">
                                             <a class="dropdown-item" (click)="toggleActivityLogAsidePane($event)" href="javascript:void(0)">Activity Logs</a>
-                                        </li>
-                                        <li role="menuitem">
-                                            <a class="dropdown-item" href="javascript:void(0)" (click)="isPlanShow=true">Upgrade Plan</a>
-                                        </li>
-                                        <li role="menuitem">
-                                            <a class="dropdown-item" href="javascript:void(0)" (click)="isPlanShow=true">Downgrade Plan</a>
-                                        </li>
-                                        <li role="menuitem">
+                                        </li> -->
+                                                <li role="menuitem">
+                                                    <a class="dropdown-item" href="javascript:void(0)"
+                                                        (click)="isPlanShow=true">Upgrade Plan</a>
+                                                </li>
+                                                <li role="menuitem">
+                                                    <a class="dropdown-item" href="javascript:void(0)"
+                                                        (click)="isPlanShow=true">Downgrade Plan</a>
+                                                </li>
+                                                <!-- <li role="menuitem">
                                             <a class="dropdown-item" href="javascript:void(0)">Cancel Subscription</a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                        </li> -->
+                                            </ul>
+                                        </div>
 
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="table-responsive">
+                                        <table class="table table-no-border mb-0">
+                                            <tr>
+                                                <th>Subscription ID</th>
+                                                <td>{{seletedUserPlans?.subscriptionId}}</td>
+                                            </tr>
+
+                                            <tr>
+                                                <th>Subscribed On</th>
+                                                <td>{{subscriptionDates?.startedAt | date: giddhDateFormatUI}}</td>
+                                            </tr>
+
+                                            <tr>
+                                                <th>Expiry Date</th>
+                                                <td>{{subscriptionDates?.expiry | date: giddhDateFormatUI}}</td>
+                                            </tr>
+
+                                            <tr>
+                                                <th> Subscription Price</th>
+                                                <td>{{seletedUserPlans?.planDetails?.amount | number}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Total Companies</th>
+                                                <td>{{ seletedUserPlans?.totalCompanies | number}} out of
+                                                    {{ seletedUserPlans?.planDetails?.companiesLimit | number}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Transactions Limit</th>
+                                                <td>{{seletedUserPlans?.planDetails?.transactionLimit | number}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th> Validity</th>
+                                                <td>{{seletedUserPlans?.planDetails?.duration}}
+                                                    {{seletedUserPlans?.planDetails?.durationUnit}}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h2 class="section_head pb-0">{{seletedUserPlans?.planDetails?.name}} (Transactions Statement)</h2>
+
+                            <div class="table-subscription mt-1 xs-mb-2">
+                                <div class="table-responsive">
+                                    <table class="table basic giddh-table on-mobile-view mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Consumptions <span class="text-gray">(previous+current)</span></th>
+                                                <th>Balance</th>
+                                                <th class="text-right">Additional Charges</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngIf="seletedUserPlans">
+                                            <tr>
+                                                <!-- <td data-title="Date">{{ moment(transaction.from, 'DD-MM-YYYY').format('MMM - YY')}}</td> -->
+                                                <td data-title="Date">&nbsp;</td>
+                                                <td data-title="Consumptions">{{ seletedUserPlans?.totalTransactions ? seletedUserPlans?.totalTransactions : 0 }}</td>
+                                                <td data-title="Balance">{{ seletedUserPlans?.balance? seletedUserPlans?.balance: 0 }}</td>
+                                                <td data-title="Additional Charges" class="text-right">{{ seletedUserPlans?.additionalCharges? seletedUserPlans?.additionalCharges: 0 }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <div class="table-responsive">
-                                <table class="table table-no-border mb-0">
-                                    <tr>
-                                        <th>Subscription ID</th>
-                                        <td>{{seletedUserPlans?.subscriptionId}}</td>
-                                    </tr>
+                    <div class="col-md-5 col-sm-12 left-div">
+                        <div class="main-associated-companies">
+                            <div class="d-flex justify-content-between pl-2">
+                                <h2 class="section_head pb-0">Associated Companies</h2>
 
-                                    <tr>
-                                        <th>Subscribed On</th>
-                                        <td>17/04/2020</td>
-                                    </tr>
+                                <div class="clearfix">
+                                    <div class="active d-inline-block middle">
+                                        <span class="green-dote"> </span> Active
+                                    </div>
+                                    <!-- <div class="btn-group d-inline-block custom-dropdown pt-05 ml-1 middle" dropdown
+                                        placement="bottom right">
+                                        <button id="button-alignment" dropdownToggle type="button"
+                                            class="dropdown-toggle" aria-controls="dropdown-alignment">
+                                            <span class="icon-dots-three-vertical"></span>
+                                        </button>
+                                        <ul id="dropdown-alignment" *dropdownMenu
+                                            class="dropdown-menu dropdown-menu-right" role="menu"
+                                            aria-labelledby="button-alignment">
+                                            <li role="menuitem">
+                                                <a class="dropdown-item" href="javascript:void(0)">Move all </a>
+                                            </li>
+                                            <li role="menuitem">
+                                                <a class="dropdown-item" href="javascript:void(0)">Deactivate all</a>
+                                            </li>
+                                        </ul>
+                                    </div> -->
+                                </div>
+                            </div>
 
-                                    <tr>
-                                        <th>Expiry Date</th>
-                                        <td>17/05/2020</td>
-                                    </tr>
+                            <div class="clearfix associated-companies-list">
+                                <div class="mt-1 mb-1 pl-2">
+                                    <div class="form-group custom-input-search">
+                                        <i class="icon-search"></i>
+                                        <input type="search" class="form-control" [(ngModel)]="searchString" (ngModelChange)="filterCompanyList($event)" placeholder="Search Company here">
+                                    </div>
+                                </div>
+                                <div class="associated-companies" *ngIf="subscriptions">
+                                    <ul>
+                                        <li *ngFor="let company of companyListForFilter; let i = index">
+                                            <a href="javascript:void(0)" (click)="toggleCompanyDetailsAsidePane($event)"><span>{{i+1}}</span>
+                                                <img src="assets/images/blue-check.svg" class="mr-05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">{{company.name}}
+                                                <p class="font-12 pl-5 mt-05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">(Current Company)</p>
+                                            </a>
 
-                                    <tr>
-                                        <th> Subscription Price</th>
-                                        <td>{{seletedUserPlans?.planDetails?.amount | number}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Total Companies</th>
-                                        <td>{{ seletedUserPlans?.totalCompanies | number}} out of
-                                            {{ seletedUserPlans?.planDetails?.companiesLimit | number}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Transactions Limit</th>
-                                        <td>{{seletedUserPlans?.planDetails?.transactionLimit | number}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th> Validity</th>
-                                        <td>{{seletedUserPlans?.planDetails?.duration}}
-                                            {{seletedUserPlans?.planDetails?.durationUnit}}</td>
-                                    </tr>
-                                </table>
+                                            <div class="btn-group d-inline-block custom-dropdown pt-05 ml-1 pull-right mt-05"
+                                                dropdown placement="bottom right">
+                                                <button id="button-alignment" dropdownToggle type="button"
+                                                    class="dropdown-toggle" aria-controls="dropdown-alignment">
+                                                    <span class="icon-dots-three-vertical"></span>
+                                                </button>
+                                                <ul id="dropdown-alignment" *dropdownMenu
+                                                    class="dropdown-menu dropdown-menu-right" role="menu"
+                                                    aria-labelledby="button-alignment">
+                                                    <li role="menuitem">
+                                                        <a class="dropdown-item" (click)="openModalMove(MoveCompany)"
+                                                            href="javascript:void(0)">Move Company </a>
+                                                    </li>
+                                                    <!-- <li role="menuitem">
+                                                        <a class="dropdown-item" href="javascript:void(0)"
+                                                            (click)="openModal(deactivateCompany)">Deactivate
+                                                            Company</a>
+                                                    </li> -->
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="pl-2 mt-3 buy-transactions">
+                                    <button class="btn btn-primary" type="button">Add Company</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-
-                <h2 class="section_head pb-0">Bonsai (Transactions Statement)</h2>
-
-                <div class="table-subscription mt-1 xs-mb-2">
-                    <div class="table-responsive">
-                        <table class="table basic giddh-table on-mobile-view mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Cunsumptions <span class="text-gray">(previous+current)</span></th>
-                                    <th>Balance</th>
-                                    <th class="text-right">Additional Charges</th>
-                                </tr>
-                            </thead>
-
-
-                            <tbody>
-                                <!-- <tr *ngIf="seletedUserPlans">
-                                    <td class="professional-name">{{ moment(transaction.from, 'DD-MM-YYYY').format('MMM - YY')}}</td>
-                                    <td>{{ seletedUserPlans?.totalTransactions ? seletedUserPlans?.totalTransactions : 0 }}</td>
-                                    <td>{{ seletedUserPlans?.balance? seletedUserPlans?.balance: 0 }}</td>
-                                    <td class="text-right">{{ seletedUserPlans?.additionalCharges? seletedUserPlans?.additionalCharges: 0 }}</td>
-                                </tr> -->
-
-                                <tr>
-                                    <td data-title="Date">Apr</td>
-                                    <td data-title="Cunsumptions">5,000</td>
-                                    <td data-title="Balance">35,000</td>
-                                    <td data-title="Additional Charges" class="text-right">0</td>
-                                </tr>
-
-                                <tr>
-                                    <td data-title="Date">Apr</td>
-                                    <td data-title="Cunsumptions">5,000</td>
-                                    <td data-title="Balance">35,000</td>
-                                    <td data-title="Additional Charges" class="text-right">0</td>
-                                </tr>
-
-                                <tr>
-                                    <td data-title="Date">Apr</td>
-                                    <td data-title="Cunsumptions">5,000</td>
-                                    <td data-title="Balance">35,000</td>
-                                    <td data-title="Additional Charges" class="text-right">0</td>
-                                </tr>
-
-                                <tr>
-                                    <td data-title="Date">Apr</td>
-                                    <td data-title="Cunsumptions">5,000</td>
-                                    <td data-title="Balance">35,000</td>
-                                    <td data-title="Additional Charges" class="text-right">0</td>
-                                </tr>
-
-                                <tr>
-                                    <td data-title="Date">Apr</td>
-                                    <td data-title="Cunsumptions">5,000</td>
-                                    <td data-title="Balance">35,000</td>
-                                    <td data-title="Additional Charges" class="text-right">0</td>
-                                </tr>
-
-                                <tr>
-                                    <td data-title="Date">Apr</td>
-                                    <td data-title="Cunsumptions">5,000</td>
-                                    <td data-title="Balance">35,000</td>
-                                    <td data-title="Additional Charges" class="text-right">0</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
 
-
-
-
-                    <!-- <div class="clearfix mb-2">
-                         comment by sadik <button type="button" class="btn btn-primary" (click)="isPlanShow=true">Change Plan</button>
-                         <button type="button" (click)="isPlanShow=true" class="btn btn-pink">Payment Log</button>
-                    </div> -->
+                <div class="mrT2">
+                    <p><small>* Additional charges on transactions above
+                            {{seletedUserPlans?.planDetails?.transactionLimit | number}} @
+                            {{seletedUserPlans?.planDetails?.ratePerExtraTransaction | number}}
+                            {{activeCompany?.baseCurrency}} per transaction</small>
+                    </p>
+                    <p><small>* Each month includes previous month's transactions</small></p>
                 </div>
             </div>
 
-
-                <div class="col-md-5 col-sm-12 left-div">
-                 <div class="main-associated-companies">
-                  <div class="d-flex justify-content-between pl-2">
-                    <h2 class="section_head pb-0">Associated Companies</h2>
-
-                    <div class="clearfix">
-                        <div class="active d-inline-block middle">
-                            <span class="green-dote"> </span> Active
-                        </div>
-                        <div class="btn-group d-inline-block custom-dropdown pt-05 ml-1 middle" dropdown placement="bottom right">
-                            <button id="button-alignment" dropdownToggle type="button" class="dropdown-toggle"
-                                aria-controls="dropdown-alignment">
-                                <span class="icon-dots-three-vertical"></span>
-                            </button>
-                            <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-                                aria-labelledby="button-alignment">
-                                <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:void(0)">Move all </a>
-                                </li>
-                                <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:void(0)">Deactivate all</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                  </div>
-
-                  <div class="clearfix associated-companies-list">
-                    <div class="mt-1 mb-1 pl-2">
-                        <div class="form-group custom-input-search">
-                            <i class="icon-search"></i>
-                            <input type="search" class="form-control" [(ngModel)]="srchString"
-                            (ngModelChange)="filterCompanyList($event)" placeholder="Search Company here">
-                        </div>
-
-                    </div>
-                    <div class="associated-companies" *ngIf="subscriptions">
-                        <ul>
-                            <li *ngFor="let company of selectedPlanCompanies"><a href="javascript:void(0)"><span>{{company.transactions}}</span>{{company.name}}</a>
-                            </li>
-
-                            <li><a href="javascript:void(0)" (click)="toggleCompanyDetailsAsidePane($event)"><span>1</span><img src="assets/images/blue-check.svg" class="mr-05" alt=""> Walkover web solution private limited
-                                <p class="font-12 pl-5 mt-05">(Current Company)</p>
-                            </a>
-
-                                <div class="btn-group d-inline-block custom-dropdown pt-05 ml-1 pull-right mt-05" dropdown placement="bottom right">
-                                    <button id="button-alignment" dropdownToggle type="button" class="dropdown-toggle"
-                                        aria-controls="dropdown-alignment">
-                                        <span class="icon-dots-three-vertical"></span>
-                                    </button>
-                                    <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-                                        aria-labelledby="button-alignment">
-                                        <li role="menuitem">
-                                            <a class="dropdown-item" (click)="openModalMove(MoveCompany)" href="javascript:void(0)">Move Company </a>
-                                        </li>
-                                        <li role="menuitem">
-                                            <a class="dropdown-item" href="javascript:void(0)" (click)="openModal(deactivateCompany)">Deactivate Company</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-
-                            <li *ngFor="let associatedCompany of associatedCompanies; let i = index"><a href="javascript:void(0)" (click)="toggleCompanyDetailsAsidePane($event)"><span>{{i+1}}</span>{{associatedCompany.companyName}}</a>
-                                <div class="btn-group d-inline-block custom-dropdown pt-05 ml-1 pull-right mt-05" dropdown placement="bottom right">
-                                    <button id="button-alignment" dropdownToggle type="button" class="dropdown-toggle"
-                                        aria-controls="dropdown-alignment">
-                                        <span class="icon-dots-three-vertical"></span>
-                                    </button>
-                                    <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-                                        aria-labelledby="button-alignment">
-                                        <li role="menuitem">
-                                            <a class="dropdown-item" (click)="openModalMove(MoveCompany)" href="javascript:void(0)">Move Company </a>
-                                        </li>
-                                        <li role="menuitem">
-                                            <a class="dropdown-item" href="javascript:void(0)" (click)="openModal(deactivateCompany)">Deactivate Company</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-
-                        </ul>
-                    </div>
-
-                    <div class="pl-2 mt-3 buy-transactions">
-                        <button class="btn btn-primary" type="button">Add Company</button>
-                    </div>
-                  </div>
+            <div class="clearfix mrT2 relative">
+                <div class="transection-popup mb-1" *ngIf="seletedUserPlans?.additionalCharges >0">
+                    <p>You have crossed transactions limit of your </p>
+                    <p><strong>Professional Plan subscribed on {{seletedUserPlans?.startedAt}}!</strong></p>
+                    <p><small>Please renew your plan or pay now to continue subscription.</small></p>
                 </div>
-                </div>
-            </div>
 
-
-            <div class="mrT2">
-                <p><small>* Additional charges on transactions above {{seletedUserPlans?.planDetails?.transactionLimit | number}} @ {{seletedUserPlans?.planDetails?.ratePerExtraTransaction | number}} {{activeCompany?.baseCurrency}} per transaction</small>
-                </p>
-                <p><small>* Each month includes previous month's transactions</small></p>
-            </div>
-
-
-        </div>
-
-        <div class="clearfix mrT2 relative">
-            <div class="transection-popup mb-1" *ngIf="seletedUserPlans?.additionalCharges >0">
-                <p>You have crossed transactions limit of your </p>
-                <p><strong>Professional Plan subscribed on {{seletedUserPlans?.startedAt}}!</strong></p>
-                <p><small>Please renew your plan or pay now to continue subscription.</small></p>
-            </div>
-
-            <!-- <h2 class="subscription-title" *ngIf="subscriptions">{{seletedUserPlans?.planDetails?.name}} <span
+                <!-- <h2 class="subscription-title" *ngIf="subscriptions">{{seletedUserPlans?.planDetails?.name}} <span
                     *ngIf="seletedUserPlans?.startedAt">({{seletedUserPlans?.startedAt}})</span></h2> -->
 
-            <!-- <div class="row">
+                <!-- <div class="row">
                 <div class="col-sm-7 transaction-list">
                     <div class="box clearfix mrT2 no-padding">
                         <div class="table-responsive">
@@ -370,95 +308,36 @@
                     </div>
                 </div>
             </div> -->
+            </div>
+
         </div>
 
-    </div>
 
-
-    <div class="clearfix">
-        <a href="javascript:void(0)">
-            <div class="box mt-2">
-                <div class="row d-flex justify-content-between align-items-center xs-d-block plan-row">
-                    <div class="col-md-8 col-sm-8 col-xs-12">
-                        <p class="bold">Plan 2</p>
-                    <ul class="list-inline plan-list">
-                        <li>Expiry Date: 25/05/2020  </li>
-                        <li>No. of companies : 4/10</li>
-                        <li>Transaction Limit: 40,000</li>
-                    </ul>
+        <div class="clearfix" *ngFor="let item of subscriptions">
+            <a href="javascript:void(0)">
+                <div class="box mt-2">
+                    <div class="row d-flex justify-content-between align-items-center xs-d-block plan-row">
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                            <p class="bold">{{item?.planDetails?.name}}</p>
+                            <ul class="list-inline plan-list">
+                                <li>Expiry Date: {{item.expiry ? (formatDate(item.expiry) | date: giddhDateFormatUI) : '-'}} </li>
+                                <li>No. of companies : {{item?.totalCompanies}}/{{item?.planDetails?.companiesLimit}}</li>
+                                <li>Transaction Limit: {{item?.totalTransactions ? item.totalTransactions : '0'}}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
+                            <div class="font-14" *ngIf="item?.status==='trial'"><span class="font-26">{{calculateRemainingDays(item?.expiry)}}</span> days remaining </div>
+                            <div class="active font-14" *ngIf="item?.status==='active'"><span class="green-dote"></span> {{item?.status | titlecase}} </div>
+                            <div class="text-danger font-14" *ngIf="item?.status==='expired'"><span class="red-dote"></span> {{item?.status | titlecase}} </div>
+                        </div>
                     </div>
-                    <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
-                        <span class="font-26">5</span> days remaining
-                    </div>
                 </div>
-            </div>
-        </a>
-    </div>
-
-
-    <div class="clearfix">
-        <a href="javascript:void(0)">
-        <div class="box mt-2">
-            <div class="row d-flex justify-content-between align-items-center xs-d-block plan-row">
-                <div class="col-md-8 col-sm-8 col-xs-12">
-                    <p class="bold">Professional</p>
-                <ul class="list-inline plan-list">
-                    <li>Expiry Date: 25/05/2020  </li>
-                    <li>No. of companies : 4/10</li>
-                    <li>Transaction Limit: 40,000</li>
-                </ul>
-                </div>
-                <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
-                    <div class="active font-14"><span class="green-dote"></span> Active </div>
-                </div>
-            </div>
+            </a>
         </div>
-        </a>
-    </div>
-
-    <div class="clearfix">
-        <a href="javascript:void(0)">
-            <div class="box mt-2">
-                <div class="row d-flex justify-content-between align-items-center xs-d-block plan-row">
-                    <div class="col-md-8 col-sm-8 col-xs-12">
-                        <p class="bold">TRIAL</p>
-                    <ul class="list-inline plan-list">
-                        <li>Expired on: 25/05/2020</li>
-                    </ul>
-                    </div>
-                    <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
-                        <div class="text-danger font-14"><span class="red-dote"></span> Expired </div>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-
-
-    <div class="clearfix">
-        <a href="javascript:void(0)">
-            <div class="box mt-2">
-                <div class="row d-flex justify-content-between align-items-center xs-d-block plan-row">
-                    <div class="col-md-8 col-sm-8 col-xs-12">
-                        <p class="bold">Professional</p>
-                    <ul class="list-inline plan-list">
-                        <li>Expired on: 25/05/2020</li>
-                    </ul>
-                    </div>
-                    <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
-                        <div class="text-danger font-14"><span class="red-dote"></span> Expired </div>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-
-
     </div>
 </ng-container>
 <div *ngIf="isLoading">
     <div class="no-data mrT2 loader-main">
-        <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
         <div class="spinner2">
             <div class="cube1"></div>
             <div class="cube2"></div>
@@ -512,23 +391,20 @@
 </ng-template> -->
 <!-- Modal end -->
 
-<!-- <div *ngIf="!isOn">dfadfsasdf</div>
-
-<button label="Results" (click)="isOn= true">Results</button> -->
-
-
-<subscriptions-plans *ngIf="isPlanShow" [subscriptions]="subscriptions" (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)"></subscriptions-plans>
+<subscriptions-plans *ngIf="isPlanShow" [subscriptions]="subscriptions"
+    (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)"></subscriptions-plans>
 
 
 <!-- activity-log-sidebar aside -->
-<div class="aside-overlay" *ngIf="activityLogAsideMenuState === 'in'"></div>
-<activity-log-sidebar [class]="activityLogAsideMenuState" *ngIf="activityLogAsideMenuState === 'in'" (closeEvent)="toggleActivityLogAsidePane()"></activity-log-sidebar>
+<!-- <div class="aside-overlay" *ngIf="activityLogAsideMenuState === 'in'"></div>
+<activity-log-sidebar [class]="activityLogAsideMenuState" *ngIf="activityLogAsideMenuState === 'in'" (closeEvent)="toggleActivityLogAsidePane()"></activity-log-sidebar> -->
 
 
 
 <!-- activity-log-sidebar aside -->
 <div class="aside-overlay" *ngIf="companyDetailsAsideMenuState === 'in'"></div>
-<company-details-sidebar [class]="companyDetailsAsideMenuState" *ngIf="companyDetailsAsideMenuState === 'in'" (closeEvent)="toggleCompanyDetailsAsidePane()"></company-details-sidebar>
+<company-details-sidebar [class]="companyDetailsAsideMenuState" *ngIf="companyDetailsAsideMenuState === 'in'"
+    (closeEvent)="toggleCompanyDetailsAsidePane()"></company-details-sidebar>
 
 
 <!-- MoveCompany Modal -->
