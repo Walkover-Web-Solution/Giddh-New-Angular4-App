@@ -300,6 +300,9 @@ span.inputAddon {
     justify-content: center;
     align-items: center
 }
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
+    background-color: inherit !important;
+}
 /*responsive*/
 @media (max-width: 768px) {
     .aging-table > tbody > tr input[type="checkbox"] {

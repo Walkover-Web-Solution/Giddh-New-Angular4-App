@@ -1401,7 +1401,7 @@ td span {
 @media(max-width:767px){
     .md-drppicker{
         flex-direction: column;
-        z-index: 5;
+        z-index:999;
         .ranges {
             .range-container {  
                 .date-range-close{
