@@ -332,7 +332,9 @@ export class MfEditComponent implements OnInit {
     public createEntry() {
         let dataToSave = _.cloneDeep(this.manufacturingDetails);
         dataToSave.stockUniqueName = this.selectedProduct;
-        dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
+        if (dataToSave.date && !dataToSave.date.includes('-')) {
+            dataToSave.date = (dataToSave.date).format('DD-MM-YYYY');
+        }
         dataToSave.linkedStocks.forEach((obj) => {
             obj.manufacturingUnit = obj.stockUnitCode;
             obj.manufacturingQuantity = obj.quantity;
@@ -347,7 +349,9 @@ export class MfEditComponent implements OnInit {
 
     public updateEntry() {
         let dataToSave = _.cloneDeep(this.manufacturingDetails);
-        dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
+        if (dataToSave.date && !dataToSave.date.includes('-')) {
+            dataToSave.date = (dataToSave.date).format('DD-MM-YYYY');
+        }
         // dataToSave.grandTotal = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
         // dataToSave.multipleOf = dataToSave.quantity;
         // dataToSave.manufacturingUniqueName =
