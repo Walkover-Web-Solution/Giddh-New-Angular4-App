@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Store, createSelector, select } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { DaybookActions } from 'apps/web-giddh/src/app/actions/daybook/daybook.actions';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -15,6 +15,7 @@ import { DaybookQueryRequest } from '../models/api-models/DaybookRequest';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { DaybookAdvanceSearchModelComponent } from './advance-search/daybook-advance-search.component';
 
 @Component({
     selector: 'daybook',
@@ -36,10 +37,16 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public daybookQueryRequest: DaybookQueryRequest;
     public daybookData$: Observable<DayBookResponseModel>;
     public daybookExportRequestType: 'get' | 'post';
+    /** Universal date observer */
+    public universalDate$: Observable<any>;
+    /** True, If advance search applied */
+    public showAdvanceSearchIcon: boolean = false;
     @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
     @ViewChild('exportDaybookModal') public exportDaybookModal: ModalDirective;
     @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent }) public dateRangePickerCmp: DaterangePickerComponent;
     @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
+    /** Daybook advance search component reference */
+    @ViewChild('daybookAdvanceSearch') public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
     public datePickerOptions: any = {
         locale: {
             applyClass: 'btn-green',
@@ -75,8 +82,11 @@ export class DaybookComponent implements OnInit, OnDestroy {
         startDate: moment().subtract(30, 'days'),
         endDate: moment()
     };
+    /** True, if entry expanded (at least one entry) */
+    public isEntryExpanded: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private searchFilterData: any = null;
+
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -85,23 +95,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
         private _daybookActions: DaybookActions,
         private store: Store<AppState>
     ) {
+
         this.daybookQueryRequest = new DaybookQueryRequest();
-        this.store.select(s => s.daybook.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
-            if (data && data.entries) {
-                this.daybookQueryRequest.page = data.page;
-                // data.entries.sort((a, b) => {
-                //   return new Date(a.entryDate).getTime() - new Date(b.entryDate).getTime();
-                // }).map(a => {
-                //   a.isExpanded = false;
-                // });
-                data.entries.map(a => {
-                    a.isExpanded = false;
-                });
-                this.loadPaginationComponent(data);
-                this.daybookData$ = observableOf(data);
-                this.changeDetectorRef.detectChanges();
-            }
-        });
+        this.initialRequest();
         let companyUniqueName;
         let company;
         store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$))
@@ -112,8 +108,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 company = p.find(q => q.uniqueName === companyUniqueName);
             });
         this.companyName = company.name;
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
-        this.initialRequest();
     }
 
     public ngOnInit() {
@@ -124,6 +120,18 @@ export class DaybookComponent implements OnInit, OnDestroy {
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'daybook';
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+        this.store.pipe(select(state => state.daybook.data), takeUntil(this.destroyed$)).subscribe((data) => {
+            if (data && data.entries) {
+                this.daybookQueryRequest.page = data.page;
+                data.entries.map(item => {
+                    item.isExpanded = this.isAllExpanded;
+                });
+                this.loadPaginationComponent(data);
+                this.daybookData$ = observableOf(data);
+                this.checkIsStockEntryAvailable();
+                this.changeDetectorRef.detectChanges();
+            }
+        });
     }
 
     public selectedDate(value: any) {
@@ -160,6 +168,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             if (obj.action === 'search') {
                 this.advanceSearchModel.hide();
                 this.go(this.searchFilterData);
+                this.showAdvanceSearchIcon = true;
             } else if (obj.action === 'export') {
                 this.daybookExportRequestType = 'post';
                 this.exportDaybookModal.show();
@@ -179,6 +188,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             sc.entries.map(e => e.isExpanded = this.isAllExpanded);
             return sc;
         }));
+        this.checkIsStockEntryAvailable();
     }
 
     public initialRequest() {
@@ -195,6 +205,11 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 this.go();
             }
         });
+        this.showAdvanceSearchIcon = false;
+        if (this.daybookAdvanceSearchModelComponent) {
+            this.daybookAdvanceSearchModelComponent.advanceSearchForm.reset();
+            this.daybookAdvanceSearchModelComponent.resetShselctForceClear();
+        }
     }
 
     public pageChanged(event: any): void {
@@ -254,7 +269,52 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public expandEntry(entry) {
+    /**
+     * To check is entry expanded
+     *
+     * @param {*} entry Transaction object
+     * @memberof DaybookComponent
+     */
+    public expandEntry(entry): any {
+        let isInventory: boolean = false;
         entry.isExpanded = !entry.isExpanded;
+        if (entry && entry.otherTransactions) {
+            isInventory = entry.otherTransactions.some(otherTrasaction => {
+                if (otherTrasaction && otherTrasaction.inventory) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        }
+        if (isInventory && entry.isExpanded) {
+            this.isEntryExpanded = true;
+        } else if (isInventory && !entry.isExpanded) {
+            this.checkIsStockEntryAvailable();
+        }
+    }
+
+    /**
+     *To check is there any stock entry available
+     *
+     * @memberof DaybookComponent
+     */
+    public checkIsStockEntryAvailable(): any {
+        this.daybookData$.subscribe(item => {
+            this.isEntryExpanded = item.entries.some(entry => {
+                if (entry.isExpanded && entry.otherTransactions) {
+                    return entry.otherTransactions.some(otherTrasaction => {
+                        if (otherTrasaction && otherTrasaction.inventory) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    });
+                } else {
+                    return false;
+                };
+            });
+        });
     }
 }
+

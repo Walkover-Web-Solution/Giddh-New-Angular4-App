@@ -86,13 +86,12 @@ export class GiddhErrorHandler {
     }
 
     /**
-     * Logs API error
+     * Logs error to API
      *
-     * @private
-     * @param {HttpErrorResponse} response Error response received from the API
+     * @param {HttpErrorResponse} response Error response received from the API/UI
      * @memberof GiddhErrorHandler
      */
-    private logApiError(response: HttpErrorResponse): void {
+    public logApiError(response: HttpErrorResponse): void {
         const apiError = response.error as any;
         const errorCode = apiError.code ? apiError.code : response.status;
         const errorMessage = apiError.message ? apiError.message : 'Bad Gateway';

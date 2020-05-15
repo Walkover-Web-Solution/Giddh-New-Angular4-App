@@ -20,3 +20,21 @@
 .pdBth4 {
     padding: 0 40px;
 }
+@media(max-width:991px){
+    .manufacturing-form .form-group{
+        width: 100%;
+    }
+    .d-none-sm{
+        display: none !important;
+    }
+}
+@media(max-width:767px){
+    .top-bar {
+        .section-title{
+            display: block !important;
+        }
+        .isActive {
+            float:left !important;
+        }
+    }
+}
