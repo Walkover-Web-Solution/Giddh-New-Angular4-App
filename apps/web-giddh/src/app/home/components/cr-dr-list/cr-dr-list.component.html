@@ -12,7 +12,7 @@
                 </ul>
             </div>
             <span class="this-week pull-right">
-                <datepickeroptions (filterDates)="getFilterDate($event)"></datepickeroptions>
+                <datepickeroptions [fromDate]="apiFromDate" [toDate]="apiToDate" (filterDates)="getFilterDate($event)"></datepickeroptions>
             </span>
         </div>
         <div class="cr-dr-body pos-rel">
