@@ -88,7 +88,7 @@
                                     <!-- region customer name -->
                                     <div class=" col-sm-2">
                                         <label>{{!isPurchaseInvoice ? 'Customer' : 'Vendor'}} Name<span
-                                                class="red-text">*</span></label>
+                                            class="red-text">*</span></label>
                                     </div>
                                     <!-- endregion -->
 
@@ -122,7 +122,8 @@
                                                 <!-- endregion -->
                                                 <!-- region if not cashinvoice show customer dropdown -->
                                                 <ng-container *ngIf="isCashInvoice">
-                                                    <input type="text" name="voucherDetails.customerName" [autofocus]="true" #inputCustomerName class="form-control cashInvoiceInput" [(ngModel)]="invFormData.voucherDetails.customerName" (change)="handleCustomerChange($event)" (blur)='selectDefaultbank()' [readOnly]="isUpdateMode && invoiceType !== 'sales' && invoiceType !== 'cash'">
+                                                    <input type="text" name="voucherDetails.customerName" [autofocus]="true" #inputCustomerName class="form-control cashInvoiceInput" [(ngModel)]="invFormData.voucherDetails.customerName" (change)="handleCustomerChange($event)" (blur)='selectDefaultbank()'
+                                                        [readOnly]="isUpdateMode && invoiceType !== 'sales' && invoiceType !== 'cash'">
                                                 </ng-container>
                                                 <!-- endregion -->
 
@@ -145,7 +146,7 @@
 
                                                 <span style="margin-right: 5px" class="cp aquaColor" *ngIf="!isCashInvoice && !isUpdateMode">
                                                     <a href="javascript:void(0)"
-                                                        (click)="getCustomerDetails()">{{!isPurchaseInvoice ? 'Customer' : 'Vendor'}}
+                                                       (click)="getCustomerDetails()">{{!isPurchaseInvoice ? 'Customer' : 'Vendor'}}
                                                         Details</a>
                                                 </span>
                                             </div>
@@ -212,9 +213,9 @@
                                                         <div class="form-group p0 width100">
                                                             <label>
                                                                 <input type="checkbox" autocomplete="None"
-                                                                    (change)="autoFillShippingDetails()"
-                                                                    name="autoFillShipping"
-                                                                    [(ngModel)]="autoFillShipping"> Shipping Address
+                                                                       (change)="autoFillShippingDetails()"
+                                                                       name="autoFillShipping"
+                                                                       [(ngModel)]="autoFillShipping"> Shipping Address
                                                                 Same as
                                                                 Billing
                                                                 Address
@@ -520,16 +521,16 @@
                             <img class="switchIcon" src="assets/images/switch-icon.svg" alt="switch-icon" (click)="switchCurrencyImg(true)">
                             <span class="right-currency">
                                 <span class="currency-digits"
-                                    *ngIf="!showCurrencyValue">{{originalExchangeRate | giddhCurrency}}</span>
+                                      *ngIf="!showCurrencyValue">{{originalExchangeRate | giddhCurrency}}</span>
                             <input type="number" name="exchangeRate" [(ngModel)]="exchangeRate" *ngIf="showCurrencyValue" class="form-control edit-currency"> {{companyCurrency}}
                             </span>
 
                             <span class="edit-icon cp">
                                 <img src="assets/images/edit-pencilicon.svg" class="edit-pencil" *ngIf="!autoSaveIcon"
-                                    (click)="showCurrencyValue = !showCurrencyValue ; autoSaveIcon = !autoSaveIcon; exchangeRate = originalExchangeRate">
+                                     (click)="showCurrencyValue = !showCurrencyValue ; autoSaveIcon = !autoSaveIcon; exchangeRate = originalExchangeRate">
                                 <img src=" assets/images/autosave.svg" class="edit-pencil"
-                                    (click)="originalExchangeRate = exchangeRate; autoSaveIcon = !autoSaveIcon; showCurrencyValue= !showCurrencyValue; calculateGrandTotal()"
-                                    *ngIf="autoSaveIcon">
+                                     (click)="originalExchangeRate = exchangeRate; autoSaveIcon = !autoSaveIcon; showCurrencyValue= !showCurrencyValue; calculateGrandTotal()"
+                                     *ngIf="autoSaveIcon">
                             </span>
 
 
@@ -540,15 +541,15 @@
                             <img class="switchIcon" src="assets/images/switch-icon.svg" alt="switch-icon" (click)="switchCurrencyImg(false)">
                             <span class="right-currency">
                                 <span class="currency-digits"
-                                    *ngIf="!showCurrencyValue">{{originalReverseExchangeRate | giddhCurrency}}</span>
+                                      *ngIf="!showCurrencyValue">{{originalReverseExchangeRate | giddhCurrency}}</span>
                             <input type="number" name="exchangeRate" [(ngModel)]="reverseExchangeRate" *ngIf="showCurrencyValue" class="form-control edit-currency"> {{companyCurrencyName}}
                             </span>
 
                             <span class="edit-icon cp">
                                 <img *ngIf="!autoSaveIcon" src="assets/images/edit-pencilicon.svg" class="edit-pencil"
-                                    (click)="saveCancelExcRate(false)">
+                                     (click)="saveCancelExcRate(false)">
                                 <img src=" assets/images/autosave.svg" class="edit-pencil"
-                                    (click)="saveCancelExcRate(true)" *ngIf="autoSaveIcon">
+                                     (click)="saveCancelExcRate(true)" *ngIf="autoSaveIcon">
                             </span>
 
                         </div>
@@ -558,7 +559,7 @@
                             <tr>
                                 <th *ngFor="let item of theadArrReadOnly;" [hidden]="!item.display" class="theadOfSalesInvoice" [ngClass]="item.label">
                                     {{item.label}} <span *ngIf="item.label === 'Tax' && isRcmEntry">(RCM)<sup
-                                            class="mandatory-asterisk">*</sup></span>
+                                class="mandatory-asterisk">*</sup></span>
                                 </th>
                             </tr>
                         </thead>
@@ -574,10 +575,10 @@
                                     <td>
                                         <div class="productName">
                                             <label *ngIf="!transaction.accountName" class="selectAccountLabel">Click to
-                                                Select
-                                                Account</label> {{transaction.accountName}}
+                                            Select
+                                            Account</label> {{transaction.accountName}}
                                             <span *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.name}}
-                                                )</span>
+                                            )</span>
 
                                         </div>
 
@@ -610,7 +611,7 @@
                                                         <label>HSN/SAC:</label>
                                                         <span>
                                                             {{(inventorySettings?.manageInventory || !transaction.sacNumberExists) ? transaction.hsnNumber : transaction.sacNumber}}
-                                                            <span class="edit-icon cp">
+                                                        <span class="edit-icon cp">
                                                                 <img src="assets/images/edit-pencilicon.svg">
                                                             </span>
                                                         </span>
@@ -684,12 +685,12 @@
                                             <div style="flex:1;">
                                                 <div class="wrap-td-data">
                                                     <span><span
-                                                            *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}
+                                                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}
                                                         </span>{{transaction.total | giddhCurrency}}</span>
                                                     <br>
                                                     <span *ngIf="entry.isOtherTaxApplicable">
                                                         {{ entry.otherTaxModal?.appliedOtherTax?.name }} : <span
-                                                            *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}
+                                                    *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}
                                                         </span>{{ entry.otherTaxSum }}
                                                     </span>
                                                 </div>
@@ -724,8 +725,9 @@
 
                                         <div class="productName">
                                             <div class="ng-select-wrap">
-                                                <sh-select [options]="salesAccounts$ | async" #selectAccount [(ngModel)]="transaction.fakeAccForSelect2" name="transaction.fakeAccForSelect2_{{entryIdx}}" (selected)="onSelectSalesAccount($event,transaction, entry)" [placeholder]="'Select A/c'" [notFoundLink]="true" [fixedValue]="(transaction.stockDetails && transaction.stockDetails.name) ? transaction.accountName+' ('+transaction.stockDetails?.name+')' : transaction.accountName"
-                                                    [forceClearReactive]="forceClear$ | async" (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67" (onClear)="onClearSalesAccount(transaction)" [useInBuiltFilterForFlattenAc]="true">
+                                                <sh-select [options]="salesAccounts$ | async" #selectAccount [(ngModel)]="transaction.fakeAccForSelect2" name="transaction.fakeAccForSelect2_{{entryIdx}}" (selected)="onSelectSalesAccount($event,transaction, entry)" [placeholder]="'Select A/c'" [notFoundLink]="true"
+                                                    [fixedValue]="(transaction.stockDetails && transaction.stockDetails.name) ? transaction.accountName+' ('+transaction.stockDetails?.name+')' : transaction.accountName" [forceClearReactive]="forceClear$ | async"
+                                                    (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67" (onClear)="onClearSalesAccount(transaction)" [useInBuiltFilterForFlattenAc]="true">
 
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
@@ -768,16 +770,16 @@
                                                             <label>Entry Date: </label>
                                                             <span *ngIf="!isUpdateMode">
                                                                 <input type="text" [placeholder]="giddhDateFormat"
-                                                                    bsDatepicker name="transaction.date_{{entryIdx}}"
-                                                                    id="transaction.date_{{entryIdx}}"
-                                                                    class="form-control text-left"
-                                                                    [(ngModel)]="entry.entryDate"
-                                                                    [disabled]="isUpdateMode"
-                                                                    (onShown)="hsnDropdownShow = false;"
-                                                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                                    #dp="bsDatepicker" />
+                                                                       bsDatepicker name="transaction.date_{{entryIdx}}"
+                                                                       id="transaction.date_{{entryIdx}}"
+                                                                       class="form-control text-left"
+                                                                       [(ngModel)]="entry.entryDate"
+                                                                       [disabled]="isUpdateMode"
+                                                                       (onShown)="hsnDropdownShow = false;"
+                                                                       [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                                                       #dp="bsDatepicker" />
                                                                 <span class="edit-icon cp" (click)="dp.toggle()"
-                                                                    [attr.aria-expanded]="dp.isOpen">
+                                                                      [attr.aria-expanded]="dp.isOpen">
                                                                     <img src="assets/images/edit-pencilicon.svg">
                                                                 </span>
                                                             </span>
@@ -795,9 +797,9 @@
                                                                 <label>HSN/SAC:</label>
                                                                 <span>
                                                                     {{(inventorySettings?.manageInventory || !transaction.sacNumber) ? transaction.hsnNumber : transaction.sacNumber }}
-                                                                    <span
-                                                                        *ngIf="!transaction.hsnNumber && !transaction.sacNumber"
-                                                                        class="updateText">Update
+                                                                <span
+                                                                    *ngIf="!transaction.hsnNumber && !transaction.sacNumber"
+                                                                    class="updateText">Update
                                                                     </span>
                                                                 <span class="edit-icon cp">
                                                                         <img src="assets/images/edit-pencilicon.svg">
@@ -813,10 +815,10 @@
                                                                 </a>
                                                                 <div class="btngroup m-t-10">
                                                                     <button class="btn btn-sm btn-success" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">Save
-                                                                    </button>
+                                                                </button>
                                                                     <button class="btn btn-sm btn-primary" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">
-                                                                        Cancel
-                                                                    </button>
+                                                                    Cancel
+                                                                </button>
                                                                 </div>
                                                             </div>
 
@@ -830,14 +832,14 @@
                                     </td>
 
                                     <td class="text-right stockUnit">
-                                        <input type="text" [disabled]="!transaction.isStockTxn" (blur)="handleQuantityBlur(entry, transaction);" placeholder="Quantity" decimalDigitsDirective name="transaction.quantity_{{entryIdx}}" class="form-control text-right"
-                                            [(ngModel)]="transaction.quantity" />
+                                        <input type="text" [disabled]="!transaction.isStockTxn" (blur)="handleQuantityBlur(entry, transaction);" placeholder="Quantity" decimalDigitsDirective name="transaction.quantity_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.quantity"
+                                        />
 
                                         <select class="form-control" [disabled]="!transaction.isStockTxn" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit" (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
-                                            <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">
-                                                {{stock.text}}
-                                            </option>
-                                        </select>
+                                        <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">
+                                            {{stock.text}}
+                                        </option>
+                                    </select>
                                     </td>
 
                                     <td class="text-right item-rate" style="
@@ -891,9 +893,9 @@
                                                     [suffixInput]="selectedSuffixForCurrency">
                                                 </tax-control>
                                                 <!-- TODO: After design finalization
-                                                    <span class="eligible-ITC">Eligible for ITC <span
-                                                        class="icon-edit"></span>
-                                                </span> -->
+                                                <span class="eligible-ITC">Eligible for ITC <span
+                                                    class="icon-edit"></span>
+                                            </span> -->
                                             </div>
 
                                             <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
@@ -921,7 +923,7 @@
                                                         <div style="display: flex;align-items: center">
                                                             <span style="margin-right: 5px">
                                                                 <a href="javascript: void 0"
-                                                                    (click)="toggleOtherTaxesAsidePane(true, entryIdx)">
+                                                                   (click)="toggleOtherTaxesAsidePane(true, entryIdx)">
                                                                     <img src="assets/images/edit-pencilicon.svg">
                                                                 </a>
                                                             </span>
@@ -1046,18 +1048,18 @@
                 <div class="pdT1 pl0 max-600 pos-rel" *ngIf="isPurchaseInvoice">
 
                     <label class="mrB1"><i class="glyphicon glyphicon-paperclip"></i>
-                                            Attachment</label>
+                                        Attachment</label>
 
                     <label class="custom-file-label form-control cp pos-rel" for="invoiceFile">
-                                            <em *ngIf="!selectedFileName">Drag/Drop file or click here</em>
-                                            <em *ngIf="selectedFileName" class="text-success">{{selectedFileName}}</em>
-                                            <span class="text-success"><i class="fa fa-check"
-                                                    *ngIf="selectedFileName"></i></span>
-                                            <input type="file" name="invoiceFile" id="invoiceFile"
-                                                [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
-                                                (uploadOutput)="onUploadOutput($event)"
-                                                (change)="onFileChange($event.target)" droppable="true">
-                                        </label>
+                                        <em *ngIf="!selectedFileName">Drag/Drop file or click here</em>
+                                        <em *ngIf="selectedFileName" class="text-success">{{selectedFileName}}</em>
+                                        <span class="text-success"><i class="fa fa-check"
+                                                                      *ngIf="selectedFileName"></i></span>
+                                        <input type="file" name="invoiceFile" id="invoiceFile"
+                                               [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
+                                               (uploadOutput)="onUploadOutput($event)"
+                                               (change)="onFileChange($event.target)" droppable="true">
+                                    </label>
 
                 </div>
                 <!-- endregion -->
@@ -1109,8 +1111,8 @@
 
                         <div class="tableCell figureCell">
                             <strong> <span
-                                                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>
-                                                    {{calculatedRoundOff | giddhCurrency}}</strong>
+                                                *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>
+                                                {{calculatedRoundOff | giddhCurrency}}</strong>
                         </div>
 
                     </div>
@@ -1119,13 +1121,13 @@
 
                         <div class="tableCell biggerDollar">
                             <strong>Total <span
-                                                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span></strong>
+                                                *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span></strong>
                         </div>
 
                         <div class="tableCell figureCell">
                             <strong><span
-                                                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.grandTotal | giddhCurrency}}
-                                                </strong>
+                                                *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.grandTotal | giddhCurrency}}
+                                            </strong>
                         </div>
 
                     </div>
@@ -1133,7 +1135,7 @@
                     <div class="tableRow" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                         <div class="tableCell biggerDollar">
                             <strong>Total <span>{{baseCurrencySymbol}}</span>
-                                                </strong>
+                                            </strong>
                         </div>
 
                         <div class="tableCell figureCell">
@@ -1171,29 +1173,29 @@
                                                         <div class="clearfix mb-1 text-left">
                                                             <span class="pd0 mr-2 d-inline-block">
                                                                                     <input class="radio-custom cp ml0"
-                                                                                        name="advanceReceipt"
-                                                                                        [value]="false"
-                                                                                        name="isAdjustAmount"
-                                                                                        [(ngModel)]="isAdjustAmount"
-                                                                                        (ngModelChange)="clickAdjustAmount($event)"
-                                                                                        id="adjustAmountNo"
-                                                                                        type="radio">
+                                                                                           name="advanceReceipt"
+                                                                                           [value]="false"
+                                                                                           name="isAdjustAmount"
+                                                                                           [(ngModel)]="isAdjustAmount"
+                                                                                           (ngModelChange)="clickAdjustAmount($event)"
+                                                                                           id="adjustAmountNo"
+                                                                                           type="radio">
                                                                                     <label class="radio-custom-label"
-                                                                                        for="adjustAmountNo"
-                                                                                        (click)="clickAdjustAmount(false)">No</label>
+                                                                                           for="adjustAmountNo"
+                                                                                           (click)="clickAdjustAmount(false)">No</label>
                                                                                 </span>
                                                             <span class="pd0 d-inline-block">
                                                                                     <input class="radio-custom cp ml0"
-                                                                                        name="advanceReceipt"
-                                                                                        [value]="true"
-                                                                                        name="isAdjustAmount"
-                                                                                        (ngModelChange)="clickAdjustAmount($event)"
-                                                                                        [(ngModel)]="isAdjustAmount"
-                                                                                        id="adjustAmountYes"
-                                                                                        type="radio">
+                                                                                           name="advanceReceipt"
+                                                                                           [value]="true"
+                                                                                           name="isAdjustAmount"
+                                                                                           (ngModelChange)="clickAdjustAmount($event)"
+                                                                                           [(ngModel)]="isAdjustAmount"
+                                                                                           id="adjustAmountYes"
+                                                                                           type="radio">
                                                                                     <label class="radio-custom-label"
-                                                                                        for="adjustAmountYes"
-                                                                                        (click)="clickAdjustAmount(true)">Yes</label>
+                                                                                           for="adjustAmountYes"
+                                                                                           (click)="clickAdjustAmount(true)">Yes</label>
                                                                                 </span>
                                                         </div>
 
@@ -1206,7 +1208,7 @@
                                                                                     </p>
                                                                                 </span>
                                                             <a href="javascript:void(0)" (click)="clickAdjustAmount(true)" class="font-12 pl-1 color-primary"><i
-                                                                                        class="icon-edit11"></i></a>
+                                                                                class="icon-edit11"></i></a>
                                                         </div>
                                                     </div>
 
@@ -1250,7 +1252,7 @@
 
                                             <li class="clearfix mrT1 biggerDollar" *ngIf="isSalesInvoice ">
                                                 <strong class="pull-right balanceDueText"> <span
-                                                                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>
+                                                                    *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>
                                                                     <ng-container *ngIf="adjustPaymentData?.totalAdjustedAmount">
                                                                         {{adjustPaymentBalanceDueData | giddhCurrency }}
                                                                     </ng-container>
@@ -1500,17 +1502,17 @@
 
                                                         <span *ngIf="!isUpdateMode">
                                                                         <input type="text"
-                                                                            [placeholder]="giddhDateFormat" bsDatepicker
-                                                                            name="transaction.date_{{entryIdx}}"
-                                                                            id="transaction.date_{{entryIdx}}"
-                                                                            class="form-control text-left"
-                                                                            [(ngModel)]="entry.entryDate"
-                                                                            [disabled]="isUpdateMode"
-                                                                            (onShown)="hsnDropdownShow = false"
-                                                                            [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                                            #dp="bsDatepicker" />
+                                                                               [placeholder]="giddhDateFormat" bsDatepicker
+                                                                               name="transaction.date_{{entryIdx}}"
+                                                                               id="transaction.date_{{entryIdx}}"
+                                                                               class="form-control text-left"
+                                                                               [(ngModel)]="entry.entryDate"
+                                                                               [disabled]="isUpdateMode"
+                                                                               (onShown)="hsnDropdownShow = false"
+                                                                               [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                                                               #dp="bsDatepicker" />
                                                                         <span class="edit-icon cp" (click)="dp.toggle()"
-                                                                            [attr.aria-expanded]="dp.isOpen">
+                                                                              [attr.aria-expanded]="dp.isOpen">
                                                                             <img
                                                                                 src="assets/images/edit-pencilicon.svg">
                                                                         </span>
@@ -1579,14 +1581,14 @@
 
                                         <div class="col-xs-6" style="padding-right:0;">
                                             <label class="card-label text-right">Qty</label>
-                                            <input type="text" [disabled]="!transaction.isStockTxn" (blur)="handleQuantityBlur(entry, transaction);" placeholder="Quantity" decimalDigitsDirective name="transaction.quantity_{{entryIdx}}" class="form-control text-right"
-                                                [(ngModel)]="transaction.quantity" />
+                                            <input type="text" [disabled]="!transaction.isStockTxn" (blur)="handleQuantityBlur(entry, transaction);" placeholder="Quantity" decimalDigitsDirective name="transaction.quantity_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.quantity"
+                                            />
                                         </div>
                                         <div class="col-xs-6">
                                             <label class="card-label text-right">Unit</label>
                                             <select class="form-control" [disabled]="!transaction.isStockTxn" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit" (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
                                                             <option *ngFor="let stock of transaction.stockList"
-                                                                [ngValue]="stock.id">
+                                                                    [ngValue]="stock.id">
                                                                 {{stock.text}}
                                                             </option>
                                                         </select>
@@ -1709,7 +1711,7 @@
                                                             <div style="display: flex;align-items: center">
                                                                 <span style="margin-right: 5px">
                                                                     <a href="javascript: void 0"
-                                                                        (click)="toggleOtherTaxesAsidePane(true, entryIdx)">
+                                                                       (click)="toggleOtherTaxesAsidePane(true, entryIdx)">
                                                                         <img src="assets/images/edit-pencilicon.svg">
                                                                     </a>
                                                                 </span>
@@ -1857,7 +1859,7 @@
 
                 <div class="tableCell figureCell">
                     <strong> <span
-                                            *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>
+                                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>
                                         {{calculatedRoundOff | giddhCurrency}}</strong>
                 </div>
 
@@ -1865,12 +1867,12 @@
             <div class="tableRow">
                 <div class="tableCell">
                     <strong>Total <span
-                                            *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span></strong>
+                                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span></strong>
                 </div>
 
                 <div class="tableCell figureCell">
                     <strong><span
-                                            *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.grandTotal | giddhCurrency}}
+                                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.grandTotal | giddhCurrency}}
                                     </strong>
                 </div>
             </div>
@@ -1941,7 +1943,7 @@
 
                                 <li class="clearfix mrT1 biggerDollar" *ngIf="isSalesInvoice ">
                                     <strong class="pull-right balanceDueText"> <span
-                                                            *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
+                                                        *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
                                                         {{invFormData.voucherDetails.balanceDue | giddhCurrency}}
                                                     </strong>
                                     <strong class="pull-right">Balance Due</strong>
@@ -1993,7 +1995,7 @@
                             class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c
                         </button> -->
                                 <button type="button" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
-                                    class="btn btn-default">Save
+                                        class="btn btn-default">Save
                                 </button>
                             </span>
                 <!-- endregion -->
@@ -2002,7 +2004,7 @@
                 <span class="d-inline-block v-align-middle" *ngIf="!isPurchaseInvoice && (!isProformaInvoice  && !isEstimateInvoice)">
 
                                 <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
-                                    class="btn btn-default" *ngIf="isCustomerSelected">Generate
+                                        class="btn btn-default" *ngIf="isCustomerSelected">Generate
                                     <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
                                         Cash
                                     </span> &amp; Update A/c
@@ -2047,13 +2049,13 @@
                                 <div class="btn-group" dropdown [dropup]="true">
 
                                     <button type="button"
-                                        (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
-                                        class="btn btn-default">Create
+                                            (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
+                                            class="btn btn-default">Create
                                     </button>
 
                                     <button id="button-split2" type="button" dropdownToggle
-                                        class="btn btn-default dropdown-toggle dropdown-toggle-split"
-                                        aria-controls="dropdown-split">
+                                            class="btn btn-default dropdown-toggle dropdown-toggle-split"
+                                            aria-controls="dropdown-split">
                                         <span class="caret"></span>
                 <span class="sr-only">Split button!</span>
                 </button>
@@ -2239,7 +2241,6 @@
     </div>
     <div class="modal-body font-14">
         <form #generateTransporterForm="ngForm" action="">
-
             <div class="row mb-3">
                 <div class="col-md-8">
                     <div class="form-group">
@@ -2252,7 +2253,6 @@
                     <p>Due <span class="text-light">(Post Adj):</span> <i class="icon-rupees font-10"></i>910</p>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-sm-3">
                     <div class="form-group">
@@ -2270,7 +2270,6 @@
                         </sh-select>
                     </div>
                 </div>
-
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label for="name">Amount<span class="text-danger">* </span> <span class="text-light"> (Inclusive
@@ -2289,7 +2288,6 @@
                             class="icon-trash"></i></a>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-sm-3">
                     <div class="mb-1">
@@ -2306,7 +2304,6 @@
                         </sh-select>
                     </div>
                 </div>
-
                 <div class="col-sm-3">
                     <div class="mb-1">
                         <input id="name" type="text" class="form-control" placeholder="Enter Amount" [(ngModel)]="tempDateParams.Amount">
@@ -2323,20 +2320,17 @@
                 </div>
             </div>
             <p><a href="javascript:void(0)" class="font-14"><span class="font-16">+</span> Add New Line</a></p>
-
             <div class="clearfix">
                 <div class="clearfix mb-1 mt-2 row">
                     <div class="col-md-2 col-sm-3 col-xs-5">
                         <span class="d-inline-block font-14">Tax Deducted?</span>
                     </div>
-
                     <div class="col-md-8 col-sm-8 col-xs-7">
                         <span class="pd0 mr-2 d-inline-block">
                             <input name="options" class="radio-custom cp ml0" id="deductedNo" [(ngModel)]="options"
                                 type="radio" [value]="true" [checked]="options" />
                             <label for="deductedNo" class="radio-custom-label">No</label>
                         </span>
-
                         <span class="pd0 mr-2 d-inline-block">
                             <input name="options" class="radio-custom cp ml0" [(ngModel)]="options" id="deductedYes"
                                 type="radio" [value]="false" [checked]="!options" />
@@ -2344,8 +2338,6 @@
                         </span>
                     </div>
                 </div>
-
-
                 <div class="row">
                     <div *ngIf="options"></div>
                     <div *ngIf="!options">
@@ -2355,7 +2347,6 @@
                                 <input type="text" class="form-control" placeholder="Select Amount">
                             </div>
                         </div>
-
                         <div class="form-group clearfix">
                             <label class="col-md-2">Amount</label>
                             <div class="col-md-3">
@@ -2364,15 +2355,11 @@
                         </div>
                     </div>
                 </div>
-
-
                 <div class="mt-4">
                     <button type="button" class="btn btn-success mrR1" (click)="confirm()">Save</button>
                     <button type="button" class="btn btn-cancel" (click)="decline()">Cancel</button>
                 </div>
-
             </div>
-
         </form>
     </div>
 </ng-template> -->
