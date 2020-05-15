@@ -5,39 +5,39 @@
                 <thead class="t-h-bg1">
                     <tr>
                         <ng-container *ngFor="let item of columnsName">
-                            <th class="text-center">{{item}}</th>
+                            <th>{{item}}</th>
                         </ng-container>
                     </tr>
                 </thead>
                 <tbody *ngIf="columnarReportResponse.accounts">
                     <tr *ngFor="let item of columnarReportResponse.accounts;let inx = index;">
                         <!-- S No -->
-                        <td class="text-center"> {{ inx + 1}} </td>
+                        <td data-title="#"> {{ inx + 1}} </td>
                         <!--Ledger Name -->
-                        <td class="text-center"> {{ item.accountName}} </td>
+                        <td data-title="Name Of Ledger"> {{ item.accountName}} </td>
                         <!--Parent  Name -->
-                        <td class="text-center"> {{ item.groupName}} </td>
+                        <td data-title="Parent Group"> {{ item.groupName}} </td>
                         <!--Opening balance  -->
-                        <td class="text-center" *ngIf="(isShowClosingOpeningBalance$ | async)">
+                        <td data-title="Opening Balance" *ngIf="(isShowClosingOpeningBalance$ | async)">
                             {{columnarReportResponse?.openingBalance[item.accountUniqueName]?.type ==='DEBIT'? '-': ''}}{{ columnarReportResponse?.openingBalance[item.accountUniqueName]?.amount}}
                         </td>
                         <!--Closing balance  -->
-                        <td class="text-center" *ngIf="(isShowClosingOpeningBalance$ | async)">
+                        <td data-title="Closing Balance" *ngIf="(isShowClosingOpeningBalance$ | async)">
                             {{columnarReportResponse?.closingBalance[item.accountUniqueName]?.type ==='DEBIT'?'-':''}}{{columnarReportResponse?.closingBalance[item.accountUniqueName]?.amount}}
                         </td>
                         <!--Grand  Total -->
-                        <td class="text-center">
+                        <td data-title="Grand Total">
                             {{columnarReportResponse?.grandTotal[item.accountUniqueName]?.type ==='DEBIT'?'-':''}}{{columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount}}
                         </td>
                         <ng-container *ngFor="let months of columnarReportResponse.data;let inx2 = index;">
                             <!-- months data -->
-                            <td class="text-center">
+                            <td data-title="">
                                 {{months?.accountsData[inx]?.monthlyBalance?.type ==='DEBIT'?'-':'' }}{{months.accountsData[inx]?.monthlyBalance?.amount}}
                             </td>
                         </ng-container>
                     </tr>
                 </tbody>
-                <tbody *ngIf="columnarReportResponse && columnarReportResponse.accounts && columnarReportResponse.accounts.length === 0">
+                <tbody class="no-record-found" *ngIf="columnarReportResponse && columnarReportResponse.accounts && columnarReportResponse.accounts.length === 0">
                     <tr>
                         <td [attr.colspan]="columnsName.length" align="center">No records found.</td>
                         <!-- <td  colspan="10">&nbsp;</td> -->

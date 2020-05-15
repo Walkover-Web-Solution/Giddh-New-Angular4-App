@@ -65,7 +65,18 @@
         outline: none;
     }
 }
-
+.giddh-table{
+    .no-record-found{
+        border: none !important;
+        tr{
+            box-shadow: none !important;
+            td{
+                padding-left: 0 !important;
+                text-align: center;
+            }
+        }
+    }  
+}
 @media only screen and (max-width: 767px) {
     .basic>thead>tr>th {
         min-width: initial;
