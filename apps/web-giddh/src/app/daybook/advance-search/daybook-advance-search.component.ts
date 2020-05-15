@@ -435,7 +435,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
      *
      * @memberof DaybookAdvanceSearchModelComponent
      */
-    public resetShselctForceClear(): void {
+    public resetShselectForceClear(): void {
         this.forceClear$ = observableOf({ status: true });
         this.forceClearParticulars$ = observableOf({ status: true });
         this.forceClearRange$ = observableOf({ status: true });

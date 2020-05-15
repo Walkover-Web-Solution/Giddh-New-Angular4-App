@@ -9,41 +9,42 @@ $greyClr: #6d6d6d;
 */
 
 @mixin marg($d, $num) {
-    @if $d== "B" {
+    @if $d=="B" {
         margin-bottom: $num;
     }
-    @if $d== "T" {
+    @if $d=="T" {
         margin-top: $num;
     }
-    @if $d== "L" {
+    @if $d=="L" {
         margin-left: $num;
     }
-    @if $d== "R" {
+    @if $d=="R" {
         margin-right: $num;
     }
-    @if $d== "A" {
+    @if $d=="A" {
         margin: $num;
     }
 }
+
 
 /**
 # padding mixin pass direction and number
 */
 
 @mixin pad($d, $num) {
-    @if $d== "B" {
+    @if $d=="B" {
         padding-bottom: $num;
     }
-    @if $d== "T" {
+    @if $d=="T" {
         padding-top: $num;
     }
-    @if $d== "L" {
+    @if $d=="L" {
         padding-left: $num;
     }
-    @if $d== "R" {
+    @if $d=="R" {
         padding-right: $num;
     }
-    @if $d== "A" {
+    @if $d=="A" {
         padding: $num;
     }
 }
@@ -88,7 +89,6 @@ $greyClr: #6d6d6d;
 
 .flex-row {
     display: flex;
-
     .flex-row-child {
         align-self: center;
         // flex-grow: 1;
@@ -121,11 +121,9 @@ $greyClr: #6d6d6d;
         padding: 0 0 0 0.5em;
         cursor: pointer;
     }
-
     select::-ms-expand {
         display: none;
     }
-
     /* Arrow */
     &::after {
         content: "\25BC";
@@ -137,12 +135,10 @@ $greyClr: #6d6d6d;
         color: #cccccc;
         pointer-events: none;
     }
-
     /* Transition */
     &:hover::after {
         color: #bbbbbb;
     }
-
     &::after {
         -webkit-transition: 0.25s all ease;
         -o-transition: 0.25s all ease;
@@ -151,37 +147,32 @@ $greyClr: #6d6d6d;
 }
 
 // styles
-
 .other-taxes-input {
     width: 85% !important;
 }
+
 .form-group {
     .form-control {
         @include radius(3px);
     }
-
     textarea.form-control {
         resize: none;
         padding-left: 7px !important;
         overflow-y: auto;
     }
-
     textarea.form-control::-webkit-scrollbar {
         width: 5px;
     }
-
     textarea.form-control::-webkit-scrollbar-thumb {
         background-color: darkgrey;
         outline: 1px solid slategrey;
         border-radius: 20px;
     }
-
     label {
         display: block;
         font-weight: 400;
         @include marg(B, 0px);
     }
-
     &.size_175 {
         input:not([type="checkbox"]),
         select,
@@ -189,7 +180,6 @@ $greyClr: #6d6d6d;
             width: 175px;
         }
     }
-
     &.size_240 {
         input:not([type="checkbox"]),
         select,
@@ -197,7 +187,6 @@ $greyClr: #6d6d6d;
             width: 240px;
         }
     }
-
     &.size_340 {
         input:not([type="checkbox"]),
         select,
@@ -205,7 +194,6 @@ $greyClr: #6d6d6d;
             width: 340px;
         }
     }
-
     &.size_380 {
         input:not([type="checkbox"]),
         select,
@@ -213,11 +201,9 @@ $greyClr: #6d6d6d;
             width: 380px;
         }
     }
-
     &.noMarg {
         @include marg(A, 0);
     }
-
     .form-control.voucher-selector {
         width: 200px;
         text-transform: capitalize;
@@ -229,7 +215,6 @@ $greyClr: #6d6d6d;
         // @include marg(R, 20px);
         vertical-align: top;
     }
-
     .form-control {
         width: 100%;
     }
@@ -264,7 +249,6 @@ $greyClr: #6d6d6d;
 // collapse
 .collapse-pane {
     padding: 0 0;
-
     .collapse-pane-heading {
         @extend .cp;
         @include marg(B, 0px);
@@ -272,14 +256,12 @@ $greyClr: #6d6d6d;
         display: flex;
         align-items: center;
         height: 30px;
-
         .ico-box-wrap,
         .ico-head {
             align-self: stretch;
             display: flex;
             align-items: center;
         }
-
         .ico-box {
             @include bdr(1px, solid, $greyClr);
             @include box(20px, 20px);
@@ -288,7 +270,6 @@ $greyClr: #6d6d6d;
             align-self: center;
             display: flex;
             justify-content: center;
-
             span {
                 align-self: center;
                 font-size: 12px;
@@ -300,7 +281,6 @@ $greyClr: #6d6d6d;
 .action-panel-td {
     width: 80px;
     padding: 0 !important;
-
     span {
         padding: 5px;
         display: inline-block;
@@ -331,11 +311,9 @@ $greyClr: #6d6d6d;
 .tableSec {
     display: table;
     width: 100%;
-
     .tableRow {
         display: table-row;
         vertical-align: top;
-
         .tableCell {
             // line-height: 40px;
             vertical-align: middle;
@@ -343,11 +321,9 @@ $greyClr: #6d6d6d;
             padding-bottom: 7px;
             display: table-cell;
         }
-
         .figureCell {
             width: 140px;
             padding-right: 0;
-
             input {
                 max-width: 130px;
                 float: right;
@@ -358,7 +334,7 @@ $greyClr: #6d6d6d;
 }
 
 .table {
-    tbody + tbody {
+    tbody+tbody {
         border: 0;
     }
 }
@@ -384,7 +360,7 @@ ng-select.splSales {
     text-align: center;
 }
 
-.table > thead > tr th {
+.table>thead>tr th {
     font-weight: 100;
 }
 
@@ -397,11 +373,9 @@ ng-select.splSales {
     border: 1px solid #d6d6d6;
     padding: 5px;
     padding-bottom: 10px;
-
     &.disabled {
         background: #eee;
     }
-
     textarea {
         border: none;
         width: 100%;
@@ -409,8 +383,7 @@ ng-select.splSales {
         height: auto !important;
         overflow: hidden;
     }
-
-    :focus {
+     :focus {
         outline: none !important;
     }
 }
@@ -442,23 +415,23 @@ textarea:focus {
     font-size: 26px;
     line-height: 1.2;
 }
+
 .sp-rupees span.icon-rupees {
     font-size: 20px;
 }
+
 .table-custom-invoice {
-    > thead {
-        > tr {
-            > th {
+    >thead {
+        >tr {
+            >th {
                 border: 1px solid #c7c7c7 !important;
                 padding: 10px 8px;
                 white-space: nowrap;
                 text-align: right;
-
                 &:first-child {
                     // border-left: none !important;
                     text-align: left;
                 }
-
                 &:nth-child(2) {
                     text-align: left;
                     white-space: normal;
@@ -469,7 +442,6 @@ textarea:focus {
                     width: 90px;
                     min-width: 90px;
                 }
-
                 &:last-child {
                     //border-right: none !important;
                     vertical-align: middle !important;
@@ -478,15 +450,13 @@ textarea:focus {
             }
         }
     }
-
-    > tbody {
-        > tr {
-            > td {
+    >tbody {
+        >tr {
+            >td {
                 border: 1px solid #c7c7c7 !important;
                 padding: 10px 8px;
                 white-space: nowrap;
                 position: relative;
-
                 &:nth-child(2) {
                     white-space: normal;
                     width: 350px;
@@ -627,11 +597,11 @@ textarea:focus {
     height: 200px;
 }
 
-.modal-invoice-footer ul > li > input {
+.modal-invoice-footer ul>li>input {
     display: none;
 }
 
-.modal-invoice-footer ul > li > input:checked + label {
+.modal-invoice-footer ul>li>input:checked+label {
     background: #229e2b;
     color: #fff;
 }
@@ -686,8 +656,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
     padding-left: 0 !important;
 }
 
-.billing-address
-    input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
+.billing-address input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
     background: transparent !important;
     padding-left: 0 !important;
 }
@@ -872,7 +841,6 @@ a.copyInvoice img {
 
 span.edit-icon {
     line-height: 17px;
-
     position: relative;
     top: -2px;
 }
@@ -1057,7 +1025,6 @@ section.staticInvoiceTable {
 // new table css
 section.newtable {
     background-color: #e5e5e5;
-
     margin-bottom: 30px;
     margin: 0 15px 30px;
 }
@@ -1071,31 +1038,36 @@ section.newtable {
     padding-left: 30px;
 }
 
-.newtable .row > div {
+.newtable .row>div {
     padding: 0;
 }
 
 .customerInvoiceTable label {
     line-height: 2.3;
 }
+
 .customerInvoiceTable label.salesCountryLabel {
     min-height: 36px;
 }
-.table-custom-invoice.table > tfoot > tr > td {
+
+.table-custom-invoice.table>tfoot>tr>td {
     border-top: none;
 }
 
 .cashinvoice_tipImg.tip_img {
     max-width: 215px;
 }
+
 .texIncurrency {
     margin-bottom: 7px;
     color: #999 !important;
     white-space: initial;
 }
+
 .pd {
     padding: 3px 5px;
 }
+
 .showOnsmall-screen,
 .card-invoiceTable-wrapper,
 .add-btn,
@@ -1105,7 +1077,6 @@ section.newtable {
 }
 
 // card css
-
 .card-invoiceTable-wrapper {
     max-width: 400px;
     width: 100%;
@@ -1222,6 +1193,7 @@ section.newtable {
     min-height: 80vh;
 }
 
+
 /* ADD BULK ITEM */
 
 .addBulkItemmodal.modal-dialog {
@@ -1335,7 +1307,7 @@ section.newtable {
     border: 1px solid #c7c7c7;
 }
 
-.gst-treatment-header > span {
+.gst-treatment-header>span {
     font-size: 14px;
 }
 
@@ -1364,13 +1336,13 @@ section.newtable {
     width: 470% !important;
 }
 
-.table-custom-invoice > thead > tr > th:first-child {
+.table-custom-invoice>thead>tr>th:first-child {
     max-width: 40px;
     width: 40px;
     min-width: 40px;
 }
 
-.table-custom-invoice > tbody > tr > td:first-child {
+.table-custom-invoice>tbody>tr>td:first-child {
     max-width: 40px;
     width: 40px;
     min-width: 40px;
@@ -1420,6 +1392,7 @@ table.table.table-custom-invoice.basic {
 #deposit-dropdown p {
     text-align: left;
 }
+
 .sku_and_customfields {
     white-space: normal;
     font-size: 12px !important;
@@ -1436,13 +1409,16 @@ table.table.table-custom-invoice.basic {
     align-self: flex-end;
     justify-self: flex-end;
 }
+
 .differ-currency span.icon-rupees {
     font-size: 11px;
 }
+
 .dateHsnCode {
     position: relative;
     top: 7px;
 }
+
 .switch-currency {
     font-size: 14px;
     color: #333;
@@ -1451,15 +1427,18 @@ table.table.table-custom-invoice.basic {
     margin-bottom: 10px;
     width: 100%;
 }
+
 .switch-currency .switchIcon {
     padding: 0 10px;
     cursor: pointer;
 }
+
 input.form-control.edit-currency {
     display: inline-block;
     width: 80px;
     height: 26px !important;
 }
+
 .icon-dollar:before {
     content: "$";
     height: 20px;
@@ -1471,22 +1450,28 @@ input.form-control.edit-currency {
     padding-bottom: 30px;
     min-height: 50px;
 }
+
 .biggerDollar .icon-dollar:before {
     font-size: 17px;
 }
+
 label.salesCountryLabel {
     padding-bottom: 0;
 }
+
 .biggerDollar .icon-rupees {
     font-size: 12px;
 }
+
 .tableCell.figureCell span.icon-rupees {
     font-size: 11px;
     margin-right: 2px;
 }
+
 .tableCell.figureCell span.icon-dollar {
     margin-right: 2px;
 }
+
 .texIncurrency span.icon-rupees {
     font-size: 11px;
     color: #999;
@@ -1495,42 +1480,54 @@ label.salesCountryLabel {
 .theadOfSalesInvoice {
     max-width: 100%;
 }
+
 .table-custom-invoice .Rate {
     width: 8%;
 }
+
 .table-custom-invoice .Amount {
     width: 12%;
 }
+
 .table-custom-invoice .Discount {
     width: 10%;
 }
+
 .table-custom-invoice .Tax {
     width: 10%;
 }
+
 .table-custom-invoice .Total {
     width: 12%;
 }
+
 .td_Wrapper {
     display: flex;
     flex-direction: column;
     height: 100%;
 }
+
 .defaultActive .td_Wrapper {
     height: 100%;
 }
+
 .set-active .td_Wrapper {
     height: 80%;
     display: initial;
 }
+
 .set-active td:last-child .td_Wrapper {
     height: 105% !important;
 }
+
 .set-active.isOtherTax td:last-child .td_Wrapper .differ-currency {
     margin-bottom: 14px;
 }
+
 .dlt-abs {
     position: relative;
 }
+
 .trash-icon-delete {
     position: absolute;
     right: -30px;
@@ -1541,41 +1538,52 @@ label.salesCountryLabel {
     border-radius: 50%;
     text-align: center;
 }
+
 .set-active .trash-icon-delete {
     transform: translateY(-40px);
     -webkit-transform: translateY(-40px);
     -moz-transform: translateY(-40px);
 }
+
 .wrap-td-data .icon-rupees {
     font-size: 11px;
 }
+
 b,
 strong {
     font-family: "opensans-bold";
     font-weight: 500;
 }
+
 .showforSmall-screen {
     display: none;
 }
+
 .card-invoiceTable .differ-currency {
     text-align: left;
     padding-left: 0;
 }
+
 .edit-card-invoiceTable .differ-currency {
     text-align: right;
 }
+
 .proformaSalesTime ul {
     top: 30px !important;
 }
+
 .item-total input.other-taxes-checkobx[type="checkbox"]:focus:after {
-    border-color: $chetwode-blue !important ;
+    border-color: $chetwode-blue !important;
 }
+
 .add-line-bulk-item a:focus {
     text-decoration: underline;
 }
+
 label.checkbox-custom-label {
     line-height: initial !important;
 }
+
 span.eligible-ITC {
     font-size: 11px;
     cursor: pointer;
@@ -1586,7 +1594,10 @@ span.eligible-ITC {
         font-size: 10px;
     }
 }
+
+
 /* resposnvie */
+
 @media (min-width: 768px) {
     .table.customerInvoiceTable .form-group {
         display: block;
@@ -1608,7 +1619,6 @@ span.eligible-ITC {
     .wrap-billing-address .bill-add:nth-child(2) {
         margin-top: 20px;
     }
-
     .customerInvoiceTable label {
         font-size: 13px;
     }
@@ -1678,6 +1688,7 @@ span.eligible-ITC {
         left: 143px;
     }
 }
+
 @media (max-width: 767px) {
     .invoiceDateDueDate {
         position: static;
@@ -1690,7 +1701,6 @@ span.eligible-ITC {
         padding: 0 15px;
         display: block;
     }
-
     .slaesPrEsti.customerInvoiceForm::before {
         top: 190px;
     }
@@ -1720,7 +1730,6 @@ span.eligible-ITC {
         max-width: 100%;
         padding-right: 30px !important;
     }
-
     .sp-rupees {
         font-size: 20px;
     }
@@ -1733,6 +1742,7 @@ span.eligible-ITC {
         margin-right: 15px;
     }
 }
+
 @media (max-width: 575px) {
     #actionPane .btn-group.dropup {
         display: block;
@@ -1752,6 +1762,7 @@ span.eligible-ITC {
         min-width: 189px;
     }
 }
+
 @media (max-width: 414px) {
     .quantityUnitW100 .col-xs-6 {
         width: 100%;
@@ -1770,6 +1781,7 @@ span.eligible-ITC {
         transform: translateX(100px);
     }
 }
+
 @media (max-width: 375px) {
     .depositeSection {
         transform: translateX(60px);
@@ -1782,7 +1794,6 @@ span.eligible-ITC {
         display: flex;
         justify-content: space-between;
     }
-
     .total-amountDiscription .tableSec .tableRow .tableCell {
         min-width: 160px;
         text-align: left;
@@ -1807,6 +1818,7 @@ span.eligible-ITC {
         vertical-align: middle;
     }
 }
+
 @media (max-width: 320px) {
     .depositeSection {
         transform: translateX(20px);

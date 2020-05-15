@@ -104,7 +104,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
-    public isGstValid: boolean;
+    public isGstValid$: Observable<boolean> = observableOf(true);
     public selectedTab: string = 'address';
     public moveAccountSuccess$: Observable<boolean>;
     public discountList$: Observable<IDiscountList[]>;
@@ -709,7 +709,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
         let gstVal: string = gstForm.get('gstNumber').value;
-
+        gstForm.get('gstNumber').setValue(gstVal.trim());
         if (gstVal.length) {
             if (gstVal.length !== 15) {
                 gstForm.get('partyType').reset('NOT APPLICABLE');
@@ -737,10 +737,17 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 });
             } else {
                 if (this.isIndia) {
+                    statesEle.forceClearReactive.status = true;
+                    statesEle.clear();
                     gstForm.get('stateCode').patchValue(null);
                     gstForm.get('state').get('code').patchValue(null);
                 }
             }
+        } else {
+            statesEle.forceClearReactive.status = true;
+            statesEle.clear();
+            gstForm.get('stateCode').patchValue(null);
+            gstForm.get('state').get('code').patchValue(null);
         }
     }
 
@@ -1014,7 +1021,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
 
-        if (ele.value) {
+        if (ele.value.trim()) {
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
@@ -1030,13 +1037,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (!isValid) {
                 this._toaster.errorToast('Invalid ' + this.formFields['taxName'].label);
                 ele.classList.add('error-box');
-                this.isGstValid = false;
+                this.isGstValid$ = observableOf(false);
             } else {
                 ele.classList.remove('error-box');
-                this.isGstValid = true;
+                this.isGstValid$ = observableOf(true);
             }
         } else {
             ele.classList.remove('error-box');
+            this.isGstValid$ = observableOf(true);
         }
     }
 

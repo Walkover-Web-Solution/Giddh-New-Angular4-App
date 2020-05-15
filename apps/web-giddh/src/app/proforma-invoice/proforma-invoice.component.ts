@@ -2050,6 +2050,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (isNaN(count)) {
             count = 0;
         }
+        /** commention now due to this found bugs need to analysis on below commented code */
+        // if (!depositAmount) {
+        //     this.depositAmount = this.invFormData.voucherDetails.deposit;
+        // }
         if ((this.isAccountHaveAdvanceReceipts || this.isInvoiceAdjustedWithAdvanceReceipts) && this.adjustPaymentData.totalAdjustedAmount) {
             this.adjustPaymentBalanceDueData = this.getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment();
         } else {
@@ -2891,13 +2895,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     private actionsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD> | BaseResponse<any, PurchaseRecordRequest>, invoiceForm: NgForm) {
         if (response.status === 'success' && response.body) {
-            // To clear receipts voucher store 
-            
-            this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails()); 
-            // To get re-assign receipts voucher store 
-            this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(response.body.account.uniqueName, { 
-                invoiceNumber: response.body.number, 
-                voucherType: response.body.type 
+            // To clear receipts voucher store
+
+            this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+            // To get re-assign receipts voucher store
+            this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(response.body.account.uniqueName, {
+                invoiceNumber: response.body.number,
+                voucherType: response.body.type
             }));
             // reset form and other
             this.resetInvoiceForm(invoiceForm);
@@ -4509,11 +4513,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 } else {
                     this.isAccountHaveAdvanceReceipts = false;
                 }
+                this._cdr.detectChanges();
             });
         } else {
             this.isAccountHaveAdvanceReceipts = false;
+            this._cdr.detectChanges();
         }
     }
 }
-
-
