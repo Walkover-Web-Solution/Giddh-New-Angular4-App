@@ -458,19 +458,15 @@
 
     </div>
     <!-- setting page sidebar -->
-
     <div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'">
         <perfect-scrollbar [scrollIndicators]="true">
         <aside-setting class="setting-sidebar" (closeAsideEvent)="toggleSettingPane($event)">
         </aside-setting>
     </perfect-scrollbar>
     </div>
-
-
     <div class="mobile_menu_icon" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
         <span class="icon-bar" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right"></span>
     </div>
-
 </div>
 <!--  -->
 <div class="white-row"  [ngClass]="{'menu_open':sideMenu.isopen}">
@@ -918,14 +914,15 @@
 
 </ng-template>
 
-<!--  -->
+<!--help & support sidebar  -->
 <div class="help-support-aside" *ngIf="asideHelpSupportMenuState === 'in'">
     <aside-help-support (closeAsideEvent)="toggleHelpSupportPane($event)">
     </aside-help-support>
 </div>
-
-<div class="help-support-aside " *ngIf="asideSettingMenuState === 'in'">
-    <perfect-scrollbar class="" [scrollIndicators]="true">
+<!-- setting aside pane -->
+<div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'">
+    <perfect-scrollbar [scrollIndicators]="true">
+        <!-- need to remove 'setting-sidebar' after development work -->
         <aside-setting class="setting-sidebar" (closeAsideEvent)="toggleSettingPane($event)">
         </aside-setting>
     </perfect-scrollbar>
