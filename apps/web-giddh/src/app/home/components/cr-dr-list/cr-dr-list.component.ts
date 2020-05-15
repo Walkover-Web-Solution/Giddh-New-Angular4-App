@@ -29,6 +29,10 @@ export class CrDrComponent implements OnInit, OnDestroy {
     public companies$: Observable<CompanyResponse[]>;
     public activeCompanyUniqueName$: Observable<string>;
     public activeCompany: any = {};
+    /* This will store the dates returned by api */
+    public apiFromDate: string;
+    public apiToDate: string;
+    /* This will store the dates returned by api */
 
     /** True, if universal date should only be used once for initializing */
     @Input() initializeDateWithUniversalDate: boolean;
@@ -38,11 +42,11 @@ export class CrDrComponent implements OnInit, OnDestroy {
     constructor(private store: Store<AppState>, private _contactService: ContactService, private cdRef: ChangeDetectorRef) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
-        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil((this.initializeDateWithUniversalDate) ? of(this.isDatePickerInitialized) : this.destroyed$));
     }
 
     public ngOnInit() {
-        this.store.pipe(select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
+        this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
                 this.datePickerOptions = {
@@ -57,7 +61,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
                 this.isDatePickerInitialized = true;
                 this.getAccountsReport();
             }
-        })), takeUntil((this.initializeDateWithUniversalDate) ? of(this.isDatePickerInitialized) : this.destroyed$)).subscribe();
+        });
 
         this.companies$.subscribe(c => {
             if (c) {
@@ -87,6 +91,22 @@ export class CrDrComponent implements OnInit, OnDestroy {
                     this.crAccounts = res.body.results;
                 }
 
+                if(!(this.fromDate && this.toDate) && res.body && res.body.results && res.body.results.fromDate && res.body.results.toDate) {
+                    this.apiFromDate = res.body.results.fromDate;
+                    this.apiToDate = res.body.results.toDate;
+
+                    this.apiFromDate = this.apiFromDate.split("-").reverse().join("-");
+                    this.apiToDate = this.apiToDate.split("-").reverse().join("-");
+
+                    this.datePickerOptions = {
+                        ...this.datePickerOptions, startDate: moment(this.apiFromDate, GIDDH_DATE_FORMAT).toDate(),
+                        endDate: moment(this.apiToDate, GIDDH_DATE_FORMAT).toDate(),
+                        chosenLabel: "Custom range"
+                    };
+                    this.fromDate = moment(this.apiFromDate).format(GIDDH_DATE_FORMAT);
+                    this.toDate = moment(this.apiToDate).format(GIDDH_DATE_FORMAT);
+                }
+
                 this.cdRef.detectChanges();
             }
         });
@@ -98,6 +118,11 @@ export class CrDrComponent implements OnInit, OnDestroy {
     }
 
     public getAccountsReport() {
+        if(!this.fromDate || !this.toDate) {
+            this.fromDate = "";
+            this.toDate = "";
+        }
+
         this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, null, 'true', this.showRecords, '', 'closingBalance', 'desc');
         this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, null, 'true', this.showRecords, '', 'closingBalance', 'desc');
     }
