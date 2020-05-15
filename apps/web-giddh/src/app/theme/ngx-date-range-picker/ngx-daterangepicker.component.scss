@@ -338,7 +338,7 @@ $input-height: 3rem !default;
         }
         // Date Range
         &.in-range {
-            background-color: #c6dafc;
+            background-color: $hawkes-blue;
             border-color: $md-drppicker-in-range-border-color;
             color: $md-drppicker-in-range-color;
 
@@ -349,18 +349,19 @@ $input-height: 3rem !default;
         }
         &.in-range::before {
             content: "";
-            background-color:$portage;
+            background-color:$portage !important;
             width: 100%;
             height: 100%;
             left: 0px;
             top: -1px;
             position: absolute;
             display: inline-block;
+
         }
 
         &.in-range.end-date::before {
             content: "";
-            background-color:$portage;
+            background-color:$portage !important;
             width:84%;
             height: 100%;
             left: 0px;
@@ -372,7 +373,7 @@ $input-height: 3rem !default;
 
         &.start-date::before {
             content: "";
-            background-color:$portage;
+            background-color:$portage !important;
             width: 100%;
             height: 100%;
             left: 0;
@@ -694,7 +695,8 @@ $input-height: 3rem !default;
     /* button */
     .buttons {
         text-align: right;
-        margin: 0 5px 5px 0;
+        margin: 0;
+        padding-right: 15px;
     }
     button {
         &:focus {
@@ -1109,7 +1111,7 @@ td span {
 }
 
 .activatedDate {
-    background-color: #c6dafc;
+    background-color: $hawkes-blue;
 }
 
 .activatedDate span {
