@@ -401,6 +401,32 @@
         </section>
         <!-- endregion -->
 
+        <table *ngIf="allTransactionDates && allTransactionDates.length > 0">
+            <tr *ngFor="let transactionDate of allTransactionDates;">
+                <td>
+                    <table>
+                        <tr>
+                            <td>{{transactionDate}}</td>
+                        </tr>
+                        <tr *ngFor="let transactions of allTransactionsList[transactionDate];">
+                            <td>
+                                {{ transactions?.inventory ? transactions?.particular?.name + ' (' + transactions?.inventory?.stock?.name + ')' : transactions?.particular?.name }}
+                            </td>
+                            <td>
+                                {{ transactions.currencySymbol }}{{ transactions.amount | giddhCurrency }}
+
+                                <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                    {{ transactions.convertedCurrencySymbol }}{{ transactions.convertedAmount | giddhCurrency }}
+                                </p>
+
+                                {{ (transactions.type === "CREDIT") ? "cr" : "dr" }}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
         <!-- region account table-->
         <table class="col-xs-12 ledger-head mrT1">
             <thead>

@@ -202,6 +202,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public columnarReportExportRequest: ExportLedgerRequest;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
+    public allTransactionsList: any[] = [];
+    public allTransactionDates: any[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -578,6 +580,31 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         endDate: moment(lt.to, 'DD-MM-YYYY').toDate(),
                         chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
                     };
+                }
+
+                this.allTransactionsList = [];
+                this.allTransactionDates = [];
+
+                if(lt.debitTransactions) {
+                    lt.debitTransactions.forEach(transaction => {
+                        if(this.allTransactionsList[transaction.entryDate] === undefined) {
+                            this.allTransactionsList[transaction.entryDate] = [];
+                        }
+                        this.allTransactionsList[transaction.entryDate].push(transaction);
+                    });
+                }
+
+                if(lt.creditTransactions) {
+                    lt.creditTransactions.forEach(transaction => {
+                        if(this.allTransactionsList[transaction.entryDate] === undefined) {
+                            this.allTransactionsList[transaction.entryDate] = [];
+                        }
+                        this.allTransactionsList[transaction.entryDate].push(transaction);
+                    });
+                }
+
+                if(this.allTransactionsList) {
+                    this.allTransactionDates = Object.keys(this.allTransactionsList);
                 }
 
                 if (lt.closingBalance) {
