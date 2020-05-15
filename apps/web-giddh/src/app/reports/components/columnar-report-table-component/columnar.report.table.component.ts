@@ -18,6 +18,8 @@ export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChange
     public columnsName = ['#', 'Name of Ledger', 'Parent Group', 'Opening Balance', 'Closing Balance'];
     /** Array of Month names for dynamic column name for months  */
     public months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    /** Array of dynamic month name  */
+    public monthName: string[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Columnar report table response object */
     @Input() columnarReportResponse: any;
@@ -48,6 +50,7 @@ export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChange
         if (changes && changes['columnarReportResponse'] && changes['columnarReportResponse'].currentValue) {
             this.reformationOfColumnarReport(changes['columnarReportResponse'].currentValue);
             this.columnarReportResponse = changes['columnarReportResponse'].currentValue;
+            this.mapDataForMonthColumnName();
         }
     }
 
@@ -69,6 +72,7 @@ export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChange
      */
     public reformationOfColumnarReport(columnarRes: any): void {
         this.columnsName = [];
+        this.monthName = [];
         this.columnsName = ['#', 'Name of Ledger', 'Parent Group', 'Opening Balance', 'Closing Balance', 'Grand Total'];
         let response = cloneDeep(columnarRes);
         if (columnarRes && columnarRes.closingBalance) {
@@ -80,11 +84,25 @@ export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChange
             }
         }
         if (columnarRes && columnarRes.data && columnarRes.data.length) {
-            columnarRes.data.forEach((key, index) => {
+            columnarRes.data.map((key, index) => {
                 if (key && response && response.data) {
                     let monthNo = response.data[index].monthYear.split('-')[0];
                     this.columnsName.push(this.months[Number(monthNo) - 1]);
+                    this.monthName.push(this.months[Number(monthNo) - 1]);
                 }
+            });
+
+        }
+    }
+    /**
+     *To Map with column name
+     *
+     * @memberof ColumnarReportTableComponent
+     */
+    public mapDataForMonthColumnName() {
+        if (this.columnarReportResponse && this.columnarReportResponse.data && this.columnarReportResponse.data.length) {
+            this.columnarReportResponse.data.map((item, index) => {
+                item.monthName = this.monthName[index];
             });
         }
     }

@@ -31,7 +31,7 @@
                         </td>
                         <ng-container *ngFor="let months of columnarReportResponse.data;let inx2 = index;">
                             <!-- months data -->
-                            <td data-title="">
+                            <td attr.data-title='{{months?.accountsData[inx].monthName}}'>
                                 {{months?.accountsData[inx]?.monthlyBalance?.type ==='DEBIT'?'-':'' }}{{months.accountsData[inx]?.monthlyBalance?.amount}}
                             </td>
                         </ng-container>
