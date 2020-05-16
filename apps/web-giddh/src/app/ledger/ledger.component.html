@@ -1,4 +1,4 @@
-<section class="container" *ngIf="!isShowLedgerColumnarReportTable">
+<section class="container ledger-section" *ngIf="!isShowLedgerColumnarReportTable">
 
     <!-- region ledger table-->
     <div class="ledgHead transactions-page mt-2 pos-rel">
@@ -13,10 +13,13 @@
                     <div style="position: relative" *ngIf="checkedTrxWhileHovering.length === 0">
                         <input type="search" [(ngModel)]="searchText" name="searchText" class="form-control"
                             (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
-                        <i class="icon-search pos-abs" style="left:5px;top:10px;"></i>
+                        <i class="icon-search pos-abs"></i>
+                    </div>
+                    <div class="ledger-datepicker">    
+                            <img src="../../assets/images/calender-icon.svg">
                     </div>
 
-                    <span class="d-flex advance-icon advnceSearchFilter pointer" [tooltip]="'Advance Search'"
+                    <span *ngIf="!isMobileScreen" class="d-flex advance-icon advnceSearchFilter pointer" [tooltip]="'Advance Search'"
                         [placement]="'top'"
                         [ngStyle]="{'margin-left': checkedTrxWhileHovering.length === 0 ? '7px': '0px'}">
                         <i class="icon-advance-search" aria-hidden="true" (click)="onOpenAdvanceSearch()"></i>
@@ -28,7 +31,7 @@
                         Clear Filter
                     </a>
 
-                    <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0">
+                    <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0 || !isMobileScreen ">
 
                         <button class="btn btn-danger" (click)="performBulkAction('delete')" container="body"
                             tooltip="Delete" [placement]="'top'"><i class="fa fa-trash-o"></i>
@@ -50,7 +53,7 @@
 
 
             </div>
-            <div class="col-sm-4  text-center col-xs-12 daterngoption">
+            <div class="col-sm-4  text-center col-xs-12 daterngoption" *ngIf="!isMobileScreen">
                 <!-- (hideDaterangepicker)="selectedDate($event)"  -->
                 <div class="advanceSearchByDate date-advanceSearch">
                     <!-- <span class="icon-calender "></span> -->
@@ -66,7 +69,7 @@
             </div>
             <!-- endregion -->
 
-            <div class="col-sm-4 col-xs-12 text-right C-flex-end search-options">
+            <div class="col-sm-4 col-xs-12 text-right C-flex-end search-options" *ngIf="!isMobileScreen">
                 <div class="d-flex xs-width-100 ledger-head-top">
 
                     <div *ngIf="isLedgerAccountAllowsMultiCurrency" class="advancSearchBlock">
@@ -107,6 +110,9 @@
 
         <div class="custom-tabs mt-2 mb-2">
             <ul class="nav nav-tabs pt-0">
+                <li>
+                    <a href="javascript:void(0)">All</a>
+                </li>
                 <li role="presentation" [className]="condition ? 'active' : ''"><a href="javascript:void(0)"
                         (click)="toggleShow()">Debit</a></li>
                 <li role="presentation" [className]="condition2 ? 'active' : ''"><a href="javascript:void(0)"
@@ -401,32 +407,33 @@
         </section>
         <!-- endregion -->
 
-        <table *ngIf="allTransactionDates && allTransactionDates.length > 0">
-            <tr *ngFor="let transactionDate of allTransactionDates;">
-                <td>
-                    <table>
-                        <tr>
-                            <td>{{transactionDate}}</td>
-                        </tr>
-                        <tr *ngFor="let transactions of allTransactionsList[transactionDate];">
-                            <td>
-                                {{ transactions?.inventory ? transactions?.particular?.name + ' (' + transactions?.inventory?.stock?.name + ')' : transactions?.particular?.name }}
-                            </td>
-                            <td>
-                                {{ transactions.currencySymbol }}{{ transactions.amount | giddhCurrency }}
+        <div class="mobile-ledger-view" *ngIf="isMobileScreen">
+            <table *ngIf="allTransactionDates && allTransactionDates.length > 0 " [ngClass]="Shown ? 'active' : ''">
+                <tr *ngFor="let transactionDate of allTransactionDates;">
+                    <td class="border-none pt-0">
+                        <table width="100%">
+                            <tr>
+                                <td class="transction-date pl-1 pr-1 pt-05" colspan="2">{{transactionDate}}</td>
+                            </tr>
+                            <tr class="second-row" *ngFor="let transactions of allTransactionsList[transactionDate];">
+                                <td class="pl-1 pr-1">
+                                    {{ transactions?.inventory ? transactions?.particular?.name + ' (' + transactions?.inventory?.stock?.name + ')' : transactions?.particular?.name }}
+                                </td>
+                                <td class="pl-1 pr-1">
+                                    {{ transactions.currencySymbol }}{{ transactions.amount | giddhCurrency }}
 
-                                <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                                    {{ transactions.convertedCurrencySymbol }}{{ transactions.convertedAmount | giddhCurrency }}
-                                </p>
+                                    <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                        {{ transactions.convertedCurrencySymbol }}{{ transactions.convertedAmount | giddhCurrency }}
+                                    </p>
 
-                                {{ (transactions.type === "CREDIT") ? "cr" : "dr" }}
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-
+                                    {{ (transactions.type === "CREDIT") ? "cr" : "dr" }}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
         <!-- region account table-->
         <table class="col-xs-12 ledger-head mrT1">
             <thead>

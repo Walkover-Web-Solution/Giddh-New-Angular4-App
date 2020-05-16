@@ -63,6 +63,13 @@ input {
 .ledgHead input[type="search"] {
     min-width: auto;
     padding-left: 27px !important;
+    
+}
+.ledgHead {i{
+    color: $gray;
+    left:9px;top:10px;
+
+}
 }
 .ledger-head-top i.icon-search.pos-abs {
     background-color: #5b64c9;
@@ -451,6 +458,34 @@ sh-select:focus {
 .ledger-main .ledger-row:hover {
     background-color: transparent;
 }
+/*mobile ledger view css*/
+.mobile-ledger-view{
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
+    table{
+        width: 100%;
+    tbody{
+        background-color:$white;
+        .transction-date{
+            font-size: 16px;
+            font-family: 'opensans-semibold';
+        }
+        td{
+            padding: 8px 0;
+            border-bottom: 1px solid #d1d1d1;
+            font-size: 14px;
+        }
+        .second-row{
+            td{
+                &:first-child{
+                    border-right: 1px solid #d9d9d9;
+                }
+            }
+        }
+    }
+}
+}
+
+
 
 /*reponsive*/
 .modal-ledger {
@@ -597,6 +632,28 @@ sh-select:focus {
     }
     .download-invoice-ledger {
         padding-left: 6px;
+    }
+    .ledgHead input[type="search"] {
+        min-width: 280px;
+        border-radius: 20px !important;
+    }
+    .ledger-section{
+        padding-top: 30px;
+    }
+    .search-ledger-field{
+        margin-right: 0 !important;
+        justify-content: space-between;
+        .ledger-datepicker{
+            width: 36px;
+            height: 36px;
+            background-color: #fff;
+            border: 1px solid #d9d9d9;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            display: flex;
+        }
     }
 }
 

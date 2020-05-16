@@ -17,7 +17,7 @@ import { createSelector } from 'reselect';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, } from 'rxjs';
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
 import * as uuid from 'uuid';
-
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
 import { GeneralActions } from '../actions/general/general.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
@@ -144,6 +144,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public uploadInput: EventEmitter<UploadInput>;
     public fileUploadOptions: UploaderOptions;
     public isFileUploading: boolean = false;
+    public isMobileScreen: boolean = true;
     public closingBalanceBeforeReconcile: { amount: number, type: string };
     public reconcileClosingBalanceForBank: { amount: number, type: string };
     // aside menu properties
@@ -220,7 +221,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private _loaderService: LoaderService,
         private _settingsDiscountAction: SettingsDiscountActions,
         private warehouseActions: WarehouseActions,
-        private _cdRf: ChangeDetectorRef
+        private _cdRf: ChangeDetectorRef,
+        private breakPointObservar: BreakpointObserver,
     ) {
 
         this.lc = new LedgerVM();
@@ -437,6 +439,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
         this.shouldShowItcSection = false;
