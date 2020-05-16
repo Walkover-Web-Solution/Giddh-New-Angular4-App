@@ -11,29 +11,29 @@ import {
     VerifyMobileModel,
     VerifyMobileResponseModel
 } from '../models/api-models/loginModels';
-import {ToasterService} from '../services/toaster.service';
-import {GeneralActions} from './general/general.actions';
-import {CompanyActions} from './company.actions';
-import {BaseResponse} from '../models/api-models/BaseResponse';
-import {ActivatedRoute, Router} from '@angular/router';
-import {sortBy} from '../lodash-optimized';
-import {COMMON_ACTIONS} from './common.const';
-import {AppState} from '../store';
-import {Injectable, NgZone} from '@angular/core';
-import {map, switchMap, take} from 'rxjs/operators';
-import {userLoginStateEnum} from '../models/user-login-state';
-import {Actions, Effect} from '@ngrx/effects';
-import {DbService} from '../services/db.service';
-import {CompanyService} from '../services/companyService.service';
-import {GeneralService} from '../services/general.service';
-import {Observable, ReplaySubject, zip as observableZip} from 'rxjs';
-import {CustomActions} from '../store/customActions';
-import {LoginWithPassword, SignUpWithPassword} from '../models/api-models/login';
-import {AuthenticationService} from '../services/authentication.service';
-import {AccountService} from '../services/account.service';
-import {Configuration} from '../app.constant';
-import {ROUTES} from '../routes-array';
-import {SettingsProfileActions} from "./settings/profile/settings.profile.action";
+import { ToasterService } from '../services/toaster.service';
+import { GeneralActions } from './general/general.actions';
+import { CompanyActions } from './company.actions';
+import { BaseResponse } from '../models/api-models/BaseResponse';
+import { ActivatedRoute, Router } from '@angular/router';
+import { sortBy } from '../lodash-optimized';
+import { COMMON_ACTIONS } from './common.const';
+import { AppState } from '../store';
+import { Injectable, NgZone } from '@angular/core';
+import { map, switchMap, take } from 'rxjs/operators';
+import { userLoginStateEnum } from '../models/user-login-state';
+import { Actions, Effect } from '@ngrx/effects';
+import { DbService } from '../services/db.service';
+import { CompanyService } from '../services/companyService.service';
+import { GeneralService } from '../services/general.service';
+import { Observable, ReplaySubject, zip as observableZip } from 'rxjs';
+import { CustomActions } from '../store/customActions';
+import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
+import { AuthenticationService } from '../services/authentication.service';
+import { AccountService } from '../services/account.service';
+import { Configuration } from '../app.constant';
+import { ROUTES } from '../routes-array';
+import { SettingsProfileActions } from "./settings/profile/settings.profile.action";
 
 @Injectable()
 export class LoginActions {
@@ -115,7 +115,7 @@ export class LoginActions {
         .ofType(LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE).pipe(
             map((action: CustomActions) => {
                 let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
-                if(response) {
+                if (response) {
                     if (response.status === 'error') {
                         this._toaster.errorToast(action.payload.message, action.payload.code);
                         return { type: 'EmptyAction' };
@@ -250,7 +250,7 @@ export class LoginActions {
                     this.zone.run(() => {
                         this._router.navigate(['/pages/new-user']);
                     });
-                    return {type: 'EmptyAction'};
+                    return { type: 'EmptyAction' };
                 } else {
                     if (stateDetail.body && stateDetail.status === 'success') {
                         this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
@@ -303,7 +303,7 @@ export class LoginActions {
                     this.zone.run(() => {
                         this._router.navigate(['/pages/new-user']);
                     });
-                    return {type: 'EmptyAction'};
+                    return { type: 'EmptyAction' };
                 } else {
                     if (stateDetail.body && stateDetail.status === 'success') {
                         this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
@@ -337,7 +337,10 @@ export class LoginActions {
                         this._router.navigate(['login']);
                     });
                 } else {
-                    window.location.href = AppUrl + 'login/';
+                    // window.location.href = AppUrl + 'login/'; sometime it's not working on macOS
+                    // after logout white screen issue in mac so reload
+                    this._router.navigate(['/login']);
+                    window.location.reload();
                 }
                 return { type: 'EmptyAction' };
             }));
@@ -1054,7 +1057,7 @@ export class LoginActions {
         // now take first company from the companies
         let cArr = companies.body.sort((a, b) => a.name.length - b.name.length);
         let company = cArr[0];
-        if(company) {
+        if (company) {
             respState.body.companyUniqueName = company.uniqueName;
         } else {
             respState.body.companyUniqueName = "";
