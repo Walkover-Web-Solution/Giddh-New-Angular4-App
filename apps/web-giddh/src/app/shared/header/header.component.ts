@@ -83,7 +83,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isLedgerAccSelected: boolean = false;
     public asideHelpSupportMenuState: string = 'out';
     public asideSettingMenuState: string = 'out';
-    
+    public leftSidebarMenuState: string = 'out';
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -748,21 +748,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.showManageGroupsModal();
     }
 
-    public openHelpSupportAside() {
-        this.toggleHelpSupportPane();
-    }
-
-    public openSettingAside() {
-        this.toggleSettingPane();
-    }
-    
     public toggleBodyClass() {
-        if (this.asideHelpSupportMenuState === 'in' || this.asideSettingMenuState === 'in') {
+        if (this.asideHelpSupportMenuState === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('body').classList.remove('fixed');
         }
     }
+
     public toggleHelpSupportPane(event?) {
         if (event) {
             event.preventDefault();
@@ -771,15 +764,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.toggleBodyClass();
     }
 
-    public toggleSettingPane(event?) {
+    public toggleLeftSidebarPane(event?) {
         if (event) {
             event.preventDefault();
         }
-        this.asideSettingMenuState = this.asideSettingMenuState === 'out' ? 'in' : 'out';
+        this.leftSidebarMenuState = this.leftSidebarMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
     }
-
-    
 
     /**
      * redirect to route and save page entry into db

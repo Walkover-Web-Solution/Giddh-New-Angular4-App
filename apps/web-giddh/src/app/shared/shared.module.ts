@@ -70,8 +70,8 @@ import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCa
 import { LayoutComponent } from './layout/layout.component';
 import { OnBoardingComponent } from './on-boarding/on-boarding.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
-import { AsideHelpSupportComponent } from './header/components/aside-help-support/aside-help-support.component'
-import { AsideSettingComponent } from './header/components/aside-setting/aside-setting.component'
+import { AsideHelpSupportComponent } from './header/components/aside-help-support/aside-help-support.component';
+import { AsideSettingComponent } from './header/components/aside-setting/aside-setting.component';
 import { DeleteTemplateConfirmationModelComponent } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
 
 // social login injection

@@ -52,11 +52,11 @@ export class SettingsComponent implements OnInit {
     }
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public asideSettingMenuState: string = 'out';
 
     constructor(
         private store: Store<AppState>,
         private companyActions: CompanyActions,
-        private settingsProfileActions: SettingsProfileActions,
         private _permissionDataService: PermissionDataService,
         public _route: ActivatedRoute,
         private router: Router,
@@ -73,6 +73,8 @@ export class SettingsComponent implements OnInit {
     }
 
     public ngOnInit() {
+        this.toggleSettingPane();
+
         this._route.params.subscribe(params => {
             if (params['type'] && this.activeTab !== params['type'] && params['referrer']) {
                 this.setStateDetails(params['type'], params['referrer']);
@@ -215,25 +217,8 @@ export class SettingsComponent implements OnInit {
                     this._toast.errorToast(res.message, res.code);
                 }
                 this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-                // this.router.navigateByUrl('/pages/settings/integration/email');
-                // this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
             });
         })
-
-        // debugger;
-
-
-        // this._authenticationService.saveGmailAuthCode(dataToSave).subscribe((res) => {
-        //
-        //     if (res.status === 'success') {
-        //         this._toast.successToast('Gmail account added successfully.', 'Success');
-        //     } else {
-        //         this._toast.errorToast(res.message, res.code);
-        //     }
-        //     this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-        //     this.router.navigateByUrl('/pages/settings/integration/email');
-        //     // this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
-        // });
     }
 
     private getRedirectUrl(baseHref: string) {
@@ -279,6 +264,22 @@ export class SettingsComponent implements OnInit {
     private loadModuleData(tabName: string): void {
         if (tabName === 'warehouse') {
             this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
+        }
+    }
+
+    public toggleSettingPane(event?) {
+        if (event) {
+            event.preventDefault();
+        }
+        this.asideSettingMenuState = this.asideSettingMenuState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+
+    public toggleBodyClass() {
+        if (this.asideSettingMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
         }
     }
 }
