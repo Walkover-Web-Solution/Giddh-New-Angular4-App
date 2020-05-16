@@ -1891,15 +1891,16 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
      */
     public saveInlineDates(event): void {
         if (event.target.name === "inlineStartDate") {
+            document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("focus-start-date");
             this.invalidInlineStartDate = "";
             if (moment(new Date(event.target.value.split("-").reverse().join("-"))).format("dddd") !== "Invalid date") {
-                this.inlineStartDate = moment(new Date(event.target.value.split("-").reverse().join("-")));
+                this.inlineStartDate = moment(new Date(event.target.value.split("-").reverse().join("-")));  
             } else {
                 this.invalidInlineStartDate = "Invalid date";
             }
         }
-
         if (event.target.name === "inlineEndDate") {
+            document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("focus-start-date");
             this.invalidInlineEndDate = "";
             if (moment(new Date(event.target.value.split("-").reverse().join("-"))).format("dddd") !== "Invalid date") {
                 this.inlineEndDate = moment(new Date(event.target.value.split("-").reverse().join("-")));
@@ -1907,6 +1908,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
                 this.invalidInlineEndDate = "Invalid date";
             }
         }
+       
     }
 
     /**
