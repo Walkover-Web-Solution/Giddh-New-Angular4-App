@@ -390,7 +390,14 @@ export class LedgerActions {
                         this._toasty.successToast(data.body);
                     } else if (_.isArray(data.body) && data.body.length > 0) {
                         _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
-                            this._toasty.warningToast(item.reason);
+                            if (item.failedEntries) {
+                                this._toasty.warningToast(item.reason);
+                            } else if (item.successEntries) {
+                                this._toasty.successToast(item.reason);
+                            } else {
+                                this._toasty.warningToast(item.reason);
+                            }
+
                         });
                         return this.SetFailedBulkEntries(data.body[0].failedEntries);
                     }

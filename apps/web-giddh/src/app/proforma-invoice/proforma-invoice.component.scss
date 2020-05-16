@@ -546,13 +546,13 @@ textarea:focus {
     max-width: 330px;
     text-align: center;
     line-height: 45px;
-}
-
-.custom-file-label em {
-    top: -7px;
-    position: absolute;
-    width: 100%;
-    left: 0;
+    em {
+        top: -7px;
+        position: absolute;
+        width: 100%;
+        left: 0;
+        overflow: hidden;
+    }
 }
 
 #actionPane {

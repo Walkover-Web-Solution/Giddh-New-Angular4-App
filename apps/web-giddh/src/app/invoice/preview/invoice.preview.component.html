@@ -30,7 +30,7 @@
             </div>
             <div class="d-flex add-invoice">
                 <!-- E-way bill generation and export to excel for a single selected item in invoice sizes -->
-                <div *ngIf="selectedVoucher !== 'purchase' || (selectedItems.length === 1 && selectedVoucher === 'purchase')">
+                <div *ngIf="(selectedVoucher !== 'purchase' && selectedItems.length > 0) || (selectedItems.length === 1 && selectedVoucher === 'purchase')">
                     <div class="btn-group" dropdown #dp="bs-dropdown">
                         <button dropdownToggle type="button" class="btn more-btn-dropdown desktop-view-btn dropdown-toggle" aria-controls="dropdown-basic">
                             More
