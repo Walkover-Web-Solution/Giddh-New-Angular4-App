@@ -145,19 +145,22 @@
                     <strong>Due as on </strong>
                     <span>
                         <input type="text"
-                               [(ngModel)]="selectedDateRange" name="selectedDateRange"
-                               ngxDaterangepickerMd
-                               [alwaysShowCalendars]="true"
-                               [ranges]="datePickerOptions.ranges"
-                               [showClearButton]="false"
-                               [showCancel]="true"
-                               [showDropdowns]="true"
-                               [locale]="{applyLabel: 'Done'}"
-                               (rangeClicked)="selectedDate($event)"
-                               (datesUpdated)="selectedDate($event)"
-                               [keepCalendarOpeningWithRange]="true"
-                               [showRangeLabelOnInput]="false"
-                               class="form-control selected-date"/>
+                            [value]="selectedDateRangeUi"
+                            [inputStartDate]="selectedDateRange?.startDate"
+                            [inputEndDate]="selectedDateRange?.endDate"
+                            name="selectedDateRange"
+                            ngxDaterangepickerMd
+                            [alwaysShowCalendars]="true"
+                            [ranges]="datePickerOptions.ranges"
+                            [showClearButton]="false"
+                            [showCancel]="true"
+                            [showDropdowns]="true"
+                            [locale]="{applyLabel: 'Done'}"
+                            (rangeClicked)="selectedDate($event)"
+                            (datesUpdated)="selectedDate($event)"
+                            [keepCalendarOpeningWithRange]="true"
+                            [showRangeLabelOnInput]="false"
+                            class="form-control selected-date"/>
 <!--                        <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"-->
 <!--                            (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"-->
 <!--                            class="form-control date-range-picker" />-->
@@ -446,7 +449,7 @@
                         <p class="due-as-on" container="body">
                             <strong>Due as on </strong>
                             <span class="italic underline">
-                                <input type="text" style="width: 250px !important;" 
+                                <input type="text" style="width: 250px !important;" readonly
                                        [value]="selectedDateRangeUi"
                                        [inputStartDate]="selectedDateRange?.startDate"
                                        [inputEndDate]="selectedDateRange?.endDate"

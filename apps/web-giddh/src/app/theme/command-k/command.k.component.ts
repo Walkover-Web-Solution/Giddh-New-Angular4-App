@@ -166,6 +166,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
             // emit value for save data in db
             if (item.type === 'GROUP') {
+                this.commandKRequestParams.q = "";
                 this.groupEmitter.emit(item);
             }
 
