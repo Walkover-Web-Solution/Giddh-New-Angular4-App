@@ -336,11 +336,12 @@ export class LoginActions {
                         this._generalService.invokeEvent.next('logoutCordova');
                         this._router.navigate(['login']);
                     });
-                } else {
-                    // window.location.href = AppUrl + 'login/'; // some times not navigating in macOS
-                    // after logout white screen issue so reload windows implemeted
+                } else if(isElectron) {
+                    //  reload is used for after logout white screen was appearing
                     this._router.navigate(['/login']);
                     window.location.reload();
+                } else {
+                    window.location.href = AppUrl + 'login/';
                 }
                 return { type: 'EmptyAction' };
             }));
