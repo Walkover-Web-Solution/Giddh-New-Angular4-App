@@ -300,8 +300,11 @@ span.inputAddon {
     justify-content: center;
     align-items: center
 }
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
+.form-control[readonly]{
     background-color: inherit !important;
+    display: inline-block !important;
+    width: 200px;
+    border: none;
 }
 /*responsive*/
 @media (max-width: 768px) {
