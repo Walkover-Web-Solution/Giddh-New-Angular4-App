@@ -7,13 +7,12 @@ import {FinancialYearComponent} from './financial-year/financial-year.component'
 import {SettingProfileComponent} from './profile/setting.profile.component';
 import {SettingIntegrationComponent} from './integration/setting.integration.component';
 import {PermissionDataService} from 'apps/web-giddh/src/app/permissions/permission-data.service';
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import {TabsetComponent} from 'ngx-bootstrap';
 import {StateDetailsRequest} from '../models/api-models/Company';
 import {CompanyActions} from '../actions/company.actions';
 import {Store} from '@ngrx/store';
 import {AppState} from '../store/roots';
-import {SettingsProfileActions} from '../actions/settings/profile/settings.profile.action';
 import {SettingsTagsComponent} from './tags/tags.component';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BunchComponent} from './bunch/bunch.component';
@@ -28,7 +27,7 @@ import { HttpClient } from "@angular/common/http";
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.css']
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnDestroy {
     @ViewChild('staticTabs') public staticTabs: TabsetComponent;
 
     @ViewChild('integrationComponent') public integrationComponent: SettingIntegrationComponent;
@@ -52,7 +51,7 @@ export class SettingsComponent implements OnInit {
     }
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public asideSettingMenuState: string = 'out';
+    public asideSettingMenuState: string = 'in';
 
     constructor(
         private store: Store<AppState>,
@@ -88,6 +87,23 @@ export class SettingsComponent implements OnInit {
                 this.selectedChildTab = 0;
                 this.integrationtab = '';
                 this.activeTab = params['type'];
+            }
+
+            this.tabChanged(this.activeTab);
+
+            if(this.activeTab == "integration") {
+                this.integrationComponent.getInitialData();
+            } else if(this.activeTab == "linked-accounts") {
+                this.eBankComp.getInitialEbankInfo();
+            } else if(this.activeTab == "profile") {
+                this.profileComponent.getInitialProfileData();
+                this.profileComponent.getInventorySettingData();
+            } else if(this.activeTab == "financial-year") {
+                this.financialYearComp.getInitialFinancialYearData();
+            } else if(this.activeTab == "permission") {
+                this.permissionComp.getInitialData();
+            } else if(this.activeTab == "tag") {
+                this.tagComp.getTags();
             }
         });
 
@@ -267,11 +283,7 @@ export class SettingsComponent implements OnInit {
         }
     }
 
-    public toggleSettingPane(event?) {
-        if (event) {
-            event.preventDefault();
-        }
-        this.asideSettingMenuState = this.asideSettingMenuState === 'out' ? 'in' : 'out';
+    public toggleSettingPane(): void {
         this.toggleBodyClass();
     }
 
@@ -281,5 +293,11 @@ export class SettingsComponent implements OnInit {
         } else {
             document.querySelector('body').classList.remove('fixed');
         }
+    }
+
+    public ngOnDestroy() {
+        this.asideSettingMenuState = "out";
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

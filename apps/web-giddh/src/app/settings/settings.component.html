@@ -1,7 +1,7 @@
 <!-- setting page sidebar -->
 <div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'">
     <perfect-scrollbar [scrollIndicators]="true">
-        <aside-setting class="setting-sidebar" (closeAsideEvent)="toggleSettingPane($event)"></aside-setting>
+        <aside-setting class="setting-sidebar" (closeAsideEvent)="toggleSettingPane()"></aside-setting>
     </perfect-scrollbar>
 </div>
 <div class="container-fluid settings-bg" [keyboardShortcut]="['alt+right', 'alt+left']" [config]="{ignoreHost:true}"
@@ -9,17 +9,17 @@
     <div class="row">
         <div class="invoce-controll">
             <div id="setting-tab">
-                <div class="setting-container" *ngIf="activeTab === 'taxes'">
+                <div class="setting-container" [hidden]="activeTab !== 'taxes'">
                     <setting-taxes></setting-taxes>
                 </div>
-                <div class="setting-container" *ngIf="activeTab === 'integration'">
+                <div class="setting-container" [hidden]="activeTab !== 'integration'">
                     <setting-integration #integrationComponent [selectedTabParent]="selectedChildTab">
                     </setting-integration>
                 </div>
-                <div class="setting-container" *ngIf="activeTab === 'linked-accounts'">
+                <div class="setting-container" [hidden]="activeTab !== 'linked-accounts'">
                     <setting-linked-accounts #eBankComp></setting-linked-accounts>
                 </div>
-                <div class="setting-container" *ngIf="activeTab === 'profile'">
+                <div class="setting-container" [hidden]="activeTab !== 'profile'">
                     <setting-profile #profileComponent></setting-profile>
                     <span *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)" class="auto_save" style="float: right;">
                         <i class="glyphicon glyphicon-refresh mrR fs14 rotate"></i>Saving...
@@ -28,25 +28,25 @@
                         <i class="glyphicon glyphicon-check mrR fs14"></i>Saved
                     </span>
                 </div>
-                <div class="setting-container" *ngIf="activeTab === 'financial-year'">
+                <div class="setting-container" [hidden]="activeTab !== 'financial-year'">
                     <financial-year #financialYearComp></financial-year>
                 </div>
-                <div class="setting-container" *ngIf="activeTab === 'permission'">
+                <div class="setting-container" [hidden]="activeTab !== 'permission'">
                     <setting-permission #permissionComp></setting-permission>
                 </div>
-                <div class="setting-container" *ngIf="activeTab === 'branch'">
+                <div class="setting-container" [hidden]="activeTab !== 'branch'">
                     <setting-branch></setting-branch>
                 </div>
-                <div class="setting-container" *ngIf="activeTab === 'tag'">
+                <div class="setting-container" [hidden]="activeTab !== 'tag'">
                     <setting-tags #tagComp></setting-tags>
                 </div>
-                <div class="setting-container" *ngIf="activeTab === 'trigger'">
+                <div class="setting-container" [hidden]="activeTab !== 'trigger'">
                     <setting-trigger></setting-trigger>
                 </div>
-                <div class="setting-container" *ngIf="activeTab === 'discount'">
+                <div class="setting-container" [hidden]="activeTab !== 'discount'">
                     <setting-discount></setting-discount>
                 </div>
-                <div class="setting-container" *ngIf="activeTab === 'warehouse'">
+                <div class="setting-container" [hidden]="activeTab !== 'warehouse'">
                     <setting-warehouse></setting-warehouse>
                 </div>
                 <!-- <tabset #staticTabs>
