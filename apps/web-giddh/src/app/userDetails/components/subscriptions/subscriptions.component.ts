@@ -23,6 +23,7 @@ import { GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat'
 
 export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy {
     public subscriptions: SubscriptionsUser[] = [];
+    public allSubscriptions: SubscriptionsUser[] = [];
     public subscriptions$: Observable<SubscriptionsUser[]>;
     public seletedUserPlans: SubscriptionsUser;
     public selectedPlanCompanies: CompaniesWithTransaction[];
@@ -53,6 +54,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
     public subscriptionDates: any = { startedAt: '', expiry: '' };
     public companyListForFilter: CompanyResponse[] = [];
+    public searchSubscribedPlan: any;
 
     constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions) {
         this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
@@ -92,6 +94,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
 
         this.subscriptions$.subscribe(userSubscriptions => {
             this.subscriptions = userSubscriptions;
+            this.allSubscriptions = userSubscriptions;
             this.showCurrentCompanyPlan();
         });
 
@@ -274,7 +277,13 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         }
     }
 
-    public filterCompanyList(event) {
+    /**
+     * This will filter the companies list
+     *
+     * @param {*} event
+     * @memberof SubscriptionsComponent
+     */
+    public filterCompanyList(event): void {
         let companies: CompanyResponse[] = [];
         this.companies$.pipe(take(1)).subscribe(cmps => companies = cmps);
 
@@ -283,6 +292,22 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
                 return cmp.name.toLowerCase().includes(event.toLowerCase());
             } else {
                 return cmp.name.toLowerCase().includes(event.toLowerCase()) || cmp.nameAlias.toLowerCase().includes(event.toLowerCase());
+            }
+        });
+    }
+
+    /**
+     * This will search the subscribed plans
+     *
+     * @param {*} event
+     * @memberof SubscriptionsComponent
+     */
+    public searchPlan(event): void {
+        this.subscriptions = [];
+
+        this.allSubscriptions.forEach(item => {
+            if(item.planDetails && item.planDetails.name  && item.planDetails.name.toLowerCase().includes(event.toLowerCase())) {
+                this.subscriptions.push(item);
             }
         });
     }

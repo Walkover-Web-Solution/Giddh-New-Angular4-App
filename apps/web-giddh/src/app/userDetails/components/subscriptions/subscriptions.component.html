@@ -9,12 +9,9 @@
                     </sh-select> -->
 
                     <!-- <label class="d-block mb-1">Select Subscribed Plan</label> -->
-                    <div class="btn-group d-block subscription-dropdown mb-2" dropdown>
-                        <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle" aria-controls="dropdown-basic">
-                            {{seletedUserPlans?.planDetails?.name}} <span class="caret"></span>
-                        </button>
-                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
-                            aria-labelledby="button-basic">
+                    <div class="btn-group d-block subscription-dropdown mb-2 open">
+                        <input type="text" class="form-control" placeholder="Search Subscribed Plan" [(ngModel)]="searchSubscribedPlan" (ngModelChange)="searchPlan($event)">
+                        <ul id="dropdown-basic" class="dropdown-menu" role="menu" aria-labelledby="button-basic">
                             <li *ngIf="subscriptions.length==0">No results found</li>
                             <li *ngFor="let item of subscriptions" role="menuitem" class="cursor-pointer">
                                 <a (click)="selectedSubscriptionPlan(item);">
