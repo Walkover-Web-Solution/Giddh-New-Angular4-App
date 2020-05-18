@@ -454,11 +454,18 @@
         <span class="icon-bar" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right"></span>
     </div>
 </div>
-<div class="white-row"  [ngClass]="{'menu_open':sideMenu.isopen}">
+<div class="white-row"  *ngIf="subscribedPlan !== undefined && subscribedPlan.status === 'expired'" [ngClass]="{'menu_open':sideMenu.isopen}">
     <p> <span class="icon-traingle-info"></span> Your {{subscribedPlan.planDetails.duration}}
         {{subscribedPlan.planDetails.durationUnit}} {{subscribedPlan.planDetails.name}} ended on
         {{subscribedPlan.expiry}}. Apply to upgrade your subscription. <a class="click-here"
             (click)="goToSelectPlan()">Click here</a></p>
+</div>
+<div class="white-row" *ngIf="subscribedPlan !== undefined && subscribedPlan.additionalCharges" [ngClass]="{'menu_open':sideMenu.isopen}">
+    <p> <span class="icon-traingle-info"></span> You have crossed the transactions limit of your
+        assigned plan {{subscribedPlan.planDetails.name}} subscribed on {{subscribedPlan.startedAt}}. To
+        continue your accounting with Giddh, Please renew your current plan or switch to another one.
+        Contact us for more assistance. <a class="clickHere" (click)="goToSelectPlan()">Click here</a>
+    </p>
 </div>
 <header class="clearfix header-container desktopHeader" [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen }">
     <nav class="navbar ">
