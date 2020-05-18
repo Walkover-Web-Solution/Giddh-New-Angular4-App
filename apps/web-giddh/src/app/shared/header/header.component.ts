@@ -83,7 +83,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isLedgerAccSelected: boolean = false;
     public asideHelpSupportMenuState: string = 'out';
     public asideSettingMenuState: string = 'out';
-    public leftSidebarMenuState: string = 'out';
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -756,26 +755,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public toggleBodyClass() {
-        if (this.asideHelpSupportMenuState === 'in') {
+        if (this.asideHelpSupportMenuState === 'in' || this.asideSettingMenuState === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('body').classList.remove('fixed');
         }
     }
 
-    public toggleHelpSupportPane(event?) {
-        if (event) {
-            event.preventDefault();
-        }
-        this.asideHelpSupportMenuState = this.asideHelpSupportMenuState === 'out' ? 'in' : 'out';
+    public toggleHelpSupportPane(show: boolean): void {
+        this.asideSettingMenuState = 'out';
+        this.asideHelpSupportMenuState = show ? 'in' : 'out';
         this.toggleBodyClass();
     }
 
-    public toggleLeftSidebarPane(event?) {
-        if (event) {
-            event.preventDefault();
-        }
-        this.leftSidebarMenuState = this.leftSidebarMenuState === 'out' ? 'in' : 'out';
+    public toggleSidebarPane(show: boolean): void {
+        this.asideHelpSupportMenuState = 'out';
+        this.asideSettingMenuState = show ? 'in' : 'out';
         this.toggleBodyClass();
     }
 
@@ -1606,5 +1601,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             // Set to false in error scenarios
             this.store.dispatch(this.companyActions.setCompanyTcsTdsApplicability(false));
         });
+    }
+
+    @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+        this.toggleSidebarPane(false);
     }
 }
