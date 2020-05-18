@@ -55,6 +55,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     public subscriptionDates: any = { startedAt: '', expiry: '' };
     public companyListForFilter: CompanyResponse[] = [];
     public searchSubscribedPlan: any;
+    public showSubscribedPlansList: boolean = false;
 
     constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions) {
         this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());

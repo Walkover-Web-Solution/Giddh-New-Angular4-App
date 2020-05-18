@@ -1,4 +1,4 @@
-<ng-container *ngIf="subscriptions.length && !isLoading">
+<ng-container *ngIf="allSubscriptions.length && !isLoading">
     <div *ngIf="!isPlanShow">
 
         <div class="row xs-mb-1 xs-mt-4">
@@ -10,8 +10,8 @@
 
                     <!-- <label class="d-block mb-1">Select Subscribed Plan</label> -->
                     <div class="btn-group d-block subscription-dropdown mb-2 open">
-                        <input type="text" class="form-control" placeholder="Search Subscribed Plan" [(ngModel)]="searchSubscribedPlan" (ngModelChange)="searchPlan($event)">
-                        <ul id="dropdown-basic" class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                        <input type="text" class="form-control" placeholder="Search Subscribed Plan" (focus)="showSubscribedPlansList = true;" (focusout)="showSubscribedPlansList = false;" [(ngModel)]="searchSubscribedPlan" (ngModelChange)="searchPlan($event)">
+                        <ul id="dropdown-basic" class="dropdown-menu" role="menu" aria-labelledby="button-basic" *ngIf="showSubscribedPlansList">
                             <li *ngIf="subscriptions.length==0">No results found</li>
                             <li *ngFor="let item of subscriptions" role="menuitem" class="cursor-pointer">
                                 <a (click)="selectedSubscriptionPlan(item);">
