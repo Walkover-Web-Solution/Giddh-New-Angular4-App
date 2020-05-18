@@ -8940,6 +8940,11 @@ input.checkbox-custom[type="checkbox"] {
 .show-calendar {
     display: block !important;
 }
+.show-calendar + .modal-backdrop + .modal {
+    display: flex !important;
+    align-items: center;
+    margin-top: 0 !important;
+}
 
 ngx-daterangepicker-material {
     display: none;
@@ -8951,9 +8956,7 @@ ngx-daterangepicker-material {
 }
 .edit-modal{
     max-width: 300px;
-    top: 50%;
     margin: 0 auto;
-    transform: translateY(-50%) !important;
     .edit-date-modal{
         h5{
             color: $gray;
