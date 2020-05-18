@@ -207,6 +207,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public inlineEndDate: any;
     public invalidInlineStartDate: string = "";
     public invalidInlineEndDate: string = "";
+    public invalidInlineDate: string = "";
     public isInlineDateFieldsShowing: boolean = false;
     public scrollSubject$: Subject<any> = new Subject();
     public activeMonth: any;
@@ -1891,15 +1892,16 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
      */
     public saveInlineDates(event): void {
         if (event.target.name === "inlineStartDate") {
+            document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("focus-start-date");
             this.invalidInlineStartDate = "";
             if (moment(new Date(event.target.value.split("-").reverse().join("-"))).format("dddd") !== "Invalid date") {
-                this.inlineStartDate = moment(new Date(event.target.value.split("-").reverse().join("-")));
+                this.inlineStartDate = moment(new Date(event.target.value.split("-").reverse().join("-")));  
             } else {
                 this.invalidInlineStartDate = "Invalid date";
             }
         }
-
         if (event.target.name === "inlineEndDate") {
+            document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("focus-start-date");
             this.invalidInlineEndDate = "";
             if (moment(new Date(event.target.value.split("-").reverse().join("-"))).format("dddd") !== "Invalid date") {
                 this.inlineEndDate = moment(new Date(event.target.value.split("-").reverse().join("-")));
@@ -1907,6 +1909,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
                 this.invalidInlineEndDate = "Invalid date";
             }
         }
+       
     }
 
     /**
@@ -1919,9 +1922,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
             this.startDate = this.inlineStartDate;
             this.endDate = this.inlineEndDate;
             this.clickApply();
+            this.allowBodyScroll();
             this.modalRef.hide();
         } else {
-            this.invalidInlineStartDate = "Start date must not be greater than End date";
+            this.invalidInlineDate = "Start date must not be greater than End date";
         }
     }
 
@@ -1932,6 +1936,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
      */
     public openMobileDatepicker(): void {
         this.openMobileDatepickerPopup = true;
+        this.restrictBodyScroll();
         document.querySelector('body').classList.add('hide-scroll-body');
     }
 

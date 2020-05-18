@@ -108,9 +108,9 @@
                         <span class="error-msg" *ngIf="invalidInlineEndDate">{{invalidInlineEndDate}}</span>
                     </div>
                 </div>
-                <span class="error-msg">Start date must not be greater than End date</span>
+                <span class="error-msg" *ngIf="invalidInlineDate">{{invalidInlineDate}}</span>
                 <div class="button-wrapper">
-                    <a (click)="modalRef.hide()" class="mr-2 cursor-pointer">Cancel</a>
+                    <a (click)="allowBodyScroll(); modalRef.hide()" class="mr-2 cursor-pointer">Cancel</a>
                     <a (click)="applyInlineDates()" class="cursor-pointer">Ok</a>
                 </div>
             </div>

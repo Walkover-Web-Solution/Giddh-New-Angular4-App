@@ -8936,6 +8936,10 @@ input.checkbox-custom[type="checkbox"] {
     align-items: center;
     margin-top: 0 !important;
 }
+.show-calendar.focus-start-date + .modal-backdrop + .modal {
+    margin-top: 30px !important;
+    align-items:flex-start;
+}
 
 ngx-daterangepicker-material {
     display: none;
