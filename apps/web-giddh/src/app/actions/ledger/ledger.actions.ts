@@ -392,12 +392,10 @@ export class LedgerActions {
                         _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
                             if (item.failedEntries) {
                                 this._toasty.warningToast(item.reason);
-                            } else if (item.successEntries) {
-                                this._toasty.successToast(item.reason);
-                            } else {
-                                this._toasty.warningToast(item.reason);
                             }
-
+                             if (data.request[0].entries.length > data.body.length) {
+                                this._toasty.successToast("All other vouchers generated successfully.");
+                            }
                         });
                         return this.SetFailedBulkEntries(data.body[0].failedEntries);
                     }
