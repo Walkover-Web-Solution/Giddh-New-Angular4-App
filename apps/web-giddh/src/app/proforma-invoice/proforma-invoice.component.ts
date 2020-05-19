@@ -2907,13 +2907,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     private actionsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD> | BaseResponse<any, PurchaseRecordRequest>, invoiceForm: NgForm) {
         if (response.status === 'success' && response.body) {
-            // To clear receipts voucher store 
-            
-            this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails()); 
-            // To get re-assign receipts voucher store 
-            this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(response.body.account.uniqueName, { 
-                invoiceNumber: response.body.number, 
-                voucherType: response.body.type 
+            // To clear receipts voucher store
+
+            this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+            // To get re-assign receipts voucher store
+            this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(response.body.account.uniqueName, {
+                invoiceNumber: response.body.number,
+                voucherType: response.body.type
             }));
             // reset form and other
             this.resetInvoiceForm(invoiceForm);
@@ -4552,7 +4552,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     private setTemplatePlaceholder(templateData: CustomTemplateState): void {
         if (templateData && templateData.customCreatedTemplates && templateData.customCreatedTemplates.length > 0) {
-            const defaultTemplate = templateData.customCreatedTemplates.find(template => template.isDefault);
+            const defaultTemplate = templateData.customCreatedTemplates.find(template => (template.isDefault || template.isDefaultForVoucher));
             if (defaultTemplate && defaultTemplate.sections) {
                 const sections = defaultTemplate.sections;
                 if (sections.header && sections.header.data) {
