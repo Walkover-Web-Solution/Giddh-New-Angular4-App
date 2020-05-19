@@ -4558,7 +4558,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     private setTemplatePlaceholder(templateData: CustomTemplateState): void {
         if (templateData && templateData.customCreatedTemplates && templateData.customCreatedTemplates.length > 0) {
-            const defaultTemplate = templateData.customCreatedTemplates.find(template => template.isDefault);
+            const defaultTemplate = templateData.customCreatedTemplates.find(template => (template.isDefault || template.isDefaultForVoucher));
             if (defaultTemplate && defaultTemplate.sections) {
                 const sections = defaultTemplate.sections;
                 if (sections.header && sections.header.data) {
