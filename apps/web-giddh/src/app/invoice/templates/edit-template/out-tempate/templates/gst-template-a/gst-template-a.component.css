@@ -519,3 +519,12 @@
   .warehouse-table tbody tr td {
     padding: 0px 20px 5px 10px;
   }
+  .img-signature {
+    text-align:center;
+    vertical-align: bottom;
+    width: 35%;
+  }
+  .inner-img-signature {
+    height: 60px;
+    min-width: 40px;
+  }
