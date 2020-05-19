@@ -20,7 +20,7 @@
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['warehouseAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Company/Warehouse Address
                 </div>
 
-                <div *ngIf="fieldsAndVisibility.header.gstin && customTemplate?.templateType === 'gst_template_a'" class="form-group">
+                <div *ngIf="fieldsAndVisibility.header.gstin" class="form-group">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['gstin'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> GSTIN
                 </div>
 
@@ -267,7 +267,7 @@
                         </td>
 
                     </tr>
-                    <tr *ngIf="fieldsAndVisibility?.table.date && customTemplate?.templateType === 'gst_template_a'">
+                    <tr *ngIf="fieldsAndVisibility?.table.date">
                         <td>
                             <label>
                                 <input type="checkbox" name="dt"
