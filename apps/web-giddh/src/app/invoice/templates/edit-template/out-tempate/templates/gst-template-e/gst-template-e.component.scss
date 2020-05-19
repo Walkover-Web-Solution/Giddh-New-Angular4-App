@@ -1,48 +1,45 @@
-/* #royal * {
-    box-sizing: content-box;
-    color: #231f20;
-    font-family: inherit;
-    font-style: inherit;
-    font-weight: inherit;
-    line-height: 18px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    text-decoration: none;
-    vertical-align: top;
-} */
-
+@import "../../../../../../../assets/css/color.scss";
 strong,
 .strong {
     font-weight: bold;
 }
+
 body {
     font-size: 12px;
     background: #fff;
 }
+
 #template-header {
-    padding: 15px 15px 0;
     width: auto;
 }
+
 .strong {
     font-weight: bold;
 }
+
 .font-11 {
     font-size: 11px !important;
 }
+
 .font-10 {
     font-size: 10px !important;
 }
+
 .font-12 {
     font-size: 12px !important;
 }
+
 .max-width-180 {
     /* max-width: 180px !important; */
 }
+
+
 /* NOTE:  comment padding, max-width, border in #royal css for java */
+
 .seperator {
     border-top: 1px solid #949494;
 }
+
 #royal {
     font: 12px/1 "Open Sans", sans-serif;
     overflow: auto;
@@ -54,12 +51,9 @@ body {
 }
 
 #royal header h1 {
-    /* margin-bottom: 10px; */
     font-weight: bolder;
     font-size: 74px;
     color: #4b4c4f;
-    padding-top: 25px;
-    /*line-height: 58px;*/
 }
 
 #royal header .sub_head {
@@ -99,16 +93,27 @@ body {
 }
 
 #royal .total-amount {
-    text-align: center;
-    vertical-align: bottom;
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-bottom: 1px solid #DF4927;
+    float: right;
 }
 
 #royal .total-amount h2 {
     font-size: 25px;
-    float: right;
     font-weight: bold;
-    /* display: flex; */
     line-height: normal;
+    margin-right: 10px;
+    margin-bottom: 0px;
+}
+
+.product-table thead tr th {
+    font-weight: normal;
+}
+
+tfoot.table-details tr th {
+    font-weight: normal;
 }
 
 #royal .mrL2 {
@@ -124,7 +129,7 @@ body {
 }
 
 #royal .meta {
-    margin: 2px 0 15px 0;
+    margin: 2px 0 0px 0;
 }
 
 #royal .meta h4 {
@@ -139,11 +144,6 @@ body {
     /* padding-bottom: 10px; */
 }
 
-#royal .product-table tbody tr td:last-child,
-#royal .product-table tfoot tr th:last-child {
-    /* background: #df49270d; */
-}
-
 #royal .product-table tfoot tr:last-child th {
     padding: 15px 0;
 }
@@ -152,36 +152,36 @@ body {
     position: relative;
 }
 
-#royal .product-table tfoot tr:nth-last-child(2) th {
-    padding-bottom: 10px;
-}
-
 #royal .product-table tfoot tr:last-child {
     padding: 7px 0;
 }
 
 #royal .product-table tbody tr:last-child td {
-    padding-bottom: 50px;
+    padding-bottom: 10px;
 }
+
+
 /* #royal .product-table:before {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    content: ' ';
-    background: #f7f7f7;
-    left: -20px;
-    width: 100%;
-    z-index: -1;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  content: ' ';
+  background: #f7f7f7;
+  left: -20px;
+  width: 100%;
+  z-index: -1;
 } */
+
+
 /* #royal .product-table:after {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    content: ' ';
-    background: #ededed;
-    right: -20px;
-    width: 100%;
-    z-index: -1;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  content: ' ';
+  background: #ededed;
+  right: -20px;
+  width: 100%;
+  z-index: -1;
 } */
 
 #royal .inwords {
@@ -234,8 +234,8 @@ body {
 
 #royal .subfooter {
     margin-top: 100px;
-    padding: 0 15px;
 }
+
 #royal .subfooter h1 {
     font-size: 24px;
     display: inline-block;
@@ -290,6 +290,10 @@ body {
     color: #4b4c4f;
 }
 
+#royal .secondry_clr td {
+    padding-bottom: 10px;
+}
+
 .address {
     max-width: 220px;
 }
@@ -307,6 +311,7 @@ body {
 #royal .tax-table tfoot tr th {
     padding: 6px;
     border-right: 1px solid #949494;
+    border-bottom: 1px solid #949494;
 }
 
 #royal .tax-table thead tr th:last-child,
@@ -354,8 +359,7 @@ table.tax-table.item {
 }
 
 .edit-template i {
-    background: url("data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMS4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDQ2OS4zMzEgNDY5LjMzMSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDY5LjMzMSA0NjkuMzMxOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgd2lkdGg9IjE2cHgiIGhlaWdodD0iMTZweCI+CjxnPgoJPHBhdGggZD0iTTQzOC45MzEsMzAuNDAzYy00MC40LTQwLjUtMTA2LjEtNDAuNS0xNDYuNSwwbC0yNjguNiwyNjguNWMtMi4xLDIuMS0zLjQsNC44LTMuOCw3LjdsLTE5LjksMTQ3LjQgICBjLTAuNiw0LjIsMC45LDguNCwzLjgsMTEuM2MyLjUsMi41LDYsNCw5LjUsNGMwLjYsMCwxLjIsMCwxLjgtMC4xbDg4LjgtMTJjNy40LTEsMTIuNi03LjgsMTEuNi0xNS4yYy0xLTcuNC03LjgtMTIuNi0xNS4yLTExLjYgICBsLTcxLjIsOS42bDEzLjktMTAyLjhsMTA4LjIsMTA4LjJjMi41LDIuNSw2LDQsOS41LDRzNy0xLjQsOS41LTRsMjY4LjYtMjY4LjVjMTkuNi0xOS42LDMwLjQtNDUuNiwzMC40LTczLjMgICBTNDU4LjUzMSw0OS45MDMsNDM4LjkzMSwzMC40MDN6IE0yOTcuNjMxLDYzLjQwM2w0NS4xLDQ1LjFsLTI0NS4xLDI0NS4xbC00NS4xLTQ1LjFMMjk3LjYzMSw2My40MDN6IE0xNjAuOTMxLDQxNi44MDNsLTQ0LjEtNDQuMSAgIGwyNDUuMS0yNDUuMWw0NC4xLDQ0LjFMMTYwLjkzMSw0MTYuODAzeiBNNDI0LjgzMSwxNTIuNDAzbC0xMDcuOS0xMDcuOWMxMy43LTExLjMsMzAuOC0xNy41LDQ4LjgtMTcuNWMyMC41LDAsMzkuNyw4LDU0LjIsMjIuNCAgIHMyMi40LDMzLjcsMjIuNCw1NC4yQzQ0Mi4zMzEsMTIxLjcwMyw0MzYuMTMxLDEzOC43MDMsNDI0LjgzMSwxNTIuNDAzeiIgZmlsbD0iIzAwMDAwMCIvPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=")
-        no-repeat;
+    background: url("data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMS4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDQ2OS4zMzEgNDY5LjMzMSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDY5LjMzMSA0NjkuMzMxOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgd2lkdGg9IjE2cHgiIGhlaWdodD0iMTZweCI+CjxnPgoJPHBhdGggZD0iTTQzOC45MzEsMzAuNDAzYy00MC40LTQwLjUtMTA2LjEtNDAuNS0xNDYuNSwwbC0yNjguNiwyNjguNWMtMi4xLDIuMS0zLjQsNC44LTMuOCw3LjdsLTE5LjksMTQ3LjQgICBjLTAuNiw0LjIsMC45LDguNCwzLjgsMTEuM2MyLjUsMi41LDYsNCw5LjUsNGMwLjYsMCwxLjIsMCwxLjgtMC4xbDg4LjgtMTJjNy40LTEsMTIuNi03LjgsMTEuNi0xNS4yYy0xLTcuNC03LjgtMTIuNi0xNS4yLTExLjYgICBsLTcxLjIsOS42bDEzLjktMTAyLjhsMTA4LjIsMTA4LjJjMi41LDIuNSw2LDQsOS41LDRzNy0xLjQsOS41LTRsMjY4LjYtMjY4LjVjMTkuNi0xOS42LDMwLjQtNDUuNiwzMC40LTczLjMgICBTNDU4LjUzMSw0OS45MDMsNDM4LjkzMSwzMC40MDN6IE0yOTcuNjMxLDYzLjQwM2w0NS4xLDQ1LjFsLTI0NS4xLDI0NS4xbC00NS4xLTQ1LjFMMjk3LjYzMSw2My40MDN6IE0xNjAuOTMxLDQxNi44MDNsLTQ0LjEtNDQuMSAgIGwyNDUuMS0yNDUuMWw0NC4xLDQ0LjFMMTYwLjkzMSw0MTYuODAzeiBNNDI0LjgzMSwxNTIuNDAzbC0xMDcuOS0xMDcuOWMxMy43LTExLjMsMzAuOC0xNy41LDQ4LjgtMTcuNWMyMC41LDAsMzkuNyw4LDU0LjIsMjIuNCAgIHMyMi40LDMzLjcsMjIuNCw1NC4yQzQ0Mi4zMzEsMTIxLjcwMyw0MzYuMTMxLDEzOC43MDMsNDI0LjgzMSwxNTIuNDAzeiIgZmlsbD0iIzAwMDAwMCIvPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=") no-repeat;
     width: 17px;
     position: absolute;
     right: 1px;
@@ -366,19 +370,52 @@ table.tax-table.item {
 img {
     max-width: 180px;
 }
+
 #royal .product-table tfoot tr th {
     padding: 0 8px;
     font-size: 11px;
+    font-weight: normal;
 }
+
 #royal footer p {
     font-size: 10px;
     color: #262626;
 }
+
 #royal .tax-table.item tfoot tr th {
     border-bottom: 1px solid #666666;
 }
+
 .slogan-pre-line {
     display: block;
     white-space: pre-line;
     line-height: 1.1em;
+}
+
+.line-height-initial {
+    line-height: initial;
+}
+
+.warehouse-table {
+    width: 100%;
+    border-bottom: 1px solid $gray;
+    padding-bottom: 5px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+header.bottom-border {
+    border-bottom: 1px solid $gray;
+}
+
+.warehouse-table tbody tr td {
+    padding: 4px 0px 1px 0px;
+    vertical-align: top;
+}
+.img-duplicate {
+    width: 150px;
+}
+.tax-table {
+    padding-right: 0px !important;
+    padding-left: 0px !important;
 }
