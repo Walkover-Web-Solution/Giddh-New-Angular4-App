@@ -20,7 +20,7 @@
                             <img [hidden]='!showLogo' [src]="logoSrc" class="pull-left" alt="" [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
                         </div>
                         <div class="col-md-6">
-                            <img src="assets/images/dublicate.svg" class="pull-right" alt="">
+                            <img src="assets/images/duplicate.svg" class="pull-right" alt="">
                         </div>
                     </div>
                 </figure>
@@ -98,11 +98,9 @@
                                                 <td>20170911-1</td>
                                             </tr>
                                         </ng-container>
-
                                     </tbody>
                                 </table>
                             </td>
-
                         </tr>
                     </tbody>
                 </table>
@@ -136,13 +134,9 @@
                     </tr>
                 </tbody>
             </table>
-
-
-            <table class="meta cargoDetail ">
+            <table class="meta cargoDetail">
                 <tbody>
                     <tr>
-
-
                         <td *ngIf="fieldsAndVisibility.header.billingAddress?.display ">
                             <p class="strong">
                                 {{(fieldsAndVisibility.header.billingAddress?.label?.length > 0) ? fieldsAndVisibility.header.billingAddress?.label : 'To'}}
@@ -245,7 +239,7 @@
             </table>
         </div>
         <div id="Template-table " [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table } " (click)="onClickSection( 'table') ">
-            <a href="javascript:void(0); " class="edit-template " *ngIf="!templateUISectionVisibility.table ">
+            <a href="javascript:void(0); " class="edit-template" *ngIf="!templateUISectionVisibility.table ">
                 <i class="fa fa-pencil "></i>
             </a>
             <article>
@@ -475,16 +469,13 @@
                 </table>
             </article>
         </div>
-
-
-
-        <div id="Template-footer " [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer } " (click)="onClickSection( 'footer') ">
+        <div id="Template-footer" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer } " (click)="onClickSection( 'footer') ">
             <div class="clearfix">
-                <a href="javascript:void(0); " class="edit-template " *ngIf="!templateUISectionVisibility.footer ">
+                <a href="javascript:void(0); " class="edit-template" *ngIf="!templateUISectionVisibility.footer ">
                     <i class="fa fa-pencil "></i>
                 </a>
                 <article>
-                    <table class="balance ">
+                    <table class="balance">
                         <tr *ngIf="fieldsAndVisibility.footer.taxableAmount?.display ">
                             <th>
                                 <!-- {{fieldsAndVisibility.footer.taxableAmount?.label}}-->
@@ -528,11 +519,11 @@
                                 <div class="inner mr-0">&nbsp;</div>
                             </td>
                         </tr>
-                        <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display ">
-                            <th class="strong ">
+                        <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display">
+                            <th class="strong">
                                 {{fieldsAndVisibility.footer.grandTotal?.label}} (USD)
                             </th>
-                            <td class="strong ">
+                            <td class="strong">
                                 <span [innerHTML]='dollarSymbol'></span>148.20
                             </td>
                         </tr>
@@ -559,10 +550,7 @@
                             <th class="strong">{{fieldsAndVisibility.footer.totalDue?.label}}</th>
                             <td><span [innerHTML]="rupeeSymbol" class="strong"></span>27380.00</td>
                         </tr>
-
                     </table>
-
-
                     <table class="tax-table item text-right" cellspacing="0" cellpadding="0" *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
                         <thead>
                             <tr>
@@ -637,17 +625,16 @@
                             </tr>
                         </tfoot>
                     </table>
-
                 </article>
             </div>
 
             <div class="clearfix">
-                <a href="javascript:void(0); " class="edit-template " *ngIf="!templateUISectionVisibility.footer ">
+                <a href="javascript:void(0); " class="edit-template" *ngIf="!templateUISectionVisibility.footer ">
                     <i class="fa fa-pencil "></i>
                 </a>
                 <aside>
 
-                    <table cellpadding="0 " cellspacing="0 " class="subfooter ">
+                    <table cellpadding="0" cellspacing="0" class="subfooter">
                         <tbody>
                             <tr>
                                 <td class="accc " [ngStyle]="{ 'font-size' : inputTemplate.fontMedium + 'px' } ">
@@ -702,7 +689,6 @@
                             </tr>
                         </tbody>
                     </table>
-
                 </aside>
                 <footer style="text-align: center; " [ngStyle]="{ 'border-color': inputTemplate.templateColor} ">
                     <p class="font-10 " *ngIf="fieldsAndVisibility.footer.companyName?.display " class="font-10 ">
