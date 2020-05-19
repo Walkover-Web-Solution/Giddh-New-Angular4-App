@@ -33,7 +33,7 @@ body {
 }
 /* NOTE:  comment padding, max-width, border in #royal css for java */
 .seperator {
-    border-top: 1px solid #949494;
+    border-top: 1px solid $nobel;
 }
 #royal {
     font: 12px/1 "Open Sans", sans-serif;
@@ -91,7 +91,7 @@ body {
     display: flex;
     align-items: center;
     padding: 5px 10px;
-    border-bottom: 1px solid #DF4927;
+    border-bottom: 1px solid $cinnabar-orange;
     float: right;
 }
 
@@ -195,7 +195,7 @@ tfoot.table-details tr th {
 
 #royal .item thead tr th {
     padding: 20px 8px 4px;
-    border-bottom: 1px solid #949494;
+    border-bottom: 1px solid $nobel;
     line-height: 1.2rem;
 }
 
@@ -204,7 +204,7 @@ tfoot.table-details tr th {
 }
 
 #royal .item tfoot tr:last-child th {
-    /*border-top: 1px solid #949494;*/
+    /*border-top: 1px solid $nobel;*/
     padding: 6px;
     line-height: 1.2rem;
     vertical-align: middle;
@@ -223,7 +223,7 @@ tfoot.table-details tr th {
 }
 
 #royal .bdrB {
-    border-bottom: 1px solid#949494;
+    border-bottom: 1px solid$nobel;
     margin-bottom: 10px;
 }
 
@@ -305,14 +305,14 @@ tfoot.table-details tr th {
 #royal .tax-table tbody tr td,
 #royal .tax-table tfoot tr th {
     padding: 6px;
-    border-right: 1px solid #949494;
-    border-bottom: 1px solid #949494;
+    border-right: 1px solid $nobel;
+    border-bottom: 1px solid $nobel;
 }
 
 #royal .tax-table thead tr th:last-child,
 #royal .tax-table tbody tr td:last-child,
 #royal .tax-table tfoot tr th:last-child {
-    border-right: 0px solid #949494;
+    border-right: 0px solid $nobel;
 }
 
 table.tax-table.item {
