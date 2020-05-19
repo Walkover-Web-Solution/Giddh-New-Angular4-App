@@ -53,7 +53,7 @@
                                 <img [hidden]='!showLogo' [src]="logoSrc" class="text-left max-width-180" alt="" [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
                             </figure>
                             <p class="bold">Walkover Web Solutions Pvt Ltd.</p>
-                            <p class="font-12">Due on 30/08/2017</p>
+                            <!-- <p class="font-12" *ngIf="(fieldsAndVisibility.header.customField1?.display && fieldsAndVisibility.header.customField2?.display && fieldsAndVisibility.header.customField3?.display && fieldsAndVisibility.header.dueDate?.display )">{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due on '}} 30/08/2017</p> -->
                         </td>
                     </tr>
                 </tbody>
@@ -132,20 +132,23 @@
                             {{(fieldsAndVisibility.header.trackingNumber?.label?.length > 0) ? fieldsAndVisibility.header.trackingNumber?.label : 'Tracking No'}}: 123654
                         </p>
 
-                        <p>Custom 1: dummy</p>
-                        <p>Custom 2: dummy</p>
-                        <p>Custom 3: dummy</p>
+                        <p *ngIf="fieldsAndVisibility.header.customField1?.display"> {{(fieldsAndVisibility.header.customField1?.label?.length > 0) ? fieldsAndVisibility.header.customField1?.label : 'Custom 1'}} :dummy</p>
+                        <p *ngIf="fieldsAndVisibility.header.customField2?.display">{{(fieldsAndVisibility.header.customField2?.label?.length > 0) ? fieldsAndVisibility.header.customField2?.label : 'Custom 2'}} :dummy</p>
+                        <p *ngIf="fieldsAndVisibility.header.customField3?.display">{{(fieldsAndVisibility.header.customField3?.label?.length > 0) ? fieldsAndVisibility.header.customField3?.label : 'Custom 3'}}:dummy</p>
+
 
                     </td>
 
                     <!-- <td colspan="1"></td> -->
                 </tr>
 
+                <!-- <tr *ngIf="!(fieldsAndVisibility.header.customField1?.display && fieldsAndVisibility.header.customField2?.display && fieldsAndVisibility.header.customField3?.display)"> -->
                 <tr>
                     <td colspan="3">
                         <div class="total-amount" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">
-                            <h2 *ngIf="fieldsAndVisibility.table.total?.display">6166.00/- </h2>
-                            <span>Due on 30/08/2017</span>
+                            <h2 *ngIf="fieldsAndVisibility.table.totalDue?.display">6166.00/- </h2>
+                            <span *ngIf="fieldsAndVisibility.header.dueDate?.display">
+                                {{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due on '}} 30/08/2017</span>
                         </div>
                     </td>
                 </tr>
@@ -431,9 +434,9 @@
                         <small *ngIf="fieldsAndVisibility.footer.slogan?.display"> {{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label : '(Signature)'}}</small>
                     </td> -->
 
-                    <td class="paid-imgWrapper">
+                    <!-- <td class="paid-imgWrapper">
                         <img src="https://apitest.giddh.com/seal/cancelled" class="img-cancel">
-                    </td>
+                    </td>  -->
 
                     <td class="text-center" style="vertical-align: bottom; width: 35%;" *ngIf="!showImageSignature">
                         <ng-container *ngIf="fieldsAndVisibility.footer.slogan?.display">

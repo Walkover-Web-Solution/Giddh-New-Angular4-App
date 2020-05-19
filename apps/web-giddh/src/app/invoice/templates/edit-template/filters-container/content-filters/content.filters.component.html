@@ -16,11 +16,11 @@
                     </div>
                 </div>
 
-                <div class="form-group" *ngIf="customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e'">
+                <div class="form-group" *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['warehouseAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Company/Warehouse Address
                 </div>
 
-                <div *ngIf="fieldsAndVisibility.header.gstin" class="form-group">
+                <div *ngIf="fieldsAndVisibility.header.gstin && customTemplate?.templateType === 'gst_template_a'" class="form-group">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['gstin'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> GSTIN
                 </div>
 
@@ -61,7 +61,7 @@
                         </div>
                     </div>
                 </ng-container>
-                <div *ngIf="fieldsAndVisibility.header.dueDate && customTemplate?.templateType !== 'gst_template_e'" class="form-group">
+                <div *ngIf="fieldsAndVisibility.header.dueDate" class="form-group">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['dueDate'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Due Date
                     <div class="mrL3">
                         <input type="text" [maxlength]="15" class="form-control" name="dueDate1" [(ngModel)]="customTemplate.sections['header'].data['dueDate'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['dueDate'].display"
@@ -205,7 +205,7 @@
             </div>
 
 
-            <div class="clearfix customField mrB2" *ngIf="customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e'">
+            <div class="clearfix customField mrB2" *ngIf="customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d'">
                 <h3>
                     <i class="fa cp" aria-hidden="true" (click)="showCustomField = !showCustomField" [ngClass]="{'fa-minus-square-o': showCustomField, 'fa-plus-square-o': !showCustomField}"></i> Custom Field
                 </h3>
@@ -267,7 +267,7 @@
                         </td>
 
                     </tr>
-                    <tr *ngIf="fieldsAndVisibility.table.date">
+                    <tr *ngIf="fieldsAndVisibility?.table.date && customTemplate?.templateType === 'gst_template_a'">
                         <td>
                             <label>
                                 <input type="checkbox" name="dt"
@@ -453,7 +453,7 @@
 
         </tr>-->
 
-                    <ng-container *ngIf="templateUISectionVisibility.table && customTemplate?.templateType === 'gst_template_e'">
+                    <ng-container *ngIf="templateUISectionVisibility.table && customTemplate?.templateType === 'gst_template_e' && voucherType==='sales'">
                         <tr *ngIf="isTcsTdsApplicable">
                             <td>
                                 <label><input type="checkbox"
@@ -500,7 +500,7 @@
                                     (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Invoice Total(in words)</label>
                         </td>
                     </tr>
-                    <tr *ngIf="customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e'">
+                    <tr *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
                         <td class="pb-3">
                             <label>
                                 <input type="checkbox" name="totalQuantity" checked
@@ -508,7 +508,7 @@
                                     (ngModelChange)="onChangeFieldVisibility(null, null, null)"  /> Total Quantity</label>
                         </td>
                     </tr>
-                    <div class="form-group" *ngIf="customTemplate?.templateType === 'gst_template_e'">
+                    <div class="form-group" *ngIf="customTemplate?.templateType === 'gst_template_e' && voucherType==='sales'">
                         <div class="form-group font-16">
                             <input type="checkbox" [(ngModel)]="customTemplate.sections['table'].data['taxBifurcation'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null); checkedTaxBifurcation('taxRateBifurcation', 'table')" /> Tax Bifurcation
                         </div>
@@ -535,7 +535,7 @@
         <div class="clearfix">
             <h2>Footer</h2>
             <div class="clearfix bdrB scrollAuto">
-                <ng-container *ngIf="customTemplate?.templateType === 'gst_template_a'">
+                <ng-container *ngIf="customTemplate?.templateType === 'gst_template_a' && voucherType==='sales'">
 
                     <div *ngIf="isTcsTdsApplicable" class="form-group">
                         <input type="checkbox" name="tcs" checked [(ngModel)]="customTemplate.sections['footer'].data['tcs'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked="true" /> TCS
@@ -588,7 +588,7 @@
                     <input type="checkbox" name="itiw" [(ngModel)]="customTemplate.sections['footer'].data['totalInWords'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Invoice Total(in words)
                 </div>
 
-                <div class="form-group" *ngIf="customTemplate?.templateType === 'gst_template_a'">
+                <div class="form-group" *ngIf="customTemplate?.templateType === 'gst_template_a' && voucherType==='sales'">
                     <div class="form-group">
                         <input type="checkbox" [(ngModel)]="customTemplate.sections['footer'].data['taxBifurcation'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null); checkedTaxBifurcation('taxRateBifurcation', 'footer')" /> Tax Bifurcation
                     </div>

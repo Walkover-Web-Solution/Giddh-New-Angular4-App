@@ -479,30 +479,30 @@
 
 
         <div id="Template-footer " [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer } " (click)="onClickSection( 'footer') ">
-        <div class="clearfix">
-            <a href="javascript:void(0); " class="edit-template " *ngIf="!templateUISectionVisibility.footer ">
-                <i class="fa fa-pencil "></i>
-            </a>
-            <article>
-                <table class="balance ">
-                    <tr *ngIf="fieldsAndVisibility.footer.taxableAmount?.display ">
-                        <th>
-                            <!-- {{fieldsAndVisibility.footer.taxableAmount?.label}}-->
-                            Taxable Amount
-                        </th>
-                        <td>
-                            <span [innerHTML]="rupeeSymbol "></span> 7200.00
-                        </td>
-                    </tr>
-                    <tr *ngIf="fieldsAndVisibility.footer.totalTax?.display ">
-                        <th>
-                            {{fieldsAndVisibility.footer.totalTax?.label}}
-                        </th>
-                        <td>
-                            <span [innerHTML]="rupeeSymbol "></span> 966.00
-                        </td>
-                    </tr>
-                    <!--<tr>
+            <div class="clearfix">
+                <a href="javascript:void(0); " class="edit-template " *ngIf="!templateUISectionVisibility.footer ">
+                    <i class="fa fa-pencil "></i>
+                </a>
+                <article>
+                    <table class="balance ">
+                        <tr *ngIf="fieldsAndVisibility.footer.taxableAmount?.display ">
+                            <th>
+                                <!-- {{fieldsAndVisibility.footer.taxableAmount?.label}}-->
+                                Taxable Amount
+                            </th>
+                            <td>
+                                <span [innerHTML]="rupeeSymbol "></span> 7200.00
+                            </td>
+                        </tr>
+                        <tr *ngIf="fieldsAndVisibility.footer.totalTax?.display ">
+                            <th>
+                                {{fieldsAndVisibility.footer.totalTax?.label}}
+                            </th>
+                            <td>
+                                <span [innerHTML]="rupeeSymbol "></span> 966.00
+                            </td>
+                        </tr>
+                        <!--<tr>
           <th>
             {{fieldsAndVisibility.table.otherTaxBifurcation?.label}}{{fieldsAndVisibility.table.otherTaxBifurcation?.label ? fieldsAndVisibility.footer.otherTaxBifurcation?.label : 'TCS' }}
           </th>
@@ -510,211 +510,211 @@
             <span [innerHTML]="rupeeSymbol "></span> 2000.00
           </td>
         </tr>-->
-                    <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display ">
-                        <th class="strong ">
-                            {{fieldsAndVisibility.footer.grandTotal?.label}} (INR)
-                        </th>
-                        <td class="strong ">
-                            <span [innerHTML]='rupeeSymbol'></span>10166.00
-                        </td>
-                    </tr>
-                    <tr *ngIf="fieldsAndVisibility.footer.totalInWords?.display ">
-                        <th>
-                            <!--            {{fieldsAndVisibility.footer.totalInWords?.label}}-->
-                            Total (In words)
-                        </th>
-                        <td>
-                            Ten Thousand One Hundred Sixty Six Only
-                            <div class="inner mr-0">&nbsp;</div>
-                        </td>
-                    </tr>
-                    <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display ">
-                        <th class="strong ">
-                            {{fieldsAndVisibility.footer.grandTotal?.label}} (USD)
-                        </th>
-                        <td class="strong ">
-                            <span [innerHTML]='dollarSymbol'></span>148.20
-                        </td>
-                    </tr>
-                    <tr *ngIf="fieldsAndVisibility.footer.totalInWords?.display ">
-                        <th>
-                            <!--            {{fieldsAndVisibility.footer.totalInWords?.label}}-->
-                            Total (In words)
-                        </th>
-                        <td>
-                            One hundred fourty-eight dollars & twenty cents
-                            <div class="inner mr-0">&nbsp;</div>
-                        </td>
-                    </tr>
-
-                    <tr *ngIf="fieldsAndVisibility.footer.tcs?.display ">
-                        <th>{{fieldsAndVisibility.footer.tcs?.label}}</th>
-                        <td><span [innerHTML]="rupeeSymbol"></span>2900.00</td>
-                    </tr>
-                    <tr *ngIf="fieldsAndVisibility.footer.tds?.display ">
-                        <th>{{fieldsAndVisibility.footer.tds?.label}}</th>
-                        <td><span [innerHTML]="rupeeSymbol"></span>3480.00</td>
-                    </tr>
-                    <tr *ngIf="fieldsAndVisibility.footer.totalDue?.display ">
-                        <th class="strong">{{fieldsAndVisibility.footer.totalDue?.label}}</th>
-                        <td><span [innerHTML]="rupeeSymbol" class="strong"></span>27380.00</td>
-                    </tr>
-
-                </table>
-
-
-                <table class="tax-table item text-right" cellspacing="0" cellpadding="0" *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
-                    <thead>
-                        <tr>
-                            <th class="text-left " [ngStyle]="{ 'background-color': inputTemplate.tableColor} " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'hsnSac'">HSN/SAC</th>
-                            <th class="text-left " [ngStyle]="{ 'background-color': inputTemplate.tableColor} " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">Tax %</th>
-                            <ng-container>
-                                <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">Taxable Amt.</th>
-                                <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">CGST %</th>
-                                <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">CGST Amt.</th>
-                                <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">SGST %</th>
-                                <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">SGST Amt.</th>
-                            </ng-container>
-                            <ng-container>
-                                <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">IGST %</th>
-                                <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">IGST Amt.</th>
-                            </ng-container>
-                            <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">Total Amt.</th>
+                        <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display ">
+                            <th class="strong ">
+                                {{fieldsAndVisibility.footer.grandTotal?.label}} (INR)
+                            </th>
+                            <td class="strong ">
+                                <span [innerHTML]='rupeeSymbol'></span>10166.00
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="text-left " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'hsnSac'">12345678</td>
-                            <td class="text-left " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">GST 5%</td>
-                            <td>10000.00</td>
+                        <tr *ngIf="fieldsAndVisibility.footer.totalInWords?.display ">
+                            <th>
+                                <!--            {{fieldsAndVisibility.footer.totalInWords?.label}}-->
+                                Total (In words)
+                            </th>
                             <td>
-                                <p>2.5%</p>
+                                Ten Thousand One Hundred Sixty Six Only
+                                <div class="inner mr-0">&nbsp;</div>
                             </td>
-                            <td class="text-right ">500.00
+                        </tr>
+                        <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display ">
+                            <th class="strong ">
+                                {{fieldsAndVisibility.footer.grandTotal?.label}} (USD)
+                            </th>
+                            <td class="strong ">
+                                <span [innerHTML]='dollarSymbol'></span>148.20
                             </td>
+                        </tr>
+                        <tr *ngIf="fieldsAndVisibility.footer.totalInWords?.display ">
+                            <th>
+                                <!--            {{fieldsAndVisibility.footer.totalInWords?.label}}-->
+                                Total (In words)
+                            </th>
                             <td>
-                                <p>2.5%</p>
+                                One hundred fourty-eight dollars & twenty cents
+                                <div class="inner mr-0">&nbsp;</div>
                             </td>
-                            <td class="text-right ">500.00
-                            </td>
-                            <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">5%</td>
-                            <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">500.00</td>
-                            <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">5,00,000.00</td>
                         </tr>
 
-                        <tr>
-                            <td class="text-left " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'hsnSac'">45484848</td>
-                            <td class="text-left " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">GST 18%</td>
-                            <td>2000.00</td>
-                            <td>
-                                <p>0%</p>
-                            </td>
-                            <td class="text-right ">00
-                            </td>
-                            <td>
-                                <p>0%</p>
-                            </td>
-                            <td class="text-right ">00
-                            </td>
-                            <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">18%</td>
-                            <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">100.00</td>
-                            <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">1,00,000.00</td>
+                        <tr *ngIf="fieldsAndVisibility.footer.tcs?.display ">
+                            <th>{{fieldsAndVisibility.footer.tcs?.label}}</th>
+                            <td><span [innerHTML]="rupeeSymbol"></span>2900.00</td>
+                        </tr>
+                        <tr *ngIf="fieldsAndVisibility.footer.tds?.display ">
+                            <th>{{fieldsAndVisibility.footer.tds?.label}}</th>
+                            <td><span [innerHTML]="rupeeSymbol"></span>3480.00</td>
+                        </tr>
+                        <tr *ngIf="fieldsAndVisibility.footer.totalDue?.display ">
+                            <th class="strong">{{fieldsAndVisibility.footer.totalDue?.label}}</th>
+                            <td><span [innerHTML]="rupeeSymbol" class="strong"></span>27380.00</td>
                         </tr>
 
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th class="text-right">
-                                <span *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'hsnSac'">Total</span></th>
-                            <th class=" text-right ">12000.00</th>
-                            <th></th>
-                            <th class="text-right ">500.00</th>
-                            <th></th>
-                            <th class="text-right ">500.00</th>
-                            <th *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label==='taxRateBifurcation' "></th>
-                            <th class="text-right " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label==='taxRateBifurcation' ">600.00</th>
-                            <th class="text-right " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label==='taxRateBifurcation' ">6,00,000.00</th>
-                        </tr>
-                    </tfoot>
-                </table>
+                    </table>
 
-            </article>
-        </div>
 
-        <div class="clearfix">
-            <a href="javascript:void(0); " class="edit-template " *ngIf="!templateUISectionVisibility.footer ">
-                <i class="fa fa-pencil "></i>
-            </a>
-            <aside>
+                    <table class="tax-table item text-right" cellspacing="0" cellpadding="0" *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
+                        <thead>
+                            <tr>
+                                <th class="text-left " [ngStyle]="{ 'background-color': inputTemplate.tableColor} " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'hsnSac'">HSN/SAC</th>
+                                <th class="text-left " [ngStyle]="{ 'background-color': inputTemplate.tableColor} " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">Tax %</th>
+                                <ng-container>
+                                    <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">Taxable Amt.</th>
+                                    <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">CGST %</th>
+                                    <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">CGST Amt.</th>
+                                    <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">SGST %</th>
+                                    <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">SGST Amt.</th>
+                                </ng-container>
+                                <ng-container>
+                                    <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">IGST %</th>
+                                    <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">IGST Amt.</th>
+                                </ng-container>
+                                <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">Total Amt.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-left " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'hsnSac'">12345678</td>
+                                <td class="text-left " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">GST 5%</td>
+                                <td>10000.00</td>
+                                <td>
+                                    <p>2.5%</p>
+                                </td>
+                                <td class="text-right ">500.00
+                                </td>
+                                <td>
+                                    <p>2.5%</p>
+                                </td>
+                                <td class="text-right ">500.00
+                                </td>
+                                <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">5%</td>
+                                <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">500.00</td>
+                                <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">5,00,000.00</td>
+                            </tr>
 
-                <table cellpadding="0 " cellspacing="0 " class="subfooter ">
-                    <tbody>
-                        <tr>
-                            <td class="accc " [ngStyle]="{ 'font-size' : inputTemplate.fontMedium + 'px' } ">
-                                <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display ">
-                                    {{fontMedium}}
-                                    <p *ngIf="fieldsAndVisibility.footer.message1?.display ">
-                                        <span>*Tax to be paid on Reverse Charge.<br>
+                            <tr>
+                                <td class="text-left " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'hsnSac'">45484848</td>
+                                <td class="text-left " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">GST 18%</td>
+                                <td>2000.00</td>
+                                <td>
+                                    <p>0%</p>
+                                </td>
+                                <td class="text-right ">00
+                                </td>
+                                <td>
+                                    <p>0%</p>
+                                </td>
+                                <td class="text-right ">00
+                                </td>
+                                <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">18%</td>
+                                <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">100.00</td>
+                                <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">1,00,000.00</td>
+                            </tr>
+
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th class="text-right">
+                                    <span *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'hsnSac'">Total</span></th>
+                                <th class=" text-right ">12000.00</th>
+                                <th></th>
+                                <th class="text-right ">500.00</th>
+                                <th></th>
+                                <th class="text-right ">500.00</th>
+                                <th *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label==='taxRateBifurcation' "></th>
+                                <th class="text-right " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label==='taxRateBifurcation' ">600.00</th>
+                                <th class="text-right " *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label==='taxRateBifurcation' ">6,00,000.00</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </article>
+            </div>
+
+            <div class="clearfix">
+                <a href="javascript:void(0); " class="edit-template " *ngIf="!templateUISectionVisibility.footer ">
+                    <i class="fa fa-pencil "></i>
+                </a>
+                <aside>
+
+                    <table cellpadding="0 " cellspacing="0 " class="subfooter ">
+                        <tbody>
+                            <tr>
+                                <td class="accc " [ngStyle]="{ 'font-size' : inputTemplate.fontMedium + 'px' } ">
+                                    <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display ">
+                                        {{fontMedium}}
+                                        <p *ngIf="fieldsAndVisibility.footer.message1?.display ">
+                                            <span>*Tax to be paid on Reverse Charge.<br>
                                             <strong>Notes</strong> <br>
                                             <span style="white-space:pre-line; ">
                                                 <ng-container *ngIf="fieldsAndVisibility?.footer?.message1?.label ">{{fieldsAndVisibility.footer.message1?.label}}
                                                 </ng-container>
                                             </span>
-                                        <ng-container *ngIf="!fieldsAndVisibility?.footer?.message1?.label ">
-                                            All payments to be made in cash. <br> Contact us for queries on these quotations. <br>
-                                        </ng-container>
-                                        </span>
-                                    </p>
+                                            <ng-container *ngIf="!fieldsAndVisibility?.footer?.message1?.label ">
+                                                All payments to be made in cash. <br> Contact us for queries on these quotations. <br>
+                                            </ng-container>
+                                            </span>
+                                        </p>
 
-                                </ng-container>
-                                <!--<p *ngIf="fieldsAndVisibility.footer.thanks?.display " style="white-space:pre-line; " [innerHTML]="fieldsAndVisibility.footer.thanks?.label "></p>-->
-                            </td>
-                            <td>&nbsp;</td>
-                            <td class="text-center " [ngStyle]="{ 'font-size': fontMedium, 'vertical-align': 'bottom', 'width': '35%' } " *ngIf="!showImageSignature ">
-                                <hr *ngIf="fieldsAndVisibility.footer.slogan?.label ">
-                                <ng-container *ngIf="fieldsAndVisibility.footer.slogan?.display ">
-                                    <strong class="slogan-pre-line ">
+                                    </ng-container>
+                                    <!--<p *ngIf="fieldsAndVisibility.footer.thanks?.display " style="white-space:pre-line; " [innerHTML]="fieldsAndVisibility.footer.thanks?.label "></p>-->
+                                </td>
+                                <td>&nbsp;</td>
+                                <td class="text-center " [ngStyle]="{ 'font-size': fontMedium, 'vertical-align': 'bottom', 'width': '35%' } " *ngIf="!showImageSignature ">
+                                    <hr *ngIf="fieldsAndVisibility.footer.slogan?.label ">
+                                    <ng-container *ngIf="fieldsAndVisibility.footer.slogan?.display ">
+                                        <strong class="slogan-pre-line ">
                                         <small
                                             *ngIf="fieldsAndVisibility.footer.slogan?.label || fieldsAndVisibility.footer.slogan?.label==='' ">
                                             {{fieldsAndVisibility.footer.slogan?.label }}
                                         </small>
                                     </strong>
-                                </ng-container>
-                            </td>
+                                    </ng-container>
+                                </td>
 
-                            <td style="text-align:center; vertical-align: bottom; width: 35%; " *ngIf="showImageSignature ">
-                                <ng-container>
-                                    <img [hidden]="!showImageSignature " [src]="imageSignatureSrc " style="height: 60px; min-width: 40px; " alt=" " />
-                                </ng-container>
-                            </td>
-                        </tr>
-                        <tr *ngIf="fieldsAndVisibility.footer.thanks?.display ">
-                            <td [ngStyle]="{ 'font-size': inputTemplate.fontDefault + 'px'} ">
-                                <strong>
+                                <td style="text-align:center; vertical-align: bottom; width: 35%; " *ngIf="showImageSignature ">
+                                    <ng-container>
+                                        <img [hidden]="!showImageSignature " [src]="imageSignatureSrc " style="height: 60px; min-width: 40px; " alt=" " />
+                                    </ng-container>
+                                </td>
+                            </tr>
+                            <tr *ngIf="fieldsAndVisibility.footer.thanks?.display ">
+                                <td [ngStyle]="{ 'font-size': inputTemplate.fontDefault + 'px'} ">
+                                    <strong>
                                     <h4 *ngIf="fieldsAndVisibility.footer.thanks?.label "
                                         [ngStyle]="{ 'color': inputTemplate.templateColor, 'font-size': inputTemplate.fontDefault + 'px'} "
                                         [innerHTML]="fieldsAndVisibility.footer.thanks?.label "></h4>
                                     <h4 *ngIf="!fieldsAndVisibility.footer.thanks?.label "
                                         [ngStyle]="{ 'color': inputTemplate.templateColor, 'font-size': inputTemplate.fontDefault + 'px'} ">
-                                        Thank You for your business.</h4>
+                                        Thank you for your business.</h4>
                                 </strong>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-            </aside>
-            <footer style="text-align: center; " [ngStyle]="{ 'border-color': inputTemplate.templateColor} ">
-                <p class="font-10 " *ngIf="fieldsAndVisibility.footer.companyName?.display " class="font-10 ">
-                    <strong>{{fieldsAndVisibility.header.companyName?.label}}</strong>
-                </p>
-                <p class="abc " [ngStyle]="{ 'font-size': inputTemplate.fontMedium + 'px', 'white-space' : 'pre-line'} " *ngIf="fieldsAndVisibility.footer.companyAddress?.display ">
-                    {{fieldsAndVisibility.footer.companyAddress?.label ? fieldsAndVisibility.footer.companyAddress?.label : ''}}
-                </p>
-            </footer>
+                </aside>
+                <footer style="text-align: center; " [ngStyle]="{ 'border-color': inputTemplate.templateColor} ">
+                    <p class="font-10 " *ngIf="fieldsAndVisibility.footer.companyName?.display " class="font-10 ">
+                        <strong>{{fieldsAndVisibility.header.companyName?.label}}</strong>
+                    </p>
+                    <p class="abc " [ngStyle]="{ 'font-size': inputTemplate.fontMedium + 'px', 'white-space' : 'pre-line'} " *ngIf="fieldsAndVisibility.footer.companyAddress?.display ">
+                        {{fieldsAndVisibility.footer.companyAddress?.label ? fieldsAndVisibility.footer.companyAddress?.label : ''}}
+                    </p>
+                </footer>
+            </div>
+
         </div>
-
-    </div>
     </div>
 
 </body>
