@@ -132,7 +132,7 @@
                                     <table class="table basic giddh-table on-mobile-view mb-0">
                                         <thead>
                                             <tr>
-                                                <th>Date</th>
+                                                <!-- <th>Date</th> -->
                                                 <th>Consumptions <span class="text-gray">(previous+current)</span></th>
                                                 <th>Balance</th>
                                                 <th class="text-right">Additional Charges</th>
@@ -141,7 +141,6 @@
                                         <tbody *ngIf="seletedUserPlans">
                                             <tr>
                                                 <!-- <td data-title="Date">{{ moment(transaction.from, 'DD-MM-YYYY').format('MMM - YY')}}</td> -->
-                                                <td data-title="Date">&nbsp;</td>
                                                 <td data-title="Consumptions">{{ seletedUserPlans?.totalTransactions ? seletedUserPlans?.totalTransactions : 0 }}</td>
                                                 <td data-title="Balance">{{ seletedUserPlans?.balance? seletedUserPlans?.balance: 0 }}</td>
                                                 <td data-title="Additional Charges" class="text-right">{{ seletedUserPlans?.additionalCharges? seletedUserPlans?.additionalCharges: 0 }}</td>
@@ -207,7 +206,7 @@
                                                     class="dropdown-menu dropdown-menu-right" role="menu"
                                                     aria-labelledby="button-alignment">
                                                     <li role="menuitem">
-                                                        <a class="dropdown-item" (click)="openModalMove(MoveCompany)"
+                                                        <a class="dropdown-item" (click)="openModalMove(MoveCompany, company)"
                                                             href="javascript:void(0)">Move Company </a>
                                                     </li>
                                                     <!-- <li role="menuitem">
@@ -406,7 +405,7 @@
 
 <!-- MoveCompany Modal -->
 <ng-template #MoveCompany>
-    <move-company></move-company>
+    <move-company [subscriptions]="subscriptions" [moveSelectedCompany]="moveSelectedCompany"></move-company>
 </ng-template>
 
 <!-- deactivate Company Modal -->
