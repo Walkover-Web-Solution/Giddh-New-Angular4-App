@@ -258,7 +258,7 @@
                         </div>
 
                         <div *ngIf="!shouldShowUploadAttachment" #attachedDocumentPreview class="fixed-ng2pdfview pdf-preview" [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
-                            <ng2-pdfjs-viewer *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')" viewerId="MyUniqueID" [hidden]="isVoucherDownloading || isVoucherDownloadError || isFileUploading"
+                            <ng2-pdfjs-viewer pagemode="none" *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')" viewerId="MyUniqueID" [hidden]="isVoucherDownloading || isVoucherDownloadError || isFileUploading"
                                 [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="testPagesLoaded($event);" [openFile]="false" [viewBookmark]="false" [download]="false">
                             </ng2-pdfjs-viewer>
                             <img *ngIf="(selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image')" class="image-preview" [src]="imagePreviewSource" />
