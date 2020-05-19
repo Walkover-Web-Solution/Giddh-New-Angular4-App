@@ -575,8 +575,7 @@
                     <input type="checkbox" name="ttx" [(ngModel)]="customTemplate.sections['footer'].data['totalTax'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Total Tax
                 </div>
                 <!--<div class="form-group">
-            <input type="checkbox" name="ded" [(ngModel)]="customTemplate.sections[2].content[2].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Other Deduction/Additions
-        </div>-->
+            <input type="checkbox" name="ded" [(ngModel)]="customTemplate.sections[2].content[2].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Other Deduction/Additions</div>-->
                 <div *ngIf="fieldsAndVisibility.footer.total" class="form-group">
                     <input type="checkbox" name="itot" [(ngModel)]="customTemplate.sections['footer'].data['total'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Invoice Total
                 </div>
@@ -587,7 +586,7 @@
                     <div class="form-group">
                         <input type="checkbox" [(ngModel)]="customTemplate.sections['footer'].data['taxBifurcation'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null); checkedTaxBifurcation('taxRateBifurcation', 'footer')" /> Tax Bifurcation
                     </div>
-                    <div class="mrL3" *ngIf="customTemplate.sections['footer'].data['taxBifurcation'].display">
+                    <div class="ml-3" *ngIf="customTemplate.sections['footer'].data['taxBifurcation'].display">
                         <div class="clearfix mb-05">
                             <input type="radio" class="radio_theme" name="tax-rate" (ngModelChange)='onFieldChange(null, null, null)' (change)="checkedTaxBifurcation('taxRateBifurcation','footer')" [checked]="customTemplate.sections['footer'].data['taxBifurcation'].label === 'taxRateBifurcation'"
                                 [disabled]="!customTemplate.sections['footer'].data['taxBifurcation'].display" /> Tax Rate
