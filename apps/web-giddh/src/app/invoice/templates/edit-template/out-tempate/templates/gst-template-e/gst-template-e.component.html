@@ -59,8 +59,6 @@
                 </tbody>
             </table>
         </header>
-
-
         <table class="warehouse-table" cellspacing="0" cellpadding="0" *ngIf="fieldsAndVisibility?.header?.warehouseAddress?.display">
             <tbody>
                 <tr>
@@ -131,7 +129,6 @@
                         <p *ngIf="fieldsAndVisibility.header.trackingNumber?.display">
                             {{(fieldsAndVisibility.header.trackingNumber?.label?.length > 0) ? fieldsAndVisibility.header.trackingNumber?.label : 'Tracking No'}}: 123654
                         </p>
-
                         <p *ngIf="fieldsAndVisibility.header.customField1?.display"> {{(fieldsAndVisibility.header.customField1?.label?.length > 0) ? fieldsAndVisibility.header.customField1?.label : 'Custom 1'}} :dummy</p>
                         <p *ngIf="fieldsAndVisibility.header.customField2?.display">{{(fieldsAndVisibility.header.customField2?.label?.length > 0) ? fieldsAndVisibility.header.customField2?.label : 'Custom 2'}} :dummy</p>
                         <p *ngIf="fieldsAndVisibility.header.customField3?.display">{{(fieldsAndVisibility.header.customField3?.label?.length > 0) ? fieldsAndVisibility.header.customField3?.label : 'Custom 3'}}:dummy</p>
@@ -246,7 +243,6 @@
                 </tr>
             </tbody>
             <tfoot class="table-details">
-
                 <tr *ngIf="fieldsAndVisibility.table.totalQuantity?.display">
                     <th [attr.colspan]="columnsVisibled - 2"></th>
                     <th class="text-right">Total Qty</th>
