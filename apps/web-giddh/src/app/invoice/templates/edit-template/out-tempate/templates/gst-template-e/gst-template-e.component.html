@@ -46,7 +46,7 @@
                         </td>
 
                         <td class="text-center img-duplicate">
-                            <img src="assets/images/dublicate.svg" alt="">
+                            <img src="assets/images/duplicate.svg" alt="">
                         </td>
                         <td class="text-right" *ngIf="showLogo">
                             <figure class="col-xs-12">
@@ -131,7 +131,6 @@
                         <p *ngIf="fieldsAndVisibility.header.trackingNumber?.display">
                             {{(fieldsAndVisibility.header.trackingNumber?.label?.length > 0) ? fieldsAndVisibility.header.trackingNumber?.label : 'Tracking No'}}: 123654
                         </p>
-
                         <p *ngIf="fieldsAndVisibility.header.customField1?.display"> {{(fieldsAndVisibility.header.customField1?.label?.length > 0) ? fieldsAndVisibility.header.customField1?.label : 'Custom 1'}} :dummy</p>
                         <p *ngIf="fieldsAndVisibility.header.customField2?.display">{{(fieldsAndVisibility.header.customField2?.label?.length > 0) ? fieldsAndVisibility.header.customField2?.label : 'Custom 2'}} :dummy</p>
                         <p *ngIf="fieldsAndVisibility.header.customField3?.display">{{(fieldsAndVisibility.header.customField3?.label?.length > 0) ? fieldsAndVisibility.header.customField3?.label : 'Custom 3'}}:dummy</p>
@@ -246,7 +245,6 @@
                 </tr>
             </tbody>
             <tfoot class="table-details">
-
                 <tr *ngIf="fieldsAndVisibility.table.totalQuantity?.display">
                     <th [attr.colspan]="columnsVisibled - 2"></th>
                     <th class="text-right">Total Qty</th>

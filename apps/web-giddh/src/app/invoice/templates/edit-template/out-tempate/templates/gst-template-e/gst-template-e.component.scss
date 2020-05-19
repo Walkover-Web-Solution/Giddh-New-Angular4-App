@@ -3,12 +3,10 @@ strong,
 .strong {
     font-weight: bold;
 }
-
 body {
     font-size: 12px;
-    background: #fff;
+    background: $white;
 }
-
 #template-header {
     width: auto;
 }
@@ -32,18 +30,16 @@ body {
 .max-width-180 {
     /* max-width: 180px !important; */
 }
-
-
 /* NOTE:  comment padding, max-width, border in #royal css for java */
 
 .seperator {
-    border-top: 1px solid #949494;
+    border-top: 1px solid $nobel;
 }
 
 #royal {
     font: 12px/1 "Open Sans", sans-serif;
     overflow: auto;
-    background: #fff;
+    background: $white;
     border: 1px solid #bfbfbf;
     max-width: 8.3in;
     width: 100%;
@@ -96,7 +92,7 @@ body {
     display: flex;
     align-items: center;
     padding: 5px 10px;
-    border-bottom: 1px solid #DF4927;
+    border-bottom: 1px solid $cinnabar-orange;
     float: right;
 }
 
@@ -159,8 +155,6 @@ tfoot.table-details tr th {
 #royal .product-table tbody tr:last-child td {
     padding-bottom: 10px;
 }
-
-
 /* #royal .product-table:before {
   position: absolute;
   top: 0;
@@ -171,8 +165,6 @@ tfoot.table-details tr th {
   width: 100%;
   z-index: -1;
 } */
-
-
 /* #royal .product-table:after {
   position: absolute;
   top: 0;
@@ -183,7 +175,6 @@ tfoot.table-details tr th {
   width: 100%;
   z-index: -1;
 } */
-
 #royal .inwords {
     color: #939393;
 }
@@ -200,7 +191,7 @@ tfoot.table-details tr th {
 
 #royal .item thead tr th {
     padding: 20px 8px 4px;
-    border-bottom: 1px solid #949494;
+    border-bottom: 1px solid $nobel;
     line-height: 1.2rem;
 }
 
@@ -209,7 +200,7 @@ tfoot.table-details tr th {
 }
 
 #royal .item tfoot tr:last-child th {
-    /*border-top: 1px solid #949494;*/
+    /*border-top: 1px solid $nobel;*/
     padding: 6px;
     line-height: 1.2rem;
     vertical-align: middle;
@@ -228,7 +219,7 @@ tfoot.table-details tr th {
 }
 
 #royal .bdrB {
-    border-bottom: 1px solid#949494;
+    border-bottom: 1px solid$nobel;
     margin-bottom: 10px;
 }
 
@@ -266,7 +257,7 @@ tfoot.table-details tr th {
     line-height: 20px;
     padding: 15px;
     margin: 8px 0 0;
-    background: #fff;
+    background: $white;
     width: auto;
 }
 
@@ -310,14 +301,14 @@ tfoot.table-details tr th {
 #royal .tax-table tbody tr td,
 #royal .tax-table tfoot tr th {
     padding: 6px;
-    border-right: 1px solid #949494;
-    border-bottom: 1px solid #949494;
+    border-right: 1px solid $nobel;
+    border-bottom: 1px solid $nobel;
 }
 
 #royal .tax-table thead tr th:last-child,
 #royal .tax-table tbody tr td:last-child,
 #royal .tax-table tfoot tr th:last-child {
-    border-right: 0px solid #949494;
+    border-right: 0px solid $nobel;
 }
 
 table.tax-table.item {
@@ -354,7 +345,7 @@ table.tax-table.item {
     padding: 4px;
     height: 15px;
     z-index: 1;
-    background: #fff;
+    background: $white;
     width: 20px;
 }
 

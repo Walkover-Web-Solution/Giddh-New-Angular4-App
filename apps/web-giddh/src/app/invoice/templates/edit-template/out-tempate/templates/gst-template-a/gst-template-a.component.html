@@ -20,7 +20,7 @@
                             <img [hidden]='!showLogo' [src]="logoSrc" class="pull-left" alt="" [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
                         </div>
                         <div class="col-md-6">
-                            <img src="assets/images/dublicate.svg" class="pull-right" alt="">
+                            <img src="assets/images/duplicate.svg" class="pull-right" alt="">
                         </div>
                     </div>
                 </figure>
@@ -136,13 +136,9 @@
                     </tr>
                 </tbody>
             </table>
-
-
-            <table class="meta cargoDetail ">
+            <table class="meta cargoDetail">
                 <tbody>
                     <tr>
-
-
                         <td *ngIf="fieldsAndVisibility.header.billingAddress?.display ">
                             <p class="strong">
                                 {{(fieldsAndVisibility.header.billingAddress?.label?.length > 0) ? fieldsAndVisibility.header.billingAddress?.label : 'To'}}
