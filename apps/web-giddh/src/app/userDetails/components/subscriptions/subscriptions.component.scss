@@ -4,22 +4,18 @@
     height: 400px;
     overflow-y: auto;
 }
-
 .campanien-list ul {
     list-style-type: none;
     height: 300px;
     overflow-y: auto;
 }
-
 .transaction-list .campanien-list {
     min-height: 0;
 }
-
 .subscription-table th {
     padding: 15px !important;
     font-family: "opensans-regular" !important;
 }
-
 .subscription-table tbody tr td,
 .head-title {
     border: 0px;
@@ -27,7 +23,6 @@
     padding: 15px !important;
     font-family: inherit !important;
 }
-
 .transection-popup {
     position: absolute;
     right: 0;
@@ -38,49 +33,41 @@
     border-radius: 3px;
     border: 1px solid #e01b1b;
 }
-
 .subscription-dropdown {
     display: block;
     clear: both;
 }
-
 .subscription-dropdown .btn {
     border: 1px solid #c4c0c0;
     width: 342px;
     text-align: left;
     background: white;
 }
-
 .subscription-dropdown .btn .caret {
     margin-top: 9px;
     float: right;
 }
-
 .subscription-dropdown .dropdown-menu {
     width: 342px;
     margin-top: 9px;
     max-height: 300px;
     overflow-y: auto;
 }
-
 .subscription-dropdown .dropdown-menu li {
     padding: 5px 4px;
     border-bottom: 1px solid #e6e6e6;
     transition: 0.5s all ease;
 }
-
 .subscription-dropdown li a {
     display: block;
     align-items: center;
     position: relative;
     padding-right: 60px;
 }
-
 .subscription-dropdown li:hover a,
 .subscription-dropdown li:hover {
     background: #f1f1f1;
 }
-
 .subscription-dropdown .dropdown-menu li a span {
     position: absolute;
     top: 40%;
@@ -147,6 +134,7 @@
 .left-div {
     border-left: 1px solid $gainsboro;
     padding-left: 0px;
+    padding-bottom: 60px;
 }
 .giddh-table tbody {
     tr:last-child {
