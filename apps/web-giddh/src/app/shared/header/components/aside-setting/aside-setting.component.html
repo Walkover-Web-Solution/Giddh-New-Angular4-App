@@ -1,27 +1,31 @@
-<div class="aside-pane">
-    <div class="aside-help-header">
-        <h2>Settings</h2>
-        <div id="close" class="cursor-pointer" (click)="closeAsidePane($event)"><i class="icon-cross"></i></div>
+
+ <perfect-scrollbar [scrollIndicators]="true">
+    <div class="aside-pane">
+        <div class="aside-help-header">
+            <h2>Settings</h2>
+            <div id="close" class="cursor-pointer" (click)="closeAsidePane($event)"><i class="icon-cross"></i></div>
+        </div>
+        <div class="help-aside-body">
+            <div class="search-field relative">
+                <i class="icon-search pos-abs"></i>
+                <input type="text" class="form-control" name="search" #searchField [(ngModel)]="search"
+                    (ngModelChange)="searchMenu($event)" placeholder="Search Settings">
+            </div>
+            <div class="back-to-main-slider">
+                <a href="javascript:;" (click)="goToPreviousPage()"><img src="../../../../../assets/images/back.svg">
+                    Back</a>
+            </div>
+            <div class="setting-items">
+                <ul class="mb-3" *ngFor="let section of filteredSettingsPageTabs;">
+                    <li *ngFor="let tab of section;">
+                        <a class="d-block" [routerLink]="[tab.link]" (click)="closeAsidePane($event)">
+                            <span><img src="{{imgPath}}{{tab.image}}"></span>
+                            <span>{{tab.label}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
     </div>
-    <div class="help-aside-body">
-        <div class="search-field relative">
-            <i class="icon-search pos-abs"></i>
-            <input type="text" class="form-control" name="search" #searchField [(ngModel)]="search"
-                (ngModelChange)="searchMenu($event)" placeholder="Search Settings">
-        </div>
-        <div class="back-to-main-slider">
-            <a href="javascript:;" (click)="goToPreviousPage()"><img src="../../../../../assets/images/back.svg">
-                Back</a>
-        </div>
-        <div class="setting-items">
-            <ul class="mb-3" *ngFor="let section of filteredSettingsPageTabs;">
-                <li *ngFor="let tab of section;">
-                    <a class="d-block" [routerLink]="[tab.link]" (click)="closeAsidePane($event)">
-                        <span><img src="{{imgPath}}{{tab.image}}"></span>
-                        <span>{{tab.label}}</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
+</perfect-scrollbar>

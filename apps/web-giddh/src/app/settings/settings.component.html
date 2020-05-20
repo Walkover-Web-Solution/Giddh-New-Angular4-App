@@ -1,8 +1,6 @@
 <!-- setting page sidebar -->
 <div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'">
-    <perfect-scrollbar [scrollIndicators]="true">
         <aside-setting class="setting-sidebar" (closeAsideEvent)="toggleSettingPane()"></aside-setting>
-    </perfect-scrollbar>
 </div>
 <div class="container-fluid settings-bg" [keyboardShortcut]="['alt+right', 'alt+left']" [config]="{ignoreHost:true}"
     (onShortcutPress)="selectTabByShortcut($event)">

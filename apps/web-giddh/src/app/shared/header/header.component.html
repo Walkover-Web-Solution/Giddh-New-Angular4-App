@@ -564,6 +564,14 @@
                         </li>
                         <li class="border-none pr-0 pull-right">
                             <img src="{{imgPath}}notification.svg">
+                            <div class="btn-group cp d-inline-block help-setting-icons " dropdown>
+                                <span class="mr-15" (click)="toggleSidebarPane(true)">
+                                    <img src="{{imgPath}}setting-icon.svg">
+                                </span>
+                                <span (click)="toggleHelpSupportPane(true)">
+                                    <img src="{{imgPath}}help-support-icon.svg">
+                                </span>
+                            </div>
                         </li>
                     </ul>
                 </div>
