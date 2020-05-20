@@ -141,14 +141,18 @@
     top: 61px;
     bottom: 0;
     min-height: 100vh;
-    background: #fff;
+    background:$white;
     width: 215px;
     left: 0;
     z-index: 990;
+    box-shadow: -2px -2px 15px rgba(0,0,0,.2) !important;
     &:after{
         display: none;
     }
     .aside-pane{
+        background:$white;
+        overflow: initial;
+        z-index: unset;
         .aside-help-header{
             display: none;
         }
@@ -176,6 +180,19 @@
             }
         }
     }
+}
+@media(max-width:767px){
+    :host.setting-sidebar{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    min-height: 100vh;
+    background: #fff;
+    width: 215px;
+    left: 0;
+    z-index: 999999;
+    width: 270px;
+    }  
 }
 @media (max-width: 768px) {
     :host {

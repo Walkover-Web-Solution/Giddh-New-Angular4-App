@@ -755,13 +755,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public toggleBodyClass() {
-        if (this.asideHelpSupportMenuState === 'in' || this.asideSettingMenuState === 'in') {
+        if (this.asideHelpSupportMenuState === 'in') {
             document.querySelector('body').classList.add('fixed');
-        } else {
+        } 
+        else {
             document.querySelector('body').classList.remove('fixed');
         }
+        
     }
-
     public toggleHelpSupportPane(show: boolean): void {
         this.asideSettingMenuState = 'out';
         this.asideHelpSupportMenuState = show ? 'in' : 'out';
