@@ -471,6 +471,11 @@ span.icon-export-icon {
 
 
 /* responsive */
+@media (max-width: 1366px) {
+    .invoice-footer {
+        left: 0px;
+    }
+}
 
 @media (max-width: 768px) {
     .search-icon-block {
