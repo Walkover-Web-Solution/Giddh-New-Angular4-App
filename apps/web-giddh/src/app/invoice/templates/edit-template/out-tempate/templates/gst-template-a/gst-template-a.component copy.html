@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <!--*ngIf="templateId == 'common_template_a'"-->
 <html id="default">
-
 <head>
     <title></title>
 </head>
-
 <body *ngIf="inputTemplate.sections && inputTemplate.sections" [ngStyle]="{ 'font-family': inputTemplate.font ? inputTemplate.font : 'Open Sans', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px', 'font-size': inputTemplate.fontDefault +'px'  }">
     <!--class="disabled-area"-->
     <div>
@@ -24,12 +22,10 @@
                         </div>
                     </div>
                 </figure>
-
                 <table cellspacing="0" cellpadding="0">
                     <tbody>
                         <tr>
                             <td>
-
                                 <figure *ngIf="fieldsAndVisibility.header.companyName?.display">
                                     <strong *ngIf="fieldsAndVisibility.header.companyName?.display">
                                         <h2
@@ -37,8 +33,6 @@
                                             {{fieldsAndVisibility.header.companyName?.label}}</h2>
                                     </strong>
                                 </figure>
-
-
                                 <table class="numDetail">
                                     <tbody>
                                         <tr [hidden]="!fieldsAndVisibility.header.gstin?.display">
@@ -53,7 +47,6 @@
                                 </table>
                             </td>
                             <td colspan="2">
-
                             </td>
                             <td class="pull-right">
                                 <table>
@@ -98,7 +91,6 @@
                                                 <td>20170911-1</td>
                                             </tr>
                                         </ng-container>
-
                                     </tbody>
                                 </table>
                             </td>
@@ -115,8 +107,6 @@
                     </div>
                 </ng-container>
             </header>
-
-
             <table class="warehouse-table" cellspacing="0" cellpadding="0" *ngIf="fieldsAndVisibility?.header?.warehouseAddress?.display">
                 <tbody>
                     <tr>
@@ -126,7 +116,6 @@
                             <p>Ltd. 405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, Near Greater Kailash Hospital, Indore 452001(M. P.)</p>
                             <p>GSTIN:23AAAAAA000A1Z0</p>
                         </td>
-
                         <td>
                             <p>Shipped From:</p>
                             <p><strong>Walkover Web Solutions Pvt</strong></p>
@@ -181,7 +170,6 @@
                                 <p>11AAAAAA000Z0A1</p>
                             </ng-container>
                         </td>
-
                         <td *ngIf="fieldsAndVisibility.header.shippingAddress?.display ">
                             <ng-container *ngIf="fieldsAndVisibility.header.shippingAddress?.display && fieldsAndVisibility.header.shippingGstin?.display ">
                                 <p>
@@ -608,7 +596,6 @@
                                 <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">100.00</td>
                                 <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">1,00,000.00</td>
                             </tr>
-
                         </tbody>
                         <tfoot>
                             <tr>
@@ -627,7 +614,6 @@
                     </table>
                 </article>
             </div>
-
             <div class="clearfix">
                 <a href="javascript:void(0); " class="edit-template " *ngIf="!templateUISectionVisibility.footer ">
                     <i class="fa fa-pencil "></i>
@@ -667,7 +653,6 @@
                                     </strong>
                                     </ng-container>
                                 </td>
-
                                 <td class="img-signature" style="text-align:center; vertical-align: bottom; width: 35%; " *ngIf="showImageSignature ">
                                     <ng-container>
                                         <img [hidden]="!showImageSignature " [src]="imageSignatureSrc " style="height: 60px; min-width: 40px; " alt=" " />
@@ -698,10 +683,7 @@
                     </p>
                 </footer>
             </div>
-
         </div>
     </div>
-
 </body>
-
 </html>
