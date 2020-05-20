@@ -1,9 +1,9 @@
 import { takeUntil, count, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, AfterViewInit, TemplateRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, AfterViewInit, TemplateRef, ViewChild, ComponentFactoryResolver } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
 import { AppState } from '../../../store/roots';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
 import { SubscriptionsActions } from '../../../actions/userSubscriptions/subscriptions.action';
 import { SubscriptionsUser, CompaniesWithTransaction, UserDetails } from '../../../models/api-models/Subscriptions';
 import * as moment from 'moment';
@@ -14,6 +14,9 @@ import { GeneralService } from '../../../services/general.service';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 import { CompanyActions } from '../../../actions/company.actions';
 import { GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { CommonActions } from '../../../actions/common.actions';
+import { CompanyAddNewUiComponent } from '../../../shared/header/components';
+import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 
 @Component({
     selector: 'subscriptions',
@@ -22,6 +25,9 @@ import { GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat'
 })
 
 export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy {
+    @ViewChild('addCompanyNewModal') public addCompanyNewModal: ModalDirective;
+    @ViewChild('companynewadd') public companynewadd: ElementViewContainerRef;
+    
     public subscriptions: SubscriptionsUser[] = [];
     public allSubscriptions: SubscriptionsUser[] = [];
     public subscriptions$: Observable<SubscriptionsUser[]>;
@@ -58,7 +64,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     public showSubscribedPlansList: boolean = false;
     public moveSelectedCompany: any;
 
-    constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions) {
+    constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions, private commonActions: CommonActions, private componentFactoryResolver: ComponentFactoryResolver) {
         this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
         this.subscriptions$ = this.store.pipe(select(s => s.subscriptions.subscriptions), takeUntil(this.destroyed$));
         this.companies$ = this.store.select(cmp => cmp.session.companies).pipe(takeUntil(this.destroyed$));
@@ -312,6 +318,47 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
             if(item.planDetails && item.planDetails.name  && item.planDetails.name.toLowerCase().includes(event.toLowerCase())) {
                 this.subscriptions.push(item);
             }
+        });
+    }
+
+    public moveCompanyCallback(event) {
+        if(event === true) {
+            this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
+        }
+        this.modalRef.hide();
+    }
+
+    public createNewCompany(): void {
+        this.removeCompanySessionData();
+        this.showAddCompanyModal();
+    }
+
+    public removeCompanySessionData() {
+        this.generalService.createNewCompany = null;
+        this.store.dispatch(this.commonActions.resetCountry());
+        this.store.dispatch(this.companyActions.removeCompanyCreateSession());
+    }
+
+    public showAddCompanyModal() {
+        this.loadAddCompanyNewUiComponent();
+        this.addCompanyNewModal.show();
+    }
+
+    public hideAddCompanyModal() {
+        this.addCompanyNewModal.hide();
+    }
+
+    public onHide() {
+        this.store.dispatch(this.companyActions.ResetCompanyPopup());
+    }
+
+    public loadAddCompanyNewUiComponent() {
+        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddNewUiComponent);
+        let viewContainerRef = this.companynewadd.viewContainerRef;
+        viewContainerRef.clear();
+        let componentRef = viewContainerRef.createComponent(componentFactory);
+        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.subscribe((a) => {
+            this.hideAddCompanyModal();
         });
     }
 

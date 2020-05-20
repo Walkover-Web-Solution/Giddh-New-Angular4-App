@@ -221,7 +221,7 @@
                                 </div>
 
                                 <div class="pl-2 mt-3 buy-transactions">
-                                    <button class="btn btn-primary" type="button">Add Company</button>
+                                    <button class="btn btn-primary" type="button" (click)="createNewCompany()">Add Company</button>
                                 </div>
                             </div>
                         </div>
@@ -310,25 +310,23 @@
 
 
         <div class="clearfix" *ngFor="let item of subscriptions">
-            <a href="javascript:void(0)">
-                <div class="box mt-2">
-                    <div class="row d-flex justify-content-between align-items-center xs-d-block plan-row">
-                        <div class="col-md-8 col-sm-8 col-xs-12">
-                            <p class="bold">{{item?.planDetails?.name}}</p>
-                            <ul class="list-inline plan-list">
-                                <li>Expiry Date: {{item.expiry ? (formatDate(item.expiry) | date: giddhDateFormatUI) : '-'}} </li>
-                                <li>No. of companies : {{item?.totalCompanies}}/{{item?.planDetails?.companiesLimit}}</li>
-                                <li>Transaction Limit: {{item?.totalTransactions ? item.totalTransactions : '0'}}</li>
-                            </ul>
-                        </div>
-                        <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
-                            <div class="font-14" *ngIf="item?.status==='trial'"><span class="font-26">{{calculateRemainingDays(item?.expiry)}}</span> days remaining </div>
-                            <div class="active font-14" *ngIf="item?.status==='active'"><span class="green-dote"></span> {{item?.status | titlecase}} </div>
-                            <div class="text-danger font-14" *ngIf="item?.status==='expired'"><span class="red-dote"></span> {{item?.status | titlecase}} </div>
-                        </div>
+            <div class="box mt-2">
+                <div class="row d-flex justify-content-between align-items-center xs-d-block plan-row">
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <p class="bold">{{item?.planDetails?.name}}</p>
+                        <ul class="list-inline plan-list">
+                            <li>Expiry Date: {{item.expiry ? (formatDate(item.expiry) | date: giddhDateFormatUI) : '-'}} </li>
+                            <li>No. of companies : {{item?.totalCompanies}}/{{item?.planDetails?.companiesLimit}}</li>
+                            <li>Transaction Limit: {{item?.totalTransactions ? item.totalTransactions : '0'}}</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
+                        <div class="font-14" *ngIf="item?.status==='trial'"><span class="font-26">{{calculateRemainingDays(item?.expiry)}}</span> days remaining </div>
+                        <div class="active font-14" *ngIf="item?.status==='active'"><span class="green-dote"></span> {{item?.status | titlecase}} </div>
+                        <div class="text-danger font-14" *ngIf="item?.status==='expired'"><span class="red-dote"></span> {{item?.status | titlecase}} </div>
                     </div>
                 </div>
-            </a>
+            </div>
         </div>
     </div>
 </ng-container>
@@ -405,10 +403,19 @@
 
 <!-- MoveCompany Modal -->
 <ng-template #MoveCompany>
-    <move-company [subscriptions]="subscriptions" [moveSelectedCompany]="moveSelectedCompany"></move-company>
+    <move-company (moveCompany)="moveCompanyCallback($event)" [subscriptions]="subscriptions" [moveSelectedCompany]="moveSelectedCompany"></move-company>
 </ng-template>
 
 <!-- deactivate Company Modal -->
 <ng-template #deactivateCompany>
     <deactivate-company></deactivate-company>
 </ng-template>
+
+<div bsModal #addCompanyNewModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog" (onHidden)="onHide()">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <ng-template element-view-container-ref #companynewadd=elementviewcontainerref>
+            </ng-template>
+        </div>
+    </div>
+</div>

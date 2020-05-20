@@ -1,6 +1,6 @@
 <div class="modal-header">
-    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
-    <h3 class="">Move Company</h3>
+    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closePopup()">×</span>
+    <h3>Move Company</h3>
 </div>
 <div id="myFrame" class="modal-body clearfix">
     <p class="mb-2">Select the plan in which you want to move <strong>{{moveSelectedCompany?.name}}</strong> from {{moveSelectedCompany?.subscription?.planDetails?.name}} to…</p>

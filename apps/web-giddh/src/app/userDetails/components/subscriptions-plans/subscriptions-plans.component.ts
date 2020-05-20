@@ -11,7 +11,6 @@ import { AppState } from '../../../store';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 import { CompanyActions } from '../../../actions/company.actions';
 import { Router } from '@angular/router';
-import { ToasterService } from '../../../services/toaster.service';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -44,19 +43,36 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
 
     @Output() public isSubscriptionPlanShow = new EventEmitter<boolean>();
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
     modalRef: BsModalRef;
+    public showPlans: any = '';
+    public totalMultipleCompanyPlans: number = 0;
+    public totalSingleCompanyPlans: number = 0;
+    public totalFreePlans: number = 0;
+
     constructor(private modalService: BsModalService, private _generalService: GeneralService,
         private _authenticationService: AuthenticationService, private store: Store<AppState>,
         private _route: Router, private companyActions: CompanyActions,
-        private settingsProfileActions: SettingsProfileActions,
-        private _toast: ToasterService) {
+        private settingsProfileActions: SettingsProfileActions) {
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
-            if (o && !_.isEmpty(o)) {
-                let companyInfo = _.cloneDeep(o);
+        this.store.select(profile => profile.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response && !_.isEmpty(response)) {
+                let companyInfo = _.cloneDeep(response);
                 this._authenticationService.getAllUserSubsciptionPlans(companyInfo.countryV2.alpha2CountryCode).subscribe(res => {
                     this.SubscriptionPlans = res.body;
+
+                    if(this.SubscriptionPlans && this.SubscriptionPlans.length > 0) {
+                        this.SubscriptionPlans.forEach(item => {
+                            if(!item.subscriptionId && item.planDetails) {
+                                if(item.planDetails.amount && item.planDetails.companiesLimit > 1) {
+                                    this.totalMultipleCompanyPlans++;
+                                } else if(item.planDetails.amount && item.planDetails.companiesLimit === 1) {
+                                    this.totalSingleCompanyPlans++;
+                                } else if(!item.planDetails.amount) {
+                                    this.totalFreePlans++;
+                                }
+                            }
+                        });
+                    }
                 });
                 this.currentCompany = companyInfo.name;
             }

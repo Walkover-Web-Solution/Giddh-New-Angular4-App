@@ -1549,6 +1549,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.removeCompanySessionData();
         this.showAddCompanyModal();
     }
+    
 
     /**
      * Fetches whether company country has other taxes (TCS/TDS)
