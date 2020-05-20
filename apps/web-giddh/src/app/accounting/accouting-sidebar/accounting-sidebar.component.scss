@@ -47,15 +47,18 @@
     color: #4d4d4d;
 }
 
-.activechild {
+.active-child {
     background: #333333;
     padding-left: 20px;
 }
-
-.activechild > span {
+.active-parent {
+    background: #333333;
+}
+.active-child > span {
     margin-right: 2px;
 }
 
 .dblUnderlined {
-    border-bottom: 3px double;
+    border-bottom: 1px double;
+    text-decoration: underline;
 }
