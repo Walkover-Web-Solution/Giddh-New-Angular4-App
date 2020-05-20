@@ -795,6 +795,13 @@ export class LedgerActions {
         return successAction;
     }
 
+    /**
+     * This will store the boolean value to refresh the ledger once account update completes
+     *
+     * @param {boolean} request
+     * @returns {CustomActions}
+     * @memberof LedgerActions
+     */
     public refreshLedger(request: boolean): CustomActions {
         return {
             type: LEDGER.REFRESH_LEDGER,
