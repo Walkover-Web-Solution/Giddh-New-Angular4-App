@@ -1,7 +1,6 @@
 <div id="exportModal" class="" ng-if="ledgerCtrl.LedgerExport">
     <div class="modal-header">
-        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeExportLedgerModal.emit()"
-            aria-label="Close">×</span>
+        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeExportLedgerModal.emit()" aria-label="Close">×</span>
         <h3>Export Ledger</h3>
     </div>
     <div class="modal-body mrB4" id="export-body">
@@ -65,20 +64,25 @@
             </div>
             <div class="pdB2 clearfix" [hidden]="emailTypeSelected === 'admin-condensed' || emailTypeSelected === 'columnar'">
                 <label class="w100">Invoice no.:</label>
-                <label class="radio-inline pd0" style="margin-left: 6px;">
+                <label class="radio-inline pd0">
                     <input type="checkbox" name="withInvoiceNumber" [(ngModel)]="withInvoiceNumber">
                 </label>
             </div>
+            <div class="pdB2 clearfix" [hidden]="emailTypeSelected !== 'columnar'">
+                <label class="w100">Cr/Dr with +/-</label>
+                <label class="radio-inline pd0">
+                    <input type="checkbox"  name="balanceTypeAsSign" [(ngModel)]="balanceTypeAsSign">
+                </label>
+            </div>
             <button class="btn-success btn" (click)="exportLedger()">Download</button>
+            <button class="btn-success btn" [hidden]="emailTypeSelected !== 'columnar'" (click)="showColumnarReport()">Show</button>
             <div class="modal_wrap" [hidden]="emailTypeSelected === 'columnar'">
                 <div class="clearfix"></div>
                 <h3 class="pdT1 pdB1">Or</h3>
                 <div>
                     <h3 class="l8grey pdB size-xs">You can add multiple id's separated comma</h3>
-                    <textarea [(ngModel)]="emailData" required name="email" class="form-control"
-                        placeholder="Recipents Email Id's"></textarea>
-                    <button ng-disabled="ledgerEmailSendForm.$invalid" class="btn btn-success mrT1"
-                        (click)="sendLedgEmail()">Send
+                    <textarea [(ngModel)]="emailData" required name="email" class="form-control" placeholder="Recipient Email Id's"></textarea>
+                    <button ng-disabled="ledgerEmailSendForm.$invalid" class="btn btn-success mrT1" (click)="sendLedgEmail()">Send
                         email
                     </button>
                 </div>

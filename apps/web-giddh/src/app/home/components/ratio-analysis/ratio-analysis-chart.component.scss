@@ -1,3 +1,4 @@
+@import "../../../../assets/css/color.scss";
 .ratioAnalysisPanelBody {
     padding-left: 0;
     padding-right: 0;
@@ -16,4 +17,25 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+@media(max-width:767px){
+    .ratio-chart-block{
+        position: relative;
+        padding-bottom: 10px;
+
+        &:after{
+                position: absolute;
+                content: '';
+                border-bottom: 1px solid $gainsboro;
+                bottom: 0;
+                height: 1px;
+                width: 90%;
+                
+        }
+        &:last-child{
+            &:after{
+                display: none;
+            }
+        }
+    }
 }

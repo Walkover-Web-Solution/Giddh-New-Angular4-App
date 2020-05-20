@@ -88,9 +88,9 @@ const INVOICE_ROUTES: Routes = [
         children: [
             { path: '', redirectTo: 'preview/sales', pathMatch: 'full' },
             { path: 'preview/:voucherType', component: InvoiceComponent },
-             { path: 'preview/:voucherType/:selectedType', component: InvoiceComponent },
+            { path: 'preview/:voucherType/:selectedType', component: InvoiceComponent },
             { path: 'preview/:voucherType/:voucherNoForDetail/:voucherAction', component: InvoiceComponent },
-            { path: 'receipt', component: ReceiptComponent },
+            //{ path: 'receipt', component: ReceiptComponent },
             { path: 'ewaybill/create', component: EWayBillCreateComponent },
         ]
     },
@@ -183,7 +183,7 @@ const INVOICE_ROUTES: Routes = [
         InvoicePreviewComponent
     ],
     entryComponents: [DownloadOrSendInvoiceOnMailComponent, PreviewDownloadReceiptComponent,
-        ReceiptUpdateComponent],
+    ReceiptUpdateComponent],
     providers: [InvoiceUiDataService, {
         provide: FONT_PICKER_CONFIG,
         useValue: DEFAULT_FONT_PICKER_CONFIG

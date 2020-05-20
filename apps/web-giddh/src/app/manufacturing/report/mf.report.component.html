@@ -1,23 +1,23 @@
 <section id="manufacture" class="clearfix">
     <!-- page Title -->
-    <div class="top_bar col-xs-12 clearfix bdrB">
-        <h1 class="section_title d-inline-block"><strong>Mfg. Journal Register</strong></h1>
+    <div class="top-bar col-xs-12 clearfix bdrB">
+        <h1 class="section-title d-inline-block"><strong>Mfg. Journal Register</strong></h1>
         <button class="btn isActive pull-right mr-0" (click)="goToCreateNewPage()" type="button">Create
             Manufacture</button>
     </div>
     <!-- form -->
     <div class="col-xs-12">
         <div class="mfStockSearchRequestForm clearfix">
-            <form #mfStockSearchRequestForm="ngForm" class="col-xs-10 pl-0 pr-0 mt-2 mb-05" (submit)="getReports()"
+            <form #mfStockSearchRequestForm="ngForm" class="col-xs-12 pl-0 pr-0 mt-2 mb-05 manufacturing-form" (submit)="getReports()"
                 autocomplete="off">
                 <div class="row">
-                    <div class="form-group col-md-3 col-sm-12">
+                    <div class="form-group col-md-2 col-sm-2">
                         <label class="d-block">Final Product</label>
                         <sh-select placeholder="--Select Product--" name="product" #productList="ngModel" required
                             [(ngModel)]="mfStockSearchRequest.product" [options]="stockListDropDown"
                             [ItemHeight]="33" (selected)="setActiveStockGroup($event)"></sh-select>
                     </div>
-                    <div class="form-group col-sm-3 col-xs-12">
+                    <div class="form-group col-md-3 col-sm-3 col-xs-12">
                         <label class="d-block">From - To</label>
                         <div class="input-group">
                             <input name="dateRange" #dp="bsDaterangepicker" placeholder="Date range picker" type="text"
@@ -31,25 +31,25 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-sm-1 col-xs-6">
+                    <div class="form-group col-md-2 col-sm-2 col-xs-6">
                             <label class="d-block">Search By</label>
                             <sh-select placeholder="--Select--" name="searchBy"
                                 [(ngModel)]="mfStockSearchRequest.searchBy" [options]="filtersForSearchBy"
                                 [ItemHeight]="33"></sh-select>
                     </div>
-                    <div class="form-group col-sm-2 col-xs-6">
+                    <div class="form-group col-md-2 col-sm-2 col-xs-6">
                         <label class="d-block">Operation</label>
                         <sh-select placeholder="--Select--" name="searchOperation"
                             [(ngModel)]="mfStockSearchRequest.searchOperation" [options]="filtersForSearchOperation"
                             [ItemHeight]="33"></sh-select>
                     </div>
-                    <div class="form-group col-sm-1 col-xs-6">
+                    <div class="form-group col-md-2 col-sm-2 col-xs-6">
                         <label class="d-block">Value</label>
                         <input type="text" decimalDigitsDirective [DecimalPlaces]="4" class="form-control"
                             placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue" />
                     </div>
-                    <div class="form-group pull-left mrL2">
-                        <label class="d-block">&nbsp;</label>
+                    <div class="form-group pull-left ml-15">
+                        <label class="d-block d-none-sm">&nbsp;</label>
                         <!-- [disabled]="mfStockSearchRequestForm.invalid" -->
                         <button class="btn btn-success" type="submit">Go</button>
                     </div>

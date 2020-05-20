@@ -1,0 +1,153 @@
+@import "../../../assets/css/color.scss";
+:host {
+    display: block;
+    position: relative;
+}
+.header:hover {
+    cursor: text;
+}
+
+.header.inline {
+    background-color: transparent;
+    width: max-content;
+    border: none;
+}
+
+.header.open {
+    border-radius: 2px 2px 0 0;
+    box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+    border-bottom: none;
+}
+
+.header:focus {
+    outline: 0;
+}
+
+div {
+    display: block;
+}
+
+/* input[type="text"] {
+    border: none !important;
+    vertical-align: middle !important;
+    width: 100%;
+    margin: 0 !important;
+    padding: 0px !important;
+    box-sizing: border-box;
+    background-color: white;
+    font-size: 1.0rem !important;
+    line-height: 2rem !important;
+    letter-spacing: 0.01rem !important;
+    font-family: 'RobotoDraft', 'Roboto', 'Helvetica Neue, Helvetica, Arial', sans-serif;
+    font-style: normal !important;
+    font-weight: 300 !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    text-rendering: optimizeLegibility !important;
+} */
+
+input[type="text"] {
+    outline: none;
+}
+
+[hidden] {
+    display: none;
+}
+
+i.close.icon.clear::after {
+    content: "✕";
+    padding-right: 8px;
+    font-weight: 800;
+    color: gray;
+}
+
+i.close.icon.clear:hover::after {
+    color: red;
+}
+
+.clear {
+    position: absolute;
+    right: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
+    top: 15px;
+    cursor: pointer;
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 100%;
+    opacity: 0.5;
+    color: black;
+    transform: translateY(-50%);
+}
+
+.sh-select-disabled {
+    background-color: #e3e3e3;
+    color: $bay-of-many;
+    cursor: not-allowed;
+}
+
+.chip {
+    display: inline-block;
+    padding: 0 7px;
+    height: 30px;
+    font-size: 14px;
+    line-height: 30px;
+    border-radius: 4px;
+    background-color: #f4f5f8;
+    margin: 0px 0 4px 4px;
+    /* color: white; */
+}
+
+.chipClosebtn {
+    padding-left: 10px;
+    font-weight: 500;
+    float: right;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.chipClosebtn:hover {
+    font-weight: 700;
+    opacity: 0.5;
+    color: black;
+}
+
+.header .form-control[readonly] {
+    background-color: #fff !important;
+    border: 1px solid #ccc;
+}
+
+.sh-select-disabled .selectedVal,
+.sh-select-disabled .form-control,
+.sh-select-disabled .form-control[readonly] {
+    background: #eee !important;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.selectedVal {
+    border: 1px solid $gainsboro !important;
+    padding-right: 22px !important;
+    background: #fff !important;
+}
+
+.header.open > input[type="text"] {
+    border-color: #d6d6d6;
+}
+
+.header .bdr > input[type="text"] {
+    border: 0;
+}
+.header .bdr > input[type="text"]::-webkit-input-placeholder {
+    color: #c1c1c1 !important;
+}
+.header .bdr > input[type="text"]::-moz-placeholder {
+    color: #c1c1c1 !important;
+}
+.header .bdr > input[type="text"]:-ms-input-placeholder {
+    color: #c1c1c1 !important;
+}
+.header .bdr > input[type="text"]:-moz-placeholder {
+    color: #c1c1c1 !important;
+}

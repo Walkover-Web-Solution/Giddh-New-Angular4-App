@@ -1,0 +1,20 @@
+{
+    "remove_branch" : "Are you sure want to remove <p class='remvBrnchName'><b>{{COMPANY_NAME}}?</b></p>",
+    "new_branch" : "+New Branch",
+    "branch_name" : "Branch Name",
+    "contact_no" : "Contact No.",
+    "total_sales" : "Total Sales",
+    "total_expenses" : "Total Expenses",
+    "total_taxes" : "Total Taxes",
+    "contact" : "Contact",
+    "address" : "Address",
+    "add_branch_under" : "Add branch under",
+    "headquarter" : "headquarter",
+    "branch_of" : "This is a branch of",
+    "create_new" : "Create New Branch",
+    "select_companies" : "Select companies who are your branch",
+    "select_branch" : "Select Branch",
+    "selected" : "selected",
+    "table_view" : "Table View",
+    "card_view" : "Card View"
+}

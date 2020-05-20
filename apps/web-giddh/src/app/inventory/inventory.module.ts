@@ -50,6 +50,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { DigitsOnlyModule } from "../shared/helpers/directives/digitsOnly/digitsOnly.module";
 import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
 import { GiddhRoundOffPipeModule } from '../shared/helpers/pipes/round-off/round-off.module';
+import { ExceptionLogService } from '../services/exception-log.service';
 
 @NgModule({
     declarations: [
@@ -120,7 +121,7 @@ import { GiddhRoundOffPipeModule } from '../shared/helpers/pipes/round-off/round
         NewBranchTransferAddComponent,
         NewBranchTransferListComponent
     ],
-    providers: [],
+    providers: [ExceptionLogService],
     imports: [
         InventoryRoutingModule,
         TooltipModule,
