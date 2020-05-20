@@ -1,5 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
@@ -10,59 +10,41 @@ import { AppState } from '../../store';
 import { StateDetailsRequest } from '../../models/api-models/Company';
 import { TallyModuleService } from '../tally-service';
 
+const FUNCTIONAL_KEYS = {
+    F2: 'F2',
+    F4: 'F4',
+    F5: 'F5',
+    F6: 'F6',
+    F7: 'F7',
+    F8: 'F8',
+    F9: 'F9'
+}
+
+const CODES = {
+    KEY_C: ['KeyC'],
+    KEY_I: ['AltLeft', 'KeyI'],
+    KEY_V: ['KeyV'],
+}
 export const PAGE_SHORTCUT_MAPPING = [
     {
-        keyCode: 118, // 'F7',
+        keyCode: 115, // 'F4',
+        key: FUNCTIONAL_KEYS.F4,
         inputForFn: {
-            page: 'Journal',
+            page: 'Contra',
             uniqueName: 'purchases',
             gridType: 'voucher'
         }
-    },
-    {
-        keyCode: 120, // 'F9',
-        inputForFn: {
-            page: 'Purchase',
-            uniqueName: 'purchases',
-            gridType: 'voucher'
-        }
-    },
-    {
-        keyCode: 119, // 'F8',
-        inputForFn: {
-            page: 'Sales',
-            uniqueName: 'purchases',
-            gridType: 'voucher'
-        }
-    },
-    {
-        keyCode: 120, // 'F9',
-        altKey: true,
-        inputForFn: {
-            page: 'Debit note',
-            uniqueName: 'purchases',
-            gridType: 'voucher'
-        }
-    },
-    {
-        keyCode: 119, // 'F8',
-        altKey: true,
-        inputForFn: {
-            page: 'Credit note',
-            uniqueName: 'purchases',
-            gridType: 'voucher'
-        }
-    },
-    {
+    }, {
         keyCode: 116, // 'F5',
+        key: FUNCTIONAL_KEYS.F5,
         inputForFn: {
             page: 'Payment',
             uniqueName: 'purchases',
             gridType: 'voucher'
         }
-    },
-    {
+    }, {
         keyCode: 117, // 'F6',
+        key: FUNCTIONAL_KEYS.F6,
         inputForFn: {
             page: 'Receipt',
             uniqueName: 'null',
@@ -70,9 +52,44 @@ export const PAGE_SHORTCUT_MAPPING = [
         }
     },
     {
-        keyCode: 115, // 'F4',
+        keyCode: 118, // 'F7',
+        key: FUNCTIONAL_KEYS.F7,
         inputForFn: {
-            page: 'Contra',
+            page: 'Journal',
+            uniqueName: 'purchases',
+            gridType: 'voucher'
+        }
+    }, {
+        keyCode: 119, // 'F8',
+        key: FUNCTIONAL_KEYS.F8,
+        inputForFn: {
+            page: 'Sales',
+            uniqueName: 'purchases',
+            gridType: 'voucher'
+        }
+    }, {
+        keyCode: 119, // 'F8',
+        key: FUNCTIONAL_KEYS.F8,
+        altKey: true,
+        inputForFn: {
+            page: 'Credit note',
+            uniqueName: 'purchases',
+            gridType: 'voucher'
+        }
+    }, {
+        keyCode: 120, // 'F9',
+        key: FUNCTIONAL_KEYS.F9,
+        inputForFn: {
+            page: 'Purchase',
+            uniqueName: 'purchases',
+            gridType: 'voucher'
+        }
+    }, {
+        keyCode: 120, // 'F9',
+        key: FUNCTIONAL_KEYS.F9,
+        altKey: true,
+        inputForFn: {
+            page: 'Debit note',
             uniqueName: 'purchases',
             gridType: 'voucher'
         }
@@ -116,12 +133,12 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
 
     @HostListener('document:keydown', ['$event'])
     public beforeunloadHandler(event: KeyboardEvent) {
-        return (event.which || event.keyCode) !== 116;
+        return event.key !== FUNCTIONAL_KEYS.F5;
     }
 
     @HostListener('document:keyup', ['$event'])
     public handleKeyboardEvent(event: KeyboardEvent) {
-        if (event.ctrlKey && event.which === 65) { // Ctrl + A
+        if (event.ctrlKey && event.key.toLowerCase() === 'a') { // Ctrl + A
             event.preventDefault();
             event.stopPropagation();
             if (this.gridType === 'voucher') {
@@ -135,7 +152,7 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
                 this.saveEntryInVoucher = false;
                 this.saveEntryInInvoice = false;
             }, 100);
-        } else if (event.altKey && event.which === 86) { // Handling Alt + V and Alt + I
+        } else if (event.altKey && CODES.KEY_V.includes(event.code)) { // Alt + V
             const selectedPage = this._tallyModuleService.selectedPageInfo.value;
             if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
                 this._tallyModuleService.setVoucher({
@@ -146,7 +163,7 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
             } else {
                 return;
             }
-        } else if (event.altKey && event.which === 73) { // Alt + I
+        } else if (event.altKey && CODES.KEY_I.includes(event.code)) { // Alt + I
             const selectedPage = this._tallyModuleService.selectedPageInfo.value;
             if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
                 this._tallyModuleService.setVoucher({
@@ -157,7 +174,8 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
             } else {
                 return;
             }
-        } else if (event.altKey && event.which === 67) { // Alt + C
+        } else if (event.altKey && CODES.KEY_C.includes(event.code)) {
+            // Alt + C: Create new stock
             if (this.gridType === 'voucher') {
                 this.openCreateAccountPopupInVoucher = true;
                 this.openCreateAccountPopupInInvoice = false;
@@ -172,14 +190,14 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
         } else {
             let selectedPageIndx = PAGE_SHORTCUT_MAPPING.findIndex((page: any) => {
                 if (event.altKey) {
-                    return page.keyCode === event.which && page.altKey;
+                    return page.key === event.key && page.altKey;
                 } else {
-                    return page.keyCode === event.which;
+                    return page.key === event.key;
                 }
             });
             if (selectedPageIndx > -1) {
                 this._tallyModuleService.setVoucher(PAGE_SHORTCUT_MAPPING[selectedPageIndx].inputForFn);
-            } else if (event.which === 113) { // F2
+            } else if (event.key === FUNCTIONAL_KEYS.F2) { // F2
                 this.openDatePicker = !this.openDatePicker;
             }
         }
@@ -187,14 +205,14 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(appState => appState.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'accounting-voucher';
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
-        this.store.select(p => p.session.companyUniqueName).pipe(take(1)).subscribe(a => {
+        this.store.pipe(select(appState => appState.session.companyUniqueName), take(1)).subscribe(a => {
             if (a && a !== '') {
                 this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data.status === 'success') {
