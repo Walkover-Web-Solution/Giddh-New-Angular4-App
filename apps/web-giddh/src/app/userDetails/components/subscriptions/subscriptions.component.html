@@ -9,7 +9,8 @@
                     </sh-select> -->
 
                     <!-- <label class="d-block mb-1">Select Subscribed Plan</label> -->
-                    <div class="btn-group d-block subscription-dropdown mb-2 open">
+                    <div class="btn-group d-block subscription-dropdown mb-2 open custom-input-search">
+                        <i class="icon-search"></i>
                         <input type="text" class="form-control" placeholder="Search Subscribed Plan" (focus)="showSubscribedPlansList = true;" (focusout)="showSubscribedPlansList = false;" [(ngModel)]="searchSubscribedPlan" (ngModelChange)="searchPlan($event)">
                         <ul id="dropdown-basic" class="dropdown-menu" role="menu" aria-labelledby="button-basic" *ngIf="showSubscribedPlansList">
                             <li *ngIf="subscriptions.length==0">No results found</li>
@@ -221,7 +222,8 @@
                                 </div>
 
                                 <div class="pl-2 mt-3 buy-transactions">
-                                    <button class="btn btn-primary" type="button" (click)="createNewCompany()">Add Company</button>
+                                    <!-- <button class="btn btn-primary" type="button" (click)="createNewCompany()">Add Company</button> -->
+                                    <button class="btn btn-primary" type="button" (click)="ModalAdd(AddCompany)">Add Company</button>
                                 </div>
                             </div>
                         </div>
@@ -406,10 +408,21 @@
     <move-company (moveCompany)="moveCompanyCallback($event)" [subscriptions]="subscriptions" [moveSelectedCompany]="moveSelectedCompany"></move-company>
 </ng-template>
 
+
+
+
+
+<!-- deactivate Company Modal -->
+<ng-template #AddCompany>
+    <add-company></add-company>
+</ng-template>
+
+
 <!-- deactivate Company Modal -->
 <ng-template #deactivateCompany>
     <deactivate-company></deactivate-company>
 </ng-template>
+
 
 <div bsModal #addCompanyNewModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog" (onHidden)="onHide()">
     <div class="modal-dialog modal-lg">

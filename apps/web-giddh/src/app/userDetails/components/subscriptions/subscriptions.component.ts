@@ -27,7 +27,7 @@ import { ElementViewContainerRef } from '../../../shared/helpers/directives/elem
 export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('addCompanyNewModal') public addCompanyNewModal: ModalDirective;
     @ViewChild('companynewadd') public companynewadd: ElementViewContainerRef;
-    
+
     public subscriptions: SubscriptionsUser[] = [];
     public allSubscriptions: SubscriptionsUser[] = [];
     public subscriptions$: Observable<SubscriptionsUser[]>;
@@ -221,6 +221,12 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     public openModal(MoveCompany: TemplateRef<any>) {
         this.modalRef = this.modalService.show(MoveCompany);
     }
+
+
+    public ModalAdd(AddCompany: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(AddCompany);
+    }
+
 
     public openModalMove(deactivateCompany: TemplateRef<any>, company: any) {
         this.moveSelectedCompany = company;
