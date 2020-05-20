@@ -15,8 +15,7 @@
                         [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].display"
                         (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Document Title: This is
                     your
-                    <div class="ml-3">
-                        <input type="text" [maxlength]="15" class="form-control" name="title"
+                    <div class="ml-3="text" [maxlength]="15" class="form-control" name="title"
                             [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].label"
                             (ngModelChange)='onFieldChange(null, null, null)'
                             [disabled]="!customTemplate.sections['header'].data['formNameTaxInvoice'].display" />
@@ -128,7 +127,7 @@
                     <input type="checkbox"
                         [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].display"
                         (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Document Title
-                    <!-- <div class="mrL3 mrT1">Invoice
+                    <!-- <div class="ml-3 mrT1">Invoice
               <input type="text" [maxlength]="15" class="form-control" name="tl" [(ngModel)]='customTemplate.sections[0].content[22].label'
                   (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[23].display"
               />
@@ -618,7 +617,7 @@
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null); checkedTaxBifurcation('taxRateBifurcation', 'table')" />
                             Tax Bifurcation
                         </div>
-                        <div class="mrL3" *ngIf="customTemplate.sections['table'].data['taxBifurcation'].display">
+                        <div class="ml-3" *ngIf="customTemplate.sections['table'].data['taxBifurcation'].display">
                             <div class="clearfix mb-05">
                                 <input type="radio" class="radio_theme" name="tax-rate"
                                     (ngModelChange)='onFieldChange(null, null, null)'
@@ -731,7 +730,7 @@
                             (ngModelChange)="onChangeFieldVisibility(null, null, null); checkedTaxBifurcation('taxRateBifurcation', 'footer')" />
                         Tax Bifurcation
                     </div>
-                    <div class="mrL3" *ngIf="customTemplate.sections['footer'].data['taxBifurcation'].display">
+                    <div class="ml-3" *ngIf="customTemplate.sections['footer'].data['taxBifurcation'].display">
                         <div class="clearfix mb-05">
                             <input type="radio" class="radio_theme" name="tax-rate"
                                 (ngModelChange)='onFieldChange(null, null, null)'
@@ -756,7 +755,7 @@
                             [(ngModel)]="customTemplate.sections['footer'].data['message1'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Note 1
                     </div>
-                    <div *ngIf="fieldsAndVisibility.footer.message1" class="form-group mrL3 clearfix">
+                    <div *ngIf="fieldsAndVisibility.footer.message1" class="form-group ml-3 clearfix">
                         <div class="col-xs-12">
                             <div class="row">
                                 <textarea class="form-control"
@@ -784,7 +783,7 @@
             <div>
                 <input type="checkbox" name="msg2" [(ngModel)]="customTemplate.sections['footer'].data['slogan'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Signature
             </div>
-            <div class="form-group mrL3 clearfix">
+            <div class="form-group ml-3 clearfix">
                 <div class="col-xs-12">
                     <div class="row">
                         <textarea class="form-control" name="mdg22" [(ngModel)]="customTemplate.sections['footer'].data['slogan'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['slogan'].display">Note:Contact us for queries on these questions</textarea>
@@ -831,7 +830,7 @@
                                 (ngModelChange)='onFieldChange(null, null, null)'
                                 [checked]="customTemplate.sections.footer.data.slogan.display" /> Slogan
                         </div>
-                        <div class="form-group mrL3 clearfix">
+                        <div class="form-group ml-3 clearfix">
                             <div>
                                 <div class="row">
                                     <textarea class="form-control"
@@ -850,7 +849,7 @@
             <div>
                 <input type="checkbox" name="msg2" [(ngModel)]="customTemplate.sections[2].content[6].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Note 2
             </div>
-            <div class="form-group mrL3 clearfix">
+            <div class="form-group ml-3 clearfix">
                 <div class="col-xs-12">
                     <div class="row">
                         <textarea class="form-control" name="mdg22" [(ngModel)]='customTemplate.sections[2].content[6].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[2].content[6].display">Note:Contact us for queries on these questions</textarea>
