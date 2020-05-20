@@ -612,7 +612,7 @@
                 <div *ngIf="fieldsAndVisibility.footer.thanks" class="clearfix mrT1">
                     <div class="form-group thanks-input-group">
                         <input type="checkbox" name="ty" [(ngModel)]="customTemplate.sections['footer'].data['thanks'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
-                        <input type="text" class="form-control thanks-input-inline" [disabled]="!fieldsAndVisibility.footer.thanks?.display" (keyup)='onFieldChange(null, null, null)' [(ngModel)]="customTemplate.sections['footer'].data['thanks'].label" placeholder="Thank you for your business"
+                        <input type="text" class="form-control thanks-input-inline" [disabled]="!fieldsAndVisibility.footer.thanks?.display" (keyup)='onFieldChange(null, null, null)' [(ngModel)]="customTemplate.sections['footer'].data['thanks'].label" placeholder="Thank You for your business"
                             maxlength="100" />
                     </div>
                 </div>
