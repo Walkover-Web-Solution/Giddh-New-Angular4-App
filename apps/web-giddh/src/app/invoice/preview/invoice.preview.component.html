@@ -30,7 +30,7 @@
             </div>
             <div class="d-flex add-invoice">
                 <!-- E-way bill generation and export to excel for a single selected item in invoice sizes -->
-                <div *ngIf="selectedVoucher !== 'purchase' || (selectedItems.length === 1 && selectedVoucher === 'purchase')">
+                <div *ngIf="(selectedVoucher !== 'purchase' && selectedItems.length > 0) || (selectedItems.length === 1 && selectedVoucher === 'purchase')">
                     <div class="btn-group" dropdown #dp="bs-dropdown">
                         <button dropdownToggle type="button" class="btn more-btn-dropdown desktop-view-btn dropdown-toggle" aria-controls="dropdown-basic">
                             More
@@ -354,7 +354,6 @@
                                 </div>
                             </div>
                         </td>
-
                         <!-- Invoice Date -->
                         <td>{{item.voucherDate}}</td>
 
@@ -385,6 +384,7 @@
                                 <div>
                                     <div dropdown container="body" class="icon-ellipse selectAction">
                                         <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic"></a>
+
 
                                         <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu" aria-labelledby="edit-model-basic">
                                             <ul class="selectActionDropdown">

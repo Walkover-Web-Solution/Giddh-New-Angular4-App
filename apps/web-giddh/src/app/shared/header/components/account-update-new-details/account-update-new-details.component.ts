@@ -387,6 +387,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 if (res.fields) {
+                    this.formFields = [];
                     Object.keys(res.fields).forEach(key => {
                         if (res.fields[key]) {
                             this.formFields[res.fields[key].name] = [];

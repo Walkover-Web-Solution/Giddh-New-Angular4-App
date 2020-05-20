@@ -50,7 +50,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public isShowColumnarReport: boolean = false;
     constructor(public settingsFinancialYearService: SettingsFinancialYearService, private store: Store<AppState>, private toaster: ToasterService, private ledgerService: LedgerService, private generalService: GeneralService) {
         this.exportRequest.fileType = 'xls';
-        this.exportRequest.balanceTypeAsSign = true;
+        this.exportRequest.balanceTypeAsSign = false;
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
 
         this.flattenGroups$.subscribe(flattenGroups => {

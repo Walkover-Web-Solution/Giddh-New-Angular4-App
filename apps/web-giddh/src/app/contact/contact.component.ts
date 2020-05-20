@@ -1056,6 +1056,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                         sortBy: string = '', order: string = 'asc'): void {
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : 'false';
+        fromDate = (fromDate) ? fromDate : '';
+        toDate = (toDate) ? toDate : '';
         this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal).subscribe((res) => {
             if (res.status === 'success') {
                 this.totalDue = res.body.closingBalance.amount || 0;
