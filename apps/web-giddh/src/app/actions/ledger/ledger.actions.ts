@@ -204,6 +204,10 @@ export class LedgerActions {
                     return { type: 'EmptyAction' };
                 } else {
                     this._toasty.successToast('entry updated successfully');
+                    if(action && action.payload && action.payload.request && action.payload.request.refreshLedger) {
+                        this.store.dispatch(this.RefreshLedger(true));
+                    }
+
                     if (response.request.generateInvoice && !response.body.voucherGenerated) {
                         let invoiceGenModel: GenerateBulkInvoiceRequest[] = [];
                         // accountUniqueName, entryUniqueName
@@ -791,4 +795,10 @@ export class LedgerActions {
         return successAction;
     }
 
+    public RefreshLedger(request: boolean): CustomActions {
+        return {
+            type: LEDGER.REFRESH_LEDGER,
+            payload: request
+        };
+    }
 }
