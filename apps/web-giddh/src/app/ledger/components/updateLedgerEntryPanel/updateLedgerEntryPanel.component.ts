@@ -185,6 +185,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public confirmationFlag: string = 'text-paragraph';
     /** Remove Advance receipt confirmation message */
     public removeAdvanceReceiptConfirmationMessage: string = 'If you change the type of this receipt, all the related advance receipt adjustments in invoices will be removed. & Are you sure you want to proceed?';// & symbol is not part of message it to split sentance by '&'
+    public entryAccountUniqueName: any = '';
+
     constructor(
         private _accountService: AccountService,
         private _ledgerService: LedgerService,
@@ -229,6 +231,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
+        this.store.pipe(select(state => state.ledger.refreshLedger), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response === true) {
+                this.store.dispatch(this._ledgerAction.RefreshLedger(false));
+                this.entryAccountUniqueName = "";
+                this.closeUpdateLedgerModal.emit();
+            }
+        });
+
         this.store.pipe(select(appState => appState.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
             if (warehouses) {
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
@@ -1038,6 +1048,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         // if no petty cash mode then do normal update ledger request
         if (!this.isPettyCash) {
             requestObj['handleNetworkDisconnection'] = true;
+            requestObj['refreshLedger'] = false;
+
+            if(this.entryAccountUniqueName && this.entryAccountUniqueName !== this.changedAccountUniq) {
+                requestObj['refreshLedger'] = true;    
+            }
+
             if (this.baseAccountChanged) {
                 this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName + '?newAccountUniqueName=' + this.changedAccountUniq));
             } else {
@@ -1106,6 +1122,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.hideBaseAccountModal();
             return;
         }
+        
         this.changedAccountUniq = acc.value;
         this.baseAccountChanged = true;
         this.saveLedgerTransaction();
@@ -1173,7 +1190,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public openHeaderDropDown() {
+        this.entryAccountUniqueName = "";
+
         if (!this.vm.selectedLedger.voucherGenerated || this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.sales) {
+            this.entryAccountUniqueName = this.vm.selectedLedger.particular.uniqueName;
             this.openDropDown = true;
         } else {
             this.openDropDown = false;
