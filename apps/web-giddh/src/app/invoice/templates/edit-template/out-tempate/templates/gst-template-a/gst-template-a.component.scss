@@ -1,4 +1,4 @@
-
+@import "../../../../../../../assets/css/color.scss";
 * {
     border: 0;
     box-sizing: content-box;
@@ -48,7 +48,9 @@
     width: 100%;
     border-collapse: inherit;
   }
+
   /* page */
+
   #default {
     overflow: auto;
     /* font-size: 93%; */
@@ -56,6 +58,7 @@
     border: 1px solid #bfbfbf;
     padding: 0;
   }
+
   #default body {
     box-sizing: border-box;
     font-size: 12px;
@@ -67,17 +70,21 @@
     background: #fff;
     border-radius: 1px;
   }
+
   /* header */
+
   #default header {
     margin: 0;
     background: #fff;
     padding: 10px;
   }
+
   #default header:after {
     clear: both;
     content: "";
     display: table;
   }
+
   .pull-right tr td {
     text-align: right !important;
   }
@@ -196,32 +203,27 @@
     padding: 8px 7px;
     line-height: 1.2rem;
   }
-
   #default table.item tfoot tr th {
     padding-right: 7px;
-    border-top: 1px solid #595959;
+    border-top: 1px solid $zambezi;
   }
-
   /* tcs */
-
   .tcs hr {
     margin-top: 50px;
     width: 100%;
-    border-bottom: 1px solid #f63407;
+    border-bottom: 1px solid $cinnabar-orange;
   }
-
   .tcs table {
     margin: 50px 0px;
     clear: both;
     width: 100%;
     border-collapse: collapse !important;
   }
-
   .tcs table td,
   .tcs table th {
     border-radius: 0;
     padding: 5px;
-    border: 1px solid #595959;
+    border: 1px solid $light-gray;
     vertical-align: top;
     text-align: right;
   }
@@ -265,13 +267,13 @@
   #default table.item td {
     border-radius: 0;
     padding: 7px;
-    border-top: 1px solid #595959;
+    border-top: 1px solid $light-gray;
     line-height: 1.2rem;
     vertical-align: top;
   }
 
   #default table.item td p {
-    color: #595959;
+    color: $zambezi;
   }
 
   #default table.balance {
@@ -459,7 +461,7 @@
     padding: 6px 16px;
   }
   .tax-table p {
-    color: #595959;
+    color: $zambezi;
   }
 
   .tax-table tfoot th {
@@ -473,7 +475,7 @@
   .tax-table tbody tr td,
   .tax-table tfoot tr th {
     padding: 6px;
-    border-right: 1px solid #595959;
+    border-right: 1px solid $zambezi;
   }
 
   .tax-table thead tr th:last-child,
@@ -486,14 +488,14 @@
     padding-top: 0px !important;
   }
   .tax-table.item tfoot tr th {
-    border-bottom: 1px solid #595959;
+    border-bottom: 1px solid $zambezi;
   }
   .tax-table tbody tr td {
     border-top: 0px solid;
   }
   .warehouse-table {
     width: 100%;
-    border-bottom: 1px solid #595959;
+    border-bottom: 1px solid $zambezi;
     margin-bottom: 10px;
     padding-bottom: 5px;
     padding-right: 0px;
