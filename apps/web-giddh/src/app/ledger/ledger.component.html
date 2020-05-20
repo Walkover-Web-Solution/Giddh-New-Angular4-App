@@ -483,12 +483,12 @@
                             <tr class="second-row" *ngFor="let transactions of allTransactionsList[transactionDate];">
                               
                                 <td class="pl-1 pr-1 relative ">
-                                    <span class="pull-left">
+                                    <span class="pull-left account-holder-checkbox">
                                         <!-- need to make dynamice -->
                                          <input type="checkbox">
                                     </span>
-                                    <span>
-                                        <span *ngIf="transactions.type === 'CREDIT'" class="text-gray">To</span>
+                                    <span class="account-holder-name">
+                                        <span *ngIf="transactions.type === 'CREDIT'" class="text-gray mr-05">To</span>
                                         <span *ngIf="transactions.type === 'DEBIT'" class="text-gray">By</span>
                                         <span>{{ transactions?.inventory ? transactions?.particular?.name + ' (' + transactions?.inventory?.stock?.name + ')' : transactions?.particular?.name }}</span> 
                                         <span class="download-invoice-ledger d-flex">

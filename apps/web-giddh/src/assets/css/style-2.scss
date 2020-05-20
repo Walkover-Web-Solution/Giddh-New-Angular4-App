@@ -9067,8 +9067,9 @@ input.checkbox-custom[type="checkbox"] {
     .ledg-head .custom-tabs .nav.nav-tabs {
         position: fixed;
         width: 100%;
-        top: 120px;
+        top: 111px;
         left: 0;
+        padding-top: 5px !important;
     }
 }
 
@@ -9362,6 +9363,7 @@ input.checkbox-custom[type="checkbox"] {
     .ledg-head .custom-tabs .nav.nav-tabs {
         left: 0;
         top: 92px;
+        padding-top: 0 !important;
     }
     .daterangepicker.dropdown-menu.show-calendar {
         z-index: 1 !important;
