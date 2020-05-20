@@ -440,7 +440,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.breakPointObservar.observe([
-            '(max-width: 767px)'
+            '(max-width: 991px)'
         ]).subscribe(result => {
             this.isMobileScreen = result.matches;
         });

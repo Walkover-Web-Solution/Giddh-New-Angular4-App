@@ -7,7 +7,7 @@
     height: 30px;
 }
 
-.ledgHead.entry-popup table td.select2-ledger>sh-select {
+.ledg-head.entry-popup table td.select2-ledger>sh-select {
     position: initial;
     margin-top: 1px;
 }
@@ -120,7 +120,7 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     padding-left: 12px !important;
 }
 
-.ledger_book {
+.ledger-book {
     position: relative;
     width: 100%;
     display: flex;
@@ -133,7 +133,7 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     height: initial;
 }
 
-.ledgHead.entry-popup table td:last-child {
+.ledg-head.entry-popup table td:last-child {
     border-right: 0px;
 }
 
@@ -251,7 +251,7 @@ span.eligible-ITC {
 }
 
 @media only screen and (max-width: 1024px) {
-    .ledger_book {
+    .ledger-book {
         display: block;
     }
     .left-col-new,
@@ -283,7 +283,7 @@ span.eligible-ITC {
     .last-ttable-amount {
         max-width: 100% !important;
     }
-    .ledger_book .h-table tbody .ledger-row td {
+    .ledger-book .h-table tbody .ledger-row td {
         padding-left: 80px !important;
     }
     .card-table tbody tr td {
@@ -321,7 +321,7 @@ span.eligible-ITC {
     .xs-table-block tbody tr td {
         display: block;
     }
-    .ledgHead .ledger_book .left-col-new.bdrR {
+    .ledg-head .ledger-book .left-col-new.bdrR {
         border-right: 0 !important;
     }
     .remove-border-left-onmo {
