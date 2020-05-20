@@ -185,6 +185,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public confirmationFlag: string = 'text-paragraph';
     /** Remove Advance receipt confirmation message */
     public removeAdvanceReceiptConfirmationMessage: string = 'If you change the type of this receipt, all the related advance receipt adjustments in invoices will be removed. & Are you sure you want to proceed?';// & symbol is not part of message it to split sentance by '&'
+    /* This will hold the account unique name which is going to be in edit mode to get compared once updated */
     public entryAccountUniqueName: any = '';
 
     constructor(
@@ -233,7 +234,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public ngOnInit() {
         this.store.pipe(select(state => state.ledger.refreshLedger), takeUntil(this.destroyed$)).subscribe(response => {
             if(response === true) {
-                this.store.dispatch(this._ledgerAction.RefreshLedger(false));
+                this.store.dispatch(this._ledgerAction.refreshLedger(false));
                 this.entryAccountUniqueName = "";
                 this.closeUpdateLedgerModal.emit();
             }

@@ -205,7 +205,7 @@ export class LedgerActions {
                 } else {
                     this._toasty.successToast('entry updated successfully');
                     if(action && action.payload && action.payload.request && action.payload.request.refreshLedger) {
-                        this.store.dispatch(this.RefreshLedger(true));
+                        this.store.dispatch(this.refreshLedger(true));
                     }
 
                     if (response.request.generateInvoice && !response.body.voucherGenerated) {
@@ -795,7 +795,7 @@ export class LedgerActions {
         return successAction;
     }
 
-    public RefreshLedger(request: boolean): CustomActions {
+    public refreshLedger(request: boolean): CustomActions {
         return {
             type: LEDGER.REFRESH_LEDGER,
             payload: request
