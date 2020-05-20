@@ -205,7 +205,7 @@
   }
   #default table.item tfoot tr th {
     padding-right: 7px;
-    border-top: 1px solid $zambezi;
+    border-top: 1px solid $light-gray;
   }
   /* tcs */
   .tcs hr {
@@ -475,7 +475,7 @@
   .tax-table tbody tr td,
   .tax-table tfoot tr th {
     padding: 6px;
-    border-right: 1px solid $zambezi;
+    border-right: 1px solid $light-gray;
   }
 
   .tax-table thead tr th:last-child,
@@ -488,14 +488,14 @@
     padding-top: 0px !important;
   }
   .tax-table.item tfoot tr th {
-    border-bottom: 1px solid $zambezi;
+    border-bottom: 1px solid $light-gray;
   }
   .tax-table tbody tr td {
     border-top: 0px solid;
   }
   .warehouse-table {
     width: 100%;
-    border-bottom: 1px solid $zambezi;
+    border-bottom: 1px solid $light-gray;
     margin-bottom: 10px;
     padding-bottom: 5px;
     padding-right: 0px;
