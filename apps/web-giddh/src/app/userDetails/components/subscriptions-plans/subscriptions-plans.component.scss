@@ -1,14 +1,14 @@
 @import "../../../../assets/css/color.scss";
 .select-plan-block .your-account span {
-    color: #9b9b9b;
+    color: $wistful;
     font-size: 14px;
     padding: 4px 0;
     display: inline-block;
 }
 .select-plan-block {
     margin-bottom: 30px;
-    background-color: #ffffff;
-    box-shadow: 0px 3px 6px #00000029;
+    background-color: $white;
+    box-shadow: 0px 3px 6px $black-russian;
 }
 .welcome-msg {
     position: relative;
@@ -17,7 +17,7 @@
     position: fixed;
     bottom: 30px;
     width: 100%;
-    color: #707070;
+    color: $dark-gray;
     padding: 10px;
 }
 .choose-ur-plan {
@@ -34,16 +34,16 @@
 .payment-log-list {
     list-style-type: none;
     font-size: 14px;
-    color: #666666;
+    color: $dark-gray;
 }
 .payment-log-list {
     list-style-type: none;
     font-size: 14px;
-    color: #666666;
+    color: $dark-gray;
 }
 .payment-log-list > li {
     padding: 0px 0 20px 10px;
-    border-left: 1px dashed #666666;
+    border-left: 1px dashed $dark-gray;
     position: relative;
     line-height: 10px;
 }
@@ -54,14 +54,14 @@
     position: relative;
     width: 10px;
     height: 10px;
-    background: #f4f5f8;
+    background: $lavender;
     content: "";
     display: block;
     position: absolute;
     left: -5px;
     top: 0px;
     border-radius: 90px;
-    border: 1px solid #666666;
+    border: 1px solid $dark-gray;
 }
 .accountAsideMenuState2 {
     position: fixed;
@@ -79,10 +79,9 @@
 .selected {
     background-color: $light-sky-blue;
 }
-
 .select-plan-head {
     text-align: center;
-    background: #EDEEF9;
+    background: $lavender;
     font-size: 26px;
     padding: 20px;
     h2 {
@@ -103,11 +102,12 @@
 .inner-your-account {
     position: relative;
     z-index: 9;
-    background: #fff;
+    background: $white;
     padding: 30px 15px 30px 30px;
-    box-shadow: 0px 3px 6px #00000029;
+    box-shadow: 0px 3px 6px $black-russian;
     border: 1px solid #D9D9D9;
     transition: .5s all ease;
+    margin-bottom: 30px;
 }
 .inner-your-account:hover {
     background: #F4F5FF;
@@ -117,7 +117,7 @@
     content: '';
     display: block;
     width: 100%;
-    border: 1px solid #D9D9D9;
+    border: 1px solid $gainsboro;
     height: 100%;
     position: absolute;
     z-index: 1;
@@ -142,7 +142,7 @@
 }
 .inner-your-account > h3 {
     font-size: 18px;
-    color: #1A237E;
+    color: $midnight-blue;
     font-weight: bold;
 }
 .plan-footer {
@@ -152,14 +152,13 @@
     }
 }
 .transactions-popup {
-    position: absolute;
     width: 360px;
-    background: #fff;
-    box-shadow: 0px 3px 6px #00000029;
+    background: $white;
+    box-shadow: 0px 3px 6px $black-russian;
     padding: 15px;
     z-index: 9;
-    left: 50px;
-    top: 30px;
+    transform: translate(330px) !important;
+    margin-top: 10px;
     .close {
         color: $nero;
         opacity: 1;
@@ -183,7 +182,7 @@
         top: 15px;
         width: 60px;
         height: 1px;
-        background: red;
+        background: $red;
         transform: rotate(10deg);
     }
 }
@@ -199,15 +198,27 @@
     z-index: 999;
     top: 20px;
 }
-
-@media only screen and (max-width: 1199px) {
-    .transactions-popup {
-        left: 0;
-        width: 100%;
-    }
+.plan-disabled {
+    opacity: .5;
 }
-
-
+.see-all-features {
+    display: flex;
+    flex-wrap: wrap;
+    max-height: 510px;
+    overflow-y: auto;
+}
+.btn-group .close {
+    font-size: 16px;
+    color: $gray;
+    opacity: 1;
+}
+.inner-close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 16px;
+    color: #1C1C1C;
+}
 @media only screen and (max-width: 767px) {
     .note-wrap {
         position: relative;
@@ -224,5 +235,17 @@
     }
     .inner-your-account {
         margin-bottom: 20px;
+    }
+    .see-all-features .col-sm-6.col-md-3 {
+        width: 100%;
+    }
+    .transactions-popup {
+        width: 260px;
+        transform: translate(0px) !important;
+    }
+}
+@media only screen and (max-width: 640px) {
+    .see-all-features .col-sm-6.col-md-3 {
+        width: 100%;
     }
 }

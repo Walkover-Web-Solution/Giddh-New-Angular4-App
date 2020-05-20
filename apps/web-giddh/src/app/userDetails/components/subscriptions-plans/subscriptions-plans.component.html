@@ -30,21 +30,70 @@
                                     <p class="font-12">Per annum</p>
                                     <div class="clearfix mb-2">
                                         <ul class="plan-list">
-                                            <li>Transactions Limit: 10,000 <div class="pull-right">
-                                                <a href="javascript:void(0)" class="text-gray" (click)="toggleDisplay()"><i class="icon-info"></i></a>
+                                            <li>Transactions Limit: 10,000
 
-                                                <div class="transactions-popup" [hidden]="isShow">
-                                                    <a href="javascript:void(0)" class="close"><i class="icon-cross"></i></a>
-                                                    <p class="bold mb-1">Transactions Limit</p>
-                                                    <p class="font-12 text-gray mb-1">Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.</p>
-                                                    <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
+                                                <div class="btn-group pull-right" dropdown placement="bottom right">
+                                                    <button id="button-alignment" dropdownToggle type="button"
+                                                    class="btn btn-primary dropdown-toggle close" aria-controls="dropdown-alignment">
+                                                        <i class="icon-info"></i>
+                                                    </button>
+                                                    <div id="dropdown-alignment" *dropdownMenu class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                        role="menu" aria-labelledby="button-alignment">
+                                                            <a href="javascript:void(0)" class="inner-close"><i class="icon-cross"></i></a>
+                                                            <p class="bold mb-1">Transactions Limit</p>
+                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.</p>
+                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
+                                                    </div>
                                                 </div>
-                                            </div>
                                             </li>
-                                            <li>Total Companies: 1</li>
-                                            <li>Unlimited Users</li>
-                                            <li>Unlimited Customers/Vendors</li>
-                                            <li>Desktop/Mobile App</li>
+                                            <li>Total Companies: 1
+                                            </li>
+                                            <li>Unlimited Users
+
+                                                <div class="btn-group pull-right" dropdown placement="bottom right">
+                                                    <button id="button-alignment" dropdownToggle type="button"
+                                                    class="btn btn-primary dropdown-toggle close" aria-controls="dropdown-alignment">
+                                                        <i class="icon-info"></i>
+                                                    </button>
+                                                    <div id="dropdown-alignment" *dropdownMenu class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                        role="menu" aria-labelledby="button-alignment">
+                                                            <a href="javascript:void(0)" class="inner-close"><i class="icon-cross"></i></a>
+                                                            <p class="bold mb-1">Transactions Limit</p>
+                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.</p>
+                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>Unlimited Customers/Vendors
+                                                <div class="btn-group pull-right" dropdown placement="bottom right">
+                                                    <button id="button-alignment" dropdownToggle type="button"
+                                                    class="btn btn-primary dropdown-toggle close" aria-controls="dropdown-alignment">
+                                                        <i class="icon-info"></i>
+                                                    </button>
+                                                    <div id="dropdown-alignment" *dropdownMenu class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                        role="menu" aria-labelledby="button-alignment">
+                                                            <a href="javascript:void(0)" class="inner-close"><i class="icon-cross"></i></a>
+                                                            <p class="bold mb-1">Transactions Limit</p>
+                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.</p>
+                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>Desktop/Mobile App
+                                                <div class="btn-group pull-right" dropdown placement="bottom right">
+                                                    <button id="button-alignment" dropdownToggle type="button"
+                                                    class="btn btn-primary dropdown-toggle close" aria-controls="dropdown-alignment">
+                                                        <i class="icon-info"></i>
+                                                    </button>
+                                                    <div id="dropdown-alignment" *dropdownMenu class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                        role="menu" aria-labelledby="button-alignment">
+                                                            <a href="javascript:void(0)" class="inner-close"><i class="icon-cross"></i></a>
+                                                            <p class="bold mb-1">Transactions Limit</p>
+                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.</p>
+                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
+                                                    </div>
+                                                </div>
+                                            </li>
                                         </ul>
                                     </div>
 
@@ -61,7 +110,7 @@
                         </div>
                     </div>
                     <div class="col-md-4 col-sm-6">
-                        <div class="select-plan-block">
+                        <div class="select-plan-block plan-disabled">
                             <div class="select-plan-head">
                                 <h2>Single Company</h2>
                             </div>
@@ -80,25 +129,32 @@
                                     </div>
                                     <div class="clearfix">
                                         <ul class="plan-list">
-                                            <li>Transactions Limit: 40,000 <div class="pull-right">
-                                                <a href="javascript:void(0)" class="text-gray" (click)="toggleDisplay()"><i class="icon-info"></i></a>
-                                                <div class="transactions-popup" [hidden]="isShow">
-                                                    <a href="javascript:void(0)" class="close"><i class="icon-cross"></i></a>
-                                                    <p class="bold mb-1">Transactions Limit</p>
-                                                    <p class="font-12 text-gray mb-1">Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.</p>
-                                                    <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
+                                            <li>Transactions Limit: 40,000
+
+                                                <div class="btn-group pull-right" dropdown placement="bottom right">
+                                                    <button id="button-alignment" dropdownToggle type="button"
+                                                    class="btn btn-primary dropdown-toggle close" aria-controls="dropdown-alignment">
+                                                        <i class="icon-info"></i>
+                                                    </button>
+                                                    <div id="dropdown-alignment" *dropdownMenu class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                        role="menu" aria-labelledby="button-alignment">
+                                                            <a href="javascript:void(0)" class="inner-close"><i class="icon-cross"></i></a>
+                                                            <p class="bold mb-1">Transactions Limit</p>
+                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.</p>
+                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
+                                                    </div>
                                                 </div>
-                                            </div></li>
+                                            </li>
                                             <li>Total Companies: 10</li>
                                             <li>Unlimited Users <div class="pull-right">
-                                                <a href="javascript:void(0)" class="text-gray" (click)="toggleDisplay()"><i class="icon-info"></i></a>
+                                                <a href="javascript:void(0)" class="text-gray"><i class="icon-info"></i></a>
                                             </div>
                                         </li>
                                             <li>Unlimited Customers/Vendors <div class="pull-right">
-                                                <a href="javascript:void(0)" class="text-gray" (click)="toggleDisplay()"><i class="icon-info"></i></a>
+                                                <a href="javascript:void(0)" class="text-gray"><i class="icon-info"></i></a>
                                             </div></li>
                                             <li>Desktop/Mobile App <div class="pull-right">
-                                                <a href="javascript:void(0)" class="text-gray" (click)="toggleDisplay()"><i class="icon-info"></i></a>
+                                                <a href="javascript:void(0)" class="text-gray"><i class="icon-info"></i></a>
                                             </div></li>
                                         </ul>
                                     </div>
@@ -114,7 +170,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-6">
+                    <div class="col-md-4 col-sm-6 plan-disabled">
                         <div class="select-plan-block">
                             <div class="select-plan-head">
                                 <h2>Free</h2>
@@ -133,7 +189,7 @@
                                     <div class="clearfix">
                                         <ul class="plan-list">
                                             <li>Transactions Limit: 40,000 <div class="pull-right">
-                                                <a href="javascript:void(0)" class="text-gray" (click)="toggleDisplay()"><i class="icon-info"></i></a>
+                                                <a href="javascript:void(0)" class="text-gray"><i class="icon-info"></i></a>
                                                 <div class="transactions-popup" [hidden]="isShow">
                                                     <a href="javascript:void(0)" class="close"><i class="icon-cross"></i></a>
                                                     <p class="bold mb-1">Transactions Limit</p>
@@ -143,14 +199,14 @@
                                             </div></li>
                                             <li>Total Companies: 100</li>
                                             <li>Unlimited Users <div class="pull-right">
-                                                <a href="javascript:void(0)" class="text-gray" (click)="toggleDisplay()"><i class="icon-info"></i></a>
+                                                <a href="javascript:void(0)" class="text-gray"><i class="icon-info"></i></a>
                                             </div>
                                         </li>
                                             <li>Unlimited Customers/Vendors <div class="pull-right">
-                                                <a href="javascript:void(0)" class="text-gray" (click)="toggleDisplay()"><i class="icon-info"></i></a>
+                                                <a href="javascript:void(0)" class="text-gray"><i class="icon-info"></i></a>
                                             </div></li>
                                             <li>Desktop/Mobile App <div class="pull-right">
-                                                <a href="javascript:void(0)" class="text-gray" (click)="toggleDisplay()"><i class="icon-info"></i></a>
+                                                <a href="javascript:void(0)" class="text-gray"><i class="icon-info"></i></a>
                                             </div></li>
                                         </ul>
                                     </div>
@@ -516,7 +572,6 @@
                 </div>
             </div>
         </div> -->
-
 	</div>
 	<div *ngIf="isSwitchPlanInProcess">
 		<div class="no-data mrT2 loader-main">
@@ -526,12 +581,10 @@
 			</div>
 		</div>
 	</div>
-    <div class="box clearfix mt-2 pl-5 xs-pl-0 pt-3 pb-3 relative" *ngIf="showPlans">
-
+    <div class="box clearfix mt-2 pl-5 xs-pl-0 pt-3 pb-3 relative see-all-features" *ngIf="showPlans">
         <a class="close close-2" href="javascript:void(0)" (click)="showPlans = ''">
             <i class="icon-cross"></i>
         </a>
-
         <div class="col-sm-6 col-md-3" *ngFor="let item of SubscriptionPlans; let i=index">
             <div class="inner-your-account" *ngIf="!item.subscriptionId && ((showPlans === 'multiple' && item?.planDetails?.amount && item?.planDetails?.companiesLimit > 1) || (showPlans === 'single' && item?.planDetails?.amount && item?.planDetails?.companiesLimit === 1) || (showPlans === 'free' && !item?.planDetails?.amount))">
                 <h3 class="mb-2">{{item?.planDetails?.name}}</h3>

@@ -87,10 +87,15 @@
     font-size: 20px;
     padding: 0px;
     color: $nobel;
+    line-height: 14px;
 }
 .associated-companies > ul > li {
     border-bottom: 1px solid $gainsboro;
     list-style-type: none;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 .associated-companies > ul > li > a {
     color: #1C1C1C;
@@ -128,7 +133,7 @@
     border-right: 1px solid $gainsboro;
     border-left: 1px solid $gainsboro;
     border-bottom: 1px solid $gainsboro;
-    max-height: 345px;
+    min-height: 360px;
     overflow-y: auto;
 }
 .left-div {
@@ -160,6 +165,9 @@
 }
 .plan-row {
     color: $nero;
+}
+.btn-group.custom-dropdown {
+    line-height: 14px;
 }
 
 @media only screen and (max-width: 1024px) {

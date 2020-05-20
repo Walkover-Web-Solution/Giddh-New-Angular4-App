@@ -1632,7 +1632,12 @@ modal-container.modal {
         padding-left: 30px !important;
     }
 }
-
+.btn-group .close:hover, .btn-group .close:focus:hover, .btn-group .close:focus:focus, .btn-group .close:focus:disabled, .btn-group .close:focus.active, .btn-group .close:focus:active, .open > .dropdown-toggle.btn-group .close:focus, .btn-group .close:focus:active:focus, .btn-group .close:focus:active:hover {
+    background: none !important;
+    border-color: transparent !important;
+    border: 0px !important;
+    box-shadow: none !important;
+}
 
 /* my css end */
 
