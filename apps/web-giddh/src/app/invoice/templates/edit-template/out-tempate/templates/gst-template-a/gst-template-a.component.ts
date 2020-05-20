@@ -15,7 +15,7 @@ import { SettingsProfileActions } from '../../../../../../actions/settings/profi
 @Component({
 	selector: 'gst-template-a',
 	templateUrl: './gst-template-a.component.html',
-	styleUrls: ['./gst-template-a.component.css'],
+	styleUrls: ['./gst-template-a.component.scss'],
 	// encapsulation: ViewEncapsulation.None
 })
 

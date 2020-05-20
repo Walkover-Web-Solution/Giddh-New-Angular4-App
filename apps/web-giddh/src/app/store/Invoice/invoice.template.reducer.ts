@@ -89,7 +89,22 @@ export const initialState: CustomTemplateState = {
                         label: '',
                         display: true,
                         width: null
-                    }
+                    },
+                     tcs: { // this is for template a
+                        label: 'TCS',
+                        display: true,
+                        width: null
+                    },
+                     tds: { // this is for template a
+                        label: 'TDS',
+                        display: true,
+                        width: null
+                    },
+                     taxBifurcation: { // this is for template a
+                        label: 'Tax Bifurcation',
+                        display: true,
+                        width: null
+                    },
                 }
             },
             header: {
@@ -228,7 +243,12 @@ export const initialState: CustomTemplateState = {
                         label: 'Billing Address',
                         display: true,
                         width: null
-                    }
+                    },
+                    warehouseAddress: {
+                        label: '',
+                        display: true,
+                        width: null
+                    },
                 }
             },
             table: {
@@ -297,7 +317,32 @@ export const initialState: CustomTemplateState = {
                         label: "TCS",
                         display: true,
                         width: null
-                    }
+                    },
+                     tcs: {  // this is for template e
+                        label: 'TCS',
+                        display: true,
+                        width: null
+                    },
+                     tds: { // this is for template e
+                        label: 'TDS',
+                        display: true,
+                        width: null
+                    },
+                     totalDue: { // this is for template e
+                        label: 'Total Due',
+                        display: true,
+                        width: null
+                    },
+                    totalQuantity: { // this is for template e
+                        label: 'Total Quantity',
+                        display: true,
+                        width: null
+                    },
+                    taxBifurcation: { // this is for template e
+                        label: 'Tax Bifurcation',
+                        display: true,
+                        width: null
+                    },
                 }
             }
         },
