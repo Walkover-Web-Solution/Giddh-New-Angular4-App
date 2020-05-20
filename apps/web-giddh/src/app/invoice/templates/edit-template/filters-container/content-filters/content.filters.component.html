@@ -15,7 +15,8 @@
                         [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].display"
                         (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Document Title: This is
                     your
-                    <div class="ml-3="text" [maxlength]="15" class="form-control" name="title"
+                    <div class="ml-3">
+                        <input type="text" [maxlength]="15" class="form-control" name="title"
                             [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].label"
                             (ngModelChange)='onFieldChange(null, null, null)'
                             [disabled]="!customTemplate.sections['header'].data['formNameTaxInvoice'].display" />
