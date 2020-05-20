@@ -10,32 +10,25 @@ body {
 #template-header {
     width: auto;
 }
-
 .strong {
     font-weight: bold;
 }
-
 .font-11 {
     font-size: 11px !important;
 }
-
 .font-10 {
     font-size: 10px !important;
 }
-
 .font-12 {
     font-size: 12px !important;
 }
-
 .max-width-180 {
     /* max-width: 180px !important; */
 }
 /* NOTE:  comment padding, max-width, border in #royal css for java */
-
 .seperator {
     border-top: 1px solid $nobel;
 }
-
 #royal {
     font: 12px/1 "Open Sans", sans-serif;
     overflow: auto;
@@ -45,49 +38,39 @@ body {
     width: 100%;
     margin: 0 auto;
 }
-
 #royal header h1 {
     font-weight: bolder;
     font-size: 74px;
     color: #4b4c4f;
 }
-
 #royal header .sub_head {
     font-size: 16px;
 }
-
 #royal .text-right {
     text-align: right;
 }
-
 #royal .text-left {
     text-align: left !important;
 }
-
 #royal .pull-right {
     float: right;
 }
-
 #royal .pull-left {
     float: left;
 }
-
 #royal table {
     width: 100%;
     table-layout: fixed;
     line-height: 20px;
     border-collapse: inherit;
 }
-
 #royal .logo {
     max-width: 120px;
     width: 100%;
 }
-
 #royal strong {
     font-weight: bold;
 }
-
 #royal .total-amount {
     display: flex;
     align-items: center;
@@ -95,7 +78,6 @@ body {
     border-bottom: 1px solid $cinnabar-orange;
     float: right;
 }
-
 #royal .total-amount h2 {
     font-size: 25px;
     font-weight: bold;
@@ -103,51 +85,40 @@ body {
     margin-right: 10px;
     margin-bottom: 0px;
 }
-
 .product-table thead tr th {
     font-weight: normal;
 }
-
 tfoot.table-details tr th {
     font-weight: normal;
 }
-
 #royal .mrL2 {
     margin-left: 20px;
 }
-
 #royal .mrB2 {
     margin-bottom: 20px;
 }
-
 #royal .mrB1 {
     margin-bottom: 10px;
 }
-
 #royal .meta {
     margin: 2px 0 0px 0;
 }
-
 #royal .meta h4 {
     font-weight: bold;
     font-size: 18px;
     line-height: 19px;
 }
-
 #royal .product-table {
     /* background: #df49270d; */
     position: relative;
     /* padding-bottom: 10px; */
 }
-
 #royal .product-table tfoot tr:last-child th {
     padding: 15px 0;
 }
-
 #royal .product-table thead tr th:last-child {
     position: relative;
 }
-
 #royal .product-table tfoot tr:last-child {
     padding: 7px 0;
 }
@@ -357,22 +328,18 @@ table.tax-table.item {
     background-size: 14px;
     height: 18px;
 }
-
 img {
     max-width: 180px;
 }
-
 #royal .product-table tfoot tr th {
     padding: 0 8px;
     font-size: 11px;
     font-weight: normal;
 }
-
 #royal footer p {
     font-size: 10px;
     color: #262626;
 }
-
 #royal .tax-table.item tfoot tr th {
     border-bottom: 1px solid #666666;
 }
@@ -382,11 +349,9 @@ img {
     white-space: pre-line;
     line-height: 1.1em;
 }
-
 .line-height-initial {
     line-height: initial;
 }
-
 .warehouse-table {
     width: 100%;
     border-bottom: 1px solid $gray;
@@ -394,11 +359,9 @@ img {
     padding-right: 0px;
     padding-left: 0px;
 }
-
 header.bottom-border {
     border-bottom: 1px solid $gray;
 }
-
 .warehouse-table tbody tr td {
     padding: 4px 0px 1px 0px;
     vertical-align: top;
