@@ -2042,13 +2042,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let taxPercentage: number = 0;
         let cessPercentage: number = 0;
         let taxTotal: number = 0;
-        entry.taxes.filter(f => f.isChecked).forEach(tax => {
-            if (tax.type === 'gstcess') {
-                cessPercentage += tax.amount;
+        entry.taxes.filter(tax => tax.isChecked).forEach(selectedTax => {
+            if (selectedTax.type === 'gstcess') {
+                cessPercentage += selectedTax.amount;
             } else {
-                taxPercentage += tax.amount;
+                taxPercentage += selectedTax.amount;
             }
-            taxTotal += tax.amount;
+            taxTotal += selectedTax.amount;
         });
         if (isNaN(entry.taxSum)) {
             entry.taxSum = 0;
