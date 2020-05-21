@@ -1,3 +1,4 @@
+@import "../../../../../../../assets/css/color.scss";
 * {
     border: 0;
     box-sizing: content-box;
@@ -11,47 +12,36 @@
     text-decoration: none;
     vertical-align: top;
   }
-
   .strong {
     font-weight: bold;
   }
-
   .font-11 {
     font-size: 11px !important;
   }
-
   .font-10 {
     font-size: 10px !important;
   }
-
   /*
   .font-12 {
   font-size: 12px !important;
   } */
-
   .pb-1 {
     padding-bottom: 10px;
   }
-
   p {
     line-height: 17px;
   }
-
   /* heading */
-
   #default header h1 {
     /* color: #df4927; */
     font-size: 14px;
   }
-
   #default header h2 {
     /* color: #df4927; */
     font-size: 14px;
     font-weight: bold;
   }
-
   /* table */
-
   #default table {
     /* font-size: 93%; */
     table-layout: fixed;
@@ -213,32 +203,27 @@
     padding: 8px 7px;
     line-height: 1.2rem;
   }
-
   #default table.item tfoot tr th {
     padding-right: 7px;
-    border-top: 1px solid #d6d6d6;
+    border-top: 1px solid $light-gray;
   }
-
   /* tcs */
-
   .tcs hr {
     margin-top: 50px;
     width: 100%;
-    border-bottom: 1px solid #f63407;
+    border-bottom: 1px solid $cinnabar-orange;
   }
-
   .tcs table {
     margin: 50px 0px;
     clear: both;
     width: 100%;
     border-collapse: collapse !important;
   }
-
   .tcs table td,
   .tcs table th {
     border-radius: 0;
     padding: 5px;
-    border: 1px solid #d6d6d6;
+    border: 1px solid $light-gray;
     vertical-align: top;
     text-align: right;
   }
@@ -282,13 +267,13 @@
   #default table.item td {
     border-radius: 0;
     padding: 7px;
-    border-top: 1px solid #d6d6d6;
+    border-top: 1px solid $light-gray;
     line-height: 1.2rem;
     vertical-align: top;
   }
 
   #default table.item td p {
-    color: #595959;
+    color: $zambezi;
   }
 
   #default table.balance {
@@ -476,7 +461,7 @@
     padding: 6px 16px;
   }
   .tax-table p {
-    color: #595959;
+    color: $zambezi;
   }
 
   .tax-table tfoot th {
@@ -490,27 +475,27 @@
   .tax-table tbody tr td,
   .tax-table tfoot tr th {
     padding: 6px;
-    border-right: 1px solid #d6d6d6;
+    border-right: 1px solid $light-gray;
   }
 
   .tax-table thead tr th:last-child,
   .tax-table tbody tr td:last-child,
   .tax-table tfoot tr th:last-child {
-    border-right: 0px solid #d6d6d6;
+    border-right: 0px solid;
   }
 
   table.tax-table.item {
     padding-top: 0px !important;
   }
   .tax-table.item tfoot tr th {
-    border-bottom: 1px solid #d6d6d6;
+    border-bottom: 1px solid $light-gray;
   }
   .tax-table tbody tr td {
     border-top: 0px solid;
   }
   .warehouse-table {
     width: 100%;
-    border-bottom: 1px solid #D6D6D6;
+    border-bottom: 1px solid $light-gray;
     margin-bottom: 10px;
     padding-bottom: 5px;
     padding-right: 0px;
