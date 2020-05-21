@@ -32,6 +32,7 @@ export interface LedgerState {
     ledgerBulkActionSuccess: boolean;
     ledgerBulkActionFailedEntries: string[];
     ledgerTransactionsBalance: any;
+    refreshLedger: boolean;
 }
 
 export const initialState: LedgerState = {
@@ -49,8 +50,8 @@ export const initialState: LedgerState = {
     isAdvanceSearchApplied: false,
     ledgerBulkActionSuccess: false,
     ledgerBulkActionFailedEntries: [],
-    ledgerTransactionsBalance: null
-
+    ledgerTransactionsBalance: null,
+    refreshLedger: false
 };
 
 export function ledgerReducer(state = initialState, action: CustomActions): LedgerState {
@@ -406,6 +407,13 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             }
             return Object.assign({}, state, {
                 ledgerTransactionsBalance: null
+            });
+        }
+
+        case LEDGER.REFRESH_LEDGER: {
+            let request = action.payload;
+            return Object.assign({}, state, {
+                refreshLedger: request
             });
         }
 
