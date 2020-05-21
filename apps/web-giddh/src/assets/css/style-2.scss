@@ -998,7 +998,7 @@ ul.sub-list {
 }
 
 .custom-tabs .nav.nav-tabs>li.active a {
-    color: #1c1c1c !important;
+    color: $nero !important;
 }
 
 .custom-tabs .nav.nav-tabs {
@@ -1632,7 +1632,7 @@ modal-container.modal {
         padding-left: 30px !important;
     }
 }
-.btn-group .close:hover, .btn-group .close:focus:hover, .btn-group .close:focus:focus, .btn-group .close:focus:disabled, .btn-group .close:focus.active, .btn-group .close:focus:active, .open > .dropdown-toggle.btn-group .close:focus, .btn-group .close:focus:active:focus, .btn-group .close:focus:active:hover {
+.plan-list .close:hover, .plan-list .close:focus:hover, .plan-list .close:focus:focus, .plan-list .close:focus:disabled, .plan-list .close:focus.active, .plan-list .close:focus:active, .open > .dropdown-toggle.plan-list .close:focus, .plan-list .close:focus:active:focus, .plan-list .close:focus:active:hover, .plan-list .close:hover, .plan-list .close:focus, .plan-list .close * {
     background: none !important;
     border-color: transparent !important;
     border: 0px !important;
@@ -8459,7 +8459,7 @@ ul.dropdown-menu p.lead.pd {
 }
 
 .setting-page .nav>li>a.active {
-    color: #1c1c1c !important;
+    color: $nero !important;
 }
 
 #tab-integration .nav-tabs>li {

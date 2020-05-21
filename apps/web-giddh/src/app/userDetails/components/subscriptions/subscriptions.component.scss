@@ -27,11 +27,11 @@
     position: absolute;
     right: 0;
     top: -60px;
-    background: #fff7f7;
+    background: $lavender;
     font-size: 14px;
     padding: 12px;
     border-radius: 3px;
-    border: 1px solid #e01b1b;
+    border: 1px solid $red;
 }
 .subscription-dropdown {
     display: block;
@@ -41,7 +41,7 @@
     border: 1px solid #c4c0c0;
     width: 342px;
     text-align: left;
-    background: white;
+    background: $white;
 }
 .subscription-dropdown .btn .caret {
     margin-top: 9px;
@@ -124,10 +124,10 @@
     background-color: $red;
 }
 .basic > tbody > tr td:first-child, .basic > thead > tr th:first-child {
-    border-left: 0px solid #ddd !important;
+    border-left: 0px solid $gainsboro !important;
 }
 .basic > tbody > tr td:last-child, .basic > thead > tr th:last-child {
-    border-right: 0px solid #ddd !important;
+    border-right: 0px solid $gainsboro !important;
 }
 .table-subscription {
     border-right: 1px solid $gainsboro;
