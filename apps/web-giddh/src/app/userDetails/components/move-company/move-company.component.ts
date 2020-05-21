@@ -30,8 +30,12 @@ export class MoveCompanyComponent implements OnInit {
 
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof MoveCompanyComponent
+     */
     public ngOnInit() {
-        console.log(this.moveSelectedCompany);
         if(this.subscriptions && this.subscriptions.length > 0) {
             this.subscriptions.forEach(plan => {
                 if(plan.subscriptionId && plan.planDetails && plan.planDetails.companiesLimit > plan.totalCompanies && this.moveSelectedCompany && this.moveSelectedCompany.subscription && this.moveSelectedCompany.subscription.planDetails && this.moveSelectedCompany.subscription.planDetails.uniqueName !== plan.planDetails.uniqueName && this.availablePlans[plan.planDetails.uniqueName] === undefined && plan.planDetails.countries.includes(this.moveSelectedCompany.country)) {
@@ -47,21 +51,37 @@ export class MoveCompanyComponent implements OnInit {
         }
     }
 
+    /**
+     * This will initiate the update plan
+     *
+     * @memberof MoveCompanyComponent
+     */
     public moveCompanyInNewPlan() {
         this.subscriptionRequestObj = {
-            planUniqueName: this.selectedPlan,
-            subscriptionId: '',
+            planUniqueName: '',
+            subscriptionId: this.availablePlans[this.selectedPlan].subscriptionId,
             userUniqueName: this.moveSelectedCompany.createdBy.uniqueName,
             licenceKey: ''
         };
         this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true, moveCompany: this.moveSelectedCompany.uniqueName });
     }
 
+    /**
+     * This will dispatch the update plan api and will close popup
+     *
+     * @param {*} obj
+     * @memberof MoveCompanyComponent
+     */
     public patchProfile(obj): void {
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
         this.moveCompany.emit(true);
     }
 
+    /**
+     * This will close the popup
+     *
+     * @memberof MoveCompanyComponent
+     */
     public closePopup() {
         this.moveCompany.emit(false);
     }
