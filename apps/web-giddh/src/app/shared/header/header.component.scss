@@ -737,8 +737,10 @@ ul.sub-list {
         padding-bottom: 0;
         font-size: 18px;
     }
+    
 }
 @media (max-width: 767px) {
+
     .nav-left-bar {
         width: 270px;
         left: -270px;
@@ -771,8 +773,8 @@ ul.sub-list {
     .nav-left-bar.open .mobile_menu_icon {
         display: flex;
     }
-    .paddingTopFixed-mobile {
-        padding-top: 92px;
+    .padding-top-fixed-mobile {
+        padding-top: 42px;
     }
     .upperLayerHeader .open .dropdown-menu {
         background-color: #fff;
@@ -783,13 +785,35 @@ ul.sub-list {
         border-radius: 4px;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     }
+
+    .lower-layer-header{
+        display: flex;
+        justify-content: space-between;
+        #add-manage.btn-gray{
+            padding-left: 0;
+            padding-right: 0;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            i{
+                padding-right: 0;
+            }
+        }
+        .help-setting-icons{
+            img{
+                width: 25px;
+            }
+        }
+    }
     .calender-addone {
-        height: 32px;
+        height: 28px;
         vertical-align: middle;
         align-items: center;
     }
     .header-date {
-        height: 32px;
+        height: 28px;
         vertical-align: top;
         display: inline-flex !important;
         align-items: center;

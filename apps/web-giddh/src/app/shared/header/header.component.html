@@ -466,7 +466,7 @@
         Contact us for more assistance. <a class="clickHere" (click)="goToSelectPlan()">Click here</a>
     </p>
 </div>
-<header class="clearfix header-container desktopHeader" [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen }">
+<header class="clearfix header-container desktopHeader" *ngIf="!isMobileSite" [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen }">
     <nav class="navbar ">
         <div class="container-fluid pdT1 pdB1">
             <div class="navbar_header">
@@ -517,7 +517,7 @@
 </header>
 
 
-<div class="paddingTopFixed-mobile">
+<div class="padding-top-fixed-mobile"  *ngIf="isMobileSite">
     <header class="clearfix header-container mobileHeader">
         <nav class="navbar " [ngClass]="{'menu_open':sideMenu.isopen}">
             <div class="container-fluid  mrB1 ">
@@ -562,21 +562,10 @@
                                 </ul>
                             </div>
                         </li>
-                        <li class="border-none pr-0 pull-right">
-                            <img src="{{imgPath}}notification.svg">
-                            <div class="btn-group cp d-inline-block help-setting-icons " dropdown>
-                                <span class="mr-15" (click)="toggleSidebarPane(true)">
-                                    <img src="{{imgPath}}setting-icon.svg">
-                                </span>
-                                <span (click)="toggleHelpSupportPane(true)">
-                                    <img src="{{imgPath}}help-support-icon.svg">
-                                </span>
-                            </div>
-                        </li>
                     </ul>
                 </div>
 
-                <div class="lower-layer-header clearfix">
+                <div class="lower-layer-header">
                     <ul class="nav universal-date  pull-left" *ngIf="(selectedCompany | async)">
                         <li [hidden]="isTodaysDateSelected" class="border-none pl-0"> 
                             <button class="btn btn-link" (click)="jumpToToday();">Today</button>
@@ -590,10 +579,23 @@
                             <span class="icon-calender calender-addone "></span>
                             <label class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
                         </li>
+                        <li class="border-none pr-0 pull-right">
+                            
+                           
+                        </li>
                     </ul>
-                    <button id="add-manage" type="button" class="btn btn-gray btn-sm pull-right mrR0 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
-                        <i class="icon-plus"></i> Master
-                    </button>
+                    <div class="d-flex align-items-center">
+                        <img src="{{imgPath}}notification.svg" class="mr-15">
+                        <button id="add-manage" type="button" class="btn btn-gray btn-sm d-inline-flex mr-15 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
+                            <i class="icon-plus"></i>
+                        </button>
+                        <div class="btn-group cp d-inline-flex help-setting-icons" dropdown>
+                            <span (click)="toggleHelpSupportPane(true)">
+                                <img src="{{imgPath}}help-support-icon.svg">
+                            </span>
+                        </div>
+                    
+                    </div>
                 </div>
             </div>
         </nav>
@@ -915,7 +917,7 @@
     <aside-help-support (closeAsideEvent)="toggleHelpSupportPane(false)"></aside-help-support>
 </div>
 <!-- setting aside pane -->
-<div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'">
+<div class="help-support-aside " *ngIf="asideSettingMenuState === 'in'">
     <perfect-scrollbar [scrollIndicators]="true">
         <aside-setting (closeAsideEvent)="toggleSidebarPane(false)"></aside-setting>
     </perfect-scrollbar>

@@ -7,7 +7,7 @@ import {FinancialYearComponent} from './financial-year/financial-year.component'
 import {SettingProfileComponent} from './profile/setting.profile.component';
 import {SettingIntegrationComponent} from './integration/setting.integration.component';
 import {PermissionDataService} from 'apps/web-giddh/src/app/permissions/permission-data.service';
-import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
+import {Component, OnInit, Output, ViewChild, OnDestroy, EventEmitter} from '@angular/core';
 import {TabsetComponent} from 'ngx-bootstrap';
 import {StateDetailsRequest} from '../models/api-models/Company';
 import {CompanyActions} from '../actions/company.actions';
@@ -22,6 +22,7 @@ import {SettingsIntegrationActions} from '../actions/settings/settings.integrati
 import {WarehouseActions} from './warehouse/action/warehouse.action';
 import { PAGINATION_LIMIT } from '../app.constant';
 import { HttpClient } from "@angular/common/http";
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     templateUrl: './settings.component.html',
@@ -29,7 +30,7 @@ import { HttpClient } from "@angular/common/http";
 })
 export class SettingsComponent implements OnInit, OnDestroy {
     @ViewChild('staticTabs') public staticTabs: TabsetComponent;
-
+    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @ViewChild('integrationComponent') public integrationComponent: SettingIntegrationComponent;
     @ViewChild('profileComponent') public profileComponent: SettingProfileComponent;
     @ViewChild('financialYearComp') public financialYearComp: FinancialYearComponent;
@@ -45,7 +46,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public selectedChildTab: number = 0;
     public activeTab: string = 'taxes';
     public integrationtab: string;
-
+    public isMobileScreen: boolean = true;
     public get shortcutEnabled() {
         return document.activeElement === document.body;
     }
@@ -64,7 +65,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
         private _generalActions: GeneralActions,
         private settingsIntegrationActions: SettingsIntegrationActions,
         private warehouseActions: WarehouseActions,
-        private http: HttpClient
+        private http: HttpClient,
+        private breakPointObservar: BreakpointObserver
     ) {
         this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
         this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
@@ -72,6 +74,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.breakPointObservar.observe([
+            '(max-width:767px)'
+        ]).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
         this.toggleSettingPane();
 
         this._route.params.subscribe(params => {
@@ -293,6 +301,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
         } else {
           //  document.querySelector('body').classList.remove('fixed');
         }
+    }
+    public closeAsidePane(event?): void {
+        this.closeAsideEvent.emit(event);
     }
 
     public ngOnDestroy() {

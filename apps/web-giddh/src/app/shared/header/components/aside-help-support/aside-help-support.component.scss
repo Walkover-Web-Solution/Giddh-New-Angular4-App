@@ -164,10 +164,11 @@
 }
 @media (max-width: 375px) {
     :host {
-        max-width: 310px;
+        max-width: 250px;
+        top: 85px;
     }
     :host .aside-pane {
-        max-width: 310px;
+        max-width: 250px;
     }
 }
 @media (max-width: 320px) {

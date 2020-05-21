@@ -1,8 +1,9 @@
 <!-- setting page sidebar -->
-<div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'">
-        <aside-setting class="setting-sidebar" (closeAsideEvent)="toggleSettingPane()"></aside-setting>
+<div class="help-support-aside setting-sidebar-wrapper"  *ngIf="asideSettingMenuState === 'in'">
+        <aside-setting class="setting-sidebar" *ngIf="!isMobileScreen"></aside-setting>
+        <aside-setting class="setting-sidebar" *ngIf="isMobileScreen" (clickOutside)="closeAsidePane()"></aside-setting>
 </div>
-<div class="container-fluid settings-bg" [keyboardShortcut]="['alt+right', 'alt+left']" [config]="{ignoreHost:true}"
+<div class="container-fluid settings-bg" [ngClass]="{'ml-215': asideSettingMenuState === 'in'}" [keyboardShortcut]="['alt+right', 'alt+left']" [config]="{ignoreHost:true}"
     (onShortcutPress)="selectTabByShortcut($event)">
     <div class="row">
         <div class="invoce-controll">
