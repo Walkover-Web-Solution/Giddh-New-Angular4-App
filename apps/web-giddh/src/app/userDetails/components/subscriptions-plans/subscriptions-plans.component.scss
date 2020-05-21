@@ -9,6 +9,7 @@
     margin-bottom: 30px;
     background-color: $white;
     box-shadow: 0px 3px 6px $black-russian;
+    height: 97%;
 }
 .welcome-msg {
     position: relative;
@@ -19,11 +20,6 @@
     width: 100%;
     color: $dark-gray;
     padding: 10px;
-}
-.choose-ur-plan {
-    height: calc(100vh - 320px);
-    overflow-y: auto;
-    overflow-x: hidden;
 }
 .noHeight {
     height: auto !important;
@@ -157,7 +153,7 @@
     box-shadow: 0px 3px 6px $black-russian;
     padding: 15px;
     z-index: 9;
-    transform: translate(330px) !important;
+    /*transform: translate(330px) !important;*/
     margin-top: 10px;
     .close {
         color: $nero;
@@ -204,8 +200,9 @@
 .see-all-features {
     display: flex;
     flex-wrap: wrap;
-    max-height: 510px;
+    max-height: 540px;
     overflow-y: auto;
+    padding-top: 60px;
 }
 .btn-group .close {
     font-size: 16px;
@@ -219,13 +216,16 @@
     font-size: 16px;
     color: #1C1C1C;
 }
+.main-row-plans {
+    display: flex;
+}
+.btn-green:focus {
+    color: $white;
+}
 @media only screen and (max-width: 767px) {
     .note-wrap {
         position: relative;
         bottom: 0px;
-    }
-    .choose-ur-plan {
-        height: initial;
     }
     .xs-pr-0 {
         padding-right: 0px !important;
@@ -241,7 +241,7 @@
     }
     .transactions-popup {
         width: 260px;
-        transform: translate(0px) !important;
+        /*transform: translate(0px) !important;*/
     }
 }
 @media only screen and (max-width: 640px) {
