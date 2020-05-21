@@ -268,9 +268,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
             }
             if (currentCompanyUniqueName && s.session.companies) {
                 let companies = _.cloneDeep(s.session.companies);
-                let comp = companies.find((c) => c.uniqueName === currentCompanyUniqueName);
-                if (comp) {
-                    this.currentFinancialYearUniqueName = comp.activeFinancialYear.uniqueName;
+                let activeCompany = companies.find((c) => c.uniqueName === currentCompanyUniqueName);
+                if (activeCompany && activeCompany.activeFinancialYear) {
+                    this.currentFinancialYearUniqueName = activeCompany.activeFinancialYear.uniqueName;
                 }
             }
         });    
