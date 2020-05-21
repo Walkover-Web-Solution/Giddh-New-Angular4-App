@@ -11,6 +11,8 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helper
 import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
 import { Router, NavigationStart } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store';
 
 const moment = _moment;
 
@@ -214,8 +216,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public activeMonthHover: boolean = false;
     public invalidStartDate: string = "";
     public invalidEndDate: string = "";
+    public currentFinancialYearUniqueName: string = "";
 
-    constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router) {
+    constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>) {
         this.choosedDate = new EventEmitter();
         this.rangeClicked = new EventEmitter();
         this.datesUpdated = new EventEmitter();
@@ -257,6 +260,21 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.store.pipe(takeUntil(this.destroyed$)).subscribe(s => {
+            let currentCompanyUniqueName = "";
+
+            if (s.session) {
+                currentCompanyUniqueName = _.cloneDeep(s.session.companyUniqueName);
+            }
+            if (currentCompanyUniqueName && s.session.companies) {
+                let companies = _.cloneDeep(s.session.companies);
+                let comp = companies.find((c) => c.uniqueName === currentCompanyUniqueName);
+                if (comp) {
+                    this.currentFinancialYearUniqueName = comp.activeFinancialYear.uniqueName;
+                }
+            }
+        });    
+
         this._breakPointObservar.observe([
             '(max-width: 767px)'
         ]).subscribe(result => {
@@ -1660,28 +1678,46 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public getFinancialYears(): void {
         this.settingsFinancialYearService.GetAllFinancialYears().subscribe(res => {
             if (res && res.body && res.body.financialYears) {
+                let currentFinancialYear;
+                let lastFinancialYear;
+
                 res.body.financialYears.forEach(key => {
                     let financialYearStarts = moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     let financialYearEnds = moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     this.financialYears.push({ label: financialYearStarts + " - " + financialYearEnds, value: key });
+
+                    if(this.currentFinancialYearUniqueName && this.currentFinancialYearUniqueName === key.uniqueName) {
+                        currentFinancialYear = moment(moment(key.financialYearStarts.split("-").reverse().join("-")).toDate());
+
+                        lastFinancialYear = {start: moment(moment(key.financialYearStarts.split("-").reverse().join("-")).subtract(1, 'year').toDate()), end: moment(moment(key.financialYearEnds.split("-").reverse().join("-")).subtract(1, 'year').toDate())};
+                    }
                 });
 
                 if (this.ranges && this.ranges.length > 0) {
                     let loop = 0;
-                    let allTimeIndex = -1;
                     this.ranges.forEach(key => {
                         if (key.name === "All Time") {
-                            allTimeIndex = loop;
+                            this.ranges[loop].value = [
+                                moment(moment(res.body.financialYears[0].financialYearStarts, GIDDH_DATE_FORMAT).toDate()),
+                                moment()
+                            ];
+                        }
+
+                        if (key.name === "This Financial Year to Date" && currentFinancialYear) {
+                            this.ranges[loop].value = [
+                                currentFinancialYear,
+                                moment()
+                            ];
+                        }
+
+                        if (key.name === "Last Financial Year" && lastFinancialYear && lastFinancialYear.start && lastFinancialYear.end) {
+                            this.ranges[loop].value = [
+                                lastFinancialYear.start,
+                                lastFinancialYear.end
+                            ];
                         }
                         loop++;
                     });
-
-                    if (allTimeIndex > -1) {
-                        this.ranges[allTimeIndex].value = [
-                            moment(moment(res.body.financialYears[0].financialYearStarts, GIDDH_DATE_FORMAT).toDate()),
-                            moment()
-                        ];
-                    }
 
                     if (this.minDate === undefined) {
                         this.minDate = moment(moment(res.body.financialYears[0].financialYearStarts, GIDDH_DATE_FORMAT).toDate());
