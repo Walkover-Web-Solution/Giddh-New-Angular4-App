@@ -146,7 +146,7 @@
                     <span>
                         <input type="text"
                             readonly
-                            [value]="selectedDateRangeUi"
+                            [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                             [inputStartDate]="selectedDateRange?.startDate"
                             [inputEndDate]="selectedDateRange?.endDate"
                             name="selectedDateRange"
@@ -451,7 +451,7 @@
                             <strong>Due as on </strong>
                             <span class="italic underline">
                                 <input type="text" style="width: 250px !important;"
-                                       [value]="selectedDateRangeUi"
+                                       [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                                        [inputStartDate]="selectedDateRange?.startDate"
                                        [inputEndDate]="selectedDateRange?.endDate"
                                        name="selectedDateRange"
