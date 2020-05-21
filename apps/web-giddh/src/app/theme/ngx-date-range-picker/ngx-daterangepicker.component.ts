@@ -1677,7 +1677,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
      */
     public getFinancialYears(): void {
         this.settingsFinancialYearService.GetAllFinancialYears().subscribe(res => {
-            if (res && res.body && res.body.financialYears) {
+            if (res && res.body && res.body.financialYears && res.body.financialYears.length > 0) {
                 let currentFinancialYear;
                 let lastFinancialYear;
 
