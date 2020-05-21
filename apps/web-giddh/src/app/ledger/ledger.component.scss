@@ -434,8 +434,12 @@ sh-select:focus {
     margin-right: 0;
 }
 .clear-filter-btn {
-    color: #1a237e;
+    color: $midnight-blue;
     font-size: 14px;
+    border: 1px solid $midnight-blue;
+    border-radius: 20px;
+    padding: 0 15px;
+    background-color: $white;
 }
 .clear-filter-btn i {
     font-size: 12px;
@@ -666,8 +670,21 @@ sh-select:focus {
             position: relative;
             width: 85%;
             input[type="search"] {
-                min-width: 240px;
+                min-width: 150px;
                 border-radius: 20px !important;
+            }
+            .clear-filter-btn{
+                text-align: center;
+                 width: 110px;
+                 padding: 0;
+                 display: flex;
+                align-items: center;
+                justify-content: center;
+                 i{
+                    left: 0;
+                    top: 0;
+                    color: $midnight-blue;
+                 }
             }
         }
     }
@@ -766,5 +783,12 @@ sh-select:focus {
     }
     .icomoon_ico {
         margin-top: 7px;
+    }
+    .ledg-head {
+        .single-search-box{
+            .clear-filter-btn{
+                font-size: 12px;
+            }
+        }
     }
 }

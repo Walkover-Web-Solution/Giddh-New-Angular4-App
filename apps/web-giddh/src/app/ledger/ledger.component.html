@@ -40,30 +40,34 @@
                                 [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
                         </div>
                     </div>
-                    <div class="single-search-box" *ngIf="checkedTrxWhileHovering.length === 0">
-                        <input type="search" [(ngModel)]="searchText" name="searchText" class="form-control"
-                            (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
-                        <i class="icon-search1 pos-abs"></i>
+                    <div class="single-search-box d-flex" *ngIf="checkedTrxWhileHovering.length === 0">
+                        <span>
+                            <input type="search" [(ngModel)]="searchText" name="searchText" class="form-control"
+                                (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
+                            <i class="icon-search1 pos-abs"></i>
+                        </span>
+                        <a class="cp mrL1 clear-filter-btn"  *ngIf="isAdvanceSearchImplemented && isMobileScreen" href="javascript: void 0" (click)="resetAdvanceSearch()"
+                            tooltip="Reset Advance Search">
+                            <i aria-hidden="true" class="glyphicon glyphicon-refresh"></i>
+                            Clear Filter
+                        </a>
                     </div>
+                    
                     <!-- Functionality not working -->
                     <div class="ledger-datepicker" container="body"  *ngIf="isMobileScreen">    
                             <img bsDatepicker src="../../assets/images/calender-icon.svg">
                     </div>
-                   
-
                     <span *ngIf="!isMobileScreen" class="advance-icon d-flex advance-search-filter pointer" [tooltip]="'Advance Search'"
                         [placement]="'top'"
                         [ngStyle]="{'margin-left': checkedTrxWhileHovering.length === 0 ? '7px': '0px'}">
                         <!-- <i class="icon-advance-search" aria-hidden="true" (click)="onOpenAdvanceSearch()"></i> -->
                         <img src="../../assets/images/advance-filter.svg" (click)="onOpenAdvanceSearch()">
                     </span>
-
-                    <a class="cp mrL1 clear-filter-btn" href="javascript: void 0" (click)="resetAdvanceSearch()"
-                        *ngIf="isAdvanceSearchImplemented" tooltip="Reset Advance Search">
+                    <a class="cp mrL1 clear-filter-btn" *ngIf="isAdvanceSearchImplemented && !isMobileScreen" href="javascript: void 0" (click)="resetAdvanceSearch()"
+                        tooltip="Reset Advance Search">
                         <i aria-hidden="true" class="glyphicon glyphicon-refresh"></i>
                         Clear Filter
                     </a>
-
                     <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0 || !isMobileScreen">
 
                         <button class="btn btn-danger" (click)="performBulkAction('delete')" container="body"
