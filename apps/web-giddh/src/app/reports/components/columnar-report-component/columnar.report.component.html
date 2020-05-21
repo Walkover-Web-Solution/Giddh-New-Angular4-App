@@ -1,8 +1,29 @@
 <div class="columnar-report-page mrT2">
     <div class="container-fluid font-14">
-        <div class="d-flex">
-            <div class="d-flex justify-content-between">
-                <div class="mr-2">
+        <div class="d-flex justify-content-between form-wrapper">
+            <div class="d-flex mb-15" *ngIf="isMobileScreen">
+                <div (clickOutside)="hideListItems()" class="btn-group d-flex mr-15" #filterDropDownList="bs-dropdown" dropdown
+                [autoClose]="false" [placement]="'right'">
+                    <i class="icon-options" dropdownToggle></i>
+                    <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu">
+                        <li role="menuitem">
+                            <a class="dropdown-item">
+                                <input type="checkbox" name="showHideOpeningClosingBalance" id="showHideOpeningClosingBalance" [(ngModel)]="exportRequest.showHideOpeningClosingBalance" [value]="true">&nbsp;<label for="showHideOpeningClosingBalance">Opening/Closing Balance</label></a>
+                        </li>
+                        <li role="menuitem">
+                            <a class="dropdown-item">
+                                <input type="checkbox" name="balanceTypeAsSign" id="balanceTypeAsSign" [(ngModel)]="exportRequest.balanceTypeAsSign" [value]="true">&nbsp;<label for="balanceTypeAsSign">Cr/Dr with +/-</label>
+                            </a>
+                    </li>
+                    </ul>
+                </div>
+                <a href="javascript:void(0);" class="icomoon-ico mr-15" (click)="!isFormValid() || isLoading" (click)="exportReport(false);" [tooltip]="'Export'">
+                    <i class="icon-ledger-union-5"></i>
+                </a>
+                <button class="btn btn-filter mr-0" *ngIf="columnarReportResponse" (click)="clearFilter();"> <span class="icon-cross"></span> Clear Filter</button>
+            </div>
+            <div class="d-flex form-wrapper-fields">
+                <div class="mr-2" *ngIf="!isMobileScreen">
                     <div (clickOutside)="hideListItems()" class="btn-group d-flex" #filterDropDownList="bs-dropdown" dropdown
                     [autoClose]="false" [placement]="'right'">
                         <i class="icon-options" dropdownToggle></i>
@@ -32,32 +53,24 @@
                 <div class="columnar-form-field mb-2 mr-2">
                     <sh-select [options]="flatGroupsOptions" [placeholder]="'Group *'" name="group" (selected)="selectGroup($event);" [forceClearReactive]="forceClear$ | async"></sh-select>
                 </div>
-                <div class="columnar-form-field mb-2">
+                <div class="columnar-form-field mb-2 mr-1" *ngIf="!isMobileScreen && columnarReportResponse">
                     <button class="btn btn-filter mr-0" (click)="clearFilter();"> <span class="icon-cross"></span> Clear Filter</button>
                 </div>
             </div>
-            <div class="columnar-form-field mb-2">
+            <div class="columnar-form-field mb-2" *ngIf="!isMobileScreen">
                 <a href="javascript:void(0);" class="icomoon-ico" (click)="!isFormValid() || isLoading" (click)="exportReport(false);" [tooltip]="'Export'">
                     <i class="icon-ledger-union-5"></i>
                 </a>
-                <!-- <button class="btn btn-pink " [disabled]="!isFormValid() || isLoading" (click)="exportReport(true);">Show</button> -->
-                
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12 d-flex">
-                <div class="mr-15">
-                   
-                </div>
-                <div>
-                   
-                </div>
+                <!-- 
+                    for future use
+                    <button class="btn btn-pink " [disabled]="!isFormValid() || isLoading" (click)="exportReport(true);">Show</button> -->    
             </div>
         </div>
     </div>
 </div>
-
-<!-- <div *ngIf="columnarReportResponse" class="back-btn text-center pr-1 mt-1 mb-1">
+<!-- 
+    for future use
+    <div *ngIf="columnarReportResponse" class="back-btn text-center pr-1 mt-1 mb-1">
     <button class="btn btn-default" (click)="clearFilter()"> <span class="icon-cross"></span>Clear Filter</button>
 </div> -->
 <columnar-report-table-component [columnarReportResponse]="columnarReportResponse"></columnar-report-table-component>
