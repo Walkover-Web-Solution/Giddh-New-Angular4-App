@@ -1992,6 +1992,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
+        if (trx.isStockTxn) {
+            trx.rate = giddhRoundOff((trx.amount / trx.quantity), 2);
+        }
         trx.amount = Number(trx.amount);
         this.calculateTotalDiscountOfEntry(entry, trx, false);
         this.calculateEntryTaxSum(entry, trx, false);
@@ -2059,11 +2062,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         transaction.amount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
             (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), 2);
         let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), 2);
-        entry.discountSum = perFromAmount + fixedDiscountTotal;
+        entry.discountSum = giddhRoundOff(perFromAmount + fixedDiscountTotal, 2);
         entry.taxSum = giddhRoundOff(((taxPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
         entry.cessSum = giddhRoundOff(((cessPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
         // Calculate stock unit rate with amount
-        if (transaction.stockDetails && transaction.stockDetails.uniqueName) {
+        if (transaction.isStockTxn) {
             transaction.rate = giddhRoundOff((transaction.amount / transaction.quantity), 2);
         }
         this.calculateSubTotal();
