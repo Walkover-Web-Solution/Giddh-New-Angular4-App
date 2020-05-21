@@ -48,6 +48,9 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public totalMultipleCompanyPlans: number = 0;
     public totalSingleCompanyPlans: number = 0;
     public totalFreePlans: number = 0;
+    public defaultMultipleCompanyPlan: any;
+    public defaultSingleCompanyPlan: any;
+    public defaultFreePlan: any;
 
     constructor(private modalService: BsModalService, private _generalService: GeneralService,
         private _authenticationService: AuthenticationService, private store: Store<AppState>,
@@ -64,15 +67,34 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                         this.SubscriptionPlans.forEach(item => {
                             if(!item.subscriptionId && item.planDetails) {
                                 if(item.planDetails.amount && item.planDetails.companiesLimit > 1) {
+
+                                    if(!this.defaultMultipleCompanyPlan) {
+                                        this.defaultMultipleCompanyPlan = item;
+                                    }
+
                                     this.totalMultipleCompanyPlans++;
                                 } else if(item.planDetails.amount && item.planDetails.companiesLimit === 1) {
+
+                                    if(!this.defaultSingleCompanyPlan) {
+                                        this.defaultSingleCompanyPlan = item;
+                                    }
+
                                     this.totalSingleCompanyPlans++;
                                 } else if(!item.planDetails.amount) {
+
+                                    if(!this.defaultFreePlan) {
+                                        this.defaultFreePlan = item;
+                                    }
+
                                     this.totalFreePlans++;
                                 }
                             }
                         });
                     }
+
+                    console.log(this.defaultMultipleCompanyPlan);
+                    console.log(this.defaultSingleCompanyPlan);
+                    console.log(this.defaultFreePlan);
                 });
                 this.currentCompany = companyInfo.name;
             }
@@ -99,6 +121,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     public ngOnDestroy() { }
 
     openModal(template: TemplateRef<any>) {
@@ -115,6 +138,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public backClicked() {
         this.isSubscriptionPlanShow.emit(true);
     }
+
     public buyPlanClicked(plan: any) {
         let activationKey = this.licenceKey.value;
         if (activationKey) {
@@ -125,6 +149,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         this._route.navigate(['billing-detail', 'buy-plan']);
         this.store.dispatch(this.companyActions.selectedPlan(plan));
     }
+
     public patchProfile(obj) {
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
     }
@@ -146,6 +171,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
         }
     }
+
     public createCompanyViaActivationKey() {
         let activationKey = this.licenceKey.value;
         this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
@@ -160,4 +186,15 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This function will show plans based on type (multiple company, single company and free plans)
+     *
+     * @param {string} type
+     * @memberof SubscriptionsPlansComponent
+     */
+    public showPlansByType(type: string): void {
+        if(!this.showPlans) {
+            this.showPlans = type;
+        }
+    }
 }

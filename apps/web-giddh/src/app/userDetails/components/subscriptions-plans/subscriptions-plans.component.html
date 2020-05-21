@@ -1,234 +1,307 @@
 <div class="welcome-msg">
-	<div class="row">
-		<div class="col-md-9 font-14">
-			<p class="mb-1">Hi {{logedInUser?.name}} !</p>
-            <p class="mb-3">All the plan come with all the features with <span class="selected">90 days money back guaranty.</span>
-			</p>
-		</div>
-		<div class="col-md-3 text-right xs-left" *ngIf="subscriptions && subscriptions.length > 0">
-			<a (click)="backClicked()" class="btn btn-default pr-3 pl-3 mb-2">Back</a>
-		</div>
-	</div>
-	<div *ngIf="!isSwitchPlanInProcess" class="choose-ur-plan noHeight">
-		<div class="row">
-			<div class="col-sm-12">
-				<div class="row">
+    <div class="row">
+        <div class="col-md-9 font-14">
+            <p class="mb-1">Hi {{logedInUser?.name}} !</p>
+            <p class="mb-3">All the plan come with all the features with <span class="selected">90 days money back
+                    guaranty.</span>
+            </p>
+        </div>
+        <div class="col-md-3 text-right xs-left" *ngIf="subscriptions && subscriptions.length > 0">
+            <a (click)="backClicked()" class="btn btn-default pr-3 pl-3 mb-2">Back</a>
+        </div>
+    </div>
+    <div *ngIf="!isSwitchPlanInProcess" class="choose-ur-plan noHeight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row">
                     <div class="col-md-4 col-sm-6">
-                        <div class="select-plan-block">
+                        <div class="select-plan-block"
+                            [ngClass]="{'plan-disabled': showPlans === 'single' || showPlans === 'free'}">
                             <div class="select-plan-head">
                                 <h2>Multiple Company</h2>
                             </div>
                             <div class="plans-box">
                                 <p class="bold">Total Plan: {{totalMultipleCompanyPlans}}</p>
-                            <div class="your-account">
-                                <div class="inner-your-account">
-                                    <h3 class="mb-2">BONSAI 2.0</h3>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <h3 class="bold font-22 mb-05">₹4000</h3>
-                                        <img class="guarantee-img" src="assets/images/guarantee.png" alt="">
-                                    </div>
-                                    <p class="font-12">Per annum</p>
-                                    <div class="clearfix mb-2">
-                                        <ul class="plan-list">
-                                            <li>Transactions Limit: 10,000
+                                <div class="your-account">
+                                    <div class="inner-your-account">
+                                        <h3 class="mb-2">{{defaultMultipleCompanyPlan?.planDetails?.name}}</h3>
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h3 class="bold font-22 mb-05">{{defaultMultipleCompanyPlan?.planDetails?.amount}}</h3>
+                                            <img class="guarantee-img" src="assets/images/guarantee.png" alt="">
+                                        </div>
+                                        <p class="font-12">{{defaultMultipleCompanyPlan?.planDetails?.durationUnit}}(s)</p>
+                                        <div class="clearfix mb-2">
+                                            <ul class="plan-list">
+                                                <li>Transactions Limit: {{defaultMultipleCompanyPlan?.planDetails?.transactionLimit}}
+                                                    <div class="btn-group pull-right" dropdown placement="bottom right">
+                                                        <button id="button-alignment" dropdownToggle type="button"
+                                                            class="btn btn-primary dropdown-toggle close"
+                                                            aria-controls="dropdown-alignment">
+                                                            <i class="icon-info"></i>
+                                                        </button>
+                                                        <div id="dropdown-alignment" *dropdownMenu
+                                                            class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                            role="menu" aria-labelledby="button-alignment">
+                                                            <a href="javascript:void(0)" class="inner-close"><i
+                                                                    class="icon-cross"></i></a>
+                                                            <p class="bold mb-1">Transactions Limit</p>
+                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante.
+                                                                Duis et risus accumsan sem tempus porta nec sit amet
+                                                                est. Sed ut euismod quam. Suspendisse potenti. Aliquam
+                                                                fringilla orci tincidunt, ullamcorper erat in, malesuada
+                                                                metus.</p>
+                                                            <p><a href="javascript:void(0)"
+                                                                    class="color-primary bold">More Details</a></p>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>Total Companies: {{defaultMultipleCompanyPlan?.planDetails?.companiesLimit}}
+                                                </li>
+                                                <li>Unlimited Users
 
-                                                <div class="btn-group pull-right" dropdown placement="bottom right">
-                                                    <button id="button-alignment" dropdownToggle type="button"
-                                                    class="btn btn-primary dropdown-toggle close" aria-controls="dropdown-alignment">
-                                                        <i class="icon-info"></i>
-                                                    </button>
-                                                    <div id="dropdown-alignment" *dropdownMenu class="transactions-popup dropdown-menu dropdown-menu-right"
-                                                        role="menu" aria-labelledby="button-alignment">
-                                                            <a href="javascript:void(0)" class="inner-close"><i class="icon-cross"></i></a>
+                                                    <div class="btn-group pull-right" dropdown placement="bottom right">
+                                                        <button id="button-alignment" dropdownToggle type="button"
+                                                            class="btn btn-primary dropdown-toggle close"
+                                                            aria-controls="dropdown-alignment">
+                                                            <i class="icon-info"></i>
+                                                        </button>
+                                                        <div id="dropdown-alignment" *dropdownMenu
+                                                            class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                            role="menu" aria-labelledby="button-alignment">
+                                                            <a href="javascript:void(0)" class="inner-close"><i
+                                                                    class="icon-cross"></i></a>
                                                             <p class="bold mb-1">Transactions Limit</p>
-                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.</p>
-                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
+                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante.
+                                                                Duis et risus accumsan sem tempus porta nec sit amet
+                                                                est. Sed ut euismod quam. Suspendisse potenti. Aliquam
+                                                                fringilla orci tincidunt, ullamcorper erat in, malesuada
+                                                                metus.</p>
+                                                            <p><a href="javascript:void(0)"
+                                                                    class="color-primary bold">More Details</a></p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </li>
-                                            <li>Total Companies: 1
-                                            </li>
-                                            <li>Unlimited Users
+                                                </li>
+                                                <li>Unlimited Customers/Vendors
+                                                    <div class="btn-group pull-right" dropdown placement="bottom right">
+                                                        <button id="button-alignment" dropdownToggle type="button"
+                                                            class="btn btn-primary dropdown-toggle close"
+                                                            aria-controls="dropdown-alignment">
+                                                            <i class="icon-info"></i>
+                                                        </button>
+                                                        <div id="dropdown-alignment" *dropdownMenu
+                                                            class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                            role="menu" aria-labelledby="button-alignment">
+                                                            <a href="javascript:void(0)" class="inner-close"><i
+                                                                    class="icon-cross"></i></a>
+                                                            <p class="bold mb-1">Transactions Limit</p>
+                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante.
+                                                                Duis et risus accumsan sem tempus porta nec sit amet
+                                                                est. Sed ut euismod quam. Suspendisse potenti. Aliquam
+                                                                fringilla orci tincidunt, ullamcorper erat in, malesuada
+                                                                metus.</p>
+                                                            <p><a href="javascript:void(0)"
+                                                                    class="color-primary bold">More Details</a></p>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>Desktop/Mobile App
+                                                    <div class="btn-group pull-right" dropdown placement="bottom right">
+                                                        <button id="button-alignment" dropdownToggle type="button"
+                                                            class="btn btn-primary dropdown-toggle close"
+                                                            aria-controls="dropdown-alignment">
+                                                            <i class="icon-info"></i>
+                                                        </button>
+                                                        <div id="dropdown-alignment" *dropdownMenu
+                                                            class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                            role="menu" aria-labelledby="button-alignment">
+                                                            <a href="javascript:void(0)" class="inner-close"><i
+                                                                    class="icon-cross"></i></a>
+                                                            <p class="bold mb-1">Transactions Limit</p>
+                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante.
+                                                                Duis et risus accumsan sem tempus porta nec sit amet
+                                                                est. Sed ut euismod quam. Suspendisse potenti. Aliquam
+                                                                fringilla orci tincidunt, ullamcorper erat in, malesuada
+                                                                metus.</p>
+                                                            <p><a href="javascript:void(0)"
+                                                                    class="color-primary bold">More Details</a></p>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
 
-                                                <div class="btn-group pull-right" dropdown placement="bottom right">
-                                                    <button id="button-alignment" dropdownToggle type="button"
-                                                    class="btn btn-primary dropdown-toggle close" aria-controls="dropdown-alignment">
-                                                        <i class="icon-info"></i>
-                                                    </button>
-                                                    <div id="dropdown-alignment" *dropdownMenu class="transactions-popup dropdown-menu dropdown-menu-right"
-                                                        role="menu" aria-labelledby="button-alignment">
-                                                            <a href="javascript:void(0)" class="inner-close"><i class="icon-cross"></i></a>
-                                                            <p class="bold mb-1">Transactions Limit</p>
-                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.</p>
-                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>Unlimited Customers/Vendors
-                                                <div class="btn-group pull-right" dropdown placement="bottom right">
-                                                    <button id="button-alignment" dropdownToggle type="button"
-                                                    class="btn btn-primary dropdown-toggle close" aria-controls="dropdown-alignment">
-                                                        <i class="icon-info"></i>
-                                                    </button>
-                                                    <div id="dropdown-alignment" *dropdownMenu class="transactions-popup dropdown-menu dropdown-menu-right"
-                                                        role="menu" aria-labelledby="button-alignment">
-                                                            <a href="javascript:void(0)" class="inner-close"><i class="icon-cross"></i></a>
-                                                            <p class="bold mb-1">Transactions Limit</p>
-                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.</p>
-                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>Desktop/Mobile App
-                                                <div class="btn-group pull-right" dropdown placement="bottom right">
-                                                    <button id="button-alignment" dropdownToggle type="button"
-                                                    class="btn btn-primary dropdown-toggle close" aria-controls="dropdown-alignment">
-                                                        <i class="icon-info"></i>
-                                                    </button>
-                                                    <div id="dropdown-alignment" *dropdownMenu class="transactions-popup dropdown-menu dropdown-menu-right"
-                                                        role="menu" aria-labelledby="button-alignment">
-                                                            <a href="javascript:void(0)" class="inner-close"><i class="icon-cross"></i></a>
-                                                            <p class="bold mb-1">Transactions Limit</p>
-                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.</p>
-                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                    <div class="plan-footer">
-                                        <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)" class="color-primary font-14">Check all features</a></p>
-                                        <button class="btn success-btn btn-round"
-                                            [ladda]="this.isUpdateCompanyInProgress$ | async">Start Trial</button>
+                                        <div class="plan-footer">
+                                            <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)"
+                                                    class="color-primary font-14">Check all features</a></p>
+                                            <button class="btn success-btn btn-round" [disabled]="showPlans === 'free' || showPlans === 'single'" (click)="buyPlanClicked(defaultMultipleCompanyPlan)"
+                                                [ladda]="this.isUpdateCompanyInProgress$ | async">Buy Plan</button>
                                             <p class="font-12">*prices excluding Tax</p>
+                                        </div>
                                     </div>
                                 </div>
+                                <a href="javascript:void(0)" class="btn btn-green btn-round"
+                                    (click)="showPlansByType('multiple')">See all Multiple Company Plans</a>
                             </div>
-                            <a href="javascript:void(0)" class="btn btn-green btn-round" (click)="showPlans = 'multiple'">See all Multiple Company Plans</a>
-                        </div>
                         </div>
                     </div>
                     <div class="col-md-4 col-sm-6">
-                        <div class="select-plan-block plan-disabled">
+                        <div class="select-plan-block"
+                            [ngClass]="{'plan-disabled': showPlans === 'multiple' || showPlans === 'free'}">
                             <div class="select-plan-head">
                                 <h2>Single Company</h2>
                             </div>
                             <div class="plans-box">
                                 <p class="bold">Total Plan: {{totalSingleCompanyPlans}}</p>
-                            <div class="your-account">
-                                <div class="inner-your-account popular">
-                                    <img src="assets/images/popular.svg" class="popular-icon" alt="">
-                                    <h3 class="mb-2">Plan 1 <small class="font-12 unbold text-blue">(Current Plan)</small></h3>
-                                    <div class="mb-3">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h3 class="bold font-22 mb-05"><span class="price-cross">₹800</span> ₹700</h3>
-                                            <img class="guarantee-img" src="assets/images/guarantee.png" alt="">
-                                        </div>
-                                        <p class="font-12">Three months</p>
-                                    </div>
-                                    <div class="clearfix">
-                                        <ul class="plan-list">
-                                            <li>Transactions Limit: 40,000
-
-                                                <div class="btn-group pull-right" dropdown placement="bottom right">
-                                                    <button id="button-alignment" dropdownToggle type="button"
-                                                    class="btn btn-primary dropdown-toggle close" aria-controls="dropdown-alignment">
-                                                        <i class="icon-info"></i>
-                                                    </button>
-                                                    <div id="dropdown-alignment" *dropdownMenu class="transactions-popup dropdown-menu dropdown-menu-right"
-                                                        role="menu" aria-labelledby="button-alignment">
-                                                            <a href="javascript:void(0)" class="inner-close"><i class="icon-cross"></i></a>
-                                                            <p class="bold mb-1">Transactions Limit</p>
-                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.</p>
-                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>Total Companies: 10</li>
-                                            <li>Unlimited Users <div class="pull-right">
-                                                <a href="javascript:void(0)" class="text-gray"><i class="icon-info"></i></a>
+                                <div class="your-account">
+                                    <div class="inner-your-account popular">
+                                        <img src="assets/images/popular.svg" class="popular-icon" alt="">
+                                        <h3 class="mb-2">{{defaultSingleCompanyPlan?.planDetails?.name}} 
+                                            <!-- <small class="font-12 unbold text-blue">(Current
+                                                Plan)</small> -->
+                                        </h3>
+                                        <div class="mb-3">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <h3 class="bold font-22 mb-05">
+                                                    <!-- <span class="price-cross">₹800</span> -->
+                                                    {{defaultSingleCompanyPlan?.planDetails?.amount}}
+                                                </h3>
+                                                <img class="guarantee-img" src="assets/images/guarantee.png" alt="">
                                             </div>
-                                        </li>
-                                            <li>Unlimited Customers/Vendors <div class="pull-right">
-                                                <a href="javascript:void(0)" class="text-gray"><i class="icon-info"></i></a>
-                                            </div></li>
-                                            <li>Desktop/Mobile App <div class="pull-right">
-                                                <a href="javascript:void(0)" class="text-gray"><i class="icon-info"></i></a>
-                                            </div></li>
-                                        </ul>
-                                    </div>
-                                    <div class="plan-footer">
-                                        <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)" class="color-primary font-14">Check all features</a></p>
-                                        <button class="btn success-btn btn-round"
-                                            [ladda]="this.isUpdateCompanyInProgress$ | async">Buy Plan</button>
+                                            <p class="font-12">{{defaultSingleCompanyPlan?.planDetails?.durationUnit}}(s)</p>
+                                        </div>
+                                        <div class="clearfix">
+                                            <ul class="plan-list">
+                                                <li>Transactions Limit: {{defaultSingleCompanyPlan?.planDetails?.transactionLimit}}
+
+                                                    <div class="btn-group pull-right" dropdown placement="bottom right">
+                                                        <button id="button-alignment" dropdownToggle type="button"
+                                                            class="btn btn-primary dropdown-toggle close"
+                                                            aria-controls="dropdown-alignment">
+                                                            <i class="icon-info"></i>
+                                                        </button>
+                                                        <div id="dropdown-alignment" *dropdownMenu
+                                                            class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                            role="menu" aria-labelledby="button-alignment">
+                                                            <a href="javascript:void(0)" class="inner-close"><i
+                                                                    class="icon-cross"></i></a>
+                                                            <p class="bold mb-1">Transactions Limit</p>
+                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante.
+                                                                Duis et risus accumsan sem tempus porta nec sit amet
+                                                                est. Sed ut euismod quam. Suspendisse potenti. Aliquam
+                                                                fringilla orci tincidunt, ullamcorper erat in, malesuada
+                                                                metus.</p>
+                                                            <p><a href="javascript:void(0)"
+                                                                    class="color-primary bold">More Details</a></p>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>Total Companies: {{defaultSingleCompanyPlan?.planDetails?.companiesLimit}}</li>
+                                                <li>Unlimited Users <div class="pull-right">
+                                                        <a href="javascript:void(0)" class="text-gray"><i
+                                                                class="icon-info"></i></a>
+                                                    </div>
+                                                </li>
+                                                <li>Unlimited Customers/Vendors <div class="pull-right">
+                                                        <a href="javascript:void(0)" class="text-gray"><i
+                                                                class="icon-info"></i></a>
+                                                    </div>
+                                                </li>
+                                                <li>Desktop/Mobile App <div class="pull-right">
+                                                        <a href="javascript:void(0)" class="text-gray"><i
+                                                                class="icon-info"></i></a>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="plan-footer">
+                                            <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)"
+                                                    class="color-primary font-14">Check all features</a></p>
+                                            <button class="btn success-btn btn-round" [disabled]="showPlans === 'multiple' || showPlans === 'free'" (click)="buyPlanClicked(defaultSingleCompanyPlan)"
+                                                [ladda]="this.isUpdateCompanyInProgress$ | async">Buy Plan</button>
                                             <p class="font-12">*prices excluding Tax</p>
+                                        </div>
                                     </div>
                                 </div>
+                                <a href="javascript:void(0)" class="btn btn-green btn-round"
+                                    (click)="showPlansByType('single')">See all Single Company Plans</a>
                             </div>
-                            <a href="javascript:void(0)" class="btn btn-green btn-round" (click)="showPlans = 'single'">See all Single Company Plans</a>
-                        </div>
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-6 plan-disabled">
-                        <div class="select-plan-block">
+                    <div class="col-md-4 col-sm-6">
+                        <div class="select-plan-block"
+                            [ngClass]="{'plan-disabled': showPlans === 'multiple' || showPlans === 'single'}">
                             <div class="select-plan-head">
                                 <h2>Free</h2>
                             </div>
                             <div class="plans-box">
                                 <p class="bold">Total Plan: {{totalFreePlans}}</p>
-                            <div class="your-account">
-                                <div class="inner-your-account">
-                                    <h3 class="mb-2">Professional</h3>
-                                    <div class="mb-3">
+                                <div class="your-account">
+                                    <div class="inner-your-account">
+                                        <h3 class="mb-2">{{defaultFreePlan?.planDetails?.name}}</h3>
                                         <div class="mb-3">
-                                            <h3 class="bold font-22 mb-05">₹0</h3>
-                                            <p class="font-12">Three months</p>
+                                            <div class="mb-3">
+                                                <h3 class="bold font-22 mb-05">{{defaultFreePlan?.planDetails?.amount}}</h3>
+                                                <p class="font-12">{{defaultFreePlan?.planDetails?.durationUnit}}(s)</p>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix">
+                                            <ul class="plan-list">
+                                                <li>Transactions Limit: {{defaultFreePlan?.planDetails?.transactionLimit}} <div class="pull-right">
+                                                        <a href="javascript:void(0)" class="text-gray"><i
+                                                                class="icon-info"></i></a>
+                                                        <div class="transactions-popup" [hidden]="isShow">
+                                                            <a href="javascript:void(0)" class="close"><i
+                                                                    class="icon-cross"></i></a>
+                                                            <p class="bold mb-1">Transactions Limit</p>
+                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante.
+                                                                Duis et risus accumsan sem tempus porta nec sit amet
+                                                                est. Sed ut euismod quam. Suspendisse potenti. Aliquam
+                                                                fringilla orci tincidunt, ullamcorper erat in, malesuada
+                                                                metus.</p>
+                                                            <p><a href="javascript:void(0)"
+                                                                    class="color-primary bold">More Details</a></p>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>Total Companies: {{defaultFreePlan?.planDetails?.companiesLimit}}</li>
+                                                <li>Unlimited Users <div class="pull-right">
+                                                        <a href="javascript:void(0)" class="text-gray"><i
+                                                                class="icon-info"></i></a>
+                                                    </div>
+                                                </li>
+                                                <li>Unlimited Customers/Vendors <div class="pull-right">
+                                                        <a href="javascript:void(0)" class="text-gray"><i
+                                                                class="icon-info"></i></a>
+                                                    </div>
+                                                </li>
+                                                <li>Desktop/Mobile App <div class="pull-right">
+                                                        <a href="javascript:void(0)" class="text-gray"><i
+                                                                class="icon-info"></i></a>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="plan-footer">
+                                            <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)"
+                                                    class="color-primary font-14">Check all features</a></p>
+                                            <button class="btn success-btn btn-round" [disabled]="showPlans === 'multiple' || showPlans === 'single'" (click)="choosePlan(defaultFreePlan);"
+                                                [ladda]="this.isUpdateCompanyInProgress$ | async">Start Trial</button>
+                                            <p class="font-12">*prices excluding Tax</p>
                                         </div>
                                     </div>
-                                    <div class="clearfix">
-                                        <ul class="plan-list">
-                                            <li>Transactions Limit: 40,000 <div class="pull-right">
-                                                <a href="javascript:void(0)" class="text-gray"><i class="icon-info"></i></a>
-                                                <div class="transactions-popup" [hidden]="isShow">
-                                                    <a href="javascript:void(0)" class="close"><i class="icon-cross"></i></a>
-                                                    <p class="bold mb-1">Transactions Limit</p>
-                                                    <p class="font-12 text-gray mb-1">Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.</p>
-                                                    <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
-                                                </div>
-                                            </div></li>
-                                            <li>Total Companies: 100</li>
-                                            <li>Unlimited Users <div class="pull-right">
-                                                <a href="javascript:void(0)" class="text-gray"><i class="icon-info"></i></a>
-                                            </div>
-                                        </li>
-                                            <li>Unlimited Customers/Vendors <div class="pull-right">
-                                                <a href="javascript:void(0)" class="text-gray"><i class="icon-info"></i></a>
-                                            </div></li>
-                                            <li>Desktop/Mobile App <div class="pull-right">
-                                                <a href="javascript:void(0)" class="text-gray"><i class="icon-info"></i></a>
-                                            </div></li>
-                                        </ul>
-                                    </div>
-                                    <div class="plan-footer">
-                                        <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)" class="color-primary font-14">Check all features</a></p>
-                                        <button class="btn success-btn btn-round"
-                                            [ladda]="this.isUpdateCompanyInProgress$ | async">Buy Plan</button>
-                                            <p class="font-12">*prices excluding Tax</p>
-                                    </div>
                                 </div>
+                                <a href="javascript:void(0)" class="btn btn-green btn-round"
+                                    (click)="showPlansByType('free')">See all FREE Plans</a>
                             </div>
-                            <a href="javascript:void(0)" class="btn btn-green btn-round" (click)="showPlans = 'free'">See all FREE Plans</a>
-                        </div>
                         </div>
                     </div>
 
 
 
-					<!-- <ng-container *ngFor="let item of SubscriptionPlans; let i=index">
+                    <!-- <ng-container *ngFor="let item of SubscriptionPlans; let i=index">
 						<ng-container *ngIf="!item?.planDetails?.amount && !item.subscriptionId"> -->
 
-                            <!-- <div class="col-sm-4">
+                    <!-- <div class="col-sm-4">
 								<div class="select-plan-block">
 									{{item?.planDetails?.name}}
 									<div class="your-account">
@@ -307,7 +380,7 @@
 
 
 
-							<!-- <div class="col-sm-4">
+                    <!-- <div class="col-sm-4">
 								<div class="select-plan-block">
 									{{item?.planDetails?.name}}
 									<div class="your-account">
@@ -380,11 +453,11 @@
 								</div>
 
 							</div> -->
-                        <!-- </ng-container> -->
+                    <!-- </ng-container> -->
 
 
-						<!-- new plan after free -->
-						<!-- <ng-container *ngIf="item?.planDetails?.amount && !item.subscriptionId">
+                    <!-- new plan after free -->
+                    <!-- <ng-container *ngIf="item?.planDetails?.amount && !item.subscriptionId">
 							<div class="col-sm-4">
 								<div class="select-plan-block">
 									{{item?.planDetails?.name}}
@@ -457,9 +530,9 @@
 
 							</div>
 						</ng-container> -->
-					<!-- </ng-container> -->
-				</div>
-				<!-- <div class="row">
+                    <!-- </ng-container> -->
+                </div>
+                <!-- <div class="row">
 					<ng-container *ngFor="let paidItem of SubscriptionPlans">
 						<ng-container
 							*ngIf="paidItem?.subscriptionId && paidItem?.totalCompanies!==paidItem?.planDetails?.companiesLimit">
@@ -550,7 +623,7 @@
 						</ng-container>
 					</ng-container>
 				</div> -->
-			</div>
+            </div>
         </div>
 
         <!-- <div class="box">
@@ -572,36 +645,42 @@
                 </div>
             </div>
         </div> -->
-	</div>
-	<div *ngIf="isSwitchPlanInProcess">
-		<div class="no-data mrT2 loader-main">
-			<div class="spinner2">
-				<div class="cube1"></div>
-				<div class="cube2"></div>
-			</div>
-		</div>
-	</div>
+    </div>
+    <div *ngIf="isSwitchPlanInProcess">
+        <div class="no-data mrT2 loader-main">
+            <div class="spinner2">
+                <div class="cube1"></div>
+                <div class="cube2"></div>
+            </div>
+        </div>
+    </div>
     <div class="box clearfix mt-2 pl-5 xs-pl-0 pt-3 pb-3 relative see-all-features" *ngIf="showPlans">
         <a class="close close-2" href="javascript:void(0)" (click)="showPlans = ''">
             <i class="icon-cross"></i>
         </a>
         <div class="col-sm-6 col-md-3" *ngFor="let item of SubscriptionPlans; let i=index">
-            <div class="inner-your-account" *ngIf="!item.subscriptionId && ((showPlans === 'multiple' && item?.planDetails?.amount && item?.planDetails?.companiesLimit > 1) || (showPlans === 'single' && item?.planDetails?.amount && item?.planDetails?.companiesLimit === 1) || (showPlans === 'free' && !item?.planDetails?.amount))">
+            <div class="inner-your-account"
+                *ngIf="!item.subscriptionId && ((showPlans === 'multiple' && item?.planDetails?.amount && item?.planDetails?.companiesLimit > 1) || (showPlans === 'single' && item?.planDetails?.amount && item?.planDetails?.companiesLimit === 1) || (showPlans === 'free' && !item?.planDetails?.amount))">
                 <h3 class="mb-2">{{item?.planDetails?.name}}</h3>
                 <div class="mb-3">
-                    <h3 class="bold font-22 mb-05">₹{{item?.planDetails?.amount | number}}</h3>
-                    <p class="font-12">Three months</p>
+                    <h3 class="bold font-22 mb-05">{{item?.planDetails?.amount | number}}</h3>
+                    <p class="font-12">{{item?.planDetails?.durationUnit}}(s)</p>
                 </div>
                 <div class="clearfix">
                     <ul class="plan-list">
                         <li>Transactions Limit: {{item?.planDetails?.transactionLimit | number}}</li>
-                        <li>Total Companies: {{ item?.totalCompanies | number}} out of {{ item?.planDetails?.companiesLimit | number}}</li>
+                        <li>Total Companies: {{ item?.totalCompanies | number}} out of
+                            {{ item?.planDetails?.companiesLimit | number}}</li>
                         <li *ngIf="item?.expiry">Subscription Renewal: {{item?.expiry}}</li>
                     </ul>
                 </div>
                 <div class="plan-footer">
-                    <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)" class="color-primary font-14">Check all features</a></p>
-                    <button class="btn success-btn btn-round" (click)="choosePlan(item);" [ladda]="this.isUpdateCompanyInProgress$ | async">Start Trial</button>
+                    <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)"
+                            class="color-primary font-14">Check all features</a></p>
+                    <button class="btn success-btn btn-round" *ngIf="!item?.planDetails?.amount" (click)="choosePlan(item);"
+                        [ladda]="this.isUpdateCompanyInProgress$ | async">Start Trial</button>
+                    <button class="btn success-btn btn-round" *ngIf="item?.planDetails?.amount" (click)="buyPlanClicked(item)"
+                        [ladda]="this.isUpdateCompanyInProgress$ | async">Buy Plan</button>    
                 </div>
             </div>
         </div>

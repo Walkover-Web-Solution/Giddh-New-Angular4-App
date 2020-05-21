@@ -54,7 +54,7 @@ export class MoveCompanyComponent implements OnInit {
             userUniqueName: this.moveSelectedCompany.createdBy.uniqueName,
             licenceKey: ''
         };
-        this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true });
+        this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true, moveCompany: this.moveSelectedCompany.uniqueName });
     }
 
     public patchProfile(obj): void {
