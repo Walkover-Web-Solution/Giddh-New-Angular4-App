@@ -866,7 +866,7 @@
                                             </div>
                                             <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                                 <span>{{baseCurrencySymbol}}</span>
-                                                <span>{{transaction.amount * exchangeRate | giddhCurrency}}</span>
+                                                <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
                                             </div>
                                         </div>
                                     </td>
