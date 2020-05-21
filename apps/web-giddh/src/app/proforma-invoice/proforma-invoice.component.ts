@@ -2007,6 +2007,73 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // }
     }
 
+    /**
+     * Calculate the complete transaction values inclusively
+     *
+     * @param {SalesEntryClass} entry Entry value
+     * @param {SalesTransactionItemClass} transaction Current transaction
+     * @memberof ProformaInvoiceComponent
+     */
+    public calculateTransactionValueInclusively(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
+        // Calculate discount
+        let percentageDiscountTotal = entry.discounts.filter(discount => discount.isActive)
+            .filter(activeDiscount => activeDiscount.discountType === 'PERCENTAGE')
+            .reduce((pv, cv) => {
+                return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+            }, 0) || 0;
+
+        let fixedDiscountTotal = entry.discounts.filter(discount => discount.isActive)
+            .filter(activeDiscount => activeDiscount.discountType === 'FIX_AMOUNT')
+            .reduce((pv, cv) => {
+                return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+            }, 0) || 0;
+
+        if (isNaN(entry.discountSum)) {
+            entry.discountSum = 0;
+        }
+        if (isNaN(transaction.taxableValue)) {
+            transaction.taxableValue = 0;
+        }
+
+        // Calculate tax
+        let taxPercentage: number = 0;
+        let cessPercentage: number = 0;
+        let taxTotal: number = 0;
+        entry.taxes.filter(f => f.isChecked).forEach(tax => {
+            if (tax.type === 'gstcess') {
+                cessPercentage += tax.amount;
+            } else {
+                taxPercentage += tax.amount;
+            }
+            taxTotal += tax.amount;
+        });
+        if (isNaN(entry.taxSum)) {
+            entry.taxSum = 0;
+        }
+
+        if (isNaN(entry.cessSum)) {
+            entry.cessSum = 0;
+        }
+
+        // Calculate amount with inclusive tax
+        transaction.amount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
+            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), 2);
+        let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), 2);
+        entry.discountSum = perFromAmount + fixedDiscountTotal;
+        entry.taxSum = giddhRoundOff(((taxPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
+        entry.cessSum = giddhRoundOff(((cessPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
+        // Calculate stock unit rate with amount
+        if (transaction.stockDetails && transaction.stockDetails.uniqueName) {
+            transaction.rate = giddhRoundOff((transaction.amount / transaction.quantity), 2);
+        }
+        this.calculateSubTotal();
+        this.calculateTotalDiscount();
+        this.calculateTotalTaxSum();
+        this.calculateGrandTotal();
+        this.calculateOtherTaxes(entry.otherTaxModal, entry);
+        this.calculateTcsTdsTotal();
+    }
+
     public calculateTotalDiscount() {
         let discount = 0;
         this.invFormData.entries.forEach(f => {
