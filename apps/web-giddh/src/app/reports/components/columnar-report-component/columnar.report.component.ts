@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
 import { select, Store } from '@ngrx/store';
 import { takeUntil, take } from 'rxjs/operators';
@@ -14,6 +14,7 @@ import { saveAs } from "file-saver";
 import { IForceClear } from '../../../models/api-models/Sales';
 import { ReportsDetailedRequestFilter } from '../../../models/api-models/Reports';
 import { PAGINATION_LIMIT } from '../../../app.constant';
+import { BsDropdownDirective } from 'ngx-bootstrap';
 
 @Component({
     selector: 'columnar-report-component',
@@ -22,6 +23,7 @@ import { PAGINATION_LIMIT } from '../../../app.constant';
 })
 
 export class ColumnarReportComponent implements OnInit, OnDestroy {
+    @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
     public fromMonthNames: any = [];
     public toMonthNames: any = [];
     public selectYear: any = [];
@@ -48,6 +50,55 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public paginationCount: number = PAGINATION_LIMIT;
     /** True, if request for show report  */
     public isShowColumnarReport: boolean = false;
+    public datePickerOptions: any = {
+        hideOnEsc: true,
+        // parentEl: '#dateRangePickerParent',
+        locale: {
+            applyClass: 'btn-green',
+            applyLabel: 'Go',
+            fromLabel: 'From',
+            format: 'D-MMM-YY',
+            toLabel: 'To',
+            cancelLabel: 'Cancel',
+            customRangeLabel: 'Custom range'
+        },
+        ranges: {
+            'This Month to Date': [
+                moment().startOf('month'),
+                moment()
+            ],
+            'This Quarter to Date': [
+                moment().quarter(moment().quarter()).startOf('quarter'),
+                moment()
+            ],
+            'This Financial Year to Date': [
+                moment().startOf('year').subtract(9, 'year'),
+                moment()
+            ],
+            'This Year to Date': [
+                moment().startOf('year'),
+                moment()
+            ],
+            'Last Month': [
+                moment().subtract(1, 'month').startOf('month'),
+                moment().subtract(1, 'month').endOf('month')
+            ],
+            'Last Quater': [
+                moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
+                moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+            ],
+            'Last Financial Year': [
+                moment().startOf('year').subtract(10, 'year'),
+                moment().endOf('year').subtract(10, 'year')
+            ],
+            'Last Year': [
+                moment().startOf('year').subtract(1, 'year'),
+                moment().endOf('year').subtract(1, 'year')
+            ]
+        },
+        startDate: moment().subtract(30, 'days'),
+        endDate: moment()
+    };
     constructor(public settingsFinancialYearService: SettingsFinancialYearService, private store: Store<AppState>, private toaster: ToasterService, private ledgerService: LedgerService, private generalService: GeneralService) {
         this.exportRequest.fileType = 'xls';
         this.exportRequest.balanceTypeAsSign = false;
@@ -108,7 +159,6 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             }
         });
     }
-
     /**
      * Callback for group selection
      *
@@ -174,7 +224,11 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
+    public hideListItems() {
+        if (this.filterDropDownList.isOpen) {
+            this.filterDropDownList.hide();
+        }
+    }
     /**
      * Callback for select year to prepare list of months
      *
