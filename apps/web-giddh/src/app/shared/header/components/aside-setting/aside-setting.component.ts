@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
 import { settingsPageTabs } from "../../../helpers/pageTabs";
 import { Location } from '@angular/common';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'aside-setting',
@@ -16,8 +17,9 @@ export class AsideSettingComponent implements OnInit {
     public settingsPageTabs: any[] = [];
     public search: any = "";
     public filteredSettingsPageTabs: any[] = [];
+    public isMobileScreen: boolean = true;
 
-    constructor(private location: Location) {
+    constructor(private location: Location, private breakPointObservar: BreakpointObserver) {
 
     }
 
@@ -27,6 +29,12 @@ export class AsideSettingComponent implements OnInit {
      * @memberof AsideSettingComponent
      */
     public ngOnInit(): void {
+        this.breakPointObservar.observe([
+            '(max-width:767px)'
+        ]).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         if (settingsPageTabs) {
             let loop = 0;
@@ -60,12 +68,12 @@ export class AsideSettingComponent implements OnInit {
     public searchMenu(search: any): void {
         this.filteredSettingsPageTabs = [];
 
-        if(search && search.trim()) {
+        if (search && search.trim()) {
             let loop = 0;
             this.settingsPageTabs.forEach((section) => {
                 section.forEach(tab => {
-                    if(tab.label.toLowerCase().includes(search.trim().toLowerCase())) {
-                        if(this.filteredSettingsPageTabs[loop] === undefined) {
+                    if (tab.label.toLowerCase().includes(search.trim().toLowerCase())) {
+                        if (this.filteredSettingsPageTabs[loop] === undefined) {
                             this.filteredSettingsPageTabs[loop] = [];
                         }
 
@@ -86,5 +94,17 @@ export class AsideSettingComponent implements OnInit {
      */
     public goToPreviousPage(): void {
         this.location.back();
+    }
+
+    /**
+     * This will close the settings popup if clicked outside and is mobile screen
+     *
+     * @param {*} [event]
+     * @memberof AsideSettingComponent
+     */
+    public closeAsidePaneIfMobile(event?): void {
+        if(this.isMobileScreen) {
+            this.closeAsideEvent.emit(event);
+        }
     }
 }

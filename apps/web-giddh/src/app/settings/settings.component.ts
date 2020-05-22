@@ -1,25 +1,25 @@
-import {take, takeUntil} from 'rxjs/operators';
-import {Observable, ReplaySubject} from 'rxjs';
-import {ToasterService} from 'apps/web-giddh/src/app/services/toaster.service';
-import {SettingPermissionComponent} from './permissions/setting.permission.component';
-import {SettingLinkedAccountsComponent} from './linked-accounts/setting.linked.accounts.component';
-import {FinancialYearComponent} from './financial-year/financial-year.component';
-import {SettingProfileComponent} from './profile/setting.profile.component';
-import {SettingIntegrationComponent} from './integration/setting.integration.component';
-import {PermissionDataService} from 'apps/web-giddh/src/app/permissions/permission-data.service';
-import {Component, OnInit, Output, ViewChild, OnDestroy, EventEmitter} from '@angular/core';
-import {TabsetComponent} from 'ngx-bootstrap';
-import {StateDetailsRequest} from '../models/api-models/Company';
-import {CompanyActions} from '../actions/company.actions';
-import {Store} from '@ngrx/store';
-import {AppState} from '../store/roots';
-import {SettingsTagsComponent} from './tags/tags.component';
-import {ActivatedRoute, Router} from '@angular/router';
-import {BunchComponent} from './bunch/bunch.component';
-import {AuthenticationService} from '../services/authentication.service';
-import {GeneralActions} from '../actions/general/general.actions';
-import {SettingsIntegrationActions} from '../actions/settings/settings.integration.action';
-import {WarehouseActions} from './warehouse/action/warehouse.action';
+import { take, takeUntil } from 'rxjs/operators';
+import { Observable, ReplaySubject } from 'rxjs';
+import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
+import { SettingPermissionComponent } from './permissions/setting.permission.component';
+import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked.accounts.component';
+import { FinancialYearComponent } from './financial-year/financial-year.component';
+import { SettingProfileComponent } from './profile/setting.profile.component';
+import { SettingIntegrationComponent } from './integration/setting.integration.component';
+import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
+import { Component, OnInit, Output, ViewChild, OnDestroy, EventEmitter } from '@angular/core';
+import { TabsetComponent } from 'ngx-bootstrap';
+import { StateDetailsRequest } from '../models/api-models/Company';
+import { CompanyActions } from '../actions/company.actions';
+import { Store } from '@ngrx/store';
+import { AppState } from '../store/roots';
+import { SettingsTagsComponent } from './tags/tags.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BunchComponent } from './bunch/bunch.component';
+import { AuthenticationService } from '../services/authentication.service';
+import { GeneralActions } from '../actions/general/general.actions';
+import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
+import { WarehouseActions } from './warehouse/action/warehouse.action';
 import { PAGINATION_LIMIT } from '../app.constant';
 import { HttpClient } from "@angular/common/http";
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -78,6 +78,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
             '(max-width:767px)'
         ]).subscribe(result => {
             this.isMobileScreen = result.matches;
+            if(!this.isMobileScreen) {
+                this.asideSettingMenuState = "in";
+                this.toggleBodyClass();
+            }
         });
 
         this.toggleSettingPane();
@@ -99,18 +103,18 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
             this.tabChanged(this.activeTab);
 
-            if(this.activeTab == "integration") {
+            if (this.activeTab == "integration") {
                 this.integrationComponent.getInitialData();
-            } else if(this.activeTab == "linked-accounts") {
+            } else if (this.activeTab == "linked-accounts") {
                 this.eBankComp.getInitialEbankInfo();
-            } else if(this.activeTab == "profile") {
+            } else if (this.activeTab == "profile") {
                 this.profileComponent.getInitialProfileData();
                 this.profileComponent.getInventorySettingData();
-            } else if(this.activeTab == "financial-year") {
+            } else if (this.activeTab == "financial-year") {
                 this.financialYearComp.getInitialFinancialYearData();
-            } else if(this.activeTab == "permission") {
+            } else if (this.activeTab == "permission") {
                 this.permissionComp.getInitialData();
-            } else if(this.activeTab == "tag") {
+            } else if (this.activeTab == "tag") {
                 this.tagComp.getTags();
             }
         });
@@ -203,12 +207,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
             this.loadModuleData(tab);
             if (this.integrationtab) {
-                this.router.navigate(['pages/settings/', tab, this.integrationtab], {replaceUrl: true});
+                this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
             }
         } else {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
             this.loadModuleData(tab);
-            this.router.navigate(['pages/settings/', tab], {replaceUrl: true});
+            this.router.navigate(['pages/settings/', tab], { replaceUrl: true });
         }
     }
 
@@ -291,19 +295,20 @@ export class SettingsComponent implements OnInit, OnDestroy {
         }
     }
 
-    public toggleSettingPane(): void {
+    public toggleSettingPane(event?): void {
         this.toggleBodyClass();
+
+        if (this.isMobileScreen && event && this.asideSettingMenuState === 'in') {
+            this.asideSettingMenuState = "out";
+        }
     }
 
     public toggleBodyClass() {
         if (this.asideSettingMenuState === 'in') {
-           // document.querySelector('body').classList.add('fixed');
+            document.querySelector('body').classList.add('fixed');
         } else {
-          //  document.querySelector('body').classList.remove('fixed');
+            document.querySelector('body').classList.remove('fixed');
         }
-    }
-    public closeAsidePane(event?): void {
-        this.closeAsideEvent.emit(event);
     }
 
     public ngOnDestroy() {
