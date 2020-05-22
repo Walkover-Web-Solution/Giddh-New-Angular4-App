@@ -1418,7 +1418,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.totalSale = res.body.grandTotal;
             this.totalDue = res.body.totalDue;
         }
-
         // get user country from his profile
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile) {
@@ -1601,42 +1600,42 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    /**	
-     * This will update the updated account in voucher list of item	
-     *	
-     * @param {*} voucherUpdatedDetails	
-     * @memberof InvoicePreviewComponent	
-     */	
-    public updateNewAccountInVoucher(voucherUpdatedDetails: any): void {	
-        if (this.voucherData && this.voucherData.items && voucherUpdatedDetails) {	
-            let loop = 0;	
-            this.voucherData.items.forEach(voucher => {	
-                if (voucher.voucherNumber === voucherUpdatedDetails.number) {	
-                    if (voucher.account.uniqueName !== voucherUpdatedDetails.account.uniqueName) {	
-                        this.voucherData.items[loop].account = voucherUpdatedDetails.account;	
-                    }	
-                }	
-                loop++;	
-            });	
-        }	
-    }	
-    /**	
-     * This will give the updated account uniquename	
-     *	
-     * @param {string} voucherNo	
-     * @param {string} currentAccountUniqueName	
-     * @returns {string}	
-     * @memberof InvoicePreviewComponent	
-     */	
-    public getUpdatedAccountUniquename(voucherNo: string, currentAccountUniqueName: string): string {	
-        let newAccountUniqueName = currentAccountUniqueName;	
-        if (this.voucherData && this.voucherData.items && voucherNo) {	
-            this.voucherData.items.forEach(voucher => {	
-                if (voucher.voucherNumber === voucherNo) {	
-                    newAccountUniqueName = voucher.account.uniqueName;	
-                }	
-            });	
-        }	
-        return newAccountUniqueName;	
+    /**
+     * This will update the updated account in voucher list of item
+     *
+     * @param {*} voucherUpdatedDetails
+     * @memberof InvoicePreviewComponent
+     */
+    public updateNewAccountInVoucher(voucherUpdatedDetails: any): void {
+        if (this.voucherData && this.voucherData.items && voucherUpdatedDetails) {
+            let loop = 0;
+            this.voucherData.items.forEach(voucher => {
+                if (voucher.voucherNumber === voucherUpdatedDetails.number) {
+                    if (voucher.account.uniqueName !== voucherUpdatedDetails.account.uniqueName) {
+                        this.voucherData.items[loop].account = voucherUpdatedDetails.account;
+                    }
+                }
+                loop++;
+            });
+        }
+    }
+    /**
+     * This will give the updated account uniquename
+     *
+     * @param {string} voucherNo
+     * @param {string} currentAccountUniqueName
+     * @returns {string}
+     * @memberof InvoicePreviewComponent
+     */
+    public getUpdatedAccountUniquename(voucherNo: string, currentAccountUniqueName: string): string {
+        let newAccountUniqueName = currentAccountUniqueName;
+        if (this.voucherData && this.voucherData.items && voucherNo) {
+            this.voucherData.items.forEach(voucher => {
+                if (voucher.voucherNumber === voucherNo) {
+                    newAccountUniqueName = voucher.account.uniqueName;
+                }
+            });
+        }
+        return newAccountUniqueName;
     }
 }

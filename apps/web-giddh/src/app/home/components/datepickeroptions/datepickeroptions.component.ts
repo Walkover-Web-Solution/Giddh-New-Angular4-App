@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, ViewChild, ElementRef, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import * as moment from 'moment/moment';
 import * as _ from 'lodash';
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
@@ -13,7 +13,10 @@ import { AppState } from "../../../store";
     styleUrls: ['../../home.component.scss']
 })
 
-export class DatepickeroptionsComponent implements OnInit, OnDestroy {
+export class DatepickeroptionsComponent implements OnInit, OnDestroy, OnChanges {
+    @Input() public fromDate: string;
+    @Input() public toDate: string;
+
     @Output() public filterDates: EventEmitter<any> = new EventEmitter(null);
     public moment = moment;
     public universalDate$: Observable<any>;
@@ -95,5 +98,20 @@ export class DatepickeroptionsComponent implements OnInit, OnDestroy {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * This will update the date in calendar returned by the api
+     *
+     * @param {SimpleChanges} changes
+     * @memberof DatepickeroptionsComponent
+     */
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes && changes.fromDate.currentValue && changes.toDate.currentValue) {
+            this.datePickerOptions = {
+                ...this.datePickerOptions, startDate: moment(changes.fromDate.currentValue).toDate(),
+                endDate: moment(changes.toDate.currentValue).toDate(), chosenLabel: "Custom range"
+            };
+        }
     }
 }

@@ -54,7 +54,7 @@
                                 <div class="col-xs-6">
                                     <div class="form-group">
                                         <sh-select [options]="accounts$ | async" name="particulars"
-                                            (onClear)="onDDClear('particulars')"
+                                            (onClear)="onDDClear('particulars')"  [forceClearReactive]="forceClearParticulars$ | async"
                                             (selected)="onDDElementSelect('particulars', $event)"
                                             [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Accounts'"
                                             [ItemHeight]="33"></sh-select>
@@ -89,7 +89,7 @@
                                 <div class="col-xs-6">
                                     <div class="form-group">
                                         <sh-select [options]="voucherTypeList | async" name="particulars"
-                                            (onClear)="onDDClear('vouchers')"
+                                            (onClear)="onDDClear('vouchers')" [forceClearReactive]="forceClear$ | async"
                                             (selected)="onDDElementSelect('vouchers', $event)" [isFilterEnabled]="true"
                                             [multiple]="true" [placeholder]="'Select Accounts'" [ItemHeight]="33">
                                         </sh-select>
@@ -109,7 +109,7 @@
                                 <div class="col-xs-6">
                                     <div class="form-group">
                                         <sh-select [showClear]="false" [width]="'100%'"
-                                            (selected)="onRangeSelect('amount', $event)"
+                                            (selected)="onRangeSelect('amount', $event)" [forceClearReactive]="forceClearRange$ | async"
                                             [options]="comparisonFilterDropDown$ | async" name="particulars"
                                             [placeholder]="'Select Range'" [ItemHeight]="33"></sh-select>
                                     </div>

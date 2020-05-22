@@ -356,7 +356,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         let gstFields = this._fb.group({
             gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
-            address: ['', Validators.maxLength(120)],
+            address: [''],
             state: this._fb.group({
                 code: [''],
                 name: [''],
@@ -433,7 +433,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
-        let gstVal: string = gstForm.get('gstNumber').value;
+        let gstVal: string = gstForm.get('gstNumber').value.trim();
         gstForm.get('gstNumber').setValue(gstVal.trim());
         if (gstVal.length) {
             if (gstVal.length !== 15) {

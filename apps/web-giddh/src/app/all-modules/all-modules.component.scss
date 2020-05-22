@@ -1,0 +1,13 @@
+@import "../../assets/css/color.scss";
+.reports-main p > a {
+  font-weight: normal;
+  color: $primary;
+}
+.reports-main p {
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.coming-soon-report {
+  color: $dark-gray !important;
+}

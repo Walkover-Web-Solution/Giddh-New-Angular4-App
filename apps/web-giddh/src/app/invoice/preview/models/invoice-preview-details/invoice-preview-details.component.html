@@ -125,17 +125,12 @@
                                                 {{ selectedItem.voucherStatus }}
                                             </label>
 
-                                            <button id="button-basic2" dropdownToggle type="button"
-                                                    class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic2"
-                                                    *ngIf="selectedItem.voucherStatus !== 'cancel'">Change Status <span class="caret"></span>
+                                            <button id="button-basic2" dropdownToggle type="button" class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic2" *ngIf="selectedItem.voucherStatus !== 'cancel'">Change Status <span class="caret"></span>
                                             </button>
 
-                                            <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu" role="menu"
-                                                aria-labelledby="button-basic2">
-                                                <li class="cp" role="menuitem"
-                                                    (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"><a
-                                                    class="dropdown-item">Paid</a></li>
-                                                <li  *ngIf="voucherType === 'sales'" (click)="openInvoiceAdvanceReceiptModal()" >
+                                            <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic2">
+                                                <li class="cp" role="menuitem" (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"><a class="dropdown-item">Paid</a></li>
+                                                <li *ngIf="voucherType === 'sales'" (click)="openInvoiceAdvanceReceiptModal()">
                                                     <a class="cp" href="javascript:void(0)">Adjust Amount</a>
                                                 </li>
 
@@ -258,8 +253,8 @@
                         </div>
 
                         <div *ngIf="!shouldShowUploadAttachment" #attachedDocumentPreview class="fixed-ng2pdfview pdf-preview" [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
-                            <ng2-pdfjs-viewer *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')" viewerId="MyUniqueID" [hidden]="isVoucherDownloading || isVoucherDownloadError || isFileUploading"
-                                              [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="testPagesLoaded($event);" [openFile]="false" [viewBookmark]="false" [download]="false">
+                            <ng2-pdfjs-viewer pagemode="none" *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')" viewerId="MyUniqueID" [hidden]="isVoucherDownloading || isVoucherDownloadError || isFileUploading"
+                                [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="testPagesLoaded($event);" [openFile]="false" [viewBookmark]="false" [download]="false">
                             </ng2-pdfjs-viewer>
                             <img *ngIf="(selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image')" class="image-preview" [src]="imagePreviewSource" />
                         </div>
@@ -414,7 +409,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <confirm-modal [body]="only4ProformaEstimates ? 'Do you want to delete the voucher(s)?' : selectedItem.voucherType === 'purchase' ? 'Do you want to delete the selected records?' : 'Do you want to delete the voucher/invoice?'" (cancelCallBack)="deleteConfirmationModel.toggle()"
-                           (successCallBack)="deleteVoucher.emit(true);deleteConfirmationModel.toggle()"></confirm-modal>
+                (successCallBack)="deleteVoucher.emit(true);deleteConfirmationModel.toggle()"></confirm-modal>
         </div>
     </div>
 </div>

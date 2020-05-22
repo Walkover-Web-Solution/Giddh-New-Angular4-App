@@ -61,7 +61,8 @@ export const ROUTES = [
                 data: { preload: true }
             },
             { path: 'audit-logs', loadChildren: './audit-logs/audit-logs.module#AuditLogsModule' },
-            // { path: 'create-advance-receipt', loadChildren: './create-advance-receipt/create-advance-receipt.modulee#CreateAdvanceReceiptModule' },
+            { path: 'all-modules', loadChildren: './all-modules/all-modules.module#AllModulesModule' },
+            { path: 'create-advance-receipt', loadChildren: './create-advance-receipt/create-advance-receipt.modulee#CreateAdvanceReceiptModule' },
             {
                 path: 'ledger/:accountUniqueName',
                 loadChildren: './ledger/ledger.module#LedgerModule',
