@@ -1988,8 +1988,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
      * @memberof NgxDaterangepickerComponent
      */
     public emitSelectedDates(sendBlankDates: boolean): void {
-        console.log(this.startDate);
-        console.log(this.endDate);
         if (sendBlankDates === true) {
             this.datesUpdated.emit({ name: '', startDate: null, endDate: null });
         } else {
