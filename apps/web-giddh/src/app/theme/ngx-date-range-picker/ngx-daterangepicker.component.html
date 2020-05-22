@@ -24,14 +24,14 @@
                     <button type="button" class="btn-angle-down"
                         (click)="rangeDropdownShow = i; clickRange($event, range);"
                         (dblclick)="dblClickRange($event, range)"
-                        [ngClass]="{'active': range.isSelected}">{{range.name}}
+                        [ngClass]="{'active': range.isSelected && isRangeSelected}">{{range.name}}
                         <span *ngIf="range.ranges.length" class="available prev angle-down"></span>
                     </button>
                     <ul *ngIf="range.ranges.length && rangeDropdownShow === i" class="sub-ranges-cal menu-drawer">
                         <li *ngFor="let subRange of range.ranges">
                             <button type="button" (click)="clickRange($event,subRange);"
                                 (dblclick)="dblClickRange($event, subRange)"
-                                [ngClass]="{'active': subRange.isSelected}">{{subRange.name}}
+                                [ngClass]="{'active': subRange.isSelected && isRangeSelected}">{{subRange.name}}
                             </button>
                         </li>
                     </ul>
