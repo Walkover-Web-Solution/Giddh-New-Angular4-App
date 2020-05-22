@@ -336,7 +336,7 @@ export class GeneralService {
 
         let hourOffset = convertdLocalTime.getTimezoneOffset() / 60;
 
-        convertdLocalTime.setMinutes(convertdLocalTime.getMinutes() - (hourOffset*60));
+        convertdLocalTime.setMinutes(convertdLocalTime.getMinutes() - (hourOffset * 60));
 
         return convertdLocalTime;
     }
@@ -365,9 +365,9 @@ export class GeneralService {
      */
     public removeSelectAllFromArray(array: Array<string>): Array<string> {
         let newArray = [];
-        if(array && array.length > 0) {
+        if (array && array.length > 0) {
             array.forEach(key => {
-                if(key !== "selectall") {
+                if (key !== "selectall") {
                     newArray.push(key);
                 }
             });
@@ -394,5 +394,31 @@ export class GeneralService {
             // Exclusive tax rate
             return ((totalTaxPercentage * (Number(amount) - totalDiscount)) / 100);
         }
+    }
+
+    /**
+     * This function will change the position of element in an array
+     *
+     * @param {*} array
+     * @param {*} currentIndex
+     * @param {*} newIndex
+     * @returns
+     * @memberof GeneralService
+     */
+    public changeElementPositionInArray(array, currentIndex, newIndex) {
+        while (currentIndex < 0) {
+            currentIndex += array.length;
+        }
+        while (newIndex < 0) {
+            newIndex += array.length;
+        }
+        if (newIndex >= array.length) {
+            var k = newIndex - array.length;
+            while ((k--) + 1) {
+                array.push(undefined);
+            }
+        }
+        array.splice(newIndex, 0, array.splice(currentIndex, 1)[0]);
+        return array;
     }
 }

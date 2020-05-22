@@ -1,4 +1,5 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import * as moment from 'moment';
 
 @Component({
 	selector: 'company-details-sidebar',
@@ -7,11 +8,15 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 
 export class CompanyDetailsSidebarComponent implements OnInit {
-
+    @Input() public selectedCompany: any;
 	@Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
+    public moment = moment;
 
 	constructor() {
+
     }
+
     public ngOnInit() {
+        
     }
 }

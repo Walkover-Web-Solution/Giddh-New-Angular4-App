@@ -1,4 +1,4 @@
-import { takeUntil, count, take } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, AfterViewInit, TemplateRef, ViewChild, ComponentFactoryResolver } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
@@ -14,8 +14,6 @@ import { GeneralService } from '../../../services/general.service';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 import { CompanyActions } from '../../../actions/company.actions';
 import { GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { CommonActions } from '../../../actions/common.actions';
-import { CompanyAddNewUiComponent } from '../../../shared/header/components';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 
 @Component({
@@ -62,9 +60,9 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     public companyListForFilter: CompanyResponse[] = [];
     public searchSubscribedPlan: any;
     public showSubscribedPlansList: boolean = false;
-    public moveSelectedCompany: any;
+    public selectedCompany: any;
 
-    constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions, private commonActions: CommonActions, private componentFactoryResolver: ComponentFactoryResolver) {
+    constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions) {
         this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
         this.subscriptions$ = this.store.pipe(select(s => s.subscriptions.subscriptions), takeUntil(this.destroyed$));
         this.companies$ = this.store.select(cmp => cmp.session.companies).pipe(takeUntil(this.destroyed$));
@@ -80,6 +78,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
             if (companies) {
                 let orderedCompanies = _.orderBy(companies, 'name');
                 this.companyListForFilter = orderedCompanies;
+                this.sortAssociatedCompanies();
                 this.activeCompanyUniqueName$.pipe(take(1)).subscribe(active => {
                     this.activeCompany = companies.find(cmp => cmp.uniqueName === active);
                     this.showCurrentCompanyPlan();
@@ -141,15 +140,6 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         this.destroyed$.complete();
     }
 
-    // public filterCompanyList(ev) {
-    //     let companies: CompaniesWithTransaction[] = [];
-    //     companies = this.seletedUserPlans.companiesWithTransactions;
-    //     let filterd = companies.filter((cmp) => {
-    //         return cmp.name.toLowerCase().includes(ev.toLowerCase());
-    //     });
-    //     this.selectedPlanCompanies = filterd;
-    // }
-
     /**
      * This function will set the current company plan
      *
@@ -196,10 +186,8 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         this.toggleBodyClass();
     }
 
-    public toggleCompanyDetailsAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
+    public toggleCompanyDetailsAsidePane(company): void {
+        this.selectedCompany = company;
         this.companyDetailsAsideMenuState = this.companyDetailsAsideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
     }
@@ -222,14 +210,12 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         this.modalRef = this.modalService.show(MoveCompany);
     }
 
-
     public ModalAdd(AddCompany: TemplateRef<any>) {
         this.modalRef = this.modalService.show(AddCompany);
     }
 
-
     public openModalMove(deactivateCompany: TemplateRef<any>, company: any) {
-        this.moveSelectedCompany = company;
+        this.selectedCompany = company;
         this.modalRef = this.modalService.show(deactivateCompany);
     }
 
@@ -278,15 +264,30 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
     }
 
+    /**
+     * This will format the date and will convert to moment
+     *
+     * @param {string} date
+     * @returns {moment.Moment}
+     * @memberof SubscriptionsComponent
+     */
     public formatDate(date: string): moment.Moment {
         return moment(date.split("-").reverse().join("-"));
     }
 
-    public calculateRemainingDays(expiry: string): any {
+    /**
+     * This will calculate the remaining days in plan
+     *
+     * @param {string} expiry
+     * @returns {string}
+     * @memberof SubscriptionsComponent
+     */
+    public calculateRemainingDays(expiry: string): string {
         if (expiry) {
             let currentDate = moment();
             let expiryDate = moment(expiry.split("-").reverse().join("-"));
-            return expiryDate.diff(currentDate, 'days');
+            let difference = expiryDate.diff(currentDate, 'days');
+            return (difference <= 15) ? difference + " days remaining" : "Active"
         } else {
             return "-";
         }
@@ -309,6 +310,8 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
                 return cmp.name.toLowerCase().includes(event.toLowerCase()) || cmp.nameAlias.toLowerCase().includes(event.toLowerCase());
             }
         });
+
+        this.sortAssociatedCompanies();
     }
 
     /**
@@ -327,45 +330,47 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         });
     }
 
-    public moveCompanyCallback(event) {
+    /**
+     * This function will refresh the subscribed companies if move company was succesful and will close the popup
+     *
+     * @param {*} event
+     * @memberof SubscriptionsComponent
+     */
+    public moveCompanyCallback(event): void {
         if(event === true) {
             this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
         }
         this.modalRef.hide();
     }
 
-    public createNewCompany(): void {
-        this.removeCompanySessionData();
-        this.showAddCompanyModal();
-    }
+    /**
+     * This will sort the associated companies and will put the current company on top
+     *
+     * @memberof SubscriptionsComponent
+     */
+    public sortAssociatedCompanies(): void {
+        this.companyListForFilter = this.companyListForFilter.sort((a, b) => a.name > b.name ? 1 : -1);
 
-    public removeCompanySessionData() {
-        this.generalService.createNewCompany = null;
-        this.store.dispatch(this.commonActions.resetCountry());
-        this.store.dispatch(this.companyActions.removeCompanyCreateSession());
-    }
-
-    public showAddCompanyModal() {
-        this.loadAddCompanyNewUiComponent();
-        this.addCompanyNewModal.show();
-    }
-
-    public hideAddCompanyModal() {
-        this.addCompanyNewModal.hide();
-    }
-
-    public onHide() {
-        this.store.dispatch(this.companyActions.ResetCompanyPopup());
-    }
-
-    public loadAddCompanyNewUiComponent() {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddNewUiComponent);
-        let viewContainerRef = this.companynewadd.viewContainerRef;
-        viewContainerRef.clear();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.subscribe((a) => {
-            this.hideAddCompanyModal();
+        let loop = 0;
+        let activeCompanyIndex = -1;
+        this.companyListForFilter.forEach(company => {
+            if(this.activeCompany && this.activeCompany.uniqueName === company.uniqueName) {
+                activeCompanyIndex = loop;
+            }
+            loop++;
         });
+
+        this.companyListForFilter = this.generalService.changeElementPositionInArray(this.companyListForFilter, activeCompanyIndex, 0);
+    }
+
+    /**
+     * This will free the data stored in selectedCompany variable on close of company details popup
+     *
+     * @param {*} event
+     * @memberof SubscriptionsComponent
+     */
+    public hideCompanyDetails(event) {
+        this.selectedCompany = {};
     }
 
     // public getSubscriptionList() {

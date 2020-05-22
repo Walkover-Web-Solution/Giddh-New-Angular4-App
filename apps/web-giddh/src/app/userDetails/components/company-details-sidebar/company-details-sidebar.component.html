@@ -1,21 +1,19 @@
 <div class="aside-pane" [keyboardShortcut]="'esc'" (onShortcutPress)="closeEvent.emit()">
-
     <div class="form-header">
         <h3 class="aside-title">Company Details</h3>
     </div>
-
-    <button id="close" class="" (click)="closeEvent.emit()"><i class="icon-cross"></i></button>
+    <button id="close" (click)="closeEvent.emit()"><i class="icon-cross"></i></button>
 
     <div class="aside-body aside-create-tax-component">
         <div class="aside-pane-form">
-            <h4 class="text-blue bold font-20 mb-1">Company Name</h4>
+            <h4 class="text-blue bold font-20 mb-1 wb">{{selectedCompany?.name}}</h4>
             <div class="row pb-1 bb-1 mb-2">
                 <div class="col-md-9">
                     <ul class="company-list font-14 mb-0">
-                        <li>Plan: TRIAL</li>
-                        <li>ID:423897439287</li>
-                        <li>Created on: 12/03/2020</li>
-                        <li>Total Transactions: 2000</li>
+                        <li>Plan: {{selectedCompany?.subscription?.planDetails?.name}}</li>
+                        <li>ID: {{selectedCompany?.subscription?.subscriptionId}}</li>
+                        <li>Created on: {{moment(selectedCompany?.subscription.createdAt, 'DD-MM-YYYY').format('DD/MM/YYYY')}}</li>
+                        <li>Total Transactions: {{selectedCompany?.subscription?.totalTransactions}}</li>
                     </ul>
                 </div>
             </div>
@@ -27,14 +25,12 @@
                     <table class="table basic giddh-table on-mobile-view mb-0">
                         <thead>
                             <tr>
-                                <th>Date</th>
+                                <!-- <th>Date</th> -->
                                 <th>Cunsumptions <span class="text-gray">(previous+current)</span></th>
                                 <th>Balance</th>
                                 <th class="text-right">Additional Charges</th>
                             </tr>
                         </thead>
-
-
                         <tbody>
                             <!-- <tr *ngIf="seletedUserPlans">
                                 <td class="professional-name">{{ moment(transaction.from, 'DD-MM-YYYY').format('MMM - YY')}}</td>
@@ -44,45 +40,10 @@
                             </tr> -->
 
                             <tr>
-                                <td data-title="Date">Apr</td>
-                                <td data-title="Cunsumptions">5,000</td>
-                                <td data-title="Balance">35,000</td>
-                                <td data-title="Additional Charges" class="text-right">0</td>
-                            </tr>
-
-                            <tr>
-                                <td data-title="Date">Apr</td>
-                                <td data-title="Cunsumptions">5,000</td>
-                                <td data-title="Balance">35,000</td>
-                                <td data-title="Additional Charges" class="text-right">0</td>
-                            </tr>
-
-                            <tr>
-                                <td data-title="Date">Apr</td>
-                                <td data-title="Cunsumptions">5,000</td>
-                                <td data-title="Balance">35,000</td>
-                                <td data-title="Additional Charges" class="text-right">0</td>
-                            </tr>
-
-                            <tr>
-                                <td data-title="Date">Apr</td>
-                                <td data-title="Cunsumptions">5,000</td>
-                                <td data-title="Balance">35,000</td>
-                                <td data-title="Additional Charges" class="text-right">0</td>
-                            </tr>
-
-                            <tr>
-                                <td data-title="Date">Apr</td>
-                                <td data-title="Cunsumptions">5,000</td>
-                                <td data-title="Balance">35,000</td>
-                                <td data-title="Additional Charges" class="text-right">0</td>
-                            </tr>
-
-                            <tr>
-                                <td data-title="Date">Apr</td>
-                                <td data-title="Cunsumptions">5,000</td>
-                                <td data-title="Balance">35,000</td>
-                                <td data-title="Additional Charges" class="text-right">0</td>
+                                <!-- <td data-title="Date">Apr</td> -->
+                                <td data-title="Cunsumptions">{{selectedCompany?.subscription?.totalTransactions}}</td>
+                                <td data-title="Balance">{{selectedCompany?.subscription?.balance}}</td>
+                                <td data-title="Additional Charges" class="text-right">{{selectedCompany?.subscription?.additionalCharges}}</td>
                             </tr>
                         </tbody>
                     </table>

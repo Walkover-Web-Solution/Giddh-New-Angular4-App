@@ -113,7 +113,7 @@
     color: $light-green;
     font-size: 14px;
 }
-.green-dote, .red-dote {
+.green-dote, .red-dote, .orange-dote {
     width: 9px;
     height: 9px;
     display: inline-block;
@@ -122,6 +122,9 @@
 }
 .red-dote {
     background-color: $red;
+} 
+.orange-dote {
+    background-color: $orange;
 }
 .basic > tbody > tr td:first-child, .basic > thead > tr th:first-child {
     border-left: 0px solid $gainsboro !important;
