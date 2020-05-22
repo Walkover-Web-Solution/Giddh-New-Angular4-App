@@ -25,12 +25,14 @@
                                 <div class="your-account">
                                     <div class="inner-your-account">
                                         <h3 class="mb-2">{{defaultMultipleCompanyPlan?.planDetails?.name}}</h3>
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h3 class="bold font-22 mb-05">{{defaultMultipleCompanyPlan?.planDetails?.amount}}</h3>
+                                        <div class="d-flex align-items-center justify-content-between plans-head-top mb-3">
+                                            <div class="clearfix">
+                                                <h3 class="bold font-22 mb-05">{{defaultMultipleCompanyPlan?.planDetails?.amount}}</h3>
+                                                <p class="font-12">{{defaultMultipleCompanyPlan?.planDetails?.durationUnit}}(s)</p>
+                                            </div>
                                             <img class="guarantee-img" src="assets/images/guarantee.png" alt="">
                                         </div>
-                                        <p class="font-12">{{defaultMultipleCompanyPlan?.planDetails?.durationUnit}}(s)</p>
-                                        <div class="clearfix mb-2">
+                                        <div class="clearfix">
                                             <ul class="plan-list">
                                                 <li>Transactions Limit: {{defaultMultipleCompanyPlan?.planDetails?.transactionLimit}}
                                                     <div class="btn-group pull-right" dropdown placement="bottom right">
@@ -160,14 +162,16 @@
                                                 Plan)</small> -->
                                         </h3>
                                         <div class="mb-3">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h3 class="bold font-22 mb-05">
-                                                    <!-- <span class="price-cross">₹800</span> -->
-                                                    {{defaultSingleCompanyPlan?.planDetails?.amount}}
-                                                </h3>
+                                            <div class="d-flex align-items-center justify-content-between plans-head-top">
+                                                <div class="clearfix">
+                                                    <h3 class="bold font-22 mb-05">
+                                                        <!-- <span class="price-cross">₹800</span> -->
+                                                        {{defaultSingleCompanyPlan?.planDetails?.amount}}
+                                                    </h3>
+                                                     <p class="font-12">{{defaultSingleCompanyPlan?.planDetails?.durationUnit}}(s)</p>
+                                                </div>
                                                 <img class="guarantee-img" src="assets/images/guarantee.png" alt="">
                                             </div>
-                                            <p class="font-12">{{defaultSingleCompanyPlan?.planDetails?.durationUnit}}(s)</p>
                                         </div>
                                         <div class="clearfix">
                                             <ul class="plan-list">
@@ -294,7 +298,7 @@
                                     <div class="inner-your-account">
                                         <h3 class="mb-2">{{defaultFreePlan?.planDetails?.name}}</h3>
                                         <div class="mb-3">
-                                            <div class="mb-3">
+                                            <div class="mb-3 plans-head-top">
                                                 <h3 class="bold font-22 mb-05">{{defaultFreePlan?.planDetails?.amount}}</h3>
                                                 <p class="font-12">{{defaultFreePlan?.planDetails?.durationUnit}}(s)</p>
                                             </div>

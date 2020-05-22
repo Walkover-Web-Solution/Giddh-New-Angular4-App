@@ -99,16 +99,15 @@
     position: relative;
     z-index: 9;
     background: $white;
-    padding: 30px 15px 30px 30px;
+    padding: 30px 15px 15px 30px;
     box-shadow: 0px 3px 6px $black-russian;
-    border: 1px solid #D9D9D9;
+    border: 1px solid $gainsboro;
     transition: .5s all ease;
     margin-bottom: 30px;
 }
 .inner-your-account:hover {
-    background: #F4F5FF;
+    background: $lavender;
 }
-
 .your-account:after, .your-account:before {
     content: '';
     display: block;
@@ -129,11 +128,14 @@
 }
 .plan-list {
     list-style-type: none;
-    margin-bottom: 120px;
+    min-height: 300px;
     li {
         font-size: 14px;
         padding: 10px 0;
         position: relative;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
     }
 }
 .inner-your-account > h3 {
@@ -222,7 +224,20 @@
 .btn-green:focus {
     color: $white;
 }
+.plans-head-top {
+    min-height: 50px;
+}
+
+
 @media only screen and (max-width: 767px) {
+    .plan-list {
+        min-height: initial;
+        margin-bottom: 10px;
+    }
+
+    .main-row-plans {
+        display: block;
+    }
     .note-wrap {
         position: relative;
         bottom: 0px;
