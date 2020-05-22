@@ -48,8 +48,7 @@
                                     </tbody>
                                 </table>
                             </td>
-                            <td colspan="2">
-                            </td>
+
                             <td class="pull-right">
                                 <table>
                                     <tbody>
@@ -273,7 +272,7 @@
                     </thead>
                     <tbody>
                         <tr class="text-right " *ngIf="fieldsAndVisibility.table.previousDue?.display ">
-                            <td [attr.colspan]="columnsVisibled " class="pr-2">
+                            <td [attr.colspan]="columnsVisibled ">
                                 {{(fieldsAndVisibility.table.previousDue?.label?.length > 0) ? fieldsAndVisibility.table.previousDue?.label :'Previous Due'}}<span class="pl-2 " [innerHTML]="rupeeSymbol "></span>5000.00</td>
                         </tr>
                         <tr>
