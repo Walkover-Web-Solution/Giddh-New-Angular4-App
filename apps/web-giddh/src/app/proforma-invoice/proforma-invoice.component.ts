@@ -319,6 +319,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         customField2Label: '',
         customField3Label: '',
         shippedViaLabel: '',
+        shippedDateLabel: '',
         trackingNumber: ''
     };
     public selectedCompany: any;
@@ -4638,6 +4639,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         customField2: { label: customField2Label },
                         customField3: { label: customField3Label },
                         shippedVia: { label: shippedViaLabel },
+                        shippingDate: { label: shippedDateLabel },
                         trackingNumber: { label: trackingNumber }
                     } = sections.header.data;
                     this.templatePlaceholder = {
@@ -4645,6 +4647,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         customField2Label,
                         customField3Label,
                         shippedViaLabel,
+                        shippedDateLabel,
                         trackingNumber
                     };
                 }
