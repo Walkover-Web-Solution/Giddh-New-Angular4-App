@@ -788,10 +788,11 @@
             </div>
         </div>
     </div>
-    <div class="box clearfix mt-2 pl-5 xs-pl-0 pb-3 relative see-all-features" *ngIf="showPlans">
+    <div class="box clearfix mt-2 pl-5 xs-pl-0 pb-3 relative" *ngIf="showPlans">
         <a class="close close-2" href="javascript:void(0)" (click)="showPlans = ''">
             <i class="icon-cross"></i>
         </a>
+        <div class="relative see-all-features">
         <div class="col-sm-6 col-md-3" *ngFor="let item of SubscriptionPlans; let i=index" [hidden]="!(!item.subscriptionId && ((showPlans === 'multiple' && item?.planDetails?.amount && item?.planDetails?.companiesLimit > 1) || (showPlans === 'single' && item?.planDetails?.amount && item?.planDetails?.companiesLimit === 1) || (showPlans === 'free' && !item?.planDetails?.amount)))">
             <div class="inner-your-account" *ngIf="!item.subscriptionId && ((showPlans === 'multiple' && item?.planDetails?.amount && item?.planDetails?.companiesLimit > 1) || (showPlans === 'single' && item?.planDetails?.amount && item?.planDetails?.companiesLimit === 1) || (showPlans === 'free' && !item?.planDetails?.amount))">
                 <h3 class="mb-2">{{item?.planDetails?.name}}</h3>
@@ -817,6 +818,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </div>
 

@@ -205,6 +205,10 @@
     max-height: 540px;
     overflow-y: auto;
     padding-top: 60px;
+    width: 80%;
+}
+.see-all-features .col-sm-6.col-md-3 {
+    width: 33.33%;
 }
 .btn-group .close {
     font-size: 16px;
@@ -229,7 +233,21 @@
 }
 
 
+@media only screen and (max-width: 1280px) {
+    .see-all-features {
+        width: 100%;
+    }
+}
+@media only screen and (max-width: 1199px) {
+    .main-row-plans {
+        width: 100%;
+        display: block;
+    }
+}
+
+
 @media only screen and (max-width: 767px) {
+
     .plan-list {
         min-height: initial;
         margin-bottom: 10px;
