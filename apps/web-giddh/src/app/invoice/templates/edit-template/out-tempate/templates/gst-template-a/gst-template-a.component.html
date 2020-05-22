@@ -16,10 +16,10 @@
             <header>
                 <figure class="clearfix">
                     <div class="row d-flex align-items-center">
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-sm-6">
                             <img [hidden]='!showLogo' [src]="logoSrc" class="pull-left" alt="" [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
                         </div>
-                        <div class="col-md-6" *ngIf="voucherType==='sales'">
+                        <div class="col-md-6 col-sm-6" *ngIf="voucherType==='sales'">
                             <img src="assets/images/duplicate.svg" class="pull-right" alt="">
                         </div>
                     </div>
@@ -48,8 +48,7 @@
                                     </tbody>
                                 </table>
                             </td>
-                            <td colspan="2">
-                            </td>
+
                             <td class="pull-right">
                                 <table>
                                     <tbody>
@@ -273,7 +272,7 @@
                     </thead>
                     <tbody>
                         <tr class="text-right " *ngIf="fieldsAndVisibility.table.previousDue?.display ">
-                            <td [attr.colspan]="columnsVisibled " class="pr-2">
+                            <td [attr.colspan]="columnsVisibled ">
                                 {{(fieldsAndVisibility.table.previousDue?.label?.length > 0) ? fieldsAndVisibility.table.previousDue?.label :'Previous Due'}}<span class="pl-2 " [innerHTML]="rupeeSymbol "></span>5000.00</td>
                         </tr>
                         <tr>
@@ -659,7 +658,7 @@
                                     <!--<p *ngIf="fieldsAndVisibility.footer.thanks?.display " style="white-space:pre-line; " [innerHTML]="fieldsAndVisibility.footer.thanks?.label "></p>-->
                                 </td>
                                 <td>&nbsp;</td>
-                                <td class="text-center " [ngStyle]="{ 'font-size': fontMedium, 'vertical-align': 'bottom', 'width': '35%' } " *ngIf="!showImageSignature ">
+                                <td class="text-center " [ngStyle]="{ 'font-size': inputTemplate.fontMedium, 'vertical-align': 'bottom', 'width': '35%' } " *ngIf="!showImageSignature ">
                                     <hr *ngIf="fieldsAndVisibility.footer.slogan?.label ">
                                     <ng-container *ngIf="fieldsAndVisibility.footer.slogan?.display ">
                                         <strong class="slogan-pre-line ">
