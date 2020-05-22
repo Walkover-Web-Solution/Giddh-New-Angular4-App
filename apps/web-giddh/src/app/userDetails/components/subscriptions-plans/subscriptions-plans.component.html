@@ -760,25 +760,7 @@
             </div>
         </div>
 
-        <div class="box">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="activation-key mb-1">
-                        <h2 class="font-26 text-blue bold mb-3">Activation Key</h2>
-                        <p class="font-14">You will get the activation key from resellers.</p>
-                        <div class="d-flex">
-                            <input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey"
-                            class="form-control mrT1" placeholder="Enter activation key">
-                            <div class="activation-btn ml-15">
-                                <button class="btn success-btn mrT1 pl-3 pr-3" [disabled]="!licenceKey.value"
-                                    (click)="createCompanyViaActivationKey()">
-                                    Activate</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </div>
     <div *ngIf="isSwitchPlanInProcess">
         <div class="no-data mrT2 loader-main">
