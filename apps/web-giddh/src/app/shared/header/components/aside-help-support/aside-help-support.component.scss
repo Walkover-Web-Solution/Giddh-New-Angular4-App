@@ -154,6 +154,13 @@
         max-width: 600px;
     }
 }
+@media(max-width:767px){
+    :host {
+        position: fixed;
+        left: auto;
+        top:  86px;
+    }
+}
 @media (max-width: 575px) {
     :host {
         max-width: 370px;

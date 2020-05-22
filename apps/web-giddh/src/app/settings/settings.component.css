@@ -1,12 +1,9 @@
 .setting-container {
     padding:15px 15px;
 }
-.ml-215{
-    margin-left: 215px;
-}
 @media(max-width:767px){
     .setting-sidebar-wrapper{
-        z-index: 9999;
+        z-index: 999;
         width: 100%;
         height: 100%;
         display: block;

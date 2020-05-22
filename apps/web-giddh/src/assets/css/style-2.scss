@@ -1591,10 +1591,20 @@ modal-container.modal {
     margin-bottom: 0px;
 }
 
-.calendly-inline-widget object {
-    width: 1000px;
-    height: 610px;
+.overlay-cal{
+    .modal-body{
+        max-width: 1120px !important;
+        width: 100% !important;
+        .calendly-inline-widget object{
+            width: 100% !important;
+            height: 610px !important;
+        }
+    }
 }
+// .calendly-inline-widget object {
+//     width: 1000px;
+//     height: 610px;
+// }
 
 .booking-container {
     max-width: 100% !important;
@@ -8397,7 +8407,7 @@ ul.dropdown-menu p.lead.pd {
     background-color: #f7f8fa;
     z-index: 9;
     position: relative;
-    top: -4px;
+    top: 6px
 }
 
 .setting-page .nav>li>a {
@@ -9024,6 +9034,19 @@ ngx-daterangepicker-material {
     visibility: visible !important;
     width: auto !important;
 }
+/*notofication css end*/
+.setting-sidebar-open .desktopHeader{
+    padding-left: 215px;
+}
+.setting-data{
+    padding-left: 215px;
+}
+.setting-sidebar-open .white-row{
+    margin-left: 215px;
+}
+.setting-sidebar-open .menu_open .setting-data {
+    padding-left: 0;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9037,7 +9060,7 @@ ngx-daterangepicker-material {
         top: 96px;
     }
     #setting-tab .tab-container .nav.nav-tabs {
-        margin: 0 0 10px;
+        margin: 0 0 0;
         padding: 10px 0px 0;
         white-space: nowrap;
         display: inline-block;
@@ -9305,11 +9328,22 @@ ngx-daterangepicker-material {
 }
 
 @media (max-width: 767px) {
+    .setting-sidebar-open .desktopHeader , .setting-sidebar-open .white-row{
+        padding-left: 0;
+    }
+    .setting-sidebar-open .setting-data{
+        padding-left: 15px;
+    }
+    .overlay-cal{
+        .modal-body{
+         padding: 50px 15px;
+        }
+    }
     .btn {
         padding: 7px 8px;
     }
     .setting-container {
-        margin-top: 55px;
+        margin-top: 0;
     }
     .hide-lable-on-mobile button {
         margin-top: 0 !important;
@@ -9404,7 +9438,7 @@ ngx-daterangepicker-material {
     #setting-tab .tab-container .nav.nav-tabs {
         position: fixed;
         width: 100%;
-        top: 80px;
+        top: 86px;
     }
     .custom-tabs .nav.nav-tabs {
         position: fixed;
@@ -9423,7 +9457,7 @@ ngx-daterangepicker-material {
         margin-top: 0;
     }
     .invoce-controll .nav.nav-tabs {
-        padding: 10px 0px 0 15px !important;
+        padding: 0 0 0 15px !important;
     }
     #setting-tab setting-integration .tab-container .nav.nav-tabs,
     #setting-tab app-invoice-setting .tab-container .nav.nav-tabs {
@@ -9514,6 +9548,12 @@ ngx-daterangepicker-material {
     }
     .panel-block .panel-body {
         min-height: auto;
+    }
+    .tabs-page .padding-top-fixed-mobile {
+        padding-top: 126px;
+    }
+    .padding-top-fixed-mobile {
+        padding-top:86px;
     }
     ngx-daterangepicker-material {
         position: fixed;

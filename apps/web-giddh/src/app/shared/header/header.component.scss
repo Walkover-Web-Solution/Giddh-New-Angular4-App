@@ -740,7 +740,9 @@ ul.sub-list {
     
 }
 @media (max-width: 767px) {
-
+.desktopHeader{
+    display: none;
+}
     .nav-left-bar {
         width: 270px;
         left: -270px;
@@ -772,9 +774,6 @@ ul.sub-list {
     }
     .nav-left-bar.open .mobile_menu_icon {
         display: flex;
-    }
-    .padding-top-fixed-mobile {
-        padding-top: 42px;
     }
     .upperLayerHeader .open .dropdown-menu {
         background-color: #fff;
@@ -831,7 +830,9 @@ ul.sub-list {
     .universal-date li input {
        height: 32px;
     }
-    
+    .white-row{
+        margin: 15px 15px 0;
+    }
 }
 
 @media (min-width: 412px) and (max-width: 840px) {

@@ -305,9 +305,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     public toggleBodyClass() {
         if (this.asideSettingMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
+           document.querySelector('body').classList.add('setting-sidebar-open');
         } else {
-            document.querySelector('body').classList.remove('fixed');
+           document.querySelector('body').classList.remove('setting-sidebar-open');
         }
     }
 

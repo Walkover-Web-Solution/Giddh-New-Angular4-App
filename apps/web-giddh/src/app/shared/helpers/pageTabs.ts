@@ -16,7 +16,7 @@ export const settingsPageTabs: PageTabs[] = [
             { label: 'Manage User(Permission)', link: '/pages/settings/permission', image: 'setting-icons/manage-user.svg' }
         ],
         [1]: [
-            { label: 'Taxes', link: '/pages/settings', image: 'setting-icons/taxes.svg' },
+            { label: 'Taxes', link: '/pages/settings/taxes', image: 'setting-icons/taxes.svg' },
             { label: 'Integration', link: '/pages/settings/integration', image: 'setting-icons/integration.svg' },
             { label: 'Linked Accounts', link: '/pages/settings/linked-accounts', image: 'setting-icons/linked-accounts.svg' },
             { label: 'Tags', link: '/pages/settings/tag', image: 'setting-icons/tags.svg' },

@@ -8,3 +8,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+@media(max-width:767px){
+    .user-detail-page{
+        padding-top: 57px;
+    }
+}
