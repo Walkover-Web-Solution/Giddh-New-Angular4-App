@@ -382,6 +382,7 @@ export class LedgerActions {
                 return this.GenerateBulkLedgerInvoiceResponse(response);
             }));
 
+
     @Effect()
     public GenerateBulkLedgerInvoiceResponse$: Observable<Action> = this.action$
         .ofType(LEDGER.GENERATE_BULK_LEDGER_INVOICE_RESPONSE).pipe(
@@ -393,14 +394,22 @@ export class LedgerActions {
                     if (typeof data.body === 'string') {
                         this._toasty.successToast(data.body);
                     } else if (_.isArray(data.body) && data.body.length > 0) {
-                        _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
-                            if (item.failedEntries) {
+                        // Block will execute if multiple invoice generate
+                        if (data && data.queryString && data.queryString.reqObj && !data.queryString.reqObj.combined) {
+                            _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
+                                if (item.failedEntries) {
+                                    this._toasty.warningToast(item.reason);
+                                }
+                                if (data.request && data.request.length>0 && data.request[0].entries && data.request[0].entries.length > data.body.length) {
+                                    this._toasty.successToast("All other vouchers generated successfully.");
+                                }
+                            });
+                        } else {
+                              //  Block will execute if compound invoice generate
+                            _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
                                 this._toasty.warningToast(item.reason);
-                            }
-                             if (data.request[0].entries.length > data.body.length) {
-                                this._toasty.successToast("All other vouchers generated successfully.");
-                            }
-                        });
+                            });
+                        }
                         return this.SetFailedBulkEntries(data.body[0].failedEntries);
                     }
                 }
