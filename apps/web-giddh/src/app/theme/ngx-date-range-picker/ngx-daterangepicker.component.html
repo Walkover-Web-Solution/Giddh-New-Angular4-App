@@ -6,6 +6,8 @@
     'show-ranges': ranges?.length
 }" [class]="'drops-' + drops + '-' + opens">
     <!-- ranges container -->
+    <perfect-scrollbar fxFlex="auto" class="hide-horizontal-scroll ranges-perfect-scrollbar" [scrollIndicators]="true"
+    [config]="{suppressScrollX: false, suppressScrollY: false}">
     <div class="ranges" *ngIf="ranges?.length">
         <!-- loop over ranges -->
         <div class="range-container">
@@ -69,6 +71,7 @@
         </div>
         <!-- days up to today/ yesterday input -->
     </div>
+    </perfect-scrollbar>
     <!-- ranges container -->
     <!-- calender container -->
     <div class="calender-container" *ngIf="!isMobileScreen || (isMobileScreen && openMobileDatepickerPopup)">
@@ -251,7 +254,7 @@
                 </perfect-scrollbar>
                 <!-- start date calendar container -->
                 <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true"
-                    [config]="{suppressScrollX: false, suppressScrollY: false}" [style.max-height.px]="300">
+                    [config]="{suppressScrollX: false, suppressScrollY: false}" [style.max-height.px]="280">
                     <div *ngIf="showCalInRanges && !showMonthPicker" (mousewheel)="mouseUp($event)" (touchmove)="mouseUp($event)">
                         <div *ngFor="let calendarMonth of calendarMonths;">
                             <div class="calendar" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
