@@ -217,6 +217,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     public invalidStartDate: string = "";
     public invalidEndDate: string = "";
     public currentFinancialYearUniqueName: string = "";
+    public isRangeSelected: boolean = false;
 
     constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>) {
         this.choosedDate = new EventEmitter();
@@ -326,7 +327,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
         this.isShown$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.invalidStartDate = "";
-            this.inlineEndDate = "";
+            this.invalidEndDate = "";
             this.rangeDropdownShow = -1;
             this.dropdownShow = false;
 
@@ -904,6 +905,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
         this.emitSelectedDates(false);
         this.hide();
+
+        this.isRangeSelected = false;
     }
 
     public clickCancel(e): void {
@@ -1275,7 +1278,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
      */
     public clickRange(e, range): void | boolean {
         this.invalidStartDate = "";
-        this.inlineEndDate = "";
+        this.invalidEndDate = "";
 
         this.selectRange(this.ranges, range.name);
 
@@ -1316,6 +1319,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         if (this.isMobileScreen) {
             this.closeDatePicker();
         }
+
+        this.isRangeSelected = true;
     }
 
     /**
@@ -1983,6 +1988,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
      * @memberof NgxDaterangepickerComponent
      */
     public emitSelectedDates(sendBlankDates: boolean): void {
+        console.log(this.startDate);
+        console.log(this.endDate);
         if (sendBlankDates === true) {
             this.datesUpdated.emit({ name: '', startDate: null, endDate: null });
         } else {
