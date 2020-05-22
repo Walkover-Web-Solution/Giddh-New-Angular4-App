@@ -697,6 +697,11 @@ $input-height: 3rem !default;
         text-align: right;
         margin: 0;
         padding-right: 15px;
+        position: relative;
+        bottom: 15px;
+        background-color: #fff;
+        padding-top: 9px;
+        z-index: 99;
     }
     button {
         &:focus {
@@ -1394,9 +1399,14 @@ td span {
         }
     }
 
-
-    
-
+@media(min-height:767px){
+    .ranges-perfect-scrollbar{
+         overflow: initial !important;
+        .ps{
+            overflow: initial !important;
+        }
+    }
+}
 /*media query*/
 @media(max-width:767px){
     .md-drppicker{
@@ -1632,7 +1642,7 @@ td span {
     }
 }
 
-@media(max-height:768px){
+@media(max-height:767px){
     .drops-down-right{
         height: 470px;
         overflow: hidden !important;

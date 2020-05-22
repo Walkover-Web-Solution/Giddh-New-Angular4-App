@@ -298,7 +298,11 @@ span.inputAddon {
 .due-as-on{
     display: flex;
     justify-content: center;
-    align-items: center
+    align-items: center;
+    strong{
+        width: 80px;
+        padding-left: 10px;
+    }
 }
 .form-control[readonly]{
     background-color: inherit !important;
