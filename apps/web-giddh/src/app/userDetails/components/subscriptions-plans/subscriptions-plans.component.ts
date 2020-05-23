@@ -37,10 +37,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public selectNewPlan: boolean = false;
     public isShow = true;
 
-    toggleDisplay() {
-        this.isShow = !this.isShow;
-    }
-
     @Output() public isSubscriptionPlanShow = new EventEmitter<boolean>();
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     modalRef: BsModalRef;
@@ -91,10 +87,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                             }
                         });
                     }
-
-                    console.log(this.defaultMultipleCompanyPlan);
-                    console.log(this.defaultSingleCompanyPlan);
-                    console.log(this.defaultFreePlan);
                 });
                 this.currentCompany = companyInfo.name;
             }
@@ -124,14 +116,15 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy() { }
 
-    openModal(template: TemplateRef<any>) {
+    public openModal(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(template);
     }
-    openModalTwo(modalTwo: TemplateRef<any>) {
+
+    public openModalTwo(modalTwo: TemplateRef<any>) {
         this.modalRef = this.modalService.show(modalTwo);
     }
 
-    allFeaturesModal(AllFeatures: TemplateRef<any>) {
+    public allFeaturesModal(AllFeatures: TemplateRef<any>) {
         this.modalRef = this.modalService.show(AllFeatures, { class: 'modal-lg all-features-modal'});
     }
 
@@ -196,5 +189,13 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         if(!this.showPlans) {
             this.showPlans = type;
         }
+    }
+
+    public toggleDisplay(): void {
+        this.isShow = !this.isShow;
+    }
+
+    public closeFeaturesModal(): void {
+        this.modalRef.hide();
     }
 }

@@ -21,7 +21,7 @@
                                 <h2>Multiple Company</h2>
                             </div>
                             <div class="plans-box">
-                                <p class="bold">Total Plan: {{totalMultipleCompanyPlans}}</p>
+                                <p class="bold">Total Plans: {{totalMultipleCompanyPlans}}</p>
                                 <div class="your-account">
                                     <div class="inner-your-account">
                                         <h3 class="mb-2">{{defaultMultipleCompanyPlan?.planDetails?.name}}</h3>
@@ -863,5 +863,5 @@
 
 <!-- All features Modal -->
 <ng-template #AllFeatures>
-    <all-features></all-features>
+    <all-features (closeEvent)="closeFeaturesModal($event)"></all-features>
 </ng-template>

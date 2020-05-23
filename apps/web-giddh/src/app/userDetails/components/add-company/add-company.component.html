@@ -1,19 +1,19 @@
 <div class="modal-header">
-    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
+    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closePopup()">×</span>
     <h3>Add Company</h3>
 </div>
 <div id="myFrame" class="modal-body clearfix font-14">
-    <p class="mb-4">Select the Company you want to add in <strong>Bonsai</strong> plan</p>
+    <p class="mb-4">Select the Company you want to add in <strong>{{activeCompany?.subscription?.planDetails?.name}}</strong> plan</p>
     <div class="row mb-2">
         <div class="col-md-6">
             <label class="font-14">Select Company<span class="text-danger">*</span></label>
             <div class="custom-select select-caret pos-rel">
-                <sh-select placeholder="Select Company" name="availablePlans"></sh-select>
+                <sh-select placeholder="Select Company" name="selectedCompany" [options]="associatedCompaniesOption" [isFilterEnabled]="true" [(ngModel)]="selectedCompany"></sh-select>
             </div>
         </div>
     </div>
 
     <div class="clearfix">
-        <button class="btn btn-primary mrT1 mrB2" (click)="moveCompanyInNewPlan()">Add</button>
+        <button class="btn btn-primary mrT1 mrB2" (click)="addCompanyInNewPlan()" [disabled]="!selectedCompany">Add</button>
     </div>
 </div>

@@ -243,7 +243,7 @@
                                 </div>
 
                                 <div class="pl-2 mt-3 buy-transactions">
-                                    <!-- <button class="btn btn-primary" type="button" (click)="ModalAdd(AddCompany)">Add Company</button> -->
+                                    <button class="btn btn-primary" type="button" (click)="openAddCompanyModal(AddCompany)">Add Company</button>
                                 </div>
                             </div>
                         </div>
@@ -414,12 +414,12 @@
 
 <!-- MoveCompany Modal -->
 <ng-template #MoveCompany>
-    <move-company (moveCompany)="moveCompanyCallback($event)" [subscriptions]="subscriptions" [moveSelectedCompany]="selectedCompany"></move-company>
+    <move-company (moveCompany)="addOrMoveCompanyCallback($event)" [subscriptions]="subscriptions" [moveSelectedCompany]="selectedCompany"></move-company>
 </ng-template>
 
 <!-- deactivate Company Modal -->
 <ng-template #AddCompany>
-    <add-company></add-company>
+    <add-company [allAssociatedCompanies]="allAssociatedCompanies" [activeCompany]="activeCompany" (addCompany)="addOrMoveCompanyCallback($event)"></add-company>
 </ng-template>
 
 <!-- deactivate Company Modal -->

@@ -61,6 +61,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     public searchSubscribedPlan: any;
     public showSubscribedPlansList: boolean = false;
     public selectedCompany: any;
+    public allAssociatedCompanies: CompanyResponse[] = [];
 
     constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions) {
         this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
@@ -77,6 +78,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         this.companies$.subscribe(companies => {
             if (companies) {
                 let orderedCompanies = _.orderBy(companies, 'name');
+                this.allAssociatedCompanies = orderedCompanies;
                 this.companyListForFilter = orderedCompanies;
                 this.sortAssociatedCompanies();
                 this.activeCompanyUniqueName$.pipe(take(1)).subscribe(active => {
@@ -210,7 +212,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         this.modalRef = this.modalService.show(MoveCompany);
     }
 
-    public ModalAdd(AddCompany: TemplateRef<any>) {
+    public openAddCompanyModal(AddCompany: TemplateRef<any>) {
         this.modalRef = this.modalService.show(AddCompany);
     }
 
@@ -303,6 +305,8 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         let companies: CompanyResponse[] = [];
         this.companies$.pipe(take(1)).subscribe(cmps => companies = cmps);
 
+        this.allAssociatedCompanies = companies;
+
         this.companyListForFilter = companies.filter((cmp) => {
             if (!cmp.nameAlias) {
                 return cmp.name.toLowerCase().includes(event.toLowerCase());
@@ -336,7 +340,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
      * @param {*} event
      * @memberof SubscriptionsComponent
      */
-    public moveCompanyCallback(event): void {
+    public addOrMoveCompanyCallback(event): void {
         if(event === true) {
             this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
         }

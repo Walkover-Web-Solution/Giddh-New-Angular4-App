@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
 	selector: 'all-features',
@@ -7,9 +7,17 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class AllFeaturesComponent implements OnInit {
+    @Output() public closeEvent = new EventEmitter<boolean>();
 
 	constructor() {
+
     }
+    
     public ngOnInit() {
+
+    }
+
+    public closePopup() {
+        this.closeEvent.emit(true);
     }
 }
