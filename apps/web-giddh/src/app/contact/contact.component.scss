@@ -13,12 +13,11 @@
 .aging-table > tbody > tr input[type="checkbox"] {
     position: absolute !important;
     opacity: 0;
-    top: 8px;
+    top: 0px;
 }
 .aging-table > tbody > tr:hover input[type="checkbox"] {
     position: relative !important;
     opacity: 1;
-    top: 0px;
 }
 
 .checkbox_visible {
