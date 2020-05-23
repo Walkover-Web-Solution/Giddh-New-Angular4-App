@@ -204,7 +204,7 @@ export class LedgerActions {
                     return { type: 'EmptyAction' };
                 } else {
                     this._toasty.successToast('entry updated successfully');
-                    if(action && action.payload && action.payload.request && action.payload.request.refreshLedger) {
+                    if (action && action.payload && action.payload.request && action.payload.request.refreshLedger) {
                         this.store.dispatch(this.refreshLedger(true));
                     }
 
@@ -393,9 +393,22 @@ export class LedgerActions {
                     if (typeof data.body === 'string') {
                         this._toasty.successToast(data.body);
                     } else if (_.isArray(data.body) && data.body.length > 0) {
-                        _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
-                            this._toasty.warningToast(item.reason);
-                        });
+                        // Block will execute if multiple invoice generate
+                        if (data && data.queryString && data.queryString.reqObj && !data.queryString.reqObj.combined) {
+                            _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
+                                if (item.failedEntries) {
+                                    this._toasty.warningToast(item.reason);
+                                }
+                                if (data.request && data.request.length>0 && data.request[0].entries.length > data.body.length) {
+                                    this._toasty.successToast("All other vouchers generated successfully.");
+                                }
+                            });
+                        } else {
+                              //  Block will execute if compound invoice generate
+                            _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
+                                this._toasty.warningToast(item.reason);
+                            });
+                        }
                         return this.SetFailedBulkEntries(data.body[0].failedEntries);
                     }
                 }
