@@ -27,8 +27,8 @@
                                         <h3 class="mb-2">{{defaultMultipleCompanyPlan?.planDetails?.name}}</h3>
                                         <div class="d-flex align-items-center justify-content-between plans-head-top mb-3">
                                             <div class="clearfix">
-                                                <h3 class="bold font-22 mb-05">{{defaultMultipleCompanyPlan?.planDetails?.amount}}</h3>
-                                                <p class="font-12">{{defaultMultipleCompanyPlan?.planDetails?.durationUnit}}(s)</p>
+                                                <h3 class="bold font-22 mb-05">{{defaultMultipleCompanyPlan?.planDetails?.amount}} /-</h3>
+                                                <p class="font-12">{{defaultMultipleCompanyPlan?.planDetails?.duration}} {{defaultMultipleCompanyPlan?.planDetails?.durationUnit}}(s)</p>
                                             </div>
                                             <img class="guarantee-img" src="assets/images/guarantee.png" alt="">
                                         </div>
@@ -166,9 +166,9 @@
                                                 <div class="clearfix">
                                                     <h3 class="bold font-22 mb-05">
                                                         <!-- <span class="price-cross">₹800</span> -->
-                                                        {{defaultSingleCompanyPlan?.planDetails?.amount}}
+                                                        {{defaultSingleCompanyPlan?.planDetails?.amount}} /-
                                                     </h3>
-                                                     <p class="font-12">{{defaultSingleCompanyPlan?.planDetails?.durationUnit}}(s)</p>
+                                                     <p class="font-12">{{defaultSingleCompanyPlan?.planDetails?.duration}} {{defaultSingleCompanyPlan?.planDetails?.durationUnit}}(s)</p>
                                                 </div>
                                                 <img class="guarantee-img" src="assets/images/guarantee.png" alt="">
                                             </div>
@@ -299,8 +299,8 @@
                                         <h3 class="mb-2">{{defaultFreePlan?.planDetails?.name}}</h3>
                                         <div class="mb-3">
                                             <div class="mb-3 plans-head-top">
-                                                <h3 class="bold font-22 mb-05">{{defaultFreePlan?.planDetails?.amount}}</h3>
-                                                <p class="font-12">{{defaultFreePlan?.planDetails?.durationUnit}}(s)</p>
+                                                <h3 class="bold font-22 mb-05">{{defaultFreePlan?.planDetails?.amount}} /-</h3>
+                                                <p class="font-12">{{defaultFreePlan?.planDetails?.duration}} {{defaultFreePlan?.planDetails?.durationUnit}}(s)</p>
                                             </div>
                                         </div>
                                         <div class="clearfix">
@@ -760,6 +760,25 @@
             </div>
         </div>
 
+        <div class="box mt-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="activation-key mb-1">
+                        <h2 class="font-26 text-blue bold mb-3">Activation Key</h2>
+                        <p class="font-14">You will get the activation key from resellers.</p>
+                        <div class="d-flex">
+                            <input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey"
+                            class="form-control mrT1" placeholder="Enter activation key">
+                            <div class="activation-btn ml-15">
+                                <button class="btn success-btn mrT1 pl-3 pr-3" [disabled]="!licenceKey.value"
+                                    (click)="createCompanyViaActivationKey()">
+                                    Activate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
     <div *ngIf="isSwitchPlanInProcess">
@@ -779,8 +798,8 @@
             <div class="inner-your-account" *ngIf="!item.subscriptionId && ((showPlans === 'multiple' && item?.planDetails?.amount && item?.planDetails?.companiesLimit > 1) || (showPlans === 'single' && item?.planDetails?.amount && item?.planDetails?.companiesLimit === 1) || (showPlans === 'free' && !item?.planDetails?.amount))">
                 <h3 class="mb-2">{{item?.planDetails?.name}}</h3>
                 <div class="mb-3">
-                    <h3 class="bold font-22 mb-05">{{item?.planDetails?.amount | number}}</h3>
-                    <p class="font-12">{{item?.planDetails?.durationUnit}}(s)</p>
+                    <h3 class="bold font-22 mb-05">{{item?.planDetails?.amount | number}} /-</h3>
+                    <p class="font-12">{{item?.planDetails?.duration}} {{item?.planDetails?.durationUnit}}(s)</p>
                 </div>
                 <div class="clearfix">
                     <ul class="plan-list">
