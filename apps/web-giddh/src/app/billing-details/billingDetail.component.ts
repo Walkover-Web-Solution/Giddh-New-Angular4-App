@@ -243,6 +243,12 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         }
     }
 
+    /**
+     * API call to get razorpay data
+     *
+     * @param {CreateCompanyUsersPlan} plan
+     * @memberof BillingDetailComponent
+     */
     public prepareSelectedPlanFromSubscriptions(plan: CreateCompanyUsersPlan) {
         this.isCreateAndSwitchCompanyInProcess = true;
         this.subscriptionPrice = plan.planDetails.amount;

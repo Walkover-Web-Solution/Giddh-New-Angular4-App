@@ -1,0 +1,8 @@
+{
+    "select_year" : "Select Year",
+    "from_month" : "From Month",
+    "to_month" : "To Month",
+    "group" : "Group",
+    "opening_closing_balance" : "Opening/Closing Balance",
+    "cr_dr" : "Cr/Dr with +/-"
+}

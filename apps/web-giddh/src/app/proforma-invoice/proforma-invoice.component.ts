@@ -87,6 +87,7 @@ import { PurchaseRecordActions } from '../actions/purchase-record/purchase-recor
 import { AdvanceReceiptAdjustmentComponent } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.component';
 import { AdvanceReceiptAdjustment, AdjustAdvancePaymentModal } from '../models/api-models/AdvanceReceiptsAdjust';
 import { CurrentCompanyState } from '../store/Company/company.reducer';
+import { CustomTemplateState } from '../store/Invoice/invoice.template.reducer';
 
 const THEAD_ARR_READONLY = [
     {
@@ -312,6 +313,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public shouldShowTrnGstField: boolean = false;
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
+    /** Placeholder text for template */
+    public templatePlaceholder: any = {
+        customField1Label: '',
+        customField2Label: '',
+        customField3Label: '',
+        shippedViaLabel: '',
+        shippedDateLabel: '',
+        trackingNumber: ''
+    };
     public selectedCompany: any;
     public formFields: any[] = [];
 
@@ -585,6 +595,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.getAllLastInvoices();
                 }
                 this.invoiceType = decodeURI(parmas['invoiceType']) as VoucherTypeEnum;
+                this.getDefaultTemplateData();
                 this.prepareInvoiceTypeFlags();
                 this.saveStateDetails();
             }
@@ -593,6 +604,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.accountUniqueName = parmas['accUniqueName'];
                 this.isUpdateMode = false;
                 this.invoiceType = decodeURI(parmas['invoiceType']) as VoucherTypeEnum;
+                this.getDefaultTemplateData();
                 this.prepareInvoiceTypeFlags();
                 this.isInvoiceRequestedFromPreviousPage = true;
                 this.getAccountDetails(parmas['accUniqueName']);
@@ -629,11 +641,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                     this.store.dispatch(this.proformaActions.getProformaDetails(obj, this.invoiceType));
                 }
+                this.getDefaultTemplateData();
             } else {
                 // for edit mode direct from @Input
+                this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
                 if (this.accountUniqueName && this.invoiceType && this.invoiceNo) {
                     this.store.dispatch(this._generalActions.setAppTitle('/pages/proforma-invoice/invoice/' + this.invoiceType));
                     this.getVoucherDetailsFromInputs();
+                    this.getDefaultTemplateData();
                 }
             }
 
@@ -898,7 +913,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         if (this.isMultiCurrencyModule()) {
                             // parse normal response to multi currency response
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
-                            // this.initializeWarehouse();
                             tempObj = cloneDeep(convertedRes1) as VoucherClass;
                         } else {
                             tempObj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
@@ -1232,6 +1246,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.shouldShowTrnGstField = false;
                 }
             }
+        });
+        this.store.pipe(select(appState => appState.invoiceTemplate), takeUntil(this.destroyed$)).subscribe((templateData: CustomTemplateState) => {
+            this.setTemplatePlaceholder(templateData);
         });
         this.prepareInvoiceTypeFlags();
     }
@@ -2904,7 +2921,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 invoiceNumber: response.body.number,
                 voucherType: response.body.type
             }));
-            
             // reset form and other
             this.resetInvoiceForm(invoiceForm);
             this._toasty.successToast('Voucher updated Successfully');
@@ -4520,6 +4536,52 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else {
             this.isAccountHaveAdvanceReceipts = false;
             this._cdr.detectChanges();
+        }
+    }
+
+    /**
+     * Fetches the default template configuration to show placeholder text for template
+     * section
+     *
+     * @private
+     * @memberof ProformaInvoiceComponent
+     */
+    private getDefaultTemplateData(): void {
+        const templateType = [VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].includes(this.invoiceType) ? 'voucher' : 'invoice';
+        this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(templateType));
+    }
+
+    /**
+     * Sets the template placeholder text based on API response
+     *
+     * @private
+     * @param {CustomTemplateState} templateData Template data received from API
+     * @memberof ProformaInvoiceComponent
+     */
+    private setTemplatePlaceholder(templateData: CustomTemplateState): void {
+        if (templateData && templateData.customCreatedTemplates && templateData.customCreatedTemplates.length > 0) {
+            const defaultTemplate = templateData.customCreatedTemplates.find(template => (template.isDefault || template.isDefaultForVoucher));
+            if (defaultTemplate && defaultTemplate.sections) {
+                const sections = defaultTemplate.sections;
+                if (sections.header && sections.header.data) {
+                    const {
+                        customField1: { label: customField1Label },
+                        customField2: { label: customField2Label },
+                        customField3: { label: customField3Label },
+                        shippedVia: { label: shippedViaLabel },
+                        shippingDate: { label: shippedDateLabel },
+                        trackingNumber: { label: trackingNumber }
+                    } = sections.header.data;
+                    this.templatePlaceholder = {
+                        customField1Label,
+                        customField2Label,
+                        customField3Label,
+                        shippedViaLabel,
+                        shippedDateLabel,
+                        trackingNumber
+                    };
+                }
+            }
         }
     }
 }

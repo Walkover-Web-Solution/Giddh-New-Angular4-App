@@ -1,7 +1,7 @@
 <div id="live">
     <div class="panel panel-default">
         <div class="panel-heading clearfix">
-            <div class="btn-group gstDropdown pull-left" dropdown>
+            <div class="btn-group gst-dropdown cursor-pointer pull-left" dropdown>
                 <span id="button-basic" dropdownToggle class="dropdown-toggle" aria-controls="dropdown-basic">
                     <span class=""> <strong>Top {{showRecords}}</strong> </span> <span
                         class="icon-arrow-down mrL1"></span>
@@ -11,14 +11,14 @@
                     <li role="menuitem"><a class="dropdown-item" (click)="changeShowRecords(10);">Top 10 </a></li>
                 </ul>
             </div>
-            <span class="thisWeek pull-right">
-                <datepickeroptions (filterDates)="getFilterDate($event)"></datepickeroptions>
+            <span class="this-week pull-right">
+                <datepickeroptions [fromDate]="apiFromDate" [toDate]="apiToDate" (filterDates)="getFilterDate($event)"></datepickeroptions>
             </span>
         </div>
         <div class="cr-dr-body pos-rel">
             <div class="top-five-cr-dr-table">
-                <div class="table-responsive debtorsTable">
-                    <table class="table basic ">
+                <div class="table-responsive debtors-table">
+                    <table class="table basic giddh-table on-mobile-view">
                         <thead>
                             <th width="30%">Debtors (Customers)</th>
                             <th width="10%">Invoiced on</th>
@@ -27,14 +27,14 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let account of drAccounts">
-                                <td>{{account.name}}</td>
-                                <td><span *ngIf="account.latestInvoiceDate">{{account.latestInvoiceDate}}</span><span
+                                <td data-title="Debtors (Customers)">{{account.name}}</td>
+                                <td data-title="Invoiced on"><span *ngIf="account.latestInvoiceDate">{{account.latestInvoiceDate}}</span><span
                                         *ngIf="!account.latestInvoiceDate">-</span></td>
-                                <td class="text-right" *ngIf="account.latestBillAmount">
+                                <td data-title="Bill Amount" class="text-right" *ngIf="account.latestBillAmount">
                                     {{account.latestBillAmount.symbol}}
                                     {{account.latestBillAmount.amount | giddhCurrency}}</td>
-                                <td class="text-right" *ngIf="!account.latestBillAmount">-</td>
-                                <td class="text-right">{{activeCompany.baseCurrencySymbol}}
+                                <td data-title="Due as on" class="text-right" *ngIf="!account.latestBillAmount">-</td>
+                                <td data-title="Due as on" class="text-right">{{activeCompany.baseCurrencySymbol}}
                                     {{ account.closingBalance.amount | giddhCurrency }}</td>
                             </tr>
                             <tr *ngIf="drAccounts.length === 0">
@@ -45,8 +45,8 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="table-responsive credtorsTable">
-                    <table class="table basic ">
+                <div class="table-responsive credtors-table">
+                    <table class="table basic giddh-table on-mobile-view">
                         <thead>
                             <th width="30%">Creditors (Vendors)</th>
                             <th width="10%">Invoiced on</th>
@@ -55,14 +55,14 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let account of crAccounts">
-                                <td>{{account.name}}</td>
-                                <td><span *ngIf="account.latestInvoiceDate">{{account.latestInvoiceDate}}</span><span
+                                <td data-title="Creditors (Vendors)">{{account.name}}</td>
+                                <td data-title="Invoiced on"><span *ngIf="account.latestInvoiceDate">{{account.latestInvoiceDate}}</span><span
                                         *ngIf="!account.latestInvoiceDate">-</span></td>
-                                <td class="text-right" *ngIf="account.latestBillAmount">
+                                <td data-title="Bill Amount" class="text-right" *ngIf="account.latestBillAmount">
                                     {{account.latestBillAmount.symbol}}
                                     {{account.latestBillAmount.amount | giddhCurrency}}</td>
-                                <td class="text-right" *ngIf="!account.latestBillAmount">-</td>
-                                <td class="text-right">{{activeCompany.baseCurrencySymbol}}
+                                <td data-title="Due as on" class="text-right" *ngIf="!account.latestBillAmount">-</td>
+                                <td data-title="Due as on" class="text-right">{{activeCompany.baseCurrencySymbol}}
                                     {{ account.closingBalance.amount | giddhCurrency }}</td>
                             </tr>
                         </tbody>

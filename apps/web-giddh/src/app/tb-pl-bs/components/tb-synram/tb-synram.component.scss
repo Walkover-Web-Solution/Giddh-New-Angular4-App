@@ -1,0 +1,67 @@
+@import "../../../../assets/css/color.scss";
+
+.mrT2 {
+    margin-top: 20px;
+}
+.mrR1 {
+    margin-right: 10px;
+}
+form label {
+    color:$nero;
+    font-weight: normal;
+}
+
+.form-inline .form-control {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+    border-radius: 2px !important;
+    padding: 6px !important;
+    outline: 0;
+    color: rgba(0, 0, 0, 0.6);
+    box-shadow: none;
+}
+
+.form-inline .form-control.selectedVal {
+    border: 1px solid #d6d6d6 !important;
+    padding-right: 22px !important;
+    background: #fff !important;
+}
+.clear {
+    position: absolute;
+    right: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
+    top: 47%;
+    cursor: pointer;
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 100%;
+    opacity: 0.5;
+    color: black;
+    transform: translateY(-50%);
+}
+.form-group.closebtn {
+    position: relative;
+}
+input.checkboxbtn {
+    position: relative;
+    top: 4px;
+}
+
+span.expand {
+    display: inline-block;
+    padding: 2px 5.8px;
+    background: #eee;
+    font-size: 18px;
+
+    border: 1px solid #ccc;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+/* .exp11{display:none;} */
+.max-980 {
+    max-width: 980px;
+    margin: 0 auto;
+}
