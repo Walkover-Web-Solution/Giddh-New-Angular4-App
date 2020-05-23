@@ -1,0 +1,25 @@
+@import "../../assets/css/color.scss";
+.tabs-dropdown{
+    width: 100%;
+    button{
+        width: 100%;
+        text-align:left;
+        background-color: $white;
+        border: none;
+        border-bottom: 1px solid $gainsboro;
+        margin: 0;
+        position: fixed;
+        top: 92px;
+        z-index: 999;
+        padding-left: 15px;
+    }
+    ul{
+        z-index: 99;
+        margin-top: 38px;
+        margin-left: 14px;
+        
+    }
+    ul.show{
+        display: inline-block !important;
+    }
+}

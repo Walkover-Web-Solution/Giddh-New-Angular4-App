@@ -41,6 +41,10 @@
 
 @media (max-width: 1266px) {
     .invoice-preview {
-        width: 7in;
+        width: 75%;
+        padding-left: 15px;
+    }
+    .templateEditor {
+        width: 25%;
     }
 }

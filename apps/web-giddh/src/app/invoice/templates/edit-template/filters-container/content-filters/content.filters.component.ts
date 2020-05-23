@@ -6,12 +6,13 @@ import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../
 import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice';
 import * as _ from '../../../../../lodash-optimized';
 import { Observable, ReplaySubject } from 'rxjs';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../../store';
 import { Configuration } from '../../../../../app.constant';
 import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
 // import {ViewChild, ElementRef} from '@angular/core';
 import { INVOICE_API } from 'apps/web-giddh/src/app/services/apiurls/invoice';
+import { CurrentCompanyState } from 'apps/web-giddh/src/app/store/Company/company.reducer';
 
 @Component({
     selector: 'content-selector',
@@ -44,7 +45,8 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
     public companyUniqueName = null;
     public sessionId$: Observable<string>;
     public companyUniqueName$: Observable<string>;
-    // @ViewChild('signatureImg') public signatureImgzRef: ElementRef<HTMLInputElement>;
+    /** True, if company country supports other tax (TCS/TDS) */
+    public isTcsTdsApplicable: boolean;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private _invoiceUiDataService: InvoiceUiDataService,
@@ -69,8 +71,17 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
 
     }
 
-    public ngOnInit() {
-
+    /**
+     * Initializes and subscribes to observables
+     *
+     * @memberof ContentFilterComponent
+     */
+    public ngOnInit(): void {
+        this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            }
+        });
         this._activatedRoute.params.subscribe(a => {
             if (!a) {
                 return;
@@ -212,7 +223,7 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
 
     public onUploadFileOutput(output: UploadOutput): void {
         if (output.type === 'allAddedToQueue' || output.type === 'addedToQueue') {
-            if(output.file) {
+            if (output.file) {
                 this.signatureImgAttached = true;
                 this.previewFile();
             }
@@ -259,7 +270,7 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
             this.startUpload();
             //this._invoiceUiDataService.setLogoPath(preview.src);
         };
-        
+
         if (file) {
             reader.readAsDataURL(file);
         } else {
@@ -294,5 +305,48 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
         }
         this._invoiceUiDataService.setCustomTemplate(template);
 
+    }
+
+    /**
+     * Change quanity then total quantity will get change
+     *
+     * @memberof ContentFilterComponent
+     */
+    public changeDisableQuantity(): void {
+        let template = _.cloneDeep(this.customTemplate);
+        if (!template.sections.table.data.quantity.display) {
+            template.sections.table.data.totalQuantity.display = false;
+        } else {
+            template.sections.table.data.totalQuantity.display = true;
+        }
+        this._invoiceUiDataService.setCustomTemplate(template);
+    }
+
+    /**
+     * Change Tax Bifurcation then total HSN/SAC or Tax table level will get change
+     *
+     * @param {string} label: String that allow tabel section either HSN/SAC(hsnSac) or Tax (taxRateBifurcation)
+     * @param {string} sectionType:  Define section for template A will be 'footer' and for template E will be 'table'
+     * @memberof ContentFilterComponent
+     */
+    public checkedTaxBifurcation(label: string, sectionType: string) {
+        let template = _.cloneDeep(this.customTemplate);
+        if (sectionType === 'table' && template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.taxBifurcation) {
+            if (template.sections.table.data.taxBifurcation.display) {
+                template.sections.table.data.taxBifurcation.label = label;
+            } else {
+                template.sections.table.data.taxBifurcation.label = '';
+            }
+        } else {
+            if (template && template.sections && template.sections.footer && template.sections.footer.data && template.sections.footer.data.taxBifurcation) {
+                if (template.sections.footer.data.taxBifurcation.display) {
+                    template.sections.footer.data.taxBifurcation.label = label;
+                } else {
+                    template.sections.footer.data.taxBifurcation.label = '';
+                }
+            }
+        }
+
+        this._invoiceUiDataService.setCustomTemplate(template);
     }
 }
