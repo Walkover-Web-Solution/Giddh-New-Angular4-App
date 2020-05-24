@@ -12,6 +12,7 @@ import { SettingsProfileActions } from '../../../actions/settings/profile/settin
 import { CompanyActions } from '../../../actions/company.actions';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
+import { DEFAULT_TRIAL_PLAN } from '../../../app.constant';
 
 @Component({
     selector: 'subscriptions-plans',
@@ -22,7 +23,7 @@ import { FormControl } from '@angular/forms';
 export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     @Input() public subscriptions: any;
     public logedInUser: UserDetails;
-    public SubscriptionPlans: CreateCompanyUsersPlan[] = [];
+    public subscriptionPlans: CreateCompanyUsersPlan[] = [];
     public currentCompany: any;
     public SubscriptionRequestObj: SubscriptionRequest = {
         planUniqueName: '',
@@ -51,6 +52,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public unlimitedUsersTooltipContent : string = "No limit on the number of users you can add for any role.";
     public unlimitedCustomersVendorsTooltipContent : string = "No limit on the number of customers or vendors you add in your books.";
     public desktopMobileAppTooltipContent : string = "Other than cloud access, install Giddh desktop app for Mac and Windows; mobile app for Android and iPhone.";
+    public defaultTrialPlan : string = DEFAULT_TRIAL_PLAN;
 
     constructor(private modalService: BsModalService, private _generalService: GeneralService,
         private _authenticationService: AuthenticationService, private store: Store<AppState>,
@@ -61,34 +63,34 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             if (response && !_.isEmpty(response)) {
                 let companyInfo = _.cloneDeep(response);
                 this._authenticationService.getAllUserSubsciptionPlans(companyInfo.countryV2.alpha2CountryCode).subscribe(res => {
-                    this.SubscriptionPlans = res.body;
+                    this.subscriptionPlans = res.body;
 
-                    console.log(this.SubscriptionPlans);
-
-                    if(this.SubscriptionPlans && this.SubscriptionPlans.length > 0) {
-                        this.SubscriptionPlans.forEach(item => {
+                    if(this.subscriptionPlans && this.subscriptionPlans.length > 0) {
+                        this.subscriptionPlans.forEach(item => {
                             if(!item.subscriptionId && item.planDetails) {
-                                if(item.planDetails.amount && item.planDetails.companiesLimit > 1) {
+                                if(item.planDetails.uniqueName !== this.defaultTrialPlan) {
+                                    if(item.planDetails.amount && item.planDetails.companiesLimit > 1) {
 
-                                    if(!this.defaultMultipleCompanyPlan) {
-                                        this.defaultMultipleCompanyPlan = item;
+                                        if(!this.defaultMultipleCompanyPlan) {
+                                            this.defaultMultipleCompanyPlan = item;
+                                        }
+
+                                        this.totalMultipleCompanyPlans++;
+                                    } else if(item.planDetails.amount && item.planDetails.companiesLimit === 1) {
+
+                                        if(!this.defaultSingleCompanyPlan) {
+                                            this.defaultSingleCompanyPlan = item;
+                                        }
+
+                                        this.totalSingleCompanyPlans++;
+                                    } else if(!item.planDetails.amount) {
+
+                                        if(!this.defaultFreePlan) {
+                                            this.defaultFreePlan = item;
+                                        }
+
+                                        this.totalFreePlans++;
                                     }
-
-                                    this.totalMultipleCompanyPlans++;
-                                } else if(item.planDetails.amount && item.planDetails.companiesLimit === 1) {
-
-                                    if(!this.defaultSingleCompanyPlan) {
-                                        this.defaultSingleCompanyPlan = item;
-                                    }
-
-                                    this.totalSingleCompanyPlans++;
-                                } else if(!item.planDetails.amount) {
-
-                                    if(!this.defaultFreePlan) {
-                                        this.defaultFreePlan = item;
-                                    }
-
-                                    this.totalFreePlans++;
                                 }
                             }
                         });

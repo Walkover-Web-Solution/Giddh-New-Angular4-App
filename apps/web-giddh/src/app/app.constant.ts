@@ -166,3 +166,11 @@ export const VAT_SUPPORTED_COUNTRIES = [
 ];
 
 export const API_POSTMAN_DOC_URL='https://documenter.getpostman.com/view/117343/S1Zw8WF1?version=latest';
+
+export let DEFAULT_TRIAL_PLAN = "";
+
+if(PRODUCTION_ENV || isElectron || isCordova) {
+    DEFAULT_TRIAL_PLAN = "e6v1566224240273";
+} else {
+    DEFAULT_TRIAL_PLAN = "4z01581500278547";
+}
