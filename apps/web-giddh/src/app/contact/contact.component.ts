@@ -23,7 +23,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { DashboardService } from '../services/dashboard.service';
 import { ContactService } from '../services/contact.service';
-import { BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent, TabsetComponent } from 'ngx-bootstrap';
+import { BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent, TabsetComponent, BsModalService, BsModalRef } from 'ngx-bootstrap';
 import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
@@ -142,6 +142,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChild('messageBox') public messageBox: ElementRef;
     @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
 
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+
     // @Input('sort-direction')
     // sortDirection: string = '';
 
@@ -229,6 +231,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public universalDate: any;
     /** Selects/Unselects extra columns based on Select All Checkbox */
     public selectAll: boolean = false;
+    modalRef: BsModalRef;
 
     constructor(
         private store: Store<AppState>,
@@ -245,7 +248,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         private _groupWithAccountsAction: GroupWithAccountsAction,
         private _cdRef: ChangeDetectorRef, private _generalService: GeneralService,
         private _route: ActivatedRoute, private _generalAction: GeneralActions,
-        private _router: Router, private _breakPointObservar: BreakpointObserver) {
+        private _router: Router, private _breakPointObservar: BreakpointObserver, private modalService: BsModalService) {
         this.searchLoader$ = this.store.select(p => p.search.searchLoader);
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
@@ -848,6 +851,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public selectedDate(value: any) {
+        this.hideModal();
+        
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -1192,5 +1197,16 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.showFieldFilter.state = event;
         this.showFieldFilter.gstin = event;
         this.showFieldFilter.comment = event;
+    }
+
+    public openModal() {
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop : false })
+        );
+    }
+
+    public hideModal() {
+        this.modalRef.hide();
     }
 }

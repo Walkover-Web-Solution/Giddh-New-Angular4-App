@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, TemplateRef, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, TemplateRef, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as _moment from 'moment';
 import { Moment } from 'moment';
@@ -96,7 +96,7 @@ export interface DateRangeClicked {
     }]
 })
 
-export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
+export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges {
     modalRef: BsModalRef;
     chosenLabel: string;
     calendarVariables: CalendarVariables = { start: {}, end: {} };
@@ -181,8 +181,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
     endCalendar: any = {};
     showCalInRanges: boolean = false;
     options: any = {}; // should get some opt from user
-    @Input() drops: string;
-    @Input() opens: string;
+    public drops: string = 'down';
+    public opens: string = 'right';
     @Output() choosedDate: EventEmitter<DateRangeClicked>;
     @Output() rangeClicked: EventEmitter<DateRangeClicked>;
     @Output() datesUpdated: EventEmitter<DateRangeClicked>;
@@ -355,6 +355,27 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
         this.scrollSubject$.pipe(debounceTime(25)).subscribe((response) => {
             this.onScroll(response);
         });
+
+        if(this.inputStartDate) {
+            this.startDate = this.inputStartDate;
+        }
+        if(this.inputEndDate) {
+            this.endDate = this.inputEndDate;
+        }
+    }
+
+    public ngOnChanges(changes: SimpleChanges) {
+        for (let change in changes) {
+            if (changes.hasOwnProperty(change)) {
+                if(change === "inputStartDate" && changes[change].currentValue) {
+                    this.startDate = changes[change].currentValue;
+                }
+                if(change === "inputEndDate" && changes[change].currentValue) {
+                    this.endDate = changes[change].currentValue;
+                    this.updateMonthsInView();
+                }
+            }
+        }
     }
 
     public closeCalender(): void {
@@ -925,8 +946,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy {
 
         if (this.isMobileScreen) {
             this.closeCalender();
-            this.closeDatePicker();
         }
+
+        this.datesUpdated.emit({ name: '', startDate: this.inputStartDate, endDate: this.inputEndDate });
     }
 
     /**
