@@ -32,7 +32,12 @@ export class OnReturnDirective {
     @HostListener('keydown', ['$event'])
     public onKeyDown(e: any) {
         // tslint:disable-next-line:max-line-length
-        if ((e.which === KEY_CODE_CONSTANTS.ENTER || e.keyCode === KEY_CODE_CONSTANTS.ENTER) || (e.which === KEY_CODE_CONSTANTS.BACKSPACE || e.keyCode === KEY_CODE_CONSTANTS.BACKSPACE) || (e.which === KEY_CODE_CONSTANTS.SPACE || e.keyCode === KEY_CODE_CONSTANTS.SPACE) || (e.which === KEY_CODE_CONSTANTS.ESC || e.keyCode === KEY_CODE_CONSTANTS.ESC) || (e.which === KEY_CODE_CONSTANTS.ARROW_DOWN || e.keyCode === KEY_CODE_CONSTANTS.ARROW_DOWN) || (e.which === KEY_CODE_CONSTANTS.ARROW_UP || e.keyCode === KEY_CODE_CONSTANTS.ARROW_UP)) {
+        if ((e.which === KEY_CODE_CONSTANTS.ENTER || e.keyCode === KEY_CODE_CONSTANTS.ENTER) ||
+            (e.which === KEY_CODE_CONSTANTS.BACKSPACE || e.keyCode === KEY_CODE_CONSTANTS.BACKSPACE) ||
+            (e.which === KEY_CODE_CONSTANTS.SPACE || e.keyCode === KEY_CODE_CONSTANTS.SPACE) ||
+            (e.which === KEY_CODE_CONSTANTS.ESC || e.keyCode === KEY_CODE_CONSTANTS.ESC) ||
+            (e.which === KEY_CODE_CONSTANTS.ARROW_DOWN || e.keyCode === KEY_CODE_CONSTANTS.ARROW_DOWN) ||
+            (e.which === KEY_CODE_CONSTANTS.ARROW_UP || e.keyCode === KEY_CODE_CONSTANTS.ARROW_UP)) {
             const selectedEle = e.target;
             const allElements: any = window.document.querySelectorAll('input[onReturn][type="text"], textarea[onReturn]');
             const nodeList = Array.from(allElements);

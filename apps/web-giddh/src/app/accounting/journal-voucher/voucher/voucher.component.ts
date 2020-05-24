@@ -159,7 +159,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private fb: FormBuilder, public bsConfig: BsDatepickerConfig) {
 
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
-        
+
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
 
         this.requestObj.transactions = [];
@@ -356,9 +356,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.selectedParticular = elem;
         this.selectRow(true, indx);
         this.filterAccount(trxnType);
-        setTimeout(() => {
-            this.showLedgerAccountList = true;
-        }, 200);
     }
 
     public onStockFocus(ev, stockIndx: number, indx: number) {
@@ -436,7 +433,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public setAccount(acc) {
         let openChequePopup = false;
-        if (acc.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts') && (!this.requestObj.chequeNumber && !this.requestObj.chequeClearanceDate)) {
+        if (acc.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts')) {
             openChequePopup = true;
             this.openChequeDetailForm();
         }
@@ -488,8 +485,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * searchAccount in accountList
      */
     public searchAccount(str) {
-        this.filterByText = str;
-        // this.accountSearch = str;
+        if (str) {
+            this.filterByText = str;
+            this.showLedgerAccountList = true;
+            // setTimeout(() => {
+            //     this.showLedgerAccountList = true;
+            // }, 200);
+        }
     }
 
     public searchStock(str) {
@@ -532,14 +534,26 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     public calModAmt(amount, transactionObj, indx) {
         let lastIndx = this.requestObj.transactions.length - 1;
+        let debitTransactionsTotal = 0;
+        let creditTransactionsTotal = 0;
         transactionObj.amount = Number(amount);
         transactionObj.total = transactionObj.amount;
         if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
             this.newEntryObj();
         }
-        let debitTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'by');
+        let debitTransactions = _.filter(this.requestObj.transactions, (o: any) => {
+            if (o.type === 'by') {
+                creditTransactionsTotal += creditTransactionsTotal + o.amount;
+                return true;
+            }
+        });
         this.totalDebitAmount = _.sumBy(debitTransactions, (o: any) => Number(o.amount));
-        let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'to');
+        let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => {
+            if (o.type === 'to') {
+                debitTransactionsTotal += debitTransactionsTotal + o.amount;
+                return true;
+            }
+        });
         this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
     }
 
