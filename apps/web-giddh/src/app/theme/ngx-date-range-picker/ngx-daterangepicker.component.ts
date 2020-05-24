@@ -372,6 +372,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 }
                 if(change === "inputEndDate" && changes[change].currentValue) {
                     this.endDate = changes[change].currentValue;
+                    this.updateMonthsInView();
                 }
             }
         }
@@ -568,6 +569,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
     public renderCalendar(side: DateType): void { // side enum
         const mainCalendar: any = (side === DateType.start) ? this.startCalendar : this.endCalendar;
+        console.log(mainCalendar);
         const month = mainCalendar.month.month();
         const year = mainCalendar.month.year();
         const hour = mainCalendar.month.hour();
