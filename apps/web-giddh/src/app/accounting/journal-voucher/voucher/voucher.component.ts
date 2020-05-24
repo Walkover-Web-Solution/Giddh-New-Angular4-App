@@ -38,7 +38,7 @@ import { IOption } from '../../../theme/ng-select/option.interface';
 import { VsForDirective } from '../../../theme/ng2-vs-for/ng2-vs-for';
 import { QuickAccountComponent } from '../../../theme/quick-account-component/quickAccount.component';
 import { KeyboardService } from '../../keyboard.service';
-import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 const TransactionsType = [
     { label: 'By', value: 'Debit' },

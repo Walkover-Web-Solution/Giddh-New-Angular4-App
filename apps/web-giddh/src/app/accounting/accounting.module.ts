@@ -1,8 +1,6 @@
 import { InventoryModule } from './../inventory/inventory.module';
 import { TallyModuleService } from './tally-service';
-import { AccountAsVoucherComponent } from './voucher-grid/voucher-grid.component';
 import { SharedModule } from './../shared/shared.module';
-import { AccountAsInvoiceComponent } from './invoice-grid/invoice-grid.component';
 import { AccountingRoutingModule } from './accounting-routing.module';
 import { AccountingComponent } from './accounting.component';
 import { CommonModule } from '@angular/common';
@@ -24,6 +22,8 @@ import { QuickAccountModule } from '../theme/quick-account-component/quickAccoun
 import { AVShSelectModule } from './ng-virtual-list/virtual-list.module';
 import { OnReturnDirective } from './keyboard.directive';
 import { JournalVoucherComponent } from './journal-voucher/journal-voucher.component';
+import { AccountAsInvoiceComponent } from './journal-voucher/invoice/invoice.component';
+import { AccountAsVoucherComponent } from './journal-voucher/voucher/voucher.component';
 
 @NgModule({
     declarations: [
