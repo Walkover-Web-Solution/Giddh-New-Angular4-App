@@ -1,8 +1,8 @@
 import { InventoryModule } from './../inventory/inventory.module';
 import { TallyModuleService } from './tally-service';
-import { AccountAsVoucherComponent } from './voucher-grid/voucher-grid.component';
+import { AccountAsVoucherComponent } from './journal-voucher/voucher/voucher.component';
 import { SharedModule } from './../shared/shared.module';
-import { AccountAsInvoiceComponent } from './invoice-grid/invoice-grid.component';
+import { AccountAsInvoiceComponent } from './journal-voucher/invoice/invoice.component';
 import { AccountingRoutingModule } from './accounting-routing.module';
 import { AccountingComponent } from './accounting.component';
 import { CommonModule } from '@angular/common';
