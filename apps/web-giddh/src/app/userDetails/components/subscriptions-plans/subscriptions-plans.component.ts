@@ -58,12 +58,17 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         private _authenticationService: AuthenticationService, private store: Store<AppState>,
         private _route: Router, private companyActions: CompanyActions,
         private settingsProfileActions: SettingsProfileActions) {
+        
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.select(profile => profile.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && !_.isEmpty(response)) {
                 let companyInfo = _.cloneDeep(response);
                 this._authenticationService.getAllUserSubsciptionPlans(companyInfo.countryV2.alpha2CountryCode).subscribe(res => {
                     this.subscriptionPlans = res.body;
+
+                    this.totalMultipleCompanyPlans = 0;
+                    this.totalSingleCompanyPlans = 0;
+                    this.totalFreePlans = 0;
 
                     if(this.subscriptionPlans && this.subscriptionPlans.length > 0) {
                         this.subscriptionPlans.forEach(item => {
