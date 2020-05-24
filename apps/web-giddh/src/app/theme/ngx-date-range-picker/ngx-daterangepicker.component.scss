@@ -78,12 +78,12 @@ $input-height: 3rem !default;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
 
     &.double {
-        width: $md-drppicker-width-double;
+        width:100%;
     }
 
     &.inline {
         position: relative;
-        display: inline-block;
+        display: flex;
     }
 
     &:before,
@@ -1413,6 +1413,7 @@ td span {
         flex-direction: column;
         z-index:999;
         .ranges {
+            width: 100% !important;
             .range-container {  
                 .date-range-close{
                     padding: 10px 12px;
@@ -1492,6 +1493,7 @@ td span {
             min-width: 100%;
             padding-top: 0;
             height: 100%;
+            overflow-x: hidden;
             .calender-container-wrapper {
                 padding-top: 0;
                 .calender-body {
@@ -1609,6 +1611,11 @@ td span {
     }  
     .angle-down{
         top: 10px;
+    }
+    .buttons {
+        .buttons-input{
+            padding-right: 15px;
+        }
     }
     perfect-scrollbar{
         max-height: 470px !important;
