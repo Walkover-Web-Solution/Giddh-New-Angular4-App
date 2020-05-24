@@ -8941,9 +8941,14 @@ input.checkbox-custom[type="checkbox"] {
     margin-top: 30px !important;
     align-items:flex-start;
 }
-
+.giddh-datepicker-modal .modal-content {
+    background: none !important;
+}
+.giddh-datepicker-modal .modal-body{
+    padding: 0 !important;
+}
 ngx-daterangepicker-material {
-    display: none;
+    // display: none;
     position: absolute;
     z-index: 1000;
     overflow: hidden;

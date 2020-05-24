@@ -23,9 +23,9 @@
                         (click)="rangeDropdownShow = i; clickRange($event, range);"
                         (dblclick)="dblClickRange($event, range)"
                         [ngClass]="{'active': range.isSelected && isRangeSelected}">{{range.name}}
-                        <span *ngIf="range.ranges.length" class="available prev angle-down"></span>
+                        <span *ngIf="range.ranges && range.ranges.length" class="available prev angle-down"></span>
                     </button>
-                    <ul *ngIf="range.ranges.length && rangeDropdownShow === i" class="sub-ranges-cal menu-drawer">
+                    <ul *ngIf="range.ranges && range.ranges.length && rangeDropdownShow === i" class="sub-ranges-cal menu-drawer">
                         <li *ngFor="let subRange of range.ranges">
                             <button type="button" (click)="clickRange($event,subRange);"
                                 (dblclick)="dblClickRange($event, subRange)"
