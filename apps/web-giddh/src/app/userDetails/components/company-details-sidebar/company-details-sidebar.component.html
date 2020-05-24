@@ -13,7 +13,7 @@
                         <li>Plan: {{selectedCompany?.subscription?.planDetails?.name}}</li>
                         <li>ID: {{selectedCompany?.subscription?.subscriptionId}}</li>
                         <li>Created on: {{moment(selectedCompany?.subscription.createdAt, 'DD-MM-YYYY').format('DD/MM/YYYY')}}</li>
-                        <li>Total Transactions: {{selectedCompany?.subscription?.totalTransactions}}</li>
+                        <li>Total Transactions: {{selectedCompany?.subscription?.totalTransactions | number}}</li>
                     </ul>
                 </div>
             </div>
@@ -26,7 +26,7 @@
                         <thead>
                             <tr>
                                 <!-- <th>Date</th> -->
-                                <th>Cunsumptions <span class="text-gray">(previous+current)</span></th>
+                                <th>Consumptions <span class="text-gray">(previous+current)</span></th>
                                 <th>Balance</th>
                                 <th class="text-right">Additional Charges</th>
                             </tr>
@@ -41,9 +41,9 @@
 
                             <tr>
                                 <!-- <td data-title="Date">Apr</td> -->
-                                <td data-title="Cunsumptions">{{selectedCompany?.subscription?.totalTransactions}}</td>
+                                <td data-title="Cunsumptions">{{selectedCompany?.subscription?.totalTransactions | number}}</td>
                                 <td data-title="Balance">{{selectedCompany?.subscription?.balance}}</td>
-                                <td data-title="Additional Charges" class="text-right">{{selectedCompany?.subscription?.additionalCharges}}</td>
+                                <td data-title="Additional Charges" class="text-right">{{selectedCompany?.subscription?.additionalCharges | number}}</td>
                             </tr>
                         </tbody>
                     </table>

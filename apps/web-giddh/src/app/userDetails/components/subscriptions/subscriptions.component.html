@@ -13,7 +13,7 @@
                                     <div class="clearfix">
                                         <p><strong>{{item?.planDetails?.name}}</strong></p>
                                         <p>Subscribed on {{item?.startedAt}} </p>
-                                        <p>Companies: {{item?.totalCompanies}} out of {{item?.planDetails?.companiesLimit}} </p>
+                                        <p>Companies: {{item?.totalCompanies | number}} out of {{item?.planDetails?.companiesLimit | number}} </p>
                                     </div>
                                     <span class="text-warning" *ngIf="item?.status==='trial'">{{item?.status | titlecase}}</span>
                                     <span class="text-success" *ngIf="item?.status==='active'">{{item?.status | titlecase}}</span>
@@ -39,8 +39,8 @@
                         <ul class="list-inline plan-list">
                             <li>Assigned On: {{activeCompany.subscription.createdAt ? (formatDate(activeCompany.subscription.createdAt) | date: giddhDateFormatUI) : '-'}} </li>
                             <li>Expiry Date: {{activeCompany.subscription.expiry ? (formatDate(activeCompany.subscription.expiry) | date: giddhDateFormatUI) : '-'}} </li>
-                            <li>No. of companies : {{activeCompany.subscription.totalCompanies}}/{{activeCompany.subscription.planDetails.companiesLimit}}</li>
-                            <li>Transaction Limit: {{activeCompany.subscription.planDetails.transactionLimit ? activeCompany.subscription.planDetails.transactionLimit : '0'}}</li>
+                            <li>No. of companies : {{activeCompany.subscription.totalCompanies | number}}/{{activeCompany.subscription.planDetails.companiesLimit | number}}</li>
+                            <li>Transaction Limit: {{activeCompany.subscription.planDetails.transactionLimit ? (activeCompany.subscription.planDetails.transactionLimit | number) : '0'}}</li>
                         </ul>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">
@@ -157,9 +157,9 @@
                                         <tbody *ngIf="seletedUserPlans">
                                             <tr>
                                                 <!-- <td data-title="Date">{{ moment(transaction.from, 'DD-MM-YYYY').format('MMM - YY')}}</td> -->
-                                                <td data-title="Consumptions">{{ seletedUserPlans?.totalTransactions ? seletedUserPlans?.totalTransactions : 0 }}</td>
+                                                <td data-title="Consumptions">{{ seletedUserPlans?.totalTransactions ? (seletedUserPlans?.totalTransactions | number) : 0 }}</td>
                                                 <td data-title="Balance">{{ seletedUserPlans?.balance? seletedUserPlans?.balance: 0 }}</td>
-                                                <td data-title="Additional Charges" class="text-right">{{ seletedUserPlans?.additionalCharges? seletedUserPlans?.additionalCharges: 0 }}</td>
+                                                <td data-title="Additional Charges" class="text-right">{{ seletedUserPlans?.additionalCharges? (seletedUserPlans?.additionalCharges | number) : 0 }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -335,8 +335,8 @@
                         <p class="bold">{{item?.planDetails?.name}}</p>
                         <ul class="list-inline plan-list">
                             <li>Expiry Date: {{item.expiry ? (formatDate(item.expiry) | date: giddhDateFormatUI) : '-'}} </li>
-                            <li>No. of companies : {{item?.totalCompanies}}/{{item?.planDetails?.companiesLimit}}</li>
-                            <li>Transaction Limit: {{item?.planDetails?.transactionLimit ? item?.planDetails?.transactionLimit : '0'}}</li>
+                            <li>No. of companies : {{item?.totalCompanies | number}}/{{item?.planDetails?.companiesLimit | number}}</li>
+                            <li>Transaction Limit: {{item?.planDetails?.transactionLimit ? (item?.planDetails?.transactionLimit | number) : '0'}}</li>
                         </ul>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left">

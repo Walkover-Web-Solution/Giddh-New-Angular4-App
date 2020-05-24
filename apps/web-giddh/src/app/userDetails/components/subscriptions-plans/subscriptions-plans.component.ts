@@ -47,6 +47,10 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public defaultMultipleCompanyPlan: any;
     public defaultSingleCompanyPlan: any;
     public defaultFreePlan: any;
+    public transactionLimitTooltipContent : string = "It is the maximum number of transactions (each contains a debit entry and a credit entry) allowed in a plan. Beyond this, charges apply (0.10 INR/transaction).";
+    public unlimitedUsersTooltipContent : string = "No limit on the number of users you can add for any role.";
+    public unlimitedCustomersVendorsTooltipContent : string = "No limit on the number of customers or vendors you add in your books.";
+    public desktopMobileAppTooltipContent : string = "Other than cloud access, install Giddh desktop app for Mac and Windows; mobile app for Android and iPhone.";
 
     constructor(private modalService: BsModalService, private _generalService: GeneralService,
         private _authenticationService: AuthenticationService, private store: Store<AppState>,
@@ -58,6 +62,8 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                 let companyInfo = _.cloneDeep(response);
                 this._authenticationService.getAllUserSubsciptionPlans(companyInfo.countryV2.alpha2CountryCode).subscribe(res => {
                     this.SubscriptionPlans = res.body;
+
+                    console.log(this.SubscriptionPlans);
 
                     if(this.SubscriptionPlans && this.SubscriptionPlans.length > 0) {
                         this.SubscriptionPlans.forEach(item => {

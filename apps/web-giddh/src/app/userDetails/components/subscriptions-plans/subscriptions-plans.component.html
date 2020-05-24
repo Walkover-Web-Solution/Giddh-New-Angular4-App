@@ -34,7 +34,7 @@
                                         </div>
                                         <div class="clearfix">
                                             <ul class="plan-list">
-                                                <li>Transactions Limit: {{defaultMultipleCompanyPlan?.planDetails?.transactionLimit}}
+                                                <li>Transactions Limit: {{defaultMultipleCompanyPlan?.planDetails?.transactionLimit | number}}
                                                     <div class="btn-group pull-right" dropdown placement="bottom right">
                                                         <button id="button-alignment" dropdownToggle type="button"
                                                             class="dropdown-toggle close"
@@ -47,20 +47,14 @@
                                                             <a href="javascript:void(0)" class="inner-close"><i
                                                                     class="icon-cross"></i></a>
                                                             <p class="bold mb-1">Transactions Limit</p>
-                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante.
-                                                                Duis et risus accumsan sem tempus porta nec sit amet
-                                                                est. Sed ut euismod quam. Suspendisse potenti. Aliquam
-                                                                fringilla orci tincidunt, ullamcorper erat in, malesuada
-                                                                metus.</p>
-                                                            <p><a href="javascript:void(0)"
-                                                                    class="color-primary bold">More Details</a></p>
+                                                            <p class="font-12 text-gray mb-1">{{transactionLimitTooltipContent}}</p>
+                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
-                                                <li>Total Companies: {{defaultMultipleCompanyPlan?.planDetails?.companiesLimit}}
+                                                <li>Total Companies: {{defaultMultipleCompanyPlan?.planDetails?.companiesLimit | number}}
                                                 </li>
                                                 <li>Unlimited Users
-
                                                     <div class="btn-group pull-right" dropdown placement="bottom right">
                                                         <button id="button-alignment" dropdownToggle type="button"
                                                             class="dropdown-toggle close"
@@ -72,14 +66,9 @@
                                                             role="menu" aria-labelledby="button-alignment">
                                                             <a href="javascript:void(0)" class="inner-close"><i
                                                                     class="icon-cross"></i></a>
-                                                            <p class="bold mb-1">Transactions Limit</p>
-                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante.
-                                                                Duis et risus accumsan sem tempus porta nec sit amet
-                                                                est. Sed ut euismod quam. Suspendisse potenti. Aliquam
-                                                                fringilla orci tincidunt, ullamcorper erat in, malesuada
-                                                                metus.</p>
-                                                            <p><a href="javascript:void(0)"
-                                                                    class="color-primary bold">More Details</a></p>
+                                                            <p class="bold mb-1">Unlimited Users</p>
+                                                            <p class="font-12 text-gray mb-1">{{unlimitedUsersTooltipContent}}</p>
+                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -95,14 +84,9 @@
                                                             role="menu" aria-labelledby="button-alignment">
                                                             <a href="javascript:void(0)" class="inner-close"><i
                                                                     class="icon-cross"></i></a>
-                                                            <p class="bold mb-1">Transactions Limit</p>
-                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante.
-                                                                Duis et risus accumsan sem tempus porta nec sit amet
-                                                                est. Sed ut euismod quam. Suspendisse potenti. Aliquam
-                                                                fringilla orci tincidunt, ullamcorper erat in, malesuada
-                                                                metus.</p>
-                                                            <p><a href="javascript:void(0)"
-                                                                    class="color-primary bold">More Details</a></p>
+                                                            <p class="bold mb-1">Unlimited Customers/Vendors</p>
+                                                            <p class="font-12 text-gray mb-1">{{unlimitedCustomersVendorsTooltipContent}}</p>
+                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -118,14 +102,9 @@
                                                             role="menu" aria-labelledby="button-alignment">
                                                             <a href="javascript:void(0)" class="inner-close"><i
                                                                     class="icon-cross"></i></a>
-                                                            <p class="bold mb-1">Transactions Limit</p>
-                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante.
-                                                                Duis et risus accumsan sem tempus porta nec sit amet
-                                                                est. Sed ut euismod quam. Suspendisse potenti. Aliquam
-                                                                fringilla orci tincidunt, ullamcorper erat in, malesuada
-                                                                metus.</p>
-                                                            <p><a href="javascript:void(0)"
-                                                                    class="color-primary bold">More Details</a></p>
+                                                            <p class="bold mb-1">Desktop/Mobile App</p>
+                                                            <p class="font-12 text-gray mb-1">{{desktopMobileAppTooltipContent}}</p>
+                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -175,8 +154,7 @@
                                         </div>
                                         <div class="clearfix">
                                             <ul class="plan-list">
-                                                <li>Transactions Limit: {{defaultSingleCompanyPlan?.planDetails?.transactionLimit}}
-
+                                                <li>Transactions Limit: {{defaultMultipleCompanyPlan?.planDetails?.transactionLimit | number}}
                                                     <div class="btn-group pull-right" dropdown placement="bottom right">
                                                         <button id="button-alignment" dropdownToggle type="button"
                                                             class="dropdown-toggle close"
@@ -189,19 +167,14 @@
                                                             <a href="javascript:void(0)" class="inner-close"><i
                                                                     class="icon-cross"></i></a>
                                                             <p class="bold mb-1">Transactions Limit</p>
-                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante.
-                                                                Duis et risus accumsan sem tempus porta nec sit amet
-                                                                est. Sed ut euismod quam. Suspendisse potenti. Aliquam
-                                                                fringilla orci tincidunt, ullamcorper erat in, malesuada
-                                                                metus.</p>
-                                                            <p><a href="javascript:void(0)"
-                                                                    class="color-primary bold">More Details</a></p>
+                                                            <p class="font-12 text-gray mb-1">{{transactionLimitTooltipContent}}</p>
+                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
-                                                <li>Total Companies: {{defaultSingleCompanyPlan?.planDetails?.companiesLimit}}</li>
+                                                <li>Total Companies: {{defaultMultipleCompanyPlan?.planDetails?.companiesLimit | number}}
+                                                </li>
                                                 <li>Unlimited Users
-
                                                     <div class="btn-group pull-right" dropdown placement="bottom right">
                                                         <button id="button-alignment" dropdownToggle type="button"
                                                             class="dropdown-toggle close"
@@ -213,14 +186,9 @@
                                                             role="menu" aria-labelledby="button-alignment">
                                                             <a href="javascript:void(0)" class="inner-close"><i
                                                                     class="icon-cross"></i></a>
-                                                            <p class="bold mb-1">Transactions Limit</p>
-                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante.
-                                                                Duis et risus accumsan sem tempus porta nec sit amet
-                                                                est. Sed ut euismod quam. Suspendisse potenti. Aliquam
-                                                                fringilla orci tincidunt, ullamcorper erat in, malesuada
-                                                                metus.</p>
-                                                            <p><a href="javascript:void(0)"
-                                                                    class="color-primary bold">More Details</a></p>
+                                                            <p class="bold mb-1">Unlimited Users</p>
+                                                            <p class="font-12 text-gray mb-1">{{unlimitedUsersTooltipContent}}</p>
+                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -236,14 +204,9 @@
                                                             role="menu" aria-labelledby="button-alignment">
                                                             <a href="javascript:void(0)" class="inner-close"><i
                                                                     class="icon-cross"></i></a>
-                                                            <p class="bold mb-1">Transactions Limit</p>
-                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante.
-                                                                Duis et risus accumsan sem tempus porta nec sit amet
-                                                                est. Sed ut euismod quam. Suspendisse potenti. Aliquam
-                                                                fringilla orci tincidunt, ullamcorper erat in, malesuada
-                                                                metus.</p>
-                                                            <p><a href="javascript:void(0)"
-                                                                    class="color-primary bold">More Details</a></p>
+                                                            <p class="bold mb-1">Unlimited Customers/Vendors</p>
+                                                            <p class="font-12 text-gray mb-1">{{unlimitedCustomersVendorsTooltipContent}}</p>
+                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -259,14 +222,9 @@
                                                             role="menu" aria-labelledby="button-alignment">
                                                             <a href="javascript:void(0)" class="inner-close"><i
                                                                     class="icon-cross"></i></a>
-                                                            <p class="bold mb-1">Transactions Limit</p>
-                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante.
-                                                                Duis et risus accumsan sem tempus porta nec sit amet
-                                                                est. Sed ut euismod quam. Suspendisse potenti. Aliquam
-                                                                fringilla orci tincidunt, ullamcorper erat in, malesuada
-                                                                metus.</p>
-                                                            <p><a href="javascript:void(0)"
-                                                                    class="color-primary bold">More Details</a></p>
+                                                            <p class="bold mb-1">Desktop/Mobile App</p>
+                                                            <p class="font-12 text-gray mb-1">{{desktopMobileAppTooltipContent}}</p>
+                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -305,8 +263,7 @@
                                         </div>
                                         <div class="clearfix">
                                             <ul class="plan-list">
-                                                <li>Transactions Limit: {{defaultFreePlan?.planDetails?.transactionLimit}} <div class="pull-right">
-
+                                                <li>Transactions Limit: {{defaultMultipleCompanyPlan?.planDetails?.transactionLimit | number}}
                                                     <div class="btn-group pull-right" dropdown placement="bottom right">
                                                         <button id="button-alignment" dropdownToggle type="button"
                                                             class="dropdown-toggle close"
@@ -319,31 +276,13 @@
                                                             <a href="javascript:void(0)" class="inner-close"><i
                                                                     class="icon-cross"></i></a>
                                                             <p class="bold mb-1">Transactions Limit</p>
-                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante.
-                                                                Duis et risus accumsan sem tempus porta nec sit amet
-                                                                est. Sed ut euismod quam. Suspendisse potenti. Aliquam
-                                                                fringilla orci tincidunt, ullamcorper erat in, malesuada
-                                                                metus.</p>
-                                                            <p><a href="javascript:void(0)"
-                                                                    class="color-primary bold">More Details</a></p>
-                                                        </div>
-                                                    </div>
-
-                                                        <div class="transactions-popup" [hidden]="isShow">
-                                                            <a href="javascript:void(0)" class="close"><i
-                                                                    class="icon-cross"></i></a>
-                                                            <p class="bold mb-1">Transactions Limit</p>
-                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante.
-                                                                Duis et risus accumsan sem tempus porta nec sit amet
-                                                                est. Sed ut euismod quam. Suspendisse potenti. Aliquam
-                                                                fringilla orci tincidunt, ullamcorper erat in, malesuada
-                                                                metus.</p>
-                                                            <p><a href="javascript:void(0)"
-                                                                    class="color-primary bold">More Details</a></p>
+                                                            <p class="font-12 text-gray mb-1">{{transactionLimitTooltipContent}}</p>
+                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
-                                                <li>Total Companies: {{defaultFreePlan?.planDetails?.companiesLimit}}</li>
+                                                <li>Total Companies: {{defaultMultipleCompanyPlan?.planDetails?.companiesLimit | number}}
+                                                </li>
                                                 <li>Unlimited Users
                                                     <div class="btn-group pull-right" dropdown placement="bottom right">
                                                         <button id="button-alignment" dropdownToggle type="button"
@@ -356,14 +295,9 @@
                                                             role="menu" aria-labelledby="button-alignment">
                                                             <a href="javascript:void(0)" class="inner-close"><i
                                                                     class="icon-cross"></i></a>
-                                                            <p class="bold mb-1">Transactions Limit</p>
-                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante.
-                                                                Duis et risus accumsan sem tempus porta nec sit amet
-                                                                est. Sed ut euismod quam. Suspendisse potenti. Aliquam
-                                                                fringilla orci tincidunt, ullamcorper erat in, malesuada
-                                                                metus.</p>
-                                                            <p><a href="javascript:void(0)"
-                                                                    class="color-primary bold">More Details</a></p>
+                                                            <p class="bold mb-1">Unlimited Users</p>
+                                                            <p class="font-12 text-gray mb-1">{{unlimitedUsersTooltipContent}}</p>
+                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -379,14 +313,9 @@
                                                             role="menu" aria-labelledby="button-alignment">
                                                             <a href="javascript:void(0)" class="inner-close"><i
                                                                     class="icon-cross"></i></a>
-                                                            <p class="bold mb-1">Transactions Limit</p>
-                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante.
-                                                                Duis et risus accumsan sem tempus porta nec sit amet
-                                                                est. Sed ut euismod quam. Suspendisse potenti. Aliquam
-                                                                fringilla orci tincidunt, ullamcorper erat in, malesuada
-                                                                metus.</p>
-                                                            <p><a href="javascript:void(0)"
-                                                                    class="color-primary bold">More Details</a></p>
+                                                            <p class="bold mb-1">Unlimited Customers/Vendors</p>
+                                                            <p class="font-12 text-gray mb-1">{{unlimitedCustomersVendorsTooltipContent}}</p>
+                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -402,14 +331,9 @@
                                                             role="menu" aria-labelledby="button-alignment">
                                                             <a href="javascript:void(0)" class="inner-close"><i
                                                                     class="icon-cross"></i></a>
-                                                            <p class="bold mb-1">Transactions Limit</p>
-                                                            <p class="font-12 text-gray mb-1">Aenean non accumsan ante.
-                                                                Duis et risus accumsan sem tempus porta nec sit amet
-                                                                est. Sed ut euismod quam. Suspendisse potenti. Aliquam
-                                                                fringilla orci tincidunt, ullamcorper erat in, malesuada
-                                                                metus.</p>
-                                                            <p><a href="javascript:void(0)"
-                                                                    class="color-primary bold">More Details</a></p>
+                                                            <p class="bold mb-1">Desktop/Mobile App</p>
+                                                            <p class="font-12 text-gray mb-1">{{desktopMobileAppTooltipContent}}</p>
+                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -759,27 +683,6 @@
 				</div> -->
             </div>
         </div>
-
-        <div class="box mt-4">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="activation-key mb-1">
-                        <h2 class="font-26 text-blue bold mb-3">Activation Key</h2>
-                        <p class="font-14">You will get the activation key from resellers.</p>
-                        <div class="d-flex">
-                            <input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey"
-                            class="form-control mrT1" placeholder="Enter activation key">
-                            <div class="activation-btn ml-15">
-                                <button class="btn success-btn mrT1 pl-3 pr-3" [disabled]="!licenceKey.value"
-                                    (click)="createCompanyViaActivationKey()">
-                                    Activate</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
     <div *ngIf="isSwitchPlanInProcess">
         <div class="no-data mrT2 loader-main">
@@ -794,32 +697,52 @@
             <i class="icon-cross"></i>
         </a>
         <div class="relative see-all-features">
-        <div class="col-sm-6 col-md-3" *ngFor="let item of SubscriptionPlans; let i=index" [hidden]="!(!item.subscriptionId && ((showPlans === 'multiple' && item?.planDetails?.amount && item?.planDetails?.companiesLimit > 1) || (showPlans === 'single' && item?.planDetails?.amount && item?.planDetails?.companiesLimit === 1) || (showPlans === 'free' && !item?.planDetails?.amount)))">
-            <div class="inner-your-account" *ngIf="!item.subscriptionId && ((showPlans === 'multiple' && item?.planDetails?.amount && item?.planDetails?.companiesLimit > 1) || (showPlans === 'single' && item?.planDetails?.amount && item?.planDetails?.companiesLimit === 1) || (showPlans === 'free' && !item?.planDetails?.amount))">
-                <h3 class="mb-2">{{item?.planDetails?.name}}</h3>
-                <div class="mb-3">
-                    <h3 class="bold font-22 mb-05">{{item?.planDetails?.amount | number}} /-</h3>
-                    <p class="font-12">{{item?.planDetails?.duration}} {{item?.planDetails?.durationUnit}}(s)</p>
-                </div>
-                <div class="clearfix">
-                    <ul class="plan-list">
-                        <li>Transactions Limit: {{item?.planDetails?.transactionLimit | number}}</li>
-                        <li>Total Companies: {{ item?.totalCompanies | number}} out of
-                            {{ item?.planDetails?.companiesLimit | number}}</li>
-                        <li *ngIf="item?.expiry">Subscription Renewal: {{item?.expiry}}</li>
-                    </ul>
-                </div>
-                <div class="plan-footer">
-                    <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)"
-                            class="color-primary font-14">Check all features</a></p>
-                    <button class="btn success-btn btn-round" *ngIf="!item?.planDetails?.amount" (click)="choosePlan(item);"
-                        [ladda]="this.isUpdateCompanyInProgress$ | async">Start Trial</button>
-                    <button class="btn success-btn btn-round" *ngIf="item?.planDetails?.amount" (click)="buyPlanClicked(item)"
-                        [ladda]="this.isUpdateCompanyInProgress$ | async">Buy Plan</button>
+            <div class="col-sm-6 col-md-3" *ngFor="let item of SubscriptionPlans; let i=index" [hidden]="!(!item.subscriptionId && ((showPlans === 'multiple' && item?.planDetails?.amount && item?.planDetails?.companiesLimit > 1) || (showPlans === 'single' && item?.planDetails?.amount && item?.planDetails?.companiesLimit === 1) || (showPlans === 'free' && !item?.planDetails?.amount)))">
+                <div class="inner-your-account" *ngIf="!item.subscriptionId && ((showPlans === 'multiple' && item?.planDetails?.amount && item?.planDetails?.companiesLimit > 1) || (showPlans === 'single' && item?.planDetails?.amount && item?.planDetails?.companiesLimit === 1) || (showPlans === 'free' && !item?.planDetails?.amount))">
+                    <h3 class="mb-2">{{item?.planDetails?.name}}</h3>
+                    <div class="mb-3">
+                        <h3 class="bold font-22 mb-05">{{item?.planDetails?.amount | number}} /-</h3>
+                        <p class="font-12">{{item?.planDetails?.duration}} {{item?.planDetails?.durationUnit}}(s)</p>
+                    </div>
+                    <div class="clearfix">
+                        <ul class="plan-list">
+                            <li>Transactions Limit: {{item?.planDetails?.transactionLimit | number}}</li>
+                            <li>Total Companies: {{ item?.planDetails?.companiesLimit | number}}</li>
+                            <li>Unlimited Users</li>
+                            <li>Unlimited Customers/Vendors</li>
+                            <li>Desktop/Mobile App</li>
+                        </ul>
+                    </div>
+                    <div class="plan-footer">
+                        <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)"
+                                class="color-primary font-14">Check all features</a></p>
+                        <button class="btn success-btn btn-round" *ngIf="!item?.planDetails?.amount" (click)="choosePlan(item);"
+                            [ladda]="this.isUpdateCompanyInProgress$ | async">Start Trial</button>
+                        <button class="btn success-btn btn-round" *ngIf="item?.planDetails?.amount" (click)="buyPlanClicked(item)"
+                            [ladda]="this.isUpdateCompanyInProgress$ | async">Buy Plan</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="box mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="activation-key mb-1">
+                    <h2 class="font-26 text-blue bold mb-3">Activation Key</h2>
+                    <p class="font-14">You will get the activation key from resellers.</p>
+                    <div class="d-flex">
+                        <input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey"
+                        class="form-control mrT1" placeholder="Enter activation key">
+                        <div class="activation-btn ml-15">
+                            <button class="btn success-btn mrT1 pl-3 pr-3" [disabled]="!licenceKey.value"
+                                (click)="createCompanyViaActivationKey()">
+                                Activate</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
