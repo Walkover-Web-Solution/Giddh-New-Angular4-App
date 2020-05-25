@@ -202,7 +202,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
 
         this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
-        this.store.pipe(select(appState => appState.session.companyUniqueName), take(1)).subscribe(uniqueName => this.currentCompanyUniqueName = uniqueName);
     }
 
     public ngOnInit() {
@@ -218,12 +217,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 if (!res) {
                     return;
                 }
-                res.forEach(cmp => {
-                    if (cmp.uniqueName === activeCompanyName) {
-                        this.activeCompany = cmp;
-                        this.createAccountsList();
-                    }
-                });
+                const currentCompany = res.find((company) => company.uniqueName === activeCompanyName);
+                if (currentCompany) {
+                    this.activeCompany = currentCompany;
+                    this.currentCompanyUniqueName = currentCompany.uniqueName;
+                    this.createAccountsList();
+                }
             });
         });
 
