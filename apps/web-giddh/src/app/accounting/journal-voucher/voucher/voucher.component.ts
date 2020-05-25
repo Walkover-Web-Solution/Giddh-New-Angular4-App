@@ -464,9 +464,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             transaction.particular = accModel.UniqueName;
             transaction.selectedAccount = accModel;
             transaction.stocks = acc.stocks;
+            transaction.currentBalance = '';
+            transaction.selectedAccount.type = '';
 
             // tally difference amount
-            transaction.amount = this.calculateDiffAmount(transaction.type);
+            transaction.amount = transaction.amount ? transaction.amount : this.calculateDiffAmount(transaction.type);
             transaction.amount = transaction.amount ? transaction.amount : null;
 
             if (acc) {
@@ -501,7 +503,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * searchAccount in accountList
      */
     public searchAccount(event: KeyboardEvent, accountName: string) {
-        if (event && !event.shiftKey && accountName) {
+        if (event && !(event.shiftKey || event.key === 'Shift') && accountName) {
             this.filterByText = accountName;
             this.showLedgerAccountList = true;
             // setTimeout(() => {
