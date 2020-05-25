@@ -134,7 +134,7 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
             element = element.offsetParent;
         }
 
-        return { x: xPosition / 2, y: yPosition };
+        return { x: 150, y: yPosition };
     }
 
     /**

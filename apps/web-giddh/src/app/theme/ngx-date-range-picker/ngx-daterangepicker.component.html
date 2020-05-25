@@ -24,7 +24,7 @@
                     <button type="button" class="btn-angle-down"
                         (click)="rangeDropdownShow = i; clickRange($event, range);"
                         (dblclick)="dblClickRange($event, range)"
-                        [ngClass]="{'active': range.isSelected && isRangeSelected}">{{range.name}}
+                        [ngClass]="{'active': range.isSelected}">{{range.name}}
                         <span *ngIf="range.ranges && range.ranges.length" class="available prev angle-down"></span>
                     </button>
                     <ul *ngIf="range.ranges && range.ranges.length && rangeDropdownShow === i" class="sub-ranges-cal menu-drawer">
