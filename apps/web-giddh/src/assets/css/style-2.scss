@@ -9496,7 +9496,7 @@ ngx-daterangepicker-material {
         float: left !important;
     }
     body.hide-scroll-body {
-        overflow-y: hidden;
+        overflow-y: hidden !important;
     }
     .panel-block .panel-body {
         min-height: auto;
