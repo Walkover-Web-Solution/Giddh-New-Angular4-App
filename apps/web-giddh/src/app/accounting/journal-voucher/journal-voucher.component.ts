@@ -34,66 +34,67 @@ export const PAGE_SHORTCUT_MAPPING = [
             uniqueName: 'purchases',
             gridType: 'voucher'
         }
-    }, {
-        keyCode: 116, // 'F5',
-        key: FUNCTIONAL_KEYS.F5,
-        inputForFn: {
-            page: 'Payment',
-            uniqueName: 'purchases',
-            gridType: 'voucher'
-        }
-    }, {
-        keyCode: 117, // 'F6',
-        key: FUNCTIONAL_KEYS.F6,
-        inputForFn: {
-            page: 'Receipt',
-            uniqueName: 'null',
-            gridType: 'voucher'
-        }
     },
-    {
-        keyCode: 118, // 'F7',
-        key: FUNCTIONAL_KEYS.F7,
-        inputForFn: {
-            page: 'Journal',
-            uniqueName: 'purchases',
-            gridType: 'voucher'
-        }
-    }, {
-        keyCode: 119, // 'F8',
-        key: FUNCTIONAL_KEYS.F8,
-        inputForFn: {
-            page: 'Sales',
-            uniqueName: 'purchases',
-            gridType: 'voucher'
-        }
-    }, {
-        keyCode: 119, // 'F8',
-        key: FUNCTIONAL_KEYS.F8,
-        altKey: true,
-        inputForFn: {
-            page: 'Credit note',
-            uniqueName: 'purchases',
-            gridType: 'voucher'
-        }
-    }, {
-        keyCode: 120, // 'F9',
-        key: FUNCTIONAL_KEYS.F9,
-        inputForFn: {
-            page: 'Purchase',
-            uniqueName: 'purchases',
-            gridType: 'voucher'
-        }
-    }, {
-        keyCode: 120, // 'F9',
-        key: FUNCTIONAL_KEYS.F9,
-        altKey: true,
-        inputForFn: {
-            page: 'Debit note',
-            uniqueName: 'purchases',
-            gridType: 'voucher'
-        }
-    }
+    // {
+    //     keyCode: 116, // 'F5',
+    //     key: FUNCTIONAL_KEYS.F5,
+    //     inputForFn: {
+    //         page: 'Payment',
+    //         uniqueName: 'purchases',
+    //         gridType: 'voucher'
+    //     }
+    // }, {
+    //     keyCode: 117, // 'F6',
+    //     key: FUNCTIONAL_KEYS.F6,
+    //     inputForFn: {
+    //         page: 'Receipt',
+    //         uniqueName: 'null',
+    //         gridType: 'voucher'
+    //     }
+    // },
+    // {
+    //     keyCode: 118, // 'F7',
+    //     key: FUNCTIONAL_KEYS.F7,
+    //     inputForFn: {
+    //         page: 'Journal',
+    //         uniqueName: 'purchases',
+    //         gridType: 'voucher'
+    //     }
+    // }, {
+    //     keyCode: 119, // 'F8',
+    //     key: FUNCTIONAL_KEYS.F8,
+    //     inputForFn: {
+    //         page: 'Sales',
+    //         uniqueName: 'purchases',
+    //         gridType: 'voucher'
+    //     }
+    // }, {
+    //     keyCode: 119, // 'F8',
+    //     key: FUNCTIONAL_KEYS.F8,
+    //     altKey: true,
+    //     inputForFn: {
+    //         page: 'Credit note',
+    //         uniqueName: 'purchases',
+    //         gridType: 'voucher'
+    //     }
+    // }, {
+    //     keyCode: 120, // 'F9',
+    //     key: FUNCTIONAL_KEYS.F9,
+    //     inputForFn: {
+    //         page: 'Purchase',
+    //         uniqueName: 'purchases',
+    //         gridType: 'voucher'
+    //     }
+    // }, {
+    //     keyCode: 120, // 'F9',
+    //     key: FUNCTIONAL_KEYS.F9,
+    //     altKey: true,
+    //     inputForFn: {
+    //         page: 'Debit note',
+    //         uniqueName: 'purchases',
+    //         gridType: 'voucher'
+    //     }
+    // }
 ];
 
 export const PAGES_WITH_CHILD = ['Purchase', 'Sales', 'Credit note', 'Debit note'];
@@ -106,29 +107,32 @@ export const PAGES_WITH_CHILD = ['Purchase', 'Sales', 'Credit note', 'Debit note
 export class JournalVoucherComponent implements OnInit, OnDestroy {
 
     public gridType: string = 'voucher';
-    public selectedPage: string = 'journal';
+    public selectedPage: string = 'Contra';
     public flattenAccounts: any = [];
     public openDatePicker: boolean = false;
     public openCreateAccountPopupInVoucher: boolean = false;
     public openCreateAccountPopupInInvoice: boolean = false;
     public saveEntryInVoucher: boolean = false;
     public saveEntryInInvoice: boolean = false;
+    /** Current date to show the balance till date */
+    public currentDate: string;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private store: Store<AppState>,
         private companyActions: CompanyActions,
-        private _tallyModuleService: TallyModuleService,
+        private tallyModuleService: TallyModuleService,
         private _accountService: AccountService,
         private sidebarAction: SidebarAction
     ) {
-        this._tallyModuleService.selectedPageInfo.subscribe((d) => {
+        this.tallyModuleService.selectedPageInfo.subscribe((d) => {
             if (d) {
                 this.gridType = d.gridType;
                 this.selectedPage = d.page;
             }
         });
+
     }
 
     @HostListener('document:keydown', ['$event'])
@@ -153,40 +157,40 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
                 this.saveEntryInInvoice = false;
             }, 100);
         } else if (event.altKey && CODES.KEY_V.includes(event.code)) { // Alt + V
-            const selectedPage = this._tallyModuleService.selectedPageInfo.value;
-            if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
-                this._tallyModuleService.setVoucher({
-                    page: selectedPage.page,
-                    uniqueName: selectedPage.uniqueName,
-                    gridType: 'voucher'
-                });
-            } else {
-                return;
-            }
+            // const selectedPage = this.tallyModuleService.selectedPageInfo.value;
+            // if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
+            //     this.tallyModuleService.setVoucher({
+            //         page: selectedPage.page,
+            //         uniqueName: selectedPage.uniqueName,
+            //         gridType: 'voucher'
+            //     });
+            // } else {
+            //     return;
+            // }
         } else if (event.altKey && CODES.KEY_I.includes(event.code)) { // Alt + I
-            const selectedPage = this._tallyModuleService.selectedPageInfo.value;
-            if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
-                this._tallyModuleService.setVoucher({
-                    page: selectedPage.page,
-                    uniqueName: selectedPage.uniqueName,
-                    gridType: 'invoice'
-                });
-            } else {
-                return;
-            }
+            // const selectedPage = this.tallyModuleService.selectedPageInfo.value;
+            // if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
+            //     this.tallyModuleService.setVoucher({
+            //         page: selectedPage.page,
+            //         uniqueName: selectedPage.uniqueName,
+            //         gridType: 'invoice'
+            //     });
+            // } else {
+            //     return;
+            // }
         } else if (event.altKey && CODES.KEY_C.includes(event.code)) {
             // Alt + C: Create new stock
-            if (this.gridType === 'voucher') {
-                this.openCreateAccountPopupInVoucher = true;
-                this.openCreateAccountPopupInInvoice = false;
-            } else if (this.gridType === 'invoice') {
-                this.openCreateAccountPopupInVoucher = false;
-                this.openCreateAccountPopupInInvoice = true;
-            }
-            setTimeout(() => {
-                this.openCreateAccountPopupInVoucher = false;
-                this.openCreateAccountPopupInInvoice = false;
-            }, 100);
+            // if (this.gridType === 'voucher') {
+            //     this.openCreateAccountPopupInVoucher = true;
+            //     this.openCreateAccountPopupInInvoice = false;
+            // } else if (this.gridType === 'invoice') {
+            //     this.openCreateAccountPopupInVoucher = false;
+            //     this.openCreateAccountPopupInInvoice = true;
+            // }
+            // setTimeout(() => {
+            //     this.openCreateAccountPopupInVoucher = false;
+            //     this.openCreateAccountPopupInInvoice = false;
+            // }, 100);
         } else {
             let selectedPageIndx = PAGE_SHORTCUT_MAPPING.findIndex((page: any) => {
                 if (event.altKey) {
@@ -196,7 +200,7 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
                 }
             });
             if (selectedPageIndx > -1) {
-                this._tallyModuleService.setVoucher(PAGE_SHORTCUT_MAPPING[selectedPageIndx].inputForFn);
+                this.tallyModuleService.setVoucher(PAGE_SHORTCUT_MAPPING[selectedPageIndx].inputForFn);
             } else if (event.key === FUNCTIONAL_KEYS.F2) { // F2
                 this.openDatePicker = !this.openDatePicker;
             }
@@ -217,10 +221,21 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
                 this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data.status === 'success') {
                         this.flattenAccounts = data.body.results;
-                        this._tallyModuleService.setFlattenAccounts(data.body.results);
+                        this.tallyModuleService.setFlattenAccounts(data.body.results);
                     }
                 });
             }
+        });
+
+        this.tallyModuleService.fetchCurrentDate().subscribe((data) => {
+            if (data && data.body) {
+                this.currentDate = data.body;
+            } else {
+                const systemDate = new Date();
+                this.currentDate = `${systemDate.getUTCFullYear()}-${systemDate.getUTCMonth()}-${systemDate.getUTCDate()}`;
+            }
+        }, () => {
+
         });
 
         this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
