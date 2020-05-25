@@ -11,7 +11,7 @@
     <div class="ranges" *ngIf="ranges?.length">
         <!-- loop over ranges -->
         <div class="range-container">
-            <div class="date-range-close" *ngIf="isMobileScreen" (click)="closeCalender(); closeDatePicker()">
+            <div class="date-range-close" *ngIf="isMobileScreen" (click)="closeCalender();">
                 <img src="../../../assets/images/close-icon.svg"> <span class="pl-2">Date range</span>
             </div>
             <ul class="range-list">
@@ -43,7 +43,7 @@
                     </button>
                     <ul class="sub-ranges-cal menu-drawer financial-year-dropdown"
                         *ngIf="dropdownShow && financialYears && financialYears.length > 0">
-                        <li *ngFor="let financialYear of financialYears;" (click)="closeDatePicker()">
+                        <li *ngFor="let financialYear of financialYears;">
                             <button type="button"
                                 (click)="clickFinancialYear(financialYear);">{{financialYear.label}}</button>
                         </li>
@@ -254,12 +254,12 @@
                 </perfect-scrollbar>
                 <!-- start date calendar container -->
                 <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true"
-                    [config]="{suppressScrollX: false, suppressScrollY: false}" [style.max-height.px]="280">
+                    [config]="{suppressScrollX: false, suppressScrollY: false}" [style.max-height.px]="280" (psYReachStart)="setCalendarToActiveMonth()">
                     <div *ngIf="showCalInRanges && !showMonthPicker" (mousewheel)="mouseUp($event)" (touchmove)="mouseUp($event)">
                         <div *ngFor="let calendarMonth of calendarMonths;">
                             <div class="calendar" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
                                 <div class="calendar-table" *ngIf="calendarMonth && calendarMonth.start"
-                                    (mouseenter)="setActiveMonth(calendarMonth.start);">
+                                    (mouseenter)="setActiveMonth(calendarMonth, 'start');">
                                     <table class="table-condensed">
                                         <thead>
                                             <tr>
@@ -372,7 +372,7 @@
                                 *ngIf="showCalInRanges && !singleDatePicker && !showMonthPicker">
                                 <div class="calendar-table">
                                     <table class="table-condensed" *ngIf="calendarMonth && calendarMonth.end"
-                                        (mouseenter)="setActiveMonth(calendarMonth.end);">
+                                        (mouseenter)="setActiveMonth(calendarMonth, 'end');">
                                         <thead>
                                             <tr>
                                                 <th colspan="5" class="month drp-animate">
@@ -520,7 +520,7 @@
                 <button class="btn btn-success" *ngIf="!isMobileScreen" [disabled]="applyBtn.disabled" type="button"
                     (click)="clickApply($event)">{{locale.applyLabel}}</button>
                 <button class="btn btn-success" *ngIf="isMobileScreen" [disabled]="applyBtn.disabled" type="button"
-                    (click)="clickApply($event); closeCalender(); closeDatePicker();">{{locale.applyLabel}}</button>
+                    (click)="clickApply($event); closeCalender();">{{locale.applyLabel}}</button>
                 <!-- apply button -->
             </div>
         </div>

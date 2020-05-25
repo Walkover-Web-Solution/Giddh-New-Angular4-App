@@ -281,7 +281,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         ]).subscribe(result => {
             this.isMobileScreen = result.matches;
             this.closeCalender();
-            this.closeDatePicker();
         });
 
         this._buildLocale();
@@ -320,7 +319,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
-                this.removeDuplicateDatepickers();
                 this.hide();
             }
         });
@@ -380,13 +378,13 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
     public closeCalender(): void {
         this.openMobileDatepickerPopup = false;
+        document.querySelector('body').classList.remove('hide-scroll-body');
     }
 
     public closeDatePicker(): void {
-        if (document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material")[0]) {
-            document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
-        }
-        document.querySelector('body').classList.remove('hide-scroll-body')
+        // if (document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material")[0]) {
+        //     document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
+        // }
     }
 
     public openModalWithClass(template: TemplateRef<any>): void {
@@ -1338,10 +1336,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         this.updateView();
 
-        if (this.isMobileScreen) {
-            this.closeDatePicker();
-        }
-
         this.isRangeSelected = true;
     }
 
@@ -2041,8 +2035,34 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @param {*} calendar
      * @memberof NgxDaterangepickerComponent
      */
-    public setActiveMonth(calendar: any): void {
+    public setActiveMonth(calendar: any, side: string): void {
         this.activeMonthHover = true;
-        this.activeMonth = calendar;
+        if(side === 'start') {
+            this.activeMonth = calendar.start;
+        } else {
+            this.activeMonth = calendar.end;
+        }
+    }
+
+    /**
+     * Once scrolling reaches to top, this will set calendar to 1st available month
+     *
+     * @memberof NgxDaterangepickerComponent
+     */
+    public setCalendarToActiveMonth(): void {
+        if(this.calendarMonths && this.calendarMonths[0]) {
+            let setMonth = moment();
+            setMonth.set('date', 1);
+
+            if(this.calendarMonths[0].start) {
+                setMonth.set('year', this.calendarMonths[0].start.year);
+                setMonth.set('month', this.calendarMonths[0].start.month);
+                this.startCalendar.month = setMonth;
+            } else if(this.calendarMonths[0].end) {
+                setMonth.set('year', this.calendarMonths[0].end.year);
+                setMonth.set('month', this.calendarMonths[0].end.month);
+                this.startCalendar.month = setMonth;
+            }
+        }
     }
 }
