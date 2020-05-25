@@ -1494,8 +1494,9 @@ td span {
             padding-top: 0;
             height: 100%;
             overflow-x: hidden;
+            overflow-y: hidden;
             .calender-container-wrapper {
-                padding-top: 0;
+                padding-top:90px;
                 .calender-body {
                     .upper-part{
                         top:88px;   
@@ -1591,14 +1592,12 @@ td span {
                     }
                    .edit-dates{
                        img{
-                        width: 15px;
+                        width: 18px;
                         margin-right: 15px;
+                        cursor: pointer;
                        }
                    }
                 }
-
-                
-               
             }
           }
         &.double {
@@ -1633,14 +1632,16 @@ td span {
     }
 
     .bottom-botton{
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        background-color:$white;
-        z-index: 999;
-        width: 100%;
-        margin: 0;
-        padding-bottom: 10px;
+        position: absolute;
+        bottom: 0 !important;
+        right: 0 !important;
+        background-color: #ffffff !important;
+        z-index: 99999 !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding-bottom: 10px !important;
+        top: auto;
+        text-align: right;
     }
 }
 
