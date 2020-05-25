@@ -12,6 +12,7 @@
                                 <a (click)="selectedSubscriptionPlan(item);">
                                     <div class="clearfix">
                                         <p><strong>{{item?.planDetails?.name}}</strong></p>
+                                        <p *ngIf="item.subscriptionId">Subscription ID: {{item.subscriptionId}} </p>
                                         <p>Subscribed on {{item.startedAt ? (formatDate(item.startedAt) | date: giddhDateFormatUI) : '-'}} </p>
                                         <p>Companies: {{item?.totalCompanies | number}} out of {{item?.planDetails?.companiesLimit | number}} </p>
                                     </div>
@@ -36,6 +37,7 @@
                     <div class="col-md-8 col-sm-8 col-xs-12">
                         <p class="bold font-14">{{activeCompany.subscription.planDetails.name}}</p>
                         <ul class="list-inline plan-list font-14">
+                            <li *ngIf="activeCompany.subscription.subscriptionId">Subscription ID: {{activeCompany.subscription.subscriptionId}} </li>
                             <li>Assigned On: {{activeCompany.subscription.createdAt ? (formatDate(activeCompany.subscription.createdAt) | date: giddhDateFormatUI) : '-'}} </li>
                             <li>Expiry Date: {{activeCompany.subscription.expiry ? (formatDate(activeCompany.subscription.expiry) | date: giddhDateFormatUI) : '-'}} </li>
                             <li>No. of companies : {{activeCompany.subscription.totalCompanies | number}}/{{activeCompany.subscription.planDetails.companiesLimit | number}}</li>
@@ -340,6 +342,7 @@
                     <div class="col-md-8 col-sm-8 col-xs-12">
                         <p class="bold font-14">{{item?.planDetails?.name}}</p>
                         <ul class="list-inline plan-list font-14">
+                            <li *ngIf="item.subscriptionId">Subscription ID: {{item.subscriptionId}} </li>
                             <li>Expiry Date: {{item.expiry ? (formatDate(item.expiry) | date: giddhDateFormatUI) : '-'}} </li>
                             <li>No. of companies : {{item?.totalCompanies | number}}/{{item?.planDetails?.companiesLimit | number}}</li>
                             <li>Transaction Limit: {{item?.planDetails?.transactionLimit ? (item?.planDetails?.transactionLimit | number) : '0'}}</li>
