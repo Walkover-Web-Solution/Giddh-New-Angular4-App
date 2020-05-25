@@ -1,20 +1,20 @@
 <div class="welcome-msg">
     <div class="row">
-        <div class="col-md-9 font-14">
+        <div class="col-md-9 col-sm-9  font-14">
             <p class="mb-1">Hi {{logedInUser?.name}} !</p>
             <p class="mb-3">All the plan come with all the features with <span class="selected">90 days money back
                     guaranty.</span>
             </p>
         </div>
-        <div class="col-md-3 text-right xs-left" *ngIf="subscriptions && subscriptions.length > 0">
+        <div class="col-md-3 col-sm-3 text-right xs-left" *ngIf="subscriptions && subscriptions.length > 0">
             <a (click)="backClicked()" class="btn btn-cancel pr-3 pl-3 mb-2 mr-0">Back</a>
         </div>
     </div>
     <div *ngIf="!isSwitchPlanInProcess" class="choose-ur-plan noHeight">
         <div class="row">
-            <div class="col-sm-12">
-                <div class="row main-row-plans">
-                    <div class="col-md-4 col-sm-6" *ngIf="totalMultipleCompanyPlans">
+            
+                <div class="main-row-plans">
+                    <div class="col-md-4 col-sm-4" *ngIf="totalMultipleCompanyPlans">
                         <div class="select-plan-block"
                             [ngClass]="{'plan-disabled': showPlans === 'single' || showPlans === 'free'}">
                             <div class="select-plan-head">
@@ -125,7 +125,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-6" *ngIf="totalSingleCompanyPlans">
+                    <div class="col-md-4 col-sm-4" *ngIf="totalSingleCompanyPlans">
                         <div class="select-plan-block"
                             [ngClass]="{'plan-disabled': showPlans === 'multiple' || showPlans === 'free'}">
                             <div class="select-plan-head">
@@ -244,7 +244,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-6" *ngIf="totalFreePlans">
+                    <div class="col-md-4 col-sm-4" *ngIf="totalFreePlans">
                         <div class="select-plan-block"
                             [ngClass]="{'plan-disabled': showPlans === 'multiple' || showPlans === 'single'}">
                             <div class="select-plan-head">
@@ -590,6 +590,7 @@
 						</ng-container> -->
                     <!-- </ng-container> -->
                 </div>
+                
                 <!-- <div class="row">
 					<ng-container *ngFor="let paidItem of SubscriptionPlans">
 						<ng-container
@@ -681,7 +682,6 @@
 						</ng-container>
 					</ng-container>
 				</div> -->
-            </div>
         </div>
     </div>
     <div *ngIf="isSwitchPlanInProcess">
@@ -730,7 +730,7 @@
     <div class="activation-key-wrapper">
         <div class="box">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="activation-key mb-1">
                         <h2 class="font-26 text-blue bold mb-3">Activation Key</h2>
                         <p class="font-14">You will get the activation key from resellers.</p>
