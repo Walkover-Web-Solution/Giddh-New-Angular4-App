@@ -1978,9 +1978,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         if (this.inlineStartDate.isBefore(this.inlineEndDate, 'day')) {
             this.startDate = this.inlineStartDate;
             this.endDate = this.inlineEndDate;
+            this.modalRef.hide();
             this.clickApply();
             this.allowBodyScroll();
-            this.modalRef.hide();
         } else {
             this.invalidInlineDate = "Start date must not be greater than End date";
         }
