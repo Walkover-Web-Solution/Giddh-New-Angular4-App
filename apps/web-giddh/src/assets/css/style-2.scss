@@ -9536,6 +9536,9 @@ ngx-daterangepicker-material {
             top: 0;
         }
     } 
+    .restrict-body-scroll:nth-child(2) .modal {
+        z-index: 9993;
+    }
 }
 @media (max-width: 575px) {
     .daterangepicker.ltr .ranges {
