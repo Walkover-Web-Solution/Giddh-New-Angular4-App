@@ -125,7 +125,7 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
      * @memberof DatepickerWrapperComponent
      */
     public getPosition(element): any {
-        var xPosition = -300;
+        var xPosition = 0;
         var yPosition = 0;
 
         while (element) {
@@ -134,7 +134,7 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
             element = element.offsetParent;
         }
 
-        return { x: xPosition, y: yPosition };
+        return { x: xPosition / 2, y: yPosition };
     }
 
     /**

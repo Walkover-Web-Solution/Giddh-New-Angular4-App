@@ -281,7 +281,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         ]).subscribe(result => {
             this.isMobileScreen = result.matches;
             this.closeCalender();
-            this.closeDatePicker();
         });
 
         this._buildLocale();
@@ -380,13 +379,13 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
     public closeCalender(): void {
         this.openMobileDatepickerPopup = false;
+        document.querySelector('body').classList.remove('hide-scroll-body');
     }
 
     public closeDatePicker(): void {
-        if (document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material")[0]) {
-            document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
-        }
-        document.querySelector('body').classList.remove('hide-scroll-body')
+        // if (document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material")[0]) {
+        //     document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
+        // }
     }
 
     public openModalWithClass(template: TemplateRef<any>): void {
@@ -1337,10 +1336,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
 
         this.updateView();
-
-        if (this.isMobileScreen) {
-            this.closeDatePicker();
-        }
 
         this.isRangeSelected = true;
     }
