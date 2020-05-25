@@ -176,8 +176,6 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
                 this.subscriptionDates.expiry = moment(this.seletedUserPlans.expiry.split("-").reverse().join("-"));
             }
         }
-        console.log(this.subscriptions);
-        console.log(this.seletedUserPlans);
     }
 
     public toggleActivityLogAsidePane(event?): void {

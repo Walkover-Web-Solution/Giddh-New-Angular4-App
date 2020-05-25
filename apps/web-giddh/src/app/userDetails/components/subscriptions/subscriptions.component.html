@@ -12,7 +12,7 @@
                                 <a (click)="selectedSubscriptionPlan(item);">
                                     <div class="clearfix">
                                         <p><strong>{{item?.planDetails?.name}}</strong></p>
-                                        <p>Subscribed on {{item?.startedAt}} </p>
+                                        <p>Subscribed on {{item.startedAt ? (formatDate(item.startedAt) | date: giddhDateFormatUI) : '-'}} </p>
                                         <p>Companies: {{item?.totalCompanies | number}} out of {{item?.planDetails?.companiesLimit | number}} </p>
                                     </div>
                                     <span class="text-warning" *ngIf="item?.status==='trial'">{{item?.status | titlecase}}</span>
