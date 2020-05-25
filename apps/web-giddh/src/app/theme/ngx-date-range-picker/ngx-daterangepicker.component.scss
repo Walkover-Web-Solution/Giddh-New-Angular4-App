@@ -1497,7 +1497,10 @@ td span {
             .calender-container-wrapper {
                 padding-top: 0;
                 .calender-body {
-                    .upper-part{                   
+                    .upper-part{
+                        top:88px;   
+                        background-color: $white !important;
+                        z-index: 99;                
                         .sticky-header{
                             width: calc(100% - 0px) !important;    
                             th.days-td{
@@ -1531,8 +1534,8 @@ td span {
                 }
             }
             .close-calender{
-                position: relative;
-                top: 10px;
+                position: fixed;
+                top: 0;
                 left: 0;
                 display: flex;
                 align-items: center;
@@ -1542,6 +1545,9 @@ td span {
                 flex-direction: column;
                 box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
                 z-index: 2;
+                padding-top: 10px;
+                background-color: $white;
+                z-index: 991;
                 .close-save-btn{
                     display: flex;
                     align-items: center;
@@ -1618,9 +1624,13 @@ td span {
         }
     }
     perfect-scrollbar{
-        max-height: 470px !important;
+        max-height: 480px !important;
         height: calc(100% - 100px) !important;
     } 
+    perfect-scrollbar.hide-horizontal-scroll{
+        max-height: 100% !important;
+        height: 100% !important;
+    }
 
     .bottom-botton{
         position: fixed;
