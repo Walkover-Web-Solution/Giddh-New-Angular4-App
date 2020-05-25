@@ -9,13 +9,13 @@ import { LedgerActions } from './../../actions/ledger/ledger.actions';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { AccountService } from './../../services/account.service';
 import { Observable, ReplaySubject } from 'rxjs';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective, BsDatepickerConfig } from 'ngx-bootstrap';
 import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
 import { AccountResponse } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
@@ -123,6 +123,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     private isComponentLoaded: boolean = false;
     public allAccounts: any;
     public previousVoucherType: string = "";
+    public universalDate$: Observable<any>;
+    public universalDate: any = '';
 
     constructor(
         private _accountService: AccountService,
@@ -133,7 +135,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private _tallyModuleService: TallyModuleService,
         private componentFactoryResolver: ComponentFactoryResolver,
         private inventoryService: InventoryService,
-        private fb: FormBuilder) {
+        private fb: FormBuilder, public bsConfig: BsDatepickerConfig) {
+
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
+        
+        this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
         this.requestObj.transactions = [];
         this._keyboardService.keyInformation.subscribe((key) => {
             this.watchKeyboardEvent(key);
@@ -163,29 +169,34 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
 
         this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
-
     }
 
     public ngOnInit() {
+        this.universalDate$.subscribe(dateObj => {
+            if (dateObj) {
+                this.universalDate = _.cloneDeep(dateObj);
+                this.journalDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+            }
+        });
 
         this.chequeDetailForm = this.fb.group({
             chequeClearanceDate: [''],
             chequeNumber: ['', [Validators.required]]
-        }),
+        });
 
-            this._tallyModuleService.requestData.pipe(distinctUntilChanged((p, q) => {
-                if (p && q) {
-                    return (_.isEqual(p, q));
-                }
-                if ((p && !q) || (!p && q)) {
-                    return false;
-                }
-                return true;
-            })).subscribe((data) => {
-                if (data) {
-                    this.requestObj = _.cloneDeep(data);
-                }
-            });
+        this._tallyModuleService.requestData.pipe(distinctUntilChanged((p, q) => {
+            if (p && q) {
+                return (_.isEqual(p, q));
+            }
+            if ((p && !q) || (!p && q)) {
+                return false;
+            }
+            return true;
+        })).subscribe((data) => {
+            if (data) {
+                this.requestObj = _.cloneDeep(data);
+            }
+        });
 
         this.store.select(p => p.ledger.ledgerCreateSuccess).pipe(takeUntil(this.destroyed$)).subscribe((s: boolean) => {
             if (s) {
@@ -422,7 +433,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 }
             }
 
-            if(openChequePopup === false) {
+            if (openChequePopup === false) {
                 setTimeout(() => {
                     if (transaction.type === 'by') {
                         this.byAmountField.nativeElement.focus();
@@ -431,6 +442,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     }
                 }, 200);
             }
+
+            this.calModAmt(transaction.amount, transaction, idx);
         } else {
             this.deleteRow(idx);
         }
@@ -520,7 +533,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public saveEntry() {
         let data = _.cloneDeep(this.requestObj);
-        data.entryDate = this.journalDate;
+        data.entryDate = moment(this.journalDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         data.transactions = this.validateTransaction(data.transactions);
 
         if (!data.transactions) {
@@ -611,7 +624,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.totalCreditAmount = 0;
         this.totalDebitAmount = 0;
         this.requestObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
-        this.journalDate = moment().format(GIDDH_DATE_FORMAT);
+        this.journalDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         this.requestObj.description = '';
         this.dateField.nativeElement.focus();
         setTimeout(() => {
@@ -1101,8 +1114,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             let accList: IOption[] = [];
             this.allAccounts.forEach((acc: IFlattenAccountsResultItem) => {
                 if (this.requestObj.voucherType === "Contra") {
-                    const checkIfBankCash = acc.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash'));
-                    if (checkIfBankCash) {
+                    const isContraAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash' || pg.uniqueName === 'currentliabilities'));
+                    const isDisallowedAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'sundrycreditors' || pg.uniqueName === 'dutiestaxes'));
+                    if (isContraAccount && !isDisallowedAccount) {
                         accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
                     }
                 } else {
@@ -1120,9 +1134,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public resetEntriesIfVoucherChanged(): void {
-        if(this.requestObj && this.previousVoucherType !== this.requestObj.voucherType) {
+        if (this.requestObj && this.previousVoucherType !== this.requestObj.voucherType) {
             this.previousVoucherType = this.requestObj.voucherType;
-
             this.refreshEntry();
         }
     }
