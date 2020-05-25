@@ -2,7 +2,7 @@
     <div class="col-xs-12 bg_wrap">
         <div class="row">
             <div class="clearfix pdT2">
-                <span class="btn label isActive">{{requestObj.voucherType}}</span>
+                <span class="btn label isActive voucher-name">{{requestObj.voucherType}}</span>
                 <div class="pull-right text-right mrB1" (clickOutside)="showFromDatePicker = false;">
                     <input type="text" onReturn #dateField name="entryDate"
                         [(ngModel)]="journalDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY"
@@ -25,22 +25,26 @@
                         <tbody (clickOutside)="hideListItems()">
                             <tr *ngFor="let transaction of requestObj.transactions;let i=index;let l=last"
                                 [ngClass]="{'activeRow': (isSelectedRow && selectedIdx === i) || (!selectedIdx && !isSelectedRow && i == 0)}">
-                                <td [style.width.px]="40"><input onReturn type="text" class="form-control txtCpc byTo"
+                                <td [style.width.px]="40">
+                                    <input onReturn type="text" class="form-control txtCpc byTo"
                                         [disabled]="i === 0 && !isFirstRowDeleted" [ngModel]="transaction.type"
                                         (ngModelChange)="selectEntryType(transaction, $event, i)"
                                         (focus)="selectRow(true,i);hideListItems()"
                                         [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
-                                        value="{{ transaction.type | lowercase }}" maxlength="2" /></td>
-                                <td><input onReturn id="first_element_{{i}}" type="text"
+                                        value="{{ transaction.type | lowercase }}" maxlength="2" />
+                                </td>
+                                <td>
+                                    <input onReturn id="first_element_{{i}}" type="text"
                                         class="form-control from-or-to-acc" #particular [required]="transaction.amount"
                                         [(ngModel)]="transaction.selectedAccount.account"
-                                        (keyup)="searchAccount($event?.target?.value);"
+                                        (keyup)="searchAccount($event, $event?.target?.value);"
                                         (focus)="onAccountFocus($event, transaction.type === 'by' ? amountField1 : amountField2, transaction.type, i);"
                                         (blur)="onAccountBlur($event);"
                                         [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
                                         (keydown)="detectKey($event)"
                                         (keydown.Tab)="validateAccount(transaction, $event, i)"
                                         (keydown.arrowDown)="openCreateAccountPopupIfRequired($event)">
+                                        <span *ngIf="transaction.currentBalance !== ''" class="current-balance">Current Balance: {{transaction.currentBalance | giddhCurrency}}</span>
                                     <table *ngIf="requestObj.voucherType !== 'Contra'">
                                         <tbody>
                                             <ng-container *ngIf="transaction.inventory && transaction.inventory.length">
