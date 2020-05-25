@@ -44,7 +44,9 @@
                                         (keydown)="detectKey($event)"
                                         (keydown.Tab)="validateAccount(transaction, $event, i)"
                                         (keydown.arrowDown)="openCreateAccountPopupIfRequired($event)">
-                                        <span *ngIf="transaction.currentBalance !== ''" class="current-balance">Current Balance: {{transaction.currentBalance | giddhCurrency}}</span>
+                                        <span *ngIf="transaction.currentBalance !== ''" class="current-balance">
+                                            Current Balance: {{transaction.currentBalance | giddhCurrency}} {{transaction.selectedAccount.type === 'DEBIT' ? 'Dr.' : 'Cr.'}}
+                                        </span>
                                     <table *ngIf="requestObj.voucherType !== 'Contra'">
                                         <tbody>
                                             <ng-container *ngIf="transaction.inventory && transaction.inventory.length">

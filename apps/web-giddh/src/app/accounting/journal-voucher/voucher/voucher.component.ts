@@ -307,7 +307,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 name: '',
                 UniqueName: '',
                 groupUniqueName: '',
-                account: ''
+                account: '',
+                type: ''
             }
         });
     }
@@ -450,7 +451,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             const formattedCurrentDate = this._tallyModuleService.getFormattedDate(this.currentDate);
             this._tallyModuleService.getCurrentBalance(this.currentCompanyUniqueName, acc.uniqueName, formattedCurrentDate, formattedCurrentDate).subscribe((data) => {
                 if (data && data.body) {
-                    this.setAccountCurrentBalance(data.body, this.selectedIdx);
+                    this.setAccountCurrentBalance(data.body, idx);
                 }
             }, () => { });
             let accModel = {
@@ -571,7 +572,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public openConfirmBox(submitBtnEle: HTMLButtonElement) {
         this.showLedgerAccountList = false;
         this.showStockList = false;
-        if (this.requestObj.transactions.length > 2) {
+        if (this.totalDebitAmount === this.totalCreditAmount) {
             this.showConfirmationBox = true;
             if (this.requestObj.description.length > 1) {
                 this.requestObj.description = this.requestObj.description.replace(/(?:\r\n|\r|\n)/g, '');
@@ -1210,8 +1211,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     private setAccountCurrentBalance(balanceData: any, index: number): void {
-        const currentBalance = (balanceData.creditTotal > balanceData.debitTotal) ?
-            (balanceData.creditTotal - balanceData.debitTotal) : (balanceData.debitTotal - balanceData.creditTotal);
-        this.requestObj.transactions[index].currentBalance = currentBalance;
+        if (balanceData.closingBalance) {
+            this.requestObj.transactions[index].currentBalance = balanceData.closingBalance.amount;
+            this.requestObj.transactions[index].selectedAccount.type = balanceData.closingBalance.type;
+        }
     }
 }
