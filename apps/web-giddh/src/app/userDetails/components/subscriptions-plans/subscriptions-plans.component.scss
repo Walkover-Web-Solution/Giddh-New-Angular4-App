@@ -89,6 +89,8 @@
     padding: 30px;
     .btn-green.btn-round {
         padding: 8px 30px;
+        display: block;
+        margin-right: 0px;
     }
 }
 .your-account {
@@ -105,8 +107,9 @@
     transition: .5s all ease;
     margin-bottom: 30px;
 }
-.inner-your-account:hover {
+.inner-your-account:hover, .inner-your-account.active {
     background: $lavender;
+    border-color: $midnight-blue;
 }
 .your-account:after, .your-account:before {
     content: '';
@@ -202,13 +205,16 @@
 .see-all-features {
     display: flex;
     flex-wrap: wrap;
-    max-height: 540px;
+    max-height: 640px;
     overflow-y: auto;
     padding-top: 60px;
     width: 80%;
 }
 .see-all-features .col-sm-6.col-md-3 {
     width: 33.33%;
+}
+.see-all-features .inner-your-account {
+    border-color: $midnight-blue;
 }
 .btn-group .close {
     font-size: 16px;
