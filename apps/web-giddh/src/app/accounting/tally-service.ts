@@ -1,9 +1,13 @@
-import { distinctUntilChanged } from 'rxjs/operators';
-import { ToasterService } from './../services/toaster.service';
-import { BlankLedgerVM } from './../ledger/ledger.vm';
-import { BehaviorSubject } from 'rxjs';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
-import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
+
+import { HttpWrapperService } from '../services/httpWrapper.service';
+import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
+import { BlankLedgerVM } from './../ledger/ledger.vm';
+import { CURRENT_DATE_API } from './constants/accounting.constant';
+import { LEDGER_API } from '../services/apiurls/ledger.api';
 
 export interface IPageInfo {
     page: string;
@@ -44,7 +48,10 @@ export class TallyModuleService {
 
     public transactionObj: object = {};
 
-    constructor(private _toaster: ToasterService) {
+    constructor(
+        private http: HttpWrapperService,
+        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
+    ) {
         this.selectedFieldType.pipe(distinctUntilChanged((p, q) => p === q)).subscribe((type: string) => {
             if (type && this.selectedPageInfo.value) {
                 let filteredAccounts;
@@ -340,5 +347,49 @@ export class TallyModuleService {
             //   break;
         }
         return isValid;
+    }
+
+    /**
+     * Fetches the current server date
+     *
+     * @returns {Observable<any>} Observable to carry out further operations
+     * @memberof TallyModuleService
+     */
+    public fetchCurrentDate(): Observable<any> {
+        return this.http.get(`${this.config.apiUrl}${CURRENT_DATE_API}`);
+    }
+
+    /**
+     * Returns the current balance of selected account for a
+     * particular date range
+     *
+     * @param {string} companyUniqueName Company unique name
+     * @param {string} accountUniqueName Account unique name
+     * @param {string} fromDate From date
+     * @param {string} toDate To date
+     * @returns {Observable<any>} Observable to carry out further operation
+     * @memberof TallyModuleService
+     */
+    public getCurrentBalance(companyUniqueName: string, accountUniqueName: string, fromDate: string, toDate: string): Observable<any> {
+        const contextPath = LEDGER_API.GET_BALANCE.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+        .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+        .replace(':from', fromDate).replace(':to', toDate)
+        .replace(':accountCurrency', 'true');
+        return this.http.get(`${this.config.apiUrl}${contextPath}`);
+    }
+
+    /**
+     * Returns the date in DD-MM-YYYY format from YYYY-MM-DD format
+     *
+     * @param {string} date Date to be formatted
+     * @returns {string} Formatted date
+     * @memberof TallyModuleService
+     */
+    public getFormattedDate(date: string): string {
+        if (date) {
+            const unformattedDate = date.split('-');
+            return `${unformattedDate[2]}-${unformattedDate[1]}-${unformattedDate[0]}`;
+        }
+        return date;
     }
 }

@@ -73,7 +73,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 	@Input() public saveEntryOnCtrlA: boolean;
 	@Input() public openDatePicker: boolean;
 	@Input() public openCreateAccountPopup: boolean;
-	@Input() public newSelectedAccount: AccountResponse;
+    @Input() public newSelectedAccount: AccountResponse;
+    /** Current date to show the balance till date */
+    @Input() public currentDate: string;
 	@Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
 	@Output() public showStockList: EventEmitter<boolean> = new EventEmitter();
 

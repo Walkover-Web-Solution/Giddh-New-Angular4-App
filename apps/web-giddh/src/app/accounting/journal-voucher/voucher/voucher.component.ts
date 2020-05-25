@@ -24,7 +24,7 @@ import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.serv
 import * as moment from 'moment';
 import { ModalDirective, BsDatepickerConfig } from 'ngx-bootstrap';
 import { Observable, ReplaySubject } from 'rxjs';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil, take } from 'rxjs/operators';
 
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { AccountResponse } from '../../../models/api-models/Account';
@@ -51,7 +51,7 @@ const CustomShortcode = [
 @Component({
     selector: 'account-as-voucher',
     templateUrl: './voucher.component.html',
-    styleUrls: ['../../accounting.component.css'],
+    styleUrls: ['../../accounting.component.css', './voucher.component.scss'],
     animations: [
         trigger('slideInOut', [
             state('in', style({
@@ -72,6 +72,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @Input() public openDatePicker: boolean;
     @Input() public openCreateAccountPopup: boolean;
     @Input() public newSelectedAccount: AccountResponse;
+    /** Current date to show the balance till date */
+    @Input() public currentDate: string;
     @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
 
     @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
@@ -93,6 +95,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     @ViewChild('byAmountField') public byAmountField: ElementRef;
     @ViewChild('toAmountField') public toAmountField: ElementRef;
+
+    @ViewChildren('byAmountField') public byAmountFields: QueryList<ElementRef>;
+    @ViewChildren('toAmountField') public toAmountFields: QueryList<ElementRef>;
 
     public showLedgerAccountList: boolean = false;
     public selectedInput: 'by' | 'to' = 'by';
@@ -141,6 +146,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     private allStocks: any[];
     private isNoAccFound: boolean = false;
     private isComponentLoaded: boolean = false;
+    /** Current company unique name */
+    private currentCompanyUniqueName: string;
 
     public allAccounts: any;
     public previousVoucherType: string = "";
@@ -191,7 +198,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
 
         this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
-
+        this.store.pipe(select(appState => appState.session.companyUniqueName), take(1)).subscribe(uniqueName => this.currentCompanyUniqueName = uniqueName);
     }
 
     public ngOnInit() {
@@ -288,6 +295,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.requestObj.transactions.push({
             amount: null,
             particular: '',
+            currentBalance: '',
             applyApplicableTaxes: false,
             isInclusiveTax: false,
             type: byOrTo,
@@ -378,7 +386,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.arrowInput = { key: 0 };
         // this.showStockList.next(true);
         if (this.accountSearch) {
-            this.searchAccount('');
             this.accountSearch = '';
         }
 
@@ -440,6 +447,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let idx = this.selectedIdx;
         let transaction = this.requestObj.transactions[idx];
         if (acc) {
+            const formattedCurrentDate = this._tallyModuleService.getFormattedDate(this.currentDate);
+            this._tallyModuleService.getCurrentBalance(this.currentCompanyUniqueName, acc.uniqueName, formattedCurrentDate, formattedCurrentDate).subscribe((data) => {
+                if (data && data.body) {
+                    this.setAccountCurrentBalance(data.body, this.selectedIdx);
+                }
+            }, () => { });
             let accModel = {
                 name: acc.name,
                 UniqueName: acc.uniqueName,
@@ -468,9 +481,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (openChequePopup === false) {
                 setTimeout(() => {
                     if (transaction.type === 'by') {
-                        this.byAmountField.nativeElement.focus();
+                        // this.byAmountField.nativeElement.focus();
+                        this.byAmountFields.last.nativeElement.focus();
                     } else {
-                        this.toAmountField.nativeElement.focus();
+                        // this.toAmountField.nativeElement.focus();
+                        this.toAmountFields.last.nativeElement.focus();
                     }
                 }, 200);
             }
@@ -484,9 +499,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     /**
      * searchAccount in accountList
      */
-    public searchAccount(str) {
-        if (str) {
-            this.filterByText = str;
+    public searchAccount(event: KeyboardEvent, accountName: string) {
+        if (event && !event.shiftKey && accountName) {
+            this.filterByText = accountName;
             this.showLedgerAccountList = true;
             // setTimeout(() => {
             //     this.showLedgerAccountList = true;
@@ -534,27 +549,20 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     public calModAmt(amount, transactionObj, indx) {
         let lastIndx = this.requestObj.transactions.length - 1;
-        let debitTransactionsTotal = 0;
-        let creditTransactionsTotal = 0;
         transactionObj.amount = Number(amount);
         transactionObj.total = transactionObj.amount;
-        if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
-            this.newEntryObj();
-        }
-        let debitTransactions = _.filter(this.requestObj.transactions, (o: any) => {
-            if (o.type === 'by') {
-                creditTransactionsTotal += creditTransactionsTotal + o.amount;
-                return true;
-            }
-        });
+
+        let debitTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'by');
         this.totalDebitAmount = _.sumBy(debitTransactions, (o: any) => Number(o.amount));
-        let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => {
-            if (o.type === 'to') {
-                debitTransactionsTotal += debitTransactionsTotal + o.amount;
-                return true;
-            }
-        });
+        let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'to');
         this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
+        if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
+            if (this.totalCreditAmount < this.totalDebitAmount) {
+                this.newEntryObj('to');
+            } else if (this.totalDebitAmount < this.totalCreditAmount) {
+                this.newEntryObj('by');
+            }
+        }
     }
 
     /**
@@ -902,25 +910,27 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * validateAccount
      */
     public validateAccount(transactionObj, ev, idx) {
-        let lastIndx = this.requestObj.transactions.length - 1;
-        if (idx === lastIndx) {
-            return;
-        }
-        if (!transactionObj.selectedAccount.account) {
-            transactionObj.selectedAccount = {};
-            transactionObj.amount = 0;
-            transactionObj.inventory = [];
-            if (idx) {
-                this.requestObj.transactions.splice(idx, 1);
-            } else {
-                ev.preventDefault();
+        if (!ev.shiftKey) {
+            let lastIndx = this.requestObj.transactions.length - 1;
+            if (idx === lastIndx) {
+                return;
             }
-            return;
-        }
-        if (transactionObj.selectedAccount.account !== transactionObj.selectedAccount.name) {
-            this._toaster.errorToast('No account found with name ' + transactionObj.selectedAccount.account);
-            ev.preventDefault();
-            return;
+            if (!transactionObj.selectedAccount.account) {
+                transactionObj.selectedAccount = {};
+                transactionObj.amount = 0;
+                transactionObj.inventory = [];
+                if (idx) {
+                    this.requestObj.transactions.splice(idx, 1);
+                } else {
+                    ev.preventDefault();
+                }
+                return;
+            }
+            if (transactionObj.selectedAccount.account !== transactionObj.selectedAccount.name) {
+                this._toaster.errorToast('No account found with name ' + transactionObj.selectedAccount.account);
+                ev.preventDefault();
+                return;
+            }
         }
     }
 
@@ -1189,5 +1199,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.previousVoucherType = this.requestObj.voucherType;
             this.refreshEntry();
         }
+    }
+
+    /**
+     * Sets the current balance of account based on credit and debit total
+     *
+     * @private
+     * @param {*} balanceData Response received from API
+     * @param {number} index Current index of account in entry
+     * @memberof AccountAsVoucherComponent
+     */
+    private setAccountCurrentBalance(balanceData: any, index: number): void {
+        const currentBalance = (balanceData.creditTotal > balanceData.debitTotal) ?
+            (balanceData.creditTotal - balanceData.debitTotal) : (balanceData.debitTotal - balanceData.creditTotal);
+        this.requestObj.transactions[index].currentBalance = currentBalance;
     }
 }

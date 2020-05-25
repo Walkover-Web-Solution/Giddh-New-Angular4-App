@@ -24,6 +24,7 @@ import { OnReturnDirective } from './keyboard.directive';
 import { JournalVoucherComponent } from './journal-voucher/journal-voucher.component';
 import { AccountAsInvoiceComponent } from './journal-voucher/invoice/invoice.component';
 import { AccountAsVoucherComponent } from './journal-voucher/voucher/voucher.component';
+import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 
 @NgModule({
     declarations: [
@@ -40,6 +41,7 @@ import { AccountAsVoucherComponent } from './journal-voucher/voucher/voucher.com
         AccountingRoutingModule,
         RouterModule,
         CommonModule,
+        CurrencyModule,
         FormsModule,
         ReactiveFormsModule,
         DatepickerModule,
