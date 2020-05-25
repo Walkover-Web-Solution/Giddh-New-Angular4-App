@@ -18,13 +18,19 @@ const FUNCTIONAL_KEYS = {
     F7: 'F7',
     F8: 'F8',
     F9: 'F9'
-}
+};
 
 const CODES = {
     KEY_C: ['KeyC'],
     KEY_I: ['AltLeft', 'KeyI'],
     KEY_V: ['KeyV'],
-}
+};
+
+export const KEYS = {
+    ENTER: 'Enter',
+    TAB: 'Tab'
+};
+
 export const PAGE_SHORTCUT_MAPPING = [
     {
         keyCode: 115, // 'F4',

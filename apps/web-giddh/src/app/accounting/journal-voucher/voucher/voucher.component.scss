@@ -1,5 +1,11 @@
 @import "../../../../assets/css/color.scss";
 
+.day-date {
+    display: flex;
+    .voucher-date-field {
+        width: auto;
+    }
+}
 .voucher-name {
     cursor: default;
     pointer-events: none;
@@ -11,4 +17,12 @@
 .current-balance {
     font-size: 14px;
     font-style: italic;
+}
+
+.cheque-popup .new-account-form .modal-body {
+    .check-clearance-date {
+        .form-control[readonly] {
+            background-color: $white !important;
+        }
+    }
 }

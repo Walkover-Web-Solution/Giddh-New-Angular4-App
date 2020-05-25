@@ -22,7 +22,7 @@ import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-serv
 import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import * as moment from 'moment';
-import { ModalDirective, BsDatepickerConfig } from 'ngx-bootstrap';
+import { ModalDirective, BsDatepickerConfig, BsDatepickerDirective } from 'ngx-bootstrap';
 import { Observable, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, takeUntil, take } from 'rxjs/operators';
 
@@ -38,6 +38,9 @@ import { VsForDirective } from '../../../theme/ng2-vs-for/ng2-vs-for';
 import { QuickAccountComponent } from '../../../theme/quick-account-component/quickAccount.component';
 import { KeyboardService } from '../../keyboard.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { KEYS } from '../journal-voucher.component';
+import { CurrentPage } from '../../../models/api-models/Common';
+import { GeneralActions } from '../../../actions/general/general.actions';
 
 const TransactionsType = [
     { label: 'By', value: 'Debit' },
@@ -86,7 +89,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChild('dateField') public dateField: ElementRef;
     @ViewChild('narrationBox') public narrationBox: ElementRef;
     @ViewChild('chequeNumberInput') public chequeNumberInput: ElementRef;
-    @ViewChild('chequeClearanceDateInput') public chequeClearanceDateInput: ElementRef;
+    @ViewChild('chequeClearanceDateInput') public chequeClearanceDateInput: BsDatepickerDirective;
     @ViewChild('chqFormSubmitBtn') public chqFormSubmitBtn: ElementRef;
     @ViewChild('submitButton') public submitButton: ElementRef;
     @ViewChild('resetButton') public resetButton: ElementRef;
@@ -162,10 +165,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private _ledgerActions: LedgerActions,
         private store: Store<AppState>,
         private _keyboardService: KeyboardService,
-        private _toaster: ToasterService, private _router: Router,
+        private _toaster: ToasterService, private router: Router,
         private _tallyModuleService: TallyModuleService,
         private componentFactoryResolver: ComponentFactoryResolver,
         private inventoryService: InventoryService,
+        private generalAction: GeneralActions,
         private fb: FormBuilder, public bsConfig: BsDatepickerConfig) {
 
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -189,12 +193,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         })).subscribe((d) => {
             if (d && d.gridType === 'voucher') {
                 this.requestObj.voucherType = d.page;
+                this.setCurrentPageTitle(d.page);
                 this.createAccountsList();
                 this.resetEntriesIfVoucherChanged();
                 setTimeout(() => {
                     this.dateField.nativeElement.focus();
                 }, 50);
             } else if (d) {
+                this.setCurrentPageTitle(d.page);
                 this.createAccountsList();
                 this.resetEntriesIfVoucherChanged();
                 this._tallyModuleService.requestData.next(this.requestObj);
@@ -750,7 +756,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (event) {
             let navigateTo = _.find(this.navigateURL, (o: any) => o.code === event.key);
             if (navigateTo) {
-                this._router.navigate(['accounting', navigateTo.route]);
+                this.router.navigate(['accounting', navigateTo.route]);
             }
         }
     }
@@ -1064,13 +1070,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.getStock(null, null, true, true);
     }
 
-    public onCheckNumberFieldKeyDown(e, fieldType: string) {
-        if (e && (e.keyCode === 13 || e.which === 13)) {
-            e.preventDefault();
-            e.stopPropagation();
+    public onCheckNumberFieldKeyDown(event, fieldType: string, datePickerField?: BsDatepickerDirective) {
+        if (event && (event.key === KEYS.ENTER || event.key === KEYS.TAB)) {
+            event.preventDefault();
+            event.stopPropagation();
             return setTimeout(() => {
                 if (fieldType === 'chqNumber') {
-                    this.chequeClearanceDateInput.nativeElement.focus();
+                    datePickerField.show();
+                    this.chequeNumberInput.nativeElement.blur();
                 } else if (fieldType === 'chqDate') {
                     this.chqFormSubmitBtn.nativeElement.focus();
                 }
@@ -1236,5 +1243,18 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.requestObj.transactions[index].currentBalance = balanceData.closingBalance.amount;
             this.requestObj.transactions[index].selectedAccount.type = balanceData.closingBalance.type;
         }
+    }
+
+    /**
+     * This function will set the page heading
+     *
+     * @param {string} title Title to be set
+     * @memberof InvoiceComponent
+     */
+    private setCurrentPageTitle(voucherType: string) : void {
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = `Journal Voucher > ${voucherType}`;
+        currentPageObj.url = this.router.url;
+        this.store.dispatch(this.generalAction.setPageTitle(currentPageObj));
     }
 }
