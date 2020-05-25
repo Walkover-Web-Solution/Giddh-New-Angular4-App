@@ -5,7 +5,7 @@
                 <span class="btn label isActive voucher-name">{{requestObj.voucherType}}</span>
                 <div class="pull-right text-right mrB1" (clickOutside)="showFromDatePicker = false;">
                     <input type="text" onReturn #dateField name="entryDate"
-                        [(ngModel)]="journalDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY"
+                        [(ngModel)]="journalDate" (blur)="dateEntered();" readonly placeholder="DD-MM-YYYY"
                         class="form-control text-right voucher-date-field" (focus)="onDateFieldFocus()" bsDatepicker [bsConfig]="bsConfig" />
                     {{ displayDay }}
                 </div>
@@ -208,7 +208,7 @@
                     </div>
                     <div class="clearfix mrT1">
                         <label>Cheque Clearance Date:</label>
-                        <input #chequeClearanceDateInput [textMask]="{mask: dateMask, guide: true}" class="form-control"
+                        <input #chequeClearanceDateInput readonly bsDatepicker [bsConfig]="bsConfig" class="form-control"
                             formControlName="chequeClearanceDate" name="account" type="text"
                             placeholder="Cheque Clearance Date"
                             (keydown)="onCheckNumberFieldKeyDown($event, 'chqDate')">

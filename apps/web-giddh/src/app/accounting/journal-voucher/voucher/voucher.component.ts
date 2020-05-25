@@ -154,6 +154,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public universalDate$: Observable<any>;
     public universalDate: any = '';
 
+    public activeCompanyUniqueName$: Observable<string>;
+    public activeCompany: any;
+
     constructor(
         private _accountService: AccountService,
         private _ledgerActions: LedgerActions,
@@ -166,6 +169,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private fb: FormBuilder, public bsConfig: BsDatepickerConfig) {
 
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+        this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
 
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
 
@@ -207,6 +211,20 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.universalDate = _.cloneDeep(dateObj);
                 this.journalDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
+        });
+
+        this.activeCompanyUniqueName$.pipe(take(1)).subscribe(activeCompanyName => {
+            this.store.pipe(select(state => state.session.companies), takeUntil(this.destroyed$)).subscribe(res => {
+                if (!res) {
+                    return;
+                }
+                res.forEach(cmp => {
+                    if (cmp.uniqueName === activeCompanyName) {
+                        this.activeCompany = cmp;
+                        this.createAccountsList();
+                    }
+                });
+            });
         });
 
         this.chequeDetailForm = this.fb.group({
@@ -418,7 +436,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public onSubmitChequeDetail() {
         const chequeDetails = this.chequeDetailForm.value;
         this.requestObj.chequeNumber = chequeDetails.chequeNumber;
-        this.requestObj.chequeClearanceDate = chequeDetails.chequeClearanceDate;
+        this.requestObj.chequeClearanceDate = moment(chequeDetails.chequeClearanceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         this.closeChequeDetailForm();
         setTimeout(() => {
             this.selectedParticular.focus();
@@ -1176,14 +1194,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (this.allAccounts) {
             let accList: IOption[] = [];
             this.allAccounts.forEach((acc: IFlattenAccountsResultItem) => {
-                if (this.requestObj.voucherType === "Contra") {
-                    const isContraAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash' || pg.uniqueName === 'currentliabilities'));
-                    const isDisallowedAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'sundrycreditors' || pg.uniqueName === 'dutiestaxes'));
-                    if (isContraAccount && !isDisallowedAccount) {
+                if(this.activeCompany && acc.currency === this.activeCompany.baseCurrency) {
+                    if (this.requestObj.voucherType === "Contra") {
+                        const isContraAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash' || pg.uniqueName === 'currentliabilities'));
+                        const isDisallowedAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'sundrycreditors' || pg.uniqueName === 'dutiestaxes'));
+                        if (isContraAccount && !isDisallowedAccount) {
+                            accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
+                        }
+                    } else {
                         accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
                     }
-                } else {
-                    accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
                 }
             });
             this.flattenAccounts = accList;
