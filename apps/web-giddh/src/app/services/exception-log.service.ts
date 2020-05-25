@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorHandler, Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
@@ -30,7 +29,6 @@ export class ExceptionLogService implements ErrorHandler {
     public handleError(error: any): void {
         if (error.stack) {
             this.addUiException({ component: '', exception: error.stack }).subscribe(() => { }, () => { });
-            this.logUiException(error);
         }
         throw error;
     }
@@ -72,24 +70,5 @@ export class ExceptionLogService implements ErrorHandler {
         } else {
             return of();
         }
-    }
-
-    /**
-     * Logs the error to API for getting the similarity of
-     * issues to decide their priority
-     *
-     * @param {*} error Error occurred
-     * @memberof ExceptionLogService
-     */
-    public logUiException(error: any): void {
-        const httpErrorResponse = new HttpErrorResponse({
-            error: {
-                code: 'UI_EXCEPTION',
-                message: error.message
-            },
-            url: 'UI_EXCEPTION' // Send url as hard coded string which is easy to query at API
-        });
-        const errorHandler = this.injector.get(GiddhErrorHandler);
-        errorHandler.logApiError(httpErrorResponse);
     }
 }
