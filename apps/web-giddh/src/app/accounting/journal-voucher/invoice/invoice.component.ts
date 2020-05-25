@@ -40,7 +40,7 @@ import { VsForDirective } from '../../../theme/ng2-vs-for/ng2-vs-for';
 import { QuickAccountComponent } from '../../../theme/quick-account-component/quickAccount.component';
 import { KeyboardService } from '../../keyboard.service';
 import { TallyModuleService } from '../../tally-service';
-import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 const TransactionsType = [
 	{ label: 'By', value: 'Debit' },
@@ -73,7 +73,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 	@Input() public saveEntryOnCtrlA: boolean;
 	@Input() public openDatePicker: boolean;
 	@Input() public openCreateAccountPopup: boolean;
-	@Input() public newSelectedAccount: AccountResponse;
+    @Input() public newSelectedAccount: AccountResponse;
+    /** Current date to show the balance till date */
+    @Input() public currentDate: string;
 	@Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
 	@Output() public showStockList: EventEmitter<boolean> = new EventEmitter();
 

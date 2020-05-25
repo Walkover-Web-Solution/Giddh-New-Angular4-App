@@ -2,13 +2,14 @@
     <li><a class="cp" (click)="setSelectedPage('Contra', 'voucher', 'purchases')"
             [ngClass]="{ 'active-parent': selectedVoucher === 'Contra'}">F4: Contra</a></li>
 
+    <!--
     <li><a class="cp" (click)="setSelectedPage('Payment', 'voucher', 'purchases')"
             [ngClass]="{ 'active-parent': selectedVoucher === 'Payment'}">F5: Payment</a></li>
 
     <li><a class="cp" (click)="setSelectedPage('Receipt', 'voucher', 'purchases')"
             [ngClass]="{ 'active-parent': selectedVoucher === 'Receipt'}">F6: Receipt</a></li>
 
-    <!-- "isHidden" class  if user is not able to access the module-->
+        "isHidden" class  if user is not able to access the module
     <li><a class="cp" (click)="setSelectedPage('Journal', 'voucher', null)"
             [ngClass]="{ 'active-parent': selectedVoucher === 'Journal'}">F7: Journal</a></li>
 
@@ -52,6 +53,6 @@
     <li><a class="cp" (click)="setSelectedPage('Debit note', 'invoice', 'sales')"
             [ngClass]="{ 'active-child': selectedVoucher === 'Debit note' && selectedGrid === 'invoice'}"
             [hidden]="selectedVoucher !== 'Debit note'"><span class="dblUnderlined">I:</span>As Invoice</a></li>
-
+    -->
 
 </ul>
