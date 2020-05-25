@@ -8,8 +8,9 @@
 .select-plan-block {
     margin-bottom: 30px;
     background-color: $white;
-    box-shadow: 0px 3px 6px $black-russian;
+    border:1px solid $gainsboro;
     height: 97%;
+
 }
 .welcome-msg {
     position: relative;
@@ -78,15 +79,15 @@
 .select-plan-head {
     text-align: center;
     background: $lavender;
-    font-size: 26px;
-    padding: 20px;
+    font-size: 24px;
+    padding: 15px;
     h2 {
         color: $midnight-blue;
         font-weight: bold;
     }
 }
 .plans-box {
-    padding: 30px;
+    padding: 24px 30px;
     .btn-green.btn-round {
         padding: 8px 30px;
         display: block;
@@ -94,7 +95,7 @@
     }
 }
 .your-account {
-    margin: 100px 0px 30px 50px;
+    margin: 90px 0px 30px 50px;
     position: relative;
 }
 .inner-your-account {
@@ -194,7 +195,6 @@
 }
 .close.close-2 {
     opacity: 1;
-    position: absolute;
     right: 25px;
     z-index: 999;
     top: 20px;
@@ -206,8 +206,7 @@
     display: flex;
     flex-wrap: wrap;
     max-height: 640px;
-    overflow-y: auto;
-    padding-top: 60px;
+    padding-top: 80px;
     width: 80%;
 }
 .see-all-features .col-sm-6.col-md-3 {
@@ -237,8 +236,14 @@
 .plans-head-top {
     min-height: 50px;
 }
-
-
+.activation-key-wrapper{
+    padding-left: 70px;
+    background-color: $lavender;
+    border: 1px solid $gainsboro;
+}
+.all-plans{
+    border: 1px solid $gainsboro;
+}
 @media only screen and (max-width: 1280px) {
     .see-all-features {
         width: 100%;

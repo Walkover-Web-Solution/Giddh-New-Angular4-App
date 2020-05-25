@@ -48,8 +48,9 @@
     float: right;
 }
 .subscription-dropdown .dropdown-menu {
-    width: 342px;
-    margin-top: 9px;
+    max-width: 400px;
+    width: 100%;
+    margin-top: 0;
     max-height: 300px;
     overflow-y: auto;
 }
@@ -101,15 +102,28 @@
     color: #1C1C1C;
     font-size: 14px;
     padding: 12px 20px;
-    display: inline-block;
+    display:flex;
     white-space: initial;
     word-break: break-all;
+    width: 100%;
 }
 .associated-companies > ul > li > a span {
     margin-right: 20px;
+    white-space: nowrap;
 }
 .associated-companies > ul > li > a:hover {
     color: $deep-sky-blue;
+}
+.associated-company-name{
+    flex-direction: column;
+    .custom-dropdown{
+        right: 0;
+        top: 13px;
+        position: absolute;
+    }
+}
+.box-border{
+    border: 1px solid $gainsboro;
 }
 .active {
     color: $light-green;
@@ -174,7 +188,16 @@
 .btn-group.custom-dropdown {
     line-height: 14px;
 }
-
+.subscription-dropdown-wrapper{
+    max-width: 400px;
+    width: 100%;
+}
+.subscription-table-box{
+    th, td{
+        padding: 3px 0 !important;
+    }
+}
+/*resposnive*/
 @media only screen and (max-width: 1024px) {
     .table-subscription {
         margin-bottom: 20px;

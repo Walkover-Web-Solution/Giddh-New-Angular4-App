@@ -7,7 +7,7 @@
             </p>
         </div>
         <div class="col-md-3 text-right xs-left" *ngIf="subscriptions && subscriptions.length > 0">
-            <a (click)="backClicked()" class="btn btn-default pr-3 pl-3 mb-2">Back</a>
+            <a (click)="backClicked()" class="btn btn-cancel pr-3 pl-3 mb-2 mr-0">Back</a>
         </div>
     </div>
     <div *ngIf="!isSwitchPlanInProcess" class="choose-ur-plan noHeight">
@@ -23,7 +23,7 @@
                             <div class="plans-box">
                                 <p class="bold">Total Plans: {{totalMultipleCompanyPlans}}</p>
                                 <div class="your-account">
-                                    <div class="inner-your-account active">
+                                    <div class="inner-your-account">
                                         <h3 class="mb-2">{{defaultMultipleCompanyPlan?.planDetails?.name}}</h3>
                                         <div class="d-flex align-items-center justify-content-between plans-head-top mb-3">
                                             <div class="clearfix">
@@ -692,10 +692,11 @@
             </div>
         </div>
     </div>
-    <div class="box clearfix mt-2 pl-5 xs-pl-0 pb-3 relative" *ngIf="showPlans">
+    <div class="box clearfix pl-5 mb-15 xs-pl-0 pb-3 relative all-plans" *ngIf="showPlans">
         <a class="close close-2" href="javascript:void(0)" (click)="showPlans = ''">
             <i class="icon-cross"></i>
         </a>
+    <perfect-scrollbar>
         <div class="relative see-all-features">
             <div class="col-sm-6 col-md-3" *ngFor="let item of subscriptionPlans; let i=index" [hidden]="!(!item.subscriptionId && item?.planDetails?.uniqueName !== defaultTrialPlan && ((showPlans === 'multiple' && item?.planDetails?.amount && item?.planDetails?.companiesLimit > 1) || (showPlans === 'single' && item?.planDetails?.amount && item?.planDetails?.companiesLimit === 1) || (showPlans === 'free' && !item?.planDetails?.amount)))">
                 <div class="inner-your-account" *ngIf="!item.subscriptionId && item?.planDetails?.uniqueName !== defaultTrialPlan && ((showPlans === 'multiple' && item?.planDetails?.amount && item?.planDetails?.companiesLimit > 1) || (showPlans === 'single' && item?.planDetails?.amount && item?.planDetails?.companiesLimit === 1) || (showPlans === 'free' && !item?.planDetails?.amount))">
@@ -724,20 +725,23 @@
                 </div>
             </div>
         </div>
+    </perfect-scrollbar>
     </div>
-    <div class="box mt-4">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="activation-key mb-1">
-                    <h2 class="font-26 text-blue bold mb-3">Activation Key</h2>
-                    <p class="font-14">You will get the activation key from resellers.</p>
-                    <div class="d-flex">
-                        <input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey"
-                        class="form-control mrT1" placeholder="Enter activation key">
-                        <div class="activation-btn ml-15">
-                            <button class="btn success-btn mrT1 pl-3 pr-3" [disabled]="!licenceKey.value"
-                                (click)="createCompanyViaActivationKey()">
-                                Activate</button>
+    <div class="activation-key-wrapper">
+        <div class="box">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="activation-key mb-1">
+                        <h2 class="font-26 text-blue bold mb-3">Activation Key</h2>
+                        <p class="font-14">You will get the activation key from resellers.</p>
+                        <div class="d-flex">
+                            <input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey"
+                            class="form-control mrT1" placeholder="Enter activation key">
+                            <div class="activation-btn ml-15">
+                                <button class="btn success-btn mrT1 pl-3 pr-3" [disabled]="!licenceKey.value"
+                                    (click)="createCompanyViaActivationKey()">
+                                    Activate</button>
+                            </div>
                         </div>
                     </div>
                 </div>
