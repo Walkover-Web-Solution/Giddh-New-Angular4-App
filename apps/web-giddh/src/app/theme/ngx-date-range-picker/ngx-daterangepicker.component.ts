@@ -380,7 +380,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public closeCalender(): void {
         this.openMobileDatepickerPopup = false;
         document.querySelector('body').classList.remove('hide-scroll-body');
-        this.hide();
     }
 
     public closeMobileDatePicker(): void {

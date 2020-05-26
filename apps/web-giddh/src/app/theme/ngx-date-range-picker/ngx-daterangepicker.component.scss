@@ -904,9 +904,6 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before{
         }
     }
     .drp-animate {
-        transform: translate(0);
-        transition: transform 0.2s ease, opacity 0.2s ease;
-
         &.drp-picker-site-this {
             transition-timing-function: linear;
         }
@@ -1632,7 +1629,7 @@ td span {
     }
 
     .bottom-botton{
-        position: absolute;
+        position: absolute !important;
         bottom: 0 !important;
         right: 0 !important;
         background-color: #ffffff !important;
@@ -1642,6 +1639,7 @@ td span {
         padding-bottom: 10px !important;
         top: auto;
         text-align: right;
+        padding-right: 0 !important;
     }
 }
 

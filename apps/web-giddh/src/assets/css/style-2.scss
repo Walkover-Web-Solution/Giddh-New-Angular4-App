@@ -9001,11 +9001,13 @@ ngx-daterangepicker-material {
             }
         }
         .button-wrapper {
-            padding: 20px 0 0;
             text-align: right;
             font-size: 14px;
+            margin-top: 10px;
             a{
                 color: $deep-sky-blue;
+                padding: 10px 10px;
+                display: inline-block;
             }
         }
     }
