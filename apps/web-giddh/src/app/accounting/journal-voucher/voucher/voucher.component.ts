@@ -27,7 +27,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, takeUntil, take } from 'rxjs/operators';
 
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
-import { AccountResponse } from '../../../models/api-models/Account';
+import { AccountResponse, AddAccountRequest, UpdateAccountRequest } from '../../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { AccountService } from '../../../services/account.service';
 import { ToasterService } from '../../../services/toaster.service';
@@ -41,6 +41,7 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { KEYS } from '../journal-voucher.component';
 import { CurrentPage } from '../../../models/api-models/Common';
 import { GeneralActions } from '../../../actions/general/general.actions';
+import { SalesActions } from '../../../actions/sales/sales.action';
 
 const TransactionsType = [
     { label: 'By', value: 'Debit' },
@@ -160,6 +161,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public activeCompanyUniqueName$: Observable<string>;
     public activeCompany: any;
 
+    public accountAsideMenuState: string = 'out';
+    private createAccountIsSuccess$: Observable<boolean>;
+
     constructor(
         private _accountService: AccountService,
         private _ledgerActions: LedgerActions,
@@ -170,10 +174,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private componentFactoryResolver: ComponentFactoryResolver,
         private inventoryService: InventoryService,
         private generalAction: GeneralActions,
-        private fb: FormBuilder, public bsConfig: BsDatepickerConfig) {
+        private fb: FormBuilder, public bsConfig: BsDatepickerConfig,
+        private salesAction: SalesActions) {
 
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
+        this.createAccountIsSuccess$ = this.store.pipe(select(p => p.sales.createAccountSuccess), takeUntil(this.destroyed$));
 
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
 
@@ -292,6 +298,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 }, 1000);
             }
         });
+
+        // create account success then hide aside pane
+        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+            if (o && this.accountAsideMenuState === 'in') {
+                this.toggleAccountAsidePane();
+            }
+        });
     }
 
     public ngOnChanges(c: SimpleChanges) {
@@ -301,7 +314,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
         if ('openCreateAccountPopup' in c && c.openCreateAccountPopup.currentValue !== c.openCreateAccountPopup.previousValue) {
             if (c.openCreateAccountPopup.currentValue) {
-                this.showQuickAccountModal();
+                this.addNewAccount();
             }
         }
         if ('saveEntryOnCtrlA' in c && c.saveEntryOnCtrlA.currentValue !== c.saveEntryOnCtrlA.previousValue) {
@@ -707,7 +720,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.totalCreditAmount = 0;
         this.totalDebitAmount = 0;
         this.requestObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
-        if(this.universalDate[1]) {
+        if (this.universalDate[1]) {
             this.journalDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         } else {
             this.journalDate = moment().format(GIDDH_DATE_FORMAT);
@@ -966,7 +979,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.showLedgerAccountList = false;
         }, 200);
         if (ev.value === 'createnewitem') {
-            return this.showQuickAccountModal();
+            return this.addNewAccount();
         }
         if (this.selectedField === 'account') {
             this.setAccount(ev.additional);
@@ -1185,11 +1198,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
     }
 
-     /**
-     * This function will close the confirmation popup on click of No
-     *
-     * @memberof AccountAsVoucherComponent
-     */
+    /**
+    * This function will close the confirmation popup on click of No
+    *
+    * @memberof AccountAsVoucherComponent
+    */
     public acceptCancel(): void {
         this.showConfirmationBox = false;
     }
@@ -1202,7 +1215,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (this.allAccounts) {
             let accList: IOption[] = [];
             this.allAccounts.forEach((acc: IFlattenAccountsResultItem) => {
-                if(this.activeCompany && acc.currency === this.activeCompany.baseCurrency) {
+                if (this.activeCompany && acc.currency === this.activeCompany.baseCurrency) {
                     if (this.requestObj.voucherType === "Contra") {
                         const isContraAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash' || pg.uniqueName === 'currentliabilities'));
                         const isDisallowedAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'sundrycreditors' || pg.uniqueName === 'dutiestaxes'));
@@ -1251,10 +1264,38 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {string} title Title to be set
      * @memberof InvoiceComponent
      */
-    private setCurrentPageTitle(voucherType: string) : void {
+    private setCurrentPageTitle(voucherType: string): void {
         let currentPageObj = new CurrentPage();
         currentPageObj.name = `Journal Voucher > ${voucherType}`;
         currentPageObj.url = this.router.url;
         this.store.dispatch(this.generalAction.setPageTitle(currentPageObj));
+    }
+
+    public toggleAccountAsidePane(event?): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+
+    public toggleBodyClass() {
+        if (this.accountAsideMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
+
+    public addNewSidebarAccount(item: AddAccountRequest) {
+        this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
+    }
+
+    public updateSidebarAccount(item: UpdateAccountRequest) {
+        this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item));
+    }
+
+    public addNewAccount() {
+        this.toggleAccountAsidePane();
     }
 }

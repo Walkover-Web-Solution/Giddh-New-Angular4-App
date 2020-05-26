@@ -173,20 +173,13 @@
         <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList"
             [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)"
             [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'"
-            [notFoundLink]="selectedField === 'account'" (noResultsClicked)="showQuickAccountModal()" [multiple]="false"
+            [notFoundLink]="selectedField === 'account'" (noResultsClicked)="addNewAccount()" [multiple]="false"
             [ItemHeight]="33" (noOptionsFound)="onNoAccountFound($event)"></accounting-virtual-list>
     </div>
 
 </div>
 
-<!--quick account popup -->
-<div bsModal #quickAccountModal="bs-modal" [config]="{ backdrop: false }" class="modal" role="dialog">
-    <div class="modal-dialog modal-sm" style="width: 298px">
-        <div class="modal-content">
-            <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
-        </div>
-    </div>
-</div>
+<generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"  [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}" [selectedGrpUniqueName]="'currentassets'" *ngIf="accountAsideMenuState === 'in'" [selectedAccountUniqueName]="null" (onShortcutPress)="toggleAccountAsidePane()" (addEvent)="addNewSidebarAccount($event)" (updateEvent)="updateSidebarAccount($event)"></generic-aside-menu-account>
 
 
 <!-- Cheque Detail Modal-->
