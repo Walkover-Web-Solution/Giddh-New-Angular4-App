@@ -232,6 +232,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     /** Selects/Unselects extra columns based on Select All Checkbox */
     public selectAll: boolean = false;
     modalRef: BsModalRef;
+    public selectedRangeLabel: any = "";
 
     constructor(
         private store: Store<AppState>,
@@ -851,6 +852,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public selectedDate(value: any) {
+        this.selectedRangeLabel = "";
+
+        if(value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+
         this.hideModal();
         
         if (value && value.startDate && value.endDate) {
