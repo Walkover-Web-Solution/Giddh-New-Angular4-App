@@ -172,6 +172,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     keepCalendarOpeningWithRange = false;
     @Input()
     showRangeLabelOnInput = false;
+    @Input() public selectedRangeLabel: any;
     chosenRange: string;
     // some state information
     isShown: boolean = false;
@@ -217,7 +218,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public invalidStartDate: string = "";
     public invalidEndDate: string = "";
     public currentFinancialYearUniqueName: string = "";
-    public isRangeSelected: boolean = false;
     public isOnScrollActive: boolean = false;
 
     constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>) {
@@ -925,8 +925,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         this.emitSelectedDates(false);
         this.hide();
-
-        this.isRangeSelected = false;
     }
 
     public clickCancel(e): void {
@@ -1337,8 +1335,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
 
         this.updateView();
-
-        this.isRangeSelected = true;
     }
 
     /**
@@ -1778,7 +1774,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.isShown$.next(false); // hide calendars
             this.isShown = false;
         }
-        this.rangeClicked.emit({ name: "Select Financial Year", startDate: this.startDate, endDate: this.endDate });
+        this.rangeClicked.emit({ name: financialYear.label, startDate: this.startDate, endDate: this.endDate });
         if (!this.keepCalendarOpeningWithRange) {
             this.clickApply();
         } else {
@@ -2097,5 +2093,31 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         if(!this.isOnScrollActive) {
             this.scrollSubject$.next("bottom");
         }
+    }
+
+    public checkIfSubRangeSelected(range: any): boolean {
+        let isSelected = false;
+        if(this.selectedRangeLabel && range.ranges && range.ranges.length > 0) {
+            range.ranges.forEach(subRange => {
+                if(!isSelected && subRange.name === this.selectedRangeLabel) {
+                    isSelected = true;
+                }
+            });
+        }
+
+        return isSelected;
+    }
+
+    public checkIfFinancialYearSelected(financialYears: any): boolean {
+        let isSelected = false;
+        if(this.selectedRangeLabel && financialYears && financialYears.length > 0) {
+            financialYears.forEach(year => {
+                if(!isSelected && year.label === this.selectedRangeLabel) {
+                    isSelected = true;
+                }
+            });
+        }
+
+        return isSelected;
     }
 }

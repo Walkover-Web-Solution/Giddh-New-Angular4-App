@@ -13,59 +13,33 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
     @Output() rangeClicked: EventEmitter<Object> = new EventEmitter();
     @Output() datesUpdated: EventEmitter<Object> = new EventEmitter();
 
-    @Input()
-    inputStartDate: _moment.Moment;
-    @Input()
-    inputEndDate: _moment.Moment;
-    @Input()
-    minDate: _moment.Moment;
-    @Input()
-    maxDate: _moment.Moment;
-    @Input()
-    autoApply: boolean;
-    @Input()
-    alwaysShowCalendars: boolean;
-    @Input()
-    showCustomRangeLabel: boolean;
-    @Input()
-    linkedCalendars: boolean;
-    @Input()
-    singleDatePicker: boolean;
-    @Input()
-    showWeekNumbers: boolean;
-    @Input()
-    showISOWeekNumbers: boolean;
-    @Input()
-    showDropdowns: boolean;
-    @Input()
-    isInvalidDate: Function;
-    @Input()
-    isCustomDate: Function;
-    @Input()
-    showClearButton: boolean;
-    @Input()
-    ranges: any;
-    @Input()
-    opens: string;
-    @Input()
-    drops: string;
-    firstMonthDayClass: string;
-    @Input()
-    lastMonthDayClass: string;
-    @Input()
-    emptyWeekRowClass: string;
-    @Input()
-    firstDayOfNextMonthClass: string;
-    @Input()
-    lastDayOfPreviousMonthClass: string;
-    @Input()
-    keepCalendarOpeningWithRange: boolean;
-    @Input()
-    showRangeLabelOnInput: boolean;
-    @Input()
-    showCancel: boolean = false;
-    @Input()
-    locale: any;
+    @Input() public inputStartDate: _moment.Moment;
+    @Input() public inputEndDate: _moment.Moment;
+    @Input() public minDate: _moment.Moment;
+    @Input() public maxDate: _moment.Moment;
+    @Input() public autoApply: boolean;
+    @Input() public alwaysShowCalendars: boolean;
+    @Input() public showCustomRangeLabel: boolean;
+    @Input() public linkedCalendars: boolean;
+    @Input() public singleDatePicker: boolean;
+    @Input() public showWeekNumbers: boolean;
+    @Input() public showISOWeekNumbers: boolean;
+    @Input() public showDropdowns: boolean;
+    @Input() public isInvalidDate: Function;
+    @Input() public isCustomDate: Function;
+    @Input() public showClearButton: boolean;
+    @Input() public ranges: any;
+    @Input() public opens: string;
+    @Input() public drops: string;
+    @Input() public lastMonthDayClass: string;
+    @Input() public emptyWeekRowClass: string;
+    @Input() public firstDayOfNextMonthClass: string;
+    @Input() public lastDayOfPreviousMonthClass: string;
+    @Input() public keepCalendarOpeningWithRange: boolean;
+    @Input() public showRangeLabelOnInput: boolean;
+    @Input() public showCancel: boolean = false;
+    @Input() public locale: any;
+    @Input() public selectedRangeLabel: any;
 
     constructor(private _renderer: Renderer2) {
 
@@ -129,12 +103,14 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
         var yPosition = 0;
 
         while (element) {
-            xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
+            if(xPosition === 0) {
+                xPosition = (element.offsetLeft - element.scrollLeft + element.clientLeft);
+            }
             yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
             element = element.offsetParent;
         }
 
-        return { x: 150, y: yPosition };
+        return { x: xPosition, y: yPosition };
     }
 
     /**

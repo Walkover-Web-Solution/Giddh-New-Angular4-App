@@ -24,28 +24,25 @@
                     <button type="button" class="btn-angle-down"
                         (click)="rangeDropdownShow = i; clickRange($event, range);"
                         (dblclick)="dblClickRange($event, range)"
-                        [ngClass]="{'active': range.isSelected}">{{range.name}}
+                        [ngClass]="{'active': range.isSelected || (selectedRangeLabel && selectedRangeLabel === range.name) || checkIfSubRangeSelected(range)}">{{range.name}}
                         <span *ngIf="range.ranges && range.ranges.length" class="available prev angle-down"></span>
                     </button>
                     <ul *ngIf="range.ranges && range.ranges.length && rangeDropdownShow === i" class="sub-ranges-cal menu-drawer">
                         <li *ngFor="let subRange of range.ranges">
                             <button type="button" (click)="clickRange($event,subRange);"
                                 (dblclick)="dblClickRange($event, subRange)"
-                                [ngClass]="{'active': subRange.isSelected && isRangeSelected}">{{subRange.name}}
+                                [ngClass]="{'active': subRange.isSelected || (selectedRangeLabel && selectedRangeLabel === subRange.name)}">{{subRange.name}}
                             </button>
                         </li>
                     </ul>
                 </li>
                 <li class="menu-li select-financial-year">
-                    <button type="button" class="btn-angle-down" (click)="dropdownShow = !dropdownShow">Select Financial
-                        Year
+                    <button type="button" class="btn-angle-down" (click)="dropdownShow = !dropdownShow" [ngClass]="{'active': checkIfFinancialYearSelected(financialYears)}">Select Financial Year
                         <span class="available prev angle-down"></span>
                     </button>
-                    <ul class="sub-ranges-cal menu-drawer financial-year-dropdown"
-                        *ngIf="dropdownShow && financialYears && financialYears.length > 0">
+                    <ul class="sub-ranges-cal menu-drawer financial-year-dropdown" *ngIf="dropdownShow && financialYears && financialYears.length > 0">
                         <li *ngFor="let financialYear of financialYears;">
-                            <button type="button"
-                                (click)="clickFinancialYear(financialYear);">{{financialYear.label}}</button>
+                            <button type="button" (click)="clickFinancialYear(financialYear);" [ngClass]="{'active': (selectedRangeLabel && selectedRangeLabel === financialYear.label)}">{{financialYear.label}}</button>
                         </li>
                     </ul>
                 </li>
