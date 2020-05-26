@@ -254,7 +254,7 @@
                 </perfect-scrollbar>
                 <!-- start date calendar container -->
                 <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true"
-                    [config]="{suppressScrollX: false, suppressScrollY: false}" [style.max-height.px]="280" (psYReachStart)="setCalendarToActiveMonth()">
+                    [config]="{suppressScrollX: false, suppressScrollY: false}" [style.max-height.px]="280" (psScrollUp)="scrollUp()" (psScrollDown)="scrollDown()" (psYReachStart)="setCalendarToActiveMonth('start')" (psYReachEnd)="setCalendarToActiveMonth('end')">
                     <div *ngIf="showCalInRanges && !showMonthPicker" (mousewheel)="mouseUp($event)" (touchmove)="mouseUp($event)">
                         <div *ngFor="let calendarMonth of calendarMonths;">
                             <div class="calendar" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">

@@ -218,6 +218,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public invalidEndDate: string = "";
     public currentFinancialYearUniqueName: string = "";
     public isRangeSelected: boolean = false;
+    public isOnScrollActive: boolean = false;
 
     constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>) {
         this.choosedDate = new EventEmitter();
@@ -1135,6 +1136,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public mouseUp(e: MouseWheelEvent): void {
+        this.isOnScrollActive = true;
         if (e.deltaY < 0) {
             this.scrollSubject$.next("top");
         } else {
@@ -1845,6 +1847,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 }
             }
         }
+
+        this.isOnScrollActive = false;
     }
 
     /**
@@ -2049,20 +2053,49 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      *
      * @memberof NgxDaterangepickerComponent
      */
-    public setCalendarToActiveMonth(): void {
-        if(this.calendarMonths && this.calendarMonths[0]) {
+    public setCalendarToActiveMonth(position: string): void {
+        let index = 0;
+        if(position === "end") {
+            if(this.calendarMonths && this.calendarMonths.length > 0) {
+                index = this.calendarMonths.length - 1;
+            }
+        }
+
+        if(this.calendarMonths && this.calendarMonths[index]) {
             let setMonth = moment();
             setMonth.set('date', 1);
 
-            if(this.calendarMonths[0].start) {
-                setMonth.set('year', this.calendarMonths[0].start.year);
-                setMonth.set('month', this.calendarMonths[0].start.month);
+            if(this.calendarMonths[index].start) {
+                setMonth.set('year', this.calendarMonths[index].start.year);
+                setMonth.set('month', this.calendarMonths[index].start.month);
                 this.startCalendar.month = setMonth;
-            } else if(this.calendarMonths[0].end) {
-                setMonth.set('year', this.calendarMonths[0].end.year);
-                setMonth.set('month', this.calendarMonths[0].end.month);
+            } else if(this.calendarMonths[index].end) {
+                setMonth.set('year', this.calendarMonths[index].end.year);
+                setMonth.set('month', this.calendarMonths[index].end.month);
                 this.startCalendar.month = setMonth;
             }
+        }
+    }
+
+    /**
+     * This will work in case of mouse wheel not used and manually dragged the scrollbar in top direction
+     *
+     * @memberof NgxDaterangepickerComponent
+     */
+    public scrollUp(): void {
+        if(!this.isOnScrollActive) {
+            this.scrollSubject$.next("top");
+        }
+    }
+
+    /**
+     * This will work in case of mouse wheel not used and manually dragged the scrollbar in bottom direction
+     *
+     * @memberof NgxDaterangepickerComponent
+     */
+    public scrollDown(): void {
+        if(!this.isOnScrollActive) {
+            this.scrollSubject$.next("bottom");
         }
     }
 }
