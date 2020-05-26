@@ -904,9 +904,6 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before{
         }
     }
     .drp-animate {
-        transform: translate(0);
-        transition: transform 0.2s ease, opacity 0.2s ease;
-
         &.drp-picker-site-this {
             transition-timing-function: linear;
         }
