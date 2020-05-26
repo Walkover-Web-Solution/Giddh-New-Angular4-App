@@ -2095,6 +2095,13 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
     }
 
+    /**
+     * This will check if any sub range is selected
+     *
+     * @param {*} range
+     * @returns {boolean}
+     * @memberof NgxDaterangepickerComponent
+     */
     public checkIfSubRangeSelected(range: any): boolean {
         let isSelected = false;
         if(this.selectedRangeLabel && range.ranges && range.ranges.length > 0) {
@@ -2108,6 +2115,13 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         return isSelected;
     }
 
+    /**
+     * This will check if any financial year is selected
+     *
+     * @param {*} financialYears
+     * @returns {boolean}
+     * @memberof NgxDaterangepickerComponent
+     */
     public checkIfFinancialYearSelected(financialYears: any): boolean {
         let isSelected = false;
         if(this.selectedRangeLabel && financialYears && financialYears.length > 0) {
