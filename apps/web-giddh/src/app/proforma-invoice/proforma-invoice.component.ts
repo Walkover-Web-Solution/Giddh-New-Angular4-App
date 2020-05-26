@@ -1992,10 +1992,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
+        trx.amount = Number(trx.amount);
         if (trx.isStockTxn) {
             trx.rate = giddhRoundOff((trx.amount / trx.quantity), 2);
         }
-        trx.amount = Number(trx.amount);
         this.calculateTotalDiscountOfEntry(entry, trx, false);
         this.calculateEntryTaxSum(entry, trx, false);
         this.calculateEntryTotal(entry, trx);
@@ -2075,6 +2075,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateGrandTotal();
         this.calculateOtherTaxes(entry.otherTaxModal, entry);
         this.calculateTcsTdsTotal();
+        this.calculateBalanceDue();
     }
 
     public calculateTotalDiscount() {
