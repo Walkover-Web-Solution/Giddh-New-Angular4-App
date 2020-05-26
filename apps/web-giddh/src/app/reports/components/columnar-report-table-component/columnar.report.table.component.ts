@@ -23,6 +23,8 @@ export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChange
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Columnar report table response object */
     @Input() columnarReportResponse: any;
+    @Input() isBalanceTypeAsSign: any;
+    public isCrDrChecked: boolean = false;
     /** To check columnar report table's column name closing and opening will be the part of table or not */
     public isShowClosingOpeningBalance$: Observable<boolean> = of(false);
 
@@ -37,7 +39,6 @@ export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChange
      */
     ngOnInit(): void {
         this.columnarReportResponse = null;
-        //
     }
 
     /**
@@ -52,6 +53,10 @@ export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChange
             this.columnarReportResponse = changes['columnarReportResponse'].currentValue;
             this.mapDataForMonthColumnName();
         }
+        if (changes && changes['isBalanceTypeAsSign']) {
+          this.isCrDrChecked = changes['isBalanceTypeAsSign'].currentValue;
+        }
+
     }
 
     /**
