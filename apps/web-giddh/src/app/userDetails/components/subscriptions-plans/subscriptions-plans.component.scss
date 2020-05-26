@@ -100,7 +100,7 @@
 }
 .inner-your-account {
     position: relative;
-    z-index: 9;
+    z-index: 2;
     background: $white;
     padding: 30px 15px 15px 30px;
     box-shadow: 0px 3px 6px $black-russian;
@@ -265,17 +265,30 @@
         overflow-y: hidden;
         white-space: nowrap;
         overflow-x: scroll;
+        margin-bottom: 15px;
     }
     .main-row-plans .col-sm-4 {
         width: 460px;
         display: inline-block;
         white-space: normal;  
     }
+    .main-row-plans::-webkit-scrollbar {
+        height: 5px;
+        width: 100%;
+    }
+    .main-row-plans::-webkit-scrollbar-thumb {
+        background-color: $gainsboro;
+        outline: 1px solid $gray;
+        border-radius: 20px;
+    }
+}
+@media(max-width:768px){
+    .plan-footer .success-btn{
+        padding: 8px 15px;
+    }
 }
 
-
 @media only screen and (max-width: 767px) {
-
     .plan-list {
         min-height: initial;
         margin-bottom: 10px;
@@ -303,6 +316,42 @@
     .transactions-popup {
         width: 260px;
         /*transform: translate(0px) !important;*/
+    }
+    .main-row-plans {
+        white-space: normal;
+        overflow-x: hidden;
+    }
+    .main-row-plans .col-sm-4 {
+        width: 100%;
+        display:block;
+        white-space: normal; 
+        max-width: 400px; 
+        margin: 0 auto;
+    }
+    .your-account{
+        margin: 90px 0px 30px 40px;
+    }
+    .plan-footer {
+        .success-btn {
+            padding: 8px 15px;
+            display: block;
+        }
+    }
+   .select-plan-head{
+    font-size: 20px;
+    padding: 12px 15px;
+    }
+    .select-plan-block{
+        margin-bottom: 15px;
+    }
+    .welcome-msg{
+        margin-top: 55px;
+        .plan-msg{
+            margin-bottom:15px;
+        }
+        .btn-cancel{
+            float: left;
+        }
     }
 }
 @media only screen and (max-width: 640px) {

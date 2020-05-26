@@ -175,12 +175,20 @@
 .plan-list > li {
     padding-right: 40px;
 }
-.section_head {
+.section-head {
     margin-bottom: 10px;
 }
 .associated-companies-list {
     max-height: 600px;
     overflow-y: auto;
+}
+.associated-companies-list::-webkit-scrollbar {
+    width:5px;
+}
+.associated-companies-list::-webkit-scrollbar-thumb {
+    background-color: $gainsboro;
+    outline: 1px solid $gray;
+    border-radius: 20px;
 }
 .plan-row {
     color: $nero;
@@ -207,9 +215,15 @@
         margin-bottom: 20px;
     }
 }
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 768px) {
+    .section-head{
+        margin-bottom: 0 !important;
+    }
     .table-subscription {
         min-height: initial;
+        border: none;
+        margin-bottom: 0;
+        margin-top: 0;
     }
     .associated-companies-list {
         max-height: 300px;
@@ -236,35 +250,62 @@
     }
     .plan-row-wrapper{
         position: relative;
-        .plan-list{
-            margin-top: 10px;
-            li{
-                padding-right: 0;
-                width: 50%;
+        .plan-row{
+            justify-content: start;
+            .plan-list{
+                margin-top: 10px;
+                li{
+                    padding-right: 0;
+                    width: 50%;
+                }
             }
-        }
-        .trial-plan-state{
-            position: absolute;
-            top: 12px;
-            right: 0;
-            text-align: right !important;
-        }
+            .trial-plan-state{
+                position: absolute;
+                top: 12px;
+                right: 0;
+                text-align: right !important;
+            }
+        }  
     } 
-    .table-subscription{
-        border: none;
-    }
     .table-responsive{
         margin-top: 10px;
     } 
     table.on-mobile-view tbody tr{
         box-shadow: none !important;
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+    table.on-mobile-view tbody > tr > td{
+        margin-bottom: 5px;
     }
     table.on-mobile-view tbody td:before{
         left: 0;
     }
     .left-div{
         border-left: none;
+        padding-right: 0;
+        .main-associated-companies{
+            .associated-company-heading{
+                background-color: $gainsboro;
+                padding: 5px 5px;
+                margin-top: 15px;
+            }
+        }
+        .associated-companies-list{
+                .search-company-here{
+                    padding-right: 20px;
+                }
+            }
+        }
+        .btn-group.custom-dropdown {
+           margin-right: 10px;
+        }
+}
+@media(max-width:767px){
+    .search-subscription{ 
+         margin-top: 55px;
     }
+   
 }
 @media(max-width:575px){
     .plan-row-wrapper{
