@@ -93,13 +93,13 @@
                     <span (click)="modalRef.hide()"><img src="../../../assets/images/calender.svg"></span>
                 </div>
                 <div class="start-end-date">
-                    <div class="relative mr-1">
+                    <div class="relative mr-1 d-flex date-field">
                         <label>Start Date</label>
                         <input type="tel" name="inlineStartDate" [value]="viewOnlyStartDate" mask="00-00-0000"
                             (blur)="saveInlineDates($event)">
                         <span class="error-msg" *ngIf="invalidInlineStartDate">{{invalidInlineStartDate}}</span>
                     </div>
-                    <div class="relative">
+                    <div class="relative d-flex date-field">
                         <label>End Date</label>
                         <input type="tel" name="inlineEndDate" [value]="viewOnlyEndDate" mask="00-00-0000"
                             (blur)="saveInlineDates($event)">
