@@ -72,7 +72,7 @@
                 </label>
             </div>
             <button class="btn-success btn" (click)="exportLedger()">Download</button>
-            <!-- <button class="btn-success btn" [hidden]="emailTypeSelected !== 'columnar'" (click)="showColumnarReport()">Show</button> -->
+            <button class="btn-success btn" [hidden]="emailTypeSelected !== 'columnar'" (click)="showColumnarReport()">Show</button>
             <div class="modal_wrap" [hidden]="emailTypeSelected === 'columnar'">
                 <div class="clearfix"></div>
                 <h3 class="pdT1 pdB1">Or</h3>
