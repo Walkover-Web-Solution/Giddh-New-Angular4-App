@@ -11,13 +11,8 @@
     <div class="ranges" *ngIf="ranges?.length">
         <!-- loop over ranges -->
         <div class="range-container">
-<<<<<<< HEAD
-            <div class="date-range-close" *ngIf="isMobileScreen">
-                <img src="../../../assets/images/close-icon.svg"  (click)="closeCalender();"> <span class="pl-2">Date range</span>
-=======
             <div class="date-range-close" *ngIf="isMobileScreen" (click)="closeMobileDatePicker();">
                 <img src="../../../assets/images/close-icon.svg"> <span class="pl-2">Date range</span>
->>>>>>> development
             </div>
             <ul class="range-list">
                 <li class="menu-li custom-select-btn" type="button" (click)="openMobileDatepicker()">
