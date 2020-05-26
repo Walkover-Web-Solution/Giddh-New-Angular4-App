@@ -48,6 +48,8 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public paginationCount: number = PAGINATION_LIMIT;
     /** True, if request for show report  */
     public isShowColumnarReport: boolean = false;
+    /** To check cr/dr or +/- checked */
+    public isBalanceTypeAsSign: boolean = false;
     constructor(public settingsFinancialYearService: SettingsFinancialYearService, private store: Store<AppState>, private toaster: ToasterService, private ledgerService: LedgerService, private generalService: GeneralService) {
         this.exportRequest.fileType = 'xls';
         this.exportRequest.balanceTypeAsSign = false;
@@ -163,6 +165,17 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 }
             });
         }
+    }
+
+    /**
+     * To balance type sign changed in +/- to Cr/Dr
+     *
+     * @param {*} event
+     * @memberof ColumnarReportComponent
+     */
+    public onBalanceTypeAsSignChanged(event) {
+        this.isBalanceTypeAsSign = event;
+        this.exportRequest.balanceTypeAsSig = event;
     }
 
     /**
@@ -318,5 +331,6 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.selectActiveFinancialYear();
         this.columnarReportResponse = null;
         this.exportRequest.balanceTypeAsSign = false;
+        this.isBalanceTypeAsSign = false;
     }
 }
