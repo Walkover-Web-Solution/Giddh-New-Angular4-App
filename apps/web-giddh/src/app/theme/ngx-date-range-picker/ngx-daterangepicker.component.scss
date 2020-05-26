@@ -1632,7 +1632,7 @@ td span {
     }
 
     .bottom-botton{
-        position: absolute;
+        position: absolute !important;
         bottom: 0 !important;
         right: 0 !important;
         background-color: #ffffff !important;
@@ -1642,6 +1642,7 @@ td span {
         padding-bottom: 10px !important;
         top: auto;
         text-align: right;
+        padding-right: 0 !important;
     }
 }
 

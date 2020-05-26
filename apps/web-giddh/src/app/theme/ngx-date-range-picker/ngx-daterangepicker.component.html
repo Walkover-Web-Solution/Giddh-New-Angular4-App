@@ -11,14 +11,12 @@
     <div class="ranges" *ngIf="ranges?.length">
         <!-- loop over ranges -->
         <div class="range-container">
-            <div class="date-range-close" *ngIf="isMobileScreen" (click)="closeCalender();">
-                <img src="../../../assets/images/close-icon.svg"> <span class="pl-2">Date range</span>
+            <div class="date-range-close" *ngIf="isMobileScreen">
+                <img src="../../../assets/images/close-icon.svg"  (click)="closeCalender();"> <span class="pl-2">Date range</span>
             </div>
             <ul class="range-list">
                 <li class="menu-li custom-select-btn" type="button" (click)="openMobileDatepicker()">
-                    <button>
-                        Custom
-                    </button>
+                    <button>Custom</button>
                 </li>
                 <li *ngFor="let range of ranges; let i = index" class="menu-li">
                     <button type="button" class="btn-angle-down"

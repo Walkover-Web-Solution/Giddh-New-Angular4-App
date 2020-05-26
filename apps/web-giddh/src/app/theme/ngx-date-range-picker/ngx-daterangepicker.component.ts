@@ -381,7 +381,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.openMobileDatepickerPopup = false;
         document.querySelector('body').classList.remove('hide-scroll-body');
     }
-
     public closeDatePicker(): void {
         // if (document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material")[0]) {
         //     document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
