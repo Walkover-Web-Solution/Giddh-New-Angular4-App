@@ -380,12 +380,14 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public closeCalender(): void {
         this.openMobileDatepickerPopup = false;
         document.querySelector('body').classList.remove('hide-scroll-body');
+        this.hide();
     }
 
-    public closeDatePicker(): void {
-        // if (document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material")[0]) {
-        //     document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
-        // }
+    public closeMobileDatePicker(): void {
+        this.datesUpdated.emit({ name: '', startDate: this.inputStartDate, endDate: this.inputEndDate });
+        this.openMobileDatepickerPopup = false;
+        document.querySelector('body').classList.remove('hide-scroll-body');
+        this.hide();
     }
 
     public openModalWithClass(template: TemplateRef<any>): void {
@@ -1161,6 +1163,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         this.calculateChosenLabel();
         this.updateView();
+
+        if(this.isMobileScreen) {
+            this.emitSelectedDates(false);
+            this.hide();
+        }
     }
 
     public uptoYesterday(e: Event, days: number): void {
@@ -1170,6 +1177,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         this.calculateChosenLabel();
         this.updateView();
+
+        if(this.isMobileScreen) {
+            this.emitSelectedDates(false);
+            this.hide();
+        }
     }
 
     /**
