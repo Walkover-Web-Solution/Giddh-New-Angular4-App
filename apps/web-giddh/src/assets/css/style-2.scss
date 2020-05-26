@@ -2460,10 +2460,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-cancel:disabled,
-.btn-cancel:disabled:hover,
-.btn-cancel:active:focus,
-.btn-cancel:active:hover,
-.btn-cancel:focus {
+.btn-cancel:disabled:hover{
     background: #e4e4e4;
     color: #666;
     border-color: #e4e4e4;
@@ -4926,8 +4923,8 @@ label {
 }
 
 .grp_col::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    outline: 1px solid slategrey;
+    background-color: $gainsboro;
+    outline: 1px solid $gray;
     margin-left: 255px;
 }
 
@@ -5017,8 +5014,8 @@ label {
 }
 
 .grp_col::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    outline: 1px solid slategrey;
+    background-color: $gainsboro;
+    outline: 1px solid $gray;
     margin-left: 255px;
 }
 
@@ -5582,8 +5579,8 @@ label {
 }
 
 .scrollAuto::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    outline: 1px solid slategrey;
+    background-color: $gainsboro;
+    outline: 1px solid $gray;
     /* margin-left: 255px; */
     border-radius: 8px;
 }
@@ -5616,7 +5613,7 @@ input[type="checkbox"][disabled] {
     /* padding-left: 240px; */
 }
 
-.section_head {
+.section-head {
     padding-bottom: 10px;
     font-family: $opensans-semibold;
     font-size: 110%;
@@ -9426,6 +9423,9 @@ ngx-daterangepicker-material {
         position: fixed;
         width: 100%;
         top: 80px;
+    }
+    #setting-tab.user-detail-page .tab-container .nav.nav-tabs {
+        top: 92px;
     }
     .custom-tabs .nav.nav-tabs {
         position: fixed;
