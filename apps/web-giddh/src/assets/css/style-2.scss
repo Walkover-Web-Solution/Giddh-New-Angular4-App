@@ -9012,7 +9012,9 @@ ngx-daterangepicker-material {
         }
     }
 }
-
+.date-field{
+    flex-direction: column;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
