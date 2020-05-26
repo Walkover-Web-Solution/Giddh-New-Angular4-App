@@ -382,6 +382,7 @@ export class LedgerActions {
                 return this.GenerateBulkLedgerInvoiceResponse(response);
             }));
 
+
     @Effect()
     public GenerateBulkLedgerInvoiceResponse$: Observable<Action> = this.action$
         .ofType(LEDGER.GENERATE_BULK_LEDGER_INVOICE_RESPONSE).pipe(
@@ -399,7 +400,7 @@ export class LedgerActions {
                                 if (item.failedEntries) {
                                     this._toasty.warningToast(item.reason);
                                 }
-                                if (data.request && data.request.length>0 && data.request[0].entries.length > data.body.length) {
+                                if (data.request && data.request.length>0 && data.request[0].entries && data.request[0].entries.length > data.body.length) {
                                     this._toasty.successToast("All other vouchers generated successfully.");
                                 }
                             });

@@ -1076,6 +1076,7 @@ ul.sub-list {
 
 .aging-table-top .top-aging-table-top span .date-range-picker {
     font-family: opensans-semibold;
+    text-align:left !important;
 }
 
 .aging-table {
@@ -1153,6 +1154,7 @@ ul.sub-list {
     margin-left: 10px;
     text-decoration: underline;
     font-size: 14px;
+
 }
 
 .basic>thead>tr>th .fa-sort {
@@ -2648,8 +2650,7 @@ input[type="checkbox"]:checked:after {
 .font-26 {
     font-size: 26px;
 }
-
-.WordWrap {
+.word-wrap {
     word-break: normal;
     white-space: nowrap;
 }
@@ -8927,7 +8928,90 @@ input.checkbox-custom[type="checkbox"] {
 .panel-block .panel-body {
     min-height: 350px;
 }
-
+/*datepicker common css*/
+.show-calendar {
+    display: block !important;
+}
+.show-calendar + .modal-backdrop + .modal {
+    display: flex !important;
+    align-items: center;
+    margin-top: 0 !important;
+}
+.show-calendar.focus-start-date + .modal-backdrop + .modal {
+    margin-top: 30px !important;
+    align-items:flex-start;
+}
+.giddh-datepicker-modal .modal-content {
+    background: none !important;
+}
+.giddh-datepicker-modal .modal-body{
+    padding: 0 !important;
+}
+ngx-daterangepicker-material {
+    // display: none;
+    position: absolute;
+    z-index: 1000;
+    overflow: hidden;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
+    z-index: 1;
+    width: 100% !important;
+    max-width: 462px !important;
+}
+.edit-modal{
+    max-width: 300px;
+    margin: 0 auto;
+    .edit-date-modal{
+        h5{
+            color: $gray;
+            font-size: 13px;
+        }
+        .modal-date-range {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid $whisper-color;
+            margin-bottom: 15px;
+            span{
+                img{
+                    width: 20px;
+                }
+            }
+        }
+        .start-end-date{
+            display: flex;
+            padding-top: 10px;
+            label{
+                position: absolute;
+                background-color:$white;
+                padding: 0 5px;
+                top: -6px;
+                left: 9px;
+                font-size: 12px;
+                color: $gray;
+            }
+            input{
+                width: 130px;
+                height: 51px;
+                border: 1px solid $gainsboro;
+                border-radius: 3px;
+                padding: 0 15px;
+                font-size: 14px;
+            }
+        }
+        .button-wrapper {
+            text-align: right;
+            font-size: 14px;
+            margin-top: 10px;
+            a{
+                color: $deep-sky-blue;
+                padding: 10px 10px;
+                display: inline-block;
+            }
+        }
+    }
+}
 
 /* responsive */
 
@@ -9414,13 +9498,50 @@ input.checkbox-custom[type="checkbox"] {
         float: left !important;
     }
     body.hide-scroll-body {
-        overflow-y: hidden;
+        overflow-y: hidden !important;
     }
     .panel-block .panel-body {
         min-height: auto;
     }
+    ngx-daterangepicker-material {
+        position: fixed;
+        top:0 !important;
+        left: 0 !important;
+        z-index: 999;
+        width: 100%;
+        height: 100vh;
+        max-width: 100% !important;
+    }
+    .giddh-datepicker-modal{
+        position: fixed;
+        width: 100%;
+        left: 0;
+        top: 0;
+        margin: 0;
+    }
+    .edit-modal{
+        max-width: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100%;
+        &:after{
+            position: absolute;
+            content: '';
+            background-color: rgba(0,0,0,0.4);
+            width: 100% !important;
+            height:125%;
+            z-index: -1;
+            left: 0;
+            top: 0;
+        }
+    } 
+    .restrict-body-scroll:nth-child(2) .modal {
+        z-index: 9993;
+    }
 }
-
 @media (max-width: 575px) {
     .daterangepicker.ltr .ranges {
         float: left;
@@ -9740,4 +9861,7 @@ input.checkbox-custom[type="checkbox"] {
     input[type="url"] {
         font-size: 16px;
     }
+}
+.restrict-body-scroll {
+    overflow-y: hidden !important;
 }
