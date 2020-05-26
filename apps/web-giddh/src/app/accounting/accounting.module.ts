@@ -2,7 +2,6 @@ import { InventoryModule } from './../inventory/inventory.module';
 import { TallyModuleService } from './tally-service';
 import { SharedModule } from './../shared/shared.module';
 import { AccountingRoutingModule } from './accounting-routing.module';
-import { AccountingComponent } from './accounting.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -29,7 +28,6 @@ import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-acco
 
 @NgModule({
     declarations: [
-        AccountingComponent,
         JournalVoucherComponent,
         AccountAsInvoiceComponent,
         AccountingSidebarComponent,

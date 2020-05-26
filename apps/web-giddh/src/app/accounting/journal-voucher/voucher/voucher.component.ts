@@ -23,11 +23,11 @@ import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import * as moment from 'moment';
 import { ModalDirective, BsDatepickerConfig, BsDatepickerDirective } from 'ngx-bootstrap';
-import { Observable, ReplaySubject } from 'rxjs';
-import { distinctUntilChanged, takeUntil, take } from 'rxjs/operators';
+import { Observable, ReplaySubject, combineLatest } from 'rxjs';
+import { distinctUntilChanged, takeUntil, take, debounceTime } from 'rxjs/operators';
 
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
-import { AccountResponse, AddAccountRequest, UpdateAccountRequest } from '../../../models/api-models/Account';
+import { AccountResponse, AddAccountRequest, UpdateAccountRequest, AccountResponseV2 } from '../../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { AccountService } from '../../../services/account.service';
 import { ToasterService } from '../../../services/toaster.service';
@@ -38,7 +38,7 @@ import { VsForDirective } from '../../../theme/ng2-vs-for/ng2-vs-for';
 import { QuickAccountComponent } from '../../../theme/quick-account-component/quickAccount.component';
 import { KeyboardService } from '../../keyboard.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { KEYS } from '../journal-voucher.component';
+import { KEYS, VOUCHERS } from '../journal-voucher.component';
 import { CurrentPage } from '../../../models/api-models/Common';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SalesActions } from '../../../actions/sales/sales.action';
@@ -97,11 +97,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
 
-    @ViewChild('byAmountField') public byAmountField: ElementRef;
-    @ViewChild('toAmountField') public toAmountField: ElementRef;
-
+    /** List of all 'DEBIT' amount fields when 'By' entries are made  */
     @ViewChildren('byAmountField') public byAmountFields: QueryList<ElementRef>;
+    /** List of all 'CREDIT' amount fields when 'To' entries are made  */
     @ViewChildren('toAmountField') public toAmountFields: QueryList<ElementRef>;
+    /** List of both date picker used (one in voucher date and other in check clearance date) */
+    @ViewChildren(BsDatepickerDirective) bsDatePickers: QueryList<BsDatepickerDirective>;
 
     public showLedgerAccountList: boolean = false;
     public selectedInput: 'by' | 'to' = 'by';
@@ -143,6 +144,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public isFirstRowDeleted: boolean = false;
     public autoFocusStockGroupField: boolean = false;
     public createStockSuccess$: Observable<boolean>;
+    /** Observable to listen for new account creation */
+    private createdAccountDetails$: Observable<any>;
 
     private selectedAccountInputField: any;
     private selectedStockInputField: any;
@@ -162,7 +165,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public activeCompany: any;
 
     public accountAsideMenuState: string = 'out';
-    private createAccountIsSuccess$: Observable<boolean>;
+    /** Category of accounts to display based on voucher type */
+    public categoryOfAccounts: string;
 
     constructor(
         private _accountService: AccountService,
@@ -170,7 +174,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private store: Store<AppState>,
         private _keyboardService: KeyboardService,
         private _toaster: ToasterService, private router: Router,
-        private _tallyModuleService: TallyModuleService,
+        private tallyModuleService: TallyModuleService,
         private componentFactoryResolver: ComponentFactoryResolver,
         private inventoryService: InventoryService,
         private generalAction: GeneralActions,
@@ -179,8 +183,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
-        this.createAccountIsSuccess$ = this.store.pipe(select(p => p.sales.createAccountSuccess), takeUntil(this.destroyed$));
-
+        this.createdAccountDetails$ = combineLatest([
+            this.store.pipe(select(appState => appState.sales.createAccountSuccess)),
+            this.store.pipe(select(appState => appState.sales.createdAccountDetails))
+        ]).pipe(debounceTime(0), takeUntil(this.destroyed$));
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
 
         this.requestObj.transactions = [];
@@ -188,7 +194,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.watchKeyboardEvent(key);
         });
 
-        this._tallyModuleService.selectedPageInfo.pipe(distinctUntilChanged((p, q) => {
+        this.tallyModuleService.selectedPageInfo.pipe(distinctUntilChanged((p, q) => {
             if (p && q) {
                 return (_.isEqual(p, q));
             }
@@ -196,23 +202,33 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 return false;
             }
             return true;
-        })).subscribe((d) => {
-            if (d && d.gridType === 'voucher') {
-                this.requestObj.voucherType = d.page;
-                this.setCurrentPageTitle(d.page);
-                this.createAccountsList();
-                this.resetEntriesIfVoucherChanged();
-                setTimeout(() => {
-                    this.dateField.nativeElement.focus();
-                }, 50);
-            } else if (d) {
-                this.setCurrentPageTitle(d.page);
-                this.createAccountsList();
-                this.resetEntriesIfVoucherChanged();
-                this._tallyModuleService.requestData.next(this.requestObj);
+        })).subscribe((data) => {
+            if (data) {
+                this.setCurrentPageTitle(data.page);
+                switch (data.page) {
+                    case VOUCHERS.CONTRA:
+                        // Contra allows cash or bank so selecting default category as bank
+                        this.categoryOfAccounts = 'bankaccounts';
+                        break;
+                    default:
+                        // TODO: Add other category cases as they are developed
+                        break;
+                }
+                if (data.gridType === 'voucher') {
+                    this.requestObj.voucherType = data.page;
+                    this.createAccountsList();
+                    this.resetEntriesIfVoucherChanged();
+                    setTimeout(() => {
+                        this.dateField.nativeElement.focus();
+                    }, 50);
+                } else {
+                    this.createAccountsList();
+                    this.resetEntriesIfVoucherChanged();
+                    this.tallyModuleService.requestData.next(this.requestObj);
+                }
+
             }
         });
-
         this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
     }
 
@@ -243,7 +259,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             chequeNumber: ['', [Validators.required]]
         });
 
-        this._tallyModuleService.requestData.pipe(distinctUntilChanged((p, q) => {
+        this.tallyModuleService.requestData.pipe(distinctUntilChanged((p, q) => {
             if (p && q) {
                 return (_.isEqual(p, q));
             }
@@ -269,7 +285,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         this.refreshEntry();
 
-        // this._tallyModuleService.selectedPageInfo.distinctUntilChanged((p, q) => {
+        // this.tallyModuleService.selectedPageInfo.distinctUntilChanged((p, q) => {
         //   if (p && q) {
         //     return (_.isEqual(p, q));
         //   }
@@ -281,7 +297,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         // });
 
-        this._tallyModuleService.filteredAccounts.subscribe((accounts) => {
+        this.tallyModuleService.filteredAccounts.subscribe((accounts) => {
             if (accounts) {
                 this.allAccounts = accounts;
                 this.createAccountsList();
@@ -300,9 +316,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
 
         // create account success then hide aside pane
-        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((o) => {
-            if (o && this.accountAsideMenuState === 'in') {
-                this.toggleAccountAsidePane();
+        this.createdAccountDetails$.subscribe((accountDetails) => {
+            if (accountDetails) {
+                const isAccountSuccessfullyCreated = accountDetails[0];
+                const createdAccountDetails = accountDetails[1];
+                if (isAccountSuccessfullyCreated && this.accountAsideMenuState === 'in') {
+                    this.toggleAccountAsidePane();
+                }
+                if (createdAccountDetails) {
+                    this.tallyModuleService.updateFlattenAccounts(createdAccountDetails);
+                    this.setAccount(createdAccountDetails);
+                }
             }
         });
     }
@@ -310,7 +334,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public ngOnChanges(c: SimpleChanges) {
         if ('openDatePicker' in c && c.openDatePicker.currentValue !== c.openDatePicker.previousValue) {
             this.showFromDatePicker = c.openDatePicker.currentValue;
-            this.dateField.nativeElement.focus();
+            if (this.bsDatePickers) {
+                this.bsDatePickers.first.show();
+            }
         }
         if ('openCreateAccountPopup' in c && c.openCreateAccountPopup.currentValue !== c.openCreateAccountPopup.previousValue) {
             if (c.openCreateAccountPopup.currentValue) {
@@ -484,8 +510,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let idx = this.selectedIdx;
         let transaction = this.requestObj.transactions[idx];
         if (acc) {
-            const formattedCurrentDate = this._tallyModuleService.getFormattedDate(this.currentDate);
-            this._tallyModuleService.getCurrentBalance(this.currentCompanyUniqueName, acc.uniqueName, formattedCurrentDate, formattedCurrentDate).subscribe((data) => {
+            const formattedCurrentDate = this.tallyModuleService.getFormattedDate(this.currentDate);
+            this.tallyModuleService.getCurrentBalance(this.currentCompanyUniqueName, acc.uniqueName, formattedCurrentDate, formattedCurrentDate).subscribe((data) => {
                 if (data && data.body) {
                     this.setAccountCurrentBalance(data.body, idx);
                 }
@@ -662,7 +688,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 let accUniqueName: string = _.maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
                 let indexOfMaxAmountEntry = _.findIndex(data.transactions, (o: any) => o.selectedAccount.UniqueName === accUniqueName);
                 data.transactions.splice(indexOfMaxAmountEntry, 1);
-                data = this._tallyModuleService.prepareRequestForAPI(data);
+                data = this.tallyModuleService.prepareRequestForAPI(data);
                 this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
             } else {
                 const byOrTo = data.voucherType === 'Payment' ? 'to' : 'by';
@@ -914,7 +940,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     public filterAccount(byOrTo: string) {
         if (byOrTo) {
-            this._tallyModuleService.selectedFieldType.next(byOrTo);
+            this.tallyModuleService.selectedFieldType.next(byOrTo);
         }
     }
 
@@ -1187,7 +1213,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (a && a !== '') {
                 this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data.status === 'success') {
-                        this._tallyModuleService.setFlattenAccounts(data.body.results);
+                        this.tallyModuleService.setFlattenAccounts(data.body.results);
                         if (needToFocusAccountInputField) {
                             this.selectedAccountInputField.value = '';
                             this.selectedAccountInputField.focus();
@@ -1261,12 +1287,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     /**
      * This function will set the page heading
      *
-     * @param {string} title Title to be set
+     * @param {string} voucherType Currently selected voucher type
      * @memberof InvoiceComponent
      */
     private setCurrentPageTitle(voucherType: string): void {
         let currentPageObj = new CurrentPage();
-        currentPageObj.name = `Journal Voucher > ${voucherType}`;
+        currentPageObj.name = `Journal Voucher * > ${voucherType}`;
         currentPageObj.url = this.router.url;
         this.store.dispatch(this.generalAction.setPageTitle(currentPageObj));
     }
@@ -1297,5 +1323,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     public addNewAccount() {
         this.toggleAccountAsidePane();
+    }
+
+    public handleVoucherDateChange(): void {
+        this.dateField.nativeElement.focus();
     }
 }

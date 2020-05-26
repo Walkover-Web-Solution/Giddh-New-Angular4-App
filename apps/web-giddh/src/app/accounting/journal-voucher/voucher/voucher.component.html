@@ -6,7 +6,7 @@
                     <span>{{ displayDay }},</span>
                     <input size="10" type="text" onReturn #dateField name="entryDate"
                         [(ngModel)]="journalDate" (blur)="dateEntered();" readonly placeholder="DD-MM-YYYY"
-                        class="form-control text-right voucher-date-field" (focus)="onDateFieldFocus()" bsDatepicker [bsConfig]="bsConfig" />
+                        class="form-control text-right voucher-date-field" (focus)="onDateFieldFocus()" bsDatepicker (bsValueChange)="handleVoucherDateChange()" [bsConfig]="bsConfig" />
                 </div>
             </div>
             <div class="clearfix" [style.min-height.vh]="61">
@@ -179,7 +179,7 @@
 
 </div>
 
-<generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"  [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}" [selectedGrpUniqueName]="'currentassets'" *ngIf="accountAsideMenuState === 'in'" [selectedAccountUniqueName]="null" (onShortcutPress)="toggleAccountAsidePane()" (addEvent)="addNewSidebarAccount($event)" (updateEvent)="updateSidebarAccount($event)"></generic-aside-menu-account>
+<generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"  [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}" [selectedGrpUniqueName]="categoryOfAccounts" *ngIf="accountAsideMenuState === 'in'" [selectedAccountUniqueName]="null" (onShortcutPress)="toggleAccountAsidePane()" (addEvent)="addNewSidebarAccount($event)" (updateEvent)="updateSidebarAccount($event)"></generic-aside-menu-account>
 
 
 <!-- Cheque Detail Modal-->

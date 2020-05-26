@@ -31,6 +31,17 @@ export const KEYS = {
     TAB: 'Tab'
 };
 
+/** Vouchers that can be generated throught JV module */
+export const VOUCHERS = {
+    CONTRA: 'Contra',
+    PAYMENT: 'Payment',
+    RECEIPT: 'Receipt',
+    JOURNAL: 'Journal',
+    SALES: 'Sales',
+    CREDIT_NOTE: 'Credit note',
+    DEBIT_NOTE: 'Debit note'
+}
+
 export const PAGE_SHORTCUT_MAPPING = [
     {
         keyCode: 115, // 'F4',
@@ -218,7 +229,7 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
         this.store.pipe(select(appState => appState.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'accounting-voucher';
+        stateDetailsRequest.lastState = 'journal-voucher';
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
