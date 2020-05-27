@@ -5232,6 +5232,7 @@ label {
     position: relative;
     margin: 0px 5px !important;
     top: 1px;
+    cursor: pointer;
 }
 
 .radio_theme:before {
@@ -5487,7 +5488,7 @@ label {
 
 .templateView li {
     float: left;
-    width: 177px;
+    width: 190px;
     margin: 0px;
     list-style: none;
     height: 240px;
@@ -8974,20 +8975,34 @@ input.checkbox-custom[type="checkbox"] {
 .show-calendar {
     display: block !important;
 }
-
+.show-calendar + .modal-backdrop + .modal {
+    display: flex !important;
+    align-items: center;
+    margin-top: 0 !important;
+}
+.show-calendar.focus-start-date + .modal-backdrop + .modal {
+    margin-top: 30px !important;
+    align-items:flex-start;
+}
+.giddh-datepicker-modal .modal-content {
+    background: none !important;
+}
+.giddh-datepicker-modal .modal-body{
+    padding: 0 !important;
+}
 ngx-daterangepicker-material {
-    display: none;
+    // display: none;
     position: absolute;
     z-index: 1000;
     overflow: hidden;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
     z-index: 1;
+    width: 100% !important;
+    max-width: 462px !important;
 }
 .edit-modal{
     max-width: 300px;
-    top: 50%;
     margin: 0 auto;
-    transform: translateY(-50%) !important;
     .edit-date-modal{
         h5{
             color: $gray;
@@ -9029,16 +9044,20 @@ ngx-daterangepicker-material {
             }
         }
         .button-wrapper {
-            padding: 20px 0 0;
             text-align: right;
             font-size: 14px;
+            margin-top: 10px;
             a{
                 color: $deep-sky-blue;
+                padding: 10px 10px;
+                display: inline-block;
             }
         }
     }
 }
-
+.date-field{
+    flex-direction: column;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9543,7 +9562,7 @@ ngx-daterangepicker-material {
         float: left !important;
     }
     body.hide-scroll-body {
-        overflow-y: hidden;
+        overflow-y: hidden !important;
     }
     .panel-block .panel-body {
         min-height: auto;
@@ -9555,9 +9574,38 @@ ngx-daterangepicker-material {
         z-index: 999;
         width: 100%;
         height: 100vh;
+        max-width: 100% !important;
+    }
+    .giddh-datepicker-modal{
+        position: fixed;
+        width: 100%;
+        left: 0;
+        top: 0;
+        margin: 0;
+    }
+    .edit-modal{
+        max-width: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100%;
+        &:after{
+            position: absolute;
+            content: '';
+            background-color: rgba(0,0,0,0.4);
+            width: 100% !important;
+            height:125%;
+            z-index: -1;
+            left: 0;
+            top: 0;
+        }
+    } 
+    .restrict-body-scroll:nth-child(2) .modal {
+        z-index: 9993;
     }
 }
-
 @media (max-width: 575px) {
     .daterangepicker.ltr .ranges {
         float: left;

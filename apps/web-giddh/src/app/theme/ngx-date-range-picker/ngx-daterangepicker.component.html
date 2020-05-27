@@ -6,44 +6,41 @@
     'show-ranges': ranges?.length
 }" [class]="'drops-' + drops + '-' + opens">
     <!-- ranges container -->
+    <perfect-scrollbar fxFlex="auto" class="hide-horizontal-scroll ranges-perfect-scrollbar" [scrollIndicators]="true"
+    [config]="{suppressScrollX: false, suppressScrollY: false}">
     <div class="ranges" *ngIf="ranges?.length">
         <!-- loop over ranges -->
         <div class="range-container">
-            <div class="date-range-close" *ngIf="isMobileScreen" (click)="closeCalender(); closeDatePicker()">
+            <div class="date-range-close" *ngIf="isMobileScreen" (click)="closeMobileDatePicker();">
                 <img src="../../../assets/images/close-icon.svg"> <span class="pl-2">Date range</span>
             </div>
             <ul class="range-list">
                 <li class="menu-li custom-select-btn" type="button" (click)="openMobileDatepicker()">
-                    <button>
-                        Custom
-                    </button>
+                    <button>Custom</button>
                 </li>
                 <li *ngFor="let range of ranges; let i = index" class="menu-li">
                     <button type="button" class="btn-angle-down"
                         (click)="rangeDropdownShow = i; clickRange($event, range);"
                         (dblclick)="dblClickRange($event, range)"
-                        [ngClass]="{'active': range.isSelected}">{{range.name}}
-                        <span *ngIf="range.ranges.length" class="available prev angle-down"></span>
+                        [ngClass]="{'active': range.isSelected || (selectedRangeLabel && selectedRangeLabel === range.name) || checkIfSubRangeSelected(range)}">{{range.name}}
+                        <span *ngIf="range.ranges && range.ranges.length" class="available prev angle-down"></span>
                     </button>
-                    <ul *ngIf="range.ranges.length && rangeDropdownShow === i" class="sub-ranges-cal menu-drawer">
+                    <ul *ngIf="range.ranges && range.ranges.length && rangeDropdownShow === i" class="sub-ranges-cal menu-drawer">
                         <li *ngFor="let subRange of range.ranges">
                             <button type="button" (click)="clickRange($event,subRange);"
                                 (dblclick)="dblClickRange($event, subRange)"
-                                [ngClass]="{'active': subRange.isSelected}">{{subRange.name}}
+                                [ngClass]="{'active': subRange.isSelected || (selectedRangeLabel && selectedRangeLabel === subRange.name)}">{{subRange.name}}
                             </button>
                         </li>
                     </ul>
                 </li>
                 <li class="menu-li select-financial-year">
-                    <button type="button" class="btn-angle-down" (click)="dropdownShow = !dropdownShow">Select Financial
-                        Year
+                    <button type="button" class="btn-angle-down" (click)="dropdownShow = !dropdownShow" [ngClass]="{'active': checkIfFinancialYearSelected(financialYears)}">Select Financial Year
                         <span class="available prev angle-down"></span>
                     </button>
-                    <ul class="sub-ranges-cal menu-drawer financial-year-dropdown"
-                        *ngIf="dropdownShow && financialYears && financialYears.length > 0">
-                        <li *ngFor="let financialYear of financialYears;" (click)="closeDatePicker()">
-                            <button type="button"
-                                (click)="clickFinancialYear(financialYear);">{{financialYear.label}}</button>
+                    <ul class="sub-ranges-cal menu-drawer financial-year-dropdown" *ngIf="dropdownShow && financialYears && financialYears.length > 0">
+                        <li *ngFor="let financialYear of financialYears;">
+                            <button type="button" (click)="clickFinancialYear(financialYear);" [ngClass]="{'active': (selectedRangeLabel && selectedRangeLabel === financialYear.label)}">{{financialYear.label}}</button>
                         </li>
                     </ul>
                 </li>
@@ -69,6 +66,7 @@
         </div>
         <!-- days up to today/ yesterday input -->
     </div>
+    </perfect-scrollbar>
     <!-- ranges container -->
     <!-- calender container -->
     <div class="calender-container" *ngIf="!isMobileScreen || (isMobileScreen && openMobileDatepickerPopup)">
@@ -95,22 +93,22 @@
                     <span (click)="modalRef.hide()"><img src="../../../assets/images/calender.svg"></span>
                 </div>
                 <div class="start-end-date">
-                    <div class="relative mr-1">
+                    <div class="relative mr-1 d-flex date-field">
                         <label>Start Date</label>
                         <input type="tel" name="inlineStartDate" [value]="viewOnlyStartDate" mask="00-00-0000"
                             (blur)="saveInlineDates($event)">
                         <span class="error-msg" *ngIf="invalidInlineStartDate">{{invalidInlineStartDate}}</span>
                     </div>
-                    <div class="relative">
+                    <div class="relative d-flex date-field">
                         <label>End Date</label>
                         <input type="tel" name="inlineEndDate" [value]="viewOnlyEndDate" mask="00-00-0000"
                             (blur)="saveInlineDates($event)">
                         <span class="error-msg" *ngIf="invalidInlineEndDate">{{invalidInlineEndDate}}</span>
                     </div>
                 </div>
-                <span class="error-msg">Start date must not be greater than End date</span>
+                <span class="error-msg" *ngIf="invalidInlineDate">{{invalidInlineDate}}</span>
                 <div class="button-wrapper">
-                    <a (click)="modalRef.hide()" class="mr-2 cursor-pointer">Cancel</a>
+                    <a (click)="allowBodyScroll(); modalRef.hide()" class="mr-2 cursor-pointer">Cancel</a>
                     <a (click)="applyInlineDates()" class="cursor-pointer">Ok</a>
                 </div>
             </div>
@@ -171,9 +169,9 @@
                         <!-- month name and month dropdown -->
                         <!-- navigate to previous and next month buttons -->
                         <div class="prev-next-btn">
-                            <button (click)="goToPrevMonth()" [disabled]="goToPreviousMonthDisabled"
+                            <button (click)="goToPrevMonth()" [disabled]="!checkIfScrollToPreviousMonthAvailable()"
                                 class="prev available"></button>
-                            <button class="next available" [disabled]="goToNextMonthDisabled"
+                            <button class="next available" [disabled]="!checkIfScrollToNextMonthAvailable()"
                                 (click)="goToNextMonth()"></button>
                         </div>
                         <!-- navigate to previous and next month buttons -->
@@ -251,12 +249,12 @@
                 </perfect-scrollbar>
                 <!-- start date calendar container -->
                 <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true"
-                    [config]="{suppressScrollX: false, suppressScrollY: false}" [style.max-height.px]="300">
+                    [config]="{suppressScrollX: false, suppressScrollY: false}" [style.max-height.px]="280" (psScrollUp)="scrollUp()" (psScrollDown)="scrollDown()" (psYReachStart)="setCalendarToActiveMonth('start')" (psYReachEnd)="setCalendarToActiveMonth('end')">
                     <div *ngIf="showCalInRanges && !showMonthPicker" (mousewheel)="mouseUp($event)" (touchmove)="mouseUp($event)">
                         <div *ngFor="let calendarMonth of calendarMonths;">
                             <div class="calendar" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
                                 <div class="calendar-table" *ngIf="calendarMonth && calendarMonth.start"
-                                    (mouseenter)="setActiveMonth(calendarMonth.start);">
+                                    (mouseenter)="setActiveMonth(calendarMonth, 'start');">
                                     <table class="table-condensed">
                                         <thead>
                                             <tr>
@@ -369,7 +367,7 @@
                                 *ngIf="showCalInRanges && !singleDatePicker && !showMonthPicker">
                                 <div class="calendar-table">
                                     <table class="table-condensed" *ngIf="calendarMonth && calendarMonth.end"
-                                        (mouseenter)="setActiveMonth(calendarMonth.end);">
+                                        (mouseenter)="setActiveMonth(calendarMonth, 'end');">
                                         <thead>
                                             <tr>
                                                 <th colspan="5" class="month drp-animate">
@@ -498,7 +496,7 @@
         <!-- buttons -->
         <div class="buttons bottom-botton"
             *ngIf="!autoApply && ( !ranges?.length || (showCalInRanges && !singleDatePicker))">
-            <div class="buttons_input">
+            <div class="buttons-input">
                 <!-- clear button -->
                 <button *ngIf="showClearButton" class="btn btn-default clear" type="button" (click)="clear()"
                     title="clear the date">
@@ -517,7 +515,7 @@
                 <button class="btn btn-success" *ngIf="!isMobileScreen" [disabled]="applyBtn.disabled" type="button"
                     (click)="clickApply($event)">{{locale.applyLabel}}</button>
                 <button class="btn btn-success" *ngIf="isMobileScreen" [disabled]="applyBtn.disabled" type="button"
-                    (click)="clickApply($event); closeCalender(); closeDatePicker();">{{locale.applyLabel}}</button>
+                    (click)="clickApply($event); closeCalender();">{{locale.applyLabel}}</button>
                 <!-- apply button -->
             </div>
         </div>

@@ -651,7 +651,7 @@
                                         </div>
                                         <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                             <span>{{baseCurrencySymbol}}</span>
-                                            <span>{{transaction.amount * exchangeRate | giddhCurrency}}</span>
+                                            <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
                                         </div>
                                     </td>
                                     <td class="item-discount" style="height:1px;">
@@ -861,12 +861,12 @@
                                     <td class="text-right item-amount" style="height:1px;">
                                         <div class="td_Wrapper">
                                             <div style="flex: 1;">
-                                                <input type="text" [disabled]="transaction.isStockTxn" (blur)="calculateWhenTrxAltered(entry, transaction)" (click)="transactionAmountClicked(transaction)" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount"
+                                                <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction)" (click)="transactionAmountClicked(transaction)" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount"
                                                     decimalDigitsDirective [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
                                             </div>
                                             <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                                 <span>{{baseCurrencySymbol}}</span>
-                                                <span>{{transaction.amount * exchangeRate | giddhCurrency}}</span>
+                                                <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
                                             </div>
                                         </div>
                                     </td>
@@ -909,8 +909,8 @@
                                         <div class="td_Wrapper">
 
                                             <div style="flex:1;">
-                                                <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.total" readonly decimalDigitsDirective [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
-                                                />
+                                                <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.total" decimalDigitsDirective [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
+                                                    (blur)="calculateTransactionValueInclusively(entry, transaction)" />
 
                                                 <div *ngIf="isTcsTdsApplicable" class="wrap-otherTax">
                                                     <input type="checkbox" class="other-taxes-checkobx" [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable" name="entry.isOtherTaxApplicable_{{entryIdx}}" id="entry.isOtherTaxApplicable_{{entryIdx}}" (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
@@ -996,7 +996,7 @@
                             <div class="row">
 
                                 <div class="form-group col-xs-4">
-                                    <input type="text" #shippingDate="ngModel" [placeholder]="giddhDateFormat" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }" placeholder="Ship Date"
+                                    <input type="text" #shippingDate="ngModel" [placeholder]="templatePlaceholder?.shippedDateLabel" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                         [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
                                     <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
                                         Invalid Date
@@ -1004,11 +1004,11 @@
                                 </div>
 
                                 <div class="form-group col-xs-4">
-                                    <input type="text" name="shippedVia" [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control" placeholder="Ship Via" />
+                                    <input type="text" name="shippedVia" [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control" [placeholder]="templatePlaceholder?.shippedViaLabel || 'Ship Via'" />
                                 </div>
 
                                 <div class="form-group col-xs-4">
-                                    <input type="text" name="trackingNumber" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control" placeholder="Tracking No." />
+                                    <input type="text" name="trackingNumber" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control" [placeholder]="templatePlaceholder?.trackingNumber || 'Tracking No.'" />
                                 </div>
 
                             </div>
@@ -1016,15 +1016,15 @@
                             <div class="row">
 
                                 <div class="form-group col-xs-4">
-                                    <input type="text" name="customField1" [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control" placeholder="Field 1" />
+                                    <input type="text" name="customField1" [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control" [placeholder]="templatePlaceholder?.customField1Label || 'Field 1'" />
                                 </div>
 
                                 <div class="form-group col-xs-4">
-                                    <input type="text" name="customField2" [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control" placeholder="Field 2" />
+                                    <input type="text" name="customField2" [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control" [placeholder]="templatePlaceholder?.customField2Label || 'Field 2'" />
                                 </div>
 
                                 <div class="form-group col-xs-4">
-                                    <input type="text" name="customField3" [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control" placeholder="Field 3" />
+                                    <input type="text" name="customField3" [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control" [placeholder]="templatePlaceholder?.customField3Label || 'Field 3'" />
                                 </div>
 
                             </div>
@@ -1380,7 +1380,7 @@
 
                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                         <span>{{baseCurrencySymbol}}</span>
-                                        <span>{{transaction.amount * exchangeRate | giddhCurrency}}</span>
+                                        <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -1633,12 +1633,12 @@
 
                                     <label class="card-label text-right">Amount</label>
                                     <div style="flex: 1;">
-                                        <input type="text" [disabled]="transaction.isStockTxn" (blur)="calculateWhenTrxAltered(entry, transaction)" (click)="transactionAmountClicked(transaction)" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount"
+                                        <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction)" (click)="transactionAmountClicked(transaction)" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount"
                                             decimalDigitsDirective [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
                                     </div>
                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                         <span>{{baseCurrencySymbol}}</span>
-                                        <span>{{transaction.amount * exchangeRate | giddhCurrency}}</span>
+                                        <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
                                     </div>
                                 </div>
 
@@ -1696,7 +1696,7 @@
                                 <div class="card-total">
                                     <label class="card-label text-right">Total</label>
                                     <div style="flex:1;">
-                                        <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.total" readonly decimalDigitsDirective [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
+                                        <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right" (blur)="calculateTransactionValueInclusively(entry, transaction)" [(ngModel)]="transaction.total" decimalDigitsDirective [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                         />
 
                                         <div *ngIf="isTcsTdsApplicable" class="wrap-otherTax">
@@ -1778,30 +1778,30 @@
                     <div class="row">
 
                         <div class="form-group col-xs-4">
-                            <input type="text" #shippingDate="ngModel" [placeholder]="giddhDateFormat" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }" placeholder="Ship Date"
+                            <input type="text" #shippingDate="ngModel" [placeholder]="templatePlaceholder?.shippedDateLabel" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                 [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
                             <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
                                 Invalid Date</p>
                         </div>
 
                         <div class="form-group col-xs-4">
-                            <input type="text" name="shippedVia" [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control" placeholder="Ship Via" />
+                            <input type="text" name="shippedVia" [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control" [placeholder]="templatePlaceholder?.shippedViaLabel || 'Ship Via'" />
                         </div>
 
                         <div class="form-group col-xs-4">
-                            <input type="text" name="trackingNumber" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control" placeholder="Tracking No." />
+                            <input type="text" name="trackingNumber" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control" [placeholder]="templatePlaceholder?.trackingNumber || 'Tracking No.'" />
                         </div>
 
                         <div class="form-group col-xs-4">
-                            <input type="text" name="customField1" [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control" placeholder="Field 1" />
+                            <input type="text" name="customField1" [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control" [placeholder]="templatePlaceholder?.customField1Label || 'Field 1'" />
                         </div>
 
                         <div class="form-group col-xs-4">
-                            <input type="text" name="customField2" [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control" placeholder="Field 2" />
+                            <input type="text" name="customField2" [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control" [placeholder]="templatePlaceholder?.customField2Label || 'Field 2'" />
                         </div>
 
                         <div class="form-group col-xs-4">
-                            <input type="text" name="customField3" [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control" placeholder="Field 3" />
+                            <input type="text" name="customField3" [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control" [placeholder]="templatePlaceholder?.customField3Label || 'Field 3'" />
                         </div>
                     </div>
                 </div>

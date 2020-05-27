@@ -87,6 +87,7 @@ import { PurchaseRecordActions } from '../actions/purchase-record/purchase-recor
 import { AdvanceReceiptAdjustmentComponent } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.component';
 import { AdvanceReceiptAdjustment, AdjustAdvancePaymentModal } from '../models/api-models/AdvanceReceiptsAdjust';
 import { CurrentCompanyState } from '../store/Company/company.reducer';
+import { CustomTemplateState } from '../store/Invoice/invoice.template.reducer';
 
 const THEAD_ARR_READONLY = [
     {
@@ -312,6 +313,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public shouldShowTrnGstField: boolean = false;
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
+    /** Placeholder text for template */
+    public templatePlaceholder: any = {
+        customField1Label: '',
+        customField2Label: '',
+        customField3Label: '',
+        shippedViaLabel: '',
+        shippedDateLabel: '',
+        trackingNumber: ''
+    };
     public selectedCompany: any;
     public formFields: any[] = [];
 
@@ -585,6 +595,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.getAllLastInvoices();
                 }
                 this.invoiceType = decodeURI(parmas['invoiceType']) as VoucherTypeEnum;
+                this.getDefaultTemplateData();
                 this.prepareInvoiceTypeFlags();
                 this.saveStateDetails();
             }
@@ -593,6 +604,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.accountUniqueName = parmas['accUniqueName'];
                 this.isUpdateMode = false;
                 this.invoiceType = decodeURI(parmas['invoiceType']) as VoucherTypeEnum;
+                this.getDefaultTemplateData();
                 this.prepareInvoiceTypeFlags();
                 this.isInvoiceRequestedFromPreviousPage = true;
                 this.getAccountDetails(parmas['accUniqueName']);
@@ -629,11 +641,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                     this.store.dispatch(this.proformaActions.getProformaDetails(obj, this.invoiceType));
                 }
+                this.getDefaultTemplateData();
             } else {
                 // for edit mode direct from @Input
+                this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
                 if (this.accountUniqueName && this.invoiceType && this.invoiceNo) {
                     this.store.dispatch(this._generalActions.setAppTitle('/pages/proforma-invoice/invoice/' + this.invoiceType));
                     this.getVoucherDetailsFromInputs();
+                    this.getDefaultTemplateData();
                 }
             }
 
@@ -898,7 +913,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         if (this.isMultiCurrencyModule()) {
                             // parse normal response to multi currency response
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
-                            // this.initializeWarehouse();
                             tempObj = cloneDeep(convertedRes1) as VoucherClass;
                         } else {
                             tempObj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
@@ -1218,6 +1232,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 if (res.fields) {
+                    this.formFields = [];
                     Object.keys(res.fields).forEach(key => {
                         if (res.fields[key]) {
                             this.formFields[res.fields[key].name] = [];
@@ -1231,6 +1246,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.shouldShowTrnGstField = false;
                 }
             }
+        });
+        this.store.pipe(select(appState => appState.invoiceTemplate), takeUntil(this.destroyed$)).subscribe((templateData: CustomTemplateState) => {
+            this.setTemplatePlaceholder(templateData);
         });
         this.prepareInvoiceTypeFlags();
     }
@@ -1976,6 +1994,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
         trx.amount = Number(trx.amount);
+        if (trx.isStockTxn) {
+            trx.rate = giddhRoundOff((trx.amount / trx.quantity), 2);
+        }
         this.calculateTotalDiscountOfEntry(entry, trx, false);
         this.calculateEntryTaxSum(entry, trx, false);
         this.calculateEntryTotal(entry, trx);
@@ -1988,6 +2009,74 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         //         this.isAdjustAdvanceReceiptModalOpen();
         //     }
         // }
+    }
+
+    /**
+     * Calculate the complete transaction values inclusively
+     *
+     * @param {SalesEntryClass} entry Entry value
+     * @param {SalesTransactionItemClass} transaction Current transaction
+     * @memberof ProformaInvoiceComponent
+     */
+    public calculateTransactionValueInclusively(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
+        // Calculate discount
+        let percentageDiscountTotal = entry.discounts.filter(discount => discount.isActive)
+            .filter(activeDiscount => activeDiscount.discountType === 'PERCENTAGE')
+            .reduce((pv, cv) => {
+                return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+            }, 0) || 0;
+
+        let fixedDiscountTotal = entry.discounts.filter(discount => discount.isActive)
+            .filter(activeDiscount => activeDiscount.discountType === 'FIX_AMOUNT')
+            .reduce((pv, cv) => {
+                return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+            }, 0) || 0;
+
+        if (isNaN(entry.discountSum)) {
+            entry.discountSum = 0;
+        }
+        if (isNaN(transaction.taxableValue)) {
+            transaction.taxableValue = 0;
+        }
+
+        // Calculate tax
+        let taxPercentage: number = 0;
+        let cessPercentage: number = 0;
+        let taxTotal: number = 0;
+        entry.taxes.filter(tax => tax.isChecked).forEach(selectedTax => {
+            if (selectedTax.type === 'gstcess') {
+                cessPercentage += selectedTax.amount;
+            } else {
+                taxPercentage += selectedTax.amount;
+            }
+            taxTotal += selectedTax.amount;
+        });
+        if (isNaN(entry.taxSum)) {
+            entry.taxSum = 0;
+        }
+
+        if (isNaN(entry.cessSum)) {
+            entry.cessSum = 0;
+        }
+
+        // Calculate amount with inclusive tax
+        transaction.amount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
+            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), 2);
+        let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), 2);
+        entry.discountSum = giddhRoundOff(perFromAmount + fixedDiscountTotal, 2);
+        entry.taxSum = giddhRoundOff(((taxPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
+        entry.cessSum = giddhRoundOff(((cessPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
+        // Calculate stock unit rate with amount
+        if (transaction.isStockTxn) {
+            transaction.rate = giddhRoundOff((transaction.amount / transaction.quantity), 2);
+        }
+        this.calculateSubTotal();
+        this.calculateTotalDiscount();
+        this.calculateTotalTaxSum();
+        this.calculateGrandTotal();
+        this.calculateOtherTaxes(entry.otherTaxModal, entry);
+        this.calculateTcsTdsTotal();
+        this.calculateBalanceDue();
     }
 
     public calculateTotalDiscount() {
@@ -4518,6 +4607,52 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else {
             this.isAccountHaveAdvanceReceipts = false;
             this._cdr.detectChanges();
+        }
+    }
+
+    /**
+     * Fetches the default template configuration to show placeholder text for template
+     * section
+     *
+     * @private
+     * @memberof ProformaInvoiceComponent
+     */
+    private getDefaultTemplateData(): void {
+        const templateType = [VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].includes(this.invoiceType) ? 'voucher' : 'invoice';
+        this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(templateType));
+    }
+
+    /**
+     * Sets the template placeholder text based on API response
+     *
+     * @private
+     * @param {CustomTemplateState} templateData Template data received from API
+     * @memberof ProformaInvoiceComponent
+     */
+    private setTemplatePlaceholder(templateData: CustomTemplateState): void {
+        if (templateData && templateData.customCreatedTemplates && templateData.customCreatedTemplates.length > 0) {
+            const defaultTemplate = templateData.customCreatedTemplates.find(template => (template.isDefault || template.isDefaultForVoucher));
+            if (defaultTemplate && defaultTemplate.sections) {
+                const sections = defaultTemplate.sections;
+                if (sections.header && sections.header.data) {
+                    const {
+                        customField1: { label: customField1Label },
+                        customField2: { label: customField2Label },
+                        customField3: { label: customField3Label },
+                        shippedVia: { label: shippedViaLabel },
+                        shippingDate: { label: shippedDateLabel },
+                        trackingNumber: { label: trackingNumber }
+                    } = sections.header.data;
+                    this.templatePlaceholder = {
+                        customField1Label,
+                        customField2Label,
+                        customField3Label,
+                        shippedViaLabel,
+                        shippedDateLabel,
+                        trackingNumber
+                    };
+                }
+            }
         }
     }
 }

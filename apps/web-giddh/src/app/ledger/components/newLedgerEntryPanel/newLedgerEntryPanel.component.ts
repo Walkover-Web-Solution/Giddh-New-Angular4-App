@@ -441,18 +441,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.currentTxn.convertedTotal = this.calculateConversionRate(this.currentTxn.total);
             }
         }
-        if (this.currentTxn && this.currentTxn.amount) {
-            if (this.isAdvanceReceipt) {
-                this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
-                this.currentTxn.total = giddhRoundOff((this.currentTxn.advanceReceiptAmount + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
-                this.totalForTax = this.currentTxn.total;
-            } else {
-                let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
-                this.totalForTax = total;
-                this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
-            }
-            this.currentTxn.convertedTotal = this.calculateConversionRate(this.currentTxn.total);
-        }
         this.calculateOtherTaxes(this.blankLedger.otherTaxModal);
         this.calculateCompoundTotal();
     }
