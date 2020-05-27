@@ -2189,4 +2189,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         return isAvailable;
     }
+
+    @HostListener('window:resize', ['$event'])
+    windowResize(event) {
+        this.datesUpdated.emit({ name: '', startDate: this.inputStartDate, endDate: this.inputEndDate });
+        this.hide();
+    }
 }
