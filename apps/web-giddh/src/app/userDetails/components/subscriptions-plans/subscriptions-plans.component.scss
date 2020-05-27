@@ -106,7 +106,7 @@
     box-shadow: 0px 3px 6px $black-russian;
     border: 1px solid $gainsboro;
     transition: .5s all ease;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 .inner-your-account:hover, .inner-your-account.active {
     background: $lavender;
@@ -195,9 +195,10 @@
 }
 .close.close-2 {
     opacity: 1;
-    right: 25px;
-    z-index: 999;
-    top: 20px;
+    z-index: 1;
+    top: 10px;
+    position: absolute;
+    right: 10px;
 }
 .plan-disabled {
     opacity: .5;
@@ -215,9 +216,9 @@
 .see-all-features {
     display: flex;
     flex-wrap: wrap;
-    max-height: 640px;
     padding-top: 0px;
     width: 80%;
+    margin-top: 10px;
 }
 .see-all-features .col-sm-6.col-md-3 {
     width: 33.33%;
@@ -257,6 +258,9 @@
 @media only screen and (max-width: 1280px) {
     .see-all-features {
         width: 100%;
+    }
+    .close.close-2 {
+        font-size: 16px;
     }
 }
 @media only screen and (max-width: 1199px) {
@@ -304,8 +308,8 @@
     .xs-pr-0 {
         padding-right: 0px !important;
     }
-    .xs-pl-0 {
-        padding-left: 0px !important;
+    .xs-pl-15 {
+        padding-left: 15px !important;
     }
     .inner-your-account {
         margin-bottom: 20px;
