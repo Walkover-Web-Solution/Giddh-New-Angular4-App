@@ -25,6 +25,9 @@ import { AccountAsInvoiceComponent } from './journal-voucher/invoice/invoice.com
 import { AccountAsVoucherComponent } from './journal-voucher/voucher/voucher.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic-aside-menu-account.module';
+import { AccountingComponent } from './accounting.component';
+import { InvoiceGridComponent } from './invoice-grid/invoice-grid.component';
+import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
 
 @NgModule({
     declarations: [
@@ -32,7 +35,10 @@ import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-acco
         AccountAsInvoiceComponent,
         AccountingSidebarComponent,
         AccountAsVoucherComponent,
-        OnReturnDirective
+        OnReturnDirective,
+        AccountingComponent, // TODO: Deprecated, remove it
+        InvoiceGridComponent, // TODO: Deprecated, remove it
+        VoucherGridComponent // TODO: Deprecated, remove it
     ],
     exports: [RouterModule, AccountingSidebarComponent],
     providers: [KeyboardService, TallyModuleService],
