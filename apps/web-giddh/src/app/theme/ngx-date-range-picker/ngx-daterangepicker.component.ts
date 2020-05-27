@@ -349,6 +349,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.isInlineDateFieldsShowing = false;
             this.invalidInlineStartDate = "";
             this.invalidInlineEndDate = "";
+            this.invalidInlineDate = "";
         });
 
         this.scrollSubject$.pipe(debounceTime(25)).subscribe((response) => {
@@ -392,6 +393,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public openModalWithClass(template: TemplateRef<any>): void {
         this.inlineStartDate = _.cloneDeep(this.startDate);
         this.inlineEndDate = _.cloneDeep(this.endDate);
+        
 
         this.viewOnlyStartDate = this.inlineStartDate.format(GIDDH_DATE_FORMAT);
         this.viewOnlyEndDate = this.inlineEndDate.format(GIDDH_DATE_FORMAT);
