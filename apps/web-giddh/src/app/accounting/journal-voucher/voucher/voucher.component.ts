@@ -17,36 +17,31 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Store, select } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
 import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import * as moment from 'moment';
-import { ModalDirective, BsDatepickerConfig, BsDatepickerDirective } from 'ngx-bootstrap';
-import { Observable, ReplaySubject, combineLatest } from 'rxjs';
-import { distinctUntilChanged, takeUntil, take, debounceTime } from 'rxjs/operators';
+import { BsDatepickerConfig, BsDatepickerDirective, ModalDirective } from 'ngx-bootstrap';
+import { combineLatest, Observable, ReplaySubject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 
+import { GeneralActions } from '../../../actions/general/general.actions';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
-import { AccountResponse, AddAccountRequest, UpdateAccountRequest, AccountResponseV2 } from '../../../models/api-models/Account';
+import { SalesActions } from '../../../actions/sales/sales.action';
+import { AccountResponse, AddAccountRequest, UpdateAccountRequest } from '../../../models/api-models/Account';
+import { CurrentPage } from '../../../models/api-models/Common';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { AccountService } from '../../../services/account.service';
 import { ToasterService } from '../../../services/toaster.service';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-select/option.interface';
 import { VsForDirective } from '../../../theme/ng2-vs-for/ng2-vs-for';
 import { QuickAccountComponent } from '../../../theme/quick-account-component/quickAccount.component';
 import { KeyboardService } from '../../keyboard.service';
-import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { KEYS, VOUCHERS } from '../journal-voucher.component';
-import { CurrentPage } from '../../../models/api-models/Common';
-import { GeneralActions } from '../../../actions/general/general.actions';
-import { SalesActions } from '../../../actions/sales/sales.action';
-
-const TransactionsType = [
-    { label: 'By', value: 'Debit' },
-    { label: 'To', value: 'Credit' },
-];
 
 const CustomShortcode = [
     { code: 'F9', route: 'purchase' }
@@ -287,18 +282,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
 
         this.refreshEntry();
-
-        // this.tallyModuleService.selectedPageInfo.distinctUntilChanged((p, q) => {
-        //   if (p && q) {
-        //     return (_.isEqual(p, q));
-        //   }
-        //   if ((p && !q) || (!p && q)) {
-        //     return false;
-        //   }
-        //   return true;
-        //  }).subscribe(() => {
-
-        // });
 
         this.tallyModuleService.filteredAccounts.subscribe((accounts) => {
             if (accounts) {
@@ -1161,40 +1144,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
     }
 
-    // public onCheckNumberFieldKeyDown(e, fieldType: string) {
-    //   if (e && (e.keyCode === 13 || e.which === 13)) {
-    //     e.preventDefault();
-    //     e.stopPropagation();
-    //     return setTimeout(() => {
-    //       if (fieldType === 'chqNumber') {
-    //         this.chequeClearanceDateInput.nativeElement.focus();
-    //       } else if (fieldType === 'chqDate') {
-    //         this.chqFormSubmitBtn.nativeElement.focus();
-    //       }
-    //     }, 100);
-    //   }
-    // }
-
-    // public keyUpOnSubmitButton(e) {
-    //   if (e && (e.keyCode === 39 || e.which === 39) || (e.keyCode === 78 || e.which === 78)) {
-    //     return setTimeout(() => this.resetButton.nativeElement.focus(), 50);
-    //   }
-    //   if (e && (e.keyCode === 8 || e.which === 8)) {
-    //     this.showConfirmationBox = false;
-    //     return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
-    //   }
-    // }
-
-    // public keyUpOnResetButton(e) {
-    //   if (e && (e.keyCode === 37 || e.which === 37) || (e.keyCode === 89 || e.which === 89)) {
-    //     return setTimeout(() => this.submitButton.nativeElement.focus(), 50);
-    //   }
-    //   if (e && (e.keyCode === 13 || e.which === 13)) {
-    //     this.showConfirmationBox = false;
-    //     return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
-    //   }
-    // }
-
     private deleteRow(idx: number) {
         this.requestObj.transactions.splice(idx, 1);
         if (!idx) {
@@ -1243,6 +1192,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public acceptCancel(): void {
         this.showConfirmationBox = false;
     }
+
     /**
      * This will create list of accounts depending on voucher type
      *
@@ -1268,6 +1218,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.inputForList = _.cloneDeep(this.flattenAccounts);
         }
     }
+
     /**
      * This will reset the entries if voucher type changed
      *
@@ -1278,6 +1229,72 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.previousVoucherType = this.requestObj.voucherType;
             this.refreshEntry();
         }
+    }
+
+    /**
+     * Aside pane togglere
+     *
+     * @param {*} [event] Toggle event
+     * @memberof AccountAsVoucherComponent
+     */
+    public toggleAccountAsidePane(event?: any): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+
+    /**
+     * Body class toggler
+     *
+     * @memberof AccountAsVoucherComponent
+     */
+    public toggleBodyClass(): void {
+        if (this.accountAsideMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
+
+    /**
+     * Add new account event handler
+     *
+     * @param {AddAccountRequest} item Account details
+     * @memberof AccountAsVoucherComponent
+     */
+    public addNewSidebarAccount(item: AddAccountRequest): void {
+        this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
+    }
+
+    /**
+     * Update account event handler
+     *
+     * @param {AddAccountRequest} item Account details
+     * @memberof AccountAsVoucherComponent
+     */
+    public updateSidebarAccount(item: UpdateAccountRequest): void {
+        this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item));
+    }
+
+    /**
+     * Toggles the aside pane when new account request is submitted
+     *
+     * @memberof AccountAsVoucherComponent
+     */
+    public addNewAccount(): void {
+        this.toggleAccountAsidePane();
+    }
+
+    /**
+     * Puts focus on date input field when voucher date
+     * is changed from date picker component
+     *
+     * @memberof AccountAsVoucherComponent
+     */
+    public handleVoucherDateChange(): void {
+        this.dateField.nativeElement.focus();
     }
 
     /**
@@ -1303,7 +1320,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     private setCurrentPageTitle(voucherType: string): void {
         let currentPageObj = new CurrentPage();
-        switch(this.currentVoucher) {
+        switch (this.currentVoucher) {
             case VOUCHERS.CONTRA:
                 currentPageObj.name = `Journal Voucher * > ${voucherType}`;
                 currentPageObj.url = '/pages/journal-voucher/contra';
@@ -1314,37 +1331,5 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 break;
         }
         this.store.dispatch(this.generalAction.setPageTitle(currentPageObj));
-    }
-
-    public toggleAccountAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
-    }
-
-    public toggleBodyClass() {
-        if (this.accountAsideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
-    }
-
-    public addNewSidebarAccount(item: AddAccountRequest) {
-        this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
-    }
-
-    public updateSidebarAccount(item: UpdateAccountRequest) {
-        this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item));
-    }
-
-    public addNewAccount() {
-        this.toggleAccountAsidePane();
-    }
-
-    public handleVoucherDateChange(): void {
-        this.dateField.nativeElement.focus();
     }
 }

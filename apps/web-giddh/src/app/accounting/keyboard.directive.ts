@@ -1,5 +1,6 @@
 import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 
+/** List of all the keyboard keys used as shortcut in JV */
 const KEY_CODE_CONSTANTS = {
     ENTER: 'Enter',
     SPACE: [' ', 'Space'],

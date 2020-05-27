@@ -82,7 +82,7 @@
     min-width: 120px;
 }
 
-.appearance_none {
+.appearance-none {
     background: #e5e5e5 !important;
     border: 0 !important;
     font-size: 16px;
@@ -99,7 +99,7 @@
     z-index: 0;
 }
 
-.sidebar_menu {
+.sidebar-menu {
     min-height: 100vh;
     background: #262626;
     color: white;
