@@ -155,6 +155,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     private isComponentLoaded: boolean = false;
     /** Current company unique name */
     private currentCompanyUniqueName: string;
+    /** Current voucher selected */
+    private currentVoucher: string;
 
     public allAccounts: any;
     public previousVoucherType: string = "";
@@ -204,8 +206,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             return true;
         })).subscribe((data) => {
             if (data) {
-                this.setCurrentPageTitle(data.page);
-                switch (data.page) {
+                this.currentVoucher = data.page;
+                this.setCurrentPageTitle(this.currentVoucher);
+                switch (this.currentVoucher) {
                     case VOUCHERS.CONTRA:
                         // Contra allows cash or bank so selecting default category as bank
                         this.categoryOfAccounts = 'bankaccounts';
@@ -215,7 +218,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         break;
                 }
                 if (data.gridType === 'voucher') {
-                    this.requestObj.voucherType = data.page;
+                    this.requestObj.voucherType = this.currentVoucher;
                     this.createAccountsList();
                     this.resetEntriesIfVoucherChanged();
                     setTimeout(() => {
@@ -586,19 +589,25 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-     * onAmountField() on amount, event => Blur, Enter, Tab
+     * Adds new entry
+     *
+     * @param {*} amount Amount of immediate previous entry
+     * @param {*} transactionObj Transaction object of immediate previous entry
+     * @param {number} entryIndex Entry index
+     * @memberof AccountAsVoucherComponent
      */
-    public addNewEntry(amount, transactionObj, idx) {
-        let indx = idx;
-        let reqField: any = document.getElementById(`first_element_${idx - 1}`);
-        let lastIndx = this.requestObj.transactions.length - 1;
+    public addNewEntry(amount: any, transactionObj: any, entryIndex: number) {
+        let index = entryIndex;
+        let reqField: any = document.getElementById(`first_element_${entryIndex - 1}`);
         if (amount === 0 || amount === '0') {
-            if (idx === 0) {
+            if (entryIndex === 0) {
                 this.isFirstRowDeleted = true;
             } else {
                 this.isFirstRowDeleted = false;
             }
-            this.requestObj.transactions.splice(indx, 1);
+            this.requestObj.transactions[index].currentBalance = '';
+            this.requestObj.transactions[index].selectedAccount.type = '';
+            this.requestObj.transactions.splice(index, 1);
             if (reqField === null) {
                 this.dateField.nativeElement.focus();
             } else {
@@ -608,7 +617,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.newEntryObj('by');
             }
         } else {
-            this.calModAmt(amount, transactionObj, indx);
+            this.calModAmt(amount, transactionObj, index);
         }
     }
 
@@ -752,7 +761,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.journalDate = moment().format(GIDDH_DATE_FORMAT);
         }
         this.requestObj.description = '';
-        this.dateField.nativeElement.focus();
         setTimeout(() => {
             this.newEntryObj();
             this.requestObj.transactions[0].type = 'by';
@@ -769,6 +777,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }, 3000);
         setTimeout(() => {
             this.refreshEntry();
+            if (this.currentVoucher) {
+                this.setCurrentPageTitle(this.currentVoucher);
+            }
         }, 200);
     }
 
@@ -1292,8 +1303,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     private setCurrentPageTitle(voucherType: string): void {
         let currentPageObj = new CurrentPage();
-        currentPageObj.name = `Journal Voucher * > ${voucherType}`;
-        currentPageObj.url = this.router.url;
+        switch(this.currentVoucher) {
+            case VOUCHERS.CONTRA:
+                currentPageObj.name = `Journal Voucher * > ${voucherType}`;
+                currentPageObj.url = '/pages/journal-voucher/contra';
+                break;
+            default:
+                currentPageObj.name = 'Journal Voucher *';
+                currentPageObj.url = '/pages/journal-voucher';
+                break;
+        }
         this.store.dispatch(this.generalAction.setPageTitle(currentPageObj));
     }
 
