@@ -8966,26 +8966,31 @@ ngx-daterangepicker-material {
                     width: 20px;
                 }
             }
+            .modal-inside-heading{
+                display: none;
+            }
         }
         .start-end-date{
-            display: flex;
-            padding-top: 10px;
-            label{
-                position: absolute;
-                background-color:$white;
-                padding: 0 5px;
-                top: -6px;
-                left: 9px;
-                font-size: 12px;
-                color: $gray;
-            }
-            input{
-                width: 130px;
-                height: 51px;
-                border: 1px solid $gainsboro;
-                border-radius: 3px;
-                padding: 0 15px;
-                font-size: 14px;
+            .start-end-date-d-flex{
+                display: flex;
+                padding-top: 10px;
+                label{
+                    position: absolute;
+                    background-color:$white;
+                    padding: 0 5px;
+                    top: -6px;
+                    left: 9px;
+                    font-size: 12px;
+                    color: $gray;
+                }
+                input{
+                    width: 130px;
+                    height: 51px;
+                    border: 1px solid $gainsboro;
+                    border-radius: 3px;
+                    padding: 0 15px;
+                    font-size: 14px;
+                }
             }
         }
         .button-wrapper {
@@ -9761,10 +9766,55 @@ ngx-daterangepicker-material {
         margin: 70px auto;
     }
 }
-
-
+@media(min-width:480px) and (max-width:667px){
+    .edit-modal{
+        margin: 20px auto;
+        .edit-date-modal{
+            padding: 0 15px;
+            .modal-outside-heading{
+                display: none;
+            }
+            .edit-date-container{
+                display: flex;
+                align-items: start;
+                .modal-date-range{
+                    flex-direction: column;
+                    justify-content: start;
+                    align-items: start;
+                    border-bottom: none;
+                    padding: 12px 0 0;
+                    margin-bottom: 0;
+                    border-right: 1px solid $gainsboro;
+                    margin-right: 15px;
+                    p{
+                        font-size: 20px;
+                        margin-top: 15px;
+                        width: 110px;
+                        margin-bottom: 20px;
+                    }
+                    img{
+                        bottom: -40px;
+                        padding-bottom: 10px;
+                    }
+                    .modal-inside-heading{
+                        display: block;
+                    }
+                }
+                .start-end-date{  
+                    padding: 10px 5px 0;
+                
+                }
+                .button-wrapper{
+                    position: absolute;
+                    bottom: 2px;
+                    right: 15px;
+                    z-index: 999;
+                }
+            }
+        }
+    }
+}
 /*** iPhone and iOS Form Input Zoom Fixes ***/
-
 
 /* Fix Input Zoom on devices older than iPhone 5: */
 

@@ -87,29 +87,35 @@
         </div>
         <ng-template #template>
             <div class="modal-body edit-date-modal">
-                <h5>Custom</h5>
-                <div class="modal-date-range">
-                    <p>{{inlineStartDate.format("MMM DD")}} - {{inlineEndDate.format("MMM DD")}}</p>
-                    <span (click)="modalRef.hide()"><img src="../../../assets/images/calender.svg"></span>
-                </div>
-                <div class="start-end-date">
-                    <div class="relative mr-1 d-flex date-field">
-                        <label>Start Date</label>
-                        <input type="tel" name="inlineStartDate" [value]="viewOnlyStartDate" mask="00-00-0000"
-                            (blur)="saveInlineDates($event)">
-                        <span class="error-msg" *ngIf="invalidInlineStartDate">{{invalidInlineStartDate}}</span>
+                <h5 class="modal-outside-heading">Custom</h5>
+
+                <div class="edit-date-container">              
+                    <div class="modal-date-range">
+                        <h5 class="modal-inside-heading">Custom</h5>
+                        <p>{{inlineStartDate.format("MMM DD")}} - {{inlineEndDate.format("MMM DD")}}</p>
+                        <span (click)="modalRef.hide()"><img src="../../../assets/images/calender.svg"></span>
                     </div>
-                    <div class="relative d-flex date-field">
-                        <label>End Date</label>
-                        <input type="tel" name="inlineEndDate" [value]="viewOnlyEndDate" mask="00-00-0000"
-                            (blur)="saveInlineDates($event)">
-                        <span class="error-msg" *ngIf="invalidInlineEndDate">{{invalidInlineEndDate}}</span>
+                    <div class="start-end-date">
+                        <div class="start-end-date-d-flex">
+                            <div class="relative mr-1 d-flex date-field">
+                                <label>Start Date</label>
+                                <input type="tel" name="inlineStartDate" [value]="viewOnlyStartDate" mask="00-00-0000"
+                                    (blur)="saveInlineDates($event)">
+                                <span class="error-msg" *ngIf="invalidInlineStartDate">{{invalidInlineStartDate}}</span>
+                            </div>
+                            <div class="relative d-flex date-field">
+                                <label>End Date</label>
+                                <input type="tel" name="inlineEndDate" [value]="viewOnlyEndDate" mask="00-00-0000"
+                                    (blur)="saveInlineDates($event)">
+                                <span class="error-msg" *ngIf="invalidInlineEndDate">{{invalidInlineEndDate}}</span>
+                            </div>
+                        </div>
+                        <span class="error-msg" *ngIf="invalidInlineDate">{{invalidInlineDate}}</span>
+                        <div class="button-wrapper">
+                            <a (click)="modalRef.hide()" class="mr-2 cursor-pointer">Cancel</a>
+                            <a (click)="applyInlineDates()" class="cursor-pointer">Ok</a>
+                        </div>
                     </div>
-                </div>
-                <span class="error-msg" *ngIf="invalidInlineDate">{{invalidInlineDate}}</span>
-                <div class="button-wrapper">
-                    <a (click)="modalRef.hide()" class="mr-2 cursor-pointer">Cancel</a>
-                    <a (click)="applyInlineDates()" class="cursor-pointer">Ok</a>
                 </div>
             </div>
         </ng-template>
