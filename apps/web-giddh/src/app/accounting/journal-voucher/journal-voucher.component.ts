@@ -245,7 +245,7 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
         this.store.pipe(select(appState => appState.session.companyUniqueName), take(1)).subscribe(a => {
             if (a && a !== '') {
                 this.accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    if (data.status === 'success') {
+                    if (data && data.status === 'success') {
                         this.flattenAccounts = data.body.results;
                         this.tallyModuleService.setFlattenAccounts(data.body.results);
                     }
