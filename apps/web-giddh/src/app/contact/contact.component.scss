@@ -10,6 +10,11 @@
 .pd1 {
     padding: 5px;
 }
+.aging-table > tbody > tr input[type="checkbox"] {
+    position: absolute !important;
+    opacity: 0;
+    top: 0px;
+}
 .aging-table > tbody > tr:hover input[type="checkbox"] {
     position: relative !important;
     opacity: 1;
@@ -143,7 +148,7 @@ td.commentField {
     border-top: none;
 }
 
-td.pos-rel.WordWrap.customer-name.cursor-pointer {
+td.pos-rel.word-wrap.customer-name.cursor-pointer {
     border-bottom: none;
     height: 37px;
     line-height: 1.4;
@@ -157,17 +162,17 @@ td.pos-rel.WordWrap.customer-name.cursor-pointer {
     padding-right: 35px;
 }
 
-td.pos-rel.WordWrap.customer-name.vendor-customer-name.cursor-pointer {
+td.pos-rel.word-wrap.customer-name.vendor-customer-name.cursor-pointer {
     height: 42px;
     line-height: 1;
     border-right: none;
 }
 
-tr:last-child td.pos-rel.WordWrap.customer-name.cursor-pointer,
-tr:last-child td.pos-rel.WordWrap.vendor-customer-name.cursor-pointer {
+tr:last-child td.pos-rel.word-wrap.customer-name.cursor-pointer,
+tr:last-child td.pos-rel.word-wrap.vendor-customer-name.cursor-pointer {
     border-bottom: 1px solid #ddd !important;
 }
-.pos-rel.WordWrap {
+.pos-rel.word-wrap {
     .icon-dots-three-vertical {
         transform: rotate(90deg);
         font-size: 20px;
@@ -295,6 +300,21 @@ span.inputAddon {
 .icon-ellipse.open.show{
     display: inline-block !important;
 }
+.due-as-on{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    strong{
+        width: 80px;
+        padding-left: 10px;
+    }
+}
+.form-control[readonly]{
+    background-color: inherit !important;
+    display: inline-block !important;
+    width: 200px;
+    border: none;
+}
 /*responsive*/
 @media (max-width: 768px) {
     .aging-table > tbody > tr input[type="checkbox"] {
@@ -303,9 +323,9 @@ span.inputAddon {
     .customer-right-wrap h4.mb-1.pdR2 {
         margin-bottom: 0;
     }
-    tr:last-child td.pos-rel.WordWrap.customer-name.cursor-pointer,
+    tr:last-child td.pos-rel.word-wrap.customer-name.cursor-pointer,
     tr:last-child
-        td.pos-rel.WordWrap.customer-name.vendor-customer-name.cursor-pointer {
+        td.pos-rel.word-wrap.customer-name.vendor-customer-name.cursor-pointer {
         border-bottom: none !important;
     }
 
@@ -320,7 +340,7 @@ span.inputAddon {
         left: auto !important;
         right: -24px !important;
     }
-    .pos-rel.WordWrap .icon-dots-three-vertical {
+    .pos-rel.word-wrap .icon-dots-three-vertical {
         transform: rotate(0deg);
     }
     .onDesktopView.btn-group {
@@ -336,13 +356,13 @@ span.inputAddon {
         z-index:1;
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
     }
-    td.pos-rel.WordWrap.customer-name.cursor-pointer,
-    td.pos-rel.WordWrap.customer-name.vendor-customer-name.cursor-pointer {
+    td.pos-rel.word-wrap.customer-name.cursor-pointer,
+    td.pos-rel.word-wrap.customer-name.vendor-customer-name.cursor-pointer {
         max-width: 100%;
         white-space: inherit;
         line-height: 1.5;
     }
-    .pos-rel.WordWrap.vendor-customer-name .icon-dots-three-vertical {
+    .pos-rel.word-wrap.vendor-customer-name .icon-dots-three-vertical {
         position: relative;
         top: 0;
         line-height: 1 !important;
@@ -354,7 +374,7 @@ span.inputAddon {
     .customer-name .icon-ellipse {
         top: 8px;
     }
-    .pos-rel.WordWrap {
+    .pos-rel.word-wrap {
         .icon-dots-three-vertical {
             display: block;
         }
@@ -401,7 +421,7 @@ span.inputAddon {
                 }
             }
     }
-   
+
     .customer-footer-box {
         padding-top: 0;
         float: left !important;
@@ -487,7 +507,7 @@ span.inputAddon {
         padding-top: 10px;
     }
 
-    .pos-rel.WordWrap .icon-dots-three-vertical {
+    .pos-rel.word-wrap .icon-dots-three-vertical {
         display: block;
     }
     .top-aging-table-top {

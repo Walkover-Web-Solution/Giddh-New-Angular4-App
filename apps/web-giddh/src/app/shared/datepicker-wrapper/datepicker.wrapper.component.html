@@ -1,0 +1,16 @@
+<ngx-daterangepicker-material
+    [inputStartDate]="inputStartDate"
+    [inputEndDate]="inputEndDate"
+    name="selectedDateRange"
+    ngxDaterangepickerMd
+    [alwaysShowCalendars]="true"
+    [ranges]="ranges"
+    [selectedRangeLabel]="selectedRangeLabel"
+    [showClearButton]="false"
+    [showCancel]="true"
+    [showDropdowns]="true"
+    [locale]="{applyLabel: 'Done'}"
+    (rangeClicked)="selectedRange($event)"
+    (datesUpdated)="selectedDate($event)"
+    [keepCalendarOpeningWithRange]="true"
+    [showRangeLabelOnInput]="false"></ngx-daterangepicker-material>
