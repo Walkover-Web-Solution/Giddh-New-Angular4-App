@@ -383,7 +383,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public closeMobileDatePicker(): void {
-        this.datesUpdated.emit({ name: '', startDate: this.inputStartDate, endDate: this.inputEndDate });
+        this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate });
         this.openMobileDatepickerPopup = false;
         document.querySelector('body').classList.remove('hide-scroll-body');
         this.hide();
@@ -946,7 +946,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.closeCalender();
         }
 
-        this.datesUpdated.emit({ name: '', startDate: this.inputStartDate, endDate: this.inputEndDate });
+        this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate });
     }
 
     /**
@@ -2018,7 +2018,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         if (sendBlankDates === true) {
             this.datesUpdated.emit({ name: '', startDate: null, endDate: null });
         } else {
-            this.datesUpdated.emit({ name: '', startDate: this.startDate, endDate: this.endDate });
+            this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.startDate, endDate: this.endDate });
         }
     }
 
@@ -2192,7 +2192,13 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
     @HostListener('window:resize', ['$event'])
     windowResize(event) {
-        this.datesUpdated.emit({ name: '', startDate: this.inputStartDate, endDate: this.inputEndDate });
+        this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate });
+        this.hide();
+    }
+
+    @HostListener('window:orientationchange', ['$event'])
+    onOrientationChange(event) {
+        this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate });
         this.hide();
     }
 }
