@@ -8961,6 +8961,7 @@ ngx-daterangepicker-material {
     max-width: 300px;
     margin: 0 auto;
     .edit-date-modal{
+    z-index:9994;
         h5{
             color: $gray;
             font-size: 13px;
@@ -9540,7 +9541,7 @@ ngx-daterangepicker-material {
             top: 0;
         }
     } 
-    .restrict-body-scroll:nth-child(2) .modal {
+    .restrict-body-scroll:last-child .modal , .hide-scroll-body:last-child .modal {
         z-index: 9993;
     }
 }
