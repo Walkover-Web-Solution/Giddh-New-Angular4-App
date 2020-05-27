@@ -8929,18 +8929,6 @@ input.checkbox-custom[type="checkbox"] {
     min-height: 350px;
 }
 /*datepicker common css*/
-.show-calendar {
-    display: block !important;
-}
-.show-calendar + .modal-backdrop + .modal {
-    display: flex !important;
-    align-items: center;
-    margin-top: 0 !important;
-}
-.show-calendar.focus-start-date + .modal-backdrop + .modal {
-    margin-top: 30px !important;
-    align-items:flex-start;
-}
 .giddh-datepicker-modal .modal-content {
     background: none !important;
 }
@@ -9540,9 +9528,6 @@ ngx-daterangepicker-material {
             top: 0;
         }
     } 
-    .restrict-body-scroll:nth-child(2) .modal {
-        z-index: 9993;
-    }
 }
 @media (max-width: 575px) {
     .daterangepicker.ltr .ranges {
@@ -9563,7 +9548,6 @@ ngx-daterangepicker-material {
         padding-top: 0;
     }
 }
-
 @media (max-width: 500px) {
     .daterangepicker.dropdown-menu {
         max-width: 100% !important;
@@ -9863,7 +9847,4 @@ ngx-daterangepicker-material {
     input[type="url"] {
         font-size: 16px;
     }
-}
-.restrict-body-scroll {
-    overflow-y: hidden !important;
 }
