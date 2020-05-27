@@ -5,17 +5,15 @@
 
                 <div class="d-flex">
                     <span class="btn label isActive">{{data.voucherType}}</span>
-
                     <input type="text" [(ngModel)]="data.invoiceNumberAgainstVoucher" [disabled]="!isCustomInvoice"
-                        name="invoiceNumberAgainstVoucher" placeholder="Invoice No" class="text-center appearance_none"
+                        name="invoiceNumberAgainstVoucher" placeholder="Invoice No" class="text-center appearance-none"
                         style="width: 128px" />
                 </div>
 
                 <div class="pull-right text-right mrB1">
                     <input type="text" onReturn #dateField [textMask]="{mask: dateMask, guide: true}"
                         [(ngModel)]="entryDate" name="entryDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY"
-                        class="form-control text-right invoice-date-field" /> {{ displayDay
-          }}
+                        class="form-control text-right invoice-date-field" /> {{ displayDay }}
                 </div>
             </div>
 
@@ -24,18 +22,9 @@
                 <div class="mx-350 form-group" [hidden]="isSalesInvoiceSelected">
                     <!-- decimalDigitsDirective -->
                     <label>{{ invoiceNoHeading }}:</label> <input type="text" placeholder="Invoice no."
-                        [(ngModel)]="data.invoiceNumberAgainstVoucher" class="form-control max-height28 appearance_none"
+                        [(ngModel)]="data.invoiceNumberAgainstVoucher" class="form-control max-height28 appearance-none"
                         style="max-width:200px" [disabled]="isSalesInvoiceSelected" />
                 </div>
-
-                <!-- key not available in request
-    <div class="mx-300 form-group" (clickOutside)="showInvoiceDate=false;">
-    <span>Date: </span>
-    <input type="text" [ngModel]="moment(entryDate).format('DD-MM-YYYY')" decimalDigitsDirective readonly (focus)="showInvoiceDate = true;" class="form-control appearance_none max-height28" />
-    <div *ngIf="showInvoiceDate" style="position: absolute; z-index:10; min-height:290px;">
-        <datepicker [(ngModel)]="entryDate" (selectionDone)="setInvoiceDate($event)" [showWeeks]="false"></datepicker>
-    </div>
-</div> -->
             </div>
             <!-- /invoice num -->
 
@@ -46,7 +35,7 @@
                     <label>Party A/c Name: <sup>*</sup></label>
                     <!-- #creditor -->
                     <input #partyAccNameInputField name="party_name" type="text" placeholder="Party account"
-                        class="form-control max-height28 appearance_none upper-fields"
+                        class="form-control max-height28 appearance-none upper-fields"
                         (input)="onPartyAccFocusInput($event);selectedField='account';focusedField = 'partyAcc';"
                         (keyup)="searchAccount($event?.target?.value)" (keydown)="detectKey($event)"
                         [(ngModel)]="creditorAcc.name"
@@ -58,7 +47,7 @@
                 <div class="form-group" style="margin-top: 5px;" *ngIf="isPurchaseInvoiceSelected">
                     <label>Ledger name:<sup>*</sup></label>
                     <input name="ledger_name" type="text" placeholder="Ledger name"
-                        class="form-control max-height28 appearance_none upper-fields" style="max-width:200px"
+                        class="form-control max-height28 appearance-none upper-fields" style="max-width:200px"
                         (input)="onPartyAccFocusInput($event, 'purchases');selectedField='account';focusedField = 'ledgerName';"
                         (keyup)="searchAccount($event?.target?.value)" (keydown)="detectKey($event)"
                         [(ngModel)]="debtorAcc.name"
@@ -67,17 +56,6 @@
                 </div>
             </div>
             <!-- /party acc name -->
-
-            <!-- operating cost acc only -->
-            <!-- No need for purchase ledger, as discussed with alok
-    <div class="mx-300 clearfix form-inline mrB">
-    <div class="form-group">
-        <label>Purchase Ledger:<sup>*</sup></label> <input type="text" #debtor placeholder="Purchase account" (focus)="accountType = 'debitor'" [(ngModel)]="debtorAcc.name" (focus)="getFlattenGrpAccounts('purchases', true)" (blur)="showAccountList=false;selectedInput=debtor"
-            class="form-control max-height28 appearance_none" style="max-width:200px" />
-    </div>
-</div> -->
-            <!-- /operating cost acc only -->
-
 
             <!--  purchase as INVOICE -->
             <div class="clearfix mrT1" [style.min-height.vh]="61">
@@ -106,7 +84,7 @@
                                                 (ngModelChange)="searchStock($event);changeStock(i, transaction?.inventory?.stock?.name)"
                                                 [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}"
                                                 (focus)="onPartyAccBlur();onStockFocus($event, i)"
-                                                (blur)="onStockItemBlur($event, qty);filterByText = ''"
+                                                (blur)="onStockItemBlur($event, qty);"
                                                 (keydown)="detectKey($event)" />
                                         </td>
                                         <td>
@@ -198,7 +176,7 @@
                 <div class="col-xs-4">
                     <div class="form-group">
                         <label>Narration:</label>
-                        <textarea #narrationBox onReturn id="invoice-narration" class="form-control appearance_none"
+                        <textarea #narrationBox onReturn id="invoice-narration" class="form-control appearance-none"
                             name="narration" (keyup.enter)="openConfirmBox(submitButton)"
                             (keydown.tab)="openConfirmBox(submitButton)" [(ngModel)]="data.description" resize="false"
                             rows="6"></textarea>

@@ -1,3 +1,5 @@
+@import '../../../../assets/css/color.scss';
+
 .mx-300 {
     max-width: 300px;
 }
@@ -6,12 +8,12 @@
     max-width: 350px;
 }
 
-.appearance_none:focus {
-    background: #ccc !important;
+.appearance-none:focus {
+    background: $very-light-gray !important;
 }
 
-.appearance_none {
-    background: #e5e5e5 !important;
+.appearance-none {
+    background: $whisper-color !important;
 }
 
 .max-height28 {
@@ -22,8 +24,6 @@
     font-size: 14px;
     padding: 2px 7px !important;
     text-transform: capitalize;
-    /* height: 24px;
-  line-height: 24px; */
 }
 
 .lh24 {

@@ -1,15 +1,16 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { Store, select } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
 import { CompanyActions } from '../../actions/company.actions';
 import { SidebarAction } from '../../actions/inventory/sidebar.actions';
-import { AppState } from '../../store';
 import { StateDetailsRequest } from '../../models/api-models/Company';
+import { AppState } from '../../store';
 import { TallyModuleService } from '../tally-service';
 
+/** List of functional keys used in JV module shortcut */
 const FUNCTIONAL_KEYS = {
     F2: 'F2',
     F4: 'F4',
@@ -20,12 +21,14 @@ const FUNCTIONAL_KEYS = {
     F9: 'F9'
 };
 
+/** Key codes for combination of shortcut with Alt+V, Alt+I and other shortcuts */
 const CODES = {
     KEY_C: ['KeyC'],
     KEY_I: ['AltLeft', 'KeyI'],
     KEY_V: ['KeyV'],
 };
 
+/** Keys of keyboard event for Enter and Tab button */
 export const KEYS = {
     ENTER: 'Enter',
     TAB: 'Tab'
@@ -42,6 +45,7 @@ export const VOUCHERS = {
     DEBIT_NOTE: 'Debit note'
 }
 
+/** Voucher page shortcut mapping */
 export const PAGE_SHORTCUT_MAPPING = [
     {
         keyCode: 115, // 'F4',
@@ -114,13 +118,13 @@ export const PAGE_SHORTCUT_MAPPING = [
     // }
 ];
 
+/** Pages which have Voucher and Invoice as options */
 export const PAGES_WITH_CHILD = ['Purchase', 'Sales', 'Credit note', 'Debit note'];
 
 @Component({
     templateUrl: './journal-voucher.component.html',
     styleUrls: ['./journal-voucher.component.scss']
 })
-
 export class JournalVoucherComponent implements OnInit, OnDestroy {
 
     public gridType: string = 'voucher';
@@ -136,20 +140,20 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /** @ignore */
     constructor(
         private store: Store<AppState>,
         private companyActions: CompanyActions,
         private tallyModuleService: TallyModuleService,
-        private _accountService: AccountService,
+        private accountService: AccountService,
         private sidebarAction: SidebarAction
     ) {
-        this.tallyModuleService.selectedPageInfo.subscribe((d) => {
-            if (d) {
-                this.gridType = d.gridType;
-                this.selectedPage = d.page;
+        this.tallyModuleService.selectedPageInfo.subscribe((data) => {
+            if (data) {
+                this.gridType = data.gridType;
+                this.selectedPage = data.page;
             }
         });
-
     }
 
     @HostListener('document:keydown', ['$event'])
@@ -224,9 +228,14 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Initializes the store listeners
+     *
+     * @memberof JournalVoucherComponent
+     */
     public ngOnInit(): void {
         let companyUniqueName = null;
-        this.store.pipe(select(appState => appState.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(appState => appState.session.companyUniqueName), take(1)).subscribe(company => companyUniqueName = company);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'journal-voucher';
@@ -235,7 +244,7 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(appState => appState.session.companyUniqueName), take(1)).subscribe(a => {
             if (a && a !== '') {
-                this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                this.accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data.status === 'success') {
                         this.flattenAccounts = data.body.results;
                         this.tallyModuleService.setFlattenAccounts(data.body.results);
@@ -251,14 +260,17 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
                 const systemDate = new Date();
                 this.currentDate = `${systemDate.getUTCFullYear()}-${systemDate.getUTCMonth()}-${systemDate.getUTCDate()}`;
             }
-        }, () => {
-
-        });
+        }, () => {});
 
         this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
     }
 
-    public ngOnDestroy() {
+    /**
+     * Unsubscribes from all the listeners
+     *
+     * @memberof JournalVoucherComponent
+     */
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
