@@ -1500,7 +1500,9 @@ td span {
                         background-color: $white !important;
                         z-index: 99;                
                         .sticky-header{
-                            width: calc(100% - 0px) !important;    
+                            max-width: 360px;
+                            margin: 0 auto;
+                            width: 100% !important;    
                             th.days-td{
                                 span{
                                     display: inline-block;
@@ -1520,6 +1522,9 @@ td span {
                     
                 }
                 .calendar-table{
+                    max-width: 360px;
+                    margin: 0 auto;
+                    width: 100%;
                     td{
                         span{
                             display: inline-block;
@@ -1657,7 +1662,6 @@ td span {
           }
     }
 }
-
 @media(max-height:767px){
     .drops-down-right{
         height: 470px;
