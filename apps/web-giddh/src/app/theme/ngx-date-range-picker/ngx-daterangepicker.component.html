@@ -169,9 +169,9 @@
                         <!-- month name and month dropdown -->
                         <!-- navigate to previous and next month buttons -->
                         <div class="prev-next-btn">
-                            <button (click)="goToPrevMonth()" [disabled]="goToPreviousMonthDisabled"
+                            <button (click)="goToPrevMonth()" [disabled]="!checkIfScrollToPreviousMonthAvailable()"
                                 class="prev available"></button>
-                            <button class="next available" [disabled]="goToNextMonthDisabled"
+                            <button class="next available" [disabled]="!checkIfScrollToNextMonthAvailable()"
                                 (click)="goToNextMonth()"></button>
                         </div>
                         <!-- navigate to previous and next month buttons -->

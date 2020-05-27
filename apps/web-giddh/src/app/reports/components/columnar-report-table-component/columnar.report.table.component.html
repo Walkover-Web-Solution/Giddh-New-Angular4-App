@@ -18,21 +18,29 @@
                         <!--Parent  Name -->
                         <td data-title="Parent Group"> {{ item.groupName}} </td>
                         <!--Opening balance  -->
-                        <td data-title="Opening Balance" *ngIf="(isShowClosingOpeningBalance$ | async)">
-                            {{columnarReportResponse?.openingBalance[item.accountUniqueName]?.type ==='DEBIT'? '-': ''}}{{ columnarReportResponse?.openingBalance[item.accountUniqueName]?.amount}}
+                        <td class="text-center" *ngIf="(isShowClosingOpeningBalance$ | async)">
+                            <span *ngIf="isCrDrChecked">{{(columnarReportResponse?.openingBalance[item.accountUniqueName]?.type ==='DEBIT' && columnarReportResponse?.openingBalance[item.accountUniqueName]?.amount >0)? '-': ''}} </span> {{ columnarReportResponse?.openingBalance[item.accountUniqueName]?.amount}}
+                            <span *ngIf="!isCrDrChecked && columnarReportResponse?.openingBalance[item.accountUniqueName]?.amount >0">{{columnarReportResponse?.openingBalance[item.accountUniqueName]?.type ==='DEBIT'? 'Dr': 'Cr'}}</span>
                         </td>
                         <!--Closing balance  -->
-                        <td data-title="Closing Balance" *ngIf="(isShowClosingOpeningBalance$ | async)">
-                            {{columnarReportResponse?.closingBalance[item.accountUniqueName]?.type ==='DEBIT'?'-':''}}{{columnarReportResponse?.closingBalance[item.accountUniqueName]?.amount}}
+                        <td class="text-center" *ngIf="(isShowClosingOpeningBalance$ | async)">
+                            <span *ngIf="isCrDrChecked && columnarReportResponse?.closingBalance[item.accountUniqueName]?.amount>0"> {{(columnarReportResponse?.closingBalance[item.accountUniqueName]?.type ==='DEBIT')?'-':''}} </span>{{columnarReportResponse?.closingBalance[item.accountUniqueName]?.amount}}
+                            <span *ngIf="!isCrDrChecked && columnarReportResponse?.closingBalance[item.accountUniqueName]?.amount>0">
+                            {{columnarReportResponse?.closingBalance[item.accountUniqueName]?.type
+                            ==='DEBIT'?'Dr':'Cr'}} </span>
                         </td>
                         <!--Grand  Total -->
-                        <td data-title="Grand Total">
-                            {{columnarReportResponse?.grandTotal[item.accountUniqueName]?.type ==='DEBIT'?'-':''}}{{columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount}}
+                        <td class="text-center">
+                            <span *ngIf="isCrDrChecked && columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount > 0"> {{(columnarReportResponse?.grandTotal[item.accountUniqueName]?.type ==='DEBIT')?'-':''}}</span> {{columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount}}
+                            <span *ngIf="!isCrDrChecked && columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount > 0">
+                             {{columnarReportResponse?.grandTotal[item.accountUniqueName]?.type
+                            ==='DEBIT'?'Dr':'Cr'}}</span>
                         </td>
                         <ng-container *ngFor="let months of columnarReportResponse.data;let inx2 = index;">
                             <!-- months data -->
-                            <td attr.data-title='{{months.monthName}}'>
-                                {{months?.accountsData[inx]?.monthlyBalance?.type ==='DEBIT'?'-':'' }}{{months.accountsData[inx]?.monthlyBalance?.amount}}
+                            <td class="text-center">
+                                <span *ngIf="isCrDrChecked && months?.accountsData[inx]?.monthlyBalance?.amount>0"> {{months?.accountsData[inx]?.monthlyBalance?.type ==='DEBIT'?'-':'' }}</span> {{months.accountsData[inx]?.monthlyBalance?.amount}}
+                                <span *ngIf="!isCrDrChecked && months?.accountsData[inx]?.monthlyBalance?.amount>0">{{months?.accountsData[inx]?.monthlyBalance?.type ==='DEBIT'?'Dr':'Cr' }}</span>
                             </td>
                         </ng-container>
                     </tr>
