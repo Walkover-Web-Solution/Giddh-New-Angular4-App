@@ -33,7 +33,7 @@ const CustomShortcode = [
 ];
 
 @Component({
-    selector: 'account-as-voucher',
+    selector: 'voucher-grid',
     templateUrl: './voucher-grid.component.html',
     styleUrls: ['../accounting.component.css'],
     animations: [
@@ -50,7 +50,7 @@ const CustomShortcode = [
     ]
 })
 
-export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
     @Input() public saveEntryOnCtrlA: boolean;
     @Input() public openDatePicker: boolean;
@@ -138,7 +138,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private fb: FormBuilder, public bsConfig: BsDatepickerConfig) {
 
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
-        
+
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
         this.requestObj.transactions = [];
         this._keyboardService.keyInformation.subscribe((key) => {
