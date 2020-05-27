@@ -342,7 +342,12 @@
                             <span class="icon-dashboard"></span>
                             <span class="label">{{menu.name}}</span>
                         </a>
-                        <a *ngIf="menu.uniqueName != '/pages/gstfiling' && menu.uniqueName != '/pages/vat-report' && menu.uniqueName != '/pages/all-modules'" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage && selectedPage.toLowerCase() == menu.name.toLowerCase()}" (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
+                        <a *ngIf="menu.uniqueName != '/pages/gstfiling' && menu.uniqueName != '/pages/vat-report' && menu.uniqueName != '/pages/all-modules' && menu.uniqueName != '/pages/journal-voucher'" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage && selectedPage.toLowerCase() == menu.name.toLowerCase()}" (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
+                            <span class="icon-dashboard"></span>
+                            <span class="label">{{menu.name}}</span>
+                        </a>
+                        <a *ngIf="menu.uniqueName == '/pages/journal-voucher'" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage && (selectedPage.toLowerCase() == menu.name.toLowerCase() || selectedPage.toLowerCase().includes(menu.name.toLowerCase()))}"
+                            (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
                             <span class="icon-dashboard"></span>
                             <span class="label">{{menu.name}}</span>
                         </a>
@@ -371,9 +376,9 @@
                                         </li>
                                         <li><a (click)="analyzeOtherMenus('contact/vendor', {tab: 'vendor', tabIndex: 0})">Vendor</a>
                                         </li>
-                                        <li><a (click)="analyzeOtherMenus('accounting-voucher')">Journal Voucher</a>
-                                        </li>
-                                        <li><a (click)="analyzeOtherMenus('journal-voucher')">New Journal Voucher</a>
+                                        <!-- <li><a (click)="analyzeOtherMenus('accounting-voucher')">Journal Voucher</a>
+                                        </li> -->
+                                        <li><a (click)="analyzeOtherMenus('journal-voucher')">Journal Voucher *</a>
                                         </li>
                                         <li><a (click)="analyzeOtherMenus('daybook')">Daybook</a></li>
                                         <li><a

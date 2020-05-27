@@ -183,6 +183,55 @@ export class TallyModuleService {
         this.filteredAccounts.next(this.flattenAccounts.value);
     }
 
+    /**
+     * Updates all accounts list when a new account is added by checking its
+     * category
+     *
+     * @param {IFlattenAccountsResultItem} account Newly added account
+     * @memberof TallyModuleService
+     */
+    public updateFlattenAccounts(account: IFlattenAccountsResultItem): void {
+        let cashAccounts = [];
+        let purchaseAccounts = [];
+        let bankAccounts = [];
+        let taxAccounts = [];
+        let expenseAccounts = [];
+        let salesAccounts = [];
+        let cashAccount = account.parentGroups.find((pg) => pg.uniqueName === 'cash');
+        if (cashAccount) {
+            cashAccounts.push(account);
+        }
+        let purchaseAccount = account.parentGroups.find((pg) => pg.uniqueName === 'purchases' || pg.uniqueName === 'directexpenses');
+        if (purchaseAccount) {
+            purchaseAccounts.push(account);
+        }
+        let bankAccount = account.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts');
+        if (bankAccount) {
+            bankAccounts.push(account);
+        }
+        let taxAccount = account.parentGroups.find((pg) => pg.uniqueName === 'currentliabilities');
+        if (taxAccount) {
+            taxAccounts.push(account);
+        }
+        let expenseAccount = account.parentGroups.find((pg) => pg.uniqueName === 'indirectexpenses' || pg.uniqueName === 'operatingcost');
+        if (expenseAccount) {
+            expenseAccounts.push(account);
+        }
+        // pg.uniqueName === 'income'
+        let salesAccount = account.parentGroups.find((pg) => pg.uniqueName === 'revenuefromoperations' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities');
+        if (salesAccount) {
+            salesAccounts.push(account);
+        }
+        this.cashAccounts.next([this.cashAccounts.value, ...cashAccounts]);
+        this.purchaseAccounts.next([...this.purchaseAccounts.value, ...purchaseAccounts]);
+        this.bankAccounts.next([...this.bankAccounts.value, ...bankAccounts]);
+        this.taxAccounts.next([...this.taxAccounts.value, ...taxAccounts]);
+        this.expenseAccounts.next([...this.expenseAccounts.value, ...expenseAccounts]);
+        this.salesAccounts.next([...this.salesAccounts.value, ...salesAccounts]);
+        this.flattenAccounts.next([...this.flattenAccounts.value, account]);
+        this.filteredAccounts.next(this.flattenAccounts.value);
+    }
+
     public getAccounts() {
         let accounts = [];
         if (this.selectedPageInfo.value) {

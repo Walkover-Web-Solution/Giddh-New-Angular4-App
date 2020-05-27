@@ -2,7 +2,6 @@ import { InventoryModule } from './../inventory/inventory.module';
 import { TallyModuleService } from './tally-service';
 import { SharedModule } from './../shared/shared.module';
 import { AccountingRoutingModule } from './accounting-routing.module';
-import { AccountingComponent } from './accounting.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -25,10 +24,10 @@ import { JournalVoucherComponent } from './journal-voucher/journal-voucher.compo
 import { AccountAsInvoiceComponent } from './journal-voucher/invoice/invoice.component';
 import { AccountAsVoucherComponent } from './journal-voucher/voucher/voucher.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic-aside-menu-account.module';
 
 @NgModule({
     declarations: [
-        AccountingComponent,
         JournalVoucherComponent,
         AccountAsInvoiceComponent,
         AccountingSidebarComponent,
@@ -58,7 +57,8 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
         VirtualScrollModule,
         ElementViewChildModule,
         QuickAccountModule.forRoot(),
-        InventoryModule
+        InventoryModule,
+        GenericAsideMenuAccountModule
     ],
 })
 export class AccountingModule {

@@ -2,12 +2,11 @@
     <div class="col-xs-12 bg_wrap">
         <div class="row">
             <div class="clearfix pdT2">
-                <span class="btn label isActive voucher-name">{{requestObj.voucherType}}</span>
-                <div class="pull-right text-right mrB1" (clickOutside)="showFromDatePicker = false;">
-                    <input type="text" onReturn #dateField name="entryDate"
+                <div class="day-date pull-right text-right mrB1" (clickOutside)="showFromDatePicker = false;">
+                    <span>{{ displayDay }},</span>
+                    <input size="10" type="text" onReturn #dateField name="entryDate"
                         [(ngModel)]="journalDate" (blur)="dateEntered();" readonly placeholder="DD-MM-YYYY"
-                        class="form-control text-right voucher-date-field" (focus)="onDateFieldFocus()" bsDatepicker [bsConfig]="bsConfig" />
-                    {{ displayDay }}
+                        class="form-control text-right voucher-date-field" (focus)="onDateFieldFocus()" bsDatepicker (bsValueChange)="handleVoucherDateChange()" [bsConfig]="bsConfig" />
                 </div>
             </div>
             <div class="clearfix" [style.min-height.vh]="61">
@@ -174,28 +173,21 @@
         <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList"
             [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)"
             [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'"
-            [notFoundLink]="selectedField === 'account'" (noResultsClicked)="showQuickAccountModal()" [multiple]="false"
+            [notFoundLink]="selectedField === 'account'" (noResultsClicked)="addNewAccount()" [multiple]="false"
             [ItemHeight]="33" (noOptionsFound)="onNoAccountFound($event)"></accounting-virtual-list>
     </div>
 
 </div>
 
-<!--quick account popup -->
-<div bsModal #quickAccountModal="bs-modal" [config]="{ backdrop: false }" class="modal" role="dialog">
-    <div class="modal-dialog modal-sm" style="width: 298px">
-        <div class="modal-content">
-            <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
-        </div>
-    </div>
-</div>
+<generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"  [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}" [selectedGrpUniqueName]="categoryOfAccounts" *ngIf="accountAsideMenuState === 'in'" [selectedAccountUniqueName]="null" (onShortcutPress)="toggleAccountAsidePane()" (addEvent)="addNewSidebarAccount($event)" (updateEvent)="updateSidebarAccount($event)"></generic-aside-menu-account>
 
 
 <!-- Cheque Detail Modal-->
-<div bsModal #chequeEntryModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
+<div bsModal #chequeEntryModal="bs-modal" [config]="{ backdrop: 'static' }" class="cheque-popup modal" role="dialog">
     <div class="modal-dialog modal-sm" style="width: 298px">
         <div class="modal-content">
             <form autocomplete="off" novalidate name="chequeDetailForm" [formGroup]="chequeDetailForm"
-                class="newAccounform" (submit)="onSubmitChequeDetail()">
+                class="new-account-form" (submit)="onSubmitChequeDetail()">
                 <div class="modal-header">
                     <h3 class="modal-title">Cheque details (if any)</h3>
                 </div>
@@ -204,11 +196,11 @@
                         <label>Cheque Number:</label>
                         <input #chequeNumberInput class="form-control" required formControlName="chequeNumber"
                             name="account" type="text" placeholder="Cheque Number"
-                            (keydown)="onCheckNumberFieldKeyDown($event, 'chqNumber')">
+                            (keydown)="onCheckNumberFieldKeyDown($event, 'chqNumber', chequeClearanceDateInput)">
                     </div>
-                    <div class="clearfix mrT1">
+                    <div class="clearfix mrT1 check-clearance-date">
                         <label>Cheque Clearance Date:</label>
-                        <input #chequeClearanceDateInput readonly bsDatepicker [bsConfig]="bsConfig" class="form-control"
+                        <input #chequeClearanceDateInput="bsDatepicker" readonly bsDatepicker [bsConfig]="bsConfig" class="form-control"
                             formControlName="chequeClearanceDate" name="account" type="text"
                             placeholder="Cheque Clearance Date"
                             (keydown)="onCheckNumberFieldKeyDown($event, 'chqDate')">

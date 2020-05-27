@@ -28,7 +28,7 @@ export const ROUTES = [
     { path: 'daybook', redirectTo: 'pages/daybook', pathMatch: 'full' },
     { path: 'purchase', redirectTo: 'pages/purchase-management', pathMatch: 'full' },
     { path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full' },
-    { path: 'accounting-voucher', redirectTo: 'pages/accounting', pathMatch: 'full' },
+    // { path: 'accounting-voucher', redirectTo: 'pages/accounting', pathMatch: 'full' },
     { path: 'journal-voucher', redirectTo: 'pages/journal-voucher', pathMatch: 'full' },
     { path: 'contact', redirectTo: 'pages/contact' },
     { path: 'aging-report', redirectTo: 'pages/aging-report', pathMatch: 'full' },
@@ -76,11 +76,11 @@ export const ROUTES = [
                 loadChildren: './manufacturing/manufacturing.module#ManufacturingModule',
                 data: { preload: true }
             },
-            {
-                path: 'accounting-voucher',
-                loadChildren: './accounting/accounting.module#AccountingModule',
-                data: { preload: true }
-            },
+            // {
+            //     path: 'accounting-voucher',
+            //     loadChildren: './accounting/accounting.module#AccountingModule',
+            //     data: { preload: true }
+            // },
             {
                 path: 'journal-voucher',
                 loadChildren: './accounting/accounting.module#AccountingModule',
