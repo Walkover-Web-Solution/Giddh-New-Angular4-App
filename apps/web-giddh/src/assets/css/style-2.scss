@@ -9008,6 +9008,11 @@ ngx-daterangepicker-material {
 .date-field{
     flex-direction: column;
 }
+:host
+    ::ng-deep
+perfect-scrollbar.hide-horizontal-scroll.ranges-perfect-scrollbar > .ps > .ps-overlay .ps-indicator-top {
+    background: transparent !important;
+ } 
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9532,7 +9537,13 @@ ngx-daterangepicker-material {
             left: 0;
             top: 0;
         }
+        .button-wrapper{
+            z-index: 9994;
+        }
     } 
+    .hide-scroll-body:last-child .modal{
+        z-index: 9993;
+    }
 }
 @media (max-width: 575px) {
     .daterangepicker.ltr .ranges {

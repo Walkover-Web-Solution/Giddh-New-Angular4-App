@@ -219,7 +219,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public invalidEndDate: string = "";
     public currentFinancialYearUniqueName: string = "";
     public isOnScrollActive: boolean = false;
-
+    public imgPath: string = '';
     constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>) {
         this.choosedDate = new EventEmitter();
         this.rangeClicked = new EventEmitter();
@@ -262,6 +262,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     }
 
     ngOnInit(): void {
+        this.imgPath = (isElectron||isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.store.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             let currentCompanyUniqueName = "";
 
