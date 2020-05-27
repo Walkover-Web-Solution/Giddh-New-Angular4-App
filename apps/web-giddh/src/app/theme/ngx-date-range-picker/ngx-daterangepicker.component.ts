@@ -330,15 +330,15 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.rangeDropdownShow = -1;
             this.dropdownShow = false;
 
-            if (document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material").length > 0) {
-                if (response) {
-                    document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("show-calendar");
-                    document.querySelector('body').classList.add('hide-scroll-body')
-                } else if (!this.isInlineDateFieldsShowing) {
-                    this.initialCalendarMonths = true;
-                    document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
-                }
-            }
+            // if (document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material").length > 0) {
+            //     if (response) {
+            //         document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("show-calendar");
+            //         document.querySelector('body').classList.add('hide-scroll-body')
+            //     } else if (!this.isInlineDateFieldsShowing) {
+            //         this.initialCalendarMonths = true;
+            //         document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
+            //     }
+            // }
         });
 
         this.modalService.onShow.subscribe(response => {
@@ -349,6 +349,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.isInlineDateFieldsShowing = false;
             this.invalidInlineStartDate = "";
             this.invalidInlineEndDate = "";
+            this.invalidInlineDate = "";
         });
 
         this.scrollSubject$.pipe(debounceTime(25)).subscribe((response) => {
@@ -392,6 +393,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public openModalWithClass(template: TemplateRef<any>): void {
         this.inlineStartDate = _.cloneDeep(this.startDate);
         this.inlineEndDate = _.cloneDeep(this.endDate);
+        
 
         this.viewOnlyStartDate = this.inlineStartDate.format(GIDDH_DATE_FORMAT);
         this.viewOnlyEndDate = this.inlineEndDate.format(GIDDH_DATE_FORMAT);
@@ -1977,7 +1979,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 this.invalidInlineEndDate = "Invalid date";
             }
         }
-
     }
 
     /**
@@ -1991,7 +1992,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.endDate = this.inlineEndDate;
             this.modalRef.hide();
             this.clickApply();
-            this.allowBodyScroll();
         } else {
             this.invalidInlineDate = "Start date must not be greater than End date";
         }
@@ -2004,7 +2004,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      */
     public openMobileDatepicker(): void {
         this.openMobileDatepickerPopup = true;
-        this.restrictBodyScroll();
         document.querySelector('body').classList.add('hide-scroll-body');
     }
 
@@ -2192,17 +2191,15 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
     @HostListener('window:resize', ['$event'])
     windowResize(event) {
-        if (this.isShown) {
-            this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate });
-            this.hide();
-        }
+        this.isMobileScreen = false;
+        this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate });
+        this.hide();
     }
 
     @HostListener('window:orientationchange', ['$event'])
     onOrientationChange(event) {
-        if (this.isShown) {
-            this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate });
-            this.hide();
-        }
+        this.isMobileScreen = false;
+        this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate });
+        this.hide();
     }
 }

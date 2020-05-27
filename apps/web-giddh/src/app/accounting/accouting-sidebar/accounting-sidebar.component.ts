@@ -7,7 +7,7 @@ import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 @Component({
     selector: 'accounting-sidebar',
     templateUrl: './accounting-sidebar.component.html',
-    styleUrls: ['./accounting-sidebar.component.css']
+    styleUrls: ['./accounting-sidebar.component.scss']
 })
 
 export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy {
@@ -30,7 +30,7 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
     public ngOnInit() {
         this._tallyModuleService.flattenAccounts.pipe(take(2)).subscribe((accounts) => {
             if (accounts) {
-                this.setSelectedPage('Journal', 'voucher', 'purchases');
+                this.setSelectedPage('Contra', 'voucher', 'purchases');
             }
         });
 
