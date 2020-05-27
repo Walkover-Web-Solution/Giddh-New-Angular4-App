@@ -23,7 +23,7 @@
                             <div class="plans-box">
                                 <p class="bold">Total Plans: {{totalMultipleCompanyPlans}}</p>
                                 <div class="your-account">
-                                    <div class="inner-your-account">
+                                    <div class="inner-your-account" [ngClass]="{'active': showPlans === 'multiple'}">
                                         <h3 class="mb-2">{{defaultMultipleCompanyPlan?.planDetails?.name}}</h3>
                                         <div class="d-flex align-items-center justify-content-between plans-head-top mb-3">
                                             <div class="clearfix">
@@ -48,7 +48,6 @@
                                                                     class="icon-cross"></i></a>
                                                             <p class="bold mb-1">Transactions Limit</p>
                                                             <p class="font-12 text-gray mb-1">{{transactionLimitTooltipContent}}</p>
-                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -68,7 +67,6 @@
                                                                     class="icon-cross"></i></a>
                                                             <p class="bold mb-1">Unlimited Users</p>
                                                             <p class="font-12 text-gray mb-1">{{unlimitedUsersTooltipContent}}</p>
-                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -86,7 +84,6 @@
                                                                     class="icon-cross"></i></a>
                                                             <p class="bold mb-1">Unlimited Customers/Vendors</p>
                                                             <p class="font-12 text-gray mb-1">{{unlimitedCustomersVendorsTooltipContent}}</p>
-                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -104,7 +101,6 @@
                                                                     class="icon-cross"></i></a>
                                                             <p class="bold mb-1">Desktop/Mobile App</p>
                                                             <p class="font-12 text-gray mb-1">{{desktopMobileAppTooltipContent}}</p>
-                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -134,7 +130,7 @@
                             <div class="plans-box">
                                 <p class="bold">Total Plans: {{totalSingleCompanyPlans}}</p>
                                 <div class="your-account">
-                                    <div class="inner-your-account popular">
+                                    <div class="inner-your-account popular" [ngClass]="{'active': showPlans === 'single'}">
                                         <img src="assets/images/popular.svg" class="popular-icon" alt="">
                                         <h3 class="mb-2">{{defaultSingleCompanyPlan?.planDetails?.name}}
                                             <!-- <small class="font-12 unbold text-blue">(Current
@@ -154,7 +150,7 @@
                                         </div>
                                         <div class="clearfix">
                                             <ul class="plan-list">
-                                                <li>Transactions Limit: {{defaultMultipleCompanyPlan?.planDetails?.transactionLimit | number}}
+                                                <li>Transactions Limit: {{defaultSingleCompanyPlan?.planDetails?.transactionLimit | number}}
                                                     <div class="btn-group pull-right" dropdown placement="bottom right">
                                                         <button id="button-alignment" dropdownToggle type="button"
                                                             class="dropdown-toggle close"
@@ -168,11 +164,10 @@
                                                                     class="icon-cross"></i></a>
                                                             <p class="bold mb-1">Transactions Limit</p>
                                                             <p class="font-12 text-gray mb-1">{{transactionLimitTooltipContent}}</p>
-                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
-                                                <li>Total Companies: {{defaultMultipleCompanyPlan?.planDetails?.companiesLimit | number}}
+                                                <li>Total Companies: {{defaultSingleCompanyPlan?.planDetails?.companiesLimit | number}}
                                                 </li>
                                                 <li>Unlimited Users
                                                     <div class="btn-group pull-right" dropdown placement="bottom right">
@@ -188,7 +183,6 @@
                                                                     class="icon-cross"></i></a>
                                                             <p class="bold mb-1">Unlimited Users</p>
                                                             <p class="font-12 text-gray mb-1">{{unlimitedUsersTooltipContent}}</p>
-                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -206,7 +200,6 @@
                                                                     class="icon-cross"></i></a>
                                                             <p class="bold mb-1">Unlimited Customers/Vendors</p>
                                                             <p class="font-12 text-gray mb-1">{{unlimitedCustomersVendorsTooltipContent}}</p>
-                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -224,7 +217,6 @@
                                                                     class="icon-cross"></i></a>
                                                             <p class="bold mb-1">Desktop/Mobile App</p>
                                                             <p class="font-12 text-gray mb-1">{{desktopMobileAppTooltipContent}}</p>
-                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -253,7 +245,7 @@
                             <div class="plans-box">
                                 <p class="bold">Total Plans: {{totalFreePlans}}</p>
                                 <div class="your-account">
-                                    <div class="inner-your-account">
+                                    <div class="inner-your-account" [ngClass]="{'active': showPlans === 'free'}">
                                         <h3 class="mb-2">{{defaultFreePlan?.planDetails?.name}}</h3>
                                         <div class="mb-3">
                                             <div class="mb-3 plans-head-top">
@@ -263,7 +255,7 @@
                                         </div>
                                         <div class="clearfix">
                                             <ul class="plan-list">
-                                                <li>Transactions Limit: {{defaultMultipleCompanyPlan?.planDetails?.transactionLimit | number}}
+                                                <li>Transactions Limit: {{defaultFreePlan?.planDetails?.transactionLimit | number}}
                                                     <div class="btn-group pull-right" dropdown placement="bottom right">
                                                         <button id="button-alignment" dropdownToggle type="button"
                                                             class="dropdown-toggle close"
@@ -277,11 +269,10 @@
                                                                     class="icon-cross"></i></a>
                                                             <p class="bold mb-1">Transactions Limit</p>
                                                             <p class="font-12 text-gray mb-1">{{transactionLimitTooltipContent}}</p>
-                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
-                                                <li>Total Companies: {{defaultMultipleCompanyPlan?.planDetails?.companiesLimit | number}}
+                                                <li>Total Companies: {{defaultFreePlan?.planDetails?.companiesLimit | number}}
                                                 </li>
                                                 <li>Unlimited Users
                                                     <div class="btn-group pull-right" dropdown placement="bottom right">
@@ -297,7 +288,6 @@
                                                                     class="icon-cross"></i></a>
                                                             <p class="bold mb-1">Unlimited Users</p>
                                                             <p class="font-12 text-gray mb-1">{{unlimitedUsersTooltipContent}}</p>
-                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -315,7 +305,6 @@
                                                                     class="icon-cross"></i></a>
                                                             <p class="bold mb-1">Unlimited Customers/Vendors</p>
                                                             <p class="font-12 text-gray mb-1">{{unlimitedCustomersVendorsTooltipContent}}</p>
-                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -333,7 +322,6 @@
                                                                     class="icon-cross"></i></a>
                                                             <p class="bold mb-1">Desktop/Mobile App</p>
                                                             <p class="font-12 text-gray mb-1">{{desktopMobileAppTooltipContent}}</p>
-                                                            <p><a href="javascript:void(0)" class="color-primary bold">More Details</a></p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -343,7 +331,7 @@
                                             <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)"
                                                     class="color-primary font-14">Check all features</a></p>
                                             <button class="btn success-btn btn-round" [disabled]="showPlans === 'multiple' || showPlans === 'single'" (click)="choosePlan(defaultFreePlan);"
-                                                [ladda]="this.isUpdateCompanyInProgress$ | async">Start Trial</button>
+                                                [ladda]="this.isUpdateCompanyInProgress$ | async">Buy Plan</button>
                                             <p class="font-12">*prices excluding Tax</p>
                                         </div>
                                     </div>
@@ -699,7 +687,8 @@
     <perfect-scrollbar>
         <div class="relative see-all-features">
             <div class="col-sm-6 col-md-3" *ngFor="let item of subscriptionPlans; let i=index" [hidden]="!(!item.subscriptionId && item?.planDetails?.uniqueName !== defaultTrialPlan && ((showPlans === 'multiple' && item?.planDetails?.amount && item?.planDetails?.companiesLimit > 1) || (showPlans === 'single' && item?.planDetails?.amount && item?.planDetails?.companiesLimit === 1) || (showPlans === 'free' && !item?.planDetails?.amount)))">
-                <div class="inner-your-account" *ngIf="!item.subscriptionId && item?.planDetails?.uniqueName !== defaultTrialPlan && ((showPlans === 'multiple' && item?.planDetails?.amount && item?.planDetails?.companiesLimit > 1) || (showPlans === 'single' && item?.planDetails?.amount && item?.planDetails?.companiesLimit === 1) || (showPlans === 'free' && !item?.planDetails?.amount))">
+                <div class="inner-your-account" *ngIf="!item.subscriptionId && item?.planDetails?.uniqueName !== defaultTrialPlan && ((showPlans === 'multiple' && item?.planDetails?.amount && item?.planDetails?.companiesLimit > 1) || (showPlans === 'single' && item?.planDetails?.amount && item?.planDetails?.companiesLimit === 1) || (showPlans === 'free' && !item?.planDetails?.amount))" [ngClass]="{'popular': item?.planDetails?.uniqueName === defaultPopularPlan}">
+                    <img src="assets/images/popular.svg" class="popular-icon" *ngIf="item?.planDetails?.uniqueName === defaultPopularPlan">
                     <h3 class="mb-2">{{item?.planDetails?.name}}</h3>
                     <div class="mb-3">
                         <h3 class="bold font-22 mb-05">{{item?.planDetails?.amount | number}} /-</h3>
@@ -718,7 +707,7 @@
                         <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)"
                                 class="color-primary font-14">Check all features</a></p>
                         <button class="btn success-btn btn-round" *ngIf="!item?.planDetails?.amount" (click)="choosePlan(item);"
-                            [ladda]="this.isUpdateCompanyInProgress$ | async">Start Trial</button>
+                            [ladda]="this.isUpdateCompanyInProgress$ | async">Buy Plan</button>
                         <button class="btn success-btn btn-round" *ngIf="item?.planDetails?.amount" (click)="buyPlanClicked(item)"
                             [ladda]="this.isUpdateCompanyInProgress$ | async">Buy Plan</button>
                     </div>

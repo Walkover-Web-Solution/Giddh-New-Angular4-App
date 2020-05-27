@@ -22,7 +22,7 @@ import { CommonActions } from '../actions/common.actions';
 import { CompanyActions } from '../actions/company.actions';
 import { GeneralActions } from '../actions/general/general.actions';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { OnBoardingType, DEFAULT_TRIAL_PLAN } from '../app.constant';
+import { OnBoardingType, DEFAULT_SIGNUP_TRIAL_PLAN } from '../app.constant';
 import * as _ from '../lodash-optimized';
 import { CountryRequest, OnboardingFormRequest } from '../models/api-models/Common';
 import { Addresses, CompanyCreateRequest, StatesRequest, CreateCompanyUsersPlan, SubscriptionRequest } from '../models/api-models/Company';
@@ -127,7 +127,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         planDetails: {
             countries: [],
             name: "",
-            uniqueName: DEFAULT_TRIAL_PLAN,
+            uniqueName: DEFAULT_SIGNUP_TRIAL_PLAN,
             createdAt: "",
             amount: 0,
             ratePerExtraTransaction: 0,

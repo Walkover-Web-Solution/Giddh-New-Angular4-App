@@ -12,7 +12,7 @@ import { SettingsProfileActions } from '../../../actions/settings/profile/settin
 import { CompanyActions } from '../../../actions/company.actions';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
-import { DEFAULT_TRIAL_PLAN } from '../../../app.constant';
+import { DEFAULT_SIGNUP_TRIAL_PLAN, DEFAULT_POPULAR_PLAN } from '../../../app.constant';
 
 @Component({
     selector: 'subscriptions-plans',
@@ -52,7 +52,8 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public unlimitedUsersTooltipContent : string = "No limit on the number of users you can add for any role.";
     public unlimitedCustomersVendorsTooltipContent : string = "No limit on the number of customers or vendors you add in your books.";
     public desktopMobileAppTooltipContent : string = "Other than cloud access, install Giddh desktop app for Mac and Windows; mobile app for Android and iPhone.";
-    public defaultTrialPlan : string = DEFAULT_TRIAL_PLAN;
+    public defaultTrialPlan : string = DEFAULT_SIGNUP_TRIAL_PLAN;
+    public defaultPopularPlan : string = DEFAULT_POPULAR_PLAN;
 
     constructor(private modalService: BsModalService, private _generalService: GeneralService,
         private _authenticationService: AuthenticationService, private store: Store<AppState>,
@@ -83,7 +84,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                                         this.totalMultipleCompanyPlans++;
                                     } else if(item.planDetails.amount && item.planDetails.companiesLimit === 1) {
 
-                                        if(!this.defaultSingleCompanyPlan) {
+                                        if(!this.defaultSingleCompanyPlan && item.planDetails.uniqueName === this.defaultPopularPlan) {
                                             this.defaultSingleCompanyPlan = item;
                                         }
 
