@@ -330,15 +330,15 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.rangeDropdownShow = -1;
             this.dropdownShow = false;
 
-            if (document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material").length > 0) {
-                if (response) {
-                    document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("show-calendar");
-                    document.querySelector('body').classList.add('hide-scroll-body')
-                } else if (!this.isInlineDateFieldsShowing) {
-                    this.initialCalendarMonths = true;
-                    document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
-                }
-            }
+            // if (document.getElementsByTagName("ngx-daterangepicker-material") && document.getElementsByTagName("ngx-daterangepicker-material").length > 0) {
+            //     if (response) {
+            //         document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("show-calendar");
+            //         document.querySelector('body').classList.add('hide-scroll-body')
+            //     } else if (!this.isInlineDateFieldsShowing) {
+            //         this.initialCalendarMonths = true;
+            //         document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.remove("show-calendar");
+            //     }
+            // }
         });
 
         this.modalService.onShow.subscribe(response => {
@@ -1977,7 +1977,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 this.invalidInlineEndDate = "Invalid date";
             }
         }
-
     }
 
     /**
@@ -1991,7 +1990,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.endDate = this.inlineEndDate;
             this.modalRef.hide();
             this.clickApply();
-            this.allowBodyScroll();
         } else {
             this.invalidInlineDate = "Start date must not be greater than End date";
         }
@@ -2004,7 +2002,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      */
     public openMobileDatepicker(): void {
         this.openMobileDatepickerPopup = true;
-        this.restrictBodyScroll();
         document.querySelector('body').classList.add('hide-scroll-body');
     }
 
