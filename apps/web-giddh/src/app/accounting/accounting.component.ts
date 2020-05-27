@@ -189,7 +189,7 @@ export class AccountingComponent implements OnInit, OnDestroy {
         this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'accounting-voucher';
+        stateDetailsRequest.lastState = 'journal-voucher';
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
