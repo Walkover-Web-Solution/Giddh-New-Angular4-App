@@ -108,12 +108,12 @@
                 </div>
                 <span class="error-msg" *ngIf="invalidInlineDate">{{invalidInlineDate}}</span>
                 <div class="button-wrapper">
-                    <a (click)="allowBodyScroll(); modalRef.hide()" class="mr-2 cursor-pointer">Cancel</a>
+                    <a (click)="modalRef.hide()" class="mr-2 cursor-pointer">Cancel</a>
                     <a (click)="applyInlineDates()" class="cursor-pointer">Ok</a>
                 </div>
             </div>
         </ng-template>
-        <div class="calender-container-wrapper" (mouseenter)="restrictBodyScroll()" (mouseleave)="allowBodyScroll()">
+        <div class="calender-container-wrapper">
             <div class="calender-body" (mouseout)="hoveredDate = null">
                 <div class="upper-part">
                     <!-- start date/ end date inputs container -->
