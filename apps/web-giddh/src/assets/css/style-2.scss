@@ -800,7 +800,7 @@ input {
 
 .company-list button.btn-link {
     font-size: 13px;
-    color: #1e67c8;
+    color: $chetwode-blue !important;
     display: block;
     padding: 7px 10px;
     display: block;
@@ -809,8 +809,8 @@ input {
 }
 
 .company-list button.btn-link:hover {
-    color: $white;
-    background: $midnight-express;
+    color: $chetwode-blue;
+    background: $lavender-light;
     text-decoration: none;
 }
 
@@ -9431,7 +9431,10 @@ perfect-scrollbar.hide-horizontal-scroll.ranges-perfect-scrollbar > .ps > .ps-ov
         left: 0;
     }
     .daterangepicker.dropdown-menu.show-calendar {
-        z-index: 1 !important;
+        z-index: 9 !important;
+    }
+    .daterangepicker.dropdown-menu.opensright.show-calendar {
+        z-index: 9992 !important;
     }
     .mt-xs-60 {
         margin-top: 60px;
