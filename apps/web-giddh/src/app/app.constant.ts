@@ -179,7 +179,7 @@ if(PRODUCTION_ENV || isElectron || isCordova) {
 export let DEFAULT_POPULAR_PLAN = "";
 
 if(PRODUCTION_ENV || isElectron || isCordova) {
-    DEFAULT_POPULAR_PLAN = "e6v1566224240273";
+    DEFAULT_POPULAR_PLAN = "oak";
 } else {
-    DEFAULT_POPULAR_PLAN = "ebd1584343144492";
+    DEFAULT_POPULAR_PLAN = "D1";
 }

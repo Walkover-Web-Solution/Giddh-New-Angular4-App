@@ -84,7 +84,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                                         this.totalMultipleCompanyPlans++;
                                     } else if (item.planDetails.amount && item.planDetails.companiesLimit === 1) {
 
-                                        if (!this.defaultSingleCompanyPlan && item.planDetails.uniqueName === this.defaultPopularPlan) {
+                                        if (!this.defaultSingleCompanyPlan && item.planDetails.name === this.defaultPopularPlan) {
                                             this.defaultSingleCompanyPlan = item;
                                         }
 

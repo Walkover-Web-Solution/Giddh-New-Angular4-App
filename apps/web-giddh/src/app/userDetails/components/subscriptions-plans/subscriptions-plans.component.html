@@ -389,9 +389,9 @@
                 [hidden]="!(!item.subscriptionId && item?.planDetails?.uniqueName !== defaultTrialPlan && ((showPlans === 'multiple' && item?.planDetails?.amount && item?.planDetails?.companiesLimit > 1) || (showPlans === 'single' && item?.planDetails?.amount && item?.planDetails?.companiesLimit === 1) || (showPlans === 'free' && !item?.planDetails?.amount)))">
                 <div class="inner-your-account"
                     *ngIf="!item.subscriptionId && item?.planDetails?.uniqueName !== defaultTrialPlan && ((showPlans === 'multiple' && item?.planDetails?.amount && item?.planDetails?.companiesLimit > 1) || (showPlans === 'single' && item?.planDetails?.amount && item?.planDetails?.companiesLimit === 1) || (showPlans === 'free' && !item?.planDetails?.amount))"
-                    [ngClass]="{'popular': item?.planDetails?.uniqueName === defaultPopularPlan}">
+                    [ngClass]="{'popular': item?.planDetails?.name === defaultPopularPlan}">
                     <img src="assets/images/popular.svg" class="popular-icon"
-                        *ngIf="item?.planDetails?.uniqueName === defaultPopularPlan">
+                        *ngIf="item?.planDetails?.name === defaultPopularPlan">
                     <h3 class="mb-2">{{item?.planDetails?.name}}</h3>
                     <div class="mb-3">
                         <h3 class="bold font-22 mb-05">{{item?.planDetails?.amount | number}} /-</h3>
