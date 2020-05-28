@@ -166,3 +166,20 @@ export const VAT_SUPPORTED_COUNTRIES = [
 ];
 
 export const API_POSTMAN_DOC_URL='https://documenter.getpostman.com/view/117343/S1Zw8WF1?version=latest';
+
+/* This plan unique name will be used as a default plan while creating new company/branch */
+export let DEFAULT_SIGNUP_TRIAL_PLAN = "";
+
+if(PRODUCTION_ENV || isElectron || isCordova) {
+    DEFAULT_SIGNUP_TRIAL_PLAN = "e6v1566224240273";
+} else {
+    DEFAULT_SIGNUP_TRIAL_PLAN = "4z01581500278547";
+}
+
+export let DEFAULT_POPULAR_PLAN = "";
+
+if(PRODUCTION_ENV || isElectron || isCordova) {
+    DEFAULT_POPULAR_PLAN = "oak";
+} else {
+    DEFAULT_POPULAR_PLAN = "D1";
+}

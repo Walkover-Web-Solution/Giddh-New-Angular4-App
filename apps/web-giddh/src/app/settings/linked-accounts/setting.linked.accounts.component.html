@@ -1,5 +1,5 @@
 <div class="box clearfix">
-    <h1 class="section_head pdT0">Add Bank Account</h1>
+    <h1 class="section-head pdT0">Add Bank Account</h1>
     <div>
         <button (click)="connectBank()" class="btn btn-primary">Connect Bank</button>
     </div>
@@ -30,7 +30,7 @@
 <div class="box clearfix mrT2" *ngIf='ebankAccounts && ebankAccounts.length'>
     <div class="">
         <!-- <button class="btn btn-primary btn-sm pull-right" (click)="onRefreshAccounts()">Refresh</button> -->
-        <h1 class="section_head pdT0">Added Accounts</h1>
+        <h1 class="section-head pdT0">Added Accounts</h1>
         <div class="mt-1">
             <!-- ================= saltedge accounts =================
       <section *ngFor="let acc of ebankAccounts; let accIdx = index" class="clearfix bank-account" [ngClass]="{'mrB4': accIdx != ebankAccounts.length-1 }">
