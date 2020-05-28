@@ -1,16 +1,24 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
-	selector: 'activity-log-sidebar',
-	styleUrls: ['./activity-log-sidebar.component.scss'],
-	templateUrl: './activity-log-sidebar.component.html'
+    selector: 'activity-log-sidebar',
+    styleUrls: ['./activity-log-sidebar.component.scss'],
+    templateUrl: './activity-log-sidebar.component.html'
 })
 
 export class ActiveLogSidebarComponent implements OnInit {
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
 
-	constructor() {
+    constructor() {
+
     }
-    public ngOnInit() {
+
+    /**
+     * Initializes the component
+     *
+     * @memberof ActiveLogSidebarComponent
+     */
+    public ngOnInit(): void {
+
     }
 }

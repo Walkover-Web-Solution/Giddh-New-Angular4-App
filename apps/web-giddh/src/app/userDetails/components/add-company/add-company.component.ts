@@ -12,12 +12,19 @@ import { SettingsProfileActions } from '../../../actions/settings/profile/settin
 })
 
 export class AddCompanyComponent implements OnInit {
+    /* This will emit true/false if added or not */
     @Output() public addCompany = new EventEmitter<boolean>();
+    /* This will accept active company data */
     @Input() public activeCompany: any;
+    /* This will accept all associated company data */
     @Input() public allAssociatedCompanies: any[] = [];
+    /* This will contain all active company data based on criteria */
     public associatedCompanies: any[] = [];
+    /* This will contain list of all active company data which we will show in dropdown */
     public associatedCompaniesOption: IOption[] = [];
+    /* This will contain selected company uniquename */
     public selectedCompany: any = '';
+    /* This will hold plan data to assign to company */
     public subscriptionRequestObj: SubscriptionRequest = {
         planUniqueName: '',
         subscriptionId: '',
@@ -34,7 +41,7 @@ export class AddCompanyComponent implements OnInit {
      *
      * @memberof AddCompanyComponent
      */
-    public ngOnInit() {
+    public ngOnInit(): void {
         if (this.allAssociatedCompanies && this.allAssociatedCompanies.length > 0) {
             this.allAssociatedCompanies.forEach(company => {
                 // country should be same and should not have same plan
@@ -51,7 +58,7 @@ export class AddCompanyComponent implements OnInit {
      *
      * @memberof AddCompanyComponent
      */
-    public addCompanyInNewPlan() {
+    public addCompanyInNewPlan(): void {
         this.subscriptionRequestObj = {
             planUniqueName: '',
             subscriptionId: this.activeCompany.subscription.subscriptionId,
@@ -77,7 +84,7 @@ export class AddCompanyComponent implements OnInit {
      *
      * @memberof AddCompanyComponent
      */
-    public closePopup() {
+    public closePopup(): void {
         this.addCompany.emit(false);
     }
 }

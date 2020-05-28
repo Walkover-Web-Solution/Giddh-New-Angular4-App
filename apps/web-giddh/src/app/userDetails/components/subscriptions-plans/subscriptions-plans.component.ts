@@ -41,18 +41,31 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     @Output() public isSubscriptionPlanShow = new EventEmitter<boolean>();
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     modalRef: BsModalRef;
+    /* This will contain the type of plans we have to show */
     public showPlans: any = '';
+    /* This will contain the number of plans with multiple companies */
     public totalMultipleCompanyPlans: number = 0;
+    /* This will contain the number of plans with single company */
     public totalSingleCompanyPlans: number = 0;
+    /* This will contain the number of plans with free plan */
     public totalFreePlans: number = 0;
+    /* This will contain the default plans of multiple companies */
     public defaultMultipleCompanyPlan: any;
+    /* This will contain the default plans of single companies */
     public defaultSingleCompanyPlan: any;
+    /* This will contain the default plans of free companies */
     public defaultFreePlan: any;
+    /* This will contain the tooltip content of transaction limit */
     public transactionLimitTooltipContent: string = "It is the maximum number of transactions (each contains a debit entry and a credit entry) allowed in a plan. Beyond this, charges apply (0.10 INR/transaction).";
+    /* This will contain the tooltip content of unlimited users */
     public unlimitedUsersTooltipContent: string = "No limit on the number of users you can add for any role.";
+    /* This will contain the tooltip content of unlimited customers */
     public unlimitedCustomersVendorsTooltipContent: string = "No limit on the number of customers or vendors you add in your books.";
+    /* This will contain the tooltip content of desktop and mobile app */
     public desktopMobileAppTooltipContent: string = "Other than cloud access, install Giddh desktop app for Mac and Windows; mobile app for Android and iPhone.";
+    /* This will contain the plan unique name of default trial plan */
     public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
+    /* This will contain the plan name of popular plan */
     public defaultPopularPlan: string = DEFAULT_POPULAR_PLAN;
 
     constructor(private modalService: BsModalService, private _generalService: GeneralService,

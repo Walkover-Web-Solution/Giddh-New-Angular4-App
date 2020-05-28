@@ -301,6 +301,12 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         }
     }
 
+    /**
+     * This will update the profile
+     *
+     * @param {*} obj
+     * @memberof SubscriptionsComponent
+     */
     public patchProfile(obj): void {
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
     }
