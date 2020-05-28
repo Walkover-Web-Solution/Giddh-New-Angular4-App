@@ -126,7 +126,7 @@
                     <div class="select-date-range" [ngClass]="{'mb-3':invalidStartDate || invalidEndDate}">
                         <div class="relative">
                             <input [ngClass]="{'invalid-date-input':invalidStartDate}" placeholder="start date" #startDateElement [value]="startDateString"
-                                (change)="setStartDate($event.target.value)" (click)="ActiveDate =0"
+                                (change)="setStartDate($event.target.value)" (focus)="ActiveDate =0"
                                 [class]="ActiveDate ===0 ?ActiveSelectedDateClass :''">
                             <span *ngIf="invalidStartDate" class="invalid-date error-msg">{{invalidStartDate}}</span>
                         </div>
@@ -135,7 +135,7 @@
                         </span>
                         <div class="relative">
                             <input  [ngClass]="{'invalid-date-input':invalidEndDate}"  placeholder="end date" #endDateElement [value]="endDateString"
-                                (change)="setEndDate($event.target.value)" (click)="ActiveDate =1"
+                                (change)="setEndDate($event.target.value)" (focus)="ActiveDate =1"
                                 [class]="ActiveDate ===1 ?ActiveSelectedDateClass :''">
                             <span *ngIf="invalidEndDate"  class="invalid-date error-msg">{{invalidEndDate}}</span>   
                         </div>
