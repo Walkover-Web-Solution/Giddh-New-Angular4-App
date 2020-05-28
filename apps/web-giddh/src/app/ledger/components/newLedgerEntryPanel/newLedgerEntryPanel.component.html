@@ -56,11 +56,11 @@
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
                                 [mask]="inputMaskFormat" [customDecimalPlaces]="4"
-                                (ngModelChange)="changePrice($event)" name=""
+                                (ngModelChange)="changePrice($event)" name="unitPrice"
                                 class="form-control text-right" />
                             <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-                                {{ currentTxn?.convertedRate | giddhCurrency: 4}}
+                                {{ currentTxn?.convertedRate | giddhCurrency: ratePrecision}}
                             </p>
                         </td>
 

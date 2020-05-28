@@ -13,6 +13,7 @@ import { AccountResponse } from '../../../models/api-models/Account';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { RATE_FIELD_PRECISION } from '../../../app.constant';
 
 export class UpdateLedgerVm {
     public flatternAccountList: IFlattenAccountsResultItem[] = [];
@@ -74,6 +75,8 @@ export class UpdateLedgerVm {
     public advanceReceiptAmount: number = 0;
     /** To track compund total change for update ledger advance adjustment */
     public compundTotalObserver = new BehaviorSubject(null);
+    /** Rate should have precision up to 4 digits for better calculation */
+    public ratePrecision = RATE_FIELD_PRECISION;
 
     constructor() {
         this.voucherTypeList = [{
@@ -278,8 +281,8 @@ export class UpdateLedgerVm {
         this.generatePanelAmount();
 
         if (this.stockTrxEntry) {
-            this.stockTrxEntry.inventory.rate = giddhRoundOff((Number(this.totalAmount) / this.stockTrxEntry.inventory.quantity), 4);
-            this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate, 4);
+            this.stockTrxEntry.inventory.rate = giddhRoundOff((Number(this.totalAmount) / this.stockTrxEntry.inventory.quantity), this.ratePrecision);
+            this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate, this.ratePrecision);
         }
 
         if (this.discountComponent) {
@@ -443,8 +446,8 @@ export class UpdateLedgerVm {
             this.stockTrxEntry.amount = giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces);
             this.stockTrxEntry.convertedAmount = this.calculateConversionRate(this.stockTrxEntry.amount);
 
-            this.stockTrxEntry.inventory.rate = giddhRoundOff((Number(this.totalAmount) / this.stockTrxEntry.inventory.quantity), 4);
-            this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate, 4);
+            this.stockTrxEntry.inventory.rate = giddhRoundOff((Number(this.totalAmount) / this.stockTrxEntry.inventory.quantity), this.ratePrecision);
+            this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate, this.ratePrecision);
 
             // update every transaction conversion rates for multi-currency
             this.selectedLedger.transactions.filter(f => f.particular.uniqueName !== this.stockTrxEntry.particular.uniqueName).map(trx => {
@@ -525,9 +528,9 @@ export class UpdateLedgerVm {
             this.stockTrxEntry.amount = this.totalAmount;
             this.stockTrxEntry.convertedAmount = this.calculateConversionRate(this.stockTrxEntry.amount);
 
-            const rate = giddhRoundOff(Number(this.stockTrxEntry.amount / this.stockTrxEntry.inventory.quantity), 4);
+            const rate = giddhRoundOff(Number(this.stockTrxEntry.amount / this.stockTrxEntry.inventory.quantity), this.ratePrecision);
             this.stockTrxEntry.inventory.rate = rate;
-            this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate, 4);
+            this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate, this.ratePrecision);
             this.stockTrxEntry.isUpdated = true;
 
             if (this.discountComponent) {
@@ -668,7 +671,7 @@ export class UpdateLedgerVm {
      * @returns Converted rate
      * @memberof UpdateLedgerVm
      */
-    public calculateConversionRate(baseModel, customDecimalPaces?: number) {
+    public calculateConversionRate(baseModel: any, customDecimalPaces?: number): number {
         if (!baseModel || !this.selectedLedger.exchangeRate) {
             return 0;
         }

@@ -49,7 +49,15 @@ export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
     }
 
-    public transform(input: number, customDecimalPlaces?: number) {
+    /**
+     * Tranforms the current value as per the user preference
+     *
+     * @param {number} input Input value to be transformed
+     * @param {number} [customDecimalPlaces] Custom decimal places to be used
+     * @returns {string} Transformed value
+     * @memberof GiddhCurrencyPipe
+     */
+    public transform(input: number, customDecimalPlaces?: number): string {
         if (input == null) {
             return;
         }

@@ -18,7 +18,7 @@ import {
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
-import { Configuration, Subvoucher } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, Subvoucher, RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { BsDatepickerDirective, ModalDirective, PopoverDirective } from 'ngx-bootstrap';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
@@ -182,6 +182,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public activeAccountCountryName: string = '';
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
+    /** Rate should have precision up to 4 digits for better calculation */
+    public ratePrecision = RATE_FIELD_PRECISION;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -449,8 +451,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.currentTxn && this.currentTxn.selectedAccount) {
             if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
                 if (this.currentTxn.inventory.quantity) {
-                    this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), 4);
-                    this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, 4);
+                    this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
+                    this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, this.ratePrecision);
                 }
             }
 
@@ -478,8 +480,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public changePrice(val: string) {
         if (!this.isExchangeRateSwapped) {
-            this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), 4);
-            this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, 4);
+            this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.ratePrecision);
+            this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, this.ratePrecision);
 
             this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
             this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
@@ -571,8 +573,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         if (this.currentTxn.selectedAccount) {
             if (this.currentTxn.selectedAccount.stock) {
-                this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), 4);
-                this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, 4);
+                this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
+                this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, this.ratePrecision);
             }
         }
         this.calculateCompoundTotal();
@@ -1018,7 +1020,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @returns Converted rate
      * @memberof NewLedgerEntryPanelComponent
      */
-    public calculateConversionRate(baseModel, customDecimalPaces?: number) {
+    public calculateConversionRate(baseModel: any, customDecimalPaces?: number): number {
         if (!baseModel || !this.blankLedger.exchangeRate) {
             return 0;
         }
