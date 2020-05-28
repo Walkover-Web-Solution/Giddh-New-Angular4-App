@@ -48,18 +48,18 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public defaultMultipleCompanyPlan: any;
     public defaultSingleCompanyPlan: any;
     public defaultFreePlan: any;
-    public transactionLimitTooltipContent : string = "It is the maximum number of transactions (each contains a debit entry and a credit entry) allowed in a plan. Beyond this, charges apply (0.10 INR/transaction).";
-    public unlimitedUsersTooltipContent : string = "No limit on the number of users you can add for any role.";
-    public unlimitedCustomersVendorsTooltipContent : string = "No limit on the number of customers or vendors you add in your books.";
-    public desktopMobileAppTooltipContent : string = "Other than cloud access, install Giddh desktop app for Mac and Windows; mobile app for Android and iPhone.";
-    public defaultTrialPlan : string = DEFAULT_SIGNUP_TRIAL_PLAN;
-    public defaultPopularPlan : string = DEFAULT_POPULAR_PLAN;
+    public transactionLimitTooltipContent: string = "It is the maximum number of transactions (each contains a debit entry and a credit entry) allowed in a plan. Beyond this, charges apply (0.10 INR/transaction).";
+    public unlimitedUsersTooltipContent: string = "No limit on the number of users you can add for any role.";
+    public unlimitedCustomersVendorsTooltipContent: string = "No limit on the number of customers or vendors you add in your books.";
+    public desktopMobileAppTooltipContent: string = "Other than cloud access, install Giddh desktop app for Mac and Windows; mobile app for Android and iPhone.";
+    public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
+    public defaultPopularPlan: string = DEFAULT_POPULAR_PLAN;
 
     constructor(private modalService: BsModalService, private _generalService: GeneralService,
         private _authenticationService: AuthenticationService, private store: Store<AppState>,
         private _route: Router, private companyActions: CompanyActions,
         private settingsProfileActions: SettingsProfileActions) {
-        
+
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.select(profile => profile.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && !_.isEmpty(response)) {
@@ -71,27 +71,27 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                     this.totalSingleCompanyPlans = 0;
                     this.totalFreePlans = 0;
 
-                    if(this.subscriptionPlans && this.subscriptionPlans.length > 0) {
+                    if (this.subscriptionPlans && this.subscriptionPlans.length > 0) {
                         this.subscriptionPlans.forEach(item => {
-                            if(!item.subscriptionId && item.planDetails) {
-                                if(item.planDetails.uniqueName !== this.defaultTrialPlan) {
-                                    if(item.planDetails.amount && item.planDetails.companiesLimit > 1) {
+                            if (!item.subscriptionId && item.planDetails) {
+                                if (item.planDetails.uniqueName !== this.defaultTrialPlan) {
+                                    if (item.planDetails.amount && item.planDetails.companiesLimit > 1) {
 
-                                        if(!this.defaultMultipleCompanyPlan) {
+                                        if (!this.defaultMultipleCompanyPlan) {
                                             this.defaultMultipleCompanyPlan = item;
                                         }
 
                                         this.totalMultipleCompanyPlans++;
-                                    } else if(item.planDetails.amount && item.planDetails.companiesLimit === 1) {
+                                    } else if (item.planDetails.amount && item.planDetails.companiesLimit === 1) {
 
-                                        if(!this.defaultSingleCompanyPlan && item.planDetails.uniqueName === this.defaultPopularPlan) {
+                                        if (!this.defaultSingleCompanyPlan && item.planDetails.uniqueName === this.defaultPopularPlan) {
                                             this.defaultSingleCompanyPlan = item;
                                         }
 
                                         this.totalSingleCompanyPlans++;
-                                    } else if(!item.planDetails.amount) {
+                                    } else if (!item.planDetails.amount) {
 
-                                        if(!this.defaultFreePlan) {
+                                        if (!this.defaultFreePlan) {
                                             this.defaultFreePlan = item;
                                         }
 
@@ -120,7 +120,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             } else {
                 this.isSwitchPlanInProcess = false;
 
-                if(this.selectNewPlan) {
+                if (this.selectNewPlan) {
                     this.backClicked();
                     this.selectNewPlan = false;
                 }
@@ -139,7 +139,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     }
 
     public allFeaturesModal(AllFeatures: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(AllFeatures, { class: 'modal-lg all-features-modal'});
+        this.modalRef = this.modalService.show(AllFeatures, { class: 'modal-lg all-features-modal' });
     }
 
     public backClicked() {
@@ -200,7 +200,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionsPlansComponent
      */
     public showPlansByType(type: string): void {
-        if(!this.showPlans) {
+        if (!this.showPlans) {
             this.showPlans = type;
         }
     }
