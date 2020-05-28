@@ -189,7 +189,7 @@
                     </div>
                     <div class="col-xs-12 d-flex mrT5">
                         <button class="btn btn-primary" (click)="back(isbranch)">Back</button>
-                        <button type="submit " class="btn btn-pink" (click)="submit(welcomeForm)" [disabled]="welcomeForm.invalid || !isGstValid">
+                        <button type="submit" class="btn btn-pink" (click)="submit(welcomeForm)" [disabled]="welcomeForm.invalid || !isGstValid || isCreateCompanyInProgress">
                             {{itemOnBoardingDetails?.isOnBoardingInProgress ? itemOnBoardingDetails?.isItemUpdateInProgress ? 'Update ' +  itemOnBoardingDetails?.onBoardingType : 'Create ' + itemOnBoardingDetails?.onBoardingType : 'Submit'
                             }}
                         </button>

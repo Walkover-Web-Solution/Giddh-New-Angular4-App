@@ -205,6 +205,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Phone utility to check the validity of a contact number */
     private phoneUtility: any = googleLibPhoneNumber.PhoneNumberUtil.getInstance();
 
+    public isCreateCompanyInProgress: boolean = false;
+
     constructor(
         private store: Store<AppState>,
         private _router: Router,
@@ -352,6 +354,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public submit(welcomeForm: NgForm) {
         let isWelcomeFormValid: boolean = true;
         if (!this.isOnBoardingInProgress) {
+            this.isCreateCompanyInProgress = true;
             this.createNewCompanyPreparedObj.businessNature = this.companyProfileObj.businessNature ? this.companyProfileObj.businessNature : '';
             this.createNewCompanyPreparedObj.businessType = this.companyProfileObj.businessType ? this.companyProfileObj.businessType : '';
             this.createNewCompanyPreparedObj.address = this.companyProfileObj.address ? this.companyProfileObj.address : '';
@@ -375,6 +378,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }, 100);
             //this._router.navigate(['select-plan']);
         } else {
+            this.isCreateCompanyInProgress = false;
             if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
                 if (this.isItemUpdateInProgress) {
                     // Check for contact number validity only for update flow of warehouse as

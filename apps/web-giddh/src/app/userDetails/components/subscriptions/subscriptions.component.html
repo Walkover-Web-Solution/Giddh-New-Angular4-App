@@ -37,11 +37,11 @@
                     <div class="col-md-8 col-sm-8 col-xs-12">
                         <p class="bold font-14">{{activeCompany.subscription.planDetails.name}}</p>
                         <ul class="list-inline plan-list font-14">
-                            <li *ngIf="activeCompany.subscription.subscriptionId"><span>Subscription ID:</span> <span>{{activeCompany.subscription.subscriptionId}}</span> </li>
-                            <li><span>Assigned On:</span> <span>{{activeCompany.subscription.createdAt ? (formatDate(activeCompany.subscription.createdAt) | date: giddhDateFormatUI) : '-'}} </span></li>
-                            <li><span>Expiry Date:</span> <span>{{activeCompany.subscription.expiry ? (formatDate(activeCompany.subscription.expiry) | date: giddhDateFormatUI) : '-'}}</span> </li>
-                            <li><span>No. of companies:</span> <span>{{activeCompany.subscription.totalCompanies | number}}/{{activeCompany.subscription.planDetails.companiesLimit | number}}</span></li>
-                            <li><span>Transaction Limit:</span> <span>{{activeCompany.subscription.planDetails.transactionLimit ? (activeCompany.subscription.planDetails.transactionLimit | number) : '0'}}</span></li>
+                            <li *ngIf="activeCompany.subscription.subscriptionId"><span>Subscription ID: </span> <span>{{activeCompany.subscription.subscriptionId}}</span> </li>
+                            <li><span>Assigned On: </span> <span>{{activeCompany.subscription.createdAt ? (formatDate(activeCompany.subscription.createdAt) | date: giddhDateFormatUI) : '-'}} </span></li>
+                            <li><span>Expiry Date: </span> <span>{{activeCompany.subscription.expiry ? (formatDate(activeCompany.subscription.expiry) | date: giddhDateFormatUI) : '-'}}</span> </li>
+                            <li><span>No. of companies: </span> <span>{{activeCompany.subscription.totalCompanies | number}}/{{activeCompany.subscription.planDetails.companiesLimit | number}}</span></li>
+                            <li><span>Transaction Limit: </span> <span>{{activeCompany.subscription.planDetails.transactionLimit ? (activeCompany.subscription.planDetails.transactionLimit | number) : '0'}}</span></li>
                         </ul>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left trial-plan-state">
@@ -120,7 +120,7 @@
                                             </tr>
 
                                             <tr>
-                                                <th> Subscription Price</th>
+                                                <th>Subscription Price</th>
                                                 <td>{{seletedUserPlans?.planDetails?.amount | number}}</td>
                                             </tr>
                                             <tr>
@@ -133,7 +133,7 @@
                                                 <td>{{seletedUserPlans?.planDetails?.transactionLimit | number}}</td>
                                             </tr>
                                             <tr>
-                                                <th> Validity</th>
+                                                <th>Validity</th>
                                                 <td>{{seletedUserPlans?.planDetails?.duration}}
                                                     {{seletedUserPlans?.planDetails?.durationUnit}}</td>
                                             </tr>
@@ -212,7 +212,7 @@
                                 </div>
                             </div>
                             <div class="clearfix associated-companies-list">
-                                <div class="mt-1 mb-1 pl-2 pr-1 search-company-here">
+                                <div class="mt-1 mb-1 pl-2 pr-1 search-company-here" *ngIf="subscriptions">
                                     <div class="form-group custom-input-search">
                                         <i class="icon-search"></i>
                                         <input type="search" class="form-control" [(ngModel)]="searchString" (ngModelChange)="filterCompanyList($event)" placeholder="Search Company here">
@@ -340,10 +340,10 @@
                     <div class="col-md-8 col-sm-8 col-xs-12">
                         <p class="bold font-14">{{item?.planDetails?.name}}</p>
                         <ul class="list-inline plan-list font-14">
-                            <li *ngIf="item.subscriptionId"><span>Subscription ID:</span> <span> {{item.subscriptionId}}</span> </li>
-                            <li><span>Expiry Date:</span><span>{{item.expiry ? (formatDate(item.expiry) | date: giddhDateFormatUI) : '-'}} </span></li>
-                            <li><span>No. of companies:</span> <span>{{item?.totalCompanies | number}}/{{item?.planDetails?.companiesLimit | number}}</span></li>
-                            <li><span>Transaction Limit:</span> <span>{{item?.planDetails?.transactionLimit ? (item?.planDetails?.transactionLimit | number) : '0'}}</span></li>
+                            <li *ngIf="item.subscriptionId"><span>Subscription ID: </span> <span> {{item.subscriptionId}}</span> </li>
+                            <li><span>Expiry Date: </span><span>{{item.expiry ? (formatDate(item.expiry) | date: giddhDateFormatUI) : '-'}} </span></li>
+                            <li><span>No. of companies: </span> <span>{{item?.totalCompanies | number}}/{{item?.planDetails?.companiesLimit | number}}</span></li>
+                            <li><span>Transaction Limit: </span> <span>{{item?.planDetails?.transactionLimit ? (item?.planDetails?.transactionLimit | number) : '0'}}</span></li>
                         </ul>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left trial-plan-state">

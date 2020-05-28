@@ -1,7 +1,7 @@
-import { takeUntil, take } from 'rxjs/operators';
+import { takeUntil, take, debounceTime } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, AfterViewInit, TemplateRef, ViewChild, ComponentFactoryResolver } from '@angular/core';
-import { ReplaySubject, Observable } from 'rxjs';
+import { ReplaySubject, Observable, Subject } from 'rxjs';
 import { AppState } from '../../../store/roots';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
 import { SubscriptionsActions } from '../../../actions/userSubscriptions/subscriptions.action';
@@ -62,6 +62,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     public showSubscribedPlansList: boolean = false;
     public selectedCompany: any;
     public allAssociatedCompanies: CompanyResponse[] = [];
+    public searchAssociatedCompaniesSubject$: Subject<any> = new Subject();
 
     constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions) {
         this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
@@ -111,6 +112,18 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
             if (val.showPlans) {
                 this.isPlanShow = true;
             }
+        });
+
+        this.searchAssociatedCompaniesSubject$.pipe(debounceTime(500)).subscribe((term) => {
+            this.companyListForFilter = [];
+            
+            this.allAssociatedCompanies.forEach((company) => {
+                if (company.name.toLowerCase().includes(term.toLowerCase())) {
+                    this.companyListForFilter.push(company);
+                }
+            });
+
+            this.sortAssociatedCompanies();
         });
     }
 
@@ -300,20 +313,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
      * @memberof SubscriptionsComponent
      */
     public filterCompanyList(event): void {
-        let companies: CompanyResponse[] = [];
-        this.companies$.pipe(take(1)).subscribe(cmps => companies = cmps);
-
-        this.allAssociatedCompanies = companies;
-
-        this.companyListForFilter = companies.filter((cmp) => {
-            if (!cmp.nameAlias) {
-                return cmp.name.toLowerCase().includes(event.toLowerCase());
-            } else {
-                return cmp.name.toLowerCase().includes(event.toLowerCase()) || cmp.nameAlias.toLowerCase().includes(event.toLowerCase());
-            }
-        });
-
-        this.sortAssociatedCompanies();
+        this.searchAssociatedCompaniesSubject$.next(event);
     }
 
     /**
@@ -326,7 +326,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         this.subscriptions = [];
 
         this.allSubscriptions.forEach(item => {
-            if(item.planDetails && item.planDetails.name  && item.planDetails.name.toLowerCase().includes(event.toLowerCase())) {
+            if (item.planDetails && item.planDetails.name && item.planDetails.name.toLowerCase().includes(event.toLowerCase())) {
                 this.subscriptions.push(item);
             }
         });
@@ -339,7 +339,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
      * @memberof SubscriptionsComponent
      */
     public addOrMoveCompanyCallback(event): void {
-        if(event === true) {
+        if (event === true) {
             this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
         }
         this.modalRef.hide();
@@ -356,7 +356,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         let loop = 0;
         let activeCompanyIndex = -1;
         this.companyListForFilter.forEach(company => {
-            if(this.activeCompany && this.activeCompany.uniqueName === company.uniqueName) {
+            if (this.activeCompany && this.activeCompany.uniqueName === company.uniqueName) {
                 activeCompanyIndex = loop;
             }
             loop++;
