@@ -191,6 +191,12 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         }
     }
 
+    /**
+     * This will open the activity log popup
+     *
+     * @param {*} [event]
+     * @memberof SubscriptionsComponent
+     */
     public toggleActivityLogAsidePane(event?): void {
         if (event) {
             event.preventDefault();
@@ -199,12 +205,23 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         this.toggleBodyClass();
     }
 
+    /**
+     * This will toggle the company details popup
+     *
+     * @param {*} company
+     * @memberof SubscriptionsComponent
+     */
     public toggleCompanyDetailsAsidePane(company): void {
         this.selectedCompany = company;
         this.companyDetailsAsideMenuState = this.companyDetailsAsideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
     }
 
+    /**
+     * This will toggle the class in body
+     *
+     * @memberof SubscriptionsComponent
+     */
     public toggleBodyClass() {
         if (this.activityLogAsideMenuState === 'in') {
             document.querySelector('body').classList.add('fixed');
@@ -219,19 +236,43 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         }
     }
 
+    /**
+     * This will open the deactive company popup
+     *
+     * @param {TemplateRef<any>} MoveCompany
+     * @memberof SubscriptionsComponent
+     */
     public openModal(MoveCompany: TemplateRef<any>) {
         this.modalRef = this.modalService.show(MoveCompany);
     }
 
+    /**
+     * This will open the add company popup
+     *
+     * @param {TemplateRef<any>} AddCompany
+     * @memberof SubscriptionsComponent
+     */
     public openAddCompanyModal(AddCompany: TemplateRef<any>) {
         this.modalRef = this.modalService.show(AddCompany);
     }
 
+    /**
+     * This will open the move company popup
+     *
+     * @param {TemplateRef<any>} deactivateCompany
+     * @param {*} company
+     * @memberof SubscriptionsComponent
+     */
     public openModalMove(deactivateCompany: TemplateRef<any>, company: any) {
         this.selectedCompany = company;
         this.modalRef = this.modalService.show(deactivateCompany);
     }
 
+    /**
+     * This will renew the subscription automatically
+     *
+     * @memberof SubscriptionsComponent
+     */
     public renewPlan(): void {
         if (this.seletedUserPlans && this.seletedUserPlans.planDetails && this.seletedUserPlans.planDetails.amount > 0) {
 

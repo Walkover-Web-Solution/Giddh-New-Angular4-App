@@ -130,18 +130,21 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy() { }
 
-    public openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template);
-    }
-
-    public openModalTwo(modalTwo: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(modalTwo);
-    }
-
+    /**
+     * This will open the all features popup
+     *
+     * @param {TemplateRef<any>} AllFeatures
+     * @memberof SubscriptionsPlansComponent
+     */
     public allFeaturesModal(AllFeatures: TemplateRef<any>) {
         this.modalRef = this.modalService.show(AllFeatures, { class: 'modal-lg all-features-modal' });
     }
 
+    /**
+     * This will take the user back to last page
+     *
+     * @memberof SubscriptionsPlansComponent
+     */
     public backClicked() {
         this.isSubscriptionPlanShow.emit(true);
     }
@@ -205,10 +208,11 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         }
     }
 
-    public toggleDisplay(): void {
-        this.isShow = !this.isShow;
-    }
-
+    /**
+     * This is callback for all features popup
+     *
+     * @memberof SubscriptionsPlansComponent
+     */
     public closeFeaturesModal(): void {
         this.modalRef.hide();
     }
