@@ -52,6 +52,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     /** True, if request for show report  */
     public isShowColumnarReport: boolean = false;
     public isMobileScreen: boolean = true;
+    public isBalanceTypeAsSign: boolean = false
     public datePickerOptions: any = {
         hideOnEsc: true,
         // parentEl: '#dateRangePickerParent',
@@ -103,6 +104,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     };
     constructor(public settingsFinancialYearService: SettingsFinancialYearService,
          private store: Store<AppState>, private toaster: ToasterService, 
+         
          private ledgerService: LedgerService, private generalService: GeneralService,private breakPointObservar: BreakpointObserver) {
         this.exportRequest.fileType = 'xls';
         this.exportRequest.balanceTypeAsSign = false;
@@ -217,6 +219,17 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 }
             });
         }
+    }
+
+    /**
+     * To balance type sign changed in +/- to Cr/Dr
+     *
+     * @param {*} event
+     * @memberof ColumnarReportComponent
+     */
+    public onBalanceTypeAsSignChanged(event) {
+        this.isBalanceTypeAsSign = event;
+        this.exportRequest.balanceTypeAsSig = event;
     }
 
     /**
@@ -376,5 +389,6 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.selectActiveFinancialYear();
         this.columnarReportResponse = null;
         this.exportRequest.balanceTypeAsSign = false;
+        this.isBalanceTypeAsSign = false;
     }
 }

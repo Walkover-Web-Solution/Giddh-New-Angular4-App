@@ -73,7 +73,7 @@
     <div *ngIf="columnarReportResponse" class="back-btn text-center pr-1 mt-1 mb-1">
     <button class="btn btn-default" (click)="clearFilter()"> <span class="icon-cross"></span>Clear Filter</button>
 </div> -->
-<columnar-report-table-component [columnarReportResponse]="columnarReportResponse"></columnar-report-table-component>
+<columnar-report-table-component [columnarReportResponse]="columnarReportResponse" [isBalanceTypeAsSign]="isBalanceTypeAsSign"></columnar-report-table-component>
 <div class="paginationWrapper" *ngIf="columnarReportResponse && columnarReportResponse?.totalPages > 1">
     <pagination [totalItems]="columnarReportResponse.totalItems" [(ngModel)]="columnarReportResponse.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" [itemsPerPage]="paginationCount" (pageChanged)="pageChanged($event)"></pagination>
 </div>
