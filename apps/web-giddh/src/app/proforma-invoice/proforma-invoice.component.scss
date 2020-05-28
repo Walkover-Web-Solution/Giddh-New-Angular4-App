@@ -1594,7 +1594,14 @@ span.eligible-ITC {
         font-size: 10px;
     }
 }
-
+.deposit-payment-mode{
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    label{
+        padding-bottom: 0;
+    }
+}
 
 /* resposnvie */
 

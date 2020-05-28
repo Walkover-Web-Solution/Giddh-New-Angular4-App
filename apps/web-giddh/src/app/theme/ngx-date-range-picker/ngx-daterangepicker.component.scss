@@ -250,7 +250,6 @@ $input-height: 3rem !default;
     th.month.drp-animate {
         font-size: 12px;
         text-align: left;
-
         color:$nero;
         font-weight: 600;
         .year-name {
@@ -323,9 +322,6 @@ $input-height: 3rem !default;
 
     td {
         margin: 0.25em 0;
-        opacity: 0.8;
-        transition: background-color 0.2s ease;
-        transform: scale(1);
         &.off {
             &,
             &.in-range,
@@ -771,11 +767,13 @@ $input-height: 3rem !default;
         }
     }
 }
+:host
+    ::ng-deep
+        perfect-scrollbar.hide-horizontal-scroll.ranges-perfect-scrollbar >
+         .ps > .ps-overlay .ps-indicator-top {
+            background: transparent !important;
+ } 
 
-perfect-scrollbar.hide-horizontal-scroll > .ps.ps--active-x > .ps__rail-x{
-    display: none !important;
-   
-}
 .md-drppicker td.in-range.in-range-start::before{
 border-radius:50% 0 0 50% !important;
 }
@@ -1500,7 +1498,9 @@ td span {
                         background-color: $white !important;
                         z-index: 99;                
                         .sticky-header{
-                            width: calc(100% - 0px) !important;    
+                            max-width: 360px;
+                            margin: 0 auto;
+                            width: 100% !important;    
                             th.days-td{
                                 span{
                                     display: inline-block;
@@ -1520,6 +1520,9 @@ td span {
                     
                 }
                 .calendar-table{
+                    max-width: 360px;
+                    margin: 0 auto;
+                    width: 100%;
                     td{
                         span{
                             display: inline-block;
@@ -1657,7 +1660,6 @@ td span {
           }
     }
 }
-
 @media(max-height:767px){
     .drops-down-right{
         height: 470px;
