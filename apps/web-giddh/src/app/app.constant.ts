@@ -167,6 +167,11 @@ export const VAT_SUPPORTED_COUNTRIES = [
 
 export const API_POSTMAN_DOC_URL='https://documenter.getpostman.com/view/117343/S1Zw8WF1?version=latest';
 
+/** Decimal point for rate field, irrespective of user profile preference
+ * will be displayed up to 4 decimal places
+ */
+export const RATE_FIELD_PRECISION = 4;
+
 /* This plan unique name will be used as a default plan while creating new company/branch */
 export let DEFAULT_SIGNUP_TRIAL_PLAN = "";
 
