@@ -35,7 +35,7 @@ export class MoveCompanyComponent implements OnInit {
      *
      * @memberof MoveCompanyComponent
      */
-    public ngOnInit() {
+    public ngOnInit(): void {
         if(this.subscriptions && this.subscriptions.length > 0) {
             this.subscriptions.forEach(plan => {
                 if(plan.subscriptionId && plan.planDetails && plan.planDetails.companiesLimit > plan.totalCompanies && this.moveSelectedCompany && this.moveSelectedCompany.subscription && this.moveSelectedCompany.subscription.planDetails && this.moveSelectedCompany.subscription.planDetails.uniqueName !== plan.planDetails.uniqueName && this.availablePlans[plan.planDetails.uniqueName] === undefined && plan.planDetails.countries.includes(this.moveSelectedCompany.country)) {
@@ -56,7 +56,7 @@ export class MoveCompanyComponent implements OnInit {
      *
      * @memberof MoveCompanyComponent
      */
-    public moveCompanyInNewPlan() {
+    public moveCompanyInNewPlan(): void {
         this.subscriptionRequestObj = {
             planUniqueName: '',
             subscriptionId: this.availablePlans[this.selectedPlan].subscriptionId,
@@ -82,7 +82,7 @@ export class MoveCompanyComponent implements OnInit {
      *
      * @memberof MoveCompanyComponent
      */
-    public closePopup() {
+    public closePopup(): void {
         this.moveCompany.emit(false);
     }
 }
