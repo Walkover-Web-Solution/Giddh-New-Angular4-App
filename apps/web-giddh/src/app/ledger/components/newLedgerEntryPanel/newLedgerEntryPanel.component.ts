@@ -449,8 +449,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.currentTxn && this.currentTxn.selectedAccount) {
             if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
                 if (this.currentTxn.inventory.quantity) {
-                    this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
-                    this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate);
+                    this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), 4);
+                    this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, 4);
                 }
             }
 
@@ -478,8 +478,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public changePrice(val: string) {
         if (!this.isExchangeRateSwapped) {
-            this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.giddhBalanceDecimalPlaces);
-            this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate);
+            this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), 4);
+            this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, 4);
 
             this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
             this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
@@ -571,8 +571,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         if (this.currentTxn.selectedAccount) {
             if (this.currentTxn.selectedAccount.stock) {
-                this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
-                this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate);
+                this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), 4);
+                this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, 4);
             }
         }
         this.calculateCompoundTotal();
@@ -1010,11 +1010,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.calculateTotal();
     }
 
-    public calculateConversionRate(baseModel) {
+    /**
+     * Calculates conversion rate
+     *
+     * @param {*} baseModel Value to be converted
+     * @param {number} [customDecimalPaces] Optional custom decimal places (required for Rate as 4 digits are required for rate)
+     * @returns Converted rate
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public calculateConversionRate(baseModel, customDecimalPaces?: number) {
         if (!baseModel || !this.blankLedger.exchangeRate) {
             return 0;
         }
-        return giddhRoundOff(baseModel * Number(this.blankLedger.exchangeRate), this.giddhBalanceDecimalPlaces);
+        return giddhRoundOff(baseModel * Number(this.blankLedger.exchangeRate), (customDecimalPaces) ? customDecimalPaces : this.giddhBalanceDecimalPlaces);
     }
 
     /**

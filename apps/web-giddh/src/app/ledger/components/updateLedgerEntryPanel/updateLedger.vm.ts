@@ -278,8 +278,8 @@ export class UpdateLedgerVm {
         this.generatePanelAmount();
 
         if (this.stockTrxEntry) {
-            this.stockTrxEntry.inventory.rate = giddhRoundOff((Number(this.totalAmount) / this.stockTrxEntry.inventory.quantity), this.giddhBalanceDecimalPlaces);
-            this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate);
+            this.stockTrxEntry.inventory.rate = giddhRoundOff((Number(this.totalAmount) / this.stockTrxEntry.inventory.quantity), 4);
+            this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate, 4);
         }
 
         if (this.discountComponent) {
@@ -443,8 +443,8 @@ export class UpdateLedgerVm {
             this.stockTrxEntry.amount = giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces);
             this.stockTrxEntry.convertedAmount = this.calculateConversionRate(this.stockTrxEntry.amount);
 
-            this.stockTrxEntry.inventory.rate = giddhRoundOff((Number(this.totalAmount) / this.stockTrxEntry.inventory.quantity), this.giddhBalanceDecimalPlaces);
-            this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate);
+            this.stockTrxEntry.inventory.rate = giddhRoundOff((Number(this.totalAmount) / this.stockTrxEntry.inventory.quantity), 4);
+            this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate, 4);
 
             // update every transaction conversion rates for multi-currency
             this.selectedLedger.transactions.filter(f => f.particular.uniqueName !== this.stockTrxEntry.particular.uniqueName).map(trx => {
@@ -525,9 +525,9 @@ export class UpdateLedgerVm {
             this.stockTrxEntry.amount = this.totalAmount;
             this.stockTrxEntry.convertedAmount = this.calculateConversionRate(this.stockTrxEntry.amount);
 
-            const rate = giddhRoundOff(Number(this.stockTrxEntry.amount / this.stockTrxEntry.inventory.quantity), this.giddhBalanceDecimalPlaces);
+            const rate = giddhRoundOff(Number(this.stockTrxEntry.amount / this.stockTrxEntry.inventory.quantity), 4);
             this.stockTrxEntry.inventory.rate = rate;
-            this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate);
+            this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate, 4);
             this.stockTrxEntry.isUpdated = true;
 
             if (this.discountComponent) {
@@ -660,14 +660,22 @@ export class UpdateLedgerVm {
         this.discountArray = [];
     }
 
-    public calculateConversionRate(baseModel) {
+    /**
+     * Calculates conversion rate
+     *
+     * @param {*} baseModel Value to be converted
+     * @param {number} [customDecimalPaces] Optional custom decimal places (required for Rate as 4 digits are required for rate)
+     * @returns Converted rate
+     * @memberof UpdateLedgerVm
+     */
+    public calculateConversionRate(baseModel, customDecimalPaces?: number) {
         if (!baseModel || !this.selectedLedger.exchangeRate) {
             return 0;
         }
         if (this.selectedCurrencyForDisplay === 0) {
-            return giddhRoundOff(baseModel * this.selectedLedger.exchangeRate, this.giddhBalanceDecimalPlaces);
+            return giddhRoundOff(baseModel * this.selectedLedger.exchangeRate, (customDecimalPaces) ? customDecimalPaces : this.giddhBalanceDecimalPlaces);
         } else {
-            return giddhRoundOff(baseModel / this.selectedLedger.exchangeRate, this.giddhBalanceDecimalPlaces);
+            return giddhRoundOff(baseModel / this.selectedLedger.exchangeRate, (customDecimalPaces) ? customDecimalPaces : this.giddhBalanceDecimalPlaces);
         }
     }
 
