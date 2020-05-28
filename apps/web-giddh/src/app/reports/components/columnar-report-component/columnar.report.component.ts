@@ -51,8 +51,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public paginationCount: number = PAGINATION_LIMIT;
     /** True, if request for show report  */
     public isShowColumnarReport: boolean = false;
+    /** To check cr/dr or +/- checked */
+    public isBalanceTypeAsSign: boolean = false;
     public isMobileScreen: boolean = true;
-    public isBalanceTypeAsSign: boolean = false
     public datePickerOptions: any = {
         hideOnEsc: true,
         // parentEl: '#dateRangePickerParent',
@@ -102,10 +103,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         startDate: moment().subtract(30, 'days'),
         endDate: moment()
     };
-    constructor(public settingsFinancialYearService: SettingsFinancialYearService,
-         private store: Store<AppState>, private toaster: ToasterService, 
-         
-         private ledgerService: LedgerService, private generalService: GeneralService,private breakPointObservar: BreakpointObserver) {
+    constructor(public settingsFinancialYearService: SettingsFinancialYearService, private store: Store<AppState>, private toaster: ToasterService, private ledgerService: LedgerService, private generalService: GeneralService,private breakPointObservar: BreakpointObserver) {
         this.exportRequest.fileType = 'xls';
         this.exportRequest.balanceTypeAsSign = false;
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
@@ -146,6 +144,11 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.getColumnarRequestModel.count = this.paginationCount;
         this.columnarReportResponse = null;
         this.getFinancialYears();
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
     }
 
     /**
