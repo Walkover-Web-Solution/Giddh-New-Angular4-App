@@ -164,8 +164,8 @@ $greyClr: #6d6d6d;
         width: 5px;
     }
     textarea.form-control::-webkit-scrollbar-thumb {
-        background-color: darkgrey;
-        outline: 1px solid slategrey;
+        background-color: $gainsboro;
+        outline: 1px solid $gray;
         border-radius: 20px;
     }
     label {

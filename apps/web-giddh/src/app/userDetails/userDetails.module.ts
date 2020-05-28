@@ -19,6 +19,12 @@ import { UserDetailsCompanyComponent } from './components/company/user-details-c
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { SubscriptionsPlansComponent } from './components/subscriptions-plans/subscriptions-plans.component';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { CompanyDetailsSidebarComponent } from './components/company-details-sidebar/company-details-sidebar.component';
+import { ActiveLogSidebarComponent } from './components/activity-log/activity-log-sidebar.component';
+import { DeactivateCompanyComponent } from './components/deactivate-company/deactivate-company.component';
+import { MoveCompanyComponent } from './components/move-company/move-company.component';
+import { AllFeaturesComponent } from './components/all-features/all-features.component';
+import { AddCompanyComponent } from './components/add-company/add-company.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -33,7 +39,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         SubscriptionsComponent,
         UserDetailsPipe,
         UserDetailsCompanyComponent,
-        SubscriptionsPlansComponent
+        SubscriptionsPlansComponent,
+        CompanyDetailsSidebarComponent,
+        ActiveLogSidebarComponent,
+        DeactivateCompanyComponent,
+        MoveCompanyComponent,
+        AllFeaturesComponent,
+        AddCompanyComponent
     ],
     exports: [],
     imports: [
