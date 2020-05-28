@@ -21,6 +21,7 @@ export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChange
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Columnar report table response object */
     @Input() columnarReportResponse: any;
+    /** Columnar report table status of Cr/Dr to +/-  */
     @Input() isBalanceTypeAsSign: any;
     public isCrDrChecked: boolean = false;
     /** To check columnar report table's column name closing and opening will be the part of table or not */
