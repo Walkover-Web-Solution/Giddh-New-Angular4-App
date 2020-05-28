@@ -62,7 +62,6 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     public showSubscribedPlansList: boolean = false;
     public selectedCompany: any;
     public allAssociatedCompanies: CompanyResponse[] = [];
-    public searchAssociatedCompaniesSubject$: Subject<any> = new Subject();
 
     constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions) {
         this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
@@ -112,18 +111,6 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
             if (val.showPlans) {
                 this.isPlanShow = true;
             }
-        });
-
-        this.searchAssociatedCompaniesSubject$.pipe(debounceTime(500)).subscribe((term) => {
-            this.companyListForFilter = [];
-            
-            this.allAssociatedCompanies.forEach((company) => {
-                if (company.name.toLowerCase().includes(term.toLowerCase())) {
-                    this.companyListForFilter.push(company);
-                }
-            });
-
-            this.sortAssociatedCompanies();
         });
     }
 
@@ -350,11 +337,19 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     /**
      * This will filter the companies list
      *
-     * @param {*} event
+     * @param {*} term
      * @memberof SubscriptionsComponent
      */
-    public filterCompanyList(event): void {
-        this.searchAssociatedCompaniesSubject$.next(event);
+    public filterCompanyList(term): void {
+        this.companyListForFilter = [];
+            
+        this.allAssociatedCompanies.forEach((company) => {
+            if (company.name.toLowerCase().includes(term.toLowerCase())) {
+                this.companyListForFilter.push(company);
+            }
+        });
+
+        this.sortAssociatedCompanies();
     }
 
     /**
@@ -392,18 +387,20 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
      * @memberof SubscriptionsComponent
      */
     public sortAssociatedCompanies(): void {
-        this.companyListForFilter = this.companyListForFilter.sort((a, b) => a.name > b.name ? 1 : -1);
+        if(this.companyListForFilter && this.companyListForFilter.length > 0) {
+            this.companyListForFilter = _.orderBy(this.companyListForFilter, 'name');
 
-        let loop = 0;
-        let activeCompanyIndex = -1;
-        this.companyListForFilter.forEach(company => {
-            if (this.activeCompany && this.activeCompany.uniqueName === company.uniqueName) {
-                activeCompanyIndex = loop;
-            }
-            loop++;
-        });
+            let loop = 0;
+            let activeCompanyIndex = -1;
+            this.companyListForFilter.forEach(company => {
+                if (this.activeCompany && this.activeCompany.uniqueName === company.uniqueName) {
+                    activeCompanyIndex = loop;
+                }
+                loop++;
+            });
 
-        this.companyListForFilter = this.generalService.changeElementPositionInArray(this.companyListForFilter, activeCompanyIndex, 0);
+            this.companyListForFilter = this.generalService.changeElementPositionInArray(this.companyListForFilter, activeCompanyIndex, 0);
+        }
     }
 
     /**

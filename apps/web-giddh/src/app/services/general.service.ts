@@ -406,18 +406,6 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public changeElementPositionInArray(array, currentIndex, newIndex) {
-        while (currentIndex < 0) {
-            currentIndex += array.length;
-        }
-        while (newIndex < 0) {
-            newIndex += array.length;
-        }
-        if (newIndex >= array.length) {
-            var k = newIndex - array.length;
-            while ((k--) + 1) {
-                array.push(undefined);
-            }
-        }
         array.splice(newIndex, 0, array.splice(currentIndex, 1)[0]);
         return array;
     }
