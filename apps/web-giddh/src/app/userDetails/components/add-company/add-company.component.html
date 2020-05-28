@@ -2,7 +2,7 @@
     <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closePopup()">×</span>
     <h3>Add Company</h3>
 </div>
-<div id="myFrame" class="modal-body clearfix font-14">
+<div id="my-frame" class="modal-body clearfix font-14">
     <p class="mb-15">Select the Company you want to add in <strong>{{activeCompany?.subscription?.planDetails?.name}}</strong> plan</p>
     <div class="row mb-1">
         <div class="col-md-6">
@@ -14,6 +14,6 @@
     </div>
 
     <div class="clearfix">
-        <button class="btn btn-primary mrT1 mrB2" (click)="addCompanyInNewPlan()" [disabled]="!selectedCompany">Add</button>
+        <button class="btn btn-primary mt-1 mb-2" (click)="addCompanyInNewPlan()" [disabled]="!selectedCompany">Add</button>
     </div>
 </div>

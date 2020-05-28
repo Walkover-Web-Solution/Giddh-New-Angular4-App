@@ -236,7 +236,7 @@
     right: 10px;
     top: 10px;
     font-size: 16px;
-    color: #1C1C1C;
+    color: $nero;
 }
 .main-row-plans {
     display: flex;
@@ -274,7 +274,7 @@
     .main-row-plans .col-sm-4 {
         width: 460px;
         display: inline-block;
-        white-space: normal;  
+        white-space: normal;
     }
     .main-row-plans::-webkit-scrollbar {
         height: 5px;
@@ -328,8 +328,8 @@
     .main-row-plans .col-sm-4 {
         width: 100%;
         display:block;
-        white-space: normal; 
-        max-width: 400px; 
+        white-space: normal;
+        max-width: 400px;
         margin: 0 auto;
     }
     .your-account{

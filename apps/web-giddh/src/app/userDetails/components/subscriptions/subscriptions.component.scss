@@ -4,12 +4,12 @@
     height: 400px;
     overflow-y: auto;
 }
-.campanien-list ul {
+.company-list ul {
     list-style-type: none;
     height: 300px;
     overflow-y: auto;
 }
-.transaction-list .campanien-list {
+.transaction-list .company-list {
     min-height: 0;
 }
 .subscription-table th {
@@ -23,7 +23,7 @@
     padding: 15px !important;
     font-family: inherit !important;
 }
-.transection-popup {
+.transaction-popup {
     position: absolute;
     right: 0;
     top: -60px;
@@ -76,7 +76,7 @@
 }
 .transaction-list .box,
 .transaction-list .box2,
-.transaction-list .campanien-list ul {
+.transaction-list .company-list ul {
     height: auto !important;
 }
 .subscription-table {
@@ -99,7 +99,7 @@
     justify-content: space-between;
 }
 .associated-companies > ul > li > a {
-    color: #1C1C1C;
+    color: $nero;
     font-size: 14px;
     padding: 12px 20px;
     display:flex;
@@ -229,7 +229,7 @@
         max-height: 300px;
         overflow-y: auto;
     }
-    .transection-popup {
+    .transaction-popup {
         position: relative;
         top: 0px;
     }
@@ -265,11 +265,11 @@
                 right: 0;
                 text-align: right !important;
             }
-        }  
-    } 
+        }
+    }
     .table-responsive{
         margin-top: 10px;
-    } 
+    }
     table.on-mobile-view tbody tr{
         box-shadow: none !important;
         margin-bottom: 0;
@@ -302,10 +302,10 @@
         }
 }
 @media(max-width:767px){
-    .search-subscription{ 
+    .search-subscription{
          margin-top: 55px;
     }
-   
+
 }
 @media(max-width:575px){
     .plan-row-wrapper{
@@ -321,5 +321,5 @@
                 }
             }
         }
-    }   
+    }
 }

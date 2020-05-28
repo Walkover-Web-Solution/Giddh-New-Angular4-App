@@ -1626,7 +1626,7 @@ modal-container.modal {
         font-size: 13px;
         top: 11px;
         left: 10px;
-        color: #808080;
+        color: $gray;
     }
     .form-control {
         padding-left: 30px !important;
@@ -9601,7 +9601,7 @@ ngx-daterangepicker-material {
             left: 0;
             top: 0;
         }
-    } 
+    }
     .restrict-body-scroll:nth-child(2) .modal {
         z-index: 9993;
     }
