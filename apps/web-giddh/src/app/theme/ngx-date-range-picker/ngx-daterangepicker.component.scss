@@ -354,7 +354,6 @@ $input-height: 3rem !default;
             display: inline-block;
 
         }
-
         &.in-range.end-date::before {
             content: "";
             background-color:$portage !important;
@@ -388,6 +387,13 @@ $input-height: 3rem !default;
             top: -1px;
             position: absolute;
             display: inline-block;
+        }
+        &.in-range-start::before{
+            left: 0px;
+        }
+        &.in-range-end::before{
+            left: 0;
+            width: 80%;
         }
         &.in-range-hovered {
             border-left: 0;
@@ -1636,6 +1642,10 @@ td span {
         top: auto;
         text-align: right;
         padding-right: 0 !important;
+    }
+    .md-drppicker td.in-range-start::before{
+        left: 11px;
+        width: 79%;
     }
 }
 
