@@ -37,11 +37,12 @@
                     <div class="col-md-8 col-sm-8 col-xs-12">
                         <p class="bold font-14">{{activeCompany.subscription.planDetails.name}}</p>
                         <ul class="list-inline plan-list font-14">
-                            <li *ngIf="activeCompany.subscription.subscriptionId"><span>Subscription ID: </span> <span>{{activeCompany.subscription.subscriptionId}}</span> </li>
-                            <li><span>Assigned On: </span> <span>{{activeCompany.subscription.createdAt ? (formatDate(activeCompany.subscription.createdAt) | date: giddhDateFormatUI) : '-'}} </span></li>
-                            <li><span>Expiry Date: </span> <span>{{activeCompany.subscription.expiry ? (formatDate(activeCompany.subscription.expiry) | date: giddhDateFormatUI) : '-'}}</span> </li>
-                            <li><span>No. of companies: </span> <span>{{activeCompany.subscription.totalCompanies | number}}/{{activeCompany.subscription.planDetails.companiesLimit | number}}</span></li>
-                            <li><span>Transaction Limit: </span> <span>{{activeCompany.subscription.planDetails.transactionLimit ? (activeCompany.subscription.planDetails.transactionLimit | number) : '0'}}</span></li>
+                            <li *ngIf="activeCompany.subscription.status==='expired'"><span>Expired On: </span> <span>{{activeCompany.subscription.expiry ? (formatDate(activeCompany.subscription.expiry) | date: giddhDateFormatUI) : '-'}}</span> </li>
+                            <li *ngIf="activeCompany.subscription.subscriptionId && activeCompany.subscription.status!=='expired'"><span>Subscription ID: </span> <span>{{activeCompany.subscription.subscriptionId}}</span> </li>
+                            <li *ngIf="activeCompany.subscription.status!=='expired'"><span>Assigned On: </span> <span>{{activeCompany.subscription.createdAt ? (formatDate(activeCompany.subscription.createdAt) | date: giddhDateFormatUI) : '-'}} </span></li>
+                            <li *ngIf="activeCompany.subscription.status!=='expired'"><span>Expiry Date: </span> <span>{{activeCompany.subscription.expiry ? (formatDate(activeCompany.subscription.expiry) | date: giddhDateFormatUI) : '-'}}</span> </li>
+                            <li *ngIf="activeCompany.subscription.status!=='expired'"><span>No. of companies: </span> <span>{{activeCompany.subscription.totalCompanies | number}}/{{activeCompany.subscription.planDetails.companiesLimit | number}}</span></li>
+                            <li *ngIf="activeCompany.subscription.status!=='expired'"><span>Transaction Limit: </span> <span>{{activeCompany.subscription.planDetails.transactionLimit ? (activeCompany.subscription.planDetails.transactionLimit | number) : '0'}}</span></li>
                         </ul>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left trial-plan-state">
@@ -340,10 +341,12 @@
                     <div class="col-md-8 col-sm-8 col-xs-12">
                         <p class="bold font-14">{{item?.planDetails?.name}}</p>
                         <ul class="list-inline plan-list font-14">
-                            <li *ngIf="item.subscriptionId"><span>Subscription ID: </span> <span> {{item.subscriptionId}}</span> </li>
-                            <li><span>Expiry Date: </span><span>{{item.expiry ? (formatDate(item.expiry) | date: giddhDateFormatUI) : '-'}} </span></li>
-                            <li><span>No. of companies: </span> <span>{{item?.totalCompanies | number}}/{{item?.planDetails?.companiesLimit | number}}</span></li>
-                            <li><span>Transaction Limit: </span> <span>{{item?.planDetails?.transactionLimit ? (item?.planDetails?.transactionLimit | number) : '0'}}</span></li>
+                            <li *ngIf="item?.status==='expired'"><span>Expired On: </span><span>{{item.expiry ? (formatDate(item.expiry) | date: giddhDateFormatUI) : '-'}} </span></li>
+                            <li *ngIf="item.subscriptionId && item?.status !== 'expired'"><span>Subscription ID: </span> <span> {{item.subscriptionId}}</span> </li>
+                            <li *ngIf="item?.status!=='expired'"><span>Assigned On: </span> <span>{{item.createdAt ? (formatDate(item.createdAt) | date: giddhDateFormatUI) : '-'}} </span></li>
+                            <li *ngIf="item?.status!=='expired'"><span>Expiry Date: </span><span>{{item.expiry ? (formatDate(item.expiry) | date: giddhDateFormatUI) : '-'}} </span></li>
+                            <li *ngIf="item?.status!=='expired'"><span>No. of companies: </span> <span>{{item?.totalCompanies | number}}/{{item?.planDetails?.companiesLimit | number}}</span></li>
+                            <li *ngIf="item?.status!=='expired'"><span>Transaction Limit: </span> <span>{{item?.planDetails?.transactionLimit ? (item?.planDetails?.transactionLimit | number) : '0'}}</span></li>
                         </ul>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left trial-plan-state">
