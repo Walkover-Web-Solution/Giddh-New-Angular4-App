@@ -100,12 +100,10 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
      */
     public getPosition(element): any {
         var xPosition = 0;
-        var yPosition = 0;
+        var yPosition = 40;
 
         while (element) {
-            if(xPosition === 0) {
-                xPosition = (element.offsetLeft - element.scrollLeft + element.clientLeft);
-            }
+            xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
             yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
             element = element.offsetParent;
         }

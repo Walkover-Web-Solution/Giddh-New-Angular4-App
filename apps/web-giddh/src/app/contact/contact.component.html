@@ -144,7 +144,7 @@
                 <p>
                     <strong>Due as on </strong>
                     <span>
-                        <input type="text" (click)="openModal()" readonly [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" name="selectedDateRange"
+                        <input type="text" (click)="showGiddhDatepicker($event)" readonly [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" name="selectedDateRange"
                             class="form-control selected-date"/>
 <!--                        <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"-->
 <!--                            (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"-->
@@ -434,7 +434,7 @@
                         <p class="due-as-on" container="body">
                             <strong>Due as on </strong>
                             <span class="italic underline">
-                                <input type="text" (click)="openModal()" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" style="width: 250px !important;" class="form-control giddh-datepicker date-range-picker"/>
+                                <input type="text" (click)="showGiddhDatepicker($event)" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" style="width: 250px !important;" class="form-control giddh-datepicker date-range-picker"/>
 
 <!--                                <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"-->
 <!--                                    (hideDaterangepicker)="selectedDate($event)"-->
@@ -991,7 +991,7 @@
 <!-- endregion -->
 
 <ng-template #datepickerTemplate>
-    <div class="recept-modal">
+    <div class="datepicker-modal">
         <div class="modal-body">
             <app-datepicker-wrapper 
             [inputStartDate]="selectedDateRange?.startDate"
