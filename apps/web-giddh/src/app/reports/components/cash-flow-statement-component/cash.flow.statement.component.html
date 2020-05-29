@@ -1,0 +1,36 @@
+<section class="clearfix text-center pt-5">
+    <div class="container-fluid">
+        <p class="mb-15">{{activeCompany?.name}}</p>
+        <h5 class="bold mb-2">Cash Flow Statement</h5>
+        <div class="d-flex align-items-center justify-content-center mb-2">
+            <label class="mr-05 font-14">As on</label>
+            <div class="custom-datepicker" (click)="showGiddhDatepicker()">
+                <i><img src="assets/images/custom-calender.svg"></i>
+                <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"  class="giddh-datepicker date-range-picker"/>
+            </div>
+        </div>
+        <button type="button" class="btn btn-pink" (click)="downloadReport()" [disabled]="isLoading || !fromDate || !toDate || !downloadRequest.companyUniqueName">Download report</button>
+    </div>
+</section>
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions.ranges"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            [locale]="{applyLabel: 'Done'}"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>
