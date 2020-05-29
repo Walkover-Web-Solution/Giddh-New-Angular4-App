@@ -858,7 +858,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             this.selectedRangeLabel = value.name;
         }
 
-        this.hideModal();
+        this.hideGiddhDatepicker();
         
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
@@ -1206,14 +1206,14 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.showFieldFilter.comment = event;
     }
 
-    public openModal() {
+    public showGiddhDatepicker() {
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop : false })
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop : false, ignoreBackdropClick: this.isMobileScreen })
         );
     }
 
-    public hideModal() {
+    public hideGiddhDatepicker() {
         this.modalRef.hide();
     }
 }
