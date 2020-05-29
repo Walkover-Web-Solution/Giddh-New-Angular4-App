@@ -171,3 +171,6 @@ export const API_POSTMAN_DOC_URL='https://documenter.getpostman.com/view/117343/
  * will be displayed up to 4 decimal places
  */
 export const RATE_FIELD_PRECISION = 4;
+
+/** Regex to remove trailing zeros from a string representation of number */
+export const REMOVE_TRAILING_ZERO_REGEX = /(\.\d*?[1-9])0+$/g;
