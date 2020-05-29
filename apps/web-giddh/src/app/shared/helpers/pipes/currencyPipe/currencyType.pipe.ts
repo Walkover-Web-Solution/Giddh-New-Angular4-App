@@ -6,6 +6,7 @@ import { ReplaySubject } from 'rxjs';
 import { OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { GeneralService } from './../../../../services/general.service';
 import { distinctUntilKeyChanged, takeUntil } from 'rxjs/operators';
+import { REMOVE_TRAILING_ZERO_REGEX } from 'apps/web-giddh/src/app/app.constant';
 
 @Pipe({ name: 'giddhCurrency', pure: true })
 
@@ -57,7 +58,7 @@ export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
      * @returns {string} Transformed value
      * @memberof GiddhCurrencyPipe
      */
-    public transform(input: number, customDecimalPlaces?: number): string {
+    public transform(input: number, customDecimalPlaces?: number, shouldRemoveTrailingZeros?: boolean): string {
         if (input == null) {
             return;
         }
@@ -92,7 +93,7 @@ export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
                     }
                 }
 
-                return op;
+                return shouldRemoveTrailingZeros ? op.replace(REMOVE_TRAILING_ZERO_REGEX, '$1') : op;;
             } else {
                 let op = '-' + result[0].substring(1);
                 if (result.length > 1) {
@@ -109,7 +110,7 @@ export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
                     }
                 }
 
-                return op;
+                return shouldRemoveTrailingZeros ? op.replace(REMOVE_TRAILING_ZERO_REGEX, '$1') : op;;
             }
         } else {
             lastThree = result[0].substring(result[0].length - 3);
@@ -250,7 +251,7 @@ export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
             }
                 break;
         }
-        return finaloutput;
+        return shouldRemoveTrailingZeros ? finaloutput.replace(REMOVE_TRAILING_ZERO_REGEX, '$1') : finaloutput;
 
     }
 
