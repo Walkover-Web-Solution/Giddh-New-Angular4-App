@@ -53,6 +53,8 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
     };
     /* This will store if loading is active or not */
     public isLoading: boolean = false;
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = {x: 0, y: 0};
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -125,7 +127,10 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
      *
      * @memberof CashFlowStatementComponent
      */
-    public showGiddhDatepicker(): void {
+    public showGiddhDatepicker(element: any): void {
+        if(element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
             Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })

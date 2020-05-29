@@ -144,7 +144,7 @@
                 <p>
                     <strong>Due as on </strong>
                     <span>
-                        <input type="text" (click)="showGiddhDatepicker()" readonly [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" name="selectedDateRange"
+                        <input type="text" (click)="showGiddhDatepicker($event)" readonly [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" name="selectedDateRange"
                             class="form-control selected-date"/>
 <!--                        <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"-->
 <!--                            (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"-->
@@ -434,7 +434,7 @@
                         <p class="due-as-on" container="body">
                             <strong>Due as on </strong>
                             <span class="italic underline">
-                                <input type="text" (click)="showGiddhDatepicker()" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" style="width: 250px !important;" class="form-control giddh-datepicker date-range-picker"/>
+                                <input type="text" (click)="showGiddhDatepicker($event)" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" style="width: 250px !important;" class="form-control giddh-datepicker date-range-picker"/>
 
 <!--                                <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"-->
 <!--                                    (hideDaterangepicker)="selectedDate($event)"-->
@@ -1008,7 +1008,8 @@
             (rangeClicked)="selectedDate($event)"
             (datesUpdated)="selectedDate($event)"
             [keepCalendarOpeningWithRange]="false"
-            [showRangeLabelOnInput]="false"></app-datepicker-wrapper>
+            [showRangeLabelOnInput]="false"
+            [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>
