@@ -2,7 +2,6 @@
     <div class="container-fluid">
         <p class="mb-15">{{activeCompany?.name}}</p>
         <h5 class="bold mb-2">Cash Flow Statement</h5>
-
         <div class="d-flex align-items-center justify-content-center mb-2">
             <label class="mr-05 font-14">As on</label>
             <div class="custom-datepicker" (click)="showGiddhDatepicker()">
@@ -13,7 +12,6 @@
         <button type="button" class="btn btn-pink" (click)="downloadReport()" [disabled]="isLoading || !fromDate || !toDate || !downloadRequest.companyUniqueName">Download report</button>
     </div>
 </section>
-
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">

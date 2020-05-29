@@ -176,13 +176,17 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
 
         this.cashFlowStatementService.downloadReport(this.downloadRequest).subscribe((res) => {
             this.isLoading = false;
-
-            if (res.status === "success") {
-                let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                return saveAs(blob, `CashFlowStatement.xlsx`);
+            if(res) {
+                if (res.status === "success") {
+                    let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
+                    return saveAs(blob, `CashFlowStatement.xlsx`);
+                } else {
+                    this.toaster.clearAllToaster();
+                    this.toaster.errorToast(res.message);
+                }
             } else {
                 this.toaster.clearAllToaster();
-                this.toaster.errorToast(res.message);
+                this.toaster.errorToast("Something went wrong! Please try again.");
             }
         });
     }
