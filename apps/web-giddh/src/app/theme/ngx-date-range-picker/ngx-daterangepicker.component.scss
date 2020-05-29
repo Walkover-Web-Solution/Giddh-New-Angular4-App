@@ -767,13 +767,6 @@ $input-height: 3rem !default;
         }
     }
 }
-:host
-    ::ng-deep
-        perfect-scrollbar.hide-horizontal-scroll.ranges-perfect-scrollbar >
-         .ps > .ps-overlay .ps-indicator-top {
-            background: transparent !important;
- } 
-
 .md-drppicker td.in-range.in-range-start::before{
 border-radius:50% 0 0 50% !important;
 }
@@ -1408,7 +1401,7 @@ td span {
         flex-direction: column;
         z-index:999;
         .ranges {
-            width: 100% !important;
+            width: calc(100% - 5px) !important;
             .range-container {  
                 .date-range-close{
                     padding: 10px 12px;
