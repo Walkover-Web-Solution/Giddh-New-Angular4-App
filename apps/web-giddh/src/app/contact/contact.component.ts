@@ -1207,6 +1207,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.showFieldFilter.comment = event;
     }
 
+    /**
+     * This will show datepicker
+     *
+     * @param {*} element
+     * @memberof ContactComponent
+     */
     public showGiddhDatepicker(element): void {
         if(element) {
             this.dateFieldPosition = this._generalService.getPosition(element.target);
@@ -1217,6 +1223,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         );
     }
 
+    /**
+     * This will hide datepicker
+     *
+     * @memberof ContactComponent
+     */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
     }
