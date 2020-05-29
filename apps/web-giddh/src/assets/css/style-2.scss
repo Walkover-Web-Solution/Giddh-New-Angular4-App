@@ -9051,19 +9051,12 @@ ngx-daterangepicker-material {
 .date-field{
     flex-direction: column;
 }
-:host
-    ::ng-deep
-perfect-scrollbar.hide-horizontal-scroll.ranges-perfect-scrollbar > .ps > .ps-overlay .ps-indicator-top {
-    background: transparent !important;
- }
 /* responsive */
-
 @media (max-width: 1440px) {
     .font-xxlarge {
         font-size: 20px;
     }
 }
-
 @media (max-width: 1024px) {
     .all-features-modal {
         width: 90%;
@@ -9852,11 +9845,11 @@ perfect-scrollbar.hide-horizontal-scroll.ranges-perfect-scrollbar > .ps > .ps-ov
             }
             .edit-date-container{
                 display: flex;
-                align-items: start;
+                align-items: flex-start;
                 .modal-date-range{
                     flex-direction: column;
-                    justify-content: start;
-                    align-items: start;
+                    justify-content: flex-start;
+                    align-items: flex-start;
                     border-bottom: none;
                     padding: 12px 0 0;
                     margin-bottom: 0;
@@ -9973,4 +9966,7 @@ perfect-scrollbar.hide-horizontal-scroll.ranges-perfect-scrollbar > .ps > .ps-ov
     input[type="url"] {
         font-size: 16px;
     }
+}
+.giddh-datepicker-modal {
+    margin: 0 !important;
 }
