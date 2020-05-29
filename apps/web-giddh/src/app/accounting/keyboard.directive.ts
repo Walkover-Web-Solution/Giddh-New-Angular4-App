@@ -1,12 +1,13 @@
 import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 
+/** List of all the keyboard keys used as shortcut in JV */
 const KEY_CODE_CONSTANTS = {
-    ENTER: 13,
-    SPACE: 32,
-    BACKSPACE: 8,
-    ESC: 27,
-    ARROW_DOWN: 40,
-    ARROW_UP: 38
+    ENTER: 'Enter',
+    SPACE: [' ', 'Space'],
+    BACKSPACE: 'Backspace',
+    ESC: 'Escape',
+    ARROW_DOWN: 'ArrowDown',
+    ARROW_UP: 'ArrowUp'
 };
 
 @Directive({
@@ -32,14 +33,19 @@ export class OnReturnDirective {
     @HostListener('keydown', ['$event'])
     public onKeyDown(e: any) {
         // tslint:disable-next-line:max-line-length
-        if ((e.which === KEY_CODE_CONSTANTS.ENTER || e.keyCode === KEY_CODE_CONSTANTS.ENTER) || (e.which === KEY_CODE_CONSTANTS.BACKSPACE || e.keyCode === KEY_CODE_CONSTANTS.BACKSPACE) || (e.which === KEY_CODE_CONSTANTS.SPACE || e.keyCode === KEY_CODE_CONSTANTS.SPACE) || (e.which === KEY_CODE_CONSTANTS.ESC || e.keyCode === KEY_CODE_CONSTANTS.ESC) || (e.which === KEY_CODE_CONSTANTS.ARROW_DOWN || e.keyCode === KEY_CODE_CONSTANTS.ARROW_DOWN) || (e.which === KEY_CODE_CONSTANTS.ARROW_UP || e.keyCode === KEY_CODE_CONSTANTS.ARROW_UP)) {
+        if ((e.key === KEY_CODE_CONSTANTS.ENTER || e.code === KEY_CODE_CONSTANTS.ENTER) ||
+            (e.key === KEY_CODE_CONSTANTS.BACKSPACE || e.code === KEY_CODE_CONSTANTS.BACKSPACE) ||
+            (KEY_CODE_CONSTANTS.SPACE.includes(e.key) || KEY_CODE_CONSTANTS.SPACE.includes(e.code)) ||
+            (e.key === KEY_CODE_CONSTANTS.ESC || e.code === KEY_CODE_CONSTANTS.ESC) ||
+            (e.key === KEY_CODE_CONSTANTS.ARROW_DOWN || e.code === KEY_CODE_CONSTANTS.ARROW_DOWN) ||
+            (e.key === KEY_CODE_CONSTANTS.ARROW_UP || e.code === KEY_CODE_CONSTANTS.ARROW_UP)) {
             const selectedEle = e.target;
             const allElements: any = window.document.querySelectorAll('input[onReturn][type="text"], textarea[onReturn]');
             const nodeList = Array.from(allElements);
             const indx = nodeList.findIndex((ele) => ele === selectedEle);
 
             // nodeList[indx + 1].focus();
-            if (e.which === KEY_CODE_CONSTANTS.ENTER || e.keyCode === KEY_CODE_CONSTANTS.ENTER) {
+            if (e.key === KEY_CODE_CONSTANTS.ENTER || e.code === KEY_CODE_CONSTANTS.ENTER) {
 
                 if (e.ctrlKey) {
                     return selectedEle.setAttribute('data-changed', true);
@@ -117,7 +123,7 @@ export class OnReturnDirective {
                     }
                 }
 
-            } else if (e.which === KEY_CODE_CONSTANTS.BACKSPACE || e.keyCode === KEY_CODE_CONSTANTS.BACKSPACE) {
+            } else if (e.key === KEY_CODE_CONSTANTS.BACKSPACE || e.code === KEY_CODE_CONSTANTS.BACKSPACE) {
 
                 let target = allElements[indx - 1];
 
@@ -155,12 +161,12 @@ export class OnReturnDirective {
                         }
                     }
                 }
-            } else if (e.which === KEY_CODE_CONSTANTS.SPACE || e.keyCode === KEY_CODE_CONSTANTS.SPACE) {
+            } else if (KEY_CODE_CONSTANTS.SPACE.includes(e.key) || KEY_CODE_CONSTANTS.SPACE.includes(e.code)) {
                 const target = allElements[indx];
                 if (target) {
                     // target.value = ''; // No need to make the field empty
                 }
-            } else if (e.which === KEY_CODE_CONSTANTS.ESC) {
+            } else if (e.key === KEY_CODE_CONSTANTS.ESC) {
 
                 let gridType: any = window.document.getElementById('get-grid-type').getAttribute('data-gridType');
 
@@ -175,7 +181,7 @@ export class OnReturnDirective {
                 return setTimeout(() => {
                     selectedEle.focus();
                 }, 100);
-            } else if (e.which === KEY_CODE_CONSTANTS.ARROW_UP || e.which === KEY_CODE_CONSTANTS.ARROW_DOWN) {
+            } else if (e.key === KEY_CODE_CONSTANTS.ARROW_UP || e.key === KEY_CODE_CONSTANTS.ARROW_DOWN) {
                 if (selectedEle.getAttribute('data-changed') === 'false') {
                     selectedEle.value = '';
                     return selectedEle.setAttribute('data-changed', true);

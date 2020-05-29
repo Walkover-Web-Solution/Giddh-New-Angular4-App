@@ -13,7 +13,7 @@ export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
 
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public _currencyNumberType: string;
-    public _currencyDesimalType: number;
+    public currencyDecimalType: number;
 
     constructor(private _currencyType: GeneralService, private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
         private _generalService: GeneralService) {
@@ -22,9 +22,9 @@ export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
             this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$), distinctUntilKeyChanged('balanceDisplayFormat')).subscribe((o) => {
                 if (o && o.name) {
                     this._currencyNumberType = o.balanceDisplayFormat ? o.balanceDisplayFormat : 'IND_COMMA_SEPARATED';
-                    this._currencyDesimalType = o.balanceDecimalPlaces ? o.balanceDecimalPlaces : 0;
-                    if (this._currencyDesimalType) {
-                        localStorage.setItem('currencyDesimalType', this._currencyDesimalType.toString());
+                    this.currencyDecimalType = o.balanceDecimalPlaces ? o.balanceDecimalPlaces : 0;
+                    if (this.currencyDecimalType) {
+                        localStorage.setItem('currencyDesimalType', this.currencyDecimalType.toString());
                     }
                     if (this._currencyNumberType) {
                         localStorage.setItem('currencyNumberType', this._currencyNumberType);
@@ -49,20 +49,28 @@ export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
     }
 
-    public transform(input: number) {
+    /**
+     * Tranforms the current value as per the user preference
+     *
+     * @param {number} input Input value to be transformed
+     * @param {number} [customDecimalPlaces] Custom decimal places to be used
+     * @returns {string} Transformed value
+     * @memberof GiddhCurrencyPipe
+     */
+    public transform(input: number, customDecimalPlaces?: number): string {
         if (input == null) {
             return;
         }
         let result = input.toString().split('.');
         // let finaloutput;
         // let currencyType = this._currencyNumberType;
-        // let digitAfterDecimal: number = this._currencyDesimalType;
+        // let digitAfterDecimal: number = this.currencyDecimalType;
         // let lastThree;
         let finaloutput;
         let currencyType = this._currencyNumberType ? this._currencyNumberType : localStorage.getItem('currencyNumberType');
         let digitAfterDecimallocal: number = parseInt(localStorage.getItem('currencyDesimalType'));
         digitAfterDecimallocal = digitAfterDecimallocal ? digitAfterDecimallocal : 0;
-        let digitAfterDecimal: number = this._currencyDesimalType ? this._currencyDesimalType : digitAfterDecimallocal;
+        let digitAfterDecimal: number = customDecimalPlaces ? Number(customDecimalPlaces) : this.currencyDecimalType ? this.currencyDecimalType : digitAfterDecimallocal;
         let lastThree;
         let afterdecDigit = null;
         // currencyType=(currencyType==null)?((this._currencyType.currencyType!=null)? this._currencyType.currencyType : '10,000,000'):'10,000,000';

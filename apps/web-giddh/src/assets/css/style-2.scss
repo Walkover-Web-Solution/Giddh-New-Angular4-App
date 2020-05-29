@@ -752,6 +752,9 @@ input {
 .ml-0 {
     margin-left: 0px;
 }
+.mr-0 {
+    margin-right: 0px !important;
+}
 
 .ml-1 {
     margin-left: 10px;
@@ -800,7 +803,7 @@ input {
 
 .company-list button.btn-link {
     font-size: 13px;
-    color: #1e67c8;
+    color: $chetwode-blue !important;
     display: block;
     padding: 7px 10px;
     display: block;
@@ -809,8 +812,8 @@ input {
 }
 
 .company-list button.btn-link:hover {
-    color: $white;
-    background: $midnight-express;
+    color: $chetwode-blue;
+    background: $lavender-light;
     text-decoration: none;
 }
 
@@ -860,7 +863,6 @@ ul.sub-list {
 .bold {
     font-family: $opensans-semibold;
 }
-
 .font-bold {
     font-family: $opensans-bold;
 }
@@ -996,7 +998,7 @@ ul.sub-list {
 }
 
 .custom-tabs .nav.nav-tabs>li.active a {
-    color: #1c1c1c !important;
+    color: $nero !important;
 }
 
 .custom-tabs .nav.nav-tabs {
@@ -1601,7 +1603,41 @@ modal-container.modal {
 .color-primary {
     color: $deep-sky-blue;
 }
-
+.justify-content-between {
+    justify-content: space-between;
+}
+.text-blue {
+    color: $midnight-blue;
+}
+.all-features-modal {
+    width: 60%;
+    margin-top: 0px;
+    .modal-body {
+        padding: 15px 30px;
+    height: 80vh;
+    overflow-y: auto;
+    }
+}
+.custom-input-search {
+    position: relative;
+    i {
+        position: absolute;
+        z-index: 11;
+        font-size: 13px;
+        top: 11px;
+        left: 10px;
+        color: $gray;
+    }
+    .form-control {
+        padding-left: 30px !important;
+    }
+}
+.plan-list .close:hover, .plan-list .close:focus:hover, .plan-list .close:focus:focus, .plan-list .close:focus:disabled, .plan-list .close:focus.active, .plan-list .close:focus:active, .open > .dropdown-toggle.plan-list .close:focus, .plan-list .close:focus:active:focus, .plan-list .close:focus:active:hover, .plan-list .close:hover, .plan-list .close:focus, .plan-list .close * {
+    background: none !important;
+    border-color: transparent !important;
+    border: 0px !important;
+    box-shadow: none !important;
+}
 
 /* my css end */
 
@@ -1844,7 +1880,17 @@ fieldset[disabled] .btn-primary:hover {
     color: $white;
     border-color: $chetwode-blue;
 }
-
+.success-btn {
+    font-size: 14px;
+    background: $success-green;
+    color: $white;
+    &:hover {
+        color: $white;
+    }
+}
+.btn-round {
+    border-radius: 90px;
+}
 #actionPane .btn-default {
     background: #e6e6e6;
     color: #333;
@@ -2414,10 +2460,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-cancel:disabled,
-.btn-cancel:disabled:hover,
-.btn-cancel:active:focus,
-.btn-cancel:active:hover,
-.btn-cancel:focus {
+.btn-cancel:disabled:hover{
     background: #e4e4e4;
     color: #666;
     border-color: #e4e4e4;
@@ -4880,8 +4923,8 @@ label {
 }
 
 .grp_col::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    outline: 1px solid slategrey;
+    background-color: $gainsboro;
+    outline: 1px solid $gray;
     margin-left: 255px;
 }
 
@@ -4971,8 +5014,8 @@ label {
 }
 
 .grp_col::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    outline: 1px solid slategrey;
+    background-color: $gainsboro;
+    outline: 1px solid $gray;
     margin-left: 255px;
 }
 
@@ -5537,8 +5580,8 @@ label {
 }
 
 .scrollAuto::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    outline: 1px solid slategrey;
+    background-color: $gainsboro;
+    outline: 1px solid $gray;
     /* margin-left: 255px; */
     border-radius: 8px;
 }
@@ -5571,7 +5614,7 @@ input[type="checkbox"][disabled] {
     /* padding-left: 240px; */
 }
 
-.section_head {
+.section-head {
     padding-bottom: 10px;
     font-family: $opensans-semibold;
     font-size: 110%;
@@ -8389,7 +8432,7 @@ ul.dropdown-menu p.lead.pd {
     background-color: #f7f8fa;
     z-index: 9;
     position: relative;
-    top: -4px;
+    top: -2px;
 }
 
 .setting-page .nav>li>a {
@@ -8414,7 +8457,7 @@ ul.dropdown-menu p.lead.pd {
 }
 
 .setting-page .nav>li>a.active {
-    color: #1c1c1c !important;
+    color: $nero !important;
 }
 
 #tab-integration .nav-tabs>li {
@@ -9015,6 +9058,10 @@ ngx-daterangepicker-material {
     }
 }
 @media (max-width: 1024px) {
+    .all-features-modal {
+        width: 90%;
+        margin: 0 auto;
+    }
     .auto_save {
         top: 96px;
     }
@@ -9387,6 +9434,9 @@ ngx-daterangepicker-material {
         width: 100%;
         top: 80px;
     }
+    #setting-tab.user-detail-page .tab-container .nav.nav-tabs {
+        top: 92px;
+    }
     .custom-tabs .nav.nav-tabs {
         position: fixed;
         width: 100%;
@@ -9424,7 +9474,10 @@ ngx-daterangepicker-material {
         left: 0;
     }
     .daterangepicker.dropdown-menu.show-calendar {
-        z-index: 1 !important;
+        z-index: 9 !important;
+    }
+    .daterangepicker.dropdown-menu.opensright.show-calendar {
+        z-index: 9992 !important;
     }
     .mt-xs-60 {
         margin-top: 60px;
@@ -9484,6 +9537,18 @@ ngx-daterangepicker-material {
     .xs-mb-1 {
         margin-bottom: 10px;
     }
+    .xs-mt-1 {
+        margin-top: 10px;
+    }
+    .xs-mb-2 {
+        margin-bottom: 20px;
+    }
+    .xs-mt-2 {
+        margin-top: 20px;
+    }
+    .xs-mt-4 {
+        margin-top: 40px;
+    }
     .xs-mr-0 {
         margin-right: 0px;
     }
@@ -9530,10 +9595,7 @@ ngx-daterangepicker-material {
             left: 0;
             top: 0;
         }
-        .button-wrapper{
-            z-index: 9994;
-        }
-    } 
+    }
     .hide-scroll-body:last-child .modal{
         z-index: 9993;
     }
@@ -9643,6 +9705,9 @@ ngx-daterangepicker-material {
 }
 
 @media (max-width: 1024px) {
+    .sm-d-block {
+        display: block;
+    }
     .form-bg {
         width: 100%;
     }
@@ -9804,9 +9869,9 @@ ngx-daterangepicker-material {
                         display: block;
                     }
                 }
-                .start-end-date{  
+                .start-end-date{
                     padding: 10px 5px 0;
-                
+
                 }
                 .button-wrapper{
                     position: absolute;

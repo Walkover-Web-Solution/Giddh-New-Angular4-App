@@ -1,9 +1,13 @@
-import { distinctUntilChanged } from 'rxjs/operators';
-import { ToasterService } from './../services/toaster.service';
-import { BlankLedgerVM } from './../ledger/ledger.vm';
-import { BehaviorSubject } from 'rxjs';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
-import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
+
+import { HttpWrapperService } from '../services/httpWrapper.service';
+import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
+import { BlankLedgerVM } from './../ledger/ledger.vm';
+import { CURRENT_DATE_API } from './constants/accounting.constant';
+import { LEDGER_API } from '../services/apiurls/ledger.api';
 
 export interface IPageInfo {
     page: string;
@@ -44,7 +48,10 @@ export class TallyModuleService {
 
     public transactionObj: object = {};
 
-    constructor(private _toaster: ToasterService) {
+    constructor(
+        private http: HttpWrapperService,
+        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
+    ) {
         this.selectedFieldType.pipe(distinctUntilChanged((p, q) => p === q)).subscribe((type: string) => {
             if (type && this.selectedPageInfo.value) {
                 let filteredAccounts;
@@ -176,6 +183,55 @@ export class TallyModuleService {
         this.filteredAccounts.next(this.flattenAccounts.value);
     }
 
+    /**
+     * Updates all accounts list when a new account is added by checking its
+     * category
+     *
+     * @param {IFlattenAccountsResultItem} account Newly added account
+     * @memberof TallyModuleService
+     */
+    public updateFlattenAccounts(account: IFlattenAccountsResultItem): void {
+        let cashAccounts = [];
+        let purchaseAccounts = [];
+        let bankAccounts = [];
+        let taxAccounts = [];
+        let expenseAccounts = [];
+        let salesAccounts = [];
+        let cashAccount = account.parentGroups.find((pg) => pg.uniqueName === 'cash');
+        if (cashAccount) {
+            cashAccounts.push(account);
+        }
+        let purchaseAccount = account.parentGroups.find((pg) => pg.uniqueName === 'purchases' || pg.uniqueName === 'directexpenses');
+        if (purchaseAccount) {
+            purchaseAccounts.push(account);
+        }
+        let bankAccount = account.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts');
+        if (bankAccount) {
+            bankAccounts.push(account);
+        }
+        let taxAccount = account.parentGroups.find((pg) => pg.uniqueName === 'currentliabilities');
+        if (taxAccount) {
+            taxAccounts.push(account);
+        }
+        let expenseAccount = account.parentGroups.find((pg) => pg.uniqueName === 'indirectexpenses' || pg.uniqueName === 'operatingcost');
+        if (expenseAccount) {
+            expenseAccounts.push(account);
+        }
+        // pg.uniqueName === 'income'
+        let salesAccount = account.parentGroups.find((pg) => pg.uniqueName === 'revenuefromoperations' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities');
+        if (salesAccount) {
+            salesAccounts.push(account);
+        }
+        this.cashAccounts.next([this.cashAccounts.value, ...cashAccounts]);
+        this.purchaseAccounts.next([...this.purchaseAccounts.value, ...purchaseAccounts]);
+        this.bankAccounts.next([...this.bankAccounts.value, ...bankAccounts]);
+        this.taxAccounts.next([...this.taxAccounts.value, ...taxAccounts]);
+        this.expenseAccounts.next([...this.expenseAccounts.value, ...expenseAccounts]);
+        this.salesAccounts.next([...this.salesAccounts.value, ...salesAccounts]);
+        this.flattenAccounts.next([...this.flattenAccounts.value, account]);
+        this.filteredAccounts.next(this.flattenAccounts.value);
+    }
+
     public getAccounts() {
         let accounts = [];
         if (this.selectedPageInfo.value) {
@@ -204,7 +260,7 @@ export class TallyModuleService {
                 case 'Receipt':
                     accounts = this.flattenAccounts.value;
                 case 'Contra':
-                    accounts = this.cashAccounts.value.concat(this.bankAccounts.value);
+                    accounts = (this.cashAccounts.value) ? this.cashAccounts.value.concat(this.bankAccounts.value) : this.bankAccounts.value;
                     break;
                 default:
                     accounts = this.flattenAccounts.value;
@@ -340,5 +396,49 @@ export class TallyModuleService {
             //   break;
         }
         return isValid;
+    }
+
+    /**
+     * Fetches the current server date
+     *
+     * @returns {Observable<any>} Observable to carry out further operations
+     * @memberof TallyModuleService
+     */
+    public fetchCurrentDate(): Observable<any> {
+        return this.http.get(`${this.config.apiUrl}${CURRENT_DATE_API}`);
+    }
+
+    /**
+     * Returns the current balance of selected account for a
+     * particular date range
+     *
+     * @param {string} companyUniqueName Company unique name
+     * @param {string} accountUniqueName Account unique name
+     * @param {string} fromDate From date
+     * @param {string} toDate To date
+     * @returns {Observable<any>} Observable to carry out further operation
+     * @memberof TallyModuleService
+     */
+    public getCurrentBalance(companyUniqueName: string, accountUniqueName: string, fromDate: string, toDate: string): Observable<any> {
+        const contextPath = LEDGER_API.GET_BALANCE.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+        .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+        .replace(':from', fromDate).replace(':to', toDate)
+        .replace(':accountCurrency', 'true');
+        return this.http.get(`${this.config.apiUrl}${contextPath}`);
+    }
+
+    /**
+     * Returns the date in DD-MM-YYYY format from YYYY-MM-DD format
+     *
+     * @param {string} date Date to be formatted
+     * @returns {string} Formatted date
+     * @memberof TallyModuleService
+     */
+    public getFormattedDate(date: string): string {
+        if (date) {
+            const unformattedDate = date.split('-');
+            return `${unformattedDate[2]}-${unformattedDate[1]}-${unformattedDate[0]}`;
+        }
+        return date;
     }
 }

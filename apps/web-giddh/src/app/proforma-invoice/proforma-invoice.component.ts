@@ -60,7 +60,7 @@ import { SalesShSelectComponent } from '../theme/sales-ng-virtual-select/sh-sele
 import { EMAIL_REGEX_PATTERN } from '../shared/helpers/universalValidations';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { Configuration, Subvoucher } from '../app.constant';
+import { Configuration, Subvoucher, RATE_FIELD_PRECISION } from '../app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
@@ -322,6 +322,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         shippedDateLabel: '',
         trackingNumber: ''
     };
+    /** Rate should have precision up to 4 digits for better calculation */
+    public ratePrecision = RATE_FIELD_PRECISION;
     public selectedCompany: any;
     public formFields: any[] = [];
 
@@ -1995,7 +1997,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
         trx.amount = Number(trx.amount);
         if (trx.isStockTxn) {
-            trx.rate = giddhRoundOff((trx.amount / trx.quantity), 2);
+            trx.rate = giddhRoundOff((trx.amount / trx.quantity), this.ratePrecision);
         }
         this.calculateTotalDiscountOfEntry(entry, trx, false);
         this.calculateEntryTaxSum(entry, trx, false);
@@ -2068,7 +2070,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         entry.cessSum = giddhRoundOff(((cessPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
         // Calculate stock unit rate with amount
         if (transaction.isStockTxn) {
-            transaction.rate = giddhRoundOff((transaction.amount / transaction.quantity), 2);
+            transaction.rate = giddhRoundOff((transaction.amount / transaction.quantity), this.ratePrecision);
         }
         this.calculateSubTotal();
         this.calculateTotalDiscount();
@@ -2985,13 +2987,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private actionsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD> | BaseResponse<any, PurchaseRecordRequest>, invoiceForm: NgForm) {
         if (response.status === 'success' && response.body) {
             // To clear receipts voucher store
-
-            this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
-            // To get re-assign receipts voucher store
-            this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(response.body.account.uniqueName, {
-                invoiceNumber: response.body.number,
-                voucherType: response.body.type
-            }));
+            if (this.isSalesInvoice || this.isCashInvoice) {
+                this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+                // To get re-assign receipts voucher store
+                this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(response.body.account.uniqueName, {
+                    invoiceNumber: response.body.number,
+                    voucherType: response.body.type
+                }));
+            }
             // reset form and other
             this.resetInvoiceForm(invoiceForm);
             this._toasty.successToast('Voucher updated Successfully');

@@ -38,7 +38,7 @@ const CustomShortcode = [
 ];
 
 @Component({
-	selector: 'account-as-invoice',
+	selector: 'invoice-grid',
 	templateUrl: './invoice-grid.component.html',
 	styleUrls: ['./invoice-grid.component.css', '../accounting.component.css'],
 	animations: [
@@ -55,7 +55,7 @@ const CustomShortcode = [
 	],
 })
 
-export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
 	@Input() public saveEntryOnCtrlA: boolean;
 	@Input() public openDatePicker: boolean;

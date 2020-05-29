@@ -19,7 +19,7 @@
                         Cash
                     </span>
 
-                    <small *ngIf="invoiceType==='estimates'">(Beta)</small>
+                    <small *ngIf="invoiceType==='estimates'"> (Beta) </small>
                     <span class="caret" *ngIf="!isUpdateMode"></span>
                 </button>
 
@@ -630,14 +630,14 @@
                                             <div class="td_Wrapper">
                                                 <div style="flex: 1;">
                                                     <div class="wrap-td-data"> <span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                                                            {{invFormData.accountDetails.currencySymbol}}</span> {{transaction.rate | giddhCurrency}}
+                                                            {{invFormData.accountDetails.currencySymbol}}</span> {{transaction.rate | giddhCurrency: ratePrecision}}
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div *ngIf="isMulticurrencyAccount && !isPurchaseInvoice" class="differ-currency">
                                                 <span>{{baseCurrencySymbol}}</span>
-                                                <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency}}</span>
+                                                <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision}}</span>
 
                                             </div>
                                         </div>
@@ -847,13 +847,13 @@
                                         <div class="td_Wrapper">
 
                                             <div style="flex: 1;">
-                                                <input type="text" [disabled]="!transaction.isStockTxn" (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)" placeholder="Rate" decimalDigitsDirective name="transaction.rate_{{entryIdx}}" class="form-control transaction-rate text-right"
-                                                    [(ngModel)]="transaction.rate" [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
+                                                <input type="text" [disabled]="!transaction.isStockTxn" (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control transaction-rate text-right"
+                                                    [(ngModel)]="transaction.rate" [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" [customDecimalPlaces]="ratePrecision" />
                                             </div>
                                             <!-- please add condition for show and hide -->
                                             <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                                 <span>{{baseCurrencySymbol}}</span>
-                                                <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency}}</span>
+                                                <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision}}</span>
                                             </div>
                                         </div>
                                     </td>
@@ -1167,7 +1167,7 @@
                                     <ul>
                                         <ng-container *ngIf="isSalesInvoice && (isAccountHaveAdvanceReceipts || isInvoiceAdjustedWithAdvanceReceipts)">
                                             <li role="menuitem" class="mrT1 ">
-                                                <div class="clearfix paymentMode">
+                                                <div class="clearfix paymentMode deposit-payment-mode">
 
                                                     <div class="pull-right balanceDueText">
                                                         <div class="clearfix mb-1 text-left">
@@ -1357,11 +1357,11 @@
                                     <label class="card-label">Rate</label>
                                     <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
                                         <p> <span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                                                            {{invFormData.accountDetails.currencySymbol}}</span> {{transaction.rate | giddhCurrency}}
+                                                            {{invFormData.accountDetails.currencySymbol}}</span> {{transaction.rate | giddhCurrency: ratePrecision}}
                                         </p>
                                         <div *ngIf="isMulticurrencyAccount && !isPurchaseInvoice" class="differ-currency">
                                             <span>{{baseCurrencySymbol}}</span>
-                                            <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency}}</span>
+                                            <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision}}</span>
 
                                         </div>
                                     </div>
@@ -1608,13 +1608,13 @@
                                 <div class="card-rate">
                                     <label class="card-label text-right">Rate</label>
                                     <div style="flex: 1;">
-                                        <input type="text" [disabled]="!transaction.isStockTxn" (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)" placeholder="Rate" decimalDigitsDirective name="transaction.rate_{{entryIdx}}" class="form-control transaction-rate text-right"
-                                            [(ngModel)]="transaction.rate" [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
+                                        <input type="text" [disabled]="!transaction.isStockTxn" (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control transaction-rate text-right"
+                                            [(ngModel)]="transaction.rate" [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" [customDecimalPlaces]="ratePrecision" />
                                     </div>
                                     <!-- please add condition for show and hide -->
                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                         <span>{{baseCurrencySymbol}}</span>
-                                        <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency}}</span>
+                                        <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision}}</span>
                                     </div>
                                 </div>
 
@@ -1913,7 +1913,7 @@
 
 
                                 <li role="menuitem" class="mrT1 ">
-                                    <div class="clearfix paymentMode">
+                                    <div class="clearfix paymentMode deposit-payment-mode">
 
                                         <sh-select class="pull-right " name="depositAccountUniqueName" [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
                                             [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
