@@ -1964,8 +1964,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         });
 
-        entry.taxSum = ((taxPercentage * (trx.amount - entry.discountSum)) / 100);
-        entry.cessSum = ((cessPercentage * (trx.amount - entry.discountSum)) / 100);
+        entry.taxSum = giddhRoundOff(((taxPercentage * (trx.amount - entry.discountSum)) / 100), 2);
+        entry.cessSum = giddhRoundOff(((cessPercentage * (trx.amount - entry.discountSum)) / 100), 2);
 
         if (isNaN(entry.taxSum)) {
             entry.taxSum = 0;
@@ -1985,7 +1985,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public calculateEntryTotal(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
-        trx.total = parseFloat(((trx.amount - entry.discountSum) + (entry.taxSum + entry.cessSum)).toFixed(2));
+        trx.total = giddhRoundOff((trx.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
 
         this.calculateSubTotal();
         this.calculateTotalDiscount();
@@ -2034,13 +2034,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
             }, 0) || 0;
 
-        if (isNaN(entry.discountSum)) {
-            entry.discountSum = 0;
-        }
-        if (isNaN(transaction.taxableValue)) {
-            transaction.taxableValue = 0;
-        }
-
         // Calculate tax
         let taxPercentage: number = 0;
         let cessPercentage: number = 0;
@@ -2053,6 +2046,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             taxTotal += selectedTax.amount;
         });
+
+        // Calculate amount with inclusive tax
+        transaction.amount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
+            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), 2);
+        let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), 2);
+        entry.discountSum = giddhRoundOff(perFromAmount + fixedDiscountTotal, 2);
+        if (isNaN(entry.discountSum)) {
+            entry.discountSum = 0;
+        }
+        transaction.taxableValue = Number(transaction.amount) - entry.discountSum;
+        if (isNaN(transaction.taxableValue)) {
+            transaction.taxableValue = 0;
+        }
+        entry.taxSum = giddhRoundOff(((taxPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
+        entry.cessSum = giddhRoundOff(((cessPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
         if (isNaN(entry.taxSum)) {
             entry.taxSum = 0;
         }
@@ -2060,14 +2068,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (isNaN(entry.cessSum)) {
             entry.cessSum = 0;
         }
-
-        // Calculate amount with inclusive tax
-        transaction.amount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
-            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), 2);
-        let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), 2);
-        entry.discountSum = giddhRoundOff(perFromAmount + fixedDiscountTotal, 2);
-        entry.taxSum = giddhRoundOff(((taxPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
-        entry.cessSum = giddhRoundOff(((cessPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
         // Calculate stock unit rate with amount
         if (transaction.isStockTxn) {
             transaction.rate = giddhRoundOff((transaction.amount / transaction.quantity), this.ratePrecision);
@@ -2151,10 +2151,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.adjustPaymentBalanceDueData = 0;
         }
         this.invFormData.voucherDetails.balanceDue =
-            ((count + this.invFormData.voucherDetails.tcsTotal + this.calculatedRoundOff) - this.invFormData.voucherDetails.tdsTotal) - depositAmount - Number(this.depositAmountAfterUpdate) - this.totalAdvanceReceiptsAdjustedAmount;
+            giddhRoundOff((((count + this.invFormData.voucherDetails.tcsTotal + this.calculatedRoundOff) - this.invFormData.voucherDetails.tdsTotal) - depositAmount - Number(this.depositAmountAfterUpdate) - this.totalAdvanceReceiptsAdjustedAmount), 2);
         if (this.isUpdateMode && this.isInvoiceAdjustedWithAdvanceReceipts && !this.adjustPaymentData.totalAdjustedAmount) {
             this.invFormData.voucherDetails.balanceDue =
-                ((count + this.invFormData.voucherDetails.tcsTotal + this.calculatedRoundOff) - this.invFormData.voucherDetails.tdsTotal) - Number(this.depositAmountAfterUpdate) - this.totalAdvanceReceiptsAdjustedAmount;
+                giddhRoundOff((((count + this.invFormData.voucherDetails.tcsTotal + this.calculatedRoundOff) - this.invFormData.voucherDetails.tdsTotal) - Number(this.depositAmountAfterUpdate) - this.totalAdvanceReceiptsAdjustedAmount), 2);
         }
 
     }

@@ -60,7 +60,7 @@
                                 class="form-control text-right" />
                             <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-                                {{ currentTxn?.convertedRate | giddhCurrency: ratePrecision}}
+                                {{ currentTxn?.convertedRate | giddhCurrency: ratePrecision: true}}
                             </p>
                         </td>
 
