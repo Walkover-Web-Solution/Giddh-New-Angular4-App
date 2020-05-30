@@ -1,32 +1,46 @@
-import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { TallyModuleService } from './../tally-service';
-import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
-import { VsForDirective } from './../../theme/ng2-vs-for/ng2-vs-for';
-import { ToasterService } from './../../services/toaster.service';
-import { KeyboardService } from './../keyboard.service';
-import { LedgerActions } from './../../actions/ledger/ledger.actions';
-import { IOption } from './../../theme/ng-select/option.interface';
-import { AccountService } from './../../services/account.service';
-import { Observable, ReplaySubject } from 'rxjs';
-import { select, Store } from '@ngrx/store';
-import { AppState } from '../../store/roots';
-import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
-import * as moment from 'moment';
-import { FlyAccountsActions } from 'apps/web-giddh/src/app/actions/fly-accounts.actions';
-import { BlankLedgerVM } from 'apps/web-giddh/src/app/ledger/ledger.vm';
-import { Router } from '@angular/router';
-import { ModalDirective } from 'ngx-bootstrap';
-import { SalesActions } from 'apps/web-giddh/src/app/actions/sales/sales.action';
-import { AccountResponse } from '../../models/api-models/Account';
-import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
-import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
-import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { InventoryService } from '../../services/inventory.service';
-import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+    AfterViewInit,
+    Component,
+    ComponentFactoryResolver,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    QueryList,
+    SimpleChanges,
+    ViewChild,
+    ViewChildren,
+} from '@angular/core';
+import { Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { BlankLedgerVM } from 'apps/web-giddh/src/app/ledger/ledger.vm';
+import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
-import { InvoiceActions } from '../../actions/invoice/invoice.actions';
+import * as moment from 'moment';
+import { ModalDirective } from 'ngx-bootstrap';
+import { Observable, ReplaySubject } from 'rxjs';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+
+import { InventoryAction } from '../../../actions/inventory/inventory.actions';
+import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
+import { LedgerActions } from '../../../actions/ledger/ledger.actions';
+import { AccountResponse } from '../../../models/api-models/Account';
+import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
+import { AccountService } from '../../../services/account.service';
+import { InventoryService } from '../../../services/inventory.service';
+import { ToasterService } from '../../../services/toaster.service';
+import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { AppState } from '../../../store';
+import { IOption } from '../../../theme/ng-select/option.interface';
+import { VsForDirective } from '../../../theme/ng2-vs-for/ng2-vs-for';
+import { QuickAccountComponent } from '../../../theme/quick-account-component/quickAccount.component';
+import { KeyboardService } from '../../keyboard.service';
+import { TallyModuleService } from '../../tally-service';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 const TransactionsType = [
 	{ label: 'By', value: 'Debit' },
@@ -38,9 +52,9 @@ const CustomShortcode = [
 ];
 
 @Component({
-	selector: 'invoice-grid',
-	templateUrl: './invoice-grid.component.html',
-	styleUrls: ['./invoice-grid.component.css', '../accounting.component.css'],
+	selector: 'account-as-invoice',
+	templateUrl: './invoice.component.html',
+	styleUrls: ['./invoice.component.scss', '../../accounting.component.css'],
 	animations: [
 		trigger('slideInOut', [
 			state('in', style({
@@ -54,13 +68,14 @@ const CustomShortcode = [
 		]),
 	],
 })
-
-export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
 	@Input() public saveEntryOnCtrlA: boolean;
 	@Input() public openDatePicker: boolean;
 	@Input() public openCreateAccountPopup: boolean;
-	@Input() public newSelectedAccount: AccountResponse;
+    @Input() public newSelectedAccount: AccountResponse;
+    /** Current date to show the balance till date */
+    @Input() public currentDate: string;
 	@Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
 	@Output() public showStockList: EventEmitter<boolean> = new EventEmitter();
 
@@ -91,10 +106,8 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 	public entryDate: any;
 	public navigateURL: any = CustomShortcode;
 	public showInvoiceDate: boolean = false;
-	// public purchaseType: string = 'invoice';
 	public groupUniqueName: string = 'purchases';
 	public filterByGrp: boolean = false;
-	// public showStockList: ReplaySubject<boolean> = new ReplaySubject<boolean>();
 	public selectedAcc: object;
 	public accountType: string;
 	public accountsTransaction = [];
@@ -141,21 +154,17 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 		private _ledgerActions: LedgerActions,
 		private store: Store<AppState>,
 		private _keyboardService: KeyboardService,
-		private flyAccountActions: FlyAccountsActions,
 		private _toaster: ToasterService,
 		private _router: Router,
-		private _salesActions: SalesActions,
 		private _tallyModuleService: TallyModuleService,
 		private componentFactoryResolver: ComponentFactoryResolver,
 		private inventoryService: InventoryService,
 		private inventoryAction: InventoryAction,
 		private invoiceActions: InvoiceActions,
 	) {
-		// this.data.transactions.inventory = [];
 		this._keyboardService.keyInformation.subscribe((key) => {
 			this.watchKeyboardEvent(key);
 		});
-		// this.store.dispatch(this._salesActions.getFlattenAcOfPurchase({groupUniqueNames: ['purchases']}));
 
 		this._tallyModuleService.selectedPageInfo.pipe(distinctUntilChanged((p, q) => {
 			if (p && q) {
@@ -342,16 +351,6 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 		this.isSelectedRow = type;
 		this.selectedRowIdx = stkIdx;
 		this.showLedgerAccountList = false;
-		// this.selectedAccIdx = accIdx;
-	}
-
-	/**
-	 * selectAccountRow() on entryObj focus/blur
-	 */
-	public selectAccountRow(type: boolean, idx) {
-		// this.isSelectedRow = type;
-		// this.selectedAccIdx = idx;
-		// this.selectedRowIdx = null;
 	}
 
 	/**
@@ -377,20 +376,13 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 	}
 
 	public onStockItemBlur(ev, elem) {
-		// this.selectedInput = elem;
-		// this.showLedgerAccountList = false;
-		// if (!this.stockSearch) {
-		//   this.searchStock('');
-		//   this.stockSearch = '';
-		// }
+		this.filterByText = '';
 	}
 
 	public onAccountFocus(ev, indx: number) {
 		this.selectedAccountInputField = ev.target;
 		this.showConfirmationBox = false;
-		// this.selectedField = 'account';
 		this.selectedAccIdx = indx;
-		// this.showLedgerAccountList = true;
 
 		this.inputForList = _.cloneDeep(this.flattenAccounts);
 		this.selectedField = 'account';
@@ -398,9 +390,6 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 		if (this.isAccountListFiltered) {
 			this.refreshAccountListData();
 		}
-		// this.selectedParticular = elem;
-		// this.selectRow(true, indx);
-		// this.filterAccount(trxnType);
 		setTimeout(() => {
 			this.showLedgerAccountList = true;
 		}, 200);
@@ -410,10 +399,6 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 		this.selectedInput = ele;
 		this.showLedgerAccountList = false;
 		this.filterByText = '';
-		// if (ev.target.value === 0) {
-		//   ev.target.focus();
-		//   ev.preventDefault();
-		// }
 	}
 
 	/**
@@ -608,25 +593,11 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 	 * prepareEntry
 	 */
 	public prepareEntry(item, stkIdx) {
-		let defaultUnit = {
-			stockUnitCode: item.stockUnit.name,
-			code: item.stockUnit.code,
-			rate: 0
-		};
-		// if (item.accountStockDetails.unitRates.length) {
-		// this.stocksTransaction[stkIdx].inventory.unit = item.accountStockDetails.unitRates[0];
 		this.stocksTransaction[stkIdx].inventory.unit.rate = item.amount / item.openingQuantity;
-		// this.stocksTransaction[stkIdx].inventory.unit.code = item.accountStockDetails.unitRates[0].stockUnitCode;
 		this.stocksTransaction[stkIdx].inventory.unit.code = item.stockUnit.code;
 		this.stocksTransaction[stkIdx].inventory.unit.stockUnitCode = item.stockUnit.name;
 
-		// } else if (!item.accountStockDetails.unitRates.length) {
-		//   this.stocksTransaction[stkIdx].inventory.unit = defaultUnit;
-		// }
-		// this.stocksTransaction[stkIdx].particular = item.accountStockDetails.accountUniqueName;
 		this.stocksTransaction[stkIdx].inventory.stock = { name: item.name, uniqueName: item.uniqueName };
-		// this.stocksTransaction[stkIdx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
-		// this.stocksTransaction[stkIdx].selectedAccount.name = item.accountStockDetails.name;
 	}
 
 	/**
@@ -697,10 +668,6 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 			if (this.stocksTransaction[i].inventory && this.stocksTransaction[i].inventory.length) {
 				this.stocksTransaction[i].inventory.splice(idx, 1);
 			}
-			// this.showStockList.emit(false);
-			// if (!this.data.transactions.length) {
-			//   this.addNewRow('stock');
-			// }
 			this.amountChanged(idx);
 		}
 	}
@@ -787,7 +754,6 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
 	public prepareDataForVoucher() {
 		let transactions = _.concat(_.cloneDeep(this.accountsTransaction), _.cloneDeep(this.stocksTransaction));
-		//  let result = _.chain(transactions).groupBy('particular').value();
 		transactions = _.orderBy(transactions, 'type');
 		_.forEach(transactions, function (obj, idx) {
 			let inventoryArr = [];
@@ -799,13 +765,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 			}
 		});
 		return transactions;
-	}
-
-	// public detectKey(ev) {
-	//   if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
-	//    this.arrowInput = { key: ev.keyCode };
-	//   }
-	// }
+    }
 
 	public detectKey(ev, isFirstAccountField = false) {
 		this.keyUpDownEvent = ev;
@@ -816,12 +776,6 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 				return stockEle.focus();
 			}
 		}
-		// if (ev.keyCode === 27) {
-		//  this.deleteRow(this.selectedRowIdx);
-		// }
-		// if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
-		//  this.arrowInput = { key: ev.keyCode };
-		// }
 	}
 
 	/**
@@ -868,15 +822,6 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 				}
 			});
 		}
-
-		// const reqArray = parentGrpUnqName ? [parentGrpUnqName] : [];
-		// this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: reqArray }, '', q).takeUntil(this.destroyed$).subscribe(data => {
-		//   if (data.status === 'success') {
-		//     this.sortStockItems(data.body.results);
-		//   } else {
-		//     // this.noResult = true;
-		//   }
-		// });
 	}
 
 	public sortStockItems(ItemArr) {
@@ -924,20 +869,6 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 					if (stockFullDetails && stockFullDetails.body.taxes && stockFullDetails.body.taxes.length) {
 						this.companyTaxesList$.pipe(take(1)).subscribe((taxes: TaxResponse[]) => {
 							stockFullDetails.body.taxes.forEach((tax: string) => {
-								// let selectedTaxAcc = this.allFlattenAccounts.find((acc) => acc.uniqueName === tax);
-								// if (selectedTaxAcc) {
-								// let acc = selectedTaxAcc;
-								// let accModel = {
-								//   name: acc.name,
-								//   UniqueName: acc.uniqueName,
-								//   groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1],
-								//   account: acc.name
-								// };
-								// this.accountsTransaction[0].particular = accModel.UniqueName;
-								// this.accountsTransaction[0].selectedAccount = accModel;
-								// this.accountsTransaction[0].stocks = acc.stocks;
-								// }
-
 								let selectedTax = taxes.find((t) => t.uniqueName === tax);
 								let taxTotalValue = 0;
 								if (selectedTax) {
@@ -991,9 +922,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 			this.loadQuickAccountComponent();
 			this.quickAccountModal.show();
 		} else if (this.selectedField === 'stock') {
-			this.asideMenuStateForProductService = 'in'; // selectedEle.getAttribute('data-changed')
-			// let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
-			// this.selectedStockInputField = selectedField;
+			this.asideMenuStateForProductService = 'in';
 			this.autoFocusStockGroupField = true;
 		}
 	}
@@ -1032,13 +961,6 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 	}
 
 	public onPartyAccBlur(needRefreshAccounts: boolean = false) {
-		// this.showAccountList.emit(false);
-		// selectedInput=creditor;
-		// this.isPartyACFocused = false;
-		// setTimeout(() => {
-		//   this.currentSelectedValue = '';
-		//   this.showLedgerAccountList = false;
-		// }, 200);
 		this.filterByText = '';
 		this.currentSelectedValue = '';
 		this.showLedgerAccountList = false;
@@ -1053,7 +975,6 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 		// after creating stock, get all stocks again
 		this.selectedStockInputField.value = '';
 		this.filterByText = '';
-		// this.partyAccNameInputField.nativeElement.focus();
 		this.dateField.nativeElement.focus();
 		this.getFlattenGrpofAccounts(null, null, true, true);
 	}
@@ -1104,27 +1025,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 			this.showConfirmationBox = false;
 			return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
 		}
-	}
-
-	// public keyUpOnSubmitButton(e) {
-	//   if (e && (e.keyCode === 39 || e.which === 39) || (e.keyCode === 78 || e.which === 78)) {
-	//     return setTimeout(() => this.resetButton.nativeElement.focus(), 50);
-	//   }
-	//   if (e && (e.keyCode === 8 || e.which === 8)) {
-	//     this.showConfirmationBox = false;
-	//     return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
-	//   }
-	// }
-
-	// public keyUpOnResetButton(e) {
-	//   if (e && (e.keyCode === 37 || e.which === 37) || (e.keyCode === 89 || e.which === 89)) {
-	//     return setTimeout(() => this.submitButton.nativeElement.focus(), 50);
-	//   }
-	//   if (e && (e.keyCode === 13 || e.which === 13)) {
-	//     this.showConfirmationBox = false;
-	//     return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
-	//   }
-	// }
+    }
 
 	private deleteRow(idx: number) {
 		this.stocksTransaction.splice(idx, 1);
