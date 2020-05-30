@@ -2,6 +2,7 @@ import { IScope, PermissionDataService } from './../permissions/permission-data.
 import { ToasterService } from './../services/toaster.service';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Injectable } from '@angular/core';
+import { GeneralService } from '../services/general.service';
 
 export const SCOPE_TO_ROUTE_MAPPING = [
     {
@@ -59,12 +60,12 @@ export class NeedsAuthorization implements CanActivate {
 
     private requestedScope: IScope = null;
 
-    constructor(public _router: Router, private _toasty: ToasterService, private _permissionDataService: PermissionDataService) {
+    constructor(public _router: Router, private _toasty: ToasterService, private _permissionDataService: PermissionDataService, private generalService: GeneralService) {
     }
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         if (route && route.routeConfig && route.routeConfig.path === "journal-voucher") {
-            return this.checkIfEmailDomainAllowed(this._permissionDataService.getCompany.createdBy.email);
+            return this.generalService.checkIfEmailDomainAllowed(this._permissionDataService.getCompany.createdBy.email);
         } else {
             return true;
         }
@@ -106,24 +107,5 @@ export class NeedsAuthorization implements CanActivate {
         } else {
             return null;
         }
-    }
-
-    /**
-     * This will verify if the company is allowed to view the page or not
-     *
-     * @param {string} email
-     * @returns {boolean}
-     * @memberof NeedsAuthorization
-     */
-    public checkIfEmailDomainAllowed(email: string): boolean {
-        let isAllowed = false;
-        if (email) {
-            let emailSplit = email.split("@");
-            if (emailSplit.indexOf("giddh.com") > -1 || emailSplit.indexOf("walkover.in") > -1 || emailSplit.indexOf("muneem.co") > -1) {
-                isAllowed = true;
-            }
-        }
-
-        return isAllowed;
     }
 }
