@@ -4,7 +4,7 @@
         <h5 class="bold mb-2">Cash Flow Statement</h5>
         <div class="d-flex align-items-center justify-content-center mb-2">
             <label class="mr-05 font-14">As on</label>
-            <div class="custom-datepicker" (click)="showGiddhDatepicker()">
+            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                 <i><img src="assets/images/custom-calender.svg"></i>
                 <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"  class="giddh-datepicker date-range-picker"/>
             </div>
@@ -30,7 +30,8 @@
             (rangeClicked)="dateSelectedCallback($event)"
             (datesUpdated)="dateSelectedCallback($event)"
             [keepCalendarOpeningWithRange]="false"
-            [showRangeLabelOnInput]="false"></app-datepicker-wrapper>
+            [showRangeLabelOnInput]="false"
+            [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>

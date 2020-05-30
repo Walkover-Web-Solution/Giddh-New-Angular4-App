@@ -233,6 +233,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public selectAll: boolean = false;
     modalRef: BsModalRef;
     public selectedRangeLabel: any = "";
+    public dateFieldPosition: any = {x: 0, y: 0};
 
     constructor(
         private store: Store<AppState>,
@@ -1206,14 +1207,28 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.showFieldFilter.comment = event;
     }
 
-    public showGiddhDatepicker() {
+    /**
+     * This will show datepicker
+     *
+     * @param {*} element
+     * @memberof ContactComponent
+     */
+    public showGiddhDatepicker(element): void {
+        if(element) {
+            this.dateFieldPosition = this._generalService.getPosition(element.target);
+        }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
             Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop : false, ignoreBackdropClick: this.isMobileScreen })
         );
     }
 
-    public hideGiddhDatepicker() {
+    /**
+     * This will hide datepicker
+     *
+     * @memberof ContactComponent
+     */
+    public hideGiddhDatepicker(): void {
         this.modalRef.hide();
     }
 }

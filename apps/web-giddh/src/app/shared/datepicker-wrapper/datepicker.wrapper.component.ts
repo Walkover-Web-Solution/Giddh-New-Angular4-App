@@ -40,6 +40,7 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
     @Input() public showCancel: boolean = false;
     @Input() public locale: any;
     @Input() public selectedRangeLabel: any;
+    @Input() public dateFieldPosition: any;
 
     constructor(private _renderer: Renderer2) {
 
@@ -92,45 +93,23 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
     }
 
     /**
-     * This will calculate the position of element
-     *
-     * @param {*} element
-     * @returns
-     * @memberof DatepickerWrapperComponent
-     */
-    public getPosition(element): any {
-        var xPosition = 0;
-        var yPosition = 40;
-
-        while (element) {
-            xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
-            yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
-            element = element.offsetParent;
-        }
-
-        return { x: xPosition, y: yPosition };
-    }
-
-    /**
      * This will set the position of datepicker
      *
      * @memberof DatepickerWrapperComponent
      */
     public setPosition(): void {
         if (document.querySelectorAll(".giddh-datepicker") && document.querySelectorAll(".giddh-datepicker")[0]) {
-            let element = document.querySelectorAll(".giddh-datepicker")[0];
             const container = document.getElementsByTagName("ngx-daterangepicker-material")[0] as HTMLElement;
             if (container) {
-                let position = this.getPosition(element);
                 let screenWidth = window.innerWidth;
-                let totalWidth = container.offsetWidth + position.x;
-                let positionX = position.x;
+                let totalWidth = container.offsetWidth + this.dateFieldPosition.x;
+                let positionX = this.dateFieldPosition.x;
 
                 if (totalWidth > screenWidth) {
                     positionX = positionX - (totalWidth - screenWidth);
                 }
 
-                this._renderer.setStyle(container, 'top', position.y + 'px');
+                this._renderer.setStyle(container, 'top', this.dateFieldPosition.y + 'px');
                 this._renderer.setStyle(container, 'left', positionX + 'px');
                 this._renderer.setStyle(container, 'right', 'auto');
             }
