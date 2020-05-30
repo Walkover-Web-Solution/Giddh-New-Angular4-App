@@ -100,7 +100,7 @@ export const ROUTES: Routes = [
             { path: 'settings', loadChildren: './settings/settings.module#SettingsModule', canActivate: [NeedsAuthorization] },
             { path: 'manufacturing', loadChildren: './manufacturing/manufacturing.module#ManufacturingModule', canActivate: [NeedsAuthorization] },
             // { path: 'accounting-voucher', loadChildren: './accounting/accounting.module#AccountingModule' },
-            { path: 'journal-voucher', loadChildren: './accounting/accounting.module#AccountingModule' },
+            { path: 'journal-voucher', loadChildren: './accounting/accounting.module#AccountingModule', canActivate: [NeedsAuthorization] },
             { path: 'user-details', loadChildren: './userDetails/userDetails.module#UserDetailsModule' },
             { path: 'contact', loadChildren: './contact/contact.module#ContactModule', canActivate: [NeedsAuthorization] },
             { path: 'new-vs-old-invoices', loadChildren: './new-vs-old-Invoices/new-vs-old-Invoices.module#NewVsOldInvoicesModule', canActivate: [NeedsAuthorization] },
