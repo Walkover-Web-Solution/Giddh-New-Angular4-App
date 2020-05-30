@@ -496,7 +496,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let idx = this.selectedIdx;
         let transaction = this.requestObj.transactions[idx];
         if (acc) {
-            const formattedCurrentDate = this.tallyModuleService.getFormattedDate(this.currentDate);
+            const formattedCurrentDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             this.tallyModuleService.getCurrentBalance(this.currentCompanyUniqueName, acc.uniqueName, formattedCurrentDate, formattedCurrentDate).subscribe((data) => {
                 if (data && data.body) {
                     this.setAccountCurrentBalance(data.body, idx);
