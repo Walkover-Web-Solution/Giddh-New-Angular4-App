@@ -332,6 +332,22 @@ $input-height: 3rem !default;
                 color: $md-drppicker-unselected-color;
             }
         }
+        &.in-range-start {
+            span {
+                background-color: $primary !important;
+                border-radius: 50%;
+                border-radius: 50%;
+                color: $white !important;
+                border-color: $primary;
+            }
+            &:hover{
+                span{
+                    background-color: $white-smoke !important;
+                    color: $nero !important;
+                    border-color: $gray;
+                }
+            }
+        }
         // Date Range
         &.in-range {
             background-color: $hawkes-blue;
@@ -1117,7 +1133,12 @@ td span {
     color: $nero !important;
     background-color:transparent !important;
 }
-
+.activatedDate:hover{
+    span{
+        background-color: $white-smoke !important;
+        border-color: $gray !important;
+    }
+}
 .btn-angle-down {
     position: relative;
     background-color: #ddd;
@@ -1431,6 +1452,7 @@ td span {
                         button {
                             padding: 12px 10px;
                             border-bottom: 1px solid $gainsboro;
+                            font-size: 14px;
                         }
                     }
                 }
@@ -1522,6 +1544,7 @@ td span {
                     max-width: 360px;
                     margin: 0 auto;
                     width: 100%;
+                    padding: 4px 0;
                     td{
                         span{
                             display: inline-block;
