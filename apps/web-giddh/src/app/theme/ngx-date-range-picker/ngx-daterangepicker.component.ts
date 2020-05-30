@@ -1351,6 +1351,13 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.updateView();
     }
 
+    public setSelectedRange(i: any): void {
+        if(i === this.rangeDropdownShow) {
+            this.rangeDropdownShow = -1;
+        } else {
+            this.rangeDropdownShow = i;
+        }
+    }
     /**
      * double clicked on a range
      * select that range and close date picker

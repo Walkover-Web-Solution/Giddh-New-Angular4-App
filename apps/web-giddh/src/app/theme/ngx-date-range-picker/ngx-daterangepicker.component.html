@@ -20,7 +20,7 @@
                 </li>
                 <li *ngFor="let range of ranges; let i = index" class="menu-li">
                     <button type="button" class="btn-angle-down"
-                        (click)="rangeDropdownShow = i; clickRange($event, range);"
+                    (click)="setSelectedRange(i); clickRange($event, range);"
                         (dblclick)="dblClickRange($event, range)"
                         [ngClass]="{'active': range.isSelected || (selectedRangeLabel && selectedRangeLabel === range.name) || checkIfSubRangeSelected(range)}">{{range.name}}
                         <span *ngIf="range.ranges && range.ranges.length" class="available prev angle-down"></span>
