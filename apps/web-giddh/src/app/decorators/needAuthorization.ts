@@ -65,7 +65,11 @@ export class NeedsAuthorization implements CanActivate {
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         if (route && route.routeConfig && route.routeConfig.path === "journal-voucher") {
-            return this.generalService.checkIfEmailDomainAllowed(this._permissionDataService.getCompany.createdBy.email);
+            if(this._permissionDataService.getCompany && this._permissionDataService.getCompany.createdBy && this._permissionDataService.getCompany.createdBy.email) {
+                return this.generalService.checkIfEmailDomainAllowed(this._permissionDataService.getCompany.createdBy.email);
+            } else {
+                return false;
+            }
         } else {
             return true;
         }

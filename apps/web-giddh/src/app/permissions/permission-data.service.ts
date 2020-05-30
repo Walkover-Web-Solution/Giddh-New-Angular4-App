@@ -7,7 +7,12 @@ export interface IScope {
     name: string;
     permissions: Array<{ code: string }>;
 }
-
+/**
+ * This will store the company createdBy Object Information
+ *
+ * @export
+ * @interface CompanyData
+ */
 export interface CompanyData {
     createdBy: any;
 }
@@ -15,7 +20,7 @@ export interface CompanyData {
 @Injectable()
 export class PermissionDataService {
     private _scopes: IScope[] = [];
-    private _createdBy: CompanyData;
+    private createdBy: CompanyData;
 
     constructor(private store: Store<AppState>) {
         this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
@@ -56,11 +61,22 @@ export class PermissionDataService {
         this._scopes = data;
     }
 
+    /**
+     * Used to get company createdBy Information
+     *
+     * @type {CompanyData}
+     * @memberof PermissionDataService
+     */
     get getCompany(): CompanyData {
-        return this._createdBy;
+        return this.createdBy;
     }
 
+    /**
+     * Used to set company createdBy Information
+     *
+     * @memberof PermissionDataService
+     */
     set getCompany(data: CompanyData) {
-        this._createdBy = data;
+        this.createdBy = data;
     }
 }
