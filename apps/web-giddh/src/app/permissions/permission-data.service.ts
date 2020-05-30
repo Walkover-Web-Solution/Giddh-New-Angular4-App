@@ -8,13 +8,19 @@ export interface IScope {
     permissions: Array<{ code: string }>;
 }
 
+export interface CompanyData {
+    createdBy: any;
+}
+
 @Injectable()
 export class PermissionDataService {
     private _scopes: IScope[] = [];
+    private _createdBy: CompanyData;
 
     constructor(private store: Store<AppState>) {
         this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
             let currentCompany = companies.find((company) => company.uniqueName === uniqueName);
+            this.getCompany = currentCompany;
             if (currentCompany && currentCompany.userEntityRoles && currentCompany.userEntityRoles.length) {
                 let superAdminIndx = currentCompany.userEntityRoles.findIndex((role) => {
                     return (role.entity.entity === 'COMPANY' && role.role.uniqueName === 'super_admin');
@@ -48,5 +54,13 @@ export class PermissionDataService {
 
     set getData(data: IScope[]) {
         this._scopes = data;
+    }
+
+    get getCompany(): CompanyData {
+        return this._createdBy;
+    }
+
+    set getCompany(data: CompanyData) {
+        this._createdBy = data;
     }
 }

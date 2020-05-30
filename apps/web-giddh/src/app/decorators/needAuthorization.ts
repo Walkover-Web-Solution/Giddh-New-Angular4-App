@@ -63,7 +63,11 @@ export class NeedsAuthorization implements CanActivate {
     }
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        return true;
+        if (route && route.routeConfig && route.routeConfig.path === "journal-voucher") {
+            return this.checkIfEmailDomainAllowed(this._permissionDataService.getCompany.createdBy.email);
+        } else {
+            return true;
+        }
         /*
         let requestedScopeNeedAuth = this.mapUIRouteWithAPIScope(state.url);
         if (requestedScopeNeedAuth) {
@@ -102,5 +106,24 @@ export class NeedsAuthorization implements CanActivate {
         } else {
             return null;
         }
+    }
+
+    /**
+     * This will verify if the company is allowed to view the page or not
+     *
+     * @param {string} email
+     * @returns {boolean}
+     * @memberof NeedsAuthorization
+     */
+    public checkIfEmailDomainAllowed(email: string): boolean {
+        let isAllowed = false;
+        if (email) {
+            let emailSplit = email.split("@");
+            if (emailSplit.indexOf("giddh.com") > -1 || emailSplit.indexOf("walkover.in") > -1 || emailSplit.indexOf("muneem.co") > -1) {
+                isAllowed = true;
+            }
+        }
+
+        return isAllowed;
     }
 }
