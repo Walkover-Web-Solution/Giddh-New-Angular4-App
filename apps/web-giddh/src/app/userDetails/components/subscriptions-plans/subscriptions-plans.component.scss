@@ -153,14 +153,21 @@
         margin: 10px 0;
     }
 }
+
 .transactions-popup {
     width: 360px;
     background: $white;
     box-shadow: 0px 3px 6px $black-russian;
     padding: 15px;
     z-index: 9;
-    /*transform: translate(330px) !important;*/
-    margin-top: 10px;
+    position: absolute;
+    top: 14px;
+    right: 0;
+    margin-top: 7px;
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: .5s all ease-in;
     .close {
         color: $nero;
         opacity: 1;
@@ -168,6 +175,15 @@
         position: absolute;
         right: 10px;
         top: 12px;
+    }
+}
+.transactions-limit-box {
+&:hover {
+        .transactions-popup {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+        }
     }
 }
 .guarantee-img {
@@ -255,6 +271,7 @@
 .all-plans{
     border: 1px solid $gainsboro;
 }
+
 @media only screen and (max-width: 1280px) {
     .see-all-features {
         width: 100%;

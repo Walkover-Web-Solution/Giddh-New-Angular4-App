@@ -1,7 +1,7 @@
 <ng-container *ngIf="allSubscriptions.length && !isLoading">
     <div *ngIf="!isPlanShow">
-        <div class="row xs-mb-1 xs-mt-4 search-subscription">
-            <div class="col-md-6 col-sm-6 col-xs-12">
+        <div class="xs-mt-4 search-subscription">
+            <div class="d-flex justify-content-between">
                 <div class="form-group subscription-dropdown-wrapper mb-0">
                     <div class="btn-group d-block subscription-dropdown mb-0 open custom-input-search">
                         <i class="icon-search"></i>
@@ -24,17 +24,18 @@
                         </ul>
                     </div>
                 </div>
+                <div class="d-flex ml-1">
+                    <button type="button" *ngIf="seletedUserPlans?.additionalCharges >0" (click)="goToBillingDetails();"
+                        class="btn btn-pink">Pay Now</button>
+                    <button type="button" (click)="isPlanShow=true" class="btn btn-green mr-0">Buy New Plan</button>
+                </div>
             </div>
-            <div class="col-md-6 col-sm-6 col-xs-12 text-right">
-                <button type="button" *ngIf="seletedUserPlans?.additionalCharges >0" (click)="goToBillingDetails();"
-                    class="btn btn-pink mt-2">Pay Now</button>
-                <button type="button" (click)="isPlanShow=true" class="btn btn-green mr-0">Buy New Plan</button>
-            </div>
+
         </div>
         <div class="clearfix mb-2" *ngIf="activeCompany && activeCompany?.subscription && activeCompany?.subscription?.planDetails">
             <div class="box mt-15 box-border plan-row-wrapper">
                 <div class="row d-flex justify-content-between align-items-center xs-d-block plan-row">
-                    <div class="col-md-8 col-sm-8 col-xs-12">
+                    <div class="col-md-11 col-sm-10 col-xs-12">
                         <p class="bold font-14">{{activeCompany.subscription.planDetails.name}}</p>
                         <ul class="list-inline plan-list font-14">
                             <li *ngIf="activeCompany.subscription.subscriptionId"><span>Subscription ID: </span> <span>{{activeCompany.subscription.subscriptionId}}</span> </li>
@@ -44,7 +45,7 @@
                             <li><span>Transaction Limit: </span> <span>{{activeCompany.subscription.planDetails.transactionLimit ? (activeCompany.subscription.planDetails.transactionLimit | number) : '0'}}</span></li>
                         </ul>
                     </div>
-                    <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left trial-plan-state">
+                    <div class="col-md-1 col-sm-2 col-xs-12 text-right trial-plan-state">
                         <div class="font-14" [ngClass]="{'active': calculateRemainingDays(activeCompany.subscription.expiry) === 'Active'}" *ngIf="activeCompany.subscription.status==='trial'"><span class="font-26" *ngIf="calculateRemainingDays(activeCompany.subscription.expiry) !== 'Active'">{{calculateRemainingDays(activeCompany.subscription.expiry)}}</span> <span class="green-dote" *ngIf="calculateRemainingDays(activeCompany.subscription.expiry) === 'Active'"></span> {{calculateRemainingDays(activeCompany.subscription.expiry) === 'Active' ? 'Active' : ""}} </div>
                         <div class="active font-14" *ngIf="activeCompany.subscription.status==='active'"><span class="green-dote"></span> {{activeCompany.subscription.status | titlecase}} </div>
                         <div class="text-danger font-14" *ngIf="activeCompany.subscription.status==='expired'"><span class="red-dote"></span> {{activeCompany.subscription.status | titlecase}} </div>
@@ -211,7 +212,7 @@
                                     </div> -->
                                 </div>
                             </div>
-                            <div class="clearfix associated-companies-list">
+                            <div class="clearfix associated-companies-list" container="body">
                                 <div class="mt-1 mb-1 pl-2 pr-1 search-company-here" *ngIf="subscriptions">
                                     <div class="form-group custom-input-search">
                                         <i class="icon-search"></i>
@@ -231,8 +232,9 @@
                                                     <p class="font-12 mt-05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">(Current Company)</p>
                                                 </div>
                                                 </a>
+
                                             <div class="btn-group custom-dropdown"
-                                                dropdown placement="bottom right">
+                                                dropdown placement="bottom right" container="body">
                                                 <button id="button-alignment" dropdownToggle type="button"
                                                     class="dropdown-toggle" aria-controls="dropdown-alignment">
                                                     <span class="icon-dots-three-vertical"></span>
@@ -337,7 +339,7 @@
         <div class="clearfix" *ngFor="let item of subscriptions">
             <div class="box mt-2 box-border plan-row-wrapper" *ngIf="item?.uniqueName !== activeCompany?.uniqueName">
                 <div class="row d-flex justify-content-between align-items-center xs-d-block plan-row">
-                    <div class="col-md-8 col-sm-8 col-xs-12">
+                    <div class="col-md-9 col-sm-9 col-xs-12">
                         <p class="bold font-14">{{item?.planDetails?.name}}</p>
                         <ul class="list-inline plan-list font-14">
                             <li *ngIf="item.subscriptionId"><span>Subscription ID: </span> <span> {{item.subscriptionId}}</span> </li>
@@ -346,7 +348,7 @@
                             <li><span>Transaction Limit: </span> <span>{{item?.planDetails?.transactionLimit ? (item?.planDetails?.transactionLimit | number) : '0'}}</span></li>
                         </ul>
                     </div>
-                    <div class="col-md-4 col-sm-4 col-xs-12 text-right xs-left trial-plan-state">
+                    <div class="col-md-3 col-sm-3 col-xs-12 text-right trial-plan-state">
                         <div class="font-14" [ngClass]="{'active': calculateRemainingDays(item?.expiry) === 'Active'}" *ngIf="item?.status==='trial'"><span class="font-26" *ngIf="calculateRemainingDays(item?.expiry) !== 'Active'">{{calculateRemainingDays(item?.expiry)}}</span> <span class="green-dote" *ngIf="calculateRemainingDays(item?.expiry) === 'Active'"></span> {{calculateRemainingDays(item?.expiry) === 'Active' ? 'Active' : ""}} </div>
                         <div class="active font-14" *ngIf="item?.status==='active'"><span class="green-dote"></span> {{item?.status | titlecase}} </div>
                         <div class="text-danger font-14" *ngIf="item?.status==='expired'"><span class="red-dote"></span> {{item?.status | titlecase}} </div>
