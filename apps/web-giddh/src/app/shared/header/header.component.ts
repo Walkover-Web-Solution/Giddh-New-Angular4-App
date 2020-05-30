@@ -215,9 +215,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private loggedInUserEmail: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private subscriptions: Subscription[] = [];
-    private modelRef: BsModalRef;
-    private modelRefExpirePlan: BsModalRef;
-    private modelRefCrossLimit: BsModalRef;
+    public modelRef: BsModalRef;
+    public modelRefExpirePlan: BsModalRef;
+    public modelRefCrossLimit: BsModalRef;
 
     private activeCompanyForDb: ICompAidata;
     private smartCombinedList$: Observable<any>;
@@ -1549,6 +1549,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.removeCompanySessionData();
         this.showAddCompanyModal();
     }
+    
 
     /**
      * Fetches whether company country has other taxes (TCS/TDS)

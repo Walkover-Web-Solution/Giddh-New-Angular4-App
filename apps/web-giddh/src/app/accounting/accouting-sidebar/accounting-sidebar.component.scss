@@ -1,26 +1,27 @@
+@import '../../../assets/css/color.scss';
+
 .account_listbar {
     overflow-y: hidden;
     height: 100vh;
     width: 250px;
-    background: white;
+    background: $white;
     position: absolute;
     left: -250px;
     z-index: 0;
 }
 
-.appearance_none {
+.appearance-none {
     background: none !important;
     border: 0 !important;
     font-size: 16px;
-    color: #333333;
+    color: $night-rider;
 }
 
-.sidebar_menu {
+.sidebar-menu {
     min-height: 100vh;
-    background: #262626;
-    color: white;
+    background: $nero;
+    color: $white;
     float: right;
-    /* width: 250px; */
     position: relative;
 }
 
@@ -33,29 +34,32 @@
 }
 
 .menu_list li a {
-    color: #fff;
+    color: $white;
     padding: 7px 12px;
     display: block;
     font-size: 14px;
 }
 
 .menu_list li a:hover {
-    background: #333;
+    background: $night-rider;
 }
 
 .menu_list li a.isHidden {
-    color: #4d4d4d;
+    color: $matterhorn;
 }
 
-.activechild {
-    background: #333333;
+.active-child {
+    background: $night-rider;
     padding-left: 20px;
 }
-
-.activechild > span {
+.active-parent {
+    background: $night-rider;
+}
+.active-child > span {
     margin-right: 2px;
 }
 
 .dblUnderlined {
-    border-bottom: 3px double;
+    border-bottom: 1px double;
+    text-decoration: underline;
 }

@@ -1,4 +1,4 @@
-<section class="container" *ngIf="!isShowLedgerColumnarReportTable">
+<section class="container d-flex" *ngIf="!isShowLedgerColumnarReportTable">
 
     <!-- region ledger table-->
     <div class="ledgHead transactions-page mt-2 pos-rel">
@@ -428,15 +428,15 @@
         </table>
 
         <!-- region account table-->
-        <table class="col-xs-12 ledger-head mrT1">
+        <table class="col-xs-12 ledger-head">
             <thead>
                 <tr>
-                    <th [ngClass]="Shown ? 'active' : ''" class="col-xs-6 hidden-xs">
+                    <th  [ngClass]="Shown ? 'active' : ''" class="col-xs-6 hidden-xs sticky-header">
                         <b> {{lc.ledgerUnderStandingObj.text.dr}}</b>
 
                         <span class="dr-cr-category pull-right text-gray">Dr</span>
                     </th>
-                    <th [ngClass]="!Shown ? 'active' : ''" class="col-xs-6 hidden-xs">
+                    <th [ngClass]="!Shown ? 'active' : ''" class="col-xs-6 hidden-xs sticky-header">
                         <b> {{lc.ledgerUnderStandingObj.text.cr}}</b>
                         <span class="dr-cr-category pull-right text-gray">Cr</span>
                     </th>

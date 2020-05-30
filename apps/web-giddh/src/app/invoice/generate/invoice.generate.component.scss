@@ -179,7 +179,7 @@ button.btn.btn-filter {
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
-    padding: 6px 10px !important;
+    padding: 7px 10px !important;
 }
 .pending-table-description{
     white-space: normal;
@@ -236,6 +236,7 @@ button.btn.btn-filter {
     .clear-filter.btn.btn-filter {
         justify-content: center !important;
         margin-bottom: 10px !important;
+        margin-right: 10px !important;
     }
     .mobile-width-100 {
         width: 100%;
@@ -255,7 +256,23 @@ button.btn.btn-filter {
         margin-bottom: 0 !important;
         width: 120px;
     }
-
+.pending-page-search-block{
+    .form-group{
+        flex-direction: column;
+        #dp-parent{
+            width: 200px;
+        }
+        .clear-filter.btn.btn-filter{
+            margin-right: 0 !important;
+        }
+        .multiple-compound-button{
+            margin-top: 10px;
+            button{
+                margin-bottom: 5px;
+            }
+        }
+    }
+}
 }
  
 @media (max-width: 375px) {

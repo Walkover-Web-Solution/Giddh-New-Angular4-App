@@ -24,16 +24,16 @@
         </div>
         <div class="row">
             <div class="col-sm-3 col-xs-12 mb-2 clear-both">
-                <input type="checkbox" name="showHideOpeningClosingBalance" id="showHideOpeningClosingBalance" [(ngModel)]="exportRequest.showHideOpeningClosingBalance" [value]="true">&nbsp;<label for="showHideOpeningClosingBalance">Opening/Closing Balance</label>
+                <input type="checkbox" name="showHideOpeningClosingBalance" id="showHideOpeningClosingBalance" [(ngModel)]="exportRequest.showHideOpeningClosingBalance">&nbsp;<label for="showHideOpeningClosingBalance">Opening/Closing Balance</label>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-3 col-xs-12 mb-2 clear-both">
-                <input type="checkbox" name="balanceTypeAsSign" id="balanceTypeAsSign" [(ngModel)]="exportRequest.balanceTypeAsSign" [value]="true">&nbsp;<label for="balanceTypeAsSign">Cr/Dr with +/-</label>
+                <input type="checkbox" name="balanceTypeAsSign" id="balanceTypeAsSign" [(ngModel)]="exportRequest.balanceTypeAsSign" (ngModelChange)="onBalanceTypeAsSignChanged($event)">&nbsp;<label for="balanceTypeAsSign">Cr/Dr with +/-</label>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-3 col-xs-6 mb-2 clear-both">
+            <div class="col-sm-12 col-xs-12 mb-2 clear-both">
                 <button class="btn btn-pink " [disabled]="!isFormValid() || isLoading" (click)="exportReport(false);">Export</button>
                 <button class="btn btn-pink " [disabled]="!isFormValid() || isLoading" (click)="exportReport(true);">Show</button>
                 <button class="btn btn-pink " (click)="clearFilter();">Reset</button>
@@ -46,7 +46,7 @@
 <!-- <div *ngIf="columnarReportResponse" class="back-btn text-center pr-1 mt-1 mb-1">
     <button class="btn btn-default" (click)="clearFilter()"> <span class="icon-cross"></span>Clear Filter</button>
 </div> -->
-<columnar-report-table-component [columnarReportResponse]="columnarReportResponse"></columnar-report-table-component>
+<columnar-report-table-component [columnarReportResponse]="columnarReportResponse" [isBalanceTypeAsSign]="isBalanceTypeAsSign"></columnar-report-table-component>
 <div class="paginationWrapper" *ngIf="columnarReportResponse && columnarReportResponse?.totalPages > 1">
     <pagination [totalItems]="columnarReportResponse.totalItems" [(ngModel)]="columnarReportResponse.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" [itemsPerPage]="paginationCount" (pageChanged)="pageChanged($event)"></pagination>
 </div>
