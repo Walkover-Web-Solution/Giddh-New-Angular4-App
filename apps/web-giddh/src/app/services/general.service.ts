@@ -409,4 +409,47 @@ export class GeneralService {
         array.splice(newIndex, 0, array.splice(currentIndex, 1)[0]);
         return array;
     }
+
+    /**
+     * This will calculate the position of element
+     *
+     * @param {*} element
+     * @returns
+     * @memberof DatepickerWrapperComponent
+     */
+    public getPosition(element): any {
+        var xPosition = 0;
+        var yPosition = 40;
+
+        while (element) {
+            xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
+            yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
+            element = element.offsetParent;
+        }
+
+        return { x: xPosition, y: yPosition };
+    }
+
+    /**
+     * Returns a particular cookie value
+     *
+     * @param {string} cookieName Name of the cookie whose value is required
+     * @returns {string} Cookie value
+     * @memberof GeneralService
+     */
+    public getCookie(cookieName: string): string {
+        const name = `${cookieName}=`;
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const availableCookies = decodedCookie.split(';');
+        for (let index = 0; index < availableCookies.length; index++) {
+            let cookie = availableCookies[index];
+            while (cookie.charAt(0) === ' ') {
+                cookie = cookie.substring(1);
+            }
+            if (cookie.indexOf(name) === 0) {
+                return cookie.substring(name.length, cookie.length);
+            }
+        }
+        return '';
+    }
 }

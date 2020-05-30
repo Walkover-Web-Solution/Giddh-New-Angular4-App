@@ -630,14 +630,14 @@
                                             <div class="td_Wrapper">
                                                 <div style="flex: 1;">
                                                     <div class="wrap-td-data"> <span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                                                            {{invFormData.accountDetails.currencySymbol}}</span> {{transaction.rate | giddhCurrency: ratePrecision}}
+                                                            {{invFormData.accountDetails.currencySymbol}}</span> {{transaction.rate | giddhCurrency: ratePrecision:true}}
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div *ngIf="isMulticurrencyAccount && !isPurchaseInvoice" class="differ-currency">
                                                 <span>{{baseCurrencySymbol}}</span>
-                                                <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision}}</span>
+                                                <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span>
 
                                             </div>
                                         </div>
@@ -853,7 +853,7 @@
                                             <!-- please add condition for show and hide -->
                                             <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                                 <span>{{baseCurrencySymbol}}</span>
-                                                <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision}}</span>
+                                                <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span>
                                             </div>
                                         </div>
                                     </td>
@@ -1357,11 +1357,11 @@
                                     <label class="card-label">Rate</label>
                                     <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
                                         <p> <span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                                                            {{invFormData.accountDetails.currencySymbol}}</span> {{transaction.rate | giddhCurrency: ratePrecision}}
+                                                            {{invFormData.accountDetails.currencySymbol}}</span> {{transaction.rate | giddhCurrency: ratePrecision:true}}
                                         </p>
                                         <div *ngIf="isMulticurrencyAccount && !isPurchaseInvoice" class="differ-currency">
                                             <span>{{baseCurrencySymbol}}</span>
-                                            <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision}}</span>
+                                            <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span>
 
                                         </div>
                                     </div>
@@ -1614,7 +1614,7 @@
                                     <!-- please add condition for show and hide -->
                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                         <span>{{baseCurrencySymbol}}</span>
-                                        <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision}}</span>
+                                        <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span>
                                     </div>
                                 </div>
 

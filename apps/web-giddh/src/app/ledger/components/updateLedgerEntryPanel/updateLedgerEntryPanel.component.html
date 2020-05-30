@@ -431,8 +431,10 @@
                                 <input type="text" name="unitPrice" (blur)="vm.inventoryPriceChanged(vm.stockTrxEntry.inventory.rate)" [mask]="vm.inputMaskFormat" [customDecimalPlaces]="ratePrecision" [prefix]="vm.selectedPrefixForCurrency" [suffix]="vm.selectedSuffixForCurrency" [rawInputValue]="vm.stockTrxEntry.inventory.rate"
                                     [(ngModel)]="vm.stockTrxEntry.inventory.rate" class="form-control text-right" />
                                 <p class="mb-0 amnt-total" *ngIf="vm.isMultiCurrencyAvailable">
-                                    <ng-container *ngTemplateOutlet="totalWithCurrencySymbol;context: { $implicit: vm.convertedRate }">
-                                    </ng-container>
+                                    <span>
+                                        {{ vm.selectedCurrency === 0 ? vm.foreignCurrencyDetails?.symbol : vm.baseCurrencyDetails?.symbol }} {{ vm.convertedRate |
+                                        giddhCurrency: ratePrecision:true }}
+                                    </span>
                                 </p>
                             </div>
                         </ng-template>

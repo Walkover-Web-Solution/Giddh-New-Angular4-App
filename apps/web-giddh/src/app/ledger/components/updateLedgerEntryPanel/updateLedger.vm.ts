@@ -667,18 +667,18 @@ export class UpdateLedgerVm {
      * Calculates conversion rate
      *
      * @param {*} baseModel Value to be converted
-     * @param {number} [customDecimalPaces] Optional custom decimal places (required for Rate as 4 digits are required for rate)
+     * @param {number} [customDecimalPlaces] Optional custom decimal places (required for Rate as 4 digits are required for rate)
      * @returns Converted rate
      * @memberof UpdateLedgerVm
      */
-    public calculateConversionRate(baseModel: any, customDecimalPaces?: number): number {
+    public calculateConversionRate(baseModel: any, customDecimalPlaces?: number): number {
         if (!baseModel || !this.selectedLedger.exchangeRate) {
             return 0;
         }
         if (this.selectedCurrencyForDisplay === 0) {
-            return giddhRoundOff(baseModel * this.selectedLedger.exchangeRate, (customDecimalPaces) ? customDecimalPaces : this.giddhBalanceDecimalPlaces);
+            return giddhRoundOff(baseModel * this.selectedLedger.exchangeRate, (customDecimalPlaces) ? customDecimalPlaces : this.giddhBalanceDecimalPlaces);
         } else {
-            return giddhRoundOff(baseModel / this.selectedLedger.exchangeRate, (customDecimalPaces) ? customDecimalPaces : this.giddhBalanceDecimalPlaces);
+            return giddhRoundOff(baseModel / this.selectedLedger.exchangeRate, (customDecimalPlaces) ? customDecimalPlaces : this.giddhBalanceDecimalPlaces);
         }
     }
 
