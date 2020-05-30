@@ -93,7 +93,7 @@ export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
                     }
                 }
 
-                return shouldRemoveTrailingZeros ? op.replace(REMOVE_TRAILING_ZERO_REGEX, '$1') : op;;
+                return shouldRemoveTrailingZeros ? op.replace(REMOVE_TRAILING_ZERO_REGEX, '$1$2$3') : op;;
             } else {
                 let op = '-' + result[0].substring(1);
                 if (result.length > 1) {
@@ -110,7 +110,7 @@ export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
                     }
                 }
 
-                return shouldRemoveTrailingZeros ? op.replace(REMOVE_TRAILING_ZERO_REGEX, '$1') : op;;
+                return shouldRemoveTrailingZeros ? op.replace(REMOVE_TRAILING_ZERO_REGEX, '$1$2$3') : op;;
             }
         } else {
             lastThree = result[0].substring(result[0].length - 3);
@@ -251,7 +251,7 @@ export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
             }
                 break;
         }
-        return shouldRemoveTrailingZeros ? finaloutput.replace(REMOVE_TRAILING_ZERO_REGEX, '$1') : finaloutput;
+        return shouldRemoveTrailingZeros ? finaloutput.replace(REMOVE_TRAILING_ZERO_REGEX, '$1$2$3') : finaloutput;
 
     }
 
