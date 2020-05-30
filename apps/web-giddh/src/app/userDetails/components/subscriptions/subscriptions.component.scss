@@ -53,6 +53,7 @@
     margin-top: 0;
     max-height: 300px;
     overflow-y: auto;
+    z-index: 9;
 }
 .subscription-dropdown .dropdown-menu li {
     padding: 5px 4px;
@@ -209,6 +210,14 @@
     border: 1px solid $gainsboro;
 }
 
+.plan-row-wrapper{
+    .plan-list{
+        li{
+            padding-right: 25px;
+            margin-bottom: 0px;
+        }
+    }
+}
 /*resposnive*/
 @media only screen and (max-width: 1024px) {
     .table-subscription {
@@ -216,7 +225,7 @@
     }
 }
 @media only screen and (max-width: 768px) {
-    .section-head{
+    .section-head {
         margin-bottom: 0 !important;
     }
     .table-subscription {
@@ -240,10 +249,6 @@
         padding-left: 0px !important;
     }
     .search-subscription{
-        button{
-            float: right;
-            margin-top: 15px;
-        }
         .subscription-dropdown-wrapper{
             max-width: 100%;
         }
@@ -257,6 +262,7 @@
                 li{
                     padding-right: 0;
                     width: 50%;
+                    line-height: 24px;
                 }
             }
             .trial-plan-state{
@@ -285,6 +291,8 @@
         border-left: none;
         padding-right: 0;
         .main-associated-companies{
+            margin-top: 10px;
+            overflow: hidden;
             .associated-company-heading{
                 background-color: $gainsboro;
                 padding: 5px 5px;
@@ -300,19 +308,24 @@
         .btn-group.custom-dropdown {
            margin-right: 10px;
         }
+        .trial-plan-state  {
+            span.font-26 {
+                font-size: 16px;
+                font-weight: bold;
+            }
+        }
 }
 @media(max-width:767px){
     .search-subscription{
          margin-top: 55px;
     }
-
 }
 @media(max-width:575px){
     .plan-row-wrapper{
         .plan-list{
             li{
                 padding-right: 0;
-                width: 100%;
+                width: 100% !important;
                 span{
                     &:first-child{
                         min-width: 150px;
@@ -321,5 +334,19 @@
                 }
             }
         }
+    }
+    .subscription-dropdown .dropdown-menu {
+        min-width: 320px;
+    }
+}
+@media(max-width:320px) {
+    .subscription-dropdown .dropdown-menu {
+        min-width: 290px;
+    }
+    .subscription-dropdown .dropdown-menu li p {
+        white-space: normal;
+    }
+    .custom-input-search .form-control {
+        font-size: 12px !important;
     }
 }
