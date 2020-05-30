@@ -17,7 +17,7 @@ import { createSelector } from 'reselect';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, } from 'rxjs';
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
 import * as uuid from 'uuid';
-
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
 import { GeneralActions } from '../actions/general/general.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
@@ -144,6 +144,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public uploadInput: EventEmitter<UploadInput>;
     public fileUploadOptions: UploaderOptions;
     public isFileUploading: boolean = false;
+    public isMobileScreen: boolean = true;
     public closingBalanceBeforeReconcile: { amount: number, type: string };
     public reconcileClosingBalanceForBank: { amount: number, type: string };
     // aside menu properties
@@ -204,6 +205,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private accountUniquename: any;
     public allTransactionsList: any[] = [];
     public allTransactionDates: any[] = [];
+    public Shown: boolean = true;
+    public isHide: boolean = false;
+    public condition: boolean = true;
+    public condition2: boolean = false;
+    public visibleTransactionTypeMobile: string = "all";
+    public ledgerTransactions: any;
 
     constructor(
         private store: Store<AppState>,
@@ -220,7 +227,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private _loaderService: LoaderService,
         private _settingsDiscountAction: SettingsDiscountActions,
         private warehouseActions: WarehouseActions,
-        private _cdRf: ChangeDetectorRef
+        private _cdRf: ChangeDetectorRef,
+        private breakPointObservar: BreakpointObserver,
     ) {
 
         this.lc = new LedgerVM();
@@ -254,12 +262,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.failedBulkEntries$ = this.store.select(p => p.ledger.ledgerBulkActionFailedEntries).pipe(takeUntil(this.destroyed$));
     }
 
-    Shown: boolean = true;
-    isHide: boolean = false;
-    condition: boolean = true;
-    condition2: boolean = false;
-
-    toggleShow() {
+    public toggleShow() {
         this.condition = this.condition ? false : true;
         this.condition2 = this.condition ? false : true;
         this.Shown = this.Shown ? false : true;
@@ -448,6 +451,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.breakPointObservar.observe([
+            '(max-width: 991px)'
+        ]).subscribe(result => {
+            this.isMobileScreen = result.matches;
+            if(this.isMobileScreen) {
+                this.arrangeLedgerTransactionsForMobile();
+            }
+        });
+
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
         this.shouldShowItcSection = false;
@@ -593,29 +605,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     };
                 }
 
-                this.allTransactionsList = [];
-                this.allTransactionDates = [];
+                this.ledgerTransactions = lt;
 
-                if(lt.debitTransactions) {
-                    lt.debitTransactions.forEach(transaction => {
-                        if(this.allTransactionsList[transaction.entryDate] === undefined) {
-                            this.allTransactionsList[transaction.entryDate] = [];
-                        }
-                        this.allTransactionsList[transaction.entryDate].push(transaction);
-                    });
-                }
-
-                if(lt.creditTransactions) {
-                    lt.creditTransactions.forEach(transaction => {
-                        if(this.allTransactionsList[transaction.entryDate] === undefined) {
-                            this.allTransactionsList[transaction.entryDate] = [];
-                        }
-                        this.allTransactionsList[transaction.entryDate].push(transaction);
-                    });
-                }
-
-                if(this.allTransactionsList) {
-                    this.allTransactionDates = Object.keys(this.allTransactionsList);
+                if(this.isMobileScreen) {
+                    this.arrangeLedgerTransactionsForMobile();
                 }
 
                 if (lt.closingBalance) {
@@ -1350,7 +1343,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (!this.paginationChild) {
             return;
         }
-        let transactionData = null;
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
         let viewContainerRef = this.paginationChild.viewContainerRef;
         viewContainerRef.remove();
@@ -1868,4 +1860,48 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.hideExportLedgerModal();
     }
 
+    /**
+     * This will toggle transaction type for mobile
+     *
+     * @param {string} transactionType
+     * @memberof LedgerComponent
+     */
+    public toggleMobileTransactionType(transactionType: string): void {
+        this.visibleTransactionTypeMobile = transactionType;
+        this.arrangeLedgerTransactionsForMobile();
+    }
+
+    /**
+     * This will merge transactions of debit/credit based on visible transaction type for mobile
+     *
+     * @memberof LedgerComponent
+     */
+    public arrangeLedgerTransactionsForMobile(): void {
+        if(this.ledgerTransactions) {
+            this.allTransactionsList = [];
+            this.allTransactionDates = [];
+
+            if(this.visibleTransactionTypeMobile !== "credit" && this.ledgerTransactions.debitTransactions) {
+                this.ledgerTransactions.debitTransactions.forEach(transaction => {
+                    if(this.allTransactionsList[transaction.entryDate] === undefined) {
+                        this.allTransactionsList[transaction.entryDate] = [];
+                    }
+                    this.allTransactionsList[transaction.entryDate].push(transaction);
+                });
+            }
+
+            if(this.visibleTransactionTypeMobile !== "debit" && this.ledgerTransactions.creditTransactions) {
+                this.ledgerTransactions.creditTransactions.forEach(transaction => {
+                    if(this.allTransactionsList[transaction.entryDate] === undefined) {
+                        this.allTransactionsList[transaction.entryDate] = [];
+                    }
+                    this.allTransactionsList[transaction.entryDate].push(transaction);
+                });
+            }
+
+            if(this.allTransactionsList) {
+                this.allTransactionDates = Object.keys(this.allTransactionsList);
+            }
+        }
+    }
 }

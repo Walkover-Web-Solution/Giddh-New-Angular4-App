@@ -326,7 +326,15 @@
 .pl-05 {
     padding-left: 5px;
 }
-
+.pt-05 {
+    padding-top: 5px;
+}
+.pr-05 {
+    padding-right: 5px;
+}
+.pb-05 {
+    padding-bottom: 5px;
+}
 .bt-1 {
     border-top: 1px solid #ccc;
 }
@@ -342,7 +350,9 @@
 .bl-1 {
     border-left: 1px solid #ccc;
 }
-
+.border-none{
+    border: none !important;
+}
 
 /* end MDB tweaks */
 
@@ -753,9 +763,14 @@ input {
     margin-left: 0px;
 }
 .mr-0 {
-    margin-right: 0px !important;
+    margin-right: 0 !important;
 }
-
+.mt-0 {
+    margin-top: 0px;
+}
+.mb-0 {
+    margin-bottom: 0px;
+}
 .ml-1 {
     margin-left: 10px;
 }
@@ -1824,12 +1839,12 @@ header .navbar {
     color: #616161;
 }
 
-.ledgHead {
+.ledg-head {
     width: 100%;
 }
 
 
-/* .ledgHead input[type=search] {
+/* .ledg-head input[type=search] {
     min-width: 220px;
 } */
 
@@ -2922,13 +2937,6 @@ li.no-click {
         width: 25%;
     }
 }
-
-@media only screen and (min-width: 1280px) {
-    /* #content_wrapper  .container{  max-width: 1280px;
-    width: 100%;
-}  */
-}
-
 @media only screen and (max-width: 1160px) {
     .template_list {
         width: 33.33%;
@@ -6293,8 +6301,8 @@ typeahead-container .dropdown-menu li.active>a>a {}
 
 /* =========================== LEDGER CSS ============================ */
 
-.ledgHead table td[class*="col-"],
-.ledgHead table td .select2-container {
+.ledg-head table td[class*="col-"],
+.ledg-head table td .select2-container {
     padding: 8px !important;
     border-bottom: 1px solid #ccc;
     border-right: 1px solid #ccc;
@@ -6310,11 +6318,11 @@ typeahead-container .dropdown-menu li.active>a>a {}
     background-color: #f7f8fa;
 }
 
-.ledgHead table td.pdR25imp {
+.ledg-head table td.pdR25imp {
     padding-right: 25px !important;
 }
 
-.ledgHead.entry-popup table td[class*="col-"] {
+.ledg-head.entry-popup table td[class*="col-"] {
     padding: 0px !important;
     padding-bottom: 1px !important;
     border-bottom: 1px solid #ccc;
@@ -6328,11 +6336,11 @@ typeahead-container .dropdown-menu li.active>a>a {}
     position: relative;
 }
 
-.ledgHead.entry-popup table td.pdR25imp {
+.ledg-head.entry-popup table td.pdR25imp {
     padding-right: 25px !important;
 }
 
-.ledgHead .ledger-main td[class*="col-"] {
+.ledg-head .ledger-main td[class*="col-"] {
     padding: 0px !important;
 }
 
@@ -6355,7 +6363,7 @@ table td[class*=col-]:last-child {
     border-left: 0;
 }
 
-.ledgHead input[type="search"] {
+.ledg-head input[type="search"] {
     min-width: auto;
 }
 
@@ -6400,7 +6408,7 @@ table td[class*=col-]:last-child {
     display: inline-block;
 }
 
-.pageCount {
+.page-count {
     overflow: hidden;
     width: 50%;
     left: 25%;
@@ -6434,7 +6442,7 @@ table td[class*=col-]:last-child {
     border-bottom: 1px solid #c4c6c7;
 }
 
-.ledger_book {
+.ledger-book {
     border: 1px solid #ccc;
     clear: both;
     /* // overflow: hidden; */
@@ -6487,7 +6495,7 @@ table td[class*=col-]:last-child {
     border: 0 !important;
 }
 
-.ledgHead.entry-popup table td.select2-ledger>sh-select {
+.ledg-head.entry-popup table td.select2-ledger>sh-select {
     top: 1px;
 }
 
@@ -7871,12 +7879,12 @@ app-header {
 
 /* my css */
 
-.ledger_book .right-col-new .entry-modal {
+.ledger-book .right-col-new .entry-modal {
     width: 165%;
     left: -65%;
 }
 
-.ledger_book .left-col-new .entry-modal {
+.ledger-book .left-col-new .entry-modal {
     width: 165%;
 }
 
@@ -8217,7 +8225,7 @@ span.red-text {
     overflow-y: auto;
 }
 
-.ledger_book .tooltip-inner {
+.ledger-book .tooltip-inner {
     word-break: break-word !important;
     white-space: pre-line !important;
 }
@@ -8239,7 +8247,7 @@ span.red-text {
     color: $midnight-blue;
 }
 
-.pageCount span {
+.page-count span {
     font-size: 14px;
 }
 
@@ -9193,6 +9201,13 @@ ngx-daterangepicker-material {
         border: 0px;
         position: relative;
     }
+    .ledg-head .custom-tabs .nav.nav-tabs {
+        position: fixed;
+        width: 100%;
+        top: 111px;
+        left: 0;
+        padding-top: 5px !important;
+    }
 }
 
 @media (max-width: 840px) {
@@ -9342,7 +9357,7 @@ ngx-daterangepicker-material {
 }
 
 @media (max-width: 1199px) {
-    .ledger_book .left-col-new .entry-modal {
+    .ledger-book .left-col-new .entry-modal {
         width: 100%;
     }
 }
@@ -9393,7 +9408,7 @@ ngx-daterangepicker-material {
     .xs-width-100 {
         width: 100%;
     }
-    .ledger_book .right-col-new .entry-modal {
+    .ledger-book .right-col-new .entry-modal {
         width: 100%;
         left: 0%;
     }
@@ -9457,7 +9472,7 @@ ngx-daterangepicker-material {
         width: 100%;
         top: 92px;
     }
-    .ledgHead.entry-popup .custom-tabs .nav.nav-tabs {
+    .ledg-head.entry-popup .custom-tabs .nav.nav-tabs {
         position: relative;
         width: 100%;
         top: 0;
@@ -9485,8 +9500,10 @@ ngx-daterangepicker-material {
     .custom-tabs .nav.nav-tabs>li a {
         padding-top: 7px;
     }
-    .ledgHead .custom-tabs .nav.nav-tabs {
+    .ledg-head .custom-tabs .nav.nav-tabs {
         left: 0;
+        top: 92px;
+        padding-top: 0 !important;
     }
     .daterangepicker.dropdown-menu.show-calendar {
         z-index: 9 !important;
