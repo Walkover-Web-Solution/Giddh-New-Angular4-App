@@ -67,7 +67,7 @@
             <p>{{daybookQueryRequest.from }} - {{ daybookQueryRequest.to}}</p>
         </div>
 
-        <div class=" clearfix trial-balance">
+        <div class=" clearfix trial-balance table-responsive">
 
             <table class="tb-head table-bordered table basic onMobileView">
                 <thead>
@@ -136,7 +136,7 @@
                                 </td>
                                 <td>{{details.inventory?details.inventory.skuCode:''}}
                                 </td>
-                                <td>{{details.inventory?details.inventory.warehouse.name:''}}
+                                <td class="warehouse-name">{{details.inventory?details.inventory.warehouse.name:''}}
                                 </td>
                             </ng-container>
                         </tr>
