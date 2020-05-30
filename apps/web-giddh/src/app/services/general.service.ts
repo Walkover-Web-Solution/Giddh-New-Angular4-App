@@ -348,4 +348,27 @@ export class GeneralService {
             return ((totalTaxPercentage * (Number(amount) - totalDiscount)) / 100);
         }
     }
+
+    /**
+     * Returns a particular cookie value
+     *
+     * @param {string} cookieName Name of the cookie whose value is required
+     * @returns {string} Cookie value
+     * @memberof GeneralService
+     */
+    public getCookie(cookieName: string): string {
+        const name = `${cookieName}=`;
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const availableCookies = decodedCookie.split(';');
+        for (let index = 0; index < availableCookies.length; index++) {
+            let cookie = availableCookies[index];
+            while (cookie.charAt(0) === ' ') {
+                cookie = cookie.substring(1);
+            }
+            if (cookie.indexOf(name) === 0) {
+                return cookie.substring(name.length, cookie.length);
+            }
+        }
+        return '';
+    }
 }
