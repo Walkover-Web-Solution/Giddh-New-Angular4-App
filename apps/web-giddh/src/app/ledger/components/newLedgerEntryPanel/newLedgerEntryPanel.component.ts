@@ -1016,15 +1016,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * Calculates conversion rate
      *
      * @param {*} baseModel Value to be converted
-     * @param {number} [customDecimalPaces] Optional custom decimal places (required for Rate as 4 digits are required for rate)
+     * @param {number} [customDecimalPlaces] Optional custom decimal places (required for Rate as 4 digits are required for rate)
      * @returns Converted rate
      * @memberof NewLedgerEntryPanelComponent
      */
-    public calculateConversionRate(baseModel: any, customDecimalPaces?: number): number {
+    public calculateConversionRate(baseModel: any, customDecimalPlaces?: number): number {
         if (!baseModel || !this.blankLedger.exchangeRate) {
             return 0;
         }
-        return giddhRoundOff(baseModel * Number(this.blankLedger.exchangeRate), (customDecimalPaces) ? customDecimalPaces : this.giddhBalanceDecimalPlaces);
+        return giddhRoundOff(baseModel * Number(this.blankLedger.exchangeRate), (customDecimalPlaces) ? customDecimalPlaces : this.giddhBalanceDecimalPlaces);
     }
 
     /**
