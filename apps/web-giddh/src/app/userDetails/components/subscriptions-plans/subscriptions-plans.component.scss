@@ -256,6 +256,7 @@
 }
 .main-row-plans {
     display: flex;
+    flex-wrap: wrap;
 }
 .btn-green:focus {
     color: $white;
@@ -289,7 +290,7 @@
         margin-bottom: 15px;
     }
     .main-row-plans .col-sm-4 {
-        width: 460px;
+        width: 50%;
         display: inline-block;
         white-space: normal;
     }
