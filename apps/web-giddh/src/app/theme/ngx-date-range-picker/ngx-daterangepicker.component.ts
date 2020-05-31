@@ -2199,9 +2199,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
     @HostListener('window:resize', ['$event'])
     windowResize(event) {
-        this.isMobileScreen = false;
-        this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate });
-        this.hide();
+        if(!this.isMobileScreen) {
+            this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate });
+            this.hide();
+        }
     }
 
     @HostListener('window:orientationchange', ['$event'])
