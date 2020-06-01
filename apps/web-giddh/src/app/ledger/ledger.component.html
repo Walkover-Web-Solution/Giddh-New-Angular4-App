@@ -19,12 +19,11 @@
             <div class="col-md-4 col-sm-4 col-xs-12 search-ledger-wrapper">
                 <div class="d-flex search-ledger-field">
                     <!-- please remove hidden attribute after functionality works -->
-                    <div class="select-all-icons" *ngIf="isMobileScreen" hidden>
-                        <div>
-                            <input type="checkbox">Select All
+                    <div class="select-all-icons" *ngIf="checkedTrxWhileHovering.length > 0 && isMobileScreen">
+                        <div *ngIf="visibleTransactionTypeMobile && checkedTrxWhileHovering.length > 0">
+                            <input type="checkbox" [(ngModel)]="debitCreditSelectAll" (click)="selectAllEntries($event, visibleTransactionTypeMobile)"> Select All
                         </div>
                         <div class="d-flex ml-15">
-                            <!-- *ngIf="checkedTrxWhileHovering.length > 0 " -->
                             <button class="btn btn-danger" (click)="performBulkAction('delete')" container="body"
                                 tooltip="Delete" [placement]="'top'"><i class="fa fa-trash-o"></i>
                             </button>
@@ -47,7 +46,7 @@
                                 (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
                             <i class="icon-search1 pos-abs"></i>
                         </span>
-                        <a class="cp mrL1 clear-filter-btn"  *ngIf="isAdvanceSearchImplemented && isMobileScreen" href="javascript: void 0" (click)="resetAdvanceSearch()"
+                        <a class="cp mrL1 clear-filter-btn"  *ngIf="isAdvanceSearchImplemented && isMobileScreen" href="javascript:;" (click)="resetAdvanceSearch()"
                             tooltip="Reset Advance Search">
                             <i aria-hidden="true" class="glyphicon glyphicon-refresh"></i>
                             Clear Filter
@@ -56,7 +55,7 @@
                     
                     <!-- Functionality not working -->
                     <div class="ledger-datepicker" container="body"  *ngIf="isMobileScreen">    
-                            <img bsDatepicker src="../../assets/images/calender-icon.svg">
+                        <img (click)="showGiddhDatepicker($event)" src="../../assets/images/calender-icon.svg">
                     </div>
                     <span *ngIf="!isMobileScreen" class="advance-icon d-flex advance-search-filter pointer" [tooltip]="'Advance Search'"
                         [placement]="'top'"
@@ -64,12 +63,12 @@
                         <!-- <i class="icon-advance-search" aria-hidden="true" (click)="onOpenAdvanceSearch()"></i> -->
                         <img src="../../assets/images/advance-filter.svg" (click)="onOpenAdvanceSearch()">
                     </span>
-                    <a class="cp mrL1 clear-filter-btn" *ngIf="isAdvanceSearchImplemented && !isMobileScreen" href="javascript: void 0" (click)="resetAdvanceSearch()"
+                    <a class="cp mrL1 clear-filter-btn" *ngIf="isAdvanceSearchImplemented && !isMobileScreen" href="javascript:;" (click)="resetAdvanceSearch()"
                         tooltip="Reset Advance Search">
                         <i aria-hidden="true" class="glyphicon glyphicon-refresh"></i>
                         Clear Filter
                     </a>
-                    <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0 || !isMobileScreen">
+                    <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0 && !isMobileScreen">
 
                         <button class="btn btn-danger" (click)="performBulkAction('delete')" container="body"
                             tooltip="Delete" [placement]="'top'"><i class="fa fa-trash-o"></i>
@@ -95,9 +94,10 @@
                 <div class="advanceSearchByDate date-advanceSearch">
                     <!-- <span class="icon-calender "></span> -->
                     <span class="inputWrapper">
-                        <input type="text" class="form-control daterange_picker_ledger" daterangepicker
+                        <!-- <input type="text" class="form-control daterange_picker_ledger" daterangepicker
                             [options]="datePickerOptions" (applyDaterangepicker)="selectedDate($event)"
-                            name="daterangeInput" />
+                            name="daterangeInput" /> -->
+                        <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"  class="giddh-datepicker date-range-picker"/>    
                     </span>
                 </div>
                 <!--<input date-range-picker="" id="daterange3" name="daterange3"-->
@@ -488,10 +488,13 @@
                                 <td class="transction-date pl-1 pr-1 pt-05" colspan="2">{{transactionDate}}</td>
                             </tr>
                             <tr class="second-row" *ngFor="let transactions of allTransactionsList[transactionDate];">
-                                <td class="pl-1 pr-1 relative ">
+                                <td class="pl-1 pr-1 relative"
+                                (dblclick)="showUpdateLedgerModal(transactions)" (keydown.enter)="showUpdateLedgerModal(transactions)"
+                                [ngClass]="{compoundEntry: transactions.entryUniqueName === lc.selectedTxnUniqueName || transactions.isChecked}"
+                                tooltip="{{transactions.description}}" (mouseover)="entryHovered(transactions.entryUniqueName)"
+                                (mouseout)="selectedTrxWhileHovering = ''">
                                     <span class="pull-left account-holder-checkbox">
-                                        <!-- need to make dynamice -->
-                                         <input type="checkbox">
+                                        <input type="checkbox" [ngClass]="{'d-none': (selectedTrxWhileHovering !== transactions.entryUniqueName && !(transactions.isChecked) && checkedTrxWhileHovering.length === 0)}" class="d-none" [(ngModel)]="transactions.isChecked" (click)="entrySelected($event, transactions.entryUniqueName)">
                                     </span>
                                     <span class="account-holder-name">
                                         <span *ngIf="transactions.type === 'CREDIT'" class="text-gray mr-05">To</span>
@@ -1482,3 +1485,26 @@
 <!--</ng-template>-->
 
 <!-- endregion -->
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerRanges.ranges"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            [locale]="{applyLabel: 'Done'}"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+            [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>
