@@ -318,7 +318,6 @@
 .pl-15 {
     padding-left: 15px;
 }
-
 .pt-15 {
     padding-top: 15px;
 }
@@ -9198,12 +9197,15 @@ ngx-daterangepicker-material {
         position: relative;
     }
     .ledg-head .custom-tabs .nav.nav-tabs {
-        position: fixed;
-        width: 100%;
-        top: 111px;
-        left: 0;
+        position: absolute;
+        width: 104%;
+        top: -50px;
         padding-top: 5px !important;
+        margin: 0;
+        left: -16px;
+        right: 0;
     }
+    
 }
 
 @media (max-width: 840px) {
@@ -9501,6 +9503,7 @@ ngx-daterangepicker-material {
         left: 0;
         top: 92px;
         padding-top: 0 !important;
+        position: fixed;
     }
     .daterangepicker.dropdown-menu.show-calendar {
         z-index: 9 !important;
@@ -9658,12 +9661,12 @@ ngx-daterangepicker-material {
 }
 
 @media (max-width: 375px) {
-    // #setting-tab .tab-container .nav.nav-tabs,
-    // .custom-tabs .nav.nav-tabs {
-    //     top:80px;
-    // }
     .aside-pane-form .custom-tabs .nav.nav-tabs>li {
         padding-right: 20px;
+    }
+    .pagination>li>a,
+        .pagination>li>span {
+            padding: 6px 6px;
     }
 }
 

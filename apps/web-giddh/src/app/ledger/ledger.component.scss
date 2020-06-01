@@ -470,6 +470,34 @@ sh-select:focus {
 .ledger-main .ledger-row:hover {
     background-color: transparent;
 }
+.date-range-picker{
+    background-color: transparent !important;
+    text-decoration-line: none;
+    text-decoration-style: none;
+    background-image: url(../../assets/images/calender-icon.svg) !important;
+    background-size: 17px !important;
+    background-position: 9px 8px !important;
+    background-repeat: no-repeat !important;
+    padding-left: 35px !important;
+    position: relative;
+    z-index: 99;
+    cursor: default;
+    top: 1px;
+    font-size: 14px;
+    padding-right: 10px !important;
+    height: 36px;
+    &:focus{
+        border-color: $chetwode-blue;
+
+    }
+}
+.ipad-view-datepicker{
+    .date-range-picker{
+        border: 1px solid $gainsboro;
+        border-radius: 20px;
+        width: 203px !important;
+    }
+}
 /*mobile ledger view css*/
 .mobile-ledger-view{
     margin: 0 -15px;
@@ -482,7 +510,8 @@ sh-select:focus {
             font-family: 'opensans-semibold';
         }
         td{
-            padding: 8px 0;
+            padding-top: 8px;
+            padding-bottom: 8px;
             border-bottom: 1px solid #d1d1d1;
             font-size: 14px;
         }
@@ -498,7 +527,8 @@ sh-select:focus {
                 }
                 span.account-holder-name {
                     float: left;
-                    width: 80%;
+                    width: 82%;
+                    display: inline-flex;
                 }
             }
         }
@@ -509,7 +539,9 @@ sh-select:focus {
 .debit-credit-amount{
     justify-content: space-between
 }
-
+.input-wrapper.ipad-view-datepicker {
+    display: none;
+}
 /*responsive*/
 .modal-ledger {
     width: 70%;
@@ -665,6 +697,7 @@ sh-select:focus {
     }
     .ledger-head {
         margin-top: 0;
+        position: initial;
     }
     .justify-content-between {
         justify-content: inherit;
@@ -676,9 +709,18 @@ sh-select:focus {
         display: block;
     }
     .ledg-head {
+        .ipad-view-datepicker{
+            display: block;
+        }
         .single-search-box{
             position: relative;
-            width: 85%;
+            width: calc(100% - 215px);
+            .full-width-input{
+                width: 100%;  
+            }
+            .default-width-input{
+                width: calc(100% - 115px); 
+            }
             input[type="search"] {
                 min-width: 150px;
                 border-radius: 20px !important;
@@ -691,7 +733,7 @@ sh-select:focus {
                 align-items: center;
                 justify-content: center;
                  i{
-                    left: 0;
+                    left: -3px;
                     top: 0;
                     color: $midnight-blue;
                  }
@@ -716,17 +758,17 @@ sh-select:focus {
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            display: flex;
+            display: none;
         }
     }
     .ledger-ellipse{
-        position: fixed;
-        top: 0;
+        position: absolute;
+        top: 107px;
         z-index: 991;
-        right: 0;
+        right: 0px;
         .btn{
             background-color: transparent;
-            color: #fff;
+            color: $nero;
             font-size: 18px;
         }
         ul{
@@ -761,7 +803,15 @@ sh-select:focus {
         top:8px;
         i{
             top: 0;
+            color: $gray;
         }
+    }
+    .ledger-head thead tr th.active {
+        display: block !important;
+        width: 100%;
+    }
+    .hidden-xs{
+        display: none!important;
     }
 }
 @media(min-width:768px){
@@ -782,9 +832,47 @@ sh-select:focus {
         border-right: 1px solid $gainsboro;
     }
 }
+@media(max-width:767px){
+        .ledger-head{
+            th{
+                padding: 0 0 10px !important;
+            }    
+        }
+        .ledger-ellipse{
+            top: 0;
+            right: 0px;
+            position: fixed;
+            .btn{
+                background-color: transparent;
+                color: $white;
+                font-size: 18px;
+            }
+        }
+        .search-ledger-field{
+            .ledger-datepicker{
+                display: flex;
+            }
+    }
+    .ledg-head{    
+        .single-search-box{
+            position: relative;
+            width: calc(100% - 45px);
+            .default-width-input{
+                width: calc(100% - 100px);
+            }
+        }
+        .ipad-view-datepicker{
+            display: none;
+        }  
+    }
+}
 @media (max-width: 575px) {
     .stat-block {
         padding-left: 15px;
+    }
+    .ledger-btn .col-xs-6{
+        width: 100% !important;
+        margin-bottom: 5px;
     }
 }
 @media (max-width: 360px) {

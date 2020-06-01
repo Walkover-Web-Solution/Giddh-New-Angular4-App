@@ -41,7 +41,8 @@
                         </div>
                     </div>
                     <div class="single-search-box d-flex" *ngIf="checkedTrxWhileHovering.length === 0">
-                        <span>
+                        <span [ngClass]="!isAdvanceSearchImplemented ? 'full-width-input':'default-width-input'">
+                            <!-- {'full-width-input':!isAdvanceSearchImplemented} -->
                             <input type="search" [(ngModel)]="searchText" name="searchText" class="form-control"
                                 (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
                             <i class="icon-search1 pos-abs"></i>
@@ -57,6 +58,12 @@
                     <div class="ledger-datepicker" container="body"  *ngIf="isMobileScreen">    
                         <img (click)="showGiddhDatepicker($event)" src="../../assets/images/calender-icon.svg">
                     </div>
+                    <span class="input-wrapper ipad-view-datepicker">
+                        <!-- <input type="text" class="form-control daterange_picker_ledger" daterangepicker
+                            [options]="datePickerOptions" (applyDaterangepicker)="selectedDate($event)"
+                            name="daterangeInput" /> -->
+                        <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"  class="giddh-datepicker date-range-picker"/>    
+                    </span>
                     <span *ngIf="!isMobileScreen" class="advance-icon d-flex advance-search-filter pointer" [tooltip]="'Advance Search'"
                         [placement]="'top'"
                         [ngStyle]="{'margin-left': checkedTrxWhileHovering.length === 0 ? '7px': '0px'}">
@@ -485,10 +492,10 @@
                     <td class="border-none pt-0 pb-0">
                         <table width="100%">
                             <tr>
-                                <td class="transction-date pl-1 pr-1 pt-05" colspan="2">{{transactionDate}}</td>
+                                <td class="transction-date pl-15 pr-15 pt-05" colspan="2">{{transactionDate}}</td>
                             </tr>
                             <tr class="second-row" *ngFor="let transactions of allTransactionsList[transactionDate];">
-                                <td class="pl-1 pr-1 relative"
+                                <td class="pl-15 pr-15 relative"
                                 (dblclick)="showUpdateLedgerModal(transactions)" (keydown.enter)="showUpdateLedgerModal(transactions)"
                                 [ngClass]="{compoundEntry: transactions.entryUniqueName === lc.selectedTxnUniqueName || transactions.isChecked}"
                                 tooltip="{{transactions.description}}" (mouseover)="entryHovered(transactions.entryUniqueName)"
@@ -508,7 +515,7 @@
                                         </span>
                                     </span>
                                 </td>
-                                <td class="pl-1 pr-1 text-right">
+                                <td class="pl-15 pr-15 text-right">
                                     <div class="d-flex justify-content-end">
                                         <div>
                                             {{ transactions.currencySymbol }}{{ transactions.amount | giddhCurrency }}
