@@ -351,7 +351,6 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
      */
     public filterCompanyList(term): void {
         this.companyListForFilter = [];
-            
         this.allAssociatedCompanies.forEach((company) => {
             if (company.name.toLowerCase().includes(term.toLowerCase())) {
                 this.companyListForFilter.push(company);

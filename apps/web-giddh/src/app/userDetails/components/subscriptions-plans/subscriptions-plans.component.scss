@@ -271,6 +271,17 @@
 .all-plans{
     border: 1px solid $gainsboro;
 }
+.btn-cancel {
+    background: $very-light-gray;
+    border-color: $very-light-gray;
+    color: $night-rider;
+    font-family: "opensans-semibold" !important;
+}
+@media only screen and (max-width: 1600px) {
+    .transactions-popup {
+        width: 260px;
+    }
+}
 @media only screen and (max-width: 1280px) {
     .see-all-features {
         width: 100%;
@@ -334,7 +345,7 @@
         width: 100%;
     }
     .transactions-popup {
-        width: 260px;
+        width: 250px;
     }
     .main-row-plans {
         white-space: normal;
