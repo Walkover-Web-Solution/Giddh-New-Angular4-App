@@ -2113,9 +2113,9 @@
     *ngIf="accountAsideMenuState === 'in'" [selectedAccountUniqueName]="selectedCustomerForDetails" (onShortcutPress)="toggleAccountAsidePane()" (addEvent)="addNewSidebarAccount($event)" (updateEvent)="updateSidebarAccount($event)"></generic-aside-menu-account>
 
 <!--&lt;!&ndash; open product service aside &ndash;&gt;-->
-<aside-menu-product-service [class]="asideMenuStateForProductService" [selectedVoucherType]="selectedVoucherType" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="onNoResultsClicked()" (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
+<aside-menu-product-service *ngIf="asideMenuStateForProductService === 'in'" [class]="asideMenuStateForProductService" [selectedVoucherType]="selectedVoucherType" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="onNoResultsClicked()" (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
 
-<app-aside-recurring-entry [voucherType]="invoiceType" [voucherNumber]="voucherNumber" [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry" (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
+<app-aside-recurring-entry *ngIf="asideMenuStateForRecurringEntry === 'in'" [voucherType]="invoiceType" [voucherNumber]="voucherNumber" [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry" (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
 <!-- region send email popup -->
 <div bsModal #sendEmailModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" [config]="modalConfig">
 
