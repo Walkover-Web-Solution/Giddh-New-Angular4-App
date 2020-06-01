@@ -15,6 +15,7 @@ import { SettingsProfileActions } from '../../../actions/settings/profile/settin
 import { CompanyActions } from '../../../actions/company.actions';
 import { GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { DEFAULT_SIGNUP_TRIAL_PLAN } from '../../../app.constant';
 
 @Component({
     selector: 'subscriptions',
@@ -62,6 +63,8 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     public showSubscribedPlansList: boolean = false;
     public selectedCompany: any;
     public allAssociatedCompanies: CompanyResponse[] = [];
+    /* This will contain the plan unique name of default trial plan */
+    public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
 
     constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions) {
         this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
@@ -80,9 +83,9 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
                 let orderedCompanies = _.orderBy(companies, 'name');
                 this.allAssociatedCompanies = orderedCompanies;
                 this.companyListForFilter = orderedCompanies;
-                this.sortAssociatedCompanies();
                 this.activeCompanyUniqueName$.pipe(take(1)).subscribe(active => {
                     this.activeCompany = companies.find(cmp => cmp.uniqueName === active);
+                    this.sortAssociatedCompanies();
                     this.showCurrentCompanyPlan();
                 });
             }
