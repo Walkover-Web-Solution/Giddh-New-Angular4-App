@@ -5,12 +5,12 @@ import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
 import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
-import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { QuickAccountComponent } from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.component';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
-import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
+import { ModalDirective, PaginationComponent, BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
@@ -203,6 +203,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
 
+ /** Selects/Unselects extra columns based on Select All Checkbox */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    public selectAll: boolean = false;
+    modalRef: BsModalRef;
+    public selectedRangeLabel: any = "";
+    public dateFieldPosition: any = {x: 0, y: 0};
+ /** Stores the current range of date picker */
+    public selectedDateRange: any;
+    public selectedDateRangeUi: any;
+
     constructor(
         private store: Store<AppState>,
         private _ledgerActions: LedgerActions,
@@ -218,7 +228,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private _loaderService: LoaderService,
         private _settingsDiscountAction: SettingsDiscountActions,
         private warehouseActions: WarehouseActions,
-        private _cdRf: ChangeDetectorRef
+        private _cdRf: ChangeDetectorRef,
+        private modalService: BsModalService
     ) {
 
         this.lc = new LedgerVM();
@@ -250,6 +261,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
         this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));
         this.failedBulkEntries$ = this.store.select(p => p.ledger.ledgerBulkActionFailedEntries).pipe(takeUntil(this.destroyed$));
+
+         /* This will get the date range picker configurations */
+        this.store.pipe(select(app => app.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
+            if (config) {
+                this.datePickerOptions = config;
+            }
+        });
     }
 
     Shown: boolean = true;
@@ -277,9 +295,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public selectedDate(value: any) {
+
+        this.selectedRangeLabel = "";
+
+        if(value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+                this.hideGiddhDatepicker();
+
         this.needToShowLoader = false;
-        let from = moment(value.picker.startDate, 'DD-MM-YYYY').toDate();
-        let to = moment(value.picker.endDate, 'DD-MM-YYYY').toDate();
+        let from = moment(value.startDate, 'DD-MM-YYYY').toDate();
+        let to = moment(value.endDate, 'DD-MM-YYYY').toDate();
 
         // if ((this.advanceSearchRequest.dataToSend.bsRangeValue[0] !== from) || (this.advanceSearchRequest.dataToSend.bsRangeValue[1] !== to)) {
 
@@ -289,10 +315,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 bsRangeValue: [from, to]
             })
         });
-        this.trxRequest.from = moment(value.picker.startDate).format('DD-MM-YYYY');
-        this.trxRequest.to = moment(value.picker.endDate).format('DD-MM-YYYY');
+        this.trxRequest.from = moment(value.startDate).format('DD-MM-YYYY');
+        this.trxRequest.to = moment(value.endDate).format('DD-MM-YYYY');
         this.todaySelected = true;
-        this.lc.blankLedger.entryDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
+        this.lc.blankLedger.entryDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
         this.getTransactionData();
         // Después del éxito de la entrada. llamar para transacciones bancarias
         this.lc.activeAccount$.subscribe((data: AccountResponse) => {
@@ -465,12 +491,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let from = params['from'];
                 let to = params['to'];
 
-                this.datePickerOptions = {
-                    ...this.datePickerOptions,
-                    startDate: moment(from, 'DD-MM-YYYY').toDate(),
-                    endDate: moment(to, 'DD-MM-YYYY').toDate(),
-                    chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
-                };
+                // this.datePickerOptions = {
+                //     ...this.datePickerOptions,
+                //     startDate: moment(from, 'DD-MM-YYYY').toDate(),
+                //     endDate:moment(from, 'DD-MM-YYYY').toDate(),
+                //     chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
+                // };
+
+                this.selectedDateRange = { startDate: moment(from, 'DD-MM-YYYY').toDate(), endDate: moment(to, 'DD-MM-YYYY').toDate() };
+                this.selectedDateRangeUi = moment(from).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(to).format(GIDDH_NEW_DATE_FORMAT_UI);
+                console.log('selectedDateRange', this.selectedDateRange);
+                console.log('selectedDateRangeUi', this.selectedDateRangeUi);
+
 
                 this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                     dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
@@ -488,12 +520,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (dateObj && !this.todaySelected) {
                     let universalDate = _.cloneDeep(dateObj);
 
-                    this.datePickerOptions = {
-                        ...this.datePickerOptions,
-                        startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
-                        endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate(),
-                        chosenLabel: universalDate[2]
-                    };
+                    // this.datePickerOptions = {
+                    //     ...this.datePickerOptions,
+                    //     startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
+                    //     endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate(),
+                    //     chosenLabel: universalDate[2]
+                    // };
+
+                      this.selectedDateRange = { startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate() };
+                this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                     this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                         dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
                             bsRangeValue: [moment(universalDate[0], 'DD-MM-YYYY').toDate(), moment(universalDate[1], 'DD-MM-YYYY').toDate()]
@@ -1839,6 +1874,32 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.isShowLedgerColumnarReportTable = event.isShowColumnarTable;
         this.columnarReportExportRequest = event.exportRequest;
         this.hideExportLedgerModal();
+    }
+
+      /**
+     * This will show datepicker
+     *
+     * @param {*} element
+     * @memberof LedgerComponent
+     */
+    public showGiddhDatepicker(element: any): void {
+        let isMobileScreen: false;
+        if(element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop : false, ignoreBackdropClick: isMobileScreen })
+        );
+    }
+
+    /**
+     * This will hide datepicker
+     *
+     * @memberof LedgerComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
     }
 
 }
