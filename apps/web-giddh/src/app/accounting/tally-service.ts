@@ -6,7 +6,6 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { HttpWrapperService } from '../services/httpWrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 import { BlankLedgerVM } from './../ledger/ledger.vm';
-import { CURRENT_DATE_API } from './constants/accounting.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 
 export interface IPageInfo {
@@ -396,16 +395,6 @@ export class TallyModuleService {
             //   break;
         }
         return isValid;
-    }
-
-    /**
-     * Fetches the current server date
-     *
-     * @returns {Observable<any>} Observable to carry out further operations
-     * @memberof TallyModuleService
-     */
-    public fetchCurrentDate(): Observable<any> {
-        return this.http.get(`${this.config.apiUrl}${CURRENT_DATE_API}`);
     }
 
     /**

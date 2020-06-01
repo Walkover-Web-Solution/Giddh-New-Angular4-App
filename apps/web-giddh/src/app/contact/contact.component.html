@@ -141,14 +141,10 @@
 
 
             <div class="text-center top-aging-table-top seprta-top-aging pd1" *ngIf="isMobileScreen">
-                <p>
+                <p (click)="showGiddhDatepicker($event)">
                     <strong>Due as on </strong>
-                    <span>
-                        <input type="text" (click)="showGiddhDatepicker($event)" readonly [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" name="selectedDateRange"
-                            class="form-control selected-date"/>
-<!--                        <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"-->
-<!--                            (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"-->
-<!--                            class="form-control date-range-picker" />-->
+                    <span *ngIf="selectedDateRangeUi">
+                        {{selectedDateRangeUi}}
                     </span>
                 </p>
             </div>

@@ -804,6 +804,8 @@ border-radius:50% 0 0 50% !important;
 .md-drppicker td.in-range.in-range-start.in-range-end span{
     background-color:$portage!important;
     border-radius: 50%;
+    color: $nero;
+    border-color: $gray;
 }
 td.in-range.in-range-start.in-range-hovered.in-range-end::before{
     border: none !important;
@@ -1428,7 +1430,8 @@ td span {
         flex-direction: column;
         z-index:999;
         .ranges {
-            width: calc(100% - 5px) !important;
+            width: 100% !important;
+            border-right: none;
             .range-container {  
                 .date-range-close{
                     padding: 10px 12px;
@@ -1470,6 +1473,11 @@ td span {
                     li:last-child{
                         button{
                             border-bottom: none !important;
+                        }
+                    }
+                    li{
+                        button{   
+                            padding-left: 25px;
                         }
                     }
                    

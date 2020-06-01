@@ -253,15 +253,6 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.tallyModuleService.fetchCurrentDate().subscribe((data) => {
-            if (data && data.body) {
-                this.currentDate = data.body;
-            } else {
-                const systemDate = new Date();
-                this.currentDate = `${systemDate.getUTCFullYear()}-${systemDate.getUTCMonth()}-${systemDate.getUTCDate()}`;
-            }
-        }, () => {});
-
         this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
     }
 
