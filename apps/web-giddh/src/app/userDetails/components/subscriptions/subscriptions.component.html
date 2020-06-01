@@ -335,10 +335,8 @@
             </div>
         </div>
 
-    <div class="subscription-collapse">
-        <div *ngFor="let item of subscriptions">
-            <div class="clearfix" *ngIf="item?.uniqueName !== activeCompany?.uniqueName">
-            <div class="box mt-2 box-border plan-row-wrapper">
+        <div class="clearfix" *ngFor="let item of subscriptions">
+            <div class="box mt-2 box-border plan-row-wrapper" *ngIf="item?.uniqueName !== activeCompany?.uniqueName">
                 <div class="row d-flex justify-content-between align-items-center xs-d-block plan-row">
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <p class="bold font-14">{{item?.planDetails?.name}}</p>
@@ -358,9 +356,8 @@
                     </div>
                 </div>
             </div>
+        </div>
     </div>
-</div>
-</div>
 </ng-container>
 <div *ngIf="isLoading">
     <div class="no-data mrT2 loader-main">
