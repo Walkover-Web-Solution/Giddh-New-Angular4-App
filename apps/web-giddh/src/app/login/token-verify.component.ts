@@ -34,13 +34,14 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
 
         // this.token = this.route.snapshot.queryParams['token'];
         this.token = this.generalService.getCookie('token');
+        this.request = this.generalService.getCookie('request');
         if (this.token) {
             this.verifyToken();
-        }
-        // this.request = this.route.snapshot.queryParams['request'];
-        this.request = this.generalService.getCookie('request');
-        if (this.request) {
-            this.verifyUser();
+        } else if (this.request) {
+            // this.request = this.route.snapshot.queryParams['request'];
+            if (this.request) {
+                this.verifyUser();
+            }
         }
     }
 
