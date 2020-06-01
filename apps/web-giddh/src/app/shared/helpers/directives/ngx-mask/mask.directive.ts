@@ -120,6 +120,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
     @Input() public showTemplate: IConfig['showTemplate'] | null = null;
     @Input() public clearIfNotMatch: IConfig['clearIfNotMatch'] | null = null;
     @Input() public validation: IConfig['validation'] | null = null;
+    @Input() public customDecimalPlaces: number;
 
     private _maskValue!: string;
     private _inputValue!: string;
@@ -154,7 +155,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
             } else {
                 this.giddhDecimalPlaces = 2;
             }
-            this._maskService.giddhDecimalPlaces = this.giddhDecimalPlaces;
+            this._maskService.giddhDecimalPlaces = this.customDecimalPlaces ? this.customDecimalPlaces : this.giddhDecimalPlaces;
         });
     }
 
