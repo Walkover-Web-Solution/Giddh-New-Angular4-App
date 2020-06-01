@@ -159,8 +159,14 @@
     box-shadow: 0px 3px 6px $black-russian;
     padding: 15px;
     z-index: 9;
-    /*transform: translate(330px) !important;*/
-    margin-top: 10px;
+    position: absolute;
+    top: 14px;
+    right: 0;
+    margin-top: 7px;
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: .5s all ease-in;
     .close {
         color: $nero;
         opacity: 1;
@@ -168,6 +174,15 @@
         position: absolute;
         right: 10px;
         top: 12px;
+    }
+}
+.transactions-limit-box {
+&:hover {
+        .transactions-popup {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+        }
     }
 }
 .guarantee-img {
@@ -240,6 +255,7 @@
 }
 .main-row-plans {
     display: flex;
+    flex-wrap: wrap;
 }
 .btn-green:focus {
     color: $white;
@@ -272,7 +288,7 @@
         margin-bottom: 15px;
     }
     .main-row-plans .col-sm-4 {
-        width: 460px;
+        width: 50%;
         display: inline-block;
         white-space: normal;
     }
@@ -319,7 +335,6 @@
     }
     .transactions-popup {
         width: 260px;
-        /*transform: translate(0px) !important;*/
     }
     .main-row-plans {
         white-space: normal;

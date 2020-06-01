@@ -429,4 +429,46 @@ export class GeneralService {
 
         return { x: xPosition, y: yPosition };
     }
+
+    /**
+     * Returns a particular cookie value
+     *
+     * @param {string} cookieName Name of the cookie whose value is required
+     * @returns {string} Cookie value
+     * @memberof GeneralService
+     */
+    public getCookie(cookieName: string): string {
+        const name = `${cookieName}=`;
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const availableCookies = decodedCookie.split(';');
+        for (let index = 0; index < availableCookies.length; index++) {
+            let cookie = availableCookies[index];
+            while (cookie.charAt(0) === ' ') {
+                cookie = cookie.substring(1);
+            }
+            if (cookie.indexOf(name) === 0) {
+                return cookie.substring(name.length, cookie.length);
+            }
+        }
+        return '';
+    }
+
+    /**
+     * This will verify if the company is allowed to view the page or not
+     *
+     * @param {string} email
+     * @returns {boolean}
+     * @memberof NeedsAuthorization
+     */
+    public checkIfEmailDomainAllowed(email: string): boolean {
+        let isAllowed = false;
+        if (email) {
+            let emailSplit = email.split("@");
+            if (emailSplit.indexOf("giddh.com") > -1 || emailSplit.indexOf("walkover.in") > -1 || emailSplit.indexOf("muneem.co") > -1) {
+                isAllowed = true;
+            }
+        }
+
+        return isAllowed;
+    }
 }

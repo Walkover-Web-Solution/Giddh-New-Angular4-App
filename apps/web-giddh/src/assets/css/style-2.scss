@@ -1192,10 +1192,6 @@ ul.sub-list {
     border: 1px solid $midnight-blue !important;
 }
 
-.custom-dropdown .dropdown-menu>li>a:hover {
-    background: #e5e5e5 !important;
-}
-
 .table-checkbox {
     position: absolute;
     left: 0;
@@ -9466,6 +9462,7 @@ ngx-daterangepicker-material {
     }
     #setting-tab.user-detail-page .tab-container .nav.nav-tabs {
         top: 92px;
+        z-index: 99;
     }
     .custom-tabs .nav.nav-tabs {
         position: fixed;
@@ -9865,6 +9862,9 @@ ngx-daterangepicker-material {
 @media (min-width: 768px) {
     .invoice-modal-content .modal-dialog {
         margin: 70px auto;
+    }
+    .edit-modal.modal-small{
+        display: none;
     }
 }
 @media(min-width:480px) and (max-width:667px){

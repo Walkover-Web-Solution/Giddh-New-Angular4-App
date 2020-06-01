@@ -346,7 +346,7 @@
                             <span class="icon-dashboard"></span>
                             <span class="label">{{menu.name}}</span>
                         </a>
-                        <a *ngIf="menu.uniqueName == '/pages/journal-voucher'" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage && (selectedPage.toLowerCase() == menu.name.toLowerCase() || selectedPage.toLowerCase().includes(menu.name.toLowerCase()))}"
+                        <a *ngIf="menu.uniqueName == '/pages/journal-voucher' && isAllowedForBetaTesting" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage && (selectedPage.toLowerCase() == menu.name.toLowerCase() || selectedPage.toLowerCase().includes(menu.name.toLowerCase()))}"
                             (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
                             <span class="icon-dashboard"></span>
                             <span class="label">{{menu.name}}</span>
@@ -378,7 +378,7 @@
                                         </li>
                                         <!-- <li><a (click)="analyzeOtherMenus('accounting-voucher')">Journal Voucher</a>
                                         </li> -->
-                                        <li><a (click)="analyzeOtherMenus('journal-voucher')">Journal Voucher *</a>
+                                        <li *ngIf="isAllowedForBetaTesting"><a (click)="analyzeOtherMenus('journal-voucher')">Journal Voucher *</a>
                                         </li>
                                         <li><a (click)="analyzeOtherMenus('daybook')">Daybook</a></li>
                                         <li><a

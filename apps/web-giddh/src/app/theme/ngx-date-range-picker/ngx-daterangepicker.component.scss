@@ -332,6 +332,22 @@ $input-height: 3rem !default;
                 color: $md-drppicker-unselected-color;
             }
         }
+        &.in-range-start {
+            span {
+                background-color: $primary !important;
+                border-radius: 50%;
+                border-radius: 50%;
+                color: $white !important;
+                border-color: $primary;
+            }
+            &:hover{
+                span{
+                    background-color: $white-smoke !important;
+                    color: $nero !important;
+                    border-color: $gray;
+                }
+            }
+        }
         // Date Range
         &.in-range {
             background-color: $hawkes-blue;
@@ -788,6 +804,8 @@ border-radius:50% 0 0 50% !important;
 .md-drppicker td.in-range.in-range-start.in-range-end span{
     background-color:$portage!important;
     border-radius: 50%;
+    color: $nero;
+    border-color: $gray;
 }
 td.in-range.in-range-start.in-range-hovered.in-range-end::before{
     border: none !important;
@@ -1117,7 +1135,12 @@ td span {
     color: $nero !important;
     background-color:transparent !important;
 }
-
+.activatedDate:hover{
+    span{
+        background-color: $white-smoke !important;
+        border-color: $gray !important;
+    }
+}
 .btn-angle-down {
     position: relative;
     background-color: #ddd;
@@ -1407,7 +1430,8 @@ td span {
         flex-direction: column;
         z-index:999;
         .ranges {
-            width: calc(100% - 5px) !important;
+            width: 100% !important;
+            border-right: none;
             .range-container {  
                 .date-range-close{
                     padding: 10px 12px;
@@ -1431,6 +1455,7 @@ td span {
                         button {
                             padding: 12px 10px;
                             border-bottom: 1px solid $gainsboro;
+                            font-size: 14px;
                         }
                     }
                 }
@@ -1448,6 +1473,11 @@ td span {
                     li:last-child{
                         button{
                             border-bottom: none !important;
+                        }
+                    }
+                    li{
+                        button{   
+                            padding-left: 25px;
                         }
                     }
                    
@@ -1472,6 +1502,7 @@ td span {
         }
         .days-upto-select{
             border-top: none;
+            padding-bottom: 50px;
             ul{
                 width:100%;
             }
@@ -1522,6 +1553,7 @@ td span {
                     max-width: 360px;
                     margin: 0 auto;
                     width: 100%;
+                    padding: 4px 0;
                     td{
                         span{
                             display: inline-block;
