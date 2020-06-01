@@ -271,6 +271,12 @@
 .all-plans{
     border: 1px solid $gainsboro;
 }
+.btn-cancel {
+    background: $very-light-gray;
+    border-color: $very-light-gray;
+    color: $night-rider;
+    font-family: "opensans-semibold" !important;
+}
 @media only screen and (max-width: 1600px) {
     .transactions-popup {
         width: 260px;
