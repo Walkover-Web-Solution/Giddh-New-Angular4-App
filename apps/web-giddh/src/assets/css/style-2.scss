@@ -1657,6 +1657,24 @@ modal-container.modal {
 .custom-datepicker i img {
     width: 12px;
 }
+.subscription-collapse .panel-group {
+    margin-bottom: 0px;
+}
+.subscription-collapse accordion-group.panel {
+    border: 0px;
+    box-shadow: none;
+}
+.subscription-collapse accordion-group .panel.card.panel-default {
+    border: 0px;
+    box-shadow: none;
+}
+.subscription-collapse accordion-group .panel.card.panel-default .panel-heading {
+    background: no-repeat;
+    padding: 0px;
+}
+.subscription-collapse .panel-default>.panel-heading+.panel-collapse>.panel-body {
+    border: 0px solid;
+}
 /* my css end */
 
 

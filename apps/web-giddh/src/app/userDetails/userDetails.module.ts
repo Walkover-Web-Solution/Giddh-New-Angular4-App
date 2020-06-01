@@ -25,6 +25,7 @@ import { DeactivateCompanyComponent } from './components/deactivate-company/deac
 import { MoveCompanyComponent } from './components/move-company/move-company.component';
 import { AllFeaturesComponent } from './components/all-features/all-features.component';
 import { AddCompanyComponent } from './components/add-company/add-company.component';
+import { AccordionModule } from 'ngx-bootstrap';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -60,6 +61,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         DecimalDigitsModule,
         SharedModule,
         ElementViewChildModule,
+        AccordionModule.forRoot(),
         ModalModule.forRoot(),
         BsDropdownModule.forRoot(),
         TooltipModule.forRoot()

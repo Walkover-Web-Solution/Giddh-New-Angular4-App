@@ -47,6 +47,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     public currentCompanyPlan: any = '';
     public activityLogAsideMenuState: string = 'out';
     public companyDetailsAsideMenuState: string = 'out';
+    oneAtATime: boolean = true;
     public subscriptionRequestObj: SubscriptionRequest = {
         planUniqueName: '',
         subscriptionId: '',
@@ -348,7 +349,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
      */
     public filterCompanyList(term): void {
         this.companyListForFilter = [];
-            
+
         this.allAssociatedCompanies.forEach((company) => {
             if (company.name.toLowerCase().includes(term.toLowerCase())) {
                 this.companyListForFilter.push(company);
