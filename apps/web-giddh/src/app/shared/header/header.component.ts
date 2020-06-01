@@ -251,6 +251,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /* This will check if company is allowed to beta test new modules */
+    public isAllowedForBetaTesting: boolean = false;
+
     /**
      *
      */
@@ -693,6 +696,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         this.selectedPlanStatus = res.subscription.status;
                     }
                     this.activeCompany = res;
+                    if(this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
+                        this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
+                    }
                     this.checkIfCompanyTcsTdsApplicable();
                 }
             });

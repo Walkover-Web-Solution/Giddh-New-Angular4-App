@@ -1177,10 +1177,6 @@ ul.sub-list {
     border: 1px solid $midnight-blue !important;
 }
 
-.custom-dropdown .dropdown-menu>li>a:hover {
-    background: #e5e5e5 !important;
-}
-
 .table-checkbox {
     position: absolute;
     left: 0;
@@ -1660,6 +1656,24 @@ modal-container.modal {
 }
 .custom-datepicker i img {
     width: 12px;
+}
+.subscription-collapse .panel-group {
+    margin-bottom: 0px;
+}
+.subscription-collapse.panel {
+    border: 0px;
+    box-shadow: none;
+}
+.subscription-collapse .panel.card.panel-default {
+    border: 0px;
+    box-shadow: none;
+}
+.subscription-collapse .panel.card.panel-default .panel-heading {
+    background: no-repeat;
+    padding: 0px;
+}
+.subscription-collapse .panel-default>.panel-heading+.panel-collapse>.panel-body {
+    border: 0px solid;
 }
 /* my css end */
 
@@ -9451,6 +9465,7 @@ ngx-daterangepicker-material {
     }
     #setting-tab.user-detail-page .tab-container .nav.nav-tabs {
         top: 92px;
+        z-index: 99;
     }
     .custom-tabs .nav.nav-tabs {
         position: fixed;
