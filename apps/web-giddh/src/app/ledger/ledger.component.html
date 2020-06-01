@@ -46,7 +46,7 @@
                                 (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
                             <i class="icon-search1 pos-abs"></i>
                         </span>
-                        <a class="cp mrL1 clear-filter-btn"  *ngIf="isAdvanceSearchImplemented && isMobileScreen" href="javascript:;" (click)="resetAdvanceSearch()"
+                        <a class="cp mrL1 clear-filter-btn"  *ngIf="(searchText || isAdvanceSearchImplemented) && isMobileScreen" href="javascript:;" (click)="resetAdvanceSearch()"
                             tooltip="Reset Advance Search">
                             <i aria-hidden="true" class="glyphicon glyphicon-refresh"></i>
                             Clear Filter
@@ -463,15 +463,14 @@
         <!-- endregion -->
         <!-- region account table-->
         <!-- Need to make this code correctly working -->
-        <table class="col-xs-12 ledger-head mrT1">
+        <table class="col-xs-12 ledger-head mrT1" *ngIf="!isMobileScreen || (isMobileScreen && visibleTransactionTypeMobile !== 'all')">
             <thead>
                 <tr>
-                    <th  [ngClass]="Shown ? 'active' : ''" class="col-xs-6 hidden-xs sticky-header">
+                    <th [ngClass]="(Shown && !isMobileScreen) || (isMobileScreen && visibleTransactionTypeMobile === 'debit') ? 'active' : ''" class="col-xs-6 hidden-xs sticky-header">
                         <b> {{lc.ledgerUnderStandingObj.text.dr}}</b>
-
                         <span class="dr-cr-category pull-right text-gray">Dr</span>
                     </th>
-                    <th [ngClass]="!Shown ? 'active' : ''" class="col-xs-6 hidden-xs sticky-header">
+                    <th [ngClass]="(!Shown && !isMobileScreen) || (isMobileScreen && visibleTransactionTypeMobile === 'credit') ? 'active' : ''" class="col-xs-6 hidden-xs sticky-header">
                         <b> {{lc.ledgerUnderStandingObj.text.cr}}</b>
                         <span class="dr-cr-category pull-right text-gray">Cr</span>
                     </th>
