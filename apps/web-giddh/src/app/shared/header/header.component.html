@@ -206,7 +206,7 @@
             <div class="col-sm-8">
                 <div class="pull-right right-details">
                     <ul class="nav universal-date mr-15" *ngIf="(selectedCompany | async)">
-                        <li class="border-none pr-15 notification">
+                        <li class="border-none pr-15" [ngClass]="{'notification': !isMobileSite}">
                             <img src="{{imgPath}}notification.svg">
                         </li>
                         <li [hidden]="isTodaysDateSelected" class="border-none pl-0">
@@ -580,7 +580,9 @@
                         </li>
                     </ul>
                     <div class="d-flex align-items-center" *ngIf="(selectedCompany | async)">
-                        <img src="{{imgPath}}notification.svg" class="mr-15">
+                        <span [ngClass]="{'notification': isMobileSite}">
+                            <img src="{{imgPath}}notification.svg" class="mr-15">
+                        </span>    
                         <button id="add-manage" type="button" class="btn btn-gray btn-sm d-inline-flex mr-15 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
                             <i class="icon-plus"></i>
                         </button>
