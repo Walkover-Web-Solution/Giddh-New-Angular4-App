@@ -336,7 +336,7 @@ export class GeneralService {
 
         let hourOffset = convertdLocalTime.getTimezoneOffset() / 60;
 
-        convertdLocalTime.setMinutes(convertdLocalTime.getMinutes() - (hourOffset*60));
+        convertdLocalTime.setMinutes(convertdLocalTime.getMinutes() - (hourOffset * 60));
 
         return convertdLocalTime;
     }
@@ -365,9 +365,9 @@ export class GeneralService {
      */
     public removeSelectAllFromArray(array: Array<string>): Array<string> {
         let newArray = [];
-        if(array && array.length > 0) {
+        if (array && array.length > 0) {
             array.forEach(key => {
-                if(key !== "selectall") {
+                if (key !== "selectall") {
                     newArray.push(key);
                 }
             });
@@ -394,5 +394,81 @@ export class GeneralService {
             // Exclusive tax rate
             return ((totalTaxPercentage * (Number(amount) - totalDiscount)) / 100);
         }
+    }
+
+    /**
+     * This function will change the position of element in an array
+     *
+     * @param {*} array
+     * @param {*} currentIndex
+     * @param {*} newIndex
+     * @returns
+     * @memberof GeneralService
+     */
+    public changeElementPositionInArray(array, currentIndex, newIndex) {
+        array.splice(newIndex, 0, array.splice(currentIndex, 1)[0]);
+        return array;
+    }
+
+    /**
+     * This will calculate the position of element
+     *
+     * @param {*} element
+     * @returns
+     * @memberof DatepickerWrapperComponent
+     */
+    public getPosition(element): any {
+        var xPosition = 0;
+        var yPosition = 40;
+
+        while (element) {
+            xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
+            yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
+            element = element.offsetParent;
+        }
+
+        return { x: xPosition, y: yPosition };
+    }
+
+    /**
+     * Returns a particular cookie value
+     *
+     * @param {string} cookieName Name of the cookie whose value is required
+     * @returns {string} Cookie value
+     * @memberof GeneralService
+     */
+    public getCookie(cookieName: string): string {
+        const name = `${cookieName}=`;
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const availableCookies = decodedCookie.split(';');
+        for (let index = 0; index < availableCookies.length; index++) {
+            let cookie = availableCookies[index];
+            while (cookie.charAt(0) === ' ') {
+                cookie = cookie.substring(1);
+            }
+            if (cookie.indexOf(name) === 0) {
+                return cookie.substring(name.length, cookie.length);
+            }
+        }
+        return '';
+    }
+
+    /**
+     * This will verify if the company is allowed to view the page or not
+     *
+     * @param {string} email
+     * @returns {boolean}
+     * @memberof NeedsAuthorization
+     */
+    public checkIfEmailDomainAllowed(email: string): boolean {
+        let isAllowed = false;
+        if (email) {
+            let emailSplit = email.split("@");
+            if (emailSplit.indexOf("giddh.com") > -1 || emailSplit.indexOf("walkover.in") > -1 || emailSplit.indexOf("muneem.co") > -1) {
+                isAllowed = true;
+            }
+        }
+
+        return isAllowed;
     }
 }

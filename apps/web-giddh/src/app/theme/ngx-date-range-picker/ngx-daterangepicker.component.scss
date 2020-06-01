@@ -78,12 +78,12 @@ $input-height: 3rem !default;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
 
     &.double {
-        width: $md-drppicker-width-double;
+        width:100%;
     }
 
     &.inline {
         position: relative;
-        display: inline-block;
+        display: flex;
     }
 
     &:before,
@@ -250,7 +250,6 @@ $input-height: 3rem !default;
     th.month.drp-animate {
         font-size: 12px;
         text-align: left;
-
         color:$nero;
         font-weight: 600;
         .year-name {
@@ -323,9 +322,6 @@ $input-height: 3rem !default;
 
     td {
         margin: 0.25em 0;
-        opacity: 0.8;
-        transition: background-color 0.2s ease;
-        transform: scale(1);
         &.off {
             &,
             &.in-range,
@@ -334,6 +330,22 @@ $input-height: 3rem !default;
                 background-color: $md-drppicker-unselected-bg-color;
                 border-color: $md-drppicker-unselected-border-color;
                 color: $md-drppicker-unselected-color;
+            }
+        }
+        &.in-range-start {
+            span {
+                background-color: $primary !important;
+                border-radius: 50%;
+                border-radius: 50%;
+                color: $white !important;
+                border-color: $primary;
+            }
+            &:hover{
+                span{
+                    background-color: $white-smoke !important;
+                    color: $nero !important;
+                    border-color: $gray;
+                }
             }
         }
         // Date Range
@@ -358,7 +370,6 @@ $input-height: 3rem !default;
             display: inline-block;
 
         }
-
         &.in-range.end-date::before {
             content: "";
             background-color:$portage !important;
@@ -392,6 +403,13 @@ $input-height: 3rem !default;
             top: -1px;
             position: absolute;
             display: inline-block;
+        }
+        &.in-range-start::before{
+            left: 0px;
+        }
+        &.in-range-end::before{
+            left: 0;
+            width: 80%;
         }
         &.in-range-hovered {
             border-left: 0;
@@ -697,6 +715,11 @@ $input-height: 3rem !default;
         text-align: right;
         margin: 0;
         padding-right: 15px;
+        position: relative;
+        bottom: 15px;
+        background-color: #fff;
+        padding-top: 9px;
+        z-index: 99;
     }
     button {
         &:focus {
@@ -766,11 +789,6 @@ $input-height: 3rem !default;
         }
     }
 }
-
-perfect-scrollbar.hide-horizontal-scroll > .ps.ps--active-x > .ps__rail-x{
-    display: none !important;
-   
-}
 .md-drppicker td.in-range.in-range-start::before{
 border-radius:50% 0 0 50% !important;
 }
@@ -786,6 +804,8 @@ border-radius:50% 0 0 50% !important;
 .md-drppicker td.in-range.in-range-start.in-range-end span{
     background-color:$portage!important;
     border-radius: 50%;
+    color: $nero;
+    border-color: $gray;
 }
 td.in-range.in-range-start.in-range-hovered.in-range-end::before{
     border: none !important;
@@ -899,9 +919,6 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before{
         }
     }
     .drp-animate {
-        transform: translate(0);
-        transition: transform 0.2s ease, opacity 0.2s ease;
-
         &.drp-picker-site-this {
             transition-timing-function: linear;
         }
@@ -1118,7 +1135,12 @@ td span {
     color: $nero !important;
     background-color:transparent !important;
 }
-
+.activatedDate:hover{
+    span{
+        background-color: $white-smoke !important;
+        border-color: $gray !important;
+    }
+}
 .btn-angle-down {
     position: relative;
     background-color: #ddd;
@@ -1394,15 +1416,22 @@ td span {
         }
     }
 
-
-    
-
+@media(min-height:767px){
+    .ranges-perfect-scrollbar{
+         overflow: initial !important;
+        .ps{
+            overflow: initial !important;
+        }
+    }
+}
 /*media query*/
 @media(max-width:767px){
     .md-drppicker{
         flex-direction: column;
         z-index:999;
         .ranges {
+            width: 100% !important;
+            border-right: none;
             .range-container {  
                 .date-range-close{
                     padding: 10px 12px;
@@ -1426,6 +1455,7 @@ td span {
                         button {
                             padding: 12px 10px;
                             border-bottom: 1px solid $gainsboro;
+                            font-size: 14px;
                         }
                     }
                 }
@@ -1443,6 +1473,11 @@ td span {
                     li:last-child{
                         button{
                             border-bottom: none !important;
+                        }
+                    }
+                    li{
+                        button{   
+                            padding-left: 25px;
                         }
                     }
                    
@@ -1467,6 +1502,7 @@ td span {
         }
         .days-upto-select{
             border-top: none;
+            padding-bottom: 50px;
             ul{
                 width:100%;
             }
@@ -1482,12 +1518,19 @@ td span {
             min-width: 100%;
             padding-top: 0;
             height: 100%;
+            overflow-x: hidden;
+            overflow-y: hidden;
             .calender-container-wrapper {
-                padding-top: 0;
+                padding-top:90px;
                 .calender-body {
-                    .upper-part{                   
+                    .upper-part{
+                        top:88px;   
+                        background-color: $white !important;
+                        z-index: 99;                
                         .sticky-header{
-                            width: calc(100% - 0px) !important;    
+                            max-width: 360px;
+                            margin: 0 auto;
+                            width: 100% !important;    
                             th.days-td{
                                 span{
                                     display: inline-block;
@@ -1507,6 +1550,10 @@ td span {
                     
                 }
                 .calendar-table{
+                    max-width: 360px;
+                    margin: 0 auto;
+                    width: 100%;
+                    padding: 4px 0;
                     td{
                         span{
                             display: inline-block;
@@ -1519,8 +1566,8 @@ td span {
                 }
             }
             .close-calender{
-                position: relative;
-                top: 10px;
+                position: fixed;
+                top: 0;
                 left: 0;
                 display: flex;
                 align-items: center;
@@ -1530,6 +1577,9 @@ td span {
                 flex-direction: column;
                 box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
                 z-index: 2;
+                padding-top: 10px;
+                background-color: $white;
+                z-index: 991;
                 .close-save-btn{
                     display: flex;
                     align-items: center;
@@ -1573,14 +1623,12 @@ td span {
                     }
                    .edit-dates{
                        img{
-                        width: 15px;
+                        width: 18px;
                         margin-right: 15px;
+                        cursor: pointer;
                        }
                    }
                 }
-
-                
-               
             }
           }
         &.double {
@@ -1600,20 +1648,36 @@ td span {
     .angle-down{
         top: 10px;
     }
+    .buttons {
+        .buttons-input{
+            padding-right: 15px;
+        }
+    }
     perfect-scrollbar{
-        max-height: 470px !important;
+        max-height: 480px !important;
         height: calc(100% - 100px) !important;
     } 
+    perfect-scrollbar.hide-horizontal-scroll{
+        max-height: 100% !important;
+        height: 100% !important;
+    }
 
     .bottom-botton{
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        background-color:$white;
-        z-index: 999;
-        width: 100%;
-        margin: 0;
-        padding-bottom: 10px;
+        position: absolute !important;
+        bottom: 0 !important;
+        right: 0 !important;
+        background-color: #ffffff !important;
+        z-index: 99999 !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding-bottom: 10px !important;
+        top: auto;
+        text-align: right;
+        padding-right: 0 !important;
+    }
+    .md-drppicker td.in-range-start::before{
+        left: 11px;
+        width: 79%;
     }
 }
 
@@ -1631,8 +1695,7 @@ td span {
           }
     }
 }
-
-@media(max-height:768px){
+@media(max-height:767px){
     .drops-down-right{
         height: 470px;
         overflow: hidden !important;

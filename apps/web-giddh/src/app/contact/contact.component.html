@@ -140,31 +140,11 @@
             </div>
 
 
-            <div class="text-center top-aging-table-top seprta-top-aging pd1" *ngIf="isMobileScreen">
-                <p>
+            <div class="text-center top-aging-table-top seprta-top-aging pd-1" *ngIf="isMobileScreen">
+                <p (click)="showGiddhDatepicker($event)">
                     <strong>Due as on </strong>
-                    <span>
-                        <input type="text"
-                            readonly
-                            [value]="selectedDateRangeUi"
-                            [inputStartDate]="selectedDateRange?.startDate"
-                            [inputEndDate]="selectedDateRange?.endDate"
-                            name="selectedDateRange"
-                            ngxDaterangepickerMd
-                            [alwaysShowCalendars]="true"
-                            [ranges]="datePickerOptions.ranges"
-                            [showClearButton]="false"
-                            [showCancel]="true"
-                            [showDropdowns]="true"
-                            [locale]="{applyLabel: 'Done'}"
-                            (rangeClicked)="selectedDate($event)"
-                            (datesUpdated)="selectedDate($event)"
-                            [keepCalendarOpeningWithRange]="true"
-                            [showRangeLabelOnInput]="false"
-                            class="form-control selected-date"/>
-<!--                        <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"-->
-<!--                            (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"-->
-<!--                            class="form-control date-range-picker" />-->
+                    <span *ngIf="selectedDateRangeUi">
+                        {{selectedDateRangeUi}}
                     </span>
                 </p>
             </div>
@@ -450,24 +430,7 @@
                         <p class="due-as-on" container="body">
                             <strong>Due as on </strong>
                             <span class="italic underline">
-                                <input type="text" style="width: 250px !important;"
-                                       [value]="selectedDateRangeUi"
-                                       [inputStartDate]="selectedDateRange?.startDate"
-                                       [inputEndDate]="selectedDateRange?.endDate"
-                                       name="selectedDateRange"
-                                       ngxDaterangepickerMd
-                                       [alwaysShowCalendars]="true"
-                                       [ranges]="datePickerOptions.ranges"
-                                       [showCustomRangeLabel]="true"
-                                       [showClearButton]="false"
-                                       [showCancel]="true"
-                                       [linkedCalendars]="true"
-                                       [showDropdowns]="true"
-                                       [locale]="{applyLabel: 'Done'}"
-                                       (datesUpdated)="selectedDate($event)"
-                                       [keepCalendarOpeningWithRange]="false"
-                                       [showRangeLabelOnInput]="false"
-                                       class="form-control date-range-picker"/>
+                                <input type="text" (click)="showGiddhDatepicker($event)" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" style="width: 250px !important;" class="form-control giddh-datepicker date-range-picker"/>
 
 <!--                                <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"-->
 <!--                                    (hideDaterangepicker)="selectedDate($event)"-->
@@ -1022,3 +985,27 @@
     </div>
 </ng-template>
 <!-- endregion -->
+
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper 
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions.ranges"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            [locale]="{applyLabel: 'Done'}"
+            (rangeClicked)="selectedDate($event)"
+            (datesUpdated)="selectedDate($event)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+            [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

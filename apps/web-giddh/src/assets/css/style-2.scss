@@ -762,6 +762,9 @@ input {
 .ml-0 {
     margin-left: 0px;
 }
+.mr-0 {
+    margin-right: 0px !important;
+}
 
 .ml-1 {
     margin-left: 10px;
@@ -810,7 +813,7 @@ input {
 
 .company-list button.btn-link {
     font-size: 13px;
-    color: #1e67c8;
+    color: $chetwode-blue !important;
     display: block;
     padding: 7px 10px;
     display: block;
@@ -819,8 +822,8 @@ input {
 }
 
 .company-list button.btn-link:hover {
-    color: $white;
-    background: $midnight-express;
+    color: $chetwode-blue;
+    background: $lavender-light;
     text-decoration: none;
 }
 
@@ -870,7 +873,6 @@ ul.sub-list {
 .bold {
     font-family: $opensans-semibold;
 }
-
 .font-bold {
     font-family: $opensans-bold;
 }
@@ -1006,7 +1008,7 @@ ul.sub-list {
 }
 
 .custom-tabs .nav.nav-tabs>li.active a {
-    color: #1c1c1c !important;
+    color: $nero !important;
 }
 
 .custom-tabs .nav.nav-tabs {
@@ -1183,10 +1185,6 @@ ul.sub-list {
     background: $midnight-blue !important;
     color: $white !important;
     border: 1px solid $midnight-blue !important;
-}
-
-.custom-dropdown .dropdown-menu>li>a:hover {
-    background: #e5e5e5 !important;
 }
 
 .table-checkbox {
@@ -1621,8 +1619,82 @@ modal-container.modal {
 .color-primary {
     color: $deep-sky-blue;
 }
-
-
+.justify-content-between {
+    justify-content: space-between;
+}
+.text-blue {
+    color: $midnight-blue;
+}
+.all-features-modal {
+    width: 60%;
+    margin-top: 0px;
+    .modal-body {
+        padding: 15px 30px;
+    height: 80vh;
+    overflow-y: auto;
+    }
+}
+.custom-input-search {
+    position: relative;
+    i {
+        position: absolute;
+        z-index: 11;
+        font-size: 13px;
+        top: 11px;
+        left: 10px;
+        color: $gray;
+    }
+    .form-control {
+        padding-left: 30px !important;
+    }
+}
+.plan-list .close:hover, .plan-list .close:focus:hover, .plan-list .close:focus:focus, .plan-list .close:focus:disabled, .plan-list .close:focus.active, .plan-list .close:focus:active, .open > .dropdown-toggle.plan-list .close:focus, .plan-list .close:focus:active:focus, .plan-list .close:focus:active:hover, .plan-list .close:hover, .plan-list .close:focus, .plan-list .close * {
+    background: none !important;
+    border-color: transparent !important;
+    border: 0px !important;
+    box-shadow: none !important;
+}
+.custom-datepicker {
+    position: relative;
+}
+.custom-datepicker i {
+    position: absolute;
+    left: 10px;
+    top: 4px;
+    z-index: 9;
+}
+.custom-datepicker input {
+    background: $white !important;
+    font-size: 12px;
+    border-radius: 90px;
+    position: relative;
+    font-weight: 600;
+    width: 195px !important;
+    display: block;
+    padding-left: 15px !important;
+    border: 1px solid $gainsboro;
+}
+.custom-datepicker i img {
+    width: 12px;
+}
+.subscription-collapse .panel-group {
+    margin-bottom: 0px;
+}
+.subscription-collapse.panel {
+    border: 0px;
+    box-shadow: none;
+}
+.subscription-collapse .panel.card.panel-default {
+    border: 0px;
+    box-shadow: none;
+}
+.subscription-collapse .panel.card.panel-default .panel-heading {
+    background: no-repeat;
+    padding: 0px;
+}
+.subscription-collapse .panel-default>.panel-heading+.panel-collapse>.panel-body {
+    border: 0px solid;
+}
 /* my css end */
 
 
@@ -1864,7 +1936,17 @@ fieldset[disabled] .btn-primary:hover {
     color: $white;
     border-color: $chetwode-blue;
 }
-
+.success-btn {
+    font-size: 14px;
+    background: $success-green;
+    color: $white;
+    &:hover {
+        color: $white;
+    }
+}
+.btn-round {
+    border-radius: 90px;
+}
 #actionPane .btn-default {
     background: #e6e6e6;
     color: #333;
@@ -2434,10 +2516,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-cancel:disabled,
-.btn-cancel:disabled:hover,
-.btn-cancel:active:focus,
-.btn-cancel:active:hover,
-.btn-cancel:focus {
+.btn-cancel:disabled:hover{
     background: #e4e4e4;
     color: #666;
     border-color: #e4e4e4;
@@ -4900,8 +4979,8 @@ label {
 }
 
 .grp_col::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    outline: 1px solid slategrey;
+    background-color: $gainsboro;
+    outline: 1px solid $gray;
     margin-left: 255px;
 }
 
@@ -4991,8 +5070,8 @@ label {
 }
 
 .grp_col::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    outline: 1px solid slategrey;
+    background-color: $gainsboro;
+    outline: 1px solid $gray;
     margin-left: 255px;
 }
 
@@ -5209,6 +5288,7 @@ label {
     position: relative;
     margin: 0px 5px !important;
     top: 1px;
+    cursor: pointer;
 }
 
 .radio_theme:before {
@@ -5464,7 +5544,7 @@ label {
 
 .templateView li {
     float: left;
-    width: 177px;
+    width: 190px;
     margin: 0px;
     list-style: none;
     height: 240px;
@@ -5556,8 +5636,8 @@ label {
 }
 
 .scrollAuto::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    outline: 1px solid slategrey;
+    background-color: $gainsboro;
+    outline: 1px solid $gray;
     /* margin-left: 255px; */
     border-radius: 8px;
 }
@@ -5590,7 +5670,7 @@ input[type="checkbox"][disabled] {
     /* padding-left: 240px; */
 }
 
-.section_head {
+.section-head {
     padding-bottom: 10px;
     font-family: $opensans-semibold;
     font-size: 110%;
@@ -7121,8 +7201,6 @@ perfect-scrollbar>.ps>.ps-overlay {
     -webkit-overflow-scrolling: touch;
 }
 
-.tax-engine .body {}
-
 .content-column .body {
     padding: 0 20px 50px;
 }
@@ -7709,11 +7787,6 @@ app-header {
 
 .form-inline sh-select .form-control {
     width: 100%;
-}
-
-.tooltip-inner {
-    /* max-width: 350px !important; */
-    /* the minimum width */
 }
 
 .permission_icon {
@@ -8407,7 +8480,7 @@ ul.dropdown-menu p.lead.pd {
     background-color: #f7f8fa;
     z-index: 9;
     position: relative;
-    top: 6px
+    top: -2px;
 }
 
 .setting-page .nav>li>a {
@@ -8432,7 +8505,7 @@ ul.dropdown-menu p.lead.pd {
 }
 
 .setting-page .nav>li>a.active {
-    color: #1c1c1c !important;
+    color: $nero !important;
 }
 
 #tab-integration .nav-tabs>li {
@@ -8947,22 +9020,21 @@ input.checkbox-custom[type="checkbox"] {
     min-height: 350px;
 }
 /*datepicker common css*/
-.show-calendar {
-    display: block !important;
+.giddh-datepicker-modal .modal-content {
+    background: none !important;
 }
-.show-calendar + .modal-backdrop + .modal {
-    display: flex !important;
-    align-items: center;
-    margin-top: 0 !important;
+.giddh-datepicker-modal .modal-body{
+    padding: 0 !important;
 }
-
 ngx-daterangepicker-material {
-    display: none;
+    // display: none;
     position: absolute;
     z-index: 1000;
     overflow: hidden;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
     z-index: 1;
+    width: 100% !important;
+    max-width: 462px !important;
 }
 .edit-modal{
     max-width: 300px;
@@ -8985,34 +9057,41 @@ ngx-daterangepicker-material {
                     width: 20px;
                 }
             }
+            .modal-inside-heading{
+                display: none;
+            }
         }
         .start-end-date{
-            display: flex;
-            padding-top: 10px;
-            label{
-                position: absolute;
-                background-color:$white;
-                padding: 0 5px;
-                top: -6px;
-                left: 9px;
-                font-size: 12px;
-                color: $gray;
-            }
-            input{
-                width: 130px;
-                height: 51px;
-                border: 1px solid $gainsboro;
-                border-radius: 3px;
-                padding: 0 15px;
-                font-size: 14px;
+            .start-end-date-d-flex{
+                display: flex;
+                padding-top: 10px;
+                label{
+                    position: absolute;
+                    background-color:$white;
+                    padding: 0 5px;
+                    top: -6px;
+                    left: 9px;
+                    font-size: 12px;
+                    color: $gray;
+                }
+                input{
+                    width: 130px;
+                    height: 51px;
+                    border: 1px solid $gainsboro;
+                    border-radius: 3px;
+                    padding: 0 15px;
+                    font-size: 14px;
+                }
             }
         }
         .button-wrapper {
-            padding: 20px 0 0;
             text-align: right;
             font-size: 14px;
+            margin-top: 10px;
             a{
                 color: $deep-sky-blue;
+                padding: 10px 10px;
+                display: inline-block;
             }
         }
     }
@@ -9047,15 +9126,20 @@ ngx-daterangepicker-material {
 .setting-sidebar-open .menu_open .setting-data {
     padding-left: 0;
 }
+.date-field{
+    flex-direction: column;
+}
 /* responsive */
-
 @media (max-width: 1440px) {
     .font-xxlarge {
         font-size: 20px;
     }
 }
-
 @media (max-width: 1024px) {
+    .all-features-modal {
+        width: 90%;
+        margin: 0 auto;
+    }
     .auto_save {
         top: 96px;
     }
@@ -9440,6 +9524,10 @@ ngx-daterangepicker-material {
         width: 100%;
         top: 86px;
     }
+    #setting-tab.user-detail-page .tab-container .nav.nav-tabs {
+        top: 92px;
+        z-index: 99;
+    }
     .custom-tabs .nav.nav-tabs {
         position: fixed;
         width: 100%;
@@ -9477,7 +9565,10 @@ ngx-daterangepicker-material {
         left: 0;
     }
     .daterangepicker.dropdown-menu.show-calendar {
-        z-index: 1 !important;
+        z-index: 9 !important;
+    }
+    .daterangepicker.dropdown-menu.opensright.show-calendar {
+        z-index: 9992 !important;
     }
     .mt-xs-60 {
         margin-top: 60px;
@@ -9537,6 +9628,18 @@ ngx-daterangepicker-material {
     .xs-mb-1 {
         margin-bottom: 10px;
     }
+    .xs-mt-1 {
+        margin-top: 10px;
+    }
+    .xs-mb-2 {
+        margin-bottom: 20px;
+    }
+    .xs-mt-2 {
+        margin-top: 20px;
+    }
+    .xs-mt-4 {
+        margin-top: 40px;
+    }
     .xs-mr-0 {
         margin-right: 0px;
     }
@@ -9544,7 +9647,7 @@ ngx-daterangepicker-material {
         float: left !important;
     }
     body.hide-scroll-body {
-        overflow-y: hidden;
+        overflow-y: hidden !important;
     }
     .panel-block .panel-body {
         min-height: auto;
@@ -9562,9 +9665,38 @@ ngx-daterangepicker-material {
         z-index: 999;
         width: 100%;
         height: 100vh;
+        max-width: 100% !important;
+    }
+    .giddh-datepicker-modal{
+        position: fixed;
+        width: 100%;
+        left: 0;
+        top: 0;
+        margin: 0;
+    }
+    .edit-modal{
+        max-width: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100%;
+        &:after{
+            position: absolute;
+            content: '';
+            background-color: rgba(0,0,0,0.4);
+            width: 100% !important;
+            height:125%;
+            z-index: -1;
+            left: 0;
+            top: 0;
+        }
+    }
+    .hide-scroll-body:last-child .modal{
+        z-index: 9993;
     }
 }
-
 @media (max-width: 575px) {
     .daterangepicker.ltr .ranges {
         float: left;
@@ -9584,7 +9716,6 @@ ngx-daterangepicker-material {
         padding-top: 0;
     }
 }
-
 @media (max-width: 500px) {
     .daterangepicker.dropdown-menu {
         max-width: 100% !important;
@@ -9671,6 +9802,9 @@ ngx-daterangepicker-material {
 }
 
 @media (max-width: 1024px) {
+    .sm-d-block {
+        display: block;
+    }
     .form-bg {
         width: 100%;
     }
@@ -9797,11 +9931,59 @@ ngx-daterangepicker-material {
     .invoice-modal-content .modal-dialog {
         margin: 70px auto;
     }
+    .edit-modal.modal-small{
+        display: none;
+    }
 }
+@media(min-width:480px) and (max-width:667px){
+    .edit-modal{
+        margin: 20px auto;
+        .edit-date-modal{
+            padding: 0 15px;
+            .modal-outside-heading{
+                display: none;
+            }
+            .edit-date-container{
+                display: flex;
+                align-items: flex-start;
+                .modal-date-range{
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                    border-bottom: none;
+                    padding: 12px 0 0;
+                    margin-bottom: 0;
+                    border-right: 1px solid $gainsboro;
+                    margin-right: 15px;
+                    p{
+                        font-size: 20px;
+                        margin-top: 15px;
+                        width: 110px;
+                        margin-bottom: 20px;
+                    }
+                    img{
+                        bottom: -40px;
+                        padding-bottom: 10px;
+                    }
+                    .modal-inside-heading{
+                        display: block;
+                    }
+                }
+                .start-end-date{
+                    padding: 10px 5px 0;
 
-
+                }
+                .button-wrapper{
+                    position: absolute;
+                    bottom: 2px;
+                    right: 15px;
+                    z-index: 999;
+                }
+            }
+        }
+    }
+}
 /*** iPhone and iOS Form Input Zoom Fixes ***/
-
 
 /* Fix Input Zoom on devices older than iPhone 5: */
 
@@ -9885,6 +10067,6 @@ ngx-daterangepicker-material {
         font-size: 16px;
     }
 }
-.restrict-body-scroll {
-    overflow-y: hidden !important;
+.giddh-datepicker-modal {
+    margin: 0 !important;
 }

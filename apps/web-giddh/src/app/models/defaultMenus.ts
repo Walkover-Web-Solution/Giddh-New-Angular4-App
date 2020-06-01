@@ -3,6 +3,7 @@ import { IUlist } from './interfaces/ulist.interface';
 export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
     // { type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher' },
+    { type: 'MENU', name: 'Journal Voucher *', uniqueName: '/pages/journal-voucher' },
     { type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', additional: { tab: 'sales', tabIndex: 0 } },
     { type: 'MENU', name: 'E-way bill', uniqueName: '/pages/invoice/ewaybill' },
     // {type: 'MENU', name: 'E-way Generate', uniqueName: '/pages/invoice/ewaybill/create'},
@@ -87,6 +88,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Reports > Sales Register', uniqueName: '/pages/reports/sales-register' },
     { type: 'MENU', name: 'Reports > Purchase Register', uniqueName: '/pages/reports/purchase-register' },
     { type: 'MENU', name: 'Reports > Monthly Columnar Report', uniqueName: '/pages/reports/monthly-columnar-report' },
+    { type: 'MENU', name: 'Reports > Cash Flow Statement', uniqueName: '/pages/reports/cash-flow-statement' },
     { type: 'MENU', name: 'Reports', uniqueName: '/pages/reports/reports-dashboard' },
     { type: 'MENU', name: 'Petty Cash Management > Pending', uniqueName: '/pages/expenses-manager', additional: { tab: 'pending', tabIndex: 0 } },
     { type: 'MENU', name: 'Petty Cash Management > Rejected', uniqueName: '/pages/expenses-manager', additional: { tab: 'rejected', tabIndex: 1 } },
@@ -95,7 +97,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Reports > Receipt (Beta)', uniqueName: '/pages/reports/receipt' },
     { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules' }
 ];
-export let HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'inventory',
+export let HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['journal-voucher', 'inventory',
     'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
     'ledger'];
 export let DEFAULT_MENUS_ORIGINAL: IUlist[] = [
@@ -120,6 +122,9 @@ export let DEFAULT_MENUS_ORIGINAL: IUlist[] = [
     // {
     //     type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher', isRemoved: false, pIndex: 1
     // },
+    {
+        type: 'MENU', name: 'Journal Voucher *', uniqueName: '/pages/journal-voucher', isRemoved: false, pIndex: 1
+    },
     {
         type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report', isRemoved: false, pIndex: 9
     },

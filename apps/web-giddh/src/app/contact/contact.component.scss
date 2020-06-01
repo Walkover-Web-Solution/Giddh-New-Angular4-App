@@ -10,6 +10,11 @@
 .pd1 {
     padding: 5px;
 }
+.aging-table > tbody > tr input[type="checkbox"] {
+    position: absolute !important;
+    opacity: 0;
+    top: 0px;
+}
 .aging-table > tbody > tr:hover input[type="checkbox"] {
     position: relative !important;
     opacity: 1;
@@ -298,7 +303,11 @@ span.inputAddon {
 .due-as-on{
     display: flex;
     justify-content: center;
-    align-items: center
+    align-items: center;
+    strong{
+        width: 80px;
+        padding-left: 10px;
+    }
 }
 .form-control[readonly]{
     background-color: inherit !important;
@@ -412,7 +421,7 @@ span.inputAddon {
                 }
             }
     }
-   
+
     .customer-footer-box {
         padding-top: 0;
         float: left !important;
@@ -502,13 +511,11 @@ span.inputAddon {
         display: block;
     }
     .top-aging-table-top {
-        padding: 3px !important;
         font-size: 14px;
     }
 }
 @media (max-width: 414px) {
     .top-aging-table-top {
-        padding: 0;
         font-size: 14px;
     }
 }

@@ -204,6 +204,10 @@ export class LedgerActions {
                     return { type: 'EmptyAction' };
                 } else {
                     this._toasty.successToast('entry updated successfully');
+                    if (action && action.payload && action.payload.request && action.payload.request.refreshLedger) {
+                        this.store.dispatch(this.refreshLedger(true));
+                    }
+
                     if (response.request.generateInvoice && !response.body.voucherGenerated) {
                         let invoiceGenModel: GenerateBulkInvoiceRequest[] = [];
                         // accountUniqueName, entryUniqueName
@@ -378,6 +382,7 @@ export class LedgerActions {
                 return this.GenerateBulkLedgerInvoiceResponse(response);
             }));
 
+
     @Effect()
     public GenerateBulkLedgerInvoiceResponse$: Observable<Action> = this.action$
         .ofType(LEDGER.GENERATE_BULK_LEDGER_INVOICE_RESPONSE).pipe(
@@ -389,16 +394,22 @@ export class LedgerActions {
                     if (typeof data.body === 'string') {
                         this._toasty.successToast(data.body);
                     } else if (_.isArray(data.body) && data.body.length > 0) {
-                        _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
-                            if (item.failedEntries) {
+                        // Block will execute if multiple invoice generate
+                        if (data && data.queryString && data.queryString.reqObj && !data.queryString.reqObj.combined) {
+                            _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
+                                if (item.failedEntries) {
+                                    this._toasty.warningToast(item.reason);
+                                }
+                                if (data.request && data.request.length>0 && data.request[0].entries && data.request[0].entries.length > data.body.length) {
+                                    this._toasty.successToast("All other vouchers generated successfully.");
+                                }
+                            });
+                        } else {
+                              //  Block will execute if compound invoice generate
+                            _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
                                 this._toasty.warningToast(item.reason);
-                            } else if (item.successEntries) {
-                                this._toasty.successToast(item.reason);
-                            } else {
-                                this._toasty.warningToast(item.reason);
-                            }
-
-                        });
+                            });
+                        }
                         return this.SetFailedBulkEntries(data.body[0].failedEntries);
                     }
                 }
@@ -798,4 +809,17 @@ export class LedgerActions {
         return successAction;
     }
 
+    /**
+     * This will store the boolean value to refresh the ledger once account update completes
+     *
+     * @param {boolean} request
+     * @returns {CustomActions}
+     * @memberof LedgerActions
+     */
+    public refreshLedger(request: boolean): CustomActions {
+        return {
+            type: LEDGER.REFRESH_LEDGER,
+            payload: request
+        };
+    }
 }
