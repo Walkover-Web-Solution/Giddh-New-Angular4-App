@@ -5,7 +5,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { SalesActions } from '../actions/sales/sales.action';
 import { CompanyActions } from '../actions/company.actions';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { SalesService } from '../services/sales.service';
 import { ToasterService } from '../services/toaster.service';
@@ -413,7 +413,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /** To check is selected invoice already adjusted with at least one advance receipts  */
     public isInvoiceAdjustedWithAdvanceReceipts: boolean = false;
 
-
     /**
      * Returns true, if Purchase Record creation record is broken
      *
@@ -670,6 +669,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             this.getAllLastInvoices();
         });
+
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((event) => {
+            if (event instanceof NavigationStart) {
+                // Unsubscribe the moment user is navigating away from this route
+                // Current implementation causes issue when user navigates to CN & DN with CMD + K
+                // in UPDATE voucher flow as the URLs are the same and only params
+                // change therefore the params subscription of current page are also fired which is
+                // not required and loads incorrect data
+                if (!this.isProformaInvoice && !this.isEstimateInvoice) {
+                    this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+                } else {
+                    this.store.dispatch(this.proformaActions.resetActiveVoucher());
+                }
+
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        })
 
         // get account details and set it to local var
         this.selectedAccountDetails$.subscribe(accountDetails => {
