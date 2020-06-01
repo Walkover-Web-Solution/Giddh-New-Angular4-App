@@ -267,8 +267,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public selectedDate(value: any) {
         this.needToShowLoader = false;
-        let from = moment(value.startDate, 'DD-MM-YYYY').toDate();
-        let to = moment(value.endDate, 'DD-MM-YYYY').toDate();
+        let from = moment(value.startDate, GIDDH_DATE_FORMAT).toDate();
+        let to = moment(value.endDate, GIDDH_DATE_FORMAT).toDate();
 
         this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
             page: 0,
@@ -276,8 +276,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 bsRangeValue: [from, to]
             })
         });
-        this.trxRequest.from = moment(value.startDate).format('DD-MM-YYYY');
-        this.trxRequest.to = moment(value.endDate).format('DD-MM-YYYY');
+        this.trxRequest.from = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+        this.trxRequest.to = moment(value.endDate).format(GIDDH_DATE_FORMAT);
         this.todaySelected = true;
         this.lc.blankLedger.entryDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
         this.getTransactionData();
@@ -793,7 +793,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.entryUniqueNamesForBulkAction = [];
                 this.getTransactionData();
                 // this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
-                //   moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
+                //   moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
                 //   this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
             }
         });
@@ -911,7 +911,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             from = this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code;
             to = this.selectedCurrency === 0 ? this.foreignCurrencyDetails.code : this.baseCurrencyDetails.code;
         }
-        let date = moment().format('DD-MM-YYYY');
+        let date = moment().format(GIDDH_DATE_FORMAT);
         this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
             let rate = response.body;
             if (rate) {
@@ -1142,22 +1142,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this._loaderService.show();
 
         if (this.lc.blankLedger.entryDate) {
-            if (!moment(this.lc.blankLedger.entryDate, 'DD-MM-YYYY').isValid()) {
+            if (!moment(this.lc.blankLedger.entryDate, GIDDH_DATE_FORMAT).isValid()) {
                 this._toaster.errorToast('Invalid Date Selected.Please Select Valid Date');
                 this._loaderService.hide();
                 return;
             } else {
-                this.lc.blankLedger.entryDate = moment(this.lc.blankLedger.entryDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
+                this.lc.blankLedger.entryDate = moment(this.lc.blankLedger.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         }
 
         if (this.lc.blankLedger.chequeClearanceDate) {
-            if (!moment(this.lc.blankLedger.chequeClearanceDate, 'DD-MM-YYYY').isValid()) {
+            if (!moment(this.lc.blankLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).isValid()) {
                 this._toaster.errorToast('Invalid Date Selected In Cheque Clearance Date.Please Select Valid Date');
                 this._loaderService.hide();
                 return;
             } else {
-                this.lc.blankLedger.chequeClearanceDate = moment(this.lc.blankLedger.chequeClearanceDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
+                this.lc.blankLedger.chequeClearanceDate = moment(this.lc.blankLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         }
 
@@ -1192,8 +1192,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public resetAdvanceSearch() {
+        this.searchText = "";
         this.advanceSearchComp.resetAdvanceSearchModal();
         this.trxRequest.page = 0;
+        this.search("");
         this.getTransactionData();
     }
 
@@ -1629,11 +1631,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.isAdvanceSearchImplemented = true;
         if (!this.todaySelected) {
             this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
-                moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
+                moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
                 this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
         } else {
-            let from = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[0] ? moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY') : '';
-            let to = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[1] ? moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY') : '';
+            let from = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[0] ? moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : '';
+            let to = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[1] ? moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : '';
             this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend),
                 this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count)
             );
