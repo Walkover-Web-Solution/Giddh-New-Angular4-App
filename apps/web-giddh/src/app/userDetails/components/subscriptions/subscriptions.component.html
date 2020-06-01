@@ -216,7 +216,7 @@
                                 <div class="mt-1 mb-1 pl-2 pr-1 search-company-here" *ngIf="subscriptions">
                                     <div class="form-group custom-input-search">
                                         <i class="icon-search"></i>
-                                        <input type="search" class="form-control" [(ngModel)]="searchString" (ngModelChange)="filterCompanyList($event)" placeholder="Search Company here">
+                                        <input type="text" class="form-control" placeholder="Search Subscribed Plan" (focus)="showSubscribedPlansList = true;" (focusout)="showSubscribedPlansList = false;" [(ngModel)]="searchSubscribedPlan" (ngModelChange)="searchPlan($event)">
                                     </div>
                                 </div>
                                 <div class="associated-companies" *ngIf="subscriptions">

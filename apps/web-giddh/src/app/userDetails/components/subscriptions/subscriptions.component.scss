@@ -60,6 +60,13 @@
     border-bottom: 1px solid #e6e6e6;
     transition: 0.5s all ease;
 }
+.subscription-dropdown .dropdown-menu li.active {
+    background: $lavender;
+}
+.subscription-dropdown .dropdown-menu li.active a, .subscription-dropdown .dropdown-menu li.active a strong {
+    background: none;
+    color: $chetwode-blue;
+}
 .subscription-dropdown li a {
     display: block;
     align-items: center;
