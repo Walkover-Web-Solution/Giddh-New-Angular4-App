@@ -5,7 +5,7 @@
                 <div class="form-group subscription-dropdown-wrapper mb-0">
                     <div class="btn-group d-block subscription-dropdown mb-0 open custom-input-search">
                         <i class="icon-search"></i>
-                        <input type="text" class="form-control" placeholder="Search Subscribed Plan" (focus)="showSubscribedPlansList = true;" (focusout)="showSubscribedPlansList = false;" [(ngModel)]="searchSubscribedPlan" (ngModelChange)="searchPlan($event)">
+                        <input type="text" class="form-control" placeholder="Search Subscribed Plan" (focus)="showSubscribedPlansList = true;"  [(ngModel)]="searchSubscribedPlan" (ngModelChange)="searchPlan($event)">
                         <ul id="dropdown-basic" class="dropdown-menu" role="menu" aria-labelledby="button-basic" *ngIf="showSubscribedPlansList">
                             <li *ngIf="subscriptions.length==0">No results found</li>
                             <li *ngFor="let item of subscriptions" role="menuitem" class="cursor-pointer">
@@ -34,7 +34,7 @@
         <div class="clearfix mb-2" *ngIf="activeCompany && activeCompany?.subscription && activeCompany?.subscription?.planDetails">
             <div class="box mt-15 box-border plan-row-wrapper">
                 <div class="row d-flex justify-content-between align-items-center xs-d-block plan-row">
-                    <div class="col-md-11 col-sm-10 col-xs-12">
+                    <div class="col-md-9 col-sm-9 col-xs-12">
                         <p class="bold font-14">{{activeCompany.subscription.planDetails.name}}</p>
                         <ul class="list-inline plan-list font-14">
                             <li *ngIf="activeCompany.subscription.status==='expired'"><span>Expired On: </span> <span>{{activeCompany.subscription.expiry ? (formatDate(activeCompany.subscription.expiry) | date: giddhDateFormatUI) : '-'}}</span> </li>
@@ -45,7 +45,7 @@
                             <li *ngIf="activeCompany.subscription.status!=='expired'"><span>Transaction Limit: </span> <span>{{activeCompany.subscription.planDetails.transactionLimit ? (activeCompany.subscription.planDetails.transactionLimit | number) : '0'}}</span></li>
                         </ul>
                     </div>
-                    <div class="col-md-1 col-sm-2 col-xs-12 text-right trial-plan-state">
+                    <div class="col-md-3 col-sm-3 col-xs-12 text-right trial-plan-state">
                         <div class="font-14" [ngClass]="{'active': calculateRemainingDays(activeCompany.subscription.expiry) === 'Active'}" *ngIf="activeCompany.subscription.status==='trial'"><span class="font-26" *ngIf="calculateRemainingDays(activeCompany.subscription.expiry) !== 'Active'">{{calculateRemainingDays(activeCompany.subscription.expiry)}}</span> <span class="green-dote" *ngIf="calculateRemainingDays(activeCompany.subscription.expiry) === 'Active'"></span> {{calculateRemainingDays(activeCompany.subscription.expiry) === 'Active' ? 'Active' : ""}} </div>
                         <div class="active font-14" *ngIf="activeCompany.subscription.status==='active'"><span class="green-dote"></span> {{activeCompany.subscription.status | titlecase}} </div>
                         <div class="text-danger font-14" *ngIf="activeCompany.subscription.status==='expired'"><span class="red-dote"></span> {{activeCompany.subscription.status | titlecase}} </div>
@@ -334,9 +334,8 @@
             </div> -->
             </div>
         </div>
-
         <div class="clearfix" *ngFor="let item of subscriptions">
-            <div class="box mt-2 box-border plan-row-wrapper" *ngIf="item?.uniqueName !== activeCompany?.uniqueName">
+            <div class="box mt-2 box-border plan-row-wrapper pointer" *ngIf="item?.uniqueName !== activeCompany?.uniqueName">
                 <div class="row d-flex justify-content-between align-items-center xs-d-block plan-row">
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <p class="bold font-14">{{item?.planDetails?.name}}</p>
