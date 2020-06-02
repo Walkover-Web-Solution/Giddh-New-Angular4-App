@@ -8,7 +8,8 @@
                         <input type="text" class="form-control" placeholder="Search Subscribed Plan" (focus)="showSubscribedPlansList = true;" (focusout)="showSubscribedPlansList = false;" [(ngModel)]="searchSubscribedPlan" (ngModelChange)="searchPlan($event)">
                         <ul id="dropdown-basic" class="dropdown-menu" role="menu" aria-labelledby="button-basic" *ngIf="showSubscribedPlansList">
                             <li *ngIf="subscriptions.length==0">No results found</li>
-                            <li *ngFor="let item of subscriptions" role="menuitem" class="cursor-pointer">
+                            <li *ngFor="let item of subscriptions" [ngClass]="{'active': seletedUserPlans == item}"
+                            role="menuitem" class="cursor-pointer">
                                 <a (click)="selectedSubscriptionPlan(item);">
                                     <div class="clearfix">
                                         <p><strong>{{item?.planDetails?.name}}</strong></p>
