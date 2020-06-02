@@ -69,7 +69,7 @@
 
                                         <!-- <button type="button" class="btn btn-primary" (click)="isPlanShow=true">Buy
                                             Transactions</button> -->
-                                        <button type="button" class="btn btn-success"
+                                        <button type="button" class="btn btn-success" *ngIf="seletedUserPlans?.planDetails?.uniqueName !== defaultTrialPlan"
                                             (click)="renewPlan()">Renew</button>
 
                                         <div class="btn-group d-inline-block custom-dropdown ml-1" dropdown
