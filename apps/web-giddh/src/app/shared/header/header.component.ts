@@ -286,6 +286,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentState = this.router.url;
                     this.setCurrentAccountNameInHeading();
                 }
+
+                this.addClassInBodyIfPageHasTabs();
             }
         });
 
@@ -1612,5 +1614,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
         this.toggleSidebarPane(false);
+    }
+
+    /**
+     * This will add the page-has-tabs class to body if the page has tabs
+     *
+     * @memberof HeaderComponent
+     */
+    public addClassInBodyIfPageHasTabs(): void {
+        if(document.getElementsByTagName("tabset") && document.getElementsByTagName("tabset").length > 0) {
+            document.querySelector('body').classList.add('page-has-tabs');
+        } else {
+            document.querySelector('body').classList.remove('page-has-tabs');
+        }
     }
 }

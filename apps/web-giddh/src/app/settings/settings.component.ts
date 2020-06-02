@@ -78,7 +78,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
             '(max-width:767px)'
         ]).subscribe(result => {
             this.isMobileScreen = result.matches;
-            if(!this.isMobileScreen) {
+            if (!this.isMobileScreen) {
                 this.asideSettingMenuState = "in";
                 this.toggleBodyClass();
             }
@@ -303,13 +303,14 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     public toggleBodyClass() {
         if (this.asideSettingMenuState === 'in') {
-           document.querySelector('body').classList.add('setting-sidebar-open');
+            document.querySelector('body').classList.add('setting-sidebar-open');
         } else {
-           document.querySelector('body').classList.remove('setting-sidebar-open');
+            document.querySelector('body').classList.remove('setting-sidebar-open');
         }
     }
 
     public ngOnDestroy() {
+        document.querySelector('body').classList.remove('setting-sidebar-open');
         this.asideSettingMenuState = "out";
         this.destroyed$.next(true);
         this.destroyed$.complete();
