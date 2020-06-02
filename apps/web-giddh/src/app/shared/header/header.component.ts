@@ -215,9 +215,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private loggedInUserEmail: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private subscriptions: Subscription[] = [];
-    private modelRef: BsModalRef;
-    private modelRefExpirePlan: BsModalRef;
-    private modelRefCrossLimit: BsModalRef;
+    public modelRef: BsModalRef;
+    public modelRefExpirePlan: BsModalRef;
+    public modelRefCrossLimit: BsModalRef;
 
     private activeCompanyForDb: ICompAidata;
     private smartCombinedList$: Observable<any>;
@@ -233,6 +233,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public forceOpenNavigation: boolean = false;
     /** VAT supported countries to show the Vat Report section in all modules */
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+    /* This will check if company is allowed to beta test new modules */
+    public isAllowedForBetaTesting: boolean = false;
 
     /**
      *
@@ -671,6 +673,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         this.selectedPlanStatus = res.subscription.status;
                     }
                     this.activeCompany = res;
+                    if(this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
+                        this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
+                    }
                     this.checkIfCompanyTcsTdsApplicable();
                 }
             });
@@ -1549,6 +1554,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.removeCompanySessionData();
         this.showAddCompanyModal();
     }
+    
 
     /**
      * Fetches whether company country has other taxes (TCS/TDS)

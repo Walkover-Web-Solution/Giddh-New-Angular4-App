@@ -23,6 +23,8 @@ export class AllModulesComponent implements OnInit {
 
     public activeCompany: any;
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+    /* This will check if company is allowed to beta test new modules */
+    public isAllowedForBetaTesting: boolean = false;
 
     constructor(private componentFactoryResolver: ComponentFactoryResolver, private store: Store<AppState>, private generalActions: GeneralActions, private groupWithAccountsAction: GroupWithAccountsAction, private generalService: GeneralService) {
 
@@ -37,6 +39,10 @@ export class AllModulesComponent implements OnInit {
         this.store.pipe(select(state => state.session.companies), take(1)).subscribe(companies => {
             companies = companies || [];
             this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
+
+            if(this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
+                this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
+            }
         });
     }
 

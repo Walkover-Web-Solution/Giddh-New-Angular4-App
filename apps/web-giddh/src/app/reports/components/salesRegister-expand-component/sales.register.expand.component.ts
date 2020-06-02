@@ -25,6 +25,7 @@ export class SalesRegisterExpandComponent implements OnInit {
     public SalesRegisteDetailedItems: SalesRegisteDetailedResponse;
     public from: string;
     public to: string;
+    /** Sales register detail response */
     public salesRegisteDetailedResponse$: Observable<SalesRegisteDetailedResponse>;
     public isGetSalesDetailsInProcess$: Observable<boolean>;
     public isGetSalesDetailsSuccess$: Observable<boolean>;
@@ -67,7 +68,7 @@ export class SalesRegisterExpandComponent implements OnInit {
     bsValue = new Date();
 
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private _generalActions: GeneralActions) {
-        this.salesRegisteDetailedResponse$ = this.store.pipe(select(p => p.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
+        this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetSalesDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsInProcess), takeUntil(this.destroyed$));
         this.isGetSalesDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsSuccess), takeUntil(this.destroyed$));
     }

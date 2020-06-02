@@ -1,0 +1,65 @@
+<div class="reverse-table-report">
+    <div class="container-fluid">
+        <div class="invoice-preview  table-responsive" *ngIf="columnarReportResponse">
+            <table class="table basic giddh-table onMobileView">
+                <thead class="t-h-bg1">
+                    <tr>
+                        <ng-container *ngFor="let item of columnsName">
+                            <th>{{item}}</th>
+                        </ng-container>
+                    </tr>
+                </thead>
+                <tbody *ngIf="columnarReportResponse.accounts">
+                    <tr *ngFor="let item of columnarReportResponse.accounts;let inx = index;">
+                        <!-- S No -->
+                        <td data-title="#"> {{ inx + 1}} </td>
+                        <!--Ledger Name -->
+                        <td data-title="Name Of Ledger"> {{ item.accountName}} </td>
+                        <!--Parent  Name -->
+                        <td data-title="Parent Group"> {{ item.groupName}} </td>
+                        <!--Opening balance  -->
+                        <td class="text-center" *ngIf="(isShowClosingOpeningBalance$ | async)">
+                            <span *ngIf="isCrDrChecked">{{(columnarReportResponse?.openingBalance[item.accountUniqueName]?.type ==='DEBIT' && columnarReportResponse?.openingBalance[item.accountUniqueName]?.amount >0)? '-': ''}} </span> {{ columnarReportResponse?.openingBalance[item.accountUniqueName]?.amount}}
+                            <span *ngIf="!isCrDrChecked && columnarReportResponse?.openingBalance[item.accountUniqueName]?.amount >0">{{columnarReportResponse?.openingBalance[item.accountUniqueName]?.type ==='DEBIT'? 'Dr': 'Cr'}}</span>
+                        </td>
+                        <!--Closing balance  -->
+                        <td class="text-center" *ngIf="(isShowClosingOpeningBalance$ | async)">
+                            <span *ngIf="isCrDrChecked && columnarReportResponse?.closingBalance[item.accountUniqueName]?.amount>0"> {{(columnarReportResponse?.closingBalance[item.accountUniqueName]?.type ==='DEBIT')?'-':''}} </span>{{columnarReportResponse?.closingBalance[item.accountUniqueName]?.amount}}
+                            <span *ngIf="!isCrDrChecked && columnarReportResponse?.closingBalance[item.accountUniqueName]?.amount>0">
+                            {{columnarReportResponse?.closingBalance[item.accountUniqueName]?.type
+                            ==='DEBIT'?'Dr':'Cr'}} </span>
+                        </td>
+                        <!--Grand  Total -->
+                        <td class="text-center">
+                            <span *ngIf="isCrDrChecked && columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount > 0"> {{(columnarReportResponse?.grandTotal[item.accountUniqueName]?.type ==='DEBIT')?'-':''}}</span> {{columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount}}
+                            <span *ngIf="!isCrDrChecked && columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount > 0">
+                             {{columnarReportResponse?.grandTotal[item.accountUniqueName]?.type
+                            ==='DEBIT'?'Dr':'Cr'}}</span>
+                        </td>
+                        <ng-container *ngFor="let months of columnarReportResponse.data;let inx2 = index;">
+                            <!-- months data -->
+                            <td class="text-center">
+                                <span *ngIf="isCrDrChecked && months?.accountsData[inx]?.monthlyBalance?.amount>0"> {{months?.accountsData[inx]?.monthlyBalance?.type ==='DEBIT'?'-':'' }}</span> {{months.accountsData[inx]?.monthlyBalance?.amount}}
+                                <span *ngIf="!isCrDrChecked && months?.accountsData[inx]?.monthlyBalance?.amount>0">{{months?.accountsData[inx]?.monthlyBalance?.type ==='DEBIT'?'Dr':'Cr' }}</span>
+                            </td>
+                        </ng-container>
+                    </tr>
+                </tbody>
+                <tbody class="no-record-found" *ngIf="columnarReportResponse && columnarReportResponse.accounts && columnarReportResponse.accounts.length === 0">
+                    <tr>
+                        <td [attr.colspan]="columnsName.length" align="center">No records found.</td>
+                        <!-- <td  colspan="10">&nbsp;</td> -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- <div *ngIf="isLoading">
+    <div class="no-data mrT2 loader-main">
+        <div class="spinner2">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
+    </div>
+</div> -->

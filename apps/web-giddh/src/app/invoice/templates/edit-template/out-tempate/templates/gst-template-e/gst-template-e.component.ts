@@ -15,7 +15,7 @@ import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/
 @Component({
     selector: 'gst-template-e',
     templateUrl: './gst-template-e.component.html',
-    styleUrls: ['./gst-template-e.component.css'],
+    styleUrls: ['./gst-template-e.component.scss'],
     // encapsulation: ViewEncapsulation.None
 })
 

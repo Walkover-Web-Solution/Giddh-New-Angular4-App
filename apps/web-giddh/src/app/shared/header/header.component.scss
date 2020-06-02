@@ -1,10 +1,4 @@
-
-
- 
 @import "../../../assets/css/color.scss";
- 
- 
-
 .ddMaxHeight {
     max-height: 500px;
 }
@@ -149,7 +143,7 @@ a[vr-item]:focus {
 .left_fixed_header > li {
     text-transform: capitalize;
     position: relative;
- 
+    font-weight: bold;
 }
 .no-padding {
     padding: 0px !important;
@@ -180,9 +174,7 @@ a[vr-item]:focus {
 
 .left_fixed_header > li > a:hover {
     color: $nero;
-   
 }
-
 .left_fixed_header > li > a:hover .label > span,
 .left_fixed_header > li > a:hover .label {
     color: #01a9f4;
@@ -713,9 +705,10 @@ ul.sub-list {
         padding-top: 10px;
     }
     .hamburger_menu button {
-        padding-top: 0;
-        padding-bottom: 0;
-        font-size: 18px;
+        width: 30px;
+        i{
+            font-size: 20px !important;
+        }
     }
     .primary-header .btn-group.cp.mrL1.d-inline-block {
         height: 34px;

@@ -3,13 +3,13 @@
     <!-- <i class="fa fa-times text-right close_modal" data-dismiss="modal" aria-hidden="true"  aria-label="Close"></i> -->
     <h3 class="">Connect Banks</h3>
 </div>
-<div id="myFrame" class="modal-body clearfix">
+<div id="my-frame" class="modal-body clearfix">
     <div class="" *ngIf="step === 1">
         <div class="form-group">
             <label>Search Provider <sup>*</sup></label>
             <input [ngbTypeahead]="dataSource" type="text" [(ngModel)]="selectedProvider.name" name="providers"
                 [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" autocomplete="off"
-                required maxlength="50" placeholder="Search Provider" pattern="^[^\s]+(\s+[^\s]+)*$">
+                required maxlength="50" placeholder="Search Provider" pattern="^[^\s]+(\s+[^\s]+)*$" (click)="click$.next($any($event).target.value)">
 
             <ng-template #rt let-r="result" let-t="term">
                 <span (keyup.enter)="typeaheadOnSelect(r)"> <span class="provider_ico"><img

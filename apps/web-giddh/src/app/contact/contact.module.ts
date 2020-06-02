@@ -72,6 +72,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         PerfectScrollbarModule,
         GhSortByPipeModule,
         GenericAsideMenuAccountModule,
+        NgxDaterangepickerMd.forRoot()
     ],
     entryComponents: [
         PaginationComponent

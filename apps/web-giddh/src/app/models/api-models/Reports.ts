@@ -186,3 +186,26 @@ export interface AdvanceReceiptSummaryRequest {
     from?: string;
     to?: string;
 }
+
+export class ColumnarResponseResult {
+    entryId: number;
+    accountId: number;
+    date: string;
+    baseAccount: string;
+    address: string;
+    voucherType: string;
+    voucherNumber: string;
+    voucherRefNo?: string;
+    voucherRefDate: string;
+    taxNumber: string;
+    narration?: string;
+    stockName?: any;
+    quantity: string;
+    stockUnitCode?: any;
+    rate?: any;
+    value?: any;
+    grossTotal: string;
+    balance?: any;
+    accountNameAndAmountMap?: any;
+    accountNameAndBalanceMap: any;
+}

@@ -60,14 +60,13 @@ export enum Subvoucher {
 /**
  * enums for default date range picker
  */
-export enum DefaultDateRangePickerRangesEnum {
+export enum DatePickerDefaultRangeEnum {
     Today = 'Today',
     Yesterday = 'Yesterday',
     Last7Days = 'Last 7 Days',
     ThisMonth = 'This Month',
     LastMonth = 'Last Month',
     ThisWeek = 'This Week',
-    Last14Days = 'Last14Days',
     SunToToday = 'Sun - Today',
     MonToToday = 'Mon - Today',
     ThisQuarterToDate = 'This Quarter to Date',
@@ -75,7 +74,8 @@ export enum DefaultDateRangePickerRangesEnum {
     ThisYearToDate = 'This Year to Date',
     LastQuarter = 'Last Quarter',
     LastFinancialYear = 'Last Financial Year',
-    LastYear = 'Last Year'
+    LastYear = 'Last Year',
+    AllTime = 'All Time'
 }
 
 /**
@@ -83,68 +83,68 @@ export enum DefaultDateRangePickerRangesEnum {
  */
 export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
     {
-        name: DefaultDateRangePickerRangesEnum.Today, value: [moment(), moment()]
+        name: DatePickerDefaultRangeEnum.Today, value: [moment(), moment()]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.Yesterday, value: [moment().subtract(1, 'days'), moment().subtract(1, 'days')]
+        name: DatePickerDefaultRangeEnum.Yesterday, value: [moment().subtract(1, 'days'), moment().subtract(1, 'days')]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.Last7Days, value: [moment().subtract(6, 'days'), moment()]
+        name: DatePickerDefaultRangeEnum.Last7Days, value: [moment().subtract(6, 'days'), moment()]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.ThisMonth, value: [moment().startOf('month'), moment().endOf('month')]
+        name: DatePickerDefaultRangeEnum.ThisMonth, value: [moment().startOf('month'), moment().endOf('month')]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.LastMonth, value: [
+        name: DatePickerDefaultRangeEnum.LastMonth, value: [
             moment().subtract(1, 'month').startOf('month'),
             moment().subtract(1, 'month').endOf('month')
         ]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.ThisWeek, ranges: [{
-            name: DefaultDateRangePickerRangesEnum.SunToToday, value: [moment().startOf('week'), moment()]
-        }, {name: DefaultDateRangePickerRangesEnum.MonToToday, value: [moment().startOf('week').add(1, 'd'), moment()]}]
+        name: DatePickerDefaultRangeEnum.ThisWeek, ranges: [{
+            name: DatePickerDefaultRangeEnum.SunToToday, value: [moment().startOf('week'), moment()]
+        }, { name: DatePickerDefaultRangeEnum.MonToToday, value: [moment().startOf('week').add(1, 'd'), moment()] }]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.Last14Days, value: [
-            moment().subtract(14, 'd'),
-            moment()
-        ]
-    },
-    {
-        name: DefaultDateRangePickerRangesEnum.ThisQuarterToDate, value: [
+        name: DatePickerDefaultRangeEnum.ThisQuarterToDate, value: [
             moment().quarter(moment().quarter()).startOf('quarter'),
             moment()
         ]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.ThisFinancialYearToDate, value: [
+        name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate, value: [
             moment().startOf('year').subtract(9, 'year'),
             moment()
         ]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.ThisYearToDate, value: [
+        name: DatePickerDefaultRangeEnum.ThisYearToDate, value: [
             moment().startOf('year'),
             moment()
         ]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.LastQuarter, value: [
+        name: DatePickerDefaultRangeEnum.LastQuarter, value: [
             moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
             moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
         ]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.LastFinancialYear, value: [
+        name: DatePickerDefaultRangeEnum.LastFinancialYear, value: [
             moment().startOf('year').subtract(10, 'year'),
             moment().endOf('year').subtract(10, 'year')
         ]
     },
     {
-        name: DefaultDateRangePickerRangesEnum.LastYear, value: [
+        name: DatePickerDefaultRangeEnum.LastYear, value: [
             moment().subtract(1, 'year').startOf('year'),
             moment().subtract(1, 'year').endOf('year')
+        ]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.AllTime, value: [
+            moment().startOf('year').subtract(10, 'year'),
+            moment()
         ]
     }
 ];
@@ -166,3 +166,28 @@ export const VAT_SUPPORTED_COUNTRIES = [
 ];
 
 export const API_POSTMAN_DOC_URL='https://documenter.getpostman.com/view/117343/S1Zw8WF1?version=latest';
+
+/** Decimal point for rate field, irrespective of user profile preference
+ * will be displayed up to 4 decimal places
+ */
+export const RATE_FIELD_PRECISION = 4;
+
+/** Regex to remove trailing zeros from a string representation of number */
+export const REMOVE_TRAILING_ZERO_REGEX = /^([\d,' ]*)$|^([\d,' ]*)\.0*$|^([\d,' ]+\.[0-9]*?)0*$/;
+
+/* This plan unique name will be used as a default plan while creating new company/branch */
+export let DEFAULT_SIGNUP_TRIAL_PLAN = "";
+
+if(PRODUCTION_ENV || isElectron || isCordova) {
+    DEFAULT_SIGNUP_TRIAL_PLAN = "e6v1566224240273";
+} else {
+    DEFAULT_SIGNUP_TRIAL_PLAN = "4z01581500278547";
+}
+
+export let DEFAULT_POPULAR_PLAN = "";
+
+if(PRODUCTION_ENV || isElectron || isCordova) {
+    DEFAULT_POPULAR_PLAN = "oak";
+} else {
+    DEFAULT_POPULAR_PLAN = "D1";
+}

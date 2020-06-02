@@ -1,26 +1,26 @@
-import {take, takeUntil} from 'rxjs/operators';
-import {Observable, ReplaySubject} from 'rxjs';
-import {ToasterService} from 'apps/web-giddh/src/app/services/toaster.service';
-import {SettingPermissionComponent} from './permissions/setting.permission.component';
-import {SettingLinkedAccountsComponent} from './linked-accounts/setting.linked.accounts.component';
-import {FinancialYearComponent} from './financial-year/financial-year.component';
-import {SettingProfileComponent} from './profile/setting.profile.component';
-import {SettingIntegrationComponent} from './integration/setting.integration.component';
-import {PermissionDataService} from 'apps/web-giddh/src/app/permissions/permission-data.service';
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {TabsetComponent} from 'ngx-bootstrap';
-import {StateDetailsRequest} from '../models/api-models/Company';
-import {CompanyActions} from '../actions/company.actions';
-import {Store} from '@ngrx/store';
-import {AppState} from '../store/roots';
-import {SettingsProfileActions} from '../actions/settings/profile/settings.profile.action';
-import {SettingsTagsComponent} from './tags/tags.component';
-import {ActivatedRoute, Router} from '@angular/router';
-import {BunchComponent} from './bunch/bunch.component';
-import {AuthenticationService} from '../services/authentication.service';
-import {GeneralActions} from '../actions/general/general.actions';
-import {SettingsIntegrationActions} from '../actions/settings/settings.integration.action';
-import {WarehouseActions} from './warehouse/action/warehouse.action';
+import { take, takeUntil } from 'rxjs/operators';
+import { Observable, ReplaySubject } from 'rxjs';
+import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
+import { SettingPermissionComponent } from './permissions/setting.permission.component';
+import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked.accounts.component';
+import { FinancialYearComponent } from './financial-year/financial-year.component';
+import { SettingProfileComponent } from './profile/setting.profile.component';
+import { SettingIntegrationComponent } from './integration/setting.integration.component';
+import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { TabsetComponent } from 'ngx-bootstrap';
+import { StateDetailsRequest } from '../models/api-models/Company';
+import { CompanyActions } from '../actions/company.actions';
+import { Store } from '@ngrx/store';
+import { AppState } from '../store/roots';
+import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
+import { SettingsTagsComponent } from './tags/tags.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BunchComponent } from './bunch/bunch.component';
+import { AuthenticationService } from '../services/authentication.service';
+import { GeneralActions } from '../actions/general/general.actions';
+import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
+import { WarehouseActions } from './warehouse/action/warehouse.action';
 import { PAGINATION_LIMIT } from '../app.constant';
 import { HttpClient } from "@angular/common/http";
 
@@ -173,16 +173,14 @@ export class SettingsComponent implements OnInit {
     }
 
     public tabChanged(tab: string) {
-        if (tab === 'integration') {
+        if (tab === 'integration' && this.integrationtab) {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
             this.loadModuleData(tab);
-            if (this.integrationtab) {
-                this.router.navigate(['pages/settings/', tab, this.integrationtab], {replaceUrl: true});
-            }
+            this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
         } else {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
             this.loadModuleData(tab);
-            this.router.navigate(['pages/settings/', tab], {replaceUrl: true});
+            this.router.navigate(['pages/settings/', tab], { replaceUrl: true });
         }
     }
 

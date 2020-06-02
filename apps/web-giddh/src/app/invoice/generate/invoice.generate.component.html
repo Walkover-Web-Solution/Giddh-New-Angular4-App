@@ -23,9 +23,9 @@
 
     <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate class="form-inline">
         <div class="d-flex">
-            <div class="d-flex form-group mobile-width-100">
+            <div class="d-flex form-group pending-page-search-block  mobile-width-100">
                 <div class="form-group date-advanceSearch" style="flex: 1 1 auto;">
-
+                    <div>
                     <div class="input-group" id="dp-parent" style="margin-right:8px; margin-bottom:0;">
                         <!-- <span class="icon-calender"></span> -->
                         <span class="input-wrapper">
@@ -55,24 +55,22 @@
                         *ngIf="!isUniversalDateApplicable && isMobileView" (click)="resetDateSearch()">
                         <span class="icon-cross"></span> Clear Filter
                     </button>
+                </div>
+                <div class="multiple-compound-button"> 
                     <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary"
                         (click)="generateBulkInvoice(false)">
                         Generate Multiple
                     </button>
-
                     <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary"
                         (click)="generateBulkInvoice(true)">
                         Generate Compound
                     </button>
-
+                </div>
                     <!-- <button placement="top" tooltip="Works only for single entry." *ngIf="!isMobileView"
                         [hidden]="selectedLedgerItems.length === 0 || selectedLedgerItems.length > 1 || !togglePrevGenBtn"
                         class="btn btn-primary" (click)="previewInvoice()">Preview &amp; Generate
                     </button> -->
-
-
                 </div>
-
                 <!-- <div class="form-group">
   <button class="btn btn-pink" style="margin: 0 !important;" *ngIf="selectedVoucher === 'sales'">+ New Invoice
   </button>

@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, } from '@angular/core';
 import { Router } from '@angular/router';
@@ -10,7 +10,6 @@ import { GeneralService } from '../services/general.service';
 import { ToasterService } from '../services/toaster.service';
 import { VatService } from "../services/vat.service";
 import * as moment from 'moment/moment';
-import { createSelector } from "reselect";
 import { GIDDH_DATE_FORMAT } from "../shared/helpers/defaultDateFormat";
 import { saveAs } from "file-saver";
 import { StateDetailsRequest } from "../models/api-models/Company";
@@ -27,7 +26,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public vatReport: any[] = [];
     public activeCompanyUniqueName$: Observable<string>;
     public activeCompany: any;
-    public universalDate$: Observable<any>;
     public datePickerOptions: any = {
         alwaysShowCalendars: true,
         startDate: moment().subtract(30, 'days'),
@@ -48,22 +46,17 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
     constructor(private store: Store<AppState>, private vatService: VatService, private _generalService: GeneralService, private _toasty: ToasterService, private cdRef: ChangeDetectorRef, private companyActions: CompanyActions, private _route: Router) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
-        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), (takeUntil(this.destroyed$)));
     }
 
     public ngOnInit() {
-        this.store.pipe(select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
-            if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
-                this.currentPeriod = {
-                    from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
-                    to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
-                };
-                this.selectedMonth = moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-            }
-        })), (takeUntil(this.destroyed$))).subscribe();
+        this.currentPeriod = {
+            from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
+            to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
+        };
+
+        this.selectedMonth = moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
+        this.fromDate = this.currentPeriod.from;
+        this.toDate = this.currentPeriod.to;
 
         this.activeCompanyUniqueName$.pipe(take(1)).subscribe(activeCompanyName => {
             this.store.pipe(select(state => state.session.companies), takeUntil(this.destroyed$)).subscribe(res => {

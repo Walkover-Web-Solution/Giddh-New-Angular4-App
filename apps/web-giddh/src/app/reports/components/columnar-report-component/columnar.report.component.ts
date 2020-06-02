@@ -12,6 +12,8 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import * as moment from 'moment/moment';
 import { saveAs } from "file-saver";
 import { IForceClear } from '../../../models/api-models/Sales';
+import { ReportsDetailedRequestFilter } from '../../../models/api-models/Reports';
+import { PAGINATION_LIMIT } from '../../../app.constant';
 
 @Component({
     selector: 'columnar-report-component',
@@ -38,10 +40,19 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public financialYearSelected: any;
     public activeFinancialYear: string = '';
     public activeFinancialYearLabel: string = '';
-
+    /** API response object of columnar report */
+    public columnarReportResponse: any;
+    /** Columnar report table request params object */
+    public getColumnarRequestModel: ReportsDetailedRequestFilter;
+    /** report table pagination count constant */
+    public paginationCount: number = PAGINATION_LIMIT;
+    /** True, if request for show report  */
+    public isShowColumnarReport: boolean = false;
+    /** To check cr/dr or +/- checked */
+    public isBalanceTypeAsSign: boolean = false;
     constructor(public settingsFinancialYearService: SettingsFinancialYearService, private store: Store<AppState>, private toaster: ToasterService, private ledgerService: LedgerService, private generalService: GeneralService) {
         this.exportRequest.fileType = 'xls';
-        this.exportRequest.balanceTypeAsSign = true;
+        this.exportRequest.balanceTypeAsSign = false;
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
 
         this.flattenGroups$.subscribe(flattenGroups => {
@@ -75,6 +86,10 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     ngOnInit(): void {
+        this.getColumnarRequestModel = new ReportsDetailedRequestFilter();
+        this.getColumnarRequestModel.page = 1;
+        this.getColumnarRequestModel.count = this.paginationCount;
+        this.columnarReportResponse = null;
         this.getFinancialYears();
     }
 
@@ -111,11 +126,11 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      *
      * @memberof ColumnarReportComponent
      */
-    public exportReport(): void {
+    public exportReport(isShowReport: boolean): void {
         if (!this.isLoading) {
             this.isLoading = true;
-
-            if(this.fromMonth && this.toMonth) {
+            this.isShowColumnarReport = isShowReport;
+            if (this.fromMonth && this.toMonth) {
                 let monthYear = [];
                 let startDate = moment(new Date(this.fromMonth));
                 let monthsCount = moment(new Date(this.toMonth)).diff(startDate, 'months');
@@ -129,27 +144,38 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
 
                 this.exportRequest.monthYear = monthYear;
             }
-
-            this.ledgerService.downloadColumnarReport(this.companyUniqueName, this.groupUniqueName, this.exportRequest).subscribe((res) => {
+            if (isShowReport) {
+                this.columnarReportResponse = null;
+                this.exportRequest.page = this.getColumnarRequestModel.page;
+                this.exportRequest.count = this.getColumnarRequestModel.count;
+            }
+            this.ledgerService.downloadColumnarReport(this.companyUniqueName, this.groupUniqueName, this.exportRequest, isShowReport).subscribe((res) => {
                 this.isLoading = false;
+                this.isShowColumnarReport = false;
                 if (res.status === "success") {
-                    this.exportRequest = {};
-                    this.groupUniqueName = '';
-                    this.forceClear$ = observableOf({ status: true });
-                    this.forceClearMonths$ = observableOf({ status: true });
-                    this.fromMonthNames = [];
-                    this.toMonthNames = [];
-                    this.selectActiveFinancialYear();
-                    this.exportRequest.balanceTypeAsSign = true;
-
-                    let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                    return saveAs(blob, `ColumnarReport.xlsx`);
+                    if (isShowReport) {
+                        this.columnarReportResponse = res.body;
+                    } else {
+                        let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
+                        return saveAs(blob, `ColumnarReport.xlsx`);
+                    }
                 } else {
                     this.toaster.clearAllToaster();
                     this.toaster.errorToast(res.message);
                 }
             });
         }
+    }
+
+    /**
+     * To balance type sign changed in +/- to Cr/Dr
+     *
+     * @param {*} event
+     * @memberof ColumnarReportComponent
+     */
+    public onBalanceTypeAsSignChanged(event) {
+        this.isBalanceTypeAsSign = event;
+        this.exportRequest.balanceTypeAsSig = event;
     }
 
     /**
@@ -259,9 +285,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public selectActiveFinancialYear(): void {
-        if(this.selectYear && this.selectYear.length > 0 && this.activeFinancialYear) {
+        if (this.selectYear && this.selectYear.length > 0 && this.activeFinancialYear) {
             this.selectYear.forEach(key => {
-                if(key.value.uniqueName === this.activeFinancialYear) {
+                if (key.value.uniqueName === this.activeFinancialYear) {
                     this.selectFinancialYear(key);
 
                     let financialYearStarts = moment(key.value.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
@@ -270,5 +296,41 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 }
             });
         }
+    }
+
+    /**
+   * To call API according to pagination
+   *
+   * @param {*} event Pagination page change event
+   * @returns {void}
+   * @memberof ColumnarReportComponent
+   */
+    public pageChanged(event: any): void {
+        if (event && this.getColumnarRequestModel) {
+            if (event && event.page === this.getColumnarRequestModel.page) {
+                return;
+            }
+            this.getColumnarRequestModel.page = event.page;
+            this.exportReport(true);
+        }
+
+    }
+
+    /**
+     * To clear applied filter
+     *
+     * @memberof ColumnarReportComponent
+     */
+    public clearFilter(): void {
+        this.exportRequest = {};
+        this.groupUniqueName = '';
+        this.forceClear$ = observableOf({ status: true });
+        this.forceClearMonths$ = observableOf({ status: true });
+        this.fromMonthNames = [];
+        this.toMonthNames = [];
+        this.selectActiveFinancialYear();
+        this.columnarReportResponse = null;
+        this.exportRequest.balanceTypeAsSign = false;
+        this.isBalanceTypeAsSign = false;
     }
 }

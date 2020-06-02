@@ -315,14 +315,16 @@ export class PurchaseRegisterComponent implements OnInit {
      * @memberof PurchaseRegisterComponent
      */
     private setPurchaseRegisterTotal(transaction: any): void {
-        const item = _.cloneDeep(transaction);
-        this.purchaseRegisterTotal.purchase += item.debitTotal;
-        this.purchaseRegisterTotal.returns += item.creditTotal;
-        this.purchaseRegisterTotal.taxTotal += item.taxTotal;
-        this.purchaseRegisterTotal.discountTotal += item.discountTotal;
-        this.purchaseRegisterTotal.tcsTotal += item.tcsTotal;
-        this.purchaseRegisterTotal.tdsTotal += item.tdsTotal;
-        this.purchaseRegisterTotal.netPurchase += item.balance.amount;
-        this.purchaseRegisterTotal.cumulative = item.closingBalance.amount;
+        if (transaction) {
+            const item = _.cloneDeep(transaction);
+            this.purchaseRegisterTotal.purchase += item.debitTotal;
+            this.purchaseRegisterTotal.returns += item.creditTotal;
+            this.purchaseRegisterTotal.taxTotal += item.taxTotal;
+            this.purchaseRegisterTotal.discountTotal += item.discountTotal;
+            this.purchaseRegisterTotal.tcsTotal += item.tcsTotal;
+            this.purchaseRegisterTotal.tdsTotal += item.tdsTotal;
+            this.purchaseRegisterTotal.netPurchase += item.balance.amount;
+            this.purchaseRegisterTotal.cumulative = item.closingBalance.amount;
+        }
     }
 }

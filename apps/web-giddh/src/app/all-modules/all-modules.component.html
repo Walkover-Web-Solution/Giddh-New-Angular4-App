@@ -6,11 +6,12 @@
                 <p><a href="javascript:void(0)" [routerLink]="['/pages/contact/customer']" [queryParams]="{tab: 'customer', tabIndex: 0}">Customer</a></p>
                 <p><a href="javascript:void(0)" [routerLink]="['/pages/contact/aging-report']">Aging Report </a></p>
                 <p><a href="javascript:void(0)" [routerLink]="['/pages/contact/vendor']" [queryParams]="{tab: 'vendor', tabIndex: 0}">Vendor</a></p>
-                <p><a href="javascript:void(0)" [routerLink]="['/pages/accounting-voucher']">Journal Voucher</a></p>
+                <p><a href="javascript:void(0)" *ngIf="isAllowedForBetaTesting" [routerLink]="['/pages/journal-voucher']">Journal Voucher *</a></p>
                 <p><a href="javascript:void(0)" (click)="showManageGroupsModal();">Create Account</a></p>
             </div>
             <div class="col-md-3 col-sm-3 mb-5 col-xs-6">
                 <p>Invoice</p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/proforma-invoice/invoice/cash']">Cash Invoice</a></p>
                 <p><a href="javascript:void(0)" [routerLink]="['/pages/proforma-invoice/invoice/sales']">Sales Invoice</a></p>
                 <p><a href="javascript:void(0)" [routerLink]="['/pages/proforma-invoice/invoice/purchase']">Purchase Record</a></p>
                 <p><a href="javascript:void(0)" [routerLink]="['/pages/invoice/preview/credit note']" [queryParams]="{tab: 'credit note', tabIndex: 1}">Dr/Cr Note</a></p>
