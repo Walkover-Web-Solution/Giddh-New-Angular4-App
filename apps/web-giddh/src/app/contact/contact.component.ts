@@ -1154,7 +1154,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             if (res.status === 'success') {
                 this.cashFreeAvailableBalance = res.body.availableBalance;
             }
+        }, () => {
         });
+        this.cashFreeAvailableBalance = 483949384;
+        this.payNow('prateek');
     }
 
     private setTableColspan() {
