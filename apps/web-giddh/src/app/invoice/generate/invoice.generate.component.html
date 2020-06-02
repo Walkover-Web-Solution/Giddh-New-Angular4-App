@@ -1,34 +1,33 @@
-<div class="invoice-genrate-container">
-    <div style="height: 44px;" *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'">
-        <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
-            style="margin-bottom: 10px;display: inline-block !important;">
-            <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
-                aria-controls="dropdown-basic">
+<ng-container *ngIf="!showEditMode">
+    <div class="invoice-genrate-container">
+        <div style="height: 44px;" *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'">
+            <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()" style="margin-bottom: 10px;display: inline-block !important;">
+                <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle" aria-controls="dropdown-basic">
                 {{ selectedVoucher | titlecase}}
                 <span class="caret"></span>
             </button>
-            <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
 
-                <li role="menuitem" (click)="changeDebitOrCredit('debit note')">
-                    <a class="dropdown-item cp" href="javascript:void(0)">Debit Note</a>
-                </li>
+                    <li role="menuitem" (click)="changeDebitOrCredit('debit note')">
+                        <a class="dropdown-item cp" href="javascript:void(0)">Debit Note</a>
+                    </li>
 
-                <li role="menuitem" (click)="changeDebitOrCredit('credit note')">
-                    <a class="dropdown-item cp" href="javascript:void(0)">Credit Note</a>
-                </li>
-            </ul>
+                    <li role="menuitem" (click)="changeDebitOrCredit('credit note')">
+                        <a class="dropdown-item cp" href="javascript:void(0)">Credit Note</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
 
 
-    <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate class="form-inline">
-        <div class="d-flex">
-            <div class="d-flex form-group pending-page-search-block  mobile-width-100">
-                <div class="form-group date-advanceSearch" style="flex: 1 1 auto;">
-                    <div>
-                    <div class="input-group" id="dp-parent" style="margin-right:8px; margin-bottom:0;">
-                        <!-- <span class="icon-calender"></span> -->
-                        <span class="input-wrapper">
+        <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate class="form-inline">
+            <div class="d-flex">
+                <div class="d-flex form-group mobile-width-100">
+                    <div class="form-group date-advanceSearch" style="flex: 1 1 auto;">
+
+                        <div class="input-group" id="dp-parent" style="margin-right:8px; margin-bottom:0;">
+                            <!-- <span class="icon-calender"></span> -->
+                            <span class="input-wrapper">
                             <input type="text" name="dateRangeGenerate" id="dateRangeGenerate" daterangepicker
                                 [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)"
                                 class="form-control" />
@@ -50,28 +49,25 @@
                             <!--                               placeholder="Select please..."/>-->
 
                         </span>
-                    </div>
-                    <button class="clear-filter btn btn-filter align-items-center d-flex justify-content-center"
-                        *ngIf="!isUniversalDateApplicable && isMobileView" (click)="resetDateSearch()">
+                        </div>
+                        <button class="clear-filter btn btn-filter align-items-center d-flex justify-content-center" *ngIf="!isUniversalDateApplicable && isMobileView" (click)="resetDateSearch()">
                         <span class="icon-cross"></span> Clear Filter
                     </button>
-                </div>
-                <div class="multiple-compound-button"> 
-                    <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary"
-                        (click)="generateBulkInvoice(false)">
+                        <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(false)">
                         Generate Multiple
                     </button>
-                    <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary"
-                        (click)="generateBulkInvoice(true)">
+
+                        <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(true)">
                         Generate Compound
                     </button>
-                </div>
-                    <!-- <button placement="top" tooltip="Works only for single entry." *ngIf="!isMobileView"
-                        [hidden]="selectedLedgerItems.length === 0 || selectedLedgerItems.length > 1 || !togglePrevGenBtn"
-                        class="btn btn-primary" (click)="previewInvoice()">Preview &amp; Generate
-                    </button> -->
-                </div>
-                <!-- <div class="form-group">
+
+                        <button placement="top" tooltip="Works only for single entry." *ngIf="!isMobileView" [hidden]="selectedLedgerItems.length === 0 || selectedLedgerItems.length > 1 || !togglePrevGenBtn" class="btn btn-primary" (click)="previewInvoice()">Preview &amp; Generate
+                    </button>
+
+
+                    </div>
+
+                    <!-- <div class="form-group">
   <button class="btn btn-pink" style="margin: 0 !important;" *ngIf="selectedVoucher === 'sales'">+ New Invoice
   </button>
   <button class="btn btn-pink" style="margin: 0 !important;" *ngIf="selectedVoucher === 'debit note'">+ New DR.
@@ -82,217 +78,197 @@
   </button>
 </div> -->
 
-            </div>
+                </div>
 
-            <div class="clear-filter align-items-center d-flex justify-content-center"
-                [ngClass]="{'width-100' : selectedLedgerItems.length === 0}"
-                *ngIf="!isUniversalDateApplicable && !isMobileView" (click)="resetDateSearch()">
-                <button class="btn btn-filter">
+                <div class="clear-filter align-items-center d-flex justify-content-center" [ngClass]="{'width-100' : selectedLedgerItems.length === 0}" *ngIf="!isUniversalDateApplicable && !isMobileView" (click)="resetDateSearch()">
+                    <button class="btn btn-filter">
                     <span class="icon-cross"></span> Clear Filter
                 </button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
 
-    <table class="table basic table-bordered pending-tabel onMobileView mt-15">
+        <table class="table basic table-bordered pending-tabel onMobileView mt-15">
 
-        <thead class="t-h-bg1">
-            <tr>
-                <th style="width:4%" *ngIf="selectedLedgerItems.length > 0">
+            <thead class="t-h-bg1">
+                <tr>
+                    <th style="width:4%" *ngIf="selectedLedgerItems.length > 0">
 
-                    <div class="mh18_img" style="justify-content: center;display: flex">
-                        <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
-                        <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
-                    </div>
-                </th>
+                        <div class="mh18_img" style="justify-content: center;display: flex">
+                            <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
+                            <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
+                        </div>
+                    </th>
 
-                <th *ngIf="selectedLedgerItems.length === 0" width="4%">
-                    <div class="mh18_img" style="justify-content: center;display: flex">
-                        #
-                    </div>
-                </th>
+                    <th *ngIf="selectedLedgerItems.length === 0" width="4%">
+                        <div class="mh18_img" style="justify-content: center;display: flex">
+                            #
+                        </div>
+                    </th>
 
-                <th style="width:12%">
-                    <div class="d-flex">
-                        <div class="flex-fill"> Date</div>
-                        <!-- <div class="icon-pointer">
+                    <th style="width:12%">
+                        <div class="d-flex">
+                            <div class="flex-fill"> Date</div>
+                            <!-- <div class="icon-pointer">
 
 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
 <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
 </div> -->
-                    </div>
+                        </div>
 
-                </th>
+                    </th>
 
-                <th style="width:20%" class="td_in_searchBox" #searchParticularContainer
-                    (clickOutside)="clickedOutside($event, searchParticularContainer, 'particular')">
+                    <th style="width:20%" class="td_in_searchBox" #searchParticularContainer (clickOutside)="clickedOutside($event, searchParticularContainer, 'particular')">
 
-                    <div [hidden]="showParticularSearch">
-                        <span> Particular</span>
-                        <!-- <i class="icon-search"
+                        <div [hidden]="showParticularSearch">
+                            <span> Particular</span>
+                            <!-- <i class="icon-search"
 (click)="toggleSearch('particular')"></i> -->
-                    </div>
+                        </div>
 
-                    <div class="input-container" [hidden]="!showParticularSearch">
-                        <input type="text" placeholder="Search Particular" class="w100" [formControl]="particularInput"
-                            #particularSearch />
-                        <i class="icon-search" (click)="showParticularSearch = false;"></i>
-                    </div>
-                </th>
+                        <div class="input-container" [hidden]="!showParticularSearch">
+                            <input type="text" placeholder="Search Particular" class="w100" [formControl]="particularInput" #particularSearch />
+                            <i class="icon-search" (click)="showParticularSearch = false;"></i>
+                        </div>
+                    </th>
 
-                <th style="width:13%">
-                    <div class="d-flex">
-                        <div class="flex-fill text-right"> Amount</div>
-                        <!-- <div class="icon-pointer">
+                    <th style="width:13%">
+                        <div class="d-flex">
+                            <div class="flex-fill text-right"> Amount</div>
+                            <!-- <div class="icon-pointer">
 
 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
 <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
 </div> -->
-                    </div>
-                </th>
+                        </div>
+                    </th>
 
-                <th style="width:20%" class="td_in_searchBox" #searchAccountContainer
-                    (clickOutside)="clickedOutside($event, searchAccountContainer, 'accountUniqueName')">
+                    <th style="width:20%" class="td_in_searchBox" #searchAccountContainer (clickOutside)="clickedOutside($event, searchAccountContainer, 'accountUniqueName')">
 
-                    <div [hidden]="showAccountSearch">
-                        <span> Account</span>
-                        <!-- <i class="icon-search"
+                        <div [hidden]="showAccountSearch">
+                            <span> Account</span>
+                            <!-- <i class="icon-search"
 (click)="toggleSearch('accountUniqueName')"></i> -->
-                    </div>
+                        </div>
 
-                    <div class="input-container" [hidden]="!showAccountSearch">
-                        <input type="text" placeholder="Search Account" class="w100"
-                            [formControl]="accountUniqueNameInput" #accountUniqueNameSearch />
-                        <!--<i class="icon-search" (click)="showAccountSearch = false;"></i>-->
-                    </div>
+                        <div class="input-container" [hidden]="!showAccountSearch">
+                            <input type="text" placeholder="Search Account" class="w100" [formControl]="accountUniqueNameInput" #accountUniqueNameSearch />
+                            <!--<i class="icon-search" (click)="showAccountSearch = false;"></i>-->
+                        </div>
 
-                </th>
+                    </th>
 
-                <th style="width:13%">
-                    <div class="d-flex">
-                        <div class="flex-fill text-right"> Total</div>
-                        <!-- <div class="icon-pointer">
+                    <th style="width:13%">
+                        <div class="d-flex">
+                            <div class="flex-fill text-right"> Total</div>
+                            <!-- <div class="icon-pointer">
 
 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
 <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
 </div> -->
-                    </div>
-                </th>
+                        </div>
+                    </th>
 
-                <th style="width:20%" class="td_in_searchBox" #searchDescContainer
-                    (clickOutside)="clickedOutside($event, searchDescContainer, 'description')">
+                    <th style="width:20%" class="td_in_searchBox" #searchDescContainer (clickOutside)="clickedOutside($event, searchDescContainer, 'description')">
 
-                    <div [hidden]="showDescSearch">
-                        <span> Description</span>
-                        <!-- <i class="icon-search"
+                        <div [hidden]="showDescSearch">
+                            <span> Description</span>
+                            <!-- <i class="icon-search"
 (click)="showDescSearch = true;showParticularSearch = false;showAccountSearch = false">
 </i> -->
-                    </div>
-
-                    <div class="input-container" [hidden]="!showDescSearch">
-                        <input type="text" placeholder="Search Description" class="w100" />
-                        <i class="icon-search" (click)="showDescSearch = false;"></i>
-                    </div>
-
-                </th>
-
-
-            </tr>
-        </thead>
-
-
-        <tbody (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
-            (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
-
-            <tr *ngFor="let item of ledgersData?.results; let i = index;" [ngClass]="{'danger': item.hasGenerationErr}"
-                (mouseover)="hoveredItemForAction = item.uniqueName">
-
-                <td class="mh18_img" data-title="#"
-                    *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedLedgerItems.length > 0">
-                    <div class="mh18_img justify-content-sm" style="justify-content: center;display: flex"
-                        data-title="#">
-                        <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
-                            (click)="toggleItem(item, true)" />
-                        <img *ngIf="item.isSelected" src="assets/images/checked.png"
-                            (click)="toggleItem(item, false)" />
-                    </div>
-                    <div *ngIf="item.hasGenerationErr">
-                        <i class='fa fa-info-circle' placement="right" [tooltip]="item.errMsg"></i>
-                    </div>
-                </td>
-
-                <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedLedgerItems.length === 0"
-                    data-title="#">
-                    <div style="justify-content: center;display: flex" class="justify-content-sm">
-                        {{ i + 1}}
-                    </div>
-                </td>
-
-                <td data-title="Date">{{item.entryDate}}</td>
-
-                <td data-title="Particular">
-                    <table class="table nested_table">
-                        <tr *ngFor="let transaction of item.transactions">
-                            <td>
-                                {{transaction.particular.name}}
-                                <span
-                                    *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}}
-                                    )</span>
-                            </td>
-
-                        </tr>
-                    </table>
-                </td>
-
-                <td data-title="Amount">
-                    <table class="table nested_table">
-                        <tr *ngFor="let transaction of item.transactions">
-                            <td class="text-right">
-                                {{transaction.amount | giddhCurrency}}
-                            </td>
-                        </tr>
-                    </table>
-
-                </td>
-
-                <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
-                    (clickOutside)="modalUniqueName = ''" data-title="Account">
-                    {{item.account.name}}
-                    <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
-                        [accountUniqueName]="item.account.uniqueName" [from]="this.ledgerSearchRequest.from"
-                        [to]="this.ledgerSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
-                    </div>
-                </td>
-
-                <td class="text-right" data-title="Total">{{item.total.amount | giddhCurrency}}</td>
-                <td data-title="Description" class="pending-table-description">{{ item.description ? item.description : '-' }}</td>
-                <!--<td><textarea type="text" placeholder="Enter Description" rows="1" class="pending-textaerea"></textarea></td>-->
-
-
-        </tbody>
-        <!-- -->
-        <tbody *ngIf="(isGetAllRequestInProcess$ | async)" id="centerAlign">
-            <tr>
-                <td colspan="8">
-                    <!--loading-->
-                    <div class="no-data mrT2 loader-main">
-                        <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-                        <div class="spinner2">
-                            <div class="cube1"></div>
-                            <div class="cube2"></div>
                         </div>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+
+                        <div class="input-container" [hidden]="!showDescSearch">
+                            <input type="text" placeholder="Search Description" class="w100" />
+                            <i class="icon-search" (click)="showDescSearch = false;"></i>
+                        </div>
+
+                    </th>
+
+
+                </tr>
+            </thead>
+
+
+            <tbody (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''" (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
+
+                <tr *ngFor="let item of ledgersData?.results; let i = index;" [ngClass]="{'danger': item.hasGenerationErr}" (mouseover)="hoveredItemForAction = item.uniqueName">
+
+                    <td class="mh18_img" data-title="#" *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedLedgerItems.length > 0">
+                        <div class="mh18_img justify-content-sm" style="justify-content: center;display: flex" data-title="#">
+                            <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)" />
+                            <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)" />
+                        </div>
+                        <div *ngIf="item.hasGenerationErr">
+                            <i class='fa fa-info-circle' placement="right" [tooltip]="item.errMsg"></i>
+                        </div>
+                    </td>
+
+                    <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedLedgerItems.length === 0" data-title="#">
+                        <div style="justify-content: center;display: flex" class="justify-content-sm">
+                            {{ i + 1}}
+                        </div>
+                    </td>
+
+                    <td data-title="Date">{{item.entryDate}}</td>
+
+                    <td data-title="Particular">
+                        <table class="table nested_table">
+                            <tr *ngFor="let transaction of item.transactions">
+                                <td>
+                                    {{transaction.particular.name}}
+                                    <span *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}}
+                                    )</span>
+                                </td>
+
+                            </tr>
+                        </table>
+                    </td>
+
+                    <td data-title="Amount">
+                        <table class="table nested_table">
+                            <tr *ngFor="let transaction of item.transactions">
+                                <td class="text-right">
+                                    {{transaction.amount | giddhCurrency}}
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+
+                    <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select" (clickOutside)="modalUniqueName = ''" data-title="Account">
+                        {{item.account.name}}
+                        <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component [accountUniqueName]="item.account.uniqueName" [from]="this.ledgerSearchRequest.from" [to]="this.ledgerSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
+                        </div>
+                    </td>
+
+                    <td class="text-right" data-title="Total">{{item.total.amount | giddhCurrency}}</td>
+                    <td data-title="Description" class="pending-table-description">{{ item.description ? item.description : '-' }}</td>
+                    <!--<td><textarea type="text" placeholder="Enter Description" rows="1" class="pending-textaerea"></textarea></td>-->
+
+
+            </tbody>
+            <!-- -->
+            <tbody *ngIf="(isGetAllRequestInProcess$ | async)" id="centerAlign">
+                <tr>
+                    <td colspan="8">
+                        <!--loading-->
+                        <div class="no-data mrT2 loader-main">
+                            <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                            <div class="spinner2">
+                                <div class="cube1"></div>
+                                <div class="cube2"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <div *ngIf="ledgersData?.totalItems > 20" class="paginationWrapper">
         <div class="alC">
-            <pagination [totalItems]="ledgersData.totalItems" [(ngModel)]="ledgersData.page" [maxSize]="5"
-                class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false"
-                (pageChanged)="pageChanged($event)"></pagination>
+            <pagination [totalItems]="ledgersData.totalItems" [(ngModel)]="ledgersData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
         </div>
     </div>
 
@@ -305,14 +281,39 @@
         <h1>No entries found within given criteria.</h1>
         <h1>Do search with some other dates</h1>
     </div>
+</ng-container>
+<!-- region edit invoice -->
+<div *ngIf="showEditMode">
+    <div class="invoice-editWrapper">
 
+        <!-- <div class="invoice-editHeader "> -->
 
+        <!-- <span>
+                    <p>Edit {{ selectedItem.voucherType | voucherTypeToNamePipe | titlecase }}</p>
+                </span> -->
+
+        <span class="close-modal cp pull-right " (click)="closeModel() ">
+                    <img src="assets/images/multiply.svg ">
+                </span>
+
+        <!-- </div> -->
+
+        <div class="invoice-editBody ">
+            <proforma-invoice-component [accountUniqueName]="selectedItem.account.uniqueName " [selectedItem]="selectedItem " [invoiceNo]="(voucherType !=='purchase' ) ? selectedItem?.voucherNumber : selectedItem?.uniqueName " [invoiceType]="selectedVoucher
+    " (cancelVoucherUpdate)="previewInvoice() ">
+            </proforma-invoice-component>
+        </div>
+
+    </div>
+
+</div>
+<!-- endregion -->
 <!--modal dialog  -->
-<div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
-    <div class="modal-dialog gray modal-liquid modal-invoice-preview">
-        <div class="modal-content">
-            <invoice-generate-model [isGenerateInvoice]="isGenerateInvoice" (closeEvent)="closeInvoiceModel($event)">
+<!-- <div bsModal #invoiceGenerateModel="bs-modal " class="modal fade " role="dialog " [config]="modalConfig ">
+    <div class="modal-dialog gray modal-liquid modal-invoice-preview ">
+        <div class="modal-content ">
+            <invoice-generate-model [isGenerateInvoice]="isGenerateInvoice " (closeEvent)="closeInvoiceModel($event) ">
             </invoice-generate-model>
         </div>
     </div>
-</div>
+</div> -->
