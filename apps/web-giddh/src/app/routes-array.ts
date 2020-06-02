@@ -29,6 +29,7 @@ export const ROUTES = [
     { path: 'purchase', redirectTo: 'pages/purchase-management', pathMatch: 'full' },
     { path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full' },
     // { path: 'accounting-voucher', redirectTo: 'pages/accounting', pathMatch: 'full' },
+    { path: 'journal-voucher', redirectTo: 'pages/journal-voucher', pathMatch: 'full' },
     { path: 'contact', redirectTo: 'pages/contact' },
     { path: 'aging-report', redirectTo: 'pages/aging-report', pathMatch: 'full' },
     { path: 'import', redirectTo: 'pages/import', pathMatch: 'full' },
@@ -80,6 +81,11 @@ export const ROUTES = [
             //     loadChildren: './accounting/accounting.module#AccountingModule',
             //     data: { preload: true }
             // },
+            {
+                path: 'journal-voucher',
+                loadChildren: './accounting/accounting.module#AccountingModule',
+                data: { preload: true }
+            },
             { path: 'user-details', loadChildren: './userDetails/userDetails.module#UserDetailsModule' },
             { path: 'contact', loadChildren: './contact/contact.module#ContactModule' },
             {
