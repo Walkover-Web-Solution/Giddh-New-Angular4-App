@@ -1,0 +1,39 @@
+@import '../../../../assets/css/color.scss';
+
+.mx-300 {
+    max-width: 300px;
+}
+
+.mx-350 {
+    max-width: 350px;
+}
+
+.appearance-none:focus {
+    background: $very-light-gray !important;
+}
+
+.appearance-none {
+    background: $whisper-color !important;
+}
+
+.max-height28 {
+    max-height: 28px;
+}
+
+.form-inline .form-control {
+    font-size: 14px;
+    padding: 2px 7px !important;
+    text-transform: capitalize;
+}
+
+.lh24 {
+    line-height: 24px;
+}
+
+.mx-300 label {
+    width: 130px;
+}
+
+.mx-350 label {
+    width: 160px;
+}

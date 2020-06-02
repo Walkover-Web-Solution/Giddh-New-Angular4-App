@@ -348,4 +348,23 @@ export class GeneralService {
             return ((totalTaxPercentage * (Number(amount) - totalDiscount)) / 100);
         }
     }
+
+    /**
+     * This will verify if the company is allowed to view the page or not
+     *
+     * @param {string} email
+     * @returns {boolean}
+     * @memberof NeedsAuthorization
+     */
+    public checkIfEmailDomainAllowed(email: string): boolean {
+        let isAllowed = false;
+        if (email) {
+            let emailSplit = email.split("@");
+            if (emailSplit.indexOf("giddh.com") > -1 || emailSplit.indexOf("walkover.in") > -1 || emailSplit.indexOf("muneem.co") > -1) {
+                isAllowed = true;
+            }
+        }
+
+        return isAllowed;
+    }
 }
