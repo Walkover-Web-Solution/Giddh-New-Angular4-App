@@ -18,7 +18,7 @@
                                 [style.width.px]="'200'">
                                 <li role="menuitem">
                                     <a class="dropdown-item">
-                                        <input type="checkbox" name="selectAll" [(ngModel)]="selectAll" (ngModelChange)="selectAllColumns($event)"> Select All
+                                        <input type="checkbox" name="selectAll" [(ngModel)]="showFieldFilter.selectAll" (ngModelChange)="selectAllColumns($event)"> Select All
                                     </a>
                                 </li>
 
@@ -750,7 +750,7 @@
                                         [(ngModel)]="account.isSelected "
                                         [ngClass]="{ 'checkbox_visible': (selectedCheckedContacts.length || isMobileScreen), 'pos-abs': !selectedCheckedContacts.length} " />
                                 </span>
-                                <span>{{account.name}}</span> 
+                                <span>{{account.name}}</span>
                                 <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false"
                                     class="icon-ellipse">
                                     <a id="edit-model-basic2" dropdownToggle
@@ -989,7 +989,7 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper 
+            <app-datepicker-wrapper
             [inputStartDate]="selectedDateRange?.startDate"
             [inputEndDate]="selectedDateRange?.endDate"
             [alwaysShowCalendars]="true"
