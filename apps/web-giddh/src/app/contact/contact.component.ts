@@ -229,8 +229,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     /** Selected company */
     private selectedCompany: any;
     public universalDate: any;
-    /** Selects/Unselects extra columns based on Select All Checkbox */
-    public selectAll: boolean = false;
     modalRef: BsModalRef;
     public selectedRangeLabel: any = "";
     public dateFieldPosition: any = {x: 0, y: 0};
@@ -301,6 +299,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         if (window.localStorage) {
             let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer']));
             if (showColumnObj) {
+                if (showColumnObj.closingBalance !== undefined) {
+                    delete showColumnObj.closingBalance;
+                };
                 this.showFieldFilter = showColumnObj;
                 this.setTableColspan();
             }
@@ -510,6 +511,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.showFieldFilter = new CustomerVendorFiledFilter();
         let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer']));
         if (showColumnObj) {
+            if (showColumnObj.closingBalance !== undefined) {
+                delete showColumnObj.closingBalance;
+            };
             this.showFieldFilter = showColumnObj;
             this.setTableColspan();
         }
@@ -860,7 +864,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         }
 
         this.hideGiddhDatepicker();
-        
+
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -1119,7 +1123,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         // if (event && column) {
         this.showFieldFilter[column] = event;
         this.setTableColspan();
-
+        this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== 'selectAll').every(filterName => this.showFieldFilter[filterName]);
         if (window.localStorage) {
             localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer'], JSON.stringify(this.showFieldFilter));
         }
@@ -1205,6 +1209,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.showFieldFilter.state = event;
         this.showFieldFilter.gstin = event;
         this.showFieldFilter.comment = event;
+        this.setTableColspan();
+        if (window.localStorage) {
+            localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer'], JSON.stringify(this.showFieldFilter));
+        }
     }
 
     /**
