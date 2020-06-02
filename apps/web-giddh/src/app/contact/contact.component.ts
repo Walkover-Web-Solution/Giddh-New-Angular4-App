@@ -229,8 +229,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     /** Selected company */
     private selectedCompany: any;
     public universalDate: any;
-    /** Selects/Unselects extra columns based on Select All Checkbox */
-    public selectAll: boolean = false;
     modalRef: BsModalRef;
     public selectedRangeLabel: any = "";
     public dateFieldPosition: any = {x: 0, y: 0};
