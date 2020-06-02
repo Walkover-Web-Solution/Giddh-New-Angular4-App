@@ -9,46 +9,13 @@
 </div>
 <div class="mobile-home-view">
     <div class="mobile-item-wrapper clearfix">
-        <div class="mobile-single-item" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn">
+        <div class="mobile-single-item" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn" [hidden]="item.type !== 'MENU'">
             <div class="single-item-wrapper" *ngIf="item.type === 'MENU'">
                 <div class="mobile-item-icon">
                     <img src="../../assets/images/mobile-home-icon/vendor.svg">
                 </div>
                 <div class="mobile-item-name">
                     <h4>{{item.name}}</h4>
-                </div>
-            </div>
-            <div class="single-search-group" *ngIf="item.type === 'GROUP'">
-                <div class="group-icon">
-                    <img src="../../assets/images/mobile-home-icon/aging-report.svg">
-                </div>
-                <div class="group-name">
-                    <h4>{{item.name}}</h4>
-                    <p *ngIf="item.parentGroups">
-                        <span *ngFor="let subitem of item.parentGroups; let idx = index">
-                            <ng-container *ngIf="idx > 0">
-                                <span>&nbsp;❯&nbsp;</span>
-                            </ng-container>
-                            {{subitem.name}}
-                        </span>
-                    </p>
-                </div>
-            </div>
-            <div class="single-search-group" *ngIf="item.type === 'ACCOUNT'">
-                <div class="group-icon">
-                    A/C
-                </div>
-                <div class="group-name">
-                    <h4>{{item.name}}</h4><br>
-                    ({{item.uniqueName}})
-                    <p *ngIf="item.parentGroups">
-                        <span *ngFor="let subitem of item.parentGroups; let idx = index">
-                            <ng-container *ngIf="idx > 0">
-                                <span>&nbsp;❯&nbsp;</span>
-                            </ng-container>
-                            {{subitem.name}}
-                        </span>
-                    </p>
                 </div>
             </div>
         </div>
@@ -536,9 +503,25 @@
         </div>              -->
     </div>
     <!-- search  -->
-    <!-- <div class="serach-accounts-groups">
+    <div class="serach-accounts-groups" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn" [hidden]="item.type !== 'GROUP'">
         <div class="search-groups">
-            <div class="single-search-group">
+            <div class="single-search-group" *ngIf="item.type === 'GROUP'">
+                <div class="group-icon">
+                    <img src="../../assets/images/mobile-home-icon/aging-report.svg">
+                </div>
+                <div class="group-name">
+                    <h4>{{item.name}}</h4>
+                    <p *ngIf="item.parentGroups">
+                        <span *ngFor="let subitem of item.parentGroups; let idx = index">
+                            <ng-container *ngIf="idx > 0">
+                                <span>&nbsp;❯&nbsp;</span>
+                            </ng-container>
+                            {{subitem.name}}
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <!-- <div class="single-search-group">
                 <div class="group-icon">
                     <img src="../../assets/images/mobile-home-icon/aging-report.svg">
                 </div>
@@ -573,21 +556,29 @@
                     <h4>India Enterprises Pvt Ltd.</h4>
                     <p>Current Liabilities > Current Assets</p>
                 </div>
-            </div>
-            <div class="single-search-group">
-                <div class="group-icon">
-                    <img src="../../assets/images/mobile-home-icon/aging-report.svg">
-                </div>
-                <div class="group-name">
-                    <h4>India Enterprises Pvt Ltd.</h4>
-                    <p>Current Liabilities > Current Assets</p>
-                </div>
-            </div>
+            </div> -->
         </div>
     </div>
-    <div class="serach-accounts-groups">
+    <div class="serach-accounts-groups" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn" [hidden]="item.type !== 'ACCOUNT'">
         <div class="search-groups search-accounts">
-            <div class="single-search-group">
+            <div class="single-search-group" *ngIf="item.type === 'ACCOUNT'">
+                <div class="group-icon">
+                    A/C
+                </div>
+                <div class="group-name">
+                    <h4>{{item.name}}</h4><br>
+                    ({{item.uniqueName}})
+                    <p *ngIf="item.parentGroups">
+                        <span *ngFor="let subitem of item.parentGroups; let idx = index">
+                            <ng-container *ngIf="idx > 0">
+                                <span>&nbsp;❯&nbsp;</span>
+                            </ng-container>
+                            {{subitem.name}}
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <!-- <div class="single-search-group">
                 <div class="group-icon">
                     A/C
                 </div>
@@ -631,7 +622,7 @@
                     <h4>India Enterprises Pvt Ltd.</h4>
                     <p>Current Liabilities > Current Assets</p>
                 </div>
-            </div>
+            </div> -->
         </div>  
-    </div> -->
+    </div>
 </div>
