@@ -220,9 +220,17 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
             }
             return state;
         }
+
+         case INVOICE_ACTIONS.PREVIEW_INVOICE: {
+            return {
+                ...state,
+                voucherDetailsInProcess: true
+            };
+        }
         case INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE: {
             let newState = _.cloneDeep(state);
             let res: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = action.payload;
+            newState.voucherDetailsInProcess = false;
             if (res.status === 'success') {
                 newState.voucher = res.body;
             } else {
