@@ -221,6 +221,9 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         }
     }
 
+    Navigate(elem: HTMLElement) {
+        elem.scrollIntoView({ behavior: 'smooth' });
+    }
     /**
      * This is callback for all features popup
      *

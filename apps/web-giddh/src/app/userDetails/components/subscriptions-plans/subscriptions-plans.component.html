@@ -2,14 +2,13 @@
     <div class="row">
         <div class="col-md-9 col-sm-9  font-14">
             <p class="mb-1">Hi {{logedInUser?.name}} !</p>
-            <p class="mb-3 plan-msg">All the plan come with all the features with <span class="selected">90 days money
-                    back guaranty.</span>
-            </p>
+            <p class="mb-3 plan-msg">All the plan come with all the features with <span class="selected">90 days money back guaranty.</span></p>
         </div>
         <div class="col-md-3 col-sm-3 text-right" *ngIf="subscriptions && subscriptions.length > 0">
             <a (click)="backClicked()" class="btn btn-cancel pr-3 pl-3 mb-2 mr-0">Back</a>
         </div>
     </div>
+    <div #topAllPlans>
     <div *ngIf="!isSwitchPlanInProcess" class="choose-ur-plan noHeight">
         <div class="row">
             <div class="main-row-plans">
@@ -54,7 +53,6 @@
                                                 {{defaultMultipleCompanyPlan?.planDetails?.companiesLimit | number}}
                                             </li>
                                             <li>Unlimited Users
-
                                                 <div class="btn-group pull-right transactions-limit-box">
                                                     <button type="button"
                                                         class="dropdown-toggle close">
@@ -98,7 +96,6 @@
                                             </li>
                                         </ul>
                                     </div>
-
                                     <div class="plan-footer">
                                         <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)"
                                                 class="color-primary font-14">Check all features</a></p>
@@ -111,7 +108,7 @@
                                 </div>
                             </div>
                             <a href="javascript:void(0)" class="btn btn-green btn-round"
-                                (click)="showPlansByType('multiple')">See all Multiple Company Plans</a>
+                                (click)="showPlansByType('multiple'); Navigate(allPlans)">See all Multiple Company Plans</a>
                         </div>
                     </div>
                 </div>
@@ -219,7 +216,7 @@
                                 </div>
                             </div>
                             <a href="javascript:void(0)" class="btn btn-green btn-round"
-                                (click)="showPlansByType('single')">See all Single Company Plans</a>
+                                (click)="showPlansByType('single'); Navigate(allPlans)">See all Single Company Plans</a>
                         </div>
                     </div>
                 </div>
@@ -318,13 +315,14 @@
                                 </div>
                             </div>
                             <a href="javascript:void(0)" class="btn btn-green btn-round"
-                                (click)="showPlansByType('free')">See all FREE Plans</a>
+                                (click)="showPlansByType('free'); Navigate(allPlans)">See all FREE Plans</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
     <div *ngIf="isSwitchPlanInProcess">
         <div class="no-data mrT2 loader-main">
             <div class="spinner2">
@@ -333,8 +331,9 @@
             </div>
         </div>
     </div>
+    <div #allPlans>
     <div class="box clearfix pl-5 mb-15 xs-pl-15 pb-3 relative all-plans" *ngIf="showPlans">
-        <a class="close close-2" href="javascript:void(0)" (click)="showPlans = ''">
+        <a class="close close-2" href="javascript:void(0)" (click)="showPlans = '';  Navigate(topAllPlans)">
             <i class="icon-cross"></i>
         </a>
         <div class="relative see-all-features">
@@ -373,6 +372,7 @@
             </div>
         </div>
     </div>
+</div>
     <div class="activation-key-wrapper">
         <div class="box">
             <div class="row">
