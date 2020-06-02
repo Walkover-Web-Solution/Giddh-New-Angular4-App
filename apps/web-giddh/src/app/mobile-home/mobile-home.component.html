@@ -18,15 +18,7 @@
                     <h4>{{item.name}}</h4>
                 </div>
             </div>
-            <div class="single-item-wrapper" *ngIf="item.type === 'GROUP'">
-                <div class="mobile-item-icon">
-                    <img src="../../assets/images/mobile-home-icon/vendor.svg">
-                </div>
-                <div class="mobile-item-name">
-                    <h4>{{item.name}}</h4>
-                </div>
-            </div>
-            <div class="single-search-group">
+            <div class="single-search-group" *ngIf="item.type === 'GROUP'">
                 <div class="group-icon">
                     <img src="../../assets/images/mobile-home-icon/aging-report.svg">
                 </div>
@@ -47,7 +39,8 @@
                     A/C
                 </div>
                 <div class="group-name">
-                    <h4>{{item.name}}</h4>
+                    <h4>{{item.name}}</h4><br>
+                    ({{item.uniqueName}})
                     <p *ngIf="item.parentGroups">
                         <span *ngFor="let subitem of item.parentGroups; let idx = index">
                             <ng-container *ngIf="idx > 0">

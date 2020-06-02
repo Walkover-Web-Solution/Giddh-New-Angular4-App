@@ -35,11 +35,18 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public noResultsFound: boolean = false;
 
     constructor(private store: Store<AppState>, private _generalService: GeneralService, private _commandKService: CommandKService, private _cdref: ChangeDetectorRef) {
+        document.querySelector('body').classList.add('mobile-home');
+
         this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$)).subscribe(res => {
             this.activeCompanyUniqueName = res;
         });
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof MobileHomeComponent
+     */
     public ngOnInit(): void {
         // listen on input for search
         this.searchSubject.pipe(debounceTime(300)).subscribe(term => {
@@ -69,10 +76,18 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CommandKComponent
      */
     public ngOnDestroy(): void {
+        document.querySelector('body').classList.remove('mobile-home');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * This will call the command k api
+     *
+     * @param {boolean} resetItems
+     * @returns {(void | boolean)}
+     * @memberof MobileHomeComponent
+     */
     public searchCommandK(resetItems: boolean): void | boolean {
         if (this.isLoading) {
             return false;
@@ -120,21 +135,18 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @private
      * @memberof CommandKComponent
      */
-    private captureValueFromList(): void {
-        // if (this.virtualScrollElem) {
-        //     let item = this.virtualScrollElem.activeItem();
-        //     if (item) {
-        //         this.itemSelected(item);
-        //         if (item.type === 'GROUP') {
-        //             this.searchedItems = [];
-        //         }
-        //     } else if (this.searchedItems && this.searchedItems.length === 1) {
-        //         this.itemSelected(this.searchedItems[0]);
-        //         if (item.type === 'GROUP') {
-        //             this.searchedItems = [];
-        //         }
-        //     }
-        // }
+    private captureValueFromList(item): void {
+        if (item) {
+            this.itemSelected(item);
+            if (item.type === 'GROUP') {
+                this.searchedItems = [];
+            }
+        } else if (this.searchedItems && this.searchedItems.length === 1) {
+            this.itemSelected(this.searchedItems[0]);
+            if (item.type === 'GROUP') {
+                this.searchedItems = [];
+            }
+        }
     }
 
     /**
@@ -205,5 +217,38 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public initSearch(e: KeyboardEvent, term: string): void {
         term = term.trim();
         this.searchSubject.next(term);
+    }
+
+    /**
+     * This function will get called if any item get selected
+     *
+     * @param {*} item
+     * @memberof CommandKComponent
+     */
+    public itemSelected(item: any): void {
+        // emit data in case of direct A/c or Menus
+        if (!item.type || (item.type && (item.type === 'MENU' || item.type === 'ACCOUNT'))) {
+            if (item.type === 'MENU') {
+                item.uniqueName = item.route;
+            }
+        } else {
+            // emit value for save data in db
+            if (item.type === 'GROUP') {
+                this.commandKRequestParams.q = "";
+            }
+
+            try {
+                this.listOfSelectedGroups.push(item);
+            } catch (error) {
+                this.listOfSelectedGroups = [];
+                this.listOfSelectedGroups.push(item);
+            }
+
+            this.searchEle.nativeElement.value = null;
+
+            // set focus on search
+            this.focusInSearchBox();
+            this.searchCommandK(true);
+        }
     }
 }
