@@ -353,7 +353,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * tax types within a company and count upto which they are allowed
      */
     public allowedSelectionOfAType: any = { type: [], count: 1 };
-
+    /** Type of invoice status (pending ,invoice, CN/DN) */
+    public isPendingVoucherType: boolean = false;
     // private members
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private selectedAccountDetails$: Observable<AccountResponseV2>;
@@ -645,15 +646,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.getDefaultTemplateData();
             } else {
                 // for edit mode direct from @Input
-                this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
-                if (this.accountUniqueName && this.invoiceType && this.invoiceNo) {
-                    this.store.dispatch(this._generalActions.setAppTitle('/pages/proforma-invoice/invoice/' + this.invoiceType));
-                    this.getVoucherDetailsFromInputs();
-                    this.getDefaultTemplateData();
+                if (parmas['voucherType'] && parmas['voucherType'] === 'pending' && parmas['selectedType']) {
+                    this.isPendingVoucherType = true;
+                    // this.isUpdateMode = true;
+                } else {
+                    this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+                    if (this.accountUniqueName && this.invoiceType && this.invoiceNo) {
+                        this.store.dispatch(this._generalActions.setAppTitle('/pages/proforma-invoice/invoice/' + this.invoiceType));
+                        this.getVoucherDetailsFromInputs();
+                        this.getDefaultTemplateData();
+                    }
                 }
             }
 
-            if (!this.isUpdateMode) {
+            if (!this.isUpdateMode && !this.isPendingVoucherType) {
                 this.resetInvoiceForm(this.invoiceForm);
                 if (!this.isMultiCurrencyModule()) {
                     // Hide the warehouse section if the module is other than multi-currency supported modules
@@ -894,8 +900,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                     bankaccounts = _.orderBy(bankaccounts, 'label');
                     this.bankAccounts$ = observableOf(bankaccounts);
-
-                    if (this.invFormData.accountDetails) {
+/** voucher type pending will not be allow as cash type*/
+                    if (this.invFormData.accountDetails && !this.isPendingVoucherType) {
                         if (!this.invFormData.accountDetails.uniqueName) {
                             this.invFormData.accountDetails.uniqueName = 'cash';
                         }
@@ -3558,7 +3564,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngOnDestroy() {
-        if (!this.isProformaInvoice && !this.isEstimateInvoice) {
+        if (!this.isProformaInvoice && !this.isEstimateInvoice && !this.isPendingVoucherType) {
             this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
         } else {
             this.store.dispatch(this.proformaActions.resetActiveVoucher());
@@ -3786,7 +3792,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         //code for voucher details
         voucherDetails.voucherDate = result.date ? result.date : '';
-        voucherDetails.balanceDue = result.balanceTotal.amountForAccount;
+        if (this.isPendingVoucherType) {
+            result.balanceTotal = result.grandTotal;
+        } else {
+            voucherDetails.balanceDue = result.balanceTotal.amountForAccount;
+        }
+
         voucherDetails.deposit = result.deposit ? result.deposit.amountForAccount : 0;
 
         //need to check usage
