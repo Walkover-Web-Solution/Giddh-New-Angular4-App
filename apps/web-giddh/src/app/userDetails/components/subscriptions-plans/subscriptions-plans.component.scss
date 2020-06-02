@@ -383,6 +383,23 @@
             float: left;
         }
     }
+    .plans-box {
+        padding: 10px 15px;
+    }
+    .your-account {
+        margin: 0px;
+    }
+    .inner-your-account {
+        margin-bottom: 20px;
+        padding: 15px;
+    }
+    .your-account:before, .your-account:after {
+        display: none;
+    }
+    .activation-key-wrapper {
+        padding-left: 0px;
+    }
+
 }
 @media only screen and (max-width: 640px) {
     .see-all-features .col-sm-6.col-md-3 {
@@ -391,7 +408,6 @@
 }
 @media(max-width:575px){
     .activation-key-wrapper{
-        padding-left: 30px;
         .d-flex{
             flex-direction: column;
             input{
