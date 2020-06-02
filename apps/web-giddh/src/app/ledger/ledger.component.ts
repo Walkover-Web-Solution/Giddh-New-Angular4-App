@@ -193,8 +193,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
 
-    /* New Datepicker Variables */
-
     constructor(
         private store: Store<AppState>,
         private _ledgerActions: LedgerActions,
@@ -266,6 +264,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public selectedDate(value: any) {
+
+        this.selectedRangeLabel = "";
+
+        if(value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+                this.hideGiddhDatepicker();
+
         this.needToShowLoader = false;
         let from = moment(value.startDate, GIDDH_DATE_FORMAT).toDate();
         let to = moment(value.endDate, GIDDH_DATE_FORMAT).toDate();
@@ -442,7 +448,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
 
         /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
+        this.store.pipe(select(stores => stores.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
             if (config) {
                 this.datePickerRanges = config;
             }
