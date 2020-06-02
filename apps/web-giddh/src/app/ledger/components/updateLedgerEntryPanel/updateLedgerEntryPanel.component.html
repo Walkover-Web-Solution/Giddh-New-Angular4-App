@@ -144,12 +144,12 @@
                                             <input [disabled]="true" [(ngModel)]="txn.particular.name" class="trxFakeInput" />
                                         </ng-template>
 
-                                        <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile && vm.selectedLedger.attachedFile.length > 0" (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)" [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}">
+                                        <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile && vm.selectedLedger.attachedFile.length > 0 && (txn?.particular?.name || txn?.particular?.uniqueName)" (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)" [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}">
                                             <i class="glyphicon glyphicon-download pull-left"
                                                style="font-size:15px;"></i>
                                         </span>
 
-                                        <span class="download-invoice-ledger " *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length> 0" [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download {{vm.selectedLedger.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{vm.selectedLedger.voucherNumber}}"
+                                        <span class="download-invoice-ledger " *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length> 0 && (txn?.particular?.name || txn?.particular?.uniqueName)" [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download {{vm.selectedLedger.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{vm.selectedLedger.voucherNumber}}"
                                             (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
                                             <i class="glyphicon glyphicon-download pull-left"
                                                style="font-size:15px;"></i>
@@ -291,12 +291,12 @@
                                             <input [disabled]="true" [(ngModel)]="txn.particular.name" class="trxFakeInput" />
                                         </ng-template>
 
-                                        <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0" [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}" (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)">
+                                        <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0 && (txn?.particular?.name || txn?.particular?.uniqueName)" [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}" (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)">
                                             <i class="glyphicon glyphicon-download pull-left"
                                                style="font-size:15px;"></i>
                                         </span>
 
-                                        <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length > 0" [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download {{vm.selectedLedger.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{vm.selectedLedger.voucherNumber}}"
+                                        <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length > 0 && (txn?.particular?.name || txn?.particular?.uniqueName)" [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download {{vm.selectedLedger.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{vm.selectedLedger.voucherNumber}}"
                                             (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
                                             <i class="glyphicon glyphicon-download pull-left"
                                                style="font-size:15px;"></i>
