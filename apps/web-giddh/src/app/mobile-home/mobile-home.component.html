@@ -1,9 +1,67 @@
+<!-- jump to account for mobile view -->
+<div class="mobile-home-search">
+    <div class="input-group account-search">
+        <span class="input-group-addon">
+            <i class="icon-search"></i>
+        </span>
+        <input type="text" #searchEle class="form-control" placeholder="Search anything" aria-describedby="" (keyup)="initSearch($event, $event.target.value)">
+    </div>
+</div>
 <div class="mobile-home-view">
     <div class="mobile-item-wrapper clearfix">
-        <div class="mobile-single-item">
+        <div class="mobile-single-item" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn">
+            <div class="single-item-wrapper" *ngIf="item.type === 'MENU'">
+                <div class="mobile-item-icon">
+                    <img src="../../assets/images/mobile-home-icon/vendor.svg">
+                </div>
+                <div class="mobile-item-name">
+                    <h4>{{item.name}}</h4>
+                </div>
+            </div>
+            <div class="single-item-wrapper" *ngIf="item.type === 'GROUP'">
+                <div class="mobile-item-icon">
+                    <img src="../../assets/images/mobile-home-icon/vendor.svg">
+                </div>
+                <div class="mobile-item-name">
+                    <h4>{{item.name}}</h4>
+                </div>
+            </div>
+            <div class="single-search-group">
+                <div class="group-icon">
+                    <img src="../../assets/images/mobile-home-icon/aging-report.svg">
+                </div>
+                <div class="group-name">
+                    <h4>{{item.name}}</h4>
+                    <p *ngIf="item.parentGroups">
+                        <span *ngFor="let subitem of item.parentGroups; let idx = index">
+                            <ng-container *ngIf="idx > 0">
+                                <span>&nbsp;❯&nbsp;</span>
+                            </ng-container>
+                            {{subitem.name}}
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class="single-search-group" *ngIf="item.type === 'ACCOUNT'">
+                <div class="group-icon">
+                    A/C
+                </div>
+                <div class="group-name">
+                    <h4>{{item.name}}</h4>
+                    <p *ngIf="item.parentGroups">
+                        <span *ngFor="let subitem of item.parentGroups; let idx = index">
+                            <ng-container *ngIf="idx > 0">
+                                <span>&nbsp;❯&nbsp;</span>
+                            </ng-container>
+                            {{subitem.name}}
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="mobile-single-item">
             <div class="single-item-wrapper">
                 <div class="mobile-item-icon">
-                    <!-- <i class="icon-edit-pencil1"></i> -->
                     <img src="../../assets/images/mobile-home-icon/vendor.svg">
                 </div>
                 <div class="mobile-item-name">
@@ -15,7 +73,6 @@
         <div class="mobile-single-item">
             <div class="single-item-wrapper">
                 <div class="mobile-item-icon">
-                    <!-- <i class="icon-users"></i> -->
                     <img src="../../assets/images/mobile-home-icon/customer.svg">
                 </div>
                 <div class="mobile-item-name">
@@ -483,10 +540,10 @@
                         <h4>Cash Invoice</h4>
                 </div>
             </div>
-        </div>             
+        </div>              -->
     </div>
     <!-- search  -->
-    <div class="serach-accounts-groups">
+    <!-- <div class="serach-accounts-groups">
         <div class="search-groups">
             <div class="single-search-group">
                 <div class="group-icon">
@@ -583,5 +640,5 @@
                 </div>
             </div>
         </div>  
-    </div>
+    </div> -->
 </div>
