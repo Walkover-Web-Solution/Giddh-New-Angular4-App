@@ -1,20 +1,20 @@
 <!-- jump to account for mobile view -->
 <div class="mobile-home-search">
     <!-- make it dynamic -->
-        <div class="company-name-alice">
-            <p>WW</p>
-        </div>
-        <div class="input-group account-search">
-            <span class="input-group-addon">
-                <i class="icon-search2"></i>
-            </span>
-            <!-- make close icon functional -->
-            <i class="icon-cross"></i>
-            <input type="text" #searchEle class="form-control" placeholder="Search anything" aria-describedby="" (keyup)="initSearch($event, $event.target.value)">
-        </div>
+    <div class="company-name-alice">
+        <p>{{companyInitials}}</p>
+    </div>
+    <div class="input-group account-search">
+        <span class="input-group-addon">
+            <i class="icon-search2"></i>
+        </span>
+        <!-- make close icon functional -->
+        <i class="icon-cross" *ngIf="searchString" (click)="clearSearch()"></i>
+        <input type="text" #searchEle class="form-control" [(ngModel)]="searchString" placeholder="Search anything" aria-describedby="" (keyup)="initSearch($event, $event.target.value)">
+    </div>
 </div>
 <div class="mobile-home-view">
-    <div class="mobile-item-wrapper clearfix">
+    <div class="mobile-item-wrapper clearfix" *ngIf="hasMenus">
         <div class="mobile-single-item" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn" [hidden]="item.type !== 'MENU'">
             <div class="single-item-wrapper" *ngIf="item.type === 'MENU'">
                 <div class="mobile-item-icon">
@@ -509,7 +509,7 @@
         </div>              -->
     </div>
     <!-- search  -->
-    <div class="serach-accounts-groups">
+    <div class="serach-accounts-groups" *ngIf="hasGroups">
         <div class="search-groups" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn" [hidden]="item.type !== 'GROUP'">
             <div class="single-search-group" *ngIf="item.type === 'GROUP'">
                 <div class="group-icon">
@@ -565,7 +565,7 @@
             </div> -->
         </div>
     </div>
-    <div class="serach-accounts-groups">
+    <div class="serach-accounts-groups" *ngIf="hasAccounts">
         <div class="search-groups search-accounts" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn" [hidden]="item.type !== 'ACCOUNT'">
             <div class="single-search-group" *ngIf="item.type === 'ACCOUNT'">
                 <div class="group-icon">
