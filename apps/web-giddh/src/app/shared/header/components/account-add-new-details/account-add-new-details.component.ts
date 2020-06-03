@@ -577,7 +577,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         // }
         this.submitClicked.emit({
             activeGroupUniqueName: this.activeGroupUniqueName,
-            accountRequest: this.addAccountForm.value
+            accountRequest
         });
     }
     public closingBalanceTypeChanged(type: string) {
