@@ -15,7 +15,7 @@
     background: #fff;
     width: 215px;
     left: -215px;
-    z-index: 990;
+    z-index: 991;
 }
 
 .nav-left-bar.open {
@@ -666,7 +666,7 @@ ul.sub-list {
 .white-row {
     background-color: $white;
     padding: 10px 15px;
-    margin-bottom:2px;
+    margin-bottom:10px;
     font-size: 16px;
     box-shadow: 1px 1px 3px #00000029;
     margin-top: 10px;
@@ -750,6 +750,13 @@ ul.sub-list {
     }
     .upperLayerHeader {
         padding-top: 5px;
+        .navbar-nav{
+            margin-bottom: 5px;
+            .hamburger_menu {
+                display: flex;
+                align-items: center;
+            }
+        }
     }
     .paddingTopFixed {
         display: none;
@@ -806,6 +813,9 @@ ul.sub-list {
                 width: 25px;
             }
         }
+        .notification{
+            height: 25px;
+        }
     }
     .calender-addone {
         height: 28px;
@@ -832,7 +842,13 @@ ul.sub-list {
        height: 32px;
     }
     .white-row{
-        margin: 15px 15px 0;
+        margin: 15px 15px;
+    }
+    .setting-menu-icon{
+        padding: 0 10px 0 3px;
+        display: none;
+        width: 30px;
+        text-align: center;
     }
 }
 

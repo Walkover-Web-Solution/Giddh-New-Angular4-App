@@ -510,8 +510,6 @@
     </nav>
     <!-- <accounts-side-bar [isRouter]="true" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue' [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar> -->
 </header>
-
-
 <div class="padding-top-fixed-mobile"  *ngIf="isMobileSite">
     <header class="clearfix header-container mobileHeader">
         <nav class="navbar " [ngClass]="{'menu_open':sideMenu.isopen}">
@@ -521,10 +519,10 @@
                         <!-- (isOpenChange)="sideBarStateChange($event)" -->
                         <li class="hamburger_menu cp pull-left" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
 
-                            <button class="btn mrR0" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right">
-                                <i class="icon-bar"></i>
+                            <button class="btn mrR0" placement="right">
+                                <i class="icon-home-icon"></i>
                             </button>
-
+                           <span class="setting-menu-icon"  (click)="asideSettingMenuState === 'in'"> <i class="icon-bar"></i> </span>
                             <h4 class="inline text-capitalize" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
                                 <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txtLwc">c</span></h4>
 
@@ -927,7 +925,7 @@
     <aside-help-support (closeAsideEvent)="toggleHelpSupportPane(false)"></aside-help-support>
 </div>
 <!-- setting aside pane -->
-<div class="help-support-aside " *ngIf="asideSettingMenuState === 'in'">
+<div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'">
     <perfect-scrollbar [scrollIndicators]="true">
         <aside-setting (closeAsideEvent)="toggleSidebarPane(false)"></aside-setting>
     </perfect-scrollbar>

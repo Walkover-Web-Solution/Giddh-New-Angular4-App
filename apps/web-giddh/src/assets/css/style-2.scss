@@ -9113,6 +9113,12 @@ ngx-daterangepicker-material {
     visibility: visible !important;
     width: auto !important;
 }
+.HW_badge{
+    background: $red;
+    width: 14px !important;
+    height: 14px !important;
+    line-height: 14px !important;
+}
 /*notofication css end*/
 .setting-sidebar-open .desktopHeader{
     padding-left: 215px;
@@ -9144,7 +9150,7 @@ ngx-daterangepicker-material {
         top: 96px;
     }
     #setting-tab .tab-container .nav.nav-tabs {
-        margin: 0 0 0;
+        margin: 0 0 7px;
         padding: 10px 0px 0;
         white-space: nowrap;
         display: inline-block;
@@ -9511,7 +9517,7 @@ ngx-daterangepicker-material {
         position: absolute;
         content: "";
         background: rgba(0, 0, 0, 0.3);
-        z-index: 99;
+        z-index: 990;
         height: 100%;
         width: 100%;
         top: 0;
@@ -9522,16 +9528,16 @@ ngx-daterangepicker-material {
     #setting-tab .tab-container .nav.nav-tabs {
         position: fixed;
         width: 100%;
-        top: 86px;
+        top: 90px;
     }
     #setting-tab.user-detail-page .tab-container .nav.nav-tabs {
-        top: 92px;
+        top: 90px;
         z-index: 99;
     }
     .custom-tabs .nav.nav-tabs {
         position: fixed;
         width: 100%;
-        top: 92px;
+        top: 90px;
     }
     .ledgHead.entry-popup .custom-tabs .nav.nav-tabs {
         position: relative;
@@ -9540,6 +9546,10 @@ ngx-daterangepicker-material {
     }
     .custom-tabs .top-bar {
         margin-top: 45px;
+    }
+    .page-has-tabs .custom-tabs .top-bar {
+        margin-top: 0;
+        padding-top: 0;
     }
     .custom-tabs.hide-header .top-bar {
         margin-top: 0;
@@ -9656,7 +9666,13 @@ ngx-daterangepicker-material {
         padding-top: 126px;
     }
     .padding-top-fixed-mobile {
-        padding-top:86px;
+        padding-top:90px;
+    }
+    .page-has-tabs .padding-top-fixed-mobile{
+        padding-top: 130px;
+    }
+    .page-has-tabs.setting-sidebar-open .padding-top-fixed-mobile{
+        padding-top:85px;
     }
     ngx-daterangepicker-material {
         position: fixed;
@@ -9695,6 +9711,31 @@ ngx-daterangepicker-material {
     }
     .hide-scroll-body:last-child .modal{
         z-index: 9993;
+    }
+    .page-has-tabs .invoice-genrate-container, 
+    .page-has-tabs .invoice-container,
+    .page-has-tabs .proforma-container
+    {
+        padding-top: 5px !important;
+    }
+    .page-has-tabs #setting-tab app-invoice-setting .tab-container .nav.nav-tabs,
+    .page-has-tabs .search-subscription{
+        margin-top: 5px !important;
+    }
+    .page-has-tabs .recurring-container{
+        margin-top: 0px !important;
+    }
+    .page-has-tabs .user-detail-page{
+        padding-top: 0 !important;
+    }
+    .HW_frame_cont.HW_visible.HW_bottom{
+        right: 0 !important;
+        left: auto !important;
+        max-width: 320px;
+        width: 100%;
+    }
+    .setting-sidebar-open .setting-menu-icon{
+        display: inline-flex !important;
     }
 }
 @media (max-width: 575px) {
