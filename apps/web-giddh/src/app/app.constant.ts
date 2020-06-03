@@ -178,7 +178,7 @@ export const REMOVE_TRAILING_ZERO_REGEX = /^([\d,' ]*)$|^([\d,' ]*)\.0*$|^([\d,'
 /* This plan unique name will be used as a default plan while creating new company/branch */
 export let DEFAULT_SIGNUP_TRIAL_PLAN = "";
 
-if(PRODUCTION_ENV || isElectron || isCordova) {
+if (PRODUCTION_ENV || isElectron || isCordova) {
     DEFAULT_SIGNUP_TRIAL_PLAN = "e6v1566224240273";
 } else {
     DEFAULT_SIGNUP_TRIAL_PLAN = "xoh1591185630174";
@@ -186,7 +186,7 @@ if(PRODUCTION_ENV || isElectron || isCordova) {
 
 export let DEFAULT_POPULAR_PLAN = "";
 
-if(PRODUCTION_ENV || isElectron || isCordova) {
+if (PRODUCTION_ENV || isElectron || isCordova) {
     DEFAULT_POPULAR_PLAN = "oak";
 } else {
     DEFAULT_POPULAR_PLAN = "Popular Plan";
