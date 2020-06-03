@@ -7,6 +7,8 @@ import { GeneralService } from '../services/general.service';
 import { CommandKService } from '../services/commandk.service';
 import { takeUntil, debounceTime } from 'rxjs/operators';
 import { remove } from '../lodash-optimized';
+import { Router } from '@angular/router';
+import { BACKSPACE } from '@angular/cdk/keycodes';
 
 @Component({
     selector: 'mobile-home',
@@ -39,7 +41,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     private searchSubject: Subject<string> = new Subject();
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private generalService: GeneralService, private commandKService: CommandKService, private cdref: ChangeDetectorRef) {
+    constructor(private store: Store<AppState>, private generalService: GeneralService, private commandKService: CommandKService, private cdref: ChangeDetectorRef, private router: Router) {
         document.querySelector('body').classList.add('mobile-home');
 
         this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$)).subscribe(res => {
@@ -93,7 +95,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * This function gets called after view initializes and will set focus in search box
      * 
-     * @memberof CommandKComponent
+     * @memberof MobileHomeComponent
      */
     public ngAfterViewInit(): void {
         setTimeout(() => {
@@ -104,7 +106,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * Releases all the observables to avoid memory leaks
      *
-     * @memberof CommandKComponent
+     * @memberof MobileHomeComponent
      */
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('mobile-home');
@@ -136,6 +138,10 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
             this.commandKRequestParams.group = "";
         }
+
+        this.hasMenus = false;
+        this.hasGroups = false;
+        this.hasAccounts = false;
 
         this.commandKService.searchCommandK(this.commandKRequestParams, this.activeCompanyUniqueName).subscribe((res) => {
             this.isLoading = false;
@@ -169,30 +175,10 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * This function will get called if pressed enter on any item
-     *
-     * @private
-     * @memberof CommandKComponent
-     */
-    private captureValueFromList(item): void {
-        if (item) {
-            this.itemSelected(item);
-            if (item.type === 'GROUP') {
-                this.searchedItems = [];
-            }
-        } else if (this.searchedItems && this.searchedItems.length === 1) {
-            this.itemSelected(this.searchedItems[0]);
-            if (item.type === 'GROUP') {
-                this.searchedItems = [];
-            }
-        }
-    }
-
-    /**
      * This function will remove the selected groups in decending order
      * if we press backspace in search box
      * @param {*} [item]
-     * @memberof CommandKComponent
+     * @memberof MobileHomeComponent
      */
     public removeItemFromSelectedGroups(item?: any): void {
         if (item) {
@@ -206,7 +192,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * This function puts the focus in search box
      *
      * @param {KeyboardEvent} [e]
-     * @memberof CommandKComponent
+     * @memberof MobileHomeComponent
      */
     public focusInSearchBox(e?: KeyboardEvent): void {
         if (this.searchEle) {
@@ -220,7 +206,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param {*} index
      * @param {*} item
      * @returns uniqueName
-     * @memberof CommandKComponent
+     * @memberof MobileHomeComponent
      */
     public trackByFn(index, item: any) {
         return item.uniqueName; // unique id corresponding to the item
@@ -230,7 +216,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * This function will load more records on scroll
      *
      * @param {*} event
-     * @memberof CommandKComponent
+     * @memberof MobileHomeComponent
      */
     @HostListener('scroll', ['$event'])
     onScroll(event: any) {
@@ -251,7 +237,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param {KeyboardEvent} e
      * @param {string} term
      * @returns {void}
-     * @memberof CommandKComponent
+     * @memberof MobileHomeComponent
      */
     public initSearch(e: KeyboardEvent, term: string): void {
         term = term.trim();
@@ -262,32 +248,39 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * This function will get called if any item get selected
      *
      * @param {*} item
-     * @memberof CommandKComponent
+     * @memberof MobileHomeComponent
      */
     public itemSelected(item: any): void {
-        // emit data in case of direct A/c or Menus
-        if (!item.type || (item.type && (item.type === 'MENU' || item.type === 'ACCOUNT'))) {
-            if (item.type === 'MENU') {
-                item.uniqueName = item.route;
-            }
-        } else {
-            // emit value for save data in db
-            if (item.type === 'GROUP') {
-                this.commandKRequestParams.q = "";
-            }
+        if (item && item.type === 'MENU') {
+            item.uniqueName = item.route;
 
-            try {
-                this.listOfSelectedGroups.push(item);
-            } catch (error) {
+            if (item.additional && item.additional.tab) {
+                if (item.uniqueName.includes('?')) {
+                    item.uniqueName = item.uniqueName.split('?')[0];
+                }
+                this.router.navigate([item.uniqueName], {
+                    queryParams: {
+                        tab: item.additional.tab,
+                        tabIndex: item.additional.tabIndex
+                    }
+                });
+            } else {
+                this.router.navigate([item.uniqueName]);
+            }
+        } else if (item.type === 'GROUP') {
+            this.commandKRequestParams.q = "";
+            if(!this.listOfSelectedGroups || this.listOfSelectedGroups.length === 0) {
                 this.listOfSelectedGroups = [];
-                this.listOfSelectedGroups.push(item);
             }
-
+            this.listOfSelectedGroups.push(item);
+            this.searchString = "";
             this.searchEle.nativeElement.value = null;
 
-            // set focus on search
             this.focusInSearchBox();
             this.searchCommandK(true);
+        } else {
+            let url = `ledger/${item.uniqueName}`;
+            this.router.navigate([url]);
         }
     }
 
@@ -300,5 +293,19 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.searchString = "";
         this.searchEle.nativeElement.value = null;
         this.searchSubject.next("");
+    }
+
+    /**
+     * This function will get called if we remove search string or group
+     *
+     * @param {*} e
+     * @memberof MobileHomeComponent
+     */
+    public handleKeydown(e: any): void {
+        let key = e.which || e.keyCode;
+
+        if (key === BACKSPACE && !this.searchEle.nativeElement.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
+            this.removeItemFromSelectedGroups();
+        }
     }
 }
