@@ -511,7 +511,7 @@ span.icon-support.dropdown-toggle {
 }
 
 // top header css
-.paddingTopFixed {
+.padding-top-fixed {
     padding-top: 60px;
 }
 
@@ -643,25 +643,6 @@ ul.sub-list {
     top: 60px;
     z-index: 10;
 }
-.mobile-home-search{
-    background-color: #EEEFFB;
-    .input-group.account-search{
-        margin: 0;
-        padding: 13px 12px 5px;
-        .input-group-addon{
-            background-color: #fff;
-            border-radius: 25px 0 0 25px;
-            padding-left: 20px;
-            line-height: 2.5;
-            height: 45px;
-        }
-        input{
-            border-radius: 0 25px 25px 0 !important;
-            background: #fff !important;
-            height: 45px;
-        }
-    }
-}
 /* responsive */
 @media (max-height: 800px) {
     .nav-wrapper {
@@ -723,7 +704,7 @@ ul.sub-list {
     .upperLayerHeader {
         padding-top: 5px;
     }
-    .paddingTopFixed {
+    .padding-top-fixed {
         display: none;
     }
     .nav-left-bar {
@@ -748,7 +729,7 @@ ul.sub-list {
     .nav-left-bar.open .mobile_menu_icon {
         display: flex;
     }
-    .paddingTopFixed-mobile {
+    .padding-top-fixed-mobile {
         padding-top: 92px;
     }
     .upperLayerHeader .open .dropdown-menu {
