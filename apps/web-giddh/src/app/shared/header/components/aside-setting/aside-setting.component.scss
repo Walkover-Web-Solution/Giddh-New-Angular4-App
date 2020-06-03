@@ -159,8 +159,12 @@
         .back-to-main-slider{
             display: block;
             padding: 10px 15px;
+            margin-bottom: 15px;
             img{
                 width: 15px;
+            }
+            i{
+                display: none;
             }
         }
         .help-aside-body {
@@ -192,6 +196,36 @@
     left: 0;
     z-index: 999999;
     width: 270px;
+    .back-to-main-slider{
+        background-color: $midnight-blue;
+        a{
+            display: flex;
+            align-items: center;
+            color: #fff;
+            span{
+                display: flex;
+                align-items: center;
+                i{
+                    margin-right: 15px;
+                    display: flex;
+                }
+            }
+        }
+    }
+    .help-aside-body {
+        ul{
+            position: relative;
+            &:after{
+                position: absolute;
+                content: '';
+                width: 90%;
+                left: 5%;
+                bottom: -16px;
+                height: 1px;
+                background-color: $gainsboro;
+                }
+            }
+        }
     }  
 }
 @media (max-width: 768px) {

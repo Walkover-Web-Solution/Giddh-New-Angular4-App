@@ -104,7 +104,7 @@ export class AsideSettingComponent implements OnInit {
      */
     public closeAsidePaneIfMobile(event?): void {
         if(this.isMobileScreen) {
-            this.closeAsideEvent.emit(event);
+            this.closeAsideEvent.emit(event);          
         }
     }
 }

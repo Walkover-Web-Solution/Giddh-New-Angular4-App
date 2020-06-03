@@ -1113,7 +1113,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public closeSidebarMobile(e) {
 
-        if (e.target.className.toString() !== 'icon-bar' && this.isMobileSite) {
+        if (e.target.className.toString() !== 'icon-home-icon' && this.isMobileSite) {
             this.sideMenu.isopen = false;
             this.menuStateChange.emit(false);
         }

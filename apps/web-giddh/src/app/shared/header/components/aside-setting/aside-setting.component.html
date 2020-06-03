@@ -11,8 +11,16 @@
                     (ngModelChange)="searchMenu($event)" placeholder="Search Settings">
             </div>
             <div class="back-to-main-slider">
-                <a href="javascript:;" (click)="goToPreviousPage()"><img src="../../../../../assets/images/back.svg">
-                    Back</a>
+                <a href="javascript:;">
+                    <span *ngIf="!isMobileScreen" (click)="goToPreviousPage()">
+                        <img src="../../../../../assets/images/back.svg">
+                        Back
+                    </span>
+                    <span *ngIf="isMobileScreen" (click)="closeAsidePane($event)">
+                        <i class="icon-cross"></i>
+                        Setting
+                    </span>
+                </a>
             </div>
             <div class="setting-items">
                 <ul class="mb-3" *ngFor="let section of filteredSettingsPageTabs;">

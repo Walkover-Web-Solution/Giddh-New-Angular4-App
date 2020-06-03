@@ -1,5 +1,5 @@
 <!-- setting page sidebar -->
-<div class="help-support-aside setting-sidebar-wrapper"  *ngIf="asideSettingMenuState === 'in'">
+<div class="help-support-aside setting-sidebar-wrapper"  *ngIf="asideSettingMenuState === 'out'">
     <aside-setting class="setting-sidebar" (closeAsideEvent)="toggleSettingPane($event)"></aside-setting>
 </div>
 <div class="container-fluid settings-bg setting-data" [keyboardShortcut]="['alt+right', 'alt+left']" [config]="{ignoreHost:true}"
