@@ -666,7 +666,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS_RESPONSE: {
             let response: BaseResponse<any, any> = action.payload;
-            if (response.status === 'success') {
+            if (response && response.body) {
                 return Object.assign({}, state, { isGmailIntegrated: true });
             } else {
                 return Object.assign({}, state, { isGmailIntegrated: false });
