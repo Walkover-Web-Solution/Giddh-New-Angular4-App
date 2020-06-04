@@ -46,6 +46,7 @@ export class SettingsComponent implements OnInit {
     public selectedChildTab: number = 0;
     public activeTab: string = 'taxes';
     public integrationtab: string;
+    public permissionTabDataFetched: boolean = false;
 
     public get shortcutEnabled() {
         return document.activeElement === document.body;
@@ -157,7 +158,10 @@ export class SettingsComponent implements OnInit {
     }
 
     public permissionTabSelected(e) {
-        this.permissionComp.getInitialData();
+        if(!this.permissionTabDataFetched) {
+            this.permissionTabDataFetched = true;
+            this.permissionComp.getInitialData();
+        }
     }
 
     public tagsTabSelected(e) {
