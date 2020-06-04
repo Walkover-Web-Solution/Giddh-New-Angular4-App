@@ -293,6 +293,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.searchString = "";
         this.searchEle.nativeElement.value = null;
         this.searchSubject.next("");
+        this.listOfSelectedGroups = [];
     }
 
     /**

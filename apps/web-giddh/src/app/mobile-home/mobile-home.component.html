@@ -2,22 +2,24 @@
     <div class="company-name-alice">
         <p>{{companyInitials}}</p>
     </div>
-    <div class="input-group account-search">
-        <span class="input-group-addon">
-            <i class="icon-search2"></i>
-        </span>
-        <i class="icon-cross" *ngIf="searchString" (click)="clearSearch()"></i>
-        <span *ngFor="let item of listOfSelectedGroups; let idx = index">
-			<div class="vR">
-				<div class="vN">
-					<div class="vT">{{item.name}}</div>
-					<ng-container>
-						<span>&nbsp;❯&nbsp;</span>
-					</ng-container>
-				</div>
-			</div>
-		</span>
-        <input type="text" #searchEle class="form-control" [(ngModel)]="searchString" placeholder="Search anything" aria-describedby="" (keyup)="initSearch($event, $event.target.value)" (keydown)="handleKeydown($event)">
+    <div class="account-search">
+        <div class="input-group">
+            <span class="input-group-addon">
+                <i class="icon-search2"></i>
+            </span>
+            <i class="icon-cross" *ngIf="searchString || listOfSelectedGroups" (click)="clearSearch() "></i>
+            <div class="wrap-group-account-input">
+                <span class="item-search-wrapper" *ngFor="let item of listOfSelectedGroups; let idx = index">
+                    <span>
+                        <span class="item-search-name">{{item.name}}</span>
+                        <ng-container>
+                                <span>&nbsp;❯&nbsp;</span>
+                        </ng-container>
+                    </span>
+                </span>
+                <input type="text" #searchEle class="form-control" [(ngModel)]="searchString" placeholder="Search" aria-describedby="" (keyup)="initSearch($event, $event.target.value)" (keydown)="handleKeydown($event)">
+            </div>   
+        </div>
     </div>
 </div>
 <div class="mobile-home-view">
