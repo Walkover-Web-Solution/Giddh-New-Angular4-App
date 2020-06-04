@@ -178,9 +178,11 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     /** is get voucher API call in progress */
     public voucherDetailsInProcess$: Observable<boolean> = of(false);
     /** selected profile currency symbol */
-     public baseCurrencySymbol: string = '';
+    public baseCurrencySymbol: string = '';
     /** selected profile currency type */
     public baseCurrency: string = '';
+    /** Selected account unique name */
+    public selectedAccountUniqueName: string = '';
 
     constructor(
         private modalService: BsModalService,
@@ -210,10 +212,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-        // this._activatedRoute.params.subscribe(a => {
-        //   this.setVoucherType(a.voucherType);
-        // });
-
         // Get accounts
         this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
             let accounts: IOption[] = [];
@@ -226,15 +224,20 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             this.accounts$ = observableOf(orderBy(accounts, 'label'));
         });
 
-        this.store.select(p => p.invoice.ledgers).pipe(
+        this.store.pipe(select(p => p.invoice.ledgers),
             takeUntil(this.destroyed$))
-            .subscribe((o: GetAllLedgersForInvoiceResponse) => {
-                if (o && o.results) {
-                    let a = _.cloneDeep(o);
-                    a.results = _.orderBy(a.results, (item: ILedgersInvoiceResult) => {
+            .subscribe((res: GetAllLedgersForInvoiceResponse) => {
+                if (res && res.results) {
+                    let response = _.cloneDeep(res);
+                    response.results = _.orderBy(response.results, (item: ILedgersInvoiceResult) => {
                         return moment(item.entryDate, 'DD-MM-YYYY');
                     }, 'desc');
-                    this.ledgersData = a;
+                    if (response && response.results) {
+                        response.results.map(item => {
+                            item = this.addToolTiptext(item);
+                        });
+                    }
+                    this.ledgersData = response;
                     this.isGetAllRequestInProcess$ = of(false);
                     setTimeout(() => {
                         this.detectChanges();
@@ -247,7 +250,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             .subscribe(async results => {
                 if (results) {
                     /** get voucher success and no any error during get voucher then show create voucher component   */
-                    if (results[0] && !results[1]) {
+                    if (results[0] && !results[1] && this.selectedItem) {
                         this.showEditMode = true;
                     } else {
                         this.showEditMode = false;
@@ -287,7 +290,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                 this.getLedgersOfInvoice();
             }
         });
- // get user country from his profile
+        // get user country from his profile
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile) {
                 this.baseCurrencySymbol = profile.baseCurrencySymbol;
@@ -446,6 +449,11 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             return item.uniqueName === this.selectedLedgerItems[0];
         });
         this.selectedItem = _.cloneDeep(res);
+        if (this.selectedItem && this.selectedItem.account && this.selectedItem.account.uniqueName) {
+            this.selectedAccountUniqueName = this.selectedItem.account.uniqueName;
+        } else {
+            this.selectedAccountUniqueName = '';
+        }
         this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model.uniqueNames));
         if (res && res.account && res.account.uniqueName) {
             this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account.uniqueName, model));
@@ -716,7 +724,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnDestroy() {
-        // this.dp.destroyPicker();
+        this.showEditMode = false;
+        this.toggleAllItems(false);
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -724,8 +733,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public resetDateSearch() {
         this.ledgerSearchRequest.dateRange = this.universalDate;
         if (this.universalDate) {
-        this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate() };
-         this.isUniversalDateApplicable = true;
+            this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate() };
+            this.isUniversalDateApplicable = true;
         }
         this.getLedgersOfInvoice();
         this.toggleAllItems(false);
@@ -739,5 +748,34 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             document.querySelector('body').classList.remove('fixed');
         }
 
+    }
+
+    /**
+     *
+     * Add tooltip text for total pending amount
+     * to item supplied (for Cash/Sales Invoice and CR/DR note)
+     *
+     * @private
+     * @param {ReceiptItem} item Receipt item received from service
+     * @returns {*} Modified item with tooltup text for grand total
+     * @memberof InvoiceGenerateComponent
+     */
+    private addToolTiptext(item: ILedgersInvoiceResult): any {
+        try {
+            let grandTotalAmountForCompany, grandTotalAmountForAccount;
+            if (item.total && item.totalForCompany) {
+                grandTotalAmountForCompany = Number(item.totalForCompany.amount) || 0;
+                grandTotalAmountForAccount = Number(item.total.amount) || 0;
+            }
+
+            let grandTotalConversionRate = 0;
+            if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
+                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
+            }
+            item['totalTooltipText'] = `In ${this.baseCurrency}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;
+
+        } catch (error) {
+        }
+        return item;
     }
 }
