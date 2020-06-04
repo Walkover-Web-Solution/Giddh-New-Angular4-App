@@ -229,12 +229,14 @@
                         <table class="table nested_table">
                             <tr *ngFor="let transaction of item.transactions">
                                 <td class="text-right">
-                                    {{transaction.amount | giddhCurrency}}
+                                    {{item.accountCurrencySymbol}} {{transaction.amount | giddhCurrency}}
                                 </td>
                             </tr>
                         </table>
 
                     </td>
+                    <!-- <ng-template #amountPopupTemplate><span [innerHTML]="item.totalTooltipText"></span>
+                        </ng-template> -->
 
                     <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select" (clickOutside)="modalUniqueName = ''" data-title="Account">
                         {{item.account.name}}
@@ -242,7 +244,9 @@
                         </div>
                     </td>
 
-                    <td class="text-right" data-title="Total">{{item.total.amount | giddhCurrency}}</td>
+                    <td class="text-right" data-title="Total">{{item.accountCurrencySymbol}}{{item.total.amount | giddhCurrency}}</td>
+                    <!-- <ng-template #totalPopupTemplate><span [innerHTML]="item.totalTooltipText"></span>
+                        </ng-template> -->
                     <td data-title="Description" class="pending-table-description">{{ item.description ? item.description : '-' }}</td>
                     <!--<td><textarea type="text" placeholder="Enter Description" rows="1" class="pending-textaerea"></textarea></td>-->
 
@@ -299,8 +303,8 @@
         <!-- </div> -->
 
         <div class="invoice-editBody ">
-            <proforma-invoice-component [accountUniqueName]="selectedItem.account.uniqueName " [selectedItem]="selectedItem " [invoiceNo]="(voucherType !=='purchase' ) ? selectedItem?.voucherNumber : selectedItem?.uniqueName " [invoiceType]="selectedVoucher
-    " (cancelVoucherUpdate)="previewInvoice() ">
+            <proforma-invoice-component [accountUniqueName]="selectedItem.account.uniqueName" [selectedItem]="selectedItem" [invoiceNo]="(voucherType !=='purchase' ) ? selectedItem?.voucherNumber : selectedItem?.uniqueName " [invoiceType]="selectedVoucher
+    " (cancelVoucherUpdate)="closeModel() ">
             </proforma-invoice-component>
         </div>
 

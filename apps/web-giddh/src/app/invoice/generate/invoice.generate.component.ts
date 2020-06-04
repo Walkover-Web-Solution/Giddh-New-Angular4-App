@@ -1,6 +1,6 @@
-import { Observable, of, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of, of as observableOf, ReplaySubject, combineLatest } from 'rxjs';
 
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil, auditTime } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { IOption } from './../../theme/ng-select/option.interface';
 import {
@@ -169,10 +169,18 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public showEditMode: boolean = false;
     /** get voucher details response object*/
     public voucherDetails: any;
+    /** selected pending voucher */
     public selectedItem: InvoicePreviewDetailsVm;
+    /** selected from date */
     public fromDate: string;
+    /** selected to date */
     public toDate: string;
+    /** is get voucher API call in progress */
     public voucherDetailsInProcess$: Observable<boolean> = of(false);
+    /** selected profile currency symbol */
+     public baseCurrencySymbol: string = '';
+    /** selected profile currency type */
+    public baseCurrency: string = '';
 
     constructor(
         private modalService: BsModalService,
@@ -234,26 +242,23 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                 }
             });
 
-        // this.store.select(p => p.receipt.voucher).pipe(
-        //     takeUntil(this.destroyed$),
-        //     distinctUntilChanged((p: any, q: any) => {
-        //         if (p && q) {
-        //             return (p.templateUniqueName === q.templateUniqueName);
-        //         }
-        //         if ((p && !q) || (!p && q)) {
-        //             return false;
-        //         }
-        //         return true;
-        //     })).subscribe((o: any) => {
-        //     if (o) {
-        //         this.getInvoiceTemplateDetails(o.templateDetails.templateUniqueName);
-        //     }
-        // });
+        combineLatest([this.store.pipe(select(stores => stores.receipt.voucher)), this.store.pipe(select(stores => stores.receipt.invoiceDataHasError))])
+            .pipe(takeUntil(this.destroyed$), auditTime(700))
+            .subscribe(async results => {
+                if (results) {
+                    /** get voucher success and no any error during get voucher then show create voucher component   */
+                    if (results[0] && !results[1]) {
+                        this.showEditMode = true;
+                    } else {
+                        this.showEditMode = false;
+                    }
+                }
+            });
+
         this.store.pipe(select(stores => stores.receipt.voucher),
             takeUntil(this.destroyed$),
             distinctUntilChanged()).subscribe((voucher: any) => {
                 if (voucher) {
-
                     this.voucherDetails = voucher;
                     if (voucher && voucher.templateDetails && voucher.templateDetails.templateUniqueName) {
                         this.getInvoiceTemplateDetails(voucher.templateDetails.templateUniqueName)
@@ -263,6 +268,13 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
                 }
             });
+        // this.store.pipe(select(stores => stores.receipt.invoiceDataHasError),
+        //     takeUntil(this.destroyed$),
+        //     distinctUntilChanged()).subscribe((isPreviewHasAnError: any) => {
+        //         if (isPreviewHasAnError) {
+        //             this.closeModel();
+        //         }
+        //     });
 
         // listen for bulk invoice generate and successfully generate and do the things
         this.isBulkInvoiceGenerated$.subscribe(result => {
@@ -275,9 +287,15 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                 this.getLedgersOfInvoice();
             }
         });
-
+ // get user country from his profile
+        this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+            if (profile) {
+                this.baseCurrencySymbol = profile.baseCurrencySymbol;
+                this.baseCurrency = profile.baseCurrency;
+            }
+        });
         // Refresh report data according to universal date
-        this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+        this.store.pipe(select((state: AppState) => state.session.applicationDate)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
                 this.ledgerSearchRequest.dateRange = this.universalDate;
@@ -291,7 +309,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                 this.getLedgersOfInvoice();
                 this.detectChanges();
             }
-        })).subscribe();
+        });
 
         // set financial years based on company financial year
         this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
@@ -356,12 +374,14 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                 this.showAccountSearch = false;
             }
         });
+        this.showEditMode = false;
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes['selectedVoucher'] && changes['selectedVoucher'].currentValue !== changes['selectedVoucher'].previousValue) {
             this.setVoucherType(changes['selectedVoucher'].currentValue);
         }
+        this.showEditMode = false;
     }
 
     // public closeInvoiceModel(e) {
@@ -378,6 +398,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         if (f.valid) {
             this.isUniversalDateApplicable = false;
             this.selectedLedgerItems = [];
+            this.selectedCountOfAccounts = [];
             this.getLedgersOfInvoice();
         }
     }
@@ -385,6 +406,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public pageChanged(event: any): void {
         this.ledgerSearchRequest.page = event.page;
         this.selectedLedgerItems = [];
+        this.selectedCountOfAccounts = [];
+        this.toggleAllItems(false);
         this.togglePrevGenBtn = false;
         this.getLedgersOfInvoice();
     }
@@ -412,6 +435,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             this.allItemsSelected = false;
         }
         this.insertItemsIntoArr();
+
     }
 
     public previewInvoice() {
@@ -427,14 +451,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account.uniqueName, model));
         }
 
-        this.showEditMode = !this.showEditMode
+        // this.showEditMode = !this.showEditMode
         this.toggleBodyClass();
-        // let request: ReceiptVoucherDetailsRequest = new ReceiptVoucherDetailsRequest();
-        // request.invoiceNumber = res.voucherNumber.join();
-        // request.voucherType = this.selectedVoucher;
-
-        // this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(res.account.uniqueName, request));
-        // this.showInvoiceModal();
     }
 
     /**
@@ -443,10 +461,14 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoiceGenerateComponent
      */
     public closeModel() {
-        this.showEditMode = !this.showEditMode;
+        this.showEditMode = false;
         this.getLedgersOfInvoice();
         this.selectedItem = null;
+        this.selectedCountOfAccounts = [];
+        this.selectedLedgerItems = [];
         this.toggleAllItems(false);
+        this.isGetAllRequestInProcess$ = of(false);
+        this.isUniversalDateApplicable = false;
     }
 
     public generateBulkInvoice(action: boolean) {
@@ -472,6 +494,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         });
         this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, model));
         this.selectedLedgerItems = [];
+        this.selectedCountOfAccounts = [];
     }
 
     public setToday(model: string) {
@@ -500,6 +523,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             this.ledgerSearchRequest.page = (this.ledgerSearchRequest.page > 1) ? this.ledgerSearchRequest.page - 1 : this.ledgerSearchRequest.page;
             this.store.dispatch(this.invoiceActions.GetAllLedgersForInvoice(this.prepareQueryParamsForLedgerApi(), this.prepareModelForLedgerApi()));
         }
+        this.selectedLedgerItems = [];
+        this.selectedCountOfAccounts = [];
     }
 
     public prepareModelForLedgerApi() {
@@ -698,21 +723,21 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
     public resetDateSearch() {
         this.ledgerSearchRequest.dateRange = this.universalDate;
-        if (!this.universalDate) {
-
-        }
+        if (this.universalDate) {
         this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate() };
-        this.isUniversalDateApplicable = true;
+         this.isUniversalDateApplicable = true;
+        }
         this.getLedgersOfInvoice();
+        this.toggleAllItems(false);
         this.detectChanges();
     }
 
-       public toggleBodyClass() {
+    public toggleBodyClass() {
         if (this.showEditMode) {
             document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('body').classList.remove('fixed');
         }
-    }
 
+    }
 }
