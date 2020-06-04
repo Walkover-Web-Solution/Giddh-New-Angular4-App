@@ -19,7 +19,7 @@
         }
     }
     .mobile-item-wrapper{
-        padding: 0 8px;
+        padding: 0 8px 15px; 
         margin-bottom: 0;
         .mobile-single-item {
             float: left;
@@ -66,7 +66,7 @@
                     color: $midnight-blue;
                     text-align: center;
                     font-family: 'opensans-semibold';
-                    height: 50px;
+                    height: 53px;
                     line-height: inherit;
                     line-height: 1.2;
                     text-overflow: ellipsis;
@@ -149,8 +149,7 @@
         margin: 0;
         padding: 15px 0 15px 10px;
         width: calc(100% - 36px);
-        position: relative;
-        
+        position: relative;  
         .input-group{
             background-color: #fff;
             border-radius: 50px;
@@ -175,15 +174,31 @@
                     top: 1px;
                 }
             }
-            i.icon-cross{
-                position: absolute;
-                right: 15px;
-                top: 12px;
-                z-index: 3;
-                color: $gray;
+            .close-addon{
+                border-radius: 0;
+                padding-left: 0;
+                line-height: 1.2;
+                height: auto;
+                color: #808080;
+                border: none;
+                padding: 0 !important;
+                padding-right: 0;
+                display: inline-flex;
+                vertical-align: middle;
+                white-space: normal;
+                position: relative;
+                width: 20px;
+                height: 15px;
+                i.icon-cross{
+                    position: absolute;
+                    right:0;
+                    top: 0;
+                    z-index: 3;
+                    color: $gray;
+                }
             }
             input{
-                width: auto !important;
+                width: 100% !important;
                 border: none !important;
                 padding:0 0 !important;
                 border-radius: 0;
@@ -201,14 +216,14 @@
         padding-left: 30px;
         display: flex;
         flex-wrap: wrap;
+        width: 100%;
         .item-search-wrapper{
             font-size: 14px;
             padding-left: 0;
             white-space: nowrap;
         }
-    }
+    } 
 }
-
 /*responsive*/
 @media(max-width:320px){
     .mobile-home-view {
