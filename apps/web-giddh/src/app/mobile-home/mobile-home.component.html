@@ -7,7 +7,7 @@
             <span class="input-group-addon">
                 <i class="icon-search2"></i>
             </span>
-            <i class="icon-cross" *ngIf="searchString || listOfSelectedGroups" (click)="clearSearch() "></i>
+            <i class="icon-cross" *ngIf="searchString || (listOfSelectedGroups && listOfSelectedGroups.length > 0)" (click)="clearSearch() "></i>
             <div class="wrap-group-account-input">
                 <span class="item-search-wrapper" *ngFor="let item of listOfSelectedGroups; let idx = index">
                     <span>
@@ -22,7 +22,7 @@
         </div>
     </div>
 </div>
-<div class="mobile-home-view">
+<div class="mobile-home-view" (mousewheel)="loadMoreModules($event)" (touchmove)="loadMoreModules($event)">
     <div class="mobile-item-wrapper clearfix" *ngIf="hasMenus">
         <div class="mobile-single-item" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn" [hidden]="item.type !== 'MENU'">
             <div class="single-item-wrapper" *ngIf="item.type === 'MENU'" (click)="itemSelected(item)">

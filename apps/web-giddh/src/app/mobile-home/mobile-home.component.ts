@@ -38,6 +38,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public hasGroups: boolean = false;
     public companyInitials: any = '';
     public searchString: any = "";
+    public scrollSubject$: Subject<any> = new Subject();
     private searchSubject: Subject<string> = new Subject();
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -90,6 +91,10 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             }
         });
+
+        this.scrollSubject$.pipe(debounceTime(25)).subscribe((response) => {
+            this.onScroll(response);
+        });
     }
 
     /**
@@ -127,6 +132,9 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         if (resetItems) {
+            this.hasMenus = false;
+            this.hasGroups = false;
+            this.hasAccounts = false;
             this.searchedItems = [];
         }
 
@@ -138,10 +146,6 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
             this.commandKRequestParams.group = "";
         }
-
-        this.hasMenus = false;
-        this.hasGroups = false;
-        this.hasAccounts = false;
 
         this.commandKService.searchCommandK(this.commandKRequestParams, this.activeCompanyUniqueName).subscribe((res) => {
             this.isLoading = false;
@@ -215,18 +219,14 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * This function will load more records on scroll
      *
-     * @param {*} event
+     * @param {*} direction
      * @memberof MobileHomeComponent
      */
-    @HostListener('scroll', ['$event'])
-    onScroll(event: any) {
-        // visible height + pixel scrolled >= total height - 200 (deducted 200 to load list little earlier before user reaches to end)
-        if (event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 200)) {
-            if (this.allowLoadMore && !this.isLoading) {
-                if (this.commandKRequestParams.page + 1 <= this.commandKRequestParams.totalPages) {
-                    this.commandKRequestParams.page++;
-                    this.searchCommandK(false);
-                }
+    public onScroll(direction: string) {
+        if (direction === "bottom" && this.allowLoadMore && !this.isLoading) {
+            if (this.commandKRequestParams.page + 1 <= this.commandKRequestParams.totalPages) {
+                this.commandKRequestParams.page++;
+                this.searchCommandK(false);
             }
         }
     }
@@ -269,7 +269,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         } else if (item.type === 'GROUP') {
             this.commandKRequestParams.q = "";
-            if(!this.listOfSelectedGroups || this.listOfSelectedGroups.length === 0) {
+            if (!this.listOfSelectedGroups || this.listOfSelectedGroups.length === 0) {
                 this.listOfSelectedGroups = [];
             }
             this.listOfSelectedGroups.push(item);
@@ -307,6 +307,21 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (key === BACKSPACE && !this.searchEle.nativeElement.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
             this.removeItemFromSelectedGroups();
+        }
+    }
+
+    /**
+     * This is used to load more records on scroll event
+     *
+     * @param {*} event
+     * @memberof MobileHomeComponent
+     */
+    public loadMoreModules(event: any): void {
+        console.log(event);
+        if (event.deltaY < 0) {
+            this.scrollSubject$.next("top");
+        } else {
+            this.scrollSubject$.next("bottom");
         }
     }
 }
