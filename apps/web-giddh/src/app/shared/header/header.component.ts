@@ -82,7 +82,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public subscribedPlan: SubscriptionsUser;
     public isLedgerAccSelected: boolean = false;
     public asideHelpSupportMenuState: string = 'out';
-    public asideSettingMenuState: string = 'out';
+    public asideSettingMenuState: string = 'in';
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -1113,7 +1113,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public closeSidebarMobile(e) {
 
-        if (e.target.className.toString() !== 'icon-home-icon' && this.isMobileSite) {
+        if (e.target.className.toString() !== 'icon-bar' && this.isMobileSite) {
             this.sideMenu.isopen = false;
             this.menuStateChange.emit(false);
         }
