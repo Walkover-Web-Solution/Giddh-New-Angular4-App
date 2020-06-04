@@ -233,6 +233,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
             newState.voucherDetailsInProcess = false;
             if (res.status === 'success') {
                 newState.voucher = res.body;
+                newState.invoiceDataHasError = false;
             } else {
                 newState.invoiceDataHasError = true;
             }
@@ -244,6 +245,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
             let res: BaseResponse<PreviewInvoiceResponseClass, string> = action.payload;
             if (res.status === 'success') {
                 newState.voucher = res.body;
+                newState.invoiceDataHasError = false;
             } else {
                 newState.invoiceDataHasError = true;
             }

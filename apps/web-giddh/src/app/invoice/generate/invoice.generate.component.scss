@@ -235,6 +235,17 @@ button.btn.btn-filter {
     }
 }
 
+span.close-modal.cp.pull-right {
+    display: inline-grid;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    width: 32px;
+    background-color: #ddd;
+    border: 1px solid $gainsboro;
+    margin-right: 8px;
+}
+
 // responsive
 @media (max-width: 768px) {
     .basic.onMobileView {
