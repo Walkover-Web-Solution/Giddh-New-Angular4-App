@@ -289,7 +289,7 @@ export class GeneralService {
 
         let hourOffset = convertdLocalTime.getTimezoneOffset() / 60;
 
-        convertdLocalTime.setMinutes(convertdLocalTime.getMinutes() - (hourOffset*60));
+        convertdLocalTime.setMinutes(convertdLocalTime.getMinutes() - (hourOffset * 60));
 
         return convertdLocalTime;
     }
@@ -318,9 +318,9 @@ export class GeneralService {
      */
     public removeSelectAllFromArray(array: Array<string>): Array<string> {
         let newArray = [];
-        if(array && array.length > 0) {
+        if (array && array.length > 0) {
             array.forEach(key => {
-                if(key !== "selectall") {
+                if (key !== "selectall") {
                     newArray.push(key);
                 }
             });
@@ -366,5 +366,20 @@ export class GeneralService {
         }
 
         return isAllowed;
+    }
+
+    /**
+     * This is to allow only digits and dot
+     *
+     * @param {*} event
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public allowOnlyNumbersAndDot(event: any): boolean {
+        if (event.keyCode === 46 || (event.keyCode >= 48 && event.keyCode <= 57)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -14,6 +14,7 @@ import { PermissionActions } from '../../../actions/permission/permission.action
 import { AccountsAction } from '../../../actions/accounts.actions';
 import { SettingsPermissionService } from '../../../services/settings.permission.service';
 import * as moment from 'moment';
+import { GeneralService } from '../../../services/general.service';
 
 // some local const
 const DATE_RANGE = 'daterange';
@@ -51,7 +52,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         private _accountsAction: AccountsAction,
         private _toasty: ToasterService,
         private store: Store<AppState>,
-        private _fb: FormBuilder
+        private _fb: FormBuilder,
+        private generalService: GeneralService
     ) {
         this.createPermissionInProcess$ = this.store.select(p => p.permission.createPermissionInProcess).pipe(takeUntil(this.destroyed$));
     }
@@ -337,5 +339,16 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 this.showIPWrap = false;
             }
         }
+    }
+
+    /**
+     * This is to allow only digits and dot
+     *
+     * @param {*} event
+     * @returns {boolean}
+     * @memberof SettingPermissionFormComponent
+     */
+    public allowOnlyNumbersAndDot(event: any): boolean {
+        return this.generalService.allowOnlyNumbersAndDot(event);
     }
 }
