@@ -119,6 +119,7 @@ export interface ILedgersInvoiceResult {
     accountCurrencySymbol?: string;
     companyCurrencySymbol?: string;
     voucherType?: string;
+    totalForCompany?: ITotalItem;
 }
 
 export interface IBulkInvoiceGenerationFalingError {

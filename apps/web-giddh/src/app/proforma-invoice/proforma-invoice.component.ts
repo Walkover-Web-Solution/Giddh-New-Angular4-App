@@ -685,16 +685,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 // in UPDATE voucher flow as the URLs are the same and only params
                 // change therefore the params subscription of current page are also fired which is
                 // not required and loads incorrect data
-                if (!this.isProformaInvoice && !this.isEstimateInvoice) {
-                    this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
-                } else {
-                    this.store.dispatch(this.proformaActions.resetActiveVoucher());
-                }
+                //  not allowing for pending type voucher on preview sales invoice on click customer name this block was calling which was wrong
+                if (!this.isPendingVoucherType) {
+                    if (!this.isProformaInvoice && !this.isEstimateInvoice) {
+                        this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+                    } else {
+                        this.store.dispatch(this.proformaActions.resetActiveVoucher());
+                    }
 
-                this.destroyed$.next(true);
-                this.destroyed$.complete();
+                    this.destroyed$.next(true);
+                    this.destroyed$.complete();
+                }
             }
-        })
+        });
 
         // get account details and set it to local var
         this.selectedAccountDetails$.subscribe(accountDetails => {
