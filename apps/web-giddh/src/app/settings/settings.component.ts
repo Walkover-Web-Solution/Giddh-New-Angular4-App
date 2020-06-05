@@ -47,10 +47,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public activeTab: string = 'taxes';
     public integrationtab: string;
     public isMobileScreen: boolean = true;
+    public permissionTabDataFetched: boolean = false;
     public get shortcutEnabled() {
         return document.activeElement === document.body;
     }
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public asideSettingMenuState: string = 'in';
 
@@ -187,7 +187,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public permissionTabSelected(e) {
-        this.permissionComp.getInitialData();
+        if(!this.permissionTabDataFetched) {
+            this.permissionTabDataFetched = true;
+            this.permissionComp.getInitialData();
+        }
     }
 
     public tagsTabSelected(e) {

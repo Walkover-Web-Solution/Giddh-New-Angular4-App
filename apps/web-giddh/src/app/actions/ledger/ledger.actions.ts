@@ -738,7 +738,7 @@ export class LedgerActions {
         };
     }
 
-    public SelectDeSelectAllEntries(mode: 'debit' | 'credit', isChecked: boolean): CustomActions {
+    public SelectDeSelectAllEntries(mode: 'debit' | 'credit' | 'all', isChecked: boolean): CustomActions {
         return {
             type: LEDGER.SELECT_DESELECT_ALL_ENTRIES,
             payload: { mode, isChecked }

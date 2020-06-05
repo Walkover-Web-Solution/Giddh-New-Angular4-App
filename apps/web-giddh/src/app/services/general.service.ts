@@ -471,4 +471,19 @@ export class GeneralService {
 
         return isAllowed;
     }
+
+    /**
+     * This is to allow only digits and dot
+     *
+     * @param {*} event
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public allowOnlyNumbersAndDot(event: any): boolean {
+        if (event.keyCode === 46 || (event.keyCode >= 48 && event.keyCode <= 57)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

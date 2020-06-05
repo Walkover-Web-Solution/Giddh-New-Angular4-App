@@ -220,7 +220,14 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             this.showPlans = type;
         }
     }
-
+    /**
+     * This function smooth scroller for all plans section
+     * @param {string} type
+     * @memberof SubscriptionsPlansComponent
+     */
+    navigate(element: HTMLElement): void {
+        element.scrollIntoView({ behavior: 'smooth' });
+    }
     /**
      * This is callback for all features popup
      *

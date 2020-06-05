@@ -209,19 +209,26 @@
                         <li class="border-none pr-15" [ngClass]="{'notification': !isMobileSite}">
                             <img src="{{imgPath}}notification.svg">
                         </li>
-                        <li [hidden]="isTodaysDateSelected" class="border-none pl-0">
+                        <!-- <li [hidden]="isTodaysDateSelected" class="border-none pl-0">
                             <button class="btn btn-link" (click)="jumpToToday();">Today</button>
+                        </li> -->
+                        <li class="not-today">
+                            <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)" ></span>
+<!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
+                            <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
                         </li>
-                        <li [hidden]="isTodaysDateSelected" class="not-today">
-                            <span class="icon-calender calender-addone"></span>
-                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />
-                        </li>
-                        <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
-                            <!-- <label class="btn btn-link"></label> -->
+                        <!-- <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
+                             
                             <span class="icon-calender calender-addone"></span>
                             <label class="header-date">
                                 {{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
-                        </li>
+                        </li> -->
+<!--                        <li [hidden]="!isTodaysDateSelected" class="cp" (click)="showGiddhDatepicker($event)">-->
+<!--                            &lt;!&ndash; <label class="btn btn-link"></label> &ndash;&gt;-->
+<!--                            <span class="icon-calender calender-addone"></span>-->
+<!--                            <label class="header-date">-->
+<!--                                {{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>-->
+<!--                        </li>-->
                     </ul>
                     <button id="add-manage" type="button" class="btn btn-gray btn-sm" [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"> 
                         <i class="icon-plus"></i> Master
@@ -560,22 +567,19 @@
 
                 <div class="lower-layer-header">
                     <ul class="nav universal-date  pull-left" *ngIf="(selectedCompany | async)">
-                        <li [hidden]="isTodaysDateSelected" class="border-none pl-0"> 
+                        <!-- <li [hidden]="isTodaysDateSelected" class="border-none pl-0"> 
                             <button class="btn btn-link" (click)="jumpToToday();">Today</button>
+                        </li> -->
+                        <li class="dateRang-picker not-today"  (click)="showGiddhDatepicker($event)" >
+                            <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)" ></span>
+<!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
+                            <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
                         </li>
-                        <li [hidden]="isTodaysDateSelected" class="dateRangPicker">
-                            <span class="icon-calender calender-addone pos-abs" (click)="jumpToToday();"></span>
-                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />
-                        </li>
-                        <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
+                        <!-- <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
                             <label class="btn btn-link">&nbsp;</label>
                             <span class="icon-calender calender-addone "></span>
                             <label class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
-                        </li>
-                        <li class="border-none pr-0 pull-right">
-                            
-                           
-                        </li>
+                        </li> -->
                     </ul>
                     <div class="d-flex align-items-center" *ngIf="(selectedCompany | async)">
                         <span [ngClass]="{'notification': isMobileSite}">
@@ -930,3 +934,12 @@
         <aside-setting (closeAsideEvent)="toggleSidebarPane(false)"></aside-setting>
     </perfect-scrollbar>
 </div>
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions.ranges" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
+                                    [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
+                                    [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>
