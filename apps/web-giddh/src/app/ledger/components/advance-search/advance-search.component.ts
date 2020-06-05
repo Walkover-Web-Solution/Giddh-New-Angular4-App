@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
 
-import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { GroupService } from '../../../services/group.service';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
@@ -10,15 +10,16 @@ import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ILedgerAdvanceSearchRequest } from '../../../models/api-models/Ledger';
 import { AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { IOption } from '../../../theme/ng-select/option.interface';
 import { AccountService } from '../../../services/account.service';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren, ElementRef } from '@angular/core';
 import * as moment from 'moment';
 import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 import { AdvanceSearchModel, AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
-import { BsDaterangepickerConfig, BsDaterangepickerDirective } from 'ngx-bootstrap';
+import { BsDaterangepickerConfig, BsDaterangepickerDirective, BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { GeneralService } from '../../../services/general.service';
 
 const COMPARISON_FILTER = [
     { label: 'Greater Than', value: 'greaterThan' },
@@ -38,10 +39,10 @@ const COMPARISON_FILTER = [
 export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges {
 
     @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
-    @ViewChild('dp') public dateRangePicker: BsDaterangepickerDirective;
+    // @ViewChild('dp') public dateRangePicker: BsDaterangepickerDirective;
     public bsRangeValue: string[];
     @Input() public advanceSearchRequest: AdvanceSearchRequest;
-    @Output() public closeModelEvent: EventEmitter<{advanceSearchData, isClose}> = new EventEmitter(null);
+    @Output() public closeModelEvent: EventEmitter<{ advanceSearchData, isClose }> = new EventEmitter(null);
     public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
     public advanceSearchObject: ILedgerAdvanceSearchRequest = null;
     public advanceSearchForm: FormGroup;
@@ -55,8 +56,31 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public comparisonFilterDropDown$: Observable<IOption[]>;
     private moment = moment;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** datepickerTemplate element reference  */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will store if device is mobile or not */
+    public isMobileScreen: boolean = false;
+    /* This will store modal reference */
+    public modalRef: BsModalRef;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOptions: any;
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* Selected from date */
+    public fromDate: string;
+    /* Selected to date */
+    public toDate: string;
 
-    constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions, private _accountService: AccountService) {
+    constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions,
+        private _accountService: AccountService,
+        private modalService: BsModalService,
+        private generalService: GeneralService) {
         this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
         this.store.dispatch(this.inventoryAction.GetManufacturingStock());
         this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
@@ -72,6 +96,13 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                     accounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
                 });
                 this.accounts$ = observableOf(accounts);
+            }
+        });
+
+        /* This will get the date range picker configurations */
+        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
+            if (config) {
+                this.datePickerOptions = config;
             }
         });
 
@@ -102,13 +133,15 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
 
     public ngOnChanges(s: SimpleChanges) {
         if ('advanceSearchRequest' in s && s.advanceSearchRequest.currentValue && s.advanceSearchRequest.currentValue !== s.advanceSearchRequest.previousValue && s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue) {
-            let f: any = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT).toDate();
-            let t: any = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT).toDate();
-
-            if (this.advanceSearchForm) {
-                let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
-                bsDaterangepicker.patchValue([f, t]);
-            }
+            // It may use later if any issue happen in new datepicker
+            // let f: any = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT).toDate();
+            // let t: any = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT).toDate();
+            this.selectedDateRange = { startDate: moment(s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[0]), endDate: moment(s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[1]) };
+            this.selectedDateRangeUi = moment(s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            // if (this.advanceSearchForm) {
+            //     let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
+            //     // bsDaterangepicker.patchValue([f, t]);
+            // }
         }
     }
 
@@ -200,7 +233,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public onCancel() {
-        this.closeModelEvent.emit({advanceSearchData: this.advanceSearchRequest, isClose: true});
+        this.closeModelEvent.emit({ advanceSearchData: this.advanceSearchRequest, isClose: true });
     }
 
     /**
@@ -219,7 +252,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      */
     public onSearch() {
         this.advanceSearchRequest.dataToSend = this.advanceSearchForm.value;
-        this.closeModelEvent.emit({advanceSearchData: this.advanceSearchRequest, isClose: false});
+        this.closeModelEvent.emit({ advanceSearchData: this.advanceSearchRequest, isClose: false });
     }
 
     public resetAndSearch() {
@@ -386,6 +419,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
 
     /**
      * toggleOtherDetails
+     *
+     * @memberof AdvanceSearchModelComponent
      */
     public toggleOtherDetails() {
         this.showOtherDetails = !this.showOtherDetails;
@@ -399,5 +434,51 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+   * This will show the datepicker
+   *
+   * @memberof AdvanceSearchModelComponent
+   */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof AdvanceSearchModelComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+       * Call back function for date/range selection in datepicker
+       *
+       * @param {*} value
+       * @memberof AdvanceSearchModelComponent
+       */
+    public dateSelectedCallback(value: any): void {
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
+        }
     }
 }
