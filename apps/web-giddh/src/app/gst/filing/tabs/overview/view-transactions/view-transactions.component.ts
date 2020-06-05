@@ -8,9 +8,12 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../../../store';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
 import { takeUntil } from 'rxjs/operators';
-import { GStTransactionRequest, GstTransactionResult } from '../../../../../models/api-models/GstReconcile';
+import { GStTransactionRequest, GstTransactionResult, GstTransactionSummary } from '../../../../../models/api-models/GstReconcile';
 import { GstReconcileActions } from '../../../../../actions/gst-reconcile/GstReconcile.actions';
 import { DownloadOrSendInvoiceOnMailComponent } from '../../../../../invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
+import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
+import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
+import { saveAs } from 'file-saver';
 
 export const Gstr1TransactionType = [
     { label: 'Invoices', value: 'invoices' },
@@ -100,13 +103,19 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     };
     public viewTransactionInProgress$: Observable<boolean> = of(null);
     public selectedFilter: any = filterTransaction;
-
+    /** PDF base 64date */
+    public base64Data: string;
+    /** selected Invoice object */
+    public selectedInvoice: GstTransactionSummary;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private modalService: BsModalService, private invoiceReceiptActions: InvoiceReceiptActions) {
-        this.viewTransaction$ = this._store.pipe(select(p => p.gstR.viewTransactionData), takeUntil(this.destroyed$));
-        this.companyGst$ = this._store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
-        this.viewTransactionInProgress$ = this._store.pipe(select(p => p.gstR.viewTransactionInProgress), takeUntil(this.destroyed$));
+    constructor(private gstAction: GstReconcileActions, private store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private modalService: BsModalService,
+        private invoiceReceiptActions: InvoiceReceiptActions,
+        private invoiceService: InvoiceService,
+        private toaster: ToasterService, ) {
+        this.viewTransaction$ = this.store.pipe(select(p => p.gstR.viewTransactionData), takeUntil(this.destroyed$));
+        this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
+        this.viewTransactionInProgress$ = this.store.pipe(select(p => p.gstR.viewTransactionInProgress), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -130,7 +139,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
             this.filterParam.type = 'all';
             this.filterParam.status = 'all';
         }
-        this._store.dispatch(this.gstAction.GetSummaryTransaction(this.selectedGst, this.filterParam));
+        this.store.dispatch(this.gstAction.GetSummaryTransaction(this.selectedGst, this.filterParam));
         this.mapFilters();
     }
 
@@ -150,7 +159,8 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
                 voucherType: invoice.voucherType,
                 accountUniqueName: invoice.account.uniqueName
             };
-            this._store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+            this.selectedInvoice = invoice;
+            this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
         }
         // this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.voucherNumber));
         this.loadDownloadOrSendMailComponent();
@@ -168,22 +178,24 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
 
         let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
         componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
+        componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
+        componentInstance.downloadInvoiceEvent.subscribe(e => this.ondownloadInvoiceEvent(e));
     }
 
     public closeDownloadOrSendMailPopup(userResponse: { action: string }) {
         this.downloadOrSendMailModel.hide();
         if (userResponse.action === 'update') {
-            this._store.dispatch(this.invoiceActions.VisitToInvoiceFromPreview());
+            this.store.dispatch(this.invoiceActions.VisitToInvoiceFromPreview());
             this.invoiceGenerateModel.show();
         } else if (userResponse.action === 'closed') {
-            this._store.dispatch(this.invoiceActions.ResetInvoiceData());
+            this.store.dispatch(this.invoiceActions.ResetInvoiceData());
         }
     }
 
     public closeInvoiceModel(e) {
         this.invoiceGenerateModel.hide();
         setTimeout(() => {
-            this._store.dispatch(this.invoiceActions.ResetInvoiceData());
+            this.store.dispatch(this.invoiceActions.ResetInvoiceData());
         }, 2000);
     }
 
@@ -233,5 +245,93 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
 
     public ngOnDestroy() {
         this.destroyed$.next(true);
+    }
+
+    /**
+    * download file as pdf
+    *
+    * @param data
+    * @param invoiceUniqueName
+    * @memberof ViewTransactionsComponent
+    */
+    public downloadFile() {
+        let blob = this.base64ToBlob(this.base64Data, 'application/pdf', 512);
+        return saveAs(blob, `Invoice-${this.selectedInvoice.account.uniqueName}.pdf`);
+    }
+
+    /**
+     *  To convert base64 data to contentType format in chunks
+     *
+     * @param {any} b64Data base64 data string
+     * @param {string} contentType type to covert file
+     * @param {number} sliceSize chunk size
+     * @returns
+     * @memberof ViewTransactionsComponent
+     */
+    public base64ToBlob(b64Data: any, contentType: string, sliceSize: number) {
+        contentType = contentType || '';
+        sliceSize = sliceSize || 512;
+        let byteCharacters = atob(b64Data);
+        let byteArrays = [];
+        let offset = 0;
+        while (offset < byteCharacters.length) {
+            let slice = byteCharacters.slice(offset, offset + sliceSize);
+            let byteNumbers = new Array(slice.length);
+            let i = 0;
+            while (i < slice.length) {
+                byteNumbers[i] = slice.charCodeAt(i);
+                i++;
+            }
+            let byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+            offset += sliceSize;
+        }
+        return new Blob(byteArrays, { type: contentType });
+    }
+
+    /**
+     * To send mail or download voucher
+     *
+     * @param {{ action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }} userResponse API call object body
+     * @memberof ViewTransactionsComponent
+     */
+    public onDownloadOrSendMailEvent(userResponse: { action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }) {
+        if (userResponse.action === 'download') {
+            this.downloadFile();
+        } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
+            this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
+                emailId: userResponse.emails,
+                voucherNumber: [this.selectedInvoice.voucherNumber],
+                typeOfInvoice: userResponse.typeOfInvoice,
+                voucherType: this.selectedInvoice.voucherType
+            }));
+        } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
+            this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice.voucherNumber));
+        }
+    }
+
+    /**
+     * To download invoice service call
+     *
+     * @param {*} invoiceCopy
+     * @memberof ViewTransactionsComponent
+     */
+    public ondownloadInvoiceEvent(invoiceCopy) {
+        let dataToSend = {
+            voucherNumber: [this.selectedInvoice.voucherNumber],
+            typeOfInvoice: invoiceCopy,
+            voucherType: this.selectedInvoice.voucherType
+        };
+        this.invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend)
+            .subscribe(res => {
+                if (res) {
+                    if (dataToSend.typeOfInvoice.length > 1) {
+                        return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'zip');
+                    }
+                    return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
+                } else {
+                    this.toaster.errorToast('Something went wrong Please try again!');
+                }
+            });
     }
 }
