@@ -114,7 +114,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         TokenVerifyComponent,
         DummyComponent,
         BillingDetailComponent,
-
+        AppLoginSuccessComponent,
         // SuccessComponent,
         NewUserComponent,
         BrowserDetectComponent,

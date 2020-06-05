@@ -28,13 +28,17 @@ export const ROUTES: Routes = [
         path: 'token-verify',
         component: TokenVerifyComponent
     },
-    { path: 'create-invoice', loadChildren: './create/create.module#CreateModule' },
-    { path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [BrowserSupported, UserAuthenticated] },
-    { path: 'signup', loadChildren: './signup/signup.module#SignupModule' },
-    { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
-    { path: 'inventory-in-out', redirectTo: 'pages/inventory-in-out', pathMatch: 'full' },
+    {path: 'create-invoice', loadChildren: './create/create.module#CreateModule'},
+    {
+        path: 'login',
+        loadChildren: './login/login.module#LoginModule',
+        canActivate: [BrowserSupported, UserAuthenticated]
+    },
+    {path: 'signup', loadChildren: './signup/signup.module#SignupModule'},
+    {path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full'},
+    {path: 'inventory-in-out', redirectTo: 'pages/inventory-in-out', pathMatch: 'full'},
     // { path: 'success', component: SuccessComponent },
-    { path: 'home', redirectTo: 'pages/home', pathMatch: 'full' },
+    {path: 'home', redirectTo: 'pages/home', pathMatch: 'full'},
     // { path: 'magic', loadChildren: './magic-link/magicLink.module#MagicLinkModule' },
     { path: 'search', redirectTo: 'pages/search', pathMatch: 'full' },
     { path: 'permissions', redirectTo: 'pages/permissions', pathMatch: 'full' },
@@ -65,17 +69,21 @@ export const ROUTES: Routes = [
     // { path: 'purchase/create', redirectTo: 'pages/purchase/create' },
     // { path: 'credit-note/create', redirectTo: 'pages/credit-note/create' },
     // { path: 'debit-note/create', redirectTo: 'pages/debit-note/create' },
-    { path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full' },
-    { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
-    { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice', pathMatch: 'full' },
-    { path: 'select-plan', component: SelectPlanComponent },
-    { path: 'billing-detail', component: BillingDetailComponent },
-    { path: 'billing-detail/buy-plan', component: BillingDetailComponent },
+    {path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full'},
+    {path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full'},
+    {path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice', pathMatch: 'full'},
+    {path: 'select-plan', component: SelectPlanComponent},
+    {path: 'billing-detail', component: BillingDetailComponent},
+    {path: 'billing-detail/buy-plan', component: BillingDetailComponent},
     {
         path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
         children: [
-            { path: 'home', loadChildren: './home/home.module#HomeModule', canActivate: [NeedsAuthorization] },
-            { path: 'invoice', loadChildren: './invoice/invoice.module#InvoiceModule', canActivate: [NeedsAuthorization] },
+            {path: 'home', loadChildren: './home/home.module#HomeModule', canActivate: [NeedsAuthorization]},
+            {
+                path: 'invoice',
+                loadChildren: './invoice/invoice.module#InvoiceModule',
+                canActivate: [NeedsAuthorization]
+            },
             // { path: 'sales', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },
             {
                 path: 'daybook',
@@ -94,7 +102,7 @@ export const ROUTES: Routes = [
             { path: 'trial-balance-and-profit-loss', loadChildren: './tb-pl-bs/tb-pl-bs.module#TBPlBsModule', canActivate: [NeedsAuthentication, NeedsAuthorization] },
             { path: 'audit-logs', loadChildren: './audit-logs/audit-logs.module#AuditLogsModule', canActivate: [NeedsAuthorization] },
             { path: 'all-modules', loadChildren: './all-modules/all-modules.module#AllModulesModule', canActivate: [NeedsAuthorization] },
-            { path: 'create-advance-receipt', loadChildren: './create-advance-receipt/create-advance-receipt.module#CreateAdvanceReceiptModule', canActivate: [NeedsAuthorization] },
+            // { path: 'create-advance-receipt', loadChildren: './create-advance-receipt/create-advance-receipt.module#CreateAdvanceReceiptModule', canActivate: [NeedsAuthorization] },
             { path: 'ledger', loadChildren: './ledger/ledger.module#LedgerModule', canActivate: [NeedsAuthorization] },
             { path: 'permissions', loadChildren: './permissions/permission.module#PermissionModule', canActivate: [NeedsAuthorization] },
             { path: 'settings', loadChildren: './settings/settings.module#SettingsModule', canActivate: [NeedsAuthorization] },
@@ -110,15 +118,31 @@ export const ROUTES: Routes = [
             // { path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },
             // { path: 'credit-note/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },
             // { path: 'debit-note/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },
-            { path: 'reports', loadChildren: './reports/reports.module#ReportsModule', canActivate: [NeedsAuthorization] },
-            { path: 'proforma-invoice', loadChildren: './proforma-invoice/proforma-invoice.module#ProformaInvoiceModule', canActivate: [NeedsAuthorization] },
-            { path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization] },
-            { path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization] },
-            { path: 'select-plan', component: SelectPlanComponent, canActivate: [NeedsAuthorization] },
-            { path: 'billing-detail', component: BillingDetailComponent, canActivate: [NeedsAuthorization] },
-            { path: 'tallysync', loadChildren: './tallysync/tallysync.module#TallysyncModule', canActivate: [NeedsAuthorization] },
+            {
+                path: 'reports',
+                loadChildren: './reports/reports.module#ReportsModule',
+                canActivate: [NeedsAuthorization]
+            },
+            {
+                path: 'proforma-invoice',
+                loadChildren: './proforma-invoice/proforma-invoice.module#ProformaInvoiceModule',
+                canActivate: [NeedsAuthorization]
+            },
+            {path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization]},
+            {path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization]},
+            {path: 'select-plan', component: SelectPlanComponent, canActivate: [NeedsAuthorization]},
+            {path: 'billing-detail', component: BillingDetailComponent, canActivate: [NeedsAuthorization]},
+            {
+                path: 'tallysync',
+                loadChildren: './tallysync/tallysync.module#TallysyncModule',
+                canActivate: [NeedsAuthorization]
+            },
 
-            { path: 'expenses-manager', loadChildren: './expenses/expenses.module#ExpensesModule', canActivate: [NeedsAuthorization] },
+            {
+                path: 'expenses-manager',
+                loadChildren: './expenses/expenses.module#ExpensesModule',
+                canActivate: [NeedsAuthorization]
+            },
 
             { path: 'vat-report', loadChildren: './vat-report/vatReport.module#VatReportModule', canActivate: [NeedsAuthorization] },
             { path: 'purchase-management', loadChildren: './purchase/purchase.module#PurchaseModule', canActivate: [NeedsAuthorization] },
@@ -127,6 +151,5 @@ export const ROUTES: Routes = [
 
         ]
     },
-    // { path: '**', redirectTo: 'login', pathMatch: 'full', canActivate: [CheckIfPublicPath] },
-    { path: '**', pathMatch: 'full', component: PublicPageHandlerComponent },
+    {path: '**', pathMatch: 'full', component: PublicPageHandlerComponent},
 ];

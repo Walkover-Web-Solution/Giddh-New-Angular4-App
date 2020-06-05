@@ -482,7 +482,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.updatedAccountDetails$ = this.store.pipe(select(p => p.sales.updatedAccountDetails), takeUntil(this.destroyed$));
         this.updateAccountSuccess$ = this.store.pipe(select(p => p.sales.updateAccountSuccess), takeUntil(this.destroyed$));
         this.generateVoucherSuccess$ = combineLatest([this.store.pipe(select(appState => appState.proforma.isGenerateSuccess)),
-        this.store.pipe(select(appState => appState.proforma.isGenerateInProcess))]).pipe(debounceTime(0), takeUntil(this.destroyed$));
+            this.store.pipe(select(appState => appState.proforma.isGenerateInProcess))]).pipe(debounceTime(0), takeUntil(this.destroyed$));
         this.updateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isUpdateProformaSuccess), takeUntil(this.destroyed$));
         this.lastGeneratedVoucherNo$ = this.store.pipe(select(p => p.proforma.lastGeneratedVoucherDetails), takeUntil(this.destroyed$));
         this.lastInvoices$ = this.store.pipe(select(p => p.receipt.lastVouchers), takeUntil(this.destroyed$));
@@ -910,7 +910,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (results[0] && results[1]) {
                     let obj;
 
-                    if (results[1].roundOffTotal && results[1].roundOffTotal.amountForAccount === 0 && results[1].roundOffTotal.amountForCompany === 0) {
+                    if(results[1].roundOffTotal && results[1].roundOffTotal.amountForAccount === 0 && results[1].roundOffTotal.amountForCompany === 0) {
                         this.applyRoundOff = false;
                     }
 
@@ -2204,7 +2204,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (!this.isPurchaseInvoice) {
             //Save the Grand Total for Edit
             if (calculatedGrandTotal > 0) {
-                if (this.applyRoundOff) {
+                if(this.applyRoundOff) {
                     this.calculatedRoundOff = Number((Math.round(calculatedGrandTotal) - calculatedGrandTotal).toFixed(2));
                 } else {
                     this.calculatedRoundOff = Number((calculatedGrandTotal - calculatedGrandTotal).toFixed(2));

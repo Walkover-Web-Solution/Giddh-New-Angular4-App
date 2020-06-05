@@ -74,7 +74,7 @@ export class UpdateLedgerVm {
     /** Advance receipt amount */
     public advanceReceiptAmount: number = 0;
     /** To track compund total change for update ledger advance adjustment */
-    public compundTotalObserver = new BehaviorSubject(null);
+    public compoundTotalObserver = new BehaviorSubject(null);
     /** Rate should have precision up to 4 digits for better calculation */
     public ratePrecision = RATE_FIELD_PRECISION;
 
@@ -375,7 +375,7 @@ export class UpdateLedgerVm {
             this.compoundTotal = giddhRoundOff((this.entryTotal.drTotal - this.entryTotal.crTotal), this.giddhBalanceDecimalPlaces);
         }
         this.convertedCompoundTotal = this.calculateConversionRate(this.compoundTotal);
-        this.compundTotalObserver.next(this.compoundTotal);
+        this.compoundTotalObserver.next(this.compoundTotal);
     }
 
     public getUniqueName(txn: ILedgerTransactionItem) {

@@ -3,7 +3,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
 
 @Component({
-    selector: 'sales-ragister-details',
+    selector: 'sales-register-details',
     templateUrl: './sales.register.details.component.html',
     styleUrls: ['./sales.register.details.component.scss']
 })

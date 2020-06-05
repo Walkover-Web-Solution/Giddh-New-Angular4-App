@@ -9,8 +9,7 @@
 
         <div class="welcome-container ">
             <p class="welcome_title">Set up your organisation profile and start accounting with Giddh.</p>
-            <form name="form" #welcomeForm="ngForm" novalidate="" class="clearfix welcome-form horizontal-form"
-                autocomplete="off">
+            <form name="form" #welcomeForm="ngForm" novalidate="" class="clearfix welcome-form horizontal-form" autocomplete="off">
                 <div class=" clearfix row">
                     <div class="col-xs-12 mrB2">
                         <ng-container *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else onBoardingItemName">
@@ -139,14 +138,12 @@
                             <div class="">
                                 <label for="taxes_dd">Applicable Tax</label>
                                 <div class="btn-group btn-block select-caret invoice-btn" dropdown>
-                                    <button dropdownToggle type="button"
-                                        class="form-control text-left btn-block dropdown-toggle"> Select Taxes <span
+                                    <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle"> Select Taxes <span
                                             class="select_drop pull-right mrT1"></span></button>
                                     <ul class="dropdown-menu dropdown-menu-2 width100" role="menu">
                                         <li *ngIf="taxesList.length==0">No results found</li>
                                         <li *ngFor="let tax of taxesList">
-                                            <input type="checkbox" (click)="selectApplicableTaxes(tax, $event)"
-                                                [checked]="tax.isSelected" /> {{tax.label}}
+                                            <input type="checkbox" (click)="selectApplicableTaxes(tax, $event)" [checked]="tax.isSelected" /> {{tax.label}}
                                         </li>
                                     </ul>
                                 </div>
@@ -189,8 +186,7 @@
                     </div>
                     <div class="col-xs-12 d-flex mrT5">
                         <button class="btn btn-primary" (click)="back(isbranch)">Back</button>
-                        <button type="submit " class="btn btn-pink" (click)="submit(welcomeForm)"
-                            [disabled]="welcomeForm.invalid || !isGstValid">
+                        <button type="submit " class="btn btn-pink" (click)="submit(welcomeForm)" [disabled]="welcomeForm.invalid || !isGstValid">
                             {{itemOnBoardingDetails?.isOnBoardingInProgress ?
                                 itemOnBoardingDetails?.isItemUpdateInProgress ? 'Update ' + itemOnBoardingDetails?.onBoardingType : 'Create ' + itemOnBoardingDetails?.onBoardingType :
                                 'Next'

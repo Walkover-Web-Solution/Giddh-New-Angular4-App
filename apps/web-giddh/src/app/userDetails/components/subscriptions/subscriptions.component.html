@@ -9,8 +9,7 @@
                             <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle" aria-controls="dropdown-basic">
                                 {{seletedUserPlans?.planDetails?.name}} <span class="caret"></span>
                             </button>
-                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
-                                aria-labelledby="button-basic">
+                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
                                 <li *ngIf="subscriptions.length==0">No results found</li>
                                 <li *ngFor="let item of subscriptions" role="menuitem" class="cursor-pointer">
                                     <a (click)="selectedSubscriptionPlan(item);">
@@ -29,8 +28,7 @@
                     </div>
                 </div>
                 <div class="col-md-9 col-sm-6 text-right xs-left">
-                    <button type="button" *ngIf="seletedUserPlans?.additionalCharges >0" (click)="goToBillingDetails();"
-                        class="btn btn-pink mt-2">Pay Now</button>
+                    <button type="button" *ngIf="seletedUserPlans?.additionalCharges >0" (click)="goToBillingDetails();" class="btn btn-pink mt-2">Pay Now</button>
                     <button type="button" (click)="isPlanShow=true" class="btn btn-green mt-2">Buy New Plan</button>
                 </div>
             </div>
@@ -50,8 +48,7 @@
                             </tr>
                             <tr>
                                 <th>Total Companies</th>
-                                <td>{{ seletedUserPlans?.totalCompanies | number}} out of
-                                    {{ seletedUserPlans?.planDetails?.companiesLimit | number}}</td>
+                                <td>{{ seletedUserPlans?.totalCompanies | number}} out of {{ seletedUserPlans?.planDetails?.companiesLimit | number}}</td>
                             </tr>
                             <tr>
                                 <th>Transactions Limit</th>
@@ -59,8 +56,8 @@
                             </tr>
                             <tr>
                                 <th> Validity</th>
-                                <td>{{seletedUserPlans?.planDetails?.duration}}
-                                    {{seletedUserPlans?.planDetails?.durationUnit}}</td>
+                                <td>{{seletedUserPlans?.planDetails?.duration}} {{seletedUserPlans?.planDetails?.durationUnit}}
+                                </td>
                             </tr>
                         </table>
                     </div>
@@ -80,8 +77,7 @@
                 <p><small>Please renew your plan or pay now to continue subscription.</small></p>
             </div>
 
-            <h2 class="subscription-title" *ngIf="subscriptions">{{seletedUserPlans?.planDetails?.name}} <span
-                    *ngIf="seletedUserPlans?.startedAt">({{seletedUserPlans?.startedAt}})</span></h2>
+            <h2 class="subscription-title" *ngIf="subscriptions">{{seletedUserPlans?.planDetails?.name}} <span *ngIf="seletedUserPlans?.startedAt">({{seletedUserPlans?.startedAt}})</span></h2>
             <div class="row">
                 <div class="col-sm-7 transaction-list">
                     <div class="box clearfix mrT2 no-padding">
@@ -125,8 +121,7 @@
                         </div>
                         <div class="clearfix">
                             <div class="mt-1 mb-1 mr-2 ml-2">
-                                <input type="search" class="form-control" [(ngModel)]="srchString"
-                                    (ngModelChange)="filterCompanyList($event)" placeholder="Search Company here">
+                                <input type="search" class="form-control" [(ngModel)]="srchString" (ngModelChange)="filterCompanyList($event)" placeholder="Search Company here">
                             </div>
                             <div class="campanien-list" *ngIf="subscriptions">
                                 <ul>

@@ -1619,7 +1619,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             });
         }
     }
-
     /**
      * This will give the updated account uniquename
      *
