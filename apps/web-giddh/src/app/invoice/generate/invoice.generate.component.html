@@ -288,9 +288,9 @@
 </ng-container>
 <!-- region edit invoice -->
 <div *ngIf="showEditMode">
-    <div class="invoice-editWrapper">
+    <div class="invoice-edit-wrapper">
 
-        <!-- <div class="invoice-editHeader "> -->
+        <!-- <div class="invoice-edit-header "> -->
 
         <!-- <span>
                     <p>Edit {{ selectedItem.voucherType | voucherTypeToNamePipe | titlecase }}</p>
@@ -302,7 +302,7 @@
 
         <!-- </div> -->
 
-        <div class="invoice-editBody ">
+        <div class="invoice-edit-body ">
             <proforma-invoice-component [accountUniqueName]="selectedAccountUniqueName" [selectedItem]="selectedItem" [invoiceNo]="(voucherType !=='purchase' ) ? selectedItem?.voucherNumber : selectedItem?.uniqueName " [invoiceType]="selectedVoucher
     " (cancelVoucherUpdate)="closeModel() ">
             </proforma-invoice-component>

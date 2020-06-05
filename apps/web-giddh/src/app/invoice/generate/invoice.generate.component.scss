@@ -201,10 +201,10 @@ button.btn.btn-filter {
     opacity: 0.6;
 }
 
-.invoice-editWrapper {
+.invoice-edit-wrapper {
     height: 100vh;
     overflow-y: auto;
-    .invoice-editHeader {
+    .invoice-edit-header {
         display: flex;
         justify-content: space-between;
         height: 54px;
@@ -230,7 +230,7 @@ button.btn.btn-filter {
             margin-right: 10px;
         }
     }
-    .invoice-editBody {
+    .invoice-edit-body {
         padding-bottom: 140px;
     }
 }
