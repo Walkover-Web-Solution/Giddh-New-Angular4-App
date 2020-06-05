@@ -93,6 +93,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('bulkActionConfirmationModal') public bulkActionConfirmationModal: ModalDirective;
     @ViewChild('bulkActionGenerateVoucherModal') public bulkActionGenerateVoucherModal: ModalDirective;
     @ViewChild('ledgerSearchTerms') public ledgerSearchTerms: ElementRef;
+    /** datepicker element reference  */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     public showUpdateLedgerForm: boolean = false;
     public isTransactionRequestInProcess$: Observable<boolean>;
@@ -109,6 +110,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public uploadInput: EventEmitter<UploadInput>;
     public fileUploadOptions: UploaderOptions;
     public isFileUploading: boolean = false;
+    /** Boolean for mobile screen or not  */
     public isMobileScreen: boolean = true;
     public closingBalanceBeforeReconcile: { amount: number, type: string };
     public reconcileClosingBalanceForBank: { amount: number, type: string };
@@ -169,6 +171,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public columnarReportExportRequest: ExportLedgerRequest;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
+    /** Transactions dates array */
     public allTransactionsList: any[] = [];
     public allTransactionDates: any[] = [];
     public Shown: boolean = true;
@@ -264,13 +267,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public selectedDate(value: any) {
-
         this.selectedRangeLabel = "";
-
-        if(value && value.name) {
+        if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-                this.hideGiddhDatepicker();
+        this.hideGiddhDatepicker();
 
         this.needToShowLoader = false;
         let from = moment(value.startDate, GIDDH_DATE_FORMAT).toDate();
@@ -1444,7 +1445,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public selectAllEntries(ev: any, type: 'debit' | 'credit' | 'all') {
         if (!ev.target.checked) {
-            if(type === 'all') {
+            if (type === 'all') {
                 this.debitCreditSelectAll = false;
             } else if (type === 'debit') {
                 this.debitSelectAll = false;

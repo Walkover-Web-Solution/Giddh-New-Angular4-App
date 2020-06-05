@@ -439,10 +439,10 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     }
 
     /**
-   * This will show the datepicker
-   *
-   * @memberof AdvanceSearchModelComponent
-   */
+    * This will show the datepicker
+    *
+    * @memberof AdvanceSearchModelComponent
+    */
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);

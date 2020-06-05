@@ -18,7 +18,7 @@ import { GeneralService } from '../../../services/general.service';
 })
 
 export class CrDrComponent implements OnInit, OnDestroy {
-
+    /** directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
@@ -171,10 +171,11 @@ export class CrDrComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * This will show the datepicker
-    *
-    * @memberof ProfitLossComponent
-    */
+     * This will show the datepicker
+     *
+     * @param {*} element input element
+     * @memberof CrDrComponent
+     */
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
@@ -184,7 +185,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
             Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
         );
     }
-    /**v
+    /**
     * This will hide the datepicker
     *
     * @memberof ProfitLossComponent
@@ -194,11 +195,11 @@ export class CrDrComponent implements OnInit, OnDestroy {
     }
 
     /**
-       * Call back function for date/range selection in datepicker
-       *
-       * @param {*} value
-       * @memberof ProfitLossComponent
-       */
+    * Call back function for date/range selection in datepicker
+    *
+    * @param {*} value
+    * @memberof ProfitLossComponent
+    */
     public dateSelectedCallback(value: any): void {
         this.selectedRangeLabel = "";
 
