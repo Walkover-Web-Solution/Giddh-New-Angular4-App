@@ -320,11 +320,12 @@ a[vr-item]:focus {
 
 .left-sub-menu ul > li > a {
     font-size: 14px;
-    color: dimgray;
+    color: $nero;
     display: block;
     clear: both;
     padding: 6px 15px;
     line-height: 16px;
+    font-family: 'opensans-regular';
 }
 
 .left-sub-menu ul > li > a:hover {
@@ -465,6 +466,7 @@ a[vr-item]:focus {
 .not-today .calender-addone {
     position: absolute;
     padding: 8px 8px;
+    top: 2px;
 }
 
 #add-manage.btn-gray {
@@ -498,7 +500,7 @@ span.icon-support.dropdown-toggle {
     height: 32px;
 }
 .date-range-picker{
-    max-width: 150px;
+    max-width: 190px;
 }
 
 .other a {
@@ -824,6 +826,7 @@ ul.sub-list {
         height: 28px;
         vertical-align: middle;
         align-items: center;
+        top:2px;
     }
     .header-date {
         height: 28px;

@@ -24,6 +24,14 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.icon-advance-search:before {
+  content: "\e907";
+}
+.icon-calender:before {
+  content: "\e93c";
+  color: #fff;
+}
 .icon-home-icon:before {
   content: "\e900";
   color: #fff;
@@ -90,9 +98,6 @@
 }
 .icon-expandIcon:before {
   content: "\e906";
-}
-.icon-advance-serch:before {
-  content: "\e907";
 }
 .icon-copy:before {
   content: "\e908";
@@ -249,9 +254,6 @@
 }
 .icon-dots-three-vertical:before {
   content: "\e93b";
-}
-.icon-calender:before {
-  content: "\e93c";
 }
 .icon-car:before {
   content: "\e93d";
