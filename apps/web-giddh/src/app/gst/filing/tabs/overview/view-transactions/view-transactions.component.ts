@@ -254,7 +254,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     * @param invoiceUniqueName
     * @memberof ViewTransactionsComponent
     */
-    public downloadFile() {
+    public downloadFile(): void {
         let blob = this.base64ToBlob(this.base64Data, 'application/pdf', 512);
         return saveAs(blob, `Invoice-${this.selectedInvoice.account.uniqueName}.pdf`);
     }
@@ -268,7 +268,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
      * @returns
      * @memberof ViewTransactionsComponent
      */
-    public base64ToBlob(b64Data: any, contentType: string, sliceSize: number) {
+    public base64ToBlob(b64Data: any, contentType: string, sliceSize: number): any {
         contentType = contentType || '';
         sliceSize = sliceSize || 512;
         let byteCharacters = atob(b64Data);
@@ -295,7 +295,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
      * @param {{ action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }} userResponse API call object body
      * @memberof ViewTransactionsComponent
      */
-    public onDownloadOrSendMailEvent(userResponse: { action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }) {
+    public onDownloadOrSendMailEvent(userResponse: { action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }): void {
         if (userResponse.action === 'download') {
             this.downloadFile();
         } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
@@ -316,7 +316,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
      * @param {*} invoiceCopy
      * @memberof ViewTransactionsComponent
      */
-    public ondownloadInvoiceEvent(invoiceCopy) {
+    public ondownloadInvoiceEvent(invoiceCopy): void {
         let dataToSend = {
             voucherNumber: [this.selectedInvoice.voucherNumber],
             typeOfInvoice: invoiceCopy,
