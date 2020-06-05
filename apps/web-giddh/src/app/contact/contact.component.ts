@@ -132,7 +132,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public updateCommentIdx: number = null;
     public searchStr$ = new Subject<string>();
     public searchStr: string = '';
-    @ViewChild('payNowModal') public payNowModal: ModalDirective;
     @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
     @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
     @ViewChild('staticTabs') public staticTabs: TabsetComponent;
@@ -323,8 +322,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 }
             }
         });
-
-        this.getCashFreeBalance();
 
         this.flattenAccountsStream$.subscribe(data => {
 
@@ -590,39 +587,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         } else {
             document.querySelector('body').classList.remove('fixed');
         }
-    }
-
-    public payNow(acc: string) {
-        this.selectedAccForPayment = acc;
-        this.payNowModal.show();
-    }
-
-    public onPaymentModalCancel() {
-        this.payNowModal.hide();
-    }
-
-    public onConfirmation(amountToPay: string) {
-        let payNowData: PayNowRequest = {
-            accountUniqueName: this.selectedAccForPayment.uniqueName,
-            amount: Number(amountToPay),
-            description: ''
-        };
-
-        this._contactService.payNow(payNowData).subscribe((res) => {
-            if (res.status === 'success') {
-                this._toasty.successToast('Payment done successfully with reference id: ' + res.body.referenceId);
-            } else {
-                this._toasty.errorToast(res.message, res.code);
-            }
-        });
-    }
-
-    public selectCashfreeAccount(event: IOption, objToApnd) {
-        let accObj = {
-            name: event.label,
-            uniqueName: event.value
-        };
-        objToApnd.account = accObj;
     }
 
     public submitCashfreeDetail(f) {
@@ -1147,15 +1111,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
             }
         });
-    }
-
-    private getCashFreeBalance() {
-        this._contactService.GetCashFreeBalance().subscribe((res) => {
-            if (res.status === 'success') {
-                this.cashFreeAvailableBalance = res.body.availableBalance;
-            }
-        });
-    }
+    }s
 
     private setTableColspan() {
         let balancesColsArr = ['openingBalance'];
