@@ -203,12 +203,12 @@
                         <input #chequeClearanceDateInput="bsDatepicker" readonly bsDatepicker [bsConfig]="bsConfig" class="form-control"
                             formControlName="chequeClearanceDate" name="account" type="text"
                             placeholder="Cheque Clearance Date"
-                            (keydown)="onCheckNumberFieldKeyDown($event, 'chqDate')">
+                            (keydown)="onCheckNumberFieldKeyDown($event, 'chqDate', chequeClearanceDateInput)">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <!-- [disabled]="chequeDetailForm.invalid" -->
-                    <button #chqFormSubmitBtn type="submit" class="btn btn-success">Create</button>
+                    <button #chqFormSubmitBtn type="submit" class="btn btn-success" (click)="focusDebitCreditAmount()">Create</button>
                     <button type="button" class="btn btn-default" (click)="closeChequeDetailForm()">Cancel</button>
                 </div>
             </form>
