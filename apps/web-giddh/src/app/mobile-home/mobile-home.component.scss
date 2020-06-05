@@ -5,8 +5,6 @@
     margin: 0 auto;
     background-color:$lavender;
     padding: 0;
-    height: 100vh;
-    overflow-y: auto;
     .search-field{
         padding: 10px 5px;
         input{
@@ -52,7 +50,8 @@
                 border-radius: 11px;    
                 margin-bottom: 8px;
                 img{
-                    width: 45px;
+                    width: 58px;
+                    border-radius: 5px;
                 }
                 i{
                     font-size: 20px;
@@ -62,15 +61,18 @@
             }
             .mobile-item-name{
                 h4{
-                    font-size: 12px;
+                    font-size:9px;
                     color: $midnight-blue;
                     text-align: center;
                     font-family: 'opensans-semibold';
-                    height: 53px;
+                    height: 40px;
                     line-height: inherit;
                     line-height: 1.2;
                     text-overflow: ellipsis;
                     overflow: hidden;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 4;
+                    -webkit-box-orient: vertical;
                 }
             }
             &:hover {
@@ -129,10 +131,14 @@
     }
 }
 .mobile-home-search{
-    background-color: #EEEFFB;
+    background-color: $lavender;
     display: flex;
     align-items: center;
     padding: 0 15px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
     .company-name-alice{
         width: 36px;
         height: 36px;
@@ -156,6 +162,9 @@
             padding: 10px 15px;
             display: flex;
             align-items: center;
+            &.group-list{
+                border-radius: 5px !important;
+            }
             .input-group-addon{
                 background-color: transparent;
                 border-radius: 0;
@@ -213,7 +222,6 @@
         }
     }
     .wrap-group-account-input{
-        padding-left: 30px;
         display: flex;
         flex-wrap: wrap;
         width: 100%;
@@ -223,6 +231,9 @@
             white-space: nowrap;
         }
     } 
+}
+.padding-top-70{
+    padding-top: 70px;
 }
 /*responsive*/
 @media(max-width:320px){

@@ -9084,6 +9084,9 @@ ngx-daterangepicker-material {
     .padding-top-fixed-mobile, .padding-top-fixed, .desktop-header{
         display: none;
     }
+    #content_wrapper{
+        background-color: $lavender;
+    }
 }
 /* responsive */
 @media (max-width: 1440px) {
