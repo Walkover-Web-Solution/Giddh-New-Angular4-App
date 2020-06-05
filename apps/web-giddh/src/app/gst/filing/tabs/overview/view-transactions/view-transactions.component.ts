@@ -260,7 +260,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     *  To convert base64 data to contetType format in chunks
+     *  To convert base64 data to contentType format in chunks
      *
      * @param {any} b64Data base64 data string
      * @param {string} contentType type to covert file
