@@ -8,7 +8,7 @@
         <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="showExportLedgerModal()">Export</a></li>
     </ul>
 </div>
-<section class="container ledger-section" *ngIf="!isShowLedgerColumnarReportTable">
+<section class="container ledger-section" [hidden]="isShowLedgerColumnarReportTable">
     <!-- region ledger table-->
     <div class="ledg-head transactions-page mt-2 pos-rel">
         <!-- region ledger header -->
@@ -1114,7 +1114,7 @@
     <div class="back-btn text-right pr-1 mt-1 mb-1">
         <button class="btn btn-default" (click)="isShowLedgerColumnarReportTable=false">Back</button>
     </div>
-    <ledger-columnar-report-table [columnarReportExportRequest]="columnarReportExportRequest" [accountUniquename]="accountUniquename"></ledger-columnar-report-table>
+    <ledger-columnar-report-table [columnarReportExportRequest]="columnarReportExportRequest" [accountUniquename]="accountUniquename" (backClick)="isShowLedgerColumnarReportTable=false"></ledger-columnar-report-table>
 </div>
 
 
