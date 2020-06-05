@@ -123,7 +123,7 @@
                         *ngFor="let item of permissionForm.get('allowedIps')['controls']; let i = index; let l = last"
                         [formGroupName]="i">
                         <div class="col-xs-11">
-                            <input class="form-control " decimalDigitsDirective name="item_{{i}}"
+                            <input class="form-control" (keypress)="allowOnlyNumbersAndDot($event)" name="item_{{i}}"
                                 formControlName="range" type="text" placeholder="192.168.1.0" />
                         </div>
                         <div class="pull-left lh34">

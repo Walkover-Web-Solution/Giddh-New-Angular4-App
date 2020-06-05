@@ -46,6 +46,7 @@ import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { SettingsServiceModule } from '../settings/settings-service.module';
 import { LedgerColumnarReportTableComponent } from './components/ledger-columnar-report-table/ledger.columnar.report.table.component';
+import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 
 @NgModule({
     declarations: [
@@ -104,6 +105,7 @@ import { LedgerColumnarReportTableComponent } from './components/ledger-columnar
         NgxMaskModule.forRoot(),
         NgbTooltipModule,
         SettingsServiceModule,
+        NgxDaterangepickerMd.forRoot()
     ],
 })
 export class LedgerModule {

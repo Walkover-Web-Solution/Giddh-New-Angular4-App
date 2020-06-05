@@ -406,7 +406,7 @@ h4 {
         width: 50%;
     }
 
-    .ledger_book:before {
+    .ledger-book:before {
         content: " ";
         height: 100%;
         position: absolute;

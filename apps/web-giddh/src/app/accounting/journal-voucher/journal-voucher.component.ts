@@ -31,7 +31,8 @@ const CODES = {
 /** Keys of keyboard event for Enter and Tab button */
 export const KEYS = {
     ENTER: 'Enter',
-    TAB: 'Tab'
+    TAB: 'Tab',
+    ESC: 'Escape'
 };
 
 /** Vouchers that can be generated throught JV module */
