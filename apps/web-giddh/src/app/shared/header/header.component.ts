@@ -1622,10 +1622,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public addClassInBodyIfPageHasTabs(): void {
-        if(document.getElementsByTagName("tabset") && document.getElementsByTagName("tabset").length > 0) {
-            document.querySelector('body').classList.add('page-has-tabs');
-        } else {
-            document.querySelector('body').classList.remove('page-has-tabs');
-        }
+        setTimeout(() => {
+            if(document.getElementsByTagName("tabset") && document.getElementsByTagName("tabset").length > 0) {
+                document.querySelector('body').classList.add('page-has-tabs');
+            } else {
+                document.querySelector('body').classList.remove('page-has-tabs');
+            }
+        }, 500);
     }
 }
