@@ -226,7 +226,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @returns uniqueName
      * @memberof MobileHomeComponent
      */
-    public trackByFn(index, item: any) {
+    public trackByFn(index, item: any): any {
         return item.uniqueName; // unique id corresponding to the item
     }
 
@@ -236,7 +236,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param {*} direction
      * @memberof MobileHomeComponent
      */
-    public onScroll(direction: string) {
+    public onScroll(direction: string): void {
         if (direction === "bottom" && this.allowLoadMore && !this.isLoading) {
             if (this.commandKRequestParams.page + 1 <= this.commandKRequestParams.totalPages) {
                 this.commandKRequestParams.page++;
