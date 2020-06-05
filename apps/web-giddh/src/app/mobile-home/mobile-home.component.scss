@@ -139,6 +139,23 @@
     width: 100%;
     top: 0;
     left: 0;
+    .dropdown-menu{
+        border-radius: 10px;
+        border: none;
+        padding: 15px 0;
+        li{
+            a{
+                padding: 5px 15px;
+                margin-bottom: 3px;
+                background-color: transparent;
+                letter-spacing: 0;
+                &:hover{
+                    color: $chetwode-blue !important;
+                    background: $lavender !important;
+                }
+            }
+        }
+    }
     .company-name-alice{
         width: 36px;
         height: 36px;
@@ -150,6 +167,12 @@
         font-size: 13px;
         color: $white;
         letter-spacing: -1px;
+        p{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 36px;
+        }
     }
     .account-search{
         margin: 0;

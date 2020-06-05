@@ -1,7 +1,11 @@
 <div class="padding-top-70">
     <div class="mobile-home-search">
-        <div class="company-name-alice">
-            <p>{{companyInitials}}</p>
+        <div class="company-name-alice btn-group" dropdown>
+            <p dropdownToggle>{{companyInitials}}</p>
+            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+                role="menu" aria-labelledby="button-basic">
+                <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)">Logout</a></li>
+            </ul>
         </div>
         <div class="account-search">
             <div class="input-group" (click)="focusInSearchBox()" [ngClass]="{'group-list': listOfSelectedGroups && listOfSelectedGroups.length > 0}">
