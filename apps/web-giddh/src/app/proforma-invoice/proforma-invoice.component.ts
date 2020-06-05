@@ -966,10 +966,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                     obj.accountDetails.currencySymbol = acc.currencySymbol || '';
                                 }
                             });
-                            // /** To check is multicurrency in case of pending voucher */
-                            // if (this.isPendingVoucherType) {
-                            //     this.isMulticurrencyAccount = results[1].account.currency.code === 'INR' && results[1].company.currency.code === 'AED';
-                            // }
                         } else if (this.isPurchaseInvoice) {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
                             this.isRcmEntry = (results[1]) ? results[1].subVoucher === Subvoucher.ReverseCharge : false;

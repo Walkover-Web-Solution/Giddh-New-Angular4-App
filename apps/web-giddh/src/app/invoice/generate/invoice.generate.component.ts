@@ -230,7 +230,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                 if (res && res.results) {
                     let response = _.cloneDeep(res);
                     response.results = _.orderBy(response.results, (item: ILedgersInvoiceResult) => {
-                        return moment(item.entryDate, 'DD-MM-YYYY');
+                        return moment(item.entryDate, GIDDH_DATE_FORMAT);
                     }, 'desc');
                     if (response && response.results) {
                         response.results.map(item => {
@@ -271,13 +271,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
                 }
             });
-        // this.store.pipe(select(stores => stores.receipt.invoiceDataHasError),
-        //     takeUntil(this.destroyed$),
-        //     distinctUntilChanged()).subscribe((isPreviewHasAnError: any) => {
-        //         if (isPreviewHasAnError) {
-        //             this.closeModel();
-        //         }
-        //     });
 
         // listen for bulk invoice generate and successfully generate and do the things
         this.isBulkInvoiceGenerated$.subscribe(result => {
@@ -302,9 +295,9 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
                 this.ledgerSearchRequest.dateRange = this.universalDate;
-                this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate(), chosenLabel: this.universalDate[2] };
-                this.fromDate = moment(this.universalDate[0], 'DD-MM-YYYY').toDate().toString();
-                this.toDate = moment(this.universalDate[1], 'DD-MM-YYYY').toDate().toString();
+                this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(), endDate: moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate(), chosenLabel: this.universalDate[2] };
+                this.fromDate = moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate().toString();
+                this.toDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate().toString();
                 // assign date
                 // this.assignStartAndEndDateForDateRangePicker(dateObj[0], dateObj[1]);
 
@@ -332,12 +325,12 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                 let activeFinancialYear = selectedCmp.activeFinancialYear;
                 if (activeFinancialYear) {
                     this.datePickerOptions.ranges['This Financial Year to Date'] = [
-                        moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
+                        moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'),
                         moment()
                     ];
                     this.datePickerOptions.ranges['Last Financial Year'] = [
-                        moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
-                        moment(activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year')
+                        moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).subtract(1, 'year'),
+                        moment(activeFinancialYear.financialYearEnds, GIDDH_DATE_FORMAT).subtract(1, 'year')
                     ];
                 }
             }
@@ -350,21 +343,10 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                 // assign date
                 // this.assignStartAndEndDateForDateRangePicker(a[0], a[1]);
 
-                this.ledgerSearchRequest.from = moment(a[0]).format('DD-MM-YYYY');
-                this.ledgerSearchRequest.to = moment(a[1]).format('DD-MM-YYYY');
+                this.ledgerSearchRequest.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
+                this.ledgerSearchRequest.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
             }
         });
-
-        // this.particularInput.valueChanges.pipe(
-        //   debounceTime(700),
-        //   distinctUntilChanged()
-        // ).subscribe(s => {
-        //   this.ledgerSearchRequest.voucherNumber = s;
-        //   this.getLedgersOfInvoice();
-        //   if (s === '') {
-        //     this.showParticularSearch = false;
-        //   }
-        // });
 
         this.accountUniqueNameInput.valueChanges.pipe(
             debounceTime(700),
@@ -386,16 +368,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         }
         this.showEditMode = false;
     }
-
-    // public closeInvoiceModel(e) {
-    //     if (e.action === 'generate') {
-    //         this.selectedLedgerItems = [];
-    //     }
-    //     this.invoiceGenerateModel.hide();
-    //     setTimeout(() => {
-    //         this.store.dispatch(this.invoiceActions.ResetInvoiceData());
-    //     }, 2000);
-    // }
 
     public getLedgersByFilters(f: NgForm) {
         if (f.valid) {
@@ -468,7 +440,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof InvoiceGenerateComponent
      */
-    public closeModel() {
+    public closeModel(): void {
         this.showEditMode = false;
         this.getLedgersOfInvoice();
         this.selectedItem = null;
@@ -520,10 +492,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice('j8bzr0k3lh0khbcje8bh'));
         }
     }
-
-    // public showInvoiceModal() {
-    //     this.invoiceGenerateModel.show();
-    // }
 
     public getLedgersOfInvoice() {
         this.store.dispatch(this.invoiceActions.GetAllLedgersForInvoice(this.prepareQueryParamsForLedgerApi(), this.prepareModelForLedgerApi()));
@@ -733,7 +701,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public resetDateSearch() {
         this.ledgerSearchRequest.dateRange = this.universalDate;
         if (this.universalDate) {
-            this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate() };
+            this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(), endDate: moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate() };
             this.isUniversalDateApplicable = true;
         }
         this.getLedgersOfInvoice();
@@ -741,7 +709,12 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.detectChanges();
     }
 
-    public toggleBodyClass() {
+    /**
+     * Add remove fixed class on body tag
+     *
+     * @memberof InvoiceGenerateComponent
+     */
+    public toggleBodyClass(): void {
         if (this.showEditMode) {
             document.querySelector('body').classList.add('fixed');
         } else {
