@@ -73,9 +73,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     /* Selected range label */
     public selectedRangeLabel: any = "";
     /* Selected from date */
-    public fromDate: string;
+    public fromDate: any;
     /* Selected to date */
-    public toDate: string;
+    public toDate: any;
 
     constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions,
         private _accountService: AccountService,
@@ -133,15 +133,14 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
 
     public ngOnChanges(s: SimpleChanges) {
         if ('advanceSearchRequest' in s && s.advanceSearchRequest.currentValue && s.advanceSearchRequest.currentValue !== s.advanceSearchRequest.previousValue && s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue) {
-            // It may use later if any issue happen in new datepicker
-            // let f: any = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT).toDate();
-            // let t: any = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT).toDate();
-            this.selectedDateRange = { startDate: moment(s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[0]), endDate: moment(s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[1]) };
+            this.fromDate = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT).toDate();
+            this.toDate = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT).toDate();
+            this.selectedDateRange = { startDate: s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[0], endDate: s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[1] };
             this.selectedDateRangeUi = moment(s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-            // if (this.advanceSearchForm) {
-            //     let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
-            //     // bsDaterangepicker.patchValue([f, t]);
-            // }
+            if (this.advanceSearchForm) {
+                let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
+                bsDaterangepicker.patchValue(this.selectedDateRangeUi);
+            }
         }
     }
 
@@ -252,6 +251,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      */
     public onSearch() {
         this.advanceSearchRequest.dataToSend = this.advanceSearchForm.value;
+        if (this.advanceSearchRequest.dataToSend && typeof this.advanceSearchRequest.dataToSend.bsRangeValue === 'string') {
+            this.advanceSearchRequest.dataToSend.bsRangeValue = [this.fromDate, this.toDate];
+        }
         this.closeModelEvent.emit({ advanceSearchData: this.advanceSearchRequest, isClose: false });
     }
 
@@ -474,11 +476,15 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.startDate) };
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-            let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
+            if (this.advanceSearchForm) {
+                this.fromDate = moment(value.startDate, GIDDH_DATE_FORMAT).toDate();
+                this.toDate = moment(value.endDate, GIDDH_DATE_FORMAT).toDate();
+                let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
+                bsDaterangepicker.patchValue([this.fromDate, this.toDate]);
+
+            }
         }
     }
 }
