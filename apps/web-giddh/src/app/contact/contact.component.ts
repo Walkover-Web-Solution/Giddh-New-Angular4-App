@@ -1111,7 +1111,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
             }
         });
-    }s
+    }
 
     private setTableColspan() {
         let balancesColsArr = ['openingBalance'];
