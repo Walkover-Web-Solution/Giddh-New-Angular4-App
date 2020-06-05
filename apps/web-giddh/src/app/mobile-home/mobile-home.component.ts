@@ -1,6 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef, HostListener, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { CommandKRequest } from '../models/api-models/Common';
-import { Subject, ReplaySubject, of as observableOf } from 'rxjs';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Subject, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
 import { GeneralService } from '../services/general.service';
@@ -14,32 +13,47 @@ import { BACKSPACE } from '@angular/cdk/keycodes';
     selector: 'mobile-home',
     templateUrl: './mobile-home.component.html',
     styleUrls: ['./mobile-home.component.scss']
-
 })
 
 export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
-    @ViewChild('searchEle') public searchEle: ElementRef;
+    @ViewChild('searchElement') public searchElement: ElementRef;
+    @ViewChild('mobileHomeView') public mobileHomeView: ElementRef;
 
+    /* This will make sure if load more is possible */
     public allowLoadMore: boolean = false;
+    /* This will check if api call is in progress */
     public isLoading: boolean = false;
+    /* This will store the company unique name */
     public activeCompanyUniqueName: any = '';
-    public commandKRequestParams: CommandKRequest = {
+    /* Object to send filters to api call */
+    public commandKRequestParams: any = {
         page: 1,
         q: '',
         group: '',
-        totalPages: 1
+        totalPages: 1,
+        isMobile: true
     };
-    public visibleItems: number = 10;
+    /* This will have list of menus/groups/accounts */
     public searchedItems: any[] = [];
+    /* This will have list of searched groups */
     public listOfSelectedGroups: any[] = [];
+    /* This will hold if results are available or not */
     public noResultsFound: boolean = false;
+    /* This will hold if results have menus in it */
     public hasMenus: boolean = false;
+    /* This will hold if results have accounts in it */
     public hasAccounts: boolean = false;
+    /* This will hold if results have groups in it */
     public hasGroups: boolean = false;
+    /* This will hold company initials */
     public companyInitials: any = '';
+    /* This will hold the search string */
     public searchString: any = "";
+    /* Observable for load more */
     public scrollSubject$: Subject<any> = new Subject();
+    /* Observable for search */
     private searchSubject: Subject<string> = new Subject();
+    /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private generalService: GeneralService, private commandKService: CommandKService, private cdref: ChangeDetectorRef, private router: Router) {
@@ -199,8 +213,8 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof MobileHomeComponent
      */
     public focusInSearchBox(e?: KeyboardEvent): void {
-        if (this.searchEle) {
-            this.searchEle.nativeElement.focus();
+        if (this.searchElement) {
+            this.searchElement.nativeElement.focus();
         }
     }
 
@@ -274,7 +288,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             this.listOfSelectedGroups.push(item);
             this.searchString = "";
-            this.searchEle.nativeElement.value = null;
+            this.searchElement.nativeElement.value = null;
 
             this.focusInSearchBox();
             this.searchCommandK(true);
@@ -291,7 +305,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public clearSearch(): void {
         this.searchString = "";
-        this.searchEle.nativeElement.value = null;
+        this.searchElement.nativeElement.value = null;
         this.searchSubject.next("");
         this.listOfSelectedGroups = [];
     }
@@ -305,7 +319,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public handleKeydown(e: any): void {
         let key = e.which || e.keyCode;
 
-        if (key === BACKSPACE && !this.searchEle.nativeElement.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
+        if (key === BACKSPACE && !this.searchElement.nativeElement.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
             this.removeItemFromSelectedGroups();
         }
     }
@@ -317,11 +331,12 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof MobileHomeComponent
      */
     public loadMoreModules(event: any): void {
-        console.log(event);
         if (event.deltaY < 0) {
             this.scrollSubject$.next("top");
         } else {
-            this.scrollSubject$.next("bottom");
+            if (this.mobileHomeView.nativeElement.offsetHeight + this.mobileHomeView.nativeElement.scrollTop >= (this.mobileHomeView.nativeElement.scrollHeight - 200)) {
+                this.scrollSubject$.next("bottom");
+            }
         }
     }
 }

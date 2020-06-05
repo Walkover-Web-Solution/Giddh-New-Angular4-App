@@ -16,7 +16,7 @@
                         </ng-container>
                     </span>
                 </span>
-                <input type="text" #searchEle class="form-control" [(ngModel)]="searchString" placeholder="Search" aria-describedby="" (keyup)="initSearch($event, $event.target.value)" (keydown)="handleKeydown($event)">
+                <input type="text" #searchElement class="form-control" [(ngModel)]="searchString" placeholder="Search" aria-describedby="" (keyup)="initSearch($event, $event.target.value)" (keydown)="handleKeydown($event)">
             </div> 
             <span class="close-addon">
                 <i class="icon-cross" *ngIf="searchString || (listOfSelectedGroups && listOfSelectedGroups.length > 0)" (click)="clearSearch() "></i>    
@@ -24,7 +24,7 @@
         </div>
     </div>
 </div>
-<div class="mobile-home-view" (mousewheel)="loadMoreModules($event)" (touchmove)="loadMoreModules($event)">
+<div class="mobile-home-view" #mobileHomeView (mousewheel)="loadMoreModules($event)" (touchmove)="loadMoreModules($event)">
     <div class="mobile-item-wrapper clearfix" *ngIf="hasMenus">
         <div class="mobile-single-item" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn" [hidden]="item.type !== 'MENU'">
             <div class="single-item-wrapper" *ngIf="item.type === 'MENU'" (click)="itemSelected(item)">
@@ -41,7 +41,7 @@
         <div class="search-groups" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn" [hidden]="item.type !== 'GROUP'">
             <div class="single-search-group" *ngIf="item.type === 'GROUP'" (click)="itemSelected(item)">
                 <div class="group-icon">
-                    <img *ngIf="item?.icon" src="../../assets/images/mobile-home-icon/{{item.icon}}">
+                    <img src="../../assets/images/mobile-home-icon/customer-group.svg">
                 </div>
                 <div class="group-name">
                     <h4>{{item.name}}</h4>
