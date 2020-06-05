@@ -21,8 +21,8 @@ import { GeneralService } from '../../../services/general.service';
 })
 
 export class TotalOverduesChartComponent implements OnInit, OnDestroy {
-@ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
-     /* This will store if device is mobile or not */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /* This will store modal reference */
     public modalRef: BsModalRef;
@@ -32,11 +32,11 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
     public datePickerOptions: any;
-     /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = {x: 0, y: 0};
-     /* Selected range label */
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /* Selected range label */
     public selectedRangeLabel: any = "";
-     /* Selected from date */
+    /* Selected from date */
     public fromDate: string;
     /* Selected to date */
     public toDate: string;
@@ -62,9 +62,9 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public toRequest: any = { from: '', to: '', refresh: false };
 
     constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe,
-     private cdRef: ChangeDetectorRef,
-     private modalService: BsModalService,
-     private generalService: GeneralService) {
+        private cdRef: ChangeDetectorRef,
+        private modalService: BsModalService,
+        private generalService: GeneralService) {
         this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
         this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -84,7 +84,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
             }
         });
         // img path
-        this.imgPath = (isElectron||isCordova)  ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         // listen for universal date
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
@@ -94,14 +94,14 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
                 this.getFilterDate(dates);
             }
         });
-         /* This will get the date range picker configurations */
+        /* This will get the date range picker configurations */
         this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
             if (config) {
                 this.datePickerOptions = config;
             }
         });
 
-           /* Observer to store universal from/to date */
+        /* Observer to store universal from/to date */
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
@@ -232,7 +232,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
      *
      * @memberof TotalOverduesChartComponent
      */
-    public checkPayableAndReceivable() : void {
+    public checkPayableAndReceivable(): void {
         if (this.totalRecievable === 0 && this.totalPayable === 0) {
             this.resetChartData();
         } else {
@@ -251,7 +251,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
             if (response && response.status === 'success' && response.body && response.body[0]) {
                 this.dataFound = true;
 
-                if(group === "sundrycreditors") {
+                if (group === "sundrycreditors") {
                     this.sundryCreditorResponse = response.body[0];
                     this.totalPayable = this.sundryCreditorResponse.closingBalance.amount;
                     this.PaybaleDurationAmt = this.sundryCreditorResponse.creditTotal - this.sundryCreditorResponse.debitTotal;
@@ -266,13 +266,13 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         });
     }
 
-     /**
-     * This will show the datepicker
-     *
-     * @memberof TotalOverduesChartComponent
-     */
+    /**
+    * This will show the datepicker
+    *
+    * @memberof TotalOverduesChartComponent
+    */
     public showGiddhDatepicker(element: any): void {
-        if(element) {
+        if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
         }
         this.modalRef = this.modalService.show(
@@ -290,12 +290,12 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         this.modalRef.hide();
     }
 
-  /**
-     * Call back function for date/range selection in datepicker
-     *
-     * @param {*} value
-     * @memberof TotalOverduesChartComponent
-     */
+    /**
+       * Call back function for date/range selection in datepicker
+       *
+       * @param {*} value
+       * @memberof TotalOverduesChartComponent
+       */
     public dateSelectedCallback(value: any): void {
         this.selectedRangeLabel = "";
 

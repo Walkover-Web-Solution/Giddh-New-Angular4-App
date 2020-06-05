@@ -56,7 +56,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
     public isDatePickerInitialized: boolean;
 
     constructor(private store: Store<AppState>, private _contactService: ContactService, private cdRef: ChangeDetectorRef, private modalService: BsModalService,
-     private generalService: GeneralService) {
+        private generalService: GeneralService) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil((this.initializeDateWithUniversalDate) ? of(this.isDatePickerInitialized) : this.destroyed$));
@@ -130,8 +130,8 @@ export class CrDrComponent implements OnInit, OnDestroy {
                     //     chosenLabel: "Custom range"
                     // };
 
-                      this.selectedDateRange = { startDate: moment(this.apiFromDate), endDate: moment(this.apiToDate) };
-                this.selectedDateRangeUi = moment(this.apiFromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.apiToDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.selectedDateRange = { startDate: moment(this.apiFromDate), endDate: moment(this.apiToDate) };
+                    this.selectedDateRangeUi = moment(this.apiFromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.apiToDate).format(GIDDH_NEW_DATE_FORMAT_UI);
                     this.fromDate = moment(this.apiFromDate).format(GIDDH_DATE_FORMAT);
                     this.toDate = moment(this.apiToDate).format(GIDDH_DATE_FORMAT);
                 }
@@ -170,13 +170,13 @@ export class CrDrComponent implements OnInit, OnDestroy {
         }
     }
 
-     /**
-     * This will show the datepicker
-     *
-     * @memberof ProfitLossComponent
-     */
+    /**
+    * This will show the datepicker
+    *
+    * @memberof ProfitLossComponent
+    */
     public showGiddhDatepicker(element: any): void {
-        if(element) {
+        if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
         }
         this.modalRef = this.modalService.show(
@@ -184,7 +184,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
             Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
         );
     }
-    /**
+    /**v
     * This will hide the datepicker
     *
     * @memberof ProfitLossComponent
