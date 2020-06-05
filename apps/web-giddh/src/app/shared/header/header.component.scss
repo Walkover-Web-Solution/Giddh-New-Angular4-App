@@ -516,7 +516,7 @@ span.icon-support.dropdown-toggle {
 }
 
 // top header css
-.paddingTopFixed {
+.padding-top-fixed {
     padding-top: 60px;
 }
 
@@ -758,7 +758,7 @@ ul.sub-list {
             }
         }
     }
-    .paddingTopFixed {
+    .padding-top-fixed {
         display: none;
     }
     .nav-left-bar {
@@ -782,6 +782,9 @@ ul.sub-list {
     }
     .nav-left-bar.open .mobile_menu_icon {
         display: flex;
+    }
+    .padding-top-fixed-mobile {
+        padding-top: 92px;
     }
     .upperLayerHeader .open .dropdown-menu {
         background-color: #fff;
