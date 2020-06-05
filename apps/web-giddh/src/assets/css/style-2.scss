@@ -9450,7 +9450,7 @@ ngx-daterangepicker-material {
         padding: 7px 8px;
     }
     .setting-container {
-        margin-top: 15px;
+        margin-top: 20px;
     }
     .hide-lable-on-mobile button {
         margin-top: 0 !important;
@@ -9548,7 +9548,7 @@ ngx-daterangepicker-material {
         top: 90px;
     }
     #setting-tab.user-detail-page .tab-container .nav.nav-tabs {
-        top: 90px;
+        top: 88px;
         z-index: 99;
     }
     .custom-tabs .nav.nav-tabs {
@@ -9689,10 +9689,10 @@ ngx-daterangepicker-material {
         padding-top:90px;
     }
     .page-has-tabs .padding-top-fixed-mobile{
-        padding-top: 130px;
+        padding-top: 130px !important;
     }
     .page-has-tabs.setting-sidebar-open .padding-top-fixed-mobile{
-        padding-top:85px;
+        padding-top:85px !important;
     }
     ngx-daterangepicker-material {
         position: fixed;
@@ -9734,19 +9734,21 @@ ngx-daterangepicker-material {
     }
     .page-has-tabs .invoice-genrate-container, 
     .page-has-tabs .invoice-container,
-    .page-has-tabs .proforma-container
+    .page-has-tabs .proforma-container,
+    .page-has-tabs .proforma-container,
+    .page-has-tabs .recurring-container
     {
-        padding-top: 5px !important;
+        padding-top: 15px !important;
     }
     .page-has-tabs #setting-tab app-invoice-setting .tab-container .nav.nav-tabs,
     .page-has-tabs .search-subscription{
-        margin-top: 5px !important;
+        margin-top: 15px !important;
     }
     .page-has-tabs .recurring-container{
         margin-top: 0px !important;
     }
-    .page-has-tabs .user-detail-page{
-        padding-top: 0 !important;
+    .page-has-tabs .user-detail-page.company-page{
+        padding-top: 15px !important;
     }
     .HW_frame_cont.HW_visible.HW_bottom{
         right: 0 !important;

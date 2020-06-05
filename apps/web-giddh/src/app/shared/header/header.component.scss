@@ -460,6 +460,7 @@ a[vr-item]:focus {
     font-size: 14px;
     border-radius: 2px 0 0 2px;
     display: inline-flex;
+    top:2px;
 }
 
 .not-today .calender-addone {
@@ -498,7 +499,7 @@ span.icon-support.dropdown-toggle {
     height: 32px;
 }
 .date-range-picker{
-    max-width: 150px;
+    max-width: 190px;
 }
 
 .other a {
