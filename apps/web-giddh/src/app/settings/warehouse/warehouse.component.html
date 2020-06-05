@@ -7,62 +7,61 @@
     </div>
 
     <div *ngIf="warehouses?.length" class="warehouse-card-view">
-
-        <div class="mb-15 text-right">
-            <button class="btn btn-pink" (click)="resetOnboardingForm();openCreateWarehouseModal();">
-                + New Warehouse
-            </button>
-        </div>
-
         <div class="row">
-            <div *ngFor="let warehouse of warehouses; index as warehouseIndex" class="col-md-4 col-sm-6 pdR1">
-                <div class="warehouse-card">
-                    <div class="d-flex">
-                        <h3>{{ warehouse.name }}</h3>
-                        <div class="warehouse-options">
-                            <span class="setAsDefault" (click)="setAsDefault(warehouse, warehouseIndex)">
-                                <i *ngIf="warehouse.isDefault" class="icon-favorite-selected"></i>
-                                <i *ngIf="!warehouse.isDefault" class="icon-no-selected"></i>
-                                Set as Default</span>
-                            <div class="btn-group" dropdown>
-                                <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
-                                    aria-controls="dropdown-basic">
-                                    <span class="icon-dots-three-vertical"></span>
-                                </button>
-                                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
-                                    aria-labelledby="button-basic">
-                                    <li role="menuitem" (click)="editWarehouse(warehouse)"><a
-                                            class="dropdown-item warehouse-options">Edit</a>
-                                    </li>
-                                </ul>
+            <div class="mb-15 col-sm-12 text-right mr-0">
+                <button class="btn btn-pink" (click)="resetOnboardingForm();openCreateWarehouseModal();">
+                    + New Warehouse
+                </button>
+            </div>
+        </div>
+        <div class="row">
+                <div *ngFor="let warehouse of warehouses; index as warehouseIndex" class="col-md-4 col-sm-6">
+                    <div class="warehouse-card">
+                        <div class="d-flex">
+                            <h3>{{ warehouse.name }}</h3>
+                            <div class="warehouse-options">
+                                <span class="setAsDefault" (click)="setAsDefault(warehouse, warehouseIndex)">
+                                    <i *ngIf="warehouse.isDefault" class="icon-favorite-selected"></i>
+                                    <i *ngIf="!warehouse.isDefault" class="icon-no-selected"></i>
+                                    Set as Default</span>
+                                <div class="btn-group" dropdown>
+                                    <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
+                                        aria-controls="dropdown-basic">
+                                        <span class="icon-dots-three-vertical"></span>
+                                    </button>
+                                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                                        aria-labelledby="button-basic">
+                                        <li role="menuitem" (click)="editWarehouse(warehouse)"><a
+                                                class="dropdown-item warehouse-options">Edit</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="warehouse-details">
+                            <!--
+                                    TODO: Integrate below code once the API is ready
+                                -->
+                            <!--
+                                    <div class="clearfix about-warehaouse">
+                                        <label>Linked with:</label>
+                                        <p>{{warehouse.uniqueName}}</p>
+                                    </div>
+                                -->
+
+                            <!--
+                                    <div class="clearfix about-warehaouse">
+                                        <label>Inventory Value:</label>
+                                        <p>22,000/-</p>
+                                    </div>
+                                -->
+                            <div class="clearfix about-warehaouse">
+                                <label>Address:</label>
+                                <p>{{ warehouse.address }}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="warehouse-details">
-                        <!--
-                                TODO: Integrate below code once the API is ready
-                            -->
-                        <!--
-                                <div class="clearfix about-warehaouse">
-                                    <label>Linked with:</label>
-                                    <p>{{warehouse.uniqueName}}</p>
-                                </div>
-                            -->
-
-                        <!--
-                                <div class="clearfix about-warehaouse">
-                                    <label>Inventory Value:</label>
-                                    <p>22,000/-</p>
-                                </div>
-                            -->
-                        <div class="clearfix about-warehaouse">
-                            <label>Address:</label>
-                            <p>{{ warehouse.address }}</p>
-                        </div>
-                    </div>
                 </div>
-            </div>
-
         </div>
     </div>
     <div class="warehouse-pagination">
