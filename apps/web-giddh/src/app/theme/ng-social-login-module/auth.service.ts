@@ -64,9 +64,8 @@ export class AuthService {
 						this._authState.next(user);
 					});
 				} else {
-					providerObject.initialize();
-					setTimeout(() => {
-						let obj = this.providers.get(providerId);
+					providerObject.initialize().then(() => {
+                        let obj = this.providers.get(providerId);
 						if (obj.isInitialize) {
 							obj.signIn().then((u: SocialUser) => {
 								u.provider = providerId;
@@ -77,7 +76,7 @@ export class AuthService {
 						} else {
 							reject('something went wrong');
 						}
-					}, 1000);
+                    });
 				}
 			} else {
 				reject(AuthService.LOGIN_PROVIDER_NOT_FOUND);
