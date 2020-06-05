@@ -82,7 +82,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public subscribedPlan: SubscriptionsUser;
     public isLedgerAccSelected: boolean = false;
     public asideHelpSupportMenuState: string = 'out';
-    public asideSettingMenuState: string = 'in';
+    public asideSettingMenuState: string = 'out';
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
