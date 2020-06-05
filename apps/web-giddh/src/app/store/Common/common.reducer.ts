@@ -13,7 +13,8 @@ export interface CurrentCommonState {
     currencies: CurrencyResponse[];
     callingcodes: CallingCodesResponse;
     onboardingform: OnboardingFormResponse,
-    partyTypes: IOption[]
+    partyTypes: IOption[],
+    getOnboardingFormInProcess: boolean;
 }
 
 const initialState: CurrentCommonState = {
@@ -22,7 +23,8 @@ const initialState: CurrentCommonState = {
     currencies: null,
     callingcodes: null,
     onboardingform: null,
-    partyTypes: null
+    partyTypes: null,
+    getOnboardingFormInProcess: false
 };
 
 export function CommonReducer(state: CurrentCommonState = initialState, action: CustomActions): CurrentCommonState {
@@ -62,11 +64,17 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
             }
             return Object.assign({}, state, {});
 
+        case CommonActions.GET_ONBOARDING_FORM: {
+              return Object.assign({}, state, {
+                    getOnboardingFormInProcess: true
+                });
+        }
         case CommonActions.GET_ONBOARDING_FORM_RESPONSE:
             let onboardingform: BaseResponse<OnboardingFormResponse, string> = action.payload;
             if (onboardingform.status === 'success') {
                 return Object.assign({}, state, {
-                    onboardingform: onboardingform.body
+                    onboardingform: onboardingform.body,
+                    getOnboardingFormInProcess: false
                 });
             }
             return Object.assign({}, state, {});

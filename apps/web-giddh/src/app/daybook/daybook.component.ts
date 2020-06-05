@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Store, createSelector, select } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { DaybookActions } from 'apps/web-giddh/src/app/actions/daybook/daybook.actions';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -124,10 +124,11 @@ export class DaybookComponent implements OnInit, OnDestroy {
             if (data && data.entries) {
                 this.daybookQueryRequest.page = data.page;
                 data.entries.map(item => {
-                    item.isExpanded = false;
+                    item.isExpanded = this.isAllExpanded;
                 });
                 this.loadPaginationComponent(data);
                 this.daybookData$ = observableOf(data);
+                this.checkIsStockEntryAvailable();
                 this.changeDetectorRef.detectChanges();
             }
         });
@@ -287,6 +288,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
             });
         }
         if (isInventory && entry.isExpanded) {
+            this.isEntryExpanded = true;
+        } else if (isInventory && !entry.isExpanded) {
             this.checkIsStockEntryAvailable();
         }
     }
@@ -298,9 +301,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
      */
     public checkIsStockEntryAvailable(): any {
         this.daybookData$.subscribe(item => {
-            this.isEntryExpanded = item.entries.some(element => {
-                if (element.isExpanded && element.otherTransactions) {
-                    return element.otherTransactions.some(otherTrasaction => {
+            this.isEntryExpanded = item.entries.some(entry => {
+                if (entry.isExpanded && entry.otherTransactions) {
+                    return entry.otherTransactions.some(otherTrasaction => {
                         if (otherTrasaction && otherTrasaction.inventory) {
                             return true;
                         } else {
@@ -313,32 +316,5 @@ export class DaybookComponent implements OnInit, OnDestroy {
             });
         });
     }
-
-    // /** TODO: it is a suggestion may be use later
-    //  * To reset advance search form
-    //  *
-    //  * @memberof DaybookComponent
-    //  */
-    // public resetAdvanceSearch(): void {
-    //     this.showAdvanceSearchIcon = false;
-    //     let universalDate;
-    //     // get application date
-    //     this.universalDate$.pipe(take(1)).subscribe(date => {
-    //         universalDate = date;
-    //     });
-
-    //     // set date picker date as application date
-    //     if (universalDate.length > 1) {
-    //         this.daybookQueryRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-    //         this.daybookQueryRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-    //         this.datePickerOptions = {
-    //             ...this.datePickerOptions,
-    //             startDate: moment(new Date(universalDate[0]), 'DD-MM-YYYY').toDate(),
-    //             endDate: moment(new Date(universalDate[1]), 'DD-MM-YYYY').toDate(),
-    //             chosenLabel: universalDate[2]
-    //         };
-    //     }
-    //      this.go(this.searchFilterData);
-    // }
 }
 

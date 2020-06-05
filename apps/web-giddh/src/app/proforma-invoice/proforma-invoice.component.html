@@ -19,7 +19,7 @@
                         Cash
                     </span>
 
-                    <small *ngIf="invoiceType==='estimates'">(Beta)</small>
+                    <small *ngIf="invoiceType==='estimates'"> (Beta) </small>
                     <span class="caret" *ngIf="!isUpdateMode"></span>
                 </button>
 
@@ -128,7 +128,7 @@
                                                 <!-- endregion -->
 
                                                 <!-- region previous details commented for multicurrency changes-->
-                                                <div class="d-flex cp aquaColor" #copyPreviousEstimate *ngIf="!isPurchaseInvoice && invFormData.voucherDetails.customerName && lastInvoices.length && !isUpdateMode" style="align-items: center;margin-left: 2%">
+                                                <div class="d-flex cp aquaColor" #copyPreviousEstimate *ngIf="!isPurchaseInvoice && !(isPendingVoucherType && isCashInvoice) && invFormData.voucherDetails.customerName && lastInvoices.length && !isUpdateMode" style="align-items: center;margin-left: 2%">
                                                     <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
                                                         <i class="fa fa-files-o"></i> Copy Previous {{ invoiceType | voucherTypeToNamePipe | titlecase}} Invoices
                                                     </a>
@@ -861,8 +861,8 @@
                                     <td class="text-right item-amount" style="height:1px;">
                                         <div class="td_Wrapper">
                                             <div style="flex: 1;">
-                                                <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction)" (click)="transactionAmountClicked(transaction)" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount"
-                                                    decimalDigitsDirective [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
+                                                <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction)" (click)="transactionAmountClicked(transaction)" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount" decimalDigitsDirective
+                                                    [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
                                             </div>
                                             <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                                 <span>{{baseCurrencySymbol}}</span>
@@ -1156,7 +1156,7 @@
                     </div>
 
                     <!--region balance due for non-purchase-->
-                    <div class="tableRow" *ngIf="((isSalesInvoice || isCashInvoice)) && !(!(isAccountHaveAdvanceReceipts || isInvoiceAdjustedWithAdvanceReceipts) && isUpdateMode)">
+                    <div class="tableRow" *ngIf="((isSalesInvoice || isCashInvoice)) && !(isPendingVoucherType && isCashInvoice) && !(!(isAccountHaveAdvanceReceipts || isInvoiceAdjustedWithAdvanceReceipts) && isUpdateMode)">
 
                         <div class="tableCell depositeSection">
 
@@ -1167,7 +1167,7 @@
                                     <ul>
                                         <ng-container *ngIf="isSalesInvoice && (isAccountHaveAdvanceReceipts || isInvoiceAdjustedWithAdvanceReceipts)">
                                             <li role="menuitem" class="mrT1 ">
-                                                <div class="clearfix paymentMode">
+                                                <div class="clearfix paymentMode deposit-payment-mode">
 
                                                     <div class="pull-right balanceDueText">
                                                         <div class="clearfix mb-1 text-left">
@@ -1633,8 +1633,8 @@
 
                                     <label class="card-label text-right">Amount</label>
                                     <div style="flex: 1;">
-                                        <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction)" (click)="transactionAmountClicked(transaction)" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount"
-                                            decimalDigitsDirective [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
+                                        <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction)" (click)="transactionAmountClicked(transaction)" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount" decimalDigitsDirective
+                                            [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
                                     </div>
                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                         <span>{{baseCurrencySymbol}}</span>
@@ -1696,8 +1696,8 @@
                                 <div class="card-total">
                                     <label class="card-label text-right">Total</label>
                                     <div style="flex:1;">
-                                        <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right" (blur)="calculateTransactionValueInclusively(entry, transaction)" [(ngModel)]="transaction.total" decimalDigitsDirective [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
-                                        />
+                                        <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right" (blur)="calculateTransactionValueInclusively(entry, transaction)" [(ngModel)]="transaction.total" decimalDigitsDirective [prefix]="invFormData.accountDetails.currencySymbol"
+                                            [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
 
                                         <div *ngIf="isTcsTdsApplicable" class="wrap-otherTax">
                                             <input type="checkbox" class="other-taxes-checkobx" [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable" name="entry.isOtherTaxApplicable_{{entryIdx}}" id="entry.isOtherTaxApplicable_{{entryIdx}}" (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
@@ -1913,7 +1913,7 @@
 
 
                                 <li role="menuitem" class="mrT1 ">
-                                    <div class="clearfix paymentMode">
+                                    <div class="clearfix paymentMode deposit-payment-mode">
 
                                         <sh-select class="pull-right " name="depositAccountUniqueName" [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
                                             [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
@@ -2004,7 +2004,7 @@
                 <span class="d-inline-block v-align-middle" *ngIf="!isPurchaseInvoice && (!isProformaInvoice  && !isEstimateInvoice)">
 
                                 <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
-                                        class="btn btn-default" *ngIf="isCustomerSelected">Generate
+                                        class="btn btn-default" *ngIf="isCustomerSelected && !isPendingVoucherType">Generate
                                     <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
                                         Cash
                                     </span> &amp; Update A/c
@@ -2113,7 +2113,8 @@
     *ngIf="accountAsideMenuState === 'in'" [selectedAccountUniqueName]="selectedCustomerForDetails" (onShortcutPress)="toggleAccountAsidePane()" (addEvent)="addNewSidebarAccount($event)" (updateEvent)="updateSidebarAccount($event)"></generic-aside-menu-account>
 
 <!--&lt;!&ndash; open product service aside &ndash;&gt;-->
-<aside-menu-product-service *ngIf="asideMenuStateForProductService === 'in'" [class]="asideMenuStateForProductService" [selectedVoucherType]="selectedVoucherType" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="onNoResultsClicked()" (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
+<aside-menu-product-service *ngIf="asideMenuStateForProductService === 'in'" [class]="asideMenuStateForProductService" [selectedVoucherType]="selectedVoucherType" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="onNoResultsClicked()"
+    (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
 
 <app-aside-recurring-entry *ngIf="asideMenuStateForRecurringEntry === 'in'" [voucherType]="invoiceType" [voucherNumber]="voucherNumber" [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry" (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
 <!-- region send email popup -->
