@@ -81,6 +81,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public imgPath: string = '';
     public subscribedPlan: SubscriptionsUser;
     public isLedgerAccSelected: boolean = false;
+    /* This will hold the value out/in to open/close help popup */
+    public asideHelpSupportMenuState: string = 'out';
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideSettingMenuState: string = 'out';
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -253,6 +257,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public dateFieldPosition: any = { x: 0, y: 0 };
     /* This will check if company is allowed to beta test new modules */
     public isAllowedForBetaTesting: boolean = false;
+    /* This will hold value if settings sidebar is open through mobile hamburger icon */
+    public isMobileSidebar: boolean = false;
 
     /**
      *
@@ -307,6 +313,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentState = this.router.url;
                     this.setCurrentAccountNameInHeading();
                 }
+
+                this.addClassInBodyIfPageHasTabs();
             }
         });
 
@@ -696,7 +704,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         this.selectedPlanStatus = res.subscription.status;
                     }
                     this.activeCompany = res;
-                    if(this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
+                    if (this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
                         this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
                     }
                     this.checkIfCompanyTcsTdsApplicable();
@@ -706,6 +714,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngAfterViewInit() {
+        /* TO SHOW NOTIFICATIONS */
+        let scriptTag = document.createElement('script');
+        scriptTag.src = 'https://cdn.headwayapp.co/widget.js';
+        scriptTag.type = 'text/javascript';
+        document.body.appendChild(scriptTag);
+        /* TO SHOW NOTIFICATIONS */
+
         if (this.selectedPlanStatus === 'expired') {// active expired
             this.openExpiredPlanModel(this.expiredPlanModel);
         }
@@ -733,20 +748,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj && dateObj.length) {
                 // if (!this.isDateRangeSelected) {
-                    // this.datePickerOptions.startDate = moment(dateObj[0]);
-                    // this.datePickerOptions.endDate = moment(dateObj[1]);
-                    // this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1]), chosenLabel: dateObj[2]};
-                    this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                    this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                    this.isDateRangeSelected = true;
-                    const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-                    const to: any = moment().format(GIDDH_DATE_FORMAT);
-                    const fromFromStore = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                    const toFromStore = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                // this.datePickerOptions.startDate = moment(dateObj[0]);
+                // this.datePickerOptions.endDate = moment(dateObj[1]);
+                // this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1]), chosenLabel: dateObj[2]};
+                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.isDateRangeSelected = true;
+                const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+                const to: any = moment().format(GIDDH_DATE_FORMAT);
+                const fromFromStore = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                const toFromStore = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
 
-                    if (from === fromFromStore && to === toFromStore) {
-                        this.isTodaysDateSelected = true;
-                    }
+                if (from === fromFromStore && to === toFromStore) {
+                    this.isTodaysDateSelected = true;
+                }
                 // }
                 // let fromForDisplay = moment(dateObj[0]).format('D-MMM-YY');
                 // let toForDisplay = moment(dateObj[1]).format('D-MMM-YY');
@@ -773,6 +788,46 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public handleNewTeamCreationEmitter(e: any) {
         this.modelRef.hide();
         this.showManageGroupsModal();
+    }
+
+    /**
+     * This will toggle the fixed class on body
+     *
+     * @memberof HeaderComponent
+     */
+    public toggleBodyClass(): void {
+        if (this.asideHelpSupportMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
+
+    /**
+     * This will toggle the help popup
+     *
+     * @param {boolean} show
+     * @memberof HeaderComponent
+     */
+    public toggleHelpSupportPane(show: boolean): void {
+        this.asideSettingMenuState = 'out';
+        this.asideHelpSupportMenuState = show ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+
+    /**
+     * This will toggle the settings popup
+     *
+     * @param {boolean} show
+     * @param {boolean} isMobileSidebar
+     * @memberof HeaderComponent
+     */
+    public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
+        this.isMobileSidebar = isMobileSidebar;
+        this.asideHelpSupportMenuState = 'out';
+        this.asideSettingMenuState = show ? 'in' : 'out';
+        this.toggleBodyClass();
+        document.querySelector('body').classList.toggle('mobile-setting-sidebar');
     }
 
     /**
@@ -1607,6 +1662,38 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
     }
 
+    @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+        this.toggleSidebarPane(false, false);
+    }
+
+    /**
+     * This will add the page-has-tabs class to body if the page has tabs
+     *
+     * @memberof HeaderComponent
+     */
+    public addClassInBodyIfPageHasTabs(): void {
+        setTimeout(() => {
+            if (document.getElementsByTagName("tabset") && document.getElementsByTagName("tabset").length > 0) {
+                if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data").length > 0) {
+                    document.querySelector('body').classList.add('on-setting-page');
+                    document.querySelector('body').classList.remove('page-has-tabs');
+                    document.querySelector('body').classList.remove('on-user-page');
+                } else if (document.getElementsByClassName("user-detail-page") && document.getElementsByClassName("user-detail-page").length > 0) {
+                    document.querySelector('body').classList.add('on-user-page');
+                    document.querySelector('body').classList.remove('page-has-tabs');
+                    document.querySelector('body').classList.remove('on-setting-page');
+                } else {
+                    document.querySelector('body').classList.add('page-has-tabs');
+                    document.querySelector('body').classList.remove('on-setting-page');
+                    document.querySelector('body').classList.remove('on-user-page');
+                }
+            } else {
+                document.querySelector('body').classList.remove('page-has-tabs');
+                document.querySelector('body').classList.remove('on-setting-page');
+                document.querySelector('body').classList.remove('on-user-page');
+            }
+        }, 500);
+    }
     /**
    * This will show the datepicker
    *
@@ -1656,5 +1743,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isTodaysDateSelected = false;
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
         }
+    }
+
+    /**
+     * This will navigate user to mobile home page
+     *
+     * @memberof HeaderComponent
+     */
+    public redirectToMobileHome(): void {
+        this.router.navigate(['/pages/mobile-home']);
     }
 }

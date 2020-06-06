@@ -1089,7 +1089,11 @@ export class LoginActions {
         this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
         this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-        this._router.navigate([stateDetail.body.lastState]);
+        if(screen.width <= 767) {
+            this._router.navigate(["/pages/mobile-home"]);
+        } else {
+            this._router.navigate([stateDetail.body.lastState]);
+        }
         if (isElectron || isCordova) {
             window.location.reload();
         }
