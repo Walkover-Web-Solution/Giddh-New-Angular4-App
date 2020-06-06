@@ -807,6 +807,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.asideHelpSupportMenuState = 'out';
         this.asideSettingMenuState = show ? 'in' : 'out';
         this.toggleBodyClass();
+        document.querySelector('body').classList.toggle('mobile-setting-sidebar');
     }
 
     /**
@@ -1653,9 +1654,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public addClassInBodyIfPageHasTabs(): void {
         setTimeout(() => {
             if(document.getElementsByTagName("tabset") && document.getElementsByTagName("tabset").length > 0) {
-                document.querySelector('body').classList.add('page-has-tabs');
+                if(document.getElementsByClassName("setting-data")) {
+                    document.querySelector('body').classList.add('on-setting-page');
+                    document.querySelector('body').classList.remove('page-has-tabs');
+                } else {
+                    document.querySelector('body').classList.add('page-has-tabs');
+                    document.querySelector('body').classList.remove('on-setting-page');
+                }
             } else {
                 document.querySelector('body').classList.remove('page-has-tabs');
+                document.querySelector('body').classList.remove('on-setting-page');
             }
         }, 500);
     }

@@ -9694,6 +9694,9 @@ ngx-daterangepicker-material {
     .page-has-tabs.setting-sidebar-open .padding-top-fixed-mobile{
         padding-top:85px !important;
     }
+    .page-has-tabs.on-setting-page .padding-top-fixed-mobile , .on-setting-page .padding-top-fixed-mobile{
+        padding-top: 90px !important;
+    }
     ngx-daterangepicker-material {
         position: fixed;
         top:0 !important;
@@ -9758,6 +9761,22 @@ ngx-daterangepicker-material {
     }
     .setting-sidebar-open .setting-menu-icon{
         display: inline-flex !important;
+    }
+    .setting-data{
+        padding-left: 15px;
+    }
+    .mobile-setting-sidebar{
+        position: relative;
+    }
+    .mobile-setting-sidebar:after {
+        position: absolute;
+        content: '';
+        background-color: rgba(0,0,0,0.5);
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 999;
     }
 }
 @media (max-width: 575px) {
