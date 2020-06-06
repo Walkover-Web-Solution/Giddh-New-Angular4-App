@@ -468,7 +468,7 @@
     </div>
 </div>
 
-<header class="clearfix header-container desktopHeader" [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen }">
+<header class="clearfix header-container desktop-header" [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen }">
     <nav class="navbar ">
         <div class="container-fluid pdT1 pdB1">
             <div class="navbar_header">
@@ -571,7 +571,7 @@
                         <!-- <li [hidden]="isTodaysDateSelected" class="border-none pl-0"> 
                             <button class="btn btn-link" (click)="jumpToToday();">Today</button>
                         </li> -->
-                        <li class="dateRang-picker not-today"  (click)="showGiddhDatepicker($event)" >
+                        <li class="daterang-picker not-today"  (click)="showGiddhDatepicker($event)" >
                             <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)" ></span>
 <!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
                             <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
