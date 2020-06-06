@@ -56,6 +56,8 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public searchString: any = "";
     /* This will hold if user logged in via social account */
     public isLoggedInWithSocialAccount$: Observable<boolean>;
+    /* This will hold the image path */
+    public imgPath: string = '';
     /* Observable for load more */
     public scrollSubject$: Subject<any> = new Subject();
     /* Observable for search */
@@ -82,10 +84,12 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).subscribe(result => {
-            if(!result.matches) {
+            if (!result.matches) {
                 this.router.navigate(["/pages/home"]);
             }
         });
+
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         // listen on input for search
         this.searchSubject.pipe(debounceTime(300)).subscribe(term => {

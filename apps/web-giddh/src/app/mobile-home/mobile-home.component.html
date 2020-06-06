@@ -30,7 +30,7 @@
         <div class="mobile-single-item" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn" [hidden]="item.type !== 'MENU'">
             <div class="single-item-wrapper" *ngIf="item.type === 'MENU'" (click)="itemSelected(item)">
                 <div class="mobile-item-icon">
-                    <img *ngIf="item?.icon" src="../../assets/images/mobile-home-icon/{{item.icon}}">
+                    <img *ngIf="item?.icon" src="{{imgPath}}mobile-home-icon/{{item.icon}}">
                 </div>
                 <div class="mobile-item-name">
                     <h4>{{item.name}}</h4>
@@ -42,7 +42,7 @@
         <div class="search-groups" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn" [hidden]="item.type !== 'GROUP'">
             <div class="single-search-group" *ngIf="item.type === 'GROUP'" (click)="itemSelected(item)">
                 <div class="group-icon">
-                    <img src="../../assets/images/mobile-home-icon/customer-group.svg">
+                    <img src="{{imgPath}}mobile-home-icon/customer-group.svg">
                 </div>
                 <div class="group-name">
                     <h4>{{item.name}}</h4>
