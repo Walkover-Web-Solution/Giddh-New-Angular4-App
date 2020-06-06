@@ -112,6 +112,7 @@
                                     <li role="menuitem" (click)="openEmailDialog();">Email</li>
                                     <li role="menuitem" (click)="openSmsDialog();">SMS</li>
                                     <li role="menuitem" (click)="downloadCSV();">Download CSV</li>
+                                    <li role="menuitem" (click)="openModal(template)">Bulk Payment</li>
                                 </ul>
                             </div>
                         </div>
@@ -866,10 +867,11 @@
                         </td>
 
                         <td data-title="Action" *ngIf="isICICIIntegrated">
-                            <button *ngIf="account.hasBankDetails " class="btn btn-small btn-success "
-                                (click)="openPaymentAside(account)">Pay Now
-                            </button>
-                            <button *ngIf="!account.hasBankDetails " class="btn btn-small btn-success "
+                            <button *ngIf="account.hasBankDetails" 
+                            class="btn btn-small btn-success" (click)="openModal(template)">
+                            Pay Now </button>
+                            <!-- (click)="openPaymentAside(account)" -->
+                            <button *ngIf="!account.hasBankDetails " class="btn btn-small btn-succes "
                                 (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
                             </button>
 
@@ -929,3 +931,8 @@
     </div>
 </ng-template>
 <!-- endregion -->
+
+
+<ng-template #template>
+    <payment-aside></payment-aside>
+</ng-template>

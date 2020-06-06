@@ -1,125 +1,237 @@
-<div class="aside-pane">
-    <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
-    <div class="form-header">
-        <h3 class="aside-title">Payment</h3>
-    </div>
-    <div class="aside-body">
-        <div class="aside-pane-form">
-            <div class="creditors_detail">
-                <p>{{accountDetails?.name}}</p>
-                <div class="contactDetails">
-                    <p class="contactNo">
-                        {{accountDetails?.mobileNo}}
+<div class="modal-header">
+    <h4 class="modal-title pull-left">Payment</h4>
+    <button type="button" class="close pull-right" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+  <div class="modal-body">
+    <div class="clearfix">
+        <div class="row d-flex align-items-center payment-top-form">
+            <div class="col-md-8">
+                <div class="d-flex">
+                    <div class="form-group mr-15">
+                        <label>Select Bank<span class="red-text">*</span></label>
+                        <!-- dropdown is show if multipal bank  -->
+                        <sh-select [options]="selectBank">
+                        </sh-select>
+                        <!-- it will shows if only one bank -->
+                        <input class="form-control" readonly value="SBI Bank">
+                        <p class="mb-1"><small class="text-gray">Bal 12,00,000 dr.</small></p>
+                    </div>
+                    <div class="form-group mr-15">
+                        <label>Total Amount<span class="red-text">*</span></label>
+                    <input type="text" class="form-control" disabled>
+                    </div>
+                    <div class="form-group mr-15">
+                        <label class="relative d-flex">Enter OTP<span class="red-text">*</span>
+                        <small class="resend-btn"><a href="javascript:void();" (click)="reSendOTP()">Resend</a></small>
+                        <!-- make timer dynamic -->
+                        <small class="resend-btn timer-count" hidden><a href="#">0.5</a></small>
+                        </label>
+                    <input type="text" class="form-control" placeholder="Enter OTP" name="OTP" [(ngModel)]="OTP" type="number" maxlength="4">
+                    </div>
+                    <div class="form-group mr-15">
+                        <label class="d-flex"> &nbsp; </label>
+                    <button type="button" class="btn btn-success" (click)="openModalWithClass(template) && modalRef.hide()" >Pay</button>
+                    <button *ngIf="!OTPsent" class="btn btn-success" [disabled]="!mode || amount===0 || remarks === ''" (click)="sendOTP()">Pay
+                        OTP</button>
+                    <button *ngIf="OTPsent" class="btn btn-success" [disabled]="!mode || amount===0 || remarks === ''" (click)="confirmOTP()">Confirm</button>
+                    <button type="button" class="btn btn-primary">Cancel OTP</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <p class="otp-success-msg text-right"> <span>
+                    <img src="../../../assets/images/checked-success.svg">
+                </span>
+                A OTP has been sent to Shubhendra Agrawal</p>
+            </div>
+
+        </div>
+        <div class="selected-bank-details">
+            <!-- loop should in below div -->
+            <div class="mb-2">
+                <div class="account-holder-name">
+                    <p>shalineee Rathore</p>
+                    <p class="text-gray due-amount">
+                        Total Due: 2500
+                    <span class="red-text cursor-pointer"><i class="icon-trash mr-05"></i>Remove</span>
                     </p>
-                    <p>{{accountDetails?.uniqueName}}</p>
-                    <p>{{accountDetails?.addresses[0]?.gstNumber}}</p>
-                    <div class="row mrB1">
-                        <div class="col-sm-6 col-xs-12" *ngIf="countryCode ==='AE'">
-                            <label>Beneficiary Name</label>
-                            <input class="form-control" [value]="accountDetails?.accountBankDetails[0]?.beneficiaryName" type="text" disabled />
-                        </div>
-                        <div class="col-sm-6 col-xs-12" [ngClass]="{'mrT1': countryCode ==='AE'}">
+                </div>
+                <div class="bank-deatils-wrapper">
+                    <div class="readonly-bank-deatils">
+                        <div class="label-value-data">
                             <label>Bank Name</label>
                             <input class="form-control" [value]="accountDetails?.accountBankDetails[0]?.bankName" type="text" disabled />
                         </div>
-                        <div class="col-sm-6 col-xs-12" *ngIf="countryCode ==='AE'">
-                            <div class="form-group">
-                                <label>Branch Name</label>
-                                <input class="form-control" [value]="accountDetails?.accountBankDetails[0]?.branchName" type="text" disabled>
+                        <div  class="label-value-data d-flex">
+                            <div class="mr-1">
+                                <label>Account Number</label>
+                                    <label *ngIf="countryCode ==='IN' ">Account Number</label>
+                                    <label *ngIf="countryCode !=='IN' ">IBAN</label>
+                                    <input class="form-control" [value]="accountDetails?.accountBankDetails[0]?.bankAccountNo" type="text" disabled>
                             </div>
-                        </div>
-                        <div class="col-sm-6 col-xs-12" [ngClass]="{'mrT1': countryCode ==='AE'}">
-                            <div class="form-group">
-                                <label *ngIf="countryCode ==='IN' ">Account Number</label>
-                                <label *ngIf="countryCode !=='IN' ">IBAN</label>
-                                <input class="form-control" [value]="accountDetails?.accountBankDetails[0]?.bankAccountNo" type="text" disabled>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-xs-12" *ngIf="countryCode ==='AE'">
-                            <div class="form-group">
+                            <div>
                                 <label>SWIFT Code/BIC</label>
                                 <input class="form-control" [value]="accountDetails?.accountBankDetails[0]?.swiftCode" type="text" disabled>
                             </div>
-                        </div>
-                        <div class="col-sm-6 col-xs-12" *ngIf="countryCode ==='IN'">
-                            <div class="form-group">
-                                <label>IFSC Code</label>
-                                <input class="form-control" [value]="accountDetails?.accountBankDetails[0]?.ifsc" type="text" disabled>
+
+
+                    </div>
+                    </div>
+                    <div class="amount-remark-section">
+                        <div class="d-flex">
+                            <div class="form-group pr-15">
+                                <label>Amount<span class="text-danger">*</span></label>
+                                <input class="form-control" name="amount" [(ngModel)]="amount" type="number">
+                            </div>
+                            <div class="form-group remark-block">
+                                <label>Remark<span class="text-danger">*</span></label>
+                                <textarea rows="1" autocomplete="off" type="text" class="form-control" placeholder="Remark" [(ngModel)]="remarks" name="remarks"></textarea>
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="row mrB1">
-                        <div class="col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Bank Name</label>
-                                <input class="form-control" [value]="accountDetails?.accountBankDetails[0]?.bankName" type="text" disabled>
-                            </div>
-                        </div>
-                    </div> -->
-                </div>
-            </div>
-            <div>
-                <div>
-                    <div class="accountDetils">
-                        <div class="selectMode">
-                            <form #paymentForm="ngForm" autocomplete="off">
-                                <div class="row mrB2">
-                                    <div class="col-sm-6 col-xs-12">
-                                        <div class="form-group custom-select pos-rel">
-                                            <label>Select Mode<span class="text-danger">*</span></label>
-                                            <div dropdown>
-                                                <select class="form-control" [disabled]="OTPsent" [(ngModel)]="mode" name="mode" id="mode">
-                                                    <option *ngFor="let account of registeredAccounts"
-                                                        [ngValue]="account">
-                                                        {{account.bank}}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3 col-xs-12">
-                                        <div class="form-group">
-                                            <label>Amount<span class="text-danger">*</span></label>
-                                            <input class="form-control" name="amount" [(ngModel)]="amount" type="number">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mrB2">
-                                    <div class="form-group">
-                                        <div class="col-sm-9 col-xs-12">
-                                            <label>Remark<span class="text-danger">*</span></label>
-                                            <textarea rows="5" autocomplete="off" type="text" class="form-control" placeholder="Remark" [(ngModel)]="remarks" name="remarks"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mrB1" *ngIf="OTPsent">
-                                    <div class="col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label>Enter OTP</label>
-                                            <input class="form-control" name="OTP" [(ngModel)]="OTP" type="number" maxlength="4">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label> </label>
-                                            <div style="margin-top: 15px; cursor: pointer"><a (click)="reSendOTP()">Resend
-                                                    OTP</a></div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <button *ngIf="!OTPsent" class="btn btn-success" [disabled]="!mode || amount===0 || remarks === ''" (click)="sendOTP()">Send
-                                            OTP</button>
-                                        <button *ngIf="OTPsent" class="btn btn-success" [disabled]="!mode || amount===0 || remarks === ''" (click)="confirmOTP()">Confirm</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
+
+        <!-- <div class="creditors_detail">
+            <p>{{accountDetails?.name}}</p>
+            <div class="contactDetails">
+                <p class="contactNo">
+                    {{accountDetails?.mobileNo}}
+                </p>
+                <p>{{accountDetails?.uniqueName}}</p>
+                <p>{{accountDetails?.addresses[0]?.gstNumber}}</p>
+                <div class="row mrB1">
+                    <div class="col-sm-6 col-xs-12" *ngIf="countryCode ==='AE'">
+                        <label>Beneficiary Name</label>
+                        <input class="form-control" [value]="accountDetails?.accountBankDetails[0]?.beneficiaryName" type="text" disabled />
+                    </div>
+                    <div class="col-sm-6 col-xs-12" [ngClass]="{'mrT1': countryCode ==='AE'}">
+                        <label>Bank Name</label>
+                        <input class="form-control" [value]="accountDetails?.accountBankDetails[0]?.bankName" type="text" disabled />
+                    </div>
+                    <div class="col-sm-6 col-xs-12" *ngIf="countryCode ==='AE'">
+                        <div class="form-group">
+                            <label>Branch Name</label>
+                            <input class="form-control" [value]="accountDetails?.accountBankDetails[0]?.branchName" type="text" disabled>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-12" [ngClass]="{'mrT1': countryCode ==='AE'}">
+                        <div class="form-group">
+                            <label *ngIf="countryCode ==='IN' ">Account Number</label>
+                            <label *ngIf="countryCode !=='IN' ">IBAN</label>
+                            <input class="form-control" [value]="accountDetails?.accountBankDetails[0]?.bankAccountNo" type="text" disabled>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-12" *ngIf="countryCode ==='AE'">
+                        <div class="form-group">
+                            <label>SWIFT Code/BIC</label>
+                            <input class="form-control" [value]="accountDetails?.accountBankDetails[0]?.swiftCode" type="text" disabled>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-12" *ngIf="countryCode ==='IN'">
+                        <div class="form-group">
+                            <label>IFSC Code</label>
+                            <input class="form-control" [value]="accountDetails?.accountBankDetails[0]?.ifsc" type="text" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mrB1">
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <label>Bank Name</label>
+                            <input class="form-control" [value]="accountDetails?.accountBankDetails[0]?.bankName" type="text" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- <div>
+            <div>
+                <div class="accountDetils">
+                    <div class="selectMode">
+                        <form #paymentForm="ngForm" autocomplete="off">
+                            <div class="row mrB2">
+                                <div class="col-sm-6 col-xs-12">
+                                    <div class="form-group custom-select pos-rel">
+                                        <label>Select Mode<span class="text-danger">*</span></label>
+                                        <div dropdown>
+                                            <select class="form-control" [disabled]="OTPsent" [(ngModel)]="mode" name="mode" id="mode">
+                                                <option *ngFor="let account of registeredAccounts"
+                                                    [ngValue]="account">
+                                                    {{account.bank}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-12">
+                                    <div class="form-group">
+                                        <label>Amount<span class="text-danger">*</span></label>
+                                        <input class="form-control" name="amount" [(ngModel)]="amount" type="number">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mrB2">
+                                <div class="form-group">
+                                    <div class="col-sm-9 col-xs-12">
+                                        <label>Remark<span class="text-danger">*</span></label>
+                                        <textarea rows="5" autocomplete="off" type="text" class="form-control" placeholder="Remark" [(ngModel)]="remarks" name="remarks"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mrB1" *ngIf="OTPsent">
+                                <div class="col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label>Enter OTP</label>
+                                        <input class="form-control" name="OTP" [(ngModel)]="OTP" type="number" maxlength="4">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label> </label>
+                                        <div style="margin-top: 15px; cursor: pointer"><a (click)="reSendOTP()">Resend
+                                                OTP</a></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button *ngIf="!OTPsent" class="btn btn-success" [disabled]="!mode || amount===0 || remarks === ''" (click)="sendOTP()">Send
+                                        OTP</button>
+                                    <button *ngIf="OTPsent" class="btn btn-success" [disabled]="!mode || amount===0 || remarks === ''" (click)="confirmOTP()">Confirm</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div> -->
     </div>
+  </div>
+
+  <ng-template #template>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Payment Status</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="Payment-img">
+            <img src="../../../assets/images/payment-succes.svg">
+        </div>
+        <h4>Payment proceed</h4>
+        <p>Status of all payments will be mailed shortly.</p>
+        <button class="btn btn-success">Done</button>
+    </div>
+  </ng-template>
+
+    <!-- <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+  -->
+  
+  <!-- (click)="modalRef.hide()" -->

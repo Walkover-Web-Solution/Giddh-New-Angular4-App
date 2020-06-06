@@ -12,7 +12,8 @@ import {
     OnDestroy,
     OnInit,
     SimpleChanges,
-    ViewChild
+    ViewChild,
+    TemplateRef 
 } from '@angular/core';
 import {select, Store} from '@ngrx/store';
 import {AppState} from '../store';
@@ -23,7 +24,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {IOption} from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import {DashboardService} from '../services/dashboard.service';
 import {ContactService} from '../services/contact.service';
-import {BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent, TabsetComponent} from 'ngx-bootstrap';
+import {BsDropdownDirective, BsModalService, ModalDirective, ModalOptions, PaginationComponent, TabsetComponent, BsModalRef } from 'ngx-bootstrap';
 import {CashfreeClass} from '../models/api-models/SettingsIntegraion';
 import {IFlattenAccountsResultItem} from '../models/interfaces/flattenAccountsResultItem.interface';
 import {SettingsIntegrationActions} from '../actions/settings/settings.integration.action';
@@ -224,8 +225,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     /** Selected company */
     private selectedCompany: any;
     public universalDate: any;
-
+    modalRef: BsModalRef;
     constructor(
+        private modalService: BsModalService,
         private store: Store<AppState>,
         private _toasty: ToasterService,
         private router: Router,
@@ -280,7 +282,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         }), takeUntil(this.destroyed$)).subscribe();
         this.store.dispatch(this._companyActions.getAllRegistrations());
     }
-
+    openModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(template,
+            Object.assign({}, { class: 'payment-modal modal-lg' })    
+        );
+    }
     public sort(key, ord = 'asc') {
         this.key = key;
         this.order = ord;

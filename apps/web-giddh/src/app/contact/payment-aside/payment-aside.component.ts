@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output,TemplateRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AccountsAction } from '../../actions/accounts.actions';
@@ -11,7 +11,8 @@ import { CompanyService } from "../../services/companyService.service";
 import { BankTransferRequest } from "../../models/api-models/Company";
 import { IRegistration } from "../../models/interfaces/registration.interface";
 import { ToasterService } from "../../services/toaster.service";
-
+import {IOption} from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 @Component({
     selector: 'payment-aside',
     templateUrl: './payment-aside.component.html',
@@ -39,6 +40,13 @@ export class PaymentAsideComponent implements OnInit {
     public OTPsent: boolean = false;
     public countryCode: string = '';
 
+    
+    public selectBank: IOption[] = 
+    [{ label: "SBI Bank", value: "1234"}, 
+    { label: "BOI Bank", value: "1235"}, 
+    { label: "BOB Bank", value: "1234"}, 
+    { label: "RBI Bank", value: "1235"} ];
+
     //Event emitter to close the Aside panel
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     //Input current account holders information
@@ -46,7 +54,9 @@ export class PaymentAsideComponent implements OnInit {
     //Variable holding OTP received by user
     public OTP: number;
     remarks: string = '';
+    modalRef: BsModalRef;
     constructor(
+        private modalService: BsModalService,
         private store: Store<AppState>,
         private _companyActions: CompanyActions,
         private accountsAction: AccountsAction,
@@ -57,6 +67,13 @@ export class PaymentAsideComponent implements OnInit {
         this.userDetails$.pipe(take(1)).subscribe(p => this.user = p);
         this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
     }
+
+    openModalWithClass(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(
+          template,
+          Object.assign({}, { class: 'payment-success-modal' })
+        );
+      }
 
     public ngOnInit() {
         this.amount = this.selectedAccForPayment.closingBalance.amount;
