@@ -42,7 +42,6 @@ export declare const gapi: any;
 export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public auth2: any;
-
     public smsFormObj: SmsKeyClass = new SmsKeyClass();
     public emailFormObj: EmailKeyClass = new EmailKeyClass();
     public paymentFormObj: PaymentClass = new PaymentClass();
@@ -82,7 +81,22 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public selecetdUpdateIndex: number;
     public isEcommerceShopifyUserVerified: boolean = false;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    public sendOtp: IOption[] = 
+        [
+            { label: "rakesh", value: "1234"}, 
+            { label: "rakesh2", value: "1235"}, 
+            { label: "rakesh", value: "1234"}, 
+            { label: "rakesh3", value: "1235"} 
+        ];
+    public approvalName: IOption[] = 
+        [
+            { label: "rakesh", value: "1234"}, 
+            { label: "rakesh2", value: "1235"}, 
+            { label: "rakesh", value: "1234"}, 
+            { label: "rakesh3", value: "1235"} 
+        ];
 
+        
     constructor(
         private router: Router,
         private store: Store<AppState>,
@@ -220,7 +234,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         // });
 
     }
-
+    
     public ngAfterViewInit() {
         if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
             this.selectTab(this.selectedTabParent);
@@ -244,6 +258,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.razorPayObj.account = { name: null, uniqueName: null };
         this.razorPayObj.autoCapturePayment = true;
     }
+    
 
     public onSubmitMsgform(f: NgForm) {
         if (f.valid) {

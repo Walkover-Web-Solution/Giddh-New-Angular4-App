@@ -1,3 +1,4 @@
+@import "../../../assets/css/color.scss";
 #inlnImg img {
     max-height: 18px;
 }
@@ -9,14 +10,26 @@
 .pdBth20 {
     padding: 0 20px;
 }
-
+.info-icon{
+    i{
+        position: absolute;
+        right: 0;
+        top: 4px;
+        color: $gray;
+    }
+}
 @media(max-width:768px) {
     .empty-label label,
     .empty-label br {
         display: none;
     }
 }
-
+.plus-cross-btn{
+    i{
+        padding: 10px;
+        color: $gray;
+    }
+}
 @media(max-width:767px) {
     #inlnImg {
         margin-top: 0;

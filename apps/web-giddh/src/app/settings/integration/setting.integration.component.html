@@ -384,7 +384,8 @@
             <ng-template tabHeading>
                 <span class="icon-payment"></span> Payment
             </ng-template>
-            <div *ngFor="let regAcc of registeredAccount; let ind=index">
+            <!-- -->
+            <div  *ngFor="let regAcc of registeredAccount; let ind=index">
                 <div class="box clearfix">
                     <div style="clear: both">
                         <h2 style="float: left; font-size: 20px">ICICI Bank</h2>
@@ -419,6 +420,37 @@
                             <br>
                             <sh-select *ngIf="accounts$ && regAcc?.account?.uniqueName" [options]="accounts$ | async" name="accountUniqueName" [defaultValue]="regAcc?.account?.name" [(ngModel)]="regAcc.account.uniqueName" placeholder="Select Account" [ItemHeight]="33" autocomplete="off"></sh-select>
                         </div>
+                    </div>
+                    <!-- Added this new row make it dynamic -->
+                    <div class="row">
+                        <div class="form-group col-sm-3 col-md-2">
+                            <label>Amount Upto <span class="required">*</span></label>
+                            <br>
+                            <!-- add ngclass for error msg , if error msg/same amount here input box border color conver to red -->
+                            <input type="text" placeholder="Enter Amount" class="form-control" disabled/>
+                            <p class="error-msg text-right"></p>
+                        </div>
+                        <div class="form-group col-sm-3 col-md-2">
+                            <label class="d-flex relative info-icon">Select OTP <span class="required">*</span>
+                                <i class="icon-info cursor-pointer" tooltip="Content here.."></i>
+                            </label>
+                            <sh-select [options]="sendOtp">
+                            </sh-select>
+                        </div>
+                        <div class="form-group col-sm-3 col-md-2">
+                            <label class="d-flex relative info-icon">Approval Name <span class="required">*</span>
+                                <i class="icon-info cursor-pointer"  tooltip="Content here.."></i>
+                            </label>
+                            <sh-select [options]="approvalName">
+                            </sh-select>
+                        </div> 
+                        <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0">
+                            <label class="d-flex">&nbsp;</label>
+                            <div class="mt-15">
+                                <i class="icon-cross cursor-pointer"></i>
+                                <i class="icon-plus cursor-pointer"></i>
+                            </div>
+                        </div>  
                     </div>
                     <div class="row">
                         <div class="form-group col-sm-3 col-md-3">
