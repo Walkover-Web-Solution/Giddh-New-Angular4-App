@@ -19,7 +19,6 @@
     "input_tax_rebate": "Input Tax Rebate (coming soon)",
     "advance_receipt": "Advance Receipt",
     "tax_on_advance_receipt": "Tax on Advance Receipt (coming soon)",
-    "particular": "Particular",
     "cumulative": "Cumulative",
     "quantity_rate": "Qty-Rate",
     "transaction_count": "Transaction count",
