@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { Subject, ReplaySubject } from 'rxjs';
+import { Subject, ReplaySubject, Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
 import { GeneralService } from '../services/general.service';
@@ -8,6 +8,9 @@ import { takeUntil, debounceTime } from 'rxjs/operators';
 import { remove } from '../lodash-optimized';
 import { Router } from '@angular/router';
 import { BACKSPACE } from '@angular/cdk/keycodes';
+import { LoginActions } from '../actions/login.action';
+import { AuthService } from '../theme/ng-social-login-module/index';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'mobile-home',
@@ -49,6 +52,8 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public companyInitials: any = '';
     /* This will hold the search string */
     public searchString: any = "";
+    /* This will hold if user logged in via social account */
+    public isLoggedInWithSocialAccount$: Observable<boolean>;
     /* Observable for load more */
     public scrollSubject$: Subject<any> = new Subject();
     /* Observable for search */
@@ -56,12 +61,14 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private generalService: GeneralService, private commandKService: CommandKService, private cdref: ChangeDetectorRef, private router: Router) {
+    constructor(private store: Store<AppState>, private generalService: GeneralService, private commandKService: CommandKService, private cdref: ChangeDetectorRef, private router: Router, private loginAction: LoginActions, private socialAuthService: AuthService, private breakPointObservar: BreakpointObserver) {
         document.querySelector('body').classList.add('mobile-home');
 
         this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$)).subscribe(res => {
             this.activeCompanyUniqueName = res;
         });
+
+        this.isLoggedInWithSocialAccount$ = this.store.select(state => state.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
     }
 
     /**
@@ -70,6 +77,14 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof MobileHomeComponent
      */
     public ngOnInit(): void {
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).subscribe(result => {
+            if(!result.matches) {
+                this.router.navigate(["/pages/home"]);
+            }
+        });
+
         // listen on input for search
         this.searchSubject.pipe(debounceTime(300)).subscribe(term => {
             this.commandKRequestParams.page = 1;
@@ -337,6 +352,38 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
             if (this.mobileHomeView.nativeElement.offsetHeight + this.mobileHomeView.nativeElement.scrollTop >= (this.mobileHomeView.nativeElement.scrollHeight - 200)) {
                 this.scrollSubject$.next("bottom");
             }
+        }
+    }
+
+    /**
+     * This is used for clearing the session of user
+     *
+     * @memberof MobileHomeComponent
+     */
+    public logout(): void {
+        if (isElectron) {
+            this.store.dispatch(this.loginAction.ClearSession());
+        } else if (isCordova) {
+            (window as any).plugins.googleplus.logout(
+                (msg) => {
+                    this.store.dispatch(this.loginAction.ClearSession());
+                }
+            );
+        } else {
+            // check if logged in via social accounts
+            this.isLoggedInWithSocialAccount$.subscribe((val) => {
+                if (val) {
+                    this.socialAuthService.signOut().then(() => {
+                        this.store.dispatch(this.loginAction.ClearSession());
+                        this.store.dispatch(this.loginAction.socialLogoutAttempt());
+                    }).catch((err) => {
+                        this.store.dispatch(this.loginAction.ClearSession());
+                        this.store.dispatch(this.loginAction.socialLogoutAttempt());
+                    });
+                } else {
+                    this.store.dispatch(this.loginAction.ClearSession());
+                }
+            });
         }
     }
 }

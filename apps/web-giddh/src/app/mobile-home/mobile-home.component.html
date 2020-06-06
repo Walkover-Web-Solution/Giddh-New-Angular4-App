@@ -4,7 +4,7 @@
             <p dropdownToggle>{{companyInitials}}</p>
             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
                 role="menu" aria-labelledby="button-basic">
-                <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)">Logout</a></li>
+                <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="logout()">Logout</a></li>
             </ul>
         </div>
         <div class="account-search">
