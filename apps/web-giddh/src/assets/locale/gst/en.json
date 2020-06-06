@@ -288,9 +288,6 @@
     "reverse_charge": "REVERSE CHARGE",
     "taxable_amount": "TAXABLE AMOUNT",
     "total_amount": "TOTAL AMOUNT",
-    "igst": "IGST",
-    "cgst": "CGST",
-    "sgst": "SGST",
     "adjusted_advance_receipt": "Adjusted Advance Receipt",
     "advance_receipt": "Advance Receipt"
 

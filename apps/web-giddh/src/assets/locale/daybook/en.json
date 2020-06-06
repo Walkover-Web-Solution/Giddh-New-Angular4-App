@@ -1,17 +1,9 @@
 {
     "transaction_report": "Transaction Report",
-    "date": "Date",
-    "particular": "Particular",
     "voucher_name": "Vch. Name",
     "voucher_no": "Vch. No.",
     "debit_amount": "Debit Amt",
     "credit_amount": "Credit Amt",
     "product_service": "Product/Service",
-    "qty": "Qty",
-    "unit": "Unit",
-    "rate": "Rate",
-    "hsn_sac": "HSN/SAC",
-    "sku": "SKU",
-    "warehouse": "Warehouse",
-    "transactions": "Transactions"
+    "qty": "Qty"
 }
