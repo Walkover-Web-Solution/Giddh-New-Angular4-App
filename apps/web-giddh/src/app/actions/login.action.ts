@@ -222,10 +222,10 @@ export class LoginActions {
     public loginSuccessByURL$: Observable<Action> = this.actions$
         .ofType(LoginActions.LoginSuccessBYUrl).pipe(
             switchMap((action) => {
-                console.log("YES");
+                console.log("Login Init");
                 return observableZip(this._companyService.getStateDetails(''), this._companyService.CompanyList(), this._companyService.CurrencyList());
             }), map((results: any[]) => {
-                console.log("YES2");
+                console.log("Login Success");
                 /* check if local storage is cleared or not for first time
 				 for application menu set up in localstorage */
 
