@@ -9694,7 +9694,7 @@ ngx-daterangepicker-material {
     .page-has-tabs.setting-sidebar-open .padding-top-fixed-mobile{
         padding-top:85px !important;
     }
-    .page-has-tabs.on-setting-page .padding-top-fixed-mobile , .on-setting-page .padding-top-fixed-mobile{
+   .on-setting-page .padding-top-fixed-mobile{
         padding-top: 90px !important;
     }
     ngx-daterangepicker-material {
@@ -9759,7 +9759,7 @@ ngx-daterangepicker-material {
         max-width: 320px;
         width: 100%;
     }
-    .setting-sidebar-open .setting-menu-icon{
+    .on-setting-page .setting-menu-icon{
         display: inline-flex !important;
     }
     .setting-data{
