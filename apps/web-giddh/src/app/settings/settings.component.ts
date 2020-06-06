@@ -295,7 +295,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public toggleSettingPane(event?): void {
-        console.log("toggleSettingPane");
         this.toggleBodyClass();
 
         if (this.isMobileScreen && event && this.asideSettingMenuState === 'in') {
@@ -312,7 +311,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-        console.log("destroy");
         document.querySelector('body').classList.remove('setting-sidebar-open');
         this.asideSettingMenuState = "out";
         this.destroyed$.next(true);
