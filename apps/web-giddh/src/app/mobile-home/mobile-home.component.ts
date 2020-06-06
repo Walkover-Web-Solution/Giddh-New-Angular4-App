@@ -19,7 +19,9 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 })
 
 export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
+    /* This will hold the object of search field */
     @ViewChild('searchElement') public searchElement: ElementRef;
+    /* This will hold the object of mobile home view element */
     @ViewChild('mobileHomeView') public mobileHomeView: ElementRef;
 
     /* This will make sure if load more is possible */

@@ -30,6 +30,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 })
 export class SettingsComponent implements OnInit, OnDestroy {
     @ViewChild('staticTabs') public staticTabs: TabsetComponent;
+    /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @ViewChild('integrationComponent') public integrationComponent: SettingIntegrationComponent;
     @ViewChild('profileComponent') public profileComponent: SettingProfileComponent;
@@ -52,6 +53,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         return document.activeElement === document.body;
     }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold the value out/in to open/close setting sidebar popup */
     public asideSettingMenuState: string = 'out';
 
     constructor(
@@ -294,6 +296,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This will toggle the settings popup
+     *
+     * @param {*} [event]
+     * @memberof SettingsComponent
+     */
     public toggleSettingPane(event?): void {
         this.toggleBodyClass();
 
@@ -302,7 +310,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
         }
     }
 
-    public toggleBodyClass() {
+    /**
+     * This will toggle the fixed class on body
+     *
+     * @memberof SettingsComponent
+     */
+    public toggleBodyClass(): void {
         if (this.asideSettingMenuState === 'in') {
             document.querySelector('body').classList.add('setting-sidebar-open');
         } else {
@@ -310,7 +323,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
         }
     }
 
-    public ngOnDestroy() {
+    /**
+     * Releases all the observables to avoid memory leaks
+     *
+     * @memberof SettingsComponent
+     */
+    public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('setting-sidebar-open');
         this.asideSettingMenuState = "out";
         this.destroyed$.next(true);
