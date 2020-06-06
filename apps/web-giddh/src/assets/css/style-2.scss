@@ -9142,6 +9142,14 @@ ngx-daterangepicker-material {
 .date-field{
     flex-direction: column;
 }
+.mobile-home{
+    .padding-top-fixed-mobile, .padding-top-fixed, .desktop-header{
+        display: none;
+    }
+    #content_wrapper{
+        background-color: $lavender;
+    }
+}
 /* responsive */
 @media (max-width: 1440px) {
     .font-xxlarge {

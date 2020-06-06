@@ -1,4 +1,4 @@
-<div class="paddingTopFixed">
+<div class="padding-top-fixed">
     <!--  *ngIf="pageUrl != '/new-user'" -->
     <div class="primary-header">
         <div>
@@ -517,7 +517,7 @@
     </nav>
     <!-- <accounts-side-bar [isRouter]="true" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue' [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar> -->
 </header>
-<div class="padding-top-fixed-mobile"  *ngIf="isMobileSite">
+<div class="padding-top-fixed-mobile">
     <header class="clearfix header-container mobileHeader">
         <nav class="navbar " [ngClass]="{'menu_open':sideMenu.isopen}">
             <div class="container-fluid  mrB1 ">
@@ -623,7 +623,6 @@
         </div>
     </div>
 </div>
-
 <!--add company modal  -->
 <div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog" (onHidden)="onHide()">
     <div class="modal-dialog modal-lg">
@@ -633,7 +632,6 @@
         </div>
     </div>
 </div>
-
 <!--add company new modal  -->
 <div bsModal #addCompanyNewModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog" (onHidden)="onHide()">
     <div class="modal-dialog modal-lg">
@@ -643,7 +641,6 @@
         </div>
     </div>
 </div>
-
 <!--delete company modal  -->
 <div bsModal #deleteCompanyModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -653,7 +650,6 @@
         </div>
     </div>
 </div>
-
 <!--CMD + G modal  -->
 <ng-template #navigationModal>
 
