@@ -134,11 +134,8 @@
     background-color: $lavender;
     display: flex;
     align-items: center;
-    padding: 0 15px;
-    position: fixed;
+    padding: 0 15px;;
     width: 100%;
-    top: 0;
-    left: 0;
     .dropdown-menu{
         border-radius: 10px;
         border: none;
@@ -254,9 +251,6 @@
             white-space: nowrap;
         }
     } 
-}
-.padding-top-70{
-    padding-top: 70px;
 }
 /*responsive*/
 @media(max-width:320px){

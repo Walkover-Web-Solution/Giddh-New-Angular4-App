@@ -1,5 +1,4 @@
-<div class="padding-top-70">
-    <div class="mobile-home-search">
+<div class="mobile-home-search">
         <div class="company-name-alice btn-group" dropdown>
             <p dropdownToggle>{{companyInitials}}</p>
             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
@@ -25,9 +24,7 @@
                 </span>
             </div>
         </div>
-    </div>
 </div>
-
 <div class="mobile-home-view" #mobileHomeView (mousewheel)="loadMoreModules($event)" (touchmove)="loadMoreModules($event)">
     <div class="mobile-item-wrapper clearfix" *ngIf="hasMenus">
         <div class="mobile-single-item" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn" [hidden]="item.type !== 'MENU'">
