@@ -365,5 +365,10 @@
     "app_payment_mode": "Payment Mode",
     "app_select_account": "Select Account",
     "app_invoice_date": "Invoice Date",
-    "app_invoice_number": "Invoice Number"
+    "app_invoice_number": "Invoice Number",
+    "sku": "SKU",
+    "igst": "IGST",
+    "cgst": "CGST",
+    "sgst": "SGST",
+    "particular": "Particular"
 }
