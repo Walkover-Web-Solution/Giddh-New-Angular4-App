@@ -81,6 +81,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public imgPath: string = '';
     public subscribedPlan: SubscriptionsUser;
     public isLedgerAccSelected: boolean = false;
+    public asideHelpSupportMenuState: string = 'out';
+    public asideSettingMenuState: string = 'out';
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -253,6 +255,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public dateFieldPosition: any = { x: 0, y: 0 };
     /* This will check if company is allowed to beta test new modules */
     public isAllowedForBetaTesting: boolean = false;
+    public isMobileSidebar: boolean = false;
 
     /**
      *
@@ -307,6 +310,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentState = this.router.url;
                     this.setCurrentAccountNameInHeading();
                 }
+
+                this.addClassInBodyIfPageHasTabs();
             }
         });
 
@@ -706,6 +711,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngAfterViewInit() {
+        /* TO SHOW NOTIFICATIONS */
+        let scriptTag = document.createElement('script');
+        scriptTag.src = 'https://cdn.headwayapp.co/widget.js';
+        scriptTag.type = 'text/javascript';
+        document.body.appendChild(scriptTag);
+        /* TO SHOW NOTIFICATIONS */
+
         if (this.selectedPlanStatus === 'expired') {// active expired
             this.openExpiredPlanModel(this.expiredPlanModel);
         }
@@ -773,6 +785,29 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public handleNewTeamCreationEmitter(e: any) {
         this.modelRef.hide();
         this.showManageGroupsModal();
+    }
+
+    public toggleBodyClass() {
+        if (this.asideHelpSupportMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } 
+        else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
+
+    public toggleHelpSupportPane(show: boolean): void {
+        this.asideSettingMenuState = 'out';
+        this.asideHelpSupportMenuState = show ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+
+    public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
+        this.isMobileSidebar = isMobileSidebar;
+        this.asideHelpSupportMenuState = 'out';
+        this.asideSettingMenuState = show ? 'in' : 'out';
+        this.toggleBodyClass();
+        document.querySelector('body').classList.toggle('mobile-setting-sidebar');
     }
 
     /**
@@ -1607,6 +1642,38 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
     }
 
+    @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+        this.toggleSidebarPane(false, false);
+    }
+
+    /**
+     * This will add the page-has-tabs class to body if the page has tabs
+     *
+     * @memberof HeaderComponent
+     */
+    public addClassInBodyIfPageHasTabs(): void {
+        setTimeout(() => {
+            if(document.getElementsByTagName("tabset") && document.getElementsByTagName("tabset").length > 0) {
+                if(document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data").length > 0) {
+                    document.querySelector('body').classList.add('on-setting-page');
+                    document.querySelector('body').classList.remove('page-has-tabs');
+                    document.querySelector('body').classList.remove('on-user-page');
+                } else if(document.getElementsByClassName("user-detail-page") && document.getElementsByClassName("user-detail-page").length > 0) {
+                    document.querySelector('body').classList.add('on-user-page');
+                    document.querySelector('body').classList.remove('page-has-tabs');
+                    document.querySelector('body').classList.remove('on-setting-page');
+                } else {
+                    document.querySelector('body').classList.add('page-has-tabs');
+                    document.querySelector('body').classList.remove('on-setting-page');
+                    document.querySelector('body').classList.remove('on-user-page');
+                }
+            } else {
+                document.querySelector('body').classList.remove('page-has-tabs');
+                document.querySelector('body').classList.remove('on-setting-page');
+                document.querySelector('body').classList.remove('on-user-page');
+            }
+        }, 500);
+    }
     /**
    * This will show the datepicker
    *
@@ -1656,5 +1723,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isTodaysDateSelected = false;
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
         }
+    }
+
+    public redirectToMobileHome(): void {
+        this.router.navigate(['/pages/mobile-home']);
     }
 }

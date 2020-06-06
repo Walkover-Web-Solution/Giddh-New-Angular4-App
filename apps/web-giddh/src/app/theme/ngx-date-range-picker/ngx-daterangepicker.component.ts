@@ -1706,6 +1706,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public ngOnDestroy(): void {
+        document.querySelector('body').classList.remove('hide-scroll-body');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

@@ -108,6 +108,13 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
+        if (!this.isCreateAndSwitchCompanyInProcess){
+            document.querySelector('body').classList.add('tabs-page');
+        }
+        else{
+            document.querySelector('body').classList.remove('tabs-page');
+        }
+
         this._route.params.subscribe(params => {
             if (params['type'] && this.activeTab !== params['type']) {
                 this.setStateDetails(params['type']);
@@ -374,7 +381,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
     /**
      * deleteSession
      */
