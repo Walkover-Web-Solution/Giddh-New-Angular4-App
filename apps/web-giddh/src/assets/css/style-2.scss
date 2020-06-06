@@ -9565,7 +9565,7 @@ ngx-daterangepicker-material {
         margin-top: 45px;
     }
     .page-has-tabs .custom-tabs .top-bar {
-        margin-top: 0;
+        margin-top: 15px;
         padding-top: 0;
     }
     .custom-tabs.hide-header .top-bar {
@@ -9682,9 +9682,9 @@ ngx-daterangepicker-material {
     .panel-block .panel-body {
         min-height: auto;
     }
-    .tabs-page .padding-top-fixed-mobile {
-        padding-top: 126px;
-    }
+    // .tabs-page .padding-top-fixed-mobile {
+    //     padding-top: 126px;
+    // }
     .padding-top-fixed-mobile {
         padding-top:90px;
     }
@@ -9759,7 +9759,7 @@ ngx-daterangepicker-material {
         max-width: 320px;
         width: 100%;
     }
-    .on-setting-page .setting-menu-icon{
+    .on-setting-page .setting-menu-icon, .on-user-page .setting-menu-icon{
         display: inline-flex !important;
     }
     .setting-data{
@@ -9767,13 +9767,14 @@ ngx-daterangepicker-material {
     }
     .mobile-setting-sidebar{
         position: relative;
+        overflow-y: hidden;
     }
     .mobile-setting-sidebar:after {
         position: absolute;
         content: '';
         background-color: rgba(0,0,0,0.5);
         width: 100%;
-        height: 100%;
+        height: 100vh;
         top: 0;
         left: 0;
         z-index: 999;
