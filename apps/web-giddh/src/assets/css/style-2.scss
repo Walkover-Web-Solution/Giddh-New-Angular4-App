@@ -9131,7 +9131,7 @@ ngx-daterangepicker-material {
     padding-left: 215px;
 }
 .setting-data{
-    padding-left: 215px;
+    padding-left: 230px;
 }
 .setting-sidebar-open .white-row{
     margin-left: 215px;
@@ -9696,7 +9696,7 @@ ngx-daterangepicker-material {
     .padding-top-fixed-mobile {
         padding-top:90px;
     }
-    .page-has-tabs .padding-top-fixed-mobile{
+    .page-has-tabs .padding-top-fixed-mobile , .on-user-page .padding-top-fixed-mobile{
         padding-top: 130px !important;
     }
     .page-has-tabs.setting-sidebar-open .padding-top-fixed-mobile{
@@ -9752,13 +9752,13 @@ ngx-daterangepicker-material {
         padding-top: 15px !important;
     }
     .page-has-tabs #setting-tab app-invoice-setting .tab-container .nav.nav-tabs,
-    .page-has-tabs .search-subscription{
+    .on-user-page .search-subscription{
         margin-top: 15px !important;
     }
     .page-has-tabs .recurring-container{
         margin-top: 0px !important;
     }
-    .page-has-tabs .user-detail-page.company-page{
+    .on-user-page  .user-detail-page.company-page{
         padding-top: 15px !important;
     }
     .HW_frame_cont.HW_visible.HW_bottom{
