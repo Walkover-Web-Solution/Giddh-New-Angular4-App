@@ -234,7 +234,7 @@
                         <i class="icon-plus"></i> Master
                     </button>
                     <div class="btn-group cp d-inline-block help-setting-icons " dropdown>
-                            <span class="mr-15" (click)="toggleSidebarPane(true)">
+                            <span class="mr-15" (click)="toggleSidebarPane(true, false)">
                                 <img src="{{imgPath}}setting-icon.svg">
                             </span>
                             <span (click)="toggleHelpSupportPane(true)">
@@ -524,12 +524,13 @@
                 <div class="upperLayerHeader">
                     <ul class="nav navbar-nav">
                         <!-- (isOpenChange)="sideBarStateChange($event)" -->
-                        <li class="hamburger_menu cp pull-left" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
-
-                            <button class="btn mrR0" placement="right">
+                        <li class="hamburger_menu cp pull-left">
+                            <button class="btn mrR0" placement="right" (click)="redirectToMobileHome()">
                                 <i class="icon-home-icon"></i>
                             </button>
-                           <span class="setting-menu-icon"  (click)="asideSettingMenuState === 'in'"> <i class="icon-bar"></i> </span>
+                            <span class="setting-menu-icon" (click)="toggleSidebarPane(true, true)"> <i class="icon-bar"></i> </span>
+                        </li>
+                        <li class="hamburger_menu cp pull-left" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
                             <h4 class="inline text-capitalize" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
                                 <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txtLwc">c</span></h4>
 
@@ -931,7 +932,7 @@
 <!-- setting aside pane -->
 <div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'">
     <perfect-scrollbar [scrollIndicators]="true">
-        <aside-setting (closeAsideEvent)="toggleSidebarPane(false)"></aside-setting>
+        <aside-setting [ngClass]="{'setting-sidebar': isMobileSidebar}" (closeAsideEvent)="toggleSidebarPane(false, false)"></aside-setting>
     </perfect-scrollbar>
 </div>
 <ng-template #datepickerTemplate>

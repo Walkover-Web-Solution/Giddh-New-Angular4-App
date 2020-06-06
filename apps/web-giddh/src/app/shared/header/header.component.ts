@@ -255,6 +255,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public dateFieldPosition: any = { x: 0, y: 0 };
     /* This will check if company is allowed to beta test new modules */
     public isAllowedForBetaTesting: boolean = false;
+    public isMobileSidebar: boolean = false;
 
     /**
      *
@@ -793,15 +794,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         else {
             document.querySelector('body').classList.remove('fixed');
         }
-        
     }
+
     public toggleHelpSupportPane(show: boolean): void {
         this.asideSettingMenuState = 'out';
         this.asideHelpSupportMenuState = show ? 'in' : 'out';
         this.toggleBodyClass();
     }
 
-    public toggleSidebarPane(show: boolean): void {
+    public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
+        this.isMobileSidebar = isMobileSidebar;
         this.asideHelpSupportMenuState = 'out';
         this.asideSettingMenuState = show ? 'in' : 'out';
         this.toggleBodyClass();
@@ -1640,7 +1642,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
-        this.toggleSidebarPane(false);
+        this.toggleSidebarPane(false, false);
     }
 
     /**
@@ -1706,5 +1708,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isTodaysDateSelected = false;
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
         }
+    }
+
+    public redirectToMobileHome(): void {
+        this.router.navigate(['/pages/mobile-home']);
     }
 }

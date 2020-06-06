@@ -52,7 +52,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         return document.activeElement === document.body;
     }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public asideSettingMenuState: string = 'in';
+    public asideSettingMenuState: string = 'out';
 
     constructor(
         private store: Store<AppState>,
@@ -83,8 +83,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 this.toggleBodyClass();
             }
         });
-
-        this.toggleSettingPane();
 
         this._route.params.subscribe(params => {
             if (params['type'] && this.activeTab !== params['type'] && params['referrer']) {
@@ -297,6 +295,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public toggleSettingPane(event?): void {
+        console.log("toggleSettingPane");
         this.toggleBodyClass();
 
         if (this.isMobileScreen && event && this.asideSettingMenuState === 'in') {
@@ -313,6 +312,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
+        console.log("destroy");
         document.querySelector('body').classList.remove('setting-sidebar-open');
         this.asideSettingMenuState = "out";
         this.destroyed$.next(true);
