@@ -116,6 +116,10 @@ export interface ILedgersInvoiceResult {
     invoiceNumber?: string;
     hasGenerationErr?: boolean;
     errMsg?: string;
+    accountCurrencySymbol?: string;
+    companyCurrencySymbol?: string;
+    voucherType?: string;
+    totalForCompany?: ITotalItem;
 }
 
 export interface IBulkInvoiceGenerationFalingError {
