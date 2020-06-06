@@ -5,7 +5,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { SalesActions } from '../actions/sales/sales.action';
 import { CompanyActions } from '../actions/company.actions';
-import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
+import { ActivatedRoute, Router, ActivationStart } from '@angular/router';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { SalesService } from '../services/sales.service';
 import { ToasterService } from '../services/toaster.service';
@@ -679,7 +679,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         });
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((event) => {
-            if (event instanceof NavigationStart) {
+            if (event instanceof ActivationStart) {
                 // Unsubscribe the moment user is navigating away from this route
                 // Current implementation causes issue when user navigates to CN & DN with CMD + K
                 // in UPDATE voucher flow as the URLs are the same and only params
