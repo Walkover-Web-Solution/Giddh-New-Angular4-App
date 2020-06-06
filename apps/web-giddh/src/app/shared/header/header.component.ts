@@ -1654,7 +1654,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public addClassInBodyIfPageHasTabs(): void {
         setTimeout(() => {
             if(document.getElementsByTagName("tabset") && document.getElementsByTagName("tabset").length > 0) {
-                if(document.getElementsByClassName("setting-data")) {
+                if(document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data").length > 0) {
                     document.querySelector('body').classList.add('on-setting-page');
                     document.querySelector('body').classList.remove('page-has-tabs');
                 } else {
