@@ -18,6 +18,11 @@
         color: $gray;
     }
 }
+.check-search {
+    position: absolute;
+    right: 10px;
+    top: 18px;
+}
 @media(max-width:768px) {
     .empty-label label,
     .empty-label br {
