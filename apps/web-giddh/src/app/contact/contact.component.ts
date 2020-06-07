@@ -1193,7 +1193,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      */
     public isBankAccountAddedAccount(item: any): boolean {
         if (item) {
-            return item.accountBankDetails && item.accountBankDetail.bankAccountNo ? true : false;
+            return item.accountBankDetails && item.accountBankDetails.bankAccountNo ? true : false;
         } else {
             return false;
         }
