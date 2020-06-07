@@ -410,4 +410,19 @@ export class CompanyService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, ReportsRequestModel>(e, ReportsRequestModel)));
 }
+
+	/**
+     *Get all integrated banks list
+     *
+     * @param {ReportsRequestModel} request
+     * @returns
+     * @memberof CompanyService
+     */
+    public getIntegratedBankInCompany(companyUniqueName: string) {
+    return this._http.get(this.config.apiUrl + COMPANY_API.GET_COMPANY_INTEGRATED_BANK_LIST
+        .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, ReportsRequestModel)));
+}
 }

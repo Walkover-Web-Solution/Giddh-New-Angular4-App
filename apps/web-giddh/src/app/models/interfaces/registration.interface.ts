@@ -12,3 +12,9 @@ export interface IRegistration {
         uniqueName: string
     }
 }
+
+export class IntegartedBankList {
+    urn: string;
+    bankName: string;
+    accountNo: string;
+}

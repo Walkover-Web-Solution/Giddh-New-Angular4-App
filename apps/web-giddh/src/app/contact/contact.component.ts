@@ -1,8 +1,8 @@
-import {CompanyService} from '../services/companyService.service';
-import {BulkEmailRequest} from '../models/api-models/Search';
-import {combineLatest, Observable, of as observableOf, ReplaySubject, Subject} from 'rxjs';
+import { CompanyService } from '../services/companyService.service';
+import { BulkEmailRequest } from '../models/api-models/Search';
+import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
-import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import {
     ChangeDetectorRef,
     Component,
@@ -13,21 +13,21 @@ import {
     OnInit,
     SimpleChanges,
     ViewChild,
-    TemplateRef 
+    TemplateRef
 } from '@angular/core';
-import {select, Store} from '@ngrx/store';
-import {AppState} from '../store';
-import {ToasterService} from '../services/toaster.service';
-import {StateDetailsRequest} from '../models/api-models/Company';
-import {CompanyActions} from '../actions/company.actions';
-import {ActivatedRoute, Router} from '@angular/router';
-import {IOption} from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
-import {DashboardService} from '../services/dashboard.service';
-import {ContactService} from '../services/contact.service';
-import {BsDropdownDirective, BsModalService, ModalDirective, ModalOptions, PaginationComponent, TabsetComponent, BsModalRef } from 'ngx-bootstrap';
-import {CashfreeClass} from '../models/api-models/SettingsIntegraion';
-import {IFlattenAccountsResultItem} from '../models/interfaces/flattenAccountsResultItem.interface';
-import {SettingsIntegrationActions} from '../actions/settings/settings.integration.action';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../store';
+import { ToasterService } from '../services/toaster.service';
+import { StateDetailsRequest } from '../models/api-models/Company';
+import { CompanyActions } from '../actions/company.actions';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
+import { DashboardService } from '../services/dashboard.service';
+import { ContactService } from '../services/contact.service';
+import { BsDropdownDirective, BsModalService, ModalDirective, ModalOptions, PaginationComponent, TabsetComponent, BsModalRef } from 'ngx-bootstrap';
+import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
+import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
+import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
 import * as _ from 'lodash';
 import {
     ContactAdvanceSearchCommonModal,
@@ -36,8 +36,8 @@ import {
     DueAmountReportQueryRequest,
     DueAmountReportResponse
 } from '../models/api-models/Contact';
-import {ElementViewContainerRef} from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import {animate, state, style, transition, trigger} from '@angular/animations';
+import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import * as moment from 'moment/moment';
 import { saveAs } from 'file-saver';
 import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
@@ -50,8 +50,8 @@ import { OnboardingFormRequest } from '../models/api-models/Common';
 import { CommonActions } from '../actions/common.actions';
 
 const CustomerType = [
-    {label: 'Customer', value: 'customer'},
-    {label: 'Vendor', value: 'vendor'}
+    { label: 'Customer', value: 'customer' },
+    { label: 'Vendor', value: 'vendor' }
 ];
 
 export interface PayNowRequest {
@@ -110,7 +110,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public activeAccountDetails: any;
     public allSelectionModel: boolean = false;
     public LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN = 'showTableColumn';
-    public localStorageKeysForFilters = {customer: 'customerFilterStorage', vendor: 'vendorFilterStorage'};
+    public localStorageKeysForFilters = { customer: 'customerFilterStorage', vendor: 'vendorFilterStorage' };
     public isMobileScreen: boolean = false;
     public modalConfig: ModalOptions = {
         animated: true,
@@ -215,6 +215,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public tableColsPan: number = 3;
     /** True, if company country's taxation is supported in Giddh */
     public shouldShowTaxFilter: boolean;
+    /** true if bulk payment model need to open */
+    public isBulkPaymentShow: boolean = false;
+    /** selected account list array */
+    public selectedAccountsList: string[] = [];
 
     private checkboxInfo: any = {
         selectedPage: 1
@@ -225,7 +229,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     /** Selected company */
     private selectedCompany: any;
     public universalDate: any;
-    modalRef: BsModalRef;
+    /** model reference to open/close bulk payment model */
+    public bulkPaymentModalRef: BsModalRef;
     constructor(
         private modalService: BsModalService,
         private store: Store<AppState>,
@@ -252,7 +257,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.store.pipe(select(p => p.company.dateRangePickerConfig), take(2)).subscribe(a => {
             if (a) {
                 this.datePickerOptions = a;
-                if(this.universalDate) {
+                if (this.universalDate) {
                     this.datePickerOptions = {
                         ...this.datePickerOptions, startDate: moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(),
                         endDate: moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate()
@@ -282,9 +287,23 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         }), takeUntil(this.destroyed$)).subscribe();
         this.store.dispatch(this._companyActions.getAllRegistrations());
     }
-    openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template,
-            Object.assign({}, { class: 'payment-modal modal-lg' })    
+
+    /**
+     * To open bulk payment model
+     *
+     * @param {TemplateRef<any>} template template/model hash reference
+     * @memberof ContactComponent
+     */
+    public openBulkPaymentModal(template: TemplateRef<any>, item?: any) {
+        this.isBulkPaymentShow = true;
+        if (item) {
+            if (this.isBankAccountAddedAccount(item)) {
+                this.selectedAccountsList = [];
+                this.selectedAccountsList.push(item);
+            }
+        }
+        this.bulkPaymentModalRef = this.modalService.show(template,
+            Object.assign({}, { class: 'payment-modal modal-lg' })
         );
     }
     public sort(key, ord = 'asc') {
@@ -335,10 +354,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 let accounts: IOption[] = [];
                 let bankAccounts: IOption[] = [];
                 _.forEach(data, (item) => {
-                    accounts.push({label: item.name, value: item.uniqueName});
+                    accounts.push({ label: item.name, value: item.uniqueName });
                     let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
                     if (findBankIndx !== -1) {
-                        bankAccounts.push({label: item.name, value: item.uniqueName});
+                        bankAccounts.push({ label: item.name, value: item.uniqueName });
                     }
                 });
                 this.bankAccounts$ = observableOf(accounts);
@@ -431,6 +450,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public performActions(type: number, account: any, event?: any) {
         this.selectedCheckedContacts = [];
         this.selectedCheckedContacts.push(account.uniqueName);
+        this.selectedAccountsList.push(account);
 
         switch (type) {
             case 0: // go to add and manage
@@ -489,6 +509,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public tabSelected(tabName: 'customer' | 'aging-report' | 'vendor') {
         this.searchStr = '';
         this.selectedCheckedContacts = [];
+        this.selectedAccountsList = [];
         if (tabName !== this.activeTab) {
             this.activeTab = tabName;
             this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, '');
@@ -500,7 +521,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             } else {
                 this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=1`);
             }
-            this.router.navigate(['pages/contact/', tabName], {replaceUrl: true});
+            this.router.navigate(['pages/contact/', tabName], { replaceUrl: true });
         }
     }
 
@@ -608,6 +629,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public pageChanged(event: any): void {
         let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
         this.selectedCheckedContacts = [];
+        this.selectedAccountsList = [];
         this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'true', 20, this.searchStr, this.key, this.order);
     }
 
@@ -838,16 +860,19 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                     m.isSelected = action;
                     return m;
                 });
+                this.selectedAccountsList = this.sundryDebtorsAccounts;
                 this.selectedCheckedContacts = this.sundryDebtorsAccounts.map(m => m.uniqueName);
             } else {
                 this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(m => {
                     m.isSelected = action;
                     return m;
                 });
+                this.selectedAccountsList = this.sundryCreditorsAccounts;
                 this.selectedCheckedContacts = this.sundryCreditorsAccounts.map(m => m.uniqueName);
             }
         } else {
             this.selectedCheckedContacts = [];
+            this.selectedAccountsList = [];
             if (this.activeTab === 'customer') {
                 this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(m => {
                     m.isSelected = action;
@@ -866,24 +891,30 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.advanceSearch.toggle();
     }
 
-    public selectAccount(ev: any, uniqueName: string) {
+    public selectAccount(ev: any, item: any) {
         // this.selectedcus = true;
         if (ev.target.checked) {
-            this.selectedCheckedContacts.push(uniqueName);
+            this.selectedCheckedContacts.push(item.uniqueName);
+            this.selectedAccountsList.push(item);
+            // Note need to remove below
+            this.selectedAccForPayment = item;
             // this.selectCustomer = true;
         } else {
             // this.selectCustomer = false;
-            let itemIndx = this.selectedCheckedContacts.findIndex((item) => item === uniqueName);
+            let itemIndx = this.selectedCheckedContacts.findIndex((element) => element === item.uniqueName);
             this.selectedCheckedContacts.splice(itemIndx, 1);
+            this.selectedAccountsList.splice(itemIndx, 1);
+
 
             if (this.selectedCheckedContacts.length === 0) {
                 this.selectAllCustomer = false;
                 this.selectAllVendor = false;
                 this.selectedWhileHovering = '';
             }
-            // this.lc.selectedTxnUniqueName = null;
-            // this.store.dispatch(this._ledgerActions.DeSelectGivenEntries([uniqueName]));
         }
+        console.log('this.selectedAccountsList', this.selectedAccountsList);
+        console.log('this.selectedCheckedContacts', this.selectedCheckedContacts);
+
     }
 
     public resetAdvanceSearch() {
@@ -1004,7 +1035,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             byteArrays.push(byteArray);
             offset += sliceSize;
         }
-        return new Blob(byteArrays, {type: contentType});
+        return new Blob(byteArrays, { type: contentType });
     }
 
     /**
@@ -1023,7 +1054,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof ContactComponent
      */
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, refresh?: string, count: number = 20, query?: string,
-                        sortBy: string = '', order: string = 'asc'): void {
+        sortBy: string = '', order: string = 'asc'): void {
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : 'false';
         fromDate = (fromDate) ? fromDate : '';
@@ -1129,7 +1160,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     * Register Account navigation
     * */
     private registerAccount() {
-        this.router.navigate(['settings'], {queryParams: {tab: 'integration', tabIndex: 1, subTab: 4}});
+        this.router.navigate(['settings'], { queryParams: { tab: 'integration', tabIndex: 1, subTab: 4 } });
     }
 
     private setStateDetails(url) {
@@ -1141,6 +1172,31 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         stateDetailsRequest.lastState = `contact/${url}`;
 
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+    }
+
+    /**
+     * To close bulk payment model
+     *
+     * @memberof ContactComponent
+     */
+    public closeBulkPaymentModel() {
+        this.isBulkPaymentShow = false;
+        this.bulkPaymentModalRef.hide();
+    }
+
+    /**
+     *To check is bank account details added in account
+     *
+     * @param {*} item account object
+     * @returns {boolean} true if added bank accounts details
+     * @memberof ContactComponent
+     */
+    public isBankAccountAddedAccount(item: any): boolean {
+        if (item) {
+            return item.accountBankDetails && item.accountBankDetail.bankAccountNo ? true : false;
+        } else {
+            return false;
+        }
     }
 
 }
