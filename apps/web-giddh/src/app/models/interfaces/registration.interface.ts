@@ -18,3 +18,17 @@ export class IntegartedBankList {
     bankName: string;
     accountNo: string;
 }
+
+export class GetOTPRequest{
+   bankType: string;
+    bankUrn: string
+    totalAmount: string;
+    transactions: BankTransactionForOTP[];
+}
+
+
+export class BankTransactionForOTP {
+   remarks: string;
+    amount: string
+    vendorUniqueName: string;
+}

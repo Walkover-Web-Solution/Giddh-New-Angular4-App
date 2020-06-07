@@ -9,11 +9,11 @@ import { VerifyEmailResponseModel, VerifyMobileModel } from "../../models/api-mo
 import { AccountResponseV2 } from "../../models/api-models/Account";
 import { CompanyService } from "../../services/companyService.service";
 import { BankTransferRequest } from "../../models/api-models/Company";
-import { IRegistration, IntegartedBankList } from "../../models/interfaces/registration.interface";
+import { IRegistration, IntegartedBankList, BankTransactionForOTP, GetOTPRequest } from "../../models/interfaces/registration.interface";
 import { ToasterService } from "../../services/toaster.service";
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, NgForm, FormBuilder, FormArray, Validators } from '@angular/forms';
 @Component({
     selector: 'payment-aside',
     templateUrl: './payment-aside.component.html',
@@ -41,7 +41,13 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public OTPsent: boolean = false;
     public countryCode: string = '';
     public integartedBankList$: Observable<IntegartedBankList[]>;
+    public requestObjectTogetOTP: GetOTPRequest = {
+        bankType: '',
+        bankUrn: '',
+        totalAmount: '',
+        transactions: []
 
+    };
     /** directive to emit boolean for close model */
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
 
@@ -66,8 +72,11 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public totalSelectedAccountAmount: number;
     public timerOn: boolean = false;
     public isPayclicked: boolean = false;
-    //  public addAccountForm: FormGroup;
+    public selectedBankUrn: any;
+    public countDownTimerRef: any;
+    public addAccountBulkPaymentForm: FormGroup;
     constructor(
+        private formBuilder: FormBuilder,
         private modalService: BsModalService,
         private store: Store<AppState>,
         private _companyActions: CompanyActions,
@@ -96,8 +105,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     }
 
     public ngOnInit() {
-
-        this.amount = this.selectedAccForPayment.closingBalance.amount;
+        this.initializeNewForm();
+        // this.amount = this.selectedAccForPayment.closingBalance.amount;
         // get all registered account
         this.store.dispatch(this._companyActions.getAllRegistrations());
 
@@ -132,14 +141,22 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                     if (item) {
                         item.bankName = item.bankName ? item.bankName : "Dummy bank name for account UI";
                         this.selectIntegratedBankList.push({ label: item.bankName, value: item.urn, additional: item });
-                        this.selectIntegratedBankList.push({ label: item.bankName, value: item.urn, additional: item });
-                        this.selectIntegratedBankList.push({ label: item.bankName, value: item.urn, additional: item });
                     }
-                })
+                });
+                if (bankList.length === 1) {
+                    this.selectBank(bankList[0].urn);
+                }
             }
-        });
 
+        });
+        this.selectedAccForBulkPayment.forEach(item => {
+            this.addAccountTransactionsFormObject(item);
+        });
+        //  this.selectedAccForBulkPayment.map(item => {
+        //    item.remarks = '';
+        // });
         this.getIntegratedBankDetails();
+
     }
 
 
@@ -153,13 +170,13 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         if (changes) {
             if (changes.selectedAccForBulkPayment && changes.selectedAccForBulkPayment.currentValue) {
                 //this.datePickerOptions.startDate = moment(changes.startDate.currentValue, 'DD-MM-YYYY');
-                this.selectedAccForBulkPayment.filter(item => {
-                    return item.hasBankDetails === true && item.accountBankDetails && item.accountBankDetails.bankAccountNo !== '';
+                console.log('selected pre---', this.selectedAccForBulkPayment);
+                this.selectedAccForBulkPayment = this.selectedAccForBulkPayment.filter(item => {
+                    return item.accountBankDetails && item.accountBankDetails.bankAccountNo !== '' && item.accountBankDetails.bankName !== '' && item.accountBankDetails.ifsc !== '';
                 });
-                this.getTotalAmount(this.selectedAccForBulkPayment);
             }
         }
-        console.log('selected', this.selectedAccForBulkPayment, changes);
+        this.getTotalAmount(this.selectedAccForBulkPayment);
     }
 
     /*
@@ -271,7 +288,10 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public selectBank(event): void {
-        console.log(event);
+        this.selectedBankUrn = event;
+        if (event) {
+            this.requestObjectTogetOTP.bankUrn = event;
+        }
     }
 
 
@@ -279,14 +299,48 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.totalSelectedAccountAmount = 0;
         if (selectedAccount && selectedAccount.length) {
             this.totalSelectedAccountAmount = selectedAccount.reduce((prev, cur) => {
-                return prev + cur.closingBalance.amount;
+                console.log(prev);
+                return prev + cur.closingBalanceAmount;
             }, 0);
         }
     }
 
-    public payClicked() {
+    public payClicked(form: NgForm) {
+        console.log(form);
         this.isPayclicked = true;
+        this.prepareRequestObject();
+
+
     }
+
+    public prepareRequestObject() {
+        this.requestObjectTogetOTP.transactions = [];
+        this.requestObjectTogetOTP.totalAmount = String(this.totalSelectedAccountAmount);
+        this.selectedAccForBulkPayment.forEach(item => {
+            let transaction: BankTransactionForOTP = {
+                amount: '',
+                remarks: '',
+                vendorUniqueName: ''
+            };
+            transaction.amount = item.closingBalance.amount;
+            transaction.remarks = item.remarks;
+            transaction.vendorUniqueName = item.uniqueName;
+            this.requestObjectTogetOTP.transactions.push(transaction);
+        });
+        console.log(this.requestObjectTogetOTP);
+    }
+
+    /**
+     * To cancel OTP request and count down timer
+     *
+     * @memberof PaymentAsideComponent
+     */
+    public clickedCancelOtp() {
+        this.isPayclicked = false;
+        this.timerOn = false;
+        clearTimeout(this.countDownTimerRef);
+    }
+
     /**
      * Timer for count down OTP validation API call
      *
@@ -297,7 +351,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public startTimer(remaining: number): any {
         let min: any = Math.floor(remaining / 60);
         let sec: any = remaining % 60;
-
         min = Number(min) < 10 ? '0' + min : Number(min);
         sec = Number(sec) < 10 ? '0' + sec : Number(sec);
         // document.getElementById('timerElement').innerHTML = min + ':' + sec;
@@ -305,7 +358,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         remaining -= 1;
 
         if (remaining >= 0 && this.timerOn) {
-            setTimeout(() => {
+            this.countDownTimerRef = setTimeout(() => {
                 this.startTimer(remaining);
             }, 1000);
             return;
@@ -313,9 +366,54 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
         if (!this.timerOn) {
             console.log('Timer Do validate stuff here');
+            this.timerOn = false;
             return;
         }
         console.log('Time out');
     }
 
+
+    public initializeNewForm() {
+        this.addAccountBulkPaymentForm = this.formBuilder.group({
+            bankType: [''],
+            bankUrn: [''],
+            totalAmount: [''],
+            transactions: this.formBuilder.array([
+                this.formBuilder.group({
+                    remarks: ['', Validators.compose([Validators.required])],
+                    amount: [''],
+                    vendorUniqueName: [''],
+                })
+            ]),
+        });
+    }
+
+
+    public addAccountTransactionsFormObject(value: any) {    // commented code because we no need GSTIN No. to add new address
+        // if (value && !value.startsWith(' ', 0)) {
+        const transactions = this.addAccountBulkPaymentForm.get('transactions') as FormArray;
+        transactions.push(this.initialAccountTransactionsForm(value));
+        return;
+    }
+
+    public initialAccountTransactionsForm(val: any): FormGroup {
+        let transactionsFields = this.formBuilder.group({
+            remarks: ['', Validators.compose([Validators.required])],
+            amount: [''],
+            vendorUniqueName: [''],
+        });
+        if (val) {
+            transactionsFields.get('remarks').patchValue('');
+            transactionsFields.get('amount').patchValue(val.closingBalance.amount);
+            transactionsFields.get('vendorUniqueName').patchValue(val.uniqueName);
+        }
+        return transactionsFields;
+    }
+
+
+    public removeTransactionsDetailsForm(i: number) {
+        const transactions = this.addAccountBulkPaymentForm.get('transactions') as FormArray;
+        transactions.removeAt(i);
+        console.log(this.addAccountBulkPaymentForm);
+    }
 }

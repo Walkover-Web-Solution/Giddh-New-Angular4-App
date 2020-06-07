@@ -1,7 +1,7 @@
 <div class="modal-header">
     <h4 class="modal-title pull-left">Payment</h4>
     <button type="button" class="close pull-right" aria-label="Close" (click)="closePaymentModel()">
-      <span aria-hidden="true">&times;</span>
+        <span aria-hidden="true">&times;</span>
     </button>
 </div>
 <div class="modal-body">
@@ -12,10 +12,18 @@
                     <div class="d-flex">
                         <div class="form-group mr-15">
                             <label>Select Bank<span class="red-text">*</span></label>
-                            <!-- dropdown is show if multipal bank  -->
-                            <!-- <sh-select *ngIf="selectIntegratedBankList.length > 1" [options]="selectIntegratedBankList">
-                        </sh-select> -->
-                            <sh-select *ngIf="selectIntegratedBankList.length > 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankName" class="text-left" name="selectedBankName" required [placeholder]="'Select Bank'" (selected)="selectBank($event);" [multiple]="false">
+                            <sh-select *ngIf="selectIntegratedBankList.length > 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankName" class="text-left" name="bankUrn" required [placeholder]="'Select Bank'" (selected)="selectBank($event);" [multiple]="false">
+                                <ng-template #optionTemplate let-option="option">
+                                    <a href="javascript:void(0)" class="list-item">
+                                        <div class="item">{{option.label}}</div>
+                                        <div class="item_unq">
+                                            <p class="font-12 text-gray mb-0">(Cr: {{option.urn}})
+                                            </p>
+                                        </div>
+                                    </a>
+                                </ng-template>
+                            </sh-select>
+                            <sh-select *ngIf="selectIntegratedBankList.length === 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankUrn" class="text-left" name="bankUrn" required [placeholder]="'Select Bank'" (ngModelChange)="selectBank($event);" [multiple]="false">
                                 <ng-template #optionTemplate let-option="option">
                                     <a href="javascript:void(0)" class="list-item">
                                         <div class="item">{{option.label}}</div>
@@ -27,34 +35,35 @@
                                 </ng-template>
                             </sh-select>
                             <!-- it will shows if only one bank -->
-                            <input *ngIf="selectIntegratedBankList.length === 1" class="form-control" [(ngModel)]="selectedBankName1" name="selectedBankName1" readonly [value]="selectIntegratedBankList[0].bankName">
+                            <!-- <input *ngIf="selectIntegratedBankList.length === 1" class="form-control" [(ngModel)]="selectedBankName" name="bankUrn" readonly [value]="selectIntegratedBankList[0].bankName"> -->
                             <p class="mb-1"><small class="text-gray">Bal 12,00,000 dr.</small></p>
                         </div>
                         <div class="form-group mr-15">
                             <label>Total Amount<span class="red-text">*</span></label>
-                            <input type="text" class="form-control" disabled [(ngModel)]="totalSelectedAccountAmount" name="totalSelectedAccountAmount">
+                            <input type="text" class="form-control" disabled [(ngModel)]="totalSelectedAccountAmount" name="amount">
                         </div>
                         <div class="form-group mr-15" *ngIf="isPayclicked">
                             <label class="relative d-flex">Enter OTP<span class="red-text">*</span>
-                        <small class="resend-btn" *ngIf="!timerOn"><a href="javascript:void();" (click)="reSendOTP()">Resend</a></small>
-                        <!-- make timer dynamic -->
-                        <small class="resend-btn timer-count"  *ngIf="timerOn"><span>{{timerCountDown$ | async}}</span></small>
-                        </label>
+                                <small class="resend-btn" *ngIf="!timerOn"><a href="javascript:void();"
+                                        (click)="reSendOTP()">Resend</a></small>
+                                <!-- make timer dynamic -->
+                                <small class="resend-btn timer-count" *ngIf="timerOn"><a
+                                        href="javascript:void();">{{timerCountDown$ | async}}</a></small>
+                            </label>
                             <input type="text" class="form-control" placeholder="Enter OTP" name="OTP" [(ngModel)]="OTP" type="number" maxlength="4">
                         </div>
                         <div class="form-group mr-15">
                             <label class="d-flex"> &nbsp; </label>
-                            <button type="button" *ngIf="!isPayclicked" class="btn btn-success" (click)="payClicked()">Pay</button>
-                            <button *ngIf="!OTPsent" class="btn btn-success" [disabled]="!mode || amount===0 || remarks === ''" (click)="sendOTP()">Pay OTP</button>
-                            <button *ngIf="isPayclicked" class="btn btn-success" [disabled]="!mode || amount===0 || remarks === ''" (click)="confirmOTP()">Confirm</button>
-                            <button type="button" *ngIf="isPayclicked" class="btn btn-primary">Cancel OTP</button>
+                            <button type="button" class="btn btn-success" [disabled]="!adjustAdvancePaymentForm.form.valid" (click)="payClicked(adjustAdvancePaymentForm)">Pay</button>
+                            <button *ngIf="isPayclicked" class="btn btn-success" [disabled]="!adjustAdvancePaymentForm.form.valid" (click)="confirmOTP()">Confirm</button>
+                            <button type="button" *ngIf="isPayclicked" class="btn btn-primary" (click)="clickedCancelOtp();">Cancel OTP</button>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <p class="otp-success-msg text-right"> <span>
-                    <img src="../../../assets/images/checked-success.svg">
-                </span> A OTP has been sent to Shubhendra Agrawal</p>
+                            <img src="../../../assets/images/checked-success.svg">
+                        </span> A OTP has been sent to Shubhendra Agrawal</p>
                 </div>
 
             </div>
@@ -66,7 +75,8 @@
                             <p>{{item.name}}</p>
                             <p class="text-gray due-amount">
                                 Total Due:{{item.closingBalance.amount}}
-                                <span class="red-text cursor-pointer" (click)="removeSelectedAccount(item)"><i class="icon-trash mr-05"></i>Remove</span>
+                                <span class="red-text cursor-pointer" (click)="removeSelectedAccount(item); removeTransactionsDetailsForm(entryIdx)"><i
+                                        class="icon-trash mr-05"></i>Remove</span>
                             </p>
                         </div>
                         <div class="bank-deatils-wrapper">
@@ -100,17 +110,18 @@
                                 <div class="d-flex">
                                     <div class="form-group pr-15">
                                         <label>Amount<span class="text-danger">*</span></label>
-                                        <input class="form-control" name="closingAmount" required [(ngModel)]="item.closingBalance.amount" type="number">
+                                        <input class="form-control" name="closingBalanceAmount{{entryIdx}}" [disabled]="isPayclicked" required [(ngModel)]="item.closingBalance.amount" type="number">
                                     </div>
                                     <div class="form-group remark-block">
                                         <label>Remark<span class="text-danger">*</span></label>
-                                        <textarea rows="1" autocomplete="off" required type="text" class="form-control" placeholder="Remark" [(ngModel)]="remarks" name="remarks"></textarea>
+                                        <textarea rows="1" name="remark{{entryIdx}}" id="{{entryIdx}}" [(ngModel)]="item.remarks" autocomplete="off" required type="text" class="form-control" placeholder="Remark"></textarea>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </ng-container>
+
 
                 <!-- <div class="creditors_detail">
             <p>{{accountDetails?.name}}</p>
@@ -237,8 +248,8 @@
         <div class="modal-header">
             <h4 class="modal-title pull-left">Payment Status</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="successModalRef.hide()">
-        <span aria-hidden="true">&times;</span>
-      </button>
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
         <div class="modal-body">
             <div class="Payment-img">
