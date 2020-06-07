@@ -443,15 +443,48 @@
                             </label>
                             <sh-select [options]="approvalName">
                             </sh-select>
-                        </div> 
+                        </div>
                         <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0">
                             <label class="d-flex">&nbsp;</label>
                             <div class="mt-15">
-                                <i class="icon-cross cursor-pointer"></i>
-                                <i class="icon-plus cursor-pointer"></i>
+                                <i class="icon-trash cursor-pointer"></i>
                             </div>
-                        </div>  
+                        </div>
                     </div>
+
+                    <div class="row">
+                        <div class="form-group col-sm-3 col-md-2">
+                            <div class="d-flex">
+                                <div class="mr-05">
+                                    <sh-select [options]="approvalName" placeholder="Enter Amount">
+                                    </sh-select>
+                                </div>
+                                <div class="ml-05">
+                                    <sh-select [options]="approvalName" placeholder="Enter Amount">
+                                    </sh-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-3 col-md-2">
+                            <sh-select [options]="sendOtp">
+                            </sh-select>
+                        </div>
+                        <div class="form-group col-sm-3 col-md-2">
+                            <sh-select [options]="approvalName">
+                            </sh-select>
+                        </div>
+                        <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0">
+                            <div class="clearfix">
+                                <i class="icon-trash cursor-pointer d-inline-block"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <a href="javascript:void" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" (click)="openNewRegistartionForm()" class="btn btn-link pl-0">Add More ID</a>
+                    </div>
+
+
                     <div class="row">
                         <div class="form-group col-sm-3 col-md-3">
                             <label>&nbsp;</label>
