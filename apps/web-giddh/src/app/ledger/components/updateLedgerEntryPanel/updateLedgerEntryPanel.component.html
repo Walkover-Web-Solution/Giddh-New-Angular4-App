@@ -32,7 +32,7 @@
     <div class="modal-body" [hidden]="isChangeAcc">
 
         <!-- region transactions -->
-        <div class="ledgHead entry-popup">
+        <div class="ledg-head entry-popup">
 
             <table class="col-xs-12 ledger-head mrT1 hidden-xs">
                 <thead>
@@ -60,7 +60,7 @@
                 </ul>
             </div>
 
-            <div class="ledger_book">
+            <div class="ledger-book">
                 <!-- region debit transaction -->
                 <div class="left-col-new bdrR" [ngClass]="Shown ? 'active' : ''">
 
@@ -144,12 +144,12 @@
                                             <input [disabled]="true" [(ngModel)]="txn.particular.name" class="trxFakeInput" />
                                         </ng-template>
 
-                                        <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile && vm.selectedLedger.attachedFile.length > 0" (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)" [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}">
+                                        <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile && vm.selectedLedger.attachedFile.length > 0 && (txn?.particular?.name || txn?.particular?.uniqueName)" (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)" [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}">
                                             <i class="glyphicon glyphicon-download pull-left"
                                                style="font-size:15px;"></i>
                                         </span>
 
-                                        <span class="download-invoice-ledger " *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length> 0" [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download {{vm.selectedLedger.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{vm.selectedLedger.voucherNumber}}"
+                                        <span class="download-invoice-ledger " *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length> 0 && (txn?.particular?.name || txn?.particular?.uniqueName)" [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download {{vm.selectedLedger.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{vm.selectedLedger.voucherNumber}}"
                                             (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
                                             <i class="glyphicon glyphicon-download pull-left"
                                                style="font-size:15px;"></i>
@@ -291,12 +291,12 @@
                                             <input [disabled]="true" [(ngModel)]="txn.particular.name" class="trxFakeInput" />
                                         </ng-template>
 
-                                        <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0" [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}" (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)">
+                                        <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0 && (txn?.particular?.name || txn?.particular?.uniqueName)" [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}" (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)">
                                             <i class="glyphicon glyphicon-download pull-left"
                                                style="font-size:15px;"></i>
                                         </span>
 
-                                        <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length > 0" [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download {{vm.selectedLedger.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{vm.selectedLedger.voucherNumber}}"
+                                        <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length > 0 && (txn?.particular?.name || txn?.particular?.uniqueName)" [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download {{vm.selectedLedger.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{vm.selectedLedger.voucherNumber}}"
                                             (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
                                             <i class="glyphicon glyphicon-download pull-left"
                                                style="font-size:15px;"></i>
@@ -428,11 +428,13 @@
                         <ng-template [ngIf]="(vm.showNewEntryPanel && vm.stockTrxEntry)">
                             <div class="text-right table-amount">
                                 <label class="font-12">Price</label>
-                                <input type="text" name="" (blur)="vm.inventoryPriceChanged(vm.stockTrxEntry.inventory.rate)" [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" [suffix]="vm.selectedSuffixForCurrency" [rawInputValue]="vm.stockTrxEntry.inventory.rate"
+                                <input type="text" name="unitPrice" (blur)="vm.inventoryPriceChanged(vm.stockTrxEntry.inventory.rate)" [mask]="vm.inputMaskFormat" [customDecimalPlaces]="ratePrecision" [prefix]="vm.selectedPrefixForCurrency" [suffix]="vm.selectedSuffixForCurrency" [rawInputValue]="vm.stockTrxEntry.inventory.rate"
                                     [(ngModel)]="vm.stockTrxEntry.inventory.rate" class="form-control text-right" />
                                 <p class="mb-0 amnt-total" *ngIf="vm.isMultiCurrencyAvailable">
-                                    <ng-container *ngTemplateOutlet="totalWithCurrencySymbol;context: { $implicit: vm.convertedRate }">
-                                    </ng-container>
+                                    <span>
+                                        {{ vm.selectedCurrency === 0 ? vm.foreignCurrencyDetails?.symbol : vm.baseCurrencyDetails?.symbol }} {{ vm.convertedRate |
+                                        giddhCurrency: ratePrecision:true }}
+                                    </span>
                                 </p>
                             </div>
                         </ng-template>

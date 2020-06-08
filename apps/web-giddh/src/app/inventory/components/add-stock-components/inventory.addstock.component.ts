@@ -61,7 +61,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public isStockDeleteInProcess$: Observable<boolean>;
     public showLoadingForStockEditInProcess$: Observable<boolean>;
     public showManufacturingItemsError: boolean = false;
-    public groupsData$: Observable<any[]>;
+    public groupsData$: Observable<any[]> = of([]);
     public selectedGroup: IOption;
     public activeGroup: any;
     public editLinkedStockIdx: any = null;

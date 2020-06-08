@@ -1,12 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { NgxMaskModule } from '../../shared/helpers/directives/ngx-mask';
 import { NgxDaterangepickerComponent } from './ngx-daterangepicker.component';
 import { NgxDaterangepickerDirective } from './ngx-daterangepicker.directive';
 import { LOCALE_CONFIG, LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
+import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { ModalModule } from 'ngx-bootstrap/modal';
+
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+    suppressScrollX: false,
+    suppressScrollY: true
+};
 
 @NgModule({
     declarations: [
@@ -17,9 +23,14 @@ import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.se
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        NgxMaskModule.forRoot()
+        NgxMaskModule.forRoot(),
+        PerfectScrollbarModule,
+        ModalModule
     ],
-    providers: [],
+    providers: [{
+        provide: PERFECT_SCROLLBAR_CONFIG,
+        useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+    }],
     exports: [
         NgxDaterangepickerComponent,
         NgxDaterangepickerDirective
@@ -28,6 +39,7 @@ import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.se
         NgxDaterangepickerComponent
     ]
 })
+
 export class NgxDaterangepickerMd {
     constructor() {
     }

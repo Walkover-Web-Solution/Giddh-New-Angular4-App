@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
 import { select, Store } from '@ngrx/store';
 import { takeUntil, take, single } from 'rxjs/operators';
@@ -24,6 +24,8 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     @Input() public columnarReportExportRequest: ExportLedgerRequest;
     /** Account unique name */
     @Input() public accountUniquename: string;
+    /** directives to emit true if back clicked or API break */
+    @Output() public backClick: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Columnar report table request params object */
     public getColumnarRequestModel: ReportsDetailedRequestFilter;
     /** Columnar table rsponse */
@@ -34,6 +36,8 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     public columnarTableColumn: string[] = [];
     /** Loader for API request */
     public isLoading: boolean = true;
+    /** pagination limit */
+    public paginationLimit: number = PAGINATION_LIMIT;
     /** Subject to destroy all observers  */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -57,7 +61,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     ngOnInit(): void {
         this.getColumnarRequestModel = new ReportsDetailedRequestFilter();
         this.getColumnarRequestModel.page = 1;
-        this.getColumnarRequestModel.count = PAGINATION_LIMIT;
+        this.getColumnarRequestModel.count = this.paginationLimit;
         this.getColumnarReportTable(this.columnarReportExportRequest);
     }
 
@@ -112,6 +116,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
                     }
                 }
             } else {
+                this.backClick.emit(true);
                 this.toaster.errorToast(response.message);
             }
         });

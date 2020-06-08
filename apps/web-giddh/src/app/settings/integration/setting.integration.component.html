@@ -43,7 +43,7 @@
 
 
             <div class="box clearfix mb-2">
-                <h3 class="section_head">Gmail Integration</h3>
+                <h3 class="section-head">Gmail Integration</h3>
                 <div class="d-flex gmail-integration-message">
 
                     <ng-container *ngIf="!(isGmailIntegrated$ | async)">
@@ -107,7 +107,7 @@
             </ng-template>
 
 
-            <!-- <h3 class="section_head mrT2">Invoice PaymentPaymentPayment</h3> -->
+            <!-- <h3 class="section-head mrT2">Invoice PaymentPaymentPayment</h3> -->
             <div class="box clearfix mb-2">
                 <h3 class="fs20 mrB2">Razorpay Details</h3>
                 <form #razorPayform="ngForm" novalidate class="">
@@ -164,7 +164,7 @@
             </div>
 
 
-            <!-- <h3 class="section_head mrT2">Cashfree Integration</h3> -->
+            <!-- <h3 class="section-head mrT2">Cashfree Integration</h3> -->
             <div class="clearfix mb-2">
 
                 <div class="box clearfix mb-2">
@@ -315,7 +315,7 @@
 
 
             <div class="box clearfix">
-                <h3 class="section_head mb-2">Amazon Seller</h3>
+                <h3 class="section-head mb-2">Amazon Seller</h3>
                 <form #formDiv name="amazonSellerForm" [formGroup]="amazonSellerForm" novalidate="" autocomplete="off">
                     <ng-container formArrayName="sellers">
                         <ng-container *ngFor="let item of amazonSellerForm.get('sellers')['controls']; let i=index;let f = first; let l = last">
@@ -373,7 +373,7 @@
                 </div>
             </div>
             <!-- <div class="mrT2 box clearfix">
-                <h3 class="section_head mb-2">Shopify</h3>
+                <h3 class="section-head mb-2">Shopify</h3>
                 <span *ngIf="isEcommerceShopifyUserVerified">Your company is successfully connected with Shopify.</span>
                 <a href="https://apps.shopify.com/accounting-software" target="_blank" *ngIf="!isEcommerceShopifyUserVerified">
                     <span>Connect with Shopify</span></a>

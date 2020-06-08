@@ -14,6 +14,7 @@ import { PermissionActions } from '../../../actions/permission/permission.action
 import { AccountsAction } from '../../../actions/accounts.actions';
 import { SettingsPermissionService } from '../../../services/settings.permission.service';
 import * as moment from 'moment';
+import { GeneralService } from '../../../services/general.service';
 
 // some local const
 const DATE_RANGE = 'daterange';
@@ -32,6 +33,10 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     @Input() public isHorizntl: boolean;
     @Input() public isUpdtCase: boolean;
     @Input() public isLblShow: boolean;
+    /** True if this component is opened in modal, required
+     * as the radio button doesn't work in ngx-bootstrap modal
+     */
+    @Input() public isOpenedInModal: boolean;
     @Output() public onSubmitForm: EventEmitter<any> = new EventEmitter(null);
 
     public showTimeSpan: boolean = false;
@@ -51,7 +56,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         private _accountsAction: AccountsAction,
         private _toasty: ToasterService,
         private store: Store<AppState>,
-        private _fb: FormBuilder
+        private _fb: FormBuilder,
+        private generalService: GeneralService
     ) {
         this.createPermissionInProcess$ = this.store.select(p => p.permission.createPermissionInProcess).pipe(takeUntil(this.destroyed$));
     }
@@ -337,5 +343,40 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 this.showIPWrap = false;
             }
         }
+    }
+
+    /**
+     * This is to allow only digits and dot
+     *
+     * @param {*} event
+     * @returns {boolean}
+     * @memberof SettingPermissionFormComponent
+     */
+    public allowOnlyNumbersAndDot(event: any): boolean {
+        return this.generalService.allowOnlyNumbersAndDot(event);
+    }
+
+    /**
+     * Handler for IP address change, required for manually changing
+     * the radio button value in modal as radio button doesn't work in
+     * ngx-bootstrap modal
+     *
+     * @param {string} value Current selected value of radio button
+     * @memberof SettingPermissionFormComponent
+     */
+    public handleIpAddressChange(value: string): void {
+        this.permissionForm.get('ipOptions').patchValue(value, { onlySelf: true });
+    }
+
+    /**
+     * Handler for Time span change, required for manually changing
+     * the radio button value in modal as radio button doesn't work in
+     * ngx-bootstrap modal
+     *
+     * @param {string} value Current selected value of radio button
+     * @memberof SettingPermissionFormComponent
+     */
+    public handleTimeSpanChange(value: string): void {
+        this.permissionForm.get('periodOptions').patchValue(value, { onlySelf: true });
     }
 }

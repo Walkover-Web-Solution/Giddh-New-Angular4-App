@@ -1,324 +1,400 @@
-<div class="welcome-msg  ">
-	<div class="row">
-		<div class="col-md-9">
-			<p class="mb-2">Hi {{logedInUser?.name}} !</p>
-			<p class="mb-3">Please select a subscription for your company <strong>“{{this.currentCompany}}”.</strong>
-			</p>
-		</div>
-		<div class="col-md-3 text-right xs-left" *ngIf="subscriptions && subscriptions.length > 0">
-			<a (click)="backClicked()" class="btn btn-default pr-3 pl-3 mb-2">Back</a>
-		</div>
-	</div>
-	<div *ngIf="!isSwitchPlanInProcess" class="choose-ur-plan noHeight">
-		<div class="row">
-			<div class="col-sm-9">
-				<div class="row">
-					<ng-container *ngFor="let item of SubscriptionPlans; let i=index">
-						<!-- Free plans -->
-						<ng-container *ngIf="!item?.planDetails?.amount && !item.subscriptionId">
-							<div class="col-sm-4">
-								<div class="select-plan-block">
-									{{item?.planDetails?.name}}
-									<div class="your-account">
-
-										<!-- <div class="row">
-                                                    <div class="col-xs-6">
-                                                        <span>
-                      Subscription ID
-                    </span>
+<div class="welcome-msg">
+    <div class="row">
+        <div class="col-md-9 col-sm-9  font-14">
+            <p class="mb-1">Hi {{logedInUser?.name}} !</p>
+            <p class="mb-3 plan-msg">All the plan come with all the features with <span class="selected">90 days money back guarantee.</span></p>
+        </div>
+        <div class="col-md-3 col-sm-3 text-right" *ngIf="subscriptions && subscriptions.length > 0">
+            <a (click)="backClicked()" class="btn btn-cancel pr-3 pl-3 mb-2 mr-0">Back</a>
+        </div>
+    </div>
+    <div #topAllPlans>
+    <div *ngIf="!isSwitchPlanInProcess" class="choose-ur-plan noHeight">
+        <div class="row">
+            <div class="main-row-plans">
+                <div class="col-md-4 col-sm-4" *ngIf="totalMultipleCompanyPlans">
+                    <div class="select-plan-block"
+                        [ngClass]="{'plan-disabled': showPlans === 'single' || showPlans === 'free'}">
+                        <div class="select-plan-head">
+                            <h2>Multiple Company</h2>
+                        </div>
+                        <div class="plans-box">
+                            <p class="bold">Total Plans: {{totalMultipleCompanyPlans}}</p>
+                            <div class="your-account">
+                                <div class="inner-your-account" [ngClass]="{'active': showPlans === 'multiple'}">
+                                    <h3 class="mb-2">{{defaultMultipleCompanyPlan?.planDetails?.name}}</h3>
+                                    <div class="d-flex align-items-center justify-content-between plans-head-top mb-3">
+                                        <div class="clearfix">
+                                            <h3 class="bold font-22 mb-05">
+                                                {{defaultMultipleCompanyPlan?.planDetails?.amount}} /-</h3>
+                                            <p class="font-12">{{defaultMultipleCompanyPlan?.planDetails?.duration}}
+                                                {{defaultMultipleCompanyPlan?.planDetails?.durationUnit}}(s)</p>
+                                        </div>
+                                        <img class="guarantee-img" src="assets/images/guarantee.png" alt="">
+                                    </div>
+                                    <div class="clearfix">
+                                        <ul class="plan-list">
+                                            <li>Transactions Limit:
+                                                {{defaultMultipleCompanyPlan?.planDetails?.transactionLimit | number}}
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
+                                                        <i class="icon-info"></i>
+                                                    </button>
+                                                    <div class="transactions-popup"
+                                                        role="menu" aria-labelledby="button-alignment">
+                                                        <p class="bold mb-1">Transactions Limit</p>
+                                                        <p class="font-12 text-gray mb-1">
+                                                            {{transactionLimitTooltipContent}}</p>
                                                     </div>
-                                                    <div class="col-xs-6">
-                                                        <p>
-                                                            -
-                                                        </p>
+                                                </div>
+                                            </li>
+                                            <li>Total Companies:
+                                                {{defaultMultipleCompanyPlan?.planDetails?.companiesLimit | number}}
+                                            </li>
+                                            <li>Unlimited Users
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
+                                                        <i class="icon-info"></i>
+                                                    </button>
+                                                    <div class="transactions-popup"
+                                                        role="menu" aria-labelledby="button-alignment">
+                                                        <p class="bold mb-1">Unlimited Users</p>
+                                                        <p class="font-12 text-gray mb-1">
+                                                            {{unlimitedUsersTooltipContent}}</p>
                                                     </div>
-                                                </div> -->
-
-										<!--  -->
-										<div class="row">
-											<div class="col-xs-6">
-												<span>
-													Subscription Price
-												</span>
-											</div>
-											<div class="col-xs-6">
-												<p *ngIf="item?.planDetails?.amount">
-													{{item?.planDetails?.amount | number}}
-												</p>
-												<p *ngIf="!item?.planDetails?.amount">
-													FREE
-												</p>
-											</div>
-										</div>
-										<!--  -->
-
-										<div class="row">
-											<div class="col-xs-6">
-												<span>
-													Total Companies
-												</span>
-											</div>
-											<div class="col-xs-6">
-												<p class="">
-													{{item?.planDetails?.companiesLimit | number}}
-												</p>
-											</div>
-										</div>
-
-										<div class="row">
-											<div class="col-xs-6">
-												<span>
-													Transactions Limit
-												</span>
-											</div>
-											<div class="col-xs-6">
-												<p>
-													{{item?.planDetails?.transactionLimit | number}}
-												</p>
-											</div>
-										</div>
-
-										<div class="row">
-											<div class="col-xs-6">
-												<span>
-													Subscription Renewal
-												</span>
-											</div>
-											<div class="col-xs-6">
-												<p>
-													{{item?.planDetails?.duration }}
-													{{item?.planDetails?.durationUnit}}(s)
-												</p>
-											</div>
-										</div>
-
-										<div class="row">
-											<div class="col-xs-12">
-												<button class="btn btn-primary mrT1 mrB2" (click)="choosePlan(item);"
-													[ladda]="this.isUpdateCompanyInProgress$ | async">Select
-													Plan</button>
-											</div>
-										</div>
-									</div>
-
-								</div>
-
-							</div>
-						</ng-container>
-						<!-- new plan after free -->
-						<ng-container *ngIf="item?.planDetails?.amount && !item.subscriptionId">
-							<div class="col-sm-4">
-								<div class="select-plan-block">
-									{{item?.planDetails?.name}}
-									<div class="your-account">
-
-										<!-- <div class="row">
-                                                    <div class="col-xs-6">
-                                                        <span>
-                      Subscription ID
-                    </span>
+                                                </div>
+                                            </li>
+                                            <li>Unlimited Customers/Vendors
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
+                                                        <i class="icon-info"></i>
+                                                    </button>
+                                                    <div class="transactions-popup"
+                                                        role="menu" aria-labelledby="button-alignment">
+                                                        <p class="bold mb-1">Unlimited Customers/Vendors</p>
+                                                        <p class="font-12 text-gray mb-1">
+                                                            {{unlimitedCustomersVendorsTooltipContent}}</p>
                                                     </div>
-                                                    <div class="col-xs-6">
-                                                        <p>
-                                                            -
-                                                        </p>
+                                                </div>
+                                            </li>
+                                            <li>Desktop/Mobile App
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
+                                                        <i class="icon-info"></i>
+                                                    </button>
+                                                    <div class="transactions-popup"
+                                                        role="menu" aria-labelledby="button-alignment">
+                                                        <p class="bold mb-1">Desktop/Mobile App</p>
+                                                        <p class="font-12 text-gray mb-1">
+                                                            {{desktopMobileAppTooltipContent}}</p>
                                                     </div>
-                                                </div> -->
-
-										<!--  -->
-										<div class="row">
-											<div class="col-xs-6">
-												<span>
-													Subscription Price
-												</span>
-											</div>
-											<div class="col-xs-6">
-												<p>
-													{{item?.planDetails?.amount | number}}
-												</p>
-											</div>
-										</div>
-										<!--  -->
-
-										<div class="row">
-											<div class="col-xs-6">
-												<span>
-													Total Companies
-												</span>
-											</div>
-											<div class="col-xs-6">
-												<p class="">
-													{{item?.planDetails?.companiesLimit | number}}
-												</p>
-											</div>
-										</div>
-
-										<div class="row">
-											<div class="col-xs-6">
-												<span>
-													Transactions Limit
-												</span>
-											</div>
-											<div class="col-xs-6">
-												<p>
-													{{item?.planDetails?.transactionLimit | number}}
-												</p>
-											</div>
-										</div>
-
-										<div class="row">
-											<div class="col-xs-6">
-												<span>
-													Subscription Renewal
-												</span>
-											</div>
-											<div class="col-xs-6">
-												<p>
-													{{item?.planDetails?.duration}}
-													{{item?.planDetails?.durationUnit}}(s)
-												</p>
-											</div>
-										</div>
-
-										<div class="row">
-											<div class="col-xs-12">
-												<button class="btn btn-success mrT1 mrB2"
-													(click)="buyPlanClicked(item)">Buy Plan</button>
-											</div>
-										</div>
-									</div>
-
-								</div>
-
-							</div>
-						</ng-container>
-					</ng-container>
-				</div>
-				<div class="row">
-					<ng-container *ngFor="let paidItem of SubscriptionPlans">
-						<ng-container
-							*ngIf="paidItem?.subscriptionId && paidItem?.totalCompanies!==paidItem?.planDetails?.companiesLimit">
-
-							<div class="col-sm-4">
-								<div class="select-plan-block">
-									{{paidItem?.planDetails?.name}}
-									<div class="your-account">
-
-										<div class="row">
-											<div class="col-xs-6">
-												<span>
-													Subscription ID
-												</span>
-											</div>
-											<div class="col-xs-6">
-												<p>
-													{{paidItem.subscriptionId}}
-												</p>
-											</div>
-										</div>
-
-										<!--  -->
-										<div class="row">
-											<div class="col-xs-6">
-												<span>
-													Subscription Price
-												</span>
-											</div>
-											<div class="col-xs-6">
-												<p>
-													{{paidItem?.planDetails?.amount | number}}
-												</p>
-											</div>
-										</div>
-										<!--  -->
-
-										<div class="row">
-											<div class="col-xs-6">
-												<span>
-													Total Companies
-												</span>
-											</div>
-											<div class="col-xs-6">
-												<p class="">
-													{{ paidItem?.totalCompanies | number}} out of
-													{{ paidItem?.planDetails?.companiesLimit | number}}
-												</p>
-											</div>
-										</div>
-
-										<div class="row">
-											<div class="col-xs-6">
-												<span>
-													Transactions Limit
-												</span>
-											</div>
-											<div class="col-xs-6">
-												<p>
-													{{paidItem?.planDetails?.transactionLimit | number}}
-												</p>
-											</div>
-										</div>
-
-										<div class="row">
-											<div class="col-xs-6">
-												<span>
-													Subscription Renewal
-												</span>
-											</div>
-											<div class="col-xs-6">
-												<p>
-													{{paidItem?.expiry}}
-												</p>
-											</div>
-										</div>
-
-										<div class="row">
-											<div class="col-xs-12">
-												<button class="btn btn-primary mrT1 mrB2" (click)="choosePlan(paidItem)"
-													[ladda]="this.isUpdateCompanyInProgress$ | async">Select
-													Plan</button>
-											</div>
-										</div>
-									</div>
-
-								</div>
-
-							</div>
-						</ng-container>
-					</ng-container>
-				</div>
-			</div>
-
-			<div class="col-sm-3">
-				<div class="activation-key">
-					<label>Activation Key</label>
-					<input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey"
-						class="form-control mrT1" placeholder="Enter activation key">
-				</div>
-				<div class="activation-btn">
-					<button class="btn btn-green mrT1" [disabled]="!licenceKey.value"
-						(click)="createCompanyViaActivationKey()">
-						Activate</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div *ngIf="isSwitchPlanInProcess">
-		<div class="no-data mrT2 loader-main">
-			<!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-			<div class="spinner2">
-				<div class="cube1"></div>
-				<div class="cube2"></div>
-			</div>
-		</div>
-	</div>
-	<!-- <div class="note-wrap">
-        <p>Note:</p>
-        <p>* revenue more than 12 and less than 20 lacs</p>
-    </div> -->
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="plan-footer">
+                                        <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)"
+                                                class="color-primary font-14">Check all features</a></p>
+                                        <button class="btn success-btn btn-round"
+                                            [disabled]="showPlans === 'free' || showPlans === 'single'"
+                                            (click)="buyPlanClicked(defaultMultipleCompanyPlan)"
+                                            [ladda]="this.isUpdateCompanyInProgress$ | async">Buy Plan</button>
+                                        <p class="font-12">*prices excluding Tax</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="javascript:void(0)" class="btn btn-green btn-round"
+                                (click)="showPlansByType('multiple'); navigate(allPlans)">See all Multiple Company Plans</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-4" *ngIf="totalSingleCompanyPlans">
+                    <div class="select-plan-block"
+                        [ngClass]="{'plan-disabled': showPlans === 'multiple' || showPlans === 'free'}">
+                        <div class="select-plan-head">
+                            <h2>Single Company</h2>
+                        </div>
+                        <div class="plans-box">
+                            <p class="bold">Total Plans: {{totalSingleCompanyPlans}}</p>
+                            <div class="your-account">
+                                <div class="inner-your-account popular" [ngClass]="{'active': showPlans === 'single'}">
+                                    <img src="assets/images/popular.svg" class="popular-icon" alt="">
+                                    <h3 class="mb-2">{{defaultSingleCompanyPlan?.planDetails?.name}}
+                                        <!-- <small class="font-12 unbold text-blue">(Current
+                                                Plan)</small> -->
+                                    </h3>
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center justify-content-between plans-head-top">
+                                            <div class="clearfix">
+                                                <h3 class="bold font-22 mb-05">
+                                                    <!-- <span class="price-cross">₹800</span> -->
+                                                    {{defaultSingleCompanyPlan?.planDetails?.amount}} /-
+                                                </h3>
+                                                <p class="font-12">{{defaultSingleCompanyPlan?.planDetails?.duration}}
+                                                    {{defaultSingleCompanyPlan?.planDetails?.durationUnit}}(s)</p>
+                                            </div>
+                                            <img class="guarantee-img" src="assets/images/guarantee.png" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="clearfix">
+                                        <ul class="plan-list">
+                                            <li>Transactions Limit:
+                                                {{defaultSingleCompanyPlan?.planDetails?.transactionLimit | number}}
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
+                                                        <i class="icon-info"></i>
+                                                    </button>
+                                                    <div class="transactions-popup"
+                                                        role="menu" aria-labelledby="button-alignment">
+                                                        <p class="bold mb-1">Transactions Limit</p>
+                                                        <p class="font-12 text-gray mb-1">
+                                                            {{transactionLimitTooltipContent}}</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>Total Companies:
+                                                {{defaultSingleCompanyPlan?.planDetails?.companiesLimit | number}}
+                                            </li>
+                                            <li>Unlimited Users
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
+                                                        <i class="icon-info"></i>
+                                                    </button>
+                                                    <div class="transactions-popup"
+                                                        role="menu" aria-labelledby="button-alignment">
+                                                        <p class="bold mb-1">Unlimited Users</p>
+                                                        <p class="font-12 text-gray mb-1">
+                                                            {{unlimitedUsersTooltipContent}}</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>Unlimited Customers/Vendors
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
+                                                        <i class="icon-info"></i>
+                                                    </button>
+                                                    <div class="transactions-popup"
+                                                        role="menu" aria-labelledby="button-alignment">
+                                                        <p class="bold mb-1">Unlimited Customers/Vendors</p>
+                                                        <p class="font-12 text-gray mb-1">
+                                                            {{unlimitedCustomersVendorsTooltipContent}}</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>Desktop/Mobile App
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
+                                                        <i class="icon-info"></i>
+                                                    </button>
+                                                    <div class="transactions-popup"
+                                                        role="menu" aria-labelledby="button-alignment">
+                                                        <p class="bold mb-1">Desktop/Mobile App</p>
+                                                        <p class="font-12 text-gray mb-1">
+                                                            {{desktopMobileAppTooltipContent}}</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="plan-footer">
+                                        <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)"
+                                                class="color-primary font-14">Check all features</a></p>
+                                        <button class="btn success-btn btn-round"
+                                            [disabled]="showPlans === 'multiple' || showPlans === 'free'"
+                                            (click)="buyPlanClicked(defaultSingleCompanyPlan)"
+                                            [ladda]="this.isUpdateCompanyInProgress$ | async">Buy Plan</button>
+                                        <p class="font-12">*prices excluding Tax</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="javascript:void(0)" class="btn btn-green btn-round"
+                                (click)="showPlansByType('single'); navigate(allPlans)">See all Single Company Plans</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-4" *ngIf="totalFreePlans">
+                    <div class="select-plan-block"
+                        [ngClass]="{'plan-disabled': showPlans === 'multiple' || showPlans === 'single'}">
+                        <div class="select-plan-head">
+                            <h2>Free</h2>
+                        </div>
+                        <div class="plans-box">
+                            <p class="bold">Total Plans: {{totalFreePlans}}</p>
+                            <div class="your-account">
+                                <div class="inner-your-account" [ngClass]="{'active': showPlans === 'free'}">
+                                    <h3 class="mb-2">{{defaultFreePlan?.planDetails?.name}}</h3>
+                                    <div class="mb-3">
+                                        <div class="mb-3 plans-head-top">
+                                            <h3 class="bold font-22 mb-05">{{defaultFreePlan?.planDetails?.amount}} /-
+                                            </h3>
+                                            <p class="font-12">{{defaultFreePlan?.planDetails?.duration}}
+                                                {{defaultFreePlan?.planDetails?.durationUnit}}(s)</p>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix">
+                                        <ul class="plan-list">
+                                            <li>Transactions Limit:
+                                                {{defaultFreePlan?.planDetails?.transactionLimit | number}}
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
+                                                        <i class="icon-info"></i>
+                                                    </button>
+                                                    <div class="transactions-popup"
+                                                        role="menu" aria-labelledby="button-alignment">
+                                                        <p class="bold mb-1">Transactions Limit</p>
+                                                        <p class="font-12 text-gray mb-1">
+                                                            {{transactionLimitTooltipContent}}</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>Total Companies:
+                                                {{defaultFreePlan?.planDetails?.companiesLimit | number}}
+                                            </li>
+                                            <li>Unlimited Users
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
+                                                        <i class="icon-info"></i>
+                                                    </button>
+                                                    <div class="transactions-popup"
+                                                        role="menu" aria-labelledby="button-alignment">
+                                                        <p class="bold mb-1">Unlimited Users</p>
+                                                        <p class="font-12 text-gray mb-1">
+                                                            {{unlimitedUsersTooltipContent}}</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>Unlimited Customers/Vendors
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
+                                                        <i class="icon-info"></i>
+                                                    </button>
+                                                    <div class="transactions-popup"
+                                                        role="menu" aria-labelledby="button-alignment">
+                                                        <p class="bold mb-1">Unlimited Customers/Vendors</p>
+                                                        <p class="font-12 text-gray mb-1">
+                                                            {{unlimitedCustomersVendorsTooltipContent}}</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>Desktop/Mobile App
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
+                                                        <i class="icon-info"></i>
+                                                    </button>
+                                                    <div class="transactions-popup"
+                                                        role="menu" aria-labelledby="button-alignment">
+                                                        <p class="bold mb-1">Desktop/Mobile App</p>
+                                                        <p class="font-12 text-gray mb-1">
+                                                            {{desktopMobileAppTooltipContent}}</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="plan-footer">
+                                        <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)"
+                                                class="color-primary font-14">Check all features</a></p>
+                                        <button class="btn success-btn btn-round"
+                                            [disabled]="showPlans === 'multiple' || showPlans === 'single'"
+                                            (click)="choosePlan(defaultFreePlan);"
+                                            [ladda]="this.isUpdateCompanyInProgress$ | async">Buy Plan</button>
+                                        <p class="font-12">*prices excluding Tax</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="javascript:void(0)" class="btn btn-green btn-round"
+                                (click)="showPlansByType('free'); navigate(allPlans)">See all FREE Plans</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-
+    <div *ngIf="isSwitchPlanInProcess">
+        <div class="no-data mrT2 loader-main">
+            <div class="spinner2">
+                <div class="cube1"></div>
+                <div class="cube2"></div>
+            </div>
+        </div>
+    </div>
+    <div #allPlans>
+    <div class="box clearfix pl-5 mb-15 xs-pl-15 pb-3 relative all-plans" *ngIf="showPlans">
+        <a class="close close-2" href="javascript:void(0)" (click)="showPlans = ''; navigate(topAllPlans)">
+            <i class="icon-cross"></i>
+        </a>
+        <div class="relative see-all-features">
+            <div class="col-sm-6 col-md-3" *ngFor="let item of subscriptionPlans; let i=index"
+                [hidden]="!(!item.subscriptionId && item?.planDetails?.uniqueName !== defaultTrialPlan && ((showPlans === 'multiple' && item?.planDetails?.amount && item?.planDetails?.companiesLimit > 1) || (showPlans === 'single' && item?.planDetails?.amount && item?.planDetails?.companiesLimit === 1) || (showPlans === 'free' && !item?.planDetails?.amount)))">
+                <div class="inner-your-account"
+                    *ngIf="!item.subscriptionId && item?.planDetails?.uniqueName !== defaultTrialPlan && ((showPlans === 'multiple' && item?.planDetails?.amount && item?.planDetails?.companiesLimit > 1) || (showPlans === 'single' && item?.planDetails?.amount && item?.planDetails?.companiesLimit === 1) || (showPlans === 'free' && !item?.planDetails?.amount))"
+                    [ngClass]="{'popular': item?.planDetails?.name === defaultPopularPlan}">
+                    <img src="assets/images/popular.svg" class="popular-icon"
+                        *ngIf="item?.planDetails?.name === defaultPopularPlan">
+                    <h3 class="mb-2">{{item?.planDetails?.name}}</h3>
+                    <div class="mb-3">
+                        <h3 class="bold font-22 mb-05">{{item?.planDetails?.amount | number}} /-</h3>
+                        <p class="font-12">{{item?.planDetails?.duration}} {{item?.planDetails?.durationUnit}}(s)</p>
+                    </div>
+                    <div class="clearfix">
+                        <ul class="plan-list">
+                            <li>Transactions Limit: {{item?.planDetails?.transactionLimit | number}}</li>
+                            <li>Total Companies: {{ item?.planDetails?.companiesLimit | number}}</li>
+                            <li>Unlimited Users</li>
+                            <li>Unlimited Customers/Vendors</li>
+                            <li>Desktop/Mobile App</li>
+                        </ul>
+                    </div>
+                    <div class="plan-footer">
+                        <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)"
+                                class="color-primary font-14">Check all features</a></p>
+                        <button class="btn success-btn btn-round" *ngIf="!item?.planDetails?.amount"
+                            (click)="choosePlan(item);" [ladda]="this.isUpdateCompanyInProgress$ | async">Buy
+                            Plan</button>
+                        <button class="btn success-btn btn-round" *ngIf="item?.planDetails?.amount"
+                            (click)="buyPlanClicked(item)" [ladda]="this.isUpdateCompanyInProgress$ | async">Buy
+                            Plan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="activation-key-wrapper">
+        <div class="box">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="activation-key mb-1">
+                        <h2 class="font-26 text-blue bold mb-3">Activation Key</h2>
+                        <p class="font-14">You will get the activation key from resellers.</p>
+                        <div class="d-flex">
+                            <input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey"
+                                class="form-control mrT1" placeholder="Enter activation key">
+                            <div class="activation-btn ml-15">
+                                <button class="btn success-btn mrT1 pl-3 pr-3" [disabled]="!licenceKey.value"
+                                    (click)="createCompanyViaActivationKey()">
+                                    Activate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- asid bar start -->
 <!-- <div class="aside-overlay"></div>
@@ -374,3 +450,8 @@
     </div>
   </div> -->
 <!-- asid bar end -->
+
+<!-- All features Modal -->
+<ng-template #AllFeatures>
+    <all-features (closeEvent)="closeFeaturesModal($event)"></all-features>
+</ng-template>

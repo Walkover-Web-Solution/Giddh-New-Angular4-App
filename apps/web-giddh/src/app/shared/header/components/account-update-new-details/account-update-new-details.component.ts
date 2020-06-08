@@ -874,11 +874,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         if (!accountRequest.currency) {
             this.selectedCurrency = this.companyCurrency;
-            this.addAccountForm.get('currency').patchValue(this.selectedCurrency);
+            this.addAccountForm.get('currency').patchValue(this.selectedCurrency, { onlySelf: true });
+            accountRequest.currency = this.selectedCurrency;
         }
         this.submitClicked.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
-            accountRequest: this.addAccountForm.value
+            accountRequest
         });
     }
 

@@ -16,13 +16,17 @@ const moment = _moment;
         }
     ]
 })
+
 export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     public picker: NgxDaterangepickerComponent;
     private _onChange = Function.prototype;
     private _onTouched = Function.prototype;
-    private _validatorChange = Function.prototype;
     private _value: any;
     private localeDiffer: KeyValueDiffer<string, any>;
+    @Input()
+    inputStartDate: _moment.Moment;
+    @Input()
+    inputEndDate: _moment.Moment;
     @Input()
     minDate: _moment.Moment;
     @Input()
@@ -81,7 +85,7 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     timePickerSeconds: Boolean = false;
     _locale: LocaleConfig = {};
     @Input() set locale(value) {
-        this._locale = {...this._localeService.config, ...value};
+        this._locale = { ...this._localeService.config, ...value };
     }
 
     get locale(): any {
@@ -141,7 +145,7 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         const componentFactory = this._componentFactoryResolver.resolveComponentFactory(NgxDaterangepickerComponent);
         viewContainerRef.clear();
         const componentRef = viewContainerRef.createComponent(componentFactory);
-        this.picker = (<NgxDaterangepickerComponent> componentRef.instance);
+        this.picker = (<NgxDaterangepickerComponent>componentRef.instance);
         this.picker.inline = false; // set inline to false for all directive usage
     }
 
@@ -164,6 +168,7 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
                 }
             }
         });
+
         this.picker.firstMonthDayClass = this.firstMonthDayClass;
         this.picker.lastMonthDayClass = this.lastMonthDayClass;
         this.picker.emptyWeekRowClass = this.emptyWeekRowClass;
@@ -172,6 +177,13 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         this.picker.drops = this.drops;
         this.picker.opens = this.opens;
         this.localeDiffer = this.differs.find(this.locale).create();
+
+        if(this.inputStartDate) {
+            this.picker.startDate = this.inputStartDate;
+        }
+        if(this.inputEndDate) {
+            this.picker.endDate = this.inputEndDate;
+        }
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -179,6 +191,12 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
             if (changes.hasOwnProperty(change)) {
                 if (this.notForChangesProperty.indexOf(change) === -1) {
                     this.picker[change] = changes[change].currentValue;
+                    if(change === "inputStartDate" && changes[change].currentValue) {
+                        this.picker.startDate = changes[change].currentValue;
+                    }
+                    if(change === "inputEndDate" && changes[change].currentValue) {
+                        this.picker.endDate = changes[change].currentValue;
+                    }
                 }
             }
         }
@@ -202,8 +220,10 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     open(event?: any) {
         this.picker.show(event);
         setTimeout(() => {
+            this.picker.removeDuplicateDatepickers();
+            this.picker.appendDatepickerToBody();
             this.setPosition();
-        });
+        }, 20);
     }
 
     @HostListener("document:keyup.esc", ['$event'])
@@ -235,7 +255,6 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         this.picker.setStartDate(start);
         this.picker.setEndDate(end);
         this.picker.updateView();
-
     }
 
     toggle(e?) {
@@ -280,45 +299,39 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         }
     }
 
+    getPosition(element) {
+        var xPosition = 0;
+        var yPosition = 40;
+
+        while (element) {
+            xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
+            yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
+            element = element.offsetParent;
+        }
+
+        return { x: xPosition, y: yPosition };
+    }
+
     /**
      * Set position of the calendar
      */
     setPosition() {
-        let style;
-        let containerTop;
-        const container = this.picker.pickerContainer.nativeElement;
-        const element = this._el.nativeElement;
-        if (this.drops && this.drops === 'up') {
-            containerTop = (element.offsetTop - container.clientHeight) + 'px';
-        } else {
-            containerTop = 'auto';
-        }
-        if (this.opens === 'left') {
-            style = {
-                top: containerTop,
-                left: (element.offsetLeft - container.clientWidth + element.clientWidth) + 'px',
-                right: 'auto'
-            };
-        } else if (this.opens === 'center') {
-            style = {
-                top: containerTop,
-                left: (element.offsetLeft + element.clientWidth / 2
-                    - container.clientWidth / 2) + 'px',
-                right: 'auto'
-            };
-        } else {
-            style = {
-                top: containerTop,
-                left: element.offsetLeft + 'px',
-                right: 'auto'
-            };
-        }
-        if (style) {
-            this._renderer.setStyle(container, 'top', style.top);
-            this._renderer.setStyle(container, 'left', style.left);
-            this._renderer.setStyle(container, 'right', style.right);
-        }
+        const container = document.getElementsByTagName("ngx-daterangepicker-material")[0] as HTMLElement;
+        if(container) {
+            const element = this._el.nativeElement;
+            let position = this.getPosition(element);
+            let screenWidth = window.innerWidth;
+            let totalWidth = container.offsetWidth + position.x;
+            let positionX = position.x;
 
+            if(totalWidth > screenWidth) {
+                positionX = positionX - (totalWidth - screenWidth);
+            }
+
+            this._renderer.setStyle(container, 'top', position.y + 'px');
+            this._renderer.setStyle(container, 'left', positionX + 'px');
+            this._renderer.setStyle(container, 'right', 'auto');
+        }
     }
 
     /**
@@ -338,5 +351,10 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         if (!clickedInside) {
             this.hide();
         }
+    }
+
+    @HostListener('window:resize', ['$event'])
+    windowResize(event) {
+        this.hide();
     }
 }

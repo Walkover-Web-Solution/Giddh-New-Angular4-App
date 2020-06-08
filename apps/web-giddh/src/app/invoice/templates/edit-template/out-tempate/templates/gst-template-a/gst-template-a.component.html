@@ -91,7 +91,6 @@
                                                 <td>20170911-1</td>
                                             </tr>
                                         </ng-container>
-
                                     </tbody>
                                 </table>
                             </td>
@@ -457,7 +456,7 @@
         </div>
         <div id="Template-footer " [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer } " (click)="onClickSection( 'footer') ">
             <div class="clearfix">
-                <a href="javascript:void(0); " class="edit-template " *ngIf="!templateUISectionVisibility.footer ">
+                <a href="javascript:void(0); " class="edit-template" *ngIf="!templateUISectionVisibility.footer ">
                     <i class="fa fa-pencil "></i>
                 </a>
                 <article>
@@ -505,11 +504,11 @@
                                 <div class="inner mr-0">&nbsp;</div>
                             </td>
                         </tr>
-                        <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display ">
-                            <th class="strong ">
+                        <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display">
+                            <th class="strong">
                                 {{fieldsAndVisibility.footer.grandTotal?.label}} (USD)
                             </th>
-                            <td class="strong ">
+                            <td class="strong">
                                 <span [innerHTML]='dollarSymbol'></span>148.20
                             </td>
                         </tr>
@@ -631,16 +630,16 @@
             </div>
 
             <div class="clearfix">
-                <a href="javascript:void(0); " class="edit-template " *ngIf="!templateUISectionVisibility.footer ">
+                <a href="javascript:void(0); " class="edit-template" *ngIf="!templateUISectionVisibility.footer ">
                     <i class="fa fa-pencil "></i>
                 </a>
                 <aside>
-                    <table cellpadding="0 " cellspacing="0 " class="subfooter">
+                    <table cellpadding="0" cellspacing="0" class="subfooter">
                         <tbody>
                             <tr>
                                 <td class="accc " [ngStyle]="{ 'font-size' : inputTemplate.fontMedium + 'px' } ">
                                     <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display ">
-                                        {{fontMedium}}
+                                        {{inputTemplate.fontMedium}}
                                         <p *ngIf="fieldsAndVisibility.footer.message1?.display ">
                                             <span>*Tax to be paid on Reverse Charge.<br>
                                                 <strong>Notes</strong> <br>

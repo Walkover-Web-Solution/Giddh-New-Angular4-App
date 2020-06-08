@@ -5,7 +5,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { SalesActions } from '../actions/sales/sales.action';
 import { CompanyActions } from '../actions/company.actions';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, ActivationStart } from '@angular/router';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { SalesService } from '../services/sales.service';
 import { ToasterService } from '../services/toaster.service';
@@ -60,7 +60,7 @@ import { SalesShSelectComponent } from '../theme/sales-ng-virtual-select/sh-sele
 import { EMAIL_REGEX_PATTERN } from '../shared/helpers/universalValidations';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { Configuration, Subvoucher } from '../app.constant';
+import { Configuration, Subvoucher, RATE_FIELD_PRECISION } from '../app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
@@ -308,7 +308,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /** Purchase record confirmation popup configuration */
     public purchaseRecordConfirmationConfiguration: ConfirmationModalConfiguration;
     /** Prevents double click on generate button */
-    public generateUpdateButtonClicked = new Subject<any>();
+    public generateUpdateButtonClicked = new Subject<NgForm>();
     /** True, if the Giddh supports the taxation of the country (not supported now: UK, US, Nepal, Australia) */
     public shouldShowTrnGstField: boolean = false;
     /** True, if company country supports other tax (TCS/TDS) */
@@ -322,6 +322,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         shippedDateLabel: '',
         trackingNumber: ''
     };
+    /** Rate should have precision up to 4 digits for better calculation */
+    public ratePrecision = RATE_FIELD_PRECISION;
     public selectedCompany: any;
     public formFields: any[] = [];
 
@@ -351,7 +353,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * tax types within a company and count upto which they are allowed
      */
     public allowedSelectionOfAType: any = { type: [], count: 1 };
-
+    /** Type of invoice status (pending ,invoice, CN/DN) */
+    public isPendingVoucherType: boolean = false;
     // private members
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private selectedAccountDetails$: Observable<AccountResponseV2>;
@@ -368,6 +371,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private generateVoucherSuccess$: Observable<any>;
     private updateVoucherSuccess$: Observable<boolean>;
     private lastGeneratedVoucherNo$: Observable<{ voucherNo: string, accountUniqueName: string }>;
+    /** Observable if getOnboarding API call in progress */
+    private getOnboardingFormInProcess$: Observable<boolean>;
     private entriesListBeforeTax: SalesEntryClass[];
     /** True, if user has selected custom invoice in Invoice Setting */
     private useCustomInvoiceNumber: boolean;
@@ -410,7 +415,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public isAccountHaveAdvanceReceipts: boolean = false;
     /** To check is selected invoice already adjusted with at least one advance receipts  */
     public isInvoiceAdjustedWithAdvanceReceipts: boolean = false;
-
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -496,7 +500,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }),
             takeUntil(this.destroyed$)
         );
-
+        this.getOnboardingFormInProcess$ = this.store.pipe(select(s => s.common.getOnboardingFormInProcess), takeUntil(this.destroyed$));
         this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
 
         this.loaderService.loaderState.pipe(delay(500), takeUntil(this.destroyed$)).subscribe((stateLoader: LoaderState) => {
@@ -505,7 +509,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 return;
             }
         });
-        this.generateUpdateButtonClicked.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((form) => {
+        this.generateUpdateButtonClicked.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((form: NgForm) => {
             this.startLoader(true);
             if (this.isUpdateMode) {
                 this.handleUpdateInvoiceForm(form);
@@ -644,15 +648,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.getDefaultTemplateData();
             } else {
                 // for edit mode direct from @Input
-                this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
-                if (this.accountUniqueName && this.invoiceType && this.invoiceNo) {
-                    this.store.dispatch(this._generalActions.setAppTitle('/pages/proforma-invoice/invoice/' + this.invoiceType));
-                    this.getVoucherDetailsFromInputs();
-                    this.getDefaultTemplateData();
+                if (parmas['voucherType'] && parmas['voucherType'] === 'pending' && parmas['selectedType']) {
+                    this.isPendingVoucherType = true;
+                    // this.isUpdateMode = true;
+                } else {
+                    this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+                    if (this.accountUniqueName && this.invoiceType && this.invoiceNo) {
+                        this.store.dispatch(this._generalActions.setAppTitle('/pages/proforma-invoice/invoice/' + this.invoiceType));
+                        this.getVoucherDetailsFromInputs();
+                        this.getDefaultTemplateData();
+                    }
                 }
             }
 
-            if (!this.isUpdateMode) {
+            if (!this.isUpdateMode && !this.isPendingVoucherType) {
                 this.resetInvoiceForm(this.invoiceForm);
                 if (!this.isMultiCurrencyModule()) {
                     // Hide the warehouse section if the module is other than multi-currency supported modules
@@ -669,6 +678,27 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.getAllLastInvoices();
         });
 
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((event) => {
+            if (event instanceof ActivationStart) {
+                // Unsubscribe the moment user is navigating away from this route
+                // Current implementation causes issue when user navigates to CN & DN with CMD + K
+                // in UPDATE voucher flow as the URLs are the same and only params
+                // change therefore the params subscription of current page are also fired which is
+                // not required and loads incorrect data
+                //  not allowing for pending type voucher on preview sales invoice on click customer name this block was calling which was wrong
+                if (!this.isPendingVoucherType) {
+                    if (!this.isProformaInvoice && !this.isEstimateInvoice) {
+                        this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+                    } else {
+                        this.store.dispatch(this.proformaActions.resetActiveVoucher());
+                    }
+
+                    this.destroyed$.next(true);
+                    this.destroyed$.complete();
+                }
+            }
+        });
+
         // get account details and set it to local var
         this.selectedAccountDetails$.subscribe(accountDetails => {
             if (accountDetails && (!this.isUpdateMode || (this.isUpdateMode && (this.invoiceType === VoucherTypeEnum.sales || this.invoiceType === VoucherTypeEnum.cash)))) {
@@ -676,6 +706,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         });
 
+        this.getOnboardingFormInProcess$.subscribe(inProcess => {
+            this.startLoader(inProcess);
+        });
         // get tax list and assign values to local vars
         this.store.pipe(select(p => p.company.isGetTaxesSuccess), takeUntil(this.destroyed$)).subscribe(isGetTaxes => {
             if (isGetTaxes) {
@@ -875,8 +908,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                     bankaccounts = _.orderBy(bankaccounts, 'label');
                     this.bankAccounts$ = observableOf(bankaccounts);
-
-                    if (this.invFormData.accountDetails) {
+                    /** voucher type pending will not be allow as cash type*/
+                    if (this.invFormData.accountDetails && !this.isPendingVoucherType) {
                         if (!this.invFormData.accountDetails.uniqueName) {
                             this.invFormData.accountDetails.uniqueName = 'cash';
                         }
@@ -1556,7 +1589,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {
         this.updateAccount = isUpdate;
-        this.generateUpdateButtonClicked.next(form);
+        if (this.isPendingVoucherType) {
+            this.startLoader(true);
+            this.onSubmitInvoiceForm(form);
+        } else {
+            this.generateUpdateButtonClicked.next(form);
+        }
     }
 
     public autoFillShippingDetails() {
@@ -1697,8 +1735,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     entry.entryDate = this.convertDateForAPI(entry.entryDate);
                     txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), 2) : 0;
 
-                    // we need to remove # from account uniqueName because we are appending # to stock for uniqueNess
-                    if (this.isLastInvoiceCopied) {
+                    // we need to remove # from account uniqueName because we are appending # to stock for uniqueNess (allowing for pending type voucher)
+                    if (this.isLastInvoiceCopied || this.isPendingVoucherType) {
                         if (txn.stockList && txn.stockList.length) {
                             txn.accountUniqueName = txn.accountUniqueName.indexOf('#') > -1 ? txn.accountUniqueName.slice(0, txn.accountUniqueName.indexOf('#')) : txn.accountUniqueName;
                             txn.fakeAccForSelect2 = txn.accountUniqueName.indexOf('#') > -1 ? txn.fakeAccForSelect2.slice(0, txn.fakeAccForSelect2.indexOf('#')) : txn.fakeAccForSelect2;
@@ -1853,12 +1891,22 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     return;
                 }
             } else {
-                this.salesService.generateGenericItem(updatedData, isVoucherV4).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
-                    this.handleGenerateResponse(response, form);
-                }, () => {
-                    this.startLoader(false);
-                    this._toasty.errorToast('Something went wrong! Try again');
-                });
+                if (this.isPendingVoucherType) {
+                    this.salesService.generatePendingVoucherGenericItem(updatedData).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
+                        this.handleGenerateResponse(response, form);
+                    }, () => {
+                        this.startLoader(false);
+                        this._toasty.errorToast('Something went wrong! Try again');
+                    });
+                } else {
+                    this.salesService.generateGenericItem(updatedData, isVoucherV4).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
+                        this.handleGenerateResponse(response, form);
+                    }, () => {
+                        this.startLoader(false);
+                        this._toasty.errorToast('Something went wrong! Try again');
+                    });
+                }
+
             }
         }
     }
@@ -1962,8 +2010,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         });
 
-        entry.taxSum = ((taxPercentage * (trx.amount - entry.discountSum)) / 100);
-        entry.cessSum = ((cessPercentage * (trx.amount - entry.discountSum)) / 100);
+        entry.taxSum = giddhRoundOff(((taxPercentage * (trx.amount - entry.discountSum)) / 100), 2);
+        entry.cessSum = giddhRoundOff(((cessPercentage * (trx.amount - entry.discountSum)) / 100), 2);
 
         if (isNaN(entry.taxSum)) {
             entry.taxSum = 0;
@@ -1983,7 +2031,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public calculateEntryTotal(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
-        trx.total = parseFloat(((trx.amount - entry.discountSum) + (entry.taxSum + entry.cessSum)).toFixed(2));
+        trx.total = giddhRoundOff((trx.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
 
         this.calculateSubTotal();
         this.calculateTotalDiscount();
@@ -1994,6 +2042,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
         trx.amount = Number(trx.amount);
+        if (trx.isStockTxn) {
+            trx.rate = giddhRoundOff((trx.amount / trx.quantity), this.ratePrecision);
+        }
         this.calculateTotalDiscountOfEntry(entry, trx, false);
         this.calculateEntryTaxSum(entry, trx, false);
         this.calculateEntryTotal(entry, trx);
@@ -2006,6 +2057,74 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         //         this.isAdjustAdvanceReceiptModalOpen();
         //     }
         // }
+    }
+
+    /**
+     * Calculate the complete transaction values inclusively
+     *
+     * @param {SalesEntryClass} entry Entry value
+     * @param {SalesTransactionItemClass} transaction Current transaction
+     * @memberof ProformaInvoiceComponent
+     */
+    public calculateTransactionValueInclusively(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
+        // Calculate discount
+        let percentageDiscountTotal = entry.discounts.filter(discount => discount.isActive)
+            .filter(activeDiscount => activeDiscount.discountType === 'PERCENTAGE')
+            .reduce((pv, cv) => {
+                return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+            }, 0) || 0;
+
+        let fixedDiscountTotal = entry.discounts.filter(discount => discount.isActive)
+            .filter(activeDiscount => activeDiscount.discountType === 'FIX_AMOUNT')
+            .reduce((pv, cv) => {
+                return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+            }, 0) || 0;
+
+        // Calculate tax
+        let taxPercentage: number = 0;
+        let cessPercentage: number = 0;
+        let taxTotal: number = 0;
+        entry.taxes.filter(tax => tax.isChecked).forEach(selectedTax => {
+            if (selectedTax.type === 'gstcess') {
+                cessPercentage += selectedTax.amount;
+            } else {
+                taxPercentage += selectedTax.amount;
+            }
+            taxTotal += selectedTax.amount;
+        });
+
+        // Calculate amount with inclusive tax
+        transaction.amount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
+            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), 2);
+        let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), 2);
+        entry.discountSum = giddhRoundOff(perFromAmount + fixedDiscountTotal, 2);
+        if (isNaN(entry.discountSum)) {
+            entry.discountSum = 0;
+        }
+        transaction.taxableValue = Number(transaction.amount) - entry.discountSum;
+        if (isNaN(transaction.taxableValue)) {
+            transaction.taxableValue = 0;
+        }
+        entry.taxSum = giddhRoundOff(((taxPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
+        entry.cessSum = giddhRoundOff(((cessPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
+        if (isNaN(entry.taxSum)) {
+            entry.taxSum = 0;
+        }
+
+        if (isNaN(entry.cessSum)) {
+            entry.cessSum = 0;
+        }
+        // Calculate stock unit rate with amount
+        if (transaction.isStockTxn) {
+            transaction.rate = giddhRoundOff((transaction.amount / transaction.quantity), this.ratePrecision);
+        }
+        this.calculateSubTotal();
+        this.calculateTotalDiscount();
+        this.calculateTotalTaxSum();
+        this.calculateGrandTotal();
+        this.calculateOtherTaxes(entry.otherTaxModal, entry);
+        this.calculateTcsTdsTotal();
+        this.calculateBalanceDue();
     }
 
     public calculateTotalDiscount() {
@@ -2078,10 +2197,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.adjustPaymentBalanceDueData = 0;
         }
         this.invFormData.voucherDetails.balanceDue =
-            ((count + this.invFormData.voucherDetails.tcsTotal + this.calculatedRoundOff) - this.invFormData.voucherDetails.tdsTotal) - depositAmount - Number(this.depositAmountAfterUpdate) - this.totalAdvanceReceiptsAdjustedAmount;
+            giddhRoundOff((((count + this.invFormData.voucherDetails.tcsTotal + this.calculatedRoundOff) - this.invFormData.voucherDetails.tdsTotal) - depositAmount - Number(this.depositAmountAfterUpdate) - this.totalAdvanceReceiptsAdjustedAmount), 2);
         if (this.isUpdateMode && this.isInvoiceAdjustedWithAdvanceReceipts && !this.adjustPaymentData.totalAdjustedAmount) {
             this.invFormData.voucherDetails.balanceDue =
-                ((count + this.invFormData.voucherDetails.tcsTotal + this.calculatedRoundOff) - this.invFormData.voucherDetails.tdsTotal) - Number(this.depositAmountAfterUpdate) - this.totalAdvanceReceiptsAdjustedAmount;
+                giddhRoundOff((((count + this.invFormData.voucherDetails.tcsTotal + this.calculatedRoundOff) - this.invFormData.voucherDetails.tdsTotal) - Number(this.depositAmountAfterUpdate) - this.totalAdvanceReceiptsAdjustedAmount), 2);
         }
 
     }
@@ -3038,7 +3157,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     // txn.date = this.convertDateForAPI(txn.date);
                     entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
-                    if (this.isUpdateMode) {
+                    // allowing below block of code for pending voucher to create because no need # in caseof pending voucher
+                    if (this.isUpdateMode || this.isPendingVoucherType) {
                         // we need to remove # from account uniqueName because we are appending # to stock for uniqueNess
                         if (txn.stockList && txn.stockList.length) {
                             txn.accountUniqueName = txn.accountUniqueName.indexOf('#') > -1 ? txn.accountUniqueName.slice(0, txn.accountUniqueName.indexOf('#')) : txn.accountUniqueName;
@@ -3468,7 +3588,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngOnDestroy() {
-        if (!this.isProformaInvoice && !this.isEstimateInvoice) {
+        if (!this.isProformaInvoice && !this.isEstimateInvoice && this.isPendingVoucherType) {
             this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
         } else {
             this.store.dispatch(this.proformaActions.resetActiveVoucher());
@@ -3696,7 +3816,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         //code for voucher details
         voucherDetails.voucherDate = result.date ? result.date : '';
-        voucherDetails.balanceDue = result.balanceTotal.amountForAccount;
+        if (this.isPendingVoucherType) {
+            result.balanceTotal = result.grandTotal;
+        } else {
+            voucherDetails.balanceDue = result.balanceTotal.amountForAccount;
+        }
+
         voucherDetails.deposit = result.deposit ? result.deposit.amountForAccount : 0;
 
         //need to check usage
@@ -3852,9 +3977,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private getUpdatedStateCodes(countryCode: any): Promise<any> {
+        this.startLoader(true);
         return new Promise((resolve: Function) => {
             if (countryCode) {
                 this.salesService.getStateCode(countryCode).subscribe(resp => {
+                    this.startLoader(false);
                     this.statesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : []);
                     resolve();
                 }, () => {
@@ -4290,6 +4417,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this._toasty.successToast(`Purchase record created successfully`);
             } else {
                 this._toasty.successToast(`Entry created successfully with Voucher Number: ${this.voucherNumber}`);
+            }
+
+            /** For pending type need to navigate to get all module of voucher type   */
+            if (this.isPendingVoucherType) {
+                this.cancelUpdate();
             }
             this.postResponseAction(this.invoiceNo);
         } else {
