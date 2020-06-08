@@ -11,6 +11,7 @@ import { BACKSPACE } from '@angular/cdk/keycodes';
 import { LoginActions } from '../actions/login.action';
 import { AuthService } from '../theme/ng-social-login-module/index';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { CommandKRequest } from '../models/api-models/Common';
 
 @Component({
     selector: 'mobile-home',
@@ -31,7 +32,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     /* This will store the company unique name */
     public activeCompanyUniqueName: any = '';
     /* Object to send filters to api call */
-    public commandKRequestParams: any = {
+    public commandKRequestParams: CommandKRequest = {
         page: 1,
         q: '',
         group: '',
