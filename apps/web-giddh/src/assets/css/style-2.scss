@@ -9125,19 +9125,20 @@ ngx-daterangepicker-material {
 .setting-sidebar-open .desktop-header{
     padding-left: 215px;
 }
-.setting-data{
-    padding-left: 230px;
+.setting-data , .setting-sidebar-open .white-row{
+    padding-left: 230px !important;
 }
-.setting-sidebar-open .white-row{
-    margin-left: 215px;
-}
-.setting-sidebar-open .menu_open .setting-data {
-    padding-left: 15px;
+// .setting-sidebar-open .white-row{
+//     margin-left: 0;
+// }
+.setting-sidebar-open .menu_open .setting-data , .setting-sidebar-open .menu_open .white-row {
+    padding-left: 15px !important;
 }
 .date-field{
     flex-direction: column;
 }
 .mobile-home{
+    background-color: $lavender;
     .padding-top-fixed-mobile, .padding-top-fixed, .desktop-header{
         display: none;
     }
@@ -9438,11 +9439,11 @@ ngx-daterangepicker-material {
 }
 
 @media (max-width: 767px) {
-    .setting-sidebar-open .desktop-header , .setting-sidebar-open .white-row{
+    .setting-sidebar-open .desktop-header {
         padding-left: 0;
     }
-    .setting-sidebar-open .setting-data{
-        padding-left: 15px;
+    .setting-sidebar-open .setting-data, .setting-sidebar-open .white-row{
+        padding-left: 15px !important;
     }
     .overlay-cal{
         .modal-body{
@@ -9766,7 +9767,7 @@ ngx-daterangepicker-material {
         display: inline-flex !important;
     }
     .setting-data{
-        padding-left: 15px;
+        padding-left: 15px !important;
     }
     .mobile-setting-sidebar{
         position: relative;

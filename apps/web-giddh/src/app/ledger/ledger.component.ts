@@ -76,6 +76,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('advanceSearchComp') public advanceSearchComp: AdvanceSearchModelComponent;
 
     @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
+    public imgPath: string = '';
     public lc: LedgerVM;
     public selectedInvoiceList: string[] = [];
     public accountInprogress$: Observable<boolean>;
@@ -439,6 +440,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.imgPath = (isElectron||isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.breakPointObservar.observe([
             '(max-width: 991px)'
         ]).subscribe(result => {

@@ -10,6 +10,7 @@ import { AuthenticationService } from 'apps/web-giddh/src/app/services/authentic
 })
 
 export class AsideHelpSupportComponent implements OnInit {
+    public imgPath: string = '';
     //Event emitter to close the Aside panel
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     /* This will hold the value of current mobile apk version */
@@ -26,6 +27,7 @@ export class AsideHelpSupportComponent implements OnInit {
      */
     public ngOnInit() {
         this.getElectronAppVersion();
+        this.imgPath = (isElectron||isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 
     /**

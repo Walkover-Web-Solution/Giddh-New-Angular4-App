@@ -31,11 +31,9 @@
 }
 .icon-calender:before {
   content: "\e93c";
-  color: #fff;
 }
 .icon-home-icon:before {
   content: "\e900";
-  color: #fff;
 }
 .icon-log:before {
   content: "\e001";

@@ -499,7 +499,8 @@ span.icon-support.dropdown-toggle {
     height: 32px;
 }
 .date-range-picker{
-    max-width: 190px;
+    max-width: 196px;
+    min-width: 196px;
 }
 
 .other a {
@@ -653,6 +654,8 @@ ul.sub-list {
     color: $white; 
     img{
         width: 18px;
+        vertical-align: top;
+        margin-top: 2px;
     }
 }
 .help-support-aside{
@@ -812,6 +815,7 @@ ul.sub-list {
         .help-setting-icons{
             img{
                 width: 25px;
+                margin-top: 0;
             }
         }
         .notification{
@@ -842,8 +846,11 @@ ul.sub-list {
     .universal-date li input {
        height: 32px;
     }
-    .white-row{
-        margin: 15px 15px;
+    .plan-wrapper{
+        padding: 15px 0 ;
+        .white-row{
+            margin: 0 15px;
+        }
     }
     .setting-menu-icon{
         padding: 0 10px 0 3px;

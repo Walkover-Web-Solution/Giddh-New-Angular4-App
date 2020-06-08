@@ -47,7 +47,7 @@
 
                     <!-- Functionality not working -->
                     <div class="ledger-datepicker" container="body" *ngIf="isMobileScreen">
-                        <img (click)="showGiddhDatepicker($event)" src="../../assets/images/calender-icon.svg">
+                        <img (click)="showGiddhDatepicker($event)" src="{{imgPath}}calender-icon.svg">
                     </div>
                     <span class="input-wrapper ipad-view-datepicker">
                         <!-- <input type="text" class="form-control daterange_picker_ledger" daterangepicker
@@ -57,7 +57,7 @@
                     </span>
                     <span *ngIf="!isMobileScreen" class="advance-icon d-flex advance-search-filter pointer" [tooltip]="'Advance Search'" [placement]="'top'" [ngStyle]="{'margin-left': checkedTrxWhileHovering.length === 0 ? '7px': '0px'}">
                         <!-- <i class="icon-advance-search" aria-hidden="true" (click)="onOpenAdvanceSearch()"></i> -->
-                        <img src="../../assets/images/advance-filter.svg" (click)="onOpenAdvanceSearch()">
+                        <img src="{{imgPath}}advance-filter.svg" (click)="onOpenAdvanceSearch()">
                     </span>
                     <a class="cp mrL1 clear-filter-btn" *ngIf="isAdvanceSearchImplemented && !isMobileScreen" href="javascript:;" (click)="resetAdvanceSearch()" tooltip="Reset Advance Search">
                         <i aria-hidden="true" class="glyphicon glyphicon-refresh"></i> Clear Filter
