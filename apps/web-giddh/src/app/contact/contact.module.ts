@@ -9,7 +9,8 @@ import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrol
 import { ContactComponent } from './contact.component';
 import { ContactRoutingModule } from './contact.routing.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { BsDropdownModule, ModalModule, PaginationComponent, PaginationModule, TooltipModule } from 'ngx-bootstrap';
+import { BsDropdownModule, PaginationComponent, PaginationModule, TooltipModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { AsideMenuAccountInContactComponent } from './aside-menu-account/aside.menu.account.component';
 import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
@@ -61,7 +62,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         SharedModule,
         SelectModule.forRoot(),
         TabsModule.forRoot(),
-        ModalModule,
+        ModalModule.forRoot(),
         PaginationModule,
         ClickOutsideModule,
         DigitsOnlyModule,
@@ -72,6 +73,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         PerfectScrollbarModule,
         GhSortByPipeModule,
         GenericAsideMenuAccountModule,
+        NgxDaterangepickerMd.forRoot()
     ],
     entryComponents: [
         PaginationComponent

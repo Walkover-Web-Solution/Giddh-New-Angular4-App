@@ -328,7 +328,8 @@ ul.selectActionDropdown {
     color: #999999;
 }
 
-.advance-icon , .search-icon-block {
+.advance-icon,
+.search-icon-block {
     width: 36px;
     height: 36px;
     display: inline-flex;
@@ -342,9 +343,11 @@ ul.selectActionDropdown {
     background: #fff;
     color: $gray;
 }
-.search-icon-block{
+
+.search-icon-block {
     display: none;
 }
+
 .advance-icon:hover {
     background: #eaeaea;
 }
@@ -428,6 +431,7 @@ button.btn.btn-filter span.icon-cross {
     z-index: 100;
     top: 0;
 }
+
 .invoice-footer h3 {
     font-size: 16px;
     color: #999999;
@@ -448,12 +452,14 @@ button.btn.btn-filter span.icon-cross {
 div.remove-capitalize {
     text-transform: none !important;
 }
-span.icon-export-icon{
-color:$gray;
+
+span.icon-export-icon {
+    color: $gray;
 }
 /* responsive */
+
 @media (max-width: 768px) {
-    .search-icon-block{
+    .search-icon-block {
         display: flex;
     }
     .card-header .mh18_img {
@@ -462,7 +468,7 @@ color:$gray;
     .mobileTable {
         display: block;
     }
-    .desktop-table  {
+    .desktop-table {
         display: none;
     }
     .mobileViewPagination {
@@ -547,8 +553,8 @@ color:$gray;
     .desktop-view-btn {
         display: none;
     }
-    .date-advanceSearch{
-        .add-invoice{
+    .date-advanceSearch {
+        .add-invoice {
             display: none;
         }
     }
@@ -561,6 +567,7 @@ color:$gray;
         font-size: 13px;
     }
 }
+
 @media (max-width: 767px) {
     .invoice-modal-content:after,
     .invoice-modal-content {
@@ -584,7 +591,7 @@ color:$gray;
 }
 
 @media (max-width: 575px) {
-    button.btn.btn-filter{
+    button.btn.btn-filter {
         width: 100%;
         justify-content: center;
         margin-bottom: 5px;
@@ -604,7 +611,7 @@ color:$gray;
         width: 100%;
         margin: 5px 0;
     }
-    .date-advanceSearch{
+    .date-advanceSearch {
         flex-direction: column;
     }
 }
@@ -630,6 +637,7 @@ color:$gray;
         top: 5px;
     }
 }
+
 @media (max-width: 320px) {
     .mobile-search .input-container input {
         letter-spacing: -0.99px;

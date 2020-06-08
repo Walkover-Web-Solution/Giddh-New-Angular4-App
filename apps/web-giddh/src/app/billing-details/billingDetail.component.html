@@ -14,10 +14,10 @@
                 </div>
             </div>
             <div class="col-sm-2">
-                <div class="back-btn" *ngIf="!this.fromSubscription">
+                <!-- <div class="back-btn" *ngIf="!this.fromSubscription">
                     <button class="btn btn-default" routerLink="/select-plan">Back</button>
-                </div>
-                <div class="back-btn" *ngIf="this.fromSubscription">
+                </div> -->
+                <div class="back-btn">
                     <button class="btn btn-default" (click)="backToSubscriptions();">Back</button>
                 </div>
             </div>
@@ -84,18 +84,6 @@
 
                     <div class="your-account">
 
-                        <!-- <div class="row">
-                            <div class="col-xs-6">
-                                <span>
-                  Subscription ID
-                </span>
-                            </div>
-                            <div class="col-xs-6">
-                                <p>
-                                    -
-                                </p>
-                            </div>
-                        </div> -->
 
                         <!--  -->
                         <div class="row">
@@ -151,16 +139,11 @@
                                 </p>
                             </div>
                         </div>
-
                     </div>
-
-
                 </div>
             </div>
         </div>
     </div>
-
-
 </div>
 
 <div *ngIf="isCreateAndSwitchCompanyInProcess">

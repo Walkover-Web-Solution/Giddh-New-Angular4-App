@@ -1414,8 +1414,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     private parseBalRes(res) {
-        this.totalSale = res.body.grandTotal;
-        this.totalDue = res.body.totalDue;
+        if (res && res.body) {
+            this.totalSale = res.body.grandTotal;
+            this.totalDue = res.body.totalDue;
+        }
         // get user country from his profile
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile) {
@@ -1605,7 +1607,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     public updateNewAccountInVoucher(voucherUpdatedDetails: any): void {
-        if (this.voucherData && this.voucherData.items && voucherUpdatedDetails) {            
+        if (this.voucherData && this.voucherData.items && voucherUpdatedDetails) {
             let loop = 0;
             this.voucherData.items.forEach(voucher => {
                 if (voucher.voucherNumber === voucherUpdatedDetails.number) {
@@ -1628,7 +1630,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public getUpdatedAccountUniquename(voucherNo: string, currentAccountUniqueName: string): string {
         let newAccountUniqueName = currentAccountUniqueName;
-        if (this.voucherData && this.voucherData.items && voucherNo) {            
+        if (this.voucherData && this.voucherData.items && voucherNo) {
             this.voucherData.items.forEach(voucher => {
                 if (voucher.voucherNumber === voucherNo) {
                     newAccountUniqueName = voucher.account.uniqueName;

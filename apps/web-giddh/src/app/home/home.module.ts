@@ -28,6 +28,7 @@ import { SharedModule } from '../shared/shared.module';
 import { DatepickeroptionsComponent } from './components/datepickeroptions/datepickeroptions.component';
 import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
 import { GiddhCurrencyPipe } from "../shared/helpers/pipes/currencyPipe/currencyType.pipe";
+import { SharedModule } from '../shared/shared.module';
 
 export function highchartsFactory() {
     // @ts-ignore

@@ -32,6 +32,7 @@ export interface LedgerState {
     ledgerBulkActionSuccess: boolean;
     ledgerBulkActionFailedEntries: string[];
     ledgerTransactionsBalance: any;
+    refreshLedger: boolean;
 }
 
 export const initialState: LedgerState = {
@@ -49,8 +50,8 @@ export const initialState: LedgerState = {
     isAdvanceSearchApplied: false,
     ledgerBulkActionSuccess: false,
     ledgerBulkActionFailedEntries: [],
-    ledgerTransactionsBalance: null
-
+    ledgerTransactionsBalance: null,
+    refreshLedger: false
 };
 
 export function ledgerReducer(state = initialState, action: CustomActions): LedgerState {
@@ -409,6 +410,13 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             });
         }
 
+        case LEDGER.REFRESH_LEDGER: {
+            let request = action.payload;
+            return Object.assign({}, state, {
+                refreshLedger: request
+            });
+        }
+
         default: {
             return state;
         }
@@ -421,27 +429,79 @@ const prepareTransactions = (transactionDetails: TransactionsResponse): Transact
     return transactionDetails;
 };
 
-const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'debit' | 'credit', isChecked: boolean): TransactionsResponse => {
+const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'debit' | 'credit' | 'all', isChecked: boolean): TransactionsResponse => {
     let newResponse: TransactionsResponse = Object.assign({}, transactionDetails);
-    let key = mode === 'debit' ? 'debitTransactions' : 'creditTransactions';
-    let reverse = mode === 'debit' ? 'creditTransactions' : 'debitTransactions';
-    newResponse[key].map(dbt => dbt.isChecked = false);
-    if (isChecked) {
-        newResponse[key].map(dt => {
-            if (dt.isCompoundEntry) {
-                newResponse[reverse].map(d => {
-                    if (dt.entryUniqueName === d.entryUniqueName) {
-                        return d.isChecked = true;
-                    }
-                    return d;
-                });
-                dt.isChecked = true;
-            } else {
-                dt.isChecked = true;
-            }
-            return dt;
-        });
+    let key = '';
+    let reverse = '';
+
+    if(mode === 'all') {
+        key = 'debitTransactions';
+        reverse = 'creditTransactions';
+
+        newResponse[key].map(dbt => dbt.isChecked = false);
+
+        if (isChecked) {
+            newResponse[key].map(dt => {
+                if (dt.isCompoundEntry) {
+                    newResponse[reverse].map(d => {
+                        if (dt.entryUniqueName === d.entryUniqueName) {
+                            return d.isChecked = true;
+                        }
+                        return d;
+                    });
+                    dt.isChecked = true;
+                } else {
+                    dt.isChecked = true;
+                }
+                return dt;
+            });
+        }
+
+        key = 'creditTransactions';
+        reverse = 'debitTransactions';
+
+        newResponse[key].map(dbt => dbt.isChecked = false);
+
+        if (isChecked) {
+            newResponse[key].map(dt => {
+                if (dt.isCompoundEntry) {
+                    newResponse[reverse].map(d => {
+                        if (dt.entryUniqueName === d.entryUniqueName) {
+                            return d.isChecked = true;
+                        }
+                        return d;
+                    });
+                    dt.isChecked = true;
+                } else {
+                    dt.isChecked = true;
+                }
+                return dt;
+            });
+        }
+    } else {
+        key = mode === 'debit' ? 'debitTransactions' : 'creditTransactions';
+        reverse = mode === 'debit' ? 'creditTransactions' : 'debitTransactions';
+
+        newResponse[key].map(dbt => dbt.isChecked = false);
+
+        if (isChecked) {
+            newResponse[key].map(dt => {
+                if (dt.isCompoundEntry) {
+                    newResponse[reverse].map(d => {
+                        if (dt.entryUniqueName === d.entryUniqueName) {
+                            return d.isChecked = true;
+                        }
+                        return d;
+                    });
+                    dt.isChecked = true;
+                } else {
+                    dt.isChecked = true;
+                }
+                return dt;
+            });
+        }
     }
+    
     return newResponse;
 };
 

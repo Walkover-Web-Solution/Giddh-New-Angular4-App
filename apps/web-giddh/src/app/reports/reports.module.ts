@@ -34,6 +34,8 @@ import { RefundAmountComponent } from './components/refund-amount/refund-amount.
 import { AdjustInvoiceModalComponent } from './components/adjust-invoice-modal/adjust-invoice-modal.component';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { ColumnarReportTableComponent } from './components/columnar-report-table-component/columnar.report.table.component';
+import { CashFlowStatementComponent } from './components/cash-flow-statement-component/cash.flow.statement.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -54,7 +56,8 @@ import { ColumnarReportTableComponent } from './components/columnar-report-table
         ReceiptAdvanceSearchComponent,
         RefundAmountComponent,
         AdjustInvoiceModalComponent,
-        ColumnarReportTableComponent
+        ColumnarReportTableComponent,
+        CashFlowStatementComponent
     ],
     entryComponents: [
         ReceiptAdvanceSearchComponent

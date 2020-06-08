@@ -1,7 +1,7 @@
 import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { AuthService } from '../../theme/ng-social-login-module/index';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
 import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
 import {
     AfterViewChecked,
@@ -116,55 +116,55 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         { name: 'DUTCH', value: 'nl' }
     ];
     public activeFinancialYear: ActiveFinancialYear;
-    public datePickerOptions: any = {
-        hideOnEsc: true,
-        opens: 'left',
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'This Month to Date': [
-                moment().startOf('month'),
-                moment()
-            ],
-            'This Quarter to Date': [
-                moment().quarter(moment().quarter()).startOf('quarter'),
-                moment()
-            ],
-            'This Financial Year to Date': [
-                moment().startOf('year').subtract(9, 'year'),
-                moment()
-            ],
-            'This Year to Date': [
-                moment().startOf('year'),
-                moment()
-            ],
-            'Last Month': [
-                moment().subtract(1, 'month').startOf('month'),
-                moment().subtract(1, 'month').endOf('month')
-            ],
-            'Last Quarter': [
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-            ],
-            'Last Financial Year': [
-                moment().startOf('year').subtract(10, 'year'),
-                moment().endOf('year').subtract(10, 'year')
-            ],
-            'Last Year': [
-                moment().subtract(1, 'year').startOf('year'),
-                moment().subtract(1, 'year').endOf('year')
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
-    };
+    // public datePickerOptions: any = {
+    //     hideOnEsc: true,
+    //     opens: 'left',
+    //     locale: {
+    //         applyClass: 'btn-green',
+    //         applyLabel: 'Go',
+    //         fromLabel: 'From',
+    //         format: 'D-MMM-YY',
+    //         toLabel: 'To',
+    //         cancelLabel: 'Cancel',
+    //         customRangeLabel: 'Custom range'
+    //     },
+    //     ranges: {
+    //         'This Month to Date': [
+    //             moment().startOf('month'),
+    //             moment()
+    //         ],
+    //         'This Quarter to Date': [
+    //             moment().quarter(moment().quarter()).startOf('quarter'),
+    //             moment()
+    //         ],
+    //         'This Financial Year to Date': [
+    //             moment().startOf('year').subtract(9, 'year'),
+    //             moment()
+    //         ],
+    //         'This Year to Date': [
+    //             moment().startOf('year'),
+    //             moment()
+    //         ],
+    //         'Last Month': [
+    //             moment().subtract(1, 'month').startOf('month'),
+    //             moment().subtract(1, 'month').endOf('month')
+    //         ],
+    //         'Last Quarter': [
+    //             moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
+    //             moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+    //         ],
+    //         'Last Financial Year': [
+    //             moment().startOf('year').subtract(10, 'year'),
+    //             moment().endOf('year').subtract(10, 'year')
+    //         ],
+    //         'Last Year': [
+    //             moment().subtract(1, 'year').startOf('year'),
+    //             moment().subtract(1, 'year').endOf('year')
+    //         ]
+    //     },
+    //     startDate: moment().subtract(30, 'days'),
+    //     endDate: moment()
+    // };
 
     public sideMenu: { isopen: boolean } = { isopen: false };
     public companyMenu: { isopen: boolean } = { isopen: false };
@@ -215,9 +215,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private loggedInUserEmail: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private subscriptions: Subscription[] = [];
-    private modelRef: BsModalRef;
-    private modelRefExpirePlan: BsModalRef;
-    private modelRefCrossLimit: BsModalRef;
+    public modelRef: BsModalRef;
+    public modelRefExpirePlan: BsModalRef;
+    public modelRefCrossLimit: BsModalRef;
 
     private activeCompanyForDb: ICompAidata;
     private smartCombinedList$: Observable<any>;
@@ -231,9 +231,29 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isCalendlyModelActivate: boolean = false;
     public companyInitials: any = '';
     public forceOpenNavigation: boolean = false;
+    public pageHasTabs: boolean = false;
     /** VAT supported countries to show the Vat Report section in all modules */
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
-    public pageHasTabs: boolean = false;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+
+    /* This will store modal reference */
+    public modalRef: BsModalRef;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOptions: any;
+    /* Selected from date */
+    public fromDate: string;
+    /* Selected to date */
+    public toDate: string;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /* This will check if company is allowed to beta test new modules */
+    public isAllowedForBetaTesting: boolean = false;
 
     /**
      *
@@ -263,7 +283,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private commonActions: CommonActions
     ) {
         this._windowRef.nativeWindow.superformIds = ['Jkvq'];
-
+        /* This will get the date range picker configurations */
+        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
+            if (config) {
+                this.datePickerOptions = config;
+            }
+        });
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
 
@@ -353,8 +378,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                 let selectedCompanyArray = selectedCmp.name.split(" ");
                 let companyInitials = [];
-                for(let loop = 0; loop < selectedCompanyArray.length; loop++) {
-                    if(loop <= 1) {
+                for (let loop = 0; loop < selectedCompanyArray.length; loop++) {
+                    if (loop <= 1) {
                         companyInitials.push(selectedCompanyArray[loop][0]);
                     }
                     else {
@@ -371,17 +396,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 } else {
                     this.seletedCompanywithBranch = selectedCmp.name;
                 }
-
-                if (this.activeFinancialYear) {
-                    this.datePickerOptions.ranges['This Financial Year to Date'] = [
-                        moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
-                        moment()
-                    ];
-                    this.datePickerOptions.ranges['Last Financial Year'] = [
-                        moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
-                        moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year')
-                    ];
-                }
+                //commenting due to new date picker option
+                // if (this.activeFinancialYear) {
+                //     this.datePickerOptions.ranges['This Financial Year to Date'] = [
+                //         moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
+                //         moment()
+                //     ];
+                //     this.datePickerOptions.ranges['Last Financial Year'] = [
+                //         moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
+                //         moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year')
+                //     ];
+                // }
 
                 this.activeCompanyForDb = new CompAidataModel();
                 this.activeCompanyForDb.name = selectedCmp.name;
@@ -678,6 +703,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         this.selectedPlanStatus = res.subscription.status;
                     }
                     this.activeCompany = res;
+                    if(this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
+                        this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
+                    }
                     this.checkIfCompanyTcsTdsApplicable();
                 }
             });
@@ -711,10 +739,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // Get universal date
         this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj && dateObj.length) {
-                if (!this.isDateRangeSelected) {
-                    this.datePickerOptions.startDate = moment(dateObj[0]);
-                    this.datePickerOptions.endDate = moment(dateObj[1]);
-                    this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1]), chosenLabel: dateObj[2]};
+                // if (!this.isDateRangeSelected) {
+                    // this.datePickerOptions.startDate = moment(dateObj[0]);
+                    // this.datePickerOptions.endDate = moment(dateObj[1]);
+                    // this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1]), chosenLabel: dateObj[2]};
+                    this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                    this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                     this.isDateRangeSelected = true;
                     const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
                     const to: any = moment().format(GIDDH_DATE_FORMAT);
@@ -724,12 +754,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     if (from === fromFromStore && to === toFromStore) {
                         this.isTodaysDateSelected = true;
                     }
-                }
-                let fromForDisplay = moment(dateObj[0]).format('D-MMM-YY');
-                let toForDisplay = moment(dateObj[1]).format('D-MMM-YY');
-                if (this.dateRangePickerCmp) {
-                    this.dateRangePickerCmp.nativeElement.value = `${fromForDisplay} - ${toForDisplay}`;
-                }
+                // }
+                // let fromForDisplay = moment(dateObj[0]).format('D-MMM-YY');
+                // let toForDisplay = moment(dateObj[1]).format('D-MMM-YY');
+                // if (this.dateRangePickerCmp) {
+                //     this.dateRangePickerCmp.nativeElement.value = `${fromForDisplay} - ${toForDisplay}`;
+                // }
             }
         })).subscribe();
     }
@@ -1073,7 +1103,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (this.companyDetailsDropDownWeb) {
             this.companyDetailsDropDownWeb.hide();
         }
-        if(event){
+        if (event) {
             document.querySelector('body').classList.add('hide-scroll-body')
         } else {
             document.querySelector('body').classList.remove('hide-scroll-body')
@@ -1103,48 +1133,50 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.flyAccounts.next(false);
     }
 
-    public setApplicationDate(ev) {
-        let data = ev ? _.cloneDeep(ev) : null;
-        if (data && data.picker) {
-            let dates = {
-                fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
-                toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT),
-                chosenLabel: data.picker.chosenLabel
-            };
-            // if (data.picker.chosenLabel === 'This Financial Year to Date') {
-            //   data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
-            //   dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-            // }
-            // if (data.picker.chosenLabel === 'Last Financial Year') {
-            //   data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year');
-            //   data.picker.endDate = moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year');
-            //   dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-            //   dates.toDate = moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT);
-            // }
-            this.isTodaysDateSelected = false;
-            this.store.dispatch(this.companyActions.SetApplicationDate(dates));
-        } else {
-            this.isTodaysDateSelected = true;
-            let today = _.cloneDeep([moment(), moment()]);
-            this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
-            let dates = {
-                fromDate: null,
-                toDate: null,
-                duration: null,
-                period: null,
-                noOfTransactions: null
-            };
-            this.store.dispatch(this.companyActions.SetApplicationDate(dates));
-        }
-    }
+    // public setApplicationDate(ev) {
+    //     let data = ev ? _.cloneDeep(ev) : null;
+    //     if (data && data.picker) {
+    //         let dates = {
+    //             fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
+    //             toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT),
+    //             chosenLabel: data.picker.chosenLabel
+    //         };
+    //         if (data.picker.chosenLabel === 'This Financial Year to Date') {
+    //           data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
+    //           dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
+    //         }
+    //         if (data.picker.chosenLabel === 'Last Financial Year') {
+    //           data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year');
+    //           data.picker.endDate = moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year');
+    //           dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
+    //           dates.toDate = moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT);
+    //         }
+    //         this.isTodaysDateSelected = false;
+    //         this.store.dispatch(this.companyActions.SetApplicationDate(dates));
+    //     } else {
+    //         this.isTodaysDateSelected = true;
+    //         let today = _.cloneDeep([moment(), moment()]);
+    //         // this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
+    //         this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
+    //         this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+    //         let dates = {
+    //             fromDate: null,
+    //             toDate: null,
+    //             duration: null,
+    //             period: null,
+    //             noOfTransactions: null
+    //         };
+    //         this.store.dispatch(this.companyActions.SetApplicationDate(dates));
+    //     }
+    // }
 
     public openDateRangePicker() {
         this.isTodaysDateSelected = false;
     }
 
-    public jumpToToday() {
-        this.setApplicationDate(null);
-    }
+    // public jumpToToday() {
+    //     this.setApplicationDate(null);
+    // }
 
     public ngOnDestroy() {
         this.destroyed$.next(true);
@@ -1557,6 +1589,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.showAddCompanyModal();
     }
 
+
     /**
      * Fetches whether company country has other taxes (TCS/TDS)
      *
@@ -1596,5 +1629,55 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 return true;
             }
         });
+    }
+   /**  This will show the datepicker
+   *
+   * 
+   * @memberof ProfitLossComponent
+   */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileSite })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof ProfitLossComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+       * Call back function for date/range selection in datepicker
+       *
+       * @param {*} value
+       * @memberof ProfitLossComponent
+       */
+    public dateSelectedCallback(value: any): void {
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            let dates = {
+                fromDate: this.fromDate,
+                toDate: this.toDate,
+            };
+            this.isTodaysDateSelected = false;
+            this.store.dispatch(this.companyActions.SetApplicationDate(dates));
+        }
     }
 }

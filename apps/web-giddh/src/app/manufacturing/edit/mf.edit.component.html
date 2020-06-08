@@ -4,8 +4,8 @@
   </div>-->
 
     <!-- page Title -->
-    <div class="top_bar col-xs-12 clearfix bdrB">
-        <h1 class="section_title d-inline-block"><strong>Manufacture of Product</strong><label *ngIf="isUpdateCase" class="mrL2">No.
+    <div class="top-bar col-xs-12 clearfix bdrB">
+        <h1 class="section-title d-inline-block"><strong>Manufacture of Product</strong><label *ngIf="isUpdateCase" class="mrL2">No.
                 {{manufacturingDetails.voucherNumber}}</label></h1>
         <button class="btn btn-default pull-right" (click)="goBackToListPage()" type="button">Back</button>
     </div>
@@ -180,7 +180,7 @@
                                 <tr *ngFor="let expense of manufacturingDetails.otherExpenses; let i = index;">
                                     <td colspan="1">
                                         <div class="custom-select pos-rel">
-                                            <sh-select [options]="liabilityGroupAccounts$ | async" [isFilterEnabled]="true" name="baseAccount{{i}}" [(ngModel)]="expense.baseAccount.uniqueName" class="pull-left  select-caret" style="width: 100%">
+                                            <sh-select [options]="liabilityGroupAccounts$ | async" [ItemHeight]="56" [isFilterEnabled]="true" name="baseAccount{{i}}" [(ngModel)]="expense.baseAccount.uniqueName" class="pull-left  select-caret" style="width: 100%">
                                             </sh-select>
                                         </div>
                                     </td>
@@ -189,7 +189,7 @@
                                     </td>
                                     <td>
                                         <div class="custom-select pos-rel">
-                                            <sh-select [options]="expenseGroupAccounts$ | async" [isFilterEnabled]="true" name="expense{{i}}" [(ngModel)]="expense.transactions[0].account.uniqueName" class="pull-left  select-caret" style="width: 100%">
+                                            <sh-select [options]="expenseGroupAccounts$ | async" [ItemHeight]="56" [isFilterEnabled]="true" name="expense{{i}}" [(ngModel)]="expense.transactions[0].account.uniqueName" class="pull-left  select-caret" style="width: 100%">
                                             </sh-select>
                                         </div>
                                     </td>
@@ -201,8 +201,8 @@
 
                                 <tr *ngIf="toggleAddExpenses">
                                     <td colspan="1">
-                                        <sh-select [forceClearReactive]="needForceClearLiability$ | async" (selected)="addExpense(otherExpenses)" [options]="liabilityGroupAccounts$ | async" [(ngModel)]="otherExpenses.transactionAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Liability/Asset A/c'"
-                                            [ItemHeight]="33"></sh-select>
+                                        <sh-select [forceClearReactive]="needForceClearLiability$ | async" [ItemHeight]="56" (selected)="addExpense(otherExpenses)" [options]="liabilityGroupAccounts$ | async" [(ngModel)]="otherExpenses.transactionAccountUniqueName" name="baseAccountUniqueName"
+                                            [placeholder]="'Liability/Asset A/c'"></sh-select>
                                     </td>
                                     <td class="text-center">
                                         <label class="pd">to</label>
@@ -210,7 +210,7 @@
                                     <td>
                                         <div class="custom-select pos-rel">
                                             <sh-select [forceClearReactive]="needForceClearGroup$ | async" (selected)="addExpense(otherExpenses)" [options]="expenseGroupAccounts$ | async" [(ngModel)]="otherExpenses.baseAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Expense A/c'"
-                                                [ItemHeight]="33"></sh-select>
+                                                [ItemHeight]="56"></sh-select>
                                         </div>
                                     </td>
                                     <!--|| transactionAccountUniqueName.invalid  || baseAccountUniqueName.invalid-->

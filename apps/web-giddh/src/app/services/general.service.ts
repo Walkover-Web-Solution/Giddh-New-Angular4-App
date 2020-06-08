@@ -18,6 +18,45 @@ export class GeneralService {
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    private _dateRangePickerDefaultRanges = {
+        Today: [moment(), moment()],
+        Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        'Last Month': [
+            moment().subtract(1, 'month').startOf('month'),
+            moment().subtract(1, 'month').endOf('month')
+        ],
+        'This Week': [{
+            'Sun - Today': [moment().startOf('week'), moment()],
+            'Mon - Today': [moment().startOf('week').add(1, 'd'), moment()]
+        }],
+        'This Quarter to Date': [
+            moment().quarter(moment().quarter()).startOf('quarter'),
+            moment()
+        ],
+        'This Financial Year to Date': [
+            moment().startOf('year').subtract(9, 'year'),
+            moment()
+        ],
+        'This Year to Date': [
+            moment().startOf('year'),
+            moment()
+        ],
+        'Last Quarter': [
+            moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
+            moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+        ],
+        'Last Financial Year': [
+            moment().startOf('year').subtract(10, 'year'),
+            moment().endOf('year').subtract(10, 'year')
+        ],
+        'Last Year': [
+            moment().subtract(1, 'year').startOf('year'),
+            moment().subtract(1, 'year').endOf('year')
+        ]
+    };
+
 
     get user(): UserDetails {
         return this._user;
@@ -41,6 +80,14 @@ export class GeneralService {
 
     set sessionId(sessionId: string) {
         this._sessionId = sessionId;
+    }
+
+    get dateRangePickerDefaultRanges(): any {
+        return this._dateRangePickerDefaultRanges;
+    }
+
+    set dateRangePickerDefaultRanges(value: any) {
+        this._dateRangePickerDefaultRanges = value;
     }
 
     // currencyType define specific type of currency out of four type of urrencyType a.1,00,00,000 ,b.10,000,000,c.10\'000\'000,d.10 000 000
@@ -289,7 +336,7 @@ export class GeneralService {
 
         let hourOffset = convertdLocalTime.getTimezoneOffset() / 60;
 
-        convertdLocalTime.setMinutes(convertdLocalTime.getMinutes() - (hourOffset*60));
+        convertdLocalTime.setMinutes(convertdLocalTime.getMinutes() - (hourOffset * 60));
 
         return convertdLocalTime;
     }
@@ -318,9 +365,9 @@ export class GeneralService {
      */
     public removeSelectAllFromArray(array: Array<string>): Array<string> {
         let newArray = [];
-        if(array && array.length > 0) {
+        if (array && array.length > 0) {
             array.forEach(key => {
-                if(key !== "selectall") {
+                if (key !== "selectall") {
                     newArray.push(key);
                 }
             });
@@ -346,6 +393,97 @@ export class GeneralService {
         } else {
             // Exclusive tax rate
             return ((totalTaxPercentage * (Number(amount) - totalDiscount)) / 100);
+        }
+    }
+
+    /**
+     * This function will change the position of element in an array
+     *
+     * @param {*} array
+     * @param {*} currentIndex
+     * @param {*} newIndex
+     * @returns
+     * @memberof GeneralService
+     */
+    public changeElementPositionInArray(array, currentIndex, newIndex) {
+        array.splice(newIndex, 0, array.splice(currentIndex, 1)[0]);
+        return array;
+    }
+
+    /**
+     * This will calculate the position of element
+     *
+     * @param {*} element
+     * @returns
+     * @memberof DatepickerWrapperComponent
+     */
+    public getPosition(element): any {
+        var xPosition = 0;
+        var yPosition = 40;
+
+        while (element) {
+            xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
+            yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
+            element = element.offsetParent;
+        }
+
+        return { x: xPosition, y: yPosition };
+    }
+
+    /**
+     * Returns a particular cookie value
+     *
+     * @param {string} cookieName Name of the cookie whose value is required
+     * @returns {string} Cookie value
+     * @memberof GeneralService
+     */
+    public getCookie(cookieName: string): string {
+        const name = `${cookieName}=`;
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const availableCookies = decodedCookie.split(';');
+        for (let index = 0; index < availableCookies.length; index++) {
+            let cookie = availableCookies[index];
+            while (cookie.charAt(0) === ' ') {
+                cookie = cookie.substring(1);
+            }
+            if (cookie.indexOf(name) === 0) {
+                return cookie.substring(name.length, cookie.length);
+            }
+        }
+        return '';
+    }
+
+    /**
+     * This will verify if the company is allowed to view the page or not
+     *
+     * @param {string} email
+     * @returns {boolean}
+     * @memberof NeedsAuthorization
+     */
+    public checkIfEmailDomainAllowed(email: string): boolean {
+        let isAllowed = false;
+        if (email) {
+            let emailSplit = email.split("@");
+            if (emailSplit.indexOf("giddh.com") > -1 || emailSplit.indexOf("walkover.in") > -1 || emailSplit.indexOf("muneem.co") > -1) {
+                isAllowed = true;
+            }
+        }
+
+        return isAllowed;
+    }
+
+    /**
+     * This is to allow only digits and dot
+     *
+     * @param {*} event
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public allowOnlyNumbersAndDot(event: any): boolean {
+        if (event.keyCode === 46 || (event.keyCode >= 48 && event.keyCode <= 57)) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

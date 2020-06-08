@@ -206,21 +206,21 @@
             <div class="col-sm-8">
                 <div class="pull-right right-details">
                     <ul class="nav universal_date mr-2" *ngIf="(selectedCompany | async)">
-                        <li [hidden]="isTodaysDateSelected">
-                            <button class="btn btn-link" (click)="jumpToToday();">Today</button>
+<!--                        <li [hidden]="isTodaysDateSelected">-->
+<!--                            <button class="btn btn-link" (click)="jumpToToday();">Today</button>-->
+<!--                        </li>-->
+                        <li class="dateRangPicker notToday">
+                            <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)" ></span>
+<!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
+                            <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
                         </li>
-                        <li [hidden]="isTodaysDateSelected" class="notToday">
-                            <span class="icon-calender calender-addone"></span>
-                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />
-                        </li>
-                        <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
-                            <!-- <label class="btn btn-link"></label> -->
-                            <span class="icon-calender calender-addone"></span>
-                            <label class="header-date">
-                                {{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
-                        </li>
+<!--                        <li [hidden]="!isTodaysDateSelected" class="cp" (click)="showGiddhDatepicker($event)">-->
+<!--                            &lt;!&ndash; <label class="btn btn-link"></label> &ndash;&gt;-->
+<!--                            <span class="icon-calender calender-addone"></span>-->
+<!--                            <label class="header-date">-->
+<!--                                {{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>-->
+<!--                        </li>-->
                     </ul>
-
 
                     <button id="AddManage" type="button" class="btn btn-gray btn-sm" [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"> <span
                             class="icon-edit-ico"></span>Accounts
@@ -342,7 +342,12 @@
                             <span class="icon-dashboard"></span>
                             <span class="label">{{menu.name}}</span>
                         </a>
-                        <a *ngIf="menu.uniqueName != '/pages/gstfiling' && menu.uniqueName != '/pages/vat-report'" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage && selectedPage.toLowerCase() == menu.name.toLowerCase()}" (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
+                        <a *ngIf="menu.uniqueName != '/pages/gstfiling' && menu.uniqueName != '/pages/vat-report' && menu.uniqueName != '/pages/all-modules' && menu.uniqueName != '/pages/journal-voucher'" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage && selectedPage.toLowerCase() == menu.name.toLowerCase()}" (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
+                            <span class="icon-dashboard"></span>
+                            <span class="label">{{menu.name}}</span>
+                        </a>
+                        <a *ngIf="menu.uniqueName == '/pages/journal-voucher' && isAllowedForBetaTesting" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage && (selectedPage.toLowerCase() == menu.name.toLowerCase() || selectedPage.toLowerCase().includes(menu.name.toLowerCase()))}"
+                            (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
                             <span class="icon-dashboard"></span>
                             <span class="label">{{menu.name}}</span>
                         </a>
@@ -373,6 +378,8 @@
                                         </li>
                                         <!-- <li><a (click)="analyzeOtherMenus('accounting-voucher')">Journal Voucher</a>
                                         </li> -->
+                                        <li *ngIf="isAllowedForBetaTesting"><a (click)="analyzeOtherMenus('journal-voucher')">Journal Voucher *</a>
+                                        </li>
                                         <li><a (click)="analyzeOtherMenus('daybook')">Daybook</a></li>
                                         <li><a
                                                 (click)="analyzeOtherMenus('trial-balance-and-profit-loss', { tab: 'trial-balance', tabIndex: 0 })">
@@ -507,18 +514,19 @@
 
                 <div class="lowerLayerHeader clearfix">
                     <ul class="nav universal_date  pull-left" *ngIf="(selectedCompany | async)">
-                        <li [hidden]="isTodaysDateSelected">
-                            <button class="btn btn-link" (click)="jumpToToday();">Today</button>
+<!--                        <li [hidden]="isTodaysDateSelected">-->
+<!--                            <button class="btn btn-link" (click)="jumpToToday();">Today</button>-->
+<!--                        </li>-->
+                        <li class="dateRangPicker sss notToday"  (click)="showGiddhDatepicker($event)" >
+                            <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)" ></span>
+<!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
+                            <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
                         </li>
-                        <li [hidden]="isTodaysDateSelected" class="dateRangPicker">
-                            <span class="icon-calender calender-addone pos-abs" (click)="jumpToToday();"></span>
-                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />
-                        </li>
-                        <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
-                            <label class="btn btn-link">&nbsp;</label>
-                            <span class="icon-calender calender-addone "></span>
-                            <label class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
-                        </li>
+<!--                        <li [hidden]="!isTodaysDateSelected" class="cp" (click)="showGiddhDatepicker($event)">-->
+<!--                            <label class="btn btn-link">&nbsp;</label>-->
+<!--                            <span class="icon-calender calender-addone "></span>-->
+<!--                            <label class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>-->
+<!--                        </li>-->
                     </ul>
                     <button id="AddManage" type="button" class="btn btn-gray btn-xs btn-sm pull-right mrR0 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"><span
                             class="icon-edit-ico"></span>
@@ -841,4 +849,13 @@
             </ul>
         </li>
 
+</ng-template>
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions.ranges" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
+                                    [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
+                                    [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+        </div>
+    </div>
 </ng-template>

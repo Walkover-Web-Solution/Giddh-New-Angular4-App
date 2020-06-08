@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
-import { Configuration, Subvoucher } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, Subvoucher, RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
@@ -179,12 +179,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public totalAdjustedAmount: number = 0;
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
+    /** Rate should have precision up to 4 digits for better calculation */
+    public ratePrecision = RATE_FIELD_PRECISION;
+
     /** True, if all the transactions are of type 'Tax' or 'Reverse Charge' */
     private taxOnlyTransactions: boolean;
     /** Remove Advance receipt confirmation flag */
     public confirmationFlag: string = 'text-paragraph';
     /** Remove Advance receipt confirmation message */
     public removeAdvanceReceiptConfirmationMessage: string = 'If you change the type of this receipt, all the related advance receipt adjustments in invoices will be removed. & Are you sure you want to proceed?';// & symbol is not part of message it to split sentance by '&'
+    /* This will hold the account unique name which is going to be in edit mode to get compared once updated */
+    public entryAccountUniqueName: any = '';
+
     constructor(
         private _accountService: AccountService,
         private _ledgerService: LedgerService,
@@ -229,6 +235,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
+        this.store.pipe(select(state => state.ledger.refreshLedger), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response === true) {
+                this.store.dispatch(this._ledgerAction.refreshLedger(false));
+                this.entryAccountUniqueName = "";
+                this.closeUpdateLedgerModal.emit();
+            }
+        });
+
         this.store.pipe(select(appState => appState.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
             if (warehouses) {
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
@@ -1038,6 +1052,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         // if no petty cash mode then do normal update ledger request
         if (!this.isPettyCash) {
             requestObj['handleNetworkDisconnection'] = true;
+            requestObj['refreshLedger'] = false;
+
+            if(this.entryAccountUniqueName && this.entryAccountUniqueName !== this.changedAccountUniq) {
+                requestObj['refreshLedger'] = true;
+            }
+
             if (this.baseAccountChanged) {
                 this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName + '?newAccountUniqueName=' + this.changedAccountUniq));
             } else {
@@ -1106,6 +1126,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.hideBaseAccountModal();
             return;
         }
+
         this.changedAccountUniq = acc.value;
         this.baseAccountChanged = true;
         this.saveLedgerTransaction();
@@ -1173,7 +1194,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public openHeaderDropDown() {
+        this.entryAccountUniqueName = "";
+
         if (!this.vm.selectedLedger.voucherGenerated || this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.sales) {
+            this.entryAccountUniqueName = this.vm.selectedLedger.particular.uniqueName;
             this.openDropDown = true;
         } else {
             this.openDropDown = false;
@@ -1494,7 +1518,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public checkAdjustedAmountExceed(totalAmount: number): void {
         if (Number(this.vm.compoundTotal) < Number(totalAmount)) {
             this.isAdjustedAmountExcess = true;
-            this.adjustedExcessAmount = totalAmount - this.vm.compoundTotal;
+            this.adjustedExcessAmount = Number(totalAmount) - Number(this.vm.compoundTotal);
         } else {
             this.isAdjustedAmountExcess = false;
             this.adjustedExcessAmount = 0;

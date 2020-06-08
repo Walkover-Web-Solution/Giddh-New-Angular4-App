@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject, of } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
@@ -74,7 +74,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
-    public isGstValid: boolean;
+    public isGstValid$: Observable<boolean>= observableOf(true);
     public GSTIN_OR_TRN: string;
     public selectedCountry: string;
     public selectedCountryCode: string;
@@ -225,6 +225,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 if (res.fields) {
+                    this.formFields = [];
                     Object.keys(res.fields).forEach(key => {
                         if (res.fields[key]) {
                             this.formFields[res.fields[key].name] = [];
@@ -461,10 +462,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             } else {
                 // statesEle.setDisabledState(false);
                 if (this.isIndia) {
+                    statesEle.forceClearReactive.status = true;
+                    statesEle.clear();
                     gstForm.get('stateCode').patchValue(null);
                     gstForm.get('state').get('code').patchValue(null);
                 }
             }
+        } else {
+                statesEle.forceClearReactive.status = true;
+                statesEle.clear();
+                gstForm.get('stateCode').patchValue(null);
+                gstForm.get('state').get('code').patchValue(null);
         }
     }
 
@@ -569,7 +577,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         // }
         this.submitClicked.emit({
             activeGroupUniqueName: this.activeGroupUniqueName,
-            accountRequest: this.addAccountForm.value
+            accountRequest
         });
     }
     public closingBalanceTypeChanged(type: string) {
@@ -705,7 +713,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
-        if (ele.value) {
+        if (ele.value.trim()) {
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
@@ -721,13 +729,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             if (!isValid) {
                 this._toaster.errorToast('Invalid ' + this.formFields['taxName'].label);
                 ele.classList.add('error-box');
-                this.isGstValid = false;
+                this.isGstValid$ = observableOf(false);
             } else {
                 ele.classList.remove('error-box');
-                this.isGstValid = true;
+                this.isGstValid$ = observableOf(true);
             }
         } else {
             ele.classList.remove('error-box');
+            this.isGstValid$ = observableOf(true);
         }
     }
     public getStates(countryCode) {
@@ -870,7 +879,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     this._toaster.errorToast('The IBAN must contain 23 to 34 characters.');
                     element.classList.add('error-box');
                 } else {
-                     element.classList.remove('error-box');
+                    element.classList.remove('error-box');
                 }
             }
         } else if (type === 'swiftCode') {
@@ -878,7 +887,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this._toaster.errorToast('The SWIFT Code/BIC must contain 8 to 11 characters.');
                 element.classList.add('error-box');
             } else {
-                 element.classList.remove('error-box');
+                element.classList.remove('error-box');
             }
         }
     }

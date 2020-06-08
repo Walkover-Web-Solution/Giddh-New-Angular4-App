@@ -1,5 +1,4 @@
-<hamburger-menu></hamburger-menu>
-<div id="setting-tab" class="custom-tabs" *ngIf="!isCreateAndSwitchCompanyInProcess">
+<div class="setting-page user-detail-page" id="setting-tab" *ngIf="!isCreateAndSwitchCompanyInProcess">
     <!-- start of tab set -->
     <tabset #staticTabs>
 
@@ -7,7 +6,7 @@
         <tab heading="Auth Key" [active]="activeTab == 'auth-key'" (select)="onTabChanged('auth-key')">
             <div class="wrap-tab-content-pd-15">
                 <div class="box clearfix mrT2">
-                    <h1 class="section_head pdT0">Main Auth-key</h1>
+                    <h1 class="section-head pdT0">Main Auth-key</h1>
                     <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
                         <div class="form-group col-xs-6">
                             <div class="row">
@@ -128,7 +127,7 @@
             <div class="wrap-tab-content-pd-15">
                 <div class="box clearfix mrT2">
                     <div class="max900 d-flex pdB1  activity-title">
-                        <h1 class="section_head pdT0">Activity History</h1>
+                        <h1 class="section-head pdT0">Activity History</h1>
                         <button class="btn btn-primary " (click)="clearAllSession()">Delete All</button>
                     </div>
                     <p class="grey_clr max900 ">Access and manage your activity history details from anywhere at anytime. This will help you to monitor all your account access.</p>

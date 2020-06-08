@@ -22,6 +22,7 @@ import { createSelector } from 'reselect';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { CurrentPage } from '../../models/api-models/Common';
 import { GeneralActions } from '../../actions/general/general.actions';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
     templateUrl: './mf.edit.component.html'
@@ -332,7 +333,9 @@ export class MfEditComponent implements OnInit {
     public createEntry() {
         let dataToSave = _.cloneDeep(this.manufacturingDetails);
         dataToSave.stockUniqueName = this.selectedProduct;
-        dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
+        if (dataToSave.date && !dataToSave.date.includes('-')) {
+            dataToSave.date = (dataToSave.date).format(GIDDH_DATE_FORMAT);
+        }
         dataToSave.linkedStocks.forEach((obj) => {
             obj.manufacturingUnit = obj.stockUnitCode;
             obj.manufacturingQuantity = obj.quantity;
@@ -347,7 +350,9 @@ export class MfEditComponent implements OnInit {
 
     public updateEntry() {
         let dataToSave = _.cloneDeep(this.manufacturingDetails);
-        dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
+        if (dataToSave.date && !dataToSave.date.includes('-')) {
+            dataToSave.date = (dataToSave.date).format(GIDDH_DATE_FORMAT);
+        }
         // dataToSave.grandTotal = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
         // dataToSave.multipleOf = dataToSave.quantity;
         // dataToSave.manufacturingUniqueName =
