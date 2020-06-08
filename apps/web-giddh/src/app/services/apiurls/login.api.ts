@@ -25,10 +25,10 @@ export const LOGIN_API = {
     FORGOT_PASSWORD: 'users/:userEmail/forgot-password',
     RESET_PASSWORD: 'reset-password',
     RENEW_SESSION: 'users/:userUniqueName/increment-session', // PUT
+    GET_USER_DETAILS_FROM_SESSION_ID: 'v2/user'
 };
 
 export const GMAIL_API = {
     GENERATE_GMAIL_TOKEN: 'company/:companyUniqueName/generate-mail-token',// POST
     SAVE_GMAIL_TOKEN: "company/:companyUniqueName/save-mail-token"
-
 };
