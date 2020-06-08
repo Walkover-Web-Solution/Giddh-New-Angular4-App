@@ -2,14 +2,13 @@
     <div class="row">
         <div class="col-md-9 col-sm-9  font-14">
             <p class="mb-1">Hi {{logedInUser?.name}} !</p>
-            <p class="mb-3 plan-msg">All the plan come with all the features with <span class="selected">90 days money
-                    back guaranty.</span>
-            </p>
+            <p class="mb-3 plan-msg">All the plan come with all the features with <span class="selected">90 days money back guarantee.</span></p>
         </div>
         <div class="col-md-3 col-sm-3 text-right" *ngIf="subscriptions && subscriptions.length > 0">
             <a (click)="backClicked()" class="btn btn-cancel pr-3 pl-3 mb-2 mr-0">Back</a>
         </div>
     </div>
+    <div #topAllPlans>
     <div *ngIf="!isSwitchPlanInProcess" class="choose-ur-plan noHeight">
         <div class="row">
             <div class="main-row-plans">
@@ -37,17 +36,13 @@
                                         <ul class="plan-list">
                                             <li>Transactions Limit:
                                                 {{defaultMultipleCompanyPlan?.planDetails?.transactionLimit | number}}
-                                                <div class="btn-group pull-right" dropdown placement="bottom right">
-                                                    <button id="button-alignment" dropdownToggle type="button"
-                                                        class="dropdown-toggle close"
-                                                        aria-controls="dropdown-alignment">
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
                                                         <i class="icon-info"></i>
                                                     </button>
-                                                    <div id="dropdown-alignment" *dropdownMenu
-                                                        class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                    <div class="transactions-popup"
                                                         role="menu" aria-labelledby="button-alignment">
-                                                        <a href="javascript:void(0)" class="inner-close"><i
-                                                                class="icon-cross"></i></a>
                                                         <p class="bold mb-1">Transactions Limit</p>
                                                         <p class="font-12 text-gray mb-1">
                                                             {{transactionLimitTooltipContent}}</p>
@@ -58,17 +53,13 @@
                                                 {{defaultMultipleCompanyPlan?.planDetails?.companiesLimit | number}}
                                             </li>
                                             <li>Unlimited Users
-                                                <div class="btn-group pull-right" dropdown placement="bottom right">
-                                                    <button id="button-alignment" dropdownToggle type="button"
-                                                        class="dropdown-toggle close"
-                                                        aria-controls="dropdown-alignment">
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
                                                         <i class="icon-info"></i>
                                                     </button>
-                                                    <div id="dropdown-alignment" *dropdownMenu
-                                                        class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                    <div class="transactions-popup"
                                                         role="menu" aria-labelledby="button-alignment">
-                                                        <a href="javascript:void(0)" class="inner-close"><i
-                                                                class="icon-cross"></i></a>
                                                         <p class="bold mb-1">Unlimited Users</p>
                                                         <p class="font-12 text-gray mb-1">
                                                             {{unlimitedUsersTooltipContent}}</p>
@@ -76,17 +67,13 @@
                                                 </div>
                                             </li>
                                             <li>Unlimited Customers/Vendors
-                                                <div class="btn-group pull-right" dropdown placement="bottom right">
-                                                    <button id="button-alignment" dropdownToggle type="button"
-                                                        class="dropdown-toggle close"
-                                                        aria-controls="dropdown-alignment">
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
                                                         <i class="icon-info"></i>
                                                     </button>
-                                                    <div id="dropdown-alignment" *dropdownMenu
-                                                        class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                    <div class="transactions-popup"
                                                         role="menu" aria-labelledby="button-alignment">
-                                                        <a href="javascript:void(0)" class="inner-close"><i
-                                                                class="icon-cross"></i></a>
                                                         <p class="bold mb-1">Unlimited Customers/Vendors</p>
                                                         <p class="font-12 text-gray mb-1">
                                                             {{unlimitedCustomersVendorsTooltipContent}}</p>
@@ -94,17 +81,13 @@
                                                 </div>
                                             </li>
                                             <li>Desktop/Mobile App
-                                                <div class="btn-group pull-right" dropdown placement="bottom right">
-                                                    <button id="button-alignment" dropdownToggle type="button"
-                                                        class="dropdown-toggle close"
-                                                        aria-controls="dropdown-alignment">
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
                                                         <i class="icon-info"></i>
                                                     </button>
-                                                    <div id="dropdown-alignment" *dropdownMenu
-                                                        class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                    <div class="transactions-popup"
                                                         role="menu" aria-labelledby="button-alignment">
-                                                        <a href="javascript:void(0)" class="inner-close"><i
-                                                                class="icon-cross"></i></a>
                                                         <p class="bold mb-1">Desktop/Mobile App</p>
                                                         <p class="font-12 text-gray mb-1">
                                                             {{desktopMobileAppTooltipContent}}</p>
@@ -113,7 +96,6 @@
                                             </li>
                                         </ul>
                                     </div>
-
                                     <div class="plan-footer">
                                         <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)"
                                                 class="color-primary font-14">Check all features</a></p>
@@ -126,7 +108,7 @@
                                 </div>
                             </div>
                             <a href="javascript:void(0)" class="btn btn-green btn-round"
-                                (click)="showPlansByType('multiple')">See all Multiple Company Plans</a>
+                                (click)="showPlansByType('multiple'); navigate(allPlans)">See all Multiple Company Plans</a>
                         </div>
                     </div>
                 </div>
@@ -162,17 +144,13 @@
                                         <ul class="plan-list">
                                             <li>Transactions Limit:
                                                 {{defaultSingleCompanyPlan?.planDetails?.transactionLimit | number}}
-                                                <div class="btn-group pull-right" dropdown placement="bottom right">
-                                                    <button id="button-alignment" dropdownToggle type="button"
-                                                        class="dropdown-toggle close"
-                                                        aria-controls="dropdown-alignment">
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
                                                         <i class="icon-info"></i>
                                                     </button>
-                                                    <div id="dropdown-alignment" *dropdownMenu
-                                                        class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                    <div class="transactions-popup"
                                                         role="menu" aria-labelledby="button-alignment">
-                                                        <a href="javascript:void(0)" class="inner-close"><i
-                                                                class="icon-cross"></i></a>
                                                         <p class="bold mb-1">Transactions Limit</p>
                                                         <p class="font-12 text-gray mb-1">
                                                             {{transactionLimitTooltipContent}}</p>
@@ -183,17 +161,13 @@
                                                 {{defaultSingleCompanyPlan?.planDetails?.companiesLimit | number}}
                                             </li>
                                             <li>Unlimited Users
-                                                <div class="btn-group pull-right" dropdown placement="bottom right">
-                                                    <button id="button-alignment" dropdownToggle type="button"
-                                                        class="dropdown-toggle close"
-                                                        aria-controls="dropdown-alignment">
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
                                                         <i class="icon-info"></i>
                                                     </button>
-                                                    <div id="dropdown-alignment" *dropdownMenu
-                                                        class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                    <div class="transactions-popup"
                                                         role="menu" aria-labelledby="button-alignment">
-                                                        <a href="javascript:void(0)" class="inner-close"><i
-                                                                class="icon-cross"></i></a>
                                                         <p class="bold mb-1">Unlimited Users</p>
                                                         <p class="font-12 text-gray mb-1">
                                                             {{unlimitedUsersTooltipContent}}</p>
@@ -201,17 +175,13 @@
                                                 </div>
                                             </li>
                                             <li>Unlimited Customers/Vendors
-                                                <div class="btn-group pull-right" dropdown placement="bottom right">
-                                                    <button id="button-alignment" dropdownToggle type="button"
-                                                        class="dropdown-toggle close"
-                                                        aria-controls="dropdown-alignment">
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
                                                         <i class="icon-info"></i>
                                                     </button>
-                                                    <div id="dropdown-alignment" *dropdownMenu
-                                                        class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                    <div class="transactions-popup"
                                                         role="menu" aria-labelledby="button-alignment">
-                                                        <a href="javascript:void(0)" class="inner-close"><i
-                                                                class="icon-cross"></i></a>
                                                         <p class="bold mb-1">Unlimited Customers/Vendors</p>
                                                         <p class="font-12 text-gray mb-1">
                                                             {{unlimitedCustomersVendorsTooltipContent}}</p>
@@ -219,17 +189,13 @@
                                                 </div>
                                             </li>
                                             <li>Desktop/Mobile App
-                                                <div class="btn-group pull-right" dropdown placement="bottom right">
-                                                    <button id="button-alignment" dropdownToggle type="button"
-                                                        class="dropdown-toggle close"
-                                                        aria-controls="dropdown-alignment">
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
                                                         <i class="icon-info"></i>
                                                     </button>
-                                                    <div id="dropdown-alignment" *dropdownMenu
-                                                        class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                    <div class="transactions-popup"
                                                         role="menu" aria-labelledby="button-alignment">
-                                                        <a href="javascript:void(0)" class="inner-close"><i
-                                                                class="icon-cross"></i></a>
                                                         <p class="bold mb-1">Desktop/Mobile App</p>
                                                         <p class="font-12 text-gray mb-1">
                                                             {{desktopMobileAppTooltipContent}}</p>
@@ -250,7 +216,7 @@
                                 </div>
                             </div>
                             <a href="javascript:void(0)" class="btn btn-green btn-round"
-                                (click)="showPlansByType('single')">See all Single Company Plans</a>
+                                (click)="showPlansByType('single'); navigate(allPlans)">See all Single Company Plans</a>
                         </div>
                     </div>
                 </div>
@@ -277,17 +243,13 @@
                                         <ul class="plan-list">
                                             <li>Transactions Limit:
                                                 {{defaultFreePlan?.planDetails?.transactionLimit | number}}
-                                                <div class="btn-group pull-right" dropdown placement="bottom right">
-                                                    <button id="button-alignment" dropdownToggle type="button"
-                                                        class="dropdown-toggle close"
-                                                        aria-controls="dropdown-alignment">
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
                                                         <i class="icon-info"></i>
                                                     </button>
-                                                    <div id="dropdown-alignment" *dropdownMenu
-                                                        class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                    <div class="transactions-popup"
                                                         role="menu" aria-labelledby="button-alignment">
-                                                        <a href="javascript:void(0)" class="inner-close"><i
-                                                                class="icon-cross"></i></a>
                                                         <p class="bold mb-1">Transactions Limit</p>
                                                         <p class="font-12 text-gray mb-1">
                                                             {{transactionLimitTooltipContent}}</p>
@@ -298,17 +260,13 @@
                                                 {{defaultFreePlan?.planDetails?.companiesLimit | number}}
                                             </li>
                                             <li>Unlimited Users
-                                                <div class="btn-group pull-right" dropdown placement="bottom right">
-                                                    <button id="button-alignment" dropdownToggle type="button"
-                                                        class="dropdown-toggle close"
-                                                        aria-controls="dropdown-alignment">
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
                                                         <i class="icon-info"></i>
                                                     </button>
-                                                    <div id="dropdown-alignment" *dropdownMenu
-                                                        class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                    <div class="transactions-popup"
                                                         role="menu" aria-labelledby="button-alignment">
-                                                        <a href="javascript:void(0)" class="inner-close"><i
-                                                                class="icon-cross"></i></a>
                                                         <p class="bold mb-1">Unlimited Users</p>
                                                         <p class="font-12 text-gray mb-1">
                                                             {{unlimitedUsersTooltipContent}}</p>
@@ -316,17 +274,13 @@
                                                 </div>
                                             </li>
                                             <li>Unlimited Customers/Vendors
-                                                <div class="btn-group pull-right" dropdown placement="bottom right">
-                                                    <button id="button-alignment" dropdownToggle type="button"
-                                                        class="dropdown-toggle close"
-                                                        aria-controls="dropdown-alignment">
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
                                                         <i class="icon-info"></i>
                                                     </button>
-                                                    <div id="dropdown-alignment" *dropdownMenu
-                                                        class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                    <div class="transactions-popup"
                                                         role="menu" aria-labelledby="button-alignment">
-                                                        <a href="javascript:void(0)" class="inner-close"><i
-                                                                class="icon-cross"></i></a>
                                                         <p class="bold mb-1">Unlimited Customers/Vendors</p>
                                                         <p class="font-12 text-gray mb-1">
                                                             {{unlimitedCustomersVendorsTooltipContent}}</p>
@@ -334,17 +288,13 @@
                                                 </div>
                                             </li>
                                             <li>Desktop/Mobile App
-                                                <div class="btn-group pull-right" dropdown placement="bottom right">
-                                                    <button id="button-alignment" dropdownToggle type="button"
-                                                        class="dropdown-toggle close"
-                                                        aria-controls="dropdown-alignment">
+                                                <div class="btn-group pull-right transactions-limit-box">
+                                                    <button type="button"
+                                                        class="dropdown-toggle close">
                                                         <i class="icon-info"></i>
                                                     </button>
-                                                    <div id="dropdown-alignment" *dropdownMenu
-                                                        class="transactions-popup dropdown-menu dropdown-menu-right"
+                                                    <div class="transactions-popup"
                                                         role="menu" aria-labelledby="button-alignment">
-                                                        <a href="javascript:void(0)" class="inner-close"><i
-                                                                class="icon-cross"></i></a>
                                                         <p class="bold mb-1">Desktop/Mobile App</p>
                                                         <p class="font-12 text-gray mb-1">
                                                             {{desktopMobileAppTooltipContent}}</p>
@@ -365,13 +315,14 @@
                                 </div>
                             </div>
                             <a href="javascript:void(0)" class="btn btn-green btn-round"
-                                (click)="showPlansByType('free')">See all FREE Plans</a>
+                                (click)="showPlansByType('free'); navigate(allPlans)">See all FREE Plans</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
     <div *ngIf="isSwitchPlanInProcess">
         <div class="no-data mrT2 loader-main">
             <div class="spinner2">
@@ -380,8 +331,9 @@
             </div>
         </div>
     </div>
+    <div #allPlans>
     <div class="box clearfix pl-5 mb-15 xs-pl-15 pb-3 relative all-plans" *ngIf="showPlans">
-        <a class="close close-2" href="javascript:void(0)" (click)="showPlans = ''">
+        <a class="close close-2" href="javascript:void(0)" (click)="showPlans = ''; navigate(topAllPlans)">
             <i class="icon-cross"></i>
         </a>
         <div class="relative see-all-features">
@@ -420,6 +372,7 @@
             </div>
         </div>
     </div>
+</div>
     <div class="activation-key-wrapper">
         <div class="box">
             <div class="row">

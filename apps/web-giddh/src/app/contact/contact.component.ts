@@ -134,7 +134,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public updateCommentIdx: number = null;
     public searchStr$ = new Subject<string>();
     public searchStr: string = '';
-    @ViewChild('payNowModal') public payNowModal: ModalDirective;
     @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
     @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
     @ViewChild('staticTabs') public staticTabs: TabsetComponent;
@@ -229,8 +228,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     /** Selected company */
     private selectedCompany: any;
     public universalDate: any;
-    /** Selects/Unselects extra columns based on Select All Checkbox */
-    public selectAll: boolean = false;
     modalRef: BsModalRef;
     public selectedRangeLabel: any = "";
     public dateFieldPosition: any = {x: 0, y: 0};
@@ -301,6 +298,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         if (window.localStorage) {
             let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer']));
             if (showColumnObj) {
+                if (showColumnObj.closingBalance !== undefined) {
+                    delete showColumnObj.closingBalance;
+                };
                 this.showFieldFilter = showColumnObj;
                 this.setTableColspan();
             }
@@ -325,8 +325,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 }
             }
         });
-
-        this.getCashFreeBalance();
 
         this.flattenAccountsStream$.subscribe(data => {
 
@@ -510,6 +508,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.showFieldFilter = new CustomerVendorFiledFilter();
         let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer']));
         if (showColumnObj) {
+            if (showColumnObj.closingBalance !== undefined) {
+                delete showColumnObj.closingBalance;
+            };
             this.showFieldFilter = showColumnObj;
             this.setTableColspan();
         }
@@ -590,39 +591,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         } else {
             document.querySelector('body').classList.remove('fixed');
         }
-    }
-
-    public payNow(acc: string) {
-        this.selectedAccForPayment = acc;
-        this.payNowModal.show();
-    }
-
-    public onPaymentModalCancel() {
-        this.payNowModal.hide();
-    }
-
-    public onConfirmation(amountToPay: string) {
-        let payNowData: PayNowRequest = {
-            accountUniqueName: this.selectedAccForPayment.uniqueName,
-            amount: Number(amountToPay),
-            description: ''
-        };
-
-        this._contactService.payNow(payNowData).subscribe((res) => {
-            if (res.status === 'success') {
-                this._toasty.successToast('Payment done successfully with reference id: ' + res.body.referenceId);
-            } else {
-                this._toasty.errorToast(res.message, res.code);
-            }
-        });
-    }
-
-    public selectCashfreeAccount(event: IOption, objToApnd) {
-        let accObj = {
-            name: event.label,
-            uniqueName: event.value
-        };
-        objToApnd.account = accObj;
     }
 
     public submitCashfreeDetail(f) {
@@ -860,7 +828,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         }
 
         this.hideGiddhDatepicker();
-        
+
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -1119,7 +1087,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         // if (event && column) {
         this.showFieldFilter[column] = event;
         this.setTableColspan();
-
+        this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== 'selectAll').every(filterName => this.showFieldFilter[filterName]);
         if (window.localStorage) {
             localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer'], JSON.stringify(this.showFieldFilter));
         }
@@ -1155,14 +1123,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 onboardingFormRequest.formName = 'onboarding';
                 onboardingFormRequest.country = countryCode;
                 this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
-            }
-        });
-    }
-
-    private getCashFreeBalance() {
-        this._contactService.GetCashFreeBalance().subscribe((res) => {
-            if (res.status === 'success') {
-                this.cashFreeAvailableBalance = res.body.availableBalance;
             }
         });
     }
@@ -1205,6 +1165,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.showFieldFilter.state = event;
         this.showFieldFilter.gstin = event;
         this.showFieldFilter.comment = event;
+        this.setTableColspan();
+        if (window.localStorage) {
+            localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer'], JSON.stringify(this.showFieldFilter));
+        }
     }
 
     /**

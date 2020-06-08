@@ -452,4 +452,38 @@ export class GeneralService {
         }
         return '';
     }
+
+    /**
+     * This will verify if the company is allowed to view the page or not
+     *
+     * @param {string} email
+     * @returns {boolean}
+     * @memberof NeedsAuthorization
+     */
+    public checkIfEmailDomainAllowed(email: string): boolean {
+        let isAllowed = false;
+        if (email) {
+            let emailSplit = email.split("@");
+            if (emailSplit.indexOf("giddh.com") > -1 || emailSplit.indexOf("walkover.in") > -1 || emailSplit.indexOf("muneem.co") > -1) {
+                isAllowed = true;
+            }
+        }
+
+        return isAllowed;
+    }
+
+    /**
+     * This is to allow only digits and dot
+     *
+     * @param {*} event
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public allowOnlyNumbersAndDot(event: any): boolean {
+        if (event.keyCode === 46 || (event.keyCode >= 48 && event.keyCode <= 57)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

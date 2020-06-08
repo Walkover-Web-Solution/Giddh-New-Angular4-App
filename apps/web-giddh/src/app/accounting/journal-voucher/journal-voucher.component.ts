@@ -31,7 +31,8 @@ const CODES = {
 /** Keys of keyboard event for Enter and Tab button */
 export const KEYS = {
     ENTER: 'Enter',
-    TAB: 'Tab'
+    TAB: 'Tab',
+    ESC: 'Escape'
 };
 
 /** Vouchers that can be generated throught JV module */
@@ -252,15 +253,6 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
                 });
             }
         });
-
-        this.tallyModuleService.fetchCurrentDate().subscribe((data) => {
-            if (data && data.body) {
-                this.currentDate = data.body;
-            } else {
-                const systemDate = new Date();
-                this.currentDate = `${systemDate.getUTCFullYear()}-${systemDate.getUTCMonth()}-${systemDate.getUTCDate()}`;
-            }
-        }, () => {});
 
         this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
     }

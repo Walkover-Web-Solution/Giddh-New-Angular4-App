@@ -8,8 +8,8 @@ input {
     display: flex;
     justify-content: space-between;
 }
-.ledgHead table td[class*="col-"],
-.ledgHead table td .select2-container {
+.ledg-head table td[class*="col-"],
+.ledg-head table td .select2-container {
     padding: 8px 10px !important;
     border-bottom: 1px solid $gainsboro;
     border-right: 1px solid $gainsboro;
@@ -19,18 +19,18 @@ input {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.ledgHead table td.pdR25imp {
+.ledg-head table td.pdR25imp {
     padding-right: 25px !important;
 }
 
-.ledgHead table td[class*="col-"],
-.ledgHead table td .select2-container {
+.ledg-head table td[class*="col-"],
+.ledg-head table td .select2-container {
     min-height: 49px;
     height: 49px;
     max-height: initial;
 }
 
-.ledgHead.entry-popup table td[class*="col-"] {
+.ledg-head.entry-popup table td[class*="col-"] {
     padding: 0px !important;
     padding-bottom: 1px !important;
     border-bottom: 1px solid $gainsboro;
@@ -40,10 +40,10 @@ input {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.ledgHead.entry-popup table td.pdR25imp {
+.ledg-head.entry-popup table td.pdR25imp {
     padding-right: 25px !important;
 }
-.ledgHead .ledger-main td[class*="col-"] {
+.ledg-head .ledger-main td[class*="col-"] {
     padding: 0px !important;
 }
 // table th[class*=col-]:last-child,
@@ -60,9 +60,20 @@ input {
 .t-h-bg1 th {
     border-left: 0;
 }
-.ledgHead input[type="search"] {
+.ledg-head input[type="search"] {
     min-width: auto;
     padding-left: 27px !important;
+    border-radius: 20px !important;
+    
+}
+.ledg-head {
+    .single-search-box{
+        position: relative;
+        i{
+            color: $gray;
+            left:9px;top:10px;   
+        }
+    }
 }
 .ledger-head-top i.icon-search.pos-abs {
     background-color: #5b64c9;
@@ -114,7 +125,7 @@ input {
 .ledger-stat span {
     display: inline-block;
 }
-.pageCount {
+.page-count {
     overflow: hidden;
     width: 100% !important;
     left: 0% !important;
@@ -169,7 +180,7 @@ input {
     color: $nero;
 }
 
-.ledger_book {
+.ledger-book {
     border: 0px solid $gainsboro;
     clear: both;
     position: relative;
@@ -186,14 +197,14 @@ input {
 
 .daterange_picker_ledger {
     border: 0;
-    background-color: #fff !important;
+    background-color: transparent !important;
     text-decoration-line: none;
     text-decoration-style: none;
     background-image: url(../../assets/images/calender.svg) !important;
     background-size: 17px !important;
     background-position: 9px 8px !important;
     background-repeat: no-repeat !important;
-    padding-left: 45px !important;
+    padding-left: 35px !important;
     position: relative;
     z-index: 99;
     cursor: default;
@@ -215,6 +226,7 @@ input {
     left: 37px !important;
     z-index: 100;
     top: 0;
+    display: none;
 }
 
 .C-flex-end {
@@ -263,8 +275,8 @@ sh-select:focus {
     color: #999999;
     padding-left: 5px;
 }
-.ledger_book .left-col-new,
-.ledger_book .right-col-new {
+.ledger-book .left-col-new,
+.ledger-book .right-col-new {
     background: #fff;
 }
 .left-col-new table.width100.h-table tbody tr td:last-child,
@@ -278,7 +290,7 @@ sh-select:focus {
 .custom-tabs {
     display: none;
 }
-.ledgHead .icomoon_ico {
+.ledg-head .icomoon_ico {
     color:$gray;
     width: 36px;
     height: 36px;
@@ -288,13 +300,14 @@ sh-select:focus {
     justify-content: center;
     border-top-width: 1px;
     background-color: #fff;
+    border-radius: 50%;
 }
-.advancSearchBlock input {
+.advanc-search-block input {
     background: $solitude !important;
     height: 28px;
     border-color: $solitude !important;
 }
-.advancSearchBlock input::placeholder {
+.advanc-search-block input::placeholder {
     color: #666666;
 }
 
@@ -310,7 +323,7 @@ sh-select:focus {
     display: flex;
 }
 
-.advancSearchBlock .icon-search {
+.advanc-search-block .icon-search {
     right: 0;
     top: 0;
     background-color: $chetwode-blue;
@@ -323,17 +336,17 @@ sh-select:focus {
 .ledger-row input[type="checkbox"] {
     margin-right: 15px;
 }
-.ledger_book .ledger-footer-1 .total_col .border-top {
+.ledger-book .ledger-footer-1 .total_col .border-top {
     border-top: 1px solid $gainsboro !important;
 }
-.ledger_book .ledger-footer-1 .total_col .bdrT {
+.ledger-book .ledger-footer-1 .total_col .bdrT {
     border: none;
 }
 
 .advanceSearchByDate {
     display: inline-flex;
     border: 1px solid $gainsboro;
-    border-radius: 2px;
+    border-radius: 20px;
     position: relative;
 }
 .advanceSearchByDate:before {
@@ -393,16 +406,17 @@ sh-select:focus {
     border-right: none;
     border-bottom: 8px solid $portage;
 }
-.advnceSearchFilter {
+.advance-search-filter {
     justify-content: center;
     align-items: center;
     margin-right: 7px;
-    i{
-        color: $gray;
+    border-radius: 50%;
+    img{
+        width: 18px;
     }
 }
  
-.ledgHead .advancSearchBlock {
+.ledg-head .advanc-search-block {
     height: 34px;
     vertical-align: middle;
     display: flex;
@@ -417,11 +431,15 @@ sh-select:focus {
 }
 .d-flex.search-ledger-field {
     align-items: center;
-    margin-right: 8px;
+    margin-right: 0;
 }
 .clear-filter-btn {
-    color: #1a237e;
+    color: $midnight-blue;
     font-size: 14px;
+    border: 1px solid $midnight-blue;
+    border-radius: 20px;
+    padding: 0 15px;
+    background-color: $white;
 }
 .clear-filter-btn i {
     font-size: 12px;
@@ -434,6 +452,7 @@ sh-select:focus {
         width: 36px;
         padding: 0px;
         height: 36px;
+        border-radius: 50%;
     }
 }
 .transaction-in-short {
@@ -451,8 +470,80 @@ sh-select:focus {
 .ledger-main .ledger-row:hover {
     background-color: transparent;
 }
+.date-range-picker{
+    background-color: transparent !important;
+    text-decoration-line: none;
+    text-decoration-style: none;
+    background-image: url(../../assets/images/calender-icon.svg) !important;
+    background-size: 17px !important;
+    background-position: 9px 8px !important;
+    background-repeat: no-repeat !important;
+    padding-left: 35px !important;
+    position: relative;
+    z-index: 99;
+    cursor: default;
+    top: 1px;
+    font-size: 14px;
+    padding-right: 10px !important;
+    height: 36px;
+    min-width: 220px !important;
+    &:focus{
+        border-color: $chetwode-blue;
 
-/*reponsive*/
+    }
+}
+.ipad-view-datepicker{
+    .date-range-picker{
+        border: 1px solid $gainsboro;
+        border-radius: 20px;
+        width: 203px !important;
+    }
+}
+/*mobile ledger view css*/
+.mobile-ledger-view{
+    margin: 0 -15px;
+    table{
+        width: 100%;
+    tbody{
+        background-color:$white;
+        .transction-date{
+            font-size: 16px;
+            font-family: 'opensans-semibold';
+        }
+        td{
+            padding-top: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #d1d1d1;
+            font-size: 14px;
+        }
+        .second-row{
+            td{
+                &:first-child{
+                    border-right: 1px solid #d9d9d9;
+                    width: 60%;
+                }
+                span.account-holder-checkbox {
+                    width: 20px;
+                    margin-right: 3px;
+                }
+                span.account-holder-name {
+                    float: left;
+                    width: 82%;
+                    display: inline-flex;
+                }
+            }
+        }
+    }
+}
+}
+
+.debit-credit-amount{
+    justify-content: space-between
+}
+.input-wrapper.ipad-view-datepicker {
+    display: none;
+}
+/*responsive*/
 .modal-ledger {
     width: 70%;
 }
@@ -491,11 +582,8 @@ sh-select:focus {
         width: 100%;
         max-width: 100%;
     }
-    .custom-tabs {
-        display: block;
-    }
-    .ledgHead table td[class*="col-"],
-    toggle-switch .ledgHead table td .select2-container {
+    .ledg-head table td[class*="col-"],
+    toggle-switch .ledg-head table td .select2-container {
         min-height: initial;
         height: initial;
         max-height: initial;
@@ -512,24 +600,30 @@ sh-select:focus {
     .advanceSearchByDate:after {
         display: none;
     }
-    .ledger-head-top,
-    .daterngoption {
+    .ledger-head-top {
         width: 100% !important;
-    }
-    .daterngoption {
-        margin-top: 10px;
+        justify-content: flex-end;
+        a{
+            &:last-child{
+                margin-right: 0;
+            }
+        }
     }
 
-    .advancSearchBlock {
+    .advanc-search-block {
         padding: 0;
     }
-    .ledgHead input[type="search"] {
-        min-width: 200px;
+    .ledg-head input[type="search"] {
+        min-width:170px;
+    }
+    .debit-credit-amount {
+        display: flex !important;
+        flex-direction: column;
     }
 }
-@media only screen and (max-width: 767px) {
-    .ledgHead table td[class*="col-"],
-    .ledgHead table td .select2-container {
+@media only screen and (max-width:991px) {
+    .ledg-head table td[class*="col-"],
+    .ledg-head table td .select2-container {
         border-bottom: 0px solid #ccc;
         border-right: 0px solid #ccc;
     }
@@ -539,33 +633,36 @@ sh-select:focus {
     .amount-total {
         background: #efefef;
     }
-    .pageCount {
+    .page-count {
         width: 100%;
         left: 0;
         bottom: 0;
         position: relative;
+        box-shadow: 0px 2px 6px #0000001a;
+        margin-top: 0;
+        padding-top: 20px;
     }
     .ledger-stat {
-        margin: 0px 0 0;
+        margin: 15px -15px;
     }
-    .ledger_book {
+    .ledger-book {
         margin-bottom: 16px;
     }
-    .ledger_book .h-table tbody .ledger-row td {
+    .ledger-book .h-table tbody .ledger-row td {
         padding-left: 80px !important;
     }
-    .ledger_book .h-table {
+    .ledger-book .h-table {
         display: block;
         clear: both;
     }
-    .ledger_book .h-table tbody {
+    .ledger-book .h-table tbody {
         display: block;
     }
-    .ledger_book .h-table tbody tr {
+    .ledger-book .h-table tbody tr {
         display: block;
         height: inherit !important;
     }
-    .ledger_book .h-table tbody tr td {
+    .ledger-book .h-table tbody tr td {
         width: 100% !important;
         display: block;
     }
@@ -596,11 +693,12 @@ sh-select:focus {
     .left-col-new table.width100.h-table thead tr th:first-child {
         border-left: 0px solid $gainsboro !important;
     }
-    .ledgHead.some.transactions-page {
+    .ledg-head.some.transactions-page {
         margin-top: 50px;
     }
     .ledger-head {
         margin-top: 0;
+        position: initial;
     }
     .justify-content-between {
         justify-content: inherit;
@@ -608,10 +706,117 @@ sh-select:focus {
     .download-invoice-ledger {
         padding-left: 6px;
     }
+    .custom-tabs {
+        display: block;
+    }
+    .ledg-head {
+        .ipad-view-datepicker{
+            display: block;
+        }
+        .single-search-box{
+            position: relative;
+            width: calc(100% - 215px);
+            .full-width-input{
+                width: 100%;  
+            }
+            .default-width-input{
+                width: calc(100% - 115px); 
+            }
+            input[type="search"] {
+                min-width: 150px;
+                border-radius: 20px !important;
+            }
+            .clear-filter-btn{
+                text-align: center;
+                 width: 110px;
+                 padding: 0;
+                 display: flex;
+                align-items: center;
+                justify-content: center;
+                 i{
+                    left: -3px;
+                    top: 0;
+                    color: $midnight-blue;
+                 }
+            }
+        }
+    }
+    .ledger-section{
+        padding-top: 30px;
+    }
+    .transaction-in-short{
+        margin-bottom: 0;
+    }
+    .search-ledger-field{
+        margin-right: 0 !important;
+        justify-content: space-between;
+        .ledger-datepicker{
+            width: 36px;
+            height: 36px;
+            background-color: #fff;
+            border: 1px solid #d9d9d9;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            display: none;
+        }
+    }
+    .ledger-ellipse{
+        position: absolute;
+        top: 107px;
+        z-index: 991;
+        right: 0px;
+        .btn{
+            background-color: transparent;
+            color: $nero;
+            font-size: 18px;
+        }
+        ul{
+            left: auto !important;
+            right: 15px !important;
+            top: 30px !important;
+            border-radius: 10px;
+            border: none;
+            padding: 15px 0;
+            li{
+                a{
+                    padding: 5px 15px;
+                    margin-bottom: 3px;
+                    background-color:transparent;
+                }
+            }
+        }
+    }
+    .select-all-icons{
+        display: flex;
+        align-items: center;
+        button{
+            border-radius: 50%;
+            height: 32px;
+            width: 32px;
+        }
+    }
+    .search-ledger-wrapper{
+        width: 100% !important;
+    }
+    .download-invoice-ledger{
+        top:8px;
+        i{
+            top: 0;
+            color: $gray;
+        }
+    }
+    .ledger-head thead tr th.active {
+        display: block !important;
+        width: 100%;
+    }
+    .hidden-xs{
+        display: none!important;
+    }
 }
-
-@media (min-width: 991px) {
-    .ledger_book:before {
+@media(min-width:768px){
+    .ledger-book:before {
         content: " ";
         height: calc(100% - 220px);
         position: absolute;
@@ -628,20 +833,61 @@ sh-select:focus {
         border-right: 1px solid $gainsboro;
     }
 }
-@media (max-width: 575px) {
-    .debitCreditAmount {
-        display: block !important;
+@media(max-width:767px){
+        .ledger-head{
+            th{
+                padding: 0 0 10px !important;
+            }    
+        }
+        .ledger-ellipse{
+            top: 0;
+            right: 0px;
+            position: fixed;
+            .btn{
+                background-color: transparent;
+                color: $white;
+                font-size: 18px;
+            }
+        }
+        .search-ledger-field{
+            .ledger-datepicker{
+                display: flex;
+            }
     }
+    .ledg-head{    
+        .single-search-box{
+            position: relative;
+            width: calc(100% - 45px);
+            .default-width-input{
+                width: calc(100% - 100px);
+            }
+        }
+        .ipad-view-datepicker{
+            display: none;
+        }  
+    }
+}
+@media (max-width: 575px) {
     .stat-block {
         padding-left: 15px;
+    }
+    .ledger-btn .col-xs-6{
+        width: 100% !important;
+        margin-bottom: 5px;
     }
 }
 @media (max-width: 360px) {
     .search-ledger-field {
-        display: block;
         min-width: 200px;
     }
     .icomoon_ico {
         margin-top: 7px;
+    }
+    .ledg-head {
+        .single-search-box{
+            .clear-filter-btn{
+                font-size: 12px;
+            }
+        }
     }
 }

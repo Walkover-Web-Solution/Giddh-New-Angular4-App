@@ -85,7 +85,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChild('dateField') public dateField: ElementRef;
     @ViewChild('narrationBox') public narrationBox: ElementRef;
     @ViewChild('chequeNumberInput') public chequeNumberInput: ElementRef;
-    @ViewChild('chequeClearanceDateInput') public chequeClearanceDateInput: BsDatepickerDirective;
+    @ViewChild('chequeClearanceDateInput') public chequeClearanceDateInput: ElementRef;
     @ViewChild('chqFormSubmitBtn') public chqFormSubmitBtn: ElementRef;
     @ViewChild('submitButton') public submitButton: ElementRef;
     @ViewChild('resetButton') public resetButton: ElementRef;
@@ -206,7 +206,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 switch (this.currentVoucher) {
                     case VOUCHERS.CONTRA:
                         // Contra allows cash or bank so selecting default category as bank
-                        this.categoryOfAccounts = 'bankaccounts';
+                        this.categoryOfAccounts = 'currentassets';
                         break;
                     default:
                         // TODO: Add other category cases as they are developed
@@ -475,6 +475,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     public closeChequeDetailForm() {
         this.chequeEntryModal.hide();
+        this.focusDebitCreditAmount();
     }
 
     public openChequeDetailForm() {
@@ -496,7 +497,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let idx = this.selectedIdx;
         let transaction = this.requestObj.transactions[idx];
         if (acc) {
-            const formattedCurrentDate = this.tallyModuleService.getFormattedDate(this.currentDate);
+            const formattedCurrentDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             this.tallyModuleService.getCurrentBalance(this.currentCompanyUniqueName, acc.uniqueName, formattedCurrentDate, formattedCurrentDate).subscribe((data) => {
                 if (data && data.body) {
                     this.setAccountCurrentBalance(data.body, idx);
@@ -755,11 +756,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public ngAfterViewInit() {
         this.isComponentLoaded = true;
+        this.chequeEntryModal.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+            this.focusDebitCreditAmount();
+        });
         setTimeout(() => {
             this.isNoAccFound = false;
         }, 3000);
         setTimeout(() => {
-            this.refreshEntry();
             if (this.currentVoucher) {
                 this.setCurrentPageTitle(this.currentVoucher);
             }
@@ -1103,15 +1106,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.getStock(null, null, true, true);
     }
 
-    public onCheckNumberFieldKeyDown(event, fieldType: string, datePickerField?: BsDatepickerDirective) {
-        if (event && (event.key === KEYS.ENTER || event.key === KEYS.TAB)) {
-            event.preventDefault();
-            event.stopPropagation();
+    public onCheckNumberFieldKeyDown(event, fieldType: string, datePickerField: BsDatepickerDirective) {
+        if (event && (event.key === KEYS.ENTER || event.key === KEYS.TAB || event.key === KEYS.ESC)) {
+            if (event.key === KEYS.ESC) {
+                datePickerField.hide();
+                this.closeChequeDetailForm();
+                this.focusDebitCreditAmount();
+                return;
+            }
             return setTimeout(() => {
                 if (fieldType === 'chqNumber') {
                     datePickerField.show();
-                    this.chequeNumberInput.nativeElement.blur();
                 } else if (fieldType === 'chqDate') {
+                    datePickerField.hide();
                     this.chqFormSubmitBtn.nativeElement.focus();
                 }
             }, 100);
@@ -1295,6 +1302,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public handleVoucherDateChange(): void {
         this.dateField.nativeElement.focus();
+    }
+
+    /**
+     * Focuses on entry debit and credit amount
+     *
+     * @memberof AccountAsVoucherComponent
+     */
+    public focusDebitCreditAmount(): void {
+        if (this.requestObj.transactions[this.selectedIdx].type === 'by') {
+            this.byAmountFields.last.nativeElement.focus();
+        } else {
+            this.toAmountFields.last.nativeElement.focus();
+        }
     }
 
     /**
