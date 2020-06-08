@@ -7,86 +7,101 @@
 import { INameUniqueName } from './Inventory';
 
 export interface IntegrationPage {
-	smsForm: any;
-	emailForm: any;
-	razorPayForm: any;
-	payoutForm: any;
-	autoCollect: CashfreeClass;
-	paymentGateway: CashfreeClass;
-	amazonSeller: AmazonSellerClass[];
-	paymentForm: any;
+    smsForm: any;
+    emailForm: any;
+    razorPayForm: any;
+    payoutForm: any;
+    autoCollect: CashfreeClass;
+    paymentGateway: CashfreeClass;
+    amazonSeller: AmazonSellerClass[];
+    paymentForm: any;
 }
 
 export class IntegrationPageClass {
-	public smsForm: SmsKeyClass;
-	public emailForm: EmailKeyClass;
-	public razorPayForm: RazorPayDetailsResponse;
-	public payoutForm: CashfreeClass;
-	public autoCollect: CashfreeClass;
-	public paymentGateway: CashfreeClass;
-	public amazonSeller: AmazonSellerClass[];
-	public paymentForm: PaymentClass;
+    public smsForm: SmsKeyClass;
+    public emailForm: EmailKeyClass;
+    public razorPayForm: RazorPayDetailsResponse;
+    public payoutForm: CashfreeClass;
+    public autoCollect: CashfreeClass;
+    public paymentGateway: CashfreeClass;
+    public amazonSeller: AmazonSellerClass[];
+    public paymentForm: PaymentClass;
 
 }
 
 export class SmsKeyClass {
-	public senderId: string;
-	public authKey: string;
+    public senderId: string;
+    public authKey: string;
 }
 
 export class EmailKeyClass {
-	public subject: string;
-	public authKey: string;
+    public subject: string;
+    public authKey: string;
 }
 
 export class RazorPayClass {
-	public userName: string;
-	public password: string;
-	public account: INameUniqueName;
-	public autoCapturePayment: boolean;
+    public userName: string;
+    public password: string;
+    public account: INameUniqueName;
+    public autoCapturePayment: boolean;
 }
 
 export class RazorPayDetailsResponse {
-	public companyName?: string;
-	public userName: string;
-	public account: INameUniqueName;
-	public autoCapturePayment: boolean;
-	public password?: string;
+    public companyName?: string;
+    public userName: string;
+    public account: INameUniqueName;
+    public autoCapturePayment: boolean;
+    public password?: string;
 }
 
 export class CashfreeClass {
-	public userName: string;
-	public password: string;
-	public account: INameUniqueName;
-	public autoCapturePayment: boolean;
-	public fakeAccObj: boolean;
+    public userName: string;
+    public password: string;
+    public account: INameUniqueName;
+    public autoCapturePayment: boolean;
+    public fakeAccObj: boolean;
 }
 
 export class CashfreeClassResponse {
-	public userName: string;
-	public password: string;
-	public account: INameUniqueName;
-	public autoCapturePayment: boolean;
+    public userName: string;
+    public password: string;
+    public account: INameUniqueName;
+    public autoCapturePayment: boolean;
 }
 
 export class AmazonSellerClass {
-	public sellerId: string;
-	public mwsAuthToken: string;
-	public accessKey: string;
-	public secretKey: string;
+    public sellerId: string;
+    public mwsAuthToken: string;
+    public accessKey: string;
+    public secretKey: string;
 }
 
 export class PaymentClass {
-	public corpId: string;
-	public userId: string;
+    public corpId: string;
+    public userId: string;
     public accountNo: string;
     public aliasId: string;
-	public accountUniqueName: string;
-	constructor() {
-		this.corpId = '';
-		this.userId = '';
+    public userAmountRangeRequests: UserAmountRangeRequests[] = [new UserAmountRangeRequests()]
+    public accountUniqueName: string;
+    constructor() {
+        this.corpId = '';
+        this.userId = '';
         this.accountNo = '';
         this.aliasId = '';
-		this.accountUniqueName = '';
-	}
+        this.accountUniqueName = '';
+        // this.userAmountRangeRequests.push(new UserAmountRangeRequests())
+    }
+}
+
+export class UserAmountRangeRequests {
+    public amount: number;
+    public otpType: string;
+    public approvalUniqueName: string;
+    public maxBankLimit: string;
+      constructor() {
+          this.amount = 0;
+          this.otpType = '';
+          this.approvalUniqueName = '';
+          this.maxBankLimit = "false";
+      }
 }

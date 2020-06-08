@@ -1,6 +1,6 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, NgForm } from '@angular/forms';
@@ -31,6 +31,10 @@ import { GoogleLoginProvider, LinkedinLoginProvider } from "../../theme/ng-socia
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
 import { EcommerceService } from '../../services/ecommerce.service';
+import { forIn } from '../../lodash-optimized';
+import { GeneralService } from '../../services/general.service';
+import { ShareRequestForm } from '../../models/api-models/Permission';
+import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 
 export declare const gapi: any;
 
@@ -69,6 +73,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
     private isSellerAdded: Observable<boolean> = observableOf(false);
     private isSellerUpdate: Observable<boolean> = observableOf(false);
+    /** user who is logged in currently */
+    private loggedInUserEmail: string;
+
 
     @Input() private selectedTabParent: number;
     @ViewChild('integrationTab') public integrationTab: TabsetComponent;
@@ -81,22 +88,27 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public selecetdUpdateIndex: number;
     public isEcommerceShopifyUserVerified: boolean = false;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
-    public sendOtp: IOption[] = 
+    public typeOTPList: IOption[] =
         [
-            { label: "rakesh", value: "1234"}, 
-            { label: "rakesh2", value: "1235"}, 
-            { label: "rakesh", value: "1234"}, 
-            { label: "rakesh3", value: "1235"} 
+            { label: "Bank OTP", value: "BANK" },
+            { label: "GIDDH OTP", value: "GIDDH" },
         ];
-    public approvalName: IOption[] = 
+    public amountUpToList: IOption[] =
         [
-            { label: "rakesh", value: "1234"}, 
-            { label: "rakesh2", value: "1235"}, 
-            { label: "rakesh", value: "1234"}, 
-            { label: "rakesh3", value: "1235"} 
+            { label: "Max limit as per Bank", value: "true" },
+            { label: "Custom", value: "false" },
         ];
+    // public approvalNameList: IOption[] =
+    //     [
+    //         { label: "rakesh", value: "1234" },
+    //         { label: "rakesh2", value: "1235" },
+    //         { label: "rakesh", value: "1234" },
+    //         { label: "rakesh3", value: "1235" }
+    //     ];
+	public approvalNameList:  IOption[] = [];
+	public selectedCompanyUniqueName: string;
 
-        
+
     constructor(
         private router: Router,
         private store: Store<AppState>,
@@ -107,7 +119,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private _companyActions: CompanyActions,
         private _authenticationService: AuthenticationService,
         private _fb: FormBuilder,
-        private _generalActions: GeneralActions) {
+        private _generalActions: GeneralActions,
+		private settingsPermissionActions: SettingsPermissionActions,
+        private generalService: GeneralService) {
         this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
@@ -116,6 +130,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.isGmailIntegrated$ = this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$));
         this.isPaymentAdditionSuccess$ = this.store.pipe(select(s => s.settings.isPaymentAdditionSuccess), takeUntil(this.destroyed$));
         this.isPaymentUpdationSuccess$ = this.store.pipe(select(s => s.settings.isPaymentUpdationSuccess), takeUntil(this.destroyed$));
+
+        this.store.pipe(select(s => s.session.user), take(1)).subscribe(result => {
+            if (result && result.user) {
+                this.generalService.user = result.user;
+                this.loggedInUserEmail = result.user.email;
+            }
+        });
         this.setCurrentPageTitle();
     }
 
@@ -187,7 +208,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     }
                 });
                 this.accounts$ = observableOf(accounts);
-                this.bankAccounts$ = observableOf(accounts);
+                this.bankAccounts$ = observableOf(bankAccounts);
             }
         });
 
@@ -217,7 +238,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.registeredAccount = o.account;
                 if (this.registeredAccount && this.registeredAccount.length === 0) {
                     this.openNewRegistration = true;
+
                 }
+                console.log('get allbank',this.registeredAccount);
             }
         });
 
@@ -233,8 +256,29 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         //     }
         // });
 
+        this.store.pipe(take(1)).subscribe(s => {
+			this.selectedCompanyUniqueName = s.session.companyUniqueName;
+			this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
+		});
+        this.store.pipe(select(stores => stores.settings.usersWithCompanyPermissions), take(2)).subscribe(resp => {
+            if (resp) {
+                let data = _.cloneDeep(resp);
+                let sortedArr = _.groupBy(this.prepareDataForUI(data), 'emailId');
+                let arr: IOption[]= [];
+                forIn(sortedArr, (value) => {
+                    if (value[0].emailId === this.loggedInUserEmail) {
+                        value[0].isLoggedInUser = true;
+                    }
+                    // arr.push({ name: value[0].userName, rows: value });
+                    arr.push({ label: value[0].userName, value: value[0].uniqueName, additional: value });
+                });
+                this.approvalNameList = _.sortBy(arr, ['label']);
+                console.log(this.approvalNameList);
+
+            }
+        });
     }
-    
+
     public ngAfterViewInit() {
         if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
             this.selectTab(this.selectedTabParent);
@@ -258,7 +302,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.razorPayObj.account = { name: null, uniqueName: null };
         this.razorPayObj.autoCapturePayment = true;
     }
-    
+
 
     public onSubmitMsgform(f: NgForm) {
         if (f.valid) {
@@ -281,6 +325,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.paymentFormObj.accountNo = "";
             this.paymentFormObj.aliasId = "";
             this.paymentFormObj.accountUniqueName = "";
+            this.paymentFormObj.userAmountRangeRequests = [];
             this.forceClear$ = observableOf({ status: true });
         }
     }
@@ -611,4 +656,29 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         }
     }
+
+    /**
+     * To map users with company permissions data for UI
+     *
+     * @param {ShareRequestForm[]} data  users with company permissions data
+     * @returns
+     * @memberof SettingIntegrationComponent
+     */
+    public prepareDataForUI(data: ShareRequestForm[]) {
+        return data.map((item) => {
+            if (item.allowedCidrs && item.allowedCidrs.length > 0) {
+                item.cidrsStr = item.allowedCidrs.toString();
+            } else {
+                item.cidrsStr = null;
+            }
+            if (item.allowedIps && item.allowedIps.length > 0) {
+                item.ipsStr = item.allowedIps.toString();
+            } else {
+                item.ipsStr = null;
+            }
+            return item;
+        });
+    }
+    public selectedMaxOrCustom(event: any, index: number) {
+console.log(event, index);    }
 }

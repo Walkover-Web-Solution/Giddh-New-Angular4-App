@@ -10,32 +10,42 @@
 .pdBth20 {
     padding: 0 20px;
 }
-.info-icon{
-    i{
+
+.info-icon {
+    i {
         position: absolute;
         right: 0;
         top: 4px;
         color: $gray;
     }
 }
+
 .check-search {
     position: absolute;
     right: 10px;
     top: 18px;
 }
+
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+}
+
 @media(max-width:768px) {
     .empty-label label,
     .empty-label br {
         display: none;
     }
 }
-.plus-cross-btn{
-    i{
+
+.plus-cross-btn {
+    i {
         padding: 5px 0;
         color: $gray;
         font-size: 20px;
     }
 }
+
 @media(max-width:767px) {
     #inlnImg {
         margin-top: 0;
@@ -45,16 +55,16 @@
         margin: 0;
         display: none;
     }
-    .gmail-integration-message{
+    .gmail-integration-message {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        h4{
+        h4 {
             align-self: self-start !important;
             padding-bottom: 10px;
             font-size: 14px;
         }
-        .btn-danger{
+        .btn-danger {
             margin-left: 0 !important;
         }
     }

@@ -74,6 +74,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public isPayclicked: boolean = false;
     public selectedBankUrn: any;
     public countDownTimerRef: any;
+    public totalAvailableBalance: any;
     public addAccountBulkPaymentForm: FormGroup;
     constructor(
         private formBuilder: FormBuilder,
@@ -291,6 +292,14 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.selectedBankUrn = event;
         if (event) {
             this.requestObjectTogetOTP.bankUrn = event;
+            this._companyService.getAllBankDetailsOfIntegrated(this.companyUniqueName, this.requestObjectTogetOTP.bankUrn).subscribe(response => {
+                console.log(response)
+                if (response.status === 'success') {
+                    // this.totalAvailableBalance = response.
+                } else if (response.status === 'error') {
+                    this._toaster.errorToast(response.message, response.code);
+                }
+            })
         }
     }
 
