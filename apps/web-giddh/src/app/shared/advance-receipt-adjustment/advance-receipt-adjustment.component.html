@@ -30,7 +30,7 @@
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label for="name">Adjustment Voucher<span class="text-danger">*</span></label>
+                                <label for="name" *ngIf="entryIdx===0">Adjustment Voucher<span class="text-danger">*</span></label>
                                 <div class="select-error select-caret relative">
                                     <sh-select class="text-left" name="voucherName{{entryIdx}}" [defaultValue]="entry.voucherNumber" (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm);" required [placeholder]="'Select Voucher'" [(ngModel)]="entry.uniqueName" (selected)="selectVoucher($event, entry, entryIdx);"
                                         [options]="adjustVoucherOptions" [multiple]="false">
@@ -52,7 +52,7 @@
 
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label>Amount<span class="text-danger">* </span> <span class="text-light">
+                                <label *ngIf="entryIdx===0">Amount<span class="text-danger">* </span> <span class="text-light">
                                         (Inclusive Tax)</span></label>
                                 <!-- decimalDigitsDirective -->
                                 <input required decimalDigitsDirective type="text" class="form-control" placeholder="Enter Amount" name="amount{{entryIdx}}" [(ngModel)]="entry.dueAmount.amountForAccount" (ngModelChange)="calculateTax(entry, entryIdx);" [prefix]="currencySymbol" [mask]="inputMaskFormat">
@@ -60,12 +60,12 @@
                         </div>
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <label for="name_{{entryIdx}}">Tax</label>
+                                <label for="name_{{entryIdx}}" *ngIf="entryIdx===0">Tax</label>
                                 <input id="name_{{entryIdx}}" type="text" class="form-control" name="calculatedTaxAmount_{{entryIdx}}" decimalDigitsDirective [(ngModel)]="entry.calculatedTaxAmount" placeholder="00.00" disabled>
                             </div>
                         </div>
                         <div class="col-sm-3">
-                            <a href="javascript:void(0)" (click)="deleteAdjustVoucherRow(entryIdx);" class="font-22 text-light pt-3 d-inline-block"><i class="icon-trash"></i></a>
+                            <a href="javascript:void(0)" (click)="deleteAdjustVoucherRow(entryIdx);" class="font-22 text-light d-inline-block" [ngClass]="{'pt-3': entryIdx===0}"><i class="icon-trash"></i></a>
                         </div>
                     </div>
                 </ng-container>

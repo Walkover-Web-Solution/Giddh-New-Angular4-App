@@ -337,7 +337,10 @@ export class LoginActions {
                         this._router.navigate(['login']);
                     });
                 } else {
-                    window.location.href = AppUrl + 'login/';
+                    // window.location.href = AppUrl + 'login/'; // some times not navigating in macOS
+                    // after logout white screen issue so reload windows implemeted
+                    this._router.navigate(['/login']);
+                    window.location.reload();
                 }
                 return { type: 'EmptyAction' };
             }));

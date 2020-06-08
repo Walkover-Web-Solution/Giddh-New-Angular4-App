@@ -320,8 +320,7 @@
                         </div>
                         <div class="clearfix">
                             <div class="mt-1 mb-1 mr-2 ml-2">
-                                <input type="search" class="form-control" [(ngModel)]="srchString"
-                                    (ngModelChange)="filterCompanyList($event)" placeholder="Search Company here">
+                                <input type="search" class="form-control" [(ngModel)]="srchString" (ngModelChange)="filterCompanyList($event)" placeholder="Search Company here">
                             </div>
                             <div class="company-list" *ngIf="subscriptions">
                                 <ul>

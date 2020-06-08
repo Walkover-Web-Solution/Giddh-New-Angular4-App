@@ -563,6 +563,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     this.detectChanges();
                 } else {
                     this.isAccountHaveAdvanceReceipts = false;
+                    this.detectChanges();
                 }
             });
         }

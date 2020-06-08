@@ -199,7 +199,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
     }
-
     public addNumber(no: string) {
         this.oneTimePassword = '';
         const mobileRegex = /^[0-9]{1,10}$/;
@@ -345,7 +344,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public payWithRazor() {
         let options: any = {
-            key: 'rzp_live_rM2Ub3IHfDnvBq',
+            key: 'rzp_live_4UTBGkTT0iZmMW',  // rzp_live_4UTBGkTT0iZmMW
             amount: this.amount, // 2000 paise = INR 20
             name: 'Giddh',
             description: `${this.selectedCompany.name} Subscription for Giddh`,

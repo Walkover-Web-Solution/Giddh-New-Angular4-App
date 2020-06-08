@@ -18,7 +18,7 @@
                             <label>Beneficiary Name</label>
                             <input class="form-control" [value]="accountDetails?.accountBankDetails[0]?.beneficiaryName" type="text" disabled />
                         </div>
-                        <div class="col-sm-6 col-xs-12" [ngClass]="{'mrT1': countryCode ==='AE'}">
+                        <div class="col-sm-6 col-xs-12" [ngClass]="{'mt-1': countryCode ==='AE'}">
                             <label>Bank Name</label>
                             <input class="form-control" [value]="accountDetails?.accountBankDetails[0]?.bankName" type="text" disabled />
                         </div>
@@ -28,7 +28,7 @@
                                 <input class="form-control" [value]="accountDetails?.accountBankDetails[0]?.branchName" type="text" disabled>
                             </div>
                         </div>
-                        <div class="col-sm-6 col-xs-12" [ngClass]="{'mrT1': countryCode ==='AE'}">
+                        <div class="col-sm-6 col-xs-12" [ngClass]="{'mt-1': countryCode ==='AE'}">
                             <div class="form-group">
                                 <label *ngIf="countryCode ==='IN' ">Account Number</label>
                                 <label *ngIf="countryCode !=='IN' ">IBAN</label>

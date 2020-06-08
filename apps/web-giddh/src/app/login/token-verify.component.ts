@@ -65,5 +65,4 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
     public verifyUser(): void {
         this.store.dispatch(this._loginAction.LoginWithPasswdResponse(this.request));
     }
-
 }

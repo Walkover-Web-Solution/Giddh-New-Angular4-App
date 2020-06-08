@@ -105,6 +105,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         });
 
         this.subscriptions$.subscribe(userSubscriptions => {
+            this.isLoading = false;
             this.subscriptions = userSubscriptions;
             this.allSubscriptions = userSubscriptions;
             this.showCurrentCompanyPlan();

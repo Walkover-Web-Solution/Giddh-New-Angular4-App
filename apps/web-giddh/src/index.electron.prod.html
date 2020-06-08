@@ -5,6 +5,7 @@
   <% } %> -->
 
 <head>
+    <base href="">
     <script type="text/javascript">
         if (window.location.hostname.indexOf('www') == 0) {
             window.location = window.location.href.replace('www.', '');
@@ -33,15 +34,15 @@
     <script>
         // if (<%= htmlWebpackPlugin.options.metadata.errlyticsNeeded %>)
         if (true) {
-            !function () {
+            ! function() {
                 var analytics = window.analytics = window.analytics || [];
                 if (!analytics.initialize)
                     if (analytics.invoked) window.console && console.error && console.error('Segment snippet included twice.');
                     else {
                         analytics.invoked = !0;
                         analytics.methods = ['trackSubmit', 'trackClick', 'trackLink', 'trackForm', 'pageview', 'identify', 'reset', 'group', 'track', 'ready', 'alias', 'debug', 'page', 'once', 'off', 'on'];
-                        analytics.factory = function (t) {
-                            return function () {
+                        analytics.factory = function(t) {
+                            return function() {
                                 var e = Array.prototype.slice.call(arguments);
                                 e.unshift(t);
                                 analytics.push(e);
@@ -52,7 +53,7 @@
                             var e = analytics.methods[t];
                             analytics[e] = analytics.factory(e);
                         }
-                        analytics.load = function (t, e) {
+                        analytics.load = function(t, e) {
                             var n = document.createElement('script');
                             n.type = 'text/javascript';
                             n.async = !0;
@@ -76,23 +77,18 @@
                 var companyUniqueName = JSON.parse(session).companyUniqueName;
                 if (user && user.session.id) {
                     analytics.identify(user.user.uniqueName, {
-                        name: user.user.name,
-                        email: user.user.email,
-                        companyName: companyUniqueName,
-                        isDesktop: false
-                        // isDesktop:  <%= htmlWebpackPlugin.options.metadata.isElectron %>
+                            name: user.user.name,
+                            email: user.user.email,
+                            companyName: companyUniqueName,
+                            isDesktop: false
+                                // isDesktop:  <%= htmlWebpackPlugin.options.metadata.isElectron %>
 
-                    },
-                        {
+                        }, {
                             Intercom: {
                                 user_hash: user.intercomHash
                             }
                         }
-                    )
-                        ;
-                }
-            }
-        }
+                    }
     </script>
 
 
