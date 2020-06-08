@@ -486,6 +486,7 @@ sh-select:focus {
     font-size: 14px;
     padding-right: 10px !important;
     height: 36px;
+    min-width: 220px !important;
     &:focus{
         border-color: $chetwode-blue;
 

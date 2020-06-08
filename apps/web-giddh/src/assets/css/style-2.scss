@@ -198,7 +198,9 @@
 
 
 /* start MDB tweaks */
-
+.border-none{
+    border: none !important;
+}
 .pt-0 {
     padding-top: 0px !important;
 }
@@ -737,7 +739,15 @@ input {
 .mb-15 {
     margin-bottom: 15px;
 }
-
+.ml-15{
+    margin-left: 15px;
+}
+.mr-15{
+    margin-right: 15px;
+}
+.mt-15{
+    margin-top: 15px;
+}
 .mr-1 {
     margin-right: 10px;
 }
@@ -1593,11 +1603,16 @@ modal-container.modal {
     margin-bottom: 0px;
 }
 
-.calendly-inline-widget object {
-    width: 1000px;
-    height: 610px;
+.overlay-cal{
+    .modal-body{
+        max-width: 1120px !important;
+        width: 100% !important;
+        .calendly-inline-widget object{
+            width: 100% !important;
+            height: 610px !important;
+        }
+    }
 }
-
 .booking-container {
     max-width: 100% !important;
 }
@@ -6551,12 +6566,11 @@ table td[class*=col-]:last-child {
     background: $white !important;
 }
 
-
-/* .universal_date label {
+/* .universal-date label {
     color: $white;
 } */
 
-.universal_date .btn-link {
+.universal-date .btn-link {
     color: #f5f5f5 !important;
     padding-top: 3px;
     padding-left: 0px;
@@ -6566,11 +6580,11 @@ table td[class*=col-]:last-child {
     border-radius: 0;
 }
 
-.universal_date .btn-link:hover {
+.universal-date .btn-link:hover {
     text-decoration: none;
 }
 
-.universal_date {
+.universal-date {
     float: none !important;
     display: inline-block;
 }
@@ -9084,8 +9098,56 @@ ngx-daterangepicker-material {
         }
     }
 }
+/*notofication css*/
+.HW_badge.HW_visible{
+    position: absolute;
+    top: -23px;
+    opacity: 1 !important;
+}
+.HW_badge{
+    transition: none !important;
+    opacity: 1 !important;
+    transform: scale(1.0) !important;
+    top: -23px !important;
+    position: absolute !important;
+}
+.HW_badge_cont{
+    visibility: visible !important;
+    width: auto !important;
+}
+.HW_badge{
+    background: $red;
+    width: 14px !important;
+    height: 14px !important;
+    line-height: 14px !important;
+}
+/*notofication css end*/
+.setting-sidebar-open .desktop-header{
+    padding-left: 215px;
+}
+.setting-data , .setting-sidebar-open .white-row{
+    padding-left: 230px !important;
+}
+// .setting-sidebar-open .white-row{
+//     margin-left: 0;
+// }
+.setting-sidebar-open .menu_open .setting-data , .setting-sidebar-open .menu_open .white-row {
+    padding-left: 15px !important;
+}
 .date-field{
     flex-direction: column;
+}
+.mobile-home{
+    background-color: $lavender;
+    .padding-top-fixed-mobile, .padding-top-fixed, .desktop-header{
+        display: none;
+    }
+    #content_wrapper{
+        background-color: $lavender;
+    }
+}
+.icon-home-icon{
+    color: $white;
 }
 /* responsive */
 @media (max-width: 1440px) {
@@ -9102,7 +9164,7 @@ ngx-daterangepicker-material {
         top: 96px;
     }
     #setting-tab .tab-container .nav.nav-tabs {
-        margin: 0 0 10px;
+        margin: 0 0 7px;
         padding: 10px 0px 0;
         white-space: nowrap;
         display: inline-block;
@@ -9327,7 +9389,8 @@ ngx-daterangepicker-material {
     .table>thead>tr>th {
         white-space: initial !important;
     }
-    .universal_date label.btn.btn-link {
+
+    .universal-date label.btn.btn-link {
         display: none;
     }
     .invoce-controll .nav.nav-tabs {
@@ -9379,11 +9442,22 @@ ngx-daterangepicker-material {
 }
 
 @media (max-width: 767px) {
+    .setting-sidebar-open .desktop-header {
+        padding-left: 0;
+    }
+    .setting-sidebar-open .setting-data, .setting-sidebar-open .white-row{
+        padding-left: 15px !important;
+    }
+    .overlay-cal{
+        .modal-body{
+         padding: 50px 15px;
+        }
+    }
     .btn {
         padding: 7px 8px;
     }
     .setting-container {
-        margin-top: 55px;
+        margin-top: 20px;
     }
     .hide-lable-on-mobile button {
         margin-top: 0 !important;
@@ -9467,7 +9541,7 @@ ngx-daterangepicker-material {
         position: absolute;
         content: "";
         background: rgba(0, 0, 0, 0.3);
-        z-index: 99;
+        z-index: 990;
         height: 100%;
         width: 100%;
         top: 0;
@@ -9478,16 +9552,16 @@ ngx-daterangepicker-material {
     #setting-tab .tab-container .nav.nav-tabs {
         position: fixed;
         width: 100%;
-        top: 80px;
+        top: 90px;
     }
     #setting-tab.user-detail-page .tab-container .nav.nav-tabs {
-        top: 92px;
+        top: 88px;
         z-index: 99;
     }
     .custom-tabs .nav.nav-tabs {
         position: fixed;
         width: 100%;
-        top: 92px;
+        top: 90px;
     }
     .ledg-head.entry-popup .custom-tabs .nav.nav-tabs {
         position: relative;
@@ -9497,11 +9571,15 @@ ngx-daterangepicker-material {
     .custom-tabs .top-bar {
         margin-top: 45px;
     }
+    .page-has-tabs .custom-tabs .top-bar {
+        margin-top: 15px;
+        padding-top: 0;
+    }
     .custom-tabs.hide-header .top-bar {
         margin-top: 0;
     }
     .invoce-controll .nav.nav-tabs {
-        padding: 10px 0px 0 15px !important;
+        padding: 0 0 0 15px !important;
     }
     #setting-tab setting-integration .tab-container .nav.nav-tabs,
     #setting-tab app-invoice-setting .tab-container .nav.nav-tabs {
@@ -9611,6 +9689,21 @@ ngx-daterangepicker-material {
     .panel-block .panel-body {
         min-height: auto;
     }
+    // .tabs-page .padding-top-fixed-mobile {
+    //     padding-top: 126px;
+    // }
+    .padding-top-fixed-mobile {
+        padding-top:90px;
+    }
+    .page-has-tabs .padding-top-fixed-mobile , .on-user-page .padding-top-fixed-mobile{
+        padding-top: 130px !important;
+    }
+    .page-has-tabs.setting-sidebar-open .padding-top-fixed-mobile{
+        padding-top:85px !important;
+    }
+   .on-setting-page .padding-top-fixed-mobile{
+        padding-top: 90px !important;
+    }
     ngx-daterangepicker-material {
         position: fixed;
         top:0 !important;
@@ -9648,6 +9741,50 @@ ngx-daterangepicker-material {
     }
     .hide-scroll-body:last-child .modal{
         z-index: 9993;
+    }
+    .page-has-tabs .invoice-genrate-container, 
+    .page-has-tabs .invoice-container,
+    .page-has-tabs .proforma-container,
+    .page-has-tabs .proforma-container,
+    .page-has-tabs .recurring-container
+    {
+        padding-top: 15px !important;
+    }
+    .page-has-tabs #setting-tab app-invoice-setting .tab-container .nav.nav-tabs,
+    .on-user-page .search-subscription{
+        margin-top: 15px !important;
+    }
+    .page-has-tabs .recurring-container{
+        margin-top: 0px !important;
+    }
+    .on-user-page  .user-detail-page.company-page{
+        padding-top: 15px !important;
+    }
+    .HW_frame_cont.HW_visible.HW_bottom{
+        right: 0 !important;
+        left: auto !important;
+        max-width: 320px;
+        width: 100%;
+    }
+    .on-setting-page .setting-menu-icon, .on-user-page .setting-menu-icon{
+        display: inline-flex !important;
+    }
+    .setting-data{
+        padding-left: 15px !important;
+    }
+    .mobile-setting-sidebar{
+        position: relative;
+        overflow-y: hidden;
+    }
+    .mobile-setting-sidebar:after {
+        position: absolute;
+        content: '';
+        background-color: rgba(0,0,0,0.5);
+        width: 100%;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        z-index: 999;
     }
 }
 @media (max-width: 575px) {
