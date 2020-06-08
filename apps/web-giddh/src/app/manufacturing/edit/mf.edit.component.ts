@@ -97,7 +97,7 @@ export class MfEditComponent implements OnInit {
                 if (manufacturingObj) {
                     this.selectedProductName = `${manufacturingObj.stockName} (${manufacturingObj.stockUniqueName})`;
                     manufacturingObj.quantity = manufacturingObj.manufacturingQuantity;
-                    manufacturingObj.date = moment(manufacturingObj.date, 'DD-MM-YYYY').toDate();
+                    manufacturingObj.date = moment(manufacturingObj.date, GIDDH_DATE_FORMAT).toDate();
                     manufacturingObj.multipleOf = (manufacturingObj.manufacturingQuantity / manufacturingObj.manufacturingMultipleOf);
                     // delete manufacturingObj.manufacturingQuantity;
                     manufacturingObj.linkedStocks.forEach((item) => {
@@ -108,6 +108,9 @@ export class MfEditComponent implements OnInit {
                     }
                     // manufacturingObj.activeStockGroupUniqueName = o.activeStockGroup;
                     this.manufacturingDetails = manufacturingObj;
+                    if (this.manufacturingDetails.date && typeof this.manufacturingDetails.date === 'object') {
+                        this.manufacturingDetails.date = String(moment(this.manufacturingDetails.date).format(GIDDH_DATE_FORMAT));
+                    }
                     this.onQuantityChange(manufacturingObj.manufacturingMultipleOf);
                 }
             }
@@ -333,8 +336,8 @@ export class MfEditComponent implements OnInit {
     public createEntry() {
         let dataToSave = _.cloneDeep(this.manufacturingDetails);
         dataToSave.stockUniqueName = this.selectedProduct;
-        if (dataToSave.date && !dataToSave.date.includes('-')) {
-            dataToSave.date = (dataToSave.date).format(GIDDH_DATE_FORMAT);
+        if (dataToSave.date && typeof dataToSave.date === 'object') {
+            dataToSave.date = String(moment(dataToSave.date).format(GIDDH_DATE_FORMAT));
         }
         dataToSave.linkedStocks.forEach((obj) => {
             obj.manufacturingUnit = obj.stockUnitCode;
@@ -350,8 +353,8 @@ export class MfEditComponent implements OnInit {
 
     public updateEntry() {
         let dataToSave = _.cloneDeep(this.manufacturingDetails);
-        if (dataToSave.date && !dataToSave.date.includes('-')) {
-            dataToSave.date = (dataToSave.date).format(GIDDH_DATE_FORMAT);
+        if (dataToSave.date && typeof dataToSave.date === 'object') {
+            dataToSave.date = String(moment(dataToSave.date).format(GIDDH_DATE_FORMAT));
         }
         // dataToSave.grandTotal = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
         // dataToSave.multipleOf = dataToSave.quantity;
@@ -485,7 +488,7 @@ export class MfEditComponent implements OnInit {
      * @memberof MfEditComponent
      */
     public setToday(): void {
-        this.manufacturingDetails.date = String(moment(this.bsValue).format('DD-MM-YYYY'));
+        this.manufacturingDetails.date = String(moment(this.bsValue).format(GIDDH_DATE_FORMAT));
     }
 
     public clearDate() {
