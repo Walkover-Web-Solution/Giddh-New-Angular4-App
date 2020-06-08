@@ -177,7 +177,7 @@
         width: calc(100% - 36px);
         position: relative;  
         .input-group{
-            background-color: #fff;
+            background-color: $white;
             border-radius: 50px;
             padding: 10px 15px;
             display: flex;
@@ -192,7 +192,7 @@
                 line-height: 1.2;
                 height: auto;
                 padding-right: 5px;
-                color: #808080;
+                color: $gray;
                 border: none;
                 padding: 0 !important;
                 padding-right: 25px !important;
@@ -208,7 +208,7 @@
                 padding-left: 0;
                 line-height: 1.2;
                 height: auto;
-                color: #808080;
+                color: $gray;
                 border: none;
                 padding: 0 !important;
                 padding-right: 0;

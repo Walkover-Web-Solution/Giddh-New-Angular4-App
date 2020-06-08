@@ -17,7 +17,7 @@
                             </ng-container>
                         </span>
                     </span>
-                    <input type="text" #searchElement class="form-control" [(ngModel)]="searchString" placeholder="Search" aria-describedby="" (keyup)="initSearch($event, $event.target.value)" (keydown)="handleKeydown($event)">
+                    <input type="text" #searchElement class="form-control" [(ngModel)]="searchString" placeholder="Search" (keyup)="initSearch($event, $event.target.value)" (keydown)="handleKeydown($event)">
                 </div> 
                 <span class="close-addon">
                     <i class="icon-cross" *ngIf="searchString || (listOfSelectedGroups && listOfSelectedGroups.length > 0)" (click)="clearSearch() "></i>    
