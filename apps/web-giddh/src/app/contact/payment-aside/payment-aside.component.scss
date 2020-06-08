@@ -76,6 +76,21 @@ form label {
 .modal-title{
     color: $white;
 }
+.btn-success {
+    padding: 7px 25px;
+}
+.payment-top-form .d-flex {
+    flex-wrap: wrap;
+}
+.payment-top-form .d-flex .form-group {
+    min-width: 190px;
+}
+.payment-top-form .d-flex .form-group:last-child {
+    min-width: 220px;
+}
+.pt-25 {
+    padding-top: 25px;
+}
 .payment-top-form{
     .form-group{
         margin-bottom: 0;
@@ -153,6 +168,49 @@ form label {
                 }
             }
         }
+    }
+}
+@media (max-width: 1100px) {
+    .payment-top-form {
+        .otp-success-msg {
+            text-align: left;
+            margin: 10px 0;
+        }
+    }
+    .payment-top-form {
+        display: block;
+    }
+}
+@media (max-width: 767px) {
+    .selected-bank-details
+    .bank-deatils-wrapper
+    .readonly-bank-deatils {
+        max-width: 100% !important;
+    }
+
+    .bank-deatils-wrapper {
+        display: block !important;
+        .readonly-bank-deatils {
+            max-width: 100%;
+        }
+    }
+    .selected-bank-details {
+        .account-holder-name {
+            p {
+                &:first-child {
+                    max-width: 100%;
+                }
+            }
+        }
+    }
+}
+
+
+
+
+@media (max-width: 480px) {
+    .payment-top-form .d-flex .form-group, .payment-top-form .d-flex .form-group:last-child {
+        min-width: 100%;
     }
 }
 

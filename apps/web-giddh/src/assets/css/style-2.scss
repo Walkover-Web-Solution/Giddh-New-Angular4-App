@@ -8930,8 +8930,11 @@ input.checkbox-custom[type="checkbox"] {
 .payment-modal{
     max-width: 1190px !important;
     width: 100% !important;
+    padding: 0 15px;
+    margin-right: auto;
+    margin-left: auto;
 }
-.payment-success-modal{
+.payment-success-modal {
     .modal-header{
         border-radius: 5px 5px 0 0;
     }
