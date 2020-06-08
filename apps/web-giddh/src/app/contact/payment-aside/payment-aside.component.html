@@ -8,9 +8,9 @@
     <div class="clearfix">
         <form #adjustAdvancePaymentForm="ngForm" autocomplete="off">
             <div class="row d-flex align-items-center payment-top-form">
-                <div class="col-md-8">
+                <div class="col-sm-12">
                     <div class="d-flex">
-                        <div class="form-group mr-15">
+                        <div class="form-group mr-15 select-bank">
                             <label>Select Bank<span class="red-text">*</span></label>
                             <sh-select *ngIf="selectIntegratedBankList.length > 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankName" class="text-left" name="urn" required [placeholder]="'Select Bank'" (selected)="selectBank($event);" [multiple]="false">
                                 <ng-template #optionTemplate let-option="option">
@@ -44,11 +44,11 @@
                         </div>
                         <div class="form-group mr-15" *ngIf="isPayclicked">
                             <label class="relative d-flex">Enter OTP<span class="red-text">*</span>
-                                <small class="resend-btn" *ngIf="!timerOn"><a href="javascript:void();"
-                                        (click)="reSendOTP()">Resend</a></small>
+                                <p class="resend-btn" *ngIf="!timerOn"><a href="javascript:void();"
+                                        (click)="reSendOTP()" class="btn-link">Resend</a></p>
                                 <!-- make timer dynamic -->
-                                <small class="resend-btn timer-count" *ngIf="timerOn"><a
-                                        href="javascript:void();">{{timerCountDown$ | async}}</a></small>
+                                <p class="resend-btn timer-count" *ngIf="timerOn"><a
+                                        href="javascript:void();" class="btn-link">{{timerCountDown$ | async}}</a></p>
                             </label>
                             <input type="text" class="form-control" placeholder="Enter OTP" name="OTP" [(ngModel)]="OTP" type="number" maxlength="4">
                         </div>
@@ -60,9 +60,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-sm-3">
                     <p class="otp-success-msg text-right"> <span>
-                            <img src="../../../assets/images/checked-success.svg">
+                        <img src="../../../assets/images/checked-success.svg">
                         </span> A OTP has been sent to Shubhendra Agrawal</p>
                 </div>
 
@@ -73,7 +73,7 @@
                     <div class="mb-2">
                         <div class="account-holder-name">
                             <p>{{item.name}}</p>
-                            <p class="text-gray due-amount">
+                            <p class="text-gray due-amount hidden-xs">
                                 Total Due:{{item.closingBalance.amount}}
                                 <span class="red-text cursor-pointer" (click)="removeSelectedAccount(item); removeTransactionsDetailsForm(entryIdx)"><i
                                         class="icon-trash mr-05"></i>Remove</span>
@@ -107,6 +107,11 @@
                                 </div>
                             </div>
                             <div class="amount-remark-section">
+                                <p class="text-gray due-amount hidden-md hidden-lg hidden-sm mb-2">
+                                    Total Due:{{item.closingBalance.amount}}
+                                    <span class="red-text cursor-pointer pull-right mb-1" (click)="removeSelectedAccount(item); removeTransactionsDetailsForm(entryIdx)"><i
+                                            class="icon-trash mr-05"></i>Remove</span>
+                                </p>
                                 <div class="d-flex">
                                     <div class="form-group pr-15">
                                         <label>Amount<span class="text-danger">*</span></label>

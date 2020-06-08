@@ -25,10 +25,24 @@
     right: 10px;
     top: 18px;
 }
-
-a.disabled {
-    pointer-events: none;
-    cursor: default;
+.disabled:after {
+    background: transparent;
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    clear: both;
+    float: none;
+    overflow: hidden;
+    position: absolute;
+    z-index: 999;
+    cursor: not-allowed;
+}
+.disabled .list-item {
+    position: relative;
 }
 
 @media(max-width:768px) {
