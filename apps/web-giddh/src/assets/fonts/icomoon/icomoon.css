@@ -34,6 +34,7 @@
 }
 .icon-home-icon:before {
   content: "\e900";
+  color: #fff;
 }
 .icon-log:before {
   content: "\e001";
