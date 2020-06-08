@@ -198,7 +198,9 @@
 
 
 /* start MDB tweaks */
-
+.border-none{
+    border: none !important;
+}
 .pt-0 {
     padding-top: 0px !important;
 }
@@ -318,7 +320,6 @@
 .pl-15 {
     padding-left: 15px;
 }
-
 .pt-15 {
     padding-top: 15px;
 }
@@ -326,7 +327,15 @@
 .pl-05 {
     padding-left: 5px;
 }
-
+.pt-05 {
+    padding-top: 5px;
+}
+.pr-05 {
+    padding-right: 5px;
+}
+.pb-05 {
+    padding-bottom: 5px;
+}
 .bt-1 {
     border-top: 1px solid #ccc;
 }
@@ -342,7 +351,9 @@
 .bl-1 {
     border-left: 1px solid #ccc;
 }
-
+.border-none{
+    border: none !important;
+}
 
 /* end MDB tweaks */
 
@@ -728,7 +739,15 @@ input {
 .mb-15 {
     margin-bottom: 15px;
 }
-
+.ml-15{
+    margin-left: 15px;
+}
+.mr-15{
+    margin-right: 15px;
+}
+.mt-15{
+    margin-top: 15px;
+}
 .mr-1 {
     margin-right: 10px;
 }
@@ -752,7 +771,15 @@ input {
 .ml-0 {
     margin-left: 0px;
 }
-
+.mr-0 {
+    margin-right: 0 !important;
+}
+.mt-0 {
+    margin-top: 0px;
+}
+.mb-0 {
+    margin-bottom: 0px;
+}
 .ml-1 {
     margin-left: 10px;
 }
@@ -800,7 +827,7 @@ input {
 
 .company-list button.btn-link {
     font-size: 13px;
-    color: #1e67c8;
+    color: $chetwode-blue !important;
     display: block;
     padding: 7px 10px;
     display: block;
@@ -809,8 +836,8 @@ input {
 }
 
 .company-list button.btn-link:hover {
-    color: $white;
-    background: $midnight-express;
+    color: $chetwode-blue;
+    background: $lavender-light;
     text-decoration: none;
 }
 
@@ -860,7 +887,6 @@ ul.sub-list {
 .bold {
     font-family: $opensans-semibold;
 }
-
 .font-bold {
     font-family: $opensans-bold;
 }
@@ -996,7 +1022,7 @@ ul.sub-list {
 }
 
 .custom-tabs .nav.nav-tabs>li.active a {
-    color: #1c1c1c !important;
+    color: $nero !important;
 }
 
 .custom-tabs .nav.nav-tabs {
@@ -1076,6 +1102,7 @@ ul.sub-list {
 
 .aging-table-top .top-aging-table-top span .date-range-picker {
     font-family: opensans-semibold;
+    text-align:left !important;
 }
 
 .aging-table {
@@ -1153,6 +1180,7 @@ ul.sub-list {
     margin-left: 10px;
     text-decoration: underline;
     font-size: 14px;
+
 }
 
 .basic>thead>tr>th .fa-sort {
@@ -1171,10 +1199,6 @@ ul.sub-list {
     background: $midnight-blue !important;
     color: $white !important;
     border: 1px solid $midnight-blue !important;
-}
-
-.custom-dropdown .dropdown-menu>li>a:hover {
-    background: #e5e5e5 !important;
 }
 
 .table-checkbox {
@@ -1579,11 +1603,16 @@ modal-container.modal {
     margin-bottom: 0px;
 }
 
-.calendly-inline-widget object {
-    width: 1000px;
-    height: 610px;
+.overlay-cal{
+    .modal-body{
+        max-width: 1120px !important;
+        width: 100% !important;
+        .calendly-inline-widget object{
+            width: 100% !important;
+            height: 610px !important;
+        }
+    }
 }
-
 .booking-container {
     max-width: 100% !important;
 }
@@ -1599,8 +1628,82 @@ modal-container.modal {
 .color-primary {
     color: $deep-sky-blue;
 }
-
-
+.justify-content-between {
+    justify-content: space-between;
+}
+.text-blue {
+    color: $midnight-blue;
+}
+.all-features-modal {
+    width: 60%;
+    margin-top: 0px;
+    .modal-body {
+        padding: 15px 30px;
+    height: 80vh;
+    overflow-y: auto;
+    }
+}
+.custom-input-search {
+    position: relative;
+    i {
+        position: absolute;
+        z-index: 11;
+        font-size: 13px;
+        top: 11px;
+        left: 10px;
+        color: $gray;
+    }
+    .form-control {
+        padding-left: 30px !important;
+    }
+}
+.plan-list .close:hover, .plan-list .close:focus:hover, .plan-list .close:focus:focus, .plan-list .close:focus:disabled, .plan-list .close:focus.active, .plan-list .close:focus:active, .open > .dropdown-toggle.plan-list .close:focus, .plan-list .close:focus:active:focus, .plan-list .close:focus:active:hover, .plan-list .close:hover, .plan-list .close:focus, .plan-list .close * {
+    background: none !important;
+    border-color: transparent !important;
+    border: 0px !important;
+    box-shadow: none !important;
+}
+.custom-datepicker {
+    position: relative;
+}
+.custom-datepicker i {
+    position: absolute;
+    left: 10px;
+    top: 4px;
+    z-index: 9;
+}
+.custom-datepicker input {
+    background: $white !important;
+    font-size: 12px;
+    border-radius: 90px;
+    position: relative;
+    font-weight: 600;
+    width: 195px !important;
+    display: block;
+    padding-left: 15px !important;
+    border: 1px solid $gainsboro;
+}
+.custom-datepicker i img {
+    width: 12px;
+}
+.subscription-collapse .panel-group {
+    margin-bottom: 0px;
+}
+.subscription-collapse.panel {
+    border: 0px;
+    box-shadow: none;
+}
+.subscription-collapse .panel.card.panel-default {
+    border: 0px;
+    box-shadow: none;
+}
+.subscription-collapse .panel.card.panel-default .panel-heading {
+    background: no-repeat;
+    padding: 0px;
+}
+.subscription-collapse .panel-default>.panel-heading+.panel-collapse>.panel-body {
+    border: 0px solid;
+}
 /* my css end */
 
 
@@ -1764,12 +1867,12 @@ header .navbar {
     color: #616161;
 }
 
-.ledgHead {
+.ledg-head {
     width: 100%;
 }
 
 
-/* .ledgHead input[type=search] {
+/* .ledg-head input[type=search] {
     min-width: 220px;
 } */
 
@@ -1842,7 +1945,17 @@ fieldset[disabled] .btn-primary:hover {
     color: $white;
     border-color: $chetwode-blue;
 }
-
+.success-btn {
+    font-size: 14px;
+    background: $success-green;
+    color: $white;
+    &:hover {
+        color: $white;
+    }
+}
+.btn-round {
+    border-radius: 90px;
+}
 #actionPane .btn-default {
     background: #e6e6e6;
     color: #333;
@@ -2412,10 +2525,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-cancel:disabled,
-.btn-cancel:disabled:hover,
-.btn-cancel:active:focus,
-.btn-cancel:active:hover,
-.btn-cancel:focus {
+.btn-cancel:disabled:hover{
     background: #e4e4e4;
     color: #666;
     border-color: #e4e4e4;
@@ -2648,8 +2758,7 @@ input[type="checkbox"]:checked:after {
 .font-26 {
     font-size: 26px;
 }
-
-.WordWrap {
+.word-wrap {
     word-break: normal;
     white-space: nowrap;
 }
@@ -2856,13 +2965,6 @@ li.no-click {
         width: 25%;
     }
 }
-
-@media only screen and (min-width: 1280px) {
-    /* #content_wrapper  .container{  max-width: 1280px;
-    width: 100%;
-}  */
-}
-
 @media only screen and (max-width: 1160px) {
     .template_list {
         width: 33.33%;
@@ -4725,7 +4827,7 @@ label {
     color: #525252;
 }
 
-#manufacture select {
+#manufacture select showGiddhDatepicker{
     border-radius: 0;
 }
 
@@ -4879,8 +4981,8 @@ label {
 }
 
 .grp_col::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    outline: 1px solid slategrey;
+    background-color: $gainsboro;
+    outline: 1px solid $gray;
     margin-left: 255px;
 }
 
@@ -4970,8 +5072,8 @@ label {
 }
 
 .grp_col::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    outline: 1px solid slategrey;
+    background-color: $gainsboro;
+    outline: 1px solid $gray;
     margin-left: 255px;
 }
 
@@ -5536,8 +5638,8 @@ label {
 }
 
 .scrollAuto::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    outline: 1px solid slategrey;
+    background-color: $gainsboro;
+    outline: 1px solid $gray;
     /* margin-left: 255px; */
     border-radius: 8px;
 }
@@ -5570,7 +5672,7 @@ input[type="checkbox"][disabled] {
     /* padding-left: 240px; */
 }
 
-.section_head {
+.section-head {
     padding-bottom: 10px;
     font-family: $opensans-semibold;
     font-size: 110%;
@@ -6227,8 +6329,8 @@ typeahead-container .dropdown-menu li.active>a>a {}
 
 /* =========================== LEDGER CSS ============================ */
 
-.ledgHead table td[class*="col-"],
-.ledgHead table td .select2-container {
+.ledg-head table td[class*="col-"],
+.ledg-head table td .select2-container {
     padding: 8px !important;
     border-bottom: 1px solid #ccc;
     border-right: 1px solid #ccc;
@@ -6244,11 +6346,11 @@ typeahead-container .dropdown-menu li.active>a>a {}
     background-color: #f7f8fa;
 }
 
-.ledgHead table td.pdR25imp {
+.ledg-head table td.pdR25imp {
     padding-right: 25px !important;
 }
 
-.ledgHead.entry-popup table td[class*="col-"] {
+.ledg-head.entry-popup table td[class*="col-"] {
     padding: 0px !important;
     padding-bottom: 1px !important;
     border-bottom: 1px solid #ccc;
@@ -6262,11 +6364,11 @@ typeahead-container .dropdown-menu li.active>a>a {}
     position: relative;
 }
 
-.ledgHead.entry-popup table td.pdR25imp {
+.ledg-head.entry-popup table td.pdR25imp {
     padding-right: 25px !important;
 }
 
-.ledgHead .ledger-main td[class*="col-"] {
+.ledg-head .ledger-main td[class*="col-"] {
     padding: 0px !important;
 }
 
@@ -6289,7 +6391,7 @@ table td[class*=col-]:last-child {
     border-left: 0;
 }
 
-.ledgHead input[type="search"] {
+.ledg-head input[type="search"] {
     min-width: auto;
 }
 
@@ -6334,7 +6436,7 @@ table td[class*=col-]:last-child {
     display: inline-block;
 }
 
-.pageCount {
+.page-count {
     overflow: hidden;
     width: 50%;
     left: 25%;
@@ -6368,7 +6470,7 @@ table td[class*=col-]:last-child {
     border-bottom: 1px solid #c4c6c7;
 }
 
-.ledger_book {
+.ledger-book {
     border: 1px solid #ccc;
     clear: both;
     /* // overflow: hidden; */
@@ -6421,7 +6523,7 @@ table td[class*=col-]:last-child {
     border: 0 !important;
 }
 
-.ledgHead.entry-popup table td.select2-ledger>sh-select {
+.ledg-head.entry-popup table td.select2-ledger>sh-select {
     top: 1px;
 }
 
@@ -6464,12 +6566,11 @@ table td[class*=col-]:last-child {
     background: $white !important;
 }
 
-
-/* .universal_date label {
+/* .universal-date label {
     color: $white;
 } */
 
-.universal_date .btn-link {
+.universal-date .btn-link {
     color: #f5f5f5 !important;
     padding-top: 3px;
     padding-left: 0px;
@@ -6479,11 +6580,11 @@ table td[class*=col-]:last-child {
     border-radius: 0;
 }
 
-.universal_date .btn-link:hover {
+.universal-date .btn-link:hover {
     text-decoration: none;
 }
 
-.universal_date {
+.universal-date {
     float: none !important;
     display: inline-block;
 }
@@ -7102,8 +7203,6 @@ perfect-scrollbar>.ps>.ps-overlay {
     -webkit-overflow-scrolling: touch;
 }
 
-.tax-engine .body {}
-
 .content-column .body {
     padding: 0 20px 50px;
 }
@@ -7692,11 +7791,6 @@ app-header {
     width: 100%;
 }
 
-.tooltip-inner {
-    /* max-width: 350px !important; */
-    /* the minimum width */
-}
-
 .permission_icon {
     position: absolute;
     right: 10px;
@@ -7812,12 +7906,12 @@ app-header {
 
 /* my css */
 
-.ledger_book .right-col-new .entry-modal {
+.ledger-book .right-col-new .entry-modal {
     width: 165%;
     left: -65%;
 }
 
-.ledger_book .left-col-new .entry-modal {
+.ledger-book .left-col-new .entry-modal {
     width: 165%;
 }
 
@@ -8158,7 +8252,7 @@ span.red-text {
     overflow-y: auto;
 }
 
-.ledger_book .tooltip-inner {
+.ledger-book .tooltip-inner {
     word-break: break-word !important;
     white-space: pre-line !important;
 }
@@ -8180,7 +8274,7 @@ span.red-text {
     color: $midnight-blue;
 }
 
-.pageCount span {
+.page-count span {
     font-size: 14px;
 }
 
@@ -8388,7 +8482,7 @@ ul.dropdown-menu p.lead.pd {
     background-color: #f7f8fa;
     z-index: 9;
     position: relative;
-    top: -4px;
+    top: -2px;
 }
 
 .setting-page .nav>li>a {
@@ -8413,7 +8507,7 @@ ul.dropdown-menu p.lead.pd {
 }
 
 .setting-page .nav>li>a.active {
-    color: #1c1c1c !important;
+    color: $nero !important;
 }
 
 #tab-integration .nav-tabs>li {
@@ -8927,22 +9021,150 @@ input.checkbox-custom[type="checkbox"] {
 .panel-block .panel-body {
     min-height: 350px;
 }
-
-
+/*datepicker common css*/
+.giddh-datepicker-modal .modal-content {
+    background: none !important;
+}
+.giddh-datepicker-modal .modal-body{
+    padding: 0 !important;
+}
+ngx-daterangepicker-material {
+    // display: none;
+    position: absolute;
+    z-index: 1000;
+    overflow: hidden;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
+    z-index: 1;
+    width: 100% !important;
+    max-width: 462px !important;
+}
+.edit-modal{
+    max-width: 300px;
+    margin: 0 auto;
+    .edit-date-modal{
+        h5{
+            color: $gray;
+            font-size: 13px;
+        }
+        .modal-date-range {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid $whisper-color;
+            margin-bottom: 15px;
+            span{
+                img{
+                    width: 20px;
+                }
+            }
+            .modal-inside-heading{
+                display: none;
+            }
+        }
+        .start-end-date{
+            .start-end-date-d-flex{
+                display: flex;
+                padding-top: 10px;
+                label{
+                    position: absolute;
+                    background-color:$white;
+                    padding: 0 5px;
+                    top: -6px;
+                    left: 9px;
+                    font-size: 12px;
+                    color: $gray;
+                }
+                input{
+                    width: 130px;
+                    height: 51px;
+                    border: 1px solid $gainsboro;
+                    border-radius: 3px;
+                    padding: 0 15px;
+                    font-size: 14px;
+                }
+            }
+        }
+        .button-wrapper {
+            text-align: right;
+            font-size: 14px;
+            margin-top: 10px;
+            a{
+                color: $deep-sky-blue;
+                padding: 10px 10px;
+                display: inline-block;
+            }
+        }
+    }
+}
+/*notofication css*/
+.HW_badge.HW_visible{
+    position: absolute;
+    top: -23px;
+    opacity: 1 !important;
+}
+.HW_badge{
+    transition: none !important;
+    opacity: 1 !important;
+    transform: scale(1.0) !important;
+    top: -23px !important;
+    position: absolute !important;
+}
+.HW_badge_cont{
+    visibility: visible !important;
+    width: auto !important;
+}
+.HW_badge{
+    background: $red;
+    width: 14px !important;
+    height: 14px !important;
+    line-height: 14px !important;
+}
+/*notofication css end*/
+.setting-sidebar-open .desktop-header{
+    padding-left: 215px;
+}
+.setting-data , .setting-sidebar-open .white-row{
+    padding-left: 230px !important;
+}
+// .setting-sidebar-open .white-row{
+//     margin-left: 0;
+// }
+.setting-sidebar-open .menu_open .setting-data , .setting-sidebar-open .menu_open .white-row {
+    padding-left: 15px !important;
+}
+.date-field{
+    flex-direction: column;
+}
+.mobile-home{
+    background-color: $lavender;
+    .padding-top-fixed-mobile, .padding-top-fixed, .desktop-header{
+        display: none;
+    }
+    #content_wrapper{
+        background-color: $lavender;
+    }
+}
+.icon-home-icon{
+    color: $white;
+}
 /* responsive */
-
 @media (max-width: 1440px) {
     .font-xxlarge {
         font-size: 20px;
     }
 }
-
 @media (max-width: 1024px) {
+    .all-features-modal {
+        width: 90%;
+        margin: 0 auto;
+    }
     .auto_save {
         top: 96px;
     }
     #setting-tab .tab-container .nav.nav-tabs {
-        margin: 0 0 10px;
+        margin: 0 0 7px;
         padding: 10px 0px 0;
         white-space: nowrap;
         display: inline-block;
@@ -9054,6 +9276,16 @@ input.checkbox-custom[type="checkbox"] {
         border: 0px;
         position: relative;
     }
+    .ledg-head .custom-tabs .nav.nav-tabs {
+        position: absolute;
+        width: 104%;
+        top: -50px;
+        padding-top: 5px !important;
+        margin: 0;
+        left: -16px;
+        right: 0;
+    }
+    
 }
 
 @media (max-width: 840px) {
@@ -9157,7 +9389,8 @@ input.checkbox-custom[type="checkbox"] {
     .table>thead>tr>th {
         white-space: initial !important;
     }
-    .universal_date label.btn.btn-link {
+
+    .universal-date label.btn.btn-link {
         display: none;
     }
     .invoce-controll .nav.nav-tabs {
@@ -9203,17 +9436,28 @@ input.checkbox-custom[type="checkbox"] {
 }
 
 @media (max-width: 1199px) {
-    .ledger_book .left-col-new .entry-modal {
+    .ledger-book .left-col-new .entry-modal {
         width: 100%;
     }
 }
 
 @media (max-width: 767px) {
+    .setting-sidebar-open .desktop-header {
+        padding-left: 0;
+    }
+    .setting-sidebar-open .setting-data, .setting-sidebar-open .white-row{
+        padding-left: 15px !important;
+    }
+    .overlay-cal{
+        .modal-body{
+         padding: 50px 15px;
+        }
+    }
     .btn {
         padding: 7px 8px;
     }
     .setting-container {
-        margin-top: 55px;
+        margin-top: 20px;
     }
     .hide-lable-on-mobile button {
         margin-top: 0 !important;
@@ -9254,7 +9498,7 @@ input.checkbox-custom[type="checkbox"] {
     .xs-width-100 {
         width: 100%;
     }
-    .ledger_book .right-col-new .entry-modal {
+    .ledger-book .right-col-new .entry-modal {
         width: 100%;
         left: 0%;
     }
@@ -9297,7 +9541,7 @@ input.checkbox-custom[type="checkbox"] {
         position: absolute;
         content: "";
         background: rgba(0, 0, 0, 0.3);
-        z-index: 99;
+        z-index: 990;
         height: 100%;
         width: 100%;
         top: 0;
@@ -9308,14 +9552,18 @@ input.checkbox-custom[type="checkbox"] {
     #setting-tab .tab-container .nav.nav-tabs {
         position: fixed;
         width: 100%;
-        top: 80px;
+        top: 90px;
+    }
+    #setting-tab.user-detail-page .tab-container .nav.nav-tabs {
+        top: 88px;
+        z-index: 99;
     }
     .custom-tabs .nav.nav-tabs {
         position: fixed;
         width: 100%;
-        top: 92px;
+        top: 90px;
     }
-    .ledgHead.entry-popup .custom-tabs .nav.nav-tabs {
+    .ledg-head.entry-popup .custom-tabs .nav.nav-tabs {
         position: relative;
         width: 100%;
         top: 0;
@@ -9323,11 +9571,15 @@ input.checkbox-custom[type="checkbox"] {
     .custom-tabs .top-bar {
         margin-top: 45px;
     }
+    .page-has-tabs .custom-tabs .top-bar {
+        margin-top: 15px;
+        padding-top: 0;
+    }
     .custom-tabs.hide-header .top-bar {
         margin-top: 0;
     }
     .invoce-controll .nav.nav-tabs {
-        padding: 10px 0px 0 15px !important;
+        padding: 0 0 0 15px !important;
     }
     #setting-tab setting-integration .tab-container .nav.nav-tabs,
     #setting-tab app-invoice-setting .tab-container .nav.nav-tabs {
@@ -9343,11 +9595,17 @@ input.checkbox-custom[type="checkbox"] {
     .custom-tabs .nav.nav-tabs>li a {
         padding-top: 7px;
     }
-    .ledgHead .custom-tabs .nav.nav-tabs {
+    .ledg-head .custom-tabs .nav.nav-tabs {
         left: 0;
+        top: 92px;
+        padding-top: 0 !important;
+        position: fixed;
     }
     .daterangepicker.dropdown-menu.show-calendar {
-        z-index: 1 !important;
+        z-index: 9 !important;
+    }
+    .daterangepicker.dropdown-menu.opensright.show-calendar {
+        z-index: 9992 !important;
     }
     .mt-xs-60 {
         margin-top: 60px;
@@ -9407,6 +9665,18 @@ input.checkbox-custom[type="checkbox"] {
     .xs-mb-1 {
         margin-bottom: 10px;
     }
+    .xs-mt-1 {
+        margin-top: 10px;
+    }
+    .xs-mb-2 {
+        margin-bottom: 20px;
+    }
+    .xs-mt-2 {
+        margin-top: 20px;
+    }
+    .xs-mt-4 {
+        margin-top: 40px;
+    }
     .xs-mr-0 {
         margin-right: 0px;
     }
@@ -9414,13 +9684,109 @@ input.checkbox-custom[type="checkbox"] {
         float: left !important;
     }
     body.hide-scroll-body {
-        overflow-y: hidden;
+        overflow-y: hidden !important;
     }
     .panel-block .panel-body {
         min-height: auto;
     }
+    // .tabs-page .padding-top-fixed-mobile {
+    //     padding-top: 126px;
+    // }
+    .padding-top-fixed-mobile {
+        padding-top:90px;
+    }
+    .page-has-tabs .padding-top-fixed-mobile , .on-user-page .padding-top-fixed-mobile{
+        padding-top: 130px !important;
+    }
+    .page-has-tabs.setting-sidebar-open .padding-top-fixed-mobile{
+        padding-top:85px !important;
+    }
+   .on-setting-page .padding-top-fixed-mobile{
+        padding-top: 90px !important;
+    }
+    ngx-daterangepicker-material {
+        position: fixed;
+        top:0 !important;
+        left: 0 !important;
+        z-index: 999;
+        width: 100%;
+        height: 100vh;
+        max-width: 100% !important;
+    }
+    .giddh-datepicker-modal{
+        position: fixed;
+        width: 100%;
+        left: 0;
+        top: 0;
+        margin: 0;
+    }
+    .edit-modal{
+        max-width: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100%;
+        &:after{
+            position: absolute;
+            content: '';
+            background-color: rgba(0,0,0,0.4);
+            width: 100% !important;
+            height:125%;
+            z-index: -1;
+            left: 0;
+            top: 0;
+        }
+    }
+    .hide-scroll-body:last-child .modal{
+        z-index: 9993;
+    }
+    .page-has-tabs .invoice-genrate-container, 
+    .page-has-tabs .invoice-container,
+    .page-has-tabs .proforma-container,
+    .page-has-tabs .proforma-container,
+    .page-has-tabs .recurring-container
+    {
+        padding-top: 15px !important;
+    }
+    .page-has-tabs #setting-tab app-invoice-setting .tab-container .nav.nav-tabs,
+    .on-user-page .search-subscription{
+        margin-top: 15px !important;
+    }
+    .page-has-tabs .recurring-container{
+        margin-top: 0px !important;
+    }
+    .on-user-page  .user-detail-page.company-page{
+        padding-top: 15px !important;
+    }
+    .HW_frame_cont.HW_visible.HW_bottom{
+        right: 0 !important;
+        left: auto !important;
+        max-width: 320px;
+        width: 100%;
+    }
+    .on-setting-page .setting-menu-icon, .on-user-page .setting-menu-icon{
+        display: inline-flex !important;
+    }
+    .setting-data{
+        padding-left: 15px !important;
+    }
+    .mobile-setting-sidebar{
+        position: relative;
+        overflow-y: hidden;
+    }
+    .mobile-setting-sidebar:after {
+        position: absolute;
+        content: '';
+        background-color: rgba(0,0,0,0.5);
+        width: 100%;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        z-index: 999;
+    }
 }
-
 @media (max-width: 575px) {
     .daterangepicker.ltr .ranges {
         float: left;
@@ -9440,7 +9806,6 @@ input.checkbox-custom[type="checkbox"] {
         padding-top: 0;
     }
 }
-
 @media (max-width: 500px) {
     .daterangepicker.dropdown-menu {
         max-width: 100% !important;
@@ -9451,12 +9816,12 @@ input.checkbox-custom[type="checkbox"] {
 }
 
 @media (max-width: 375px) {
-    // #setting-tab .tab-container .nav.nav-tabs,
-    // .custom-tabs .nav.nav-tabs {
-    //     top:80px;
-    // }
     .aside-pane-form .custom-tabs .nav.nav-tabs>li {
         padding-right: 20px;
+    }
+    .pagination>li>a,
+        .pagination>li>span {
+            padding: 6px 6px;
     }
 }
 
@@ -9527,6 +9892,9 @@ input.checkbox-custom[type="checkbox"] {
 }
 
 @media (max-width: 1024px) {
+    .sm-d-block {
+        display: block;
+    }
     .form-bg {
         width: 100%;
     }
@@ -9653,11 +10021,59 @@ input.checkbox-custom[type="checkbox"] {
     .invoice-modal-content .modal-dialog {
         margin: 70px auto;
     }
+    .edit-modal.modal-small{
+        display: none;
+    }
 }
+@media(min-width:480px) and (max-width:667px){
+    .edit-modal{
+        margin: 20px auto;
+        .edit-date-modal{
+            padding: 0 15px;
+            .modal-outside-heading{
+                display: none;
+            }
+            .edit-date-container{
+                display: flex;
+                align-items: flex-start;
+                .modal-date-range{
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                    border-bottom: none;
+                    padding: 12px 0 0;
+                    margin-bottom: 0;
+                    border-right: 1px solid $gainsboro;
+                    margin-right: 15px;
+                    p{
+                        font-size: 20px;
+                        margin-top: 15px;
+                        width: 110px;
+                        margin-bottom: 20px;
+                    }
+                    img{
+                        bottom: -40px;
+                        padding-bottom: 10px;
+                    }
+                    .modal-inside-heading{
+                        display: block;
+                    }
+                }
+                .start-end-date{
+                    padding: 10px 5px 0;
 
-
+                }
+                .button-wrapper{
+                    position: absolute;
+                    bottom: 2px;
+                    right: 15px;
+                    z-index: 999;
+                }
+            }
+        }
+    }
+}
 /*** iPhone and iOS Form Input Zoom Fixes ***/
-
 
 /* Fix Input Zoom on devices older than iPhone 5: */
 
@@ -9740,4 +10156,7 @@ input.checkbox-custom[type="checkbox"] {
     input[type="url"] {
         font-size: 16px;
     }
+}
+.giddh-datepicker-modal {
+    margin: 0 !important;
 }

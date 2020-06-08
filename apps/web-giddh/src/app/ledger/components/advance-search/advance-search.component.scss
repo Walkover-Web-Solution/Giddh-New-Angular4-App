@@ -37,7 +37,7 @@
     .amount-total {
         background: #efefef;
     }
-    .pageCount {
+    .page-count {
         width: 100%;
         left: 0;
         bottom: 0;
@@ -46,15 +46,30 @@
     .ledger-stat {
         margin: 0px 0 0;
     }
-    .ledger_book {
+    .ledger-book {
         margin-bottom: 100px;
     }
     .ledger-head thead tr th.active {
         display: block !important;
         width: 100%;
     }
-    .ledger_book .h-table tbody .ledger-row td {
+    .ledger-book .h-table tbody .ledger-row td {
         position: relative;
         padding-left: 80px !important;
     }
+    .Advance-Search{
+        p{
+            line-height: 18px;
+            margin-bottom: 10px;
+        }
+        .mb-2{
+            margin-bottom: 10px !important;
+        }
+        .mt-2{
+            margin-top: 10px;
+        }
+        .mb-1{
+            margin-bottom: 0;
+        }
+    }  
 }

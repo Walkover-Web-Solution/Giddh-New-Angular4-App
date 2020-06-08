@@ -51,7 +51,7 @@ export class SettingsProfileService {
      */
     public PatchProfile(model): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = (model.moveCompany) ? model.moveCompany : this._generalService.companyUniqueName;
         const contextPath = (model.callNewPlanApi) ? SETTINGS_PROFILE_API.UPDATE_COMPANY_PLAN : SETTINGS_PROFILE_API.GET;
         return this._http.patch(this.config.apiUrl + contextPath.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;

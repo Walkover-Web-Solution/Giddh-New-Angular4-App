@@ -40,7 +40,7 @@ import { CheckPermissionDirective } from './../permissions/check-permission.dire
 import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-taxes';
 import { FixedFooterComponent } from './fixed-footer/fixed-footer.component';
 import { FooterComponent } from './footer/footer.component';
-import { HeaderComponent } from './header';
+import { HeaderComponent } from './header'
 import {
     AccountOperationsComponent,
     AccountsSideBarComponent,
@@ -70,7 +70,10 @@ import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCa
 import { LayoutComponent } from './layout/layout.component';
 import { OnBoardingComponent } from './on-boarding/on-boarding.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
+import { AsideHelpSupportComponent } from './header/components/aside-help-support/aside-help-support.component';
+import { AsideSettingComponent } from './header/components/aside-setting/aside-setting.component';
 import { DeleteTemplateConfirmationModelComponent } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
+import { DatepickerWrapperComponent } from './datepicker-wrapper/datepicker.wrapper.component';
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -115,6 +118,8 @@ export function provideConfig() {
         FooterComponent,
         FixedFooterComponent,
         AccountsSideBarComponent,
+        AsideHelpSupportComponent,
+        AsideSettingComponent,
         ManageGroupsAccountsComponent,
         CompanyAddComponent,
         CompanyAddNewUiComponent,
@@ -134,7 +139,8 @@ export function provideConfig() {
         AccountUpdateNewDetailsComponent,
         WelcomeComponent,
         ConfirmationModalComponent,
-        DeleteTemplateConfirmationModelComponent
+        DeleteTemplateConfirmationModelComponent,
+        DatepickerWrapperComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -200,6 +206,8 @@ export function provideConfig() {
         NgbTypeaheadModule,
         VsForDirective,
         AccountsSideBarComponent,
+        AsideHelpSupportComponent,
+        AsideSettingComponent,
         TextCaseChangeModule,
         KeyboardShortutModule,
         CompanyAddNewUiComponent,
@@ -215,7 +223,8 @@ export function provideConfig() {
         TooltipModule,
         BsDatepickerModule,
         NgxDaterangepickerMd,
-        DeleteTemplateConfirmationModelComponent
+        DeleteTemplateConfirmationModelComponent,
+        DatepickerWrapperComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
