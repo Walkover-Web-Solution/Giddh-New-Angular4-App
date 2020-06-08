@@ -100,8 +100,8 @@ export class UserAmountRangeRequests {
     public maxBankLimit: string;
       constructor() {
           this.amount = 0;
-          this.otpType = '';
+          this.otpType = 'BANK';
           this.approvalUniqueName = '';
-          this.maxBankLimit = "false";
+          this.maxBankLimit = "true";
       }
 }

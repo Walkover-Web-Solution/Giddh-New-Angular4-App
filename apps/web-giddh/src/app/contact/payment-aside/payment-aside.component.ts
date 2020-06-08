@@ -89,7 +89,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.userDetails$.pipe(take(1)).subscribe(p => this.user = p);
         this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
 
-        this.integartedBankList$ = this.store.pipe(select(p => p.company.integratedBankList),takeUntil(this.destroyed$));
+        this.integartedBankList$ = this.store.pipe(select(p => p.company.integratedBankList), takeUntil(this.destroyed$));
     }
 
     /**
@@ -154,9 +154,18 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.selectedAccForBulkPayment.forEach(item => {
             this.addAccountTransactionsFormObject(item);
         });
-        //  this.selectedAccForBulkPayment.map(item => {
-        //    item.remarks = '';
-        // });
+         this.selectedAccForBulkPayment.map(item => {
+           item.remarks = '';
+        });
+
+        if (this.selectedAccForBulkPayment.length < this.selectedAccForPayment.length) {
+            let unSelected: number = this.selectedAccForPayment.length - this.selectedAccForBulkPayment.length;
+            let totalSelected: number = this.selectedAccForBulkPayment.length;
+            if (totalSelected && unSelected) {
+                this._toaster.infoToast(`${unSelected} out of ${totalSelected} transactions could not be processed as bank details of those accounts are not updated.`);
+            }
+
+        }
         this.getIntegratedBankDetails();
 
     }
@@ -171,8 +180,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes) {
             if (changes.selectedAccForBulkPayment && changes.selectedAccForBulkPayment.currentValue) {
-                //this.datePickerOptions.startDate = moment(changes.startDate.currentValue, 'DD-MM-YYYY');
-                console.log('selected pre---', this.selectedAccForBulkPayment);
                 this.selectedAccForBulkPayment = this.selectedAccForBulkPayment.filter(item => {
                     return item.accountBankDetails && item.accountBankDetails.bankAccountNo !== '' && item.accountBankDetails.bankName !== '' && item.accountBankDetails.ifsc !== '';
                 });
@@ -297,7 +304,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             this._companyService.getAllBankDetailsOfIntegrated(this.companyUniqueName, this.requestObjectTogetOTP.urn).subscribe(response => {
                 console.log(response)
                 if (response.status === 'success') {
-                     if (response.body.Status === 'SUCCESS') {
+                    if (response.body.Status === 'SUCCESS') {
                         this.totalAvailableBalance = response.body.effectiveBal;
                     }
                 } else if (response.status === 'error') {
@@ -317,7 +324,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this._companyService.bulkVendorPayment(this.companyUniqueName, this.requestObjectTogetOTP).subscribe(response => {
             console.log('bulkVendorPayment', response);
             if (response.status === 'success') {
-                  this._toaster.successToast(response.body);
+                this._toaster.successToast(response.body);
             } else if (response.status === 'error') {
                 this._toaster.errorToast(response.message, response.code);
             }

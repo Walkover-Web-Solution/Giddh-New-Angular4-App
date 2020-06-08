@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
@@ -36,6 +36,7 @@ import { forIn } from '../../lodash-optimized';
 import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
+import { elementStylingMap } from '@angular/core/src/render3';
 
 export declare const gapi: any;
 
@@ -70,6 +71,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isPaymentAdditionSuccess$: Observable<boolean>;
     public isPaymentUpdationSuccess$: Observable<boolean>;
     public isElectron: boolean = Configuration.isElectron;
+    public isMaxLimitSelected: boolean;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
     private isSellerAdded: Observable<boolean> = observableOf(false);
@@ -122,6 +124,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private _fb: FormBuilder,
         private _generalActions: GeneralActions,
         private settingsPermissionActions: SettingsPermissionActions,
+        private changeDetectionRef: ChangeDetectorRef,
         private generalService: GeneralService) {
         this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
@@ -241,6 +244,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this.openNewRegistration = true;
 
                 }
+                console.log('get allbank pre', this.registeredAccount);
+                if (this.registeredAccount && this.registeredAccount.length) {
+                    this.registeredAccount.map(item => {
+                        if (item && !item.userAmountRangeRequests) {
+                            item.userAmountRangeRequests = [this.getBlankAmountRangeRow()]
+                        }
+                    });
+                }
                 console.log('get allbank', this.registeredAccount);
             }
         });
@@ -319,17 +330,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public onSubmitPaymentform(f: NgForm) {
         if (f.valid) {
-            console.log('form:',f.value);
-            console.log('object send',this.paymentFormObj);
+            console.log('form:', f.value);
+            console.log('object send', this.paymentFormObj);
             this.store.dispatch(this.settingsIntegrationActions.SavePaymentInfo(this.paymentFormObj));
-            this.paymentFormObj = new PaymentClass();
-            this.paymentFormObj.corpId = "";
-            this.paymentFormObj.userId = "";
-            this.paymentFormObj.accountNo = "";
-            this.paymentFormObj.aliasId = "";
-            this.paymentFormObj.accountUniqueName = "";
-            this.paymentFormObj.userAmountRangeRequests = [this.getBlankAmountRangeRow()];
-            this.forceClear$ = observableOf({ status: true });
+            // this.clearForm();
         }
     }
 
@@ -690,11 +694,45 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {number} index index number
      * @memberof SettingIntegrationComponent
      */
-    public selectedMaxOrCustom(event: any, index: number): void {
+    public selectedMaxOrCustom(event: IOption, index: number, isUpdate: boolean): void {
         console.log(event, index);
-        this.paymentFormObj.userAmountRangeRequests.forEach(item=>{
+        if (this.paymentFormObj && this.paymentFormObj.userAmountRangeRequests && !isUpdate) {
+            if (event.value === 'true') {
+                delete this.paymentFormObj.userAmountRangeRequests[index].amount;
+            } else {
+                this.paymentFormObj.userAmountRangeRequests[index].amount = null;
+                this.isMaxLimitSelected = false;
+            }
+            this.changeDetectionRef.detectChanges();
+        }
+    }
 
-        })
+    public maxLimitOrCustomChanged(event: any, index: number): void {
+        console.log('limit changhed', event);
+        if (event === 'true' && this.checkIsMaxBankLimitSelected(this.paymentFormObj.userAmountRangeRequests)) {
+            this.paymentFormObj.userAmountRangeRequests[index].maxBankLimit = "false"
+            event = false;
+            this.toasty.infoToast('You can not select max bank limit more than 1');
+        }
+        this.changeDetectionRef.detectChanges();
+        // if (this.paymentFormObj && this.paymentFormObj.userAmountRangeRequests) {
+        //     if (this.checkIsMaxBankLimitSelected(this.paymentFormObj.userAmountRangeRequests)) {
+        //         this.toasty.infoToast('You can not select max bank limit more than 1');
+        //         this.paymentFormObj.userAmountRangeRequests[index].maxBankLimit = "false"
+        //     }
+        // }
+
+    }
+
+    public checkIsMaxBankLimitSelected(itemList: any[]): boolean {
+        let selected: boolean = true;
+        // if (itemList) {
+        //     itemList.forEach(item => {
+
+        //     });
+        // }
+        return selected = itemList.some((item) => item.maxBankLimit === "true");
+
     }
 
     /**
@@ -702,11 +740,17 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      *
      * @memberof SettingIntegrationComponent
      */
-    public addNewAmountRangeRow(): void {
-        if (this.paymentFormObj && this.paymentFormObj.userAmountRangeRequests) {
+    public addNewAmountRangeRow(indexUpdateObj?: number): void {
+        if (this.paymentFormObj && !indexUpdateObj && this.paymentFormObj.userAmountRangeRequests) {
             this.paymentFormObj.userAmountRangeRequests.push(this.getBlankAmountRangeRow());
         }
+        if (indexUpdateObj && this.registeredAccount) {
+            if (this.registeredAccount[indexUpdateObj - 1] && this.registeredAccount[indexUpdateObj - 1].userAmountRangeRequests) {
+                this.registeredAccount[indexUpdateObj - 1].userAmountRangeRequests.push(this.getBlankAmountRangeRow());
+            }
+        }
     }
+
     /**
      * Get new blank amount range row
      *
@@ -729,13 +773,53 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {*} item item object which need to remove
      * @memberof SettingIntegrationComponent
      */
-    public deleteAmountRangeRow(item: any): void {
-        if (item) {
+    public deleteAmountRangeRow(item: any, indexUpdateList?: number): void {
+        if (item && !indexUpdateList) {
             let itemIndx = this.paymentFormObj.userAmountRangeRequests.findIndex((element) => element === item);
             if (itemIndx > -1) {
                 this.paymentFormObj.userAmountRangeRequests.splice(itemIndx, 1);
             }
         }
+        if (item && indexUpdateList) {
+            let itemIndxOfUpdate = this.registeredAccount[indexUpdateList - 1].userAmountRangeRequests.findIndex((element) => element === item);
+            if (itemIndxOfUpdate > -1) {
+                this.registeredAccount[indexUpdateList - 1].userAmountRangeRequests.splice(itemIndxOfUpdate, 1);
+            }
+        }
     }
 
+    public selectedOtpType(event: IOption, index: number) {
+        console.log(event, index);
+        // if(event && this.paymentFormObj && this.paymentFormObj.userAmountRangeRequests && event.value === 'BANK' ) {
+        // this.paymentFormObj.userAmountRangeRequests[index].approvalUniqueName = '';
+
+        // }
+    }
+
+    /**
+     * To check if duplicate amount entered
+     *
+     * @param {*} item row object
+     * @param {number} index index number
+     * @memberof SettingIntegrationComponent
+     */
+    public changeAmount(item: any, index: number) {
+
+    }
+
+    /**
+     * To clear/reset form
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public clearForm() {
+        this.paymentFormObj = new PaymentClass();
+        this.paymentFormObj.corpId = "";
+        this.paymentFormObj.userId = "";
+        this.paymentFormObj.accountNo = "";
+        this.paymentFormObj.aliasId = "";
+        this.paymentFormObj.accountUniqueName = "";
+        this.paymentFormObj.userAmountRangeRequests = [this.getBlankAmountRangeRow()];
+        this.forceClear$ = observableOf({ status: true });
+    }
 }
