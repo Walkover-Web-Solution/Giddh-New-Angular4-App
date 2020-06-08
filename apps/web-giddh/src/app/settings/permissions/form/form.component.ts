@@ -33,6 +33,10 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     @Input() public isHorizntl: boolean;
     @Input() public isUpdtCase: boolean;
     @Input() public isLblShow: boolean;
+    /** True if this component is opened in modal, required
+     * as the radio button doesn't work in ngx-bootstrap modal
+     */
+    @Input() public isOpenedInModal: boolean;
     @Output() public onSubmitForm: EventEmitter<any> = new EventEmitter(null);
 
     public showTimeSpan: boolean = false;
@@ -350,5 +354,29 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
      */
     public allowOnlyNumbersAndDot(event: any): boolean {
         return this.generalService.allowOnlyNumbersAndDot(event);
+    }
+
+    /**
+     * Handler for IP address change, required for manually changing
+     * the radio button value in modal as radio button doesn't work in
+     * ngx-bootstrap modal
+     *
+     * @param {string} value Current selected value of radio button
+     * @memberof SettingPermissionFormComponent
+     */
+    public handleIpAddressChange(value: string): void {
+        this.permissionForm.get('ipOptions').patchValue(value, { onlySelf: true });
+    }
+
+    /**
+     * Handler for IP address change, required for manually changing
+     * the radio button value in modal as radio button doesn't work in
+     * ngx-bootstrap modal
+     *
+     * @param {string} value Current selected value of radio button
+     * @memberof SettingPermissionFormComponent
+     */
+    public handleTimeSpanChange(value: string): void {
+        this.permissionForm.get('periodOptions').patchValue(value, { onlySelf: true });
     }
 }
