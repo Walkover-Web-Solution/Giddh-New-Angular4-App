@@ -21,9 +21,9 @@ export class IntegartedBankList {
 
 export class GetOTPRequest{
    bankType: string;
-    bankUrn: string
+    urn: string
     totalAmount: string;
-    transactions: BankTransactionForOTP[];
+    bankPaymentTransactions: BankTransactionForOTP[];
 }
 
 
