@@ -1,5 +1,4 @@
 @import "../../../assets/css/color.scss";
-
 .flex-container {
     display: flex;
     flex-direction: row;
@@ -10,6 +9,7 @@
 table {
     table-layout: fixed;
 }
+
 
 /* .table.basic tbody tr td {
     background-color: #fff;
@@ -24,6 +24,7 @@ table {
     cursor: pointer;
 }
 
+
 /*
 .table.basic>tbody>tr>td>table tbody tr td {
     padding: 5px 0;
@@ -32,6 +33,7 @@ table {
 tfoot {
     background: #fff;
 } */
+
 .flex-fill {
     flex: 1 1 auto;
 }
@@ -39,6 +41,7 @@ tfoot {
 .d-flex {
     display: flex;
 }
+
 
 /*td-in-searchbox_style*/
 
@@ -76,15 +79,15 @@ tfoot {
     top: 12px;
 }
 
-.basic > thead > tr > th {
-    border-right: 1px solid #cdcdcd;
+.basic>thead>tr>th {
+    border-right: 1px solid $gainsboro;
 }
 
 .icon-pointer .glyphicon {
     cursor: pointer;
 }
 
-.dropdown-menu > li > a:hover {
+.dropdown-menu>li>a:hover {
     color: $chetwode-blue;
     background: #e5e5e5;
 }
@@ -93,7 +96,7 @@ tfoot {
     margin-top: 0;
 }
 
-.pending-tabel .nested_table > tbody tr td {
+.pending-tabel .nested_table>tbody tr td {
     border: 0 !important;
     padding: 0px !important;
 }
@@ -119,6 +122,7 @@ tfoot {
     font-size: 18px;
     padding: 0;
 }
+
 .basic.table {
     margin-bottom: 0;
 }
@@ -126,9 +130,11 @@ tfoot {
 .invoice-genrate-container {
     padding: 0 15px;
 }
+
 .input-group {
     position: relative;
 }
+
 .input-group input.form-control {
     background-image: url("../../../assets/images/calender.svg") !important;
     background-size: 17px !important;
@@ -140,9 +146,11 @@ tfoot {
     cursor: default;
     width: 100%;
 }
+
 .input-group input.form-control:focus {
     border-color: $chetwode-blue;
 }
+
 .icon-calender {
     position: absolute;
     z-index: 9;
@@ -160,6 +168,7 @@ tfoot {
     position: relative;
     height: 36px !important;
 }
+
 .input-wrapper:before {
     position: absolute;
     content: "";
@@ -171,8 +180,9 @@ tfoot {
     z-index: 100;
     top: 0;
 }
+
 button.btn.btn-filter {
-    background:$whisper-color;
+    background: $whisper-color;
     border: 1px solid $whisper-color;
     font-size: 14px;
     color: $midnight-blue;
@@ -181,16 +191,67 @@ button.btn.btn-filter {
     align-items: center;
     padding: 6px 10px !important;
 }
-.pending-table-description{
+
+.pending-table-description {
     white-space: normal;
 }
+
+.close-modal img {
+    width: 16px;
+    opacity: 0.6;
+}
+
+.invoice-edit-wrapper {
+    height: 100vh;
+    overflow-y: auto;
+    .invoice-edit-header {
+        display: flex;
+        justify-content: space-between;
+        height: 54px;
+        background-color: $white;
+        border-top: 1px solid $gainsboro;
+        border-bottom: 1px solid $gainsboro;
+        align-items: center;
+        span {
+            padding: 10px;
+            p {
+                font-size: 16px;
+                font-weight: bold;
+            }
+        }
+        span.close-modal {
+            height: 32px;
+            width: 32px;
+            background-color: $very-light-gray;
+            border: 1px solid $gainsboro;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+        }
+    }
+    .invoice-edit-body {
+        padding-bottom: 140px;
+    }
+}
+
+span.close-modal.cp.pull-right {
+    display: inline-grid;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    width: 32px;
+    background-color: $very-light-gray;
+    border: 1px solid $gainsboro;
+    margin-right: 8px;
+}
+
 // responsive
 @media (max-width: 768px) {
     .basic.onMobileView {
         background: transparent;
         border: none;
     }
-
     .justify-content-sm {
         justify-content: left !important;
     }
@@ -202,7 +263,7 @@ button.btn.btn-filter {
         width: 100% !important;
         float: left;
     }
-    .pending-tabel .nested_table > tbody tr td {
+    .pending-tabel .nested_table>tbody tr td {
         padding: 0 !important;
     }
     .pending-tabel tr td {
@@ -241,23 +302,23 @@ button.btn.btn-filter {
         width: 100%;
     }
 }
-@media(max-width:767px){
+
+@media(max-width:767px) {
     .invoice-genrate-container {
-        padding-top:55px;
+        padding-top: 55px;
     }
     .form-inline .form-group {
         display: flex;
         flex-direction: row;
     }
-    .clear-filter.btn.btn-filter{
+    .clear-filter.btn.btn-filter {
         flex-direction: row !important;
         margin-top: 0 !important;
         margin-bottom: 0 !important;
         width: 120px;
     }
-
 }
- 
+
 @media (max-width: 375px) {
     .form-group button,
     .form-group .input-group {
@@ -277,18 +338,18 @@ button.btn.btn-filter {
         vertical-align: middle;
     }
 }
+
 .clear-filter.desktop-view-btn {
     display: inline-block;
 }
-@media(max-width:320px){
+
+@media(max-width:320px) {
     .form-inline .form-group {
         flex-direction: column;
     }
-    .clear-filter.btn.btn-filter{
+    .clear-filter.btn.btn-filter {
         flex-direction: row !important;
         margin-top: 10px !important;
         width: 100%;
     }
-
 }
- 
