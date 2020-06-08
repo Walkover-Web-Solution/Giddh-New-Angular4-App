@@ -369,7 +369,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handler for IP address change, required for manually changing
+     * Handler for Time span change, required for manually changing
      * the radio button value in modal as radio button doesn't work in
      * ngx-bootstrap modal
      *
