@@ -1089,7 +1089,7 @@ export class LoginActions {
         this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
         this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-        if(screen.width <= 767) {
+        if(screen.width <= 767 || isCordova) {
             this._router.navigate(["/pages/mobile-home"]);
         } else {
             this._router.navigate([stateDetail.body.lastState]);
