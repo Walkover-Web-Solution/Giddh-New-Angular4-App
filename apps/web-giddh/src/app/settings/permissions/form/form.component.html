@@ -16,23 +16,23 @@
     </div>
 
     <!-- time span -->
-    <div class="form-group" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('timeSpanSection')">
+    <div class="form-group" [exclude]="'.time-span-dropdown'" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('timeSpanSection')">
         <label *ngIf="isLblShow">Time Span</label>
         <div class="btn-group" [ngClass]="{'open': showTimeSpan, 'btn-group-liq': !isHorizntl}">
             <button (click)="showTimeSpan = !showTimeSpan" type="button" class="form-control text-left ">
                 {{selectedTimeSpan}}
                 <span class="pull-right"><span class="fa fa-caret-down"></span></span>
             </button>
-            <section class="dropdown-menu custom_dropdown mrB1" [ngClass]="{'open': showTimeSpan}">
+            <section class="dropdown-menu custom_dropdown mrB1 time-span-dropdown" [ngClass]="{'open': showTimeSpan}">
 
                 <div class="clearfix pd1 option_box">
 
-                    <span class="pd0 mrR3">
+                    <span class="pd0 mrR3" (click)="isOpenedInModal ? handleTimeSpanChange('daterange'): ''">
                         <input id="dateRange" class="radio-custom cp ml0" type="radio" name="periodOptions" formControlName="periodOptions" value="daterange">
                         <label for="dateRange" class="radio-custom-label">Date Range</label>
                     </span>
 
-                    <span class="pd0 mrR3">
+                    <span class="pd0 mrR3" (click)="isOpenedInModal ? handleTimeSpanChange('pastperiod'): ''">
                         <input id="pastPeriod" class="radio-custom cp ml0" type="radio" name="periodOptions" formControlName="periodOptions" value="pastperiod">
                         <label for="pastPeriod" class="radio-custom-label">Past Period</label>
                     </span>
@@ -76,23 +76,23 @@
     </div>
     <!-- time span end -->
 
-    <div class="form-group" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('rangeSpanSection')">
+    <div class="form-group" [exclude]="'.ip-addresses-dropdown'" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('rangeSpanSection')">
         <label *ngIf="isLblShow">IP Addresses</label>
         <div class="btn-group " [ngClass]="{'open': showIPWrap, 'btn-group-liq': !isHorizntl}">
             <button (click)="showIPWrap = !showIPWrap" type="button" class="form-control text-left ">
                 {{selectedIPRange}}
                 <span class="pull-right"><span class="fa fa-caret-down"></span></span>
             </button>
-            <section class="dropdown-menu custom_dropdown" role="menu" [ngClass]="{'open': showIPWrap}">
+            <section class="dropdown-menu custom_dropdown ip-addresses-dropdown" role="menu" [ngClass]="{'open': showIPWrap}">
                 <div class="clearfix option_box pd1">
 
-                    <span class="pd0 mrR3">
+                    <span (click)="isOpenedInModal ? handleIpAddressChange('cidr_range'): ''" class="pd0 mrR3">
                         <input id="cidrRange" class="radio-custom cp ml0" type="radio" name="ipOptions" formControlName="ipOptions"
                         value="cidr_range">
                         <label for="cidrRange" class="radio-custom-label">CIDR Range</label>
                     </span>
 
-                    <span class="pd0 mrR3">
+                    <span (click)="isOpenedInModal ? handleIpAddressChange('ip_address'): ''" class="pd0 mrR3">
                         <input id="address" class="radio-custom cp ml0" type="radio" name="ipOptions" formControlName="ipOptions" value="ip_address">
                         <label for="address" class="radio-custom-label">Address</label>
                     </span>
