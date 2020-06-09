@@ -9140,8 +9140,9 @@ ngx-daterangepicker-material {
             border-bottom: 1px solid $whisper-color;
             margin-bottom: 15px;
             span {
-                img {
-                    width: 20px;
+                padding: 5px 10px;
+                i {
+                    color: $gray;
                 }
             }
             .modal-inside-heading {
@@ -9835,6 +9836,7 @@ ngx-daterangepicker-material {
         align-items: center;
         height: 100vh;
         width: 100%;
+        padding-top: 40px;
         &:after {
             position: absolute;
             content: '';
@@ -10138,6 +10140,7 @@ ngx-daterangepicker-material {
 @media(min-width:480px) and (max-width:667px) {
     .edit-modal {
         margin: 20px auto;
+        padding-top: 0;
         .edit-date-modal {
             padding: 0 15px;
             .modal-outside-heading {
