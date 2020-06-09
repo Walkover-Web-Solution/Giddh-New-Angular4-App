@@ -247,8 +247,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 if (this.registeredAccount) {
                     this.registeredAccount.map(item => {
                         item.userAmountRanges.map(element => {
-                            if(typeof element.maxBankLimit === "boolean") {
-                    element.maxBankLimit =  element.maxBankLimit ? 'max' : 'custom';
+                            if (typeof element.maxBankLimit === "boolean") {
+                                element.maxBankLimit = element.maxBankLimit ? 'max' : 'custom';
                             }
                         });
                     });
