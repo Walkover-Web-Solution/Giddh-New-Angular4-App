@@ -9,7 +9,7 @@ import { VerifyEmailResponseModel, VerifyMobileModel } from "../../models/api-mo
 import { AccountResponseV2 } from "../../models/api-models/Account";
 import { CompanyService } from "../../services/companyService.service";
 import { BankTransferRequest } from "../../models/api-models/Company";
-import { IRegistration, IntegartedBankList, BankTransactionForOTP, GetOTPRequest } from "../../models/interfaces/registration.interface";
+import { IRegistration, IntegratedBankList, BankTransactionForOTP, GetOTPRequest } from "../../models/interfaces/registration.interface";
 import { ToasterService } from "../../services/toaster.service";
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
@@ -40,7 +40,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     //variable to check whether OTP is sent to show and hide OTP text field
     public OTPsent: boolean = false;
     public countryCode: string = '';
-    public integartedBankList$: Observable<IntegartedBankList[]>;
+    /** Integrated bank list array */
+    public integartedBankList$: Observable<IntegratedBankList[]>;
+    /** Request object for OTP */
     public requestObjectTogetOTP: GetOTPRequest = {
         bankType: '',
         urn: '',
@@ -50,32 +52,39 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     };
     /** directive to emit boolean for close model */
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
-
-
+/** Integrated bank list sh-select options */
     public selectIntegratedBankList: IOption[] = [];
-    // [{ label: "SBI Bank", value: "1234",  additional: ''},
-    // { label: "BOI Bank", value: "1235" },
-    // { label: "BOB Bank", value: "1234" },
-    // { label: "RBI Bank", value: "1235" }];
-
     //Event emitter to close the Aside panel
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     //Input current account holders information
     @Input() public selectedAccForPayment: any;
+    /** Selected account list */
     @Input() public selectedAccForBulkPayment: any[];
+    /** company unique name */
     public companyUniqueName: string;
+    /** count down timer observable */
     public timerCountDown$: Observable<string>;
     //Variable holding OTP received by user
     public OTP: number;
+    /** remark for payment */
     public remarks: string = '';
+    /** Model reference */
     public successModalRef: BsModalRef;
+    /** total selected account's amount sum */
     public totalSelectedAccountAmount: number;
+    /** to check count down timer on */
     public timerOn: boolean = false;
+    /** to track for OTP  */
     public isPayclicked: boolean = false;
+    /** selected bank URN number */
     public selectedBankUrn: any;
+    /** Timer reference */
     public countDownTimerRef: any;
+    /** Total available balance of selected account */
     public totalAvailableBalance: any;
+    /** Total selected account  */
     public totalSelectedLength: number;
+    /** bulk payment form */
     public addAccountBulkPaymentForm: FormGroup;
     public imgPath: string = '';
     constructor(
@@ -139,7 +148,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             }
         });
 
-        this.integartedBankList$.pipe(takeUntil(this.destroyed$)).subscribe((bankList: IntegartedBankList[]) => {
+        this.integartedBankList$.pipe(takeUntil(this.destroyed$)).subscribe((bankList: IntegratedBankList[]) => {
             this.selectIntegratedBankList = [];
             if (bankList && bankList.length) {
                 bankList.forEach(item => {
@@ -416,8 +425,12 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         }
     }
 
-
-    public initializeNewForm() {
+/**
+ *To initialize form
+ *
+ * @memberof PaymentAsideComponent
+ */
+public initializeNewForm(): void {
         this.addAccountBulkPaymentForm = this.formBuilder.group({
             bankType: [''],
             urn: [''],
@@ -432,15 +445,28 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         });
     }
 
-
-    public addAccountTransactionsFormObject(value: any) {    // commented code because we no need GSTIN No. to add new address
+/**
+ * Add account transaction object
+ *
+ * @param {*} value item need to add
+ * @returns
+ * @memberof PaymentAsideComponent
+ */
+public addAccountTransactionsFormObject(value: any): any {    // commented code because we no need GSTIN No. to add new address
         // if (value && !value.startsWith(' ', 0)) {
         const transactions = this.addAccountBulkPaymentForm.get('bankPaymentTransactions') as FormArray;
         transactions.push(this.initialAccountTransactionsForm(value));
         return;
     }
 
-    public initialAccountTransactionsForm(val: any): FormGroup {
+/**
+ * Initialize account transaction form
+ *
+ * @param {*} val
+ * @returns {FormGroup}
+ * @memberof PaymentAsideComponent
+ */
+public initialAccountTransactionsForm(val: any): FormGroup {
         let transactionsFields = this.formBuilder.group({
             remarks: ['', Validators.compose([Validators.required])],
             amount: [''],

@@ -301,7 +301,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      * @param {TemplateRef<any>} template template/model hash reference
      * @memberof ContactComponent
      */
-    public openBulkPaymentModal(template: TemplateRef<any>, item?: any) {
+    public openBulkPaymentModal(template: TemplateRef<any>, item?: any): void {
         this.isBulkPaymentShow = true;
         if (item) {
             if (this.isBankAccountAddedAccount(item)) {
@@ -1206,7 +1206,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      *
      * @memberof ContactComponent
      */
-    public closeBulkPaymentModel() {
+    public closeBulkPaymentModel(): void {
         this.isBulkPaymentShow = false;
         this.bulkPaymentModalRef.hide();
     }

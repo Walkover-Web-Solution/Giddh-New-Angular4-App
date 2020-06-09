@@ -11,7 +11,7 @@ import { AppState } from '../store/roots';
 import { CustomActions } from '../store/customActions';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { COMMON_ACTIONS } from './common.const';
-import { IRegistration, IntegartedBankList } from "../models/interfaces/registration.interface";
+import { IRegistration, IntegratedBankList } from "../models/interfaces/registration.interface";
 
 @Injectable()
 
@@ -378,7 +378,7 @@ export class CompanyActions {
                 return { type: 'EmptyAction' };
             }));
 
-  @Effect()
+    @Effect()
     public getAllIntegratedBankInCompany$: Observable<Action> = this.action$
         .ofType(CompanyActions.GET_ALL_INTEGRATED_BANK).pipe(
             switchMap((action: CustomActions) => this._companyService.getIntegratedBankInCompany(action.payload)),
@@ -648,14 +648,14 @@ export class CompanyActions {
     public resetUserChosenFinancialYear(): CustomActions {
         return { type: CompanyActions.RESET_USER_CHOSEN_FINANCIAL_YEAR };
     }
- /**
-  * Get all bank integration
-  *
-  * @param {string} companyUniqueName
-  * @returns {CustomActions}
-  * @memberof CompanyActions
-  */
- public getAllIntegratedBankInCompany(companyUniqueName: string): CustomActions {
+    /**
+     * Get all bank integration
+     *
+     * @param {string} companyUniqueName
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public getAllIntegratedBankInCompany(companyUniqueName: string): CustomActions {
         return {
             type: CompanyActions.GET_ALL_INTEGRATED_BANK,
             payload: companyUniqueName

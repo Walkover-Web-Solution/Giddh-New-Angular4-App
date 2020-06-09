@@ -13,7 +13,7 @@ export interface IRegistration {
     }
 }
 
-export class IntegartedBankList {
+export class IntegratedBankList {
     urn: string;
     bankName: string;
     accountNo: string;
