@@ -499,8 +499,8 @@ span.icon-support.dropdown-toggle {
     height: 32px;
 }
 .date-range-picker{
-    max-width: 196px;
-    min-width: 196px;
+    max-width: 205px;
+    min-width: 205px;
 }
 
 .other a {
@@ -858,6 +858,14 @@ ul.sub-list {
         width: 30px;
         text-align: center;
     }
+    .not-today{
+        margin-right: 5px;
+    }
+    .date-range-picker{
+        max-width: 190px;
+        min-width: 190px;
+        font-size: 13px !important;
+    }
 }
 
 @media (min-width: 412px) and (max-width: 840px) {
@@ -901,5 +909,9 @@ ul.sub-list {
     }
     .lower-layer-header {
         padding-top: 5px;
+    }
+    .not-today{
+        padding-right: 0 !important;
+        padding-left: 0 !important;
     }
 }
