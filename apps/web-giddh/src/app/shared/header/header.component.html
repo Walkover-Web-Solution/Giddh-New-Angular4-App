@@ -346,10 +346,9 @@
                 <!-- Main menu -->
                 <ul class="left_fixed_header mrT4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
                     <h6 class="mrB1">MENU
-                        <!-- <i 
-              class="fa fa-plus cp"></i>  -->
-
-                        <img src="{{imgPath}}angle-round-icon.svg" class="pull-right" *ngIf="!isMobileSite" tooltip="Menu" placement="bottom" container="body"> 
+                        <a [routerLink]="['/pages/all-modules']">
+                            <img src="{{imgPath}}angle-round-icon.svg" class="pull-right" *ngIf="!isMobileSite" tooltip="Menu" placement="bottom" container="body">
+                        </a>    
                     </h6>
                     <li *ngFor="let menu of menuItemsFromIndexDB">
                         <a *ngIf="menu.uniqueName == '/pages/gstfiling' && activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode == 'IN'" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage && selectedPage.toLowerCase() == menu.name.toLowerCase()}"

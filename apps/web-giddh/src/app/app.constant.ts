@@ -187,7 +187,7 @@ if (PRODUCTION_ENV || isElectron || isCordova) {
 export let DEFAULT_POPULAR_PLAN = "";
 
 if (PRODUCTION_ENV || isElectron || isCordova) {
-    DEFAULT_POPULAR_PLAN = "oak";
+    DEFAULT_POPULAR_PLAN = "Oak";
 } else {
     DEFAULT_POPULAR_PLAN = "Popular Plan";
 }
