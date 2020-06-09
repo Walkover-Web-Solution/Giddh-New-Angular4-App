@@ -105,7 +105,7 @@ form label {
     }
 }
 .selected-bank-details{
-    border-top: 1px solid #d9d9d9;
+    border-top: 1px solid $gainsboro;
     padding-top: 25px;
     margin-top: 5px;
     .account-holder-name{
@@ -127,7 +127,7 @@ form label {
         }
     }
     .bank-deatils-wrapper{
-        border: 1px solid #d9d9d9;
+        border: 1px solid $gainsboro;
         border-radius: 2px;
         margin-top: 3px;
         display: flex;
@@ -137,7 +137,7 @@ form label {
             font-size: 14px;
             background-color: #EAEAEA;
             padding: 10px;
-            border-right: 1px solid #d9d9d9;
+            border-right: 1px solid $gainsboro;
             .label-value-data{
                 display: flex;
                 align-items: center;
@@ -204,45 +204,8 @@ form label {
         }
     }
 }
-
-
-
-
 @media (max-width: 480px) {
     .payment-top-form .d-flex .form-group, .payment-top-form .d-flex .form-group:last-child {
         min-width: 100%;
     }
 }
-
-// @media (max-width: 768px) {
-//     :host {
-//         max-width: 600px;
-//     }
-//     :host .aside-pane {
-//         max-width: 600px;
-//     }
-// }
-// @media (max-width: 575px) {
-//     :host {
-//         max-width: 370px;
-//     }
-//     :host .aside-pane {
-//         max-width: 370px;
-//     }
-// }
-// @media (max-width: 375px) {
-//     :host {
-//         max-width: 310px;
-//     }
-//     :host .aside-pane {
-//         max-width: 310px;
-//     }
-// }
-// @media (max-width: 320px) {
-//     :host {
-//         max-width: 280px;
-//     }
-//     :host .aside-pane {
-//         max-width: 280px;
-//     }
-// }

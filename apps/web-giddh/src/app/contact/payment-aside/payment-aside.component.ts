@@ -77,6 +77,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public totalAvailableBalance: any;
     public totalSelectedLength: number;
     public addAccountBulkPaymentForm: FormGroup;
+    public imgPath: string = '';
     constructor(
         private formBuilder: FormBuilder,
         private modalService: BsModalService,
@@ -107,6 +108,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     }
 
     public ngOnInit() {
+        this.imgPath = (isElectron||isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.initializeNewForm();
         // this.amount = this.selectedAccForPayment.closingBalance.amount;
         // get all registered account
