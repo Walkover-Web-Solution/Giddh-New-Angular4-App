@@ -99,7 +99,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public amountUpToList: IOption[] =
         [
             { label: "Max limit as per Bank", value: "max" },
-            { label: "Custom", value: "custome" },
+            { label: "Custom", value: "custom" },
         ];
     public approvalNameList: IOption[] = [];
     public selectedCompanyUniqueName: string;
@@ -247,7 +247,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 if (this.registeredAccount) {
                     this.registeredAccount.map(item => {
                         item.userAmountRanges.map(element => {
-                            element.maxBankLimit = (typeof element.maxBankLimit === "boolean" && element.maxBankLimit) ? 'max' : 'custom';
+                            if (typeof element.maxBankLimit === "boolean") {
+                                element.maxBankLimit = element.maxBankLimit ? 'max' : 'custom';
+                            }
                         });
                     });
                 }

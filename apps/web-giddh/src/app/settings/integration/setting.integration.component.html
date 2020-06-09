@@ -429,7 +429,7 @@
                                 <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
                                     <br></ng-container>
                                 <div class="custom-select select-caret pos-rel">
-                                    <sh-select [options]="amountUpToList" autocomplete="off" required [(ngModel)]="item.maxBankLimit" name="maxBankLimit{{ind}}{{index}}" (selected)="selectedMaxOrCustom(index, true, ind);" (ngModelChange)="maxLimitOrCustomChanged($event, index , true, ind)">
+                                    <sh-select [options]="amountUpToList" autocomplete="off" [fixedValue]="item.maxBankLimit" required [(ngModel)]="item.maxBankLimit" name="maxBankLimit{{ind}}{{index}}" (selected)="selectedMaxOrCustom(index, true, ind);" (ngModelChange)="maxLimitOrCustomChanged($event, index , true, ind)">
                                     </sh-select>
                                 </div>
                                 <p class="error-msg text-right"></p>
@@ -439,7 +439,7 @@
                                     <br></ng-container>
                                 <div class="d-flex">
                                     <div class="mr-05 custom-select select-caret pos-rel">
-                                        <sh-select [options]="amountUpToList" autocomplete="off" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom(index, true, ind);" (ngModelChange)="maxLimitOrCustomChanged($event, index , true, ind)" name="maxBankLimit{{ind}}{{index}}">
+                                        <sh-select [options]="amountUpToList" autocomplete="off" [fixedValue]="item.maxBankLimit" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom(index, true, ind);" (ngModelChange)="maxLimitOrCustomChanged($event, index , true, ind)" name="maxBankLimit{{ind}}{{index}}">
                                         </sh-select>
                                     </div>
                                     <div class="ml-05">
@@ -470,14 +470,13 @@
                                                     <img src="assets/images/blue-check.svg" class="check-search" alt="">
                                                 </div>
                                             </a>
-
-                                            <a href="javascript:void(0)" *ngIf="!option?.additional[0]?.mobileVerified" class="list-item relative text-light disabled">
+                                            <fieldset disabled href="javascript:void(0)" *ngIf="!option?.additional[0]?.mobileVerified" class="list-item relative text-light disabled disabled-list-item">
                                                 <div class="item">
                                                     <p>{{option?.label}}</p>
                                                     <p>Unverifed</p>
                                                     <img src="assets/images/close-round.svg" class="check-search" alt="">
                                                 </div>
-                                            </a>
+                                            </fieldset>
                                         </ng-template>
                                     </sh-select>
                                 </div>
@@ -561,17 +560,18 @@
                                 <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
                                     <br></ng-container>
                                 <div class="custom-select max select-caret pos-rel">
-                                    <sh-select [options]="amountUpToList" required [(ngModel)]="item.maxBankLimit" value="max" (selected)="selectedMaxOrCustom( index, false);" (ngModelChange)="maxLimitOrCustomChanged($event, index , false)" name="maxBankLimit{{index}}">
+                                    <sh-select [options]="amountUpToList" required [(ngModel)]="item.maxBankLimit" [fixedValue]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);" (ngModelChange)="maxLimitOrCustomChanged($event, index , false)" name="maxBankLimit{{index}}">
                                     </sh-select>
                                 </div>
                                 <p class="error-msg text-right"></p>
                             </div>
-                            <div class="form-group col-sm-3 col-md-2" *ngIf="item.maxBankLimit !=='max'">
+                            <div class="form-group col-sm-3  col-md-2" *ngIf="item.maxBankLimit !=='max'">
                                 <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
                                     <br></ng-container>
                                 <div class="d-flex">
                                     <div class="mr-05 custom-select cust select-caret pos-rel">
-                                        <sh-select [options]="amountUpToList" required [(ngModel)]="item.maxBankLimit" value="custom" [defaultValue]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);" (ngModelChange)="maxLimitOrCustomChanged($event, index, false)" name="maxBankLimit{{index}}">
+                                        <sh-select [options]="amountUpToList" required [(ngModel)]="item.maxBankLimit" [fixedValue]="item.maxBankLimit" [defaultValue]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);" (ngModelChange)="maxLimitOrCustomChanged($event, index, false)"
+                                            name="maxBankLimit{{index}}">
                                         </sh-select>
                                     </div>
                                     <div class="ml-05">
@@ -654,129 +654,3 @@
         </tab>
     </tabset>
 </div>
-<!-- <div class="row">
-                        <div class="form-group col-sm-3 col-md-2">
-                            <label>Amount Upto <span class="required">*</span></label>
-                            <br>
-                            <div class="custom-select select-caret pos-rel">
-                                <sh-select [options]="amountUpToList" name="maxBankLimit">
-                                </sh-select>
-                            </div>
-                            <p class="error-msg text-right"></p>
-                        </div>
-                        <div class="form-group col-sm-3 col-md-2" *ngIf="true">
-                            <label>Amount Upto <span class="required">*</span></label>
-                            <br>
-                            <div class="custom-select select-caret pos-rel">
-                                <sh-select [options]="amountUpToList" required name="maxBankLimit">
-                                </sh-select>
-                            </div>
-                            <p class="error-msg text-right"></p>
-                        </div>
-                        <div class="form-group col-sm-3 col-md-2" *ngIf="false">
-                            <label>Amount Upto <span class="required">*</span></label>
-                            <br>
-                            <div class="d-flex">
-                                <div class="mr-05 custom-select select-caret pos-rel">
-                                    <sh-select [options]="amountUpToList" name="maxBankLimit">
-                                    </sh-select>
-                                </div>
-                                <div class="ml-05">
-                                    <input type="text" class="form-control" placeholder="Amount">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-3 col-md-2">
-                            <label class="d-flex relative info-icon">Select OTP <span class="required">*</span>
-                                <i class="icon-info cursor-pointer" tooltip="Content here.."></i>
-                            </label>
-                            <div class="custom-select select-caret pos-rel">
-                                <sh-select [options]="typeOTPList" name="otpType">
-                                </sh-select>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-3 col-md-2">
-                            <label class="d-flex relative info-icon">Approval Name <span class="required">*</span>
-                                <i class="icon-info cursor-pointer"  tooltip="Content here.."></i>
-                            </label>
-                            <div class="custom-select select-caret pos-rel">
-                                <sh-select [options]="approvalNameList" class="text-left" name="approvalUniqueName" required [placeholder]="'Select Bank 1'" [multiple]="false">
-                                    <ng-template #optionTemplate let-option="option">
-                                        <a href="javascript:void(0)" *ngIf="!option?.additional[0]?.mobileVerified" class="list-item relative">
-                                            <div class="item">
-                                                <p>{{option?.label}}</p>
-                                                <p>{{option?.additional[0]?.mobileNumber}}</p>
-                                                <img src="assets/images/blue-check.svg" class="check-search" alt="">
-                                            </div>
-                                        </a>
-
-                                        <a href="javascript:void(0)" onclick="return false;" *ngIf="option?.additional[0]?.mobileVerified" class="list-item relative text-light disabled">
-                                            <div class="item">
-                                                <p>{{option?.label}}</p>
-                                                <p>Unverifed</p>
-                                                <img src="assets/images/close-round.svg" class="check-search" alt="">
-                                            </div>
-                                        </a>
-                                    </ng-template>
-                                </sh-select>
-                            </div>
-                        </div>
-                        <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0">
-                            <label class="d-flex">&nbsp;</label>
-                            <div class="mt-15">
-                                <i class="icon-trash cursor-pointer"></i>
-                            </div>
-                        </div>
-                    </div> -->
-
-<!-- <div class="row">
-                        <div class="form-group col-sm-3 col-md-2">
-                            <div class="d-flex">
-                                <div class="mr-05 custom-select select-caret pos-rel">
-                                    <sh-select [options]="amountUpToList" name="maxBankLimit">
-                                    </sh-select>
-                                </div>
-                                <div class="ml-05">
-                                    <input type="text" class="form-control" placeholder="Amount">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-3 col-md-2">
-                            <div class="custom-select select-caret pos-rel">
-                                <sh-select [options]="typeOTPList">
-                                </sh-select>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-3 col-md-2">
-                            <div class="custom-select select-caret pos-rel">
-                                <sh-select [options]="approvalNameList" class="text-left" name="selectedBankName" required [placeholder]="'Select Bank2'" [multiple]="false">
-                                    <ng-template #optionTemplate let-option="option">
-                                        <a href="javascript:void(0)" *ngIf="option?.additional[0]?.mobileVerified" class="list-item relative">
-                                            <div class="item">
-                                                <p>{{option?.label}}</p>
-                                                <p>{{option?.additional[0]?.mobileNumber}}</p>
-                                                <img src="assets/images/blue-check.svg" class="check-search" alt="">
-                                            </div>
-                                        </a>
-
-                                        <a href="javascript:void(0)" onclick="return false;" *ngIf="!option?.additional[0]?.mobileVerified" class="list-item relative text-light disabled">
-                                            <div class="item">
-                                                <p>{{option?.label}}</p>
-                                                <p>Unverifed</p>
-                                                <img src="assets/images/close-round.svg" class="check-search" alt="">
-                                            </div>
-                                        </a>
-                                    </ng-template>
-                                </sh-select>
-                            </div>
-                        </div>
-                        <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0">
-                            <div class="clearfix">
-                                <i class="icon-trash cursor-pointer d-inline-block"></i>
-                            </div>
-                        </div>
-                    </div> -->
-
-<!-- <div class="clearfix">
-                        <a href="javascript:void" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" (click)="openNewRegistartionForm()" class="btn btn-link pl-0">Add More ID</a>
-                    </div> -->
