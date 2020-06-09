@@ -429,7 +429,7 @@
                                 <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
                                     <br></ng-container>
                                 <div class="custom-select select-caret pos-rel">
-                                    <sh-select [options]="amountUpToList" required [(ngModel)]="item.maxBankLimit" name="maxBankLimit{{ind}}{{index}}" (selected)="selectedMaxOrCustom(index, true, ind);" (ngModelChange)="maxLimitOrCustomChanged($event, index , true, ind)">
+                                    <sh-select [options]="amountUpToList" autocomplete="off" required [(ngModel)]="item.maxBankLimit" name="maxBankLimit{{ind}}{{index}}" (selected)="selectedMaxOrCustom(index, true, ind);" (ngModelChange)="maxLimitOrCustomChanged($event, index , true, ind)">
                                     </sh-select>
                                 </div>
                                 <p class="error-msg text-right"></p>
@@ -439,7 +439,7 @@
                                     <br></ng-container>
                                 <div class="d-flex">
                                     <div class="mr-05 custom-select select-caret pos-rel">
-                                        <sh-select [options]="amountUpToList" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom(index, true, ind);" (ngModelChange)="maxLimitOrCustomChanged($event, index , true, ind)" name="maxBankLimit{{ind}}{{index}}">
+                                        <sh-select [options]="amountUpToList" autocomplete="off" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom(index, true, ind);" (ngModelChange)="maxLimitOrCustomChanged($event, index , true, ind)" name="maxBankLimit{{ind}}{{index}}">
                                         </sh-select>
                                     </div>
                                     <div class="ml-05">
