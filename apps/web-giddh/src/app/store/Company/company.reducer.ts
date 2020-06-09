@@ -5,7 +5,7 @@ import { SETTINGS_TAXES_ACTIONS } from '../../actions/settings/taxes/settings.ta
 import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
 import * as moment from 'moment/moment';
-import { IRegistration } from "../../models/interfaces/registration.interface";
+import { IntegratedBankList, IRegistration } from "../../models/interfaces/registration.interface";
 import { DEFAULT_DATE_RANGE_PICKER_RANGES, DatePickerDefaultRangeEnum } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
@@ -26,6 +26,8 @@ export interface CurrentCompanyState {
     isCompanyActionInProgress: boolean;
     isAccountInfoLoading: boolean;
     isTcsTdsApplicable: boolean;
+    isGetAllIntegratedBankInProgress: boolean;
+    integratedBankList: IntegratedBankList[];
 }
 
 /**
@@ -33,6 +35,7 @@ export interface CurrentCompanyState {
  */
 const initialState: CurrentCompanyState = {
     taxes: null,
+    integratedBankList: null,
     isTaxesLoading: false,
     isGetTaxesSuccess: false,
     activeFinancialYear: null,
@@ -58,7 +61,8 @@ const initialState: CurrentCompanyState = {
     isTaxUpdatedSuccessfully: false,
     isCompanyActionInProgress: false,
     isAccountInfoLoading: false,
-    isTcsTdsApplicable: false
+    isTcsTdsApplicable: false,
+    isGetAllIntegratedBankInProgress: false
 };
 
 export function CompanyReducer(state: CurrentCompanyState = initialState, action: CustomActions): CurrentCompanyState {
@@ -210,6 +214,24 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                 ...state,
                 isTcsTdsApplicable: action.payload
             };
+
+
+        case CompanyActions.GET_ALL_INTEGRATED_BANK:
+            return Object.assign({}, state, {
+                isGetAllIntegratedBankInProgress: true,
+            });
+        case CompanyActions.GET_ALL_INTEGRATED_BANK_RESPONSE:
+            let response: BaseResponse<IntegratedBankList[], string> = action.payload;
+            if (response.status === 'success') {
+                return Object.assign({}, state, {
+                    integratedBankList: response.body,
+                    isGetAllIntegratedBankInProgress: false,
+                });
+            } else {
+                return Object.assign({}, state, {
+                    isGetAllIntegratedBankInProgress: false
+                });
+            }
         default:
             return state;
     }
