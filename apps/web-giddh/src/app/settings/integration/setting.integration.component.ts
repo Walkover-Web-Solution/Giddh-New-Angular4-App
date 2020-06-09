@@ -71,7 +71,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isPaymentAdditionSuccess$: Observable<boolean>;
     public isPaymentUpdationSuccess$: Observable<boolean>;
     public isElectron: boolean = Configuration.isElectron;
-    public isMaxLimitSelected: boolean;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
     private isSellerAdded: Observable<boolean> = observableOf(false);
@@ -731,6 +730,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.changeDetectionRef.detectChanges();
     }
 
+    /**
+     * To check mac and custom is selected
+     *
+     * @param {any[]} itemList
+     * @param {number} index
+     * @returns {boolean}
+     * @memberof SettingIntegrationComponent
+     */
     public checkIsMaxBankLimitSelected(itemList: any[], index: number): boolean {
 
         let selected: boolean = false;
@@ -752,24 +759,33 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
    * @param {number} index index number
    * @memberof SettingIntegrationComponent
    */
-    public changeAmount(item: any, index: number, ele: HTMLInputElement, isUpdate: boolean) {
-        if (!isUpdate && item && ele && this.paymentFormObj) {
-            if (this.checkIsAmuntrepeat(this.paymentFormObj.userAmountRanges, this.paymentFormObj.userAmountRanges[index].amount, index)) {
-                ele.classList.add('error-box');
+    public changeAmount(item: any, index: number, elementRef: HTMLInputElement, isUpdate: boolean) {
+        if (!isUpdate && item && elementRef && this.paymentFormObj) {
+            if (this.checkIsAmountRepeat(this.paymentFormObj.userAmountRanges, this.paymentFormObj.userAmountRanges[index].amount, index)) {
+                elementRef.classList.add('error-box');
             } else {
-                ele.classList.remove('error-box');
+                elementRef.classList.remove('error-box');
             }
         }
-        //  else if(isUpdate && item && ele && this.registeredAccount.userAmountRanges) {
-        //      if (this.checkIsAmuntrepeat(this.registeredAccount.userAmountRanges, this.registeredAccount.userAmountRanges[index].amount)) {
-        //         ele.classList.add('error-box');
+        //  else if(isUpdate && item && elementRef && this.registeredAccount.userAmountRanges) {
+        //      if (this.checkIsAmountRepeat(this.registeredAccount.userAmountRanges, this.registeredAccount.userAmountRanges[index].amount)) {
+        //         elementRef.classList.add('error-box');
         //     } else {
-        //         ele.classList.remove('error-box');
+        //         elementRef.classList.remove('error-box');
         //     }
         // }
     }
 
-    public checkIsAmuntrepeat(itemList: any[], value: any, index: number): boolean {
+    /**
+     * To check is entered amount repeated
+     *
+     * @param {any[]} itemList List of item
+     * @param {*} value Selected value
+     * @param {number} index Index number
+     * @returns {boolean}
+     * @memberof SettingIntegrationComponent
+     */
+    public checkIsAmountRepeat(itemList: any[], value: any, index: number): boolean {
 
         let selected: boolean = false;
         if (itemList) {
@@ -784,10 +800,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         return selected;
     }
 
-
     /**
-     * Add new blank amount range row
+     *Add new blank amount range row
      *
+     * @param {number} [indexUpdateObj] selected item
      * @memberof SettingIntegrationComponent
      */
     public addNewAmountRangeRow(indexUpdateObj?: number): void {

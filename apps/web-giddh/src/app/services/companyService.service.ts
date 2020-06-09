@@ -418,7 +418,7 @@ export class CompanyService {
      * @returns
      * @memberof CompanyService
      */
-    public getIntegratedBankInCompany(companyUniqueName: string) {
+    public getIntegratedBankInCompany(companyUniqueName: string): Observable<BaseResponse<any, any>> {
         return this._http.get(this.config.apiUrl + COMPANY_API.GET_COMPANY_INTEGRATED_BANK_LIST
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))).pipe(map((res) => {
                 let data: BaseResponse<any, string> = res;
@@ -434,7 +434,7 @@ export class CompanyService {
      * @returns
      * @memberof CompanyService
      */
-    public getAllBankDetailsOfIntegrated(companyUniqueName: string, urn: string) {
+    public getAllBankDetailsOfIntegrated(companyUniqueName: string, urn: string): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMPANY_API.GET_COMPANY_INTEGRATED_BANK_DETAILS.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':urn', urn);
         return this._http.get(url).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;

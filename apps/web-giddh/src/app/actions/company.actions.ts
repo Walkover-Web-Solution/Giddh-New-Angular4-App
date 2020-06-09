@@ -662,6 +662,13 @@ export class CompanyActions {
         };
     }
 
+    /**
+     * to get all integrated banks list
+     *
+     * @param {BaseResponse<any, string>} value company unique name
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
     public getAllIntegratedBankInCompanyResponse(value: BaseResponse<any, string>): CustomActions {
         return {
             type: CompanyActions.GET_ALL_INTEGRATED_BANK_RESPONSE,

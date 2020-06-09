@@ -463,15 +463,15 @@
                                 <div class="custom-select select-caret pos-rel" *ngIf="item.otpType!=='BANK'">
                                     <sh-select [options]="approvalNameList" class="text-left" [(ngModel)]="item.approvalUniqueName" name="approvalUniqueName{{ind}}{{index}}" required [placeholder]="'Select Bank'" [multiple]="false">
                                         <ng-template #optionTemplate let-option="option">
-                                            <a href="javascript:void(0)" *ngIf="option?.additional[0].mobileVerified" class="list-item relative">
+                                            <a href="javascript:void(0)" *ngIf="option?.additional[0]?.mobileVerified" class="list-item relative">
                                                 <div class="item">
                                                     <p>{{option?.label}}</p>
-                                                    <p>{{option?.additional[0].mobileNumber}}</p>
+                                                    <p>{{option?.additional[0]?.mobileNumber}}</p>
                                                     <img src="assets/images/blue-check.svg" class="check-search" alt="">
                                                 </div>
                                             </a>
 
-                                            <a href="javascript:void(0)" *ngIf="!option?.additional[0].mobileVerified" class="list-item relative text-light disabled">
+                                            <a href="javascript:void(0)" *ngIf="!option?.additional[0]?.mobileVerified" class="list-item relative text-light disabled">
                                                 <div class="item">
                                                     <p>{{option?.label}}</p>
                                                     <p>Unverifed</p>
@@ -595,15 +595,15 @@
                                 <div class="custom-select select-caret pos-rel" *ngIf="item.otpType!=='BANK'">
                                     <sh-select [options]="approvalNameList" class="text-left" [(ngModel)]="item.approvalUniqueName" name="approvalUniqueName{{index}}" required [placeholder]="'Select Bank'" [multiple]="false">
                                         <ng-template #optionTemplate let-option="option">
-                                            <a href="javascript:void(0)" *ngIf="option?.additional[0].mobileVerified" class="list-item relative">
+                                            <a href="javascript:void(0)" *ngIf="option?.additional[0]?.mobileVerified" class="list-item relative">
                                                 <div class="item">
                                                     <p>{{option?.label}}</p>
-                                                    <p>{{option?.additional[0].mobileNumber}}</p>
+                                                    <p>{{option?.additional[0]?.mobileNumber}}</p>
                                                     <img src="assets/images/blue-check.svg" class="check-search" alt="">
                                                 </div>
                                             </a>
 
-                                            <a href="javascript:void(0)" *ngIf="!option?.additional[0].mobileVerified" class="list-item relative text-light disabled">
+                                            <a href="javascript:void(0)" *ngIf="!option?.additional[0]?.mobileVerified" class="list-item relative text-light disabled">
                                                 <div class="item">
                                                     <p>{{option?.label}}</p>
                                                     <p>Unverifed</p>
@@ -703,15 +703,15 @@
                             <div class="custom-select select-caret pos-rel">
                                 <sh-select [options]="approvalNameList" class="text-left" name="approvalUniqueName" required [placeholder]="'Select Bank 1'" [multiple]="false">
                                     <ng-template #optionTemplate let-option="option">
-                                        <a href="javascript:void(0)" *ngIf="!option?.additional[0].mobileVerified" class="list-item relative">
+                                        <a href="javascript:void(0)" *ngIf="!option?.additional[0]?.mobileVerified" class="list-item relative">
                                             <div class="item">
                                                 <p>{{option?.label}}</p>
-                                                <p>{{option?.additional[0].mobileNumber}}</p>
+                                                <p>{{option?.additional[0]?.mobileNumber}}</p>
                                                 <img src="assets/images/blue-check.svg" class="check-search" alt="">
                                             </div>
                                         </a>
 
-                                        <a href="javascript:void(0)" onclick="return false;" *ngIf="option?.additional[0].mobileVerified" class="list-item relative text-light disabled">
+                                        <a href="javascript:void(0)" onclick="return false;" *ngIf="option?.additional[0]?.mobileVerified" class="list-item relative text-light disabled">
                                             <div class="item">
                                                 <p>{{option?.label}}</p>
                                                 <p>Unverifed</p>
@@ -752,15 +752,15 @@
                             <div class="custom-select select-caret pos-rel">
                                 <sh-select [options]="approvalNameList" class="text-left" name="selectedBankName" required [placeholder]="'Select Bank2'" [multiple]="false">
                                     <ng-template #optionTemplate let-option="option">
-                                        <a href="javascript:void(0)" *ngIf="option?.additional[0].mobileVerified" class="list-item relative">
+                                        <a href="javascript:void(0)" *ngIf="option?.additional[0]?.mobileVerified" class="list-item relative">
                                             <div class="item">
                                                 <p>{{option?.label}}</p>
-                                                <p>{{option?.additional[0].mobileNumber}}</p>
+                                                <p>{{option?.additional[0]?.mobileNumber}}</p>
                                                 <img src="assets/images/blue-check.svg" class="check-search" alt="">
                                             </div>
                                         </a>
 
-                                        <a href="javascript:void(0)" onclick="return false;" *ngIf="!option?.additional[0].mobileVerified" class="list-item relative text-light disabled">
+                                        <a href="javascript:void(0)" onclick="return false;" *ngIf="!option?.additional[0]?.mobileVerified" class="list-item relative text-light disabled">
                                             <div class="item">
                                                 <p>{{option?.label}}</p>
                                                 <p>Unverifed</p>

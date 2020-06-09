@@ -12,7 +12,7 @@
                     <div class="d-flex">
                         <div class="form-group mr-15 select-bank">
                             <label>Select Bank<span class="red-text">*</span></label>
-                            <sh-select *ngIf="selectIntegratedBankList.length > 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankName" class="text-left" name="urn" required [placeholder]="'Select Bank'" (selected)="selectBank($event);" [multiple]="false">
+                            <sh-select *ngIf="selectIntegratedBankList.length > 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankName" class="text-left" name="urn" required placeholder="'Select Bank'" (selected)="selectBank($event);" [multiple]="false">
                                 <ng-template #optionTemplate let-option="option">
                                     <a href="javascript:void(0)" class="list-item">
                                         <div class="item">{{option.label}}</div>
@@ -23,7 +23,7 @@
                                     </a>
                                 </ng-template>
                             </sh-select>
-                            <sh-select *ngIf="selectIntegratedBankList.length === 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankUrn" class="text-left" name="urn" required [placeholder]="'Select Bank'" (ngModelChange)="selectBank($event);" [multiple]="false">
+                            <sh-select *ngIf="selectIntegratedBankList.length === 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankUrn" class="text-left" name="urn" required placeholder="'Select Bank'" (ngModelChange)="selectBank($event);" [multiple]="false">
                                 <ng-template #optionTemplate let-option="option">
                                     <a href="javascript:void(0)" class="list-item">
                                         <div class="item">{{option.label}}</div>
@@ -42,7 +42,7 @@
                             <label>Total Amount<span class="red-text">*</span></label>
                             <input type="text" class="form-control" disabled [(ngModel)]="totalSelectedAccountAmount" name="amount">
                         </div>
-                        <div class="form-group mr-15" *ngIf="isPayclicked">
+                        <div class="form-group mr-15" *ngIf="isPayClicked">
                             <label class="relative d-flex">Enter OTP<span class="red-text">*</span>
                                 <p class="resend-btn" *ngIf="!timerOn"><a href="javascript:void();"
                                         (click)="reSendOTP()" class="btn-link">Resend</a></p>
@@ -54,9 +54,9 @@
                         </div>
                         <div class="form-group mr-15">
                             <label class="d-flex"> &nbsp; </label>
-                            <button type="button" *ngIf="!isPayclicked" class="btn btn-success" [disabled]="!adjustAdvancePaymentForm.form.valid" (click)="payClicked(adjustAdvancePaymentForm)">Pay</button>
-                            <button *ngIf="isPayclicked" class="btn btn-success" [disabled]="!adjustAdvancePaymentForm.form.valid" (click)="confirmOTP()">Confirm</button>
-                            <button type="button" *ngIf="isPayclicked" class="btn btn-primary" (click)="clickedCancelOtp();">Cancel OTP</button>
+                            <button type="button" *ngIf="!isPayClicked" class="btn btn-success" [disabled]="!adjustAdvancePaymentForm.form.valid" (click)="payClicked(adjustAdvancePaymentForm)">Pay</button>
+                            <button *ngIf="isPayClicked" class="btn btn-success" [disabled]="!adjustAdvancePaymentForm.form.valid" (click)="confirmOTP()">Confirm</button>
+                            <button type="button" *ngIf="isPayClicked" class="btn btn-primary" (click)="clickedCancelOtp();">Cancel OTP</button>
                         </div>
                     </div>
                 </div>
@@ -115,7 +115,7 @@
                                 <div class="d-flex">
                                     <div class="form-group pr-15">
                                         <label>Amount<span class="text-danger">*</span></label>
-                                        <input class="form-control" name="closingBalanceAmount{{entryIdx}}" [disabled]="isPayclicked" required [(ngModel)]="item.closingBalance.amount" type="number">
+                                        <input class="form-control" name="closingBalanceAmount{{entryIdx}}" [disabled]="isPayClicked" required [(ngModel)]="item.closingBalance.amount" type="number">
                                     </div>
                                     <div class="form-group remark-block">
                                         <label>Remark<span class="text-danger">*</span></label>

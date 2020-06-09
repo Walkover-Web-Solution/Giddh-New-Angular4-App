@@ -261,7 +261,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
 
         // get default datepicker options from store
-        this.store.pipe(select(p => p.company.dateRangePickerConfig), take(2)).subscribe(a => {
+        this.store.pipe(select(storeConfig => storeConfig.company.dateRangePickerConfig), take(2)).subscribe(a => {
             if (a) {
                 this.datePickerOptions = a;
                 if (this.universalDate) {

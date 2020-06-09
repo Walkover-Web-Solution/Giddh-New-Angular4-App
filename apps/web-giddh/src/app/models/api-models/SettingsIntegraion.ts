@@ -76,6 +76,7 @@ export class AmazonSellerClass {
     public secretKey: string;
 }
 
+/** For payment request/response   */
 export class PaymentClass {
     public corpId: string;
     public userId: string;
@@ -93,6 +94,7 @@ export class PaymentClass {
     }
 }
 
+/** Payment range for request/response   */
 export class UserAmountRangeRequests {
     public amount: number;
     public otpType: string;

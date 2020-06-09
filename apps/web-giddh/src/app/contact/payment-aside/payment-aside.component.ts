@@ -41,9 +41,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public OTPsent: boolean = false;
     public countryCode: string = '';
     /** Integrated bank list array */
-    public integartedBankList$: Observable<IntegratedBankList[]>;
+    public integratedBankList$: Observable<IntegratedBankList[]>;
     /** Request object for OTP */
-    public requestObjectTogetOTP: GetOTPRequest = {
+    public requestObjectToGetOTP: GetOTPRequest = {
         bankType: '',
         urn: '',
         totalAmount: '',
@@ -52,7 +52,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     };
     /** directive to emit boolean for close model */
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
-/** Integrated bank list sh-select options */
+    /** Integrated bank list sh-select options */
     public selectIntegratedBankList: IOption[] = [];
     //Event emitter to close the Aside panel
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -75,7 +75,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     /** to check count down timer on */
     public timerOn: boolean = false;
     /** to track for OTP  */
-    public isPayclicked: boolean = false;
+    public isPayClicked: boolean = false;
     /** selected bank URN number */
     public selectedBankUrn: any;
     /** Timer reference */
@@ -100,7 +100,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.userDetails$.pipe(take(1)).subscribe(p => this.user = p);
         this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
 
-        this.integartedBankList$ = this.store.pipe(select(p => p.company.integratedBankList), takeUntil(this.destroyed$));
+        this.integratedBankList$ = this.store.pipe(select(p => p.company.integratedBankList), takeUntil(this.destroyed$));
     }
 
     /**
@@ -117,7 +117,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron||isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.initializeNewForm();
         // this.amount = this.selectedAccForPayment.closingBalance.amount;
         // get all registered account
@@ -148,7 +148,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             }
         });
 
-        this.integartedBankList$.pipe(takeUntil(this.destroyed$)).subscribe((bankList: IntegratedBankList[]) => {
+        this.integratedBankList$.pipe(takeUntil(this.destroyed$)).subscribe((bankList: IntegratedBankList[]) => {
             this.selectIntegratedBankList = [];
             if (bankList && bankList.length) {
                 bankList.forEach(item => {
@@ -166,8 +166,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.selectedAccForBulkPayment.forEach(item => {
             this.addAccountTransactionsFormObject(item);
         });
-         this.selectedAccForBulkPayment.map(item => {
-           item.remarks = '';
+        this.selectedAccForBulkPayment.map(item => {
+            item.remarks = '';
         });
 
         if (this.selectedAccForBulkPayment.length < this.totalSelectedLength) {
@@ -295,26 +295,31 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @returns {*}
      * @memberof PaymentAsideComponent
      */
-    public closePaymentModel(): any {
+    public closePaymentModel(): void {
         this.closeModelEvent.emit(true);
     }
 
+    /**
+     * API call to get integrated bank list
+     *
+     * @memberof PaymentAsideComponent
+     */
     public getIntegratedBankDetails(): void {
         this.store.dispatch(this._companyActions.getAllIntegratedBankInCompany(this.companyUniqueName));
     }
 
     /**
-     *To select bank event
+     * To select bank event
      *
-     * @param {*} event selected bank object
+     * @param {*} event Selected bank object
      * @memberof PaymentAsideComponent
      */
     public selectBank(event: IOption): void {
         this.selectedBankUrn = event.value;
         if (event) {
-            this.requestObjectTogetOTP.urn = event.value;
-            this.requestObjectTogetOTP.bankType = event.label;
-            this._companyService.getAllBankDetailsOfIntegrated(this.companyUniqueName, this.requestObjectTogetOTP.urn).subscribe(response => {
+            this.requestObjectToGetOTP.urn = event.value;
+            this.requestObjectToGetOTP.bankType = event.label;
+            this._companyService.getAllBankDetailsOfIntegrated(this.companyUniqueName, this.requestObjectToGetOTP.urn).subscribe(response => {
 
                 if (response.status === 'success') {
                     if (response.body.Status === 'SUCCESS') {
@@ -334,7 +339,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         * @memberof PaymentAsideComponent
         */
     public bulkPayVendor(): void {
-        this._companyService.bulkVendorPayment(this.companyUniqueName, this.requestObjectTogetOTP).subscribe(response => {
+        this._companyService.bulkVendorPayment(this.companyUniqueName, this.requestObjectToGetOTP).subscribe(response => {
 
             if (response.status === 'success') {
                 this._toaster.successToast(response.body);
@@ -344,9 +349,12 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         });
     }
 
-
-
-
+    /**
+     * To get total amount
+     *
+     * @param {any[]} selectedAccount Selected accounts list
+     * @memberof PaymentAsideComponent
+     */
     public getTotalAmount(selectedAccount: any[]): void {
         this.totalSelectedAccountAmount = 0;
         if (selectedAccount && selectedAccount.length) {
@@ -363,14 +371,19 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public payClicked(form: NgForm) {
-        this.isPayclicked = true;
+        this.isPayClicked = true;
         this.prepareRequestObject();
         this.bulkPayVendor();
     }
 
-    public prepareRequestObject() {
-        this.requestObjectTogetOTP.bankPaymentTransactions = [];
-        this.requestObjectTogetOTP.totalAmount = String(this.totalSelectedAccountAmount);
+    /**
+     * To prepare object for UI
+     *
+     * @memberof PaymentAsideComponent
+     */
+    public prepareRequestObject(): void {
+        this.requestObjectToGetOTP.bankPaymentTransactions = [];
+        this.requestObjectToGetOTP.totalAmount = String(this.totalSelectedAccountAmount);
         this.selectedAccForBulkPayment.forEach(item => {
             let transaction: BankTransactionForOTP = {
                 amount: '',
@@ -380,7 +393,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             transaction.amount = item.closingBalance.amount;
             transaction.remarks = item.remarks;
             transaction.vendorUniqueName = item.uniqueName;
-            this.requestObjectTogetOTP.bankPaymentTransactions.push(transaction);
+            this.requestObjectToGetOTP.bankPaymentTransactions.push(transaction);
         });
     }
 
@@ -389,8 +402,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      *
      * @memberof PaymentAsideComponent
      */
-    public clickedCancelOtp() {
-        this.isPayclicked = false;
+    public clickedCancelOtp(): void {
+        this.isPayClicked = false;
         this.timerOn = false;
         clearTimeout(this.countDownTimerRef);
     }
@@ -425,12 +438,12 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         }
     }
 
-/**
- *To initialize form
- *
- * @memberof PaymentAsideComponent
- */
-public initializeNewForm(): void {
+    /**
+     *To initialize form
+     *
+     * @memberof PaymentAsideComponent
+     */
+    public initializeNewForm(): void {
         this.addAccountBulkPaymentForm = this.formBuilder.group({
             bankType: [''],
             urn: [''],
@@ -445,28 +458,28 @@ public initializeNewForm(): void {
         });
     }
 
-/**
- * Add account transaction object
- *
- * @param {*} value item need to add
- * @returns
- * @memberof PaymentAsideComponent
- */
-public addAccountTransactionsFormObject(value: any): any {    // commented code because we no need GSTIN No. to add new address
+    /**
+     * Add account transaction object
+     *
+     * @param {*} value item need to add
+     * @returns
+     * @memberof PaymentAsideComponent
+     */
+    public addAccountTransactionsFormObject(value: any): any {    // commented code because we no need GSTIN No. to add new address
         // if (value && !value.startsWith(' ', 0)) {
         const transactions = this.addAccountBulkPaymentForm.get('bankPaymentTransactions') as FormArray;
         transactions.push(this.initialAccountTransactionsForm(value));
         return;
     }
 
-/**
- * Initialize account transaction form
- *
- * @param {*} val
- * @returns {FormGroup}
- * @memberof PaymentAsideComponent
- */
-public initialAccountTransactionsForm(val: any): FormGroup {
+    /**
+     * Initialize account transaction form
+     *
+     * @param {*} val
+     * @returns {FormGroup}
+     * @memberof PaymentAsideComponent
+     */
+    public initialAccountTransactionsForm(val: any): FormGroup {
         let transactionsFields = this.formBuilder.group({
             remarks: ['', Validators.compose([Validators.required])],
             amount: [''],
@@ -479,10 +492,14 @@ public initialAccountTransactionsForm(val: any): FormGroup {
         }
         return transactionsFields;
     }
-
-
-    public removeTransactionsDetailsForm(i: number) {
+    /**
+     * To remove tansaction form row entry
+     *
+     * @param {number} Index of selected item
+     * @memberof PaymentAsideComponent
+     */
+    public removeTransactionsDetailsForm(index: number) {
         const transactions = this.addAccountBulkPaymentForm.get('bankPaymentTransactions') as FormArray;
-        transactions.removeAt(i);
+        transactions.removeAt(index);
     }
 }
