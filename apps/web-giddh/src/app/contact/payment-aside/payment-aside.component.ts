@@ -169,15 +169,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.selectedAccForBulkPayment.map(item => {
             item.remarks = '';
         });
-
-        if (this.selectedAccForBulkPayment.length < this.totalSelectedLength) {
-            let unSelected: number = this.totalSelectedLength - this.selectedAccForBulkPayment.length;
-            let totalSelected: number = this.selectedAccForBulkPayment.length;
-            if (totalSelected && unSelected) {
-                this._toaster.infoToast(`${unSelected} out of ${totalSelected} transactions could not be processed as bank details of those accounts are not updated.`);
-            }
-
-        }
         this.getIntegratedBankDetails();
 
     }

@@ -769,13 +769,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 elementRef.classList.remove('error-box');
             }
         }
-        //  else if(isUpdate && item && elementRef && this.registeredAccount.userAmountRanges) {
-        //      if (this.checkIsAmountRepeat(this.registeredAccount.userAmountRanges, this.registeredAccount.userAmountRanges[index].amount)) {
-        //         elementRef.classList.add('error-box');
-        //     } else {
-        //         elementRef.classList.remove('error-box');
-        //     }
-        // }
     }
 
     /**
