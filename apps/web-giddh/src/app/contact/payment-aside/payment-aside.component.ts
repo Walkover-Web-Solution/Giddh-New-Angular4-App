@@ -75,6 +75,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public selectedBankUrn: any;
     public countDownTimerRef: any;
     public totalAvailableBalance: any;
+    public totalSelectedLength: number;
     public addAccountBulkPaymentForm: FormGroup;
     constructor(
         private formBuilder: FormBuilder,
@@ -158,8 +159,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
            item.remarks = '';
         });
 
-        if (this.selectedAccForBulkPayment.length < this.selectedAccForPayment.length) {
-            let unSelected: number = this.selectedAccForPayment.length - this.selectedAccForBulkPayment.length;
+        if (this.selectedAccForBulkPayment.length < this.totalSelectedLength) {
+            let unSelected: number = this.totalSelectedLength - this.selectedAccForBulkPayment.length;
             let totalSelected: number = this.selectedAccForBulkPayment.length;
             if (totalSelected && unSelected) {
                 this._toaster.infoToast(`${unSelected} out of ${totalSelected} transactions could not be processed as bank details of those accounts are not updated.`);
@@ -180,6 +181,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes) {
             if (changes.selectedAccForBulkPayment && changes.selectedAccForBulkPayment.currentValue) {
+                this.totalSelectedLength = changes.selectedAccForBulkPayment.currentValue.length;
                 this.selectedAccForBulkPayment = this.selectedAccForBulkPayment.filter(item => {
                     return item.accountBankDetails && item.accountBankDetails.bankAccountNo !== '' && item.accountBankDetails.bankName !== '' && item.accountBankDetails.ifsc !== '';
                 });
@@ -302,7 +304,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             this.requestObjectTogetOTP.urn = event.value;
             this.requestObjectTogetOTP.bankType = event.label;
             this._companyService.getAllBankDetailsOfIntegrated(this.companyUniqueName, this.requestObjectTogetOTP.urn).subscribe(response => {
-                console.log(response)
+
                 if (response.status === 'success') {
                     if (response.body.Status === 'SUCCESS') {
                         this.totalAvailableBalance = response.body.effectiveBal;
@@ -322,7 +324,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         */
     public bulkPayVendor(): void {
         this._companyService.bulkVendorPayment(this.companyUniqueName, this.requestObjectTogetOTP).subscribe(response => {
-            console.log('bulkVendorPayment', response);
+
             if (response.status === 'success') {
                 this._toaster.successToast(response.body);
             } else if (response.status === 'error') {
@@ -338,7 +340,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.totalSelectedAccountAmount = 0;
         if (selectedAccount && selectedAccount.length) {
             this.totalSelectedAccountAmount = selectedAccount.reduce((prev, cur) => {
-                console.log(prev);
                 return prev + cur.closingBalanceAmount;
             }, 0);
         }
@@ -351,7 +352,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public payClicked(form: NgForm) {
-        console.log(form);
         this.isPayclicked = true;
         this.prepareRequestObject();
         this.bulkPayVendor();
@@ -371,7 +371,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             transaction.vendorUniqueName = item.uniqueName;
             this.requestObjectTogetOTP.bankPaymentTransactions.push(transaction);
         });
-        console.log(this.requestObjectTogetOTP);
     }
 
     /**
@@ -409,11 +408,10 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         }
 
         if (!this.timerOn) {
-            console.log('Timer Do validate stuff here');
+
             this.timerOn = false;
             return;
         }
-        console.log('Time out');
     }
 
 
@@ -458,6 +456,5 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public removeTransactionsDetailsForm(i: number) {
         const transactions = this.addAccountBulkPaymentForm.get('bankPaymentTransactions') as FormArray;
         transactions.removeAt(i);
-        console.log(this.addAccountBulkPaymentForm);
     }
 }

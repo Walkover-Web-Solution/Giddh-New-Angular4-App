@@ -15,7 +15,8 @@ import {
     PaymentClass,
     RazorPayClass,
     SmsKeyClass,
-    UserAmountRangeRequests
+    UserAmountRangeRequests,
+    IntegratedBankList,
 } from '../../models/api-models/SettingsIntegraion';
 import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -23,7 +24,6 @@ import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { TabsetComponent, ModalDirective } from "ngx-bootstrap";
 import { CompanyActions } from "../../actions/company.actions";
-import { IRegistration } from "../../models/interfaces/registration.interface";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { CurrentPage } from '../../models/api-models/Common';
 import { GeneralActions } from '../../actions/general/general.actions';
@@ -78,6 +78,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     private isSellerUpdate: Observable<boolean> = observableOf(false);
     /** user who is logged in currently */
     private loggedInUserEmail: string;
+    public integratedBankList: IntegratedBankList;
 
 
     @Input() private selectedTabParent: number;
@@ -98,19 +99,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         ];
     public amountUpToList: IOption[] =
         [
-            { label: "Max limit as per Bank", value: "true" },
-            { label: "Custom", value: "false" },
+            { label: "Max limit as per Bank", value: "max" },
+            { label: "Custom", value: "custome" },
         ];
-    // public approvalNameList: IOption[] =
-    //     [
-    //         { label: "rakesh", value: "1234" },
-    //         { label: "rakesh2", value: "1235" },
-    //         { label: "rakesh", value: "1234" },
-    //         { label: "rakesh3", value: "1235" }
-    //     ];
     public approvalNameList: IOption[] = [];
     public selectedCompanyUniqueName: string;
-
+    public isCreateInvalid: boolean = false;
 
     constructor(
         private router: Router,
@@ -244,15 +238,22 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this.openNewRegistration = true;
 
                 }
-                console.log('get allbank pre', this.registeredAccount);
                 if (this.registeredAccount && this.registeredAccount.length) {
                     this.registeredAccount.map(item => {
-                        if (item && !item.userAmountRangeRequests) {
-                            item.userAmountRangeRequests = [this.getBlankAmountRangeRow()]
+                        if (item && !item.userAmountRanges) {
+                            item.userAmountRanges = [this.getBlankAmountRangeRow()]
                         }
                     });
                 }
-                console.log('get allbank', this.registeredAccount);
+                if (this.registeredAccount) {
+                    this.registeredAccount.map(item => {
+                        item.userAmountRanges.map(element => {
+                            element.maxBankLimit =(typeof element.maxBankLimit === "boolean" && element.maxBankLimit) ? 'max' : 'custom';
+                        });
+                    });
+                }
+                // please ignore this for test env
+                console.log(this.registeredAccount);
             }
         });
 
@@ -285,8 +286,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     arr.push({ label: value[0].userName, value: value[0].uniqueName, additional: value });
                 });
                 this.approvalNameList = _.sortBy(arr, ['label']);
-                console.log(this.approvalNameList);
-
             }
         });
     }
@@ -330,10 +329,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public onSubmitPaymentform(f: NgForm) {
         if (f.valid) {
-            console.log('form:', f.value);
-            console.log('object send', this.paymentFormObj);
-            this.store.dispatch(this.settingsIntegrationActions.SavePaymentInfo(this.paymentFormObj));
-            // this.clearForm();
+            let requestObject = _.cloneDeep(this.paymentFormObj)
+            requestObject.userAmountRanges.map(element => {
+                element.maxBankLimit = (element.maxBankLimit === 'max') ? 'true' : 'false';
+            });
+
+            this.store.dispatch(this.settingsIntegrationActions.SavePaymentInfo(requestObject));
+            // this.clearForm();s
         }
     }
 
@@ -590,15 +592,27 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         }
     }
 
-    public deRegisterForm(regAcc: IRegistration) {
-        this.store.dispatch(this.settingsIntegrationActions.RemovePaymentInfo(regAcc.iciciCorporateDetails.URN));
+    public deRegisterForm(regAcc: IntegratedBankList) {
+        this.store.dispatch(this.settingsIntegrationActions.RemovePaymentInfo(regAcc.URN));
     }
 
-    public updateICICDetails(regAcc: IRegistration, index) {
+    /**
+     * To update integrated bank details
+     *
+     * @param {IntegratedBankList} regAcc
+     * @param {number} index
+     * @memberof SettingIntegrationComponent
+     */
+    public updateICICDetails(regAcc: IntegratedBankList, index: number) {
         this.selecetdUpdateIndex = index;
+        let registeredAccountObj = _.cloneDeep(regAcc);
+        registeredAccountObj.userAmountRanges.map(item => {
+            item.maxBankLimit = item.maxBankLimit === "max" ? 'true' : 'false';
+        });
         let requestData = {
-            URN: regAcc.iciciCorporateDetails.URN,
-            accountUniqueName: regAcc.account.uniqueName
+            URN: registeredAccountObj.URN,
+            accountUniqueName: registeredAccountObj.account.uniqueName,
+            userAmountRanges: registeredAccountObj.userAmountRanges
         }
         this.store.dispatch(this.settingsIntegrationActions.UpdatePaymentInfo(requestData));
         this.paymentFormObj = new PaymentClass();
@@ -694,46 +708,82 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {number} index index number
      * @memberof SettingIntegrationComponent
      */
-    public selectedMaxOrCustom(event: IOption, index: number, isUpdate: boolean): void {
-        console.log(event, index);
-        if (this.paymentFormObj && this.paymentFormObj.userAmountRangeRequests && !isUpdate) {
-            if (event.value === 'true') {
-                delete this.paymentFormObj.userAmountRangeRequests[index].amount;
-            } else {
-                this.paymentFormObj.userAmountRangeRequests[index].amount = null;
-                this.isMaxLimitSelected = false;
-            }
-            this.changeDetectionRef.detectChanges();
+    public selectedMaxOrCustom( index: number, isUpdate: boolean, parentIndex?: number,): void {
+        if (!isUpdate && this.paymentFormObj.userAmountRanges) {
+            this.paymentFormObj.userAmountRanges[index].amount = null;
+        }
+        if (isUpdate && this.registeredAccount &&  this.registeredAccount[parentIndex].userAmountRanges) {
+            this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
         }
     }
 
-    public maxLimitOrCustomChanged(event: any, index: number): void {
-        console.log('limit changhed', event);
-        if (event === 'true' && this.checkIsMaxBankLimitSelected(this.paymentFormObj.userAmountRangeRequests)) {
-            this.paymentFormObj.userAmountRangeRequests[index].maxBankLimit = "false"
-            event = false;
+    public maxLimitOrCustomChanged( event: any, index: number, isUpdate: boolean, parentIndex?: number,): void {
+        if (event === 'max' && !isUpdate && this.checkIsMaxBankLimitSelected(this.paymentFormObj.userAmountRanges, index)) {
+            this.paymentFormObj.userAmountRanges[index].maxBankLimit = "custom";
+            this.paymentFormObj.userAmountRanges[index].amount = null;
+            this.toasty.infoToast('You can not select max bank limit more than 1');
+        }
+        if (event === 'max' && isUpdate && this.checkIsMaxBankLimitSelected(this.registeredAccount[parentIndex].userAmountRanges, index)) {
+            this.registeredAccount[parentIndex].userAmountRanges[index].maxBankLimit = "custom";
+            this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
             this.toasty.infoToast('You can not select max bank limit more than 1');
         }
         this.changeDetectionRef.detectChanges();
-        // if (this.paymentFormObj && this.paymentFormObj.userAmountRangeRequests) {
-        //     if (this.checkIsMaxBankLimitSelected(this.paymentFormObj.userAmountRangeRequests)) {
-        //         this.toasty.infoToast('You can not select max bank limit more than 1');
-        //         this.paymentFormObj.userAmountRangeRequests[index].maxBankLimit = "false"
+    }
+
+    public checkIsMaxBankLimitSelected(itemList: any[], index: number): boolean {
+
+        let selected: boolean = false;
+        if (itemList) {
+            selected = itemList.some((item, indx) => {
+                if (index !== indx && item.maxBankLimit) {
+                    return item.maxBankLimit === 'max';
+                }
+            }
+            );
+        }
+        return selected;
+    }
+
+    /**
+   * To check if duplicate amount entered
+   *
+   * @param {*} item row object
+   * @param {number} index index number
+   * @memberof SettingIntegrationComponent
+   */
+    public changeAmount(item: any, index: number, ele: HTMLInputElement, isUpdate: boolean) {
+        if (!isUpdate && item && ele && this.paymentFormObj) {
+            if (this.checkIsAmuntrepeat(this.paymentFormObj.userAmountRanges, this.paymentFormObj.userAmountRanges[index].amount, index)) {
+                ele.classList.add('error-box');
+            } else {
+                ele.classList.remove('error-box');
+            }
+        }
+        //  else if(isUpdate && item && ele && this.registeredAccount.userAmountRanges) {
+        //      if (this.checkIsAmuntrepeat(this.registeredAccount.userAmountRanges, this.registeredAccount.userAmountRanges[index].amount)) {
+        //         ele.classList.add('error-box');
+        //     } else {
+        //         ele.classList.remove('error-box');
         //     }
         // }
-
     }
 
-    public checkIsMaxBankLimitSelected(itemList: any[]): boolean {
-        let selected: boolean = true;
-        // if (itemList) {
-        //     itemList.forEach(item => {
+    public checkIsAmuntrepeat(itemList: any[], value: any, index: number): boolean {
 
-        //     });
-        // }
-        return selected = itemList.some((item) => item.maxBankLimit === "true");
-
+        let selected: boolean = false;
+        if (itemList) {
+            selected = itemList.some((item, indx) => {
+                if (index !== indx && item.amount && value) {
+                    return item.amount === value;
+                }
+            }
+            );
+        }
+        this.isCreateInvalid = selected;
+        return selected;
     }
+
 
     /**
      * Add new blank amount range row
@@ -741,12 +791,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public addNewAmountRangeRow(indexUpdateObj?: number): void {
-        if (this.paymentFormObj && !indexUpdateObj && this.paymentFormObj.userAmountRangeRequests) {
-            this.paymentFormObj.userAmountRangeRequests.push(this.getBlankAmountRangeRow());
+        if (this.paymentFormObj && !indexUpdateObj && this.paymentFormObj.userAmountRanges) {
+            this.paymentFormObj.userAmountRanges.push(this.getBlankAmountRangeRow());
         }
         if (indexUpdateObj && this.registeredAccount) {
-            if (this.registeredAccount[indexUpdateObj - 1] && this.registeredAccount[indexUpdateObj - 1].userAmountRangeRequests) {
-                this.registeredAccount[indexUpdateObj - 1].userAmountRangeRequests.push(this.getBlankAmountRangeRow());
+            if (this.registeredAccount[indexUpdateObj - 1] && this.registeredAccount[indexUpdateObj - 1].userAmountRanges) {
+                this.registeredAccount[indexUpdateObj - 1].userAmountRanges.push(this.getBlankAmountRangeRow());
             }
         }
     }
@@ -758,14 +808,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public getBlankAmountRangeRow(): any {
-        let userAmountRangeRequests = {
-            amount: 0,
+        let userAmountRanges = {
+            amount: null,
             otpType: '',
             approvalUniqueName: '',
-            maxBankLimit: 'false',
+            maxBankLimit: 'custom',
         }
         // return new UserAmountRangeRequests();
-        return userAmountRangeRequests;
+        return userAmountRanges;
     }
     /**
      * Delete amount range row
@@ -775,37 +825,26 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public deleteAmountRangeRow(item: any, indexUpdateList?: number): void {
         if (item && !indexUpdateList) {
-            let itemIndx = this.paymentFormObj.userAmountRangeRequests.findIndex((element) => element === item);
+            let itemIndx = this.paymentFormObj.userAmountRanges.findIndex((element) => element === item);
             if (itemIndx > -1) {
-                this.paymentFormObj.userAmountRangeRequests.splice(itemIndx, 1);
+                this.paymentFormObj.userAmountRanges.splice(itemIndx, 1);
             }
         }
         if (item && indexUpdateList) {
-            let itemIndxOfUpdate = this.registeredAccount[indexUpdateList - 1].userAmountRangeRequests.findIndex((element) => element === item);
+            let itemIndxOfUpdate = this.registeredAccount[indexUpdateList - 1].userAmountRanges.findIndex((element) => element === item);
             if (itemIndxOfUpdate > -1) {
-                this.registeredAccount[indexUpdateList - 1].userAmountRangeRequests.splice(itemIndxOfUpdate, 1);
+                this.registeredAccount[indexUpdateList - 1].userAmountRanges.splice(itemIndxOfUpdate, 1);
             }
         }
     }
 
-    public selectedOtpType(event: IOption, index: number) {
-        console.log(event, index);
-        // if(event && this.paymentFormObj && this.paymentFormObj.userAmountRangeRequests && event.value === 'BANK' ) {
-        // this.paymentFormObj.userAmountRangeRequests[index].approvalUniqueName = '';
+    // public selectedOtpType(event: IOption, index: number) {
+    //     console.log(event, index);
+    //     // if(event && this.paymentFormObj && this.paymentFormObj.userAmountRanges && event.value === 'BANK' ) {
+    //     // this.paymentFormObj.userAmountRanges[index].approvalUniqueName = '';
 
-        // }
-    }
-
-    /**
-     * To check if duplicate amount entered
-     *
-     * @param {*} item row object
-     * @param {number} index index number
-     * @memberof SettingIntegrationComponent
-     */
-    public changeAmount(item: any, index: number) {
-
-    }
+    //     // }
+    // }
 
     /**
      * To clear/reset form
@@ -819,7 +858,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.paymentFormObj.accountNo = "";
         this.paymentFormObj.aliasId = "";
         this.paymentFormObj.accountUniqueName = "";
-        this.paymentFormObj.userAmountRangeRequests = [this.getBlankAmountRangeRow()];
+        this.paymentFormObj.userAmountRanges = [this.getBlankAmountRangeRow()];
         this.forceClear$ = observableOf({ status: true });
     }
 }

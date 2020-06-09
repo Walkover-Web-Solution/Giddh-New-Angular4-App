@@ -81,7 +81,7 @@ export class PaymentClass {
     public userId: string;
     public accountNo: string;
     public aliasId: string;
-    public userAmountRangeRequests: UserAmountRangeRequests[] = [new UserAmountRangeRequests()]
+    public userAmountRanges: UserAmountRangeRequests[] = [new UserAmountRangeRequests()]
     public accountUniqueName: string;
     constructor() {
         this.corpId = '';
@@ -99,9 +99,41 @@ export class UserAmountRangeRequests {
     public approvalUniqueName: string;
     public maxBankLimit: string;
       constructor() {
-          this.amount = 0;
+          this.amount = null;
           this.otpType = 'BANK';
           this.approvalUniqueName = '';
-          this.maxBankLimit = "true";
+          this.maxBankLimit = "max";
       }
 }
+
+
+
+
+    export class Account {
+        name: string;
+        uniqueName: string;
+    }
+
+    export class UserAmountRange {
+        amount?: number;
+        otpType: string;
+        approvalUniqueName?: any;
+        approvalDetails?: any;
+        maxBankLimit: boolean;
+    }
+
+// IRegistration
+    export class IntegratedBankList {
+        corpId: string;
+        userId: string;
+        accountNo: string;
+        accountUniqueName?: any;
+        account: Account;
+        aliasId: string;
+        bankName?: any;
+        userAmountRanges: UserAmountRange[];
+        message?: any;
+        URN: string;
+    }
+
+
