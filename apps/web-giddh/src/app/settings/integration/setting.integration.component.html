@@ -485,7 +485,7 @@
                                     <input type="text" class="form-control" disabled placeholder="Registered" name="approvalUniqueName{{index}}" [(ngModel)]="item.approvalUniqueName">
                                 </div>
                             </div>
-                            <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0" *ngIf="index">
+                            <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0">
                                 <ng-container *ngIf="index===0"> <label class="d-flex">&nbsp;</label></ng-container>
                                 <div class="mt-15">
                                     <i (click)="deleteAmountRangeRow(item, ind+1)" class="icon-trash cursor-pointer"></i>
@@ -617,7 +617,7 @@
                                     <input type="text" class="form-control" disabled placeholder="Registered" name="approvalUniqueName{{index}}" [(ngModel)]="item.approvalUniqueName">
                                 </div>
                             </div>
-                            <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0" *ngIf="index">
+                            <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0">
                                 <label *ngIf="index===0" class="d-flex">&nbsp;</label>
                                 <div class="mt-1">
                                     <i (click)="deleteAmountRangeRow(item)" class="icon-trash cursor-pointer"></i>

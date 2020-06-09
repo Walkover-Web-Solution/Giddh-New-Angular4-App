@@ -248,7 +248,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 if (this.registeredAccount) {
                     this.registeredAccount.map(item => {
                         item.userAmountRanges.map(element => {
-                            element.maxBankLimit =(typeof element.maxBankLimit === "boolean" && element.maxBankLimit) ? 'max' : 'custom';
+                            element.maxBankLimit = (typeof element.maxBankLimit === "boolean" && element.maxBankLimit) ? 'max' : 'custom';
                         });
                     });
                 }
@@ -708,16 +708,16 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {number} index index number
      * @memberof SettingIntegrationComponent
      */
-    public selectedMaxOrCustom( index: number, isUpdate: boolean, parentIndex?: number,): void {
+    public selectedMaxOrCustom(index: number, isUpdate: boolean, parentIndex?: number, ): void {
         if (!isUpdate && this.paymentFormObj.userAmountRanges) {
             this.paymentFormObj.userAmountRanges[index].amount = null;
         }
-        if (isUpdate && this.registeredAccount &&  this.registeredAccount[parentIndex].userAmountRanges) {
+        if (isUpdate && this.registeredAccount && this.registeredAccount[parentIndex].userAmountRanges) {
             this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
         }
     }
 
-    public maxLimitOrCustomChanged( event: any, index: number, isUpdate: boolean, parentIndex?: number,): void {
+    public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, parentIndex?: number, ): void {
         if (event === 'max' && !isUpdate && this.checkIsMaxBankLimitSelected(this.paymentFormObj.userAmountRanges, index)) {
             this.paymentFormObj.userAmountRanges[index].maxBankLimit = "custom";
             this.paymentFormObj.userAmountRanges[index].amount = null;
@@ -825,16 +825,26 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public deleteAmountRangeRow(item: any, indexUpdateList?: number): void {
         if (item && !indexUpdateList) {
-            let itemIndx = this.paymentFormObj.userAmountRanges.findIndex((element) => element === item);
-            if (itemIndx > -1) {
-                this.paymentFormObj.userAmountRanges.splice(itemIndx, 1);
+            if (this.paymentFormObj.userAmountRanges.length > 1) {
+                let itemIndx = this.paymentFormObj.userAmountRanges.findIndex((element) => element === item);
+                if (itemIndx > -1) {
+                    this.paymentFormObj.userAmountRanges.splice(itemIndx, 1);
+                }
+            } else {
+                this.toasty.infoToast('At least 1 row is required')
             }
+
         }
         if (item && indexUpdateList) {
-            let itemIndxOfUpdate = this.registeredAccount[indexUpdateList - 1].userAmountRanges.findIndex((element) => element === item);
-            if (itemIndxOfUpdate > -1) {
-                this.registeredAccount[indexUpdateList - 1].userAmountRanges.splice(itemIndxOfUpdate, 1);
+            if (this.registeredAccount[indexUpdateList - 1].userAmountRanges.length > 1) {
+                let itemIndxOfUpdate = this.registeredAccount[indexUpdateList - 1].userAmountRanges.findIndex((element) => element === item);
+                if (itemIndxOfUpdate > -1) {
+                    this.registeredAccount[indexUpdateList - 1].userAmountRanges.splice(itemIndxOfUpdate, 1);
+                }
+            } else {
+                this.toasty.infoToast('At least 1 row is required')
             }
+
         }
     }
 
