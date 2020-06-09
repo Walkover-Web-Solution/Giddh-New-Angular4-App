@@ -8,7 +8,7 @@
         <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="showExportLedgerModal()">Export</a></li>
     </ul>
 </div>
-<section class="container ledger-section" *ngIf="!isShowLedgerColumnarReportTable">
+<section class="container ledger-section" [hidden]="isShowLedgerColumnarReportTable">
     <!-- region ledger table-->
     <div class="ledg-head transactions-page mt-2 pos-rel">
         <!-- region ledger header -->
