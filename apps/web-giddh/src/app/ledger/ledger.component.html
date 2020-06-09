@@ -148,15 +148,15 @@
         <!-- endregion -->
         <div class="custom-tabs mt-2 mb-2">
             <ul class="nav nav-tabs pt-0">
-                <li [ngClass]="{'active': visibleTransactionTypeMobile === 'all'}">
-                    <a href="javascript:void(0)" (click)="toggleMobileTransactionType('all');">All</a>
-                </li>
-                <li role="presentation" [ngClass]="{'active': visibleTransactionTypeMobile === 'debit'}">
-                    <a href="javascript:void(0)" (click)="toggleMobileTransactionType('debit')">Debit</a>
-                </li>
-                <li role="presentation" [ngClass]="{'active': visibleTransactionTypeMobile === 'credit'}">
-                    <a href="javascript:void(0)" (click)="toggleMobileTransactionType('credit')">Credit</a>
-                </li>
+                    <li [ngClass]="{'active': visibleTransactionTypeMobile === 'all'}">
+                        <a href="javascript:void(0)" (click)="toggleMobileTransactionType('all');">All</a>
+                    </li>
+                    <li role="presentation" [ngClass]="{'active': visibleTransactionTypeMobile === 'debit'}">
+                        <a href="javascript:void(0)" (click)="toggleMobileTransactionType('debit')">Debit</a>
+                    </li>
+                    <li role="presentation" [ngClass]="{'active': visibleTransactionTypeMobile === 'credit'}">
+                        <a href="javascript:void(0)" (click)="toggleMobileTransactionType('credit')">Credit</a>
+                    </li>
             </ul>
         </div>
 
@@ -463,11 +463,11 @@
                 <table class="width100 h-table table-head hidden-xs">
                     <thead>
                         <tr class="t-h-bg1">
-                            <th class="col-xs-3">
+                            <th class="col-xs-3 col-md-3 col-lg-3">
                                 <span class="cp">Date</span>
                             </th>
-                            <th class="col-xs-5">Particular</th>
-                            <th class="col-xs-4 text-right">Amount</th>
+                            <th class="col-xs-5 col-md-6 col-lg-6">Particular</th>
+                            <th class="col-xs-4 col-md-3 col-lg-3 text-right">Amount</th>
                         </tr>
                     </thead>
                 </table>
@@ -483,11 +483,11 @@
                             <!--<input type="checkbox" [(ngModel)]="debitSelectAll" (click)="selectAllEntries($event, 'debit')">-->
                             <!--</td>-->
 
-                            <td class="col-xs-3" data-title="Date">
+                            <td class="col-xs-3 col-md-3 col-lg-3" data-title="Date">
                                 <input type="checkbox" [(ngModel)]="debitSelectAll" *ngIf="checkedTrxWhileHovering.length > 0" (click)="selectAllEntries($event, 'debit')">
                             </td>
-                            <td data-title="Particular" class="col-xs-5">To Balance B/F</td>
-                            <td data-title="Amount" class="col-xs-4 text-right">
+                            <td data-title="Particular" class="col-xs-5 col-md-6 col-lg-6">To Balance B/F</td>
+                            <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 text-right">
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'" class="">
                                     {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.forwardedBalance?.amount  | giddhCurrency }}
                                 </span><br>
@@ -508,11 +508,11 @@
                             <!--<td class="col-xs-1 text-center"><input type="checkbox" [(ngModel)]="debitSelectAll"-->
                             <!--(click)="selectAllEntries($event, 'debit')"></td>-->
 
-                            <td class="col-xs-3" data-title="Select All">
+                            <td class="col-xs-3 col-md-3 col-lg-3" data-title="Select All">
                                 <input type="checkbox" [(ngModel)]="debitSelectAll" *ngIf="checkedTrxWhileHovering.length > 0" (click)="selectAllEntries($event, 'debit')">
                             </td>
-                            <td class="col-xs-5"></td>
-                            <td class="col-xs-4"></td>
+                            <td class="col-xs-5 col-md-6 col-lg-6"></td>
+                            <td class="col-xs-4 col-md-3 col-lg-3"></td>
                         </tr>
                         <!-- endregion -->
 
@@ -524,7 +524,7 @@
                             <!---->
                             <!--</td>-->
 
-                            <td class="col-xs-3" data-title="Date">
+                            <td class="col-xs-3 col-md-3 col-lg-3" data-title="Date">
 
                                 <div class="d-flex align-items-center">
                                     <span style="float: left">
@@ -538,7 +538,7 @@
 
                             </td>
 
-                            <td class="col-xs-5" data-title="Particular">
+                            <td class="col-xs-5 col-md-6 col-lg-6" data-title="Particular">
                                 <div class="d-flex align-items-center justify-content-between">
 
                                     <div class="ellp">
@@ -557,7 +557,7 @@
                                 </div>
                             </td>
 
-                            <td class="col-xs-4 pos-rel text-right" data-title="Amount">
+                            <td class="col-xs-4 col-md-3 col-lg-3 pos-rel text-right" data-title="Amount">
                                 {{ txn.currencySymbol }}{{ txn.amount | giddhCurrency }}
 
                                 <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
@@ -580,7 +580,7 @@
                                     <tbody class="ledger-main">
                                         <tr class="ledger-row" container="body">
 
-                                            <td class="col-xs-3 no-leftBorder" data-title="Date">
+                                            <td class="col-xs-3 col-md-3 col-lg-3 no-leftBorder" data-title="Date">
                                                 <div class="d-flex align-items-center">
                                                     <span class="ledger-checkbox" style="float: left">
                                                         <!--<input type="checkbox"/>-->
@@ -591,7 +591,7 @@
                                                 </div>
                                             </td>
 
-                                            <td data-title="Particular" class="col-xs-5 select2-parent select2-ledger" (click)="bs.hide();" (mousedown)="showNewLedgerEntryPopup(txn);">
+                                            <td data-title="Particular" class="col-xs-5 col-md-6 col-lg-6 select2-parent select2-ledger" (click)="bs.hide();" (mousedown)="showNewLedgerEntryPopup(txn);">
 
                                                 <div class="ledger-account-label d-flex">
                                                     <span *ngIf="( (!shDebit.isOpen && txn.particular) ||
@@ -633,7 +633,7 @@
 
                                             </td>
 
-                                            <td data-title="Amount" class="col-xs-4 pos-rel">
+                                            <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 pos-rel">
                                                 <input class="form-control alR" type="text" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" [(ngModel)]="txn.amount" (input)="handleAmountInput(txn);" (click)="showNewLedgerEntryPopup(txn);blankLedgerAmountClick()">
                                             </td>
 
@@ -667,11 +667,11 @@
                 <table class="width100 h-table hidden-xs">
                     <thead>
                         <tr class="t-h-bg1">
-                            <th class="col-xs-3">
+                            <th class="col-xs-3 col-md-3 col-lg-3">
                                 <span class="cp">Date</span>
                             </th>
-                            <th class="col-xs-5">Particular</th>
-                            <th class="col-xs-4 text-right">Amount</th>
+                            <th class="col-xs-5 col-md-6 col-lg-6">Particular</th>
+                            <th class="col-xs-4 col-md-3 col-lg-3 text-right">Amount</th>
                         </tr>
                     </thead>
                 </table>
@@ -687,11 +687,11 @@
                             <!--<input type="checkbox" [(ngModel)]="creditSelectAll" (click)="selectAllEntries($event,'credit')">-->
                             <!--</td>-->
 
-                            <td class="col-xs-3" data-title="Date">
+                            <td class="col-xs-3 col-md-3 col-lg-3" data-title="Date">
                                 <input type="checkbox" [(ngModel)]="creditSelectAll" *ngIf="checkedTrxWhileHovering.length > 0" (click)="selectAllEntries($event,'credit')">
                             </td>
-                            <td data-title="B/F Balance" class="col-xs-5">By Balance B/F</td>
-                            <td data-title="Amount" class="col-xs-4 text-right">
+                            <td data-title="B/F Balance" class="col-xs-5 col-md-6 col-lg-6">By Balance B/F</td>
+                            <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 text-right">
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
                                     {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.forwardedBalance?.amount | giddhCurrency}}
                                 </span><br>
@@ -710,11 +710,11 @@
                             <!--<td class="col-xs-1 text-center"><input type="checkbox" [(ngModel)]="creditSelectAll"-->
                             <!--(click)="selectAllEntries($event,'credit')"></td>-->
 
-                            <td class="col-xs-3">
+                            <td class="col-xs-3 col-md-3 col-lg-3">
                                 <input type="checkbox" [(ngModel)]="creditSelectAll" *ngIf="checkedTrxWhileHovering.length > 0" (click)="selectAllEntries($event,'credit')">
                             </td>
-                            <td class="col-xs-5"></td>
-                            <td class="col-xs-4">
+                            <td class="col-xs-5 col-md-6 col-lg-6"></td>
+                            <td class="col-xs-4 col-md-3 col-lg-3">
                             </td>
                         </tr>
                         <!-- endregion -->
@@ -727,7 +727,7 @@
                             <!---->
                             <!--</td>-->
 
-                            <td class="col-xs-3" data-title="Date">
+                            <td class="col-xs-3 col-md-3 col-lg-3" data-title="Date">
 
                                 <div class="d-flex align-items-center">
                                     <span class="ledger-checkbox" style="float: left">
@@ -743,7 +743,7 @@
 
                             </td>
 
-                            <td class="col-xs-5" data-title="Particular">
+                            <td class="col-xs-5 col-md-6 col-lg-6" data-title="Particular">
 
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="ellp">
@@ -762,7 +762,7 @@
                                 </div>
                             </td>
 
-                            <td data-title="Amount" class="col-xs-4 pos-rel text-right">
+                            <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 pos-rel text-right">
                                 {{ txn.currencySymbol }} {{txn.amount | giddhCurrency}}
                                 <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ txn.convertedCurrencySymbol }}{{ txn.convertedAmount | giddhCurrency}}
@@ -790,7 +790,7 @@
                                             <!---->
                                             <!--</td>-->
 
-                                            <td class="col-xs-3" data-title="Date">
+                                            <td class="col-xs-3 col-md-3 col-lg-3" data-title="Date">
 
                                                 <div class="d-flex align-items-center">
                                                     <span class="ledger-checkbox" style="float: left">
@@ -801,7 +801,7 @@
                                                 </div>
 
                                             </td>
-                                            <td class="col-xs-5 select2-parent select2-ledger " data-title="Particular" (click)="bsd.hide()" (mousedown)="showNewLedgerEntryPopup(txn);">
+                                            <td class="col-xs-5 col-md-6 col-lg-6 select2-parent select2-ledger " data-title="Particular" (click)="bsd.hide()" (mousedown)="showNewLedgerEntryPopup(txn);">
 
                                                 <div class="ledger-account-label d-flex">
                                                     <span *ngIf="(
@@ -845,7 +845,7 @@
                                                 </ul>
                                             </td>
 
-                                            <td class="col-xs-4 pos-rel" data-title="Amount">
+                                            <td class="col-xs-4 col-md-3 col-lg-3 pos-rel" data-title="Amount">
                                                 <input class="form-control alR" type="text" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" [(ngModel)]="txn.amount" (input)="handleAmountInput(txn);" (click)="showNewLedgerEntryPopup(txn);blankLedgerAmountClick()">
                                             </td>
                                         </tr>

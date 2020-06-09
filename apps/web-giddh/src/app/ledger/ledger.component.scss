@@ -471,7 +471,7 @@ sh-select:focus {
     background-color: transparent;
 }
 .date-range-picker{
-    background-color: transparent !important;
+    background-color: $white !important;
     text-decoration-line: none;
     text-decoration-style: none;
     background-image: url(../../assets/images/calender-icon.svg) !important;
@@ -487,6 +487,7 @@ sh-select:focus {
     padding-right: 10px !important;
     height: 36px;
     min-width: 220px !important;
+    border-radius: 30px;
     &:focus{
         border-color: $chetwode-blue;
 
