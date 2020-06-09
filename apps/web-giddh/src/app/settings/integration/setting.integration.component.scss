@@ -24,6 +24,7 @@
     position: absolute;
     right: 10px;
     top: 18px;
+    width: 13px;
 }
 .disabled:after {
     background: transparent;
@@ -44,7 +45,14 @@
 .disabled .list-item {
     position: relative;
 }
-
+.disabled {
+    position: relative;
+}
+.disabled-list-item {
+    padding: 6px;
+    height: 100%;
+    background: $white;
+}
 @media(max-width:768px) {
     .empty-label label,
     .empty-label br {
