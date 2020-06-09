@@ -811,7 +811,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public toggleHelpSupportPane(show: boolean): void {
         this.asideSettingMenuState = 'out';
-        this.asideHelpSupportMenuState = show ? 'in' : 'out';
+        document.querySelector('body').classList.remove('mobile-setting-sidebar');
+        this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
         this.toggleBodyClass();
     }
 
@@ -825,9 +826,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
         this.isMobileSidebar = isMobileSidebar;
         this.asideHelpSupportMenuState = 'out';
-        this.asideSettingMenuState = show ? 'in' : 'out';
+        this.asideSettingMenuState = (show && this.asideSettingMenuState === 'out') ? 'in' : 'out';
         this.toggleBodyClass();
-        document.querySelector('body').classList.toggle('mobile-setting-sidebar');
+
+        if(this.asideSettingMenuState === "in") {
+            document.querySelector('body').classList.add('mobile-setting-sidebar');
+        } else {
+            document.querySelector('body').classList.remove('mobile-setting-sidebar');
+        }
     }
 
     /**
@@ -1703,6 +1709,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
+            if(!this.isMobileSite && this.dateFieldPosition) {
+                this.dateFieldPosition.x -= 60;
+            }
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
