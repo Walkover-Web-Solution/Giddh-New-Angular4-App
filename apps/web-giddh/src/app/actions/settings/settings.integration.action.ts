@@ -109,7 +109,7 @@ export class SettingsIntegrationActions {
                     this.store.dispatch(this._companyAction.getAllRegistrations());
                 } else {
                     this.store.dispatch(this._companyAction.getAllRegistrations());
-                    this.toasty.successToast(data.body, '');
+                    this.toasty.successToast('Update successfully');
                 }
                 return { type: 'EmptyAction' };
 
