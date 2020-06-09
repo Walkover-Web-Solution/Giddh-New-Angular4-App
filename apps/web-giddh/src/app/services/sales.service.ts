@@ -158,4 +158,28 @@ export class SalesService {
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
+    /**
+    * To generate pending type voucher
+    * @param model : GenericRequestForGenerateSCD object
+    *
+    *
+    */
+    public generatePendingVoucherGenericItem(model: any): Observable<BaseResponse<any, any>> {
+        let accountUniqueName = model.account.uniqueName;
+        let url;
+        url = this.config.apiUrl + SALES_API_V4.GENERATE_GENERIC_ITEMS + '-pending-vouchers';
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.post(url
+            .replace(':companyUniqueName', this.companyUniqueName)
+            .replace(':accountUniqueName', accountUniqueName)
+            , model)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
+                    data.request = model;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
+    }
+
 }

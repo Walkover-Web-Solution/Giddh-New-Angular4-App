@@ -24,7 +24,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { DashboardService } from '../services/dashboard.service';
 import { ContactService } from '../services/contact.service';
-import { BsDropdownDirective, BsModalService, ModalDirective, ModalOptions, PaginationComponent, TabsetComponent, BsModalRef } from 'ngx-bootstrap';
+import { BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent, TabsetComponent, BsModalService, BsModalRef } from 'ngx-bootstrap';
 import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
@@ -45,7 +45,7 @@ import { createSelector } from 'reselect';
 import { GeneralActions } from '../actions/general/general.actions';
 import { GeneralService } from '../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { GIDDH_DATE_FORMAT } from './../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../shared/helpers/defaultDateFormat';
 import { OnboardingFormRequest } from '../models/api-models/Common';
 import { CommonActions } from '../actions/common.actions';
 
@@ -79,7 +79,9 @@ export interface PayNowRequest {
 })
 
 export class ContactComponent implements OnInit, OnDestroy, OnChanges {
-    // selected: any;
+    /** Stores the current range of date picker */
+    public selectedDateRange: any;
+    public selectedDateRangeUi: any;
     public flattenAccounts: any = [];
     public sundryDebtorsAccountsBackup: any = {};
     public sundryDebtorsAccountsForAgingReport: IOption[] = [];
@@ -139,6 +141,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChild('mailModal') public mailModal: ModalDirective;
     @ViewChild('messageBox') public messageBox: ElementRef;
     @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
+
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
 
     // @Input('sort-direction')
     // sortDirection: string = '';
@@ -231,8 +235,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public universalDate: any;
     /** model reference to open/close bulk payment model */
     public bulkPaymentModalRef: BsModalRef;
+    modalRef: BsModalRef;
+    public selectedRangeLabel: any = "";
+    public dateFieldPosition: any = { x: 0, y: 0 };
+
     constructor(
-        private modalService: BsModalService,
         private store: Store<AppState>,
         private _toasty: ToasterService,
         private router: Router,
@@ -247,7 +254,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         private _groupWithAccountsAction: GroupWithAccountsAction,
         private _cdRef: ChangeDetectorRef, private _generalService: GeneralService,
         private _route: ActivatedRoute, private _generalAction: GeneralActions,
-        private _router: Router, private _breakPointObservar: BreakpointObserver) {
+        private _router: Router, private _breakPointObservar: BreakpointObserver, private modalService: BsModalService) {
         this.searchLoader$ = this.store.select(p => p.search.searchLoader);
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
@@ -316,10 +323,22 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
     public ngOnInit() {
 
+        // get default datepicker options from store
+        this.store.pipe(select(p => p.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(a => {
+            if (a) {
+                this.datePickerOptions = a;
+                this.fromDate = moment(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT);
+            }
+        });
+
         // localStorage supported
         if (window.localStorage) {
             let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer']));
             if (showColumnObj) {
+                if (showColumnObj.closingBalance !== undefined) {
+                    delete showColumnObj.closingBalance;
+                };
                 this.showFieldFilter = showColumnObj;
                 this.setTableColspan();
             }
@@ -327,14 +346,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
         this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj) {
-                this.universalDate = _.cloneDeep(dateObj);
-                this.datePickerOptions = {
-                    ...this.datePickerOptions, startDate: moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(),
-                    endDate: moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate()
-                };
-
-                this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                let universalDate = _.cloneDeep(dateObj);
+                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
+                this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
+                this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');
                 this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, this.searchStr);
             }
         })).pipe(takeUntil(this.destroyed$)).subscribe();
@@ -499,8 +515,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
             url = location.origin + location.pathname + `#./pages/${part}/${accUniqueName}`;
             console.log(ipcRenderer.send('open-url', url));
-        } else if (isCordova) {
-            // todo: open url in Native mobile
         } else {
             (window as any).open(url);
         }
@@ -534,6 +548,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.showFieldFilter = new CustomerVendorFiledFilter();
         let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer']));
         if (showColumnObj) {
+            if (showColumnObj.closingBalance !== undefined) {
+                delete showColumnObj.closingBalance;
+            };
             this.showFieldFilter = showColumnObj;
             this.setTableColspan();
         }
@@ -845,9 +862,19 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public selectedDate(value: any) {
-        this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
-        this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
-        if (value.event.type === 'hide') {
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+
+        this.hideGiddhDatepicker();
+
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
             this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, this.searchStr);
             this.detectChanges();
         }
@@ -1110,7 +1137,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         // if (event && column) {
         this.showFieldFilter[column] = event;
         this.setTableColspan();
-
+        this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== 'selectAll').every(filterName => this.showFieldFilter[filterName]);
         if (window.localStorage) {
             localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer'], JSON.stringify(this.showFieldFilter));
         }
@@ -1198,5 +1225,48 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             return false;
         }
     }
+    /**
+        * This will toggle all columns
+        *
+        * @param {boolean} event
+        * @memberof ContactComponent
+        */
+    public selectAllColumns(event: boolean): void {
+        this.showFieldFilter.parentGroup = event;
+        this.showFieldFilter.openingBalance = event;
+        this.showFieldFilter.mobile = event;
+        this.showFieldFilter.email = event;
+        this.showFieldFilter.state = event;
+        this.showFieldFilter.gstin = event;
+        this.showFieldFilter.comment = event;
+        this.setTableColspan();
+        if (window.localStorage) {
+            localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer'], JSON.stringify(this.showFieldFilter));
+        }
+    }
 
+    /**
+     * This will show datepicker
+     *
+     * @param {*} element
+     * @memberof ContactComponent
+     */
+    public showGiddhDatepicker(element): void {
+        if (element) {
+            this.dateFieldPosition = this._generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+        );
+    }
+
+    /**
+     * This will hide datepicker
+     *
+     * @memberof ContactComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
 }
