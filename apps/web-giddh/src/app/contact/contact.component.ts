@@ -222,7 +222,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     /** true if bulk payment model need to open */
     public isBulkPaymentShow: boolean = false;
     /** selected account list array */
-    public selectedAccountsList: string[] = [];
+    public selectedAccountsList: any[] = [];
 
     private checkboxInfo: any = {
         selectedPage: 1
@@ -309,9 +309,18 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 this.selectedAccountsList.push(item);
             }
         }
-        this.bulkPaymentModalRef = this.modalService.show(template,
-            Object.assign({}, { class: 'payment-modal modal-lg' })
-        );
+        if (this.selectedAccountsList.length) {
+            this.selectedAccountsList = this.selectedAccountsList.filter(itemObject => {
+                return itemObject.accountBankDetails && itemObject.accountBankDetails.bankAccountNo !== '' && itemObject.accountBankDetails.bankName !== '' && itemObject.accountBankDetails.ifsc !== '';
+            });
+            if (this.selectedAccountsList.length < this.selectedCheckedContacts.length) {
+                this._toaster.infoToast(`${this.selectedCheckedContacts.length - this.selectedAccountsList.length} out of ${this.selectedCheckedContacts.length} transactions could not be processed as bank details of those accounts are not updated.`);
+            }
+            this.bulkPaymentModalRef = this.modalService.show(template,
+                Object.assign({}, { class: 'payment-modal modal-lg' })
+            );
+        }
+
     }
     public sort(key, ord = 'asc') {
         this.key = key;
