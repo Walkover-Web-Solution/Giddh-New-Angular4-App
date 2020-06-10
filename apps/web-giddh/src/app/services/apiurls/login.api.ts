@@ -25,7 +25,8 @@ export const LOGIN_API = {
     FORGOT_PASSWORD: 'users/:userEmail/forgot-password',
     RESET_PASSWORD: 'reset-password',
     RENEW_SESSION: 'users/:userUniqueName/increment-session', // PUT
-    GET_USER_DETAILS_FROM_SESSION_ID: 'v2/user'
+    GET_USER_DETAILS_FROM_SESSION_ID: 'v2/user',
+    LOGIN_WITH_APPLE: 'v2/signup-with-apple',
 };
 
 export const GMAIL_API = {

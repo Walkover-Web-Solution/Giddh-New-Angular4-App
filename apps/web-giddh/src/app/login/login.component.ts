@@ -29,7 +29,7 @@ import { DOCUMENT } from "@angular/platform-browser";
 import { ToasterService } from "../services/toaster.service";
 import { AuthenticationService } from "../services/authentication.service";
 import { userLoginStateEnum } from "../models/user-login-state";
-import { isCordova } from "@giddh-workspaces/utils";
+import { isCordova, isIOS } from "@giddh-workspaces/utils";
 import { GeneralService } from "../services/general.service";
 import { AppModule } from '..';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -78,8 +78,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     public signupVerifyForm: FormGroup;
     public isLoginWithPasswordSuccessNotVerified$: Observable<boolean>;
     public isLoginWithPasswordIsShowVerifyOtp$: Observable<boolean>;
-
-
     public showForgotPassword: boolean = false;
     public forgotStep: number = 0;
     public retryCount: number = 0;
@@ -94,6 +92,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     //Button to hide linkedIn button till functionality is available
     public showLinkedInButton = false;
     public deviceDetails: any;
+    public isCordovaAppleApp: boolean = false;
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: FormBuilder,
@@ -172,8 +171,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
             if (typeof window['cordova'] !== 'undefined') {
                 document.addEventListener('deviceready', (device) => {
-                    console.log(device);
                     bootstrap();
+
+                    if (isIOS()) {
+                        this.isCordovaAppleApp = true;
+                    }
                 }, false);
             } else {
                 bootstrap();
@@ -424,13 +426,11 @@ export class LoginComponent implements OnInit, OnDestroy {
             } else if (provider === "apple") {
                 (cordova.plugins as any).SignInWithApple.signin(
                     { requestedScopes: [0, 1] },
-                    function (succ) {
-                        console.log(succ);
-                        alert(JSON.stringify(succ));
+                    function (response) {
+                        this.store.dispatch(this.loginAction.signupWithApple(response));
                     },
-                    function (err) {
-                        console.error(err);
-                        alert(JSON.stringify(err));
+                    function (error) {
+                        alert('Apple login is not supported on your IOS version.');
                     }
                 )
             }
@@ -444,7 +444,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
         }
     }
-
 
     public ngOnDestroy() {
         this.document.body.classList.add("unresponsive");
