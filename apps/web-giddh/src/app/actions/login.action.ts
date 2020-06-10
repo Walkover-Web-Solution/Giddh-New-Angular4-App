@@ -1091,10 +1091,11 @@ export class LoginActions {
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
         if(screen.width <= 767 || isCordova) {
             this._router.navigate(["/pages/mobile-home"]);
+            window.location.reload();
         } else {
             this._router.navigate([stateDetail.body.lastState]);
         }
-        if (isElectron || isCordova) {
+        if (isElectron) {
             window.location.reload();
         }
         return { type: 'EmptyAction' };
