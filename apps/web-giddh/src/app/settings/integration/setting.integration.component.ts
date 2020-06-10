@@ -253,8 +253,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                         });
                     });
                 }
-                // please ignore this for test env
-                console.log(this.registeredAccount);
             }
         });
 
@@ -284,7 +282,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                         value[0].isLoggedInUser = true;
                     }
                     // arr.push({ name: value[0].userName, rows: value });
-                    arr.push({ label: value[0].userName, value: value[0].uniqueName, additional: value });
+                    arr.push({ label: value[0].userName, value: value[0].userUniqueName, additional: value });
                 });
                 this.approvalNameList = _.sortBy(arr, ['label']);
             }
@@ -828,6 +826,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         // return new UserAmountRangeRequests();
         return userAmountRanges;
     }
+
     /**
      * Delete amount range row
      *
@@ -859,20 +858,29 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         }
     }
 
-    // public selectedOtpType(event: IOption, index: number) {
-    //     console.log(event, index);
-    //     // if(event && this.paymentFormObj && this.paymentFormObj.userAmountRanges && event.value === 'BANK' ) {
-    //     // this.paymentFormObj.userAmountRanges[index].approvalUniqueName = '';
-
-    //     // }
-    // }
+    /**
+     * To reset aaproval name if OTP type selected
+     *
+     * @param {IOption} event OTP type option event
+     * @param {number} index index number
+     * @param {boolean} isUpdate True if update mode
+     * @memberof SettingIntegrationComponent
+     */
+    public selectedOtpType(event: IOption, index: number, isUpdate: boolean, parentIndex?: number): void {
+        if (event && this.paymentFormObj && this.paymentFormObj.userAmountRanges  && !isUpdate) {
+            this.paymentFormObj.userAmountRanges[index].approvalUniqueName = '';
+        } else if (event && this.registeredAccount && this.registeredAccount[parentIndex].userAmountRanges && isUpdate) {
+            this.registeredAccount[parentIndex].userAmountRanges[index].approvalUniqueName = null;
+            this.registeredAccount[parentIndex].userAmountRanges[index].approvalDetails = null;
+        }
+    }
 
     /**
      * To clear/reset form
      *
      * @memberof SettingIntegrationComponent
      */
-    public clearForm() {
+    public clearForm(): void {
         this.paymentFormObj = new PaymentClass();
         this.paymentFormObj.corpId = "";
         this.paymentFormObj.userId = "";
