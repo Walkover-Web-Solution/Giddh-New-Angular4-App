@@ -1249,7 +1249,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 } else {
                     if (result[1]) {
                         result[1] = result[1] as ProformaResponse;
-                        result[1].results.forEach(item => {
+                        result[1].items.forEach(item => {
                             arr.push({
                                 versionNumber: this.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
                                 date: this.isProformaInvoice ? item.proformaDate : item.estimateDate,
@@ -1862,7 +1862,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else {
                 requestObject.depositAccountUniqueName = '';
             }
-            this.store.dispatch(this.proformaActions.generateProforma(requestObject));
+
+            requestObject.date = moment(requestObject.date).format(GIDDH_DATE_FORMAT);
+            requestObject.type = "sales";
+
+            let updatedData = requestObject;
+            updatedData = this.updateData(requestObject, data);
+            updatedData.voucher = {};
+            updatedData.voucher.voucherDetails = {};
+            updatedData.voucher.accountDetails = {};
+            updatedData.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
+            updatedData.voucher.accountDetails.uniqueName = data.accountDetails.uniqueName;
+            this.store.dispatch(this.proformaActions.generateProforma(updatedData));
         } else {
             let updatedData = requestObject;
             let isVoucherV4 = false;
