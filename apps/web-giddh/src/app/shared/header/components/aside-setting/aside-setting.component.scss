@@ -159,12 +159,20 @@
         .back-to-main-slider{
             display: block;
             padding: 10px 15px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             img{
                 width: 15px;
             }
-            i{
-                display: none;
+            a{
+                color: $cornflower-blue;
+                span{
+                    display: flex;
+                    align-items: center;
+                    i{
+                        margin-right: 10px;
+                    }
+                }
+
             }
         }
         .help-aside-body {
