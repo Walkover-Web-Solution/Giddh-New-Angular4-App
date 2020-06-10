@@ -9598,7 +9598,7 @@ ngx-daterangepicker-material {
     }
     .ledg-head .custom-tabs .nav.nav-tabs {
         left: 0;
-        top: 92px;
+        top: 90px;
         padding-top: 0 !important;
         position: fixed;
     }
@@ -9787,6 +9787,9 @@ ngx-daterangepicker-material {
         top: 0;
         left: 0;
         z-index: 999;
+    }
+    .ledg-head .custom-tabs .nav.nav-tabs {
+        padding-top: 0 !important;
     }
 }
 @media (max-width: 575px) {

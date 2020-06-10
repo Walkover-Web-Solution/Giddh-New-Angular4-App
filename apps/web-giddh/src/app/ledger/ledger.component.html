@@ -147,17 +147,19 @@
         </div>
         <!-- endregion -->
         <div class="custom-tabs mt-2 mb-2">
-            <ul class="nav nav-tabs pt-0">
-                    <li [ngClass]="{'active': visibleTransactionTypeMobile === 'all'}">
-                        <a href="javascript:void(0)" (click)="toggleMobileTransactionType('all');">All</a>
-                    </li>
-                    <li role="presentation" [ngClass]="{'active': visibleTransactionTypeMobile === 'debit'}">
-                        <a href="javascript:void(0)" (click)="toggleMobileTransactionType('debit')">Debit</a>
-                    </li>
-                    <li role="presentation" [ngClass]="{'active': visibleTransactionTypeMobile === 'credit'}">
-                        <a href="javascript:void(0)" (click)="toggleMobileTransactionType('credit')">Credit</a>
-                    </li>
-            </ul>
+            <tabset>
+                <ul class="nav nav-tabs pt-0">
+                        <li [ngClass]="{'active': visibleTransactionTypeMobile === 'all'}">
+                            <a href="javascript:void(0)" (click)="toggleMobileTransactionType('all');">All</a>
+                        </li>
+                        <li role="presentation" [ngClass]="{'active': visibleTransactionTypeMobile === 'debit'}">
+                            <a href="javascript:void(0)" (click)="toggleMobileTransactionType('debit')">Debit</a>
+                        </li>
+                        <li role="presentation" [ngClass]="{'active': visibleTransactionTypeMobile === 'credit'}">
+                            <a href="javascript:void(0)" (click)="toggleMobileTransactionType('credit')">Credit</a>
+                        </li>
+                </ul>
+            </tabset>
         </div>
 
         <!-- region bank ledgers-->
@@ -411,8 +413,8 @@
                                         <input type="checkbox" [ngClass]="{'d-none': (selectedTrxWhileHovering !== transactions.entryUniqueName && !(transactions.isChecked) && checkedTrxWhileHovering.length === 0)}" class="d-none" [(ngModel)]="transactions.isChecked" (click)="entrySelected($event, transactions.entryUniqueName)">
                                     </span>
                                     <span class="account-holder-name">
-                                        <span *ngIf="transactions.type === 'CREDIT'" class="text-gray mr-05">To</span>
-                                    <span *ngIf="transactions.type === 'DEBIT'" class="text-gray mr-05">By</span>
+                                        <span *ngIf="transactions.type === 'CREDIT'" class="text-gray mr-05">By</span>
+                                    <span *ngIf="transactions.type === 'DEBIT'" class="text-gray mr-05">To</span>
                                     <span>{{ transactions?.inventory ? transactions?.particular?.name + ' (' + transactions?.inventory?.stock?.name + ')' : transactions?.particular?.name }}</span>
                                     <span class="download-invoice-ledger d-flex" *ngIf="transactions.attachedFileUniqueName" (click)="downloadAttachedFile(transactions.attachedFileUniqueName , $event)">
                                             <i class="glyphicon glyphicon-download pull-left"></i>
@@ -430,7 +432,6 @@
                                                 {{ transactions.convertedCurrencySymbol }}{{ transactions.convertedAmount | giddhCurrency }}
                                             </p>
                                         </div>
-                                        <span class="ml-05">{{ (transactions.type === "CREDIT") ? "cr" : "dr" }}</span>
                                     </div>
                                 </td>
                             </tr>
