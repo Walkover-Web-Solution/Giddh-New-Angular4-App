@@ -602,7 +602,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {number} index
      * @memberof SettingIntegrationComponent
      */
-    public updateICICDetails(regAcc: IntegratedBankList, index: number) {
+    public updateIciciDetails(regAcc: IntegratedBankList, index: number) {
         this.selecetdUpdateIndex = index;
         let registeredAccountObj = _.cloneDeep(regAcc);
         registeredAccountObj.userAmountRanges.map(item => {
@@ -714,6 +714,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (isUpdate && this.registeredAccount && this.registeredAccount[parentIndex].userAmountRanges) {
             this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
         }
+        console.log('selected', this.paymentFormObj, this.registeredAccount, index);
     }
 
     public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, parentIndex?: number, ): void {
@@ -728,6 +729,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.toasty.infoToast('You can not select max bank limit more than 1');
         }
         this.changeDetectionRef.detectChanges();
+        console.log('changes', this.paymentFormObj, this.registeredAccount, index);
     }
 
     /**
@@ -753,15 +755,24 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /**
-   * To check if duplicate amount entered
-   *
-   * @param {*} item row object
-   * @param {number} index index number
-   * @memberof SettingIntegrationComponent
-   */
-    public changeAmount(item: any, index: number, elementRef: HTMLInputElement, isUpdate: boolean) {
+     *To check if duplicate amount entered
+     *
+     * @param {*} item Selected element
+     * @param {number} index Index of selected item
+     * @param {HTMLInputElement} elementRef Input reference
+     * @param {boolean} isUpdate True if is in update mode element
+     * @param {number} [parentIndex] Index of parent object array
+     * @memberof SettingIntegrationComponent
+     */
+    public changeAmount(item: any, index: number, elementRef: HTMLInputElement, isUpdate: boolean, parentIndex?: number) {
         if (!isUpdate && item && elementRef && this.paymentFormObj) {
             if (this.checkIsAmountRepeat(this.paymentFormObj.userAmountRanges, this.paymentFormObj.userAmountRanges[index].amount, index)) {
+                elementRef.classList.add('error-box');
+            } else {
+                elementRef.classList.remove('error-box');
+            }
+        } else if (isUpdate && item && elementRef && this.registeredAccount[parentIndex]) {
+            if (this.checkIsAmountRepeat(this.registeredAccount[parentIndex].userAmountRanges, this.registeredAccount[parentIndex].userAmountRanges[index].amount, index)) {
                 elementRef.classList.add('error-box');
             } else {
                 elementRef.classList.remove('error-box');
@@ -867,7 +878,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public selectedOtpType(event: IOption, index: number, isUpdate: boolean, parentIndex?: number): void {
-        if (event && this.paymentFormObj && this.paymentFormObj.userAmountRanges  && !isUpdate) {
+        if (event && this.paymentFormObj && this.paymentFormObj.userAmountRanges && !isUpdate) {
             this.paymentFormObj.userAmountRanges[index].approvalUniqueName = '';
         } else if (event && this.registeredAccount && this.registeredAccount[parentIndex].userAmountRanges && isUpdate) {
             this.registeredAccount[parentIndex].userAmountRanges[index].approvalUniqueName = null;
