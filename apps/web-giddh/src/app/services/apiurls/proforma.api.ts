@@ -1,6 +1,5 @@
-const baseUrlV2 = 'v2/company/:companyUniqueName/accounts/:accountUniqueName/:vouchers/';
-const baseUrl = 'company/:companyUniqueName/vouchers/:vouchers/';
-
+const baseUrlV2 = 'v3/company/:companyUniqueName/accounts/:accountUniqueName/:vouchers/';
+const baseUrl = 'company/:companyUniqueName/vouchers/v3/:vouchers/';
 
 export const PROFORMA_API = {
     generate: `${baseUrlV2}generate`,
