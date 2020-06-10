@@ -9227,8 +9227,12 @@ ngx-daterangepicker-material {
     height: 14px !important;
     line-height: 14px !important;
 }
-
-
+.HW_badge.HW_softHidden{
+    display: none !important;
+}
+span#HW_badge_cont:nth-child(3){
+    display: none;
+}
 /*notofication css end*/
 
 .setting-sidebar-open .desktop-header {
@@ -9507,6 +9511,7 @@ span#HW_badge_cont:nth-child(3){
         padding: 5px 10px 5px 0% !important;
         text-align: center;
         width: 100%;
+        margin-bottom: 0;
     }
     #middleBody .horizontal-form,
     .view_forms .horizontal-form {
