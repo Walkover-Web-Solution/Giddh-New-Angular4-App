@@ -12,7 +12,8 @@ import {
     OnDestroy,
     OnInit,
     SimpleChanges,
-    ViewChild
+    ViewChild,
+    TemplateRef
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
@@ -218,6 +219,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public tableColsPan: number = 3;
     /** True, if company country's taxation is supported in Giddh */
     public shouldShowTaxFilter: boolean;
+    /** true if bulk payment model need to open */
+    public isBulkPaymentShow: boolean = false;
+    /** selected account list array */
+    public selectedAccountsList: string[] = [];
 
     private checkboxInfo: any = {
         selectedPage: 1
@@ -228,9 +233,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     /** Selected company */
     private selectedCompany: any;
     public universalDate: any;
+    /** model reference to open/close bulk payment model */
+    public bulkPaymentModalRef: BsModalRef;
     modalRef: BsModalRef;
     public selectedRangeLabel: any = "";
-    public dateFieldPosition: any = {x: 0, y: 0};
+    public dateFieldPosition: any = { x: 0, y: 0 };
 
     constructor(
         private store: Store<AppState>,
@@ -252,6 +259,19 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+
+        // get default datepicker options from store
+        this.store.pipe(select(storeConfig => storeConfig.company.dateRangePickerConfig), take(2)).subscribe(a => {
+            if (a) {
+                this.datePickerOptions = a;
+                if (this.universalDate) {
+                    this.datePickerOptions = {
+                        ...this.datePickerOptions, startDate: moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(),
+                        endDate: moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate()
+                    };
+                }
+            }
+        });
 
         this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
@@ -275,6 +295,24 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.store.dispatch(this._companyActions.getAllRegistrations());
     }
 
+    /**
+     * To open bulk payment model
+     *
+     * @param {TemplateRef<any>} template template/model hash reference
+     * @memberof ContactComponent
+     */
+    public openBulkPaymentModal(template: TemplateRef<any>, item?: any): void {
+        this.isBulkPaymentShow = true;
+        if (item) {
+            if (this.isBankAccountAddedAccount(item)) {
+                this.selectedAccountsList = [];
+                this.selectedAccountsList.push(item);
+            }
+        }
+        this.bulkPaymentModalRef = this.modalService.show(template,
+            Object.assign({}, { class: 'payment-modal modal-lg' })
+        );
+    }
     public sort(key, ord = 'asc') {
         this.key = key;
         this.order = ord;
@@ -428,6 +466,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public performActions(type: number, account: any, event?: any) {
         this.selectedCheckedContacts = [];
         this.selectedCheckedContacts.push(account.uniqueName);
+        this.selectedAccountsList.push(account);
 
         switch (type) {
             case 0: // go to add and manage
@@ -484,6 +523,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public tabSelected(tabName: 'customer' | 'aging-report' | 'vendor') {
         this.searchStr = '';
         this.selectedCheckedContacts = [];
+        this.selectedAccountsList = [];
         if (tabName !== this.activeTab) {
             this.activeTab = tabName;
             this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, '');
@@ -606,6 +646,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public pageChanged(event: any): void {
         let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
         this.selectedCheckedContacts = [];
+        this.selectedAccountsList = [];
         this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'true', 20, this.searchStr, this.key, this.order);
     }
 
@@ -823,7 +864,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public selectedDate(value: any) {
         this.selectedRangeLabel = "";
 
-        if(value && value.name) {
+        if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
 
@@ -846,16 +887,19 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                     m.isSelected = action;
                     return m;
                 });
+                this.selectedAccountsList = this.sundryDebtorsAccounts;
                 this.selectedCheckedContacts = this.sundryDebtorsAccounts.map(m => m.uniqueName);
             } else {
                 this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(m => {
                     m.isSelected = action;
                     return m;
                 });
+                this.selectedAccountsList = this.sundryCreditorsAccounts;
                 this.selectedCheckedContacts = this.sundryCreditorsAccounts.map(m => m.uniqueName);
             }
         } else {
             this.selectedCheckedContacts = [];
+            this.selectedAccountsList = [];
             if (this.activeTab === 'customer') {
                 this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(m => {
                     m.isSelected = action;
@@ -874,24 +918,30 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.advanceSearch.toggle();
     }
 
-    public selectAccount(ev: any, uniqueName: string) {
+    public selectAccount(ev: any, item: any) {
         // this.selectedcus = true;
         if (ev.target.checked) {
-            this.selectedCheckedContacts.push(uniqueName);
+            this.selectedCheckedContacts.push(item.uniqueName);
+            this.selectedAccountsList.push(item);
+            // Note need to remove below
+            this.selectedAccForPayment = item;
             // this.selectCustomer = true;
         } else {
             // this.selectCustomer = false;
-            let itemIndx = this.selectedCheckedContacts.findIndex((item) => item === uniqueName);
+            let itemIndx = this.selectedCheckedContacts.findIndex((element) => element === item.uniqueName);
             this.selectedCheckedContacts.splice(itemIndx, 1);
+            this.selectedAccountsList.splice(itemIndx, 1);
+
 
             if (this.selectedCheckedContacts.length === 0) {
                 this.selectAllCustomer = false;
                 this.selectAllVendor = false;
                 this.selectedWhileHovering = '';
             }
-            // this.lc.selectedTxnUniqueName = null;
-            // this.store.dispatch(this._ledgerActions.DeSelectGivenEntries([uniqueName]));
         }
+        console.log('this.selectedAccountsList', this.selectedAccountsList);
+        console.log('this.selectedCheckedContacts', this.selectedCheckedContacts);
+
     }
 
     public resetAdvanceSearch() {
@@ -1152,11 +1202,35 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     /**
-     * This will toggle all columns
+     * To close bulk payment model
      *
-     * @param {boolean} event
      * @memberof ContactComponent
      */
+    public closeBulkPaymentModel(): void {
+        this.isBulkPaymentShow = false;
+        this.bulkPaymentModalRef.hide();
+    }
+
+    /**
+     *To check is bank account details added in account
+     *
+     * @param {*} item account object
+     * @returns {boolean} true if added bank accounts details
+     * @memberof ContactComponent
+     */
+    public isBankAccountAddedAccount(item: any): boolean {
+        if (item) {
+            return item.accountBankDetails && item.accountBankDetails.bankAccountNo ? true : false;
+        } else {
+            return false;
+        }
+    }
+    /**
+        * This will toggle all columns
+        *
+        * @param {boolean} event
+        * @memberof ContactComponent
+        */
     public selectAllColumns(event: boolean): void {
         this.showFieldFilter.parentGroup = event;
         this.showFieldFilter.openingBalance = event;
@@ -1178,12 +1252,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof ContactComponent
      */
     public showGiddhDatepicker(element): void {
-        if(element) {
+        if (element) {
             this.dateFieldPosition = this._generalService.getPosition(element.target);
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop : false, ignoreBackdropClick: this.isMobileScreen })
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
         );
     }
 
