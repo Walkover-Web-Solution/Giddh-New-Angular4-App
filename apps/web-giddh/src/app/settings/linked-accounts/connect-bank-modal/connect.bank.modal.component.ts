@@ -1,7 +1,7 @@
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { Observable, of, ReplaySubject } from 'rxjs';
+import { Observable, of, ReplaySubject, Subject, merge } from 'rxjs';
 import { SettingsLinkedAccountsService } from '../../../services/settings.linked.accounts.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -63,6 +63,7 @@ export class ConnectBankModalComponent implements OnChanges {
     public base64StringForModel: SafeResourceUrl = '';
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public click$ = new Subject<string>();
 
     constructor(public sanitizer: DomSanitizer,
         private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
@@ -72,13 +73,21 @@ export class ConnectBankModalComponent implements OnChanges {
     ) {
         this.needReloadingLinkedAccounts$ = this.store.select(s => s.settings.linkedAccounts.needReloadingLinkedAccounts).pipe(takeUntil(this.destroyed$));
         this.dataSource = (text$: Observable<any>): Observable<any> => {
-            return text$.pipe(
+
+            const inputClick$ = this.click$;
+
+            return merge(text$, inputClick$).pipe(
                 debounceTime(300),
                 distinctUntilChanged(),
                 switchMap((term: string) => {
                     if (term.startsWith(' ', 0)) {
                         return [];
                     }
+
+                    if (this.selectedProvider.name === undefined || this.selectedProvider.name === null) {
+                        this.selectedProvider.name = "";
+                    }
+
                     return this._settingsLinkedAccountsService.SearchBank(this.selectedProvider.name).pipe(catchError(e => {
                         return [];
                     }));

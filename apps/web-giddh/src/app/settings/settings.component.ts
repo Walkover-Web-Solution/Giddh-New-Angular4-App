@@ -1,36 +1,37 @@
-import {take, takeUntil} from 'rxjs/operators';
-import {Observable, ReplaySubject} from 'rxjs';
-import {ToasterService} from 'apps/web-giddh/src/app/services/toaster.service';
-import {SettingPermissionComponent} from './permissions/setting.permission.component';
-import {SettingLinkedAccountsComponent} from './linked-accounts/setting.linked.accounts.component';
-import {FinancialYearComponent} from './financial-year/financial-year.component';
-import {SettingProfileComponent} from './profile/setting.profile.component';
-import {SettingIntegrationComponent} from './integration/setting.integration.component';
-import {PermissionDataService} from 'apps/web-giddh/src/app/permissions/permission-data.service';
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {TabsetComponent} from 'ngx-bootstrap';
-import {StateDetailsRequest} from '../models/api-models/Company';
-import {CompanyActions} from '../actions/company.actions';
-import {Store} from '@ngrx/store';
-import {AppState} from '../store/roots';
-import {SettingsProfileActions} from '../actions/settings/profile/settings.profile.action';
-import {SettingsTagsComponent} from './tags/tags.component';
-import {ActivatedRoute, Router} from '@angular/router';
-import {BunchComponent} from './bunch/bunch.component';
-import {AuthenticationService} from '../services/authentication.service';
-import {GeneralActions} from '../actions/general/general.actions';
-import {SettingsIntegrationActions} from '../actions/settings/settings.integration.action';
-import {WarehouseActions} from './warehouse/action/warehouse.action';
+import { take, takeUntil } from 'rxjs/operators';
+import { Observable, ReplaySubject } from 'rxjs';
+import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
+import { SettingPermissionComponent } from './permissions/setting.permission.component';
+import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked.accounts.component';
+import { FinancialYearComponent } from './financial-year/financial-year.component';
+import { SettingProfileComponent } from './profile/setting.profile.component';
+import { SettingIntegrationComponent } from './integration/setting.integration.component';
+import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
+import { Component, OnInit, Output, ViewChild, OnDestroy, EventEmitter } from '@angular/core';
+import { TabsetComponent } from 'ngx-bootstrap';
+import { StateDetailsRequest } from '../models/api-models/Company';
+import { CompanyActions } from '../actions/company.actions';
+import { Store } from '@ngrx/store';
+import { AppState } from '../store/roots';
+import { SettingsTagsComponent } from './tags/tags.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BunchComponent } from './bunch/bunch.component';
+import { AuthenticationService } from '../services/authentication.service';
+import { GeneralActions } from '../actions/general/general.actions';
+import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
+import { WarehouseActions } from './warehouse/action/warehouse.action';
 import { PAGINATION_LIMIT } from '../app.constant';
 import { HttpClient } from "@angular/common/http";
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.css']
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnDestroy {
     @ViewChild('staticTabs') public staticTabs: TabsetComponent;
-
+    /* Event emitter for close sidebar popup event */
+    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @ViewChild('integrationComponent') public integrationComponent: SettingIntegrationComponent;
     @ViewChild('profileComponent') public profileComponent: SettingProfileComponent;
     @ViewChild('financialYearComp') public financialYearComp: FinancialYearComponent;
@@ -46,17 +47,18 @@ export class SettingsComponent implements OnInit {
     public selectedChildTab: number = 0;
     public activeTab: string = 'taxes';
     public integrationtab: string;
-
+    public isMobileScreen: boolean = true;
+    public permissionTabDataFetched: boolean = false;
     public get shortcutEnabled() {
         return document.activeElement === document.body;
     }
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideSettingMenuState: string = 'out';
 
     constructor(
         private store: Store<AppState>,
         private companyActions: CompanyActions,
-        private settingsProfileActions: SettingsProfileActions,
         private _permissionDataService: PermissionDataService,
         public _route: ActivatedRoute,
         private router: Router,
@@ -65,7 +67,8 @@ export class SettingsComponent implements OnInit {
         private _generalActions: GeneralActions,
         private settingsIntegrationActions: SettingsIntegrationActions,
         private warehouseActions: WarehouseActions,
-        private http: HttpClient
+        private http: HttpClient,
+        private breakPointObservar: BreakpointObserver
     ) {
         this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
         this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
@@ -73,6 +76,16 @@ export class SettingsComponent implements OnInit {
     }
 
     public ngOnInit() {
+        this.breakPointObservar.observe([
+            '(max-width:767px)'
+        ]).subscribe(result => {
+            this.isMobileScreen = result.matches;
+            if (!this.isMobileScreen) {
+                this.asideSettingMenuState = "in";
+                this.toggleBodyClass();
+            }
+        });
+
         this._route.params.subscribe(params => {
             if (params['type'] && this.activeTab !== params['type'] && params['referrer']) {
                 this.setStateDetails(params['type'], params['referrer']);
@@ -86,6 +99,23 @@ export class SettingsComponent implements OnInit {
                 this.selectedChildTab = 0;
                 this.integrationtab = '';
                 this.activeTab = params['type'];
+            }
+
+            this.tabChanged(this.activeTab);
+
+            if (this.activeTab == "integration") {
+                this.integrationComponent.getInitialData();
+            } else if (this.activeTab == "linked-accounts") {
+                this.eBankComp.getInitialEbankInfo();
+            } else if (this.activeTab == "profile") {
+                this.profileComponent.getInitialProfileData();
+                this.profileComponent.getInventorySettingData();
+            } else if (this.activeTab == "financial-year") {
+                this.financialYearComp.getInitialFinancialYearData();
+            } else if (this.activeTab == "permission") {
+                this.permissionComp.getInitialData();
+            } else if (this.activeTab == "tag") {
+                this.tagComp.getTags();
             }
         });
 
@@ -157,7 +187,10 @@ export class SettingsComponent implements OnInit {
     }
 
     public permissionTabSelected(e) {
-        this.permissionComp.getInitialData();
+        if(!this.permissionTabDataFetched) {
+            this.permissionTabDataFetched = true;
+            this.permissionComp.getInitialData();
+        }
     }
 
     public tagsTabSelected(e) {
@@ -173,16 +206,14 @@ export class SettingsComponent implements OnInit {
     }
 
     public tabChanged(tab: string) {
-        if (tab === 'integration') {
+        if (tab === 'integration' && this.integrationtab) {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
             this.loadModuleData(tab);
-            if (this.integrationtab) {
-                this.router.navigate(['pages/settings/', tab, this.integrationtab], {replaceUrl: true});
-            }
+            this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
         } else {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
             this.loadModuleData(tab);
-            this.router.navigate(['pages/settings/', tab], {replaceUrl: true});
+            this.router.navigate(['pages/settings/', tab], { replaceUrl: true });
         }
     }
 
@@ -215,25 +246,8 @@ export class SettingsComponent implements OnInit {
                     this._toast.errorToast(res.message, res.code);
                 }
                 this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-                // this.router.navigateByUrl('/pages/settings/integration/email');
-                // this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
             });
         })
-
-        // debugger;
-
-
-        // this._authenticationService.saveGmailAuthCode(dataToSave).subscribe((res) => {
-        //
-        //     if (res.status === 'success') {
-        //         this._toast.successToast('Gmail account added successfully.', 'Success');
-        //     } else {
-        //         this._toast.errorToast(res.message, res.code);
-        //     }
-        //     this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-        //     this.router.navigateByUrl('/pages/settings/integration/email');
-        //     // this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
-        // });
     }
 
     private getRedirectUrl(baseHref: string) {
@@ -280,5 +294,44 @@ export class SettingsComponent implements OnInit {
         if (tabName === 'warehouse') {
             this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
         }
+    }
+
+    /**
+     * This will toggle the settings popup
+     *
+     * @param {*} [event]
+     * @memberof SettingsComponent
+     */
+    public toggleSettingPane(event?): void {
+        this.toggleBodyClass();
+
+        if (this.isMobileScreen && event && this.asideSettingMenuState === 'in') {
+            this.asideSettingMenuState = "out";
+        }
+    }
+
+    /**
+     * This will toggle the fixed class on body
+     *
+     * @memberof SettingsComponent
+     */
+    public toggleBodyClass(): void {
+        if (this.asideSettingMenuState === 'in') {
+            document.querySelector('body').classList.add('setting-sidebar-open');
+        } else {
+            document.querySelector('body').classList.remove('setting-sidebar-open');
+        }
+    }
+
+    /**
+     * Releases all the observables to avoid memory leaks
+     *
+     * @memberof SettingsComponent
+     */
+    public ngOnDestroy(): void {
+        document.querySelector('body').classList.remove('setting-sidebar-open');
+        this.asideSettingMenuState = "out";
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

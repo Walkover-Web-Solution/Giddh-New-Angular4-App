@@ -54,7 +54,7 @@ export class CommonActions {
     @Effect()
     public getOnboardingForm$: Observable<Action> = this.action$
         .ofType(CommonActions.GET_ONBOARDING_FORM).pipe(
-            switchMap((action: CustomActions) => this._commonService.GetOnboardingForm(action.payload)),
+            switchMap((action: CustomActions) => this._commonService.getOnboardingForm(action.payload)),
             map(response => this.GetOnboardingFormResponse(response)));
     @Effect()
     public getPartytypes$: Observable<Action> = this.action$

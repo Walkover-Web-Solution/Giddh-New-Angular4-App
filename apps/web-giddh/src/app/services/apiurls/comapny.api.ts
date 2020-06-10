@@ -31,4 +31,7 @@ export const COMPANY_API = {
 
     GET_REGISTERED_PURCHASE: 'v2/company/:companyUniqueName/purchases-register-overview?from=:fromDate&to=:toDate&interval=:interval',
     GET_DETAILED_REGISTERED_PURCHASE: 'v2/company/:companyUniqueName/purchases-register-detailed?',
+    GET_COMPANY_INTEGRATED_BANK_LIST: 'company/:companyUniqueName/payment/banks/accounts',
+    GET_COMPANY_INTEGRATED_BANK_DETAILS: 'company/:companyUniqueName/bank/balanceInquiry?urn=:urn',
+    BULK_PAYMENT: 'company/:companyUniqueName/bank/payments',
 };

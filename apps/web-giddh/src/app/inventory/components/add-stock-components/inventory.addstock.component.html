@@ -346,7 +346,7 @@
 
                     <section class="mrT2 row mrB3 col-xs-12" *ngIf="addStockForm.value.isFsStock">
                         <div class="pdL pdR">
-                            <h1 class="section_head bdrB"><strong>{{addStockForm.controls['name'].value}} (Made
+                            <h1 class="section-head bdrB"><strong>{{addStockForm.controls['name'].value}} (Made
                                     with)</strong></h1>
                             <table class="noHover  width100">
                                 <tbody formGroupName="manufacturingDetails">
@@ -422,7 +422,7 @@
 
                     <div class="row">
                         <div class="col-xs-12 text-left">
-                            <div class="mrT1 pdL pdR">
+                            <div class="mt-5 pdL pdR">
 
                                 <button type="submit" *ngIf="!isUpdatingStockForm"
                                     [ladda]="isStockAddInProcess$ | async" (click)="submit()" class="btn btn-success"

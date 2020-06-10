@@ -17,6 +17,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { GeneralService } from "../../services/general.service";
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -44,6 +45,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         rangeInputFormat: 'DD-MM-YYYY',
         containerClass: 'theme-green myDpClass'
     };
+    public isMobileScreen: boolean = false;
     public dataSyncOption = IsyncData;
     public currentBranch: string = null;
     public currentBranchNameAlias: string = null;
@@ -71,7 +73,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         private companyActions: CompanyActions,
         private settingsProfileActions: SettingsProfileActions,
         private commonActions: CommonActions,
-        private _generalService: GeneralService
+        private _generalService: GeneralService,
+        private _breakPointObservar: BreakpointObserver
     ) {
         this.getOnboardingForm();
 
@@ -152,6 +155,12 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             if (res !== null) {
                 this.getAllBranches();
             }
+        });
+        this._breakPointObservar.observe([
+            '(max-width:768px)'
+        ]).subscribe(result => {
+            this.isMobileScreen = result.matches;
+            this.changeBranchViewType('card')
         });
     }
 
@@ -310,10 +319,14 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public getOnboardingForm() {
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                Object.keys(res.fields).forEach(key => {
-                    this.formFields[res.fields[key].name] = [];
-                    this.formFields[res.fields[key].name] = res.fields[key];
-                });
+                if (res.fields) {
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            this.formFields[res.fields[key].name] = [];
+                            this.formFields[res.fields[key].name] = res.fields[key];
+                        }
+                    });
+                }
             }
         });
     }

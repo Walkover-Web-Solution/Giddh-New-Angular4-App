@@ -76,7 +76,7 @@
                         </span>
                     </div>
 
-                    <div class="col-xs-12 mrB2 selectBox" *ngIf="!isWarehouse">
+                    <div class="col-xs-12 mrB2 selectBox" *ngIf="businessTypeList?.length && !isWarehouse">
                         <div class="pos-rel">
                             <label for="businessType">Select Business Type</label>
                             <div class="custom-select pos-rel">
@@ -184,15 +184,13 @@
                     </div>
                     <div class="col-xs-12 ">
                         <p class="change-preference ">Note: You can always change your preferences later in Settings.
-                        </p>
+                        </p><br />
+                        <p class="taxation-not-supported" *ngIf="!formFields['taxName']">Create and apply taxes on all types of transactions! To get tax reports, contact <a href="mailto:sales@giddh.com">sales@giddh.com</a>!</p>
                     </div>
                     <div class="col-xs-12 d-flex mrT5">
                         <button class="btn btn-primary" (click)="back(isbranch)">Back</button>
-                        <button type="submit " class="btn btn-pink" (click)="submit(welcomeForm)"
-                            [disabled]="welcomeForm.invalid || !isGstValid">
-                            {{itemOnBoardingDetails?.isOnBoardingInProgress ?
-                                itemOnBoardingDetails?.isItemUpdateInProgress ? 'Update ' + itemOnBoardingDetails?.onBoardingType : 'Create ' + itemOnBoardingDetails?.onBoardingType :
-                                'Next'
+                        <button type="submit" class="btn btn-pink" (click)="submit(welcomeForm)" [disabled]="welcomeForm.invalid || !isGstValid || isCreateCompanyInProgress">
+                            {{itemOnBoardingDetails?.isOnBoardingInProgress ? itemOnBoardingDetails?.isItemUpdateInProgress ? 'Update ' +  itemOnBoardingDetails?.onBoardingType : 'Create ' + itemOnBoardingDetails?.onBoardingType : 'Submit'
                             }}
                         </button>
                     </div>

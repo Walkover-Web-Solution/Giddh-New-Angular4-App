@@ -1,0 +1,9 @@
+{
+    "transaction_report": "Transaction Report",
+    "voucher_name": "Vch. Name",
+    "voucher_no": "Vch. No.",
+    "debit_amount": "Debit Amt",
+    "credit_amount": "Credit Amt",
+    "product_service": "Product/Service",
+    "qty": "Qty"
+}

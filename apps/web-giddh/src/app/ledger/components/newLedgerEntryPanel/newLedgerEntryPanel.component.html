@@ -55,11 +55,12 @@
                             <input type="text" [(ngModel)]="currentTxn.inventory.unit.rate"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
-                                [mask]="inputMaskFormat" (ngModelChange)="changePrice($event)" name=""
+                                [mask]="inputMaskFormat" [customDecimalPlaces]="4"
+                                (ngModelChange)="changePrice($event)" name="unitPrice"
                                 class="form-control text-right" />
                             <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-                                {{ currentTxn?.convertedRate | giddhCurrency}}
+                                {{ currentTxn?.convertedRate | giddhCurrency: ratePrecision: true}}
                             </p>
                         </td>
 
@@ -123,7 +124,7 @@
                             <!--tax control component-->
                             <!-- Login Changes by Sagar  -->
                             <!-- [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes" -->
-                            <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate" 
+                            <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate"
                                 [taxRenderData]="currentTxn.taxesVm" [totalForTax]="totalForTax"
                                 [customHeading]="shouldShowAdvanceReceiptMandatoryFields ? 'Tax on Advance' : isRcmEntry ? 'Tax (RCM)' : ''"
                                 [isMandatory]="shouldShowAdvanceReceiptMandatoryFields || isRcmEntry"
@@ -179,31 +180,28 @@
             <div class="col-sm-8 col-xs-12" [ngClass]="{'col-sm-offset-4' : !(currentTxn?.selectedAccount?.stock)}">
                 <div class="text-right mb-1" *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
 
-                    <input type="checkbox" [(ngModel)]="blankLedger.isOtherTaxesApplicable"
-                        *ngIf="!blankLedger.isOtherTaxesApplicable"
-                        (ngModelChange)="toggleOtherTaxesAsidePane(blankLedger.isOtherTaxesApplicable)" />
+                    <ng-container *ngIf="isTcsTdsApplicable">
+                        <input type="checkbox" [(ngModel)]="blankLedger.isOtherTaxesApplicable" *ngIf="!blankLedger.isOtherTaxesApplicable"
+                            (ngModelChange)="toggleOtherTaxesAsidePane(blankLedger.isOtherTaxesApplicable)" />
+                        <span *ngIf="!blankLedger.isOtherTaxesApplicable">Other Tax ?</span>
 
-                    <span *ngIf="!blankLedger.isOtherTaxesApplicable">Other Tax ?</span>
-
-                    <div class="clearfix">
-                        <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mrT1 pull-right"
-                            [ngStyle]="{ 'width': totalTdElementWidth + 'px'}">
-                            <label>Other Tax</label>
-                            <span class="d-flex">
-                                <span class="d-flex align-item-center">
-                                    <a href="javascript: void 0" (click)="toggleOtherTaxesAsidePane(true)">
-                                        <img src="assets/images/edit-pencilicon.svg">
-                                    </a>
+                        <div class="clearfix">
+                            <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mrT1 pull-right"
+                                [ngStyle]="{ 'width': totalTdElementWidth + 'px'}">
+                                <label>Other Tax</label>
+                                <span class="d-flex">
+                                    <span class="d-flex align-item-center">
+                                        <a href="javascript:void(0)" (click)="toggleOtherTaxesAsidePane(true)">
+                                            <img src="assets/images/edit-pencilicon.svg">
+                                        </a>
+                                    </span>
+                                    <input class="text-right form-control mrL1" disabled="disabled" [(ngModel)]="blankLedger.otherTaxesSum"
+                                        name="entry.otherTaxesSum" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
+                                        [mask]="inputMaskFormat" />
                                 </span>
-
-                                <input class="text-right form-control mrL1" disabled="disabled"
-                                    [(ngModel)]="blankLedger.otherTaxesSum" name="entry.otherTaxesSum"
-                                    [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
-                                    [mask]="inputMaskFormat" />
-                            </span>
+                            </div>
                         </div>
-                    </div>
-
+                    </ng-container>
                 </div>
             </div>
         </div>
@@ -429,7 +427,7 @@
 
                         <input class="pull-left" type="checkbox" name="generateInvoice" [disabled]="isAdvanceReceipt && blankLedger.generateInvoice ? 'disabled' : null"
                             [(ngModel)]="blankLedger.generateInvoice">
-                        Generate Invoice
+                        Generate Voucher
                     </label>
 
                 </div>

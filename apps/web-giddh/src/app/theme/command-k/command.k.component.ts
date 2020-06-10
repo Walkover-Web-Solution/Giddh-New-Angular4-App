@@ -63,7 +63,8 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         page: 1,
         q: '',
         group: '',
-        totalPages: 1
+        totalPages: 1,
+        isMobile: false
     };
 
     constructor(
@@ -166,6 +167,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
             // emit value for save data in db
             if (item.type === 'GROUP') {
+                this.commandKRequestParams.q = "";
                 this.groupEmitter.emit(item);
             }
 

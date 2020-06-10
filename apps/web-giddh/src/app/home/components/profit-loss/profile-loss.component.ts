@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import { Options } from 'highcharts';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -8,7 +8,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
-import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { DashboardService } from '../../../services/dashboard.service';
 import {
     ProfitLossData,
@@ -20,77 +20,36 @@ import {
 import { TBPlBsActions } from "../../../actions/tl-pl.actions";
 import * as Highcharts from 'highcharts';
 import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'profit-loss',
     templateUrl: 'profit-loss.component.html',
-    styleUrls: ['../../home.component.scss'],
-    styles: [
-        `
-            .total_amt {
-                font-size: 18px;
-            }
-
-            .totalIncomeText {
-                color: #4693F1;
-            }
-
-            .totalExpensesText {
-                color: #FED46A
-            }
-
-            span.monthDropdown {
-                font-size: 12px;
-                color: #666666;
-                vertical-align: top;
-            }
-
-            .dashboard-filter .btn-group {
-                display: block;
-                line-height: 1;
-            }
-
-            .dashboard-filter .btn-group span {
-                vertical-align: middle;
-                color: #666666;
-            }
-
-            .underline {
-                text-decoration: underline;
-            }
-
-            .dashboard-filter {
-                display: inline-flex;
-                color: #666666;
-                align-items: flex-end;
-
-            }
-
-            .dashboard-filter .icon-collapse-icon {
-                margin-left: 8px;
-                font-size: 14px;
-            }
-
-            .dueAmount {
-                color: #262626;
-                font-size: 16px;
-                margin: 0;
-                padding: 0;
-            }
-
-            span.icon-rupees {
-                font-size: 15px;
-            }
-
-            .panel-body small {
-                color: #666666;
-            }
-
-		`
-    ]
+    styleUrls: ['../../home.component.scss', './profit-loss.component.scss'],
 })
 
 export class ProfitLossComponent implements OnInit, OnDestroy {
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will store if device is mobile or not */
+    public isMobileScreen: boolean = false;
+    /* This will store modal reference */
+    public modalRef: BsModalRef;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOptions: any;
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* Selected from date */
+    public fromDate: string;
+    /* Selected to date */
+    public toDate: string;
     @Input() public refresh: boolean = false;
     public imgPath: string = '';
     public options: Options;
@@ -111,7 +70,10 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public dataFound: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef) {
+    constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe,
+        private cdRef: ChangeDetectorRef,
+        private modalService: BsModalService,
+        private generalService: GeneralService) {
         this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
         this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
@@ -130,13 +92,20 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
             }
         });
         // img path
-        this.imgPath = (isElectron||isCordova)  ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        /* This will get the date range picker configurations */
+        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
+            if (config) {
+                this.datePickerOptions = config;
+            }
+        });
         // listen for universal date
         this.universalDate$.subscribe(dateObj => {
             if (this.isDefault && dateObj) {
                 let dates = [];
                 dates = [moment(dateObj[0]).format(GIDDH_DATE_FORMAT), moment(dateObj[1]).format(GIDDH_DATE_FORMAT), false];
+                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.getFilterDate(dates);
                 this.isDefault = false;
             }
@@ -209,8 +178,8 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
             chart: {
                 type: 'pie',
                 polar: false,
-                className: 'profit_loss_chart',
-                width: 348,
+                className: 'profit-loss-chart',
+                width: 260,
                 height: '180px'
             },
             title: {
@@ -283,9 +252,65 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * API call to get refresh chart
+     *
+     * @memberof ProfitLossComponent
+     */
     public refreshChart() {
         this.requestInFlight = true;
         this.plRequest.refresh = true;
         this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(this.plRequest)));
+    }
+
+    /**
+     * This will show the datepicker
+     *
+     * @param {*} element input element reference
+     * @memberof ProfitLossComponent
+     */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof ProfitLossComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+    * Call back function for date/range selection in datepicker
+    *
+    * @param {*} value
+    * @memberof ProfitLossComponent
+    */
+    public dateSelectedCallback(value: any): void {
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.requestInFlight = true;
+            this.plRequest.from = this.fromDate;
+            this.plRequest.to = this.toDate;
+            this.plRequest.refresh = false;
+            this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(this.plRequest)));
+        }
     }
 }

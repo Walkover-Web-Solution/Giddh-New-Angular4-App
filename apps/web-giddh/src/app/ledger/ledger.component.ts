@@ -5,19 +5,19 @@ import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
 import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
-import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { QuickAccountComponent } from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.component';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
-import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
+import { ModalDirective, PaginationComponent, BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, } from 'rxjs';
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
 import * as uuid from 'uuid';
-
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
 import { GeneralActions } from '../actions/general/general.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
@@ -29,7 +29,7 @@ import { AccountResponse } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
-import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest, TransactionsResponse, } from '../models/api-models/Ledger';
+import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, } from '../models/api-models/Ledger';
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
@@ -76,46 +76,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('advanceSearchComp') public advanceSearchComp: AdvanceSearchModelComponent;
 
     @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
+    public imgPath: string = '';
     public lc: LedgerVM;
     public selectedInvoiceList: string[] = [];
     public accountInprogress$: Observable<boolean>;
     public universalDate$: Observable<any>;
-    public datePickerOptions: any = {
-        hideOnEsc: true,
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'Last 1 Day': [
-                moment().subtract(1, 'days'),
-                moment()
-            ],
-            'Last 7 Days': [
-                moment().subtract(6, 'days'),
-                moment()
-            ],
-            'Last 30 Days': [
-                moment().subtract(29, 'days'),
-                moment()
-            ],
-            'Last 6 Months': [
-                moment().subtract(6, 'months'),
-                moment()
-            ],
-            'Last 1 Year': [
-                moment().subtract(12, 'months'),
-                moment()
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
-    };
     public trxRequest: TransactionsRequest;
     public advanceSearchRequest: AdvanceSearchRequest;
     public isLedgerCreateSuccess$: Observable<boolean>;
@@ -129,6 +94,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('bulkActionConfirmationModal') public bulkActionConfirmationModal: ModalDirective;
     @ViewChild('bulkActionGenerateVoucherModal') public bulkActionGenerateVoucherModal: ModalDirective;
     @ViewChild('ledgerSearchTerms') public ledgerSearchTerms: ElementRef;
+    /** datepicker element reference  */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     public showUpdateLedgerForm: boolean = false;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;
@@ -144,6 +111,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public uploadInput: EventEmitter<UploadInput>;
     public fileUploadOptions: UploaderOptions;
     public isFileUploading: boolean = false;
+    /** Boolean for mobile screen or not  */
+    public isMobileScreen: boolean = true;
     public closingBalanceBeforeReconcile: { amount: number, type: string };
     public reconcileClosingBalanceForBank: { amount: number, type: string };
     // aside menu properties
@@ -155,6 +124,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isCompanyCreated$: Observable<boolean>;
     public debitSelectAll: boolean = false;
     public creditSelectAll: boolean = false;
+    public debitCreditSelectAll: boolean = false;
     public isBankTransactionLoading: boolean = false;
     public todaySelected: boolean = false;
     public todaySelected$: Observable<boolean> = observableOf(false);
@@ -196,9 +166,36 @@ export class LedgerComponent implements OnInit, OnDestroy {
         from: '',
         to: ''
     };
-
+    /** True if columnar report show*/
+    public isShowLedgerColumnarReportTable: boolean = false;
+    /** Export ledger request object */
+    public columnarReportExportRequest: ExportLedgerRequest;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
+    /** Transactions dates array */
+    public allTransactionsList: any[] = [];
+    public allTransactionDates: any[] = [];
+    public Shown: boolean = true;
+    public isHide: boolean = false;
+    public condition: boolean = true;
+    public condition2: boolean = false;
+    public visibleTransactionTypeMobile: string = "all";
+    public ledgerTransactions: any;
+
+    /* New Datepicker Variables */
+
+    /* This will store modal reference */
+    public modalRef: BsModalRef;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerRanges: any;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
 
     constructor(
         private store: Store<AppState>,
@@ -215,7 +212,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private _loaderService: LoaderService,
         private _settingsDiscountAction: SettingsDiscountActions,
         private warehouseActions: WarehouseActions,
-        private _cdRf: ChangeDetectorRef
+        private _cdRf: ChangeDetectorRef,
+        private breakPointObservar: BreakpointObserver,
+        private modalService: BsModalService
     ) {
 
         this.lc = new LedgerVM();
@@ -249,12 +248,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.failedBulkEntries$ = this.store.select(p => p.ledger.ledgerBulkActionFailedEntries).pipe(takeUntil(this.destroyed$));
     }
 
-    Shown: boolean = true;
-    isHide: boolean = false;
-    condition: boolean = true;
-    condition2: boolean = false;
-
-    toggleShow() {
+    public toggleShow() {
         this.condition = this.condition ? false : true;
         this.condition2 = this.condition ? false : true;
         this.Shown = this.Shown ? false : true;
@@ -274,11 +268,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public selectedDate(value: any) {
-        this.needToShowLoader = false;
-        let from = moment(value.picker.startDate, 'DD-MM-YYYY').toDate();
-        let to = moment(value.picker.endDate, 'DD-MM-YYYY').toDate();
+        this.selectedRangeLabel = "";
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
 
-        // if ((this.advanceSearchRequest.dataToSend.bsRangeValue[0] !== from) || (this.advanceSearchRequest.dataToSend.bsRangeValue[1] !== to)) {
+        this.needToShowLoader = false;
+        let from = moment(value.startDate, GIDDH_DATE_FORMAT).toDate();
+        let to = moment(value.endDate, GIDDH_DATE_FORMAT).toDate();
 
         this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
             page: 0,
@@ -286,10 +284,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 bsRangeValue: [from, to]
             })
         });
-        this.trxRequest.from = moment(value.picker.startDate).format('DD-MM-YYYY');
-        this.trxRequest.to = moment(value.picker.endDate).format('DD-MM-YYYY');
+        this.trxRequest.from = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+        this.trxRequest.to = moment(value.endDate).format(GIDDH_DATE_FORMAT);
         this.todaySelected = true;
-        this.lc.blankLedger.entryDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
+        this.lc.blankLedger.entryDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
         this.getTransactionData();
         // Después del éxito de la entrada. llamar para transacciones bancarias
         this.lc.activeAccount$.subscribe((data: AccountResponse) => {
@@ -299,7 +297,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.hideEledgerWrap();
             }
         });
-        // setTimeout(()=>{this._cdRf.detectChanges()} , 500);
     }
 
     public selectAccount(e: IOption, txn: TransactionVM) {
@@ -423,15 +420,43 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public hideEledgerWrap() {
         this.lc.showEledger = false;
     }
-
+    /**
+     * To change pagination page number
+     *
+     * @param {*} event Pagination change event
+     * @memberof LedgerComponent
+     */
     public pageChanged(event: any): void {
         // this.advanceSearchRequest.page = event.page;
         this.trxRequest.page = event.page;
         // this.lc.currentPage = event.page;
-        this.getTransactionData();
+
+        if (this.isAdvanceSearchImplemented) {
+            this.advanceSearchRequest.page = event.page;
+            this.getAdvanceSearchTxn();
+        } else {
+            this.getTransactionData();
+        }
     }
 
     public ngOnInit() {
+        this.imgPath = (isElectron||isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.breakPointObservar.observe([
+            '(max-width: 991px)'
+        ]).subscribe(result => {
+            this.isMobileScreen = result.matches;
+            if (this.isMobileScreen) {
+                this.arrangeLedgerTransactionsForMobile();
+            }
+        });
+
+        /* This will get the date range picker configurations */
+        this.store.pipe(select(stores => stores.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
+            if (config) {
+                this.datePickerRanges = config;
+            }
+        });
+
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
         this.shouldShowItcSection = false;
@@ -451,16 +476,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let from = params['from'];
                 let to = params['to'];
 
-                this.datePickerOptions = {
-                    ...this.datePickerOptions,
-                    startDate: moment(from, 'DD-MM-YYYY').toDate(),
-                    endDate: moment(to, 'DD-MM-YYYY').toDate(),
-                    chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
-                };
+                this.selectedDateRange = { startDate: moment(from), endDate: moment(to) };
+                this.selectedDateRangeUi = moment(from).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(to).format(GIDDH_NEW_DATE_FORMAT_UI);
 
                 this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                     dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
-                        bsRangeValue: [moment(from, 'DD-MM-YYYY').toDate(), moment(to, 'DD-MM-YYYY').toDate()]
+                        bsRangeValue: [moment(from, GIDDH_DATE_FORMAT).toDate(), moment(to, GIDDH_DATE_FORMAT).toDate()]
                     })
                 });
                 this.advanceSearchRequest.to = to;
@@ -474,31 +495,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (dateObj && !this.todaySelected) {
                     let universalDate = _.cloneDeep(dateObj);
 
-                    this.datePickerOptions = {
-                        ...this.datePickerOptions,
-                        startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
-                        endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate(),
-                        chosenLabel: universalDate[2]
-                    };
+                    this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
+                    this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+
                     this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                         dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
-                            bsRangeValue: [moment(universalDate[0], 'DD-MM-YYYY').toDate(), moment(universalDate[1], 'DD-MM-YYYY').toDate()]
+                            bsRangeValue: [moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(), moment(universalDate[1], GIDDH_DATE_FORMAT).toDate()]
                         })
                     });
                     this.advanceSearchRequest.to = universalDate[1];
                     this.advanceSearchRequest.page = 0;
 
-                    this.trxRequest.from = moment(universalDate[0]).format('DD-MM-YYYY');
-                    this.trxRequest.to = moment(universalDate[1]).format('DD-MM-YYYY');
+                    this.trxRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                    this.trxRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                     this.trxRequest.page = 0;
                 } else {
-                    // date picker start and end date set to today when app date is selected as today
-                    this.datePickerOptions = {
-                        ...this.datePickerOptions,
-                        startDate: moment().toDate(),
-                        endDate: moment().toDate(),
-                        chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
-                    };
+                    this.selectedDateRange = { startDate: moment(), endDate: moment() };
+                    this.selectedDateRangeUi = moment().format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment().format(GIDDH_NEW_DATE_FORMAT_UI);
+
                     // set advance search bsRangeValue to blank, because we are depending api to give us from and to date
                     this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                         dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
@@ -568,13 +582,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.transactionData$.subscribe((lt: any) => {
             if (lt) {
                 // set date picker to and from date, as what we got from api
-                if (lt.from && lt.to) {
-                    this.datePickerOptions = {
-                        ...this.datePickerOptions,
-                        startDate: moment(lt.from, 'DD-MM-YYYY').toDate(),
-                        endDate: moment(lt.to, 'DD-MM-YYYY').toDate(),
-                        chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
-                    };
+                if (lt.from && lt.to && (!this.selectedDateRange || !this.selectedDateRange.startDate || !this.selectedDateRange.endDate)) {
+                    this.selectedDateRange = { startDate: moment(lt.from), endDate: moment(lt.to) };
+                    this.selectedDateRangeUi = moment(lt.from).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(lt.to).format(GIDDH_NEW_DATE_FORMAT_UI);
+                }
+
+                this.ledgerTransactions = lt;
+
+                if (this.isMobileScreen) {
+                    this.arrangeLedgerTransactionsForMobile();
                 }
 
                 if (lt.closingBalance) {
@@ -786,7 +802,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.entryUniqueNamesForBulkAction = [];
                 this.getTransactionData();
                 // this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
-                //   moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
+                //   moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
                 //   this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
             }
         });
@@ -810,13 +826,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public initTrxRequest(accountUnq: string) {
         this._loaderService.show();
-        // this.advanceSearchRequest = this.advanceSearchRequest || new AdvanceSearchRequest();
-        // this.advanceSearchRequest.page = 0;
-        // this.advanceSearchRequest.count = 15;
         this.advanceSearchRequest.accountUniqueName = accountUnq;
-        // this.advanceSearchRequest.from = this.advanceSearchRequest.from || moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
-        // this.advanceSearchRequest.to = this.advanceSearchRequest.to || moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
-        // this.advanceSearchRequest.dataToSend = this.advanceSearchRequest.dataToSend || new AdvanceSearchModel();
         this.trxRequest.accountUniqueName = accountUnq;
         // always send accountCurrency true when requesting for first time
         this.trxRequest.accountCurrency = true;
@@ -873,7 +883,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public saveBankTransaction() {
-        // Api llama para mover la transacción bancaria al libro mayor
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject();
         blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
         delete blankTransactionObj['voucherType'];
@@ -911,7 +920,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             from = this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code;
             to = this.selectedCurrency === 0 ? this.foreignCurrencyDetails.code : this.baseCurrencyDetails.code;
         }
-        let date = moment().format('DD-MM-YYYY');
+        let date = moment().format(GIDDH_DATE_FORMAT);
         this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
             let rate = response.body;
             if (rate) {
@@ -989,7 +998,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.lc.addNewTransaction('CREDIT')
             ],
             voucherType: null,
-            entryDate: this.datePickerOptions.endDate ? moment(this.datePickerOptions.endDate).format('DD-MM-YYYY') : moment().format('DD-MM-YYYY'),
+            entryDate: this.selectedDateRange.endDate ? moment(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT),
             unconfirmedEntry: false,
             attachedFile: '',
             attachedFileName: '',
@@ -1118,8 +1127,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public showShareLedgerModal() {
-        this.shareLedgerDates.from = moment(this.datePickerOptions.startDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-        this.shareLedgerDates.to = moment(this.datePickerOptions.endDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+        this.shareLedgerDates.from = moment(this.selectedDateRange.startDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+        this.shareLedgerDates.to = moment(this.selectedDateRange.endDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
         this.sharLedger.clear();
         this.shareLedgerModal.show();
@@ -1142,22 +1151,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this._loaderService.show();
 
         if (this.lc.blankLedger.entryDate) {
-            if (!moment(this.lc.blankLedger.entryDate, 'DD-MM-YYYY').isValid()) {
+            if (!moment(this.lc.blankLedger.entryDate, GIDDH_DATE_FORMAT).isValid()) {
                 this._toaster.errorToast('Invalid Date Selected.Please Select Valid Date');
                 this._loaderService.hide();
                 return;
             } else {
-                this.lc.blankLedger.entryDate = moment(this.lc.blankLedger.entryDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
+                this.lc.blankLedger.entryDate = moment(this.lc.blankLedger.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         }
 
         if (this.lc.blankLedger.chequeClearanceDate) {
-            if (!moment(this.lc.blankLedger.chequeClearanceDate, 'DD-MM-YYYY').isValid()) {
+            if (!moment(this.lc.blankLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).isValid()) {
                 this._toaster.errorToast('Invalid Date Selected In Cheque Clearance Date.Please Select Valid Date');
                 this._loaderService.hide();
                 return;
             } else {
-                this.lc.blankLedger.chequeClearanceDate = moment(this.lc.blankLedger.chequeClearanceDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
+                this.lc.blankLedger.chequeClearanceDate = moment(this.lc.blankLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         }
 
@@ -1192,7 +1201,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public resetAdvanceSearch() {
+        this.searchText = "";
         this.advanceSearchComp.resetAdvanceSearchModal();
+        this.trxRequest.page = 0;
+        this.search("");
         this.getTransactionData();
     }
 
@@ -1309,7 +1321,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (!this.paginationChild) {
             return;
         }
-        let transactionData = null;
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
         let viewContainerRef = this.paginationChild.viewContainerRef;
         viewContainerRef.remove();
@@ -1339,11 +1350,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public onOpenAdvanceSearch(): void {
-        if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.datePickerOptions && this.datePickerOptions.startDate && this.datePickerOptions.endDate ) {
+        if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.selectedDateRange && this.selectedDateRange.startDate && this.selectedDateRange.endDate) {
             this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                 page: 0,
                 dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
-                    bsRangeValue: [this.datePickerOptions.startDate, this.datePickerOptions.endDate]
+                    bsRangeValue: [this.selectedDateRange.startDate, this.selectedDateRange.endDate]
                 })
             });
         }
@@ -1362,20 +1373,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.advanceSearchModel.hide();
         if (!event.isClose) {
             this.getAdvanceSearchTxn();
-            // this.getTransactionData();
             if (event.advanceSearchData) {
                 if (event.advanceSearchData['dataToSend']['bsRangeValue'].length) {
-                    this.datePickerOptions = {
-                        ...this.datePickerOptions,
-                        startDate: moment(event.advanceSearchData.dataToSend.bsRangeValue[0], 'DD-MM-YYYY').toDate(),
-                        endDate: moment(event.advanceSearchData.dataToSend.bsRangeValue[1], 'DD-MM-YYYY').toDate(),
-                        chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
-                    };
+                    this.selectedDateRange = { startDate: moment(event.advanceSearchData.dataToSend.bsRangeValue[0]), endDate: moment(event.advanceSearchData.dataToSend.bsRangeValue[1]) };
+                    this.selectedDateRangeUi = moment(event.advanceSearchData.dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(event.advanceSearchData.dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 }
-
             }
         }
-        // this.advanceSearchRequest = _.cloneDeep(advanceSearchRequest);
     }
 
     public getReconciliation() {
@@ -1441,10 +1445,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
-    public selectAllEntries(ev: any, type: 'debit' | 'credit') {
-        let key = type === 'debit' ? 'DEBIT' : 'CREDIT';
+    public selectAllEntries(ev: any, type: 'debit' | 'credit' | 'all') {
         if (!ev.target.checked) {
-            if (type === 'debit') {
+            if (type === 'all') {
+                this.debitCreditSelectAll = false;
+            } else if (type === 'debit') {
                 this.debitSelectAll = false;
             } else {
                 this.creditSelectAll = false;
@@ -1635,11 +1640,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.isAdvanceSearchImplemented = true;
         if (!this.todaySelected) {
             this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
-                moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
+                moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
                 this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
         } else {
-            let from = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[0] ? moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY') : '';
-            let to = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[1] ? moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY') : '';
+            let from = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[0] ? moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : '';
+            let to = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[1] ? moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : '';
             this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend),
                 this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count)
             );
@@ -1672,6 +1677,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.closingBalanceBeforeReconcile = null;
         this.getBankTransactions();
         this.getTransactionData();
+    }
+
+    /**
+     * Handle amount input
+     *
+     * @param {TransactionVM} transaction Current transaction
+     * @memberof LedgerComponent
+     */
+    public handleAmountInput(transaction: TransactionVM): void {
+        if (transaction.amount !== undefined) {
+            transaction.amount = Number(transaction.amount);
+            this.needToReCalculate.next(true);
+        }
     }
 
     /**
@@ -1791,4 +1809,118 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     }
 
+    /**
+     * To show columnar report table
+     *
+     * @param {{ isShowColumnarTable: boolean, exportRequest: ExportLedgerRequest }} event Ccolumnar report emmiter event object
+     * @memberof LedgerComponent
+     */
+    public onShowColumnarReportTable(event: { isShowColumnarTable: boolean, exportRequest: ExportLedgerRequest }): void {
+
+        let advanceSearch = cloneDeep(this.advanceSearchRequest)
+        if (!advanceSearch.dataToSend.bsRangeValue) {
+            this.universalDate$.pipe(take(1)).subscribe(date => {
+                if (date) {
+                    advanceSearch.dataToSend.bsRangeValue = [moment(date[0], GIDDH_DATE_FORMAT).toDate(), moment(date[1], GIDDH_DATE_FORMAT).toDate()];
+                }
+            });
+        }
+        event.exportRequest.from = moment(advanceSearch.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(advanceSearch.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+        event.exportRequest.to = moment(advanceSearch.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(advanceSearch.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
+        this.isShowLedgerColumnarReportTable = event.isShowColumnarTable;
+        this.columnarReportExportRequest = event.exportRequest;
+        this.hideExportLedgerModal();
+    }
+
+    /**
+     * This will toggle transaction type for mobile
+     *
+     * @param {string} transactionType
+     * @memberof LedgerComponent
+     */
+    public toggleMobileTransactionType(transactionType: string): void {
+        this.visibleTransactionTypeMobile = transactionType;
+        this.arrangeLedgerTransactionsForMobile();
+    }
+
+    /**
+     * This will merge transactions of debit/credit based on visible transaction type for mobile
+     *
+     * @memberof LedgerComponent
+     */
+    public arrangeLedgerTransactionsForMobile(): void {
+        if (this.ledgerTransactions) {
+            this.allTransactionsList = [];
+            this.allTransactionDates = [];
+
+            if (this.visibleTransactionTypeMobile !== "credit" && this.ledgerTransactions.debitTransactions) {
+                this.ledgerTransactions.debitTransactions.forEach(transaction => {
+                    if (this.allTransactionsList[transaction.entryDate] === undefined) {
+                        this.allTransactionsList[transaction.entryDate] = [];
+                    }
+                    this.allTransactionsList[transaction.entryDate].push(transaction);
+                });
+            }
+
+            if (this.visibleTransactionTypeMobile !== "debit" && this.ledgerTransactions.creditTransactions) {
+                this.ledgerTransactions.creditTransactions.forEach(transaction => {
+                    if (this.allTransactionsList[transaction.entryDate] === undefined) {
+                        this.allTransactionsList[transaction.entryDate] = [];
+                    }
+                    this.allTransactionsList[transaction.entryDate].push(transaction);
+                });
+            }
+
+            if (this.allTransactionsList) {
+                this.allTransactionDates = Object.keys(this.allTransactionsList);
+            }
+        }
+    }
+
+    /**
+     * This will show the datepicker
+     *
+     * @memberof LedgerComponent
+     */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof LedgerComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof LedgerComponent
+     */
+    public dateSelectedCallback(value: any): void {
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+
+        this.hideGiddhDatepicker();
+
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+
+            this.selectedDate(value);
+        }
+    }
 }

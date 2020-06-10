@@ -2,31 +2,13 @@
 
     <div class="d-flex date-advanceSearch">
         <form #invoiceForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker pr">
-
             <div class="d-flex">
-
                 <div class="form-group mrR1 d-flex">
                     <div class="input-group ">
                         <!-- <span class="icon-calender"></span> -->
                         <span class="inputWrapper">
                             <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
                                 class="form-control" (applyDaterangepicker)="dateRangeChanged($event)" />
-
-<!--                            <input type="text"-->
-<!--                                   [(ngModel)]="selectedDateRange"-->
-<!--                                   ngxDaterangepickerMd-->
-<!--                                   [alwaysShowCalendars]="true"-->
-<!--                                   [ranges]="datePickerOptions.ranges"-->
-<!--                                   [showClearButton]="false"-->
-<!--                                   [showCancel]="true"-->
-<!--                                   [showDropdowns]="true"-->
-<!--                                   [locale]="{applyLabel: 'Done'}"-->
-<!--                                   (datesUpdated)="dateRangeChanged($event)"-->
-<!--                                   [keepCalendarOpeningWithRange]="true"-->
-<!--                                   [showRangeLabelOnInput]="false"-->
-<!--                                   name="selectedDateRange"-->
-<!--                                   class="form-control"-->
-<!--                                   placeholder="Select please..."/>-->
                         </span>
                     </div>
 
@@ -34,10 +16,9 @@
                         <span class="icon-advance-search" (click)="toggleAdvanceSearchPopup()" tooltip="Advance Search"></span>
                         <!-- -->
                     </div>
-                    <!-- <a class="cp pd smallLoading" *ngIf="showResetAdvanceSearchIcon" href="javascript: void 0"
-            (click)="resetAdvanceSearch()">
-            <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333" tooltip="Reset Filter"></i>
-          </a> -->
+                    <div class="search-icon-block" (click)="openModal(template)">
+                        <i class="icon-search"></i>
+                    </div>
                 </div>
 
 
@@ -51,7 +32,7 @@
             </button>
         </div>
 
-        <div class="d-flex">
+        <div class="d-flex btn-wrapper">
 
             <!-- region more items -->
             <div *ngIf="selectedItems.length === 1" style="height: 30px;">
@@ -59,7 +40,7 @@
                 <div class="btn-group" dropdown #dp="bs-dropdown"
                     style="margin-bottom: 10px;display: inline-block !important;">
 
-                    <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
+                    <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                         aria-controls="dropdown-basic">
                         More
                         <span class="caret"></span>
@@ -77,13 +58,13 @@
             </div>
             <!-- endregion -->
 
-            <div *ngIf="voucherType === 'proformas'" class="btn-wrapper mb-1">
+            <div *ngIf="voucherType === 'proformas'" class="btn-wrapper">
                 <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
                     Proforma
                 </button>
             </div>
 
-            <div *ngIf="voucherType === 'estimates'" class="btn-wrapper mb-1">
+            <div *ngIf="voucherType === 'estimates'" class="btn-wrapper">
                 <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
                     Estimate
                 </button>
@@ -92,7 +73,7 @@
         </div>
     </div>
 
-    <div class="mobileSearch mrB1">
+    <div class="mobile-search mrB1">
         <div class="row">
             <div class="col-sm-6 col-xs-6 full-width-on-mobile">
                 <div class="input-container">
@@ -108,13 +89,76 @@
                 </div>
             </div>
         </div>
+        <div class="d-flex mt-1">
+            <div *ngIf="voucherType === 'proformas'" class="btn-wrapper mr-15">
+                <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
+                    Proforma
+                </button>
+            </div>
+
+            <div *ngIf="voucherType === 'estimates'" class="btn-wrapper mr-15">
+                <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
+                    Estimate
+                </button>
+            </div>
+            <div *ngIf="selectedItems.length === 1" style="height: 30px;">
+
+                <div class="btn-group" dropdown #dp="bs-dropdown"
+                    style="margin-bottom: 10px;display: inline-block !important;">
+
+                    <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
+                        aria-controls="dropdown-basic">
+                        More
+                        <span class="caret"></span>
+                    </button>
+
+                    <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+
+                        <li role="menuitem">
+                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleConfirmationModel(true)">Delete</a>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </div>
+
+        </div>
 
     </div>
+
+    <ng-template #template>
+        <div class="modal-header">
+          <h4 class="modal-title bg pull-left">Search here...</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+                        <div class="input-container">
+                            <input type="text" placeholder="Search Invoice No." class=" form-control" #searchBox name="voucherNumberInput" [formControl]="voucherNumberInput" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+                        <div class="input-container">
+                            <input type="text" placeholder="Search Customer Name" class=" form-control" #searchBox name="accountUniqueNameInput" [formControl]="accountUniqueNameInput" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-6 mt-2">
+                        <button class="btn btn-pink">Submit</button>
+                    </div>
+                   
+                </div>
+            
+        </div>
+    </ng-template>
 
     <!--  -->
     <div class="clearfix">
         <div class="table-responsive removeResponsive">
-            <table class="table basic table-bordered mrT2 invoice-table onMobileView table-responsive">
+            <table class="table basic table-bordered mt-15 invoice-table onMobileView table-responsive">
                 <thead class="t-h-bg1">
                     <tr>
 

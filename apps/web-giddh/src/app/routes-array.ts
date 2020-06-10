@@ -28,7 +28,8 @@ export const ROUTES = [
     { path: 'daybook', redirectTo: 'pages/daybook', pathMatch: 'full' },
     { path: 'purchase', redirectTo: 'pages/purchase-management', pathMatch: 'full' },
     { path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full' },
-    { path: 'accounting-voucher', redirectTo: 'pages/accounting', pathMatch: 'full' },
+    // { path: 'accounting-voucher', redirectTo: 'pages/accounting', pathMatch: 'full' },
+    { path: 'journal-voucher', redirectTo: 'pages/journal-voucher', pathMatch: 'full' },
     { path: 'contact', redirectTo: 'pages/contact' },
     { path: 'aging-report', redirectTo: 'pages/aging-report', pathMatch: 'full' },
     { path: 'import', redirectTo: 'pages/import', pathMatch: 'full' },
@@ -61,6 +62,7 @@ export const ROUTES = [
                 data: { preload: true }
             },
             { path: 'audit-logs', loadChildren: './audit-logs/audit-logs.module#AuditLogsModule' },
+            { path: 'all-modules', loadChildren: './all-modules/all-modules.module#AllModulesModule' },
             { path: 'create-advance-receipt', loadChildren: './create-advance-receipt/create-advance-receipt.modulee#CreateAdvanceReceiptModule' },
             {
                 path: 'ledger/:accountUniqueName',
@@ -74,8 +76,13 @@ export const ROUTES = [
                 loadChildren: './manufacturing/manufacturing.module#ManufacturingModule',
                 data: { preload: true }
             },
+            // {
+            //     path: 'accounting-voucher',
+            //     loadChildren: './accounting/accounting.module#AccountingModule',
+            //     data: { preload: true }
+            // },
             {
-                path: 'accounting-voucher',
+                path: 'journal-voucher',
                 loadChildren: './accounting/accounting.module#AccountingModule',
                 data: { preload: true }
             },

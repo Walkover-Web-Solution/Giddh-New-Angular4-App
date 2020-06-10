@@ -222,10 +222,10 @@ export class LoginActions {
     public loginSuccessByURL$: Observable<Action> = this.actions$
         .ofType(LoginActions.LoginSuccessBYUrl).pipe(
             switchMap((action) => {
-                console.log("YES");
+                console.log("Login Init");
                 return observableZip(this._companyService.getStateDetails(''), this._companyService.CompanyList(), this._companyService.CurrencyList());
             }), map((results: any[]) => {
-                console.log("YES2");
+                console.log("Login Success");
                 /* check if local storage is cleared or not for first time
 				 for application menu set up in localstorage */
 
@@ -275,10 +275,10 @@ export class LoginActions {
     public loginSuccess$: Observable<Action> = this.actions$
         .ofType(LoginActions.LoginSuccess).pipe(
             switchMap((action) => {
-                console.log("YES");
+                console.log("Login Init");
                 return observableZip(this._companyService.getStateDetails(''), this._companyService.CompanyList(), this._companyService.CurrencyList());
             }), map((results: any[]) => {
-                console.log("YES2");
+                console.log("Login Success");
                 /* check if local storage is cleared or not for first time
                  for application menu set up in localstorage */
 
@@ -1054,13 +1054,17 @@ export class LoginActions {
         // now take first company from the companies
         let cArr = companies.body.sort((a, b) => a.name.length - b.name.length);
         let company = cArr[0];
-        respState.body.companyUniqueName = company.uniqueName;
+        if(company) {
+            respState.body.companyUniqueName = company.uniqueName;
+        } else {
+            respState.body.companyUniqueName = "";
+        }
         respState.status = 'success';
         respState.request = '';
         respState.body.lastState = 'home';
         // check for entity and override last state ['GROUP', 'ACCOUNT']
         try {
-            if (company.userEntityRoles && company.userEntityRoles.length) {
+            if (company && company.userEntityRoles && company.userEntityRoles.length) {
                 // find sorted userEntityRoles
                 let entitiesArr = company.userEntityRoles.sort((a, b) => a.entity.name.length - b.entity.name.length);
                 let entityObj = entitiesArr[0].entity;
@@ -1072,6 +1076,8 @@ export class LoginActions {
                 } else {
                     respState.body.lastState = 'home';
                 }
+            } else {
+                respState.body.lastState = 'home';
             }
         } catch (error) {
             respState.body.lastState = 'home';
@@ -1083,7 +1089,11 @@ export class LoginActions {
         this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
         this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-        this._router.navigate([stateDetail.body.lastState]);
+        if(screen.width <= 767 || isCordova) {
+            this._router.navigate(["/pages/mobile-home"]);
+        } else {
+            this._router.navigate([stateDetail.body.lastState]);
+        }
         if (isElectron || isCordova) {
             window.location.reload();
         }

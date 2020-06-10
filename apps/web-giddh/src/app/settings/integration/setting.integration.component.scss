@@ -1,3 +1,4 @@
+@import "../../../assets/css/color.scss";
 #inlnImg img {
     max-height: 18px;
 }
@@ -10,10 +11,60 @@
     padding: 0 20px;
 }
 
-@media(max-waidth:768px) {
+.info-icon {
+    i {
+        position: absolute;
+        right: 0;
+        top: 4px;
+        color: $gray;
+    }
+}
+
+.check-search {
+    position: absolute;
+    right: 10px;
+    top: 18px;
+    width: 13px;
+}
+.disabled:after {
+    background: transparent;
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    clear: both;
+    float: none;
+    overflow: hidden;
+    position: absolute;
+    z-index: 999;
+    cursor: not-allowed;
+}
+.disabled .list-item {
+    position: relative;
+}
+.disabled {
+    position: relative;
+}
+.disabled-list-item {
+    padding: 6px;
+    height: 100%;
+    background: $white;
+}
+@media(max-width:768px) {
     .empty-label label,
     .empty-label br {
         display: none;
+    }
+}
+
+.plus-cross-btn {
+    i {
+        padding: 5px 0;
+        color: $gray;
+        font-size: 20px;
     }
 }
 
@@ -25,5 +76,18 @@
     .inlnImg label {
         margin: 0;
         display: none;
+    }
+    .gmail-integration-message {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        h4 {
+            align-self: self-start !important;
+            padding-bottom: 10px;
+            font-size: 14px;
+        }
+        .btn-danger {
+            margin-left: 0 !important;
+        }
     }
 }

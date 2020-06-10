@@ -1,0 +1,93 @@
+<div class="reverse-table-report" *ngIf="!isLoading">
+    <div class="container-fluid">
+        <div class="invoice-preview  table-responsive">
+            <table class="table basic giddh-table onMobileView">
+                <thead class="t-h-bg1">
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th>Date
+                        </th>
+                        <th>Particulars
+                        </th>
+                        <th>Address
+                        </th>
+                        <th>Voucher Type
+                        </th>
+                        <th>Voucher Number
+                        </th>
+                        <th>Voucher Ref No
+                        </th>
+                        <th>Voucher Ref Date
+                        </th>
+                        <th>Tax Number
+                        </th>
+                        <th>Narration
+                        </th>
+                        <th>Stock Name
+                        </th>
+
+                        <th>Quantity
+                        </th>
+                        <th>Unit
+                        </th>
+                        <th>Rate
+                        </th>
+                        <th>Value
+                        </th>
+                        <th>Gross Total
+                        </th>
+                        <ng-container *ngFor="let item of columnarTableColumn;">
+                            <th>
+                                {{item}}
+                            </th>
+                        </ng-container>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of reportResponseResult; let itemIndexOfElement = index;">
+                        <td data-title="S. No" class="text-center">{{ itemIndexOfElement + 1 }} </td>
+                        <td data-title="Date" class="text-center">{{ item.date }} </td>
+                        <td data-title="Particulars" class="text-center">{{ item.baseAccount }} </td>
+                        <td data-title="Address" class="text-center">{{ item.address }} </td>
+                        <td data-title="Voucher Type" class="text-center">{{ item.voucherType }} </td>
+                        <td data-title="Voucher Number" class="text-center">{{ item.voucherNumber }} </td>
+                        <td data-title="Voucher Ref No" class="text-center">{{ item.voucherRefNo }} </td>
+                        <td data-title="Voucher Ref Date" class="text-center">{{ item.voucherRefDate }} </td>
+
+                        <td data-title="Tax Number" class="text-center">{{ item.taxNumber }} </td>
+                        <td data-title="Narration" class="text-center">{{ item.narration }} </td>
+                        <td data-title="Stock Name" class="text-center">{{ item.stockName }} </td>
+                        <td data-title="Quantity" class="text-center">{{ item.quantity }} </td>
+                        <td data-title="Unit" class="text-center">{{ item.stockUnitCode }} </td>
+                        <td data-title="Rate" class="text-center">{{ item.rate }} </td>
+                        <td data-title="Value" class="text-center">{{ item.value }} </td>
+                        <td data-title="Gross Total" class="text-center">{{ item.grossTotal }} </td>
+                        <ng-container *ngFor="let key of columnarTableColumn;">
+                            <td>
+                                {{item.accountNameAndBalanceMap[key]}}
+                            </td>
+                        </ng-container>
+                    </tr>
+                </tbody>
+                <tbody *ngIf="reportResponse  &&  reportResponse?.totalItems === 0">
+                    <tr>
+                        <td [attr.colspan]="getTotalNoOfColumn()" align="center">No records found.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="paginationWrapper" *ngIf="reportResponse && reportResponse?.totalPages > 1">
+            <pagination [totalItems]="reportResponse.totalItems" [(ngModel)]="reportResponse.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isLoading">
+    <div class="no-data mrT2 loader-main">
+        <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+        <div class="spinner2">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
+    </div>
+</div>

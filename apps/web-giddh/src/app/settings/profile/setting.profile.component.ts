@@ -626,10 +626,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public getOnboardingForm(countryCode) {
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                Object.keys(res.fields).forEach(key => {
-                    this.formFields[res.fields[key].name] = [];
-                    this.formFields[res.fields[key].name] = res.fields[key];
-                });
+                if (res.fields) {
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            this.formFields[res.fields[key].name] = [];
+                            this.formFields[res.fields[key].name] = res.fields[key];
+                        }
+                    });
+                }
             } else {
                 let onboardingFormRequest = new OnboardingFormRequest();
                 onboardingFormRequest.formName = 'onboarding';
@@ -637,5 +641,20 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
             }
         });
+    }
+
+    /**
+     * This will return the state code/name if available
+     *
+     * @param {*} gst
+     * @returns {string}
+     * @memberof SettingProfileComponent
+     */
+    public getState(gst): string {
+        let state = "";
+        if(gst.stateCode) {
+            state = gst.stateCode + " - " + gst.stateName;
+        }
+        return state;
     }
 }

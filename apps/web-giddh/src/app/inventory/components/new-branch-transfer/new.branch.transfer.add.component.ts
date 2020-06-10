@@ -282,21 +282,29 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public selectCompany(event, type, index): void {
         if (type) {
             if (type === "sources") {
-                this.branchTransfer.sources[index].name = event.label;
-                this.branchTransfer.sources[index].warehouse.name = "";
-                this.branchTransfer.sources[index].warehouse.uniqueName = "";
-                this.branchTransfer.sources[index].warehouse.taxNumber = "";
-                this.branchTransfer.sources[index].warehouse.address = "";
-
-                this.resetSourceWarehouses(index);
+                if (this.branchTransfer.sources[index]) {
+                    this.branchTransfer.sources[index].name = event.label;
+                    if (this.branchTransfer.sources[index].warehouse) {
+                        this.branchTransfer.sources[index].warehouse.name = "";
+                        this.branchTransfer.sources[index].warehouse.uniqueName = "";
+                        this.branchTransfer.sources[index].warehouse.taxNumber = "";
+                        this.branchTransfer.sources[index].warehouse.address = "";
+                        this.branchTransfer.sources[index].warehouse.stockDetails.quantity = (event.value) ? 1 : null;
+                    }
+                    this.resetSourceWarehouses(index);
+                }
             } else {
-                this.branchTransfer.destinations[index].name = event.label;
-                this.branchTransfer.destinations[index].warehouse.name = "";
-                this.branchTransfer.destinations[index].warehouse.uniqueName = "";
-                this.branchTransfer.destinations[index].warehouse.taxNumber = "";
-                this.branchTransfer.destinations[index].warehouse.address = "";
-
-                this.resetDestinationWarehouses(index);
+                if (this.branchTransfer.destinations[index]) {
+                    this.branchTransfer.destinations[index].name = event.label;
+                    if (this.branchTransfer.destinations[index].warehouse) {
+                        this.branchTransfer.destinations[index].warehouse.name = "";
+                        this.branchTransfer.destinations[index].warehouse.uniqueName = "";
+                        this.branchTransfer.destinations[index].warehouse.taxNumber = "";
+                        this.branchTransfer.destinations[index].warehouse.address = "";
+                        this.branchTransfer.destinations[index].warehouse.stockDetails.quantity = (event.value) ? 1 : null;
+                    }
+                    this.resetDestinationWarehouses(index);
+                }
             }
         }
     }
@@ -449,10 +457,14 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                Object.keys(res.fields).forEach(key => {
-                    this.formFields[res.fields[key].name] = [];
-                    this.formFields[res.fields[key].name] = res.fields[key];
-                });
+                if (res.fields) {
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            this.formFields[res.fields[key].name] = [];
+                            this.formFields[res.fields[key].name] = res.fields[key];
+                        }
+                    });
+                }
             } else {
                 let onboardingFormRequest = new OnboardingFormRequest();
                 onboardingFormRequest.formName = '';
@@ -494,6 +506,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             product.name = event.additional.name;
             product.stockDetails.stockUnit = event.additional.stockUnit.code;
             product.stockDetails.rate = event.additional.rate;
+            product.stockDetails.quantity = product.stockDetails.quantity || 1;
             product.skuCode = event.additional.skuCode;
 
             if (this.inventorySettings.manageInventory || !event.additional.sacNumber) {
@@ -509,7 +522,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.focusDefaultSource();
             }
 
-            this.calculateOverallTotal();
+            this.calculateRowTotal(product);
 
             setTimeout(() => {
                 if (this.productDescription) {

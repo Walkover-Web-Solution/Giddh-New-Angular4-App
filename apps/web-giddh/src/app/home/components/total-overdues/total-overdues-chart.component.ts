@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import { Options } from 'highcharts';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -7,85 +7,39 @@ import { HomeActions } from '../../../actions/home/home.actions';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
-import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { DashboardService } from '../../../services/dashboard.service';
 import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 import * as _ from "../../../lodash-optimized";
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'toal-overdues-chart',
     templateUrl: 'total-overdues-chart.component.html',
-    styleUrls: ['../../home.component.scss'],
-    styles: [
-        `
-            .total_amt {
-                font-size: 18px;
-            }
-
-            .customerDueText {
-                color: #0CB1AF;
-            }
-
-            .vendorDueText {
-                color: #F85C88;
-            }
-
-            .secondary_text {
-                color: #5B64C9;
-            }
-
-            span.monthDropdown {
-                font-size: 12px;
-                color: #666666;
-                vertical-align: top;
-            }
-
-            .dashboard-filter .btn-group {
-                display: block;
-                line-height: 1;
-            }
-
-            .dashboard-filter .btn-group span {
-                vertical-align: middle;
-                color: #666666;
-            }
-
-            .underline {
-                text-decoration: underline;
-            }
-
-            .dashboard-filter {
-                display: inline-flex;
-                color: #666666;
-                align-items: flex-end;
-
-            }
-
-            .dashboard-filter .icon-collapse-icon {
-                margin-left: 8px;
-                font-size: 14px;
-            }
-
-            .dueAmount {
-                color: #262626;
-                font-size: 16px;
-                margin: 0;
-                padding: 0;
-            }
-
-            span.icon-rupees {
-                font-size: 15px;
-            }
-
-            .panel-body small {
-                color: #666666;
-            }
-
-		`
-    ]
+    styleUrls: ['../../home.component.scss', './total-overdues-chart.component.scss'],
 })
 
 export class TotalOverduesChartComponent implements OnInit, OnDestroy {
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will store if device is mobile or not */
+    public isMobileScreen: boolean = false;
+    /* This will store modal reference */
+    public modalRef: BsModalRef;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOptions: any;
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* Selected from date */
+    public fromDate: string;
+    /* Selected to date */
+    public toDate: string;
     @Input() public refresh: boolean = false;
     public imgPath: string = '';
     public options: Options;
@@ -107,7 +61,10 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public toRequest: any = { from: '', to: '', refresh: false };
 
-    constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef) {
+    constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe,
+        private cdRef: ChangeDetectorRef,
+        private modalService: BsModalService,
+        private generalService: GeneralService) {
         this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
         this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -127,7 +84,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
             }
         });
         // img path
-        this.imgPath = (isElectron||isCordova)  ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         // listen for universal date
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
@@ -135,6 +92,22 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
                 let dates = [];
                 dates = [moment(dateObj[0]).format(GIDDH_DATE_FORMAT), moment(dateObj[1]).format(GIDDH_DATE_FORMAT), false];
                 this.getFilterDate(dates);
+            }
+        });
+        /* This will get the date range picker configurations */
+        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
+            if (config) {
+                this.datePickerOptions = config;
+            }
+        });
+
+        /* Observer to store universal from/to date */
+        this.universalDate$.subscribe(dateObj => {
+            if (dateObj) {
+                let universalDate = _.cloneDeep(dateObj);
+
+                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
+                this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
         });
     }
@@ -159,8 +132,8 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
             chart: {
                 type: 'pie',
                 polar: false,
-                className: 'overdue_chart',
-                width: 348,
+                className: 'overdue-chart',
+                width: 260,
                 height: '180px'
             },
             title: {
@@ -259,7 +232,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
      *
      * @memberof TotalOverduesChartComponent
      */
-    public checkPayableAndReceivable() : void {
+    public checkPayableAndReceivable(): void {
         if (this.totalRecievable === 0 && this.totalPayable === 0) {
             this.resetChartData();
         } else {
@@ -278,7 +251,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
             if (response && response.status === 'success' && response.body && response.body[0]) {
                 this.dataFound = true;
 
-                if(group === "sundrycreditors") {
+                if (group === "sundrycreditors") {
                     this.sundryCreditorResponse = response.body[0];
                     this.totalPayable = this.sundryCreditorResponse.closingBalance.amount;
                     this.PaybaleDurationAmt = this.sundryCreditorResponse.creditTotal - this.sundryCreditorResponse.debitTotal;
@@ -291,5 +264,55 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
 
             this.checkPayableAndReceivable();
         });
+    }
+
+    /**
+    * This will show the datepicker
+    *
+    * @memberof TotalOverduesChartComponent
+    */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof TotalOverduesChartComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+       * Call back function for date/range selection in datepicker
+       *
+       * @param {*} value
+       * @memberof TotalOverduesChartComponent
+       */
+    public dateSelectedCallback(value: any): void {
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.requestInFlight = true;
+            this.toRequest.from = this.fromDate;
+            this.toRequest.to = this.toDate;
+            this.toRequest.refresh = false;
+            this.getTotalOverdues();
+        }
     }
 }

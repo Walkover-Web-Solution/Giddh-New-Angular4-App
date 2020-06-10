@@ -1,4 +1,4 @@
-<div class="setting-page" id="settingTab" *ngIf="!isCreateAndSwitchCompanyInProcess">
+<div class="setting-page user-detail-page" id="setting-tab" *ngIf="!isCreateAndSwitchCompanyInProcess">
     <!-- start of tab set -->
     <tabset #staticTabs>
 
@@ -6,7 +6,7 @@
         <tab heading="Auth Key" [active]="activeTab == 'auth-key'" (select)="onTabChanged('auth-key')">
             <div class="wrap-tab-content-pd-15">
                 <div class="box clearfix mrT2">
-                    <h1 class="section_head pdT0">Main Auth-key</h1>
+                    <h1 class="section-head pdT0">Main Auth-key</h1>
                     <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
                         <div class="form-group col-xs-6">
                             <div class="row">
@@ -15,7 +15,7 @@
                         </div>
                         <div class="form-group clearfix mrB0">
                             <button class="btn btn-default" (click)="regenerateKey()">Regenerate Auth Key</button>
-                            <a class="btn btn-link" href="https://developers.giddh.com/collection/giddh-api-integration/46/pages/140" target="_blank">Documentation</a>
+                            <a class="btn btn-link" href="{{apiPostmanDocUrl}}" target="_blank">Documentation</a>
                         </div>
                     </form>
                 </div>
@@ -26,7 +26,7 @@
             <div class="wrap-tab-content-pd-15">
                 <div class="box clearfix mrT2">
                     <form class="" name="mobileForm" novalidate>
-                        <h1 class="section_head">Add/Edit Mobile Number</h1>
+                        <h1 class="section-head">Add/Edit Mobile Number</h1>
                         <div class="mrT">
                             <!-- ng-minlength="10" pattern="/^[0-9]{1,10}$/"  -->
                             <input decimalDigitsDirective maxlength="10" class="form-control max350 pull-left " type="text" ng-required="true" placeholder="9998899988" name="mobileForm.phoneNumber" [(ngModel)]="phoneNumber" />
@@ -58,7 +58,7 @@
                                     </button>
                                     <div class="longcode-details" *ngIf="expandLongCode">
                                         <figure>
-                                            <h1 class="section_head">Accounts</h1>
+                                            <h1 class="section-head">Accounts</h1>
                                             <ul>
                                                 <li>
                                                     <h2>Case 1:</h2>
@@ -79,7 +79,7 @@
                                             </ul>
                                         </figure>
                                         <figure>
-                                            <h1 class="section_head">Groups</h1>
+                                            <h1 class="section-head">Groups</h1>
                                             <ul>
                                                 <li>
                                                     <h2>Case 1:</h2>
@@ -93,7 +93,7 @@
                                             </ul>
                                         </figure>
                                         <figure>
-                                            <h1 class="section_head">Net worth</h1>
+                                            <h1 class="section-head">Net worth</h1>
                                             <ul>
                                                 <li>
                                                     <h2>Case 1</h2>
@@ -113,7 +113,7 @@
 
                     <div class="mrT2">
                         <!--two way auth-->
-                        <h1 class="section_head"><input type="checkbox" (change)="changeTwoWayAuth()" [(ngModel)]="twoWayAuth" /> Two Way Authentication</h1>
+                        <h1 class="section-head"><input type="checkbox" (change)="changeTwoWayAuth()" [(ngModel)]="twoWayAuth" /> Two Way Authentication</h1>
                         <p class="grey" *ngIf="twoWayAuth">You will need to enter verification code at the time of login.
                         </p>
                     </div>
@@ -127,7 +127,7 @@
             <div class="wrap-tab-content-pd-15">
                 <div class="box clearfix mrT2">
                     <div class="max900 d-flex pdB1  activity-title">
-                        <h1 class="section_head pdT0">Activity History</h1>
+                        <h1 class="section-head pdT0">Activity History</h1>
                         <button class="btn btn-primary " (click)="clearAllSession()">Delete All</button>
                     </div>
                     <p class="grey_clr max900 ">Access and manage your activity history details from anywhere at anytime. This will help you to monitor all your account access.</p>

@@ -11,7 +11,7 @@ import { AppState } from '../store/roots';
 import { CustomActions } from '../store/customActions';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { COMMON_ACTIONS } from './common.const';
-import { IRegistration } from "../models/interfaces/registration.interface";
+import { IRegistration, IntegratedBankList } from "../models/interfaces/registration.interface";
 
 @Injectable()
 
@@ -56,6 +56,14 @@ export class CompanyActions {
     public static SET_ACTIVE_FINANCIAL_YEAR = 'SET_ACTIVE_FINANCIAL_YEAR';
 
     public static USER_REMOVE_COMPANY_CREATE_SESSION = "USER_REMOVE_COMPANY_CREATE_SESSION";
+    public static SET_IS_TCS_TDS_APPLICABLE = 'SET_IS_TCS_TDS_APPLICABLE';
+    public static SET_USER_CHOSEN_FINANCIAL_YEAR = 'SET_USER_CHOSEN_FINANCIAL_YEAR';
+    public static RESET_USER_CHOSEN_FINANCIAL_YEAR = 'RESET_USER_CHOSEN_FINANCIAL_YEAR';
+
+    public static GET_ALL_INTEGRATED_BANK = 'GET_ALL_INTEGRATED_BANK';
+    public static GET_ALL_INTEGRATED_BANK_RESPONSE = 'GET_ALL_INTEGRATED_BANK_RESPONSE';
+
+
 
     @Effect()
     public createCompany$: Observable<Action> = this.action$
@@ -370,6 +378,23 @@ export class CompanyActions {
                 return { type: 'EmptyAction' };
             }));
 
+    @Effect()
+    public getAllIntegratedBankInCompany$: Observable<Action> = this.action$
+        .ofType(CompanyActions.GET_ALL_INTEGRATED_BANK).pipe(
+            switchMap((action: CustomActions) => this._companyService.getIntegratedBankInCompany(action.payload)),
+            map(response => {
+                return this.getAllIntegratedBankInCompanyResponse(response);
+            }));
+
+    @Effect()
+    public getAllIntegratedBankInCompanyResponse$: Observable<Action> = this.action$
+        .ofType(CompanyActions.GET_ALL_INTEGRATED_BANK_RESPONSE).pipe(
+            map((action: CustomActions) => {
+                if (action.payload.status === 'error') {
+                    this._toasty.errorToast(action.payload.message, action.payload.code);
+                }
+                return { type: 'EmptyAction' };
+            }));
     constructor(
         private action$: Actions,
         private _companyService: CompanyService,
@@ -589,4 +614,67 @@ export class CompanyActions {
     public removeCompanyCreateSession(): CustomActions {
         return { type: CompanyActions.USER_REMOVE_COMPANY_CREATE_SESSION };
     }
+
+    /**
+     * Returns the action to set whether company country is
+     * eligible for other tax (TCS/TDS)
+     *
+     * @param {string} isTcsTdsApplicable True if the company country has other tax (TCS/TDS)
+     * @returns {CustomActions} Action to set country eligibility for other tax (TCS/TDS)
+     * @memberof CompanyActions
+     */
+    public setCompanyTcsTdsApplicability(isTcsTdsApplicable: boolean): CustomActions {
+        return { type: CompanyActions.SET_IS_TCS_TDS_APPLICABLE, payload: isTcsTdsApplicable };
+    }
+
+    /**
+     * Returns the action to set the financial year chosen in either sales or purchase register
+     *
+     * @param {string} financialYearUniqueName Unique name of chosen financial year
+     * @returns {CustomActions} Action to set the financial year
+     * @memberof CompanyActions
+     */
+    public setUserChosenFinancialYear(financialYearUniqueName: string): CustomActions {
+        return { type: CompanyActions.SET_USER_CHOSEN_FINANCIAL_YEAR, payload: financialYearUniqueName };
+    }
+
+    /**
+     * Returns the action to reset the financial year chosen in either sales or purchase register
+     * when user leaves these modules
+     *
+     * @returns {CustomActions} Action to reset the financial year
+     * @memberof CompanyActions
+     */
+    public resetUserChosenFinancialYear(): CustomActions {
+        return { type: CompanyActions.RESET_USER_CHOSEN_FINANCIAL_YEAR };
+    }
+    /**
+     * Get all bank integration
+     *
+     * @param {string} companyUniqueName
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public getAllIntegratedBankInCompany(companyUniqueName: string): CustomActions {
+        return {
+            type: CompanyActions.GET_ALL_INTEGRATED_BANK,
+            payload: companyUniqueName
+        };
+    }
+
+    /**
+     * to get all integrated banks list
+     *
+     * @param {BaseResponse<any, string>} value company unique name
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public getAllIntegratedBankInCompanyResponse(value: BaseResponse<any, string>): CustomActions {
+        return {
+            type: CompanyActions.GET_ALL_INTEGRATED_BANK_RESPONSE,
+            payload: value
+        };
+    }
+
+
 }

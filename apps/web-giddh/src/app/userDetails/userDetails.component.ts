@@ -19,6 +19,7 @@ import { GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { BsModalRef, TabsetComponent } from 'ngx-bootstrap';
 import { GeneralActions } from '../actions/general/general.actions';
 import { CurrentPage } from '../models/api-models/Common';
+import { API_POSTMAN_DOC_URL } from '../app.constant';
 
 @Component({
     selector: 'user-details',
@@ -67,7 +68,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public activeTab: string;
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCreateAndSwitchCompanyInProcess: boolean;
-
+    public apiPostmanDocUrl: String = API_POSTMAN_DOC_URL;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>,
@@ -107,6 +108,13 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
+        if (!this.isCreateAndSwitchCompanyInProcess){
+            document.querySelector('body').classList.add('tabs-page');
+        }
+        else{
+            document.querySelector('body').classList.remove('tabs-page');
+        }
+
         this._route.params.subscribe(params => {
             if (params['type'] && this.activeTab !== params['type']) {
                 this.setStateDetails(params['type']);
@@ -373,7 +381,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
     /**
      * deleteSession
      */

@@ -1,0 +1,84 @@
+@import "../../../../assets/css/color.scss";
+.invoice-footer {
+    h3 {
+        font-size: 16px;
+        color: $nobel;
+        display: inline-block;
+        margin-right: 10px;
+    }
+    h1 {
+        font-size: 28px;
+        color: $extra-dark-gray;
+        display: inline-block;
+    }
+}
+.branch-transfer-report .basic>thead>tr>th {
+    border-top: 1px solid $gainsboro !important;
+}
+
+.icon-pointer.activeTextColor {
+    color: $deep-sky-blue;
+}
+
+.voucher-type-dropdown {
+    display: inline-block;
+    .btn {
+        padding: 0 8px;
+        margin-right: 0px;
+    }
+}
+
+ 
+
+.icon-calender {
+    position: absolute;
+    z-index: 9;
+    height: 36px;
+    width: 36px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid $gainsboro;
+    color: $nobel;
+    left: 0;
+    font-size: 18px;
+}
+.btn-filter {
+    background: $whisper-color;
+    border: 1px solid $whisper-color;
+    font-size: 16px;
+    color: $midnight-blue;
+    display: inline-flex;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    align-items: center;
+    padding: 6px 10px !important;
+    .icon-cross {
+        margin-right: 5px;
+    }
+    &:focus {
+        box-shadow: none;
+        outline: none;
+    }
+    &:active {
+        box-shadow: none;
+        outline: none;
+    }
+}
+.giddh-table{
+    .no-record-found{
+        border: none !important;
+        tr{
+            box-shadow: none !important;
+            td{
+                padding-left: 0 !important;
+                text-align: center;
+            }
+        }
+    }  
+}
+@media only screen and (max-width: 767px) {
+    .basic>thead>tr>th {
+        min-width: initial;
+    }
+}

@@ -2,11 +2,12 @@
 .pItem {
     padding: 0 4px;
 }
+
 .height-30 {
     height: 30px;
 }
 
-.ledgHead.entry-popup table td.select2-ledger > sh-select {
+.ledg-head.entry-popup table td.select2-ledger>sh-select {
     position: initial;
     margin-top: 1px;
 }
@@ -49,18 +50,18 @@ table.width100 {
     font-size: 24px;
 }
 
-ng-select > div i.fa.fa-caret-down::before {
+ng-select>div i.fa.fa-caret-down::before {
     color: $white;
     font-size: 20px;
 }
 
-ng-select > div a.ng-star-inserted {
+ng-select>div a.ng-star-inserted {
     color: $white;
     text-transform: uppercase;
     font-size: 16px;
 }
 
-ng-select > div {
+ng-select>div {
     background-color: transparent;
     border: none;
 }
@@ -107,16 +108,19 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     padding: 2px 0;
 }
 
+
 /* .ledger-main .form-control {
     height: 26px;
 } */
+
 .ledger-main .form-control {
     background: $white !important;
     height: 45px;
     padding-right: 12px !important;
     padding-left: 12px !important;
 }
-.ledger_book {
+
+.ledger-book {
     position: relative;
     width: 100%;
     display: flex;
@@ -129,13 +133,14 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     height: initial;
 }
 
-.ledgHead.entry-popup table td:last-child {
+.ledg-head.entry-popup table td:last-child {
     border-right: 0px;
 }
 
 .custom-tabs {
     display: none !important;
 }
+
 
 /* .total-detail-table tbody tr td {
   vertical-align: top;
@@ -166,13 +171,16 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     width: 80px !important;
     min-width: 80px;
 }
-.download-invoice-ledger > i {
+
+.download-invoice-ledger>i {
     top: 15px;
     position: relative;
 }
+
 .checkbox-custom-label strong {
     display: contents;
 }
+
 span.eligible-ITC {
     font-size: 11px;
     cursor: pointer;
@@ -183,6 +191,7 @@ span.eligible-ITC {
         font-size: 10px;
     }
 }
+
 .taxable-amount-section {
     display: inline-block;
     margin-bottom: 12px;
@@ -190,31 +199,38 @@ span.eligible-ITC {
         margin-bottom: 4px;
     }
 }
+
 .adjust-receipt {
     padding: 10px;
     border: 1px solid $gainsboro;
     margin-top: 10px;
 }
+
 .pr-05 {
     padding-right: 5px;
 }
+
 .pl-05 {
     padding-left: 5px;
 }
+
 .adjustment-field {
     max-height: 160px;
     overflow-y: auto;
     overflow-x: hidden;
     min-height: 160px;
 }
+
 .ledger-bottom {
     display: flex;
 }
+
 .ledger-head th {
     color: $jacksons-purple;
     padding-left: 0;
     padding-bottom: 10px;
 }
+
 .update-ledger-account {
     align-items: center;
     span {
@@ -224,7 +240,10 @@ span.eligible-ITC {
         width: 100%;
     }
 }
+
+
 /* responsive */
+
 @media only screen and (max-width: 1359px) {
     .ledger-bottom {
         display: block;
@@ -232,7 +251,7 @@ span.eligible-ITC {
 }
 
 @media only screen and (max-width: 1024px) {
-    .ledger_book {
+    .ledger-book {
         display: block;
     }
     .left-col-new,
@@ -264,7 +283,7 @@ span.eligible-ITC {
     .last-ttable-amount {
         max-width: 100% !important;
     }
-    .ledger_book .h-table tbody .ledger-row td {
+    .ledger-book .h-table tbody .ledger-row td {
         padding-left: 80px !important;
     }
     .card-table tbody tr td {
@@ -284,13 +303,11 @@ span.eligible-ITC {
         max-width: 39%;
         white-space: initial;
     }
-
     .other-tax {
         flex: 0 0 100% !important;
         max-width: 100% !important;
         margin-top: 10px;
     }
-
     .entrypanel:before {
         display: none;
     }
@@ -304,7 +321,7 @@ span.eligible-ITC {
     .xs-table-block tbody tr td {
         display: block;
     }
-    .ledgHead .ledger_book .left-col-new.bdrR {
+    .ledg-head .ledger-book .left-col-new.bdrR {
         border-right: 0 !important;
     }
     .remove-border-left-onmo {
@@ -332,7 +349,7 @@ span.eligible-ITC {
     }
     #crdID input,
     #dbtID input {
-        border: 1px solid #d9d9d9 !important;
+        border: 1px solid $gainsboro !important;
         height: 36px;
     }
     .ledger-main .form-control {

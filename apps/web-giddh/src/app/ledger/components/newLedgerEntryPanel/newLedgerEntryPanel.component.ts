@@ -18,7 +18,7 @@ import {
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
-import { Configuration, Subvoucher } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, Subvoucher, RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { BsDatepickerDirective, ModalDirective, PopoverDirective } from 'ngx-bootstrap';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
@@ -54,6 +54,7 @@ import { isAndroidCordova, isIOSCordova } from "@giddh-workspaces/utils";
 import { IOSFilePicker } from "@ionic-native/file-picker/ngx";
 import { FileTransfer } from "@ionic-native/file-transfer/ngx";
 import { FileChooser } from "@ionic-native/file-chooser/ngx";
+import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -179,6 +180,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public allowedSelectionOfAType: any = { type: [], count: 1 };
     /** country name of active account */
     public activeAccountCountryName: string = '';
+    /** True, if company country supports other tax (TCS/TDS) */
+    public isTcsTdsApplicable: boolean;
+    /** Rate should have precision up to 4 digits for better calculation */
+    public ratePrecision = RATE_FIELD_PRECISION;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -256,6 +261,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.warehouses = warehouseData.formattedWarehouses;
                 this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
                 this.selectedWarehouse = String(this.defaultWarehouse);
+            }
+        });
+
+        this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
             }
         });
 
@@ -404,18 +415,33 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.calculateTotal();
     }
 
-    public calculateTotal() {
-        if (this.currentTxn && this.currentTxn.amount) {
-            if (this.isAdvanceReceipt) {
-                this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
-                this.currentTxn.total = giddhRoundOff((this.currentTxn.advanceReceiptAmount + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
-                this.totalForTax = this.currentTxn.total;
+    /**
+     * Calculates the total amount
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public calculateTotal(): void {
+        if (this.currentTxn) {
+            if (this.currentTxn.amount) {
+                if (this.isAdvanceReceipt) {
+                    this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.total = giddhRoundOff((this.currentTxn.advanceReceiptAmount + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                    this.totalForTax = this.currentTxn.total;
+                } else {
+                    let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
+                    this.totalForTax = total;
+                    this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                }
+                this.currentTxn.convertedTotal = this.calculateConversionRate(this.currentTxn.total);
             } else {
-                let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
-                this.totalForTax = total;
-                this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                // Amount is zero, set other parameters to zero
+                if (this.isAdvanceReceipt) {
+                    this.currentTxn.advanceReceiptAmount = 0;
+                }
+                this.totalForTax = 0;
+                this.currentTxn.total = 0;
+                this.currentTxn.convertedTotal = this.calculateConversionRate(this.currentTxn.total);
             }
-            this.currentTxn.convertedTotal = this.calculateConversionRate(this.currentTxn.total);
         }
         this.calculateOtherTaxes(this.blankLedger.otherTaxModal);
         this.calculateCompoundTotal();
@@ -425,8 +451,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.currentTxn && this.currentTxn.selectedAccount) {
             if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
                 if (this.currentTxn.inventory.quantity) {
-                    this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
-                    this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate);
+                    this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
+                    this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, this.ratePrecision);
                 }
             }
 
@@ -454,8 +480,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public changePrice(val: string) {
         if (!this.isExchangeRateSwapped) {
-            this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.giddhBalanceDecimalPlaces);
-            this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate);
+            this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.ratePrecision);
+            this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, this.ratePrecision);
 
             this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
             this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
@@ -547,8 +573,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         if (this.currentTxn.selectedAccount) {
             if (this.currentTxn.selectedAccount.stock) {
-                this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
-                this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate);
+                this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
+                this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, this.ratePrecision);
             }
         }
         this.calculateCompoundTotal();
@@ -986,11 +1012,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.calculateTotal();
     }
 
-    public calculateConversionRate(baseModel) {
+    /**
+     * Calculates conversion rate
+     *
+     * @param {*} baseModel Value to be converted
+     * @param {number} [customDecimalPlaces] Optional custom decimal places (required for Rate as 4 digits are required for rate)
+     * @returns Converted rate
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public calculateConversionRate(baseModel: any, customDecimalPlaces?: number): number {
         if (!baseModel || !this.blankLedger.exchangeRate) {
             return 0;
         }
-        return giddhRoundOff(baseModel * Number(this.blankLedger.exchangeRate), this.giddhBalanceDecimalPlaces);
+        return giddhRoundOff(baseModel * Number(this.blankLedger.exchangeRate), (customDecimalPlaces) ? customDecimalPlaces : this.giddhBalanceDecimalPlaces);
     }
 
     /**

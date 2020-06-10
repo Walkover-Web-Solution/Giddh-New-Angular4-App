@@ -45,6 +45,7 @@ export class OnboardingFormResponse {
         name: string;
         label: string;
     }];
+    businessType: Array<string>;
 }
 
 export class CurrentPage {
@@ -58,4 +59,5 @@ export class CommandKRequest {
     q: string;
     group: string;
     totalPages: number;
+    isMobile: any;
 }

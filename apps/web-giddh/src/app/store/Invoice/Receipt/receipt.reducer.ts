@@ -134,6 +134,11 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
                             } else if (result.body.voucherDetails && m.voucherNumber === result.body.voucherDetails.voucherNumber) {
                                 m.grandTotal.amountForAccount = result.body.voucherDetails.grandTotal;
                             }
+
+                            if(result && result.body && (result.body.type === VoucherTypeEnum.sales || result.body.type === VoucherTypeEnum.cash) && result.body.number == m.voucherNumber) {
+                                m.account = result.body.account;
+                            }
+
                             return m;
                         })
                     }
@@ -215,11 +220,20 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
             }
             return state;
         }
+
+         case INVOICE_ACTIONS.PREVIEW_INVOICE: {
+            return {
+                ...state,
+                voucherDetailsInProcess: true
+            };
+        }
         case INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE: {
             let newState = _.cloneDeep(state);
             let res: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = action.payload;
+            newState.voucherDetailsInProcess = false;
             if (res.status === 'success') {
                 newState.voucher = res.body;
+                newState.invoiceDataHasError = false;
             } else {
                 newState.invoiceDataHasError = true;
             }
@@ -231,6 +245,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
             let res: BaseResponse<PreviewInvoiceResponseClass, string> = action.payload;
             if (res.status === 'success') {
                 newState.voucher = res.body;
+                newState.invoiceDataHasError = false;
             } else {
                 newState.invoiceDataHasError = true;
             }

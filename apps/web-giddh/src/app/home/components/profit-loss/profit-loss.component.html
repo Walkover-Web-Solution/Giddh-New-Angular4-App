@@ -4,13 +4,16 @@
         <div class="panel-heading">
             <strong>Profit & Loss</strong>
             <i class="glyphicon glyphicon-refresh mrL2" (click)="refreshChart()"></i>
-            <div class="pull-right dashboard-filter">
+            <!-- <div class="pull-right dashboard-filter">
                 <div class="btn-group" dropdown>
-                    <span id="button-basic" dropdownToggle class="dropdown-toggle monthDropdown"
+                    <span id="button-basic" dropdownToggle class="dropdown-toggle month-dropdown"
                         aria-controls="dropdown-basic">
                         <datepickeroptions (filterDates)="getFilterDate($event)"></datepickeroptions>
                     </span>
                 </div>
+            </div> -->
+            <div class=" pull-right" (click)="showGiddhDatepicker($event)">
+                <input type="text" readonly name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
             </div>
         </div>
 
@@ -25,37 +28,39 @@
                 </div>
             </div>
             <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
-                <perfect-scrollbar [scrollIndicators]="true">
-                    <chart [options]="profitLossChart" *ngIf="dataFound" #currentRatio></chart>
-                    <div class="noDataAvailable" *ngIf="!dataFound">
-                        <img src="{{imgPath}}noDataChart.svg" alt="no data found">
+                <chart [options]="profitLossChart" *ngIf="dataFound" #currentRatio></chart>
+                <div class="noDataAvailable" *ngIf="!dataFound">
+                    <img src="{{imgPath}}noDataChart.svg" alt="no data found">
+                </div>
+                <div class="clearfix mb-2 total-income">
+                    <div>
+                        <span class="mrB1 due-amount">Net Profit/Loss</span>
+                        <span class="total-amount pull-right">
+                                {{netProfitLossType}}<span>{{amountSettings.baseCurrencySymbol}}</span> {{ netProfitLoss | giddhCurrency }}</span>
                     </div>
-                    <div class="clearfix mrB2">
-                        <div class="">
-                            <span class="mrB1 dueAmount">Net Profit/Loss</span>
-                            <span class="total_amt pull-right">
-                                {{netProfitLossType}}<span>{{amountSettings.baseCurrencySymbol}}</span>
-                                {{ netProfitLoss | giddhCurrency }}</span>
-                        </div>
+                </div>
+                <div class="clearfix mb-2 total-income">
+                    <div>
+                        <span class="mrB1 due-amount">Total Income</span>
+                        <span class="total-amount pull-right total-expenses-text"><span>{{amountSettings.baseCurrencySymbol}}</span> {{ totalIncome | giddhCurrency }} {{totalIncomeType}}</span>
                     </div>
-                    <div class="clearfix mrB2">
-                        <div class="">
-                            <span class="mrB1 dueAmount">Total Income</span>
-                            <span
-                                class="total_amt pull-right totalExpensesText"><span>{{amountSettings.baseCurrencySymbol}}</span>
-                                {{ totalIncome | giddhCurrency }} {{totalIncomeType}}</span>
-                        </div>
+                </div>
+                <div class="clearfix mb-2 total-income">
+                    <div>
+                        <span class="mrB1 due-amount">Total Expenses</span>
+                        <span class="total-amount pull-right total-income-text"><span>{{amountSettings.baseCurrencySymbol}}</span> {{ totalExpense | giddhCurrency }} {{totalExpenseType}}</span>
                     </div>
-                    <div class="clearfix mrB2">
-                        <div class="">
-                            <span class="mrB1 dueAmount">Total Expenses</span>
-                            <span
-                                class="total_amt pull-right totalIncomeText"><span>{{amountSettings.baseCurrencySymbol}}</span>
-                                {{ totalExpense | giddhCurrency }} {{totalExpenseType}}</span>
-                        </div>
-                    </div>
-                </perfect-scrollbar>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions.ranges" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
+                [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

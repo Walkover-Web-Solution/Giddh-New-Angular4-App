@@ -18,10 +18,7 @@ import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/Se
 import { SETTINGS_DISCOUNT_ACTIONS } from '../../actions/settings/discount/settings.discount.const';
 import { AccountResponse } from '../../models/api-models/Account';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import { CommonActions } from "../../actions/common.actions";
-import { OnboardingFormResponse } from "../../models/api-models/Common";
 import { SETTINGS_TAXES_ACTIONS } from "../../actions/settings/taxes/settings.taxes.const";
-import { AccountsAction } from '../../actions/accounts.actions';
 
 export interface LinkedAccountsState {
     bankAccounts?: BankAccountsResponse[];
@@ -669,7 +666,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS_RESPONSE: {
             let response: BaseResponse<any, any> = action.payload;
-            if (response.status === 'success') {
+            if (response && response.body) {
                 return Object.assign({}, state, { isGmailIntegrated: true });
             } else {
                 return Object.assign({}, state, { isGmailIntegrated: false });

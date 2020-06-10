@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject, of } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
@@ -74,7 +74,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
-    public isGstValid: boolean;
+    public isGstValid$: Observable<boolean>= observableOf(true);
     public GSTIN_OR_TRN: string;
     public selectedCountry: string;
     public selectedCountryCode: string;
@@ -224,15 +224,20 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                Object.keys(res.fields).forEach(key => {
-                    this.formFields[res.fields[key].name] = [];
-                    this.formFields[res.fields[key].name] = res.fields[key];
-                });
-                this.GSTIN_OR_TRN = res.fields[0].label;
-
-                // Object.keys(res.applicableTaxes).forEach(key => {
-                //     this.taxesList.push({ label: res.applicableTaxes[key].name, value: res.applicableTaxes[key].uniqueName, isSelected: false });
-                // });
+                if (res.fields) {
+                    this.formFields = [];
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            this.formFields[res.fields[key].name] = [];
+                            this.formFields[res.fields[key].name] = res.fields[key];
+                        }
+                    });
+                }
+                if (this.formFields['taxName'] && this.formFields['taxName'].label) {
+                    this.GSTIN_OR_TRN = this.formFields['taxName'].label;
+                } else {
+                    this.GSTIN_OR_TRN = '';
+                }
             }
         });
     }
@@ -284,17 +289,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public setCountryByCompany(company: CompanyResponse) {
-        let result: IContriesWithCodes = contriesWithCodes.find((c) => c.countryName === company.country);
-        if (result) {
-            this.addAccountForm.get('country').get('countryCode').setValue(result.countryflag);
-            this.selectedCountry = result.countryflag + ' - ' + result.countryName;
-            this.selectedCountryCode = result.countryflag;
-            this.addAccountForm.get('mobileCode').setValue(result.value);
-            let stateObj = this.getStateGSTCode(this.stateList, result.countryflag)
+        if (this.activeCompany && this.activeCompany.countryV2) {
+            const countryCode = this.activeCompany.countryV2.alpha2CountryCode;
+            const countryName = this.activeCompany.countryV2.countryName;
+            const callingCode = this.activeCompany.countryV2.callingCode;
+            this.addAccountForm.get('country').get('countryCode').setValue(countryCode);
+            this.selectedCountry = `${countryCode} - ${countryName}`;
+            this.selectedCountryCode = countryCode;
+            this.addAccountForm.get('mobileCode').setValue(callingCode);
             this.addAccountForm.get('currency').setValue(company.baseCurrency);
-            this.getOnboardingForm(result.countryflag);
-            this.companyCountry = result.countryflag;
-
+            this.getOnboardingForm(countryCode);
+            this.companyCountry = countryCode;
         } else {
             this.addAccountForm.get('country').get('countryCode').setValue('IN');
             this.addAccountForm.get('mobileCode').setValue('91');
@@ -351,7 +356,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         let gstFields = this._fb.group({
             gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
-            address: ['', Validators.maxLength(120)],
+            address: [''],
             state: this._fb.group({
                 code: [''],
                 name: [''],
@@ -428,8 +433,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
-        let gstVal: string = gstForm.get('gstNumber').value;
-
+        let gstVal: string = gstForm.get('gstNumber').value.trim();
+        gstForm.get('gstNumber').setValue(gstVal.trim());
         if (gstVal.length) {
             if (gstVal.length !== 15) {
                 gstForm.get('partyType').reset('NOT APPLICABLE');
@@ -457,10 +462,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             } else {
                 // statesEle.setDisabledState(false);
                 if (this.isIndia) {
+                    statesEle.forceClearReactive.status = true;
+                    statesEle.clear();
                     gstForm.get('stateCode').patchValue(null);
                     gstForm.get('state').get('code').patchValue(null);
                 }
             }
+        } else {
+                statesEle.forceClearReactive.status = true;
+                statesEle.clear();
+                gstForm.get('stateCode').patchValue(null);
+                gstForm.get('state').get('code').patchValue(null);
         }
     }
 
@@ -565,7 +577,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         // }
         this.submitClicked.emit({
             activeGroupUniqueName: this.activeGroupUniqueName,
-            accountRequest: this.addAccountForm.value
+            accountRequest
         });
     }
     public closingBalanceTypeChanged(type: string) {
@@ -701,7 +713,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
-        if (ele.value) {
+        if (ele.value.trim()) {
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
@@ -717,13 +729,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             if (!isValid) {
                 this._toaster.errorToast('Invalid ' + this.formFields['taxName'].label);
                 ele.classList.add('error-box');
-                this.isGstValid = false;
+                this.isGstValid$ = observableOf(false);
             } else {
                 ele.classList.remove('error-box');
-                this.isGstValid = true;
+                this.isGstValid$ = observableOf(true);
             }
         } else {
             ele.classList.remove('error-box');
+            this.isGstValid$ = observableOf(true);
         }
     }
     public getStates(countryCode) {
@@ -866,7 +879,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     this._toaster.errorToast('The IBAN must contain 23 to 34 characters.');
                     element.classList.add('error-box');
                 } else {
-                     element.classList.remove('error-box');
+                    element.classList.remove('error-box');
                 }
             }
         } else if (type === 'swiftCode') {
@@ -874,7 +887,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this._toaster.errorToast('The SWIFT Code/BIC must contain 8 to 11 characters.');
                 element.classList.add('error-box');
             } else {
-                 element.classList.remove('error-box');
+                element.classList.remove('error-box');
             }
         }
     }

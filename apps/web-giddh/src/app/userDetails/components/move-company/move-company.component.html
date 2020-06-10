@@ -1,0 +1,19 @@
+<div class="modal-header">
+    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closePopup()">×</span>
+    <h3>Move Company</h3>
+</div>
+<div id="my-frame" class="modal-body move-company-modal-body clearfix">
+    <p class="mb-2">Select the plan in which you want to move <strong>{{moveSelectedCompany?.name}}</strong> from {{moveSelectedCompany?.subscription?.planDetails?.name}} to…</p>
+
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <label class="font-14">Select Plan<span class="text-danger">*</span></label>
+            <div class="custom-select select-caret pos-rel">
+                <sh-select placeholder="Select Plan" name="availablePlans" [options]="availablePlansOption" [isFilterEnabled]="true" [(ngModel)]="selectedPlan"></sh-select>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix">
+        <button class="btn btn-primary" (click)="moveCompanyInNewPlan()" [disabled]="!selectedPlan">Move</button>
+    </div>
+</div>

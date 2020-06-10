@@ -243,7 +243,14 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         }
     }
 
+    /**
+     * API call to get razorpay data
+     *
+     * @param {CreateCompanyUsersPlan} plan
+     * @memberof BillingDetailComponent
+     */
     public prepareSelectedPlanFromSubscriptions(plan: CreateCompanyUsersPlan) {
+        this.isCreateAndSwitchCompanyInProcess = true;
         this.subscriptionPrice = plan.planDetails.amount;
         this.SubscriptionRequestObj.userUniqueName = this.logedInuser.uniqueName;
         this.SubscriptionRequestObj.planUniqueName = plan.planDetails.uniqueName;
@@ -256,6 +263,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         }
         if (this.subscriptionPrice && this.UserCurrency) {
             this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).subscribe((res: any) => {
+                this.isCreateAndSwitchCompanyInProcess = false;
                 if (res.status === 'success') {
                     this.ChangePaidPlanAMT = res.body.amount;
                     this.orderId = res.body.id;
@@ -419,10 +427,14 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     public getOnboardingForm() {
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                Object.keys(res.fields).forEach(key => {
-                    this.formFields[res.fields[key].name] = [];
-                    this.formFields[res.fields[key].name] = res.fields[key];
-                });
+                if (res.fields) {
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            this.formFields[res.fields[key].name] = [];
+                            this.formFields[res.fields[key].name] = res.fields[key];
+                        }
+                    });
+                }
             } else {
                 let onboardingFormRequest = new OnboardingFormRequest();
                 onboardingFormRequest.formName = 'onboarding';

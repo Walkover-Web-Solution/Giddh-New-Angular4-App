@@ -124,25 +124,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>City</label>
-                                    <input type="text" disabled class="form-control" placeholder="City Name">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>Zip Code</label>
-                                    <input type="text" disabled class="form-control" placeholder="Enter Code">
-                                </div>
-                            </div> -->
-                                <div class="col-sm-4" *ngIf="GSTIN_OR_TRN !== undefined">
-                                    <div class="form-group">
+                                <div class="col-sm-4" *ngIf="GSTIN_OR_TRN">
+                                    <div class="form-group mb-05">
                                         <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}</label>
-                                        <input type="text" class="form-control" autocomplete="false" autocomplete="false" #gstNumberField (keyup)="getStateCode(gst, states); checkGstNumValidation(gstNumberField);" name="gstNumber" formControlName="gstNumber" placeholder="Enter {{formFields['taxName'].label}}"
+                                        <input type="text" class="form-control" autocomplete="false" autocomplete="false" #gstNumberField (keyup)="getStateCode(gst, states);" (blur)="checkGstNumValidation(gstNumberField);" name="gstNumber" formControlName="gstNumber" placeholder="Enter {{formFields['taxName'].label}}"
                                         />
                                     </div>
                                 </div>
+
                                 <ng-container *ngIf="companyCountry ==='IN'">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -153,7 +142,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4" *ngIf="gst.get('gstNumber').value && isGstValid">
+                                    <div class="col-sm-4" *ngIf="gst.get('gstNumber').value && (isGstValid$ | async)">
                                         <div class="form-group">
                                             <label class="d-block">&nbsp;</label>
                                             <label>
@@ -374,7 +363,7 @@
                 <button type="button" *ngIf="showDeleteButton" class="btn btn-danger " (click)="deleteClicked.emit(true)">
                     Delete
                 </button>
-                <button (click)="submit()" class="btn btn-primary mrL1 updateBtnZindex" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Update
+                <button (click)="submit()" class="btn btn-primary mrL1 updateBtnZindex" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid || !(isGstValid$ | async)">Update
                 </button>
             </div>
         </div>
@@ -518,7 +507,7 @@
                 <button type="button" *ngIf="showDeleteButton" class="btn btn-danger " (click)="deleteClicked.emit(true)">
                     Delete
                 </button>
-                <button (click)="submit()" class="btn btn-primary mrL1 updateBtnZindex" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Update
+                <button (click)="submit()" class="btn btn-primary mrL1 updateBtnZindex" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid || !(isGstValid$ | async)">Update
                 </button>
             </div>
         </div>

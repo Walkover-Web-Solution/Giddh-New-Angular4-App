@@ -4,7 +4,7 @@
 		(onSubmitForm)="submitPermissionForm($event)"></setting-permission-form>
 </div>
 
-<div class=" ">
+<div>
 	<h3 class="mrB1"><strong>Users</strong></h3>
 
 
@@ -77,7 +77,7 @@
 				<i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="closeEditUserModal()"></i>
 			</div>
 			<div class="modal-body">
-				<setting-permission-form [userdata]="selectedUser" [isLblShow]="true" [isUpdtCase]="true"
+				<setting-permission-form [isOpenedInModal]="true" [userdata]="selectedUser" [isLblShow]="true" [isUpdtCase]="true"
 					[isHorizntl]="false" (onSubmitForm)="submitPermissionForm($event)"></setting-permission-form>
 			</div>
 		</div>

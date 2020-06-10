@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ToasterService } from './../../services/toaster.service';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
@@ -20,6 +20,9 @@ import { AccountService } from '../../services/account.service';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { createSelector } from 'reselect';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
+import { CurrentPage } from '../../models/api-models/Common';
+import { GeneralActions } from '../../actions/general/general.actions';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
     templateUrl: './mf.edit.component.html'
@@ -35,7 +38,7 @@ export class MfEditComponent implements OnInit {
     public isUpdateCase: boolean = false;
     public manufacturingDetails: ManufacturingItemRequest;
     public otherExpenses: any = {};
-    public toggleAddExpenses: boolean = false;
+    public toggleAddExpenses: boolean = true;
     public toggleAddLinkedStocks: boolean = false;
     public linkedStocks: IStockItemDetail = new IStockItemDetail();
     public expenseGroupAccounts: any = [];
@@ -45,7 +48,9 @@ export class MfEditComponent implements OnInit {
     public showFromDatePicker: boolean = false;
     public moment = moment;
     public initialQuantityObj: any = [];
-    public needForceClear$: Observable<IForceClear> = observableOf({ status: false });
+    public needForceClearLiability$: Observable<IForceClear> = observableOf({ status: false });
+    public needForceClearGroup$: Observable<IForceClear> = observableOf({ status: false });
+
     public needForceClearProductList$: Observable<IForceClear> = observableOf({ status: false });
 
     public options: Select2Options = {
@@ -54,6 +59,14 @@ export class MfEditComponent implements OnInit {
     };
     public expenseGroupAccounts$: Observable<IOption[]>;
     public liabilityGroupAccounts$: Observable<IOption[]>;
+    /** To check which index of expense is in editable mode */
+    public isEditableIndex: number = null;
+    /** To get manufacture stock list in-progress */
+    public isGetManufactureStockInProgress$: Observable<boolean> = observableOf(false);
+    /** To get stock with rate in-progress */
+    public isStockWithRateInprogress$: Observable<boolean> = observableOf(false);
+    /** set default value to date picker */
+    public bsValue = new Date();
     private initialQuantity: number = 1;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -64,10 +77,13 @@ export class MfEditComponent implements OnInit {
         private _location: Location,
         private _inventoryService: InventoryService,
         private _accountService: AccountService,
+        private generalAction: GeneralActions,
         private _toasty: ToasterService) {
 
         this.store.dispatch(this.inventoryAction.GetManufacturingCreateStock());
         this.store.dispatch(this.inventoryAction.GetStock());
+        this.isGetManufactureStockInProgress$ = this.store.pipe(select(state => state.inventory.isGetManufactureStockInProgress), takeUntil(this.destroyed$));
+        this.isStockWithRateInprogress$ = this.store.pipe(select(state => state.manufacturing.isStockWithRateInprogress), takeUntil(this.destroyed$));
 
         this.groupsList$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
 
@@ -81,7 +97,7 @@ export class MfEditComponent implements OnInit {
                 if (manufacturingObj) {
                     this.selectedProductName = `${manufacturingObj.stockName} (${manufacturingObj.stockUniqueName})`;
                     manufacturingObj.quantity = manufacturingObj.manufacturingQuantity;
-                    manufacturingObj.date = moment(manufacturingObj.date, 'DD-MM-YYYY').toDate();
+                    manufacturingObj.date = moment(manufacturingObj.date, GIDDH_DATE_FORMAT).toDate();
                     manufacturingObj.multipleOf = (manufacturingObj.manufacturingQuantity / manufacturingObj.manufacturingMultipleOf);
                     // delete manufacturingObj.manufacturingQuantity;
                     manufacturingObj.linkedStocks.forEach((item) => {
@@ -92,6 +108,9 @@ export class MfEditComponent implements OnInit {
                     }
                     // manufacturingObj.activeStockGroupUniqueName = o.activeStockGroup;
                     this.manufacturingDetails = manufacturingObj;
+                    if (this.manufacturingDetails.date && typeof this.manufacturingDetails.date === 'object') {
+                        this.manufacturingDetails.date = String(moment(this.manufacturingDetails.date).format(GIDDH_DATE_FORMAT));
+                    }
                     this.onQuantityChange(manufacturingObj.manufacturingMultipleOf);
                 }
             }
@@ -131,6 +150,8 @@ export class MfEditComponent implements OnInit {
         });
 
         this.manufacturingDetails.quantity = 1;
+        this.setCurrentPageTitle();
+        this.setToday();
     }
 
     public ngOnInit() {
@@ -299,7 +320,9 @@ export class MfEditComponent implements OnInit {
             this.manufacturingDetails = manufacturingObj;
 
             this.otherExpenses = {};
-            this.needForceClear$ = observableOf({ status: true });
+            this.needForceClearLiability$ = observableOf({ status: true });
+            this.needForceClearGroup$ = observableOf({ status: true });
+
             this.initializeOtherExpenseObj();
         }
     }
@@ -313,7 +336,9 @@ export class MfEditComponent implements OnInit {
     public createEntry() {
         let dataToSave = _.cloneDeep(this.manufacturingDetails);
         dataToSave.stockUniqueName = this.selectedProduct;
-        dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
+        if (dataToSave.date && typeof dataToSave.date === 'object') {
+            dataToSave.date = String(moment(dataToSave.date).format(GIDDH_DATE_FORMAT));
+        }
         dataToSave.linkedStocks.forEach((obj) => {
             obj.manufacturingUnit = obj.stockUnitCode;
             obj.manufacturingQuantity = obj.quantity;
@@ -328,7 +353,9 @@ export class MfEditComponent implements OnInit {
 
     public updateEntry() {
         let dataToSave = _.cloneDeep(this.manufacturingDetails);
-        dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
+        if (dataToSave.date && typeof dataToSave.date === 'object') {
+            dataToSave.date = String(moment(dataToSave.date).format(GIDDH_DATE_FORMAT));
+        }
         // dataToSave.grandTotal = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
         // dataToSave.multipleOf = dataToSave.quantity;
         // dataToSave.manufacturingUniqueName =
@@ -455,31 +482,72 @@ export class MfEditComponent implements OnInit {
         }
     }
 
-    public setToday() {
-        this.manufacturingDetails.date = String(moment());
+    /**
+     * To set current date
+     *
+     * @memberof MfEditComponent
+     */
+    public setToday(): void {
+        this.manufacturingDetails.date = String(moment(this.bsValue).format(GIDDH_DATE_FORMAT));
     }
 
     public clearDate() {
         this.manufacturingDetails.date = '';
     }
 
-    public getAccountName(uniqueName: string, category: string) {
-        let name;
-        if (category === 'liabilityGroupAccounts') {
-            this.liabilityGroupAccounts$.subscribe((data) => {
-                let account = data.find((acc) => acc.value === uniqueName);
-                if (account) {
-                    name = account.label;
-                }
-            });
-        } else if (category === 'expenseGroupAccounts') {
-            this.expenseGroupAccounts$.subscribe((data) => {
-                let account = data.find((acc) => acc.value === uniqueName);
-                if (account) {
-                    name = account.label;
-                }
-            });
-        }
-        return observableOf(name);
+    // /**   will be useful in version 2
+    //  *TODO:  To return account details
+    //  *
+    //  * @param {string} uniqueName Unique name of
+    //  * @param {string} category
+    //  * @returns
+    //  * @memberof MfEditComponent
+    //  */
+    // public getAccountName(uniqueName: string, category: string) {
+    //         let name;
+    //         let uniqueNameOfAcc;
+    //         if (category === 'liabilityGroupAccounts') {
+    //             this.liabilityGroupAccounts$.subscribe((data) => {
+    //                 let account = data.find((acc) => acc.value === uniqueName);
+    //                 if (account) {
+    //                     name = account.label;
+    //                     uniqueNameOfAcc = account.value;
+    //                 }
+    //             });
+    //         } else if (category === 'expenseGroupAccounts') {
+    //             this.expenseGroupAccounts$.subscribe((data) => {
+    //                 let account = data.find((acc) => acc.value === uniqueName);
+    //                 if (account) {
+    //                     name = account.label;
+    //                     uniqueNameOfAcc = account.value;
+    //                 }
+    //             });
+    //         }
+    //         return observableOf(uniqueNameOfAcc);
+    //     }
+
+    /**
+     * To toggle add expense entry block
+     *
+     * @param {boolean} isToggle True, if need to add an expense entry
+     * @memberof MfEditComponent
+     */
+    public onToggleAddExpensesBlock(isToggle: boolean): void {
+        this.toggleAddExpenses = !isToggle;
+        this.needForceClearLiability$ = observableOf({ status: true });
+        this.needForceClearGroup$ = observableOf({ status: true });
+    }
+
+    /**
+     *To set menu title name
+     *
+     * @memberof MfEditComponent
+     */
+    public setCurrentPageTitle() {
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = "Manufacturing";
+        currentPageObj.url = "";
+        currentPageObj.additional = "";
+        this.store.dispatch(this.generalAction.setPageTitle(currentPageObj));
     }
 }

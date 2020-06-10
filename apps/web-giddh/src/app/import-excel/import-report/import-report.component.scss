@@ -1,15 +1,18 @@
-//.report-none{
-//  display: none;
-//}
-.r-card {
-    padding: 16px;
-    background-color: white;
-    box-shadow: 0px 3px 7px #00000026;
-    border-radius: 2px;
-    position: relative;
-    padding-right: 30px;
+@import "../../../assets/css/color.scss";
 
-    label.text-gray {
-        color: #646464;
+.import-data-table{
+    height: 68vh; 
+    overflow-y: auto;
+    .import-card {
+        padding: 15px;
+        background-color: white;
+        box-shadow: 0px 3px 7px $black-russian;
+        border-radius: 2px;
+        position: relative;
+        padding-right: 30px;
+        font-size: 14px;
+        svg.download-import{
+            fill:$gray;
+        }
     }
 }
