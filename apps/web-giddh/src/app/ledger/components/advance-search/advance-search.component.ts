@@ -58,7 +58,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
 
     constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions, private _accountService: AccountService) {
         this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
-        this.store.dispatch(this.inventoryAction.GetManufacturingStock());
+        // this.store.dispatch(this.inventoryAction.GetManufacturingStock());
         this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
     }
 
