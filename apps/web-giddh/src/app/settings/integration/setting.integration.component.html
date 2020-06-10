@@ -483,7 +483,7 @@
                                         </sh-select>
                                     </div>
                                     <div class="custom-select select-caret pos-rel" *ngIf="item.otpType==='BANK'">
-                                        <input type="text" class="form-control" disabled placeholder="Registered" name="approvalUniqueName{{index}}" value="">
+                                        <input type="text" class="form-control" disabled placeholder="Registered" name="approvalUniqueName{{index}}">
                                     </div>
                                 </div>
                                 <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0">
@@ -496,7 +496,7 @@
                         </ng-container>
 
                         <div>
-                            <a (click)="addNewAmountRangeRow(ind+1)" class="btn btn-link pl-0">+ Add New Row</a>
+                            <a href="javascript:void(0)" (click)="addNewAmountRangeRow(ind+1)" class="btn btn-link pl-0">+ Add New Row</a>
                         </div>
                         <!-- New code -->
 
@@ -617,7 +617,7 @@
                                     </sh-select>
                                 </div>
                                 <div class="custom-select select-caret pos-rel" *ngIf="item.otpType==='BANK'">
-                                    <input type="text" class="form-control" disabled placeholder="Registered" name="approvalUniqueName{{index}}" value="">
+                                    <input type="text" class="form-control" disabled placeholder="Registered" name="approvalUniqueName{{index}}">
                                 </div>
                             </div>
                             <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0">
@@ -629,7 +629,7 @@
                         </div>
                     </ng-container>
                     <div>
-                        <a (click)="addNewAmountRangeRow()" class="btn btn-link pl-0">+ Add New Row</a>
+                        <a href="javascript:void(0)" (click)="addNewAmountRangeRow()" class="btn btn-link pl-0">+ Add New Row</a>
                     </div>
                     <!-- <div class="clearfix">
                         <a href="javascript:void" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" (click)="openNewRegistartionForm()" class="btn btn-link pl-0">Add More ID</a>
