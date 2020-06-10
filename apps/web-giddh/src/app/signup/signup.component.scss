@@ -269,7 +269,7 @@ small {
 .social-login {
     overflow: hidden;
     display: flex;
-    margin-bottom: 20px;
+    margin-bottom: 0;
 }
 
 .social-login li {
@@ -296,6 +296,7 @@ small {
 
 .google-ico span {
     padding: 0 15px;
+    display: inline-block;
 }
 
 /* social icon */
@@ -560,6 +561,25 @@ small {
 @media only screen and (max-width: 767px) {
     .giddh-login {
         margin: 0 auto;
+    }
+}
+@media(max-width:575px){
+    .social-login{
+        display: flex;
+        margin-bottom: 0;
+        flex-direction: column;
+        width: 100%;
+        li{
+            display: block;
+            margin-right: 0;
+            width: 100%;
+            margin-bottom: 10px;
+            a{
+                display: block; 
+                margin-bottom: 10px;
+                width: 100%;
+            }
+        }
     }
 }
 @media only screen and (max-width: 375px) {
