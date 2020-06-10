@@ -233,7 +233,7 @@
                                                     <tbody class="ledger-main">
                                                         <!-- [(ngModel)]="txn.isChecked" -->
                                                         <tr class="ledger-row" [ngClass]="{compoundEntry: txn.id === lc.selectedBankTxnUniqueName}">
-                                                           
+
                                                             <td class="col-xs-3 col-md-3 col-lg-3">
                                                                 <div class="d-flex align-items-center">
                                                                     <span>
@@ -309,7 +309,7 @@
                                                                         <input class="form-control" [maxlength]="10" name="bsDates" autocomplete="off" type="text" #cbs='bsDatepicker' [(ngModel)]="item.entryDate" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [outsideClick]="true">
 
                                                                     </span>
-                                                                </div>  
+                                                                </div>
                                                             </td>
                                                             <td class="col-xs-5 col-md-6 col-lg-6 select2-parent select2-ledger ">
                                                                 <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [ItemHeight]="67"
@@ -1177,7 +1177,7 @@
 <!-- Advance search popup -->
 <div bsModal #advanceSearchModel="bs-modal" tabindex="-1" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg advanceSearchModal">
-        <div class="modal-content">
+        <div class="modal-content" *ngIf="advanceSearchModel.isShown">
             <advance-search-model #advanceSearchComp [advanceSearchRequest]="advanceSearchRequest" (closeModelEvent)="closeAdvanceSearchPopup($event)"></advance-search-model>
         </div>
     </div>
