@@ -492,10 +492,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.lastProformaInvoices$ = this.store.pipe(select(p => p.proforma.lastVouchers), takeUntil(this.destroyed$));
         this.voucherDetails$ = this.store.pipe(
             select(s => {
+                console.log(s);
                 if (!this.isProformaInvoice && !this.isEstimateInvoice) {
                     return s.receipt.voucher as VoucherClass;
                 } else {
-                    return s.proforma.activeVoucher as GenericRequestForGenerateSCD;
+                    return s.proforma.activeVoucher as any;
                 }
             }),
             takeUntil(this.destroyed$)
@@ -971,7 +972,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             this.isRcmEntry = (results[1]) ? results[1].subVoucher === Subvoucher.ReverseCharge : false;
                             obj = cloneDeep(convertedRes1) as VoucherClass;
                         } else {
-                            obj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
+                            obj = cloneDeep(results[1]) as VoucherClass;
                         }
                     }
                     /** Tourist scheme added in case of sales invoice  */
@@ -1167,6 +1168,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.isCustomerSelected = false;
                     }
                 }
+
+                console.log(this.invFormData);
 
                 this.calculateBalanceDue();
                 this.calculateTotalDiscount();
