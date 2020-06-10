@@ -319,6 +319,15 @@ span.close-modal.cp.pull-right {
         width: 120px;
     }
 }
+@media(max-width:575px){
+    .pending-advance-search{
+        flex-direction: column !important;
+        button{
+            margin-top: 10px !important;
+            width: 100% !important;
+        }
+    }
+}
 
 @media (max-width: 375px) {
     .form-group button,
