@@ -316,9 +316,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             if (this.selectedAccountsList.length < this.selectedCheckedContacts.length) {
                 this._toaster.infoToast(`${this.selectedCheckedContacts.length - this.selectedAccountsList.length} out of ${this.selectedCheckedContacts.length} transactions could not be processed as bank details of those accounts are not updated.`);
             }
-            this.bulkPaymentModalRef = this.modalService.show(template,
-                Object.assign({}, { class: 'payment-modal modal-lg' })
-            );
+            if (this.selectedAccountsList.length) {
+                this.bulkPaymentModalRef = this.modalService.show(template,
+                    Object.assign({}, { class: 'payment-modal modal-lg' })
+                );
+            }
         }
 
     }
@@ -948,9 +950,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 this.selectedWhileHovering = '';
             }
         }
-        console.log('this.selectedAccountsList', this.selectedAccountsList);
-        console.log('this.selectedCheckedContacts', this.selectedCheckedContacts);
-
     }
 
     public resetAdvanceSearch() {
