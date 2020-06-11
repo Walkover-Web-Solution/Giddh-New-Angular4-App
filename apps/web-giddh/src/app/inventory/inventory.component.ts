@@ -405,6 +405,9 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     private loadBranchAndWarehouseDetails(): void {
         this.loadInventoryTab(() => {
             this.loadBranchWithWarehouse();
+            if (!this.GroupStockReportRequest) {
+                this.GroupStockReportRequest = new GroupStockReportRequest();
+            }
             this.GroupStockReportRequest.branchUniqueName = this.currentBranchAndWarehouseFilterValues.branch;
             this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouseFilterValues.warehouse !== 'all-entities') ? this.currentBranchAndWarehouseFilterValues.warehouse : null;;
         });
