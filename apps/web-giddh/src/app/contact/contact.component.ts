@@ -950,9 +950,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 this.selectedWhileHovering = '';
             }
         }
-        console.log('this.selectedAccountsList', this.selectedAccountsList);
-        console.log('this.selectedCheckedContacts', this.selectedCheckedContacts);
-
     }
 
     public resetAdvanceSearch() {

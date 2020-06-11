@@ -478,4 +478,20 @@ export class CompanyService {
             return observableEmpty();
         }
     }
+
+    /**
+    * Get all integrated banks data from bank server
+    *
+    * @param {string} companyUniqueName company unique name
+    * @param {string} urn urn number
+    * @returns
+    * @memberof CompanyService
+    */
+    public resendOtp(companyUniqueName: string, urn: string, requestId: string): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMPANY_API.BULK_PAYMENT_RESEND_OTP.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':urn', urn).replace(':requestId', requestId);
+        return this._http.get(url).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, '')));
+    }
 }
