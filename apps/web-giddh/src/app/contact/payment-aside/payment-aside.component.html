@@ -17,7 +17,7 @@
                                     <a href="javascript:void(0)" class="list-item">
                                         <div class="item">{{option?.label}}</div>
                                         <div class="item_unq">
-                                            <p class="font-12 text-gray mb-0">(Acc No.: {{option?.additional?.accountNo}})
+                                            <p class="font-12 text-gray mb-0">(Acc. No.: {{option?.additional?.accountNo}})
                                             </p>
                                         </div>
                                     </a>
@@ -28,7 +28,7 @@
                                     <a href="javascript:void(0)" class="list-item">
                                         <div class="item">{{option?.label}}</div>
                                         <div class="item_unq">
-                                            <p class="font-12 text-gray mb-0">(Acc No.: {{option?.additional?.accountNo}})
+                                            <p class="font-12 text-gray mb-0">(Acc. No.: {{option?.additional?.accountNo}})
                                             </p>
                                         </div>
                                     </a>
@@ -72,7 +72,7 @@
                         <div class="account-holder-name">
                             <p>{{item.name}}</p>
                             <p class="text-gray due-amount hidden-xs">
-                                Total Dues:{{item.totalDueAmount | giddhCurrency}}
+                                Total Due:{{item.totalDueAmount | giddhCurrency}}
                                 <span class="red-text cursor-pointer" (click)="removeSelectedAccount(item); removeTransactionsDetailsForm(entryIdx)"><i
                                         class="icon-trash mr-05"></i>Remove</span>
                             </p>

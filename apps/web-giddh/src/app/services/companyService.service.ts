@@ -480,10 +480,10 @@ export class CompanyService {
     }
 
     /**
-    * Get all integrated banks data from bank server
+    * Resend OTP API call
     *
-    * @param {string} companyUniqueName company unique name
-    * @param {string} urn urn number
+    * @param {string} companyUniqueName Company unique name
+    * @param {string} urn Urn number
     * @returns
     * @memberof CompanyService
     */
