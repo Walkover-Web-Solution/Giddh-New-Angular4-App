@@ -26,7 +26,6 @@ import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.componen
 import { PaymentAsideComponent } from './payment-aside/payment-aside.component';
 import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic-aside-menu-account.module';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
-import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { TextMaskModule } from 'angular2-text-mask';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 //payemnt aside component

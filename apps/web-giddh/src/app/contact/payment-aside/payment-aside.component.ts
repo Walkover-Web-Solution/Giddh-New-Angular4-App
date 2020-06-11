@@ -97,7 +97,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     /** OTP receiver success message slogan */
     public otpReceiverNameMessage = '';
     /** True if request in process */
-    public isRequestInprocess: boolean = false;
+    public isRequestInProcess: boolean = false;
     /** Company currency symbol */
     public companyCurrency: string;
     /** selected base currency symbol */
@@ -156,7 +156,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             this.store.dispatch(this._companyActions.getAllIntegratedBankInCompany(this.companyUniqueName));
         }
 
-        this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
+        this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.companyCurrency = profile.baseCurrency || 'INR';
             this.baseCurrencySymbol = profile.baseCurrencySymbol;
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
@@ -335,9 +335,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             this.totalAvailableBalance = null;
             this.requestObjectToGetOTP.urn = event.value;
             this.requestObjectToGetOTP.bankName = event.label;
-            this.isRequestInprocess = true;
+            this.isRequestInProcess = true;
             this._companyService.getAllBankDetailsOfIntegrated(this.companyUniqueName, this.requestObjectToGetOTP.urn).subscribe(response => {
-                this.isRequestInprocess = false;
+                this.isRequestInProcess = false;
                 if (response.status === 'success') {
                     if (response.body.Status === 'SUCCESS') {
                         this.totalAvailableBalance = response.body.effectiveBal;
@@ -358,9 +358,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public bulkPayVendor(): void {
         this.paymentRequestId = '';
         this.otpReceiverNameMessage = '';
-        this.isRequestInprocess = true;
+        this.isRequestInProcess = true;
         this._companyService.bulkVendorPayment(this.companyUniqueName, this.requestObjectToGetOTP).subscribe(response => {
-            this.isRequestInprocess = false;
+            this.isRequestInProcess = false;
             if (response.status === 'success') {
                 this.isPayClicked = true;
                 if (response.body && response.body.message) {
