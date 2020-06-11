@@ -15,14 +15,8 @@ import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
 	selector: 'setting-permission',
-	templateUrl: './setting.permission.component.html',
-	styles: [`
-  @media(max-width:767px){
-    .user{
-      padding-bottom:7px;
-    }
-  }
-  `]
+    templateUrl: './setting.permission.component.html',
+    styleUrls: ['./setting.permission.component.scss']
 })
 export class SettingPermissionComponent implements OnInit, OnDestroy {
 
