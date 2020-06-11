@@ -307,7 +307,7 @@
                             {{item.invoiceDate}}
                         </td>
                         <td class="text-right" data-title="Total Amt.">{{item.grandTotal | giddhCurrency}}</td>
-                        <!-- <td class="text-right" [tooltip]="(selectedVoucher === 'proformas' || selectedVoucher === 'estimate') ? grandTotalPopupTemplate : ''" container="body" containerClass="invoice-preview">{{item.accountCurrencySymbol}} {{item.grandTotal?.amountForAccount | giddhCurrency}}
+                        <!-- <td class="text-right" [tooltip]="(selectedVoucher === 'proformas' || selectedVoucher === 'estimate') ? grandTotalPopupTemplate : ''" container="body" containerClass="invoice-preview">{{item.accountCurrencySymbol}} {{item.amount?.amountForAccount | giddhCurrency}}
                         </td>
                         <ng-template #grandTotalPopupTemplate><span [innerHTML]="item.grandTotalTooltipText"></span>
                         </ng-template> -->
