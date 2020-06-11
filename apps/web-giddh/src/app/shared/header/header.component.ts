@@ -815,7 +815,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
         this.toggleBodyClass();
     }
-
     /**
      * This will toggle the settings popup
      *

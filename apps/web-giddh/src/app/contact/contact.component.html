@@ -93,7 +93,7 @@
                                     <li role="menuitem" (click)="openEmailDialog();">Email</li>
                                     <li role="menuitem" (click)="openSmsDialog();">SMS</li>
                                     <li role="menuitem" (click)="downloadCSV();">Download CSV</li>
-                                    <li role="menuitem" (click)="openBulkPaymentModal(template)">Bulk Payment</li>
+                                    <li role="menuitem" *ngIf="selectedCheckedContacts.length>0" (click)="openBulkPaymentModal(template)">Bulk Payment</li>
                                 </ul>
                             </div>
                         </div>
@@ -792,7 +792,7 @@
 
 
 <ng-template #template>
-    <payment-aside [selectedAccForBulkPayment]="selectedAccountsList" [selectedAccForPayment]="selectedAccForPayment" (closeModelEvent)="closeBulkPaymentModel()"></payment-aside>
+    <payment-aside [selectedAccountsForBulkPayment]="selectedAccountsList" [selectedAccForPayment]="selectedAccForPayment" (closeModelEvent)="closeBulkPaymentModel()"></payment-aside>
 </ng-template>
 <!-- endregion -->
 
