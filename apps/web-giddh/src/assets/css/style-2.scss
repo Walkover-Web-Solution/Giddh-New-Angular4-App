@@ -9280,6 +9280,32 @@ span#HW_badge_cont:nth-child(3){
 .giddh-datepicker{
     cursor: pointer !important;
 }
+.remove-header-lower-layer{
+    .container-fluid.mrB1{
+        margin-bottom: 0;
+        .lower-layer-header{
+            display: none !important;
+        }
+        .upper-layer-header{
+            padding-top: 10px;
+            padding-bottom: 5px;
+        }
+    }
+    .padding-top-fixed-mobile{
+        padding-top: 50px;
+    }
+    
+}
+.mobile-sidebar-open:after{
+    position: absolute;
+    content: '';
+    background-color: rgba(0,0,0,0.5);
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 9;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9580,6 +9606,16 @@ span#HW_badge_cont:nth-child(3){
 @media (max-width: 767px) {
     .HW_badge_cont {
         left: -6px !important;
+    }
+    .remove-header-lower-layer{
+        .mobile-back-btn{
+            display: inline-flex !important;
+        }
+        .hamburger_menu {
+            .btn{
+                display: none !important;
+            }
+        }
     }
     .setting-sidebar-open .desktop-header {
         padding-left: 0;
@@ -9908,7 +9944,7 @@ span#HW_badge_cont:nth-child(3){
         width: 100%;
     }
     .on-setting-page .setting-menu-icon,
-    .on-user-page .setting-menu-icon {
+    .on-user-page .setting-menu-icon{
         display: inline-flex !important;
     }
     .setting-data {
