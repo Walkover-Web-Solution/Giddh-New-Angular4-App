@@ -9,7 +9,7 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { catchError, map } from 'rxjs/operators';
 import { EstimateGetVersionByVersionNoRequest, ProformaDownloadRequest, ProformaFilter, ProformaGetAllVersionRequest, ProformaGetAllVersionsResponse, ProformaGetRequest, ProformaResponse, ProformaUpdateActionRequest } from '../models/api-models/proforma';
 import { ESTIMATES_API, PROFORMA_API } from './apiurls/proforma.api';
-import { GenericRequestForGenerateSCD } from '../models/api-models/Sales';
+import { GenericRequestForGenerateSCD, VoucherClass } from '../models/api-models/Sales';
 
 export class ProformaService {
 	private companyUniqueName: string;
@@ -39,7 +39,7 @@ export class ProformaService {
 				catchError((e) => this.errorHandler.HandleCatch<ProformaResponse, ProformaFilter>(e, request, { page: request.page, count: request.count, from: request.from, to: request.to, type: 'pdf' })));
 	}
 
-	public get(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<GenericRequestForGenerateSCD, ProformaGetRequest>> {
+	public get(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<VoucherClass, ProformaGetRequest>> {
 		this.companyUniqueName = this._generalService.companyUniqueName;
 		return this._http.post(this.config.apiUrl + PROFORMA_API.base
 			.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -48,46 +48,46 @@ export class ProformaService {
 			request
 		).pipe(
 			map((res) => {
-				let data: BaseResponse<GenericRequestForGenerateSCD, ProformaGetRequest> = res;
+				let data: BaseResponse<VoucherClass, ProformaGetRequest> = res;
 				data.queryString = voucherType;
 				data.request = request;
 				return data;
 			}),
-			catchError((e) => this.errorHandler.HandleCatch<GenericRequestForGenerateSCD, ProformaGetRequest>(e, request)));
+			catchError((e) => this.errorHandler.HandleCatch<VoucherClass, ProformaGetRequest>(e, request)));
 	}
 
-	public generate(request: GenericRequestForGenerateSCD): Observable<BaseResponse<GenericRequestForGenerateSCD, GenericRequestForGenerateSCD>> {
+	public generate(request: VoucherClass): Observable<BaseResponse<VoucherClass, VoucherClass>> {
 		this.companyUniqueName = this._generalService.companyUniqueName;
 		return this._http.post(this.config.apiUrl + PROFORMA_API.generate
 			.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-			.replace(':vouchers', request.voucher.voucherDetails.voucherType)
-			.replace(':accountUniqueName', encodeURIComponent(request.voucher.accountDetails.uniqueName)),
+			.replace(':vouchers', request.voucherDetails.voucherType)
+			.replace(':accountUniqueName', encodeURIComponent(request.accountDetails.uniqueName)),
 			request
 		).pipe(
 			map((res) => {
-				let data: BaseResponse<GenericRequestForGenerateSCD, GenericRequestForGenerateSCD> = res;
-				data.queryString = request.voucher.accountDetails.uniqueName;
+				let data: BaseResponse<VoucherClass, VoucherClass> = res;
+				data.queryString = request.accountDetails.uniqueName;
 				data.request = request;
 				return data;
 			}),
-			catchError((e) => this.errorHandler.HandleCatch<GenericRequestForGenerateSCD, GenericRequestForGenerateSCD>(e, request)));
+			catchError((e) => this.errorHandler.HandleCatch<VoucherClass, VoucherClass>(e, request)));
 	}
 
-	public update(request: GenericRequestForGenerateSCD): Observable<BaseResponse<GenericRequestForGenerateSCD, GenericRequestForGenerateSCD>> {
+	public update(request: VoucherClass): Observable<BaseResponse<VoucherClass, VoucherClass>> {
 		this.companyUniqueName = this._generalService.companyUniqueName;
 		return this._http.put(this.config.apiUrl + PROFORMA_API.base
 			.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-			.replace(':vouchers', request.voucher.voucherDetails.voucherType)
-			.replace(':accountUniqueName', encodeURIComponent(request.voucher.accountDetails.uniqueName)),
+			.replace(':vouchers', request.voucherDetails.voucherType)
+			.replace(':accountUniqueName', encodeURIComponent(request.accountDetails.uniqueName)),
 			request
 		).pipe(
 			map((res) => {
-				let data: BaseResponse<GenericRequestForGenerateSCD, GenericRequestForGenerateSCD> = res;
-				data.queryString = request.voucher.accountDetails.uniqueName;
+				let data: BaseResponse<VoucherClass, VoucherClass> = res;
+				data.queryString = request.accountDetails.uniqueName;
 				data.request = request;
 				return data;
 			}),
-			catchError((e) => this.errorHandler.HandleCatch<GenericRequestForGenerateSCD, GenericRequestForGenerateSCD>(e, request)));
+			catchError((e) => this.errorHandler.HandleCatch<VoucherClass, VoucherClass>(e, request)));
 	}
 
 	public delete(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {

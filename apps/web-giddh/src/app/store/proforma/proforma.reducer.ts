@@ -2,7 +2,7 @@ import { CustomActions } from '../customActions';
 import { PROFORMA_ACTIONS } from '../../actions/proforma/proforma.const';
 import { ProformaFilter, ProformaGetAllVersionsResponse, ProformaGetRequest, ProformaResponse, ProformaVersionItem } from '../../models/api-models/proforma';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { GenericRequestForGenerateSCD, VoucherTypeEnum } from '../../models/api-models/Sales';
+import { GenericRequestForGenerateSCD, VoucherTypeEnum, VoucherClass } from '../../models/api-models/Sales';
 import { cloneDeep } from '../../lodash-optimized';
 
 export interface ProformaState {
@@ -13,7 +13,7 @@ export interface ProformaState {
 	lastVouchers: ProformaResponse;
 	isGetDetailsInProcess: boolean;
 	lastGeneratedVoucherDetails: { voucherNo: string, accountUniqueName: string };
-	activeVoucher: GenericRequestForGenerateSCD;
+	activeVoucher: VoucherClass;
 	activeVoucherVersions: ProformaVersionItem[];
 	isUpdateProformaInProcess: boolean;
 	isUpdateProformaSuccess: boolean;
@@ -68,10 +68,10 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
 		}
 
 		case PROFORMA_ACTIONS.GENERATE_PROFORMA_RESPONSE: {
-			let response: BaseResponse<GenericRequestForGenerateSCD, GenericRequestForGenerateSCD> = action.payload;
+			let response: BaseResponse<VoucherClass, VoucherClass> = action.payload;
 			if (response.status === 'success') {
 				let no: string;
-				switch (response.request.voucher.voucherDetails.voucherType) {
+				switch (response.request.voucherDetails.voucherType) {
 					case 'proformas':
 						no = response.body.number;
 						break;
@@ -79,13 +79,13 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
 						no = response.body.number;
 						break;
 					default:
-						no = response.body.voucher.voucherDetails.voucherNumber;
+						no = response.body.voucherDetails.voucherNumber;
 				}
 				return cloneDeep({
 					...state,
 					isGenerateInProcess: false,
 					isGenerateSuccess: true,
-					lastGeneratedVoucherDetails: { voucherNo: no, accountUniqueName: response.request.voucher.accountDetails.uniqueName }
+					lastGeneratedVoucherDetails: { voucherNo: no, accountUniqueName: response.request.accountDetails.uniqueName }
 				});
 			}
 			return cloneDeep({
@@ -125,7 +125,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
 		}
 
 		case PROFORMA_ACTIONS.GET_PROFORMA_DETAILS_RESPONSE: {
-			let response: BaseResponse<GenericRequestForGenerateSCD, ProformaGetRequest> = action.payload;
+			let response: BaseResponse<VoucherClass, ProformaGetRequest> = action.payload;
 			return {
 				...state,
 				isGetDetailsInProcess: false,
@@ -144,7 +144,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
 
 		case PROFORMA_ACTIONS.UPDATE_PROFORMA_RESPONSE: {
 			let vouchers = { ...state.vouchers };
-			let result = action.payload as BaseResponse<GenericRequestForGenerateSCD, GenericRequestForGenerateSCD>;
+			let result = action.payload as BaseResponse<VoucherClass, VoucherClass>;
 			if (result.status === 'success') {
 				return {
 					...state,
@@ -153,13 +153,13 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
 					vouchers: {
 						...vouchers,
 						results: vouchers.results.map(m => {
-							if (result.body.voucher.voucherDetails.voucherType === VoucherTypeEnum.estimate) {
-								if (m.estimateNumber === result.body.voucher.voucherDetails.estimateNumber) {
-									m.grandTotal = result.body.voucher.voucherDetails.grandTotal;
+							if (result.body.voucherDetails.voucherType === VoucherTypeEnum.estimate) {
+								if (m.estimateNumber === result.body.voucherDetails.estimateNumber) {
+									m.grandTotal = result.body.voucherDetails.grandTotal;
 								}
 							} else {
-								if (m.proformaNumber === result.body.voucher.voucherDetails.proformaNumber) {
-									m.grandTotal = result.body.voucher.voucherDetails.grandTotal;
+								if (m.proformaNumber === result.body.voucherDetails.proformaNumber) {
+									m.grandTotal = result.body.voucherDetails.grandTotal;
 								}
 							}
 							return m;

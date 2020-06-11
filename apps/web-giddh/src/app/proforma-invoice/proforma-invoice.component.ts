@@ -492,11 +492,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.lastProformaInvoices$ = this.store.pipe(select(p => p.proforma.lastVouchers), takeUntil(this.destroyed$));
         this.voucherDetails$ = this.store.pipe(
             select(s => {
-                console.log(s);
                 if (!this.isProformaInvoice && !this.isEstimateInvoice) {
                     return s.receipt.voucher as VoucherClass;
                 } else {
-                    return s.proforma.activeVoucher as any;
+                    return s.proforma.activeVoucher as VoucherClass;
                 }
             }),
             takeUntil(this.destroyed$)
@@ -972,7 +971,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             this.isRcmEntry = (results[1]) ? results[1].subVoucher === Subvoucher.ReverseCharge : false;
                             obj = cloneDeep(convertedRes1) as VoucherClass;
                         } else {
-                            obj = cloneDeep(results[1]) as VoucherClass;
+                            let convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
+                            if (results[1].account.currency) {
+                                this.companyCurrencyName = results[1].account.currency.code;
+                            }
+                            obj = cloneDeep(convertedRes1) as VoucherClass;
                         }
                     }
                     /** Tourist scheme added in case of sales invoice  */
@@ -1044,7 +1047,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         if (!this.isLastInvoiceCopied) {
                             // convert date object
                             if (this.isProformaInvoice) {
-                                obj.voucherDetails.voucherDate = moment(obj.voucherDetails.proformaDate, 'DD-MM-YYYY').toDate();
+                                obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, 'DD-MM-YYYY').toDate();
                                 obj.voucherDetails.voucherNumber = obj.voucherDetails.proformaNumber;
                             } else if (this.isEstimateInvoice) {
                                 obj.voucherDetails.voucherDate = moment(obj.voucherDetails.estimateDate, 'DD-MM-YYYY').toDate();
