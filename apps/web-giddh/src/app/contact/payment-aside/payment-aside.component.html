@@ -15,9 +15,9 @@
                             <sh-select *ngIf="selectIntegratedBankList.length > 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankName" class="text-left" name="urn" required placeholder="'Select Bank'" (selected)="selectBank($event);" [multiple]="false">
                                 <ng-template #optionTemplate let-option="option">
                                     <a href="javascript:void(0)" class="list-item">
-                                        <div class="item">{{option.label}}</div>
+                                        <div class="item">{{option?.label}}</div>
                                         <div class="item_unq">
-                                            <p class="font-12 text-gray mb-0">(Cr: {{option.urn}})
+                                            <p class="font-12 text-gray mb-0">(Acc. No.: {{option?.additional?.accountNo}})
                                             </p>
                                         </div>
                                     </a>
@@ -26,21 +26,19 @@
                             <sh-select *ngIf="selectIntegratedBankList.length === 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankUrn" class="text-left" name="urn" required placeholder="'Select Bank'" (ngModelChange)="selectBank($event);" [multiple]="false">
                                 <ng-template #optionTemplate let-option="option">
                                     <a href="javascript:void(0)" class="list-item">
-                                        <div class="item">{{option.label}}</div>
+                                        <div class="item">{{option?.label}}</div>
                                         <div class="item_unq">
-                                            <p class="font-12 text-gray mb-0">(Cr: {{option.urn}})
+                                            <p class="font-12 text-gray mb-0">(Acc. No.: {{option?.additional?.accountNo}})
                                             </p>
                                         </div>
                                     </a>
                                 </ng-template>
                             </sh-select>
-                            <!-- it will shows if only one bank -->
-                            <!-- <input *ngIf="selectIntegratedBankList.length === 1" class="form-control" [(ngModel)]="selectedBankName" name="urn" readonly [value]="selectIntegratedBankList[0].bankName"> -->
-                            <p class="mb-1"><small class="text-gray">Bal {{totalAvailableBalance}} dr.</small></p>
+                            <!-- <p class="mb-1"><small class="text-gray">Bal {{totalAvailableBalance}} dr.</small></p> -->
                         </div>
                         <div class="form-group mr-15">
                             <label>Total Amount<span class="red-text">*</span></label>
-                            <input type="text" class="form-control" disabled [(ngModel)]="totalSelectedAccountAmount" name="amount">
+                            <input type="text" class="form-control" decimalDigitsDirective disabled [mask]="inputMaskFormat" [(ngModel)]="totalSelectedAccountAmount" name="amount">
                         </div>
                         <div class="form-group mr-15" *ngIf="isPayClicked">
                             <label class="relative d-flex">Enter OTP<span class="red-text">*</span>
@@ -50,20 +48,20 @@
                                 <p class="resend-btn timer-count" *ngIf="timerOn"><a
                                         href="javascript:void();" class="btn-link">{{timerCountDown$ | async}}</a></p>
                             </label>
-                            <input type="text" class="form-control" placeholder="Enter OTP" name="OTP" [(ngModel)]="OTP" type="number" maxlength="4">
+                            <input type="text" class="form-control" placeholder="Enter OTP" required name="receivedOtp" [(ngModel)]="receivedOtp">
                         </div>
                         <div class="form-group mr-15">
                             <label class="d-flex"> &nbsp; </label>
-                            <button type="button" *ngIf="!isPayClicked" class="btn btn-success" [disabled]="!adjustAdvancePaymentForm.form.valid" (click)="payClicked(adjustAdvancePaymentForm)">Pay</button>
+                            <button type="button" *ngIf="!isPayClicked" class="btn btn-success" [disabled]="!adjustAdvancePaymentForm.form.valid" (click)="payClicked()">Pay</button>
                             <button *ngIf="isPayClicked" class="btn btn-success" [disabled]="!adjustAdvancePaymentForm.form.valid" (click)="confirmOTP()">Confirm</button>
                             <button type="button" *ngIf="isPayClicked" class="btn btn-primary" (click)="clickedCancelOtp();">Cancel OTP</button>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-3" *ngIf="otpReceiverNameMessage">
                     <p class="otp-success-msg text-right"> <span>
                         <img src="{{imgPath}}checked-success.svg">
-                        </span>OTP has been sent to Shubhendra Agrawal</p>
+                        </span>{{otpReceiverNameMessage}}</p>
                 </div>
 
             </div>
@@ -74,7 +72,7 @@
                         <div class="account-holder-name">
                             <p>{{item.name}}</p>
                             <p class="text-gray due-amount hidden-xs">
-                                Total Due:{{item.closingBalance.amount}}
+                                Total Due:{{item.totalDueAmount | giddhCurrency}}
                                 <span class="red-text cursor-pointer" (click)="removeSelectedAccount(item); removeTransactionsDetailsForm(entryIdx)"><i
                                         class="icon-trash mr-05"></i>Remove</span>
                             </p>
@@ -83,22 +81,23 @@
                             <div class="readonly-bank-deatils">
                                 <div class="label-value-data">
                                     <label>Bank Name</label>
-                                    <label>{{item.accountBankDetails.bankName}}</label>
+                                    <label>{{item?.accountBankDetails?.bankName}}</label>
                                     <!-- <input class="form-control" [value]="item?.accountBankDetails?.bankName" name="bankName{{entryIdx}}" [(ngModel)]="item.accountBankDetails.bankName" type="text" disabled /> -->
                                 </div>
                                 <div class="label-value-data d-flex">
                                     <div class="mr-1">
                                         <!-- <label>Account Number</label> -->
-                                        <label *ngIf="countryCode ==='IN' ">Account #:</label>
-                                        <label *ngIf="countryCode !=='IN' ">IBAN</label>
-                                        <label>{{item.accountBankDetails.bankAccountNo}}</label>
+                                        <label *ngIf="item.country.code ==='IN' ">Account #:</label>
+                                        <label *ngIf="item.country.code !=='IN' ">IBAN</label>
+                                        <label>{{item?.accountBankDetails?.bankAccountNo}}</label>
                                         <!-- <input class="form-control" [value]="item?.accountBankDetails?.bankAccountNo" name="bankAccountNo{{entryIdx}}" [(ngModel)]="item.accountBankDetails.bankAccountNo" type="text" disabled> -->
                                     </div>
-                                    <div *ngIf="countryCode !=='IN' ">
+                                    <div *ngIf="item.country.code !=='IN' ">
                                         <label>SWIFT Code/BIC</label>
-                                        <input class="form-control" [value]="item?.accountBankDetails?.swiftCode" name="swiftCode{{entryIdx}}" [(ngModel)]="item.accountBankDetails.swiftCode" type="text" disabled>
+                                        <label>{{item?.accountBankDetails?.swiftCode}}</label>
+                                        <!-- <input class="form-control" [value]="item?.accountBankDetails?.swiftCode" name="swiftCode{{entryIdx}}" [(ngModel)]="item.accountBankDetails.swiftCode" type="text" disabled> -->
                                     </div>
-                                    <div *ngIf="countryCode ==='IN' ">
+                                    <div *ngIf="item.country.code ==='IN' ">
                                         <label>IFSC Code:</label>
                                         <label>{{item?.accountBankDetails?.ifsc}}</label>
                                         <!-- <input class="form-control" [value]="item?.accountBankDetails?.ifsc" name="ifsc{{entryIdx}}" [(ngModel)]="item.accountBankDetails.ifsc" type="text" disabled> -->
@@ -107,15 +106,10 @@
                                 </div>
                             </div>
                             <div class="amount-remark-section">
-                                <p class="text-gray due-amount hidden-md hidden-lg hidden-sm mb-2">
-                                    Total Due:{{item.closingBalance.amount}}
-                                    <span class="red-text cursor-pointer pull-right mb-1" (click)="removeSelectedAccount(item); removeTransactionsDetailsForm(entryIdx)"><i
-                                            class="icon-trash mr-05"></i>Remove</span>
-                                </p>
                                 <div class="d-flex">
                                     <div class="form-group pr-15">
                                         <label>Amount<span class="text-danger">*</span></label>
-                                        <input class="form-control" name="closingBalanceAmount{{entryIdx}}" [disabled]="isPayClicked" required [(ngModel)]="item.closingBalance.amount" type="number">
+                                        <input class="form-control" name="closingBalanceAmount{{entryIdx}}" [(ngModel)]="item.closingBalance.amount" decimalDigitsDirective type="text" required [disabled]="isPayClicked">
                                     </div>
                                     <div class="form-group remark-block">
                                         <label>Remark<span class="text-danger">*</span></label>
@@ -249,7 +243,7 @@
         </form>
     </div>
 
-    <ng-template #template>
+    <ng-template #successTemplate>
         <div class="modal-header">
             <h4 class="modal-title pull-left">Payment Status</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="successModalRef.hide()">
@@ -262,7 +256,7 @@
             </div>
             <h4>Payment proceed</h4>
             <p>Status of all payments will be mailed shortly.</p>
-            <button class="btn btn-success" (click)="closePaymentModel()">Done</button>
+            <button class="btn btn-success" (click)="successModalRef.hide()">Done</button>
         </div>
     </ng-template>
 
