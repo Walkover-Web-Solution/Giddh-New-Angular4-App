@@ -9,7 +9,7 @@ import { VerifyEmailResponseModel, VerifyMobileModel } from "../../models/api-mo
 import { AccountResponseV2 } from "../../models/api-models/Account";
 import { CompanyService } from "../../services/companyService.service";
 import { BankTransferRequest } from "../../models/api-models/Company";
-import { IRegistration, IntegratedBankList, BankTransactionForOTP, GetOTPRequest } from "../../models/interfaces/registration.interface";
+import { IRegistration, IntegratedBankList, BankTransactionForOTP, GetOTPRequest, BulkPaymentConfirmRequest } from "../../models/interfaces/registration.interface";
 import { ToasterService } from "../../services/toaster.service";
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
@@ -44,7 +44,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public integratedBankList$: Observable<IntegratedBankList[]>;
     /** Request object for OTP */
     public requestObjectToGetOTP: GetOTPRequest = {
-        bankType: '',
+        bankName: '',
         urn: '',
         totalAmount: '',
         bankPaymentTransactions: []
@@ -65,7 +65,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     /** count down timer observable */
     public timerCountDown$: Observable<string>;
     //Variable holding OTP received by user
-    public OTP: number;
+    public receivedOtp: number;
     /** remark for payment */
     public remarks: string = '';
     /** Model reference */
@@ -87,6 +87,12 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     /** bulk payment form */
     public addAccountBulkPaymentForm: FormGroup;
     public imgPath: string = '';
+    /** Payment request id for OTP confirmation */
+    public paymentRequestId: string = '';
+    /** OTP receiver success message slogan */
+    public otpReceiverNameMessage = '';
+    /** True if request in process */
+    public isRequestInprocess: boolean = false;
     constructor(
         private formBuilder: FormBuilder,
         private modalService: BsModalService,
@@ -125,9 +131,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.store.dispatch(this._companyActions.getAllRegistrations());
 
         //get current registered account on the user
-        this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
-            if (o.account) {
-                this.registeredAccounts = o.account;
+        this.store.pipe(select(selectStore => selectStore.company), takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response.account) {
+                this.registeredAccounts = response.account;
                 if (this.registeredAccounts.length === 1) {
                     this.mode = this.registeredAccounts[0];
                 }
@@ -137,7 +143,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             this.store.dispatch(this._companyActions.getAllIntegratedBankInCompany(this.companyUniqueName));
         }
         //get selecetd vendors account details
-        this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedAccForPayment.uniqueName));
+        if (this.selectedAccForPayment && this.selectedAccForPayment.uniqueName) {
+            this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedAccForPayment.uniqueName));
+        }
         this.activeAccount$.subscribe(acc => {
             if (acc && acc.accountBankDetails) {
                 this.accountDetails = acc;
@@ -226,23 +234,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     *
     * */
     public reSendOTP() {
-        let request = {
-            params: {
-                urn: this.mode.iciciCorporateDetails.URN
-            }
-        };
-        //commented due to api changed
-        // this._companyService.getOTP(request).subscribe((res) => {
-        //     if (res.status === 'success') {
-        //         this.OTPsent = true;
-        //     } else {
-        //         if (res.status === 'error' && res.code === 'BANK_ERROR') {
-        //             this._toaster.warningToast(res.message);
-        //         } else {
-        //             this._toaster.errorToast(res.message);
-        //         }
-        //     }
-        // });
+        this.paymentRequestId = '';
         this.timerOn = true
         this.startTimer(40);
     }
@@ -252,14 +244,10 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     *
     * */
     public confirmOTP() {
-        let bankTransferRequest: BankTransferRequest = new BankTransferRequest();
-        bankTransferRequest.amount = this.amount;
-        bankTransferRequest.otp = this.OTP;
-        bankTransferRequest.URN = this.mode.iciciCorporateDetails.URN;
-        bankTransferRequest.payeeName = this.user.user.name;
-        bankTransferRequest.transferAccountUniqueName = this.accountDetails.uniqueName;
-        bankTransferRequest.remarks = this.remarks;
-        this._companyService.confirmOTP(bankTransferRequest).subscribe((res) => {
+        let bankTransferConfirmOtpRequest: BulkPaymentConfirmRequest = new BulkPaymentConfirmRequest();
+        bankTransferConfirmOtpRequest.requestId = this.paymentRequestId;
+        bankTransferConfirmOtpRequest.otp = this.receivedOtp;
+        this._companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUrn, bankTransferConfirmOtpRequest).subscribe((res) => {
             if (res.status === 'success') {
                 this.closeAsidePane();
             } else {
@@ -308,10 +296,15 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public selectBank(event: IOption): void {
         this.selectedBankUrn = event.value;
         if (event) {
+            this.isPayClicked = false;
+             this.paymentRequestId = '';
+        this.otpReceiverNameMessage = '';
+            this.totalAvailableBalance = null;
             this.requestObjectToGetOTP.urn = event.value;
-            this.requestObjectToGetOTP.bankType = event.label;
+            this.requestObjectToGetOTP.bankName = event.label;
+            this.isRequestInprocess = true;
             this._companyService.getAllBankDetailsOfIntegrated(this.companyUniqueName, this.requestObjectToGetOTP.urn).subscribe(response => {
-
+                this.isRequestInprocess = false;
                 if (response.status === 'success') {
                     if (response.body.Status === 'SUCCESS') {
                         this.totalAvailableBalance = response.body.effectiveBal;
@@ -324,18 +317,28 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     }
 
     /**
-        *To select bank event
-        *
-        * @param {*} event selected bank object
-        * @memberof PaymentAsideComponent
-        */
+    * API call to get OTP
+    *
+    *
+    * @memberof PaymentAsideComponent
+    */
     public bulkPayVendor(): void {
+        this.paymentRequestId = '';
+        this.otpReceiverNameMessage = '';
+        this.isRequestInprocess = true;
         this._companyService.bulkVendorPayment(this.companyUniqueName, this.requestObjectToGetOTP).subscribe(response => {
-
+            this.isRequestInprocess = false;
             if (response.status === 'success') {
-                this._toaster.successToast(response.body);
+                this.isPayClicked = true;
+                if (response.body && response.body.message) {
+                    this._toaster.successToast(response.body.message);
+                    this.otpReceiverNameMessage = response.body.message;
+                    this.paymentRequestId = response.body.requestId;
+                }
             } else if (response.status === 'error') {
+                this.isPayClicked = false;
                 this._toaster.errorToast(response.message, response.code);
+                this.paymentRequestId = '';
             }
         });
     }
@@ -358,11 +361,11 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     /**
      * To Prepare payment request object and API call
      *
-     * @param {NgForm} form Form data
+     *
      * @memberof PaymentAsideComponent
      */
-    public payClicked(form: NgForm) {
-        this.isPayClicked = true;
+    public payClicked() {
+        this.paymentRequestId = '';
         this.prepareRequestObject();
         this.bulkPayVendor();
     }
@@ -436,7 +439,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      */
     public initializeNewForm(): void {
         this.addAccountBulkPaymentForm = this.formBuilder.group({
-            bankType: [''],
+            bankName: [''],
             urn: [''],
             totalAmount: [''],
             bankPaymentTransactions: this.formBuilder.array([

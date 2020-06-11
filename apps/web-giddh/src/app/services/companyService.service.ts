@@ -27,7 +27,7 @@ import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { BulkEmailRequest } from '../models/api-models/Search';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { IRegistration, GetOTPRequest } from "../models/interfaces/registration.interface";
+import { IRegistration, GetOTPRequest, BulkPaymentResponse, BulkPaymentConfirmRequest } from "../models/interfaces/registration.interface";
 import { ReportsRequestModel, ReportsResponseModel } from "../models/api-models/Reports";
 
 @Injectable()
@@ -450,12 +450,30 @@ export class CompanyService {
      * @returns {Observable<BaseResponse<string, GetOTPRequest>>}
      * @memberof CompanyService
      */
-    public bulkVendorPayment(companyUniqueName: string, bankTransferRequest: GetOTPRequest): Observable<BaseResponse<string, GetOTPRequest>> {
-        this.companyUniqueName = this._generalService.companyUniqueName;
+    public bulkVendorPayment(companyUniqueName: string, bankTransferRequest: GetOTPRequest): Observable<BaseResponse<BulkPaymentResponse, GetOTPRequest>> {
         if (this.companyUniqueName) {
-            return this._http.post(this.config.apiUrl + COMPANY_API.BULK_PAYMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), bankTransferRequest).pipe(map((res) => {
+            return this._http.post(this.config.apiUrl + COMPANY_API.BULK_PAYMENT.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), bankTransferRequest).pipe(map((res) => {
                 return res;
-            }), catchError((e) => this.errorHandler.HandleCatch<string, GetOTPRequest>(e, bankTransferRequest)));
+            }), catchError((e) => this.errorHandler.HandleCatch<BulkPaymentResponse, GetOTPRequest>(e, bankTransferRequest)));
+        } else {
+            return observableEmpty();
+        }
+    }
+
+    /**
+     * Bulk pay vendor API call
+     *
+     * @param {string} companyUniqueName  Company unique name
+     * @param {string} urn Selected bank urn number
+     * @param {BulkPaymentConfirmRequest} requestObject Request object
+     * @returns {Observable<BaseResponse<BulkPaymentResponse, BulkPaymentConfirmRequest>>}
+     * @memberof CompanyService
+     */
+    public bulkVendorPaymentConfirm(companyUniqueName: string, urn: string, requestObject: BulkPaymentConfirmRequest): Observable<BaseResponse<BulkPaymentResponse, BulkPaymentConfirmRequest>> {
+        if (this.companyUniqueName) {
+            return this._http.post(this.config.apiUrl + COMPANY_API.BULK_PAYMENT_CONFIRM.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':urn', urn), requestObject).pipe(map((res) => {
+                return res;
+            }), catchError((e) => this.errorHandler.HandleCatch<BulkPaymentResponse, BulkPaymentConfirmRequest>(e, BulkPaymentConfirmRequest)));
         } else {
             return observableEmpty();
         }
