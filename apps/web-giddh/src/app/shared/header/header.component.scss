@@ -751,7 +751,7 @@ ul.sub-list {
         width: 270px;
         left: -270px;
     }
-    .upperLayerHeader {
+    .upper-layer-header {
         padding-top: 5px;
         .navbar-nav{
             margin-bottom: 5px;
@@ -787,7 +787,7 @@ ul.sub-list {
     .nav-left-bar.open .mobile_menu_icon {
         display: flex;
     }
-    .upperLayerHeader .open .dropdown-menu {
+    .upper-layer-header .open .dropdown-menu {
         background-color: #fff;
         -webkit-background-clip: padding-box;
         background-clip: padding-box;
@@ -857,6 +857,12 @@ ul.sub-list {
         display: none;
         width: 30px;
         text-align: center;
+    }
+    .mobile-back-btn{
+        display: none;
+        color: #fff;
+        transform: rotate(90deg);
+        margin-right: 10px;
     }
     .not-today{
         margin-right: 5px;
