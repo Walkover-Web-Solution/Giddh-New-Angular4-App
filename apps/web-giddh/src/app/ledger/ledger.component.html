@@ -33,9 +33,10 @@
                             <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput" id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
                         </div>
                     </div>
+                    <!-- [ngClass]="{'class-1':condition1==condition2, 'class-2': condition3==condition4}" -->
                     <div class="single-search-box d-flex" *ngIf="checkedTrxWhileHovering.length === 0">
-                        <span [ngClass]="!isAdvanceSearchImplemented ? 'full-width-input':'default-width-input'">
-                            <!-- {'full-width-input':!isAdvanceSearchImplemented} -->
+                        <span [ngClass]="{'default-width-input': (searchText || isAdvanceSearchImplemented) && isMobileScreen, 
+                                         'full-width-input': (searchText || !isAdvanceSearchImplemented) && isMobileScreen }">
                             <input type="search" [(ngModel)]="searchText" name="searchText" class="form-control"
                                 (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
                             <i class="icon-search1 pos-abs"></i>
