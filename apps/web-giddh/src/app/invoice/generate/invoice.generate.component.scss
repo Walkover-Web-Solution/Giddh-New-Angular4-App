@@ -247,6 +247,16 @@ span.close-modal.cp.pull-right {
 }
 
 // responsive
+@media(max-width:1023px){
+    .pending-advance-search{
+        .input-group{
+            display: flex;
+            .clear-filter{
+                margin-left: 15px !important;
+            }
+        }
+    }
+}
 @media (max-width: 768px) {
     .basic.onMobileView {
         background: transparent;
@@ -318,10 +328,35 @@ span.close-modal.cp.pull-right {
         margin-bottom: 0 !important;
         width: 120px;
     }
+    .pending-advance-search{
+        width: 100%;
+        margin-bottom: 0;
+        flex-direction: column !important;
+        div#dp-parent{
+            width: 100% !important;
+            display: flex;
+            justify-content: space-between;
+            .input-wrapper{
+                width: 100% !important;
+                max-width: 190px;
+            }
+            .clear-filter{
+                float: right;
+                width: 120px !important;
+                margin-top: 0 !important;
+                margin-right: 0 !important;
+            }
+        }
+       span{
+           .btn{
+               margin-bottom: 0 !important;
+               margin-top: 10px !important;
+           }
+       } 
+    }
 }
 @media(max-width:575px){
     .pending-advance-search{
-        flex-direction: column !important;
         button{
             margin-top: 10px !important;
             width: 100% !important;

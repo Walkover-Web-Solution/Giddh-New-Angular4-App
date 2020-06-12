@@ -45,14 +45,14 @@
 
                     <div class="col-sm-8 col-xs-12">
 
-                        <div class="">
+                        <div class="total-amount">
 
-                            <div class="col-xs-8" style="padding-left: 0">
+                            <div class="col-sm-8 col-xs-6" style="padding-left: 0">
                                 <sh-select placeholder="Select" name="entryTotalBy" [options]="filtersForEntryTotal"
                                     [ItemHeight]="33" (selected)="invoiceTotalRangeChanged($event)"></sh-select>
                             </div>
 
-                            <div class="col-xs-4" style="padding: 0">
+                            <div class="col-sm-4 col-xs-6" style="padding: 0">
                                 <input class="form-control" type="tel" placeholder="00" name="total" [(ngModel)]="request.total">
 
                             </div>
@@ -201,12 +201,12 @@
 
                         <div class="total-amount">
 
-                            <div class="col-sm-8 col-xs-12" style="padding-left: 0">
+                            <div class="col-sm-8 col-xs-6" style="padding-left: 0">
                                 <sh-select placeholder="Select Range" [options]="filtersForEntryTotal" [ItemHeight]="33"
                                     (selected)="invoiceTotalRangeChanged($event)"></sh-select>
                             </div>
 
-                            <div class="col-sm-4 col-xs-12" style="padding: 0">
+                            <div class="col-sm-4 col-xs-6" style="padding: 0">
                                 <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total">
 
                             </div>
@@ -303,7 +303,7 @@
                                 <sh-select placeholder="Select Range" [options]="filtersForEntryTotal" [ItemHeight]="33"
                                     (selected)="invoiceTotalRangeChanged($event)"></sh-select>
                             </div>
-                            <div class="col-xs-4" style="padding: 0">
+                            <div class="col-sm-4 col-xs-12" style="padding: 0">
                                 <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total">
                             </div>
                         </div>
