@@ -53,6 +53,15 @@
     height: 100%;
     background: $white;
 }
+@media(max-width:1359px) {
+    .xs-pl-15 {
+        padding-left: 15px !important;
+    }
+    .hidden-1359 {
+        display: none;
+    }
+}
+
 @media(max-width:768px) {
     .empty-label label,
     .empty-label br {
@@ -72,6 +81,7 @@
     #inlnImg {
         margin-top: 0;
     }
+
     #inlnImg label,
     .inlnImg label {
         margin: 0;
