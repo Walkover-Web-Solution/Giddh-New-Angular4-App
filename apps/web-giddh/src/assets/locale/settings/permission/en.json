@@ -28,10 +28,7 @@
     "bank_account_placeholder" : "Select Account",
     "duration_limit" : "Duration limit",
     "amount_limit" : "Amount Limit",
-    "add_button" : "Add",
     "bank_account_hover_box_heading" : "Bank Account",
     "more_detail_hover_box" : "More Details",
-    "days" : "Days",
     "create_user_permission" : "Create User Permission",
-
 }

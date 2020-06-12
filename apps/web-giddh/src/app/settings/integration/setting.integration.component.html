@@ -41,7 +41,6 @@
                 <span class="icon-mail"></span> Email
             </ng-template>
 
-
             <div class="box clearfix mb-2">
                 <h3 class="section-head">Gmail Integration</h3>
                 <div class="d-flex gmail-integration-message">
@@ -305,7 +304,6 @@
                     </form>
                 </div>
             </div>
-
         </tab>
 
         <tab>
@@ -388,10 +386,12 @@
             <div *ngFor="let regAcc of registeredAccount; let parentIndex=index">
 
                 <div class="box clearfix">
-                    <div style="clear: both">
-                        <h2 style="float: left; font-size: 20px">ICICI Bank</h2>
-                        <button type="button" style="float: right; margin-right: 5px" class="btn btn-danger mrR1" (click)="deRegisterForm(regAcc)">Remove
-                        </button>
+                    <div class="d-flex justify-content-between">
+                        <h2 class="font-20 bold">ICICI Bank</h2>
+                        <div class="ico-btn">
+                            <button class="btn btn-xs" type="button"><i class="fa fa-pencil"></i></button>
+                            <button class="btn btn-xs mr-0" type="button" (click)="deRegisterForm(regAcc)"><i class="fa fa-trash-o"></i></button>
+                        </div>
                     </div>
                     <br/>
                     <br/>
