@@ -110,7 +110,7 @@
                                     <div class="form-group pr-15">
                                         <label>Amount<span class="text-danger">*</span></label>
 
-                                        <input class="form-control" name="closingBalanceAmount{{entryIdx}}" [(ngModel)]="item.closingBalance.amount" decimalDigitsDirective type="text" required [disabled]="isPayClicked">
+                                        <input class="form-control" name="closingBalanceAmount{{entryIdx}}" [(ngModel)]="item.closingBalance.amount" decimalDigitsDirective type="text" [required]="!isPayClicked" [disabled]="isPayClicked">
                                     </div>
                                     <div class="form-group remark-block">
                                         <label>Remark<span class="text-danger">*</span></label>
