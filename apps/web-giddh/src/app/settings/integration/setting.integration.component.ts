@@ -718,7 +718,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (isUpdate && this.registeredAccount && this.registeredAccount[parentIndex].userAmountRanges) {
             this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
         }
-        console.log('selected', this.paymentFormObj, this.registeredAccount, index);
     }
 
     public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, parentIndex?: number, ): void {
@@ -733,7 +732,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.toasty.infoToast('You can not select max bank limit more than 1');
         }
         this.changeDetectionRef.detectChanges();
-        console.log('changes', this.paymentFormObj, this.registeredAccount, index);
     }
 
     /**
