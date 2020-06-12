@@ -331,4 +331,21 @@ export class SettingsIntegrationService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
+
+    /**
+     * Get integrated bank validations form
+     *
+     * @param {string} companyUniqueName Company unique name
+     * @param {string} bankName Bank name
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
+    public getValidationFormForBank(companyUniqueName: string, bankName: string): Observable<BaseResponse<any, any>> {
+
+        return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_INTERATION_VALIDATION_FORM.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':bankName', bankName)).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)));
+    }
+
 }

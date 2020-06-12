@@ -417,7 +417,7 @@
                                 <br>
                                 <input type="text" placeholder="Enter Alias ID" name="aliasId" class="form-control" [(ngModel)]="regAcc.aliasId" disabled/>
                             </div>
-                            <div class="form-group col-sm-3 col-md-2">
+                            <div class="form-group col-sm-3 col-md-2" *ngIf="bankAccounts$ && regAcc?.account?.uniqueName">
                                 <label>Accounts <span class="required">*</span></label>
                                 <br>
                                 <sh-select *ngIf="bankAccounts$ && regAcc?.account?.uniqueName" required [options]="bankAccounts$ | async" name="accountUniqueName" [defaultValue]="regAcc?.account?.name" [(ngModel)]="regAcc.account.uniqueName" placeholder="Select Account" [ItemHeight]="33"
@@ -441,12 +441,13 @@
                                         <br></ng-container>
                                     <div class="d-flex">
                                         <div class="mr-05 custom-select select-caret pos-rel">
-                                            <sh-select [options]="amountUpToList" autocomplete="off" required [fixedValue]="Custom" defaultValue="{{item.maxBankLimit}}" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom(index, true, parentIndex);" (ngModelChange)="maxLimitOrCustomChanged($event, index , true, parentIndex)"
+                                            <sh-select [options]="amountUpToList" autocomplete="off" [required]="item.maxBankLimit !== 'max'" [fixedValue]="Custom" defaultValue="{{item.maxBankLimit}}" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom(index, true, parentIndex);" (ngModelChange)="maxLimitOrCustomChanged($event, index , true, parentIndex)"
                                                 name="maxBankLimit{{parentIndex}}{{index}}">
                                             </sh-select>
                                         </div>
                                         <div class="ml-05">
-                                            <input type="number" class="form-control" #amountUpdateElement required [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountUpdateElement, true, parentIndex );" name="amount{{parentIndex}}{{index}}" placeholder="Amount">
+                                            <input type="text" class="form-control" maxlength="maxLimit.length" #amountUpdateElement decimalDigitsDirective [required]="item.maxBankLimit !== 'max'" [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountUpdateElement, true, parentIndex );"
+                                                name="amount{{parentIndex}}{{index}}" placeholder="Amount">
                                         </div>
                                     </div>
                                 </div>
@@ -580,7 +581,7 @@
                                         </sh-select>
                                     </div>
                                     <div class="ml-05">
-                                        <input type="number" class="form-control" #amountElement required [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountElement, false );" name="amount{{index}}" placeholder="Amount">
+                                        <input type="text" class="form-control" maxlength="8" #amountElement required decimalDigitsDirective [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountElement, false );" name="amount{{index}}" placeholder="Amount" [max]='maxLimit' [min]='minLimit'>
                                     </div>
                                 </div>
                             </div>

@@ -218,7 +218,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 });
             }
         }
-        this.getTotalAmount(this.selectedAccForBulkPayment);
+        this.getTotalAmount();
     }
 
     /*
@@ -377,12 +377,13 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     }
 
     /**
-     * To get total amount
+     * To get total amount of selected account's balance
      *
-     * @param {any[]} selectedAccount Selected accounts list
+     *
      * @memberof PaymentAsideComponent
      */
-    public getTotalAmount(selectedAccount: any[]): void {
+    public getTotalAmount(): void {
+        let selectedAccount = cloneDeep(this.selectedAccForBulkPayment);
         this.totalSelectedAccountAmount = 0;
         if (selectedAccount && selectedAccount.length) {
             this.totalSelectedAccountAmount = selectedAccount.reduce((prev, cur) => {

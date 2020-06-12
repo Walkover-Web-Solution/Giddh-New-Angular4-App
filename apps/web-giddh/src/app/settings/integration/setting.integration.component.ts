@@ -37,6 +37,7 @@ import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { elementStylingMap } from '@angular/core/src/render3';
+import { SettingsIntegrationService } from '../../services/settings.integraion.service';
 
 export declare const gapi: any;
 
@@ -104,6 +105,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public approvalNameList: IOption[] = [];
     public selectedCompanyUniqueName: string;
     public isCreateInvalid: boolean = false;
+    public maxLimit: number = 99999999 ;
+    public minLimit: number = 0.01;
 
     constructor(
         private router: Router,
@@ -118,7 +121,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private _generalActions: GeneralActions,
         private settingsPermissionActions: SettingsPermissionActions,
         private changeDetectionRef: ChangeDetectorRef,
-        private generalService: GeneralService) {
+        private generalService: GeneralService,
+        private settingsIntegrationService: SettingsIntegrationService) {
         this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
@@ -271,6 +275,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(take(1)).subscribe(s => {
             this.selectedCompanyUniqueName = s.session.companyUniqueName;
             this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
+            this.getValidationForm('ICICI')
         });
         this.store.pipe(select(stores => stores.settings.usersWithCompanyPermissions), take(2)).subscribe(resp => {
             if (resp) {
@@ -900,5 +905,24 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.paymentFormObj.accountUniqueName = "";
         this.paymentFormObj.userAmountRanges = [this.getBlankAmountRangeRow()];
         this.forceClear$ = observableOf({ status: true });
+    }
+
+    /**
+     * To get validation of amount bank
+     *
+     * @param {string} bankType
+     * @memberof SettingIntegrationComponent
+     */
+    public getValidationForm(bankType: string) {
+        if (this.selectedCompanyUniqueName && bankType) {
+            this.settingsIntegrationService.getValidationFormForBank(this.selectedCompanyUniqueName, bankType).subscribe(response => {
+                if (response && response.status === 'success') {
+                    if (response.body) {
+                        this.maxLimit = response.body.maxAmount;
+                        this.minLimit = response.body.minAmount;
+                    }
+                }
+            });
+        }
     }
 }
