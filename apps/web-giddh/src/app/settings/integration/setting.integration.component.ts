@@ -105,8 +105,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public approvalNameList: IOption[] = [];
     public selectedCompanyUniqueName: string;
     public isCreateInvalid: boolean = false;
-    public maxLimit: number = 99999999 ;
-    public minLimit: number = 0.01;
+    public maxLimit: number = 9;
 
     constructor(
         private router: Router,
@@ -918,8 +917,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.settingsIntegrationService.getValidationFormForBank(this.selectedCompanyUniqueName, bankType).subscribe(response => {
                 if (response && response.status === 'success') {
                     if (response.body) {
-                        this.maxLimit = response.body.maxAmount;
-                        this.minLimit = response.body.minAmount;
+                        this.maxLimit = String(response.body.maxAmoun).length;
                     }
                 }
             });

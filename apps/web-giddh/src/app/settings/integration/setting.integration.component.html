@@ -446,7 +446,7 @@
                                             </sh-select>
                                         </div>
                                         <div class="ml-05">
-                                            <input type="text" class="form-control" maxlength="maxLimit.length" #amountUpdateElement decimalDigitsDirective [required]="item.maxBankLimit !== 'max'" [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountUpdateElement, true, parentIndex );"
+                                            <input type="text" class="form-control" [maxlength]="maxLimit" #amountUpdateElement decimalDigitsDirective [required]="item.maxBankLimit !== 'max'" [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountUpdateElement, true, parentIndex );"
                                                 name="amount{{parentIndex}}{{index}}" placeholder="Amount">
                                         </div>
                                     </div>
@@ -581,7 +581,7 @@
                                         </sh-select>
                                     </div>
                                     <div class="ml-05">
-                                        <input type="text" class="form-control" maxlength="8" #amountElement required decimalDigitsDirective [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountElement, false );" name="amount{{index}}" placeholder="Amount" [max]='maxLimit' [min]='minLimit'>
+                                        <input type="text" class="form-control" [maxlength]="maxLimit" #amountElement required decimalDigitsDirective [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountElement, false );" name="amount{{index}}" placeholder="Amount">
                                     </div>
                                 </div>
                             </div>
