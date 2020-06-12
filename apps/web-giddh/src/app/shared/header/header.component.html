@@ -210,11 +210,11 @@
                             <img src="{{imgPath}}notification.svg">
                         </li>
                         <li [hidden]="isTodaysDateSelected" class="border-none pl-0">
-                            <button class="btn btn-link" (click)="dateSelectedCallback()">Today</button>
+                            <button class="btn btn-link">Today</button>
                         </li>
-                        <li class="not-today cursor-pointer">
-                            <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
-                            <!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
+                        <li class="not-today">
+                            <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)" ></span>
+<!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
                             <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
                         </li>
                         <!-- <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
