@@ -259,6 +259,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.startTimer(40);
         this._companyService.resendOtp(this.companyUniqueName, this.selectedBankUrn, this.paymentRequestId).subscribe((response) => {
             if (response && response.status === 'success') {
+
                 this.isPayClicked = true;
                 if (response.body && response.body.message) {
                     this._toaster.successToast(response.body.message);
@@ -281,6 +282,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         bankTransferConfirmOtpRequest.otp = this.receivedOtp;
         this._companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUrn, bankTransferConfirmOtpRequest).subscribe((res) => {
             if (res && res.status === 'success') {
+
                 this.closePaymentModel();
                 this.openModalWithClass(this.successTemplate);
             } else {
