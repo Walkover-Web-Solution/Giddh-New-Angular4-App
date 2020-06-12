@@ -9,7 +9,7 @@
         <form #adjustAdvancePaymentForm="ngForm" autocomplete="off">
             <div class="row d-flex align-items-center payment-top-form">
                 <div class="col-sm-12">
-                    <div class="d-flex">
+                    <div class="d-flex mb-1">
                         <div class="form-group mr-15 select-bank">
                             <label>Select Bank<span class="red-text">*</span></label>
                             <sh-select *ngIf="selectIntegratedBankList.length > 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankName" class="text-left" name="urn" required placeholder="'Select Bank'" (selected)="selectBank($event);" [multiple]="false">
@@ -109,7 +109,8 @@
                                 <div class="d-flex">
                                     <div class="form-group pr-15">
                                         <label>Amount<span class="text-danger">*</span></label>
-                                        <input class="form-control" name="closingBalanceAmount{{entryIdx}}" [(ngModel)]="item.closingBalance.amount" decimalDigitsDirective type="text" required [disabled]="isPayClicked">
+
+                                        <input class="form-control" name="closingBalanceAmount{{entryIdx}}" [(ngModel)]="item.closingBalance.amount" decimalDigitsDirective type="text" [required]="!isPayClicked" [disabled]="isPayClicked">
                                     </div>
                                     <div class="form-group remark-block">
                                         <label>Remark<span class="text-danger">*</span></label>
@@ -182,7 +183,7 @@
                     <div class="selectMode">
                         <form #paymentForm="ngForm" autocomplete="off">
                             <div class="row mrB2">
-                                <div class="col-sm-6 col-xs-12">
+                                <div class="col-sm-6 col-xs-12">contact-detail
                                     <div class="form-group custom-select pos-rel">
                                         <label>Select Mode<span class="text-danger">*</span></label>
                                         <div dropdown>
@@ -251,7 +252,7 @@
             </button>
         </div>
         <div class="modal-body">
-            <div class="Payment-img">
+            <div class="payment-img">
                 <img src="{{imgPath}}payment-succes.svg">
             </div>
             <h4>Payment proceed</h4>
@@ -259,7 +260,6 @@
             <button class="btn btn-success" (click)="successModalRef.hide()">Done</button>
         </div>
     </ng-template>
-
     <!-- <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
   -->
 

@@ -29,6 +29,7 @@ import { WarehouseComponent } from './warehouse/warehouse.component';
 import { SettingsServiceModule } from './settings-service.module';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -65,7 +66,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CurrencyModule,
         OmitByKeyPipeModule,
         SettingsServiceModule,
-        PerfectScrollbarModule
+        PerfectScrollbarModule,
+        ShSelectModule
     ],
     providers: [
         {
