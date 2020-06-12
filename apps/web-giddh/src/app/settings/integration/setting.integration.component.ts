@@ -910,7 +910,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {string} bankType
      * @memberof SettingIntegrationComponent
      */
-    public getValidationForm(bankType: string) {
+    public getValidationForm(bankType: string): void {
         if (this.selectedCompanyUniqueName && bankType) {
             this.settingsIntegrationService.getValidationFormForBank(this.selectedCompanyUniqueName, bankType).subscribe(response => {
                 if (response && response.status === 'success') {
