@@ -1880,6 +1880,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if(!updatedData.accountDetails) {
                 updatedData.accountDetails = {};
             }
+            updatedData.voucherDetails.voucherNumber = data.voucherDetails.voucherNumber;
             updatedData.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
             updatedData.accountDetails.uniqueName = data.accountDetails.uniqueName;
             this.store.dispatch(this.proformaActions.generateProforma(updatedData));
@@ -3011,7 +3012,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 dueDate: data.voucherDetails.dueDate,
                 number: this.invoiceNo,
                 uniqueName: unqName,
-                roundOffApplicable: this.applyRoundOff
+                roundOffApplicable: this.applyRoundOff,
+                templateDetails: data.templateDetails
             } as GenericRequestForGenerateSCD;
 
             if(!requestObject.voucherDetails) {
