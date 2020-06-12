@@ -32,4 +32,7 @@
     "bank_account_hover_box_heading" : "Bank Account",
     "details_hover_box" : "Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.",
     "more_detail_hover_box" : "More Details",
+    "days" : "Days",
+    "create_user_permission" : "Create User Permission",
+
 }
