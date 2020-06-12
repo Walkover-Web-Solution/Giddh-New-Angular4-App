@@ -209,9 +209,9 @@
                         <li class="border-none pr-15" [ngClass]="{'notification': !isMobileSite}">
                             <img src="{{imgPath}}notification.svg">
                         </li>
-                        <!-- <li [hidden]="isTodaysDateSelected" class="border-none pl-0">
-                            <button class="btn btn-link" (click)="jumpToToday();">Today</button>
-                        </li> -->
+                        <li [hidden]="isTodaysDateSelected" class="border-none pl-0">
+                            <button class="btn btn-link">Today</button>
+                        </li>
                         <li class="not-today">
                             <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)" ></span>
 <!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
@@ -483,9 +483,9 @@
 
                 <div class="lower-layer-header">
                     <ul class="nav universal-date  pull-left" *ngIf="(selectedCompany | async)">
-                        <!-- <li [hidden]="isTodaysDateSelected" class="border-none pl-0"> 
-                            <button class="btn btn-link" (click)="jumpToToday();">Today</button>
-                        </li> -->
+                        <li [hidden]="isTodaysDateSelected" class="border-none pl-0"> 
+                            <button class="btn btn-link">Today</button>
+                        </li>
                         <li class="daterang-picker not-today">
                             <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)" ></span>
 <!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
