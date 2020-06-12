@@ -756,7 +756,7 @@ sh-select:focus {
         .single-search-box{
             position: relative;
             width: calc(100% - 215px);
-            margin-right: 15px;
+            margin-right: 13px;
             .full-width-input{
                 width: 100%;  
             }
@@ -935,6 +935,11 @@ sh-select:focus {
             .clear-filter-btn{
                 font-size: 12px;
             }
+        }
+    }
+    .ledg-head {
+        .single-search-box{
+            margin-right:5px;
         }
     }
 }
