@@ -144,7 +144,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
 
 		case PROFORMA_ACTIONS.UPDATE_PROFORMA_RESPONSE: {
 			let vouchers = { ...state.vouchers };
-			let result = action.payload as BaseResponse<VoucherClass, VoucherClass>;
+			let result = action.payload as BaseResponse<any, VoucherClass>;
 			if (result.status === 'success') {
 				return {
 					...state,
@@ -152,16 +152,10 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
 					isUpdateProformaSuccess: true,
 					vouchers: {
 						...vouchers,
-						results: vouchers.results.map(m => {
-							if (result.body.voucherDetails.voucherType === VoucherTypeEnum.estimate) {
-								if (m.estimateNumber === result.body.voucherDetails.estimateNumber) {
-									m.grandTotal = result.body.voucherDetails.grandTotal;
-								}
-							} else {
-								if (m.proformaNumber === result.body.voucherDetails.proformaNumber) {
-									m.grandTotal = result.body.voucherDetails.grandTotal;
-								}
-							}
+						results: vouchers.results.map(m => {                            
+                            if (m.estimateNumber === result.body.number) {
+                                m.grandTotal = result.body.grandTotal;
+                            }
 							return m;
 						})
 					}
