@@ -104,6 +104,11 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public baseCurrencySymbol: string;
     /** Input mast for number format */
     public inputMaskFormat: string = '';
+    /** Selected bank unique name */
+    public selectedBankUniqueName: string;
+    /** To check form validation */
+    public isValidData: boolean = false;
+
 
 
     constructor(
@@ -218,7 +223,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 });
             }
         }
-        this.getTotalAmount(this.selectedAccForBulkPayment);
+        this.getTotalAmount();
     }
 
     /*
@@ -301,6 +306,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             let itemIndx = this.selectedAccForBulkPayment.findIndex((element) => element === item);
             this.selectedAccForBulkPayment.splice(itemIndx, 1);
         }
+        this.getTotalAmount();
     }
 
     /**
@@ -310,7 +316,22 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public closePaymentModel(): void {
+        this.resetFormData();
+        this.totalSelectedAccountAmount = null;
         this.closeModelEvent.emit(true);
+    }
+
+    /**
+     * To reset form data
+     *
+     * @memberof PaymentAsideComponent
+     */
+    public resetFormData(): void {
+        this.selectedBankUniqueName = '';
+        this.selectedBankUrn = '';
+        this.receivedOtp = '';
+        this.isPayClicked = false;
+        this.selectedAccForBulkPayment = [];
     }
 
     /**
@@ -379,17 +400,40 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     }
 
     /**
-     * To get total amount
+     * To get total amount of selected account's balance
      *
-     * @param {any[]} selectedAccount Selected accounts list
+     *
      * @memberof PaymentAsideComponent
      */
-    public getTotalAmount(selectedAccount: any[]): void {
+    public getTotalAmount(): void {
+        let selectedAccount = cloneDeep(this.selectedAccForBulkPayment);
         this.totalSelectedAccountAmount = 0;
         if (selectedAccount && selectedAccount.length) {
             this.totalSelectedAccountAmount = selectedAccount.reduce((prev, cur) => {
-                return prev + cur.closingBalanceAmount;
+                return prev + Number(cur.closingBalance.amount);
             }, 0);
+        }
+        this.totalSelectedAccountAmount = Number(this.totalSelectedAccountAmount);
+        if (selectedAccount && selectedAccount.length) {
+
+            this.isValidData = selectedAccount.every(item => {
+                return item.closingBalance.amount && item.remarks ? true : false;
+            });
+        } else {
+            this.isValidData = false;
+        }
+    }
+
+    /**
+     * To prevent zero from textbox
+     *
+     * @param {number} amount Amount
+     * @param {number} index Index of item
+     * @memberof PaymentAsideComponent
+     */
+    public preventZero(amount: number, index: number) {
+        if (Number(amount) <= 0) {
+            this.selectedAccForBulkPayment[index].closingBalance.amount = '';
         }
     }
 

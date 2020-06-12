@@ -29,7 +29,11 @@ import { WarehouseComponent } from './warehouse/warehouse.component';
 import { SettingsServiceModule } from './settings-service.module';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
+import { TextMaskModule } from 'angular2-text-mask';
+import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
+import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -67,7 +71,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         OmitByKeyPipeModule,
         SettingsServiceModule,
         PerfectScrollbarModule,
+        TextMaskModule,
+        NgxMaskModule.forRoot(),
+        DigitsOnlyModule,
         ShSelectModule
+
     ],
     providers: [
         {

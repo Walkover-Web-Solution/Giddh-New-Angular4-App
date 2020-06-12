@@ -12,7 +12,7 @@
                     <div class="d-flex mb-1">
                         <div class="form-group mr-15 select-bank">
                             <label>Select Bank<span class="red-text">*</span></label>
-                            <sh-select *ngIf="selectIntegratedBankList.length > 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankName" class="text-left" name="urn" required placeholder="'Select Bank'" (selected)="selectBank($event);" [multiple]="false">
+                            <sh-select *ngIf="selectIntegratedBankList.length > 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankUniqueName" class="text-left" name="urn" required placeholder="'Select Bank'" (selected)="selectBank($event);" [multiple]="false">
                                 <ng-template #optionTemplate let-option="option">
                                     <a href="javascript:void(0)" class="list-item">
                                         <div class="item">{{option?.label}}</div>
@@ -52,7 +52,8 @@
                         </div>
                         <div class="form-group mr-15">
                             <label class="d-flex"> &nbsp; </label>
-                            <button type="button" *ngIf="!isPayClicked" class="btn btn-success" [disabled]="!adjustAdvancePaymentForm.form.valid" (click)="payClicked()">Pay</button>
+                            <button type="button" *ngIf="!isPayClicked" class="btn btn-success" [disabled]="!selectedBankUniqueName || !isValidData" (click)="payClicked()">Pay</button>
+
                             <button *ngIf="isPayClicked" class="btn btn-success" [disabled]="!adjustAdvancePaymentForm.form.valid" (click)="confirmOTP()">Confirm</button>
                             <button type="button" *ngIf="isPayClicked" class="btn btn-primary" (click)="clickedCancelOtp();">Cancel OTP</button>
                         </div>
@@ -109,12 +110,12 @@
                                 <div class="d-flex">
                                     <div class="form-group pr-15">
                                         <label>Amount<span class="text-danger">*</span></label>
+                                        <input class="form-control" name="closingBalanceAmount{{entryIdx}}" (blur)="getTotalAmount();preventZero(item.closingBalance.amount, entryIdx)" [(ngModel)]="item.closingBalance.amount" decimalDigitsDirective type="text" [required]="!isPayClicked" [disabled]="isPayClicked">
 
-                                        <input class="form-control" name="closingBalanceAmount{{entryIdx}}" [(ngModel)]="item.closingBalance.amount" decimalDigitsDirective type="text" [required]="!isPayClicked" [disabled]="isPayClicked">
                                     </div>
                                     <div class="form-group remark-block">
                                         <label>Remark<span class="text-danger">*</span></label>
-                                        <textarea rows="1" name="remark{{entryIdx}}" id="{{entryIdx}}" [(ngModel)]="item.remarks" autocomplete="off" required type="text" class="form-control" placeholder="Remark"></textarea>
+                                        <textarea rows="1" name="remark{{entryIdx}}" id="{{entryIdx}}" (blur)="getTotalAmount();" [(ngModel)]="item.remarks" autocomplete="off" required type="text" class="form-control" [disabled]="isPayClicked" placeholder="Remark"></textarea>
                                     </div>
                                 </div>
                             </div>
