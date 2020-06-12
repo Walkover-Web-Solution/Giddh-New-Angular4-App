@@ -24,7 +24,7 @@ export class ProformaActions {
 			map((response) => {
 				if (response.status === 'success') {
 					let no: string;
-					switch (response.request.voucher.voucherDetails.voucherType) {
+					switch (response.request.voucherDetails.voucherType) {
 						case 'proformas':
 							no = response.body.number;
 							break;
@@ -32,7 +32,7 @@ export class ProformaActions {
 							no = response.body.number;
 							break;
 						default:
-							no = response.body.voucher.voucherDetails.voucherNumber;
+							no = response.body.voucherDetails.voucherNumber;
 					}
 					this._toasty.successToast(`Entry created successfully with Voucher No: ${no}`);
 				} else {

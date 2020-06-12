@@ -57,6 +57,7 @@ export class ProformaService {
 	}
 
 	public generate(request: VoucherClass): Observable<BaseResponse<VoucherClass, VoucherClass>> {
+        console.log(request);
 		this.companyUniqueName = this._generalService.companyUniqueName;
 		return this._http.post(this.config.apiUrl + PROFORMA_API.generate
 			.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -74,6 +75,7 @@ export class ProformaService {
 	}
 
 	public update(request: VoucherClass): Observable<BaseResponse<VoucherClass, VoucherClass>> {
+        console.log(request);
 		this.companyUniqueName = this._generalService.companyUniqueName;
 		return this._http.put(this.config.apiUrl + PROFORMA_API.base
 			.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))

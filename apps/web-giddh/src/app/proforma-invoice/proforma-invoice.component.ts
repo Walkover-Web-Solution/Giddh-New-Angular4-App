@@ -1874,11 +1874,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             let updatedData = requestObject;
             updatedData = this.updateData(requestObject, data);
-            updatedData.voucher = {};
-            updatedData.voucher.voucherDetails = {};
-            updatedData.voucher.accountDetails = {};
-            updatedData.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
-            updatedData.voucher.accountDetails.uniqueName = data.accountDetails.uniqueName;
+            if(!updatedData.voucherDetails) {
+                updatedData.voucherDetails = {};
+            }
+            if(!updatedData.accountDetails) {
+                updatedData.accountDetails = {};
+            }
+            updatedData.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
+            updatedData.accountDetails.uniqueName = data.accountDetails.uniqueName;
             this.store.dispatch(this.proformaActions.generateProforma(updatedData));
         } else {
             let updatedData = requestObject;
@@ -2952,6 +2955,73 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         }
         if (this.isProformaInvoice || this.isEstimateInvoice) {
+            let data = requestObject.voucher;
+            let exRate = this.originalExchangeRate;
+            let unqName = this.invoiceUniqueName || this.accountUniqueName;
+
+            let salesEntryClassArray: SalesEntryClassMulticurrency[] = [];
+            let entries = data.entries;
+
+            entries.forEach(e => {
+                let salesEntryClass = new SalesEntryClassMulticurrency();
+                salesEntryClass.voucherType = e.voucherType;
+                salesEntryClass.uniqueName = e.uniqueName;
+                salesEntryClass.description = e.description;
+                salesEntryClass.date = e.entryDate;
+                e.taxList.forEach(t => {
+                    salesEntryClass.taxes.push({ uniqueName: t });
+                });
+                e.transactions.forEach(tr => {
+                    let transactionClassMul = new TransactionClassMulticurrency();
+                    transactionClassMul.account.uniqueName = tr.accountUniqueName;
+                    transactionClassMul.account.name = tr.accountName;
+                    transactionClassMul.amount.amountForAccount = tr.amount;
+                    salesEntryClass.hsnNumber = tr.hsnNumber;
+                    salesEntryClass.sacNumber = tr.sacNumber;
+                    salesEntryClass.description = tr.description;
+                    if (tr.isStockTxn) {
+                        let saalesAddBulkStockItems = new SalesAddBulkStockItems();
+                        saalesAddBulkStockItems.name = tr.stockDetails.name;
+                        saalesAddBulkStockItems.uniqueName = tr.stockDetails.uniqueName;
+                        saalesAddBulkStockItems.quantity = tr.quantity;
+                        saalesAddBulkStockItems.rate = {};
+                        saalesAddBulkStockItems.rate.amountForAccount = tr.rate;
+                        saalesAddBulkStockItems.sku = tr.stockDetails.skuCode;
+                        saalesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
+                        saalesAddBulkStockItems.stockUnit.code = tr.stockUnit;
+
+                        transactionClassMul.stock = saalesAddBulkStockItems;
+                    }
+                    salesEntryClass.transactions.push(transactionClassMul);
+                });
+                e.discounts.forEach(ds => {
+                    salesEntryClass.discounts.push(new DiscountMulticurrency(ds));
+                });
+
+                salesEntryClassArray.push(salesEntryClass);
+            });
+
+            requestObject = {
+                account: data.accountDetails,
+                updateAccountDetails: this.updateAccount,
+                entries: salesEntryClassArray,
+                date: this.convertDateForAPI(data.voucherDetails.voucherDate),
+                type: "sales",
+                exchangeRate: exRate,
+                dueDate: data.voucherDetails.dueDate,
+                number: this.invoiceNo,
+                uniqueName: unqName,
+                roundOffApplicable: this.applyRoundOff
+            } as GenericRequestForGenerateSCD;
+
+            if(!requestObject.voucherDetails) {
+                requestObject.voucherDetails = {};
+            }
+            if(!requestObject.accountDetails) {
+                requestObject.accountDetails = {};
+            }
+            requestObject.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
+            requestObject.accountDetails.uniqueName = requestObject.account.uniqueName;
             this.store.dispatch(this.proformaActions.updateProforma(requestObject));
         } else {
             let data = requestObject.voucher;
