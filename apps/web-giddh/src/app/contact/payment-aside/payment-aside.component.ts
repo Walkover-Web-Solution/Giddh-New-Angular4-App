@@ -110,6 +110,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public isValidData: boolean = false;
 
 
+
     constructor(
         private formBuilder: FormBuilder,
         private modalService: BsModalService,
