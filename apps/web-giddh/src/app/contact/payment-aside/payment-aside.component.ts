@@ -326,7 +326,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      *
      * @memberof PaymentAsideComponent
      */
-    public resetFormData() {
+    public resetFormData(): void {
         this.selectedBankUniqueName = '';
         this.selectedBankUrn = '';
         this.receivedOtp = '';
