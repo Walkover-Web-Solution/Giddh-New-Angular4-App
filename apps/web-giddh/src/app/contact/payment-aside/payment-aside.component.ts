@@ -145,7 +145,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
         //get current registered account on the user
         this.store.pipe(select(selectStore => selectStore.company), takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response.account) {
+            if (response && response.account) {
                 this.registeredAccounts = response.account;
                 if (this.registeredAccounts.length === 1) {
                     this.mode = this.registeredAccounts[0];
@@ -258,7 +258,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.timerOn = true
         this.startTimer(40);
         this._companyService.resendOtp(this.companyUniqueName, this.selectedBankUrn, this.paymentRequestId).subscribe((response) => {
-            if (response.status === 'success') {
+            if (response && response.status === 'success') {
                 this.isPayClicked = true;
                 if (response.body && response.body.message) {
                     this._toaster.successToast(response.body.message);
@@ -280,7 +280,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         bankTransferConfirmOtpRequest.requestId = this.paymentRequestId;
         bankTransferConfirmOtpRequest.otp = this.receivedOtp;
         this._companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUrn, bankTransferConfirmOtpRequest).subscribe((res) => {
-            if (res.status === 'success') {
+            if (res && res.status === 'success') {
                 this.closePaymentModel();
                 this.openModalWithClass(this.successTemplate);
             } else {
@@ -397,7 +397,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      *
      * @memberof PaymentAsideComponent
      */
-    public payClicked() {
+    public payClicked(): void {
         this.paymentRequestId = '';
         this.prepareRequestObject();
         this.bulkPayVendor();

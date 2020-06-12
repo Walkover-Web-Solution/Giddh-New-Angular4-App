@@ -46,7 +46,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public selectedIPRange: string = 'IP Address';
     public createPermissionInProcess$: Observable<boolean>;
     public dateRangePickerValue: Date[] = [];
-    opened = false;
+    /** To open model */
+    public opened = false;
     // private methods
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
