@@ -173,6 +173,8 @@ export class LoginComponent implements OnInit, OnDestroy {
                 document.addEventListener('deviceready', (device) => {
                     bootstrap();
 
+                    console.log(isIOS());
+
                     if (isIOS()) {
                         this.isCordovaAppleApp = true;
                     }
@@ -427,6 +429,8 @@ export class LoginComponent implements OnInit, OnDestroy {
                 (cordova.plugins as any).SignInWithApple.signin(
                     { requestedScopes: [0, 1] },
                     function (response) {
+                        console.log(response);
+                        alert(JSON.stringify(response));
                         this.store.dispatch(this.loginAction.signupWithApple(response));
                     },
                     function (error) {
