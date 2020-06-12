@@ -1,0 +1,22 @@
+<div class="search-copmany-page">
+    <div class="search-compnay-field">
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="icon-search2"></i>
+                </span>
+                <div class="wrap-group-account-input">
+                    <input type="text" #searchElement class="form-control" placeholder="Search Company">
+                </div> 
+                <span class="close-addon">
+                    <i class="icon-cross"></i>    
+                </span>
+            </div>
+    </div>
+    <div class="all-company-list mt-1">
+        <ul>
+            <li *ngFor="let name of comapnyList">
+                <a href="javascript:void();">{{name.CompanyName}}</a>
+            </li>
+        </ul>
+    </div>
+</div>

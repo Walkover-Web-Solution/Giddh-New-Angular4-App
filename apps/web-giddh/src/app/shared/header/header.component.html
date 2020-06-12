@@ -436,14 +436,16 @@
     <header class="clearfix header-container mobileHeader">
         <nav class="navbar " [ngClass]="{'menu_open':sideMenu.isopen}">
             <div class="container-fluid  mrB1 ">
-                <div class="upperLayerHeader">
+                <div class="upper-layer-header">
                     <ul class="nav navbar-nav">
                         <!-- (isOpenChange)="sideBarStateChange($event)" -->
                         <li class="hamburger_menu cp pull-left">
                             <button class="btn mrR0" placement="right" (click)="redirectToMobileHome()">
                                 <i class="icon-home-icon"></i>
+                                
                             </button>
                             <span class="setting-menu-icon" (click)="toggleSidebarPane(true, true)"> <i class="icon-bar"></i> </span>
+                            <span class="mobile-back-btn" (click)="redirectToMobileHome()"><i class="icon-arrow-down-2"></i></span>
                         </li>
                         <li class="hamburger_menu cp pull-left" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
                             <h4 class="inline text-capitalize" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
@@ -675,11 +677,11 @@
         </div>
     </div>
 </ng-template>
-<div class="overlay-cal" *ngIf="isCalendlyModelActivate">
-    <button id="close" class="close-2" (click)="hideScheduleCalendlyModel()"><i class="icon-cross" ></i></button>
+<div class="overlay-cal" *ngIf="isCalendlyModelActivate"> 
     <div id="scheduleCall" class="tab-pane active vertical-center modal-body">
         <div class="calendly-box" #reder>
             <div class="calendly-inline-widget">
+                <button id="close" class="close-2" (click)="hideScheduleCalendlyModel()"><i class="icon-cross" ></i></button>
                 <object data="https://calendly.com/sales-accounting-software/talk-to-sale"></object>
             </div>
         </div>

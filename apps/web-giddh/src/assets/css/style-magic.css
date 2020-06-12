@@ -5257,7 +5257,7 @@ form#groupDetailForm {
 }
 
 @media (max-width: 768px) {
-    .mobileHeader .upperLayerHeader .navbar-nav {
+    .mobileHeader .upper-layer-header .navbar-nav {
         float: none;
     }
     .desktop-header {

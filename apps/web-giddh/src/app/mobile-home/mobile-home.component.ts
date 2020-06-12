@@ -12,11 +12,17 @@ import { LoginActions } from '../actions/login.action';
 import { AuthService } from '../theme/ng-social-login-module/index';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommandKRequest } from '../models/api-models/Common';
+import { BsDropdownConfig } from 'ngx-bootstrap';
 
 @Component({
     selector: 'mobile-home',
     templateUrl: './mobile-home.component.html',
-    styleUrls: ['./mobile-home.component.scss']
+    styleUrls: ['./mobile-home.component.scss'],
+    providers: [
+        {
+            provide: BsDropdownConfig, useValue: { insideClick: true },
+        }
+    ]
 })
 
 export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -144,6 +150,9 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         }, 0);
     }
 
+    public openMobileSidebar(){
+        document.querySelector('body').classList.add('mobile-sidebar-open');
+    }
     /**
      * Releases all the observables to avoid memory leaks
      *
@@ -153,6 +162,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         document.querySelector('body').classList.remove('mobile-home');
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body').classList.remove('mobile-sidebar-open');
     }
 
     /**
