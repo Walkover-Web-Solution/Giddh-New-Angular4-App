@@ -389,40 +389,44 @@
                     <div class="d-flex justify-content-between">
                         <h2 class="font-20 bold">ICICI Bank</h2>
                         <div class="ico-btn">
-                            <button class="btn btn-xs" type="button"><i class="fa fa-pencil"></i></button>
+                            <button class="btn btn-xs" *ngIf="isBankUpdateInEdit !== parentIndex " (click)="editRegisterForm(parentIndex)" type="button"><i class="fa fa-pencil"></i></button>
+                            <button class="btn btn-xs" *ngIf="isBankUpdateInEdit === parentIndex " (click)="editRegisterForm(null)" type="button"><i class="fa fa-pencil"></i></button>
                             <button class="btn btn-xs mr-0" type="button" (click)="deRegisterForm(regAcc)"><i class="fa fa-trash-o"></i></button>
                         </div>
                     </div>
                     <br/>
                     <br/>
+                    <!-- <div *ngIf="isBankUpdateInEdit === parentIndex ">
+                        <h3>Edit {{parentIndex}}</h3>
+                    </div> -->
                     <form #paymentFormUpdate="ngForm">
                         <div class="row">
                             <div class="form-group col-sm-4 col-md-2">
                                 <label>Corporate ID <span class="required">*</span></label>
                                 <br>
-                                <input type="text" placeholder="Enter Corporate ID" required name="corpId" class="form-control" [(ngModel)]="regAcc.corpId" disabled/>
+                                <input type="text" placeholder="Enter Corporate ID" required name="corpId" class="form-control" [(ngModel)]="regAcc.corpId" [disabled]="isBankUpdateInEdit !== parentIndex" />
                             </div>
                             <div class="form-group col-sm-4 col-md-2">
                                 <label>User ID <span class="required">*</span></label>
                                 <br>
-                                <input type="text" placeholder="Enter User ID" name="userId" required class="form-control" [(ngModel)]="regAcc.userId" disabled/>
+                                <input type="text" placeholder="Enter User ID" name="userId" required class="form-control" [(ngModel)]="regAcc.userId" [disabled]="isBankUpdateInEdit !== parentIndex" />
                             </div>
                             <div class="form-group col-sm-4 col-md-2">
                                 <label>Account Number <span class="required">*</span></label>
                                 <br>
-                                <input type="text" placeholder="Enter Account Number" name="accountNo" required class="form-control" [(ngModel)]="regAcc.accountNo" disabled/>
+                                <input type="text" placeholder="Enter Account Number" name="accountNo" required class="form-control" [(ngModel)]="regAcc.accountNo" [disabled]="isBankUpdateInEdit !== parentIndex" />
                             </div>
                             <div class="form-group col-sm-4 col-md-2">
                                 <label>Alias ID</label>
                                 <br>
-                                <input type="text" placeholder="Enter Alias ID" name="aliasId" class="form-control" [(ngModel)]="regAcc.aliasId" disabled/>
+                                <input type="text" placeholder="Enter Alias ID" name="aliasId" class="form-control" [(ngModel)]="regAcc.aliasId" [disabled]="isBankUpdateInEdit !== parentIndex" />
                             </div>
                             <div class="form-group col-sm-4 col-md-2" *ngIf="bankAccounts$ && regAcc?.account?.uniqueName">
 
                                 <label>Accounts <span class="required">*</span></label>
                                 <br>
-                                <sh-select *ngIf="bankAccounts$ && regAcc?.account?.uniqueName" required [options]="bankAccounts$ | async" name="accountUniqueName" [defaultValue]="regAcc?.account?.name" [(ngModel)]="regAcc.account.uniqueName" placeholder="Select Account" [ItemHeight]="33"
-                                    autocomplete="off"></sh-select>
+                                <sh-select *ngIf="bankAccounts$ && regAcc?.account?.uniqueName" [disabled]="isBankUpdateInEdit !== parentIndex" required [options]="bankAccounts$ | async" name="accountUniqueName" [defaultValue]="regAcc?.account?.name" [(ngModel)]="regAcc.account.uniqueName"
+                                    placeholder="Select Account" [ItemHeight]="33" autocomplete="off"></sh-select>
                             </div>
                         </div>
                         <!-- Added this new row make it dynamic -->
@@ -432,7 +436,7 @@
                                     <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
                                         <br></ng-container>
                                     <div class="custom-select select-caret pos-rel">
-                                        <sh-select [options]="amountUpToList" autocomplete="off" required [(ngModel)]="item.maxBankLimit" name="maxBankLimit{{parentIndex}}{{index}}" (selected)="selectedMaxOrCustom(index, true, parentIndex);" (ngModelChange)="maxLimitOrCustomChanged($event, index , true, parentIndex)">
+                                        <sh-select [options]="amountUpToList" autocomplete="off" required [(ngModel)]="item.maxBankLimit" name="maxBankLimit{{parentIndex}}{{index}}" [disabled]="isBankUpdateInEdit !== parentIndex" (selected)="selectedMaxOrCustom(index, true, parentIndex);" (ngModelChange)="maxLimitOrCustomChanged($event, index , true, parentIndex)">
                                         </sh-select>
                                     </div>
                                     <p class="error-msg text-right"></p>
@@ -443,12 +447,12 @@
                                     <div class="d-flex">
 
                                         <div class="mr-05 custom-select select-caret pos-rel width-100">
-                                            <sh-select [options]="amountUpToList" autocomplete="off" [required]="item.maxBankLimit !== 'max'" [fixedValue]="Custom" defaultValue="{{item.maxBankLimit}}" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom(index, true, parentIndex);" (ngModelChange)="maxLimitOrCustomChanged($event, index , true, parentIndex)"
-                                                name="maxBankLimit{{parentIndex}}{{index}}">
+                                            <sh-select [options]="amountUpToList" autocomplete="off" [required]="item.maxBankLimit !== 'max'" [disabled]="isBankUpdateInEdit !== parentIndex" [fixedValue]="Custom" defaultValue="{{item.maxBankLimit}}" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom(index, true, parentIndex);"
+                                                (ngModelChange)="maxLimitOrCustomChanged($event, index , true, parentIndex)" name="maxBankLimit{{parentIndex}}{{index}}">
                                             </sh-select>
                                         </div>
                                         <div class="ml-05  width-100">
-                                            <input type="text" class="form-control" [maxlength]="maxLimit" #amountUpdateElement decimalDigitsDirective [required]="item.maxBankLimit !== 'max'" [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountUpdateElement, true, parentIndex );"
+                                            <input type="text" class="form-control" [maxlength]="maxLimit" #amountUpdateElement decimalDigitsDirective [disabled]="isBankUpdateInEdit !== parentIndex" [required]="item.maxBankLimit !== 'max'" [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountUpdateElement, true, parentIndex );preventZero(item.amount,index, parentIndex, true )"
                                                 name="amount{{parentIndex}}{{index}}" placeholder="Amount">
                                         </div>
                                     </div>
@@ -458,7 +462,7 @@
                                 <i class="icon-info cursor-pointer" tooltip="Content here.."></i>
                             </label></ng-container>
                                     <div class="custom-select select-caret pos-rel">
-                                        <sh-select [options]="typeOTPList" [(ngModel)]="item.otpType" (ngModelChange)="selectedOtpType($event, index, true, parentIndex)" required name="otpType{{parentIndex}}{{index}}">
+                                        <sh-select [options]="typeOTPList" [(ngModel)]="item.otpType" (ngModelChange)="selectedOtpType($event, index, true, parentIndex)" [disabled]="isBankUpdateInEdit !== parentIndex" required name="otpType{{parentIndex}}{{index}}">
                                         </sh-select>
                                     </div>
                                 </div>
@@ -467,7 +471,7 @@
                                 <i class="icon-info cursor-pointer"  tooltip="Content here.."></i>
                             </label></ng-container>
                                     <div class="custom-select select-caret pos-rel" *ngIf="item.otpType!=='BANK'">
-                                        <sh-select [options]="approvalNameList" class="text-left" [(ngModel)]="item.approvalUniqueName" name="approvalUniqueName{{parentIndex}}{{index}}" required [placeholder]="'Select Bank'" [multiple]="false">
+                                        <sh-select [options]="approvalNameList" class="text-left" [disabled]="isBankUpdateInEdit !== parentIndex" [(ngModel)]="item.approvalUniqueName" name="approvalUniqueName{{parentIndex}}{{index}}" required [placeholder]="'Select Bank'" [multiple]="false">
                                             <ng-template #optionTemplate let-option="option">
                                                 <a href="javascript:void(0)" *ngIf="option?.additional[0]?.mobileVerified" class="list-item relative">
                                                     <div class="item">
@@ -487,10 +491,10 @@
                                         </sh-select>
                                     </div>
                                     <div class="custom-select select-caret pos-rel" *ngIf="item.otpType==='BANK'">
-                                        <input type="text" class="form-control" disabled placeholder="Registered" name="approvalUniqueName{{index}}">
+                                        <input type="text" class="form-control" [disabled]="item.otpType==='BANK' || isBankUpdateInEdit !== parentIndex" placeholder="Registered" name="approvalUniqueName{{index}}">
                                     </div>
                                 </div>
-                                <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0">
+                                <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0" *ngIf="isBankUpdateInEdit === parentIndex">
                                     <ng-container *ngIf="index===0"> <label class="d-flex hidden-1359">&nbsp;</label></ng-container>
                                     <div class="mt-1 xs-pl-15">
                                         <i (click)="deleteAmountRangeRow(item, parentIndex+1)" class="icon-trash cursor-pointer"></i>
@@ -499,7 +503,7 @@
                             </div>
                         </ng-container>
 
-                        <div>
+                        <div *ngIf="isBankUpdateInEdit === parentIndex">
                             <a href="javascript:void(0)" (click)="addNewAmountRangeRow(parentIndex+1)" class="btn btn-link pl-0">+ Add New Row</a>
                         </div>
                         <!-- New code -->
@@ -524,7 +528,7 @@
                 <br/>
             </div>
 
-            <!--  Create or add bank account start -->
+            <!--  Create or add bank account start
             <div *ngIf="openNewRegistration && !(isPaymentAdditionSuccess$ | async)" class="box clearfix">
                 <h3 class="fs20 mrB2">ICICI Bank</h3>
                 <form #paymentForm="ngForm" (ngSubmit)="onSubmitPaymentform(paymentForm)">
@@ -565,7 +569,7 @@
                                 <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
                                     <br></ng-container>
                                 <div class="custom-select max select-caret pos-rel">
-                                    <sh-select [options]="amountUpToList" required [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);" (ngModelChange)="maxLimitOrCustomChanged($event, index , false)" name="maxBankLimit{{index}}">
+                                    <sh-select [options]="amountUpToList" [required]="item.maxBankLimit ==='max'" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);maxLimitOrCustomChanged($event, index , false)" name="maxBankLimit{{index}}">
                                     </sh-select>
                                 </div>
                                 <p class="error-msg text-right"></p>
@@ -575,12 +579,12 @@
                                     <br></ng-container>
                                 <div class="d-flex">
                                     <div class="mr-05 custom-select cust select-caret pos-rel">
-                                        <sh-select [options]="amountUpToList" required [fixedValue]="Custom" defaultValue="{{item.maxBankLimit}}" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);" (ngModelChange)="maxLimitOrCustomChanged($event, index, false)"
+                                        <sh-select [options]="amountUpToList" [required]="item.maxBankLimit !=='max'" [fixedValue]="Custom" defaultValue="{{item.maxBankLimit}}" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);maxLimitOrCustomChanged($event, index, false)"
                                             name="maxBankLimit{{index}}">
                                         </sh-select>
                                     </div>
                                     <div class="ml-05">
-                                        <input type="text" class="form-control" [maxlength]="maxLimit" #amountElement required decimalDigitsDirective [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountElement, false );" name="amount{{index}}" placeholder="Amount">
+                                        <input type="text" class="form-control" [maxlength]="maxLimit" #amountElement [required]="item.maxBankLimit !=='max'" decimalDigitsDirective [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountElement, false );" name="amount{{index}}" placeholder="Amount">
                                     </div>
                                 </div>
                             </div>
@@ -589,7 +593,7 @@
                                 <i class="icon-info cursor-pointer" tooltip="Content here.."></i>
                             </label></ng-container>
                                 <div class="custom-select select-caret pos-rel">
-                                    <sh-select [options]="typeOTPList" [(ngModel)]="item.otpType" (ngModelChange)="selectedOtpType($event,index, false)" required name="otpType{{index}}">
+                                    <sh-select [options]="typeOTPList" [(ngModel)]="item.otpType" (selected)="selectedOtpType($event,index, false)" required name="otpType{{index}}">
                                     </sh-select>
                                 </div>
                             </div>
@@ -633,9 +637,6 @@
                     <div>
                         <a href="javascript:void(0)" (click)="addNewAmountRangeRow()" class="btn btn-link pl-0">+ Add New Row</a>
                     </div>
-                    <!-- <div class="clearfix">
-                        <a href="javascript:void" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" (click)="openNewRegistartionForm()" class="btn btn-link pl-0">Add More ID</a>
-                    </div> -->
                     <div class="form-group">
                         <div class="empty-label">
                             <br>
@@ -654,7 +655,136 @@
                     </div>
                 </div>
             </div>
-            <!--  Create or add bank account end -->
+             Create or add bank account end -->
+            <div *ngIf="openNewRegistration && !(isPaymentAdditionSuccess$ | async)" class="box clearfix">
+                <h3 class="fs20 mrB2">ICICI Bank</h3>
+                <form [formGroup]="addBankForm" (ngSubmit)="onSubmitPaymentform(addBankForm)">
+                    <div class="row">
+                        <div class="form-group col-sm-4 col-md-2">
+                            <div class="">
+                                <label>Corporate ID <span class="required">*</span></label>
+                                <br>
+                                <input type="text" placeholder="Enter Corporate ID" class="form-control" formControlName="corpId" name="corpId" autocomplete="off" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-4 col-md-2">
+                            <label>User ID <span class="required">*</span></label>
+                            <br>
+                            <input type="text" placeholder="Enter User ID" class="form-control" formControlName="userId" name="userId" required autocomplete="off" />
+                        </div>
+                        <div class="form-group col-sm-4 col-md-2">
+                            <label>Account Number <span class="required">*</span></label>
+                            <br>
+                            <input type="text" placeholder="Enter Account Number" class="form-control" formControlName="accountNo" name="accountNo" autocomplete="off" />
+                        </div>
+                        <div class="form-group col-sm-4 col-md-2">
+                            <label>Alias ID</label>
+                            <br>
+                            <input type="text" placeholder="Enter Alias ID" class="form-control" name="aliasId" formControlName="aliasId" />
+                        </div>
+                        <div class="form-group col-sm-4 col-md-2">
+                            <label>Accounts <span class="required">*</span></label>
+                            <br>
+                            <sh-select #paymentFormAccountName [options]="accounts$ | async" name="accountUniqueName" formControlName="accountUniqueName" [forceClearReactive]="forceClear$ | async" placeholder="Select Account" [ItemHeight]="33" autocomplete="off">
+                            </sh-select>
+                        </div>
+                    </div>
+                    <ng-container formArrayName="userAmountRanges">
+                        <ng-container *ngFor="let item of addBankForm.get('userAmountRanges')['controls'];let index = index;let f = first; let l = last" [formGroupName]="index">
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-2" *ngIf="item.get('maxBankLimit').value ==='max'">
+                                    <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
+                                        <br></ng-container>
+                                    <div class="custom-select max select-caret pos-rel">
+                                        <sh-select [options]="amountUpToList" formControlName="maxBankLimit" (selected)="selectedMaxOrCustom2( index, false, null , $event)" name="maxBankLimit">
+                                        </sh-select>
+                                    </div>
+                                    <p class="error-msg text-right"></p>
+                                </div>
+                                <div class="form-group col-sm-3  col-md-2" *ngIf="item.get('maxBankLimit').value!=='max'">
+                                    <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
+                                        <br></ng-container>
+                                    <div class="d-flex">
+                                        <div class="mr-05 custom-select cust select-caret pos-rel">
+                                            <sh-select [options]="amountUpToList" formControlName="maxBankLimit" (selected)="selectedMaxOrCustom2(  index, false, null , $event)" name="maxBankLimit">
+                                            </sh-select>
+                                        </div>
+                                        <div class="ml-05">
+                                            <input type="text" class="form-control" #amountElement decimalDigitsDirective [maxlength]="maxLimit" (blur)="preventZero(item.get('amount').value, index, null, false)" formControlName="amount" name="amount" placeholder="Amount">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-2">
+                                    <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Select OTP <span class="required">*</span>
+                                <i class="icon-info cursor-pointer" tooltip="Content here.."></i>
+                            </label></ng-container>
+                                    <div class="custom-select select-caret pos-rel">
+                                        <sh-select [options]="typeOTPList" formControlName="otpType" (selected)="selectedOtpType($event,index, false)" required name="otpType">
+                                        </sh-select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-2">
+                                    <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Approval Name <span class="required">*</span>
+                                <i class="icon-info cursor-pointer"  tooltip="Content here.."></i>
+                            </label></ng-container>
+                                    <div class="custom-select select-caret pos-rel" *ngIf="item.get('otpType').value !=='BANK'">
+                                        <sh-select [options]="approvalNameList" class="text-left" formControlName="approvalUniqueName" name="approvalUniqueName" [placeholder]="'Select Bank'" [multiple]="false">
+                                            <ng-template #optionTemplate let-option="option">
+                                                <a href="javascript:void(0)" *ngIf="option?.additional[0]?.mobileVerified" class="list-item relative">
+                                                    <div class="item">
+                                                        <p>{{option?.label}}</p>
+                                                        <p>{{option?.additional[0]?.mobileNumber}}</p>
+                                                        <img src="assets/images/blue-check.svg" class="check-search" alt="">
+                                                    </div>
+                                                </a>
+
+                                                <fieldset disabled href="javascript:void(0)" *ngIf="!option?.additional[0]?.mobileVerified" class="list-item relative text-light disabled disabled-list-item">
+                                                    <div class="item">
+                                                        <p>{{option?.label}}</p>
+                                                        <p>Unverifed</p>
+                                                        <img src="assets/images/close-round.svg" class="check-search" alt="">
+                                                    </div>
+                                                </fieldset>
+                                            </ng-template>
+                                        </sh-select>
+                                    </div>
+                                    <div class="custom-select select-caret pos-rel" *ngIf="item.get('otpType').value ==='BANK'">
+                                        <input type="text" class="form-control" disabled placeholder="Registered" formControlName="approvalUniqueName" name="approvalUniqueName">
+                                    </div>
+                                </div>
+                                <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0">
+                                    <label *ngIf="index===0" class="d-flex hidden-1359">&nbsp;</label>
+                                    <div class="mt-1 xs-pl-15">
+                                        <i (click)="removeUserAmountRangesForm(index)" class="icon-trash cursor-pointer"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                    <div>
+                        <a href="javascript:void(0)" (click)="addUserAmountRangesForm()" class="btn btn-link pl-0">+ Add New Row</a>
+                    </div>
+                    <!-- <div class="clearfix">
+                        <a href="javascript:void" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" (click)="openNewRegistartionForm()" class="btn btn-link pl-0">Add More ID</a>
+                    </div> -->
+                    <div class="form-group">
+                        <div class="empty-label">
+                            <br>
+                            <button type="submit" [disabled]="addBankForm.invalid" class="btn btn-success mrR1">Submit</button>
+                        </div>
+                    </div>
+                </form>
+                <div *ngIf="(isPaymentAdditionSuccess$ | async)">
+                    <div style="display: inline-block" class="clearfix">
+                        <div>Congratulations!! A request has been sent to your account, go to <a href="https://www.icicibank.com/" target="_blank">ICICI portal</a> and accept it.
+                        </div>
+                    </div>
+                    <div class="clearfix">
+                        <div style="color: gray">Once it is done you can link your ICICI account/s and make payment directly through GIDDH.
+                        </div>
+                    </div>
+                </div>
+            </div>
             <button type="button" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" style=" margin-right: 5px" class="btn btn-pink mrR1" (click)="openNewRegistartionForm()">Add More ID</button>
         </tab>
     </tabset>
