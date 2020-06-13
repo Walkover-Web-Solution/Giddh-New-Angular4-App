@@ -791,8 +791,8 @@
 <!-- endregion bank integration from by bank name:  ui/bank/integration/form?bankName=ICICI&= -->
 
 
-<ng-template #template>
-    <payment-aside [selectedAccountsForBulkPayment]="selectedAccountsList" [selectedAccForPayment]="selectedAccForPayment" (closeModelEvent)="closeBulkPaymentModel()"></payment-aside>
+<ng-template #templat>
+    <payment-aside *ngIf="isBulkPaymentShow" [selectedAccountsForBulkPayment]="selectedAccountsList" [selectedAccForPayment]="selectedAccForPayment" (closeModelEvent)="closeBulkPaymentModel()"></payment-aside>
 </ng-template>
 <!-- endregion -->
 

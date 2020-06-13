@@ -598,7 +598,7 @@
                                 <i class="icon-info cursor-pointer"  tooltip="Content here.."></i>
                             </label></ng-container>
                                 <div class="custom-select select-caret pos-rel" *ngIf="item.otpType!=='BANK'">
-                                    <sh-select [options]="approvalNameList" class="text-left" [(ngModel)]="item.approvalUniqueName" name="approvalUniqueName{{index}}" required [placeholder]="'Select Bank'" [multiple]="false">
+                                    <sh-select [options]="approvalNameList" class="text-left" [(ngModel)]="item.approvalUniqueName" name="approvalUniqueName{{index}}" [required]="item.otpType!=='BANK'" [placeholder]="'Select Bank'" [multiple]="false">
                                         <ng-template #optionTemplate let-option="option">
                                             <a href="javascript:void(0)" *ngIf="option?.additional[0]?.mobileVerified" class="list-item relative">
                                                 <div class="item">
