@@ -262,6 +262,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                         });
                     });
                 }
+                this.addBankForm.reset();
             }
         });
 
