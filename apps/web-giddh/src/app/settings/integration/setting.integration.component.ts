@@ -721,16 +721,24 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, parentIndex?: number, ): void {
-        if (event === 'max' && !isUpdate && this.checkIsMaxBankLimitSelected(this.paymentFormObj.userAmountRanges, index)) {
-            this.paymentFormObj.userAmountRanges[index].maxBankLimit = "custom";
-            this.paymentFormObj.userAmountRanges[index].amount = null;
-            this.toasty.infoToast('You can not select max bank limit more than 1');
+        if (!isUpdate) {
+            if (event === 'max' && this.checkIsMaxBankLimitSelected(this.paymentFormObj.userAmountRanges, index)) {
+                this.paymentFormObj.userAmountRanges[index].maxBankLimit = "custom";
+                this.paymentFormObj.userAmountRanges[index].amount = null;
+                this.toasty.infoToast('You can not select max bank limit more than 1');
+            } else {
+                this.paymentFormObj.userAmountRanges[index].amount = null;
+            }
+        } else {
+            if (event === 'max' && this.checkIsMaxBankLimitSelected(this.registeredAccount[parentIndex].userAmountRanges, index)) {
+                this.registeredAccount[parentIndex].userAmountRanges[index].maxBankLimit = "custom";
+                this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
+                this.toasty.infoToast('You can not select max bank limit more than 1');
+            } else {
+                this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
+            }
         }
-        if (event === 'max' && isUpdate && this.checkIsMaxBankLimitSelected(this.registeredAccount[parentIndex].userAmountRanges, index)) {
-            this.registeredAccount[parentIndex].userAmountRanges[index].maxBankLimit = "custom";
-            this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
-            this.toasty.infoToast('You can not select max bank limit more than 1');
-        }
+
         this.changeDetectionRef.detectChanges();
     }
 
@@ -832,7 +840,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public getBlankAmountRangeRow(): any {
         let userAmountRanges = {
             amount: null,
-            otpType: '',
+            otpType: 'BANK',
             approvalUniqueName: '',
             maxBankLimit: 'custom',
         }

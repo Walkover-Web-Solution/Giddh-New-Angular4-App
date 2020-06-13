@@ -565,7 +565,7 @@
                                 <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
                                     <br></ng-container>
                                 <div class="custom-select max select-caret pos-rel">
-                                    <sh-select [options]="amountUpToList" required [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);" (ngModelChange)="maxLimitOrCustomChanged($event, index , false)" name="maxBankLimit{{index}}">
+                                    <sh-select [options]="amountUpToList" [required]="item.maxBankLimit ==='max'" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);" (ngModelChange)="maxLimitOrCustomChanged($event, index , false)" name="maxBankLimit{{index}}">
                                     </sh-select>
                                 </div>
                                 <p class="error-msg text-right"></p>
@@ -575,12 +575,12 @@
                                     <br></ng-container>
                                 <div class="d-flex">
                                     <div class="mr-05 custom-select cust select-caret pos-rel">
-                                        <sh-select [options]="amountUpToList" required [fixedValue]="Custom" defaultValue="{{item.maxBankLimit}}" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);" (ngModelChange)="maxLimitOrCustomChanged($event, index, false)"
+                                        <sh-select [options]="amountUpToList" [required]="item.maxBankLimit !=='max'" [fixedValue]="Custom" defaultValue="{{item.maxBankLimit}}" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);" (ngModelChange)="maxLimitOrCustomChanged($event, index, false)"
                                             name="maxBankLimit{{index}}">
                                         </sh-select>
                                     </div>
                                     <div class="ml-05">
-                                        <input type="text" class="form-control" [maxlength]="maxLimit" #amountElement required decimalDigitsDirective [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountElement, false );" name="amount{{index}}" placeholder="Amount">
+                                        <input type="text" class="form-control" [maxlength]="maxLimit" #amountElement [required]="item.maxBankLimit !=='max'" decimalDigitsDirective [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountElement, false );" name="amount{{index}}" placeholder="Amount">
                                     </div>
                                 </div>
                             </div>
