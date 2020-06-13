@@ -792,7 +792,7 @@
 
 
 <ng-template #template>
-    <payment-aside [selectedAccountsForBulkPayment]="selectedAccountsList" [selectedAccForPayment]="selectedAccForPayment" (closeModelEvent)="closeBulkPaymentModel()"></payment-aside>
+    <payment-aside *ngIf="isBulkPaymentShow" [selectedAccountsForBulkPayment]="selectedAccountsList" [selectedAccForPayment]="selectedAccForPayment" (closeModelEvent)="closeBulkPaymentModel()"></payment-aside>
 </ng-template>
 <!-- endregion -->
 
