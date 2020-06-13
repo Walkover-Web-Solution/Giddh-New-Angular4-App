@@ -1,13 +1,13 @@
-import {take, takeUntil} from "rxjs/operators";
-import {LoginActions} from "../actions/login.action";
-import {AppState} from "../store";
-import {Router} from "@angular/router";
-import {Component, Inject, OnDestroy, OnInit, ViewChild} from "@angular/core";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ModalDirective} from "ngx-bootstrap";
-import {Configuration} from "../app.constant";
-import {Store} from "@ngrx/store";
-import {Observable, ReplaySubject} from "rxjs";
+import { take, takeUntil } from "rxjs/operators";
+import { LoginActions } from "../actions/login.action";
+import { AppState } from "../store";
+import { Router } from "@angular/router";
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ModalDirective } from "ngx-bootstrap";
+import { Configuration } from "../app.constant";
+import { Store } from "@ngrx/store";
+import { Observable, ReplaySubject } from "rxjs";
 import {
     LinkedInRequestModel,
     SignupwithEmaillModel,
@@ -22,13 +22,13 @@ import {
     LinkedinLoginProvider,
     SocialUser
 } from "../theme/ng-social-login-module/index";
-import {contriesWithCodes} from "../shared/helpers/countryWithCodes";
-import {IOption} from "../theme/ng-virtual-select/sh-options.interface";
-import {DOCUMENT} from "@angular/platform-browser";
-import {ToasterService} from "../services/toaster.service";
-import {userLoginStateEnum} from "../models/user-login-state";
-import {isIOSCordova} from "@giddh-workspaces/utils";
-import {GeneralService} from "../services/general.service";
+import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
+import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
+import { DOCUMENT } from "@angular/platform-browser";
+import { ToasterService } from "../services/toaster.service";
+import { userLoginStateEnum } from "../models/user-login-state";
+import { isCordova, isIOSCordova } from "@giddh-workspaces/utils";
+import { GeneralService } from "../services/general.service";
 
 @Component({
     selector: "signup",
@@ -73,19 +73,19 @@ export class SignupComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public showLinkedInButton: boolean = false;
     /** Used only to refer in the template */
-    public isCordova: boolean = isCordova;
+    public isCordovaAppleApp: boolean = false;
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: FormBuilder,
-                private store: Store<AppState>,
-                private router: Router,
-                private loginAction: LoginActions,
-                private authService: AuthService,
-                @Inject(DOCUMENT) private document: Document,
-                private _toaster: ToasterService,
-                private _generalService: GeneralService
+        private store: Store<AppState>,
+        private router: Router,
+        private loginAction: LoginActions,
+        private authService: AuthService,
+        @Inject(DOCUMENT) private document: Document,
+        private _toaster: ToasterService,
+        private _generalService: GeneralService
     ) {
-        this.urlPath = (isElectron || isCordova) ? "" : AppUrl + APP_FOLDER;
+        this.urlPath = (isElectron || isCordova()) ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = store.select(state => {
             return state.login.isLoginWithEmailInProcess;
         }).pipe(takeUntil(this.destroyed$));
@@ -132,12 +132,20 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).pipe(takeUntil(this.destroyed$));
 
         contriesWithCodes.map(c => {
-            this.countryCodeList.push({value: c.countryName, label: c.value});
+            this.countryCodeList.push({ value: c.countryName, label: c.value });
         });
         this.userLoginState$ = this.store.select(p => p.session.userLoginState);
         this.userDetails$ = this.store.select(p => p.session.user);
         this.isTwoWayAuthInProcess$ = this.store.select(p => p.login.isTwoWayAuthInProcess);
         this.isTwoWayAuthInSuccess$ = this.store.select(p => p.login.isTwoWayAuthSuccess);
+
+        if (isCordova()) {
+            if (typeof window['cordova'] !== 'undefined') {
+                if (isIOSCordova() || window['cordova']['platformId'] === "ios") {
+                    this.isCordovaAppleApp = true;
+                }
+            }
+        }
     }
 
     // tslint:disable-next-line:no-empty
@@ -165,10 +173,10 @@ export class SignupComponent implements OnInit, OnDestroy {
             email: ["", [Validators.required, Validators.email]],
             verificationCode: ["", Validators.required]
         });
-        this.setCountryCode({value: "India", label: "India"});
+        this.setCountryCode({ value: "India", label: "India" });
 
         // get user object when google auth is complete
-        if (!Configuration.isElectron && !Configuration.isCordova) {
+        if (!Configuration.isElectron && !isCordova()) {
             this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
                 this.isSocialLogoutAttempted$.subscribe((res) => {
                     if (!res && user) {
@@ -305,8 +313,7 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     public async signInWithProviders(provider: string) {
         if (Configuration.isElectron) {
-
-            const {ipcRenderer} = (window as any).require("electron");
+            const { ipcRenderer } = (window as any).require("electron");
             if (provider === "google") {
                 // google
                 const t = ipcRenderer.send("authenticate", provider);
@@ -321,23 +328,32 @@ export class SignupComponent implements OnInit, OnDestroy {
                 const t = ipcRenderer.sendSync("authenticate", provider);
                 this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
             }
-
-        } else if (Configuration.isCordova) {
-            (window as any).plugins.googleplus.login(
-                {
-                    'scopes': 'email', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
-                    'webClientId': this._generalService.getGoogleCredentials().GOOGLE_CLIENT_ID,
-                    'offline': true // optional, but requires the webClientId - if set to true the plugin will also return a serverAuthCode, which can be used to grant offline access to a non-Google server
-                },
-                (obj) => {
-                    this.store.dispatch(this.loginAction.signupWithGoogle(obj.accessToken));
-                    // console.log(JSON.stringify(obj)); // do something useful instead of alerting
-                },
-                (msg) => {
-                    console.log(('error: ' + msg));
-                }
-            );
-
+        } else if (isCordova()) {
+            if (provider === "google") {
+                (window as any).plugins.googleplus.login(
+                    {
+                        'scopes': 'email', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
+                        'webClientId': this._generalService.getGoogleCredentials().GOOGLE_CLIENT_ID,
+                        'offline': true // optional, but requires the webClientId - if set to true the plugin will also return a serverAuthCode, which can be used to grant offline access to a non-Google server
+                    },
+                    (obj) => {
+                        this.store.dispatch(this.loginAction.signupWithGoogle(obj.accessToken));
+                    },
+                    (msg) => {
+                        console.log(('error: ' + msg));
+                    }
+                );
+            } else if (provider === "apple") {
+                (cordova.plugins as any).SignInWithApple.signin(
+                    { requestedScopes: [0, 1] },
+                    (response) => {
+                        this.store.dispatch(this.loginAction.signupWithApple(response));
+                    },
+                    (error) => {
+                        this._toaster.errorToast(error);
+                    }
+                )
+            }
         } else {
             //  web social authentication
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());

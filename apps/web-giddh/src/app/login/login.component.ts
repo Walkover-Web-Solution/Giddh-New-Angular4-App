@@ -29,7 +29,7 @@ import { DOCUMENT } from "@angular/platform-browser";
 import { ToasterService } from "../services/toaster.service";
 import { AuthenticationService } from "../services/authentication.service";
 import { userLoginStateEnum } from "../models/user-login-state";
-import { isCordova, isIOS } from "@giddh-workspaces/utils";
+import { isCordova, isIOSCordova } from "@giddh-workspaces/utils";
 import { GeneralService } from "../services/general.service";
 import { AppModule } from '..';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -91,7 +91,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     //Button to hide linkedIn button till functionality is available
     public showLinkedInButton = false;
-    public deviceDetails: any;
     public isCordovaAppleApp: boolean = false;
 
     // tslint:disable-next-line:no-empty
@@ -170,14 +169,11 @@ export class LoginComponent implements OnInit, OnDestroy {
             };
 
             if (typeof window['cordova'] !== 'undefined') {
+                if (isIOSCordova() || window['cordova']['platformId'] === "ios") {
+                    this.isCordovaAppleApp = true;
+                }
                 document.addEventListener('deviceready', (device) => {
                     bootstrap();
-
-                    console.log(isIOS());
-
-                    if (isIOS()) {
-                        this.isCordovaAppleApp = true;
-                    }
                 }, false);
             } else {
                 bootstrap();
@@ -419,7 +415,6 @@ export class LoginComponent implements OnInit, OnDestroy {
                     },
                     (obj) => {
                         this.store.dispatch(this.loginAction.signupWithGoogle(obj.accessToken));
-                        // console.log((JSON.stringify(obj))); // do something useful instead of alerting
                     },
                     (msg) => {
                         console.log(('error: ' + msg));
@@ -428,13 +423,11 @@ export class LoginComponent implements OnInit, OnDestroy {
             } else if (provider === "apple") {
                 (cordova.plugins as any).SignInWithApple.signin(
                     { requestedScopes: [0, 1] },
-                    function (response) {
-                        console.log(response);
-                        alert(JSON.stringify(response));
+                    (response) => {
                         this.store.dispatch(this.loginAction.signupWithApple(response));
                     },
-                    function (error) {
-                        alert('Apple login is not supported on your IOS version.');
+                    (error) => {
+                        this._toaster.errorToast(error);
                     }
                 )
             }
