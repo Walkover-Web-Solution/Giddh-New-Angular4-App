@@ -81,8 +81,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public integratedBankList: IntegratedBankList;
     /** Add bank form reference */
     public addBankForm: FormGroup;
-
-
+    /** Input mast for number format */
+    public inputMaskFormat: string = '';
 
     @Input() private selectedTabParent: number;
     @ViewChild('integrationTab') public integrationTab: TabsetComponent;
@@ -285,6 +285,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         //         }
         //     }
         // });
+        this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+        });
 
         this.store.pipe(take(1)).subscribe(s => {
             this.selectedCompanyUniqueName = s.session.companyUniqueName;
@@ -346,13 +349,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
 
-/**
- *To submit form and send data to API Call
- *
- * @param {*} fomValue
- * @memberof SettingIntegrationComponent
- */
-public onSubmitPaymentform(fomValue: any): void {
+    /**
+     *To submit form and send data to API Call
+     *
+     * @param {*} fomValue
+     * @memberof SettingIntegrationComponent
+     */
+    public onSubmitPaymentform(fomValue: any): void {
 
         if (fomValue.valid) {
             let requestObject = _.cloneDeep(fomValue.value)
@@ -779,16 +782,16 @@ public onSubmitPaymentform(fomValue: any): void {
     }
 
 
-/**
- * To call when max and custom limit options change
- *
- * @param {*} event
- * @param {number} index
- * @param {boolean} isUpdate
- * @param {number} [parentIndex]
- * @memberof SettingIntegrationComponent
- */
-public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, parentIndex?: number, ): void {
+    /**
+     * To call when max and custom limit options change
+     *
+     * @param {*} event
+     * @param {number} index
+     * @param {boolean} isUpdate
+     * @param {number} [parentIndex]
+     * @memberof SettingIntegrationComponent
+     */
+    public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, parentIndex?: number, ): void {
 
         if (!isUpdate) {
             if (event === 'max' && this.checkIsMaxBankLimitSelected(this.paymentFormObj.userAmountRanges, index)) {
@@ -870,6 +873,9 @@ public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, par
             } else {
                 elementRef.classList.remove('error-box');
             }
+        }
+        if (this.maxLimit) {
+
         }
     }
 
@@ -1106,14 +1112,37 @@ public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, par
      * @param {boolean} [isUpdate]
      * @memberof SettingIntegrationComponent
      */
-    public preventZero(amount: number, index: number, parentIndex?: number, isUpdate?: boolean): void {
+    public preventZero(amount: number, index: number, parentIndex?: number, isUpdate?: boolean): boolean {
 
-        if (Number(amount) <= 0 && !isUpdate) {
+        if (!isUpdate) {
             const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
-            transactions.controls[index].get('amount').patchValue(null);
+            if (Number(amount) <= 0) {
+                transactions.controls[index].get('amount').patchValue(null);
+            }
+            if (amount) {
+                let convertedAmount;
+                convertedAmount = _.cloneDeep(amount);
+                convertedAmount.toString().replace(',', '');
+                if (convertedAmount.includes('.')) {
+                    let splitedAmount = convertedAmount.split('.');
+                    if (splitedAmount[0].length > this.maxLimit) {
+                        console.log('splitedAmount[0].length', splitedAmount[0].length,  this.maxLimit);
+                        return false;
+                    }
+                } else {
+                    if (convertedAmount.length > this.maxLimit) {
+                        console.log('convertedAmount', convertedAmount.length,  this.maxLimit);
+
+                        return false;
+                    }
+                }
+
+            }
         }
-        if (isUpdate && Number(amount) <= 0) {
-            this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
+        if (isUpdate) {
+            if (Number(amount) <= 0) {
+                this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
+            }
         }
     }
 

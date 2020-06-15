@@ -385,6 +385,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 }
             })
         }
+        this.getTotalAmount();
     }
 
     /**
