@@ -5,7 +5,22 @@
   <% } %> -->
 
 <head>
-
+    <script>
+        (function(w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start': new Date().getTime(),
+                event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-K2L9QG');
+    </script>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -32,7 +47,11 @@
 
 
 <body class="unresponsive">
-
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <!--<% if (JSON.parse(htmlWebpackPlugin.options.metadata.errlyticsNeeded)) { %>-->
     <!--<noscript>-->
     <!--<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG" height="0" width="0"-->
@@ -41,7 +60,7 @@
     <!--<% } %>-->
     <!--<div id="loader-1" class="giddh-spinner vertical-center-spinner"></div>-->
     <!-- Scripts will be injected by webpack here -->
-
+    <app-component></app-component>
 </body>
 
 </html>
