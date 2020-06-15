@@ -1050,7 +1050,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, 'DD-MM-YYYY').toDate();
                                 obj.voucherDetails.voucherNumber = obj.voucherDetails.proformaNumber;
                             } else if (this.isEstimateInvoice) {
-                                obj.voucherDetails.voucherDate = moment(obj.voucherDetails.estimateDate, 'DD-MM-YYYY').toDate();
+                                obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, 'DD-MM-YYYY').toDate();
                                 obj.voucherDetails.voucherNumber = obj.voucherDetails.estimateNumber;
                             } else {
                                 obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, 'DD-MM-YYYY').toDate();
@@ -1258,7 +1258,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         result[1].items.forEach(item => {
                             arr.push({
                                 versionNumber: this.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
-                                date: this.isProformaInvoice ? item.proformaDate : item.estimateDate,
+                                date: this.isProformaInvoice ? item.voucherDate : item.voucherDate,
                                 grandTotal: item.grandTotal,
                                 account: { name: item.customerName, uniqueName: item.customerUniqueName }
                             });
@@ -1722,9 +1722,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         // convert date object
         if (this.invoiceType === VoucherTypeEnum.generateProforma || this.invoiceType === VoucherTypeEnum.proforma) {
-            data.voucherDetails.proformaDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
+            data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
         } else if (this.invoiceType === VoucherTypeEnum.generateEstimate || this.invoiceType === VoucherTypeEnum.estimate) {
-            data.voucherDetails.estimateDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
+            data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
         } else {
             data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
         }
@@ -3228,9 +3228,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         // convert date object
         if (this.isProformaInvoice) {
-            data.voucherDetails.proformaDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
+            data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
         } else if (this.isEstimateInvoice) {
-            data.voucherDetails.estimateDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
+            data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
         } else {
             data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
         }
@@ -4363,7 +4363,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private isMultiCurrencyModule(): boolean {
-        return [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash].includes(this.invoiceType);
+        return [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash, 'proformas', 'estimates'].includes(this.invoiceType);
     }
 
     /**
