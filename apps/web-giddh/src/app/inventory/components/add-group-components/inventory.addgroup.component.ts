@@ -105,13 +105,13 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         });
 
         // check if active group is available if then fill form else reset form
-        this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
-            if (a && !this.addGroup) {
+        this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(account => {
+            if (account && !this.addGroup) {
                 let updGroupObj = new StockGroupRequest();
-                updGroupObj.name = a.name;
-                updGroupObj.uniqueName = a.uniqueName;
-                updGroupObj.hsnNumber = a.hsnNumber;
-                updGroupObj.sacNumber = a.sacNumber;
+                updGroupObj.name = account.name;
+                updGroupObj.uniqueName = account.uniqueName;
+                updGroupObj.hsnNumber = account.hsnNumber;
+                updGroupObj.sacNumber = account.sacNumber;
                 if (updGroupObj.uniqueName === 'maingroup') {
                     this.addGroupForm.controls['uniqueName'].disable();
                     this.defaultGrpActive = true;
@@ -120,10 +120,10 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                     this.defaultGrpActive = false;
                 }
 
-                if (a.parentStockGroup) {
-                    this.selectedGroup = { label: a.parentStockGroup.name, value: a.parentStockGroup.uniqueName };
+                if (account.parentStockGroup) {
+                    this.selectedGroup = { label: account.parentStockGroup.name, value: account.parentStockGroup.uniqueName };
                     // updGroupObj.parentStockGroupUniqueName = this.selectedGroup.value;
-                    this.parentStockSearchString = a.parentStockGroup.uniqueName;
+                    this.parentStockSearchString = account.parentStockGroup.uniqueName;
                     updGroupObj.isSubGroup = true;
                 } else {
                     updGroupObj.parentStockGroupUniqueName = '';
@@ -132,19 +132,19 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                     this.forceClear$ = observableOf({ status: true });
                 }
                 this.addGroupForm.patchValue(updGroupObj);
-                if (a.parentStockGroup) {
-                    this.addGroupForm.patchValue({ parentStockGroupUniqueName: { label: a.parentStockGroup.name, value: a.parentStockGroup.uniqueName } });
+                if (account.parentStockGroup) {
+                    this.addGroupForm.patchValue({ parentStockGroupUniqueName: account.parentStockGroup.uniqueName });
                 }
 
             } else {
-                if (a) {
-                    this.addGroupForm.patchValue({ isSubGroup: true, parentStockGroupUniqueName: { label: a.name, value: a.uniqueName } });
+                if (account) {
+                    this.addGroupForm.patchValue({ isSubGroup: true, parentStockGroupUniqueName: account.uniqueName });
                 } else {
                     this.addGroupForm.patchValue({ name: '', uniqueName: '', hsnNumber: '', sacNumber: '', isSubGroup: false });
                 }
                 this.parentStockSearchString = '';
             }
-            if (a && a.stocks.length > 0) {
+            if (account && account.stocks.length > 0) {
                 this.canDeleteGroup = false;
             } else {
                 this.canDeleteGroup = true;
