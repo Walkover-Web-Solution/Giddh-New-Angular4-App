@@ -9,7 +9,7 @@ import {
     ViewChild,
     TemplateRef
 } from '@angular/core';
-import {FormControl} from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import {
     ProformaFilter,
     ProformaGetRequest,
@@ -17,23 +17,25 @@ import {
     ProformaResponse,
     ProformaUpdateActionRequest
 } from '../../models/api-models/proforma';
-import {select, Store} from '@ngrx/store';
-import {AppState} from '../../store';
-import {ProformaActions} from '../../actions/proforma/proforma.actions';
-import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
-import {combineLatest, Observable, ReplaySubject} from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../store';
+import { ProformaActions } from '../../actions/proforma/proforma.actions';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment/moment';
-import {cloneDeep, uniqBy} from '../../lodash-optimized';
-import {ModalDirective, BsModalRef, ModalOptions , BsModalService} from 'ngx-bootstrap';
-import {InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm} from '../../models/api-models/Invoice';
-import {InvoiceAdvanceSearchComponent} from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
-import {GIDDH_DATE_FORMAT} from '../../shared/helpers/defaultDateFormat';
-import {InvoiceSetting} from '../../models/interfaces/invoice.setting.interface';
-import {VoucherTypeEnum} from '../../models/api-models/Sales';
-import {ActivatedRoute, Router} from '@angular/router';
-import {createSelector} from "reselect";
-import {BreakpointObserver} from '@angular/cdk/layout';
-import {GeneralService} from '../../services/general.service';
+import { cloneDeep, uniqBy } from '../../lodash-optimized';
+import { ModalDirective, BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap';
+import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
+import { InvoiceAdvanceSearchComponent } from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
+import { VoucherTypeEnum } from '../../models/api-models/Sales';
+import { ActivatedRoute, Router } from '@angular/router';
+import { createSelector } from "reselect";
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { GeneralService } from '../../services/general.service';
+
+const MULTI_CURRENCY_MODULES = ['proformas', 'estimate'];
 
 @Component({
     selector: 'app-proforma-list-component',
@@ -132,7 +134,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public showCustomerSearch: boolean = false;
     public customerNameInput: FormControl = new FormControl();
 
-    public sortRequestForUi: { sortBy: string, sort: string } = {sortBy: '', sort: ''};
+    public sortRequestForUi: { sortBy: string, sort: string } = { sortBy: '', sort: '' };
     public advanceSearchFilter: ProformaFilter = new ProformaFilter();
     public allItemsSelected: boolean = false;
     public hoveredItemUniqueName: string;
@@ -148,9 +150,11 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public isMobileView = false;
+    public baseCurrencySymbol: string = '';
+    public baseCurrency: string = '';
 
     constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private activatedRouter: ActivatedRoute,
-                private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private _generalService: GeneralService,private modalService: BsModalService) {
+        private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private _generalService: GeneralService, private modalService: BsModalService) {
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = 20;
         this.advanceSearchFilter.from = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
@@ -167,10 +171,21 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             this.isMobileView = result.matches;
         });
     }
+
     openModal(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(template);
     }
+
     ngOnInit() {
+        this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+            if (profile) {
+                this.baseCurrencySymbol = profile.baseCurrencySymbol;
+                this.baseCurrency = profile.baseCurrency;
+            }
+        });
+
+        console.log(this.voucherType);
+
         combineLatest([
             this.store.pipe(select(s => s.proforma.vouchers)),
             this.store.pipe(select(s => s.proforma.voucherNoForDetails)),
@@ -197,6 +212,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                             }
                         } else {
                             item.expiredDays = null;
+                        }
+
+                        if (MULTI_CURRENCY_MODULES.indexOf(this.voucherType) > -1) {
+                            item = this.addToolTiptext(item);
                         }
 
                         this.itemsListForDetails.push(this.parseItemForVm(item));
@@ -721,9 +740,39 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         obj.uniqueName = obj.voucherNumber;
         obj.grandTotal = invoice.grandTotal;
         obj.voucherType = this.voucherType;
-        obj.account = {name: invoice.customerName, uniqueName: invoice.customerUniqueName};
+        obj.account = { name: invoice.customerName, uniqueName: invoice.customerUniqueName };
         obj.voucherStatus = invoice.action;
         return obj;
     }
 
+    /**
+     * Adds tooltip text for grand total
+     * to item supplied (for Proforma/Estimate Invoice)
+     *
+     * @private
+     * @param {any} item received from service
+     * @returns {*} Modified item with tooltup text for grand total
+     * @memberof ProformaListComponent
+     */
+    private addToolTiptext(item: any): any {
+        try {
+            let grandTotalAmountForCompany,
+                grandTotalAmountForAccount;
+
+            if (MULTI_CURRENCY_MODULES.indexOf(this.voucherType) > -1 && item.amount) {
+                grandTotalAmountForCompany = Number(item.amount.amountForCompany) || 0;
+                grandTotalAmountForAccount = Number(item.amount.amountForAccount) || 0;
+            }
+
+            let grandTotalConversionRate = 0;
+            if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
+                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
+            }
+
+            item['grandTotalTooltipText'] = `In ${this.baseCurrency}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;
+        } catch (error) {
+
+        }
+        return item;
+    }
 }
