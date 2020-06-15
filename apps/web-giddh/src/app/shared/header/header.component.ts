@@ -291,7 +291,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         /* This will get the date range picker configurations */
         this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
             if (config) {
-                this.datePickerOptions = config;
+                // removed today and yesterday option from universal datepicker
+                // if (config && config.ranges && config.ranges.length && config.ranges[0] && config.ranges[0].name && config.ranges[0].name === 'Today') {
+                //         delete config.ranges[0];
+                // }
+
+                if (config && config.ranges && config.ranges[0] && config.ranges[0].name === 'Today' && config.ranges[1].name === 'Yesterday') {
+                    delete config.ranges[0];
+                    delete config.ranges[1];
+                    let modifiedRanges = [];
+                    config.ranges.forEach(item => {
+                        modifiedRanges.push(item);
+                    });
+                     config.ranges = modifiedRanges;
+                }
+                   this.datePickerOptions = config;
             }
         });
         // Reset old stored application date
@@ -747,21 +761,30 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // Get universal date
         this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj && dateObj.length) {
+                //  Commented may be use later for new datepicker
                 // if (!this.isDateRangeSelected) {
                 // this.datePickerOptions.startDate = moment(dateObj[0]);
                 // this.datePickerOptions.endDate = moment(dateObj[1]);
                 // this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1]), chosenLabel: dateObj[2]};
-                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.isDateRangeSelected = true;
-                const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-                const to: any = moment().format(GIDDH_DATE_FORMAT);
-                const fromFromStore = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                const toFromStore = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                // const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+                // const to: any = moment().format(GIDDH_DATE_FORMAT);
+                // const fromFromStore = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                // const toFromStore = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
 
-                if (from === fromFromStore && to === toFromStore) {
-                    this.isTodaysDateSelected = true;
+                // if (from === fromFromStore && to === toFromStore) {
+                //     this.isTodaysDateSelected = true;
+                // }
+                if (this.isTodaysDateSelected) {
+                    let today = _.cloneDeep([moment(), moment()]);
+                    this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
+                    this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                } else {
+                    this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                    this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.isDateRangeSelected = true;
                 }
+
+
                 // }
                 // let fromForDisplay = moment(dateObj[0]).format('D-MMM-YY');
                 // let toForDisplay = moment(dateObj[1]).format('D-MMM-YY');
@@ -815,7 +838,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
         this.toggleBodyClass();
     }
-
     /**
      * This will toggle the settings popup
      *
@@ -829,7 +851,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.asideSettingMenuState = (show && this.asideSettingMenuState === 'out') ? 'in' : 'out';
         this.toggleBodyClass();
 
-        if(this.asideSettingMenuState === "in") {
+        if (this.asideSettingMenuState === "in") {
             document.querySelector('body').classList.add('mobile-setting-sidebar');
         } else {
             document.querySelector('body').classList.remove('mobile-setting-sidebar');
@@ -1709,7 +1731,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
-            if(!this.isMobileSite && this.dateFieldPosition) {
+            if (!this.isMobileSite && this.dateFieldPosition) {
                 this.dateFieldPosition.x -= 60;
             }
         }
@@ -1734,14 +1756,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
        * @param {*} value
        * @memberof ProfitLossComponent
        */
-    public dateSelectedCallback(value: any): void {
+    public dateSelectedCallback(value?: any): void {
         this.selectedRangeLabel = "";
 
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
+            this.hideGiddhDatepicker();
             this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
@@ -1751,6 +1773,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 toDate: this.toDate,
             };
             this.isTodaysDateSelected = false;
+            this.store.dispatch(this.companyActions.SetApplicationDate(dates));
+        } else {
+            this.isTodaysDateSelected = true;
+            let today = _.cloneDeep([moment(), moment()]);
+            // this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
+            this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
+            this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            let dates = {
+                fromDate: null,
+                toDate: null,
+                duration: null,
+                period: null,
+                noOfTransactions: null
+            };
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
         }
     }
