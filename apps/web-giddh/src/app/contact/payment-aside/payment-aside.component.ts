@@ -201,16 +201,16 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             this.addAccountTransactionsFormObject(item);
         });
         this.selectedAccForBulkPayment.map(item => {
-             let modifiedRemark;
-              let companyFirstName;
-             if(this.companyFirstName) {
-             companyFirstName = this.companyFirstName.split(' ');
-             }
-            if(item && item.name) {
-              modifiedRemark = item.name.split(' ');
+            let modifiedRemark;
+            let companyFirstName;
+            if (this.companyFirstName) {
+                companyFirstName = this.companyFirstName.split(' ');
+            }
+            if (item && item.name) {
+                modifiedRemark = item.name.split(' ');
             }
             if (modifiedRemark.length && companyFirstName) {
-                item.remarks = modifiedRemark[0]+' - '+ companyFirstName[0];
+                item.remarks = modifiedRemark[0] + ' - ' + companyFirstName[0];
             } else {
                 item.remarks = '';
             }
