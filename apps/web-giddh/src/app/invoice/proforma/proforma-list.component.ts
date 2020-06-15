@@ -35,7 +35,7 @@ import { createSelector } from "reselect";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../services/general.service';
 
-const MULTI_CURRENCY_MODULES = ['proformas', 'estimate'];
+const MULTI_CURRENCY_MODULES = ['proformas', 'estimates'];
 
 @Component({
     selector: 'app-proforma-list-component',

@@ -7,7 +7,7 @@ export const PROFORMA_API = {
     getAll: `${baseUrl}all?`,
     base: `${baseUrlV3}`,
     download: `${baseUrlV3}download?fileType=:fileType`,
-    generateInvoice: `company/:companyUniqueName/vouchers/accounts/:accountUniqueName/generate-via-proforma`,
+    generateInvoice: `company/:companyUniqueName/vouchers/accounts/:accountUniqueName/v3/generate-via-proforma`,
     updateAction: `${baseUrlV3}action`,
     generateEstimate: `${baseUrlV3}generate/estimate`,
     mailProforma: `${baseUrlV3}mail`
@@ -18,7 +18,7 @@ export const ESTIMATES_API = {
     getAll: `${baseUrl}all?`,
     base: `${baseUrlV3}`,
     download: `${baseUrlV3}download?fileType=:fileType`,
-    generateInvoice: `company/:companyUniqueName/vouchers/accounts/:accountUniqueName/generate-via-estimate`,
+    generateInvoice: `v3/company/:companyUniqueName/accounts/:accountUniqueName/proformas/generate-via-estimate`,
     generateProforma: `${baseUrlV3}generate-via-estimate`,
     updateAction: `${baseUrlV3}action`,
     getVersions: `${baseUrlV2}versions/all?`,
