@@ -26,6 +26,8 @@ import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.componen
 import { PaymentAsideComponent } from './payment-aside/payment-aside.component';
 import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic-aside-menu-account.module';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
+import { TextMaskModule } from 'angular2-text-mask';
+import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 //payemnt aside component
 
 
@@ -73,6 +75,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         PerfectScrollbarModule,
         GhSortByPipeModule,
         GenericAsideMenuAccountModule,
+        NgxDaterangepickerMd.forRoot(),
+        TextMaskModule,
+        NgxMaskModule.forRoot(),
+
     ],
     entryComponents: [
         PaginationComponent

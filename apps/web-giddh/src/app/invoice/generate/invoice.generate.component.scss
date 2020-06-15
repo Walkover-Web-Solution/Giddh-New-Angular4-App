@@ -80,7 +80,7 @@ tfoot {
 }
 
 .basic>thead>tr>th {
-    border-right: 1px solid #cdcdcd;
+    border-right: 1px solid $gainsboro;
 }
 
 .icon-pointer .glyphicon {
@@ -189,7 +189,7 @@ button.btn.btn-filter {
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
-    padding: 6px 10px !important;
+    padding: 7px 10px !important;
 }
 
 .pending-table-description {
@@ -208,9 +208,9 @@ button.btn.btn-filter {
         display: flex;
         justify-content: space-between;
         height: 54px;
-        background-color: #ffffff;
-        border-top: 1px solid #c6c6c6;
-        border-bottom: 1px solid #c6c6c6;
+        background-color: $white;
+        border-top: 1px solid $gainsboro;
+        border-bottom: 1px solid $gainsboro;
         align-items: center;
         span {
             padding: 10px;
@@ -222,7 +222,7 @@ button.btn.btn-filter {
         span.close-modal {
             height: 32px;
             width: 32px;
-            background-color: #ddd;
+            background-color: $very-light-gray;
             border: 1px solid $gainsboro;
             display: flex;
             justify-content: center;
@@ -241,7 +241,7 @@ span.close-modal.cp.pull-right {
     align-items: center;
     height: 32px;
     width: 32px;
-    background-color: #ddd;
+    background-color: $very-light-gray;
     border: 1px solid $gainsboro;
     margin-right: 8px;
 }
@@ -297,6 +297,7 @@ span.close-modal.cp.pull-right {
     .clear-filter.btn.btn-filter {
         justify-content: center !important;
         margin-bottom: 10px !important;
+        margin-right: 10px !important;
     }
     .mobile-width-100 {
         width: 100%;

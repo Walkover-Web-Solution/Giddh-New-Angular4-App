@@ -119,6 +119,7 @@ export class CustomerAdvanceSearchModal {
 }
 
 export class CustomerVendorFiledFilter {
+    public selectAll: boolean = false;
     public parentGroup: boolean = false;
     public email: boolean = false;
     public mobile: boolean = false;
@@ -126,7 +127,6 @@ export class CustomerVendorFiledFilter {
     public gstin: boolean = false;
     public comment: boolean = false;
     public openingBalance: boolean = false;
-    public closingBalance: boolean = false;
 }
 
 /**

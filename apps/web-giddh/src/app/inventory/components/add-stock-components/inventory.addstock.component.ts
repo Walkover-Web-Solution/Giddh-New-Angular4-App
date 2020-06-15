@@ -571,7 +571,11 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         let amount = this.addStockForm.value.openingAmount;
 
         if (quantity && amount) {
-            this.addStockForm.patchValue({ stockRate: (amount / quantity).toFixed(4) });
+            let rate = (amount / quantity).toFixed(4);
+            if (isNaN(Number(rate))) {
+                rate = '0';
+            }
+            this.addStockForm.patchValue({ stockRate:  rate});
         } else if (!quantity || !amount) {
             this.addStockForm.controls['stockRate'].patchValue('');
         }
@@ -858,8 +862,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         stockObj.name = formObj.name;
         stockObj.uniqueName = formObj.uniqueName.toLowerCase();
         stockObj.stockUnitCode = formObj.stockUnitCode;
-        stockObj.openingAmount = formObj.openingAmount;
-        stockObj.openingQuantity = formObj.openingQuantity;
+        stockObj.openingAmount = formObj.openingAmount || 0;
+        stockObj.openingQuantity = formObj.openingQuantity || 0;
         stockObj.hsnNumber = formObj.hsnNumber;
         stockObj.sacNumber = formObj.sacNumber;
         stockObj.taxes = formObj.taxes;

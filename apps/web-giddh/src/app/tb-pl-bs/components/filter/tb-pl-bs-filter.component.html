@@ -25,7 +25,6 @@
                     <div class="form-group mrR1" *ngIf="filterForm.get('selectedDateOption').value == '1'">
                         <span class="inputWrapper">
                             <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
-                                   (hideDaterangepicker)="selectedDate($event)"
                                    (applyDaterangepicker)="selectedDate($event)"
                                    class="form-control date-range-picker daterange_picker_tb-pl-bs mrR1" /></span>
 

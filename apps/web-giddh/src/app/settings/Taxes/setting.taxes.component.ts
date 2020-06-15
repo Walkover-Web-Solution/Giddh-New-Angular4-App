@@ -67,7 +67,7 @@ const taxDuration = [
   .basic {
     background: transparent;
 }
-.col-xs-12.pdT2,.section_head{
+.col-xs-12.pdT2,.section-head{
   padding-top:0;
 }
 
