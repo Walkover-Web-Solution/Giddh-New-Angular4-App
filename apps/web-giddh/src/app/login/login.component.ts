@@ -164,6 +164,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isTwoWayAuthInSuccess$ = this.store.select(p => p.login.isTwoWayAuthSuccess);
 
         try {
+            console.log(isCordova());
+            console.log(window['cordova']);
             if (isCordova()) {
                 const bootstrap = () => {
                     platformBrowserDynamic().bootstrapModule(AppModule);
@@ -173,7 +175,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                     if (isIOSCordova() || window['cordova']['platformId'] === "ios") {
                         this.isCordovaAppleApp = true;
                     }
-                    document.addEventListener('deviceready', (device) => {
+                    document.addEventListener('deviceready', () => {
                         bootstrap();
                     }, false);
                 } else {
@@ -181,7 +183,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 }
             }
         } catch (error) {
-
+            console.log(error);
         }
     }
 

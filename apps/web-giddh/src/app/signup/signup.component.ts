@@ -148,7 +148,7 @@ export class SignupComponent implements OnInit, OnDestroy {
                 }
             }
         } catch (error) {
-
+            
         }
     }
 
