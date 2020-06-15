@@ -33,6 +33,7 @@ import { DaybookAdvanceSearchModelComponent } from './advance-search/daybook-adv
 })
 export class DaybookComponent implements OnInit, OnDestroy {
     public companyName: string;
+    public showLoader: boolean = false;
     public isAllExpanded: boolean = false;
     public daybookQueryRequest: DaybookQueryRequest;
     public daybookData$: Observable<DayBookResponseModel>;
@@ -131,10 +132,12 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 this.checkIsStockEntryAvailable();
                 this.changeDetectorRef.detectChanges();
             }
+            this.showLoader = false;
         });
     }
 
     public selectedDate(value: any) {
+        this.showLoader = true;
         let from = moment(value.picker.startDate).format('DD-MM-YYYY');
         let to = moment(value.picker.endDate).format('DD-MM-YYYY');
         if ((this.daybookQueryRequest.from !== from) || (this.daybookQueryRequest.to !== to)) {
