@@ -85,7 +85,7 @@ export class ExportLedgerComponent implements OnInit {
                     if (response.body.status === "success") {
                         if (response.queryString.fileType === 'xlsx') {
                             let blob = base64ToBlob(response.body.response, 'application/vnd.ms-excel', 512);
-                            return saveAs(blob, `${this.accountUniqueName}.xls`);
+                            return saveAs(blob, `${this.accountUniqueName}.xlsx`);
                         } else if (response.queryString.fileType === 'pdf') {
                             let blob = base64ToBlob(response.body.response, 'application/pdf', 512);
                             return saveAs(blob, `${this.accountUniqueName}.pdf`);
