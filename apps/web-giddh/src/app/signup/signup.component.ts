@@ -139,12 +139,16 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.isTwoWayAuthInProcess$ = this.store.select(p => p.login.isTwoWayAuthInProcess);
         this.isTwoWayAuthInSuccess$ = this.store.select(p => p.login.isTwoWayAuthSuccess);
 
-        if (isCordova()) {
-            if (typeof window['cordova'] !== 'undefined') {
-                if (isIOSCordova() || window['cordova']['platformId'] === "ios") {
-                    this.isCordovaAppleApp = true;
+        try {
+            if (isCordova()) {
+                if (typeof window['cordova'] !== 'undefined') {
+                    if (isIOSCordova() || window['cordova']['platformId'] === "ios") {
+                        this.isCordovaAppleApp = true;
+                    }
                 }
             }
+        } catch (error) {
+
         }
     }
 
@@ -350,7 +354,10 @@ export class SignupComponent implements OnInit, OnDestroy {
                         this.store.dispatch(this.loginAction.signupWithApple(response));
                     },
                     (error) => {
-                        this._toaster.errorToast(error);
+                        let errorMessage = this._generalService.appleLoginErrorHandler(error);
+                        if (errorMessage) {
+                            this._toaster.errorToast(errorMessage);
+                        }
                     }
                 )
             }

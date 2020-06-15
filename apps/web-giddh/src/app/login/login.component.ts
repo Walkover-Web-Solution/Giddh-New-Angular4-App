@@ -163,21 +163,25 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isTwoWayAuthInProcess$ = this.store.select(p => p.login.isTwoWayAuthInProcess);
         this.isTwoWayAuthInSuccess$ = this.store.select(p => p.login.isTwoWayAuthSuccess);
 
-        if (isCordova()) {
-            const bootstrap = () => {
-                platformBrowserDynamic().bootstrapModule(AppModule);
-            };
+        try {
+            if (isCordova()) {
+                const bootstrap = () => {
+                    platformBrowserDynamic().bootstrapModule(AppModule);
+                };
 
-            if (typeof window['cordova'] !== 'undefined') {
-                if (isIOSCordova() || window['cordova']['platformId'] === "ios") {
-                    this.isCordovaAppleApp = true;
-                }
-                document.addEventListener('deviceready', (device) => {
+                if (typeof window['cordova'] !== 'undefined') {
+                    if (isIOSCordova() || window['cordova']['platformId'] === "ios") {
+                        this.isCordovaAppleApp = true;
+                    }
+                    document.addEventListener('deviceready', (device) => {
+                        bootstrap();
+                    }, false);
+                } else {
                     bootstrap();
-                }, false);
-            } else {
-                bootstrap();
+                }
             }
+        } catch (error) {
+
         }
     }
 
@@ -427,7 +431,10 @@ export class LoginComponent implements OnInit, OnDestroy {
                         this.store.dispatch(this.loginAction.signupWithApple(response));
                     },
                     (error) => {
-                        this._toaster.errorToast(error);
+                        let errorMessage = this._generalService.appleLoginErrorHandler(error);
+                        if (errorMessage) {
+                            this._toaster.errorToast(errorMessage);
+                        }
                     }
                 )
             }

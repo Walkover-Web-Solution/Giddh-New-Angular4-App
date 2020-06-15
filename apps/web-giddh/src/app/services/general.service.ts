@@ -486,4 +486,27 @@ export class GeneralService {
             return false;
         }
     }
+
+    /**
+     * This will handle the error returned by apple login
+     *
+     * @param {*} error
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public appleLoginErrorHandler(error): string {
+        let errorMessage = "";
+
+        if (error.code === "1000") {
+            errorMessage = "Authorization attempt failed for an unknown reason";
+        } else if (error.code === "1001") {
+            errorMessage = "";
+        } else if (error.code === "1002") {
+            errorMessage = "Authorization request received an invalid response.";
+        } else if (error.code === "1003") {
+            errorMessage = "";
+        }
+
+        return errorMessage;
+    }
 }
