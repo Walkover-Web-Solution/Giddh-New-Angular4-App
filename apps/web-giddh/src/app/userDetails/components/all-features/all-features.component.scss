@@ -1,0 +1,16 @@
+@import "../../../../assets/css/color.scss";
+.all-features-list li {
+    list-style-type: none;
+    color: $gray;
+    font-size: 14px;
+    padding: 3px 0;
+}
+@media only screen and (max-width: 1360px) and (min-width: 767px)  {
+    .inventory-last-box {
+        margin-top: 15px;
+    }
+    .inventory-last-box > div {
+        width: 50%;
+        float: left;
+    }
+}

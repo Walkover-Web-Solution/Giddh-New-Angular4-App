@@ -1,20 +1,21 @@
 <section id="dashboard" class="clearfix">
     <div class="container-fluid top-bar">
         <div class="dashboard-container">
-            <div class="dashboard-notification">
-                <div class="white-row" *ngIf="subscribedPlan !== undefined && subscribedPlan.status === 'expired'">
+            <!-- <div class="dashboard-notification"> -->
+                <!-- code commented for future use -->
+                <!-- <div class="white-row" *ngIf="subscribedPlan !== undefined && subscribedPlan.status === 'expired'">
                     <p> <span class="icon-traingle-info"></span> Your {{subscribedPlan.planDetails.duration}}
                         {{subscribedPlan.planDetails.durationUnit}} {{subscribedPlan.planDetails.name}} ended on
                         {{subscribedPlan.expiry}}. Apply to upgrade your subscription. <a class="clickHere"
                             (click)="goToSelectPlan()">Click here</a></p>
-                </div>
-                <div class="white-row" *ngIf="subscribedPlan !== undefined && subscribedPlan.additionalCharges">
+                </div> -->
+                <!-- <div class="white-row" *ngIf="subscribedPlan !== undefined && subscribedPlan.additionalCharges">
                     <p> <span class="icon-traingle-info"></span> You have crossed the transactions limit of your
                         assigned plan {{subscribedPlan.planDetails.name}} subscribed on {{subscribedPlan.startedAt}}. To
                         continue your accounting with Giddh, Please renew your current plan or switch to another one.
                         Contact us for more assistance. <a class="clickHere" (click)="goToSelectPlan()">Click here</a>
                     </p>
-                </div>
+                </div> -->
                 <!--        <div class="white-row">-->
                 <!--          <p><span class="icon-info-icon"></span> GSTR 2A Mismatch report for FY 2018-19 is now available for download.-->
                 <!--            <span class="clickHere ">Visit-->
@@ -24,7 +25,7 @@
                 <!--          <p><span class="icon-info-icon"></span>New feature JobWork added <span class="clickHere ">NEW-->
                 <!--            </span></p>-->
                 <!--        </div>-->
-            </div>
+            <!-- </div> -->
             <div class="row">
                 <!-- total overdues -->
                 <div class="col-sm-6 col-md-4 col-lg-4 col-xs-12 panel-block" *ngIf="!hideallcharts">

@@ -59,4 +59,5 @@ export class CommandKRequest {
     q: string;
     group: string;
     totalPages: number;
+    isMobile: any;
 }

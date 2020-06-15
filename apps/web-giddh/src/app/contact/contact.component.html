@@ -1,5 +1,4 @@
-<tabset #staticTabs class="custom-tabs " [ngClass]="{'hide-header': activeTab === 'vendor'}">
-
+<tabset #staticTabs class="custom-tabs" [ngClass]="{'hide-header': activeTab === 'vendor'}">
     <!-- region Customer/Vendor -->
     <tab heading="Customer" (select)="tabSelected(activeTab === 'vendor' ? 'vendor' : 'customer')"
         [active]="activeTab !== 'aging-report'">
@@ -16,6 +15,12 @@
 
                             <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu"
                                 [style.width.px]="'200'">
+                                <li role="menuitem">
+                                    <a class="dropdown-item">
+                                        <input type="checkbox" name="selectAll" [(ngModel)]="showFieldFilter.selectAll" (ngModelChange)="selectAllColumns($event)"> Select All
+                                    </a>
+                                </li>
+
                                 <li role="menuitem">
                                     <a class="dropdown-item">
                                         <input type="checkbox" name="field_filter.parentGroup"
@@ -134,29 +139,11 @@
             </div>
 
 
-            <div class="text-center top-aging-table-top seprta-top-aging pd1" *ngIf="isMobileScreen">
-                <p>
+            <div class="text-center top-aging-table-top seprta-top-aging pd-1" *ngIf="isMobileScreen">
+                <p (click)="showGiddhDatepicker($event)">
                     <strong>Due as on </strong>
-                    <span class="italic underline">
-
-<!--                        <input type="text"-->
-<!--                               [(ngModel)]="selectedDateRange" name="selectedDateRange"-->
-<!--                               ngxDaterangepickerMd-->
-<!--                               [alwaysShowCalendars]="true"-->
-<!--                               [ranges]="datePickerOptions.ranges"-->
-<!--                               [showClearButton]="false"-->
-<!--                               [showCancel]="true"-->
-<!--                               [showDropdowns]="true"-->
-<!--                               [locale]="{applyLabel: 'Done'}"-->
-<!--                               (datesUpdated)="selectedDate($event)"-->
-<!--                               [keepCalendarOpeningWithRange]="true"-->
-<!--                               [showRangeLabelOnInput]="false"-->
-<!--                               class="form-control"-->
-<!--                               placeholder="Select please..."/>-->
-
-                        <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
-                            (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
-                            class="form-control date-range-picker" />
+                    <span *ngIf="selectedDateRangeUi">
+                        {{selectedDateRangeUi}}
                     </span>
                 </p>
             </div>
@@ -348,31 +335,15 @@
                     <td></td>
                     <td *ngIf="showFieldFilter.parentGroup"></td>
                     <td [attr.colspan]="tableColsPan" class="text-center top-aging-table-top">
-                        <p style="display: flex;justify-content: center;align-items: center">
+                        <p class="due-as-on" container="body">
                             <strong>Due as on </strong>
                             <span class="italic underline">
+                                <input type="text" (click)="showGiddhDatepicker($event)" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" style="width: 250px !important;" class="form-control giddh-datepicker date-range-picker"/>
 
-<!--                                <input type="text" style="width: 250px !important;"-->
-<!--                                       [(ngModel)]="selected"-->
-<!--                                       ngxDaterangepickerMd-->
-<!--                                       [alwaysShowCalendars]="true"-->
-<!--                                       [ranges]="datePickerOptions.ranges"-->
-<!--                                       [showCustomRangeLabel]="true"-->
-<!--                                       [showClearButton]="false"-->
-<!--                                       [showCancel]="true"-->
-<!--                                       [linkedCalendars]="true"-->
-<!--                                       [showDropdowns]="true"-->
-<!--                                       [locale]="{applyLabel: 'Done'}"-->
-<!--                                       (datesUpdated)="selectedDate($event)"-->
-<!--                                       [keepCalendarOpeningWithRange]="false"-->
-<!--                                       [showRangeLabelOnInput]="false"-->
-<!--                                       class="form-control date-range-picker"-->
-<!--                                       placeholder="Select please..."/>-->
-
-                                <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
-                                    (hideDaterangepicker)="selectedDate($event)"
-                                    (applyDaterangepicker)="selectedDate($event)"
-                                    class="form-control date-range-picker" />
+<!--                                <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"-->
+<!--                                    (hideDaterangepicker)="selectedDate($event)"-->
+<!--                                    (applyDaterangepicker)="selectedDate($event)"-->
+<!--                                    class="form-control date-range-picker" />-->
 
                             </span>
                         </p>
@@ -479,7 +450,7 @@
                 <ng-container *ngIf="activeTab === 'customer'">
 
                     <tr *ngFor="let account of sundryDebtorsAccounts;let idx = index">
-                        <td class="pos-rel WordWrap customer-name cursor-pointer" (clickOutside)="dropdown.hide()"
+                        <td class="pos-rel word-wrap customer-name cursor-pointer" (clickOutside)="dropdown.hide()"
                             (dblclick)="dropdown.show()" data-title="Customer">
                         <div class="customer-name-filed">
                             <span class="inline table-checkbox">
@@ -630,26 +601,26 @@
                         </div>
 
                         </td>
-                        <td class="WordWrap " data-title="Parent Group" *ngIf="showFieldFilter.parentGroup">
+                        <td class="word-wrap" data-title="Parent Group" *ngIf="showFieldFilter.parentGroup">
                             {{account.groupUniqueName}}</td>
-                        <td [ngClass]="{'WordWrap text-right': 1 === 1, 'negative-balance': account.openingBalance?.type === 'CREDIT' && account.openingBalance?.amount }" data-title="Opening" *ngIf="showFieldFilter.openingBalance">
-                            <span *ngIf="account.openingBalance?.type === 'CREDIT' && account.openingBalance?.amount ">-</span>{{account.openingBalance?.amount |giddhCurrency}}
+                        <td class="word-wrap text-right" data-title="Opening" *ngIf="showFieldFilter.openingBalance">
+                            {{account.openingBalance?.amount |giddhCurrency}}
                         </td>
-                        <td class="WordWrap text-right " data-title=" Receipts">
+                        <td class="word-wrap text-right" data-title=" Receipts">
                             {{account.debitTotal |giddhCurrency}}</td>
-                        <td class="WordWrap text-right " data-title=" Sales">
+                        <td class="word-wrap text-right" data-title=" Sales">
                             {{account.creditTotal |giddhCurrency}}</td>
-                        <td [ngClass]="{'WordWrap text-right': 1 === 1, 'negative-balance': account.closingBalance?.type === 'CREDIT' && account.closingBalance?.amount }" data-title="Closing">
-                            <span *ngIf="account.closingBalance?.type === 'CREDIT' && account.closingBalance?.amount ">-</span>{{account.closingBalance?.amount |giddhCurrency}}
+                        <td class="word-wrap text-right" data-title="Closing">
+                            {{account.closingBalance?.amount |giddhCurrency}}
                         </td>
-                        <td class="text-lowercase WordWrap " *ngIf="showFieldFilter.email" data-title="Email">
+                        <td class="text-lowercase word-wrap" *ngIf="showFieldFilter.email" data-title="Email">
                             {{account.email || '-' }}</td>
-                        <td class="WordWrap " *ngIf="showFieldFilter.mobile " data-title="Mobile No">
+                        <td class="word-wrap" *ngIf="showFieldFilter.mobile " data-title="Mobile No">
                             {{account.mobileNo || '-'}}
                         </td>
-                        <td class="WordWrap " *ngIf="showFieldFilter.gstin && shouldShowTaxFilter" data-title="GSTIN">
+                        <td class="word-wrap" *ngIf="showFieldFilter.gstin && shouldShowTaxFilter" data-title="GSTIN">
                             {{account.gstIn || '-' }}</td>
-                        <td class="WordWrap " *ngIf="showFieldFilter.state " data-title="State">
+                        <td class="word-wrap" *ngIf="showFieldFilter.state " data-title="State">
                             {{account?.state?.name || '-'}}</td>
                         <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx' data-title=" Comment"
                             class="commentField">
@@ -678,7 +649,7 @@
                 <ng-container *ngIf="activeTab==='vendor' ">
 
                     <tr *ngFor="let account of sundryCreditorsAccounts; let idx=index ">
-                        <td class="pos-rel WordWrap customer-name vendor-customer-name cursor-pointer"
+                        <td class="pos-rel word-wrap customer-name vendor-customer-name cursor-pointer"
                             data-title="Vendor" (clickOutside)="dropdown.hide()" (dblclick)="dropdown.show()">
                             <div class="vendor-name-field">
                                 <span class="inline table-checkbox ">
@@ -830,29 +801,28 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="WordWrap" data-title="Parent Group" *ngIf="showFieldFilter.parentGroup">
+                        <td class="word-wrap" data-title="Parent Group" *ngIf="showFieldFilter.parentGroup">
                             <div class="table-email">{{account.groupUniqueName}}</div>
                         </td>
-                        <td [ngClass]="{'WordWrap text-right': 1 === 1, 'negative-balance': account.openingBalance?.type === 'DEBIT' && account.openingBalance?.amount }" data-title="Opening" *ngIf="showFieldFilter.openingBalance">
-                            <span *ngIf="account.openingBalance?.type === 'DEBIT' && account.openingBalance?.amount ">-</span>{{account.openingBalance?.amount |giddhCurrency}}
+                        <td class="word-wrap text-right" data-title="Opening" *ngIf="showFieldFilter.openingBalance">
+                            {{account.openingBalance?.amount |giddhCurrency}}
                         </td>
-                        <td class="WordWrap text-right " data-title="Purchase">
+                        <td class="word-wrap text-right" data-title="Purchase">
                             {{account.creditTotal |giddhCurrency}}</td>
-
-                        <td class="WordWrap text-right " data-title="Payment">
+                        <td class="word-wrap text-right" data-title="Payment">
                             {{account.debitTotal |giddhCurrency}}</td>
-                        <td [ngClass]="{'WordWrap text-right': 1 === 1, 'negative-balance': account.closingBalance?.type === 'DEBIT' && account.closingBalance?.amount }" data-title="Closing">
-                            <span *ngIf="account.closingBalance?.type === 'DEBIT' && account.closingBalance?.amount ">-</span>{{account.closingBalance?.amount |giddhCurrency}}
+                        <td class="word-wrap text-right" data-title="Closing">
+                            {{account.closingBalance?.amount |giddhCurrency}}
                         </td>
-                        <td class="WordWrap text-lowercase " *ngIf="showFieldFilter.email " data-title="Email">
+                        <td class="word-wrap text-lowercase" *ngIf="showFieldFilter.email " data-title="Email">
                             <div class="table-email ">{{account.email || '-' }}</div>
                         </td>
-                        <td class="WordWrap " *ngIf="showFieldFilter.mobile " data-title="Mobile No.">
+                        <td class="word-wrap" *ngIf="showFieldFilter.mobile " data-title="Mobile No.">
                             {{account.mobileNo || '-' }}
                         </td>
-                        <td class="WordWrap " *ngIf="showFieldFilter.gstin  && shouldShowTaxFilter" data-title="GSTIN">
+                        <td class="word-wrap" *ngIf="showFieldFilter.gstin  && shouldShowTaxFilter" data-title="GSTIN">
                             {{account.gstIn || '-' }}</td>
-                        <td class="WordWrap " *ngIf="showFieldFilter.state " data-title="State">{{account?.state?.name}}
+                        <td class="word-wrap" *ngIf="showFieldFilter.state " data-title="State">{{account?.state?.name}}
                         </td>
                         <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx' data-title="Comment">
                             <ng-container *ngIf='updateCommentIdx != idx'>
@@ -862,9 +832,7 @@
                                 <textarea class='form-control' maxlength='100' [(ngModel)]='account.comment'
                                     (blur)='updateComment(account)'></textarea>
                             </ng-container>
-
                         </td>
-
                         <td data-title="Action" *ngIf="isICICIIntegrated">
                             <button *ngIf="account.hasBankDetails " class="btn btn-small btn-success "
                                 (click)="openPaymentAside(account)">Pay Now
@@ -872,10 +840,8 @@
                             <button *ngIf="!account.hasBankDetails " class="btn btn-small btn-success "
                                 (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
                             </button>
-
                         </td>
                     </tr>
-
                     <tr *ngIf="!(sundryCreditorsAccounts).length ">
                         <td colspan="12 " class="text-center empty_table ">
                             <h1>No Record Found !!</h1>
@@ -884,8 +850,6 @@
 
                 </ng-container>
             </tbody>
-
-
         </table>
     </div>
 
@@ -929,3 +893,27 @@
     </div>
 </ng-template>
 <!-- endregion -->
+
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions.ranges"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            [locale]="{applyLabel: 'Done'}"
+            (rangeClicked)="selectedDate($event)"
+            (datesUpdated)="selectedDate($event)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+            [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

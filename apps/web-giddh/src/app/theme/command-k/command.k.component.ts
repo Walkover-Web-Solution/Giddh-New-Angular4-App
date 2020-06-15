@@ -63,7 +63,8 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         page: 1,
         q: '',
         group: '',
-        totalPages: 1
+        totalPages: 1,
+        isMobile: false
     };
 
     constructor(

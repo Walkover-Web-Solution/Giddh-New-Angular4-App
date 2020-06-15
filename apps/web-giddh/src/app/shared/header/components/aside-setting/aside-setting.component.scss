@@ -1,0 +1,262 @@
+@import '../../../../../assets/css/color.scss';
+:host {
+    position: fixed;
+    left: auto;
+    top:55px;
+    right: 0;
+    bottom: 0;
+    max-width: 330px;
+    width: 100%;
+    z-index: 99999;
+    box-shadow: -3px 0 6px rgba(0,0,0,0.1);
+    &:after{
+        position: absolute;
+        content: '';
+        width: 12px;
+        height: 12px;
+        background-color:$alice-blue;
+        top: -6px;
+        right: 50px;
+        z-index: 1;
+        transform: rotate(45deg);
+    }
+   
+}
+:host.setting-sidebar{
+    position: fixed;
+    top: 61px;
+    bottom: 0;
+    min-height: 100vh;
+    background: $white;
+    width: 215px;
+    left: 0;
+    z-index: 990;
+    .aside-help-header{
+        display: none;
+    }
+    .help-aside-body {
+        .search-field{
+            display: none;
+        }
+    }
+}
+:host.in #close {
+    display: block;
+    position: fixed;
+    left: -41px;
+    top: 0;
+    z-index: 5;
+    border: 0;
+    border-radius: 0;
+    cursor: pointer;
+}
+
+:host .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+:host .aside-pane {
+    max-width: 760px;
+    width: 100%;
+}
+.aside-header {
+    background-color:$white;
+    padding: 20px 10px;
+}
+.aside-pane {
+    padding: 0;
+    background-color:$alice-blue;
+    .back-to-main-slider{
+        display: none;
+    }
+    .aside-help-header{
+        display: flex;
+        justify-content: space-between;
+        padding: 18px 15px;
+        border-bottom: 1px solid $gainsboro;
+        position:sticky;
+        top: 0;
+        background-color: inherit;
+        z-index: 1;
+        h2 {
+            font-family: 'opensans-semibold';
+            font-size: 18px;
+            color: $midnight-blue;
+        }
+    }
+    .help-aside-body{
+        padding-bottom: 25%;
+        .search-field{
+            padding: 15px;
+            input{
+                border-radius: 20px !important;
+                padding-left: 40px !important;
+            }
+            i{
+                top: 25px;
+                left: 30px;
+                color: gray;
+            }
+        }
+    }
+}
+.aside-pane-form {
+    background-color: $white;
+    box-shadow: 0px 3px 6px #0000001a;
+    padding: 15px 15px;
+    height: calc(100vh - 90px);
+    overflow: auto;
+    scroll-behavior: smooth;
+    position: relative;
+    margin-top: 15px;
+}
+.setting-items{
+    ul{
+        padding: 0 ;
+        list-style: none;
+        font-size: 14px;
+        font-family:'opensans-semibold';
+        li{
+            padding: 4px 20px;
+            margin-bottom:8px;
+            a{
+                cursor: pointer;
+                img{
+                    margin-right: 12px;
+                }
+                span{
+                    color: $nero;
+                }
+            }
+            &:hover{
+                background-color:$lavender;
+            }
+        }
+    }
+}
+
+:host.setting-sidebar{
+    position: fixed;
+    top: 61px;
+    bottom: 0;
+    min-height: 100vh;
+    background:$white;
+    width: 215px;
+    left: 0;
+    z-index: 990;
+    box-shadow: -2px -2px 15px rgba(0,0,0,.2) !important;
+    &:after{
+        display: none;
+    }
+    .aside-pane{
+        background:$white;
+        overflow: initial;
+        z-index: unset;
+        .aside-help-header{
+            display: none;
+        }
+        .back-to-main-slider{
+            display: block;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            img{
+                width: 15px;
+            }
+            i{
+                display: none;
+            }
+        }
+        .help-aside-body {
+            .search-field{
+                display: none;
+            }
+            .setting-items{
+                ul{
+                    li{
+                        padding: 4px 15px;
+                        a{
+                            display: flex;
+                            align-items: flex-start;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+@media(max-width:767px){
+    :host.setting-sidebar{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    min-height: 100vh;
+    background: $white;
+    width: 215px;
+    left: 0;
+    z-index: 999999;
+    width: 270px;
+    .back-to-main-slider{
+        background-color: $midnight-blue;
+        a{
+            display: flex;
+            align-items: center;
+            color: $white;
+            span{
+                display: flex;
+                align-items: center;
+                i{
+                    margin-right: 15px;
+                    display: flex;
+                }
+            }
+        }
+    }
+    .help-aside-body {
+        ul{
+            position: relative;
+            &:after{
+                position: absolute;
+                content: '';
+                width: 90%;
+                left: 5%;
+                bottom: -16px;
+                height: 1px;
+                background-color: $gainsboro;
+                }
+            }
+        }
+    }  
+}
+@media (max-width: 768px) {
+    :host {
+        max-width: 600px;
+    }
+    :host .aside-pane {
+        max-width: 600px;
+    }
+}
+@media (max-width: 575px) {
+    :host {
+        max-width: 370px;
+    }
+    :host .aside-pane {
+        max-width: 370px;
+    }
+}
+@media (max-width: 375px) {
+    :host {
+        max-width: 310px;
+    }
+    :host .aside-pane {
+        max-width: 310px;
+    }
+}
+@media (max-width: 320px) {
+    :host {
+        max-width: 280px;
+    }
+    :host .aside-pane {
+        max-width: 280px;
+    }
+}

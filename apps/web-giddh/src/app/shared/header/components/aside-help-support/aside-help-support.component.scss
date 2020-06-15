@@ -1,0 +1,188 @@
+@import '../../../../../assets/css/color.scss';
+:host {
+    position: fixed;
+    left: auto;
+    top: 55px;
+    right: 0;
+    bottom: 0;
+    max-width: 330px;
+    width: 100%;
+    z-index: 99999;
+    box-shadow: -3px 0 6px rgba(0,0,0,0.1);
+    &:after{
+        position: absolute;
+        content: '';
+        width: 12px;
+        height: 12px;
+        background-color:$alice-blue;
+        top: -6px;
+        right: 18px;
+        z-index: 1;
+        transform: rotate(45deg);
+    }
+}
+:host.in #close {
+    display: block;
+    position: fixed;
+    left: -41px;
+    top: 0;
+    z-index: 5;
+    border: 0;
+    cursor: pointer;
+    border-radius: 0;
+}
+:host .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+:host .aside-pane {
+    max-width: 760px;
+    width: 100%;
+}
+.aside-header {
+    background-color:$alice-blue;
+    padding: 20px 10px;
+}
+.aside-pane {
+    padding: 0;
+    background-color:$alice-blue;
+    .aside-help-header{
+        display: flex;
+        justify-content: space-between;
+        padding: 18px 15px;
+        border-bottom: 1px solid $gainsboro;
+        position:sticky;
+        top: 0;
+        background-color: inherit;
+        h2 {
+            font-family: 'opensans-semibold';
+            font-size: 18px;
+            color: $midnight-blue;
+        }
+    }
+    .help-aside-body{
+        padding-bottom: 25%;
+        .faq-block{
+            padding: 15px;
+            border-bottom: 1px solid $gainsboro;
+            a{
+                display: block;
+                color:$nero;
+
+                p{
+                    font-size: 14px;
+                    font-family: 'opensans-semibold'; 
+                }
+                small{
+                    font-size: 12px;
+                }
+            }       
+    }
+    .feature-block{
+        padding: 15px;
+        border-bottom: 1px solid $gainsboro;
+        ul{
+            list-style: none;
+            li{
+                font-size: 14px;
+                font-family: 'opensans-semibold';
+                margin-bottom: 10px;
+                a{
+                    color:$nero;
+                }
+            }
+        }
+    }
+    .download-block{
+        padding: 15px;
+        border-bottom: 1px solid $gainsboro;
+        h4{
+            padding-bottom: 15px;
+            font-size: 14px;
+            font-family: 'opensans-semibold';
+
+        }
+        ul{
+            list-style: none;
+            li{
+                float: left;
+                width: 50%;
+                padding-bottom: 10px;
+                a{
+                    color: $nero;
+                    padding-bottom: 15px;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+    .file-image{
+        padding: 15px 15px 0;
+        text-align: center;
+        img{
+            display: block;
+            margin: 15px auto 30px;
+        }
+        p{
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+    }
+    .contact-block{
+        text-align: center;
+        font-size: 20px;
+        line-height: 1.5;
+    }
+    }
+}
+.aside-pane-form {
+    background-color: $white;
+    box-shadow: 0px 3px 6px #0000001a;
+    padding: 15px 15px;
+    height: calc(100vh - 90px);
+    overflow: auto;
+    scroll-behavior: smooth;
+    position: relative;
+    margin-top: 15px;
+}
+@media (max-width: 768px) {
+    :host {
+        max-width: 600px;
+    }
+    :host .aside-pane {
+        max-width: 600px;
+    }
+}
+@media(max-width:767px){
+    :host {
+        position: fixed;
+        left: auto;
+        top:  86px;
+    }
+}
+@media (max-width: 575px) {
+    :host {
+        max-width: 370px;
+    }
+    :host .aside-pane {
+        max-width: 370px;
+    }
+}
+@media (max-width: 375px) {
+    :host {
+        max-width: 250px;
+        top: 85px;
+    }
+    :host .aside-pane {
+        max-width: 250px;
+    }
+}
+@media (max-width: 320px) {
+    :host {
+        max-width: 280px;
+    }
+    :host .aside-pane {
+        max-width: 280px;
+    }
+}

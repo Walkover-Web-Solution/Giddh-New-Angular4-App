@@ -19,6 +19,7 @@ import { SelectPlanComponent } from './selectPlan/selectPlan.component';
 import { BillingDetailComponent } from './billing-details/billingDetail.component';
 import { TokenVerifyComponent } from './login/token-verify.component';
 import {AppLoginSuccessComponent} from "./app-login-success/app-login-success";
+import { MobileHomeComponent } from "./mobile-home/mobile-home.component";
 
 export const ROUTES: Routes = [
     {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -69,12 +70,13 @@ export const ROUTES: Routes = [
     // { path: 'purchase/create', redirectTo: 'pages/purchase/create' },
     // { path: 'credit-note/create', redirectTo: 'pages/credit-note/create' },
     // { path: 'debit-note/create', redirectTo: 'pages/debit-note/create' },
-    {path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full'},
-    {path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full'},
-    {path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice', pathMatch: 'full'},
-    {path: 'select-plan', component: SelectPlanComponent},
-    {path: 'billing-detail', component: BillingDetailComponent},
-    {path: 'billing-detail/buy-plan', component: BillingDetailComponent},
+    { path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full' },
+    { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
+    { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice', pathMatch: 'full' },
+    { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
+    { path: 'select-plan', component: SelectPlanComponent },
+    { path: 'billing-detail', component: BillingDetailComponent },
+    { path: 'billing-detail/buy-plan', component: BillingDetailComponent },
     {
         path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
         children: [
@@ -118,25 +120,14 @@ export const ROUTES: Routes = [
             // { path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },
             // { path: 'credit-note/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },
             // { path: 'debit-note/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },
-            {
-                path: 'reports',
-                loadChildren: './reports/reports.module#ReportsModule',
-                canActivate: [NeedsAuthorization]
-            },
-            {
-                path: 'proforma-invoice',
-                loadChildren: './proforma-invoice/proforma-invoice.module#ProformaInvoiceModule',
-                canActivate: [NeedsAuthorization]
-            },
-            {path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization]},
-            {path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization]},
-            {path: 'select-plan', component: SelectPlanComponent, canActivate: [NeedsAuthorization]},
-            {path: 'billing-detail', component: BillingDetailComponent, canActivate: [NeedsAuthorization]},
-            {
-                path: 'tallysync',
-                loadChildren: './tallysync/tallysync.module#TallysyncModule',
-                canActivate: [NeedsAuthorization]
-            },
+            { path: 'reports', loadChildren: './reports/reports.module#ReportsModule', canActivate: [NeedsAuthorization] },
+            { path: 'proforma-invoice', loadChildren: './proforma-invoice/proforma-invoice.module#ProformaInvoiceModule', canActivate: [NeedsAuthorization] },
+            { path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization] },
+            { path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization] },
+            { path: 'select-plan', component: SelectPlanComponent, canActivate: [NeedsAuthorization] },
+            { path: 'billing-detail', component: BillingDetailComponent, canActivate: [NeedsAuthorization] },
+            { path: 'mobile-home', component: MobileHomeComponent, canActivate: [NeedsAuthorization] },
+            { path: 'tallysync', loadChildren: './tallysync/tallysync.module#TallysyncModule', canActivate: [NeedsAuthorization] },
 
             {
                 path: 'expenses-manager',
@@ -147,6 +138,7 @@ export const ROUTES: Routes = [
             { path: 'vat-report', loadChildren: './vat-report/vatReport.module#VatReportModule', canActivate: [NeedsAuthorization] },
             { path: 'purchase-management', loadChildren: './purchase/purchase.module#PurchaseModule', canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
+            
             // {path: '**', pathMatch: 'full', component: NotFoundComponent},
 
         ]

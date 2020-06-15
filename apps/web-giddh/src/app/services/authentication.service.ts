@@ -1,4 +1,4 @@
-import {catchError, map} from 'rxjs/operators';
+import {catchError, map, retry} from 'rxjs/operators';
 import {Inject, Injectable, Optional} from '@angular/core';
 
 import {Observable} from 'rxjs';
@@ -343,4 +343,16 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
+    /**
+     * Returns the user details obtained from the session ID
+     *
+     * @param {*} sessionId Session ID of current session
+     * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operations
+     * @memberof AuthenticationService
+     */
+    public getUserDetails(sessionId: any): Observable<any> {
+        const url = `${this.config.apiUrl}${LOGIN_API.GET_USER_DETAILS_FROM_SESSION_ID}`;
+        return this._http.get(url, null, { headers: { 'Session-Id': sessionId } })
+            .pipe(retry(3), catchError((error) => this.errorHandler.HandleCatch<any, any>(error, '')));
+    }
 }

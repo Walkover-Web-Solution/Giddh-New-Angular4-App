@@ -20,6 +20,7 @@ export class CommandKService {
         url = url.replace(':page', request.page);
         url = url.replace(':q', request.q);
         url = url.replace(':group', request.group);
+        url = url.replace(':isMobile', request.isMobile);
         return this._http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;

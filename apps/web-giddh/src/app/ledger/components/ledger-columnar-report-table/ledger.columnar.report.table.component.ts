@@ -36,6 +36,8 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     public columnarTableColumn: string[] = [];
     /** Loader for API request */
     public isLoading: boolean = true;
+    /** pagination limit */
+    public paginationLimit: number = PAGINATION_LIMIT;
     /** Subject to destroy all observers  */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -59,7 +61,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     ngOnInit(): void {
         this.getColumnarRequestModel = new ReportsDetailedRequestFilter();
         this.getColumnarRequestModel.page = 1;
-        this.getColumnarRequestModel.count = PAGINATION_LIMIT;
+        this.getColumnarRequestModel.count = this.paginationLimit;
         this.getColumnarReportTable(this.columnarReportExportRequest);
     }
 

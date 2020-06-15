@@ -27,6 +27,7 @@ import { Daterangepicker } from "../theme/ng2-daterangepicker/daterangepicker.mo
 import { DatepickeroptionsComponent } from './components/datepickeroptions/datepickeroptions.component';
 import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
 import { GiddhCurrencyPipe } from "../shared/helpers/pipes/currencyPipe/currencyType.pipe";
+import { SharedModule } from '../shared/shared.module';
 
 export function highchartsFactory() {
     // @ts-ignore
@@ -87,7 +88,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         BsDatepickerModule,
         TooltipModule.forRoot(),
         Daterangepicker,
-        CurrencyModule
+        CurrencyModule,
+        SharedModule
     ],
 })
 export class HomeModule {
