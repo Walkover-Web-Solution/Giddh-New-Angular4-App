@@ -440,8 +440,8 @@
                         <ng-container *ngFor="let item of regAcc.userAmountRanges; let index = index">
                             <div class="row">
                                 <div class="form-group col-sm-4 col-md-2" *ngIf="item.maxBankLimit ==='max'">
-                                    <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
-                                        <br></ng-container>
+                                    <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
+                                        </ng-container>
                                     <div class="custom-select select-caret pos-rel">
                                         <sh-select [options]="amountUpToList" autocomplete="off" required [(ngModel)]="item.maxBankLimit" name="maxBankLimit{{parentIndex}}{{index}}" [disabled]="isBankUpdateInEdit !== parentIndex" (selected)="selectedMaxOrCustom(index, true, parentIndex);" (ngModelChange)="maxLimitOrCustomChanged($event, index , true, parentIndex)">
                                         </sh-select>
@@ -449,8 +449,8 @@
                                     <p class="error-msg text-right"></p>
                                 </div>
                                 <div class="form-group col-sm-4 col-md-2" *ngIf="item.maxBankLimit !== 'max'">
-                                    <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
-                                        <br></ng-container>
+                                    <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
+                                        </ng-container>
                                     <div class="d-flex">
 
                                         <div class="mr-05 custom-select select-caret pos-rel width-100">
@@ -465,18 +465,19 @@
                                     </div>
                                 </div>
                                 <div class="form-group col-sm-4 col-md-2">
-                                    <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Select OTP <span class="required">*</span>
-                                <i class="icon-info cursor-pointer" tooltip="Content here.."></i>
-                            </label></ng-container>
+                                    <ng-container *ngIf="index===0">
+                                        <label class="d-flex relative info-icon">Select OTP <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in Approval Name"></i></div></label>
+                                    </ng-container>
                                     <div class="custom-select select-caret pos-rel">
                                         <sh-select [options]="typeOTPList" [(ngModel)]="item.otpType" (ngModelChange)="selectedOtpType($event, index, true, parentIndex)" [disabled]="isBankUpdateInEdit !== parentIndex" required name="otpType{{parentIndex}}{{index}}">
                                         </sh-select>
                                     </div>
                                 </div>
                                 <div class="form-group col-sm-4 col-md-2">
-                                    <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Approval Name <span class="required">*</span>
-                                <i class="icon-info cursor-pointer"  tooltip="Content here.."></i>
-                            </label></ng-container>
+                                    <ng-container *ngIf="index===0">
+                            <label class="d-flex relative info-icon">Approval Name <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send."></i></div></label>
+
+                        </ng-container>
                                     <div class="custom-select select-caret pos-rel" *ngIf="item.otpType!=='BANK'">
                                         <sh-select [options]="approvalNameList" class="text-left" [disabled]="isBankUpdateInEdit !== parentIndex" [(ngModel)]="item.approvalUniqueName" name="approvalUniqueName{{parentIndex}}{{index}}" required [placeholder]="'Select Bank'" [multiple]="false">
                                             <ng-template #optionTemplate let-option="option">
@@ -700,8 +701,8 @@
                         <ng-container *ngFor="let item of addBankForm.get('userAmountRanges')['controls'];let index = index;let f = first; let l = last" [formGroupName]="index">
                             <div class="row">
                                 <div class="form-group col-sm-4 col-md-2" *ngIf="item.get('maxBankLimit').value ==='max'">
-                                    <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
-                                        <br></ng-container>
+                                    <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in Approval Name."></i></label>
+                                        </ng-container>
                                     <div class="custom-select max select-caret pos-rel">
 
                                         <sh-select [options]="amountUpToList" formControlName="maxBankLimit" (selected)="selectedMaxOrCustomField( index, false, null , $event)" name="maxBankLimit">
@@ -711,8 +712,8 @@
                                     <p class="error-msg text-right"></p>
                                 </div>
                                 <div class="form-group col-sm-3  col-md-2" *ngIf="item.get('maxBankLimit').value!=='max'">
-                                    <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
-                                        <br></ng-container>
+                                    <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in Approval Name."></i></label>
+                                        </ng-container>
                                     <div class="d-flex">
                                         <div class="mr-05 custom-select cust select-caret pos-rel">
 
@@ -726,9 +727,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group col-sm-4 col-md-2">
-                                    <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Select OTP <span class="required">*</span>
-                                <i class="icon-info cursor-pointer" tooltip="Content here.."></i>
-                            </label></ng-container>
+                                    <ng-container *ngIf="index===0">
+                                        <label class="d-flex relative info-icon">Select OTP <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in Approval Name"></i></div></label>
+                                        </ng-container>
                                     <div class="custom-select select-caret pos-rel">
                                         <sh-select [options]="typeOTPList" formControlName="otpType" (selected)="selectedOtpType($event,index, false)" required name="otpType">
                                         </sh-select>
@@ -736,7 +737,8 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-md-2">
                                     <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Approval Name <span class="required">*</span>
-                                <i class="icon-info cursor-pointer"  tooltip="Content here.."></i>
+                                <i class="icon-info cursor-pointer"  tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send.
+                                "></i>
                             </label></ng-container>
                                     <div class="custom-select select-caret pos-rel" *ngIf="item.get('otpType').value !=='BANK'">
                                         <sh-select [options]="approvalNameList" class="text-left" formControlName="approvalUniqueName" name="approvalUniqueName" [placeholder]="'Select Bank'" [multiple]="false">
