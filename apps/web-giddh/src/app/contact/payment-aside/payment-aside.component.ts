@@ -104,6 +104,11 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public baseCurrencySymbol: string;
     /** Input mast for number format */
     public inputMaskFormat: string = '';
+    /** Selected bank unique name */
+    public selectedBankUniqueName: string;
+    /** To check form validation */
+    public isValidData: boolean = false;
+
 
 
     constructor(
@@ -145,7 +150,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
         //get current registered account on the user
         this.store.pipe(select(selectStore => selectStore.company), takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response.account) {
+            if (response && response.account) {
                 this.registeredAccounts = response.account;
                 if (this.registeredAccounts.length === 1) {
                     this.mode = this.registeredAccounts[0];
@@ -218,7 +223,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 });
             }
         }
-        this.getTotalAmount(this.selectedAccForBulkPayment);
+        this.getTotalAmount();
     }
 
     /*
@@ -258,7 +263,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.timerOn = true
         this.startTimer(40);
         this._companyService.resendOtp(this.companyUniqueName, this.selectedBankUrn, this.paymentRequestId).subscribe((response) => {
-            if (response.status === 'success') {
+            if (response && response.status === 'success') {
+
                 this.isPayClicked = true;
                 if (response.body && response.body.message) {
                     this._toaster.successToast(response.body.message);
@@ -280,7 +286,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         bankTransferConfirmOtpRequest.requestId = this.paymentRequestId;
         bankTransferConfirmOtpRequest.otp = this.receivedOtp;
         this._companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUrn, bankTransferConfirmOtpRequest).subscribe((res) => {
-            if (res.status === 'success') {
+            if (res && res.status === 'success') {
+
                 this.closePaymentModel();
                 this.openModalWithClass(this.successTemplate);
             } else {
@@ -299,6 +306,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             let itemIndx = this.selectedAccForBulkPayment.findIndex((element) => element === item);
             this.selectedAccForBulkPayment.splice(itemIndx, 1);
         }
+        this.getTotalAmount();
     }
 
     /**
@@ -308,7 +316,22 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public closePaymentModel(): void {
+        this.resetFormData();
+        this.totalSelectedAccountAmount = null;
         this.closeModelEvent.emit(true);
+    }
+
+    /**
+     * To reset form data
+     *
+     * @memberof PaymentAsideComponent
+     */
+    public resetFormData(): void {
+        this.selectedBankUniqueName = '';
+        this.selectedBankUrn = '';
+        this.receivedOtp = '';
+        this.isPayClicked = false;
+        this.selectedAccForBulkPayment = [];
     }
 
     /**
@@ -377,17 +400,40 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     }
 
     /**
-     * To get total amount
+     * To get total amount of selected account's balance
      *
-     * @param {any[]} selectedAccount Selected accounts list
+     *
      * @memberof PaymentAsideComponent
      */
-    public getTotalAmount(selectedAccount: any[]): void {
+    public getTotalAmount(): void {
+        let selectedAccount = cloneDeep(this.selectedAccForBulkPayment);
         this.totalSelectedAccountAmount = 0;
         if (selectedAccount && selectedAccount.length) {
             this.totalSelectedAccountAmount = selectedAccount.reduce((prev, cur) => {
-                return prev + cur.closingBalanceAmount;
+                return prev + Number(cur.closingBalance.amount);
             }, 0);
+        }
+        this.totalSelectedAccountAmount = Number(this.totalSelectedAccountAmount);
+        if (selectedAccount && selectedAccount.length) {
+
+            this.isValidData = selectedAccount.every(item => {
+                return item.closingBalance.amount && item.remarks ? true : false;
+            });
+        } else {
+            this.isValidData = false;
+        }
+    }
+
+    /**
+     * To prevent zero from textbox
+     *
+     * @param {number} amount Amount
+     * @param {number} index Index of item
+     * @memberof PaymentAsideComponent
+     */
+    public preventZero(amount: number, index: number) {
+        if (Number(amount) <= 0) {
+            this.selectedAccForBulkPayment[index].closingBalance.amount = '';
         }
     }
 
@@ -397,7 +443,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      *
      * @memberof PaymentAsideComponent
      */
-    public payClicked() {
+    public payClicked(): void {
         this.paymentRequestId = '';
         this.prepareRequestObject();
         this.bulkPayVendor();
