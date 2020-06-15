@@ -79,6 +79,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /** user who is logged in currently */
     private loggedInUserEmail: string;
     public integratedBankList: IntegratedBankList;
+    /** Add bank form reference */
     public addBankForm: FormGroup;
 
 
@@ -90,7 +91,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     @ViewChild('paymentFormAccountName') paymentFormAccountName: ShSelectComponent;
     //variable holding account Info
     public registeredAccount;
+    /** To check is registration form open*/
     public openNewRegistration: boolean;
+    /**Selected bank integration form index for update  */
     public selecetdUpdateIndex: number;
     public isEcommerceShopifyUserVerified: boolean = false;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
@@ -107,8 +110,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public approvalNameList: IOption[] = [];
     public selectedCompanyUniqueName: string;
     public isCreateInvalid: boolean = false;
+
+    /** Maximum amount length limit */
     public maxLimit: number = 8;
+    /** Maximum amount limit */
     public maxAmountLimit: number;
+    /** To check bank update form in edit mode */
+
     public isBankUpdateInEdit: number = null;
 
 
@@ -337,7 +345,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         }
     }
 
-    public onSubmitPaymentform(fomValue: any) {
+
+/**
+ *To submit form and send data to API Call
+ *
+ * @param {*} fomValue
+ * @memberof SettingIntegrationComponent
+ */
+public onSubmitPaymentform(fomValue: any): void {
+
         if (fomValue.valid) {
             let requestObject = _.cloneDeep(fomValue.value)
             requestObject.userAmountRanges.map(element => {
@@ -734,7 +750,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
  * @param {number} index index number
  * @memberof SettingIntegrationComponent
  */
-    public selectedMaxOrCustom2(index: number, isUpdate: boolean, parentIndex?: number, event?: any): void {
+    public selectedMaxOrCustomField(index: number, isUpdate: boolean, parentIndex?: number, event?: any): void {
+
         if (!isUpdate) {
             let userAmountRanges = this.addBankForm.get('userAmountRanges') as FormArray;
             userAmountRanges.controls[index].get('amount').patchValue(null);
@@ -742,7 +759,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 userAmountRanges.controls[index].get('amount').patchValue(null);
                 userAmountRanges.controls[index].get('amount').clearValidators();
                 userAmountRanges.controls[index].get('amount').reset();
-                if (this.checkIsMaxBankLimitSelected2(userAmountRanges, index)) {
+
+                if (this.checkIsMaxBankLimitSelectedField(userAmountRanges, index)) {
+
                     userAmountRanges.controls[index].get('maxBankLimit').patchValue('custom');
                     userAmountRanges.controls[index].get('amount').patchValue(null);
                     userAmountRanges.controls[index].get('amount').setErrors({ 'incorrect': true });
@@ -759,7 +778,18 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         }
     }
 
-    public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, parentIndex?: number, ): void {
+
+/**
+ * To call when max and custom limit options change
+ *
+ * @param {*} event
+ * @param {number} index
+ * @param {boolean} isUpdate
+ * @param {number} [parentIndex]
+ * @memberof SettingIntegrationComponent
+ */
+public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, parentIndex?: number, ): void {
+
         if (!isUpdate) {
             if (event === 'max' && this.checkIsMaxBankLimitSelected(this.paymentFormObj.userAmountRanges, index)) {
                 this.paymentFormObj.userAmountRanges[index].maxBankLimit = "custom";
@@ -789,7 +819,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @returns {boolean}
      * @memberof SettingIntegrationComponent
      */
-    public checkIsMaxBankLimitSelected2(itemList: FormArray, index: number): boolean {
+    public checkIsMaxBankLimitSelectedField(itemList: FormArray, index: number): boolean {
+
 
         let selected: boolean = false;
         if (itemList) {
@@ -993,7 +1024,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
 
-
+    /**
+     * To create and initialize bank integration form
+     *
+     * @returns {FormGroup}
+     * @memberof SettingIntegrationComponent
+     */
     public createBankIntegrationForm(): FormGroup {
         return this._fb.group({
             corpId: [null, Validators.compose([Validators.required])],
@@ -1012,6 +1048,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
     }
 
+    /**
+     * To initialize user amout range of bank integration form
+     *
+     * @returns {FormGroup}
+     * @memberof SettingIntegrationComponent
+     */
     public initialUserAmountRangesForm(): FormGroup {
         let transactionsFields = this._fb.group({
             maxBankLimit: ['custom', Validators.compose([Validators.required])],
@@ -1022,6 +1064,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         return transactionsFields;
     }
 
+
+    /**
+     * To add user amount range form
+     *
+     * @returns {*}
+     * @memberof SettingIntegrationComponent
+     */
     public addUserAmountRangesForm(): any {    // commented code because we no need GSTIN No. to add new address
         // if (value && !value.startsWith(' ', 0)) {
         const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
@@ -1030,7 +1079,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
 
-    public removeUserAmountRangesForm(index: number) {
+    /**
+     * To remove user amount range field
+     *
+     * @param {number} index
+     * @memberof SettingIntegrationComponent
+     */
+    public removeUserAmountRangesForm(index: number): void {
+
         const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
         if (transactions.controls.length > 1) {
             transactions.removeAt(index);
@@ -1040,16 +1096,34 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     }
 
-    public preventZero(amount: number, index: number, parentIndex?: number, isUpdate?: boolean) {
+
+    /**
+     * Prevent zero amount form amount field
+     *
+     * @param {number} amount
+     * @param {number} index
+     * @param {number} [parentIndex]
+     * @param {boolean} [isUpdate]
+     * @memberof SettingIntegrationComponent
+     */
+    public preventZero(amount: number, index: number, parentIndex?: number, isUpdate?: boolean): void {
+
         if (Number(amount) <= 0 && !isUpdate) {
             const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
             transactions.controls[index].get('amount').patchValue(null);
         }
-        if (isUpdate && Number(amount) <= 0 ) {
+        if (isUpdate && Number(amount) <= 0) {
             this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
         }
     }
-    public editRegisterForm(index: any) {
+
+    /**
+     *Edit bank integration form
+     *
+     * @param {*} index
+     * @memberof SettingIntegrationComponent
+     */
+    public editRegisterForm(index: any): void {
         this.isBankUpdateInEdit = index;
     }
 }

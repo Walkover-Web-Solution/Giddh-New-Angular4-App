@@ -89,7 +89,7 @@ export class ContactService {
 		}), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
 	}
 
-	public GetContactsDashboard(fromDate: string, toDate: string, groupUniqueName: string, pageNumber: number, refresh: string, count: number = 20, query?: string, sortBy: string = '',
+	public GetContactsDashboard(fromDate: string, toDate: string, groupUniqueName: string, pageNumber: number, refresh: string, count: number = 50, query?: string, sortBy: string = '',
 		order: string = 'asc', postData?: ContactAdvanceSearchModal): Observable<BaseResponse<any, string>> {
 		this.companyUniqueName = this._generalService.companyUniqueName;
 		let url = this.config.apiUrl + 'v2/company/:companyUniqueName/groups/:groupUniqueName/account-balances?page=:page' +

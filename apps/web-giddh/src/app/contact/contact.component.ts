@@ -1088,7 +1088,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      * @param {string} [order='asc'] Order of sorting (asc or desc)
      * @memberof ContactComponent
      */
-    private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, refresh?: string, count: number = 20, query?: string,
+    private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, refresh?: string, count: number = 50, query?: string,
         sortBy: string = '', order: string = 'asc'): void {
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : 'false';
