@@ -405,21 +405,28 @@
                                 <label>Corporate ID <span class="required">*</span></label>
                                 <br>
                                 <input type="text" placeholder="Enter Corporate ID" required name="corpId" class="form-control" [(ngModel)]="regAcc.corpId" disabled />
+
                             </div>
                             <div class="form-group col-sm-4 col-md-2">
                                 <label>User ID <span class="required">*</span></label>
                                 <br>
+
                                 <input type="text" placeholder="Enter User ID" name="userId" required class="form-control" [(ngModel)]="regAcc.userId" disabled />
+
                             </div>
                             <div class="form-group col-sm-4 col-md-2">
                                 <label>Account Number <span class="required">*</span></label>
                                 <br>
+
                                 <input type="text" placeholder="Enter Account Number" name="accountNo" required class="form-control" [(ngModel)]="regAcc.accountNo" disabled />
+
                             </div>
                             <div class="form-group col-sm-4 col-md-2">
                                 <label>Alias ID</label>
                                 <br>
+
                                 <input type="text" placeholder="Enter Alias ID" name="aliasId" class="form-control" [(ngModel)]="regAcc.aliasId" disabled />
+
                             </div>
                             <div class="form-group col-sm-4 col-md-2" *ngIf="bankAccounts$ && regAcc?.account?.uniqueName">
 
@@ -696,7 +703,9 @@
                                     <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
                                         <br></ng-container>
                                     <div class="custom-select max select-caret pos-rel">
+
                                         <sh-select [options]="amountUpToList" formControlName="maxBankLimit" (selected)="selectedMaxOrCustomField( index, false, null , $event)" name="maxBankLimit">
+
                                         </sh-select>
                                     </div>
                                     <p class="error-msg text-right"></p>
@@ -706,7 +715,9 @@
                                         <br></ng-container>
                                     <div class="d-flex">
                                         <div class="mr-05 custom-select cust select-caret pos-rel">
+
                                             <sh-select [options]="amountUpToList" formControlName="maxBankLimit" (selected)="selectedMaxOrCustomField(  index, false, null , $event)" name="maxBankLimit">
+
                                             </sh-select>
                                         </div>
                                         <div class="ml-05">

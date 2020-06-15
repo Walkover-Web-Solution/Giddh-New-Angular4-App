@@ -110,11 +110,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public approvalNameList: IOption[] = [];
     public selectedCompanyUniqueName: string;
     public isCreateInvalid: boolean = false;
+
     /** Maximum amount length limit */
     public maxLimit: number = 8;
     /** Maximum amount limit */
     public maxAmountLimit: number;
     /** To check bank update form in edit mode */
+
     public isBankUpdateInEdit: number = null;
 
 
@@ -343,6 +345,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         }
     }
 
+
 /**
  *To submit form and send data to API Call
  *
@@ -350,6 +353,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
  * @memberof SettingIntegrationComponent
  */
 public onSubmitPaymentform(fomValue: any): void {
+
         if (fomValue.valid) {
             let requestObject = _.cloneDeep(fomValue.value)
             requestObject.userAmountRanges.map(element => {
@@ -747,6 +751,7 @@ public onSubmitPaymentform(fomValue: any): void {
  * @memberof SettingIntegrationComponent
  */
     public selectedMaxOrCustomField(index: number, isUpdate: boolean, parentIndex?: number, event?: any): void {
+
         if (!isUpdate) {
             let userAmountRanges = this.addBankForm.get('userAmountRanges') as FormArray;
             userAmountRanges.controls[index].get('amount').patchValue(null);
@@ -754,7 +759,9 @@ public onSubmitPaymentform(fomValue: any): void {
                 userAmountRanges.controls[index].get('amount').patchValue(null);
                 userAmountRanges.controls[index].get('amount').clearValidators();
                 userAmountRanges.controls[index].get('amount').reset();
+
                 if (this.checkIsMaxBankLimitSelectedField(userAmountRanges, index)) {
+
                     userAmountRanges.controls[index].get('maxBankLimit').patchValue('custom');
                     userAmountRanges.controls[index].get('amount').patchValue(null);
                     userAmountRanges.controls[index].get('amount').setErrors({ 'incorrect': true });
@@ -771,6 +778,7 @@ public onSubmitPaymentform(fomValue: any): void {
         }
     }
 
+
 /**
  * To call when max and custom limit options change
  *
@@ -781,6 +789,7 @@ public onSubmitPaymentform(fomValue: any): void {
  * @memberof SettingIntegrationComponent
  */
 public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, parentIndex?: number, ): void {
+
         if (!isUpdate) {
             if (event === 'max' && this.checkIsMaxBankLimitSelected(this.paymentFormObj.userAmountRanges, index)) {
                 this.paymentFormObj.userAmountRanges[index].maxBankLimit = "custom";
@@ -811,6 +820,7 @@ public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, par
      * @memberof SettingIntegrationComponent
      */
     public checkIsMaxBankLimitSelectedField(itemList: FormArray, index: number): boolean {
+
 
         let selected: boolean = false;
         if (itemList) {
@@ -1054,6 +1064,7 @@ public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, par
         return transactionsFields;
     }
 
+
     /**
      * To add user amount range form
      *
@@ -1067,6 +1078,7 @@ public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, par
         return;
     }
 
+
     /**
      * To remove user amount range field
      *
@@ -1074,6 +1086,7 @@ public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, par
      * @memberof SettingIntegrationComponent
      */
     public removeUserAmountRangesForm(index: number): void {
+
         const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
         if (transactions.controls.length > 1) {
             transactions.removeAt(index);
@@ -1082,6 +1095,7 @@ public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, par
         }
 
     }
+
 
     /**
      * Prevent zero amount form amount field
@@ -1093,6 +1107,7 @@ public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, par
      * @memberof SettingIntegrationComponent
      */
     public preventZero(amount: number, index: number, parentIndex?: number, isUpdate?: boolean): void {
+
         if (Number(amount) <= 0 && !isUpdate) {
             const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
             transactions.controls[index].get('amount').patchValue(null);
