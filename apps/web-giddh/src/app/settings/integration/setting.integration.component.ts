@@ -1112,32 +1112,32 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {boolean} [isUpdate]
      * @memberof SettingIntegrationComponent
      */
-    public preventZero(amount: number, index: number, parentIndex?: number, isUpdate?: boolean): boolean {
+    public preventZero(amount: number, index: number, parentIndex?: number, isUpdate?: boolean): any {
 
         if (!isUpdate) {
             const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
             if (Number(amount) <= 0) {
                 transactions.controls[index].get('amount').patchValue(null);
             }
-            if (amount) {
-                let convertedAmount;
-                convertedAmount = _.cloneDeep(amount);
-                convertedAmount.toString().replace(',', '');
-                if (convertedAmount.includes('.')) {
-                    let splitedAmount = convertedAmount.split('.');
-                    if (splitedAmount[0].length > this.maxLimit) {
-                        console.log('splitedAmount[0].length', splitedAmount[0].length,  this.maxLimit);
-                        return false;
-                    }
-                } else {
-                    if (convertedAmount.length > this.maxLimit) {
-                        console.log('convertedAmount', convertedAmount.length,  this.maxLimit);
+            // if (amount) {
+            //     let convertedAmount;
+            //     convertedAmount = _.cloneDeep(amount);
+            //     convertedAmount.toString().replace(',', '');
+            //     if (convertedAmount.includes('.')) {
+            //         let splitedAmount = convertedAmount.split('.');
+            //         if (splitedAmount[0].length > this.maxLimit) {
+            //             console.log('splitedAmount[0].length', splitedAmount[0].length,  this.maxLimit);
+            //             return false;
+            //         }
+            //     } else {
+            //         if (convertedAmount.length > this.maxLimit) {
+            //             console.log('convertedAmount', convertedAmount.length,  this.maxLimit);
 
-                        return false;
-                    }
-                }
+            //             return false;
+            //         }
+            //     }
 
-            }
+            // }
         }
         if (isUpdate) {
             if (Number(amount) <= 0) {
