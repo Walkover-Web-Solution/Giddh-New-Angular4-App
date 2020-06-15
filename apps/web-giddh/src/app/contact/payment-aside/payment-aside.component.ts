@@ -108,6 +108,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public selectedBankUniqueName: string;
     /** To check form validation */
     public isValidData: boolean = false;
+    /** company's first  name */
+    public companyFirstName: string = '';
 
 
 
@@ -163,6 +165,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.companyCurrency = profile.baseCurrency || 'INR';
+            this.companyFirstName = profile.name;
             this.baseCurrencySymbol = profile.baseCurrencySymbol;
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
         });
@@ -176,7 +179,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 if (acc.country && acc.country.countryCode) {
                     this.countryCode = this.accountDetails.country.countryCode
                 }
-
             }
         });
 
@@ -199,7 +201,20 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             this.addAccountTransactionsFormObject(item);
         });
         this.selectedAccForBulkPayment.map(item => {
-            item.remarks = '';
+            let modifiedRemark;
+            let companyFirstName;
+            if (this.companyFirstName) {
+                companyFirstName = this.companyFirstName.split(' ');
+            }
+            if (item && item.name) {
+                modifiedRemark = item.name.split(' ');
+            }
+            if (modifiedRemark.length && companyFirstName) {
+                item.remarks = modifiedRemark[0] + ' - ' + companyFirstName[0];
+            } else {
+                item.remarks = '';
+            }
+
             item.totalDueAmount = item.closingBalance.amount;
         });
         this.getIntegratedBankDetails();
@@ -370,6 +385,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 }
             })
         }
+        this.getTotalAmount();
     }
 
     /**

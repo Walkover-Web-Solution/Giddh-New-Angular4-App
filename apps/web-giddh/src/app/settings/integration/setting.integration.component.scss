@@ -10,7 +10,7 @@
 .pdBth20 {
     padding: 0 20px;
 }
-
+/*
 .info-icon {
     i {
         position: absolute;
@@ -18,7 +18,7 @@
         top: 4px;
         color: $gray;
     }
-}
+}*/
 
 .check-search {
     position: absolute;
@@ -52,6 +52,14 @@
     padding: 6px;
     height: 100%;
     background: $white;
+}
+.tooltip-box {
+    position: absolute;
+    right: 0;
+    top: 0;
+    .icon-info {
+        color: $gray;
+    }
 }
 @media(max-width:1359px) {
     .xs-pl-15 {

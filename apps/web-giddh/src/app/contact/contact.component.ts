@@ -48,6 +48,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../shared/helpers/defaultDateFormat';
 import { OnboardingFormRequest } from '../models/api-models/Common';
 import { CommonActions } from '../actions/common.actions';
+import { PAGINATION_LIMIT } from '../app.constant';
 
 const CustomerType = [
     { label: 'Customer', value: 'customer' },
@@ -223,6 +224,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public isBulkPaymentShow: boolean = false;
     /** selected account list array */
     public selectedAccountsList: any[] = [];
+    /**pagination count */
+    public paginationLimit: number = PAGINATION_LIMIT;
+
 
     private checkboxInfo: any = {
         selectedPage: 1
@@ -329,7 +333,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.order = ord;
 
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
-            null, 'false', 20, this.searchStr, key, ord);
+            null, 'false', PAGINATION_LIMIT, this.searchStr, key, ord);
     }
 
     public ngOnInit() {
@@ -362,7 +366,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
                 this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');
-                this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, this.searchStr);
+                this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr);
             }
         })).pipe(takeUntil(this.destroyed$)).subscribe();
 
@@ -370,7 +374,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             if (yes) {
                 if (this.accountAsideMenuState === 'in') {
                     this.toggleAccountAsidePane();
-                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, this.searchStr);
+                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr);
                 }
             }
         });
@@ -397,9 +401,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             .subscribe((term: any) => {
                 this.searchStr = term;
                 if (this.activeTab === 'customer') {
-                    this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, 'true', 20, term, this.key, this.order);
+                    this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, 'true', PAGINATION_LIMIT, term, this.key, this.order);
                 } else {
-                    this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, 'true', 20, term, this.key, this.order);
+                    this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, 'true', PAGINATION_LIMIT, term, this.key, this.order);
                 }
             });
         this._breakPointObservar.observe([
@@ -537,7 +541,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.selectedAccountsList = [];
         if (tabName !== this.activeTab) {
             this.activeTab = tabName;
-            this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, '');
+            this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, '');
 
             this.store.dispatch(this._generalAction.setAppTitle(`/pages/contact/${tabName}`));
 
@@ -554,7 +558,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.tabSelected(tabName);
         this.searchStr = '';
         if (tabName === 'vendor') {
-            this.getAccounts(this.fromDate, this.toDate, type, null, 'true', 20, '');
+            this.getAccounts(this.fromDate, this.toDate, type, null, 'true', PAGINATION_LIMIT, '');
         }
         this.showFieldFilter = new CustomerVendorFiledFilter();
         let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer']));
@@ -630,7 +634,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             if (grpName) {
                 if (this.accountAsideMenuState === 'in') {
                     this.toggleAccountAsidePane();
-                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, '');
+                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, '');
                 }
             }
         }, 1000);
@@ -658,7 +662,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
         this.selectedCheckedContacts = [];
         this.selectedAccountsList = [];
-        this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'true', 20, this.searchStr, this.key, this.order);
+        this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
     }
 
     public hideListItems() {
@@ -862,7 +866,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
             let componentInstance = componentInstanceView.instance as PaginationComponent;
             componentInstance.totalItems = s.count * s.totalPages;
-            componentInstance.itemsPerPage = s.count;
+            componentInstance.itemsPerPage = this.paginationLimit;
             componentInstance.maxSize = 5;
             componentInstance.writeValue(s.page);
             componentInstance.boundaryLinks = true;
@@ -886,7 +890,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, this.searchStr);
+            this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr);
             this.detectChanges();
         }
     }
@@ -957,7 +961,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.isAdvanceSearchApplied = false;
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
-            null, 'true', 20, '');
+            null, 'true', PAGINATION_LIMIT, '');
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
@@ -1011,7 +1015,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         }
         this.isAdvanceSearchApplied = true;
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
-            null, 'true', 20, '');
+            null, 'true', PAGINATION_LIMIT, '');
     }
 
     public setAmountType(category: string, amountType: string) {
@@ -1088,7 +1092,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      * @param {string} [order='asc'] Order of sorting (asc or desc)
      * @memberof ContactComponent
      */
-    private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, refresh?: string, count: number = 50, query?: string,
+    private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, refresh?: string, count: number = PAGINATION_LIMIT, query?: string,
         sortBy: string = '', order: string = 'asc'): void {
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : 'false';
