@@ -84,6 +84,7 @@ export class PaymentClass {
     public aliasId: string;
     public userAmountRanges: UserAmountRangeRequests[] = [new UserAmountRangeRequests()]
     public accountUniqueName: string;
+    public message?: string;
     constructor() {
         this.corpId = '';
         this.userId = '';

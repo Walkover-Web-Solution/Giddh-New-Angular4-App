@@ -9253,6 +9253,12 @@ ngx-daterangepicker-material {
 .icon-home-icon {
     color: $white;
 }
+.HW_badge.HW_softHidden{
+    display: none !important;
+}
+span#HW_badge_cont:nth-child(3){
+    display: none;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9480,6 +9486,7 @@ ngx-daterangepicker-material {
     table.table td.text-center.empty_table {
         padding: 5px 10px 5px 0% !important;
         text-align: center;
+        width: 100%;
     }
     #middleBody .horizontal-form,
     .view_forms .horizontal-form {
@@ -9702,7 +9709,7 @@ ngx-daterangepicker-material {
     }
     .ledg-head .custom-tabs .nav.nav-tabs {
         left: 0;
-        top: 92px;
+        top: 90px;
         padding-top: 0 !important;
         position: fixed;
     }
@@ -9892,6 +9899,9 @@ ngx-daterangepicker-material {
         top: 0;
         left: 0;
         z-index: 999;
+    }
+    .ledg-head .custom-tabs .nav.nav-tabs {
+        padding-top: 0 !important;
     }
 }
 

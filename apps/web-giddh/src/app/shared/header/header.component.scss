@@ -630,16 +630,17 @@ ul.sub-list {
 }
 
 .close-2 {
-    position: fixed;
+    position: absolute;
     top: 15px;
-    right: 15px;
+    right: 30px;
     background: none;
-    color: red;
     border: 0px;
-    color: #fff;
+    color: $nero;
     cursor: pointer;
     font-size: 20px;
     z-index: 9999;
+    width: 40px;
+    height: 40px;
 }
 .head-nav {
     background: #f1f1f1;
@@ -744,6 +745,14 @@ ul.sub-list {
     
 }
 @media (max-width: 767px) {
+.close-2 {
+    top: 65px;
+    right: 66px;
+    background-color: $white;
+    width: 35px;
+    height: 35px;
+    position: fixed;
+}
 .desktop-header{
     display: none;
 }
@@ -847,7 +856,7 @@ ul.sub-list {
        height: 32px;
     }
     .plan-wrapper{
-        padding: 15px 0 ;
+        padding: 15px 0 0;
         .white-row{
             margin: 0 15px;
         }
@@ -882,6 +891,12 @@ ul.sub-list {
     ul.sub-list {
         min-height: 50px;
         max-height: 190px;
+    }
+}
+@media (max-width: 679px) {
+    .close-2{
+        top: 52px;
+        right: 35px;
     }
 }
 
