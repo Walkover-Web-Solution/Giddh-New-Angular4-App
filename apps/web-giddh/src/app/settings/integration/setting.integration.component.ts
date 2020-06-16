@@ -89,6 +89,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     @ViewChild('removegmailintegration') public removegmailintegration: ModalDirective;
     @ViewChild('paymentForm') paymentForm: NgForm;
     @ViewChild('paymentFormAccountName') paymentFormAccountName: ShSelectComponent;
+    /** Payment integration bank update form reference */
+    @ViewChild('paymentFormUpdate') paymentFormUpdate: NgForm;
+
+
     //variable holding account Info
     public registeredAccount;
     /** To check is registration form open*/
@@ -768,11 +772,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     userAmountRanges.controls[index].get('maxBankLimit').patchValue('custom');
                     userAmountRanges.controls[index].get('amount').patchValue(null);
                     userAmountRanges.controls[index].get('amount').setErrors({ 'incorrect': true });
-                    userAmountRanges.controls[index].get('amount').setValidators(Validators.compose([Validators.required, Validators.maxLength(this.maxLimit)]));
+                    userAmountRanges.controls[index].get('amount').setValidators(Validators.compose([Validators.required]));
                     this.toasty.infoToast('You can not select max bank limit more than 1');
                 }
             } else {
-                userAmountRanges.controls[index].get('amount').setValidators(Validators.compose([Validators.required, Validators.maxLength(this.maxLimit)]));
+                userAmountRanges.controls[index].get('amount').setValidators(Validators.compose([Validators.required]));
                 userAmountRanges.controls[index].get('amount').patchValue(null);
             }
         }
@@ -1118,6 +1122,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
             if (Number(amount) <= 0) {
                 transactions.controls[index].get('amount').patchValue(null);
+            } else {
+                transactions.controls[index].get('amount').setErrors(null);
             }
             // if (amount) {
             //     let convertedAmount;
@@ -1142,7 +1148,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (isUpdate) {
             if (Number(amount) <= 0) {
                 this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
+            } else if(Number(amount) > 0) {
+                this.paymentFormUpdate.controls.amount.setErrors(null);
             }
+
+            console.log(this.paymentFormUpdate)
         }
     }
 

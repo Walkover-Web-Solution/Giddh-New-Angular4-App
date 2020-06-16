@@ -459,7 +459,7 @@
                                             </sh-select>
                                         </div>
                                         <div class="ml-05  width-100">
-                                            <input type="text" class="form-control" #amountUpdateElement decimalDigitsDirective [disabled]="isBankUpdateInEdit !== parentIndex" [required]="item.maxBankLimit !== 'max'" [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountUpdateElement, true, parentIndex );preventZero(item.amount,index, parentIndex, true )"
+                                            <input type="text" class="form-control" #amountUpdateElement [required]="item.maxBankLimit !== 'max'" decimalDigitsDirective [disabled]="isBankUpdateInEdit !== parentIndex" [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountUpdateElement, true, parentIndex );preventZero(item.amount,index, parentIndex, true )"
                                                 name="amount{{parentIndex}}{{index}}" placeholder="Amount">
                                         </div>
                                     </div>
@@ -722,7 +722,7 @@
                                             </sh-select>
                                         </div>
                                         <div class="ml-05">
-                                            <input type="text" class="form-control" #amountElement decimalDigitsDirective (blur)="preventZero(item.get('amount').value, index, null, false)" formControlName="amount" name="amount" placeholder="Amount">
+                                            <input type="text" class="form-control" #amountElement decimalDigitsDirective (blur)="preventZero(item.get('amount').value, index, null, false)" [mask]="inputMaskFormat" formControlName="amount" name="amount" placeholder="Amount">
                                         </div>
                                     </div>
                                 </div>
