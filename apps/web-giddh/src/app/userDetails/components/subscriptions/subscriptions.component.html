@@ -161,7 +161,7 @@
                                             <tr>
                                                 <!-- <td data-title="Date">{{ moment(transaction.from, 'DD-MM-YYYY').format('MMM - YY')}}</td> -->
                                                 <td data-title="Consumptions">{{ seletedUserPlans?.totalTransactions ? (seletedUserPlans?.totalTransactions | number) : 0 }}</td>
-                                                <td data-title="Balance">{{ seletedUserPlans?.balance? seletedUserPlans?.balance: 0 }}</td>
+                                                <td data-title="Balance">{{ seletedUserPlans?.remainingTransactions || 0 }}</td>
                                                 <td data-title="Additional Charges" class="text-right">{{ seletedUserPlans?.additionalCharges? (seletedUserPlans?.additionalCharges | number) : 0 }}</td>
                                             </tr>
                                         </tbody>
