@@ -792,7 +792,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {number} [parentIndex]
      * @memberof SettingIntegrationComponent
      */
-    public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, parentIndex?: number ): void {
+    public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, parentIndex?: number): void {
 
         if (!isUpdate) {
             if (event === 'max' && this.checkIsMaxBankLimitSelected(this.paymentFormObj.userAmountRanges, index)) {
