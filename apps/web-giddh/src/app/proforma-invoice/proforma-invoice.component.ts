@@ -1047,17 +1047,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         if (!this.isLastInvoiceCopied) {
                             // convert date object
                             if (this.isProformaInvoice) {
-                                obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, 'DD-MM-YYYY').toDate();
+                                obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
                                 obj.voucherDetails.voucherNumber = obj.voucherDetails.proformaNumber;
                             } else if (this.isEstimateInvoice) {
-                                obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, 'DD-MM-YYYY').toDate();
+                                obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
                                 obj.voucherDetails.voucherNumber = obj.voucherDetails.estimateNumber;
                             } else {
-                                obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, 'DD-MM-YYYY').toDate();
+                                obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
                             }
 
                             if (obj.voucherDetails.dueDate) {
-                                obj.voucherDetails.dueDate = moment(obj.voucherDetails.dueDate, 'DD-MM-YYYY').toDate();
+                                obj.voucherDetails.dueDate = moment(obj.voucherDetails.dueDate, GIDDH_DATE_FORMAT).toDate();
                             }
                         }
 
@@ -1130,7 +1130,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.showGstAndTrnUsingCountryName(this.customerCountryName);
                         if (this.isMulticurrencyAccount) {
                             this.getCurrencyRate(this.companyCurrency, tempSelectedAcc.currency,
-                                moment(this.invFormData.voucherDetails.voucherDate).format('DD-MM-YYYY'));
+                                moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
                             this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode).then(() => {
                                 this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
                             });
@@ -1171,8 +1171,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.isCustomerSelected = false;
                     }
                 }
-
-                console.log(this.invFormData);
 
                 this.calculateBalanceDue();
                 this.calculateTotalDiscount();
@@ -1342,7 +1340,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         // get exchange rate when application date is changed
         if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && date) {
-            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, moment(date).format('DD-MM-YYYY'));
+            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, moment(date).format(GIDDH_DATE_FORMAT));
         }
 
         this.invFormData.entries.forEach((entry: SalesEntryClass) => {
@@ -1653,7 +1651,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         if (this.isSalesInvoice || this.isPurchaseInvoice || this.isProformaInvoice || this.isEstimateInvoice) {
-            if (moment(data.voucherDetails.dueDate, 'DD-MM-YYYY').isBefore(moment(data.voucherDetails.voucherDate, 'DD-MM-YYYY'), 'd')) {
+            if (moment(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(moment(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
                 this.startLoader(false);
                 this._toasty.errorToast('Due date cannot be less than Invoice Date');
                 return;
@@ -1788,10 +1786,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         });
         let exRate = this.originalExchangeRate;
         let requestObject: any;
+        let voucherDate: any;
         if (!this.isPurchaseInvoice) {
             const deposit = new AmountClassMulticurrency();
             deposit.accountUniqueName = this.depositAccountUniqueName;
             deposit.amountForAccount = this.depositAmount;
+
+            voucherDate = data.voucherDetails.voucherDate;
+
             requestObject = {
                 account: data.accountDetails,
                 updateAccountDetails: this.updateAccount,
@@ -1869,7 +1871,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 requestObject.depositAccountUniqueName = '';
             }
 
-            requestObject.date = moment(requestObject.date).format(GIDDH_DATE_FORMAT);
+            requestObject.date = moment(voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             requestObject.type = "sales";
 
             let updatedData = requestObject;
@@ -2498,7 +2500,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
                 this.getCurrencyRate(this.companyCurrency, item.additional.currency,
-                    moment(this.invFormData.voucherDetails.voucherDate).format('DD-MM-YYYY'));
+                    moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
             }
 
             if (this.isSalesInvoice && this.isMulticurrencyAccount) {
@@ -2749,7 +2751,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.isMulticurrencyAccount = event.additional.currency !== this.companyCurrency;
                     if (this.isMulticurrencyAccount) {
                         this.getCurrencyRate(this.companyCurrency, event.additional ? event.additional.currency : '',
-                            moment(this.invFormData.voucherDetails.voucherDate).format('DD-MM-YYYY'));
+                            moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
                     }
                 }
             }
@@ -3170,7 +3172,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         if (this.isSalesInvoice || this.isPurchaseInvoice || this.isProformaInvoice || this.isEstimateInvoice) {
-            if (moment(data.voucherDetails.dueDate, 'DD-MM-YYYY').isBefore(moment(data.voucherDetails.voucherDate, 'DD-MM-YYYY'), 'd')) {
+            if (moment(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(moment(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
                 this._toasty.errorToast('Due date cannot be less than Invoice Date');
                 return;
             }
@@ -3872,7 +3874,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             salesEntryClass.voucherType = entry.voucherType;
             salesEntryClass.uniqueName = entry.uniqueName;
             salesEntryClass.description = entry.description;
-            salesEntryClass.entryDate = moment(entry.date, 'DD-MM-YYYY').toDate();
+            salesEntryClass.entryDate = moment(entry.date, GIDDH_DATE_FORMAT).toDate();
             this.calculateOtherTaxes(salesEntryClass.otherTaxModal, salesEntryClass);
             voucherClassConversion.entries.push(salesEntryClass);
         });
@@ -3914,7 +3916,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherDetails.deposit = result.deposit ? result.deposit.amountForAccount : 0;
 
         //need to check usage
-        voucherDetails.dueDate = result.dueDate ? moment(result.dueDate, 'DD-MM-YYYY').toDate() : '';
+        voucherDetails.dueDate = result.dueDate ? moment(result.dueDate, GIDDH_DATE_FORMAT).toDate() : '';
         voucherDetails.balanceStatus = result.balanceStatus;
 
         voucherDetails.customerUniquename = result.account.uniqueName;
