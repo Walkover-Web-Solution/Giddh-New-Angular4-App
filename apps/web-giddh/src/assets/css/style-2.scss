@@ -980,11 +980,6 @@ ul.sub-list {
 .tab-integraton .nav-tabs>li {
     margin-right: 25px;
 }
-
-.tab-integraton .form-group label {
-    margin-bottom: 6px;
-}
-
 .customer-footer-box .numbertotal {
     font-size: 26px;
     color: $chetwode-blue;
@@ -1747,8 +1742,17 @@ modal-container.modal {
 .subscription-collapse .panel-default>.panel-heading+.panel-collapse>.panel-body {
     border: 0px solid;
 }
-
-
+.payment-success-modal {
+    transform: translate(0,-0%) !important;
+}
+.payment-success-modal {
+    .payment-img img {
+        width: 80px;
+    }
+}
+.tooltip-box .tooltip {
+    width: 150px;
+}
 /* my css end */
 
 

@@ -740,10 +740,10 @@
                             </ng-container>
                         </td>
                         <td data-title="Action" *ngIf="isICICIIntegrated">
-                            <button *ngIf="account.hasBankDetails" class="btn btn-small btn-success" (click)="openBulkPaymentModal(template, account)">
+                            <button *ngIf="account.bankPaymentDetails" class="btn btn-small btn-success" (click)="openBulkPaymentModal(template, account)">
                             Pay Now </button>
                             <!-- (click)="openPaymentAside(account)" -->
-                            <button *ngIf="!account.hasBankDetails " class="btn btn-small btn-succes " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
+                            <button *ngIf="!account.bankPaymentDetails " class="btn btn-small btn-succes " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
                             </button>
                         </td>
                     </tr>
@@ -759,16 +759,16 @@
     </div>
 
     <div colspan="100%" class="xs-pl-0 paginationWrapper">
-        <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && Totalcontacts>=20">
+        <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && Totalcontacts>=paginationLimit">
             <div class="alC  ">
-                <pagination [totalItems]="sundryDebtorsAccountsBackup.totalPages" [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)">
+                <pagination [totalItems]="sundryDebtorsAccountsBackup.totalItems" [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="sundryDebtorsAccountsBackup.counts" [rotate]="false" (pageChanged)="pageChanged($event)">
                 </pagination>
             </div>
         </div>
 
-        <div *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length && Totalcontacts>=20">
+        <div *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length && Totalcontacts>=paginationLimit">
             <div class="alC ">
-                <pagination [totalItems]="sundryCreditorsAccountsBackup.totalPages" [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)">
+                <pagination [totalItems]="sundryCreditorsAccountsBackup.totalItems" [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="sundryCreditorsAccountsBackup.counts" [rotate]="false" (pageChanged)="pageChanged($event)">
                 </pagination>
             </div>
         </div>
@@ -792,7 +792,7 @@
 
 
 <ng-template #template>
-    <payment-aside [selectedAccountsForBulkPayment]="selectedAccountsList" [selectedAccForPayment]="selectedAccForPayment" (closeModelEvent)="closeBulkPaymentModel()"></payment-aside>
+    <payment-aside *ngIf="isBulkPaymentShow" [selectedAccountsForBulkPayment]="selectedAccountsList" [selectedAccForPayment]="selectedAccForPayment" (closeModelEvent)="closeBulkPaymentModel()"></payment-aside>
 </ng-template>
 <!-- endregion -->
 
