@@ -33,6 +33,7 @@ import { DaybookAdvanceSearchModelComponent } from './advance-search/daybook-adv
 })
 export class DaybookComponent implements OnInit, OnDestroy {
     public companyName: string;
+    /** True, If loader is working */
     public showLoader: boolean = false;
     public isAllExpanded: boolean = false;
     public daybookQueryRequest: DaybookQueryRequest;
