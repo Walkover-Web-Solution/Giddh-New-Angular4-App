@@ -1126,14 +1126,15 @@ td span {
 .hideMe {
     display: none;
 }
-
 .activatedDate {
     background-color: $hawkes-blue;
 }
-
 .activatedDate span {
     color: $nero !important;
     background-color:transparent !important;
+}
+.activatedDate.in-range.in-range-start span {
+    color: $nero !important;
 }
 .activatedDate:hover{
     span{
@@ -1693,6 +1694,10 @@ td span {
                 }
             } 
           }
+    }
+    .md-drppicker td.in-range-start::before{
+        left: 11px;
+        width: 79%;
     }
 }
 @media(max-height:767px){

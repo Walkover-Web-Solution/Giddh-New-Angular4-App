@@ -411,6 +411,7 @@ sh-select:focus {
     align-items: center;
     margin-right: 7px;
     border-radius: 50%;
+    background-color: $white;
     img{
         width: 18px;
     }
@@ -471,12 +472,12 @@ sh-select:focus {
     background-color: transparent;
 }
 .date-range-picker{
-    background-color: transparent !important;
+    background-color: $white !important;
     text-decoration-line: none;
     text-decoration-style: none;
     background-image: url(../../assets/images/calender-icon.svg) !important;
     background-size: 17px !important;
-    background-position: 9px 8px !important;
+    background-position: 15px 8px !important;
     background-repeat: no-repeat !important;
     padding-left: 35px !important;
     position: relative;
@@ -487,6 +488,7 @@ sh-select:focus {
     padding-right: 10px !important;
     height: 36px;
     min-width: 220px !important;
+    border-radius: 30px;
     &:focus{
         border-color: $chetwode-blue;
 
@@ -641,6 +643,7 @@ sh-select:focus {
         box-shadow: 0px 2px 6px #0000001a;
         margin-top: 0;
         padding-top: 20px;
+        padding-bottom: 20px;
     }
     .ledger-stat {
         margin: 15px -15px;
@@ -716,6 +719,7 @@ sh-select:focus {
         .single-search-box{
             position: relative;
             width: calc(100% - 215px);
+            margin-right: 15px;
             .full-width-input{
                 width: 100%;  
             }
@@ -764,7 +768,7 @@ sh-select:focus {
     }
     .ledger-ellipse{
         position: absolute;
-        top: 107px;
+        top: 66px;
         z-index: 991;
         right: 0px;
         .btn{
@@ -865,6 +869,12 @@ sh-select:focus {
         .ipad-view-datepicker{
             display: none;
         }  
+    }
+    .ledger-section{
+        padding-top: 0;
+        .transactions-page{
+            margin-top: 15px !important;
+        }
     }
 }
 @media (max-width: 575px) {

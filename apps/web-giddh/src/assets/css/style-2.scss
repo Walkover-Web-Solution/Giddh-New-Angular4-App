@@ -198,9 +198,11 @@
 
 
 /* start MDB tweaks */
-.border-none{
+
+.border-none {
     border: none !important;
 }
+
 .pt-0 {
     padding-top: 0px !important;
 }
@@ -320,6 +322,7 @@
 .pl-15 {
     padding-left: 15px;
 }
+
 .pt-15 {
     padding-top: 15px;
 }
@@ -327,15 +330,19 @@
 .pl-05 {
     padding-left: 5px;
 }
+
 .pt-05 {
     padding-top: 5px;
 }
+
 .pr-05 {
     padding-right: 5px;
 }
+
 .pb-05 {
     padding-bottom: 5px;
 }
+
 .bt-1 {
     border-top: 1px solid #ccc;
 }
@@ -351,9 +358,11 @@
 .bl-1 {
     border-left: 1px solid #ccc;
 }
-.border-none{
+
+.border-none {
     border: none !important;
 }
+
 
 /* end MDB tweaks */
 
@@ -739,15 +748,19 @@ input {
 .mb-15 {
     margin-bottom: 15px;
 }
-.ml-15{
+
+.ml-15 {
     margin-left: 15px;
 }
-.mr-15{
+
+.mr-15 {
     margin-right: 15px;
 }
-.mt-15{
+
+.mt-15 {
     margin-top: 15px;
 }
+
 .mr-1 {
     margin-right: 10px;
 }
@@ -771,15 +784,19 @@ input {
 .ml-0 {
     margin-left: 0px;
 }
+
 .mr-0 {
     margin-right: 0 !important;
 }
+
 .mt-0 {
     margin-top: 0px;
 }
+
 .mb-0 {
     margin-bottom: 0px;
 }
+
 .ml-1 {
     margin-left: 10px;
 }
@@ -887,6 +904,7 @@ ul.sub-list {
 .bold {
     font-family: $opensans-semibold;
 }
+
 .font-bold {
     font-family: $opensans-bold;
 }
@@ -962,11 +980,6 @@ ul.sub-list {
 .tab-integraton .nav-tabs>li {
     margin-right: 25px;
 }
-
-.tab-integraton .form-group label {
-    margin-bottom: 6px;
-}
-
 .customer-footer-box .numbertotal {
     font-size: 26px;
     color: $chetwode-blue;
@@ -1102,7 +1115,7 @@ ul.sub-list {
 
 .aging-table-top .top-aging-table-top span .date-range-picker {
     font-family: opensans-semibold;
-    text-align:left !important;
+    text-align: left !important;
 }
 
 .aging-table {
@@ -1180,7 +1193,6 @@ ul.sub-list {
     margin-left: 10px;
     text-decoration: underline;
     font-size: 14px;
-
 }
 
 .basic>thead>tr>th .fa-sort {
@@ -1603,16 +1615,17 @@ modal-container.modal {
     margin-bottom: 0px;
 }
 
-.overlay-cal{
-    .modal-body{
+.overlay-cal {
+    .modal-body {
         max-width: 1120px !important;
         width: 100% !important;
-        .calendly-inline-widget object{
+        .calendly-inline-widget object {
             width: 100% !important;
             height: 610px !important;
         }
     }
 }
+
 .booking-container {
     max-width: 100% !important;
 }
@@ -1628,21 +1641,25 @@ modal-container.modal {
 .color-primary {
     color: $deep-sky-blue;
 }
+
 .justify-content-between {
     justify-content: space-between;
 }
+
 .text-blue {
     color: $midnight-blue;
 }
+
 .all-features-modal {
     width: 60%;
     margin-top: 0px;
     .modal-body {
         padding: 15px 30px;
-    height: 80vh;
-    overflow-y: auto;
+        height: 80vh;
+        overflow-y: auto;
     }
 }
+
 .custom-input-search {
     position: relative;
     i {
@@ -1657,21 +1674,36 @@ modal-container.modal {
         padding-left: 30px !important;
     }
 }
-.plan-list .close:hover, .plan-list .close:focus:hover, .plan-list .close:focus:focus, .plan-list .close:focus:disabled, .plan-list .close:focus.active, .plan-list .close:focus:active, .open > .dropdown-toggle.plan-list .close:focus, .plan-list .close:focus:active:focus, .plan-list .close:focus:active:hover, .plan-list .close:hover, .plan-list .close:focus, .plan-list .close * {
+
+.plan-list .close:hover,
+.plan-list .close:focus:hover,
+.plan-list .close:focus:focus,
+.plan-list .close:focus:disabled,
+.plan-list .close:focus.active,
+.plan-list .close:focus:active,
+.open>.dropdown-toggle.plan-list .close:focus,
+.plan-list .close:focus:active:focus,
+.plan-list .close:focus:active:hover,
+.plan-list .close:hover,
+.plan-list .close:focus,
+.plan-list .close * {
     background: none !important;
     border-color: transparent !important;
     border: 0px !important;
     box-shadow: none !important;
 }
+
 .custom-datepicker {
     position: relative;
 }
+
 .custom-datepicker i {
     position: absolute;
     left: 10px;
     top: 4px;
     z-index: 9;
 }
+
 .custom-datepicker input {
     background: $white !important;
     font-size: 12px;
@@ -1683,26 +1715,43 @@ modal-container.modal {
     padding-left: 15px !important;
     border: 1px solid $gainsboro;
 }
+
 .custom-datepicker i img {
     width: 12px;
 }
+
 .subscription-collapse .panel-group {
     margin-bottom: 0px;
 }
+
 .subscription-collapse.panel {
     border: 0px;
     box-shadow: none;
 }
+
 .subscription-collapse .panel.card.panel-default {
     border: 0px;
     box-shadow: none;
 }
+
 .subscription-collapse .panel.card.panel-default .panel-heading {
     background: no-repeat;
     padding: 0px;
 }
+
 .subscription-collapse .panel-default>.panel-heading+.panel-collapse>.panel-body {
     border: 0px solid;
+}
+.payment-success-modal {
+    transform: translate(0,-0%) !important;
+}
+.payment-success-modal {
+    .payment-img img {
+        width: 80px;
+    }
+}
+.tooltip-box .tooltip {
+    width: 150px;
 }
 /* my css end */
 
@@ -1945,6 +1994,7 @@ fieldset[disabled] .btn-primary:hover {
     color: $white;
     border-color: $chetwode-blue;
 }
+
 .success-btn {
     font-size: 14px;
     background: $success-green;
@@ -1953,9 +2003,11 @@ fieldset[disabled] .btn-primary:hover {
         color: $white;
     }
 }
+
 .btn-round {
     border-radius: 90px;
 }
+
 #actionPane .btn-default {
     background: #e6e6e6;
     color: #333;
@@ -2525,7 +2577,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-cancel:disabled,
-.btn-cancel:disabled:hover{
+.btn-cancel:disabled:hover {
     background: #e4e4e4;
     color: #666;
     border-color: #e4e4e4;
@@ -2758,6 +2810,7 @@ input[type="checkbox"]:checked:after {
 .font-26 {
     font-size: 26px;
 }
+
 .word-wrap {
     word-break: normal;
     white-space: nowrap;
@@ -2965,6 +3018,7 @@ li.no-click {
         width: 25%;
     }
 }
+
 @media only screen and (max-width: 1160px) {
     .template_list {
         width: 33.33%;
@@ -4827,7 +4881,7 @@ label {
     color: #525252;
 }
 
-#manufacture select showGiddhDatepicker{
+#manufacture select showGiddhDatepicker {
     border-radius: 0;
 }
 
@@ -6565,6 +6619,7 @@ table td[class*=col-]:last-child {
 .noHover:hover td {
     background: $white !important;
 }
+
 
 /* .universal-date label {
     color: $white;
@@ -9022,13 +9077,46 @@ input.checkbox-custom[type="checkbox"] {
 .panel-block .panel-body {
     min-height: 350px;
 }
+
+.payment-modal {
+    max-width: 1190px !important;
+    width: 100% !important;
+    padding: 0 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.payment-success-modal {
+    .modal-header {
+        border-radius: 5px 5px 0 0;
+    }
+    .modal-body {
+        text-align: center;
+        padding-top: 40px;
+        padding-bottom: 40px;
+        h4 {
+            font-size: 22px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+    }
+}
+
+
 /*datepicker common css*/
+
 .giddh-datepicker-modal .modal-content {
     background: none !important;
 }
-.giddh-datepicker-modal .modal-body{
+
+.giddh-datepicker-modal .modal-body {
     padding: 0 !important;
 }
+
 ngx-daterangepicker-material {
     // display: none;
     position: absolute;
@@ -9039,11 +9127,12 @@ ngx-daterangepicker-material {
     width: 100% !important;
     max-width: 462px !important;
 }
-.edit-modal{
+
+.edit-modal {
     max-width: 300px;
     margin: 0 auto;
-    .edit-date-modal{
-        h5{
+    .edit-date-modal {
+        h5 {
             color: $gray;
             font-size: 13px;
         }
@@ -9055,29 +9144,30 @@ ngx-daterangepicker-material {
             padding-bottom: 20px;
             border-bottom: 1px solid $whisper-color;
             margin-bottom: 15px;
-            span{
-                img{
-                    width: 20px;
+            span {
+                padding: 5px 10px;
+                i {
+                    color: $gray;
                 }
             }
-            .modal-inside-heading{
+            .modal-inside-heading {
                 display: none;
             }
         }
-        .start-end-date{
-            .start-end-date-d-flex{
+        .start-end-date {
+            .start-end-date-d-flex {
                 display: flex;
                 padding-top: 10px;
-                label{
+                label {
                     position: absolute;
-                    background-color:$white;
+                    background-color: $white;
                     padding: 0 5px;
                     top: -6px;
                     left: 9px;
                     font-size: 12px;
                     color: $gray;
                 }
-                input{
+                input {
                     width: 130px;
                     height: 51px;
                     border: 1px solid $gainsboro;
@@ -9091,7 +9181,7 @@ ngx-daterangepicker-material {
             text-align: right;
             font-size: 14px;
             margin-top: 10px;
-            a{
+            a {
                 color: $deep-sky-blue;
                 padding: 10px 10px;
                 display: inline-block;
@@ -9099,63 +9189,89 @@ ngx-daterangepicker-material {
         }
     }
 }
+
+
 /*notofication css*/
-.HW_badge.HW_visible{
+
+.HW_badge.HW_visible {
     position: absolute;
     top: -23px;
     opacity: 1 !important;
 }
-.HW_badge{
+
+.HW_badge {
     transition: none !important;
     opacity: 1 !important;
     transform: scale(1.0) !important;
     top: -23px !important;
     position: absolute !important;
 }
-.HW_badge_cont{
+
+.HW_badge_cont {
     visibility: visible !important;
     width: auto !important;
 }
-.HW_badge{
+
+.HW_badge {
     background: $red;
     width: 14px !important;
     height: 14px !important;
     line-height: 14px !important;
 }
+
+
 /*notofication css end*/
-.setting-sidebar-open .desktop-header{
+
+.setting-sidebar-open .desktop-header {
     padding-left: 215px;
 }
-.setting-data , .setting-sidebar-open .white-row{
+
+.setting-data,
+.setting-sidebar-open .white-row {
     padding-left: 230px !important;
 }
+
 // .setting-sidebar-open .white-row{
 //     margin-left: 0;
 // }
-.setting-sidebar-open .menu_open .setting-data , .setting-sidebar-open .menu_open .white-row {
+.setting-sidebar-open .menu_open .setting-data,
+.setting-sidebar-open .menu_open .white-row {
     padding-left: 15px !important;
 }
-.date-field{
+
+.date-field {
     flex-direction: column;
 }
-.mobile-home{
+
+.mobile-home {
     background-color: $lavender;
-    .padding-top-fixed-mobile, .padding-top-fixed, .desktop-header{
+    .padding-top-fixed-mobile,
+    .padding-top-fixed,
+    .desktop-header {
         display: none;
     }
-    #content_wrapper{
+    #content_wrapper {
         background-color: $lavender;
     }
 }
-.icon-home-icon{
+
+.icon-home-icon {
     color: $white;
 }
+.HW_badge.HW_softHidden{
+    display: none !important;
+}
+span#HW_badge_cont:nth-child(3){
+    display: none;
+}
 /* responsive */
+
 @media (max-width: 1440px) {
     .font-xxlarge {
         font-size: 20px;
     }
 }
+
 @media (max-width: 1024px) {
     .all-features-modal {
         width: 90%;
@@ -9286,7 +9402,6 @@ ngx-daterangepicker-material {
         left: -16px;
         right: 0;
     }
-    
 }
 
 @media (max-width: 840px) {
@@ -9376,6 +9491,7 @@ ngx-daterangepicker-material {
     table.table td.text-center.empty_table {
         padding: 5px 10px 5px 0% !important;
         text-align: center;
+        width: 100%;
     }
     #middleBody .horizontal-form,
     .view_forms .horizontal-form {
@@ -9390,7 +9506,6 @@ ngx-daterangepicker-material {
     .table>thead>tr>th {
         white-space: initial !important;
     }
-
     .universal-date label.btn.btn-link {
         display: none;
     }
@@ -9446,12 +9561,13 @@ ngx-daterangepicker-material {
     .setting-sidebar-open .desktop-header {
         padding-left: 0;
     }
-    .setting-sidebar-open .setting-data, .setting-sidebar-open .white-row{
+    .setting-sidebar-open .setting-data,
+    .setting-sidebar-open .white-row {
         padding-left: 15px !important;
     }
-    .overlay-cal{
-        .modal-body{
-         padding: 50px 15px;
+    .overlay-cal {
+        .modal-body {
+            padding: 50px 15px;
         }
     }
     .btn {
@@ -9598,7 +9714,7 @@ ngx-daterangepicker-material {
     }
     .ledg-head .custom-tabs .nav.nav-tabs {
         left: 0;
-        top: 92px;
+        top: 90px;
         padding-top: 0 !important;
         position: fixed;
     }
@@ -9694,34 +9810,35 @@ ngx-daterangepicker-material {
     //     padding-top: 126px;
     // }
     .padding-top-fixed-mobile {
-        padding-top:90px;
+        padding-top: 90px;
     }
-    .page-has-tabs .padding-top-fixed-mobile , .on-user-page .padding-top-fixed-mobile{
+    .page-has-tabs .padding-top-fixed-mobile,
+    .on-user-page .padding-top-fixed-mobile {
         padding-top: 130px !important;
     }
-    .page-has-tabs.setting-sidebar-open .padding-top-fixed-mobile{
-        padding-top:85px !important;
+    .page-has-tabs.setting-sidebar-open .padding-top-fixed-mobile {
+        padding-top: 85px !important;
     }
-   .on-setting-page .padding-top-fixed-mobile{
+    .on-setting-page .padding-top-fixed-mobile {
         padding-top: 90px !important;
     }
     ngx-daterangepicker-material {
         position: fixed;
-        top:0 !important;
+        top: 0 !important;
         left: 0 !important;
         z-index: 999;
         width: 100%;
         height: 100vh;
         max-width: 100% !important;
     }
-    .giddh-datepicker-modal{
+    .giddh-datepicker-modal {
         position: fixed;
         width: 100%;
         left: 0;
         top: 0;
         margin: 0;
     }
-    .edit-modal{
+    .edit-modal {
         max-width: 100%;
         margin: 0;
         display: flex;
@@ -9729,65 +9846,70 @@ ngx-daterangepicker-material {
         align-items: center;
         height: 100vh;
         width: 100%;
-        &:after{
+        padding-top: 40px;
+        &:after {
             position: absolute;
             content: '';
-            background-color: rgba(0,0,0,0.4);
+            background-color: rgba(0, 0, 0, 0.4);
             width: 100% !important;
-            height:125%;
+            height: 125%;
             z-index: -1;
             left: 0;
             top: 0;
         }
     }
-    .hide-scroll-body:last-child .modal{
+    .hide-scroll-body:last-child .modal {
         z-index: 9993;
     }
-    .page-has-tabs .invoice-genrate-container, 
+    .page-has-tabs .invoice-genrate-container,
     .page-has-tabs .invoice-container,
     .page-has-tabs .proforma-container,
     .page-has-tabs .proforma-container,
-    .page-has-tabs .recurring-container
-    {
+    .page-has-tabs .recurring-container {
         padding-top: 15px !important;
     }
     .page-has-tabs #setting-tab app-invoice-setting .tab-container .nav.nav-tabs,
-    .on-user-page .search-subscription{
+    .on-user-page .search-subscription {
         margin-top: 15px !important;
     }
-    .page-has-tabs .recurring-container{
+    .page-has-tabs .recurring-container {
         margin-top: 0px !important;
     }
-    .on-user-page  .user-detail-page.company-page{
+    .on-user-page .user-detail-page.company-page {
         padding-top: 15px !important;
     }
-    .HW_frame_cont.HW_visible.HW_bottom{
+    .HW_frame_cont.HW_visible.HW_bottom {
         right: 0 !important;
         left: auto !important;
         max-width: 320px;
         width: 100%;
     }
-    .on-setting-page .setting-menu-icon, .on-user-page .setting-menu-icon{
+    .on-setting-page .setting-menu-icon,
+    .on-user-page .setting-menu-icon {
         display: inline-flex !important;
     }
-    .setting-data{
+    .setting-data {
         padding-left: 15px !important;
     }
-    .mobile-setting-sidebar{
+    .mobile-setting-sidebar {
         position: relative;
         overflow-y: hidden;
     }
     .mobile-setting-sidebar:after {
         position: absolute;
         content: '';
-        background-color: rgba(0,0,0,0.5);
+        background-color: rgba(0, 0, 0, 0.5);
         width: 100%;
         height: 100vh;
         top: 0;
         left: 0;
         z-index: 999;
     }
+    .ledg-head .custom-tabs .nav.nav-tabs {
+        padding-top: 0 !important;
+    }
 }
+
 @media (max-width: 575px) {
     .daterangepicker.ltr .ranges {
         float: left;
@@ -9807,6 +9929,7 @@ ngx-daterangepicker-material {
         padding-top: 0;
     }
 }
+
 @media (max-width: 500px) {
     .daterangepicker.dropdown-menu {
         max-width: 100% !important;
@@ -9821,8 +9944,8 @@ ngx-daterangepicker-material {
         padding-right: 20px;
     }
     .pagination>li>a,
-        .pagination>li>span {
-            padding: 6px 6px;
+    .pagination>li>span {
+        padding: 6px 6px;
     }
 }
 
@@ -10022,22 +10145,24 @@ ngx-daterangepicker-material {
     .invoice-modal-content .modal-dialog {
         margin: 70px auto;
     }
-    .edit-modal.modal-small{
+    .edit-modal.modal-small {
         display: none;
     }
 }
-@media(min-width:480px) and (max-width:667px){
-    .edit-modal{
+
+@media(min-width:480px) and (max-width:667px) {
+    .edit-modal {
         margin: 20px auto;
-        .edit-date-modal{
+        padding-top: 0;
+        .edit-date-modal {
             padding: 0 15px;
-            .modal-outside-heading{
+            .modal-outside-heading {
                 display: none;
             }
-            .edit-date-container{
+            .edit-date-container {
                 display: flex;
                 align-items: flex-start;
-                .modal-date-range{
+                .modal-date-range {
                     flex-direction: column;
                     justify-content: flex-start;
                     align-items: flex-start;
@@ -10046,25 +10171,24 @@ ngx-daterangepicker-material {
                     margin-bottom: 0;
                     border-right: 1px solid $gainsboro;
                     margin-right: 15px;
-                    p{
+                    p {
                         font-size: 20px;
                         margin-top: 15px;
                         width: 110px;
                         margin-bottom: 20px;
                     }
-                    img{
+                    img {
                         bottom: -40px;
                         padding-bottom: 10px;
                     }
-                    .modal-inside-heading{
+                    .modal-inside-heading {
                         display: block;
                     }
                 }
-                .start-end-date{
+                .start-end-date {
                     padding: 10px 5px 0;
-
                 }
-                .button-wrapper{
+                .button-wrapper {
                     position: absolute;
                     bottom: 2px;
                     right: 15px;
@@ -10074,7 +10198,10 @@ ngx-daterangepicker-material {
         }
     }
 }
+
+
 /*** iPhone and iOS Form Input Zoom Fixes ***/
+
 
 /* Fix Input Zoom on devices older than iPhone 5: */
 
@@ -10158,6 +10285,7 @@ ngx-daterangepicker-material {
         font-size: 16px;
     }
 }
+
 .giddh-datepicker-modal {
     margin: 0 !important;
 }

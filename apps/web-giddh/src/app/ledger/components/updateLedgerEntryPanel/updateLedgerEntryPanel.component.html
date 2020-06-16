@@ -488,7 +488,7 @@
                             <span auto-close="outsideClick">
                                 <update-ledger-tax-control #tax [taxes]="vm.companyTaxesList$ | async"
                                                            [customHeading]="shouldShowAdvanceReceiptMandatoryFields ? 'Tax on Advance' : isRcmEntry ? 'Tax (RCM)' : ''"
-                                                           [isMandatory]="shouldShowAdvanceReceiptMandatoryFields || isRcmEntry"
+                                                           [isMandatory]="isRcmEntry"
                                                            [date]="vm.selectedLedger.entryDate" [taxRenderData]="vm.taxRenderData"
                                                            [totalForTax]="vm.totalForTax" [prefixInput]="vm.selectedPrefixForCurrency"
                                                            [maskInput]="vm.inputMaskFormat" [suffixInput]="vm.selectedSuffixForCurrency"
