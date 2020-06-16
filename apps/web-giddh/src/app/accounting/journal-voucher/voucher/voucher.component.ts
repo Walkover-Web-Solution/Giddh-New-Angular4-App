@@ -85,7 +85,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChild('dateField') public dateField: ElementRef;
     @ViewChild('narrationBox') public narrationBox: ElementRef;
     @ViewChild('chequeNumberInput') public chequeNumberInput: ElementRef;
-    @ViewChild('chequeClearanceDateInput') public chequeClearanceDateInput: ElementRef;
+    @ViewChild('chequeClearanceInputField') public chequeClearanceInputField: ElementRef;
     @ViewChild('chqFormSubmitBtn') public chqFormSubmitBtn: ElementRef;
     @ViewChild('submitButton') public submitButton: ElementRef;
     @ViewChild('resetButton') public resetButton: ElementRef;
@@ -1117,9 +1117,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             return setTimeout(() => {
                 if (fieldType === 'chqNumber') {
                     datePickerField.show();
+                    this.chequeClearanceInputField.nativeElement.focus();
                 } else if (fieldType === 'chqDate') {
                     datePickerField.hide();
-                    this.chqFormSubmitBtn.nativeElement.focus();
+                    if (!event.shiftKey) {
+                        this.chqFormSubmitBtn.nativeElement.focus();
+                    }
                 }
             }, 100);
         }
