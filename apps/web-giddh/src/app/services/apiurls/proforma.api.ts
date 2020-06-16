@@ -18,8 +18,8 @@ export const ESTIMATES_API = {
     getAll: `${baseUrl}all?`,
     base: `${baseUrlV3}`,
     download: `${baseUrlV3}download?fileType=:fileType`,
-    generateInvoice: `v3/company/:companyUniqueName/accounts/:accountUniqueName/proformas/generate-via-estimate`,
-    generateProforma: `${baseUrlV3}generate-via-estimate`,
+    generateInvoice: `/company/:companyUniqueName/vouchers/accounts/:accountUniqueName/v3/generate-via-estimate`,
+    generateProforma: `v3/company/:companyUniqueName/accounts/:accountUniqueName/proformas/generate-via-estimate`,
     updateAction: `${baseUrlV3}action`,
     getVersions: `${baseUrlV2}versions/all?`,
     getVersion: `${baseUrlV2}versions`
