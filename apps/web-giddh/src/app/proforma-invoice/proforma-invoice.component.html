@@ -514,7 +514,7 @@
                 <!-- region normal view -->
                 <section class="staticInvoiceTable salseInvoicetable clearfix mrB2 whiteBg container-fluid ng-tns-c8-0" *ngIf="!isMobileView">
 
-                    <ng-container *ngIf="isSalesInvoice || isCashInvoice || isCreditNote || isDebitNote">
+                    <ng-container *ngIf="isSalesInvoice || isCashInvoice || isCreditNote || isDebitNote || isProformaInvoice || isEstimateInvoice">
                         <!-- switch currency on click, remaining functional work , UI is completed -->
                         <div class="switch-currency" *ngIf="isMulticurrencyAccount && !showSwitchedCurr">
                             <span class="left-currency">1 {{companyCurrencyName}}</span>
