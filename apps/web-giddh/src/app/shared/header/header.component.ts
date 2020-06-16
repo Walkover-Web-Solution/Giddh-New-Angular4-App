@@ -305,6 +305,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     });
                     configDatePicker.ranges = modifiedRanges;
                 }
+                this.datePickerOptions = configDatePicker;
             }
         });
         // Reset old stored application date
