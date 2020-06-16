@@ -419,7 +419,10 @@ a[vr-item]:focus {
 .d-inline-block {
     display: inline-block !important;
 }
-
+.notification{
+    padding: 0 !important;
+    margin-right: 10px !important;
+}
 .universal-date li {
     display: inline-block;
     position: relative;
@@ -429,13 +432,16 @@ a[vr-item]:focus {
     img{
         vertical-align: bottom;
         display: inline-block;
+        position: relative;
+        left: 16px;
+        padding: 0 20px;
     }
 }
 
 .universal-date li input {
     padding-left: 29px !important;
     color: #fff !important;
-    padding-right: 5px !important;
+    padding-right: 0 !important;
     text-align: left;
 }
 
@@ -499,8 +505,8 @@ span.icon-support.dropdown-toggle {
     height: 32px;
 }
 .date-range-picker{
-    max-width: 205px;
-    min-width: 205px;
+    max-width: 210px;
+    min-width: 210px;
 }
 
 .other a {
@@ -745,6 +751,15 @@ ul.sub-list {
     
 }
 @media (max-width: 767px) {
+.notification{
+    margin-right: 0 !important;
+}
+.universal-date .btn-link {
+    border-bottom: none;
+    text-align: left;
+    height: 24px !important;
+    display: none !important;
+}
 .close-2 {
     top: 65px;
     right: 66px;
@@ -852,6 +867,9 @@ ul.sub-list {
     .cText.head-nav {
         display: none;
     }
+    .universal-date li{
+        display: block;
+    }
     .universal-date li input {
        height: 32px;
     }
@@ -873,7 +891,7 @@ ul.sub-list {
     .date-range-picker{
         max-width: 190px;
         min-width: 190px;
-        font-size: 13px !important;
+        font-size: 12px !important;
     }
 }
 
@@ -915,12 +933,6 @@ ul.sub-list {
     .universal-date li {
         display: block;
         position: relative;
-    }
-    .universal-date .btn-link {
-        border-bottom: none;
-        text-align: left;
-        height: 24px !important;
-        display: none;
     }
     .lower-layer-header {
         padding-top: 5px;

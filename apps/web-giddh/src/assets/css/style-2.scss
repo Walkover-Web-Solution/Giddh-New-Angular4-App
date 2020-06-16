@@ -9191,21 +9191,23 @@ ngx-daterangepicker-material {
 
 .HW_badge.HW_visible {
     position: absolute;
-    top: -23px;
-    opacity: 1 !important;
+    top: 2px;
+    left: 12px;
 }
 
 .HW_badge {
     transition: none !important;
-    opacity: 1 !important;
     transform: scale(1.0) !important;
-    top: -23px !important;
     position: absolute !important;
 }
 
 .HW_badge_cont {
     visibility: visible !important;
     width: auto !important;
+    top: -25px;
+    width: 30px !important;
+    display: flex !important;
+    left: 28px !important;
 }
 
 .HW_badge {
@@ -9258,7 +9260,7 @@ ngx-daterangepicker-material {
     display: none !important;
 }
 span#HW_badge_cont:nth-child(3){
-    display: none;
+    display: none !important;
 }
 /* responsive */
 
@@ -9554,6 +9556,9 @@ span#HW_badge_cont:nth-child(3){
 }
 
 @media (max-width: 767px) {
+    .HW_badge_cont {
+        left: -6px !important;
+    }
     .setting-sidebar-open .desktop-header {
         padding-left: 0;
     }
