@@ -181,6 +181,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public condition2: boolean = false;
     public visibleTransactionTypeMobile: string = "all";
     public ledgerTransactions: any;
+    public datePickerOptions: any;
 
     /* New Datepicker Variables */
 

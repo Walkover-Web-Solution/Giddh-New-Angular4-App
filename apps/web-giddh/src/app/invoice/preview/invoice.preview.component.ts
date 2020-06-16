@@ -26,7 +26,7 @@ import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '..
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../services/invoice.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { ModalDirective } from 'ngx-bootstrap';
 import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
@@ -54,6 +54,7 @@ import { PurchaseRecordActions } from '../../actions/purchase-record/purchase-re
 import { Location } from '@angular/common';
 import { AdvanceReceiptAdjustment, AdjustAdvancePaymentModal } from '../../models/api-models/AdvanceReceiptsAdjust';
 import { SalesService } from '../../services/sales.service';
+import { GeneralService } from '../../services/general.service';
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
 /** Multi currency modules includes Cash/Sales Invoice and CR/DR note */
@@ -89,12 +90,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild(InvoicePaymentModelComponent) public invoicePaymentModelComponent: InvoicePaymentModelComponent;
 
     public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
-    public bsConfig: Partial<BsDatepickerConfig> = {
-        showWeekNumbers: false,
-        dateInputFormat: 'DD-MM-YYYY',
-        rangeInputFormat: 'DD-MM-YYYY',
-        containerClass: 'theme-green myDpClass'
-    };
     public base64Data: string;
     public selectedInvoice: ReceiptItem;
     public invoiceSearchRequest: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
@@ -121,56 +116,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     public showCustomerSearch = false;
     public showProformaSearch = false;
-    public selectedDateRange: any;
-    public datePickerOptions: any = {
-        hideOnEsc: true,
-        // parentEl: '#dateRangePickerParent',
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'This Month to Date': [
-                moment().startOf('month'),
-                moment()
-            ],
-            'This Quarter to Date': [
-                moment().quarter(moment().quarter()).startOf('quarter'),
-                moment()
-            ],
-            'This Financial Year to Date': [
-                moment().startOf('year').subtract(9, 'year'),
-                moment()
-            ],
-            'This Year to Date': [
-                moment().startOf('year'),
-                moment()
-            ],
-            'Last Month': [
-                moment().subtract(1, 'month').startOf('month'),
-                moment().subtract(1, 'month').endOf('month')
-            ],
-            'Last Quater': [
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-            ],
-            'Last Financial Year': [
-                moment().startOf('year').subtract(10, 'year'),
-                moment().endOf('year').subtract(10, 'year')
-            ],
-            'Last Year': [
-                moment().startOf('year').subtract(1, 'year'),
-                moment().endOf('year').subtract(1, 'year')
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
-    };
     public universalDate: Date[];
     public universalDate$: Observable<any>;
     public actionOnInvoiceSuccess$: Observable<boolean>;
@@ -244,6 +189,20 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     /** To check is selected account/customer have advance receipts */
     public isAccountHaveAdvanceReceipts: boolean = false;
 
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOptions: any;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = {x: 0, y: 0};
+    /* This will hold the univeral date object */
+    public universalDateObj: any;
+
     constructor(
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
@@ -262,14 +221,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private _invoiceBulkUpdateService: InvoiceBulkUpdateService,
         private location: Location,
         private salesService: SalesService,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        private generalService: GeneralService
     ) {
         this.advanceReceiptAdjustmentData = null;
         this.invoiceSearchRequest.page = 1;
         this.invoiceSearchRequest.count = PAGINATION_LIMIT;
         this.invoiceSearchRequest.entryTotalBy = '';
-        this.invoiceSearchRequest.from = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
-        this.invoiceSearchRequest.to = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
         this.invoiceSearchRequest.accountUniqueName = '';
         this.invoiceSearchRequest.invoiceNumber = '';
         this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
@@ -277,18 +235,64 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.isGetAllRequestInProcess$ = this.store.select(p => p.receipt.isGetAllRequestInProcess).pipe(takeUntil(this.destroyed$));
         this.exportInvoiceRequestInProcess$ = this.store.select(p => p.invoice.exportInvoiceInprogress).pipe(takeUntil(this.destroyed$));
         this.exportedInvoiceBase64res$ = this.store.select(p => p.invoice.exportInvoicebase64Data).pipe(takeUntil(this.destroyed$));
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.select(state => state.session.applicationDate).pipe(takeUntil(this.destroyed$));
         this.voucherDetails$ = this.store.pipe(select(s => s.receipt.voucher), takeUntil(this.destroyed$));
-        //this._invoiceService.getTotalAndBalDue();
     }
-    openModal(template: TemplateRef<any>) {
+
+    public openModal(template: TemplateRef<any>): void {
         this.modalRef = this.modalService.show(template);
     }
+
     public ngOnInit() {
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).subscribe(result => {
             this.isMobileView = result.matches;
+        });
+
+        /* This will get the date range picker configurations */
+        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
+            if (config) {
+                this.datePickerOptions = config;
+            }
+        });
+
+        /* Observer to store universal from/to date */
+        this.universalDate$.subscribe(dateObj => {
+            if (dateObj) {
+                this.universalDateObj = _.cloneDeep(dateObj);
+
+                this.selectedDateRange = { startDate: moment(this.universalDateObj[0]), endDate: moment(this.universalDateObj[1]) };
+                this.selectedDateRangeUi = moment(this.universalDateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+
+                if (localStorage.getItem('universalSelectedDate')) {
+                    let universalStorageData = localStorage.getItem('universalSelectedDate').split(',');
+                    if ((moment(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === moment(this.universalDateObj[0]).format(GIDDH_DATE_FORMAT)) && (moment(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === moment(this.universalDateObj[1]).format(GIDDH_DATE_FORMAT))) {
+                        if (window.localStorage && localStorage.getItem('invoiceSelectedDate')) {
+                            let storedSelectedDate = JSON.parse(localStorage.getItem('invoiceSelectedDate'));
+
+                            if (storedSelectedDate.fromDates && storedSelectedDate.toDates) {
+                                this.invoiceSearchRequest.from = storedSelectedDate.fromDates;
+                                this.invoiceSearchRequest.to = storedSelectedDate.toDates;
+                                this.isUniversalDateApplicable = false;
+                            }
+                        } else {
+                            this.invoiceSearchRequest.from = moment(this.universalDateObj[0]).format(GIDDH_DATE_FORMAT);
+                            this.invoiceSearchRequest.to = moment(this.universalDateObj[1]).format(GIDDH_DATE_FORMAT);
+                            this.isUniversalDateApplicable = true;
+                        }
+                    } else {
+                        this.invoiceSearchRequest.from = moment(this.universalDateObj[0]).format(GIDDH_DATE_FORMAT);
+                        this.invoiceSearchRequest.to = moment(this.universalDateObj[1]).format(GIDDH_DATE_FORMAT);
+                        this.isUniversalDateApplicable = true;
+                    }
+                } else {
+                    this.invoiceSearchRequest.from = moment(this.universalDateObj[0]).format(GIDDH_DATE_FORMAT);
+                    this.invoiceSearchRequest.to = moment(this.universalDateObj[1]).format(GIDDH_DATE_FORMAT);
+                    this.isUniversalDateApplicable = true;
+                }
+                this.getVoucher(this.isUniversalDateApplicable);
+            }
         });
 
         this.advanceSearchFilter.page = 1;
@@ -363,7 +367,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 if (res[0]) {
                     this.itemsListForDetails = [];
                     res[0].items = res[0].items.map((item: ReceiptItem) => {
-                        let dueDate = item.dueDate ? moment(item.dueDate, 'DD-MM-YYYY') : null;
+                        let dueDate = item.dueDate ? moment(item.dueDate, GIDDH_DATE_FORMAT) : null;
 
                         if (dueDate) {
                             if (dueDate.isAfter(moment()) || ['paid', 'cancel'].includes(item.balanceStatus)) {
@@ -468,88 +472,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.invoiceSetting = settings;
         });
 
-        //--------------------- Refresh report data according to universal date--------------------------------
-        this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (a) => {
-
-            if (a) {
-                if (localStorage.getItem('universalSelectedDate')) {
-
-                    let universalStorageData = localStorage.getItem('universalSelectedDate').split(',');
-                    if ((moment(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === moment(a[0]).format(GIDDH_DATE_FORMAT)) && (moment(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === moment(a[1]).format(GIDDH_DATE_FORMAT))) {
-                        if (window.localStorage && localStorage.getItem('invoiceSelectedDate')) {
-                            let storedSelectedDate = JSON.parse(localStorage.getItem('invoiceSelectedDate'));
-                            // this.showAdvanceSearchIcon = true;
-                            this.datePickerOptions = {
-                                ...this.datePickerOptions,
-                                startDate: moment(storedSelectedDate.fromDates, 'DD-MM-YYYY').toDate(),
-                                endDate: moment(storedSelectedDate.toDates, 'DD-MM-YYYY').toDate(),
-                                chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
-                            };
-                            // assign dates
-                            // this.assignStartAndEndDateForDateRangePicker(storedSelectedDate.fromDates, storedSelectedDate.toDates);
-                            if (storedSelectedDate.fromDates && storedSelectedDate.toDates) {
-                                this.invoiceSearchRequest.from = storedSelectedDate.fromDates;
-                                this.invoiceSearchRequest.to = storedSelectedDate.toDates;
-                                this.isUniversalDateApplicable = false;
-                            }
-
-                        } else {
-                            this.datePickerOptions = {
-                                ...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
-                                endDate: moment(a[1], 'DD-MM-YYYY').toDate(),
-                                chosenLabel: a[2]
-                            };
-
-                            // assign dates
-                            // this.assignStartAndEndDateForDateRangePicker(a[0], a[1]);
-
-                            this.invoiceSearchRequest.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                            this.invoiceSearchRequest.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
-                            this.isUniversalDateApplicable = true;
-                        }
-                    } else {
-                        this.datePickerOptions = {
-                            ...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
-                            endDate: moment(a[1], 'DD-MM-YYYY').toDate(),
-                            chosenLabel: a[2]
-                        };
-
-                        // assign dates
-                        // this.assignStartAndEndDateForDateRangePicker(a[0], a[1]);
-
-                        this.invoiceSearchRequest.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                        this.invoiceSearchRequest.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
-                        this.isUniversalDateApplicable = true;
-                    }
-                } else {
-                    this.datePickerOptions = {
-                        ...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
-                        endDate: moment(a[1], 'DD-MM-YYYY').toDate(),
-                        chosenLabel: a[2]
-                    };
-
-                    // assign dates
-                    // this.assignStartAndEndDateForDateRangePicker(a[0], a[1]);
-
-                    this.invoiceSearchRequest.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                    this.invoiceSearchRequest.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
-                    this.isUniversalDateApplicable = true;
-                }
-            }
-            //  this.getVoucherCount++;
-            //     if (this.getVoucherCount > 1) {
-            //       this.getVoucher(true);
-            //     }
-            this.getVoucher(true);
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
-
         this.actionOnInvoiceSuccess$.subscribe((a) => {
             if (a) {
                 this.selectedInvoiceForDetails = null;
                 this.getVoucher(this.isUniversalDateApplicable);
             }
         });
-        // this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(''), this.selectedVoucher));
 
         this.selectedCompany$ = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
             if (!companies) {
@@ -569,19 +497,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if (selectedCmp) {
                 this.activeFinancialYear = selectedCmp.activeFinancialYear;
                 this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
-                if (this.activeFinancialYear) {
-                    this.datePickerOptions.ranges['This Financial Year to Date'] = [
-                        moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
-                        moment()
-                    ];
-                    this.datePickerOptions.ranges['Last Financial Year'] = [
-                        moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
-                        moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year')
-                    ];
-                }
             }
             return selectedCmp;
         })).pipe(takeUntil(this.destroyed$));
+
         this.selectedCompany$.subscribe(cmp => {
             if (cmp) {
                 this.activeFinancialYear = cmp.activeFinancialYear;
@@ -1287,23 +1206,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.invoiceSearchRequest.count = PAGINATION_LIMIT;
         this.invoiceSearchRequest.voucherNumber = '';
 
-        let universalDate;
-        // get application date
-        this.universalDate$.pipe(take(1)).subscribe(date => {
-            universalDate = date;
-        });
-
         // set date picker date as application date
-        if (universalDate.length > 1) {
-            this.invoiceSearchRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-            this.invoiceSearchRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-            this.datePickerOptions = {
-                ...this.datePickerOptions,
-                startDate: moment(new Date(universalDate[0]), 'DD-MM-YYYY').toDate(),
-                endDate: moment(new Date(universalDate[1]), 'DD-MM-YYYY').toDate(),
-                chosenLabel: universalDate[2]
-            };
-            // this.assignStartAndEndDateForDateRangePicker(universalDate[0], universalDate[1]);
+        if (this.universalDateObj.length > 1) {
+            this.invoiceSearchRequest.from = moment(this.universalDateObj[0]).format(GIDDH_DATE_FORMAT);
+            this.invoiceSearchRequest.to = moment(this.universalDateObj[1]).format(GIDDH_DATE_FORMAT);
+            
+            this.selectedDateRange = { startDate: moment(this.universalDateObj[0]), endDate: moment(this.universalDateObj[1]) };
+            this.selectedDateRangeUi = moment(this.universalDateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
         }
         this.getVoucher(this.isUniversalDateApplicable);
     }
@@ -1638,5 +1547,62 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             });
         }
         return newAccountUniqueName;
+    }
+
+    /**
+     * This will show the datepicker
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public showGiddhDatepicker(element: any): void {
+        if(element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileView })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof InvoicePreviewComponent
+     */
+    public dateSelectedCallback(value: any): void {
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+
+        this.hideGiddhDatepicker();
+
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            
+            this.invoiceSearchRequest.from = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.invoiceSearchRequest.to = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+
+            this.showAdvanceSearchIcon = true;
+            this.invoiceSelectedDate.fromDates = this.invoiceSearchRequest.from;
+            this.invoiceSelectedDate.toDates = this.invoiceSearchRequest.to;
+
+            if (window.localStorage) {
+                localStorage.setItem('invoiceSelectedDate', JSON.stringify(this.invoiceSelectedDate));
+            }
+            this.getVoucher(false);
+        }
     }
 }

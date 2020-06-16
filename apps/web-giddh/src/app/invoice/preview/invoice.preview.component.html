@@ -7,8 +7,7 @@
                 <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
                     <div class="input-group">
                         <span class="inputWrapper">
-                            <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
-                                (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
+                            <input type="text" name="dateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"  class="form-control giddh-datepicker" />
                         </span>
                     </div>
                     <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
@@ -20,7 +19,6 @@
                     </div>
                 </div>
             </form>
-
 
             <!-- Invoice filter section ends -->
             <div class="clear-filter" *ngIf="showAdvanceSearchIcon" (click)="resetAdvanceSearch()">
@@ -756,3 +754,26 @@
     </div>
 </div>
 <!-- end -->
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions.ranges"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            [locale]="{applyLabel: 'Done'}"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+            [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>
