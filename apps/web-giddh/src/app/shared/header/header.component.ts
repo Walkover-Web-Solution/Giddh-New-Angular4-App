@@ -291,21 +291,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         /* This will get the date range picker configurations */
         this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
             if (config) {
-                // removed today and yesterday option from universal datepicker
-                // if (config && config.ranges && config.ranges.length && config.ranges[0] && config.ranges[0].name && config.ranges[0].name === 'Today') {
-                //         delete config.ranges[0];
-                // }
-
-                if (config && config.ranges && config.ranges[0] && config.ranges[0].name === 'Today' && config.ranges[1].name === 'Yesterday') {
-                    delete config.ranges[0];
-                    delete config.ranges[1];
+                let configDatePicker = cloneDeep(config);
+                if (configDatePicker && configDatePicker.ranges) {
                     let modifiedRanges = [];
-                    config.ranges.forEach(item => {
-                        modifiedRanges.push(item);
+                    configDatePicker.ranges.forEach(item => {
+                        if (item.name !== 'Today' && item.name !== 'Yesterday') {
+                            modifiedRanges.push(item);
+                        }
                     });
-                     config.ranges = modifiedRanges;
+                    configDatePicker.ranges = modifiedRanges;
                 }
-                   this.datePickerOptions = config;
+                this.datePickerOptions = configDatePicker;
             }
         });
         // Reset old stored application date
