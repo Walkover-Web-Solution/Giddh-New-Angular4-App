@@ -1155,11 +1155,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public showExportLedgerModal(): void {
-        if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.datePickerOptions && this.datePickerOptions.startDate && this.datePickerOptions.endDate) {
+        if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.selectedDateRange && this.selectedDateRange.startDate && this.selectedDateRange.endDate) {
             this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                 page: 0,
                 dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
-                    bsRangeValue: [this.datePickerOptions.startDate, this.datePickerOptions.endDate]
+                    bsRangeValue: [this.selectedDateRange.startDate, this.selectedDateRange.endDate]
                 })
             });
         }
