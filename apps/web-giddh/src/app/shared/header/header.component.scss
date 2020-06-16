@@ -419,7 +419,10 @@ a[vr-item]:focus {
 .d-inline-block {
     display: inline-block !important;
 }
-
+.notification{
+    padding: 0 !important;
+    margin-right: 10px !important;
+}
 .universal-date li {
     display: inline-block;
     position: relative;
@@ -429,6 +432,9 @@ a[vr-item]:focus {
     img{
         vertical-align: bottom;
         display: inline-block;
+        position: relative;
+        left: 16px;
+        padding: 0 20px;
     }
 }
 
@@ -749,6 +755,26 @@ ul.sub-list {
     
 }
 @media (max-width: 767px) {
+<<<<<<< HEAD
+=======
+.notification{
+    margin-right: 0 !important;
+}
+.universal-date .btn-link {
+    border-bottom: none;
+    text-align: left;
+    height: 24px !important;
+    display: none !important;
+}
+.close-2 {
+    top: 65px;
+    right: 66px;
+    background-color: $white;
+    width: 35px;
+    height: 35px;
+    position: fixed;
+}
+>>>>>>> 2006466d2... notification and help sidebar issue fixed
 .desktop-header{
     display: none;
 }
@@ -848,6 +874,9 @@ ul.sub-list {
     .cText.head-nav {
         display: none;
     }
+    .universal-date li{
+        display: block;
+    }
     .universal-date li input {
        height: 32px;
     }
@@ -863,6 +892,17 @@ ul.sub-list {
         width: 30px;
         text-align: center;
     }
+<<<<<<< HEAD
+=======
+    .not-today{
+        margin-right: 5px;
+    }
+    .date-range-picker{
+        max-width: 190px;
+        min-width: 190px;
+        font-size: 12px !important;
+    }
+>>>>>>> 2006466d2... notification and help sidebar issue fixed
 }
 
 @media (min-width: 412px) and (max-width: 840px) {
@@ -897,12 +937,6 @@ ul.sub-list {
     .universal-date li {
         display: block;
         position: relative;
-    }
-    .universal-date .btn-link {
-        border-bottom: none;
-        text-align: left;
-        height: 24px !important;
-        display: none;
     }
     .lower-layer-header {
         padding-top: 5px;
