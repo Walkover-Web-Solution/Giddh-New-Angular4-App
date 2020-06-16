@@ -35,7 +35,7 @@ import { createSelector } from "reselect";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../services/general.service';
 
-const MULTI_CURRENCY_MODULES = ['proformas', 'estimates'];
+const VOUCHER_TYPES = ['proformas', 'estimates'];
 
 @Component({
     selector: 'app-proforma-list-component',
@@ -213,7 +213,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                             item.expiredDays = null;
                         }
 
-                        if (MULTI_CURRENCY_MODULES.indexOf(this.voucherType) > -1) {
+                        if (VOUCHER_TYPES.indexOf(this.voucherType) > -1) {
                             item = this.addToolTiptext(item);
                         }
 
@@ -758,7 +758,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             let grandTotalAmountForCompany,
                 grandTotalAmountForAccount;
 
-            if (MULTI_CURRENCY_MODULES.indexOf(this.voucherType) > -1 && item.amount) {
+            if (VOUCHER_TYPES.indexOf(this.voucherType) > -1 && item.amount) {
                 grandTotalAmountForCompany = Number(item.amount.amountForCompany) || 0;
                 grandTotalAmountForAccount = Number(item.amount.amountForAccount) || 0;
             }
