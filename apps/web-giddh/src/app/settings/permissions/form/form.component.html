@@ -1,218 +1,142 @@
 <form name="permissionForm" [formGroup]="permissionForm" [ngClass]="{'permissionForm': isHorizntl}"
     (ngSubmit)="submitPermissionForm()">
 
-    <div class="row mb-15">
-        <div class="col-sm-6">
-           <div class="form-group">
-                <label *ngIf="isLblShow">Unique Name/Email ID</label>
-                <input type="text" name="emailId" formControlName="emailId" placeholder="Unique Name/Email ID"
-                    class="form-control" [attr.readonly]="userdata?.uniqueName" />
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="form-group">
-                <label *ngIf="isLblShow">Role Name</label>
-                <!-- <select name="roleUniqueName" formControlName="roleUniqueName" class="form-control ">
-                <option [value]="role.uniqueName" *ngFor="let role of allRoles">{{role.name}}</option>
-            </select> -->
-                <sh-select placeholder="Select role" formControlName="roleUniqueName" [options]="allRoles"></sh-select>
-            </div>
-        </div>
+    <div class="form-group" style="margin-left:0;">
+        <label *ngIf="isLblShow">Unique Name/Email ID</label>
+        <input type="text" name="emailId" formControlName="emailId" placeholder="Unique Name/Email ID"
+            class="form-control" [attr.readonly]="userdata?.uniqueName" />
     </div>
 
-    <div class="clearfix">
-        <p class="bold font-14 mb-1 d-inline-block middle mr-1">Specific Permission</p>
-        <div class="relative d-inline-block transactions-limit-box">
-            <a href="javascript:void(0)" class="text-gray text-gray pr-1 d-inline-block"><i class="icon-info"></i></a>
-            <div class="transactions-popup">
-                <p class="bold mb-1">Bank Account</p>
-                <p class="font-12 text-gray mb-1"> Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.</p>
-                <a href="javascript:void(0)" class="btn-link bold font-14">More Details</a>
-            </div>
-        </div>
+    <div class="form-group">
+        <label *ngIf="isLblShow">Role Name</label>
+        <!-- <select name="roleUniqueName" formControlName="roleUniqueName" class="form-control ">
+        <option [value]="role.uniqueName" *ngFor="let role of allRoles">{{role.name}}</option>
+    </select> -->
+        <sh-select placeholder="Select role" formControlName="roleUniqueName" [options]="allRoles"></sh-select>
     </div>
-    <div class="d-flex row mb-15 permission-row">
-        <!-- time span -->
-        <div class="form-group col-xs-12" [exclude]="'.time-span-dropdown'" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('timeSpanSection')">
-            <label *ngIf="isLblShow">Time Span</label>
-            <div class="btn-group" [ngClass]="{'open': showTimeSpan, 'btn-group-liq': !isHorizntl}">
-                <button (click)="showTimeSpan = !showTimeSpan" type="button" class="form-control text-left">
-                    {{selectedTimeSpan}}
-                    <span class="pull-right"><span class="fa fa-caret-down"></span></span>
-                </button>
-                <ul class="dropdown-menu mb-1 time-span-dropdown" [ngClass]="{'open': showTimeSpan}">
-                    <li><a class="dropdown-item" href="javascript:void(0)" (click)="isOpenedInModal ? handleTimeSpanChange('daterange'): ''"><div class="item">Date Range</div></a></li>
-                    <li><a class="dropdown-item" href="javascript:void(0)" (click)="isOpenedInModal ? handleTimeSpanChange('pastperiod'): ''"><div class="item">Past Period</div></a></li>
 
-                    <!-- <span class="width-100 d-block mb-1" (click)="isOpenedInModal ? handleTimeSpanChange('daterange'): ''">
+    <!-- time span -->
+    <div class="form-group" [exclude]="'.time-span-dropdown'" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('timeSpanSection')">
+        <label *ngIf="isLblShow">Time Span</label>
+        <div class="btn-group" [ngClass]="{'open': showTimeSpan, 'btn-group-liq': !isHorizntl}">
+            <button (click)="showTimeSpan = !showTimeSpan" type="button" class="form-control text-left ">
+                {{selectedTimeSpan}}
+                <span class="pull-right"><span class="fa fa-caret-down"></span></span>
+            </button>
+            <section class="dropdown-menu custom_dropdown mrB1 time-span-dropdown" [ngClass]="{'open': showTimeSpan}">
+
+                <div class="clearfix pd1 option_box">
+
+                    <span class="pd0 mrR3" (click)="isOpenedInModal ? handleTimeSpanChange('daterange'): ''">
                         <input id="dateRange" class="radio-custom cp ml0" type="radio" name="periodOptions" formControlName="periodOptions" value="daterange">
                         <label for="dateRange" class="radio-custom-label">Date Range</label>
                     </span>
 
-                    <span class="width-100 d-block" (click)="isOpenedInModal ? handleTimeSpanChange('pastperiod'): ''">
+                    <span class="pd0 mrR3" (click)="isOpenedInModal ? handleTimeSpanChange('pastperiod'): ''">
                         <input id="pastPeriod" class="radio-custom cp ml0" type="radio" name="periodOptions" formControlName="periodOptions" value="pastperiod">
                         <label for="pastPeriod" class="radio-custom-label">Past Period</label>
-                    </span>-->
-                </ul>
-            </div>
+                    </span>
+
+                </div>
+
+                <section class="periods container-fluid mrB1"
+                    *ngIf="permissionForm.get('periodOptions').value === 'daterange'">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label>From - To</label>
+                            <input name="DateRangePicker" [bsValue]="dateRangePickerValue"
+                                (bsValueChange)="onSelectDateRange($event)" placeholder="Select Date Range" type="text"
+                                class="form-control" bsDaterangepicker>
+
+                            <!-- <input class="form-control " name="from" formControlName="from" type="text" placeholder="DD-MM-YYYY" /> -->
+                        </div>
+                        <!-- <div class="col-xs-6">
+                <label>To</label>
+                <input class="form-control " name="to" formControlName="to" type="text" placeholder="DD-MM-YYYY" />
+            </div> -->
+                    </div>
+                </section>
+
+                <section class="periods container-fluid mrB1"
+                    *ngIf="permissionForm.get('periodOptions').value === 'pastperiod'">
+                    <label>Select Past Period</label>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <input class="form-control " name="duration" digitsOnlyDirective formControlName="duration"
+                                type="number" placeholder="Number" />
+                        </div>
+                        <div class="col-xs-6 pdL0 lh34">
+                            Days
+                        </div>
+                    </div>
+                </section>
+
+            </section>
         </div>
-        <!-- time span end -->
+    </div>
+    <!-- time span end -->
 
-        <!--  -->
-        <section class="form-group col-xs-12"
-            *ngIf="permissionForm.get('periodOptions').value === 'daterange'">
-                <label>From - To</label>
-                <input name="DateRangePicker" [bsValue]="dateRangePickerValue"
-                    (bsValueChange)="onSelectDateRange($event)" placeholder="Select Date Range" type="text"
-                    class="form-control" bsDaterangepicker>
-        </section>
+    <div class="form-group" [exclude]="'.ip-addresses-dropdown'" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('rangeSpanSection')">
+        <label *ngIf="isLblShow">IP Addresses</label>
+        <div class="btn-group " [ngClass]="{'open': showIPWrap, 'btn-group-liq': !isHorizntl}">
+            <button (click)="showIPWrap = !showIPWrap" type="button" class="form-control text-left ">
+                {{selectedIPRange}}
+                <span class="pull-right"><span class="fa fa-caret-down"></span></span>
+            </button>
+            <section class="dropdown-menu custom_dropdown ip-addresses-dropdown" role="menu" [ngClass]="{'open': showIPWrap}">
+                <div class="clearfix option_box pd1">
 
-        <section class="form-group col-xs-12"
-            *ngIf="permissionForm.get('periodOptions').value === 'pastperiod'">
-            <label>Select Past Period</label>
-            <div class="row">
-                <div class="col-xs-6">
-                    <input class="form-control " name="duration" digitsOnlyDirective formControlName="duration"
-                        type="number" placeholder="Number" />
-                </div>
-                <div class="col-xs-6 pdL0 lh34">
-                    Days
-                </div>
-            </div>
-        </section>
-
-        <div class="form-group col-xs-12" [exclude]="'.ip-addresses-dropdown'" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('rangeSpanSection')">
-            <label *ngIf="isLblShow">IP Addresses</label>
-            <div class="btn-group " [ngClass]="{'open': showIPWrap, 'btn-group-liq': !isHorizntl}">
-                <button (click)="showIPWrap = !showIPWrap" type="button" class="form-control text-left ">
-                    {{selectedIPRange}}
-                    <span class="pull-right"><span class="fa fa-caret-down"></span></span>
-                </button>
-                <ul class="dropdown-menu ip-addresses-dropdown" role="menu" [ngClass]="{'open': showIPWrap}">
-                    <li (click)="isOpenedInModal ? handleIpAddressChange('cidr_range'): ''">
-                        <a href="javascript:void(0)" class="dropdown-item">CIDR Range</a></li>
-                    <li (click)="isOpenedInModal ? handleIpAddressChange('ip_address'): ''">
-                        <a href="javascript:void(0)" class="dropdown-item">
-                        Address</a>
-                    </li>
-                    <!-- <span (click)="isOpenedInModal ? handleIpAddressChange('cidr_range'): ''" class="width-100 d-block mb-1">
+                    <span (click)="isOpenedInModal ? handleIpAddressChange('cidr_range'): ''" class="pd0 mrR3">
                         <input id="cidrRange" class="radio-custom cp ml0" type="radio" name="ipOptions" formControlName="ipOptions"
                         value="cidr_range">
                         <label for="cidrRange" class="radio-custom-label">CIDR Range</label>
                     </span>
 
-                    <span (click)="isOpenedInModal ? handleIpAddressChange('ip_address'): ''" class="width-100 d-block">
+                    <span (click)="isOpenedInModal ? handleIpAddressChange('ip_address'): ''" class="pd0 mrR3">
                         <input id="address" class="radio-custom cp ml0" type="radio" name="ipOptions" formControlName="ipOptions" value="ip_address">
                         <label for="address" class="radio-custom-label">Address</label>
-                    </span> -->
-                </ul>
-            </div>
+                    </span>
+
+                </div>
+
+                <section formArrayName="allowedCidrs" class="iprange container-fluid"
+                    *ngIf="permissionForm.get('ipOptions').value === 'cidr_range'">
+                    <div class="row mrB1"
+                        *ngFor="let item of permissionForm.get('allowedCidrs')['controls']; let i = index; let l = last"
+                        [formGroupName]="i">
+                        <div class="col-xs-11">
+                            <input class="form-control " name="item_{{i}}" formControlName="range" type="text"
+                                placeholder="192.168.1.0/24" />
+                        </div>
+                        <div class="pull-left lh34">
+                            <i *ngIf="!l" (click)="delRow('allowedCidrs', i, $event)"
+                                class="fa fa-trash-o cursor-pointer"></i>
+                            <i *ngIf="l" (click)="addNewRow('allowedCidrs', item, $event)"
+                                class="fa fa-plus cursor-pointer"></i>
+                        </div>
+                    </div>
+                </section>
+
+                <section formArrayName="allowedIps" class="iprange container-fluid"
+                    *ngIf="permissionForm.get('ipOptions').value === 'ip_address'">
+                    <div class="row mrB1"
+                        *ngFor="let item of permissionForm.get('allowedIps')['controls']; let i = index; let l = last"
+                        [formGroupName]="i">
+                        <div class="col-xs-11">
+                            <input class="form-control" (keypress)="allowOnlyNumbersAndDot($event)" name="item_{{i}}"
+                                formControlName="range" type="text" placeholder="192.168.1.0" />
+                        </div>
+                        <div class="pull-left lh34">
+                            <i *ngIf="!l" (click)="delRow('allowedIps', i, $event)"
+                                class="fa fa-trash-o cursor-pointer"></i>
+                            <i *ngIf="l" (click)="addNewRow('allowedIps', item, $event)"
+                                class="fa fa-plus cursor-pointer"></i>
+                        </div>
+                    </div>
+                </section>
+
+            </section>
         </div>
-
-        <!--  -->
-        <section formArrayName="allowedCidrs" class="col-xs-12"
-        *ngIf="permissionForm.get('ipOptions').value === 'cidr_range'">
-            <label>CIDR Range</label>
-            <div class="mb-1"
-                *ngFor="let item of permissionForm.get('allowedCidrs')['controls']; let i = index; let l = last"
-                [formGroupName]="i">
-                <div class="d-flex align-items-center">
-                    <div class="width-100">
-                        <input class="form-control " name="item_{{i}}" formControlName="range" type="text"
-                            placeholder="192.168.1.0/24" />
-                    </div>
-                    <div class="d-flex lh34 pl-05 pr-15">
-                        <i *ngIf="!l" (click)="delRow('allowedCidrs', i, $event)"
-                                    class=" icon-cross cursor-pointer"></i>
-
-                        <i *ngIf="l" (click)="addNewRow('allowedCidrs', item, $event)"
-                            class=" icon-add cursor-pointer"></i>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section formArrayName="allowedIps" class="col-xs-12"
-            *ngIf="permissionForm.get('ipOptions').value === 'ip_address'">
-            <label>Address</label>
-            <div class="d-flex align-items-center mb-1"
-                *ngFor="let item of permissionForm.get('allowedIps')['controls']; let i = index; let l = last"
-                [formGroupName]="i">
-                <div class="width-100">
-                    <input class="form-control" (keypress)="allowOnlyNumbersAndDot($event)" name="item_{{i}}"
-                        formControlName="range" type="text" placeholder="192.168.1.0" />
-                </div>
-                <div class="d-flex lh34 pl-05 pr-15">
-                    <i *ngIf="!l" (click)="delRow('allowedIps', i, $event)"
-                                class=" icon-cross cursor-pointer"></i>
-                    <i *ngIf="l" (click)="addNewRow('allowedIps', item, $event)"
-                        class="icon-add cursor-pointer"></i>
-                </div>
-            </div>
-        </section>
-
-    <!--  -->
-    </div>
-    <div class="mb-4">
-    <p class="mb-15">
-        <input type="checkbox" (change)="show = !show" ng-model="show" />
-        Payment Permissions</p>
-    <div class="row container-fluid permission-main" *ngIf="show">
-        <div class="clearfix d-flex permission-row">
-            <div class="col-sm-6">
-                <div class="d-flex justify-content-between align-items-center">
-                    <label>Bank Account</label>
-                    <div class="relative d-inline-block transactions-limit-box">
-                        <a class="text-gray text-gray pr-1 d-inline-block" href="javascript:void(0)">
-                        <i class="icon-info"></i></a>
-                        <div class="transactions-popup">
-                            <p class="bold mb-1">Bank Account</p>
-                            <p class="font-12 text-gray mb-1"> Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.</p>
-                            <a class="btn-link bold font-14" href="javascript:void(0)">More Details</a>
-                        </div>
-                    </div>
-                </div>
-                <sh-select [options]="approvalName" class="text-left" name="selectedBankName" required placeholder="Select Bank" [multiple]="false">
-                    <ng-template #optionTemplate let-option="option">
-                        <div class="list-item">
-                            <input type="checkbox">
-                            <div class="clearfix">
-                                <p class="font-14 mb-0">ICICI Bank</p>
-                                <p class="font-14 mb-0">1234567890AB</p>
-                            </div>
-                        </div>
-                    </ng-template>
-                </sh-select>
-            </div>
-            <div class="col-sm-3">
-                <div class="d-flex justify-content-between align-items-center">
-                    <label>Duration limit<i class="text-danger">*</i></label>
-                    <div class="relative d-inline-block transactions-limit-box">
-                        <a class="text-gray text-gray pr-1 d-inline-block" href="javascript:void(0)">
-                        <i class="icon-info"></i></a>
-                        <div class="transactions-popup">
-                            <p class="bold mb-1">Bank Account</p>
-                            <p class="font-12 text-gray mb-1"> Aenean non accumsan ante. Duis et risus accumsan sem tempus porta nec sit amet est. Sed ut euismod quam. Suspendisse potenti. Aliquam fringilla orci tincidunt, ullamcorper erat in, malesuada metus.</p>
-                            <a class="btn-link bold font-14" href="javascript:void(0)">More Details</a>
-                        </div>
-                    </div>
-                </div>
-                <sh-select placeholder="Select Account" formControlName="roleUniqueName" [options]="allRoles"></sh-select>
-            </div>
-            <div class="col-sm-3">
-                <label>Amount Limit</label>
-                <div class="d-flex align-items-center mb-1">
-                    <div class="width-100">
-                        <input type="text" class="form-control" placeholder="Amount Limit">
-                    </div>
-                    <div class="d-flex pl-05 pr-15">
-                        <i class="icon-add cursor-pointer"></i>
-                        <!-- <i class="icon-cross cursor-pointer ml-1"></i> -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     </div>
 
     <div class="form-group add-btn">
