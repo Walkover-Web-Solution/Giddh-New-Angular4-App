@@ -89,8 +89,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     @ViewChild('removegmailintegration') public removegmailintegration: ModalDirective;
     @ViewChild('paymentForm') paymentForm: NgForm;
     @ViewChild('paymentFormAccountName') paymentFormAccountName: ShSelectComponent;
-    /** Payment integration bank update form reference */
-    @ViewChild('paymentFormUpdate') paymentFormUpdate: NgForm;
 
 
     //variable holding account Info
@@ -1125,34 +1123,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             } else {
                 transactions.controls[index].get('amount').setErrors(null);
             }
-            // if (amount) {
-            //     let convertedAmount;
-            //     convertedAmount = _.cloneDeep(amount);
-            //     convertedAmount.toString().replace(',', '');
-            //     if (convertedAmount.includes('.')) {
-            //         let splitedAmount = convertedAmount.split('.');
-            //         if (splitedAmount[0].length > this.maxLimit) {
-            //             console.log('splitedAmount[0].length', splitedAmount[0].length,  this.maxLimit);
-            //             return false;
-            //         }
-            //     } else {
-            //         if (convertedAmount.length > this.maxLimit) {
-            //             console.log('convertedAmount', convertedAmount.length,  this.maxLimit);
-
-            //             return false;
-            //         }
-            //     }
-
-            // }
         }
         if (isUpdate) {
             if (Number(amount) <= 0) {
                 this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
-            } else if(Number(amount) > 0) {
-                this.paymentFormUpdate.controls.amount.setErrors(null);
             }
-
-            console.log(this.paymentFormUpdate)
         }
     }
 
