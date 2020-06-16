@@ -435,7 +435,7 @@ a[vr-item]:focus {
 .universal-date li input {
     padding-left: 29px !important;
     color: #fff !important;
-    padding-right: 5px !important;
+    padding-right: 0 !important;
     text-align: left;
 }
 
@@ -499,8 +499,8 @@ span.icon-support.dropdown-toggle {
     height: 32px;
 }
 .date-range-picker{
-    max-width: 205px;
-    min-width: 205px;
+    max-width: 210px;
+    min-width: 210px;
 }
 
 .other a {
