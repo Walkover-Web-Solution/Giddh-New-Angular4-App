@@ -152,6 +152,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public isMobileView = false;
     /* This will hold the base currency symbol of the company */
     public baseCurrencySymbol: string = '';
+    /* This will hold the base currency of the company */
     public baseCurrency: string = '';
 
     constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private activatedRouter: ActivatedRoute,

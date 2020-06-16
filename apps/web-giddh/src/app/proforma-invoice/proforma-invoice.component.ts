@@ -1256,7 +1256,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         result[1].items.forEach(item => {
                             arr.push({
                                 versionNumber: this.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
-                                date: this.isProformaInvoice ? item.voucherDate : item.voucherDate,
+                                date: item.voucherDate,
                                 grandTotal: item.grandTotal,
                                 account: { name: item.customerName, uniqueName: item.customerUniqueName }
                             });
