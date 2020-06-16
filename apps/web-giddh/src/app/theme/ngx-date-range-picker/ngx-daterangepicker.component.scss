@@ -574,7 +574,6 @@ $input-height: 3rem !default;
         float: none;
         text-align: left;
         margin: 0;
-        border-right: 1px solid $gainsboro;
         display: flex;
         flex-direction: column;
         .range-container {
@@ -715,11 +714,13 @@ $input-height: 3rem !default;
         text-align: right;
         margin: 0;
         padding-right: 15px;
-        position: relative;
+        position: absolute;
         bottom: 15px;
         background-color: #fff;
         padding-top: 9px;
         z-index: 99;
+        right: 0;
+        width: calc(100% - 218px);
     }
     button {
         &:focus {
@@ -823,7 +824,9 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before{
 .relative{
     position: relative;
 }
-
+.ranges-perfect-scrollbar{
+    border-right: 1px solid $gainsboro;
+}
 @media (min-width: 564px) {
     .md-drppicker {
         width: auto;
@@ -1308,7 +1311,6 @@ td span {
     justify-content: space-around;
 }
 .days-upto-select {
-    border-bottom: 1px solid $gainsboro;
     border-top: 1px solid $gainsboro;
     ul {
         list-style: none;

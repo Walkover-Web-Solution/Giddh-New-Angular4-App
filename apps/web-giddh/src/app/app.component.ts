@@ -22,7 +22,7 @@ import {Configuration} from "./app.constant";
  * Top Level Component
  */
 @Component({
-    selector: 'body',
+    selector: 'app-component',
     encapsulation: ViewEncapsulation.None,
     styleUrls: [
         './app.component.css'

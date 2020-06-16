@@ -440,7 +440,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron||isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.breakPointObservar.observe([
             '(max-width: 991px)'
         ]).subscribe(result => {
@@ -581,10 +581,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.lc.transactionData$.subscribe((lt: any) => {
             if (lt) {
-                // set date picker to and from date, as what we got from api
-                if (lt.from && lt.to && (!this.selectedDateRange || !this.selectedDateRange.startDate || !this.selectedDateRange.endDate)) {
-                    this.selectedDateRange = { startDate: moment(lt.from), endDate: moment(lt.to) };
-                    this.selectedDateRangeUi = moment(lt.from).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(lt.to).format(GIDDH_NEW_DATE_FORMAT_UI);
+                // set date picker to and from date, as what we got from api in case of today selected from universal date
+                if (lt.from && lt.to) {
+                    let fromDate = lt.from.split('-');
+                    let toDate = lt.to.split('-');
+                    let fromDateInMMDDYYY;
+                    let toDateInMMDDYYY;
+                    if (fromDate && fromDate.length) {
+                        fromDateInMMDDYYY = fromDate[1] +'-'+ fromDate[0]+'-'+ fromDate[2];
+                    }
+                    if (toDate && toDate.length) {
+                        toDateInMMDDYYY = toDate[1] +'-'+  toDate[0] +'-'+  toDate[2]
+                    }
+                    this.selectedDateRange = { startDate: moment(fromDateInMMDDYYY), endDate: moment(toDateInMMDDYYY) };
+                    this.selectedDateRangeUi = moment(fromDateInMMDDYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(toDateInMMDDYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
                 }
 
                 this.ledgerTransactions = lt;
@@ -1139,7 +1149,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.shareLedgerModal.hide();
     }
 
-    public showExportLedgerModal() {
+    /**
+     * Displays the export ledger modal
+     *
+     * @memberof LedgerComponent
+     */
+    public showExportLedgerModal(): void {
+        if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.selectedDateRange && this.selectedDateRange.startDate && this.selectedDateRange.endDate) {
+            this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+                page: 0,
+                dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+                    bsRangeValue: [this.selectedDateRange.startDate, this.selectedDateRange.endDate]
+                })
+            });
+        }
         this.exportLedgerModal.show();
     }
 
