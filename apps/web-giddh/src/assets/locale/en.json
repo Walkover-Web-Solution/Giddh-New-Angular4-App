@@ -370,5 +370,7 @@
     "igst": "IGST",
     "cgst": "CGST",
     "sgst": "SGST",
-    "particular": "Particular"
+    "particular": "Particular",
+    "clo_bal": "Clo Bal",
+    "dr": "dr."
 }
