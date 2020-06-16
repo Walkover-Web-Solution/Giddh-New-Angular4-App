@@ -49,6 +49,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../shared/helpers
 import { OnboardingFormRequest } from '../models/api-models/Common';
 import { CommonActions } from '../actions/common.actions';
 import { PAGINATION_LIMIT } from '../app.constant';
+import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 
 const CustomerType = [
     { label: 'Customer', value: 'customer' },
@@ -258,7 +259,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         private _groupWithAccountsAction: GroupWithAccountsAction,
         private _cdRef: ChangeDetectorRef, private _generalService: GeneralService,
         private _route: ActivatedRoute, private _generalAction: GeneralActions,
-        private _router: Router, private _breakPointObservar: BreakpointObserver, private modalService: BsModalService) {
+        private _router: Router, private _breakPointObservar: BreakpointObserver, private modalService: BsModalService,
+        private settingsProfileActions: SettingsProfileActions) {
         this.searchLoader$ = this.store.select(p => p.search.searchLoader);
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
@@ -297,6 +299,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             this.selectedCompany = store.session.companies.find((company) => company.uniqueName === store.session.companyUniqueName);
         }), takeUntil(this.destroyed$)).subscribe();
         this.store.dispatch(this._companyActions.getAllRegistrations());
+        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
     }
 
     /**
@@ -312,21 +315,24 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 this.selectedAccountsList = [];
                 this.selectedAccountsList.push(item);
             }
+        } else {
+            if (this.selectedAccountsList.length) {
+                this.selectedAccountsList = this.selectedAccountsList.filter(itemObject => {
+                    return itemObject.bankPaymentDetails === true;
+                });
+                this.selectedAccountsList = this.selectedAccountsList.filter((data, index) => {
+                    return this.selectedAccountsList.indexOf(data) === index;
+                });
+                if (this.selectedAccountsList.length < this.selectedCheckedContacts.length) {
+                    this._toaster.infoToast(`${this.selectedCheckedContacts.length - this.selectedAccountsList.length} out of ${this.selectedCheckedContacts.length} transactions could not be processed as bank details of those accounts are not updated.`);
+                }
+            }
         }
         if (this.selectedAccountsList.length) {
-            this.selectedAccountsList = this.selectedAccountsList.filter(itemObject => {
-                return itemObject.accountBankDetails && itemObject.accountBankDetails.bankAccountNo !== '' && itemObject.accountBankDetails.bankName !== '' && itemObject.accountBankDetails.ifsc !== '';
-            });
-            if (this.selectedAccountsList.length < this.selectedCheckedContacts.length) {
-                this._toaster.infoToast(`${this.selectedCheckedContacts.length - this.selectedAccountsList.length} out of ${this.selectedCheckedContacts.length} transactions could not be processed as bank details of those accounts are not updated.`);
-            }
-            if (this.selectedAccountsList.length) {
-                this.bulkPaymentModalRef = this.modalService.show(template,
-                    Object.assign({}, { class: 'payment-modal modal-lg' })
-                );
-            }
+            this.bulkPaymentModalRef = this.modalService.show(template,
+                Object.assign({}, { class: 'payment-modal modal-lg' })
+            );
         }
-
     }
     public sort(key, ord = 'asc') {
         this.key = key;
@@ -607,10 +613,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.toggleAccountAsidePane();
     }
 
-    public openPaymentAside(acc: string) {
-        this.selectedAccForPayment = acc;
-        this.togglePaymentPane();
-    }
+    //  commenting for now may be use later for reference
+    // public openPaymentAside(acc: string) {
+    //     this.selectedAccForPayment = acc;
+    //     this.togglePaymentPane();
+    // }
 
     public toggleAccountAsidePane(event?): void {
         if (event) {
@@ -621,13 +628,14 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.toggleBodyClass();
     }
 
-    public togglePaymentPane(event?) {
-        if (event) {
-            event.preventDefault();
-        }
-        this.paymentAsideMenuState = this.paymentAsideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
-    }
+    //  commenting for now may be use later for reference
+    // public togglePaymentPane(event?) {
+    //     if (event) {
+    //         event.preventDefault();
+    //     }
+    //     this.paymentAsideMenuState = this.paymentAsideMenuState === 'out' ? 'in' : 'out';
+    //     this.toggleBodyClass();
+    // }
 
     public getUpdatedList(grpName?): void {
         setTimeout(() => {

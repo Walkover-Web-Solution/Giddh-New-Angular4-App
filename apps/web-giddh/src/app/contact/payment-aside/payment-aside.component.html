@@ -12,7 +12,8 @@
                     <div class="d-flex mb-1">
                         <div class="form-group mr-15 select-bank">
                             <label>Select Bank<span class="red-text">*</span></label>
-                            <sh-select *ngIf="selectIntegratedBankList.length > 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankUniqueName" class="text-left" name="urn" required placeholder="'Select Bank'" (selected)="selectBank($event);" [multiple]="false">
+                            <sh-select [options]="selectIntegratedBankList" [(ngModel)]="selectedBankUniqueName" [fixedValue]="selectedBankName" [defaultValue]="selectedBankName" class="text-left" name="selectedBankUniqueName" required placeholder="'Select Bank'" (click)="setBankName($event);"
+                                (selected)="selectBank($event);" [multiple]="false">
                                 <ng-template #optionTemplate let-option="option">
                                     <a href="javascript:void(0)" class="list-item">
                                         <div class="item">{{option?.label}}</div>
@@ -23,7 +24,7 @@
                                     </a>
                                 </ng-template>
                             </sh-select>
-                            <sh-select *ngIf="selectIntegratedBankList.length === 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankUrn" class="text-left" name="urn" required placeholder="'Select Bank'" (ngModelChange)="selectBank($event);" [multiple]="false">
+                            <!-- <sh-select *ngIf="selectIntegratedBankList.length === 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankUrn" class="text-left" name="urn" required placeholder="'Select Bank'" (ngModelChange)="selectBank($event);" [multiple]="false">
                                 <ng-template #optionTemplate let-option="option">
                                     <a href="javascript:void(0)" class="list-item">
                                         <div class="item">{{option?.label}}</div>
@@ -33,7 +34,7 @@
                                         </div>
                                     </a>
                                 </ng-template>
-                            </sh-select>
+                            </sh-select> -->
                             <p *ngIf="totalAvailableBalance"><small class="text-gray">Bal {{totalAvailableBalance | giddhCurrency}} dr.</small></p>
                         </div>
                         <div class="form-group mr-15">
@@ -42,11 +43,11 @@
                         </div>
                         <div class="form-group mr-15" *ngIf="isPayClicked">
                             <label class="relative d-flex">Enter OTP<span class="red-text">*</span>
-                                <p class="resend-btn" *ngIf="!timerOn"><a href="javascript:void();"
+                                <p class="resend-btn" *ngIf="!timerOn"><a href="javascript:void(0);"
                                         (click)="reSendOTP()" class="btn-link">Resend</a></p>
                                 <!-- make timer dynamic -->
                                 <p class="resend-btn timer-count" *ngIf="timerOn"><a
-                                        href="javascript:void();" class="btn-link">{{timerCountDown$ | async}}</a></p>
+                                        href="javascript:void(0);" class="btn-link">{{timerCountDown$ | async}}</a></p>
                             </label>
                             <input type="number" class="form-control" placeholder="Enter OTP" required name="receivedOtp" [(ngModel)]="receivedOtp">
                         </div>
@@ -74,7 +75,7 @@
                             <p>{{item.name}}</p>
                             <p class="text-gray due-amount hidden-xs">
                                 Total Due:{{item.totalDueAmount | giddhCurrency}}
-                                <span class="red-text cursor-pointer" (click)="removeSelectedAccount(item); removeTransactionsDetailsForm(entryIdx)"><i
+                                <span class="red-text cursor-pointer" *ngIf="selectedAccForBulkPayment.length > 1" (click)="removeSelectedAccount(item); removeTransactionsDetailsForm(entryIdx)"><i
                                         class="icon-trash mr-05"></i>Remove</span>
                             </p>
                         </div>

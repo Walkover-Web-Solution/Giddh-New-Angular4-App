@@ -664,7 +664,7 @@
                 </div>
             </div>
              Create or add bank account end -->
-            <div *ngIf="openNewRegistration && !(isPaymentAdditionSuccess$ | async)" class="box clearfix">
+            <div *ngIf="openNewRegistration" class="box clearfix">
                 <h3 class="fs20 mrB2">ICICI Bank</h3>
                 <form [formGroup]="addBankForm" (ngSubmit)="onSubmitPaymentform(addBankForm)">
                     <div class="row">

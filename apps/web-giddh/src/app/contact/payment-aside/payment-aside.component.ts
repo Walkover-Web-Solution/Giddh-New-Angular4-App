@@ -110,6 +110,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public isValidData: boolean = false;
     /** company's first  name */
     public companyFirstName: string = '';
+    /** Selected bank name */
+    public selectedBankName: string = '';
+
 
 
 
@@ -191,7 +194,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                         this.selectIntegratedBankList.push({ label: item.bankName, value: item.urn, additional: item });
                     }
                 });
-                if (bankList.length === 1) {
+
+                if (this.selectIntegratedBankList.length === 1) {
                     this.selectBank(this.selectIntegratedBankList[0]);
                 }
             }
@@ -236,6 +240,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 this.selectedAccForBulkPayment = this.selectedAccForBulkPayment.filter(item => {
                     return item.accountBankDetails && item.accountBankDetails.bankAccountNo !== '' && item.accountBankDetails.bankName !== '' && item.accountBankDetails.ifsc !== '';
                 });
+            }
+            if (changes.selectedAccForPayment && changes.selectedAccForPayment.currentValue) {
+
             }
         }
         this.getTotalAmount();
@@ -344,6 +351,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public resetFormData(): void {
         this.selectedBankUniqueName = '';
         this.selectedBankUrn = '';
+        this.selectedBankName = '';
         this.receivedOtp = '';
         this.isPayClicked = false;
         this.selectedAccForBulkPayment = [];
@@ -365,8 +373,10 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public selectBank(event: IOption): void {
-        this.selectedBankUrn = event.value;
         if (event) {
+            this.selectedBankUrn = event.value;
+            this.selectedBankUniqueName = event.value;
+            this.selectedBankName = event.label;
             this.isPayClicked = false;
             this.paymentRequestId = '';
             this.otpReceiverNameMessage = '';
@@ -374,16 +384,17 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             this.requestObjectToGetOTP.urn = event.value;
             this.requestObjectToGetOTP.bankName = event.label;
             this.isRequestInProcess = true;
-            this._companyService.getAllBankDetailsOfIntegrated(this.companyUniqueName, this.requestObjectToGetOTP.urn).subscribe(response => {
-                this.isRequestInProcess = false;
-                if (response.status === 'success') {
-                    if (response.body.Status === 'SUCCESS') {
-                        this.totalAvailableBalance = response.body.effectiveBal;
-                    }
-                } else if (response.status === 'error') {
-                    this._toaster.errorToast(response.message, response.code);
-                }
-            })
+            this.totalAvailableBalance = event.additional.effectiveBal;
+            // this._companyService.getAllBankDetailsOfIntegrated(this.companyUniqueName, this.requestObjectToGetOTP.urn).subscribe(response => {
+            //     this.isRequestInProcess = false;
+            //     if (response.status === 'success') {
+            //         if (response.body.Status === 'SUCCESS') {
+            //             this.totalAvailableBalance = response.body.effectiveBal;
+            //         }
+            //     } else if (response.status === 'error') {
+            //         this._toaster.errorToast(response.message, response.code);
+            //     }
+            // })
         }
         this.getTotalAmount();
     }
@@ -413,6 +424,12 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 this.paymentRequestId = '';
             }
         });
+    }
+
+    public setBankName(event: IOption) {
+        this.selectedBankUrn = event.value;
+        this.selectedBankUniqueName = event.value;
+        this.selectedBankName = event.label;
     }
 
     /**
@@ -521,8 +538,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             return;
         }
 
-        if (!this.timerOn) {
-
+        if (this.timerOn) {
             this.timerOn = false;
             return;
         }

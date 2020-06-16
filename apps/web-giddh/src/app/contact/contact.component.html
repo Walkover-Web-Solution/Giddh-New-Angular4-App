@@ -740,10 +740,10 @@
                             </ng-container>
                         </td>
                         <td data-title="Action" *ngIf="isICICIIntegrated">
-                            <button *ngIf="account.hasBankDetails" class="btn btn-small btn-success" (click)="openBulkPaymentModal(template, account)">
+                            <button *ngIf="account.bankPaymentDetails" class="btn btn-small btn-success" (click)="openBulkPaymentModal(template, account)">
                             Pay Now </button>
                             <!-- (click)="openPaymentAside(account)" -->
-                            <button *ngIf="!account.hasBankDetails " class="btn btn-small btn-succes " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
+                            <button *ngIf="!account.bankPaymentDetails " class="btn btn-small btn-succes " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
                             </button>
                         </td>
                     </tr>
