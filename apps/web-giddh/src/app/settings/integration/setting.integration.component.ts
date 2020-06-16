@@ -766,7 +766,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 userAmountRanges.controls[index].get('amount').reset();
 
                 if (this.checkIsMaxBankLimitSelectedField(userAmountRanges, index)) {
-
                     userAmountRanges.controls[index].get('maxBankLimit').patchValue('custom');
                     userAmountRanges.controls[index].get('amount').patchValue(null);
                     userAmountRanges.controls[index].get('amount').setErrors({ 'incorrect': true });
@@ -793,7 +792,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {number} [parentIndex]
      * @memberof SettingIntegrationComponent
      */
-    public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, parentIndex?: number, ): void {
+    public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, parentIndex?: number ): void {
 
         if (!isUpdate) {
             if (event === 'max' && this.checkIsMaxBankLimitSelected(this.paymentFormObj.userAmountRanges, index)) {
@@ -875,9 +874,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             } else {
                 elementRef.classList.remove('error-box');
             }
-        }
-        if (this.maxLimit) {
-
         }
     }
 

@@ -209,7 +209,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             if (item && item.name) {
                 modifiedRemark = item.name.split(' ');
             }
-            if (modifiedRemark.length && companyFirstName) {
+            if (modifiedRemark && modifiedRemark.length && companyFirstName) {
                 item.remarks = modifiedRemark[0] + ' - ' + companyFirstName[0];
             } else {
                 item.remarks = '';
@@ -447,7 +447,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @param {number} index Index of item
      * @memberof PaymentAsideComponent
      */
-    public preventZero(amount: number, index: number) {
+    public preventZero(amount: number, index: number): void {
         if (Number(amount) <= 0) {
             this.selectedAccForBulkPayment[index].closingBalance.amount = '';
         }
