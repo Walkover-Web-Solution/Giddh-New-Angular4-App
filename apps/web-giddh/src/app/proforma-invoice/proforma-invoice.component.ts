@@ -1872,7 +1872,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             requestObject.date = moment(voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-            requestObject.type = "sales";
+            requestObject.type = VoucherTypeEnum.sales;
 
             let updatedData = requestObject;
             updatedData = this.updateData(requestObject, data);
@@ -2965,16 +2965,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let salesEntryClassArray: SalesEntryClassMulticurrency[] = [];
             let entries = data.entries;
 
-            entries.forEach(e => {
+            entries.forEach(entry => {
                 let salesEntryClass = new SalesEntryClassMulticurrency();
-                salesEntryClass.voucherType = e.voucherType;
-                salesEntryClass.uniqueName = e.uniqueName;
-                salesEntryClass.description = e.description;
-                salesEntryClass.date = e.entryDate;
-                e.taxList.forEach(t => {
+                salesEntryClass.voucherType = entry.voucherType;
+                salesEntryClass.uniqueName = entry.uniqueName;
+                salesEntryClass.description = entry.description;
+                salesEntryClass.date = entry.entryDate;
+                entry.taxList.forEach(t => {
                     salesEntryClass.taxes.push({ uniqueName: t });
                 });
-                e.transactions.forEach(tr => {
+                entry.transactions.forEach(tr => {
                     let transactionClassMul = new TransactionClassMulticurrency();
                     transactionClassMul.account.uniqueName = tr.accountUniqueName;
                     transactionClassMul.account.name = tr.accountName;
@@ -2983,21 +2983,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     salesEntryClass.sacNumber = tr.sacNumber;
                     salesEntryClass.description = tr.description;
                     if (tr.isStockTxn) {
-                        let saalesAddBulkStockItems = new SalesAddBulkStockItems();
-                        saalesAddBulkStockItems.name = tr.stockDetails.name;
-                        saalesAddBulkStockItems.uniqueName = tr.stockDetails.uniqueName;
-                        saalesAddBulkStockItems.quantity = tr.quantity;
-                        saalesAddBulkStockItems.rate = {};
-                        saalesAddBulkStockItems.rate.amountForAccount = tr.rate;
-                        saalesAddBulkStockItems.sku = tr.stockDetails.skuCode;
-                        saalesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
-                        saalesAddBulkStockItems.stockUnit.code = tr.stockUnit;
+                        let salesAddBulkStockItems = new SalesAddBulkStockItems();
+                        salesAddBulkStockItems.name = tr.stockDetails.name;
+                        salesAddBulkStockItems.uniqueName = tr.stockDetails.uniqueName;
+                        salesAddBulkStockItems.quantity = tr.quantity;
+                        salesAddBulkStockItems.rate = {};
+                        salesAddBulkStockItems.rate.amountForAccount = tr.rate;
+                        salesAddBulkStockItems.sku = tr.stockDetails.skuCode;
+                        salesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
+                        salesAddBulkStockItems.stockUnit.code = tr.stockUnit;
 
-                        transactionClassMul.stock = saalesAddBulkStockItems;
+                        transactionClassMul.stock = salesAddBulkStockItems;
                     }
                     salesEntryClass.transactions.push(transactionClassMul);
                 });
-                e.discounts.forEach(ds => {
+                entry.discounts.forEach(ds => {
                     salesEntryClass.discounts.push(new DiscountMulticurrency(ds));
                 });
 
@@ -3009,7 +3009,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 updateAccountDetails: this.updateAccount,
                 entries: salesEntryClassArray,
                 date: this.convertDateForAPI(data.voucherDetails.voucherDate),
-                type: "sales",
+                type: VoucherTypeEnum.sales,
                 exchangeRate: exRate,
                 dueDate: data.voucherDetails.dueDate,
                 number: this.invoiceNo,
@@ -4365,7 +4365,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private isMultiCurrencyModule(): boolean {
-        return [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash, 'proformas', 'estimates'].includes(this.invoiceType);
+        return [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash, VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate].includes(this.invoiceType);
     }
 
     /**

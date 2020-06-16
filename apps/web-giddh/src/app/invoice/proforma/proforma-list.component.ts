@@ -150,6 +150,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public isMobileView = false;
+    /* This will hold the base currency symbol of the company */
     public baseCurrencySymbol: string = '';
     public baseCurrency: string = '';
 
@@ -177,14 +178,12 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     ngOnInit() {
-        this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+        this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile) {
                 this.baseCurrencySymbol = profile.baseCurrencySymbol;
                 this.baseCurrency = profile.baseCurrency;
             }
         });
-
-        console.log(this.voucherType);
 
         combineLatest([
             this.store.pipe(select(s => s.proforma.vouchers)),
@@ -751,7 +750,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
      *
      * @private
      * @param {any} item received from service
-     * @returns {*} Modified item with tooltup text for grand total
+     * @returns {*} Modified item with tooltip text for grand total
      * @memberof ProformaListComponent
      */
     private addToolTiptext(item: any): any {
