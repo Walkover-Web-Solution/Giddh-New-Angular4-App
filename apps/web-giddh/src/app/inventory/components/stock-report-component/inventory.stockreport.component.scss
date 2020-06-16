@@ -316,3 +316,20 @@ button.btn.btn-filter {
 .stock-not-found {
     text-transform: none;
 }
+.btn-white {
+    background: $white;
+    color: $primary;
+    vertical-align: middle;
+    width: 37px;
+    height: 37px;
+    line-height: 30px;
+    text-align: center;
+    margin-right: 8px;
+    border: 1px solid $gainsboro;
+    border-radius: 2px;
+}
+.full-height {
+    max-height: calc(100vh - 310px);
+    min-height: calc(100vh - 310px);
+    overflow: auto;
+}

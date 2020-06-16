@@ -32,8 +32,7 @@ span.caret {
     display: none;
 }
 #inventory-sidebar {
-    background: #fff;
-    min-height: 100vh;
+    background: $white;
     width: 260px !important;
-    padding-bottom: 220px;
+    padding-bottom: 80px;
 }

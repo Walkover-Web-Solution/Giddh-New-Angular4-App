@@ -30,11 +30,13 @@ s.tock-grp-list .active i,
 }
 
 .item-group {
-    padding: 12px 15px;
-    padding-right: 0;
     display: flex;
     align-items: center;
     max-height: 41px;
+    a.d-flex {
+        padding: 12px 15px;
+        padding-right: 0;
+    }
 }
 
 .main-group div > stockgrp-list .item-group {
@@ -60,4 +62,16 @@ stock-list ::ng-deep.in-list a div {
 }
 .stock-grp-list li .btn {
     line-height: 14px;
+    padding: 14px !important;
+    margin-right: 0px;
+}
+.main-group .item-group a.d-flex {
+    min-width: 85%;
+}
+.main-group .item-group a.d-flex a.text-black {
+    max-width: 85%;
+}
+.inner-stock-list {
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

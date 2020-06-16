@@ -16,7 +16,7 @@ import { InvViewService } from '../../inv.view.service';
     <ul class="list-unstyled stock-items clearfix" [hidden]="!Groups.isOpen">
       <li class="clearfix " *ngFor="let item of Groups.stocks" style="padding: 0px">
         <div class="in-list" [ngClass]="{'active':  (activeStockUniqueName$ | async) === item.uniqueName}">
-          <a (click)="OpenStock(item, $event)" style="display: flex;align-items: center;flex: 1;color: black;justify-content: space-between" class="d-flex">
+          <a (click)="OpenStock(item, $event)" style="display: flex;align-items: center;flex: 1;color: black;justify-content: space-between" class="d-flex width-100">
             <span class="span">{{item.name}}</span>
             <span class="d-block" *ngIf="item.count" style="margin-right: 12px;" [hidden]="(activeStockUniqueName$ | async) === item.uniqueName">
          {{item.count}}</span>

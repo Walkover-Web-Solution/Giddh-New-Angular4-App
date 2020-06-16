@@ -27,9 +27,9 @@ a:hover {
     flex-flow: row wrap;
 }
 
-table {
-    table-layout: fixed;
-}
+// table {
+//     table-layout: fixed;
+// }
 
 /* .table.basic tbody tr td {
     background-color: #fff;
@@ -43,7 +43,9 @@ table {
     max-height: 20px;
     cursor: pointer;
 }
-
+.basic > thead > tr > th {
+    min-width: 140px;
+}
 /*
 .table.basic>tbody>tr>td>table tbody tr td {
     padding: 5px 0;
@@ -312,4 +314,21 @@ button.btn.btn-filter {
 }
 .group-not-found {
     text-transform: none;
+}
+.btn-white {
+    background: $white;
+    color: $primary;
+    vertical-align: middle;
+    width: 37px;
+    height: 37px;
+    line-height: 30px;
+    text-align: center;
+    margin-right: 8px;
+    border-radius: 2px;
+    border: 1px solid $gainsboro;
+}
+.full-height {
+    max-height: calc(100vh - 310px);
+    min-height: calc(100vh - 310px);
+    overflow: auto;
 }

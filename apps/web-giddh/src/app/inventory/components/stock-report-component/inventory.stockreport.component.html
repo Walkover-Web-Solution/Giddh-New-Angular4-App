@@ -52,10 +52,13 @@
 
             <div>
 
+                <button class="btn-white middle" data-toggle="tooltip" tooltip="Edit Stock"><i class="icon-edit"></i>
+                </button>
+
                 <div class="btn-group btn-download" dropdown [autoClose]="true" placement="bottom right">
                     <button id="button-alignment" dropdownToggle type="button"
-                        class="btn-link mrT cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
-                        <i class="icon-download"></i> Download
+                        class="btn-white cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
+                        <i class="icon-download1"></i>
                     </button>
                     <ul *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-download" role="menu"
                         aria-labelledby="button-alignment">
@@ -75,6 +78,7 @@
     </form>
 
     <section>
+        <div class="table-responsive full-height">
         <table class="table basic table-border"
             [ngClass]="{'mB100': stockReport && stockReport.transactions && stockReport.transactions.length>6}">
             <thead>
@@ -392,6 +396,7 @@
                 </tr>
             </tfoot>
         </table>
+    </div>
     </section>
 
 

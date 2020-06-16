@@ -3,9 +3,9 @@
         *ngFor="let grp of Groups" style="padding: 0 !important;padding-left: 0 !important;">
         <div class="item-group"
             [ngClass]="{'active': grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName) && !(activeStockUniqueName$ | async)}">
-            <a (click)="OpenGroup(grp, $event)" style="display: flex;align-items: center;flex: 1;color: black;"
+            <a href="javascript:void(0)" (click)="OpenGroup(grp, $event)" style="display: flex;align-items: center;flex: 1;color: black;"
                 class="d-flex">
-                <a [routerLink]="[ 'group', grp.uniqueName, 'report' ]" class="text-black">{{grp.name}}</a>
+                <a href="javascript:void(0)" [routerLink]="[ 'group', grp.uniqueName, 'report' ]" class="text-black"><div class="inner-stock-list">{{grp.name}}</div></a>
                 <i (click)="OpenGroup(grp, $event)" style="margin:0 15px;font-size: 9px" class="icon-arrow-down pr"
                     [ngClass]="{'open': grp.isOpen}"></i>
             </a>

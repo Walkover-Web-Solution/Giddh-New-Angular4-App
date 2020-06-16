@@ -45,7 +45,7 @@
       </ul>
     </div>
   </div> -->
-    <div class="fb__1-container mrB1">
+    <div class="fb__1-container mb-1">
         <div class="d-flex" style="justify-content: space-between;width: 100%">
             <div class="d-flex" style="align-items: center">
                 <h2 class="mr-2" style="font-size: 20px;font-weight: bold; text-transform:capitalize;"
@@ -65,11 +65,13 @@
                 </button>
             </div>
             <div class="clearfix">
+                <button class="btn-white middle" data-toggle="tooltip" tooltip="Edit Group"><i class="icon-edit"></i>
+                </button>
 
                 <div class="btn-group " dropdown [autoClose]="true" placement="bottom right">
                     <button id="button-alignment" dropdownToggle type="button"
-                        class="btn-link mrT cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
-                        <i class="icon-download"></i> Download
+                        class="btn-white cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
+                        <i class="icon-download1"></i>
                     </button>
                     <ul id="dropdown-alignment" *dropdownMenu
                         class="dropdown-menu dropdown-menu-right dropdown-menu-download" role="menu"
@@ -93,6 +95,7 @@
     </div>
 
     <section>
+        <div class="table-responsive full-height">
         <table class="table basic table-border inventoryStockTable"
             [ngClass]="{'mB100': groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length>6}">
             <thead>
@@ -420,6 +423,7 @@
                 </tr>
             </tfoot>
         </table>
+    </div>
 
 
         <!-- sticky Footer -->

@@ -20,3 +20,8 @@
 .stock-items .active .btn-link .fa {
     color: $jacksons-purple;
 }
+.stock-items a > .span {
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+}
