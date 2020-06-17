@@ -65,7 +65,8 @@ export interface SubscriptionsUser {
 	planDetails: PlanDetails;
 	additionalCharges?: any;
 	createdAt: string;
-	status: string;
+    status: string;
+    remainingTransactions: number;
 }
 
 export class PlanDetails {

@@ -266,7 +266,6 @@
 }
 .main-row-plans {
     display: flex;
-    flex-wrap: wrap;
 }
 .btn-green:focus {
     color: $white;
@@ -323,7 +322,6 @@
     .main-row-plans {
         width: 100%;
         overflow-y: hidden;
-        white-space: nowrap;
         overflow-x: scroll;
         margin-bottom: 15px;
         display: block;
@@ -331,7 +329,6 @@
     .main-row-plans .col-sm-4 {
         width: 50%;
         display: inline-block;
-        white-space: normal;
         float: none;
     }
     .main-row-plans::-webkit-scrollbar {
