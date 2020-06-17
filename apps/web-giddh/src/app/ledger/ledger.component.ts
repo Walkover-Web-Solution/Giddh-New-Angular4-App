@@ -477,7 +477,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let to = params['to'];
                 // Set date range to component date picker
                 let dateRange = { fromDate: '', toDate: '' };
-                dateRange = this.generalService.dateConversionToSetComponentdatePicker(from, to);
+                dateRange = this.generalService.dateConversionToSetComponentDatePicker(from, to);
                 this.selectedDateRange = { startDate: moment(dateRange.fromDate), endDate: moment(dateRange.toDate) };
                 this.selectedDateRangeUi = moment(dateRange.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateRange.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
 
@@ -586,7 +586,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 // set date picker to and from date, as what we got from api in case of today selected from universal date
                 if (lt.from && lt.to) {
                     let dateRange = { fromDate: '', toDate: '' };
-                    dateRange = this.generalService.dateConversionToSetComponentdatePicker(lt.from, lt.to);
+                    dateRange = this.generalService.dateConversionToSetComponentDatePicker(lt.from, lt.to);
                     this.selectedDateRange = { startDate: moment(dateRange.fromDate), endDate: moment(dateRange.toDate) };
                     this.selectedDateRangeUi = moment(dateRange.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateRange.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
                 }

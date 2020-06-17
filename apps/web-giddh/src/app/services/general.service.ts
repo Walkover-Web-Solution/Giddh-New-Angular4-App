@@ -495,7 +495,7 @@ export class GeneralService {
      * @param {string} toDate
      * @memberof GeneralService
      */
-    public dateConversionToSetComponentdatePicker(fromDateValue: string, toDateValue: string): any {
+    public dateConversionToSetComponentDatePicker(fromDateValue: string, toDateValue: string): any {
         let fromDateInMmDdYy;
         let toDateInMmDdYy;
         if (fromDateValue && toDateValue) {
