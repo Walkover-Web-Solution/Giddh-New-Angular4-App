@@ -290,7 +290,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public fetchedConvertedRate: number = 0;
     public isAddBulkItemInProcess: boolean = false;
     public modalRef: BsModalRef;
-    message: string;
+    public message: string;
 
     public exceptTaxTypes: string[];
     /** Stores warehouses for a company */
@@ -417,6 +417,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /** To check is selected invoice already adjusted with at least one advance receipts  */
     public isInvoiceAdjustedWithAdvanceReceipts: boolean = false;
     public editingHsnSac: any = "";
+    public voucherTypeChanged: boolean = false;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -583,6 +584,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         });
 
         this.route.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
+            this.voucherTypeChanged = false;
+            
             if (params['invoiceType']) {
                 // Reset voucher due to advance receipt model set voucher in invoice management
                 this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
@@ -695,6 +698,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     } else {
                         this.store.dispatch(this.proformaActions.resetActiveVoucher());
                     }
+                }
+
+                if(!this.voucherTypeChanged) {
+                    this.destroyed$.next(true);
+                    this.destroyed$.complete();
                 }
             }
         });
@@ -1172,8 +1180,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                 }
 
-                console.log(this.invFormData);
-
                 this.calculateBalanceDue();
                 this.calculateTotalDiscount();
                 this.calculateTotalTaxSum();
@@ -1398,6 +1404,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public pageChanged(val: string, label: string) {
+        this.voucherTypeChanged = true;
         this.router.navigate(['pages', 'proforma-invoice', 'invoice', val]);
         this.selectedVoucherType = val;
     }
@@ -3012,8 +3019,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 salesEntryClassArray.push(salesEntryClass);
             });
 
-            console.log(data);
-
             requestObject = {
                 account: data.accountDetails,
                 updateAccountDetails: this.updateAccount,
@@ -3027,8 +3032,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 roundOffApplicable: this.applyRoundOff,
                 templateDetails: data.templateDetails
             } as GenericRequestForGenerateSCD;
-
-            console.log(requestObject);
 
             if (!requestObject.voucherDetails) {
                 requestObject.voucherDetails = {};
@@ -3244,10 +3247,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
 
         if (this.isProformaInvoice || this.isEstimateInvoice) {
-            if(data.accountDetails && data.accountDetails.billingDetails && data.accountDetails.billingDetails.state) {
+            if (data.accountDetails && data.accountDetails.billingDetails && data.accountDetails.billingDetails.state) {
                 data.accountDetails.billingDetails.stateCode = data.accountDetails.billingDetails.state.code;
             }
-            if(data.accountDetails && data.accountDetails.shippingDetails && data.accountDetails.shippingDetails.state) {
+            if (data.accountDetails && data.accountDetails.shippingDetails && data.accountDetails.shippingDetails.state) {
                 data.accountDetails.shippingDetails.stateCode = data.accountDetails.shippingDetails.state.code;
             }
         }
@@ -4242,11 +4245,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             });
         }
 
-        if(this.inventorySettings && (this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
+        if (this.inventorySettings && (this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
             this.editingHsnSac = transaction.hsnNumber;
         }
 
-        if(this.inventorySettings && !(this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
+        if (this.inventorySettings && !(this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
             this.editingHsnSac = transaction.sacNumber;
         }
 
@@ -4840,11 +4843,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public hideHsnSacEditPopup(transaction: any): void {
-        if(this.inventorySettings && (this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
+        if (this.inventorySettings && (this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
             transaction.hsnNumber = this.editingHsnSac;
         }
 
-        if(this.inventorySettings && !(this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
+        if (this.inventorySettings && !(this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
             transaction.sacNumber = this.editingHsnSac;
         }
 
