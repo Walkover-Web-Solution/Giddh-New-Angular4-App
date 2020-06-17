@@ -80,7 +80,11 @@
     text-align: center;
     background: $lavender;
     font-size: 18px;
+<<<<<<< HEAD
     padding: 20px 15px;
+=======
+    padding: 10px 15px;
+>>>>>>> 7ddcb8136... Update design of subscription page
     h2 {
         color: $midnight-blue;
         font-weight: bold;
@@ -88,7 +92,11 @@
 }
 .plans-box {
     padding: 10px 30px 10px;
+<<<<<<< HEAD
     p.total-price {
+=======
+    p{
+>>>>>>> 7ddcb8136... Update design of subscription page
         margin: 0 -8px;
     }
     .btn-green.btn-round {
@@ -105,7 +113,7 @@
     position: relative;
     z-index: 2;
     background: $white;
-    padding: 30px 15px 15px 30px;
+    padding: 15px;
     box-shadow: 0px 3px 6px $black-russian;
     border: 1px solid $gainsboro;
     transition: .5s all ease;
@@ -136,11 +144,19 @@
 
 .plan-list {
     list-style-type: none;
+<<<<<<< HEAD
     min-height: 290px;
     margin-top: 5px;
     li {
         font-size: 14px;
         padding: 8px 0;
+=======
+    min-height: 150px;
+    margin-top: 5px;
+    li {
+        font-size: 14px;
+        padding: 5px 0;
+>>>>>>> 7ddcb8136... Update design of subscription page
         position: relative;
         position: relative;
         display: flex;
@@ -288,6 +304,26 @@
     color: $night-rider;
     font-family: "opensans-semibold" !important;
     margin-bottom: 15px !important;
+<<<<<<< HEAD
+=======
+}
+.single-plan-for-company{
+    .your-account{
+        .inner-your-account{
+            margin-bottom: 35px;
+        }
+        margin: 15px 0;
+        &:before,
+        &:after{
+            display: none;
+        }
+    }
+    .plans-box {
+        p{
+            margin: 0;
+        }
+    }
+>>>>>>> 7ddcb8136... Update design of subscription page
 }
 .single-plan-for-company{
     .your-account {
@@ -372,9 +408,14 @@
     .main-row-plans .col-sm-4 {
         width: 50%;
         display: inline-block;
+<<<<<<< HEAD
     }
     .main-row-plans .col-sm-4:last-child {
         margin-left: 25%;
+=======
+        white-space: normal;
+        float: none;
+>>>>>>> 7ddcb8136... Update design of subscription page
     }
     .main-row-plans::-webkit-scrollbar {
         height: 5px;
