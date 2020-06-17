@@ -262,6 +262,9 @@ span.close-modal.cp.pull-right {
         background: transparent;
         border: none;
     }
+    .pending-tabel{
+        margin-top: 5px !important;
+    }
     .justify-content-sm {
         justify-content: left !important;
     }
@@ -336,15 +339,17 @@ span.close-modal.cp.pull-right {
             width: 100% !important;
             display: flex;
             justify-content: space-between;
+            flex-direction: column;
             .input-wrapper{
                 width: 100% !important;
                 max-width: 190px;
             }
             .clear-filter{
                 float: right;
-                width: 120px !important;
-                margin-top: 0 !important;
+                width: 100% !important;
+                margin-top: 10px !important;
                 margin-right: 0 !important;
+                margin-left: 0 !important;
             }
         }
        span{

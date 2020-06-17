@@ -60,6 +60,12 @@ span.icon-rupees {
 .profit-loss-chart{
     margin: 0 auto !important;
 }
+.dashboard-datepicker {
+    max-width: 190px;
+    min-width: 190px;
+    border-radius: 30px;
+    border: 1px solid $gainsboro;
+}
 @media(max-width:767px){
     .total-income {
         margin-bottom: 10px;

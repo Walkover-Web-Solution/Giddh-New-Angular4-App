@@ -73,7 +73,7 @@
     .onMobileView tbody tr {
         box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
         background: $white;
-        border-bottom: 1px solid #dfdfdf;
+        border-bottom: none;
         cursor: pointer;
         display: block;
         padding: 5px 0 10px 0px;
@@ -4006,6 +4006,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .modal-header {
     position: relative;
     background: $midnight-blue !important;
+    border-radius: 5px 5px 0 0;
 }
 
 .close_modal {
@@ -8488,6 +8489,7 @@ ul.dropdown-menu p.lead.pd {
     color: #484848 !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
+    border-radius: 4px;
 }
 
 #invoice-setting ul.nav-tabs>li {
@@ -8569,6 +8571,7 @@ ul.dropdown-menu p.lead.pd {
 #tab-integration .nav-tabs>li a {
     border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
     font-size: 18px;
+    border-radius: 4px;
 }
 
 #tab-integration .nav-tabs>li a:hover {
