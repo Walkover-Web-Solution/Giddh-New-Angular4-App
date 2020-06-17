@@ -112,9 +112,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public companyFirstName: string = '';
     /** Selected bank name */
     public selectedBankName: string = '';
-
-
-
+    /** To check is bank selected */
+    public isBankSelectedForBulkPayment: boolean = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -350,6 +349,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      */
     public resetFormData(): void {
         this.selectedBankUniqueName = '';
+        this.isBankSelectedForBulkPayment = false;
         this.selectedBankUrn = '';
         this.selectedBankName = '';
         this.receivedOtp = '';
@@ -376,6 +376,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         if (event) {
             this.selectedBankUrn = event.value;
             this.selectedBankUniqueName = event.value;
+            this.isBankSelectedForBulkPayment = true;
             this.selectedBankName = event.label;
             this.isPayClicked = false;
             this.paymentRequestId = '';
@@ -385,16 +386,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             this.requestObjectToGetOTP.bankName = event.label;
             this.isRequestInProcess = true;
             this.totalAvailableBalance = event.additional.effectiveBal;
-            // this._companyService.getAllBankDetailsOfIntegrated(this.companyUniqueName, this.requestObjectToGetOTP.urn).subscribe(response => {
-            //     this.isRequestInProcess = false;
-            //     if (response.status === 'success') {
-            //         if (response.body.Status === 'SUCCESS') {
-            //             this.totalAvailableBalance = response.body.effectiveBal;
-            //         }
-            //     } else if (response.status === 'error') {
-            //         this._toaster.errorToast(response.message, response.code);
-            //     }
-            // })
         }
         this.getTotalAmount();
     }
@@ -426,10 +417,15 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         });
     }
 
-    public setBankName(event: IOption) {
-        this.selectedBankUrn = event.value;
-        this.selectedBankUniqueName = event.value;
-        this.selectedBankName = event.label;
+    /**
+     * set Bank name for bydefault set bank name if only single bank integrated to prevent 'urn' displayed this was incorrect
+     *
+     * @param {*} event Click event
+     * @memberof PaymentAsideComponent
+     */
+    public setBankName(event: any): void {
+        this.selectedBankUniqueName = '';
+        this.selectedBankName = event.target.value;
     }
 
     /**
@@ -455,6 +451,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         } else {
             this.isValidData = false;
         }
+        /** to testing purpose */
+        console.log(this.isValidData, this.isBankSelectedForBulkPayment);
     }
 
     /**
