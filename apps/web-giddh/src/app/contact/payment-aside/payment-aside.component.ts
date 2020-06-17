@@ -423,6 +423,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * set Bank name for bydefault set bank name if only single bank integrated to prevent 'urn' displayed this was incorrect
      *
      * @param {*} event Click event
+     * @param {ShSelectComponent} selectBankEle Sh-select reference
      * @memberof PaymentAsideComponent
      */
     public setBankName(event: any,  selectBankEle: ShSelectComponent): void {
