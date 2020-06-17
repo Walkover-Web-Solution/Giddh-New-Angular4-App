@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-9 col-sm-9  font-14">
             <p class="mb-1">Hi {{logedInUser?.name}} !</p>
-            <p class="mb-3 plan-msg">All the plan come with all the features with <span class="selected">90 days money back guarantee.</span></p>
+            <p class="mb-3 plan-msg" hidden>All the plan come with all the features with <span class="selected">90 days money back guarantee.</span></p>
         </div>
         <div class="col-md-3 col-sm-3 text-right" *ngIf="subscriptions && subscriptions.length > 0">
             <a (click)="backClicked()" class="btn btn-cancel pr-3 pl-3 mb-2 mr-0">Back</a>
@@ -22,8 +22,8 @@
                             <p class="bold">Total Plans: {{totalMultipleCompanyPlans}}</p>
                             <div class="your-account">
                                 <div class="inner-your-account" [ngClass]="{'active': showPlans === 'multiple'}">
-                                    <h3 class="mb-2">{{defaultMultipleCompanyPlan?.planDetails?.name}}</h3>
-                                    <div class="d-flex align-items-center justify-content-between plans-head-top mb-3">
+                                    <h3 class="mb-2 plan-heading">{{defaultMultipleCompanyPlan?.planDetails?.name}}</h3>
+                                    <div class="d-flex align-items-center justify-content-between plans-head-top">
                                         <div class="clearfix">
                                             <h3 class="bold font-22 mb-05">
                                                 {{defaultMultipleCompanyPlan?.planDetails?.amount}} /-</h3>
@@ -113,7 +113,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-4" *ngIf="totalSingleCompanyPlans">
-                    <div class="select-plan-block"
+                    <div class="select-plan-block single-plan-for-company"
                         [ngClass]="{'plan-disabled': showPlans === 'multiple' || showPlans === 'free'}">
                         <div class="select-plan-head">
                             <h2>Single Company</h2>
@@ -123,11 +123,11 @@
                             <div class="your-account">
                                 <div class="inner-your-account popular" [ngClass]="{'active': showPlans === 'single'}">
                                     <img src="assets/images/popular.svg" class="popular-icon" alt="">
-                                    <h3 class="mb-2">{{defaultSingleCompanyPlan?.planDetails?.name}}
+                                    <h3 class="mb-2 plan-heading">{{defaultSingleCompanyPlan?.planDetails?.name}}
                                         <!-- <small class="font-12 unbold text-blue">(Current
                                                 Plan)</small> -->
                                     </h3>
-                                    <div class="mb-3">
+                                    <div>
                                         <div class="d-flex align-items-center justify-content-between plans-head-top">
                                             <div class="clearfix">
                                                 <h3 class="bold font-22 mb-05">
@@ -230,9 +230,9 @@
                             <p class="bold">Total Plans: {{totalFreePlans}}</p>
                             <div class="your-account">
                                 <div class="inner-your-account" [ngClass]="{'active': showPlans === 'free'}">
-                                    <h3 class="mb-2">{{defaultFreePlan?.planDetails?.name}}</h3>
-                                    <div class="mb-3">
-                                        <div class="mb-3 plans-head-top">
+                                    <h3 class="mb-2 plan-heading">{{defaultFreePlan?.planDetails?.name}}</h3>
+                                    <div>
+                                        <div class="plans-head-top">
                                             <h3 class="bold font-22 mb-05">{{defaultFreePlan?.planDetails?.amount}} /-
                                             </h3>
                                             <p class="font-12">{{defaultFreePlan?.planDetails?.duration}}
@@ -345,9 +345,12 @@
                     <img src="assets/images/popular.svg" class="popular-icon"
                         *ngIf="item?.planDetails?.name === defaultPopularPlan">
                     <h3 class="mb-2">{{item?.planDetails?.name}}</h3>
-                    <div class="mb-3">
-                        <h3 class="bold font-22 mb-05">{{item?.planDetails?.amount | number}} /-</h3>
-                        <p class="font-12">{{item?.planDetails?.duration}} {{item?.planDetails?.durationUnit}}(s)</p>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h3 class="bold font-22 mb-05">{{item?.planDetails?.amount | number}} /-</h3>
+                            <p class="font-12">{{item?.planDetails?.duration}} {{item?.planDetails?.durationUnit}}(s)</p>
+                        </div>
+                        <img class="guarantee-img" src="assets/images/guarantee.png" alt="">
                     </div>
                     <div class="clearfix">
                         <ul class="plan-list">

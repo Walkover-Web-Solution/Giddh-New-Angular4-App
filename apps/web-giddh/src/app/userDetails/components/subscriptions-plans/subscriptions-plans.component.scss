@@ -79,30 +79,33 @@
 .select-plan-head {
     text-align: center;
     background: $lavender;
-    font-size: 24px;
-    padding: 15px;
+    font-size: 18px;
+    padding: 10px 15px;
     h2 {
         color: $midnight-blue;
         font-weight: bold;
     }
 }
 .plans-box {
-    padding: 24px 30px;
+    padding: 10px 30px 10px;
+    p{
+        margin: 0 -8px;
+    }
     .btn-green.btn-round {
-        padding: 8px 30px;
+        padding: 6px 30px;
         display: block;
         margin-right: 0px;
     }
 }
 .your-account {
-    margin: 90px 0px 30px 50px;
+    margin: 30px 0px 0 15px;
     position: relative;
 }
 .inner-your-account {
     position: relative;
     z-index: 2;
     background: $white;
-    padding: 30px 15px 15px 30px;
+    padding: 15px;
     box-shadow: 0px 3px 6px $black-russian;
     border: 1px solid $gainsboro;
     transition: .5s all ease;
@@ -123,19 +126,20 @@
     background: $white;
 }
 .your-account:after {
-    top: -35px;
-    left: -25px;
+    top: -10px;
+    left: -10px;
 }
 .your-account:before {
-    top: -70px;
-    left: -50px;
+    top: -20px;
+    left: -20px;
 }
 .plan-list {
     list-style-type: none;
-    min-height: 300px;
+    min-height: 150px;
+    margin-top: 5px;
     li {
         font-size: 14px;
-        padding: 10px 0;
+        padding: 5px 0;
         position: relative;
         position: relative;
         display: flex;
@@ -143,13 +147,20 @@
     }
 }
 .inner-your-account > h3 {
-    font-size: 18px;
+    font-size: 16px;
     color: $midnight-blue;
     font-weight: bold;
+    margin-bottom: 5px;
+    .plans-head-top{
+        h3{
+            font-size: 18px !important;
+            margin-bottom: 0 !important;
+        }
+    }
 }
 .plan-footer {
      .success-btn {
-        padding: 8px 60px;
+        padding: 6px 60px;
         margin: 10px 0;
     }
 }
@@ -276,6 +287,24 @@
     border-color: $very-light-gray;
     color: $night-rider;
     font-family: "opensans-semibold" !important;
+    margin-bottom: 15px !important;
+}
+.single-plan-for-company{
+    .your-account{
+        .inner-your-account{
+            margin-bottom: 35px;
+        }
+        margin: 15px 0;
+        &:before,
+        &:after{
+            display: none;
+        }
+    }
+    .plans-box {
+        p{
+            margin: 0;
+        }
+    }
 }
 @media only screen and (max-width: 1600px) {
     .transactions-popup {
@@ -297,11 +326,13 @@
         white-space: nowrap;
         overflow-x: scroll;
         margin-bottom: 15px;
+        display: block;
     }
     .main-row-plans .col-sm-4 {
         width: 50%;
         display: inline-block;
         white-space: normal;
+        float: none;
     }
     .main-row-plans::-webkit-scrollbar {
         height: 5px;
