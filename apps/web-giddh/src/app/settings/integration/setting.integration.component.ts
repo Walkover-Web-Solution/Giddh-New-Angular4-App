@@ -761,6 +761,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             let userAmountRanges = this.addBankForm.get('userAmountRanges') as FormArray;
             userAmountRanges.controls[index].get('amount').patchValue(null);
             if (event.value === 'max') {
+                userAmountRanges.controls[index].get('maxBankLimit').patchValue('max');
                 userAmountRanges.controls[index].get('amount').patchValue(null);
                 userAmountRanges.controls[index].get('amount').clearValidators();
                 userAmountRanges.controls[index].get('amount').reset();
@@ -773,6 +774,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this.toasty.infoToast('You can not select max bank limit more than 1');
                 }
             } else {
+                userAmountRanges.controls[index].get('maxBankLimit').patchValue('custom');
                 userAmountRanges.controls[index].get('amount').setValidators(Validators.compose([Validators.required]));
                 userAmountRanges.controls[index].get('amount').patchValue(null);
             }

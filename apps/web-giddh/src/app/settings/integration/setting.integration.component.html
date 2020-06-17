@@ -666,7 +666,7 @@
              Create or add bank account end -->
             <div *ngIf="openNewRegistration" class="box clearfix">
                 <h3 class="fs20 mrB2">ICICI Bank</h3>
-                <form [formGroup]="addBankForm" (ngSubmit)="onSubmitPaymentform(addBankForm)">
+                <form [formGroup]="addBankForm" (ngSubmit)="onSubmitPaymentform(addBankForm)" *ngIf="!(isPaymentAdditionSuccess$ | async)">
                     <div class="row">
                         <div class="form-group col-sm-4 col-md-2">
                             <div class="">
@@ -701,7 +701,7 @@
                         <ng-container *ngFor="let item of addBankForm.get('userAmountRanges')['controls'];let index = index;let f = first; let l = last" [formGroupName]="index">
                             <div class="row">
                                 <div class="form-group col-sm-4 col-md-2" *ngIf="item.get('maxBankLimit').value ==='max'">
-                                    <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in Approval Name."></i></label>
+                                    <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
                                     </ng-container>
                                     <div class="custom-select max select-caret pos-rel">
 
@@ -712,7 +712,7 @@
                                     <p class="error-msg text-right"></p>
                                 </div>
                                 <div class="form-group col-sm-3  col-md-2" *ngIf="item.get('maxBankLimit').value!=='max'">
-                                    <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in Approval Name."></i></label>
+                                    <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
                                     </ng-container>
                                     <div class="d-flex">
                                         <div class="mr-05 custom-select cust select-caret pos-rel">
@@ -736,10 +736,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group col-sm-4 col-md-2">
-                                    <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Approval Name <span class="required">*</span>
-                                <i class="icon-info cursor-pointer"  tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send.
-                                "></i>
-                            </label></ng-container>
+                                    <ng-container *ngIf="index===0">
+                                        <label class="d-flex relative info-icon">Approval Name <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send."></i></div></label>
+
+                                    </ng-container>
                                     <div class="custom-select select-caret pos-rel" *ngIf="item.get('otpType').value !=='BANK'">
                                         <sh-select [options]="approvalNameList" class="text-left" formControlName="approvalUniqueName" name="approvalUniqueName" [placeholder]="'Select Bank'" [multiple]="false">
                                             <ng-template #optionTemplate let-option="option">
