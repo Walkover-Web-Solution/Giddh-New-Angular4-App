@@ -416,7 +416,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public isAccountHaveAdvanceReceipts: boolean = false;
     /** To check is selected invoice already adjusted with at least one advance receipts  */
     public isInvoiceAdjustedWithAdvanceReceipts: boolean = false;
+    /* This will hold the currently editing hsn/sac code */
     public editingHsnSac: any = "";
+    /* This will hold if voucher type changed to make sure we don't destroy the data */
     public voucherTypeChanged: boolean = false;
 
     /**
