@@ -534,7 +534,7 @@ span.icon-support.dropdown-toggle {
     position: fixed;
     width: 100%;
     top: 0;
-    z-index: 9990;
+    z-index: 99990;
 }
 
 .primary-header .giddh-logo {
@@ -658,7 +658,7 @@ ul.sub-list {
     z-index: 10;
 }
 .help-setting-icons{
-    color: $white; 
+    color: $white;
     img{
         width: 18px;
         vertical-align: top;
@@ -689,7 +689,7 @@ ul.sub-list {
         color: $chetwode-blue;
         cursor:pointer;
     }
-    
+
     span.icon-traingle-info {
         color: $bitter-sweet;
         font-size: 15px;
@@ -748,7 +748,7 @@ ul.sub-list {
             font-size: 20px !important;
         }
     }
-    
+
 }
 @media (max-width: 767px) {
 .notification{
