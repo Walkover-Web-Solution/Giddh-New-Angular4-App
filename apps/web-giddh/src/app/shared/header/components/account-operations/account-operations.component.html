@@ -333,7 +333,7 @@
 
 <!--add new buttons-->
 <div class="inline-table new_form ng-scope" *ngIf="(showNewForm$ | async)">
-    <div class="vcenter">
+    <div class="vcenter groups-buttons">
         <button class="btn isActive mrB2" (click)="showAddGroupForm()">Create Group</button>
         <span class="clearfix"></span>
         <button class="btn isActive" *ngIf="!isRootLevelGroup" (click)="showAddAccountForm()">Create A/c</button>
