@@ -80,7 +80,7 @@
     text-align: center;
     background: $lavender;
     font-size: 18px;
-    padding: 10px 15px;
+    padding: 20px 15px;
     h2 {
         color: $midnight-blue;
         font-weight: bold;
@@ -88,7 +88,7 @@
 }
 .plans-box {
     padding: 10px 30px 10px;
-    p{
+    p.total-price {
         margin: 0 -8px;
     }
     .btn-green.btn-round {
@@ -105,7 +105,7 @@
     position: relative;
     z-index: 2;
     background: $white;
-    padding: 15px;
+    padding: 30px 15px 15px 30px;
     box-shadow: 0px 3px 6px $black-russian;
     border: 1px solid $gainsboro;
     transition: .5s all ease;
@@ -133,13 +133,14 @@
     top: -20px;
     left: -20px;
 }
+
 .plan-list {
     list-style-type: none;
-    min-height: 150px;
+    min-height: 290px;
     margin-top: 5px;
     li {
         font-size: 14px;
-        padding: 5px 0;
+        padding: 8px 0;
         position: relative;
         position: relative;
         display: flex;
@@ -289,14 +290,14 @@
     margin-bottom: 15px !important;
 }
 .single-plan-for-company{
-    .your-account{
-        .inner-your-account{
-            margin-bottom: 35px;
-        }
+    .your-account {
         margin: 15px 0;
         &:before,
         &:after{
             display: none;
+        }
+        .plan-list {
+            min-height: 305px;
         }
     }
     .plans-box {
@@ -305,6 +306,50 @@
         }
     }
 }
+
+
+//
+@media only screen and (max-width: 1366px) {
+    .your-account {
+        margin: 30px 0px 0 15px;
+    }
+    .your-account:after {
+        top: -10px;
+        left: -10px;
+    }
+    .your-account:before {
+        top: -20px;
+        left: -20px;
+    }
+    .inner-your-account {
+        padding: 15px;
+    }
+    .plan-list {
+        list-style-type: none;
+        min-height: 150px;
+    }
+    .single-plan-for-company {
+        .your-account {
+            .plan-list {
+                min-height: 165px;
+            }
+        }
+    }
+    .select-plan-head {
+        padding: 10px 15px;
+    }
+    .plan-list {
+        li {
+            padding: 5px 0;
+        }
+    }
+    .plan-msg {
+        margin-bottom: 10px;
+    }
+}
+//
+
+
 @media only screen and (max-width: 1600px) {
     .transactions-popup {
         width: 260px;
@@ -321,15 +366,15 @@
 @media only screen and (max-width: 1199px) {
     .main-row-plans {
         width: 100%;
-        overflow-y: hidden;
-        overflow-x: scroll;
         margin-bottom: 15px;
         display: block;
     }
     .main-row-plans .col-sm-4 {
         width: 50%;
         display: inline-block;
-        float: none;
+    }
+    .main-row-plans .col-sm-4:last-child {
+        margin-left: 25%;
     }
     .main-row-plans::-webkit-scrollbar {
         height: 5px;
@@ -348,6 +393,9 @@
 }
 
 @media only screen and (max-width: 767px) {
+    .main-row-plans .col-sm-4:last-child {
+        margin-left: auto;
+    }
     .plan-list {
         min-height: initial;
         margin-bottom: 10px;
@@ -403,7 +451,7 @@
         margin-bottom: 15px;
     }
     .welcome-msg{
-        margin-top: 55px;
+        margin-top: 15px;
         .plan-msg{
             margin-bottom:15px;
         }

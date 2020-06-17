@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-9 col-sm-9  font-14">
             <p class="mb-1">Hi {{logedInUser?.name}} !</p>
-            <p class="mb-3 plan-msg" hidden>All the plan come with all the features with <span class="selected">90 days money back guarantee.</span></p>
+            <p class="mb-3 plan-msg">All the plan come with all the features with <span class="selected">90 days money back guarantee.</span></p>
         </div>
         <div class="col-md-3 col-sm-3 text-right" *ngIf="subscriptions && subscriptions.length > 0">
             <a (click)="backClicked()" class="btn btn-cancel pr-3 pl-3 mb-2 mr-0">Back</a>
@@ -19,7 +19,7 @@
                             <h2>Multiple Company</h2>
                         </div>
                         <div class="plans-box">
-                            <p class="bold">Total Plans: {{totalMultipleCompanyPlans}}</p>
+                            <p class="bold total-price">Total Plans: {{totalMultipleCompanyPlans}}</p>
                             <div class="your-account">
                                 <div class="inner-your-account" [ngClass]="{'active': showPlans === 'multiple'}">
                                     <h3 class="mb-2 plan-heading">{{defaultMultipleCompanyPlan?.planDetails?.name}}</h3>
@@ -227,7 +227,7 @@
                             <h2>Free</h2>
                         </div>
                         <div class="plans-box">
-                            <p class="bold">Total Plans: {{totalFreePlans}}</p>
+                            <p class="bold total-price">Total Plans: {{totalFreePlans}}</p>
                             <div class="your-account">
                                 <div class="inner-your-account" [ngClass]="{'active': showPlans === 'free'}">
                                     <h3 class="mb-2 plan-heading">{{defaultFreePlan?.planDetails?.name}}</h3>
