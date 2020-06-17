@@ -311,9 +311,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public openBulkPaymentModal(template: TemplateRef<any>, item?: any): void {
         this.isBulkPaymentShow = true;
         if (item) {
+            this.selectedAccForPayment = null;
             if (this.isBankAccountAddedAccount(item)) {
-                this.selectedAccountsList = [];
-                this.selectedAccountsList.push(item);
+                this.selectedAccForPayment = item;
             }
         } else {
             if (this.selectedAccountsList.length) {
@@ -328,7 +328,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 }
             }
         }
-        if (this.selectedAccountsList.length) {
+        if (this.selectedAccountsList.length || this.selectedAccForPayment) {
             this.bulkPaymentModalRef = this.modalService.show(template,
                 Object.assign({}, { class: 'payment-modal modal-lg' })
             );
@@ -487,7 +487,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public performActions(type: number, account: any, event?: any) {
         this.selectedCheckedContacts = [];
         this.selectedCheckedContacts.push(account.uniqueName);
-        this.selectedAccountsList.push(account);
 
         switch (type) {
             case 0: // go to add and manage
@@ -945,10 +944,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         // this.selectedcus = true;
         if (ev.target.checked) {
             this.selectedCheckedContacts.push(item.uniqueName);
-            this.selectedAccountsList.push(item);
-            // Note need to remove below
-            this.selectedAccForPayment = item;
-            // this.selectCustomer = true;
+            if (item.bankPaymentDetails) {
+                this.selectedAccountsList.push(item);
+            }
         } else {
             // this.selectCustomer = false;
             let itemIndx = this.selectedCheckedContacts.findIndex((element) => element === item.uniqueName);
@@ -1228,6 +1226,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      */
     public closeBulkPaymentModel(): void {
         this.isBulkPaymentShow = false;
+        this.selectedAccForPayment = null;
         this.bulkPaymentModalRef.hide();
     }
 

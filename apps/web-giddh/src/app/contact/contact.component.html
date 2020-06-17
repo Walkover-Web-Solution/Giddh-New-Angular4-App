@@ -93,7 +93,7 @@
                                     <li role="menuitem" (click)="openEmailDialog();">Email</li>
                                     <li role="menuitem" (click)="openSmsDialog();">SMS</li>
                                     <li role="menuitem" (click)="downloadCSV();">Download CSV</li>
-                                    <li role="menuitem" *ngIf="selectedCheckedContacts.length>0" (click)="openBulkPaymentModal(template)">Bulk Payment</li>
+                                    <li role="menuitem" *ngIf="selectedAccountsList.length>0" (click)="openBulkPaymentModal(template)">Bulk Payment</li>
                                 </ul>
                             </div>
                         </div>
@@ -740,7 +740,7 @@
                             </ng-container>
                         </td>
                         <td data-title="Action" *ngIf="isICICIIntegrated">
-                            <button *ngIf="account.bankPaymentDetails" class="btn btn-small btn-success" (click)="openBulkPaymentModal(template, account)">
+                            <button *ngIf="account?.bankPaymentDetails && account?.country?.code==='IN'" class="btn btn-small btn-success" (click)="openBulkPaymentModal(template, account)">
                             Pay Now </button>
                             <!-- (click)="openPaymentAside(account)" -->
                             <button *ngIf="!account.bankPaymentDetails " class="btn btn-small btn-succes " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
