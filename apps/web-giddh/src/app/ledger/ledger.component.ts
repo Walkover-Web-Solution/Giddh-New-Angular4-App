@@ -232,7 +232,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
         this.isTransactionRequestInProcess$ = this.store.select(p => p.ledger.transactionInprogress).pipe(takeUntil(this.destroyed$));
         this.ledgerBulkActionSuccess$ = this.store.select(p => p.ledger.ledgerBulkActionSuccess).pipe(takeUntil(this.destroyed$));
-
+        // Call only when data is not available
         this.lc.flattenAccountListStream$.pipe(take(1)).subscribe((data) => {
             if (!data) {
                 this.store.dispatch(this._generalActions.getFlattenAccount());
