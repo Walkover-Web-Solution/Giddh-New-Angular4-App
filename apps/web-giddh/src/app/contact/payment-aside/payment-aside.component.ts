@@ -429,7 +429,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public setBankName(event: any,  selectBankEle: ShSelectComponent): void {
         this.selectedBankUniqueName = '';
         selectBankEle.filter = event.target.value;
-        console.log(selectBankEle);
         this.selectedBankName = event.target.value;
     }
 
