@@ -370,6 +370,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private updatedAccountDetails$: Observable<AccountResponseV2>;
     private generateVoucherSuccess$: Observable<any>;
     private updateVoucherSuccess$: Observable<boolean>;
+    /* This will hold (true/false) once proforma voucher add/edit is in process and processed */
     private updateProformaVoucherInProcess$: Observable<boolean>;
     private lastGeneratedVoucherNo$: Observable<{ voucherNo: string, accountUniqueName: string }>;
     /** Observable if getOnboarding API call in progress */
