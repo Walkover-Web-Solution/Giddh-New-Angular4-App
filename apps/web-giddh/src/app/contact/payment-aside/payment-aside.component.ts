@@ -113,11 +113,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     /** Selected bank name */
     public selectedBankName: string = '';
     /** To check is bank selected */
-    public isBankSelectedFotBulkPayment: boolean = false;
-
-
-
-
+    public isBankSelectedForBulkPayment: boolean = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -353,7 +349,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      */
     public resetFormData(): void {
         this.selectedBankUniqueName = '';
-        this.isBankSelectedFotBulkPayment = false;
+        this.isBankSelectedForBulkPayment = false;
         this.selectedBankUrn = '';
         this.selectedBankName = '';
         this.receivedOtp = '';
@@ -380,7 +376,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         if (event) {
             this.selectedBankUrn = event.value;
             this.selectedBankUniqueName = event.value;
-            this.isBankSelectedFotBulkPayment = true;
+            this.isBankSelectedForBulkPayment = true;
             this.selectedBankName = event.label;
             this.isPayClicked = false;
             this.paymentRequestId = '';
@@ -427,7 +423,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @param {*} event Click event
      * @memberof PaymentAsideComponent
      */
-    public setBankName(event: any) {
+    public setBankName(event: any): void {
         this.selectedBankUniqueName = '';
         this.selectedBankName = event.target.value;
     }
@@ -456,7 +452,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             this.isValidData = false;
         }
         /** to testing purpose */
-        console.log(this.isValidData, this.isBankSelectedFotBulkPayment);
+        console.log(this.isValidData, this.isBankSelectedForBulkPayment);
     }
 
     /**
