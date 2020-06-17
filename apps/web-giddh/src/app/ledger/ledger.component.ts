@@ -475,9 +475,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (params['from'] && params['to']) {
                 let from = params['from'];
                 let to = params['to'];
-
-                this.selectedDateRange = { startDate: moment(from), endDate: moment(to) };
-                this.selectedDateRangeUi = moment(from).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(to).format(GIDDH_NEW_DATE_FORMAT_UI);
+                // Set date range to component date picker
+                let dateRange = { fromDate: '', toDate: '' };
+                dateRange = this.generalService.dateConversionToSetComponentdatePicker(from, to);
+                this.selectedDateRange = { startDate: moment(dateRange.fromDate), endDate: moment(dateRange.toDate) };
+                this.selectedDateRangeUi = moment(dateRange.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateRange.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
 
                 this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                     dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
@@ -583,18 +585,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (lt) {
                 // set date picker to and from date, as what we got from api in case of today selected from universal date
                 if (lt.from && lt.to) {
-                    let fromDate = lt.from.split('-');
-                    let toDate = lt.to.split('-');
-                    let fromDateInMMDDYYY;
-                    let toDateInMMDDYYY;
-                    if (fromDate && fromDate.length) {
-                        fromDateInMMDDYYY = fromDate[1] +'-'+ fromDate[0]+'-'+ fromDate[2];
-                    }
-                    if (toDate && toDate.length) {
-                        toDateInMMDDYYY = toDate[1] +'-'+  toDate[0] +'-'+  toDate[2]
-                    }
-                    this.selectedDateRange = { startDate: moment(fromDateInMMDDYYY), endDate: moment(toDateInMMDDYYY) };
-                    this.selectedDateRangeUi = moment(fromDateInMMDDYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(toDateInMMDDYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    let dateRange = { fromDate: '', toDate: '' };
+                    dateRange = this.generalService.dateConversionToSetComponentdatePicker(lt.from, lt.to);
+                    this.selectedDateRange = { startDate: moment(dateRange.fromDate), endDate: moment(dateRange.toDate) };
+                    this.selectedDateRangeUi = moment(dateRange.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateRange.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
                 }
 
                 this.ledgerTransactions = lt;

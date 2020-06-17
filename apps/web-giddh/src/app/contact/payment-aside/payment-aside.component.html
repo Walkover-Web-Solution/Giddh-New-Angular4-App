@@ -53,9 +53,9 @@
                         </div>
                         <div class="form-group mr-15">
                             <label class="d-flex"> &nbsp; </label>
-                            <button type="button" *ngIf="!isPayClicked" class="btn btn-success" [disabled]="!selectedBankUniqueName || !isValidData" (click)="payClicked()">Pay</button>
+                            <button type="button" *ngIf="!isPayClicked" class="btn btn-success" [disabled]="!isBankSelectedFotBulkPayment || !isValidData" (click)="payClicked()">Pay</button>
 
-                            <button *ngIf="isPayClicked" class="btn btn-success" [disabled]="!selectedBankUniqueName || !isValidData || !receivedOtp" (click)="confirmOTP()">Confirm</button>
+                            <button *ngIf="isPayClicked" class="btn btn-success" [disabled]="!isBankSelectedFotBulkPayment || !isValidData || !receivedOtp" (click)="confirmOTP()">Confirm</button>
                             <button type="button" *ngIf="isPayClicked" class="btn btn-primary" (click)="clickedCancelOtp();">Cancel OTP</button>
                         </div>
                     </div>
