@@ -1671,7 +1671,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.isSalesInvoice || this.isPurchaseInvoice || this.isProformaInvoice || this.isEstimateInvoice) {
             if (moment(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(moment(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
                 this.startLoader(false);
-                this._toasty.errorToast('Due date cannot be less than Invoice Date');
+
+                let dateText = "Invoice";
+
+                if(this.isProformaInvoice) {
+                    dateText = "Proforma";
+                }
+
+                if(this.isEstimateInvoice) {
+                    dateText = "Estimate";
+                }
+
+                this._toasty.errorToast('Due date cannot be less than '+dateText+' Date');
                 return;
             }
         } else {
@@ -3191,7 +3202,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         if (this.isSalesInvoice || this.isPurchaseInvoice || this.isProformaInvoice || this.isEstimateInvoice) {
             if (moment(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(moment(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
-                this._toasty.errorToast('Due date cannot be less than Invoice Date');
+                this.startLoader(false);
+
+                let dateText = "Invoice";
+
+                if(this.isProformaInvoice) {
+                    dateText = "Proforma";
+                }
+
+                if(this.isEstimateInvoice) {
+                    dateText = "Estimate";
+                }
+
+                this._toasty.errorToast('Due date cannot be less than '+dateText+' Date');
                 return;
             }
         } else {
