@@ -19,7 +19,7 @@
                         Cash
                     </span>
 
-                    <small *ngIf="invoiceType==='estimates'">(Beta)</small>
+                    <small *ngIf="invoiceType==='estimates'"> (Beta) </small>
                     <span class="caret" *ngIf="!isUpdateMode"></span>
                 </button>
 
@@ -1167,7 +1167,7 @@
                                     <ul>
                                         <ng-container *ngIf="isSalesInvoice && (isAccountHaveAdvanceReceipts || isInvoiceAdjustedWithAdvanceReceipts)">
                                             <li role="menuitem" class="mrT1 ">
-                                                <div class="clearfix paymentMode">
+                                                <div class="clearfix paymentMode deposit-payment-mode">
 
                                                     <div class="pull-right balanceDueText">
                                                         <div class="clearfix mb-1 text-left">
@@ -1913,7 +1913,7 @@
 
 
                                 <li role="menuitem" class="mrT1 ">
-                                    <div class="clearfix paymentMode">
+                                    <div class="clearfix paymentMode deposit-payment-mode">
 
                                         <sh-select class="pull-right " name="depositAccountUniqueName" [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
                                             [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">

@@ -13,9 +13,7 @@ import { GetBunchModalComponent } from './bunch/components-modal/get-companies/g
 import { DiscountComponent } from './discount/discount.component';
 import { FinancialYearComponent } from './financial-year/financial-year.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
-import {
-    SettingLinkedAccountsConfirmationModalComponent,
-} from './linked-accounts/confirmation-modal/confirmation.modal.component';
+import { SettingLinkedAccountsConfirmationModalComponent} from './linked-accounts/confirmation-modal/confirmation.modal.component';
 import { ConnectBankModalComponent } from './linked-accounts/connect-bank-modal/connect.bank.modal.component';
 import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked.accounts.component';
 import { SettingPermissionFormComponent } from './permissions/form/form.component';
@@ -29,6 +27,17 @@ import { SettingTaxesComponent } from './Taxes/setting.taxes.component';
 import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
 import { SettingsServiceModule } from './settings-service.module';
+import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
+import { TextMaskModule } from 'angular2-text-mask';
+import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
+import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+
+
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+    suppressScrollX: true
+};
 
 @NgModule({
     declarations: [
@@ -60,7 +69,19 @@ import { SettingsServiceModule } from './settings-service.module';
         ContactModule,
         CurrencyModule,
         OmitByKeyPipeModule,
-        SettingsServiceModule
+        SettingsServiceModule,
+        PerfectScrollbarModule,
+        TextMaskModule,
+        NgxMaskModule.forRoot(),
+        DigitsOnlyModule,
+        ShSelectModule
+
+    ],
+    providers: [
+        {
+            provide: PERFECT_SCROLLBAR_CONFIG,
+            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+        }
     ]
 })
 

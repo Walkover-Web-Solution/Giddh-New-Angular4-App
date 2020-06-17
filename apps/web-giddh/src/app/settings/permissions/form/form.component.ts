@@ -15,7 +15,6 @@ import { AccountsAction } from '../../../actions/accounts.actions';
 import { SettingsPermissionService } from '../../../services/settings.permission.service';
 import * as moment from 'moment';
 import { GeneralService } from '../../../services/general.service';
-
 // some local const
 const DATE_RANGE = 'daterange';
 const PAST_PERIOD = 'pastperiod';
@@ -47,6 +46,10 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public selectedIPRange: string = 'IP Address';
     public createPermissionInProcess$: Observable<boolean>;
     public dateRangePickerValue: Date[] = [];
+    /** To open model */
+    public opened = false;
+    /** To show model */
+    public show: boolean = false;
     // private methods
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

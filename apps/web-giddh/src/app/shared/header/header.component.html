@@ -1,4 +1,4 @@
-<div class="paddingTopFixed">
+<div class="padding-top-fixed">
     <!--  *ngIf="pageUrl != '/new-user'" -->
     <div class="primary-header">
         <div>
@@ -176,59 +176,72 @@
                 </ul>
 
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="giddh-logo" (click)="forceOpenNavigation = true;">
 
                     <!-- [attachOutsideOnClick]="true" [isOpen]="companyMenu.isopen"  [attachOutsideOnClick]="true" (clickOutside)="closeUserMenu(dropdown)"-->
-            <li class="company-name pos-rel" [autoClose]="false" dropdown #dropdown="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="dropdown.isOpen = false">
-                <a id="cmpWrp" href="javascript:void(0)" class="clearfix z1 " dropdownToggle>
-                    <ng-template #companyBranchNameAlias> {{ (selectedCompany | async)?.name }}<span *ngIf="(selectedCompany | async)?.nameAlias"> ( {{  (selectedCompany | async)?.nameAlias }}
+                    <li class="company-name pos-rel" [autoClose]="false" dropdown #dropdown="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="dropdown.isOpen = false">
+                        <a id="cmpWrp" href="javascript:void(0)" class="clearfix z1 " dropdownToggle>
+                            <ng-template #companyBranchNameAlias> {{ (selectedCompany | async)?.name }}<span *ngIf="(selectedCompany | async)?.nameAlias"> ( {{  (selectedCompany | async)?.nameAlias }}
                             )</span>
-                    </ng-template>
-                    <!-- <span class="icon-dots-three-vertical"></span> -->
-                    <div class="cText no-padding">
+                            </ng-template>
+                            <!-- <span class="icon-dots-three-vertical"></span> -->
+                            <div class="cText no-padding">
 
-                        <span class="cName ellp pdR1 alice">{{companyInitials}}</span>
+                                <span class="cName ellp pdR1 alice">{{companyInitials}}</span>
 
-                        <img src="assets/images/giddh-white-logo.svg" class="giddh-logo">
-                    </div>
-                </a>
-                <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
-                <ng-container *ngTemplateOutlet="headDropdownMenu"></ng-container>
-                </ul>
+                                <img src="assets/images/giddh-white-logo.svg" class="giddh-logo">
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
+                            <ng-container *ngTemplateOutlet="headDropdownMenu"></ng-container>
+                        </ul>
 
-            </li>
+                    </li>
 
 
                 </div>
 
             </div>
-            <div class="col-sm-8">
+            <div class="col-sm-9">
                 <div class="pull-right right-details">
-                    <ul class="nav universal_date mr-2" *ngIf="(selectedCompany | async)">
-                        <li [hidden]="isTodaysDateSelected">
-                            <button class="btn btn-link" (click)="jumpToToday();">Today</button>
+                    <ul class="nav universal-date mr-15" *ngIf="(selectedCompany | async)">
+                        <li class="border-none pr-15" [ngClass]="{'notification': !isMobileSite}">
+                            <img src="{{imgPath}}notification.svg">
                         </li>
-                        <li [hidden]="isTodaysDateSelected" class="notToday">
-                            <span class="icon-calender calender-addone"></span>
-                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />
+                        <li [hidden]="isTodaysDateSelected" class="border-none pl-0">
+                            <button class="btn btn-link" (click)="dateSelectedCallback()">Today</button>
                         </li>
-                        <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
-                            <!-- <label class="btn btn-link"></label> -->
+                        <li class="not-today">
+                            <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
+                            <!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
+                            <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
+                        </li>
+                        <!-- <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
+
                             <span class="icon-calender calender-addone"></span>
                             <label class="header-date">
                                 {{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
-                        </li>
+                        </li> -->
+                        <!--                        <li [hidden]="!isTodaysDateSelected" class="cp" (click)="showGiddhDatepicker($event)">-->
+                        <!--                            &lt;!&ndash; <label class="btn btn-link"></label> &ndash;&gt;-->
+                        <!--                            <span class="icon-calender calender-addone"></span>-->
+                        <!--                            <label class="header-date">-->
+                        <!--                                {{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>-->
+                        <!--                        </li>-->
                     </ul>
-
-
-                    <button id="AddManage" type="button" class="btn btn-gray btn-sm" [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"> <span
-                            class="icon-edit-ico"></span>Accounts
+                    <button id="add-manage" type="button" class="btn btn-gray btn-sm" [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
+                        <i class="icon-plus"></i> Master
                     </button>
-                    <div class="btn-group cp mrL1 d-inline-block" dropdown>
-                        <span class="icon-support dropdown-toggle" dropdownToggle></span>
+                    <div class="btn-group cp d-inline-block help-setting-icons " dropdown>
+                        <span class="mr-15" (click)="toggleSidebarPane(true, false)">
+                                <img src="{{imgPath}}setting-icon.svg">
+                            </span>
+                        <span (click)="toggleHelpSupportPane(true)">
+                                <img src="{{imgPath}}help-support-icon.svg">
+                            </span>
 
-                        <!-- <img src="{{imgPath}}support.svg" dropdownToggle class="dropdown-toggle" [style.max-width.px]="24" /> -->
+                        <!-- <span class="icon-support dropdown-toggle" dropdownToggle></span>
                         <ul *dropdownMenu class="dropdown-menu dropdown-menu-right mrT1 pd1" role="menu" aria-labelledby="button-basic" [style.min-width.px]="230">
                             <li>
                                 <button class="btn btn-block btn-gray">
@@ -237,7 +250,7 @@
                                 </button>
                             </li>
                             <li class="mrT2 text-center mrB2">
-                                <!-- <span><a href="tel:02268210057" target="_blank" class="grey_clr">022-68210057</a></span>  openScheduleModal() -->
+
                                 <p><a href="mailto:support@giddh.com" target="_blank" class="grey_clr">support@giddh.com</a></p>
                             </li>
                             <li class="row text-center">
@@ -245,9 +258,9 @@
                                 <span class="text-center"><a href="http://faq.giddh.com/" target="_blank"
                                         class="btn btn-link tdUndr">FAQs</a></span>
                             </li>
-                            <!-- <h3 class="mrT2 mrB2 fs20 text-center grey_clr">FAQs?</h3> -->
 
-                        </ul>
+
+                        </ul> -->
                     </div>
                 </div>
 
@@ -298,7 +311,7 @@
                 <span class="input-group-addon" id="">
                     <i class="icon-search"></i>
                 </span>
-                <input type="text" class="form-control jumpToAccount" placeholder="Jump to Account" aria-describedby="">
+                <input type="text" class="form-control jumpToAccount" placeholder="Search Anything" aria-describedby="">
             </div>
 
         </ul>
@@ -309,7 +322,12 @@
 
                 <!-- Accounts menu -->
                 <ul class="left_fixed_header mrT1" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
-                    <h6 class="mrB1">ACCOUNTS <i *ngIf="!isMobileSite" tooltip="Create account" placement="bottom" container="body" class="fa fa-plus cp" (click)="showManageGroupsModal()"></i>
+                    <h6 class="mrB1">ACCOUNTS
+
+                        <img src="{{imgPath}}plus-around-icon.svg" *ngIf="!isMobileSite" (click)="showManageGroupsModal()" tooltip="Create account" class="pull-right" placement="bottom" container="body">
+                        <!-- <i  class="fa fa-plus cp" >
+
+                        </i> -->
                     </h6>
                     <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
                     <li *ngFor="let acc of accountItemsFromIndexDB">
@@ -328,8 +346,9 @@
                 <!-- Main menu -->
                 <ul class="left_fixed_header mrT4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
                     <h6 class="mrB1">MENU
-                        <!-- <i *ngIf="!isMobileSite" tooltip="Menu" placement="bottom" container="body"
-              class="fa fa-plus cp"></i>  -->
+                        <a [routerLink]="['/pages/all-modules']">
+                            <img src="{{imgPath}}angle-round-icon.svg" class="pull-right" *ngIf="!isMobileSite" tooltip="Menu" placement="bottom" container="body">
+                        </a>
                     </h6>
                     <li *ngFor="let menu of menuItemsFromIndexDB">
                         <a *ngIf="menu.uniqueName == '/pages/gstfiling' && activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode == 'IN'" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage && selectedPage.toLowerCase() == menu.name.toLowerCase()}"
@@ -342,7 +361,8 @@
                             <span class="icon-dashboard"></span>
                             <span class="label">{{menu.name}}</span>
                         </a>
-                        <a *ngIf="menu.uniqueName != '/pages/gstfiling' && menu.uniqueName != '/pages/vat-report' && menu.uniqueName != '/pages/all-modules' && menu.uniqueName != '/pages/journal-voucher'" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage && selectedPage.toLowerCase() == menu.name.toLowerCase()}" (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
+                        <a *ngIf="menu.uniqueName != '/pages/gstfiling' && menu.uniqueName != '/pages/vat-report' && menu.uniqueName != '/pages/all-modules' && menu.uniqueName != '/pages/journal-voucher'" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage && selectedPage.toLowerCase() == menu.name.toLowerCase()}"
+                            (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
                             <span class="icon-dashboard"></span>
                             <span class="label">{{menu.name}}</span>
                         </a>
@@ -352,125 +372,24 @@
                             <span class="label">{{menu.name}}</span>
                         </a>
                     </li>
-
-                    <li class="other">
-                        <a [routerLink]="['/pages/all-modules']">All Modules
-                        </a>
+                    <li id="other" class="show-more-module">
+                        <a [routerLink]="['/pages/all-modules']">Show More...</a>
                     </li>
-
-                    <!-- <li class="other" *ngIf="!isMobileSite" (mouseenter)="allModulesPopover.show()" (mouseleave)="handleAllModulesLeaveEvent($event)">
-                        <a #allModulesPopover="bs-popover" [popover]="allModules" placement="right" containerClass="all-modules-popover"
-                            (mouseenter)="allModulesPopover.show()" container="body">All
-                            Modules <i *ngIf="!isMobileSite" tooltip="All Modules" placement="bottom" container="body"
-                                class="fa fa-angle-right cp"></i></a>
-                    </li> -->
-                    <!-- All Modules list -->
-                    <ng-template #allModules>
-                        <ul class="left-sub-menu left_fixed_header open" id="other_sub_menu" (mouseenter)="allModulesPopover.show()"
-                            (mouseleave)="allModulesPopover.hide()" style="height: fit-content">
-                            <li>
-                                <div class="clearfix">
-                                    <ul>
-                                        <li><a href="javascript:void(0)"><strong>General</strong></a></li>
-                                        <li><a (click)="analyzeOtherMenus('contact/customer', {tab: 'customer', tabIndex: 0})">Customer</a>
-                                        </li>
-                                        <li><a (click)="analyzeOtherMenus('contact/vendor', {tab: 'vendor', tabIndex: 0})">Vendor</a>
-                                        </li>
-                                        <!-- <li><a (click)="analyzeOtherMenus('accounting-voucher')">Journal Voucher</a>
-                                        </li> -->
-                                        <li *ngIf="isAllowedForBetaTesting"><a (click)="analyzeOtherMenus('journal-voucher')">Journal Voucher *</a>
-                                        </li>
-                                        <li><a (click)="analyzeOtherMenus('daybook')">Daybook</a></li>
-                                        <li><a
-                                                (click)="analyzeOtherMenus('trial-balance-and-profit-loss', { tab: 'trial-balance', tabIndex: 0 })">
-                                                Trial Balance</a></li>
-                                        <li><a
-                                                (click)="analyzeOtherMenus('trial-balance-and-profit-loss', { tab: 'trial-balance', tabIndex: 1 })">P&L,
-                                                B/S</a></li>
-                                    </ul>
-
-                                    <ul>
-                                        <li><a href="javascript:void(0)"><strong>Invoice</strong></a></li>
-                                        <li><a (click)="analyzeOtherMenus('proforma-invoice/invoice/sales')">Sales</a></li>
-                                        <li><a (click)="analyzeOtherMenus('proforma-invoice/invoice/purchase')">Purchase</a></li>
-                                        <li><a (click)="analyzeOtherMenus('proforma-invoice/invoice/cash')">Cash</a></li>
-                                        <li><a
-                                                (click)="analyzeOtherMenus('invoice/preview/credit note', {tab: 'credit note', tabIndex: 1})">Dr/Cr
-                                                Note</a></li>
-                                        <li><a
-                                                (click)="analyzeOtherMenus('invoice/preview/sales', {tab: 'templates', tabIndex: 3})">Template</a>
-                                        </li>
-                                        <li><a (click)="analyzeOtherMenus('invoice/preview/sales', {tab: 'invoice', tabIndex: 0})">Invoice
-                                                Management</a></li>
-                                    </ul>
-
-                                    <ul>
-                                        <li><a href="javascript:void(0)"><strong>Inventory</strong></a></li>
-                                        <li><a (click)="analyzeOtherMenus('inventory')">Inventory</a></li>
-                                        <li><a (click)="analyzeOtherMenus('manufacturing/report')">Manufacturing</a></li>
-                                        <!-- <li><a (click)="analyzeOtherMenus('inventory/jobwork')">Job Work</a></li> -->
-                                        <li><a (click)="analyzeOtherMenus('inventory/report')">Branch Transfer</a></li>
-                                        <li><a (click)="analyzeOtherMenus('settings/warehouse')">Warehouse</a></li>
-                                    </ul>
-
-                                    <ul>
-                                        <li><a href="javascript:void(0)"><strong>Settings</strong></a></li>
-                                        <li><a (click)="analyzeOtherMenus('permissions')">Permission</a></li>
-                                        <li><a (click)="analyzeOtherMenus('import/select-type')">Import Data</a></li>
-                                        <li>
-                                            <a (click)="analyzeOtherMenus('settings/integration', { tab: 'integration', tabIndex: 1 })">Integration
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a (click)="analyzeOtherMenus('settings/taxes', { tab: 'taxes', tabIndex: 0 })">Settings
-                                            </a>
-                                        </li>
-                                    </ul>
-
-                                    <ul>
-                                        <li><a href="#"><strong>Others</strong></a></li>
-                                        <li><a (click)="analyzeOtherMenus('audit-logs')">Audit Log</a></li>
-                                        <li><a (click)="analyzeOtherMenus('search')">Search</a></li>
-                                        <li><a (click)="analyzeOtherMenus('gstfiling')"
-                                                *ngIf="activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode == 'IN'">GSTR</a>
-                                        </li>
-                                        <li><a (click)="analyzeOtherMenus('vat-report')"
-                                                *ngIf="activeCompany && activeCompany.countryV2 && vatSupportedCountries?.includes(activeCompany.countryV2.alpha2CountryCode)">Vat
-                                                Report</a></li>
-                                        <li><a (click)="analyzeOtherMenus('home')">Dashboard</a></li>
-                                        <li><a (click)="analyzeOtherMenus('reports/reports-dashboard')">Reports</a></li>
-                                    </ul>
-
-                                </div>
-                            </li>
-
-                        </ul>
-                    </ng-template>
                 </ul>
-                <!-- <app-fixed-footer></app-fixed-footer> -->
-
             </perfect-scrollbar>
-
         </div>
-
-
-
     </div>
-
     <div class="mobile_menu_icon" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
         <span class="icon-bar" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right"></span>
     </div>
-
 </div>
 
-<header class="clearfix header-container desktop-header " [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen , 'ledger-page': isLedgerAccSelected }">
+<header class="clearfix header-container desktop-header" [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen }">
     <nav class="navbar ">
         <div class="container-fluid pdT1 pdB1">
             <div class="navbar_header">
                 <ul class="nav navbar-nav">
-                    <!-- (isOpenChange)="sideBarStateChange($event)" -->
                     <li class="hamburger_menu cp" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
-
                         <button class="btn mrR0" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right">
                             <i class="icon-bar"></i>
                         </button>
@@ -514,21 +433,20 @@
     </nav>
     <!-- <accounts-side-bar [isRouter]="true" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue' [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar> -->
 </header>
-
-
-<div class="paddingTopFixed-mobile">
+<div class="padding-top-fixed-mobile">
     <header class="clearfix header-container mobileHeader">
         <nav class="navbar " [ngClass]="{'menu_open':sideMenu.isopen}">
             <div class="container-fluid  mrB1 ">
                 <div class="upperLayerHeader">
                     <ul class="nav navbar-nav">
                         <!-- (isOpenChange)="sideBarStateChange($event)" -->
-                        <li class="hamburger_menu cp pull-left" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
-
-                            <button class="btn mrR0" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right">
-                                <i class="icon-bar"></i>
+                        <li class="hamburger_menu cp pull-left">
+                            <button class="btn mrR0" placement="right" (click)="redirectToMobileHome()">
+                                <i class="icon-home-icon"></i>
                             </button>
-
+                            <span class="setting-menu-icon" (click)="toggleSidebarPane(true, true)"> <i class="icon-bar"></i> </span>
+                        </li>
+                        <li class="hamburger_menu cp pull-left" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
                             <h4 class="inline text-capitalize" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
                                 <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txtLwc">c</span></h4>
 
@@ -561,34 +479,56 @@
                                 </ul>
                             </div>
                         </li>
-
-
                     </ul>
                 </div>
 
-                <div class="lowerLayerHeader clearfix">
-                    <ul class="nav universal_date  pull-left" *ngIf="(selectedCompany | async)">
-                        <li [hidden]="isTodaysDateSelected">
-                            <button class="btn btn-link" (click)="jumpToToday();">Today</button>
+                <div class="lower-layer-header">
+                    <ul class="nav universal-date  pull-left" *ngIf="(selectedCompany | async)">
+                        <li [hidden]="isTodaysDateSelected" class="border-none pl-0">
+                            <button class="btn btn-link">Today</button>
                         </li>
-                        <li [hidden]="isTodaysDateSelected" class="dateRangPicker">
-                            <span class="icon-calender calender-addone pos-abs" (click)="jumpToToday();"></span>
-                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />
+                        <li class="daterang-picker not-today">
+                            <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
+                            <!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
+                            <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
                         </li>
-                        <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
+                        <!-- <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
                             <label class="btn btn-link">&nbsp;</label>
                             <span class="icon-calender calender-addone "></span>
                             <label class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
-                        </li>
+                        </li> -->
                     </ul>
-                    <button id="AddManage" type="button" class="btn btn-gray btn-xs btn-sm pull-right mrR0 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"><span
-                            class="icon-edit-ico"></span>
-                        Accounts
-                    </button>
+                    <div class="d-flex align-items-center" *ngIf="(selectedCompany | async)">
+                        <span [ngClass]="{'notification': isMobileSite}">
+                            <img src="{{imgPath}}notification.svg" class="mr-15">
+                        </span>
+                        <button id="add-manage" type="button" class="btn btn-gray btn-sm d-inline-flex mr-15 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
+                            <i class="icon-plus"></i>
+                        </button>
+                        <div class="btn-group cp d-inline-flex help-setting-icons" dropdown>
+                            <span (click)="toggleHelpSupportPane(true)">
+                                <img src="{{imgPath}}help-support-icon.svg">
+                            </span>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
+</div>
+<div class="plan-wrapper" *ngIf="subscribedPlan !== undefined && subscribedPlan.status === 'expired'" [ngClass]="{'menu_open':sideMenu.isopen}">
+    <div class="white-row plan-issue">
+        <p><span class="icon-traingle-info"></span> Your {{subscribedPlan.planDetails.duration}} {{subscribedPlan.planDetails.durationUnit}} {{subscribedPlan.planDetails.name}} ended on {{subscribedPlan.expiry}}. Apply to upgrade your subscription. <a class="click-here"
+                (click)="goToSelectPlan()">Click here</a></p>
+    </div>
+</div>
+<div class="plan-wrapper" *ngIf="subscribedPlan !== undefined && subscribedPlan.additionalCharges" [ngClass]="{'menu_open':sideMenu.isopen}">
+    <div class="white-row plan-issue">
+        <p> <span class="icon-traingle-info"></span> You have crossed the transactions limit of your assigned plan {{subscribedPlan.planDetails.name}} subscribed on {{subscribedPlan.startedAt}}. To continue your accounting with Giddh, Please renew your current
+            plan or switch to another one. Contact us for more assistance. <a class="clickHere" (click)="goToSelectPlan()">Click here</a>
+        </p>
+    </div>
 </div>
 <!--add and manage group account modal -->
 <div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy mangeAccountPopup addManageGroupAcc" role="dialog" (onShown)="onShown()">
@@ -599,7 +539,6 @@
         </div>
     </div>
 </div>
-
 <!--add company modal  -->
 <div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog" (onHidden)="onHide()">
     <div class="modal-dialog modal-lg">
@@ -609,7 +548,6 @@
         </div>
     </div>
 </div>
-
 <!--add company new modal  -->
 <div bsModal #addCompanyNewModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog" (onHidden)="onHide()">
     <div class="modal-dialog modal-lg">
@@ -619,7 +557,6 @@
         </div>
     </div>
 </div>
-
 <!--delete company modal  -->
 <div bsModal #deleteCompanyModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -629,7 +566,6 @@
         </div>
     </div>
 </div>
-
 <!--CMD + G modal  -->
 <ng-template #navigationModal>
 
@@ -737,169 +673,186 @@
     </div>
 </ng-template>
 <div class="overlay-cal" *ngIf="isCalendlyModelActivate">
-    <button id="close" class="close-2" (click)="hideScheduleCalendlyModel()"><i class="icon-cross" ></i></button>
     <div id="scheduleCall" class="tab-pane active vertical-center modal-body">
         <div class="calendly-box" #reder>
             <div class="calendly-inline-widget">
+                <button id="close" class="close-2" (click)="hideScheduleCalendlyModel()"><i class="icon-cross" ></i></button>
                 <object data="https://calendly.com/sales-accounting-software/talk-to-sale"></object>
             </div>
         </div>
     </div>
 </div>
-
-
 <ng-template #headDropdownMenu>
 
-        <li>
-            <div class="cText head-nav">
-                <div class="company-name-finance-year" placement="bottom">
-                    <span class=" ellp pdR1">{{ ((selectedCompany | async)?.name)}}
+    <li>
+        <div class="cText head-nav">
+            <div class="company-name-finance-year" placement="bottom">
+                <span class=" ellp pdR1">{{ ((selectedCompany | async)?.name)}}
                     </span>
 
-                    <div class="unique-name-financial-year"> <span *ngIf="(selectedCompany | async)?.nameAlias" class="branch-unique-name">
+                <div class="unique-name-financial-year"> <span *ngIf="(selectedCompany | async)?.nameAlias" class="branch-unique-name">
                             ({{ (selectedCompany | async)?.nameAlias }})
                         </span>
-                        <span class="fyear">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }}
+                    <span class="fyear">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }}
                         </span>
-                    </div>
                 </div>
-
-
             </div>
-        </li>
 
-        <li>
-            <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/settings/taxes', {tab: 'taxes', tabIndex: 0})">Settings</a>
-        </li>
-        <li *ngIf="!isMobileSite">
-            <!-- [routerLink]="['/settings']" [queryParams]="" -->
-            <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/settings/permission', { tab: 'permission', tabIndex: 5 })">Manage
+
+        </div>
+    </li>
+
+    <li>
+        <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/settings/taxes', {tab: 'taxes', tabIndex: 0})">Settings</a>
+    </li>
+    <li *ngIf="!isMobileSite">
+        <!-- [routerLink]="['/settings']" [queryParams]="" -->
+        <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/settings/permission', { tab: 'permission', tabIndex: 5 })">Manage
                 Users (Permission)</a>
-        </li>
-        <li>
-            <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/company-import-export')">Back
+    </li>
+    <li>
+        <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/company-import-export')">Back
                 up
                 Data</a>
-        </li>
-        <!-- #dropdown="bs-dropdown" -->
-        <!--  -->
-        <li dropdown class="pos-rel" #subdropdown="bs-dropdown" [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="subdropdown.isOpen = false" (onShown)="switchCompanyMenuShown()">
-            <a href="javascript:void(0)" class="clearfix" dropdownToggle>
+    </li>
+    <!-- #dropdown="bs-dropdown" -->
+    <!--  -->
+    <li dropdown class="pos-rel" #subdropdown="bs-dropdown" [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="subdropdown.isOpen = false" (onShown)="switchCompanyMenuShown()">
+        <a href="javascript:void(0)" class="clearfix" dropdownToggle>
                 Switch company
                 <span class="glyphicon glyphicon-menu-right"></span>
             </a>
 
-            <ul id="companyList" class="company-list dropdown-menu sub_menu_nav" dropdown>
+        <ul id="companyList" class="company-list dropdown-menu sub_menu_nav" dropdown>
 
-                <div class="input-group" container="body">
+            <div class="input-group" container="body">
 
-                    <input type="text" class="form-control" placeholder="Search Company here" [(ngModel)]="searchCmp" #searchCmpTextBox name="searchCompany" (ngModelChange)="filterCompanyList($event)" autocomplete="off" />
+                <input type="text" class="form-control" placeholder="Search Company here" [(ngModel)]="searchCmp" #searchCmpTextBox name="searchCompany" (ngModelChange)="filterCompanyList($event)" autocomplete="off" />
 
-                    <span tooltip="Refresh" class="input-group-addon" id="" (click)="refreshCompanies($event)">
+                <span tooltip="Refresh" class="input-group-addon" id="" (click)="refreshCompanies($event)">
                         <i class="glyphicon glyphicon-refresh cp"
                             [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
                     </span>
-                </div>
+            </div>
 
-                <li style="padding:0px;">
+            <li style="padding:0px;">
 
-                    <perfect-scrollbar class="" [scrollIndicators]="true">
+                <perfect-scrollbar class="" [scrollIndicators]="true">
 
-                        <ul class="sub-list" *ngIf="companyListForFilter && companyListForFilter.length">
+                    <ul class="sub-list" *ngIf="companyListForFilter && companyListForFilter.length">
 
-                            <li class="cmp posrelative headerTooltip" *ngFor="let cmp of companyListForFilter; let i = index" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (keydown.enter)="changeCompany(cmp.uniqueName)" (click)="changeCompany(cmp.uniqueName)">
+                        <li class="cmp posrelative headerTooltip" *ngFor="let cmp of companyListForFilter; let i = index" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (keydown.enter)="changeCompany(cmp.uniqueName)" (click)="changeCompany(cmp.uniqueName)">
 
-                                <a vr-item href="javascript:void(0);" class="ellp" (mouseenter)="mouseEnteredOnCompanyName(i)">
+                            <a vr-item href="javascript:void(0);" class="ellp" (mouseenter)="mouseEnteredOnCompanyName(i)">
 
-                                    <ng-template #CompanyBranchname> {{ cmp.name }}
-                                        <span *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span>
-                                    </ng-template>
+                                <ng-template #CompanyBranchname> {{ cmp.name }}
+                                    <span *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span>
+                                </ng-template>
 
-                                    <span container="body" [tooltip]="CompanyBranchname" placement="top">
+                                <span container="body" [tooltip]="CompanyBranchname" placement="top">
                                         {{ cmp.name }} <span
                                             *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span> </span>
 
-                                    <img class="pull-right permission_icon" *ngIf="hoveredIndx !== i && cmp.createdBy.email !== (user$ | async)?.email" src="assets/images/users.svg">
+                                <img class="pull-right permission_icon" *ngIf="hoveredIndx !== i && cmp.createdBy.email !== (user$ | async)?.email" src="assets/images/users.svg">
 
-                                    <img class="pull-right permission_icon" *ngIf="hoveredIndx === i && cmp.createdBy.email !== (user$ | async)?.email" src="assets/images/users-white.svg">
+                                <img class="pull-right permission_icon" *ngIf="hoveredIndx === i && cmp.createdBy.email !== (user$ | async)?.email" src="assets/images/users-white.svg">
 
-                                </a>
-                                <!-- commented by meghna
+                            </a>
+                            <!-- commented by meghna
 <i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
 -->
-                            </li>
+                        </li>
 
-                        </ul>
+                    </ul>
 
-                    </perfect-scrollbar>
+                </perfect-scrollbar>
 
-                </li>
+            </li>
 
-                <li>
-                    <button href="javascript:void(0)" (click)="createNewCompany()" class="btn-link pd0">Create
+            <li>
+                <button href="javascript:void(0)" (click)="createNewCompany()" class="btn-link pd0">Create
                         Company
                     </button>
-                </li>
+            </li>
 
-            </ul>
-        </li>
+        </ul>
+    </li>
 
-        <li role="separator" class="divider" style="width:100%"></li>
+    <li role="separator" class="divider" style="width:100%"></li>
 
-        <li class="mrB1" *ngIf="!isMobileSite">
-            <a [tooltip]="userEmail" placement="top" href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details', { tab: 'profile', tabIndex: 1 })" class="oh">
-                <span class="user_circle pull-left" *ngIf="!userAvatar">
+    <li class="mrB1" *ngIf="!isMobileSite">
+        <a [tooltip]="userEmail" placement="top" href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details', { tab: 'profile', tabIndex: 1 })" class="oh">
+            <span class="user_circle pull-left" *ngIf="!userAvatar">
                     <span>{{userName | uppercase}}</span>
-                </span>
-                <span class="user_circle pull-left" *ngIf="userAvatar" [style.background]="'transparent'">
+            </span>
+            <span class="user_circle pull-left" *ngIf="userAvatar" [style.background]="'transparent'">
                     <img src="{{userAvatar}}" alt="" />
                 </span>
-                <div class="pull-left userName_wrap ellp">{{ userFullName }}
-                    <small class="grey_clr">Profile</small>
-                </div>
-            </a>
-        </li>
-        <li *ngIf="!isMobileSite">
-            <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details', { tab: 'api', tabIndex: 0 })">API</a>
-        </li>
-        <li>
-            <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank">Upcoming</a>
-        </li>
-        <li>
-            <!-- <a href="https://giddh.canny.io/" target="_blank">Feature Request</a> -->
-            <a href="https://giddh.canny.io/feature-requests" target="_blank">Feature Request</a>
-        </li>
-        <li>
-            <a href="https://changelog.giddh.com" target="_blank">Changelog</a>
-        </li>
-        <!-- <li>
+            <div class="pull-left userName_wrap ellp">{{ userFullName }}
+                <small class="grey_clr">Profile</small>
+            </div>
+        </a>
+    </li>
+    <li *ngIf="!isMobileSite">
+        <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details', { tab: 'api', tabIndex: 0 })">API</a>
+    </li>
+    <li>
+        <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank">Upcoming</a>
+    </li>
+    <li>
+        <!-- <a href="https://giddh.canny.io/" target="_blank">Feature Request</a> -->
+        <a href="https://giddh.canny.io/feature-requests" target="_blank">Feature Request</a>
+    </li>
+    <li>
+        <a href="https://changelog.giddh.com" target="_blank">Changelog</a>
+    </li>
+    <!-- <li>
 <a href="http://faq.giddh.com" target="_blank">Help</a>
 </li> -->
-        <li role="separator" class="divider" style="width:100%"></li>
-        <li>
-            <a href="javascript:void(0)" (click)="logout()">Logout</a>
-        </li>
-        <li role="separator" class="divider" style="width:100%"></li>
-        <li class="app_list ">
-            <ul>
-                <h6>Downloads</h6>
-                <li>
-                    <a href="https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en" target="_blank" title="android app">
-                        <i class="fa fa-android"></i> Android</a>
-                </li>
-                <li>
-                    <a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app">
-                        <i class="fa fa-apple"></i> IOS</a>
-                </li>
-                <li>
-                    <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{apkVersion}}.dmg" target="_blank" title="macOS app">
-                        <i class="fa fa-apple"></i> MacOS</a>
-                </li>
-                <li>
-                    <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh%20Setup%20{{apkVersion}}.exe" target="_blank" title="windows app">
-                        <i class="fa fa-windows"></i> Windows</a>
-                </li>
-            </ul>
-        </li>
+    <li role="separator" class="divider" style="width:100%"></li>
+    <li>
+        <a href="javascript:void(0)" (click)="logout()">Logout</a>
+    </li>
+    <li role="separator" class="divider" style="width:100%"></li>
+    <li class="app_list ">
+        <ul>
+            <h6>Downloads</h6>
+            <li>
+                <a href="https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en" target="_blank" title="android app">
+                    <i class="fa fa-android"></i> Android</a>
+            </li>
+            <li hidden>
+                <a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app">
+                    <i class="fa fa-apple"></i> IOS</a>
+            </li>
+            <li>
+                <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{apkVersion}}.dmg" target="_blank" title="macOS app">
+                    <i class="fa fa-apple"></i> MacOS</a>
+            </li>
+            <li>
+                <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh%20Setup%20{{apkVersion}}.exe" target="_blank" title="windows app">
+                    <i class="fa fa-windows"></i> Windows</a>
+            </li>
+        </ul>
+    </li>
+</ng-template>
 
+<!--help & support sidebar  -->
+<div class="help-support-aside" *ngIf="asideHelpSupportMenuState === 'in'">
+    <aside-help-support (closeAsideEvent)="toggleHelpSupportPane(false)"></aside-help-support>
+</div>
+<!-- setting aside pane -->
+<div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'">
+    <perfect-scrollbar [scrollIndicators]="true">
+        <aside-setting [ngClass]="{'setting-sidebar': isMobileSidebar}" (closeAsideEvent)="toggleSidebarPane(false, false)"></aside-setting>
+    </perfect-scrollbar>
+</div>
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions.ranges" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
+                [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+        </div>
+    </div>
 </ng-template>

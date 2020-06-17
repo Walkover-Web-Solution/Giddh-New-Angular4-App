@@ -127,7 +127,7 @@
                             <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate"
                                 [taxRenderData]="currentTxn.taxesVm" [totalForTax]="totalForTax"
                                 [customHeading]="shouldShowAdvanceReceiptMandatoryFields ? 'Tax on Advance' : isRcmEntry ? 'Tax (RCM)' : ''"
-                                [isMandatory]="shouldShowAdvanceReceiptMandatoryFields || isRcmEntry"
+                                [isMandatory]="isRcmEntry"
                                 [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']" [maskInput]="inputMaskFormat"
                                 [prefixInput]="selectedPrefixForCurrency" [suffixInput]="selectedSuffixForCurrency"
                                 [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : []"
@@ -427,7 +427,7 @@
 
                         <input class="pull-left" type="checkbox" name="generateInvoice" [disabled]="isAdvanceReceipt && blankLedger.generateInvoice ? 'disabled' : null"
                             [(ngModel)]="blankLedger.generateInvoice">
-                        Generate Invoice
+                        Generate Voucher
                     </label>
 
                 </div>

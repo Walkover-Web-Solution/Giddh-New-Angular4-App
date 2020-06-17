@@ -32,7 +32,7 @@
     <div class="modal-body" [hidden]="isChangeAcc">
 
         <!-- region transactions -->
-        <div class="ledgHead entry-popup">
+        <div class="ledg-head entry-popup">
 
             <table class="col-xs-12 ledger-head mrT1 hidden-xs">
                 <thead>
@@ -60,7 +60,7 @@
                 </ul>
             </div>
 
-            <div class="ledger_book">
+            <div class="ledger-book">
                 <!-- region debit transaction -->
                 <div class="left-col-new bdrR" [ngClass]="Shown ? 'active' : ''">
 
@@ -488,7 +488,7 @@
                             <span auto-close="outsideClick">
                                 <update-ledger-tax-control #tax [taxes]="vm.companyTaxesList$ | async"
                                                            [customHeading]="shouldShowAdvanceReceiptMandatoryFields ? 'Tax on Advance' : isRcmEntry ? 'Tax (RCM)' : ''"
-                                                           [isMandatory]="shouldShowAdvanceReceiptMandatoryFields || isRcmEntry"
+                                                           [isMandatory]="isRcmEntry"
                                                            [date]="vm.selectedLedger.entryDate" [taxRenderData]="vm.taxRenderData"
                                                            [totalForTax]="vm.totalForTax" [prefixInput]="vm.selectedPrefixForCurrency"
                                                            [maskInput]="vm.inputMaskFormat" [suffixInput]="vm.selectedSuffixForCurrency"
@@ -817,7 +817,7 @@
                                 <label class="pull-left cp fs16">
                                     <input class="pull-left" type="checkbox" name="generateInvoice" [(ngModel)]="vm.selectedLedger.generateInvoice"
                                            [disabled]="(vm.isInvoiceGeneratedAlready || (isAdvanceReceipt && vm.selectedLedger.generateInvoice)) ? 'disabled': null">
-                                    Generate Invoice
+                                    Generate Voucher
                                 </label>
                             </div>
 

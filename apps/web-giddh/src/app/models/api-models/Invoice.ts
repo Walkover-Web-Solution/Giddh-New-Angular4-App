@@ -124,6 +124,7 @@ export interface ILedgersInvoiceResult {
 
 export interface IBulkInvoiceGenerationFalingError {
     failedEntries: string[];
+    successEntries?: string[];
     reason: string;
 }
 

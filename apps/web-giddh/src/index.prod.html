@@ -43,6 +43,7 @@
         window.usingCordova = false;
     </script>
     <script type='text/javascript'>
+        var HW_config = {    selector: ".notification", account:  "7eB4aJ"  };
         window.onload = function() {
             if (window['isElectron']) {
                 var jQuery = $ = window.$ = window.jQuery = require('jquery');
@@ -128,10 +129,14 @@
 
 
 <body class="unresponsive">
-
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <!--<div id="loader-1" class="giddh-spinner vertical-center-spinner"></div>-->
     <!-- Scripts will be injected by webpack here -->
-
+    <app-component></app-component>
 </body>
 
 </html>
