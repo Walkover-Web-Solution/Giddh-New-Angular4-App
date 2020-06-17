@@ -733,12 +733,16 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         return request;
     }
 
-    private parseItemForVm(invoice: ProformaItem): InvoicePreviewDetailsVm {
+    private parseItemForVm(invoice: any): InvoicePreviewDetailsVm {
         let obj: InvoicePreviewDetailsVm = new InvoicePreviewDetailsVm();
-        obj.voucherDate = this.voucherType === 'proformas' ? invoice.proformaDate : invoice.estimateDate;
-        obj.voucherNumber = this.voucherType === 'proformas' ? invoice.proformaNumber : invoice.estimateNumber;
+        obj.voucherDate = this.voucherType === VoucherTypeEnum.generateProforma ? invoice.proformaDate : invoice.estimateDate;
+        obj.voucherNumber = this.voucherType === VoucherTypeEnum.generateProforma ? invoice.proformaNumber : invoice.estimateNumber;
         obj.uniqueName = obj.voucherNumber;
-        obj.grandTotal = invoice.grandTotal;
+        if (this.voucherType === VoucherTypeEnum.generateProforma || this.voucherType === VoucherTypeEnum.generateEstimate) {
+            obj.grandTotal = invoice.amount.amountForAccount;
+        } else {
+            obj.grandTotal = invoice.grandTotal;
+        }
         obj.voucherType = this.voucherType;
         obj.account = { name: invoice.customerName, uniqueName: invoice.customerUniqueName };
         obj.voucherStatus = invoice.action;
