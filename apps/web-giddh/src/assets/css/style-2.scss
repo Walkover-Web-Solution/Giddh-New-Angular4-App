@@ -980,11 +980,6 @@ ul.sub-list {
 .tab-integraton .nav-tabs>li {
     margin-right: 25px;
 }
-
-.tab-integraton .form-group label {
-    margin-bottom: 6px;
-}
-
 .customer-footer-box .numbertotal {
     font-size: 26px;
     color: $chetwode-blue;
@@ -1747,8 +1742,17 @@ modal-container.modal {
 .subscription-collapse .panel-default>.panel-heading+.panel-collapse>.panel-body {
     border: 0px solid;
 }
-
-
+.payment-success-modal {
+    transform: translate(0,-0%) !important;
+}
+.payment-success-modal {
+    .payment-img img {
+        width: 80px;
+    }
+}
+.tooltip-box .tooltip {
+    width: 150px;
+}
 /* my css end */
 
 
@@ -5136,7 +5140,9 @@ label {
     height: 97%;
     min-height: 97%;
 }
-
+.groups-buttons {
+    height: 400px;
+}
 
 /* .tooltip.bottom .tooltip-arrow {
     position: relative;
@@ -9191,21 +9197,23 @@ ngx-daterangepicker-material {
 
 .HW_badge.HW_visible {
     position: absolute;
-    top: -23px;
-    opacity: 1 !important;
+    top: 2px;
+    left: 12px;
 }
 
 .HW_badge {
     transition: none !important;
-    opacity: 1 !important;
     transform: scale(1.0) !important;
-    top: -23px !important;
     position: absolute !important;
 }
 
 .HW_badge_cont {
     visibility: visible !important;
     width: auto !important;
+    top: -25px;
+    width: 30px !important;
+    display: flex !important;
+    left: 28px !important;
 }
 
 .HW_badge {
@@ -9258,7 +9266,7 @@ ngx-daterangepicker-material {
     display: none !important;
 }
 span#HW_badge_cont:nth-child(3){
-    display: none;
+    display: none !important;
 }
 /* responsive */
 
@@ -9309,6 +9317,9 @@ span#HW_badge_cont:nth-child(3){
         width: 90px;
         height: 90px;
         font-size: 14px;
+    }
+    .groups-buttons {
+        height: auto;
     }
 }
 
@@ -9554,6 +9565,9 @@ span#HW_badge_cont:nth-child(3){
 }
 
 @media (max-width: 767px) {
+    .HW_badge_cont {
+        left: -6px !important;
+    }
     .setting-sidebar-open .desktop-header {
         padding-left: 0;
     }
