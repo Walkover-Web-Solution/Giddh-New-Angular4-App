@@ -1762,7 +1762,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
             if (!this.isMobileSite && this.dateFieldPosition) {
-                this.dateFieldPosition.x -= 60;
+                this.dateFieldPosition.x -= 150;
             }
         }
         this.modalRef = this.modalService.show(
