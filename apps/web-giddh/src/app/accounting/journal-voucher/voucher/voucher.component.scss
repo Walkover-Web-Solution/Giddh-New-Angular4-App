@@ -61,6 +61,13 @@
             &:last-child{
                 width: 5%;
             }
+            .icon-arrow-down{
+                font-size: 14px;
+                position: absolute;
+                right: 5px;
+                top: 7px;
+                color: $nero;
+            }
         }
  
         .icon-cross{

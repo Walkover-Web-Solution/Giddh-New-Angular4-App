@@ -12,21 +12,24 @@
       </div>
       <div class="receipt-entry-form">
           <div class="form-fields">
-              <div class="single-field">
+              <div class="single-field relative">
                   <label>Type</label>
                   <sh-select [options]="selectRef" placeholder="Receipt"></sh-select>
+                  <i class="icon-arrow-down"></i>
               </div>
               <div class="single-field">
                   <label>Note</label>
                   <input type="text" class="form-control" placeholder="Note">
               </div>
-              <div class="single-field">
+              <div class="single-field relative">
                   <label>Tax (Optional) </label>
                   <sh-select [options]="selectTax" placeholder="Select Tax"></sh-select>
+                  <i class="icon-arrow-down"></i>
               </div>
-              <div class="single-field" *ngIf="showInvNo" [ngClass]="{'set-width': showInvNo}">
+              <div class="single-field relative" *ngIf="showInvNo" [ngClass]="{'set-width': showInvNo}">
                   <label>Inv No., Date, Amount</label>
                   <sh-select [options]="SelectInvNoDateAmount"></sh-select>
+                  <i class="icon-arrow-down"></i>
               </div>
               <div class="single-field">
                   <label>Amount</label>
