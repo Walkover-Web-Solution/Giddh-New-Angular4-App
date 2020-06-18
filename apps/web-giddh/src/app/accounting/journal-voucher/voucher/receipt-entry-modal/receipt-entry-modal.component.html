@@ -1,0 +1,50 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">Receipt Entry</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="receipt-entry-content">
+      <div class="receipt-entry-top-detail">
+          <h5 class="mb-05">Bill wise Details for: Debtor Name</h5>
+          <p>Upto: ₹25,000 Cr</p>
+      </div>
+      <div class="receipt-entry-form">
+          <div class="form-fields">
+              <div class="single-field">
+                  <label>Type</label>
+                  <sh-select [options]="selectRef" placeholder="Receipt"></sh-select>
+              </div>
+              <div class="single-field">
+                  <label>Note</label>
+                  <input type="text" class="form-control" placeholder="Note">
+              </div>
+              <div class="single-field">
+                  <label>Tax (Optional) </label>
+                  <sh-select [options]="selectTax" placeholder="Select Tax"></sh-select>
+              </div>
+              <div class="single-field" *ngIf="showInvNo" [ngClass]="{'set-width': showInvNo}">
+                  <label>Inv No., Date, Amount</label>
+                  <sh-select [options]="SelectInvNoDateAmount"></sh-select>
+              </div>
+              <div class="single-field">
+                  <label>Amount</label>
+                  <input type="tel" class="form-control" placeholder="Enter Amount">
+              </div>
+              <div class="single-field">
+                  <p>
+                      <label class="d-block">&nbsp;</label>
+                      To/Cr</p>
+                  <div hidden>
+                      <label>&nbsp;</label>
+                      <sh-select [options]="selectCrDr" placeholder="To/Cr"></sh-select>
+                  </div>
+              </div>
+          </div>
+          <div class="mt-4">
+              <button class="btn btn-success" disabled>Save</button>
+          </div>
+      </div>
+    </div>
+  </div>
