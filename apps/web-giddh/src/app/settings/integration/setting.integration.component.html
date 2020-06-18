@@ -437,7 +437,7 @@
                             </div>
                         </div>
                         <!-- Added this new row make it dynamic -->
-                        <ng-container *ngFor="let item of regAcc.userAmountRanges; let index = index">
+                        <ng-container *ngFor="let item of regAcc.userAmountRanges; let index = index; let firstIndex = first; let lastIndex = last">
                             <div class="row">
                                 <div class="form-group col-sm-4 col-md-2" *ngIf="item.maxBankLimit ==='max'">
                                     <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
@@ -522,7 +522,7 @@
                             <button type="button" class="btn btn-success mrR1" [disabled]="!paymentFormUpdate.form.valid" (click)="updateIciciDetails(regAcc, parentIndex)">Update</button>
                         </div>
                     </form>
-                    <div style="display: inline" *ngIf="(isPaymentUpdationSuccess$ | async) && parentIndex === selecetdUpdateIndex">
+                    <div style="display: inline" *ngIf="((isPaymentUpdationSuccess$ | async) && parentIndex === selecetdUpdateIndex) || ((isPaymentAdditionSuccess$ | async) && parentIndex===lastIndex )">
                         <div class="clearfix">
                             <div>Congratulations!! A request has been sent to your account, go to <a href="https://www.icicibank.com/" target="_blank">ICICI portal</a> and accept it.
                             </div>
@@ -722,7 +722,8 @@
                                             </sh-select>
                                         </div>
                                         <div class="ml-05">
-                                            <input type="text" class="form-control" #amountElement decimalDigitsDirective (blur)="preventZero(item.get('amount').value, index, null, false)" [mask]="inputMaskFormat" formControlName="amount" name="amount" placeholder="Amount">
+                                            <input type="text" class="form-control" [ngClass]="{'error-box': checkIsAmountRepeat(addBankForm.get('userAmountRanges').value,item.get('amount').value,index)}" #amountElement decimalDigitsDirective (blur)="preventZero(item.get('amount').value, index, null, false)"
+                                                [mask]="inputMaskFormat" formControlName="amount" name="amount" placeholder="Amount">
                                         </div>
                                     </div>
                                 </div>
@@ -787,7 +788,7 @@
                         </div>
                     </div>
                 </form>
-                <div *ngIf="(isPaymentAdditionSuccess$ | async)">
+                <!-- <div *ngIf="(isPaymentAdditionSuccess$ | async)">
                     <div style="display: inline-block" class="clearfix">
                         <div>Congratulations!! A request has been sent to your account, go to <a href="https://www.icicibank.com/" target="_blank">ICICI portal</a> and accept it.
                         </div>
@@ -796,7 +797,7 @@
                         <div style="color: gray">Once it is done you can link your ICICI account/s and make payment directly through GIDDH.
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
             <button type="button" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" style=" margin-right: 5px" class="btn btn-pink mrR1" (click)="openNewRegistartionForm()">Add More ID</button>
         </tab>

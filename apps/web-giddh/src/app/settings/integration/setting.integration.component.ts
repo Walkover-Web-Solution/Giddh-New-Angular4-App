@@ -316,6 +316,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.approvalNameList = _.sortBy(arr, ['label']);
             }
         });
+        this.isPaymentUpdationSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                this.isBankUpdateInEdit = null;
+            }
+        })
     }
 
     public ngAfterViewInit() {
@@ -365,13 +370,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public onSubmitPaymentform(fomValue: any): void {
 
         if (fomValue.valid) {
+            this.selecetdUpdateIndex = null;
             let requestObject = _.cloneDeep(fomValue.value)
             requestObject.userAmountRanges.map(element => {
                 element.maxBankLimit = (element.maxBankLimit === 'max') ? 'true' : 'false';
             });
-
+            this.isBankUpdateInEdit = null;
             this.store.dispatch(this.settingsIntegrationActions.SavePaymentInfo(requestObject));
-            // this.clearForm();s
         }
     }
 
@@ -641,6 +646,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public updateIciciDetails(regAcc: IntegratedBankList, index: number) {
         this.selecetdUpdateIndex = index;
+        this.store.dispatch(this.settingsIntegrationActions.ResetICICIFlags());
         let registeredAccountObj = _.cloneDeep(regAcc);
         registeredAccountObj.userAmountRanges.map(item => {
             item.maxBankLimit = item.maxBankLimit === "max" ? 'true' : 'false';
