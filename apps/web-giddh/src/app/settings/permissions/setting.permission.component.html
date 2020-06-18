@@ -71,7 +71,7 @@
                 <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeEditUserModal()">×</span>
             </div>
             <div class="modal-body">
-                <setting-permission-form [isOpenedInModal]="true" [userdata]="selectedUser" [isLblShow]="true" [isUpdtCase]="true" [isHorizntl]="false" (onSubmitForm)="submitPermissionForm($event)"></setting-permission-form>
+                <setting-permission-form [isOpenedInModal]="true" [userdata]="selectedUser" [isLblShow]="true" [isUpdtCase]="(selectedUser) ? true : false" [isHorizntl]="false" (onSubmitForm)="submitPermissionForm($event)"></setting-permission-form>
             </div>
         </div>
     </div>
