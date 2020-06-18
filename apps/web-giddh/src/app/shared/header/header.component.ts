@@ -834,10 +834,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleHelpSupportPane(show: boolean): void {
-        this.asideSettingMenuState = 'out';
-        document.querySelector('body').classList.remove('mobile-setting-sidebar');
-        this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
-        this.toggleBodyClass();
+        setTimeout(() => {
+            this.asideSettingMenuState = 'out';
+            document.querySelector('body').classList.remove('mobile-setting-sidebar');
+            this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
+            this.toggleBodyClass();
+        }, (this.asideHelpSupportMenuState === 'out') ? 100 : 0);
     }
     /**
      * This will toggle the settings popup
