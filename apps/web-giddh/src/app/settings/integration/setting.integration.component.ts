@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject, of } from 'rxjs';
 
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
@@ -87,7 +87,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /** To check company country */
     public isIndianCompany: boolean = true;
     /** To check update bank form validations */
-    public isUpdateBankFormValid: boolean = false;
+    public isUpdateBankFormValid$: Observable<boolean> = of(false);
 
     @Input() private selectedTabParent: number;
     @ViewChild('integrationTab') public integrationTab: TabsetComponent;
@@ -887,7 +887,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (!isUpdate && item && elementRef && this.paymentFormObj) {
             if (this.checkIsAmountRepeat(this.paymentFormObj.userAmountRanges, this.paymentFormObj.userAmountRanges[index].amount, index)) {
                 elementRef.classList.add('error-box');
-                this.isUpdateBankFormValid = false;
+                this.isUpdateBankFormValid$ = of(false);
             } else {
                 elementRef.classList.remove('error-box');
                 this.checkFormValidations(this.addBankForm.value);
@@ -922,6 +922,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             );
         }
         this.isCreateInvalid = selected;
+        this.isUpdateBankFormValid$ = of(selected);
         return selected;
     }
 
@@ -1153,6 +1154,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             } else {
                 transactions.controls[index].get('amount').setErrors(null);
             }
+            this.checkFormValidations(this.addBankForm.value);
         }
         if (isUpdate) {
             if (Number(amount) <= 0) {
@@ -1207,7 +1209,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 });
             }
         }
-        this.isUpdateBankFormValid = valid;
+        this.isUpdateBankFormValid$ = of(valid);
+        console.log('valid=========',valid);
         return valid;
     }
 }

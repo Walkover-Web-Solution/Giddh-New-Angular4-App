@@ -515,7 +515,7 @@
                             <div class="form-group">
                                 <div class="empty-label">
                                     <br>
-                                    <button type="submit" [disabled]="!isUpdateBankFormValid" class="btn btn-success mrR1">Update</button>
+                                    <button type="submit" [disabled]="!(isUpdateBankFormValid$ | async)" class="btn btn-success mrR1">Update {{!(isUpdateBankFormValid$ | async)}}</button>
                                 </div>
                             </div>
                         </form>
