@@ -26,3 +26,47 @@
         }
     }
 }
+.debtor-details{
+    display: flex;
+    cursor: default;
+    font-size: 14px;
+}
+.debtor-details-form{
+    display: flex;
+    font-size: 14px;
+    background-color: $silver;
+    padding: 10px 9px;
+    margin-bottom: 10px;
+    .form-fields{
+        display: flex;
+        align-items: center;
+        .single-field {
+            width: 20%;
+            margin-right: 15px;
+             &.cr-dr-field{
+                 width: 5% !important;
+             }
+            label{
+                margin-bottom: 5px;
+                display: none;
+            }
+            input.form-control{
+                background-color: $white !important;
+                border: 1px solid $gainsboro;
+                border-radius: 2px !important;
+            }
+            &.set-width{
+                width: 30%;
+            }
+            &:last-child{
+                width: 5%;
+            }
+        }
+ 
+        .icon-cross{
+            color: $gray;
+            cursor: pointer;
+            padding: 5px;
+        }
+    }
+}

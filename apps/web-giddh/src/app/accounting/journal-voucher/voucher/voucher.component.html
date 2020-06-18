@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div class="clearfix" [style.min-height.vh]="61">
-                <div class="table-responsive bdrT">
+                <div class="bdrT">
                     <table class="table entry_table">
                         <thead>
                             <tr>
@@ -43,9 +43,55 @@
                                         (keydown)="detectKey($event)"
                                         (keydown.Tab)="validateAccount(transaction, $event, i)"
                                         (keydown.arrowDown)="openCreateAccountPopupIfRequired($event)">
-                                        <span *ngIf="transaction.currentBalance !== ''" class="current-balance">
+                                        <span *ngIf="transaction.currentBalance !== ''" class="current-balance d-block mb-05">
                                             Current Balance: {{transaction.currentBalance | giddhCurrency}} {{transaction.selectedAccount.type === 'DEBIT' ? 'Dr.' : 'Cr.'}}
                                         </span>
+
+                                        <!-- Need to make it dymanic and show it only TO row -->
+                                      <div class="debtor-details pb-1 pt-05" *ngIf="debtorFormStatic && transaction.type === 'to'" (click)="shoewDebtorForm()">
+                                          <span class="mr-15">Receipt</span>
+                                          <span class="mr-15">samplename</span>
+                                          <span class="mr-15">200 (10%)</span>
+                                          <!-- showing below field if receipt type is against reference -->
+                                          <span class="mr-15" *ngIf="showInvNo">84358; 25/06/2020; 5000 cr.</span>
+                                          <span class="mr-15">2,000.00</span>
+                                          <span>cr</span>				
+                                      </div>  
+                                      <div class="debtor-details-form pb-1 pt-05" *ngIf="debtorDetailFormShow && transaction.type === 'to'">
+                                        <div class="form-fields">
+                                            <div class="single-field">
+                                                <label>Type</label>
+                                                <sh-select [options]="selectRef" placeholder="Receipt"></sh-select>
+                                            </div>
+                                            <div class="single-field">
+                                                <label>Note</label>
+                                                <input type="text" class="form-control" placeholder="Note">
+                                            </div>
+                                            <div class="single-field">
+                                                <label>Tax (Optional) </label>
+                                                <sh-select [options]="selectTax" placeholder="Select Tax"></sh-select>
+                                            </div>
+                                            <!-- showing below field if receipt type is against reference -->
+                                            <div class="single-field" *ngIf="showInvNo" [ngClass]="{'set-width': showInvNo}">
+                                                <label>Inv No., Date, Amount</label>
+                                                <sh-select [options]="SelectInvNoDateAmount"></sh-select>
+                                            </div>
+                                            <div class="single-field">
+                                                <label>Amount</label>
+                                                <input type="tel" class="form-control" placeholder="Enter Amount">
+                                            </div>
+                                            <div class="single-field cr-dr-field">
+                                                <p>
+                                                    <label class="d-block">&nbsp;</label>
+                                                    To/Cr
+                                                </p>
+                                            </div>
+                                            <span (click)="closeDebtorDetailForm()">
+                                                <i class="icon-cross"></i>
+                                            </span>
+                                        </div>
+                                      </div>
+
                                     <table *ngIf="requestObj.voucherType !== 'Contra'">
                                         <tbody>
                                             <ng-container *ngIf="transaction.inventory && transaction.inventory.length">
@@ -117,7 +163,7 @@
                                         (ngModelChange)="calModAmt(transaction.amount, transaction, i)" />
                                 </td>
                                 <td>
-                                    <input onReturn
+                                    <input (click)="openModal(receiptEntry)" onReturn
                                         [disabled]="!transaction.selectedAccount.name || transaction.type !== 'to'"
                                         [hidden]="transaction.type !== 'to'" type="text"
                                         class="form-control text-right debit-credit" #toAmountField
@@ -220,3 +266,9 @@
 <aside-inventory-stock-group [autoFocus]="autoFocusStockGroupField" (closeAsideEvent)="closeCreateStock()"
     [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService">
 </aside-inventory-stock-group>
+
+
+<!-- Recipt entry modal -->
+<ng-template #receiptEntry>
+    <receipt-entry></receipt-entry>
+</ng-template>

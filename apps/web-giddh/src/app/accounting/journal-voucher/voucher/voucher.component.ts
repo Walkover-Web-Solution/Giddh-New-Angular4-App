@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
     AfterViewInit,
+    TemplateRef,
     Component,
     ComponentFactoryResolver,
     ElementRef,
@@ -22,7 +23,7 @@ import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-serv
 import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import * as moment from 'moment';
-import { BsDatepickerConfig, BsDatepickerDirective, ModalDirective } from 'ngx-bootstrap';
+import { BsDatepickerConfig, BsDatepickerDirective, ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 
@@ -98,7 +99,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChildren('toAmountField') public toAmountFields: QueryList<ElementRef>;
     /** List of both date picker used (one in voucher date and other in check clearance date) */
     @ViewChildren(BsDatepickerDirective) bsDatePickers: QueryList<BsDatepickerDirective>;
-
+    public showInvNo:false;
+    public debtorDetailFormShow:boolean = false;
+    public debtorFormStatic:boolean = true; 
     public showLedgerAccountList: boolean = false;
     public selectedInput: 'by' | 'to' = 'by';
     public requestObj: any = {};
@@ -164,7 +167,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public accountAsideMenuState: string = 'out';
     /** Category of accounts to display based on voucher type */
     public categoryOfAccounts: string;
-
+    modalRef: BsModalRef;
     constructor(
         private _accountService: AccountService,
         private _ledgerActions: LedgerActions,
@@ -176,7 +179,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private inventoryService: InventoryService,
         private generalAction: GeneralActions,
         private fb: FormBuilder, public bsConfig: BsDatepickerConfig,
-        private salesAction: SalesActions) {
+        private salesAction: SalesActions,
+        private modalService: BsModalService) {
 
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
@@ -230,6 +234,41 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
     }
 
+    openModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(
+            template,
+            Object.assign({}, { class: 'modal-lg' })
+        );
+     }
+
+     public selectRef: IOption[] = [
+        { label: "Receipt", value: "Receipt"}, 
+        { label: "Advance Receipt", value: "Advance Receipt"}, 
+        { label: "Against  Reference", value: "Against  Reference"} 
+        ];
+    public selectTax: IOption[] = [
+            { label: "Receipt", value: "Receipt"}, 
+            { label: "Advance Receipt", value: "Advance Receipt"}, 
+            { label: "Against  Reference", value: "Against  Reference"} 
+        ];
+    public selectCrDr: IOption[] = [
+            { label: "To/Cr", value: "To/Cr"}, 
+            { label: "To/Dr", value: "To/Dr"}
+    ];
+
+    public SelectInvNoDateAmount:  IOption[] = [
+        { label: "84358; 25/06/2020; 5000 cr.", value: "84358; 25/06/2020; 5000 cr."}, 
+        { label: "848; 25/06/2020; 5000 cr", value: "848; 25/06/2020; 5000 cr."}
+    ];
+ 
+public shoewDebtorForm(){
+    this.debtorDetailFormShow = !this.debtorDetailFormShow;
+    this.debtorFormStatic = !this.debtorFormStatic;
+}
+public closeDebtorDetailForm(){
+    this.debtorDetailFormShow = !this.debtorDetailFormShow;
+    this.debtorFormStatic = !this.debtorFormStatic;
+}
     public ngOnInit() {
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {

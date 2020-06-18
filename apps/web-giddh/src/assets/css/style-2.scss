@@ -3910,8 +3910,9 @@ a.btn.btn-xs.btn-link.pull-right {
 #shareModal .modal-header {
     border-bottom: 0;
 }
-
-
+.modal-header {
+    border-radius: 5px 5px 0 0;
+}
 /* #shareModalh3 {
     font-size: 18px;
     color: $white;
@@ -4010,6 +4011,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .modal-header {
     position: relative;
     background: $midnight-blue !important;
+    color: $white !important;
 }
 
 .close_modal {
@@ -6111,7 +6113,9 @@ virtual-scroll .scrollable-content .item>a {
 .customerInvoiceTable virtual-scroll .scrollable-content .item>a {
     white-space: initial;
 }
-
+virtual-scroll .scrollable-content .item>a{
+    font-size: 14px !important;
+}
 virtual-scroll .scrollable-content .item.selected>a {
     color: $chetwode-blue !important;
 }
@@ -9267,6 +9271,21 @@ ngx-daterangepicker-material {
 }
 span#HW_badge_cont:nth-child(3){
     display: none !important;
+}
+.debtor-details-form{
+    .form-fields{
+        .single-field {
+            sh-select{
+                .header{
+                    input.form-control{
+                        background-color: $white !important;
+                        height: 28px !important;
+                        padding-right: 8px !important;
+                    }
+                }
+            } 
+        }
+    }
 }
 /* responsive */
 
