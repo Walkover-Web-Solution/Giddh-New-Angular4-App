@@ -840,11 +840,11 @@
 </ng-template>
 
 <!--help & support sidebar  -->
-<div class="help-support-aside" *ngIf="asideHelpSupportMenuState === 'in'">
+<div class="help-support-aside" *ngIf="asideHelpSupportMenuState === 'in'" (clickOutside)="closeHelpPanOnOutsideClick()">
     <aside-help-support (closeAsideEvent)="toggleHelpSupportPane(false)"></aside-help-support>
 </div>
 <!-- setting aside pane -->
-<div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'">
+<div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'" (clickOutside)="closeSettingPanOnOutsideClick()">
     <perfect-scrollbar [scrollIndicators]="true">
         <aside-setting [ngClass]="{'setting-sidebar': isMobileSidebar}" (closeAsideEvent)="toggleSidebarPane(false, false)"></aside-setting>
     </perfect-scrollbar>
