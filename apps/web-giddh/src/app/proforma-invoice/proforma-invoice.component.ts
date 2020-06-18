@@ -703,7 +703,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                 }
 
-                if(!this.voucherTypeChanged) {
+                if(!this.voucherTypeChanged && event.snapshot.params.invoiceType === this.invoiceType) {
                     this.destroyed$.next(true);
                     this.destroyed$.complete();
                 }
