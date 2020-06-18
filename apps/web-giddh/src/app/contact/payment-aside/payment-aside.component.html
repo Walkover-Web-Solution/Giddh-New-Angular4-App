@@ -12,8 +12,8 @@
                     <div class="d-flex mb-1">
                         <div class="form-group mr-15 select-bank">
                             <label>Select Bank<span class="red-text">*</span></label>
-                            <sh-select [options]="selectIntegratedBankList" [(ngModel)]="selectedBankUniqueName" [fixedValue]="selectedBankName" [defaultValue]="selectedBankName" class="text-left" name="selectedBankUniqueName" required placeholder="'Select Bank'" (click)="setBankName($event);"
-                                (selected)="selectBank($event);" [multiple]="false">
+                            <sh-select [options]="selectIntegratedBankList" #selectBankEle [multiple]="false" [ItemHeight]="33" [fixedValue]="selectedBankName" [isFilterEnabled]="true" class="text-left" [(ngModel)]="selectedBankUniqueName" name="selectedBankUniqueName" required
+                                placeholder="Select Bank" (click)="setBankName($event, selectBankEle);" (selected)="selectBank($event);" [multiple]="false">
                                 <ng-template #optionTemplate let-option="option">
                                     <a href="javascript:void(0)" class="list-item">
                                         <div class="item">{{option?.label}}</div>
@@ -111,8 +111,8 @@
                                 <div class="d-flex">
                                     <div class="form-group pr-15">
                                         <label>Amount<span class="text-danger">*</span></label>
-                                        <input class="form-control" name="closingBalanceAmount{{entryIdx}}" decimalDigitsDirective (blur)="getTotalAmount();preventZero(item.closingBalance.amount, entryIdx)" [mask]="inputMaskFormat" [(ngModel)]="item.closingBalance.amount" type="text" [required]="!isPayClicked"
-                                            [disabled]="isPayClicked">
+                                        <input class="form-control" name="closingBalanceAmount{{entryIdx}}" maxLength="12" decimalDigitsDirective (blur)="getTotalAmount();preventZero(item.closingBalance.amount, entryIdx)" [mask]="inputMaskFormat" [(ngModel)]="item.closingBalance.amount" type="text"
+                                            [required]="!isPayClicked" [disabled]="isPayClicked">
 
                                     </div>
                                     <div class="form-group remark-block">
