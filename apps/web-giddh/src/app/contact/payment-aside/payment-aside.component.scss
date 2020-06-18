@@ -1,24 +1,5 @@
-:host {
-    position: fixed;
-    left: auto;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    max-width: 760px;
-    width: 100%;
-    z-index: 99999;
-}
-:host.in #close {
-    display: block;
-    position: fixed;
-    left: -41px;
-    top: 0;
-    z-index: 5;
-    border: 0;
-    border-radius: 0;
-}
-
-:host .container-fluid {
+@import "../../../assets/css/color.scss";
+.container-fluid {
     padding-left: 0;
     padding-right: 0;
 }
@@ -91,35 +72,146 @@ form label {
     position: relative;
     margin-top: 15px;
 }
-@media (max-width: 768px) {
-    :host {
-        max-width: 600px;
+/*new css of new payemtndesign*/
+.modal-title{
+    color: $white;
+}
+.btn-success {
+    padding: 7px 25px;
+}
+.payment-top-form .d-flex {
+    flex-wrap: wrap;
+}
+.payment-top-form .d-flex .form-group {
+    min-width: 190px;
+}
+.payment-top-form .d-flex .form-group:last-child {
+    min-width: 220px;
+}
+.pt-25 {
+    padding-top: 25px;
+}
+.payment-top-form{
+    .form-group{
+        margin-bottom: 0;
+        .resend-btn{
+            position: absolute;
+            right: 0;
+        }
     }
-    :host .aside-pane {
-        max-width: 600px;
+    .otp-success-msg{
+        color: $light-sea-green;
+        font-size: 14px;
     }
 }
-@media (max-width: 575px) {
-    :host {
-        max-width: 370px;
+.selected-bank-details{
+    border-top: 1px solid $gainsboro;
+    padding-top: 25px;
+    margin-top: 5px;
+    .account-holder-name{
+        display: flex;
+        font-size: 14px;
+        .due-amount{
+            max-width: 100%;
+            width: 100%;
+        }
+         p{
+             &:first-child{
+                max-width: 450px;
+                width: 100%;
+             }
+             span{
+                 float: right;
+             }
+
+        }
     }
-    :host .aside-pane {
-        max-width: 370px;
+    .bank-deatils-wrapper{
+        border: 1px solid $gainsboro;
+        border-radius: 2px;
+        margin-top: 3px;
+        display: flex;
+        .readonly-bank-deatils {
+            width: 100%;
+            max-width: 450px;
+            font-size: 14px;
+            background-color: #EAEAEA;
+            padding: 10px;
+            border-right: 1px solid $gainsboro;
+            .label-value-data{
+                display: flex;
+                align-items: center;
+                margin: 5px 0;
+                label{
+                    margin-right: 5px;
+                }
+                .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
+                    background-color: transparent !important;
+                    display: inline;
+                    width: auto;
+                    height: 22px;
+                    max-width: 90px;
+                    border: none !important;
+                }
+            }
+        }
+        .amount-remark-section{
+            padding: 15px;
+            width: 100%;
+            .form-group{
+                margin-bottom: 0;
+            }
+            .remark-block{
+                width: 100%;
+                textarea{
+                    min-height: 36px;
+                }
+            }
+        }
     }
 }
-@media (max-width: 375px) {
-    :host {
-        max-width: 310px;
+@media (max-width: 1100px) {
+    .payment-top-form {
+        .otp-success-msg {
+            text-align: left;
+            margin: 10px 0;
+        }
     }
-    :host .aside-pane {
-        max-width: 310px;
+    .payment-top-form {
+        display: block;
     }
 }
-@media (max-width: 320px) {
-    :host {
-        max-width: 280px;
+@media (max-width: 767px) {
+    .selected-bank-details
+    .bank-deatils-wrapper
+    .readonly-bank-deatils {
+        max-width: 100% !important;
     }
-    :host .aside-pane {
-        max-width: 280px;
+
+    .bank-deatils-wrapper {
+        display: block !important;
+        .readonly-bank-deatils {
+            max-width: 100%;
+        }
+    }
+    .selected-bank-details {
+        .account-holder-name {
+            p {
+                &:first-child {
+                    max-width: 100%;
+                }
+            }
+        }
+    }
+}
+@media (max-width: 480px) {
+    .payment-top-form .d-flex .form-group, .payment-top-form .d-flex .form-group:last-child {
+        min-width: 100%;
+    }
+    .amount-remark-section .d-flex {
+        display: block;
+        .form-group.pr-15 {
+            padding-right: 0px;
+        }
     }
 }

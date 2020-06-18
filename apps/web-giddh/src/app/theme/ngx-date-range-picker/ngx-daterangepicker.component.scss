@@ -718,7 +718,7 @@ $input-height: 3rem !default;
         bottom: 15px;
         background-color: #fff;
         padding-top: 9px;
-        z-index: 999;
+        z-index: 99;
         right: 0;
         width: calc(100% - 218px);
     }
@@ -1129,14 +1129,15 @@ td span {
 .hideMe {
     display: none;
 }
-
 .activatedDate {
     background-color: $hawkes-blue;
 }
-
 .activatedDate span {
     color: $nero !important;
     background-color:transparent !important;
+}
+.activatedDate.in-range.in-range-start span {
+    color: $nero !important;
 }
 .activatedDate:hover{
     span{
@@ -1695,6 +1696,10 @@ td span {
                 }
             } 
           }
+    }
+    .md-drppicker td.in-range-start::before{
+        left: 11px;
+        width: 79%;
     }
 }
 @media(max-height:767px){
