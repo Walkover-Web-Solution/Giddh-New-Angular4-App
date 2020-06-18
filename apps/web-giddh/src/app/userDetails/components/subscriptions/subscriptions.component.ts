@@ -13,7 +13,7 @@ import { CompanyResponse, SubscriptionRequest, CreateCompanyUsersPlan } from '..
 import { GeneralService } from '../../../services/general.service';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 import { CompanyActions } from '../../../actions/company.actions';
-import { GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { DEFAULT_SIGNUP_TRIAL_PLAN } from '../../../app.constant';
 
@@ -105,8 +105,17 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         });
 
         this.subscriptions$.subscribe(userSubscriptions => {
-            this.subscriptions = userSubscriptions;
-            this.allSubscriptions = userSubscriptions;
+            this.isLoading = false;
+            if(userSubscriptions && userSubscriptions.length > 0) {
+                userSubscriptions.forEach(userSubscription => {
+                    if(userSubscription.createdAt) {
+                        userSubscription.createdAt = moment(userSubscription.createdAt, "DD-MM-YYYY HH:mm:ss").format(GIDDH_DATE_FORMAT);
+                    }
+
+                    this.subscriptions.push(userSubscription);
+                    this.allSubscriptions.push(userSubscription);
+                });
+            }
             this.showCurrentCompanyPlan();
         });
 
