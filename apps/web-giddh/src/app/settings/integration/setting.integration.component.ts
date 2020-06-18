@@ -83,6 +83,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public addBankForm: FormGroup;
     /** Input mast for number format */
     public inputMaskFormat: string = '';
+    /** To check company country */
+    public isIndianCompany: boolean = true;
 
     @Input() private selectedTabParent: number;
     @ViewChild('integrationTab') public integrationTab: TabsetComponent;
@@ -289,6 +291,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         // });
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+            if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
+                this.isIndianCompany = profile.countryV2.alpha2CountryCode === 'IN' ? true : false;
+            }
         });
 
         this.store.pipe(take(1)).subscribe(s => {
