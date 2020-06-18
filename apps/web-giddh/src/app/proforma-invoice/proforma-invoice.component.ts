@@ -2097,6 +2097,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (trx.isStockTxn) {
             trx.rate = giddhRoundOff((trx.amount / trx.quantity), this.ratePrecision);
         }
+
+        if(this.isUpdateMode && (this.isEstimateInvoice || this.isProformaInvoice)) {
+            this.applyRoundOff = true;
+        }
+
         this.calculateTotalDiscountOfEntry(entry, trx, false);
         this.calculateEntryTaxSum(entry, trx, false);
         this.calculateEntryTotal(entry, trx);
