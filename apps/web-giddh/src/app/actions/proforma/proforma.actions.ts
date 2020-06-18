@@ -6,7 +6,7 @@ import { AppState } from '../../store';
 import { ProformaService } from '../../services/proforma.service';
 import { CustomActions } from '../../store/customActions';
 import { PROFORMA_ACTIONS } from './proforma.const';
-import { ActionTypeAfterVoucherGenerateOrUpdate, GenericRequestForGenerateSCD } from '../../models/api-models/Sales';
+import { ActionTypeAfterVoucherGenerateOrUpdate, GenericRequestForGenerateSCD, VoucherClass } from '../../models/api-models/Sales';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
@@ -24,15 +24,15 @@ export class ProformaActions {
 			map((response) => {
 				if (response.status === 'success') {
 					let no: string;
-					switch (response.request.voucher.voucherDetails.voucherType) {
+					switch (response.request.voucherDetails.voucherType) {
 						case 'proformas':
-							no = response.body.voucher.voucherDetails.proformaNumber;
+							no = response.body.number;
 							break;
 						case 'estimates':
-							no = response.body.voucher.voucherDetails.estimateNumber;
+							no = response.body.number;
 							break;
 						default:
-							no = response.body.voucher.voucherDetails.voucherNumber;
+							no = response.body.voucherDetails.voucherNumber;
 					}
 					this._toasty.successToast(`Entry created successfully with Voucher No: ${no}`);
 				} else {
@@ -175,14 +175,14 @@ export class ProformaActions {
 	}
 
 	// region generate proforma
-	public generateProforma(request: GenericRequestForGenerateSCD): CustomActions {
+	public generateProforma(request: VoucherClass): CustomActions {
 		return {
 			type: PROFORMA_ACTIONS.GENERATE_PROFORMA_REQUEST,
 			payload: request
 		}
 	}
 
-	public generateProformaResponse(response: BaseResponse<GenericRequestForGenerateSCD, GenericRequestForGenerateSCD>): CustomActions {
+	public generateProformaResponse(response: BaseResponse<VoucherClass, VoucherClass>): CustomActions {
 		return {
 			type: PROFORMA_ACTIONS.GENERATE_PROFORMA_RESPONSE,
 			payload: response
@@ -216,7 +216,7 @@ export class ProformaActions {
 		}
 	}
 
-	public getProformaDetailsResponse(response: BaseResponse<GenericRequestForGenerateSCD, ProformaGetRequest>): CustomActions {
+	public getProformaDetailsResponse(response: BaseResponse<VoucherClass, ProformaGetRequest>): CustomActions {
 		return {
 			type: PROFORMA_ACTIONS.GET_PROFORMA_DETAILS_RESPONSE,
 			payload: response
@@ -226,14 +226,14 @@ export class ProformaActions {
 	// endregion
 
 	// region update proforma
-	public updateProforma(request: GenericRequestForGenerateSCD): CustomActions {
+	public updateProforma(request: VoucherClass): CustomActions {
 		return {
 			type: PROFORMA_ACTIONS.UPDATE_PROFORMA_REQUEST,
 			payload: request
 		}
 	}
 
-	public updateProformaResponse(response: BaseResponse<GenericRequestForGenerateSCD, GenericRequestForGenerateSCD>): CustomActions {
+	public updateProformaResponse(response: BaseResponse<VoucherClass, VoucherClass>): CustomActions {
 		return {
 			type: PROFORMA_ACTIONS.UPDATE_PROFORMA_RESPONSE,
 			payload: response
