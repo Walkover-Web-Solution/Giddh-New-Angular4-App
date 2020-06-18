@@ -6,7 +6,7 @@
             </ng-template>
 
             <div class="box clearfix">
-                <h3 class="fs20 mrB2">MSG91</h3>
+                <h3 class="font-20 bold mb-2">MSG91</h3>
                 <form #msgform="ngForm" (ngSubmit)="onSubmitMsgform(msgform)" class="smsForm">
                     <section ngModelGroup="smsFormObj" #smsFormObjCtrl="ngModelGroup">
                         <div class="row">
@@ -70,7 +70,7 @@
 
 
             <div class="box clearfix">
-                <h3 class="fs20 mrB2">SendGrid</h3>
+                <h3 class="font-20 bold mb-2">SendGrid</h3>
                 <form #emailform="ngForm" (ngSubmit)="onSubmitEmailform(emailform)" class="">
                     <div class="row">
                         <div class="form-group col-sm-4 col-md-3">
@@ -108,7 +108,7 @@
 
             <!-- <h3 class="section-head mrT2">Invoice PaymentPaymentPayment</h3> -->
             <div class="box clearfix mb-2">
-                <h3 class="fs20 mrB2">Razorpay Details</h3>
+                <h3 class="font-20 bold mb-2">Razorpay Details</h3>
                 <form #razorPayform="ngForm" novalidate class="">
                     <div class="row">
                         <div class="form-group col-sm-4 col-xs-12">
@@ -167,7 +167,7 @@
             <div class="clearfix mb-2">
 
                 <div class="box clearfix mb-2">
-                    <h3 class="fs20 mrB2">Smart Payout</h3>
+                    <h3 class="font-20 bold mb-2">Smart Payout</h3>
 
                     <form #payoutForm="ngForm" novalidate class="">
                         <div class="row">
@@ -220,7 +220,7 @@
 
 
                 <div class="box clearfix mb-2">
-                    <h3 class="fs20 mrB2">Auto Collect</h3>
+                    <h3 class="font-20 bold mb-2">Auto Collect</h3>
                     <form #autoCollectform="ngForm" novalidate class="">
                         <div class="row">
                             <div class="form-group col-sm-4 col-xs-12">
@@ -271,7 +271,7 @@
 
 
                 <div class="box clearfix mb-2">
-                    <h3 class="fs20 mrB2">Payment Gateway</h3>
+                    <h3 class="font-20 bold mb-2">Payment Gateway</h3>
                     <form #paymentGatewayForm="ngForm" novalidate class="">
                         <div class="row">
                             <div class="form-group col-sm-4 col-xs-12">
@@ -311,9 +311,8 @@
                 <span class="icon-ecomm"></span> E-Comm
             </ng-template>
 
-
             <div class="box clearfix">
-                <h3 class="section-head mb-2">Amazon Seller</h3>
+                <h3 class="font-20 bold mb-2">Amazon Seller</h3>
                 <form #formDiv name="amazonSellerForm" [formGroup]="amazonSellerForm" novalidate="" autocomplete="off">
                     <ng-container formArrayName="sellers">
                         <ng-container *ngFor="let item of amazonSellerForm.get('sellers')['controls']; let i=index;let f = first; let l = last">
@@ -387,15 +386,13 @@
 
                 <div class="box clearfix">
                     <div class="d-flex justify-content-between">
-                        <h2 class="font-20 bold">ICICI Bank</h2>
+                        <h2 class="font-20 bold mb-2">ICICI Bank</h2>
                         <div class="ico-btn">
                             <button class="btn btn-xs" *ngIf="isBankUpdateInEdit !== parentIndex " (click)="editRegisterForm(parentIndex)" type="button"><i class="fa fa-pencil"></i></button>
                             <button class="btn btn-xs" *ngIf="isBankUpdateInEdit === parentIndex " (click)="editRegisterForm(null)" type="button"><i class="fa fa-pencil"></i></button>
                             <button class="btn btn-xs mr-0" type="button" (click)="deRegisterForm(regAcc)"><i class="fa fa-trash-o"></i></button>
                         </div>
                     </div>
-                    <br/>
-                    <br/>
                     <!-- <div *ngIf="isBankUpdateInEdit === parentIndex ">
                         <h3>Edit {{parentIndex}}</h3>
                     </div> -->
@@ -512,7 +509,7 @@
                         </ng-container>
 
                         <div *ngIf="isBankUpdateInEdit === parentIndex">
-                            <a href="javascript:void(0)" (click)="addNewAmountRangeRow(parentIndex+1)" class="btn btn-link pl-0">+ Add New Row</a>
+                            <a href="javascript:void(0)" (click)="addNewAmountRangeRow(parentIndex+1)" class="btn btn-link pl-0 pt-0">+ Add New Row</a>
                         </div>
                         <!-- New code -->
 
@@ -524,7 +521,7 @@
                     </form>
                     <div style="display: inline" *ngIf="(isPaymentUpdationSuccess$ | async) && parentIndex === selecetdUpdateIndex">
                         <div class="clearfix">
-                            <div>Congratulations!! A request has been sent to your account, go to <a href="https://www.icicibank.com/" target="_blank">ICICI portal</a> and accept it.
+                            <div>Congratulations!! A request has been sent to your account, go to <a class="btn-link" href="https://www.icicibank.com/" target="_blank">ICICI portal</a> and accept it.
                             </div>
                         </div>
                         <div class="clearfix">
@@ -538,7 +535,7 @@
 
             <!--  Create or add bank account start
             <div *ngIf="openNewRegistration && !(isPaymentAdditionSuccess$ | async)" class="box clearfix">
-                <h3 class="fs20 mrB2">ICICI Bank</h3>
+                <h3 class="font-20 bold mb-2">ICICI Bank</h3>
                 <form #paymentForm="ngForm" (ngSubmit)="onSubmitPaymentform(paymentForm)">
                     <div class="row">
                         <div class="form-group col-sm-4 col-md-2">
@@ -664,8 +661,8 @@
                 </div>
             </div>
              Create or add bank account end -->
-            <div *ngIf="openNewRegistration" class="box clearfix">
-                <h3 class="fs20 mrB2">ICICI Bank</h3>
+            <div *ngIf="openNewRegistration" class="box clearfix mb-2">
+                <h3 class="font-20 bold mb-2">ICICI Bank</h3>
                 <form [formGroup]="addBankForm" (ngSubmit)="onSubmitPaymentform(addBankForm)" *ngIf="!(isPaymentAdditionSuccess$ | async)">
                     <div class="row">
                         <div class="form-group col-sm-4 col-md-2">
@@ -775,7 +772,7 @@
                         </ng-container>
                     </ng-container>
                     <div>
-                        <a href="javascript:void(0)" (click)="addUserAmountRangesForm()" class="btn btn-link pl-0">+ Add New Row</a>
+                        <a href="javascript:void(0)" (click)="addUserAmountRangesForm()" class="btn btn-link pl-0 pt-0">+ Add New Row</a>
                     </div>
                     <!-- <div class="clearfix">
                         <a href="javascript:void" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" (click)="openNewRegistartionForm()" class="btn btn-link pl-0">Add More ID</a>
@@ -789,7 +786,7 @@
                 </form>
                 <div *ngIf="(isPaymentAdditionSuccess$ | async)">
                     <div style="display: inline-block" class="clearfix">
-                        <div>Congratulations!! A request has been sent to your account, go to <a href="https://www.icicibank.com/" target="_blank">ICICI portal</a> and accept it.
+                        <div>Congratulations!! A request has been sent to your account, go to <a class="btn-link" href="https://www.icicibank.com/" target="_blank">ICICI portal</a> and accept it.
                         </div>
                     </div>
                     <div class="clearfix">
