@@ -29,6 +29,7 @@ import { AccountingComponent } from './accounting.component';
 import { InvoiceGridComponent } from './invoice-grid/invoice-grid.component';
 import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
 import {NgxMaskModule} from "../shared/helpers/directives/ngx-mask";
+import { ReceiptEntryModalComponent } from './journal-voucher/voucher/receipt-entry-modal/receipt-entry-modal.component';
 
 @NgModule({
     declarations: [
@@ -39,7 +40,8 @@ import {NgxMaskModule} from "../shared/helpers/directives/ngx-mask";
         OnReturnDirective,
         AccountingComponent, // TODO: Deprecated, remove it
         InvoiceGridComponent, // TODO: Deprecated, remove it
-        VoucherGridComponent // TODO: Deprecated, remove it
+        VoucherGridComponent, // TODO: Deprecated, remove it
+        ReceiptEntryModalComponent
     ],
     exports: [RouterModule, AccountingSidebarComponent],
     providers: [KeyboardService, TallyModuleService],

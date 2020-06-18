@@ -3932,8 +3932,9 @@ a.btn.btn-xs.btn-link.pull-right {
 #shareModal .modal-header {
     border-bottom: 0;
 }
-
-
+.modal-header {
+    border-radius: 5px 5px 0 0;
+}
 /* #shareModalh3 {
     font-size: 18px;
     color: $white;
@@ -6153,6 +6154,10 @@ virtual-scroll .scrollable-content .item>a .item_stock {
 
 virtual-scroll .scrollable-content .item.selected>a,
 virtual-scroll .scrollable-content .item.hilighted>a {
+virtual-scroll .scrollable-content .item>a{
+    font-size: 14px !important;
+}
+virtual-scroll .scrollable-content .item.selected>a {
     color: $chetwode-blue !important;
 }
 
@@ -9429,6 +9434,21 @@ span#HW_badge_cont:nth-child(3) {
 }
 .giddh-datepicker-modal {
     z-index: 99999;
+}
+.debtor-details-form{
+    .form-fields{
+        .single-field {
+            sh-select{
+                .header{
+                    input.form-control{
+                        background-color: $white !important;
+                        height: 28px !important;
+                        padding-right: 8px !important;
+                    }
+                }
+            } 
+        }
+    }
 }
 /* responsive */
 
