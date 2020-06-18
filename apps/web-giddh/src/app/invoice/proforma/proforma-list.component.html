@@ -157,7 +157,7 @@
 
     <!--  -->
     <div class="clearfix">
-        <div class="table-responsive removeResponsive">
+        <div class="table-responsive removeResponsive invoice-preview">
             <table class="table basic table-bordered mt-15 invoice-table onMobileView table-responsive">
                 <thead class="t-h-bg1">
                     <tr>
@@ -306,7 +306,11 @@
                         <td attr.data-title="{{ voucherType === 'proformas' ? 'Proforma' : 'Estimate' }} Date">
                             {{item.invoiceDate}}
                         </td>
-                        <td class="text-right" data-title="Total Amt.">{{item.grandTotal | giddhCurrency}}</td>
+                        <!-- <td class="text-right" data-title="Total Amt.">{{item.grandTotal | giddhCurrency}}</td> -->
+                        <td class="text-right" [tooltip]="(voucherType === 'proformas' || voucherType === 'estimates') ? grandTotalPopupTemplate : ''" container="body" containerClass="invoice-preview">{{item?.amount?.currencyForAccount?.symbol}} {{item.amount?.amountForAccount | giddhCurrency}}
+                        </td>
+                        <ng-template #grandTotalPopupTemplate><span [innerHTML]="item.grandTotalTooltipText"></span>
+                        </ng-template>
                         <td class="" data-title="Expiry Date">{{item.expiryDate}}</td>
                         <td data-title="Status">{{ item.status }}</td>
 
