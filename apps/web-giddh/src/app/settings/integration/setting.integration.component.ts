@@ -953,6 +953,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         return selected;
     }
 
+    /**
+     * To check duplicate amount in bank amount range field
+     *
+     * @param {any[]} itemList Amount rangeof bank integration array object
+     * @returns {boolean}
+     * @memberof SettingIntegrationComponent
+     */
     public toCheckBankAmountCustomFieldValidation(itemList: any[]): boolean {
         let isInValid = false;
         if (itemList) {
