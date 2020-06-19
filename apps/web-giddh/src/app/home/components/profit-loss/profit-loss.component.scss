@@ -71,12 +71,14 @@ span.icon-rupees {
         margin-bottom: 10px;
     }
 }
-@media(max-width:360px){
+@media(max-width:480px){
     .dashboard-filter{
         display: flex;
         float: none !important;
         margin-top: 10px;
     }
+}
+@media(max-width:360px){
     .due-amount , .total-amount {
         font-size: 14px;
     }
