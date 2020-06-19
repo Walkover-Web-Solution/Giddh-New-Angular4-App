@@ -29,7 +29,6 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
         private connectionService: ConnectionService
     ) {
         this.connectionService.monitor().subscribe(isConnected => {
-            console.log(isConnected);
             if(!isConnected) {
                 this.isConnected = false;
             } else {
