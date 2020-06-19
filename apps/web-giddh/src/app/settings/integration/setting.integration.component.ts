@@ -147,7 +147,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private changeDetectionRef: ChangeDetectorRef,
         private generalService: GeneralService,
         private settingsIntegrationService: SettingsIntegrationService,
-        private settingsPermissionService:SettingsPermissionService) {
+        private settingsPermissionService: SettingsPermissionService) {
         this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
@@ -322,7 +322,19 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     // arr.push({ name: value[0].userName, rows: value });
                     arr.push({ label: value[0].userName, value: value[0].userUniqueName, additional: value });
                 });
-                this.approvalNameList = _.sortBy(arr, ['label']);
+                let sortedArray = [];
+                arr.forEach(item => {
+                    if (item.additional[0].mobileVerified) {
+                        sortedArray.push(item);
+                    }
+                });
+                arr.forEach(item => {
+                    if (!item.additional[0].mobileVerified) {
+                        sortedArray.push(item);
+                    }
+                });
+                this.approvalNameList= sortedArray;
+                // this.approvalNameList = _.sortBy(sortedArray, ['label']);
             }
         });
         this.isPaymentUpdationSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
@@ -920,15 +932,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         let selected: boolean = false;
         if (itemList) {
             selected = itemList.some((item, indx) => {
-                if (index !== indx &&  item.amount && value) {
+                if (index !== indx && item.amount && value) {
                     return Number(item.amount) === Number(value);
                 }
             }
             );
         }
-        if(itemList && !selected) {
+        if (itemList && !selected) {
             this.isCreateInvalid = this.isUpdateInvalid = itemList.some((item) => {
-                    return item.maxBankLimit==='custom' && !item.amount
+                return item.maxBankLimit === 'custom' && !item.amount
             });
         }
         this.isUpdateBankFormValid$ = of(selected);
