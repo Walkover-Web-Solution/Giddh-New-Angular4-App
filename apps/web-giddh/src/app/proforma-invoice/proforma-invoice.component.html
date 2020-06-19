@@ -514,7 +514,7 @@
                 <!-- region normal view -->
                 <section class="staticInvoiceTable salseInvoicetable clearfix mrB2 whiteBg container-fluid ng-tns-c8-0" *ngIf="!isMobileView">
 
-                    <ng-container *ngIf="isSalesInvoice || isCashInvoice || isCreditNote || isDebitNote">
+                    <ng-container *ngIf="isSalesInvoice || isCashInvoice || isCreditNote || isDebitNote || isProformaInvoice || isEstimateInvoice">
                         <!-- switch currency on click, remaining functional work , UI is completed -->
                         <div class="switch-currency" *ngIf="isMulticurrencyAccount && !showSwitchedCurr">
                             <span class="left-currency">1 {{companyCurrencyName}}</span>
@@ -793,7 +793,7 @@
 
                                                     <div class="col-xs-6 pdL0">
                                                         <div class="wrap-hsnBox">
-                                                            <div class="hsnCode text-right" (click)="toggleHsnSacDropDown()">
+                                                            <div class="hsnCode text-right" (click)="toggleHsnSacDropDown(transaction)">
                                                                 <label>HSN/SAC:</label>
                                                                 <span>
                                                                     {{(inventorySettings?.manageInventory || !transaction.sacNumber) ? transaction.hsnNumber : transaction.sacNumber }}
@@ -816,7 +816,7 @@
                                                                 <div class="btngroup m-t-10">
                                                                     <button class="btn btn-sm btn-success" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">Save
                                                                 </button>
-                                                                    <button class="btn btn-sm btn-primary" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">
+                                                                    <button class="btn btn-sm btn-primary" type="button" (click)="hideHsnSacEditPopup(transaction)">
                                                                     Cancel
                                                                 </button>
                                                                 </div>
@@ -1527,7 +1527,7 @@
 
                                                 <div class="col-xs-6 pdL0">
                                                     <div class="wrap-hsnBox">
-                                                        <div class="hsnCode text-right" (click)="toggleHsnSacDropDown()">
+                                                        <div class="hsnCode text-right" (click)="toggleHsnSacDropDown(transaction)">
                                                             <label>HSN/SAC:</label>
                                                             <span>
                                                                             {{(inventorySettings?.manageInventory || !transaction.sacNumber) ? transaction.hsnNumber : transaction.sacNumber }}
@@ -1552,7 +1552,7 @@
                                                                 <button class="btn btn-sm btn-success" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">
                                                                                 Save
                                                                             </button>
-                                                                <button class="btn btn-sm btn-primary" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">
+                                                                <button class="btn btn-sm btn-primary" type="button" (click)="hideHsnSacEditPopup(transaction)">
                                                                                 Cancel
                                                                             </button>
                                                             </div>

@@ -291,10 +291,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         /* This will get the date range picker configurations */
         this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
             if (config) {
-                // removed today and yesterday option from universal datepicker
-                // if (config && config.ranges && config.ranges.length && config.ranges[0] && config.ranges[0].name && config.ranges[0].name === 'Today') {
-                //         delete config.ranges[0];
-                // }
                 let configDatePicker = cloneDeep(config);
                 if (configDatePicker && configDatePicker.ranges) {
                     let modifiedRanges = [];
@@ -833,10 +829,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleHelpSupportPane(show: boolean): void {
-        this.asideSettingMenuState = 'out';
-        document.querySelector('body').classList.remove('mobile-setting-sidebar');
-        this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
-        this.toggleBodyClass();
+        setTimeout(() => {
+            this.asideSettingMenuState = 'out';
+            document.querySelector('body').classList.remove('mobile-setting-sidebar');
+            this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
+            this.toggleBodyClass();
+        }, (this.asideHelpSupportMenuState === 'out') ? 100 : 0);
     }
     /**
      * This will toggle the settings popup
@@ -846,16 +844,44 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
-        this.isMobileSidebar = isMobileSidebar;
-        this.asideHelpSupportMenuState = 'out';
-        this.asideSettingMenuState = (show && this.asideSettingMenuState === 'out') ? 'in' : 'out';
-        this.toggleBodyClass();
+        setTimeout(() => {
+            this.isMobileSidebar = isMobileSidebar;
+            this.asideHelpSupportMenuState = 'out';
+            this.asideSettingMenuState = (show && this.asideSettingMenuState === 'out') ? 'in' : 'out';
+            this.toggleBodyClass();
 
-        if (this.asideSettingMenuState === "in") {
-            document.querySelector('body').classList.add('mobile-setting-sidebar');
-        } else {
-            document.querySelector('body').classList.remove('mobile-setting-sidebar');
-        }
+            if (this.asideSettingMenuState === "in") {
+                document.querySelector('body').classList.add('mobile-setting-sidebar');
+            } else {
+                document.querySelector('body').classList.remove('mobile-setting-sidebar');
+            }
+        }, (this.asideSettingMenuState === 'out') ? 100 : 0);
+    }
+
+    /**
+     * This will close the settings popup if click outside of popup
+     *
+     * @memberof HeaderComponent
+     */
+    public closeSettingPanOnOutsideClick() {
+        setTimeout(() => {
+            if (this.asideSettingMenuState === "in") {
+                this.asideSettingMenuState = 'out';
+            }
+        }, 50);
+    }
+
+    /**
+     * This will close the help popup if click outside of popup
+     *
+     * @memberof HeaderComponent
+     */
+    public closeHelpPanOnOutsideClick() {
+        setTimeout(() => {
+            if (this.asideHelpSupportMenuState === "in") {
+                this.asideHelpSupportMenuState = 'out';
+            }
+        }, 50);
     }
 
     /**
@@ -1732,7 +1758,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
             if (!this.isMobileSite && this.dateFieldPosition) {
-                this.dateFieldPosition.x -= 60;
+                this.dateFieldPosition.x -= 150;
             }
         }
         this.modalRef = this.modalService.show(
