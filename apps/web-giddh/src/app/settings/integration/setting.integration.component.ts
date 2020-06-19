@@ -39,6 +39,7 @@ import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { elementStylingMap } from '@angular/core/src/render3';
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
+import { SettingsPermissionService } from '../../services/settings.permission.service';
 
 export declare const gapi: any;
 
@@ -117,6 +118,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public approvalNameList: IOption[] = [];
     public selectedCompanyUniqueName: string;
     public isCreateInvalid: boolean = false;
+    /** update bank form validation for amount */
+    public isUpdateInvalid: boolean = false;
+
 
     /** Maximum amount length limit */
     public maxLimit: number = 8;
@@ -142,7 +146,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private settingsPermissionActions: SettingsPermissionActions,
         private changeDetectionRef: ChangeDetectorRef,
         private generalService: GeneralService,
-        private settingsIntegrationService: SettingsIntegrationService) {
+        private settingsIntegrationService: SettingsIntegrationService,
+        private settingsPermissionService:SettingsPermissionService) {
         this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
@@ -915,13 +920,17 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         let selected: boolean = false;
         if (itemList) {
             selected = itemList.some((item, indx) => {
-                if (index !== indx && item.amount && value) {
-                    return item.amount === value;
+                if (index !== indx &&  item.amount && value) {
+                    return Number(item.amount) === Number(value);
                 }
             }
             );
         }
-        this.isCreateInvalid = selected;
+        if(itemList && !selected) {
+            this.isCreateInvalid = this.isUpdateInvalid = itemList.some((item) => {
+                    return item.maxBankLimit==='custom' && !item.amount
+            });
+        }
         this.isUpdateBankFormValid$ = of(selected);
         return selected;
     }
@@ -1210,7 +1219,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         }
         this.isUpdateBankFormValid$ = of(valid);
-        console.log('valid=========',valid);
         return valid;
     }
 }

@@ -453,7 +453,7 @@
                                                 </div>
                                                 <div class="ml-05">
                                                     <input type="text" class="form-control" [ngClass]="{'error-box': checkIsAmountRepeat(addBankForm.get('userAmountRanges').value,item.get('amount').value,index)}" #amountElement decimalDigitsDirective (blur)="preventZero(item.get('amount').value, index, null, false)"
-                                                        [mask]="inputMaskFormat" formControlName="amount" name="amount" placeholder="Amount">
+                                                        maxlength="10" formControlName="amount" name="amount" placeholder="Amount">
                                                 </div>
                                             </div>
                                         </div>
@@ -514,7 +514,7 @@
                             <div class="form-group">
                                 <div class="empty-label">
                                     <br>
-                                    <button type="submit" [disabled]="!(isUpdateBankFormValid$ | async)" class="btn btn-success mrR1">Update {{!(isUpdateBankFormValid$ | async)}}</button>
+                                    <button type="submit" [disabled]="!addBankForm.valid || isUpdateInvalid" class="btn btn-success mrR1">Update</button>
                                 </div>
                             </div>
                         </form>
@@ -581,7 +581,7 @@
                                         </div>
                                         <div class="ml-05  width-100">
                                             <input type="text" class="form-control" #amountUpdateElement [required]="item.maxBankLimit !== 'max'" decimalDigitsDirective [disabled]="isBankUpdateInEdit !== parentIndex" [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountUpdateElement, true, parentIndex );preventZero(item.amount,index, parentIndex, true )"
-                                                name="amount{{parentIndex}}{{index}}" placeholder="Amount">
+                                                maxlength="10" name="amount{{parentIndex}}{{index}}" placeholder="Amount">
                                         </div>
                                     </div>
                                 </div>
@@ -844,7 +844,7 @@
                                         </div>
                                         <div class="ml-05">
                                             <input type="text" class="form-control" [ngClass]="{'error-box': checkIsAmountRepeat(addBankForm.get('userAmountRanges').value,item.get('amount').value,index)}" #amountElement decimalDigitsDirective (blur)="preventZero(item.get('amount').value, index, null, false)"
-                                                [mask]="inputMaskFormat" formControlName="amount" name="amount" placeholder="Amount">
+                                                maxlength="10" [mask]="inputMaskFormat" formControlName="amount" name="amount" placeholder="Amount">
                                         </div>
                                     </div>
                                 </div>
@@ -905,7 +905,7 @@
                     <div class="form-group">
                         <div class="empty-label">
                             <br>
-                            <button type="submit" [disabled]="addBankForm.invalid" class="btn btn-success mrR1">Submit</button>
+                            <button type="submit" [disabled]="addBankForm.invalid || isCreateInvalid" class="btn btn-success mrR1">Submit</button>
                         </div>
                     </div>
                 </form>

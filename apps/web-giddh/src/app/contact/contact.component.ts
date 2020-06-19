@@ -312,7 +312,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.isBulkPaymentShow = true;
         if (item) {
             this.selectedAccForPayment = null;
-            if (this.isBankAccountAddedAccount(item)) {
+            if (item.bankPaymentDetails) {
                 this.selectedAccForPayment = item;
             }
         } else {
@@ -1136,6 +1136,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                     this.sundryCreditorsAccounts = _.cloneDeep(res.body.results);
 
                 }
+                this.selectedAccountsList = [];
+                this.selectedCheckedContacts = [];
                 this.detectChanges();
             }
         });
@@ -1228,6 +1230,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.isBulkPaymentShow = false;
         this.selectedAccForPayment = null;
         this.bulkPaymentModalRef.hide();
+        this.selectedAccountsList = [];
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr);
 
     }
