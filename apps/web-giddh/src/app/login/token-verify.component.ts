@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs';
+import { ConnectionService } from 'ng-connection-service';
 
 import { LoginActions } from '../actions/login.action';
 import { AuthenticationService } from '../services/authentication.service';
@@ -17,6 +18,7 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
     public token: string;
     public request: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public isConnected: boolean = true;
 
     constructor(
         private route: ActivatedRoute,
@@ -24,7 +26,19 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private authenticationService: AuthenticationService,
         private _loginAction: LoginActions,
+        private connectionService: ConnectionService
     ) {
+        this.connectionService.monitor().subscribe(isConnected => {
+            console.log(isConnected);
+            if(!isConnected) {
+                this.isConnected = false;
+            } else {
+                if(!this.isConnected) {
+                    this.isConnected = true;
+                    this.refreshPage();
+                }
+            }
+        });
     }
 
     public ngOnDestroy() {
@@ -64,5 +78,22 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
      */
     public verifyUser(): void {
         this.store.dispatch(this._loginAction.LoginWithPasswdResponse(this.request));
+    }
+
+    /**
+     * Refreshes the page
+     *
+     * @memberof TokenVerifyComponent
+     */
+    public refreshPage(): void {
+        if (this.route.snapshot.queryParams['token']) {
+            this.token = this.route.snapshot.queryParams['token'];
+            window.location.href = "/token-verify?token="+this.token;
+        }
+
+        if (this.route.snapshot.queryParams['request']) {
+            const sessionId = decodeURIComponent(this.route.snapshot.queryParams['request']);
+            window.location.href = "/token-verify?request="+sessionId;
+        }
     }
 }
