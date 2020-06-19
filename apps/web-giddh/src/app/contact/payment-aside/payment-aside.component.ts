@@ -194,12 +194,18 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                         this.selectIntegratedBankList.push({ label: item.bankName, value: item.urn, additional: item });
                     }
                 });
+                // let ss= [];
+                // ss.push(this.selectIntegratedBankList[0]);
+                // this.selectIntegratedBankList =ss;
 
                 if (this.selectIntegratedBankList.length === 1) {
                     this.selectBank(this.selectIntegratedBankList[0]);
                 }
             }
 
+        });
+        this.selectedAccForBulkPayment = this.selectedAccForBulkPayment.filter((data, index) => {
+            return this.selectedAccForBulkPayment.indexOf(data) === index;
         });
         this.selectedAccForBulkPayment.forEach(item => {
             this.addAccountTransactionsFormObject(item);
@@ -221,6 +227,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
             item.totalDueAmount = item.closingBalance.amount;
         });
+
+
         this.getIntegratedBankDetails();
 
     }
@@ -236,7 +244,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         if (changes) {
             if (changes.selectedAccForPayment && changes.selectedAccForPayment.currentValue) {
                 this.selectedAccForBulkPayment = [];
-                this.selectedAccForBulkPayment.push(changes.selectedAccForPayment.currentValue);
+               this.selectedAccForBulkPayment.push(changes.selectedAccForPayment.currentValue);
             } else {
                 if (changes.selectedAccountsForBulkPayment && changes.selectedAccountsForBulkPayment.currentValue) {
                     this.totalSelectedLength = changes.selectedAccountsForBulkPayment.currentValue.length;
@@ -426,10 +434,10 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @param {ShSelectComponent} selectBankEle Sh-select reference
      * @memberof PaymentAsideComponent
      */
-    public setBankName(event: any,  selectBankEle: ShSelectComponent): void {
+    public setBankName(event: any, selectBankEle: ShSelectComponent): void {
         this.selectedBankUniqueName = '';
-        selectBankEle.filter = event.target.value;
-        this.selectedBankName = event.target.value;
+        selectBankEle.filter = event.target.value !== undefined ? event.target.value : selectBankEle.fixedValue;
+        this.selectedBankName = event.target.value !== undefined ? event.target.value : selectBankEle.fixedValue;
     }
 
     /**
