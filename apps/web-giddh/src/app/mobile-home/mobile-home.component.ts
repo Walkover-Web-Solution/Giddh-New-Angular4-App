@@ -150,8 +150,22 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         }, 0);
     }
 
-    public openMobileSidebar(){
+    /**
+     * This function open mobile side bar
+     * 
+     * @memberof MobileHomeComponent
+     */
+    public openMobileSidebar() {
         document.querySelector('body').classList.add('mobile-sidebar-open');
+    }
+
+    /**
+     * This function close mobile side bar
+     * 
+     * @memberof MobileHomeComponent
+     */
+    public closeMobileSidebar() {
+        document.querySelector('body').classList.remove('mobile-sidebar-open');
     }
     /**
      * Releases all the observables to avoid memory leaks
