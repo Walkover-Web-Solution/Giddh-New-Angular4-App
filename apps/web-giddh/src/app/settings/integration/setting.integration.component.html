@@ -393,8 +393,6 @@
                             <button class="btn btn-xs mr-0" type="button" (click)="deRegisterForm(regAcc)"><i class="fa fa-trash-o"></i></button>
                         </div>
                     </div>
-                    <br/>
-                    <br/>
                     <div *ngIf="isBankUpdateInEdit === parentIndex ">
                         <form [formGroup]="addBankForm" (ngSubmit)="updateIciciDetails(addBankForm.value, parentIndex)">
                             <div class="row">
