@@ -23,7 +23,7 @@ import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
-import { TabsetComponent, ModalDirective } from "ngx-bootstrap";
+import { TabsetComponent, ModalDirective, TabDirective } from "ngx-bootstrap";
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { CurrentPage } from '../../models/api-models/Common';
@@ -167,6 +167,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public ngOnInit() {
+
         //logic to switch to payment tab if coming from vedor tabs add payment
         if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
             this.selectTab(this.selectedTabParent);
@@ -222,7 +223,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.addAmazonSellerRow();
             }
         });
-
         this.flattenAccountsStream$.subscribe(data => {
             if (data) {
                 let accounts: IOption[] = [];
@@ -284,6 +284,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     });
                 }
                 this.addBankForm.reset();
+                this.isBankUpdateInEdit = null;
             }
         });
 
@@ -305,11 +306,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
 
-        this.store.pipe(take(1)).subscribe(s => {
-            this.selectedCompanyUniqueName = s.session.companyUniqueName;
-            this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
-            this.getValidationForm('ICICI')
-        });
         this.store.pipe(select(stores => stores.settings.usersWithCompanyPermissions), take(2)).subscribe(resp => {
             if (resp) {
                 let data = _.cloneDeep(resp);
@@ -333,10 +329,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                         sortedArray.push(item);
                     }
                 });
-                this.approvalNameList= sortedArray;
+                this.approvalNameList = sortedArray;
                 // this.approvalNameList = _.sortBy(sortedArray, ['label']);
             }
         });
+        if (this.selectedCompanyUniqueName) {
+            this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
+        }
         this.isPaymentUpdationSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.isBankUpdateInEdit = null;
@@ -360,6 +359,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
         this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
+        this.store.pipe(take(1)).subscribe(s => {
+            this.selectedCompanyUniqueName = s.session.companyUniqueName;
+            this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
+            this.getValidationForm('ICICI')
+        });
     }
 
     public setDummyData() {
@@ -660,6 +664,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public deRegisterForm(regAcc: IntegratedBankList) {
+        this.store.dispatch(this.settingsIntegrationActions.ResetICICIFlags());
         this.store.dispatch(this.settingsIntegrationActions.RemovePaymentInfo(regAcc.URN));
     }
 
@@ -927,7 +932,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @returns {boolean}
      * @memberof SettingIntegrationComponent
      */
-    public checkIsAmountRepeat(itemList: any[], value: any, index: number): boolean {
+    public checkIsAmountRepeat(itemList: any[], value: any, index: number, isUpdateMode?: boolean): boolean {
 
         let selected: boolean = false;
         if (itemList) {
@@ -938,13 +943,24 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
             );
         }
-        if (itemList && !selected) {
-            this.isCreateInvalid = this.isUpdateInvalid = itemList.some((item) => {
-                return item.maxBankLimit === 'custom' && !item.amount
-            });
+        if (!selected) {
+            this.isCreateInvalid = this.isUpdateInvalid = this.toCheckBankAmountCustomFieldValidation(itemList);
+
+        } else {
+            this.isCreateInvalid = this.isUpdateInvalid = selected;
         }
         this.isUpdateBankFormValid$ = of(selected);
         return selected;
+    }
+
+    public toCheckBankAmountCustomFieldValidation(itemList: any[]): boolean {
+        let isInValid = false;
+        if (itemList) {
+            isInValid = itemList.some((item) => {
+                return (item.maxBankLimit === 'custom' && !item.amount);
+            });
+        }
+        return isInValid
     }
 
     /**
@@ -1146,14 +1162,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public removeUserAmountRangesForm(index: number): void {
-
         const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
         if (transactions.controls.length > 1) {
             transactions.removeAt(index);
         } else {
             this.toasty.infoToast('At least 1 row is required');
         }
-
+        this.isCreateInvalid = this.isUpdateInvalid = this.toCheckBankAmountCustomFieldValidation(transactions.value);
     }
 
 
@@ -1207,6 +1222,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 }
             });
             this.checkFormValidations(this.addBankForm.value);
+            if (this.addBankForm.value) {
+                this.isUpdateInvalid = this.toCheckBankAmountCustomFieldValidation(this.addBankForm.value.userAmountRanges)
+            }
         } else {
             this.addBankForm = this.createBankIntegrationForm();
         }

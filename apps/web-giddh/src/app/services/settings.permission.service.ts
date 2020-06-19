@@ -23,15 +23,9 @@ export class SettingsPermissionService {
     /*
     * Get Users With Company Permissions
     */
-    public GetUsersWithCompanyPermissions(companyUniqueName: string, isPaymentIntegration?: boolean): Observable<BaseResponse<any, string>> {
+    public GetUsersWithCompanyPermissions(companyUniqueName: string): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
-        let url;
-        if (isPaymentIntegration) {
-            url = this.config.apiUrl + SETTINGS_PERMISSION_API.GET_APPROVAL_NAME.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
-        } else {
-            url = this.config.apiUrl + SETTINGS_PERMISSION_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
-        }
-        return this._http.get(url).pipe(map((res) => {
+        return this._http.get(this.config.apiUrl + SETTINGS_PERMISSION_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             data.queryString = {};
             return data;
