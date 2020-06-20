@@ -1,10 +1,10 @@
 <div class="mobile-home-search">
-        <div class="company-name-alice btn-group" dropdown [autoClose]="false"  insideClick="true">
+        <div class="company-name-alice btn-group" dropdown [autoClose]="false" insideClick="true" #mobileSideNav="bs-dropdown">
             <p dropdownToggle (click)="openMobileSidebar()">{{companyInitials}}</p>
             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
                 role="menu" aria-labelledby="button-basic">
                 <!-- <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="logout()">Logout</a></li> -->
-                <li><mobile-home-sidebar></mobile-home-sidebar></li>
+                <li><mobile-home-sidebar (closeMobileSidebar)="closeMobileSidebar();mobileSideNav.hide()"></mobile-home-sidebar></li>
             </ul>
         </div>
         <div class="account-search">

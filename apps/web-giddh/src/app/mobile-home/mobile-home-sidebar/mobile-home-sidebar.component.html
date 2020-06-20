@@ -1,11 +1,17 @@
 <div class="mobile-home-sidebar-wrapper">
     <div class="sidebar-header">
-        <p class="company-name-alice">WW</p>
-        <div class="close-btn"><i class="icon-cross"></i></div>
-        <div class="company-details">
-            <p class="company-name">Walkover Web Solutions Pvt. Ltd.</p>
-            <p><small>(Branch Name) FY-Apr2019-Mar2020</small></p>
-            <p><small>shubhendraagrawal@gmail.com</small></p>
+        <p class="company-name-alice">{{companyInitials}}</p>
+        <div class="close-btn" (click)="closeMobileSidebar.emit(true)"><i class="icon-cross"></i></div>
+        <div class="company-details" *ngIf="selectedCompany">
+            <p class="company-name">{{selectedCompany.name}}</p>
+            <p>
+                <small>
+                    <span *ngIf="selectedCompany && selectedCompany?.nameAlias">
+                        ({{selectedCompany?.nameAlias}})
+                    </span> {{selectedCompany.activeFinancialYear?.uniqueName}}
+                </small>
+            </p>
+            <p><small>{{selectedCompany.email ? selectedCompany.email : selectedCompany?.createdBy?.email}}</small></p>
         </div>
     </div>
     <div class="sidebar-body">
@@ -14,7 +20,7 @@
                 <a href="javascipt:()" hidden>Import/Export Data (Backup)</a>
             </li>
             <li>
-                <a href="javascipt:()">Changelog</a>
+                <a href="https://changelog.giddh.com/" target="_blank">Changelog</a>
             </li>
             <li>
                 <a href="javascipt:()" [routerLink]="['/pages/mobile-search-company']">Switch Company</a>
@@ -31,12 +37,11 @@
             <li>
                 <a href="javascipt:()" hidden>API</a>
             </li>
-            
+
             <hr class="mt-1 mb-1">
             <li>
-                <a href="javascipt:()">Logout</a>
+                <a href="javascipt:()" (click)="logout()">Logout</a>
             </li>
         </ul>
     </div>
-
 </div>
