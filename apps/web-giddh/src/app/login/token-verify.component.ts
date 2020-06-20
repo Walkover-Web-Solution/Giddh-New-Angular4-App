@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ReplaySubject } from 'rxjs';
 import { ConnectionService } from 'ng-connection-service';
+import { ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { LoginActions } from '../actions/login.action';
 import { AuthenticationService } from '../services/authentication.service';
@@ -28,7 +29,7 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
         private _loginAction: LoginActions,
         private connectionService: ConnectionService
     ) {
-        this.connectionService.monitor().subscribe(isConnected => {
+        this.connectionService.monitor().pipe(takeUntil(this.destroyed$)).subscribe(isConnected => {
             if(!isConnected) {
                 this.isConnected = false;
             } else {
