@@ -8,7 +8,11 @@
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['companyName'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company Name
                 </div>
                 <div class="form-group" *ngIf="customTemplate?.templateType === 'gst_template_e'">
-                    <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Document Title: This is your
+                    <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null);changeInvoiceHeader($event)" checked /> Document Title: This is your
+                    <div class="ml-3">
+                        <input type="text" [maxlength]="15" class="form-control" name="title" [(ngModel)]="customTemplate.sections['header'].data['formNameInvoice'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['formNameInvoice'].display"
+                        />
+                    </div>
                     <div class="ml-3">
                         <input type="text" [maxlength]="15" class="form-control" name="title" [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['formNameTaxInvoice'].display"
                         />
