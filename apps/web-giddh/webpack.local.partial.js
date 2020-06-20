@@ -15,7 +15,7 @@ module.exports = {
             'PRODUCTION_ENV': JSON.stringify(false),
             'STAGING_ENV': JSON.stringify(false),
             'TEST_ENV': JSON.stringify(false),
-            'LOCAL_ENV': JSON.stringify(true),
+            'LOCAL_ENV': JSON.stringify(false),
             'process.env.ENV': 'development',
             'process.env.NODE_ENV': 'development',
             'process.env.isElectron': JSON.stringify(false),
