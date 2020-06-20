@@ -130,7 +130,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         if (!LOCAL_ENV && !(isElectron || isCordova())) {
             this._versionCheckService.initVersionCheck(AppUrl + '/version.json');
             this._versionCheckService.onVersionChange$.subscribe((isChanged: boolean) => {
-                console.log('Reached version: ', isChanged);
                 if (isChanged) {
                     this.newVersionAvailableForWebApp = _.clone(isChanged);
                 }
