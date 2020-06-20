@@ -81,7 +81,9 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.isLoggedInWithSocialAccount$ = this.store.select(state => state.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
     }
-
+    navigate(element: HTMLElement): void {
+        element.scrollIntoView({ behavior: 'smooth' });
+    }
     /**
      * Initializes the component
      *
@@ -418,4 +420,6 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
             });
         }
     }
+
+   
 }
