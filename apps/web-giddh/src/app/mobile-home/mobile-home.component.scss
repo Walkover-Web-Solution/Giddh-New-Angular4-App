@@ -1,4 +1,30 @@
 @import "../../assets/css/color.scss";
+
+
+.mobile-item-icon:hover{
+    -webkit-animation-name: pulse;
+    animation-name: pulse;
+    animation-duration:1s;
+    cursor: pointer;
+    animation-timing-function: ease-in-out;
+    box-shadow: 0px 10px 50px 0 rgba(0, 0, 0, 0.1);
+
+
+}
+@keyframes pulse {
+    0% {
+        -webkit-transform: scaleX(1);
+        transform: scaleX(1);
+    }
+    50% {
+        -webkit-transform: scale3d(1.05, 1.05, 1.05);
+        transform: scale3d(1.05, 1.05, 1.05);
+    }
+    100% {
+        -webkit-transform: scaleX(1);
+        transform: scaleX(1);
+    }
+}
 .mobile-home-view {
     max-width: 767px;
     width: 100%;
@@ -49,6 +75,7 @@
                 background-color: $white;
                 border-radius: 11px;    
                 margin-bottom: 8px;
+                transform: scaleX(1);
                 img{
                     width: 58px;
                     border-radius: 5px;
@@ -100,7 +127,11 @@
         .single-search-group {
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
+            padding: 7px 15px;
+            margin: 0 -15px ;
+            &:hover{
+                background-color: $lavender-light !important;
+            }
             .group-icon{
                 padding-right: 10px;
                 color: $gray;
