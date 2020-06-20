@@ -1231,8 +1231,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.selectedAccForPayment = null;
         this.bulkPaymentModalRef.hide();
         this.selectedAccountsList = [];
-        this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr);
-
+        this.toggleAllSelection(false);
+        // this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr);
     }
 
     /**
