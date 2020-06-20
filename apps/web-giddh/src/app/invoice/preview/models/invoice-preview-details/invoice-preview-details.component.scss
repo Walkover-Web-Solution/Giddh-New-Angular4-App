@@ -4,7 +4,7 @@
     content: "";
     width: 100%;
     height: 100%;
-    background-color: #fff;
+    background-color: $white;
     top: 170px;
     bottom: 0;
     left: 0;
@@ -24,15 +24,15 @@
     position: fixed;
     top: 59px;
     width: 100%;
-    background-color: #fff;
+    background-color: $white;
     margin: 0 0;
     height: 100vh;
-    z-index: 9991;
+    z-index: 999;
     left: 0;
 }
 
 .invoice-sidebar {
-    background-color: #fff;
+    background-color: $white;
     padding: 0;
     height: calc(100vh - 20px);
 }
@@ -129,7 +129,7 @@
 
 .invoiceDetail-header .edit-change-status .edit-action-btn-grps {
     display: flex;
-    background-color: #ffffff;
+    background-color: $white;
     border: 1px solid #cbcbcb;
     margin-right: 10px;
     span {
@@ -194,7 +194,7 @@
 
 .invoice-image-section {
     text-align: center;
-    background-color: #fff;
+    background-color: $white;
     margin-bottom: 35px;
     z-index: -9;
     height: 100%;
@@ -353,7 +353,7 @@ span.close-modal.cp.pull-right {
         display: flex;
         justify-content: space-between;
         height: 54px;
-        background-color: #ffffff;
+        background-color: $white;
         border-top: 1px solid #c6c6c6;
         border-bottom: 1px solid #c6c6c6;
         align-items: center;
@@ -455,7 +455,7 @@ label.labeled {
     right: 0;
     border: 1px solid #c7c7c7;
     .sendEmailModalWrapper {
-        background-color: #fff;
+        background-color: $white;
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
         height: 200px;
         .sendEmailModalHeader {
@@ -476,7 +476,7 @@ label.labeled {
     }
     .btn-success {
         background: #28ab00;
-        color: #fff;
+        color: $white;
     }
     .aquaColor a {
         color: #0c8fe6;
@@ -580,7 +580,7 @@ label.labeled {
     .invoice-sidebar .invoice-number-date span.inoviceDate:before {
         position: absolute;
         content: "";
-        background-color: #fff;
+        background-color: $white;
         width: 3px;
         height: 12px;
         top: 3px;
@@ -599,7 +599,7 @@ label.labeled {
 
 @media (max-width: 767px) {
     .invoice-sidebar {
-        background-color: #fff;
+        background-color: $white;
         padding: 0;
         height: inherit;
         max-height: 46vmax;
