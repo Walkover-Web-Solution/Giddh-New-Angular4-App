@@ -127,7 +127,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.sideBarStateChange(true);
         // Need to implement for Web app only
         // debugger;
-        if (!LOCAL_ENV && !(isElectron || isCordova())) {
+        if (!(isElectron || isCordova())) {
             this._versionCheckService.initVersionCheck(AppUrl + '/version.json');
 
             this._versionCheckService.onVersionChange$.subscribe((isChanged: boolean) => {
