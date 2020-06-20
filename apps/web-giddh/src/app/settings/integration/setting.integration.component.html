@@ -393,8 +393,6 @@
                             <button class="btn btn-xs mr-0" type="button" (click)="deRegisterForm(regAcc)"><i class="fa fa-trash-o"></i></button>
                         </div>
                     </div>
-                    <br/>
-                    <br/>
                     <div *ngIf="isBankUpdateInEdit === parentIndex ">
                         <form [formGroup]="addBankForm" (ngSubmit)="updateIciciDetails(addBankForm.value, parentIndex)">
                             <div class="row">
@@ -452,7 +450,7 @@
                                                     </sh-select>
                                                 </div>
                                                 <div class="ml-05">
-                                                    <input type="text" class="form-control" [ngClass]="{'error-box': checkIsAmountRepeat(addBankForm.get('userAmountRanges').value,item.get('amount').value,index)}" #amountElement decimalDigitsDirective (blur)="preventZero(item.get('amount').value, index, null, false)"
+                                                    <input type="text" class="form-control" [ngClass]="{'error-box': checkIsAmountRepeat(addBankForm.get('userAmountRanges').value,item.get('amount').value,index, true)}" #amountElement decimalDigitsDirective (blur)="preventZero(item.get('amount').value, index, null, false)"
                                                         maxlength="10" formControlName="amount" name="amount" placeholder="Amount">
                                                 </div>
                                             </div>
@@ -843,7 +841,7 @@
                                             </sh-select>
                                         </div>
                                         <div class="ml-05">
-                                            <input type="text" class="form-control" [ngClass]="{'error-box': checkIsAmountRepeat(addBankForm.get('userAmountRanges').value,item.get('amount').value,index)}" #amountElement decimalDigitsDirective (blur)="preventZero(item.get('amount').value, index, null, false)"
+                                            <input type="text" class="form-control" [ngClass]="{'error-box': checkIsAmountRepeat(addBankForm.get('userAmountRanges').value,item.get('amount').value,index, false)}" #amountElement decimalDigitsDirective (blur)="preventZero(item.get('amount').value, index, null, false)"
                                                 maxlength="10" [mask]="inputMaskFormat" formControlName="amount" name="amount" placeholder="Amount">
                                         </div>
                                     </div>
