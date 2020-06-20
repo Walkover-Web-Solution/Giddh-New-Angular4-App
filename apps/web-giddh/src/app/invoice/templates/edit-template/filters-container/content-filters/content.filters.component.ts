@@ -349,4 +349,14 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
 
         this._invoiceUiDataService.setCustomTemplate(template);
     }
+    
+    /**
+     * To check document title header is toggle
+     *
+     * @param {boolean} event
+     * @memberof ContentFilterComponent
+     */
+    public changeInvoiceHeader(event: boolean) {
+        this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
+    }
 }
