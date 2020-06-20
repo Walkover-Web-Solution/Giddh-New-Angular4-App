@@ -130,6 +130,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         if (!LOCAL_ENV && !(isElectron || isCordova())) {
             this._versionCheckService.initVersionCheck(AppUrl + '/version.json');
             this._versionCheckService.onVersionChange$.subscribe((isChanged: boolean) => {
+                console.log('Reached version: ', isChanged);
                 if (isChanged) {
                     this.newVersionAvailableForWebApp = _.clone(isChanged);
                 }
@@ -146,7 +147,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 // need to save last state
                 const redirectState = this.getLastStateFromUrl(evt.url);
                 localStorage.setItem('lastState', redirectState);
-                return window.location.reload(true);
+                window.location.reload();
+                return;
             }
             if (!(evt instanceof NavigationEnd)) {
                 return;
