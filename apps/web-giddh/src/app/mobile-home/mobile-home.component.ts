@@ -311,6 +311,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof MobileHomeComponent
      */
     public itemSelected(item: any): void {
+        document.querySelector('body').classList.add('add-animation');
         if (item && item.type === 'MENU') {
             item.uniqueName = item.route;
 
