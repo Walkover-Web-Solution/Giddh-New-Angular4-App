@@ -128,7 +128,7 @@
             display: flex;
             align-items: center;
             padding: 7px 15px;
-            margin: 0 -15px ;
+            margin: 5px -15px 5px;
             &:hover{
                 background-color: $lavender-light !important;
             }
@@ -298,6 +298,25 @@
             white-space: nowrap;
         }
     } 
+}
+.top-button{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    position: fixed;
+    background-color: $midnight-blue;
+    color: $white;
+    bottom: 15px;
+    right: 15px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.06), 0 2px 32px 0 rgba(0, 0, 0, 0.16);
+    cursor: pointer;
+        i{
+            font-size: 20px;
+            transform: rotate(180deg);
+        }
 }
 /*responsive*/
 @media(max-width:320px){
