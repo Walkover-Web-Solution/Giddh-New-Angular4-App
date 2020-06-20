@@ -1406,6 +1406,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         const attrs = node.attributes;
         return (attrs.getNamedItem('dropdownToggle') && attrs.getNamedItem('switch-company')
             && attrs.getNamedItem('aria-expanded') && attrs.getNamedItem('aria-expanded').nodeValue === 'true');
+
+   
+
     }
 
     public loadScript() {
@@ -1471,6 +1474,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public switchCompanyMenuShown() {
         if (this.searchCmpTextBox && this.searchCmpTextBox.nativeElement) {
             setTimeout(() => this.searchCmpTextBox.nativeElement.focus(), 200);
+            document.querySelector('body').classList.add('prevent-body-scroll')
+        }
+        else{
+            document.querySelector('body').classList.remove('prevent-body-scroll')
         }
     }
 
