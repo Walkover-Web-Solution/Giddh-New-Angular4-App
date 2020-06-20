@@ -19,9 +19,7 @@ export class VersionCheckService {
      * @param {number} frequency - in milliseconds, defaults to 30 minutes
      */
     public initVersionCheck(url, frequency = 1000 * 60 * 1) { // will check in every 1 minutes
-        console.log('Setting version check');
         setInterval(() => {
-            console.log('checking');
             this.checkVersion(url);
         }, frequency);
     }
@@ -32,11 +30,9 @@ export class VersionCheckService {
      */
     private checkVersion(url) {
         // timestamp these requests to invalidate caches
-        console.log('Url: ', url);
         this.http.get(url + '?t=' + new Date().getTime())
             .subscribe(
                 (response: any) => {
-                    console.log('Response received checkVersion', url);
                     const hash = response.hash;
                     const hashChanged = this.hasHashChanged(this.currentHash, hash);
 

@@ -131,7 +131,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._versionCheckService.initVersionCheck(AppUrl + '/version.json');
 
             this._versionCheckService.onVersionChange$.subscribe((isChanged: boolean) => {
-                console.log('Reached version: ', isChanged);
                 if (isChanged) {
                     this.newVersionAvailableForWebApp = _.clone(isChanged);
                 }
