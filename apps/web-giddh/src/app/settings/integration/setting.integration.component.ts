@@ -967,7 +967,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 return (item.maxBankLimit === 'custom' && !item.amount);
             });
         }
-        return isInValid
+        return isInValid;
     }
 
     /**
@@ -1230,7 +1230,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             });
             this.checkFormValidations(this.addBankForm.value);
             if (this.addBankForm.value) {
-                this.isUpdateInvalid = this.toCheckBankAmountCustomFieldValidation(this.addBankForm.value.userAmountRanges)
+                this.isUpdateInvalid = this.toCheckBankAmountCustomFieldValidation(this.addBankForm.value.userAmountRanges);
             }
         } else {
             this.addBankForm = this.createBankIntegrationForm();
