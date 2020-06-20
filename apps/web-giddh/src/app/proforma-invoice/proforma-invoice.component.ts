@@ -1585,6 +1585,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.purchaseRecordInvoiceDate = '';
         this.purchaseRecordTaxNumber = '';
         this.purchaseRecordInvoiceNumber = '';
+        this.adjustPaymentBalanceDueData = 0;
+        this.depositAmount = 0;
         this.startLoader(false);
 
         this.assignDates();
