@@ -60,7 +60,6 @@
     },
     "private": true,
     "dependencies": {
-        "@ionic-native/user-agent": "^5.21.5",
         "@angular/animations": "^7.0.0",
         "@angular/common": "^7.0.0",
         "@angular/compiler": "^7.0.0",
@@ -77,6 +76,7 @@
         "@ionic-native/file-chooser": "^5.17.0",
         "@ionic-native/file-picker": "5.17.0",
         "@ionic-native/file-transfer": "5.17.0",
+        "@ionic-native/user-agent": "^5.21.5",
         "@ng-bootstrap/ng-bootstrap": "^3.2.0",
         "@ngrx/effects": "^6.1.0",
         "@ngrx/router-store": "^6.1.0",
@@ -101,6 +101,7 @@
         "jspdf-autotable": "2.3.2",
         "moment": "^2.22.2",
         "ng-click-outside": "^4.0.0",
+        "ng-connection-service": "^1.0.4",
         "ng-contenteditable": "^2.0.2",
         "ng2-ckeditor": "^1.2.3",
         "ng2-order-pipe": "^0.1.5",

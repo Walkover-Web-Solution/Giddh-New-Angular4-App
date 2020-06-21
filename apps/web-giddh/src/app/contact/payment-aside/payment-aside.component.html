@@ -12,18 +12,21 @@
                     <div class="d-flex mb-1">
                         <div class="form-group mr-15 select-bank">
                             <label>Select Bank<span class="red-text">*</span></label>
-                            <sh-select [options]="selectIntegratedBankList" #selectBankEle [multiple]="false" [ItemHeight]="33" [fixedValue]="selectedBankName" [isFilterEnabled]="true" class="text-left" [(ngModel)]="selectedBankUniqueName" name="selectedBankUniqueName" required
-                                placeholder="Select Bank" (click)="setBankName($event, selectBankEle);" (selected)="selectBank($event);" [multiple]="false">
-                                <ng-template #optionTemplate let-option="option">
-                                    <a href="javascript:void(0)" class="list-item">
-                                        <div class="item">{{option?.label}}</div>
-                                        <div class="item_unq">
-                                            <p class="font-12 text-gray mb-0">Clo Bal: {{option?.additional?.effectiveBal | giddhCurrency}} dr.
-                                            </p>
-                                        </div>
-                                    </a>
-                                </ng-template>
-                            </sh-select>
+                            <div class="relative">
+                                <img *ngIf="(isGetAllIntegratedBankInProgress$ | async)" class="dropdown-loader" src="assets/images/loader.gif" alt="">
+                                <sh-select [options]="selectIntegratedBankList" #selectBankEle [multiple]="false" [ItemHeight]="33" [fixedValue]="selectedBankName" [isFilterEnabled]="true" class="text-left" [(ngModel)]="selectedBankUniqueName" name="selectedBankUniqueName" required
+                                    placeholder="Select Bank" (click)="setBankName($event, selectBankEle);" (selected)="selectBank($event);" [multiple]="false">
+                                    <ng-template #optionTemplate let-option="option">
+                                        <a href="javascript:void(0)" class="list-item">
+                                            <div class="item">{{option?.label}}</div>
+                                            <div class="item_unq">
+                                                <p class="font-12 text-gray mb-0">Clo Bal: {{option?.additional?.effectiveBal | giddhCurrency}} dr.
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </ng-template>
+                                </sh-select>
+                            </div>
                             <!-- <sh-select *ngIf="selectIntegratedBankList.length === 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankUrn" class="text-left" name="urn" required placeholder="'Select Bank'" (ngModelChange)="selectBank($event);" [multiple]="false">
                                 <ng-template #optionTemplate let-option="option">
                                     <a href="javascript:void(0)" class="list-item">
@@ -61,7 +64,7 @@
                     </div>
                 </div>
                 <div class="col-sm-3" *ngIf="otpReceiverNameMessage">
-                    <p class="otp-success-msg text-right"> <span>
+                    <p class="otp-success-msg text-right"> <span class="mr-1 d-inline-block">
                         <img src="{{imgPath}}checked-success.svg">
                         </span>{{otpReceiverNameMessage}}</p>
                 </div>
@@ -111,7 +114,7 @@
                                 <div class="d-flex">
                                     <div class="form-group pr-15">
                                         <label>Amount<span class="text-danger">*</span></label>
-                                        <input class="form-control" name="closingBalanceAmount{{entryIdx}}" maxLength="12" decimalDigitsDirective (blur)="getTotalAmount();preventZero(item.closingBalance.amount, entryIdx)" [mask]="inputMaskFormat" [(ngModel)]="item.closingBalance.amount" type="text"
+                                        <input class="form-control" name="closingBalanceAmount{{entryIdx}}" maxLength="12" decimalDigitsDirective (blur)="getTotalAmount();preventZero(item.closingBalanceAmount, entryIdx)" [mask]="inputMaskFormat" [(ngModel)]="item.closingBalanceAmount" type="text"
                                             [required]="!isPayClicked" [disabled]="isPayClicked">
 
                                     </div>
