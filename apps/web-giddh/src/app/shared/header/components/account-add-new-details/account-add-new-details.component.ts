@@ -74,7 +74,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
-    public isGstValid$: Observable<boolean> = observableOf(true);
+    public isGstValid$: Observable<boolean>= observableOf(true);
     public GSTIN_OR_TRN: string;
     public selectedCountry: string;
     public selectedCountryCode: string;
@@ -464,15 +464,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 if (this.isIndia) {
                     // statesEle.forceClearReactive.status = true;
                     // statesEle.clear();
-                    gstForm.get('stateCode').patchValue(null);
-                    gstForm.get('state').get('code').patchValue(null);
+                    // gstForm.get('stateCode').patchValue(null);
+                    // gstForm.get('state').get('code').patchValue(null);
                 }
             }
         } else {
-            // statesEle.forceClearReactive.status = true;
-            // statesEle.clear();
-            gstForm.get('stateCode').patchValue(null);
-            gstForm.get('state').get('code').patchValue(null);
+                // statesEle.forceClearReactive.status = true;
+                // statesEle.clear();
+                // gstForm.get('stateCode').patchValue(null);
+                // gstForm.get('state').get('code').patchValue(null);
         }
     }
 
