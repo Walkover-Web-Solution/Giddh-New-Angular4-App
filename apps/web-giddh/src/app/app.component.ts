@@ -66,12 +66,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             } else {
                 this._generalService.user = null;
                 this._generalService.sessionId = null;
-                // this.store.dispatch(this.loginAction.SetLoginStatus(userLoginStateEnum.notLoggedIn));
             }
             this._generalService.companyUniqueName = ss.companyUniqueName;
         });
         if (!(this._generalService.user && this._generalService.sessionId)) {
-            // this.store.dispatch(this.loginAction.SetLoginStatus(userLoginStateEnum.notLoggedIn));
             if (!window.location.href.includes('login')) {
                 if (PRODUCTION_ENV && !(isElectron || this.isCordova)) {
                     window.location.href = 'https://giddh.com/login/';
