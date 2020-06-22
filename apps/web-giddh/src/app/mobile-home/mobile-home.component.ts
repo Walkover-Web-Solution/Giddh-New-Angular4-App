@@ -57,6 +57,8 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public hasAccounts: boolean = false;
     /* This will hold if results have groups in it */
     public hasGroups: boolean = false;
+    /* This will hold side nav open status */
+    public sideNavOpen: boolean = false;
     /* This will hold company initials */
     public companyInitials: any = '';
     /* This will hold the search string */
@@ -159,6 +161,9 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public openMobileSidebar() {
         document.querySelector('body').classList.add('mobile-sidebar-open');
+        setTimeout(() => {
+            this.sideNavOpen = true;
+        }, 100);
     }
 
     /**
@@ -167,6 +172,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof MobileHomeComponent
      */
     public closeMobileSidebar() {
+        this.sideNavOpen = false;
         document.querySelector('body').classList.remove('mobile-sidebar-open');
     }
     /**

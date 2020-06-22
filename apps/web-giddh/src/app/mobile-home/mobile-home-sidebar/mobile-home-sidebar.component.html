@@ -1,4 +1,4 @@
-<div class="mobile-home-sidebar-wrapper">
+<div class="mobile-home-sidebar-wrapper" (clickOutside)="closeModel()">
     <div class="sidebar-header">
         <p class="company-name-alice">{{companyInitials}}</p>
         <div class="close-btn" (click)="closeMobileSidebar.emit(true)"><i class="icon-cross"></i></div>

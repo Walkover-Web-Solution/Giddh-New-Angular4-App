@@ -109,4 +109,15 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
             });
         }
     }
+
+    /**
+     * Close nav on click
+     *
+     * @memberof MobileHomeSidebarComponent
+     */
+    public closeModel() {
+        setTimeout(() => {
+            this.closeMobileSidebar.emit(true);
+        }, 50);
+    }
 }

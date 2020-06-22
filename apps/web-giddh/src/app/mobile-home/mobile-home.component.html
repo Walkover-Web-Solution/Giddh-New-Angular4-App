@@ -1,35 +1,46 @@
-<div   #topMobilePage>
+<div #topMobilePage>
     <div class="mobile-home-search">
-            <div class="company-name-alice btn-group" dropdown [autoClose]="false" insideClick="true" #mobileSideNav="bs-dropdown">
-                <p dropdownToggle (click)="openMobileSidebar()">{{companyInitials}}</p>
-                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
-                    role="menu" aria-labelledby="button-basic">
-                    <!-- <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="logout()">Logout</a></li> -->
-                    <li><mobile-home-sidebar (closeMobileSidebar)="closeMobileSidebar();mobileSideNav.hide()"></mobile-home-sidebar></li>
-                </ul>
-            </div>
-            <div class="account-search">
-                <div class="input-group" (click)="focusInSearchBox()" [ngClass]="{'group-list': listOfSelectedGroups && listOfSelectedGroups.length > 0}">
-                    <div class="wrap-group-account-input">
-                        <span class="item-search-wrapper" *ngFor="let item of listOfSelectedGroups; let idx = index">
-                            <span>
-                                <span class="item-search-name">{{item.name}}</span>
-                                <ng-container>
-                                        <span>&nbsp;❯&nbsp;</span>
-                                </ng-container>
-                            </span>
+        <div class="company-name-alice btn-group" dropdown [autoClose]="false" insideClick="true"
+            #mobileSideNav="bs-dropdown">
+            <p dropdownToggle (click)="openMobileSidebar()">{{companyInitials}}</p>
+            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                <!-- <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="logout()">Logout</a></li> -->
+                <li>
+                    <mobile-home-sidebar
+                        (closeMobileSidebar)="sideNavOpen ? (mobileSideNav.hide()) : ''; sideNavOpen ? closeMobileSidebar() : ''">
+                    </mobile-home-sidebar>
+                </li>
+            </ul>
+        </div>
+        <div class="account-search">
+            <div class="input-group" (click)="focusInSearchBox()"
+                [ngClass]="{'group-list': listOfSelectedGroups && listOfSelectedGroups.length > 0}">
+                <div class="wrap-group-account-input">
+                    <span class="item-search-wrapper" *ngFor="let item of listOfSelectedGroups; let idx = index">
+                        <span>
+                            <span class="item-search-name">{{item.name}}</span>
+                            <ng-container>
+                                <span>&nbsp;❯&nbsp;</span>
+                            </ng-container>
                         </span>
-                        <input type="text" #searchElement class="form-control" [(ngModel)]="searchString" placeholder="Search" (keyup)="initSearch($event, $event.target.value)" (keydown)="handleKeydown($event)">
-                    </div> 
-                    <span class="close-addon">
-                        <i class="icon-cross" *ngIf="searchString || (listOfSelectedGroups && listOfSelectedGroups.length > 0)" (click)="clearSearch() "></i>    
                     </span>
+                    <input type="text" #searchElement class="form-control" [(ngModel)]="searchString"
+                        placeholder="Search" (keyup)="initSearch($event, $event.target.value)"
+                        (keydown)="handleKeydown($event)">
                 </div>
+                <span class="close-addon">
+                    <i class="icon-cross"
+                        *ngIf="searchString || (listOfSelectedGroups && listOfSelectedGroups.length > 0)"
+                        (click)="clearSearch() "></i>
+                </span>
             </div>
+        </div>
     </div>
-    <div class="mobile-home-view" #mobileHomeView (mousewheel)="loadMoreModules($event)" (touchmove)="loadMoreModules($event)">
+    <div class="mobile-home-view" #mobileHomeView (mousewheel)="loadMoreModules($event)"
+        (touchmove)="loadMoreModules($event)">
         <div class="mobile-item-wrapper clearfix" *ngIf="hasMenus">
-            <div class="mobile-single-item" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn" [hidden]="item.type !== 'MENU'">
+            <div class="mobile-single-item" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn"
+                [hidden]="item.type !== 'MENU'">
                 <div class="single-item-wrapper" *ngIf="item.type === 'MENU'" (click)="itemSelected(item)">
                     <div class="mobile-item-icon">
                         <img *ngIf="item?.icon" src="{{imgPath}}mobile-home-icon/{{item.icon}}">
@@ -41,7 +52,8 @@
             </div>
         </div>
         <div class="serach-accounts-groups" *ngIf="hasGroups">
-            <div class="search-groups" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn" [hidden]="item.type !== 'GROUP'">
+            <div class="search-groups" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn"
+                [hidden]="item.type !== 'GROUP'">
                 <div class="single-search-group" *ngIf="item.type === 'GROUP'" (click)="itemSelected(item)">
                     <div class="group-icon">
                         <img src="{{imgPath}}mobile-home-icon/customer-group.svg">
@@ -61,7 +73,9 @@
             </div>
         </div>
         <div class="serach-accounts-groups" *ngIf="hasAccounts">
-            <div class="search-groups search-accounts" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn" [hidden]="item.type !== 'ACCOUNT'">
+            <div class="search-groups search-accounts"
+                *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn"
+                [hidden]="item.type !== 'ACCOUNT'">
                 <div class="single-search-group" *ngIf="item.type === 'ACCOUNT'" (click)="itemSelected(item)">
                     <div class="group-icon">
                         A/C
@@ -79,7 +93,7 @@
                         </p>
                     </div>
                 </div>
-            </div>  
+            </div>
         </div>
     </div>
     <div class="top-button" (click)='navigate(topMobilePage);'>
