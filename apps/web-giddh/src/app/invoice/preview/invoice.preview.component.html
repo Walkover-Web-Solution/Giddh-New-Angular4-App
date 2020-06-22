@@ -558,7 +558,7 @@
                                         <div class="flex-fill selectAction">
                                             <span [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ? item.balanceStatus : 'Select Action' }}</span>
                                         </div>
-                                        <div class="click-dropdwon">
+                                        <div class="click-dropdwon" [attachOutsideOnClick]="true" (clickOutside)="showMoreBtn = false" [exclude]="'.dropdown-menu'">
                                             <i class="fa fa-ellipsis-v" (click)="showMoreBtn=!showMoreBtn;selectedItemForMoreBtn = item.voucherNumber"></i>
                                             <ul class="dropdown-menu displayBlock" *ngIf="showMoreBtn && selectedItemForMoreBtn === item.voucherNumber">
                                                 <li (click)="onPerformAction(item, 'paid')">
