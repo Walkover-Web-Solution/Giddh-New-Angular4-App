@@ -901,12 +901,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
             let date = moment().format('DD-MM-YYYY');
             this.invoiceList = [];
             this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((res: any) => {
-                // _.map(res.body.invoiceList, (o) => {
-                //     this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
-                // });
-                // _.uniqBy(this.invoiceList, 'value');
+                _.map(res.body.invoiceList, (o) => {
+                    this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
+                });
+                _.uniqBy(this.invoiceList, 'value');
                 console.log(res);
             });
+
+            // this.invoiceList.push({
+            //     "label": "20200601-1",
+            //     "value": "20200601-1",
+            //     "isSelected": true
+            // });
         }
     }
 
