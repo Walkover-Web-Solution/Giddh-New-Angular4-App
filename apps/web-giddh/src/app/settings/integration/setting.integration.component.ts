@@ -306,7 +306,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
 
-        this.store.pipe(select(stores => stores.settings.usersWithCompanyPermissions), take(2)).subscribe(resp => {
+        this.store.pipe(select(stores => stores.settings.usersWithCompanyPermissions),  takeUntil(this.destroyed$)).subscribe(resp => {
             if (resp) {
                 let data = _.cloneDeep(resp);
                 let sortedArr = _.groupBy(this.prepareDataForUI(data), 'emailId');
