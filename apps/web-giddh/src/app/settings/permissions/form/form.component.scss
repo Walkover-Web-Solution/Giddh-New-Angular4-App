@@ -4,7 +4,7 @@
 }
 
 .custom_dropdown {
-    width: 300px;
+    width: 100%;
     border-radius: 0;
     margin: 0px 0;
     margin-top: 0px;
@@ -17,18 +17,12 @@
 }
 
 .custom_dropdown.open {
-    // margin-top: 5px;
     transform: translateY(5px);
 }
 
 .lh34 {
     line-height: 34px;
 }
-
-.form-group > label {
-    margin-bottom: 5px;
-}
-
 .permissionForm {
     .form-group {
         width: 188px;
@@ -64,6 +58,46 @@
 .custom_dropdown .caret {
     transform: rotate(-90deg);
 }
+.transactions-popup {
+    width: 360px;
+    background: $white;
+    box-shadow: 0px 3px 6px #00000029;
+    padding: 15px;
+    z-index: 9;
+    position: absolute;
+    top: 5px;
+    left: 20px;
+    margin-top: 7px;
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: .5s all ease-in;
+    border: 1px solid $light-gray;
+}
+.permission-main .transactions-popup {
+    right: 20px;
+    left: auto;
+}
+.transactions-limit-box:hover .transactions-popup {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+i.icon-add {
+    color: $gray;
+    font-size: 18px;
+}
+i.icon-cross {
+    color: $gray;
+}
+.permission-row .col-xs-12, .permission-row .col-sm-6, .permission-row .col-sm-3 {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+.permission-row {
+    margin-right: -5px;
+    margin-left: -5px;
+}
 @media (max-width: 1199px) {
     .create-btn {
         float: none !important;
@@ -89,6 +123,22 @@
     }
 }
 
+
+@media (max-width: 991px) {
+    .permission-row {
+        flex-wrap: wrap;
+    }
+    .permission-row .col-xs-12, .permission-row .col-sm-6, .permission-row .col-sm-3 {
+        flex: 0 0 50%;
+    }
+    .transactions-popup {
+        width: 250px;
+    }
+    .permission-main .transactions-popup {
+        width: 250px;
+    }
+}
+
 @media (max-width: 768px) {
     .permissionForm {
         .form-group {
@@ -107,5 +157,18 @@
             width: auto;
             display: inline-block;
         }
+    }
+}
+@media (max-width: 767px) {
+    .transactions-popup {
+        top: 13px;
+        right: 0;
+        width: 170px;
+        left: auto;
+    }
+}
+@media (max-width: 640px) {
+    .permission-row .col-xs-12, .permission-row .col-sm-6, .permission-row .col-sm-3 {
+        flex: 0 0 100%;
     }
 }

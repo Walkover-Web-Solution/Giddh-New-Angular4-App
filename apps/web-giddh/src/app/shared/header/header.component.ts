@@ -839,7 +839,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
         this.toggleBodyClass();
     }
-
     /**
      * This will toggle the settings popup
      *
@@ -881,6 +880,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (this.companyDetailsDropDownWeb) {
             this.companyDetailsDropDownWeb.hide();
         }
+
+        this.toggleBodyScroll();
 
         // entry in db with confirmation
         let menu: any = {};
@@ -1800,5 +1801,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public redirectToMobileHome(): void {
         this.router.navigate(['/pages/mobile-home']);
+    }
+
+    /**
+     * This will stop the body scroll if company dropdown is open
+     *
+     * @memberof HeaderComponent
+     */
+    public toggleBodyScroll(): void {
+        if(this.companyDropdown.isOpen) {
+            document.querySelector('body').classList.add('prevent-body-scroll');
+        } else {
+            document.querySelector('body').classList.remove('prevent-body-scroll');
+        }
     }
 }

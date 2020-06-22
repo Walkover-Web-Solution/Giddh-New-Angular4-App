@@ -636,16 +636,17 @@ ul.sub-list {
 }
 
 .close-2 {
-    position: fixed;
+    position: absolute;
     top: 15px;
-    right: 15px;
+    right: 30px;
     background: none;
-    color: red;
     border: 0px;
-    color: #fff;
+    color: $nero;
     cursor: pointer;
     font-size: 20px;
     z-index: 9999;
+    width: 40px;
+    height: 40px;
 }
 .head-nav {
     background: #f1f1f1;
@@ -657,7 +658,7 @@ ul.sub-list {
     z-index: 10;
 }
 .help-setting-icons{
-    color: $white; 
+    color: $white;
     img{
         width: 18px;
         vertical-align: top;
@@ -688,7 +689,7 @@ ul.sub-list {
         color: $chetwode-blue;
         cursor:pointer;
     }
-    
+
     span.icon-traingle-info {
         color: $bitter-sweet;
         font-size: 15px;
@@ -747,7 +748,7 @@ ul.sub-list {
             font-size: 20px !important;
         }
     }
-    
+
 }
 @media (max-width: 767px) {
 .notification{
@@ -873,7 +874,7 @@ ul.sub-list {
        height: 32px;
     }
     .plan-wrapper{
-        padding: 15px 0 ;
+        padding: 15px 0 0;
         .white-row{
             margin: 0 15px;
         }
@@ -909,6 +910,12 @@ ul.sub-list {
         max-height: 190px;
     }
 }
+@media (max-width: 679px) {
+    .close-2{
+        top: 52px;
+        right: 35px;
+    }
+}
 
 @media (max-width: 375px) {
     .universal-date li.dateRangPicker {
@@ -928,5 +935,9 @@ ul.sub-list {
     }
     .lower-layer-header {
         padding-top: 5px;
+    }
+    .not-today{
+        padding-right: 0 !important;
+        padding-left: 0 !important;
     }
 }

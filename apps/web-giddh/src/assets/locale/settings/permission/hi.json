@@ -21,5 +21,16 @@
     "select_past_period_placeholder" : "Number",
     "ip_addresses" : "IP Addresses",
     "cidr_example" : "192.168.1.0/24",
-    "ip_example" : "192.168.1.0"
+    "ip_example" : "192.168.1.0",
+    "specific_permission" : "Specific Permission",
+    "payment_permissions_checkbox" : "Payment Permissions",
+    "bank_account" : "Bank Account",
+    "bank_account_placeholder" : "Select Account",
+    "duration_limit" : "Duration limit",
+    "amount_limit" : "Amount Limit",
+    "add_button" : "Add",
+    "bank_account_hover_box_heading" : "Bank Account",
+    "more_detail_hover_box" : "More Details",
+    "days" : "Days",
+    "create_user_permission" : "Create User Permission"
 }

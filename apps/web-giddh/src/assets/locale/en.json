@@ -366,9 +366,11 @@
     "app_select_account": "Select Account",
     "app_invoice_date": "Invoice Date",
     "app_invoice_number": "Invoice Number",
-    "sku": "SKU",
-    "igst": "IGST",
-    "cgst": "CGST",
-    "sgst": "SGST",
-    "particular": "Particular"
+    "app_sku": "SKU",
+    "app_igst": "IGST",
+    "app_cgst": "CGST",
+    "app_sgst": "SGST",
+    "app_particular": "Particular",
+    "app_clo_bal": "Clo Bal",
+    "app_dr": "dr."
 }
