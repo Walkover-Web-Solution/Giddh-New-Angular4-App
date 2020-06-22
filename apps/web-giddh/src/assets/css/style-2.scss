@@ -5140,7 +5140,9 @@ label {
     height: 97%;
     min-height: 97%;
 }
-
+.groups-buttons {
+    height: 400px;
+}
 
 /* .tooltip.bottom .tooltip-arrow {
     position: relative;
@@ -9315,6 +9317,9 @@ span#HW_badge_cont:nth-child(3){
         width: 90px;
         height: 90px;
         font-size: 14px;
+    }
+    .groups-buttons {
+        height: auto;
     }
 }
 

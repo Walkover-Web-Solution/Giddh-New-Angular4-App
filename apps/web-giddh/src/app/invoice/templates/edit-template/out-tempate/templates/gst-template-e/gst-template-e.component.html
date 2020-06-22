@@ -19,7 +19,8 @@
                         <td>
                             <h1 [ngStyle]="{'font-size' : inputTemplate.fontSize-1+28 +'px'}">hello</h1>
                             <h4 class="sub_head" *ngIf="fieldsAndVisibility.header.formNameTaxInvoice?.display">This is your
-                                <strong>{{fieldsAndVisibility.header.formNameTaxInvoice?.label}}</strong>
+                                <strong *ngIf="fieldsAndVisibility.header.formNameInvoice?.label && !fieldsAndVisibility.header.formNameTaxInvoice?.label">{{fieldsAndVisibility.header.formNameInvoice?.label}}</strong>
+                                <strong *ngIf="(!fieldsAndVisibility.header.formNameInvoice?.label && fieldsAndVisibility.header.formNameTaxInvoice?.label) || (fieldsAndVisibility.header.formNameInvoice?.label && fieldsAndVisibility.header.formNameTaxInvoice?.label)">{{fieldsAndVisibility.header.formNameTaxInvoice?.label}}</strong>
                             </h4>
                             <p class="mt-05">
                                 <ng-container *ngIf="voucherType==='sales'">
