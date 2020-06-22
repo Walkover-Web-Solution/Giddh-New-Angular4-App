@@ -190,7 +190,10 @@ var app = new Vue({
                         if (e && e.response && e.response.data) {
                             msg = e.response.data.message;
                         }
-                        this.$toaster.error(msg);
+
+                        if((from && to) || (e && e.response && e.response.data && e.response.data.code !== "NOT_FOUND")) {
+                            this.$toaster.error(msg);
+                        }
                     });    
             } else {
                 this.$toaster.error('Magic link ID not found.');
