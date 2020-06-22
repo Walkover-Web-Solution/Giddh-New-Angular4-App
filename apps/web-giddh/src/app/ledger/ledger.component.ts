@@ -414,6 +414,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.handleTaxableAmountVisibility(txn);
         this.newLedgerComponent.calculateTotal();
         this.newLedgerComponent.detectChanges();
+        console.log(txn);
         this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
     }
 
@@ -883,6 +884,26 @@ export class LedgerComponent implements OnInit, OnDestroy {
             } else {
                 this.getInvoiveLists({ accountUniqueName: this.accountUniquename, status: 'unpaid' });
             }
+        }
+    }
+
+    public getInvoiceListsForCreditNote(e) {
+        if (e) {
+            console.log(this.accountUniquename);
+            console.log(this.selectedTxnAccUniqueName);
+            let request = {
+                "accountUniqueNames": [this.selectedTxnAccUniqueName, this.accountUniquename],
+                "voucherType": "credit note"
+            }
+            let date = moment().format('DD-MM-YYYY');
+            this.invoiceList = [];
+            this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((res: any) => {
+                // _.map(res.body.invoiceList, (o) => {
+                //     this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
+                // });
+                // _.uniqBy(this.invoiceList, 'value');
+                console.log(res);
+            });
         }
     }
 
