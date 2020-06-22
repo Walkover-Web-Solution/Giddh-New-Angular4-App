@@ -5,10 +5,10 @@
                 <i class="icon-search2"></i>
             </span>
             <div class="wrap-group-account-input">
-                <input type="text" [(ngModel)]="searchCmp" (ngModelChange)="filterCompanyList($event)" #searchElement class="form-control"
-                    placeholder="Search Company">
+                <input type="text" [(ngModel)]="searchCmp" (ngModelChange)="filterCompanyList($event)" #searchElement
+                    class="form-control" placeholder="Search Company">
             </div>
-            <span class="close-addon">
+            <span class="close-addon" *ngIf="searchCmp && searchCmp.length">
                 <i class="icon-cross" (click)="filterCompanyList('');searchCmp = ''"></i>
             </span>
         </div>
