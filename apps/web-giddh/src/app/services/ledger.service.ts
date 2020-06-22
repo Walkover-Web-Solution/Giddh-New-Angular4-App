@@ -394,9 +394,9 @@ export class LedgerService {
 
     public getInvoiceListsForCreditNote(model: any, date: string) {
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + LEDGER_API.GET_VOUCHER_INVOICE_LIST
+        return this._http.post(this.config.apiUrl + LEDGER_API.GET_VOUCHER_INVOICE_LIST
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':voucherDate', encodeURIComponent(date))
+            .replace(':voucherDate', encodeURIComponent(date)), model
         ).pipe(
             map((res) => {
                 let data: BaseResponse<IUnpaidInvoiceListResponse, any> = res;
@@ -438,11 +438,11 @@ export class LedgerService {
         if (isShowData) {
             url = this.config.apiUrl + LEDGER_API.GET_COLUMNAR_REPORT + '?fileType=json';
             if (request.page) {
-            url = `${url}&page=${request.page}`;
-        }
-        if (request.count) {
-            url = `${url}&count=${request.count}`;
-        }
+                url = `${url}&page=${request.page}`;
+            }
+            if (request.count) {
+                url = `${url}&count=${request.count}`;
+            }
         } else {
             url = this.config.apiUrl + LEDGER_API.GET_COLUMNAR_REPORT;
         }
