@@ -115,6 +115,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public selectedBankName: string = '';
     /** To check is bank selected */
     public isBankSelectedForBulkPayment: boolean = false;
+    /** Get all bank inprogress */
+    public isGetAllIntegratedBankInProgress$: Observable<boolean>;
+
 
     constructor(
         private formBuilder: FormBuilder,
@@ -130,6 +133,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
 
         this.integratedBankList$ = this.store.pipe(select(p => p.company.integratedBankList), takeUntil(this.destroyed$));
+        this.isGetAllIntegratedBankInProgress$ = this.store.pipe(select(storeBank => storeBank.company.isGetAllIntegratedBankInProgress), takeUntil(this.destroyed$));
+
     }
 
     /**
@@ -148,7 +153,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public ngOnInit() {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.initializeNewForm();
-        // this.amount = this.selectedAccForPayment.closingBalance.amount;
+        // this.amount = this.selectedAccForPayment.closingBalanceAmount;
         // get all registered account
         this.store.pipe((select(c => c.session.companyUniqueName)), take(2)).subscribe(s => this.companyUniqueName = s);
         this.store.dispatch(this._companyActions.getAllRegistrations());
@@ -225,7 +230,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 item.remarks = '';
             }
 
-            item.totalDueAmount = item.closingBalance.amount;
+            item.totalDueAmount = item.closingBalanceAmount;
         });
 
 
@@ -244,16 +249,20 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         if (changes) {
             if (changes.selectedAccForPayment && changes.selectedAccForPayment.currentValue) {
                 this.selectedAccForBulkPayment = [];
-               this.selectedAccForBulkPayment.push(changes.selectedAccForPayment.currentValue);
+                this.selectedAccForBulkPayment.push(changes.selectedAccForPayment.currentValue);
             } else {
                 if (changes.selectedAccountsForBulkPayment && changes.selectedAccountsForBulkPayment.currentValue) {
                     this.totalSelectedLength = changes.selectedAccountsForBulkPayment.currentValue.length;
-                    this.selectedAccForBulkPayment = cloneDeep(this.selectedAccountsForBulkPayment);
+                    this.selectedAccForBulkPayment = _.cloneDeep(this.selectedAccountsForBulkPayment);
+                    // this.selectedAccForBulkPayment = cloneDeep(this.selectedAccountsForBulkPayment);
                     this.selectedAccForBulkPayment = this.selectedAccForBulkPayment.filter(item => {
                         return item.accountBankDetails && item.accountBankDetails.bankAccountNo !== '' && item.accountBankDetails.bankName !== '' && item.accountBankDetails.ifsc !== '';
                     });
                 }
             }
+        }
+        if (this.selectedAccForBulkPayment && !this.selectedAccForBulkPayment.length) {
+            this.closePaymentModel();
         }
         this.getTotalAmount();
     }
@@ -451,14 +460,14 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.totalSelectedAccountAmount = 0;
         if (selectedAccount && selectedAccount.length) {
             this.totalSelectedAccountAmount = selectedAccount.reduce((prev, cur) => {
-                return prev + Number(cur.closingBalance.amount);
+                return prev + Number(cur.closingBalanceAmount);
             }, 0);
         }
         this.totalSelectedAccountAmount = Number(this.totalSelectedAccountAmount);
         if (selectedAccount && selectedAccount.length) {
 
             this.isValidData = selectedAccount.every(item => {
-                return item.closingBalance.amount && item.remarks ? true : false;
+                return item.closingBalanceAmount && item.remarks ? true : false;
             });
         } else {
             this.isValidData = false;
@@ -476,7 +485,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      */
     public preventZero(amount: number, index: number): void {
         if (Number(amount) <= 0) {
-            this.selectedAccForBulkPayment[index].closingBalance.amount = '';
+            this.selectedAccForBulkPayment[index].closingBalanceAmount = '';
         }
     }
 
@@ -506,7 +515,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 remarks: '',
                 vendorUniqueName: ''
             };
-            transaction.amount = item.closingBalance.amount;
+            transaction.amount = item.closingBalanceAmount;
             transaction.remarks = item.remarks;
             transaction.vendorUniqueName = item.uniqueName;
             this.requestObjectToGetOTP.bankPaymentTransactions.push(transaction);
@@ -603,7 +612,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         });
         if (val) {
             transactionsFields.get('remarks').patchValue('');
-            transactionsFields.get('amount').patchValue(val.closingBalance.amount);
+            transactionsFields.get('amount').patchValue(val.closingBalanceAmount);
             transactionsFields.get('vendorUniqueName').patchValue(val.uniqueName);
         }
         return transactionsFields;
