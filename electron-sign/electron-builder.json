@@ -50,10 +50,7 @@
             "nsis-web",
             "zip"
         ],
-        "icon": "icon.ico",
-        "publisherName": "Walkover Technologies Pvt Ltd",
-        "certificateSubjectName": "Walkover Technologies Pvt Ltd",
-        "legalTrademarks": "Walkover Technologies Pvt Ltd"
+        "icon": "icon.ico"
     },
     "nsis": {
         "oneClick": true,

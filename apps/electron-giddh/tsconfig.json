@@ -1,5 +1,7 @@
 {
     "compilerOptions": {
+        "skipLibCheck": true,
+        "skipDefaultLibCheck": true,
         "inlineSources": false,
         "sourceMap": true,
         "declaration": false,
