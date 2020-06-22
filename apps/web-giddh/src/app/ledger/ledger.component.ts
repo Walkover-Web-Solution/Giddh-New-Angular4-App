@@ -414,7 +414,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.handleTaxableAmountVisibility(txn);
         this.newLedgerComponent.calculateTotal();
         this.newLedgerComponent.detectChanges();
-        console.log(txn);
         this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
     }
 
@@ -895,8 +894,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public getInvoiceListsForCreditNote(e) {
         if (e) {
-            console.log(this.accountUniquename);
-            console.log(this.selectedTxnAccUniqueName);
             let request = {
                 "accountUniqueNames": [this.selectedTxnAccUniqueName, this.accountUniquename],
                 "voucherType": "credit note"
