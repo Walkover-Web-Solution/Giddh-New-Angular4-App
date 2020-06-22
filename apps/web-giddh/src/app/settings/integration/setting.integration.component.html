@@ -132,9 +132,9 @@
                                 <div class="">
                                     <label>Link Account</label>
                                     <div class="input-group">
-                                        <sh-select *ngIf="razorPayObj.account" placeholder="Link Account" name="razorPayObj.account" [(ngModel)]="razorPayObj.account.uniqueName" [options]="accounts$ | async" (selected)="selectAccount($event)">
+                                        <sh-select placeholder="Link Account" name="razorPayObj.account" [(ngModel)]="razorPayObj.account.uniqueName" [options]="accounts$ | async" (selected)="selectAccount($event)">
                                         </sh-select>
-                                        <div class="input-group-addon cp">
+                                        <div class="input-group-addon cp" *ngIf="razorPayObj?.account?.uniqueName && razorPayObj?.account?.name">
                                             <span (click)="unlinkAccountFromRazorPay()" class="glyphicon glyphicon-trash"></span>
                                         </div>
                                     </div>
