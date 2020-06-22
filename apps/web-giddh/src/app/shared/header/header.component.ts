@@ -1798,6 +1798,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.router.navigate(['/pages/mobile-home']);
     }
 
+    /**
+     * This will stop the body scroll if company dropdown is open
+     *
+     * @memberof HeaderComponent
+     */
     public toggleBodyScroll(): void {
         if(this.companyDropdown.isOpen) {
             document.querySelector('body').classList.add('prevent-body-scroll');
