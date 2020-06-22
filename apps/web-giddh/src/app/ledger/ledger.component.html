@@ -276,7 +276,7 @@
                                                 <!--new ledge popup-->
                                                 <div class="pos-abs entry-modal" *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id">
                                                     <new-ledger-entry-panel #newLedPanel [trxRequest]="advanceSearchRequest" [isBankTransaction]="true" [blankLedger]="item" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)"
-                                                        [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox" (saveBlankLedger)="saveBankTransaction()" (clickedOutsideEvent)="hideBankLedgerPopup($event)" (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
+                                                        [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox" (saveBlankLedger)="saveBankTransaction()" (clickedOutsideEvent)="hideBankLedgerPopup($event)" (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)" (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
                                                         [invoiceList]="invoiceList" [isTouristSchemeApplicable]="isTouristSchemeApplicable">
                                                     </new-ledger-entry-panel>
                                                 </div>
@@ -342,7 +342,7 @@
                                                 <!--new ledge popup-->
                                                 <div class="pos-abs entry-modal" *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id">
                                                     <new-ledger-entry-panel #newLedPanel [trxRequest]="advanceSearchRequest" [isBankTransaction]="true" [blankLedger]="item" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)"
-                                                        [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox" (saveBlankLedger)="saveBankTransaction()" (clickedOutsideEvent)="hideBankLedgerPopup($event)" (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
+                                                        [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox" (saveBlankLedger)="saveBankTransaction()" (clickedOutsideEvent)="hideBankLedgerPopup($event)" (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)" (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
                                                         [invoiceList]="invoiceList">
                                                     </new-ledger-entry-panel>
                                                 </div>
@@ -648,7 +648,7 @@
                                     <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails" [foreignCurrencyDetails]="foreignCurrencyDetails"
                                         [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces" [selectedCurrency]="selectedCurrency" [selectedPrefixForCurrency]="selectedPrefixForCurrency" [selectedSuffixForCurrency]="selectedSuffixForCurrency" [isLedgerAccountAllowsMultiCurrency]="isLedgerAccountAllowsMultiCurrency"
                                         [inputMaskFormat]="inputMaskFormat" (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox" (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()"
-                                        (clickedOutsideEvent)="hideNewLedgerEntryPopup()" (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)" [invoiceList]="invoiceList" [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount" [shouldShowItcSection]="shouldShowItcSection"
+                                        (clickedOutsideEvent)="hideNewLedgerEntryPopup()" (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)" (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)" [invoiceList]="invoiceList" [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount" [shouldShowItcSection]="shouldShowItcSection"
                                         [isTouristSchemeApplicable]="isTouristSchemeApplicable">
                                     </new-ledger-entry-panel>
                                 </div>
@@ -858,7 +858,7 @@
                                     <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails" [foreignCurrencyDetails]="foreignCurrencyDetails"
                                         [selectedCurrency]="selectedCurrency" [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces" [selectedPrefixForCurrency]="selectedPrefixForCurrency" [selectedSuffixForCurrency]="selectedSuffixForCurrency" [inputMaskFormat]="inputMaskFormat"
                                         [isLedgerAccountAllowsMultiCurrency]="isLedgerAccountAllowsMultiCurrency" (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox" (resetBlankLedger)="resetBlankTransaction()"
-                                        (saveBlankLedger)="saveBlankTransaction()" (clickedOutsideEvent)="hideNewLedgerEntryPopup()" (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)" [invoiceList]="invoiceList" [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
+                                        (saveBlankLedger)="saveBlankTransaction()" (clickedOutsideEvent)="hideNewLedgerEntryPopup()" (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)" (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)" [invoiceList]="invoiceList" [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
                                         [shouldShowItcSection]="shouldShowItcSection" [isTouristSchemeApplicable]="isTouristSchemeApplicable">
                                     </new-ledger-entry-panel>
                                 </div>

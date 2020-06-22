@@ -274,7 +274,7 @@
     <span>{{""}}</span>
 </td> -->
                             <td class="pdR1"
-                                *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note' || blankLedger.voucherType == 'pay')">
+                                *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'pay')">
                                 <label class="default_clr">Invoice No.</label>
                                 <input type="text" placeholder="Invoice no." class="form-control"
                                     [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
@@ -320,6 +320,29 @@
                 <sh-select [options]="invoiceList" [isFilterEnabled]="true"
                 [placeholder]="'Select Invoice'" [ItemHeight]="'auto'"
                 [style.width.px]="161"></sh-select> -->
+                            </td>
+
+                            <td class="pdR1" *ngIf="blankLedger.voucherType == 'credit note'">
+                                <div class="form-group">
+                                    <label class="default_clr">Invoice No.</label>
+                                    <div class="btn-group btn-block invoice-btn" dropdown>
+                                        <button dropdownToggle type="button"
+                                            class="form-control text-left btn-block dropdown-toggle">
+                                            Select Invoices
+                                            <span class="select_drop pull-right mrT1">
+                                                <i class="fa fa-caret-down"></i>
+                                            </span>
+                                        </button>
+
+                                        <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width100" role="menu">
+                                            <li *ngIf="invoiceList.length==0">No results found</li>
+                                            <li *ngFor="let invoice of invoiceList">
+                                                <input type="checkbox" (click)="selectInvoice(invoice, $event)"
+                                                    [checked]="invoice.isSelected" /> {{invoice.label}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </td>
 
                             <td *ngIf="shouldShowAdvanceReceipt" class="pdR1 pt-2 hidden-xs">

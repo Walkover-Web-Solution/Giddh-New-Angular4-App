@@ -31,7 +31,7 @@ import { LoaderService } from '../../../loader/loader.service';
 import { forEach, sumBy } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
-import { ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
+import { ReconcileRequest, ReconcileResponse, TransactionsResponse } from '../../../models/api-models/Ledger';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
 import { TagRequest } from '../../../models/api-models/settingsTags';
@@ -115,6 +115,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
     @Output() public clickedOutsideEvent: EventEmitter<any> = new EventEmitter();
     @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
+    @Output() public getInvoiceListsForCreditNote: EventEmitter<any> = new EventEmitter();
     @ViewChild('entryContent') public entryContent: ElementRef;
     @ViewChild('sh') public sh: ShSelectComponent;
     @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
@@ -904,6 +905,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (e.value === 'rcpt') {
             this.shouldShowAdvanceReceipt = true;
             this.clickUnpaidInvoiceList.emit(true);
+        } else if (e.value === 'credit note') {
+            this.getInvoiceListsForCreditNote.emit(true);
+            // this.shouldShowAdvanceReceipt = false;
+            // this.isAdvanceReceipt = false;
         } else {
             this.shouldShowAdvanceReceipt = false;
             this.isAdvanceReceipt = false;

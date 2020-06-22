@@ -414,6 +414,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.handleTaxableAmountVisibility(txn);
         this.newLedgerComponent.calculateTotal();
         this.newLedgerComponent.detectChanges();
+        console.log(txn);
         this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
     }
 
@@ -588,10 +589,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     let fromDateInMMDDYYY;
                     let toDateInMMDDYYY;
                     if (fromDate && fromDate.length) {
-                        fromDateInMMDDYYY = fromDate[1] +'-'+ fromDate[0]+'-'+ fromDate[2];
+                        fromDateInMMDDYYY = fromDate[1] + '-' + fromDate[0] + '-' + fromDate[2];
                     }
                     if (toDate && toDate.length) {
-                        toDateInMMDDYYY = toDate[1] +'-'+  toDate[0] +'-'+  toDate[2]
+                        toDateInMMDDYYY = toDate[1] + '-' + toDate[0] + '-' + toDate[2]
                     }
                     this.selectedDateRange = { startDate: moment(fromDateInMMDDYYY), endDate: moment(toDateInMMDDYYY) };
                     this.selectedDateRangeUi = moment(fromDateInMMDDYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(toDateInMMDDYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -889,6 +890,26 @@ export class LedgerComponent implements OnInit, OnDestroy {
             } else {
                 this.getInvoiveLists({ accountUniqueName: this.accountUniquename, status: 'unpaid' });
             }
+        }
+    }
+
+    public getInvoiceListsForCreditNote(e) {
+        if (e) {
+            console.log(this.accountUniquename);
+            console.log(this.selectedTxnAccUniqueName);
+            let request = {
+                "accountUniqueNames": [this.selectedTxnAccUniqueName, this.accountUniquename],
+                "voucherType": "credit note"
+            }
+            let date = moment().format('DD-MM-YYYY');
+            this.invoiceList = [];
+            this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((res: any) => {
+                // _.map(res.body.invoiceList, (o) => {
+                //     this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
+                // });
+                // _.uniqBy(this.invoiceList, 'value');
+                console.log(res);
+            });
         }
     }
 
