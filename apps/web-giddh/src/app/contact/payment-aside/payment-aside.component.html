@@ -14,11 +14,15 @@
                             <label>Select Bank<span class="red-text">*</span></label>
                             <div class="relative">
                                 <img *ngIf="(isGetAllIntegratedBankInProgress$ | async)" class="dropdown-loader" src="assets/images/loader.gif" alt="">
-                                <sh-select [options]="selectIntegratedBankList" #selectBankEle [multiple]="false" [ItemHeight]="33" [fixedValue]="selectedBankName" [isFilterEnabled]="true" class="text-left" [(ngModel)]="selectedBankUniqueName" name="selectedBankUniqueName" required
-                                    placeholder="Select Bank" (click)="setBankName($event, selectBankEle);" (selected)="selectBank($event);" [multiple]="false">
+                                <sh-select [options]="selectIntegratedBankList" [disabled]="isPayClicked" #selectBankEle [multiple]="false" [ItemHeight]="33" [fixedValue]="selectedBankName" [isFilterEnabled]="true" class="text-left" [(ngModel)]="selectedBankUniqueName" name="selectedBankUniqueName"
+                                    required placeholder="Select Bank" (click)="setBankName($event, selectBankEle);" (selected)="selectBank($event);" [multiple]="false">
                                     <ng-template #optionTemplate let-option="option">
                                         <a href="javascript:void(0)" class="list-item">
                                             <div class="item">{{option?.label}}</div>
+                                            <div class="item_unq">
+                                                <p class="font-12 text-gray mb-0">A/c No.: {{option?.additional?.accountNo}}
+                                                </p>
+                                            </div>
                                             <div class="item_unq">
                                                 <p class="font-12 text-gray mb-0">Clo Bal: {{option?.additional?.effectiveBal | giddhCurrency}} dr.
                                                 </p>
@@ -262,7 +266,7 @@
                 <img src="{{imgPath}}payment-succes.svg">
             </div>
             <h4>Payment proceed</h4>
-            <p>Status of all payments will be mailed shortly.</p>
+            <p *ngIf="this.selectedAccForBulkPayment.length>1">Status of all payments will be mailed shortly.</p>
             <button class="btn btn-success" (click)="successModalRef.hide()">Done</button>
         </div>
     </ng-template>
