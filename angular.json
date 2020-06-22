@@ -201,20 +201,20 @@
                   "with": "apps/web-giddh/src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": false,
+              "optimization": true,
               "outputHashing": "all",
-              "sourceMap": true,
+              "sourceMap": false,
               "extractCss": true,
-              "namedChunks": true,
-              "aot": false,
+              "namedChunks": false,
+              "aot": true,
               "extractLicenses": true,
-              "vendorChunk": true,
-              "buildOptimizer": false,
+              "vendorChunk": false,
+              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
                   "maximumWarning": "2mb",
-                  "maximumError": "10mb"
+                  "maximumError": "5mb"
                 }
               ]
             },
@@ -459,12 +459,12 @@
                   "with": "apps/web-giddh/src/environments/environment.prod.electron.ts"
                 }
               ],
-              "optimization": false,
+              "optimization": true,
               "outputHashing": "all",
-              "sourceMap": true,
+              "sourceMap": false,
               "extractCss": false,
               "namedChunks": true,
-              "aot": false,
+              "aot": true,
               "extractLicenses": false,
               "vendorChunk": true,
               "buildOptimizer": false,
@@ -472,7 +472,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "2mb",
-                  "maximumError": "15mb"
+                  "maximumError": "5mb"
                 }
               ]
             },
