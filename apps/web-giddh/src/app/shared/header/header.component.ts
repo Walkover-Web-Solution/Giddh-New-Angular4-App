@@ -876,6 +876,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.companyDetailsDropDownWeb.hide();
         }
 
+        this.toggleBodyScroll();
+
         // entry in db with confirmation
         let menu: any = {};
         menu.time = +new Date();
@@ -1794,5 +1796,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public redirectToMobileHome(): void {
         this.router.navigate(['/pages/mobile-home']);
+    }
+
+    public toggleBodyScroll(): void {
+        if(this.companyDropdown.isOpen) {
+            document.querySelector('body').classList.add('prevent-body-scroll');
+        } else {
+            document.querySelector('body').classList.remove('prevent-body-scroll');
+        }
     }
 }
