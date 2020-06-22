@@ -774,6 +774,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     public onPerformAction(item, ev: string) {
         if (ev) {
+            this.showMoreBtn = false;
             let objItem = item || this.selectedInvoiceForDetails;
             let actionToPerform = ev;
             if (actionToPerform === 'paid') {
