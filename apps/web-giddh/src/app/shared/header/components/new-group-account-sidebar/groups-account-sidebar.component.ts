@@ -83,8 +83,10 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
             let activeGroup;
             this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
             if (this.currentGroup !== undefined) {
-                this.currentGroup.name = activeGroup.name;
-                this.currentGroup.uniqueName = activeGroup.uniqueName;
+                if (activeGroup) {
+                    this.currentGroup.name = activeGroup.name;
+                    this.currentGroup.uniqueName = activeGroup.uniqueName;
+                }
                 this.onGroupClick(this.currentGroup, this.currentGroupIndex);
             }
         }
