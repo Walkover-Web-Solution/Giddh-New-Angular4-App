@@ -15,6 +15,7 @@ import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-optio
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { FormGroup, NgForm, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { cloneDeep } from '../../lodash-optimized';
+import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 @Component({
     selector: 'payment-aside',
     templateUrl: './payment-aside.component.html',
@@ -110,7 +111,12 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public isValidData: boolean = false;
     /** company's first  name */
     public companyFirstName: string = '';
-
+    /** Selected bank name */
+    public selectedBankName: string = '';
+    /** To check is bank selected */
+    public isBankSelectedForBulkPayment: boolean = false;
+    /** Get all bank inprogress */
+    public isGetAllIntegratedBankInProgress$: Observable<boolean>;
 
 
     constructor(
@@ -127,6 +133,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
 
         this.integratedBankList$ = this.store.pipe(select(p => p.company.integratedBankList), takeUntil(this.destroyed$));
+        this.isGetAllIntegratedBankInProgress$ = this.store.pipe(select(storeBank => storeBank.company.isGetAllIntegratedBankInProgress), takeUntil(this.destroyed$));
+
     }
 
     /**
@@ -145,7 +153,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public ngOnInit() {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.initializeNewForm();
-        // this.amount = this.selectedAccForPayment.closingBalance.amount;
+        // this.amount = this.selectedAccForPayment.closingBalanceAmount;
         // get all registered account
         this.store.pipe((select(c => c.session.companyUniqueName)), take(2)).subscribe(s => this.companyUniqueName = s);
         this.store.dispatch(this._companyActions.getAllRegistrations());
@@ -191,11 +199,18 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                         this.selectIntegratedBankList.push({ label: item.bankName, value: item.urn, additional: item });
                     }
                 });
-                if (bankList.length === 1) {
+                // let ss= [];
+                // ss.push(this.selectIntegratedBankList[0]);
+                // this.selectIntegratedBankList =ss;
+
+                if (this.selectIntegratedBankList.length === 1) {
                     this.selectBank(this.selectIntegratedBankList[0]);
                 }
             }
 
+        });
+        this.selectedAccForBulkPayment = this.selectedAccForBulkPayment.filter((data, index) => {
+            return this.selectedAccForBulkPayment.indexOf(data) === index;
         });
         this.selectedAccForBulkPayment.forEach(item => {
             this.addAccountTransactionsFormObject(item);
@@ -209,14 +224,16 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             if (item && item.name) {
                 modifiedRemark = item.name.split(' ');
             }
-            if (modifiedRemark.length && companyFirstName) {
+            if (modifiedRemark && modifiedRemark.length && companyFirstName) {
                 item.remarks = modifiedRemark[0] + ' - ' + companyFirstName[0];
             } else {
                 item.remarks = '';
             }
 
-            item.totalDueAmount = item.closingBalance.amount;
+            item.totalDueAmount = item.closingBalanceAmount;
         });
+
+
         this.getIntegratedBankDetails();
 
     }
@@ -230,13 +247,22 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes) {
-            if (changes.selectedAccountsForBulkPayment && changes.selectedAccountsForBulkPayment.currentValue) {
-                this.totalSelectedLength = changes.selectedAccountsForBulkPayment.currentValue.length;
-                this.selectedAccForBulkPayment = cloneDeep(this.selectedAccountsForBulkPayment);
-                this.selectedAccForBulkPayment = this.selectedAccForBulkPayment.filter(item => {
-                    return item.accountBankDetails && item.accountBankDetails.bankAccountNo !== '' && item.accountBankDetails.bankName !== '' && item.accountBankDetails.ifsc !== '';
-                });
+            if (changes.selectedAccForPayment && changes.selectedAccForPayment.currentValue) {
+                this.selectedAccForBulkPayment = [];
+                this.selectedAccForBulkPayment.push(changes.selectedAccForPayment.currentValue);
+            } else {
+                if (changes.selectedAccountsForBulkPayment && changes.selectedAccountsForBulkPayment.currentValue) {
+                    this.totalSelectedLength = changes.selectedAccountsForBulkPayment.currentValue.length;
+                    this.selectedAccForBulkPayment = _.cloneDeep(this.selectedAccountsForBulkPayment);
+                    // this.selectedAccForBulkPayment = cloneDeep(this.selectedAccountsForBulkPayment);
+                    this.selectedAccForBulkPayment = this.selectedAccForBulkPayment.filter(item => {
+                        return item.accountBankDetails && item.accountBankDetails.bankAccountNo !== '' && item.accountBankDetails.bankName !== '' && item.accountBankDetails.ifsc !== '';
+                    });
+                }
             }
+        }
+        if (this.selectedAccForBulkPayment && !this.selectedAccForBulkPayment.length) {
+            this.closePaymentModel();
         }
         this.getTotalAmount();
     }
@@ -343,7 +369,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      */
     public resetFormData(): void {
         this.selectedBankUniqueName = '';
+        this.isBankSelectedForBulkPayment = false;
         this.selectedBankUrn = '';
+        this.selectedBankName = '';
         this.receivedOtp = '';
         this.isPayClicked = false;
         this.selectedAccForBulkPayment = [];
@@ -361,29 +389,22 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     /**
      * To select bank event
      *
-     * @param {*} event Selected bank object
+     * @param {IOption} event Selected bank object
+     * @param {ShSelectComponent} selectBabkEle Sh-select reference element
      * @memberof PaymentAsideComponent
      */
     public selectBank(event: IOption): void {
-        this.selectedBankUrn = event.value;
         if (event) {
+            this.selectedBankUrn = event.value;
+            this.selectedBankUniqueName = event.value;
+            this.isBankSelectedForBulkPayment = true;
+            this.selectedBankName = event.label;
             this.isPayClicked = false;
             this.paymentRequestId = '';
             this.otpReceiverNameMessage = '';
-            this.totalAvailableBalance = null;
             this.requestObjectToGetOTP.urn = event.value;
             this.requestObjectToGetOTP.bankName = event.label;
-            this.isRequestInProcess = true;
-            this._companyService.getAllBankDetailsOfIntegrated(this.companyUniqueName, this.requestObjectToGetOTP.urn).subscribe(response => {
-                this.isRequestInProcess = false;
-                if (response.status === 'success') {
-                    if (response.body.Status === 'SUCCESS') {
-                        this.totalAvailableBalance = response.body.effectiveBal;
-                    }
-                } else if (response.status === 'error') {
-                    this._toaster.errorToast(response.message, response.code);
-                }
-            })
+            this.totalAvailableBalance = event.additional.effectiveBal;
         }
         this.getTotalAmount();
     }
@@ -416,6 +437,19 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     }
 
     /**
+     * set Bank name for bydefault set bank name if only single bank integrated to prevent 'urn' displayed this was incorrect
+     *
+     * @param {*} event Click event
+     * @param {ShSelectComponent} selectBankEle Sh-select reference
+     * @memberof PaymentAsideComponent
+     */
+    public setBankName(event: any, selectBankEle: ShSelectComponent): void {
+        this.selectedBankUniqueName = '';
+        selectBankEle.filter = event.target.value !== undefined ? event.target.value : selectBankEle.fixedValue;
+        this.selectedBankName = event.target.value !== undefined ? event.target.value : selectBankEle.fixedValue;
+    }
+
+    /**
      * To get total amount of selected account's balance
      *
      *
@@ -426,18 +460,20 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.totalSelectedAccountAmount = 0;
         if (selectedAccount && selectedAccount.length) {
             this.totalSelectedAccountAmount = selectedAccount.reduce((prev, cur) => {
-                return prev + Number(cur.closingBalance.amount);
+                return prev + Number(cur.closingBalanceAmount);
             }, 0);
         }
         this.totalSelectedAccountAmount = Number(this.totalSelectedAccountAmount);
         if (selectedAccount && selectedAccount.length) {
 
             this.isValidData = selectedAccount.every(item => {
-                return item.closingBalance.amount && item.remarks ? true : false;
+                return item.closingBalanceAmount && item.remarks ? true : false;
             });
         } else {
             this.isValidData = false;
         }
+        /** to testing purpose */
+        console.log(this.isValidData, this.isBankSelectedForBulkPayment);
     }
 
     /**
@@ -447,9 +483,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @param {number} index Index of item
      * @memberof PaymentAsideComponent
      */
-    public preventZero(amount: number, index: number) {
+    public preventZero(amount: number, index: number): void {
         if (Number(amount) <= 0) {
-            this.selectedAccForBulkPayment[index].closingBalance.amount = '';
+            this.selectedAccForBulkPayment[index].closingBalanceAmount = '';
         }
     }
 
@@ -479,7 +515,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 remarks: '',
                 vendorUniqueName: ''
             };
-            transaction.amount = item.closingBalance.amount;
+            transaction.amount = item.closingBalanceAmount;
             transaction.remarks = item.remarks;
             transaction.vendorUniqueName = item.uniqueName;
             this.requestObjectToGetOTP.bankPaymentTransactions.push(transaction);
@@ -521,8 +557,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             return;
         }
 
-        if (!this.timerOn) {
-
+        if (this.timerOn) {
             this.timerOn = false;
             return;
         }
@@ -577,7 +612,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         });
         if (val) {
             transactionsFields.get('remarks').patchValue('');
-            transactionsFields.get('amount').patchValue(val.closingBalance.amount);
+            transactionsFields.get('amount').patchValue(val.closingBalanceAmount);
             transactionsFields.get('vendorUniqueName').patchValue(val.uniqueName);
         }
         return transactionsFields;

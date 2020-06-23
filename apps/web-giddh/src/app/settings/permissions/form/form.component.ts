@@ -48,6 +48,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public dateRangePickerValue: Date[] = [];
     /** To open model */
     public opened = false;
+    /** To show model */
     public show: boolean = false;
     // private methods
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

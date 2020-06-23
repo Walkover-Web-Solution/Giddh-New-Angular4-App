@@ -71,6 +71,10 @@
         "connection_request_message": "Congratulations!! A request has been sent to your account, go to <a href='https://www.icicibank.com/' target='_blank'>ICICI portal</a> and accept it.",
         "note": "Once it is done you can link your ICICI account/s and make payment directly through GIDDH.",
         "add_more": "Add More ID",
-        "max_limit_alert": "You can not select max bank limit more than 1"
+        "max_limit_alert": "You can not select max bank limit more than 1",
+        "amount_upto": "Amount Upto",
+        "select_otp": "Select OTP",
+        "approval_name": "Approval Name"
+
     }
 }
