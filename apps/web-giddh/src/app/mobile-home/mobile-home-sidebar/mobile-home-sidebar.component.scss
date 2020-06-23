@@ -32,17 +32,17 @@
         }
     }
     .sidebar-body{
-        padding: 15px;
+        padding: 15px 0;
         ul{
             list-style: none;
             li{
                 a{
-                    padding: 10px 0;
+                    padding: 10px 15px;
                     color: $nero;
                     font-family: 'opensans-semibold';
                     display: flex;
                     &:hover{
-                        color: $deep-sky-blue;
+                        background-color: $lavender;
                     }
                 }
             }

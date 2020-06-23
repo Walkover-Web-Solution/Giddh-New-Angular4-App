@@ -20,7 +20,7 @@
         z-index: 1;
         transform: rotate(45deg);
     }
-   
+
 }
 :host.setting-sidebar{
     position: fixed;
@@ -119,7 +119,7 @@
         font-family:'opensans-semibold';
         li{
             padding: 6px 20px;
-            margin-bottom:4px;
+            margin-bottom:0px;
             a{
                 cursor: pointer;
                 img{
@@ -182,10 +182,11 @@
             .setting-items{
                 ul{
                     li{
-                        padding: 4px 15px;
+                        padding: 0px;
                         a{
                             display: flex;
                             align-items: flex-start;
+                            padding: 7px 15px;
                         }
                     }
                 }
@@ -193,7 +194,7 @@
         }
     }
 }
-@media(max-width:767px){
+@media(max-width:767px) {
     :host.setting-sidebar{
     position: fixed;
     top: 0;
@@ -234,7 +235,18 @@
                 }
             }
         }
-    }  
+        .help-aside-body {
+            .setting-items {
+                ul {
+                    li {
+                        a {
+                            padding: 10px 15px !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 @media (max-width: 768px) {
     :host {

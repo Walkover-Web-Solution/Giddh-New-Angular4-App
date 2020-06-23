@@ -512,10 +512,7 @@ span.icon-support.dropdown-toggle {
 .other a {
     color: $extra-dark-gray;
     text-transform: uppercase;
-    // font-family:$opensans-semibold;
 }
-
-
 .showMoreOpt {
     font-size: 14px;
     padding: 0 15px;
@@ -744,7 +741,8 @@ ul.sub-list {
     }
     .hamburger_menu button {
         width: 30px;
-        i{
+        padding: 4px 4px 3px 0;
+        i {
             font-size: 20px !important;
         }
     }
@@ -880,9 +878,9 @@ ul.sub-list {
         }
     }
     .setting-menu-icon{
-        padding: 0 10px 0 3px;
+        padding: 4px 10px 4px 4px;
         display: none;
-        width: 30px;
+        width: 32px;
         text-align: center;
     }
     .mobile-back-btn{

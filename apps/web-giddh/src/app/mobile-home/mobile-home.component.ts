@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { HostListener, Inject, Component, OnInit, ChangeDetectorRef, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { Subject, ReplaySubject, Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
@@ -13,6 +13,7 @@ import { AuthService } from '../theme/ng-social-login-module/index';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommandKRequest } from '../models/api-models/Common';
 import { BsDropdownConfig } from 'ngx-bootstrap';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
     selector: 'mobile-home',
@@ -22,7 +23,7 @@ import { BsDropdownConfig } from 'ngx-bootstrap';
         {
             provide: BsDropdownConfig, useValue: { insideClick: true },
         }
-    ]
+    ],
 })
 
 export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -74,7 +75,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private generalService: GeneralService, private commandKService: CommandKService, private cdref: ChangeDetectorRef, private router: Router, private loginAction: LoginActions, private socialAuthService: AuthService, private breakPointObservar: BreakpointObserver) {
+    constructor(@Inject(DOCUMENT) document, private store: Store<AppState>, private generalService: GeneralService, private commandKService: CommandKService, private cdref: ChangeDetectorRef, private router: Router, private loginAction: LoginActions, private socialAuthService: AuthService, private breakPointObservar: BreakpointObserver) {
         document.querySelector('body').classList.add('mobile-home');
 
         this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$)).subscribe(res => {
@@ -143,9 +144,22 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
+    @HostListener('window:scroll', ['$event'])
+
+    onWindowScroll(e) {
+        if (window.pageYOffset > 100) {
+          let element = document.getElementById('navbar');
+          element.classList.add('sticky');
+        } else {
+         let element = document.getElementById('navbar');
+           element.classList.remove('sticky');
+        }
+     }
+
+
     /**
      * This function gets called after view initializes and will set focus in search box
-     * 
+     *
      * @memberof MobileHomeComponent
      */
     public ngAfterViewInit(): void {
@@ -156,7 +170,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /**
      * This function open mobile side bar
-     * 
+     *
      * @memberof MobileHomeComponent
      */
     public openMobileSidebar() {
@@ -168,7 +182,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /**
      * This function close mobile side bar
-     * 
+     *
      * @memberof MobileHomeComponent
      */
     public closeMobileSidebar() {
@@ -427,5 +441,5 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-   
+
 }
