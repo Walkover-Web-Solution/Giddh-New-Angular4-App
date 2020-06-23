@@ -120,7 +120,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /** To check bank update form in edit mode */
 
     public isBankUpdateInEdit: number = null;
-
+    /** Update bank urn number */
+    public updateBankUrnNumber: any;
+    public forceClearLinkAccount$: Observable<IForceClear> = observableOf({ status: false });
 
     constructor(
         private router: Router,
@@ -173,11 +175,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
             // set razor pay form data
             if (o.razorPayForm) {
-                this.razorPayObj = _.cloneDeep(o.razorPayForm);
-                if(this.razorPayObj && this.razorPayObj.account === null) {
-                    this.razorPayObj.account = { name: null, uniqueName: null };
+                if (typeof o.razorPayForm !== "string") {
+                    this.razorPayObj = _.cloneDeep(o.razorPayForm);
+                    if (this.razorPayObj && this.razorPayObj.account === null) {
+                        this.razorPayObj.account = { name: null, uniqueName: null };
+                        this.forceClearLinkAccount$ = observableOf({ status: true });
+                    }
+                    this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
                 }
-                this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
                 this.updateRazor = true;
             } else {
                 this.setDummyData();
@@ -338,8 +343,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
         this.razorPayObj.account = { name: null, uniqueName: null };
         this.razorPayObj.autoCapturePayment = true;
+        this.forceClearLinkAccount$ = observableOf({ status: true });
     }
-
 
     public onSubmitMsgform(f: NgForm) {
         if (f.valid) {
