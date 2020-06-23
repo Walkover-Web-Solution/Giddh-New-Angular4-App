@@ -78,7 +78,7 @@ var app = new Vue({
                 ledgers: []
             }
         },
-        legderBalanceData : {
+        legderBalanceData: {
             forwardedBalance: {
                 amount: '',
                 type: ''
@@ -96,7 +96,7 @@ var app = new Vue({
         folderPath: '',
         isSmall: false
     },
-    mounted: function () {
+    mounted: function() {
         this.folderPath = window.location.hostname === 'localhost' ? '' : 'app/';
         var id = this.getParameterByName('id');
         this.getMagicLinkData(id)
@@ -142,13 +142,13 @@ var app = new Vue({
                         this.$toaster.error(msg);
                     });
 
-                    if (from && to) {
-                        url = apiBaseUrl + 'magic-link-ledger-balance/' + id + '?from=' + from + '&to=' + to;
-                    } else {
-                        url = apiBaseUrl + 'magic-link-ledger-balance/' + id;
-                    }
+                if (from && to) {
+                    url = apiBaseUrl + 'magic-link-ledger-balance/' + id + '?from=' + from + '&to=' + to;
+                } else {
+                    url = apiBaseUrl + 'magic-link-ledger-balance/' + id;
+                }
 
-                    axios.get(url)
+                axios.get(url)
                     .then(response => {
                         if (response.data.status === 'success') {
                             this.legderBalanceData = response.data.body;
@@ -190,7 +190,10 @@ var app = new Vue({
                         if (e && e.response && e.response.data) {
                             msg = e.response.data.message;
                         }
-                        this.$toaster.error(msg);
+
+                        if ((from && to) || (e && e.response && e.response.data && e.response.data.code !== "NOT_FOUND")) {
+                            this.$toaster.error(msg);
+                        }
                     });
             } else {
                 this.$toaster.error('Magic link ID not found.');
@@ -209,7 +212,7 @@ var app = new Vue({
             var unq = ledger.uniqueName;
             ledger.isCompoundEntry = true;
             var ledgerData = this.ledgerData;
-            ledgerData.ledgersTransactions.ledgers.forEach(function (lgr) {
+            ledgerData.ledgersTransactions.ledgers.forEach(function(lgr) {
                 if (unq === lgr.uniqueName) {
                     lgr.isCompoundEntry = true;
                 } else {
@@ -222,15 +225,15 @@ var app = new Vue({
         customFilter: function(txn) {
             return txn.particular.name.indexOf(this.searchText) != -1;
         },
-        filterBy: function (list, value) {
+        filterBy: function(list, value) {
             let arrayList = [];
             arrayList.push(list);
 
-            if(!value) {
+            if (!value) {
                 value = "";
             }
 
-            return arrayList.filter(function (txn) {
+            return arrayList.filter(function(txn) {
                 return txn.particular.name.toLowerCase().includes(value.toLowerCase()) || String(txn.amount).includes(value.toLowerCase());
             });
         },

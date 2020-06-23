@@ -11,7 +11,7 @@ import { AppState } from '../store/roots';
 import { CustomActions } from '../store/customActions';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { COMMON_ACTIONS } from './common.const';
-import { IRegistration } from "../models/interfaces/registration.interface";
+import { IRegistration, IntegratedBankList } from "../models/interfaces/registration.interface";
 
 @Injectable()
 
@@ -59,6 +59,11 @@ export class CompanyActions {
     public static SET_IS_TCS_TDS_APPLICABLE = 'SET_IS_TCS_TDS_APPLICABLE';
     public static SET_USER_CHOSEN_FINANCIAL_YEAR = 'SET_USER_CHOSEN_FINANCIAL_YEAR';
     public static RESET_USER_CHOSEN_FINANCIAL_YEAR = 'RESET_USER_CHOSEN_FINANCIAL_YEAR';
+
+    public static GET_ALL_INTEGRATED_BANK = 'GET_ALL_INTEGRATED_BANK';
+    public static GET_ALL_INTEGRATED_BANK_RESPONSE = 'GET_ALL_INTEGRATED_BANK_RESPONSE';
+
+
 
     @Effect()
     public createCompany$: Observable<Action> = this.action$
@@ -373,6 +378,23 @@ export class CompanyActions {
                 return { type: 'EmptyAction' };
             }));
 
+    @Effect()
+    public getAllIntegratedBankInCompany$: Observable<Action> = this.action$
+        .ofType(CompanyActions.GET_ALL_INTEGRATED_BANK).pipe(
+            switchMap((action: CustomActions) => this._companyService.getIntegratedBankInCompany(action.payload)),
+            map(response => {
+                return this.getAllIntegratedBankInCompanyResponse(response);
+            }));
+
+    @Effect()
+    public getAllIntegratedBankInCompanyResponse$: Observable<Action> = this.action$
+        .ofType(CompanyActions.GET_ALL_INTEGRATED_BANK_RESPONSE).pipe(
+            map((action: CustomActions) => {
+                if (action.payload.status === 'error') {
+                    this._toasty.errorToast(action.payload.message, action.payload.code);
+                }
+                return { type: 'EmptyAction' };
+            }));
     constructor(
         private action$: Actions,
         private _companyService: CompanyService,
@@ -626,4 +648,33 @@ export class CompanyActions {
     public resetUserChosenFinancialYear(): CustomActions {
         return { type: CompanyActions.RESET_USER_CHOSEN_FINANCIAL_YEAR };
     }
+    /**
+     * Get all bank integration
+     *
+     * @param {string} companyUniqueName
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public getAllIntegratedBankInCompany(companyUniqueName: string): CustomActions {
+        return {
+            type: CompanyActions.GET_ALL_INTEGRATED_BANK,
+            payload: companyUniqueName
+        };
+    }
+
+    /**
+     * to get all integrated banks list
+     *
+     * @param {BaseResponse<any, string>} value company unique name
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public getAllIntegratedBankInCompanyResponse(value: BaseResponse<any, string>): CustomActions {
+        return {
+            type: CompanyActions.GET_ALL_INTEGRATED_BANK_RESPONSE,
+            payload: value
+        };
+    }
+
+
 }

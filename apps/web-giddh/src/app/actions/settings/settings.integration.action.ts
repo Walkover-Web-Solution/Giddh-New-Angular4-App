@@ -92,7 +92,7 @@ export class SettingsIntegrationActions {
     public UpdatePaymentKey$: Observable<Action> = this.action$
         .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY).pipe(
             switchMap((action: CustomActions) => this.settingsIntegrationService.updatePaymentKey(action.payload)),
-            map(res => this.validateResponse<string, PaymentClass>(res, {
+            map(res => this.validateResponse<any, PaymentClass>(res, {
                 type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY_RESPONSE,
                 payload: res
             }, true, {
@@ -103,13 +103,13 @@ export class SettingsIntegrationActions {
     public UpdatePaymentKeyResponse$: Observable<Action> = this.action$
         .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY_RESPONSE).pipe(
             map((response: CustomActions) => {
-                let data: BaseResponse<string, string> = response.payload;
+                let data: BaseResponse<any, string> = response.payload;
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
-                    this.store.dispatch(this._companyAction.getAllRegistrations());
+                    // this.store.dispatch(this._companyAction.getAllRegistrations());
                 } else {
                     this.store.dispatch(this._companyAction.getAllRegistrations());
-                    this.toasty.successToast(data.body, '');
+                    this.toasty.successToast(data.body.message);
                 }
                 return { type: 'EmptyAction' };
 
@@ -851,6 +851,7 @@ export class SettingsIntegrationActions {
             }
             return errorAction;
         } else {
+            this.store.dispatch(this.GetRazorPayDetails());
             this.toasty.successToast("Razorpay Details have been verified successfully.");
         }
         return successAction;

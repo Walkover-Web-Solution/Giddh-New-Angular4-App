@@ -27,7 +27,7 @@ import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { BulkEmailRequest } from '../models/api-models/Search';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { IRegistration } from "../models/interfaces/registration.interface";
+import { IRegistration, GetOTPRequest, BulkPaymentResponse, BulkPaymentConfirmRequest } from "../models/interfaces/registration.interface";
 import { ReportsRequestModel, ReportsResponseModel } from "../models/api-models/Reports";
 
 @Injectable()
@@ -396,18 +396,98 @@ export class CompanyService {
             }), catchError((e) => this.errorHandler.HandleCatch<string, ReportsRequestModel>(e, ReportsRequestModel)));
     }
 
-	/*
-  * get registered sales
-  * */
- public getPurchaseRegister(request: ReportsRequestModel) {
-    this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + COMPANY_API.GET_REGISTERED_PURCHASE
-        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':fromDate', encodeURIComponent(request.from))
-        .replace(':toDate', encodeURIComponent(request.to))
-        .replace(':interval', encodeURIComponent(request.interval))).pipe(map((res) => {
-            let data: BaseResponse<ReportsResponseModel, string> = res;
+	/**
+     * To get registered sales
+     *
+     * @param {ReportsRequestModel} request Request body
+     * @returns
+     * @memberof CompanyService
+     */
+    public getPurchaseRegister(request: ReportsRequestModel) {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.get(this.config.apiUrl + COMPANY_API.GET_REGISTERED_PURCHASE
+            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            .replace(':fromDate', encodeURIComponent(request.from))
+            .replace(':toDate', encodeURIComponent(request.to))
+            .replace(':interval', encodeURIComponent(request.interval))).pipe(map((res) => {
+                let data: BaseResponse<ReportsResponseModel, string> = res;
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<string, ReportsRequestModel>(e, ReportsRequestModel)));
+    }
+
+	/**
+     *Get all integrated banks list
+     *
+     * @param {ReportsRequestModel} request
+     * @returns
+     * @memberof CompanyService
+     */
+    public getIntegratedBankInCompany(companyUniqueName: string): Observable<BaseResponse<any, any>> {
+        return this._http.get(this.config.apiUrl + COMPANY_API.GET_COMPANY_INTEGRATED_BANK_LIST
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))).pipe(map((res) => {
+                let data: BaseResponse<any, string> = res;
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, ReportsRequestModel)));
+    }
+
+    /**
+     * Get all integrated banks data from bank server
+     *
+     * @param {string} companyUniqueName company unique name
+     * @param {string} urn urn number
+     * @returns
+     * @memberof CompanyService
+     */
+    public getAllBankDetailsOfIntegrated(companyUniqueName: string, urn: string): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMPANY_API.GET_COMPANY_INTEGRATED_BANK_DETAILS.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':urn', urn);
+        return this._http.get(url).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<string, ReportsRequestModel>(e, ReportsRequestModel)));
-}
+        }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, ReportsRequestModel)));
+    }
+
+    /**
+     * Bulk pay vendor API call
+     *
+     * @param {string} companyUniqueName  company unique name
+     * @param {GetOTPRequest} bankTransferRequest request object
+     * @returns {Observable<BaseResponse<string, GetOTPRequest>>}
+     * @memberof CompanyService
+     */
+    public bulkVendorPayment(companyUniqueName: string, bankTransferRequest: GetOTPRequest): Observable<BaseResponse<BulkPaymentResponse, GetOTPRequest>> {
+            return this._http.post(this.config.apiUrl + COMPANY_API.BULK_PAYMENT.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), bankTransferRequest).pipe(map((res) => {
+                return res;
+            }), catchError((e) => this.errorHandler.HandleCatch<BulkPaymentResponse, GetOTPRequest>(e, bankTransferRequest)));
+    }
+
+    /**
+     * Bulk pay vendor API call
+     *
+     * @param {string} companyUniqueName  Company unique name
+     * @param {string} urn Selected bank urn number
+     * @param {BulkPaymentConfirmRequest} requestObject Request object
+     * @returns {Observable<BaseResponse<BulkPaymentResponse, BulkPaymentConfirmRequest>>}
+     * @memberof CompanyService
+     */
+    public bulkVendorPaymentConfirm(companyUniqueName: string, urn: string, requestObject: BulkPaymentConfirmRequest): Observable<BaseResponse<BulkPaymentResponse, BulkPaymentConfirmRequest>> {
+            return this._http.post(this.config.apiUrl + COMPANY_API.BULK_PAYMENT_CONFIRM.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':urn', urn), requestObject).pipe(map((res) => {
+                return res;
+            }), catchError((e) => this.errorHandler.HandleCatch<BulkPaymentResponse, BulkPaymentConfirmRequest>(e, BulkPaymentConfirmRequest)));
+    }
+
+    /**
+    * Resend OTP API call
+    *
+    * @param {string} companyUniqueName Company unique name
+    * @param {string} urn Urn number
+    * @returns
+    * @memberof CompanyService
+    */
+    public resendOtp(companyUniqueName: string, urn: string, requestId: string): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMPANY_API.BULK_PAYMENT_RESEND_OTP.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':urn', urn).replace(':requestId', requestId);
+        return this._http.get(url).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, '')));
+    }
 }

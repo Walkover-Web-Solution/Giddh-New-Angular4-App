@@ -91,7 +91,9 @@
                     <div class="modal-date-range">
                         <h5 class="modal-inside-heading">Custom</h5>
                         <p>{{inlineStartDate.format("MMM DD")}} - {{inlineEndDate.format("MMM DD")}}</p>
-                        <span (click)="modalRef.hide()"><img src="{{imgPath}}calender.svg"></span>
+                        <span (click)="modalRef.hide()">
+                            <i class="icon-calender"></i>
+                        </span>
                     </div>
                     <div class="start-end-date">
                         <div class="start-end-date-d-flex">
