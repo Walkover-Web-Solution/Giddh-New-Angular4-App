@@ -340,8 +340,13 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         });
     }
 
-
-    public removeSelectedAccount(item: any) {
+    /**
+     * To remove selected amount range from bank account form
+     *
+     * @param {*} item
+     * @memberof PaymentAsideComponent
+     */
+    public removeSelectedAccount(item: any): void {
         if (item) {
             let itemIndx = this.selectedAccForBulkPayment.findIndex((element) => element === item);
             this.selectedAccForBulkPayment.splice(itemIndx, 1);
@@ -622,7 +627,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @param {number} Index of selected item
      * @memberof PaymentAsideComponent
      */
-    public removeTransactionsDetailsForm(index: number) {
+    public removeTransactionsDetailsForm(index: number): void {
         const transactions = this.addAccountBulkPaymentForm.get('bankPaymentTransactions') as FormArray;
         transactions.removeAt(index);
     }
