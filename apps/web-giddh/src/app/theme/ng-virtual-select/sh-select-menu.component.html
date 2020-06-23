@@ -9,7 +9,7 @@
             [class.hilighted]="row.isHilighted" [class.disabled]="row.disabled" (click)="toggleSelected(row)" [style.height.px]="ItemHeight">
             <ng-template [ngTemplateOutletContext]="{option: row}" [ngTemplateOutlet]="optionTemplate"></ng-template>
             <ng-container *ngIf="!optionTemplate">
-                <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                <a href="javascript:void(0)" class="list-item">
                     <div class="item">{{row.label}}</div>
                 </a>
             </ng-container>
@@ -43,7 +43,7 @@
             [class.hilighted]="row.isHilighted" [style.height.px]="ItemHeight">
             <ng-template [ngTemplateOutletContext]="{option: row}" [ngTemplateOutlet]="optionTemplate"></ng-template>
             <ng-container *ngIf="!optionTemplate">
-                <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                <a href="javascript:void(0)" class="list-item">
                     <div class="item"><span><input type="checkbox" class="form-control" [value]="row.value" [checked]="selectedValues?.indexOf(row) !== -1" (change)="toggleSelected(row)"></span> <span (click)="toggleSelected(row)">{{row.label}}</span></div>
                 </a>
             </ng-container>
