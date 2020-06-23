@@ -6092,28 +6092,30 @@ ng-select .select_drop i {
 }
 
 virtual-scroll .scrollable-content .item>a {
-    color: #333;
-    padding: 6px;
+    color: $nero;
+    padding: 3px 10px;
     display: table-cell;
     vertical-align: middle;
     height: 100%;
+    border-bottom: 0px !important;
 }
 
 .customerInvoiceForm virtual-scroll .scrollable-content .item>a {
-    color: #333;
-    padding: 0 6px;
+    color: $nero;
+    padding: 3px 10px;
     display: flex;
     vertical-align: middle;
     height: 100%;
     flex-direction: column;
     justify-content: center;
+    border-bottom: 0px !important;
 }
 
 .customerInvoiceTable virtual-scroll .scrollable-content .item>a {
     white-space: initial;
 }
 
-virtual-scroll .scrollable-content .item.selected>a {
+virtual-scroll .scrollable-content .item.selected>a, virtual-scroll .scrollable-content .item.hilighted > a {
     color: $chetwode-blue !important;
 }
 
@@ -8733,11 +8735,11 @@ button.btn.btn-filter {
 }
 
 .select2-ledger .menu .item:hover {
-    background-color: #e3e4ed;
+    background: $lavender !important;
 }
 
 .select2-ledger .menu .item:hover a {
-    color: #5b64c9;
+    color: $chetwode-blue;
 }
 
 button.ladda-button,
@@ -9299,6 +9301,9 @@ span#HW_badge_cont:nth-child(3){
 }
 span#HW_badge_cont:nth-child(3){
     display: none !important;
+}
+.giddh-datepicker{
+    cursor: pointer !important;
 }
 /* responsive */
 
@@ -10342,4 +10347,7 @@ span#HW_badge_cont:nth-child(3){
 
 .giddh-datepicker-modal {
     margin: 0 !important;
+}
+body.prevent-body-scroll {
+    overflow-y: hidden !important;
 }

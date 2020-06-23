@@ -851,6 +851,7 @@ export class SettingsIntegrationActions {
             }
             return errorAction;
         } else {
+            this.store.dispatch(this.GetRazorPayDetails());
             this.toasty.successToast("Razorpay Details have been verified successfully.");
         }
         return successAction;

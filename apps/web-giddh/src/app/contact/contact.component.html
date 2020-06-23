@@ -129,10 +129,16 @@
 
                     <div class="">
 
-                        <div *ngIf="!isMobileScreen">
+                        <div *ngIf="!isMobileScreen && !isGetAccountsInProcess">
                             <!-- <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true"> -->
                             <ng-container *ngTemplateOutlet='mainTable'></ng-container>
                             <!-- </perfect-scrollbar> -->
+                        </div>
+                        <div class="no-data mrT2 loader-main" *ngIf="!isMobileScreen && isGetAccountsInProcess">
+                            <div class="spinner2">
+                                <div class="cube1"></div>
+                                <div class="cube2"></div>
+                            </div>
                         </div>
 
                         <div *ngIf="isMobileScreen">
@@ -775,7 +781,6 @@
     </div>
 
 </ng-template>
-
 
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
