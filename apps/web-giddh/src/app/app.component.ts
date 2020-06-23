@@ -161,7 +161,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 // need to save last state
                 const redirectState = this.getLastStateFromUrl(evt.url);
                 localStorage.setItem('lastState', redirectState);
-                return window.location.reload(true);
+                window.location.reload();
+                return;
             }
             if (!(evt instanceof NavigationEnd)) {
                 return;
