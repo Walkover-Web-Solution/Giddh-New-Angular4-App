@@ -112,7 +112,6 @@
                 <form #razorPayform="ngForm" novalidate class="">
                     <div class="row">
                         <div class="form-group col-sm-4 col-xs-12">
-
                             <label>Key Id
                                 <span class="required">*</span>
                             </label>
@@ -126,15 +125,15 @@
                             <input class="form-control" type="password" placeholder="Secret key" name="razorPayObj.password" [(ngModel)]="razorPayObj.password" required autocomplete="off">
                         </div>
                     </div>
-                    <div class="">
+                    <div>
                         <div class="row">
                             <div class="form-group col-sm-4 col-xs-12">
-                                <div class="">
+                                <div>
                                     <label>Link Account</label>
                                     <div class="input-group">
-                                        <sh-select *ngIf="razorPayObj.account" placeholder="Link Account" name="razorPayObj.account" [(ngModel)]="razorPayObj.account.uniqueName" [options]="accounts$ | async" (selected)="selectAccount($event)">
+                                        <sh-select placeholder="Link Account" name="razorPayObj.account" [(ngModel)]="razorPayObj.account.uniqueName" [options]="accounts$ | async" (selected)="selectAccount($event)" [forceClearReactive]="forceClearLinkAccount$ | async">
                                         </sh-select>
-                                        <div class="input-group-addon cp">
+                                        <div class="input-group-addon cp" *ngIf="razorPayObj?.account?.uniqueName && razorPayObj?.account?.name">
                                             <span (click)="unlinkAccountFromRazorPay()" class="glyphicon glyphicon-trash"></span>
                                         </div>
                                     </div>

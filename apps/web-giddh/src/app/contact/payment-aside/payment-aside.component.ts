@@ -199,9 +199,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                         this.selectIntegratedBankList.push({ label: item.bankName, value: item.urn, additional: item });
                     }
                 });
-                // let ss= [];
-                // ss.push(this.selectIntegratedBankList[0]);
-                // this.selectIntegratedBankList =ss;
 
                 if (this.selectIntegratedBankList.length === 1) {
                     this.selectBank(this.selectIntegratedBankList[0]);
@@ -296,13 +293,16 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             }
         });
     }
-    /*
-    * API call to send OTP to user
-    *
-    * */
-    public reSendOTP() {
+
+    /**
+     * API call to send OTP to user
+     *
+     * @memberof PaymentAsideComponent
+     */
+    public reSendOTP(): void {
         this.timerOn = true
         this.startTimer(40);
+        this.receivedOtp = null;
         this._companyService.resendOtp(this.companyUniqueName, this.selectedBankUrn, this.paymentRequestId).subscribe((response) => {
             if (response && response.status === 'success') {
 
@@ -328,7 +328,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         bankTransferConfirmOtpRequest.otp = this.receivedOtp;
         this._companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUrn, bankTransferConfirmOtpRequest).subscribe((res) => {
             if (res && res.status === 'success') {
-
                 this.closePaymentModel();
                 this.openModalWithClass(this.successTemplate);
             } else {
@@ -359,6 +358,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public closePaymentModel(): void {
         this.resetFormData();
         this.totalSelectedAccountAmount = null;
+        this.selectedAccForPayment = null;
         this.closeModelEvent.emit(true);
     }
 
@@ -559,6 +559,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
         if (this.timerOn) {
             this.timerOn = false;
+            this.receivedOtp = null;
             return;
         }
     }

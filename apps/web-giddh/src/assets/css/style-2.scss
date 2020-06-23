@@ -10301,3 +10301,6 @@ span#HW_badge_cont:nth-child(3){
 .giddh-datepicker-modal {
     margin: 0 !important;
 }
+body.prevent-body-scroll {
+    overflow-y: hidden !important;
+}
