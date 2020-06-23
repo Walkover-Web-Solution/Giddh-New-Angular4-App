@@ -472,8 +472,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         } else {
             this.isValidData = false;
         }
-        /** to testing purpose */
-        console.log(this.isValidData, this.isBankSelectedForBulkPayment);
     }
 
     /**
