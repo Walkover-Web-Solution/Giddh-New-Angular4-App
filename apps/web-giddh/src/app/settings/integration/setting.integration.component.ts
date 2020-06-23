@@ -123,6 +123,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             // set razor pay form data
             if (o.razorPayForm) {
                 this.razorPayObj = _.cloneDeep(o.razorPayForm);
+                if(this.razorPayObj && this.razorPayObj.account === null) {
+                    this.razorPayObj.account = { name: null, uniqueName: null };
+                }
                 this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
                 this.updateRazor = true;
             } else {
