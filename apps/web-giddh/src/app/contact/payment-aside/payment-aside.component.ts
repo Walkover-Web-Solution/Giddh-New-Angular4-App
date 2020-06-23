@@ -251,7 +251,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 if (changes.selectedAccountsForBulkPayment && changes.selectedAccountsForBulkPayment.currentValue) {
                     this.totalSelectedLength = changes.selectedAccountsForBulkPayment.currentValue.length;
                     this.selectedAccForBulkPayment = _.cloneDeep(this.selectedAccountsForBulkPayment);
-                    // this.selectedAccForBulkPayment = cloneDeep(this.selectedAccountsForBulkPayment);
                     this.selectedAccForBulkPayment = this.selectedAccForBulkPayment.filter(item => {
                         return item.accountBankDetails && item.accountBankDetails.bankAccountNo !== '' && item.accountBankDetails.bankName !== '' && item.accountBankDetails.ifsc !== '';
                     });
@@ -426,7 +425,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.isRequestInProcess = true;
         this._companyService.bulkVendorPayment(this.companyUniqueName, this.requestObjectToGetOTP).subscribe(response => {
             this.isRequestInProcess = false;
-            if (response.status === 'success') {
+            if (response && response.status === 'success') {
                 this.isPayClicked = true;
                 if (response.body && response.body.message) {
                     this._toaster.successToast(response.body.message);
