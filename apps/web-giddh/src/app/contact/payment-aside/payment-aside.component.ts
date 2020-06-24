@@ -251,7 +251,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 if (changes.selectedAccountsForBulkPayment && changes.selectedAccountsForBulkPayment.currentValue) {
                     this.totalSelectedLength = changes.selectedAccountsForBulkPayment.currentValue.length;
                     this.selectedAccForBulkPayment = _.cloneDeep(this.selectedAccountsForBulkPayment);
-                    // this.selectedAccForBulkPayment = cloneDeep(this.selectedAccountsForBulkPayment);
                     this.selectedAccForBulkPayment = this.selectedAccForBulkPayment.filter(item => {
                         return item.accountBankDetails && item.accountBankDetails.bankAccountNo !== '' && item.accountBankDetails.bankName !== '' && item.accountBankDetails.ifsc !== '';
                     });
@@ -340,8 +339,13 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         });
     }
 
-
-    public removeSelectedAccount(item: any) {
+    /**
+     * To remove selected amount range from bank account form
+     *
+     * @param {*} item
+     * @memberof PaymentAsideComponent
+     */
+    public removeSelectedAccount(item: any): void {
         if (item) {
             let itemIndx = this.selectedAccForBulkPayment.findIndex((element) => element === item);
             this.selectedAccForBulkPayment.splice(itemIndx, 1);
@@ -421,7 +425,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.isRequestInProcess = true;
         this._companyService.bulkVendorPayment(this.companyUniqueName, this.requestObjectToGetOTP).subscribe(response => {
             this.isRequestInProcess = false;
-            if (response.status === 'success') {
+            if (response && response.status === 'success') {
                 this.isPayClicked = true;
                 if (response.body && response.body.message) {
                     this._toaster.successToast(response.body.message);
@@ -472,8 +476,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         } else {
             this.isValidData = false;
         }
-        /** to testing purpose */
-        console.log(this.isValidData, this.isBankSelectedForBulkPayment);
     }
 
     /**
@@ -624,7 +626,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @param {number} Index of selected item
      * @memberof PaymentAsideComponent
      */
-    public removeTransactionsDetailsForm(index: number) {
+    public removeTransactionsDetailsForm(index: number): void {
         const transactions = this.addAccountBulkPaymentForm.get('bankPaymentTransactions') as FormArray;
         transactions.removeAt(index);
     }
