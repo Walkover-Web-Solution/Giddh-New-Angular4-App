@@ -14,8 +14,8 @@ import { AuthService } from '../../theme/ng-social-login-module/index';
     templateUrl: './mobile-home-sidebar.component.html',
     styleUrls: ['./mobile-home-sidebar.component.scss']
 })
-export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
 
+export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
     /* This will close sidebar */
     @Output() public closeMobileSidebar: EventEmitter<boolean> = new EventEmitter();
     /* This will hold selected company */
@@ -27,22 +27,21 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(
-        private _store: Store<AppState>,
-        private _loginAction: LoginActions,
-        private _socialAuthService: AuthService,
-        private _generalService: GeneralService
-    ) { }
+    constructor(private store: Store<AppState>, private loginAction: LoginActions, private socialAuthService: AuthService, private generalService: GeneralService) {
 
-    public ngOnInit() {
-        this._store.pipe(
-            select((state: AppState) => state.session.companies),
-            takeUntil(this.destroyed$)
-        ).subscribe(companies => {
+    }
+
+    /**
+     * Initializes the component
+     *
+     * @memberof MobileHomeSidebarComponent
+     */
+    public ngOnInit(): void {
+        this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
             if (companies) {
                 let selectedCmp = companies.find(cmp => {
                     if (cmp && cmp.uniqueName) {
-                        return cmp.uniqueName === this._generalService.companyUniqueName;
+                        return cmp.uniqueName === this.generalService.companyUniqueName;
                     } else {
                         return false;
                     }
@@ -64,7 +63,7 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.isLoggedInWithSocialAccount$ = this._store.select(state => state.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
+        this.isLoggedInWithSocialAccount$ = this.store.select(state => state.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
     }
 
     /**
@@ -83,28 +82,28 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
      *
      * @memberof MobileHomeSidebarComponent
      */
-    public logout() {
+    public logout(): void {
         if (isElectron) {
-            this._store.dispatch(this._loginAction.ClearSession());
+            this.store.dispatch(this.loginAction.ClearSession());
         } else if (isCordova) {
             (window as any).plugins.googleplus.logout(
                 (msg) => {
-                    this._store.dispatch(this._loginAction.ClearSession());
+                    this.store.dispatch(this.loginAction.ClearSession());
                 }
             );
         } else {
             // check if logged in via social accounts
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
                 if (val) {
-                    this._socialAuthService.signOut().then(() => {
-                        this._store.dispatch(this._loginAction.ClearSession());
-                        this._store.dispatch(this._loginAction.socialLogoutAttempt());
+                    this.socialAuthService.signOut().then(() => {
+                        this.store.dispatch(this.loginAction.ClearSession());
+                        this.store.dispatch(this.loginAction.socialLogoutAttempt());
                     }).catch((err) => {
-                        this._store.dispatch(this._loginAction.ClearSession());
-                        this._store.dispatch(this._loginAction.socialLogoutAttempt());
+                        this.store.dispatch(this.loginAction.ClearSession());
+                        this.store.dispatch(this.loginAction.socialLogoutAttempt());
                     });
                 } else {
-                    this._store.dispatch(this._loginAction.ClearSession());
+                    this.store.dispatch(this.loginAction.ClearSession());
                 }
             });
         }
@@ -115,7 +114,7 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
      *
      * @memberof MobileHomeSidebarComponent
      */
-    public closeModel() {
+    public closeModel(): void {
         setTimeout(() => {
             this.closeMobileSidebar.emit(true);
         }, 50);

@@ -724,12 +724,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngAfterViewInit() {
-        /* TO SHOW NOTIFICATIONS */
-        let scriptTag = document.createElement('script');
-        scriptTag.src = 'https://cdn.headwayapp.co/widget.js';
-        scriptTag.type = 'text/javascript';
-        document.body.appendChild(scriptTag);
-        /* TO SHOW NOTIFICATIONS */
+        if(window['Headway'] === undefined) {
+            /* TO SHOW NOTIFICATIONS */
+            let scriptTag = document.createElement('script');
+            scriptTag.src = 'https://cdn.headwayapp.co/widget.js';
+            scriptTag.type = 'text/javascript';
+            document.body.appendChild(scriptTag);
+            /* TO SHOW NOTIFICATIONS */
+        } else {
+            window['Headway'].init();
+        }
 
         if (this.selectedPlanStatus === 'expired') {// active expired
             this.openExpiredPlanModel(this.expiredPlanModel);
@@ -1834,7 +1838,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleBodyScroll(): void {
-        if(this.companyDropdown.isOpen) {
+        if(this.companyDropdown.isOpen && !this.isMobileSite) {
             document.querySelector('body').classList.add('prevent-body-scroll');
         } else {
             document.querySelector('body').classList.remove('prevent-body-scroll');
