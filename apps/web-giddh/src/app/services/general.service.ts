@@ -509,7 +509,7 @@ export class GeneralService {
                 toDateInMmDdYy = toDate[1] + '-' + toDate[0] + '-' + toDate[2]
             }
         }
-        return { fromDate: fromDateInMmDdYy, todate: toDateInMmDdYy }
+        return { fromDate: fromDateInMmDdYy, toDate: toDateInMmDdYy }
     }
 
 }
