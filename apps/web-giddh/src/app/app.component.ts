@@ -69,18 +69,18 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             }
             this._generalService.companyUniqueName = ss.companyUniqueName;
         });
-        if (!(this._generalService.user && this._generalService.sessionId)) {
-            if (!window.location.href.includes('login')) {
-                if (PRODUCTION_ENV && !(isElectron || this.isCordova)) {
-                    window.location.href = 'https://giddh.com/login/';
-                } else if (this.isCordova) {
-                    this._generalService.invokeEvent.next('logoutCordova');
-                    this.router.navigate(['login']);
-                } else {
-                    window.location.href = AppUrl + 'login';
-                }
-            }
-        }
+        // if (!(this._generalService.user && this._generalService.sessionId)) {
+        //     if (!window.location.href.includes('login')) {
+        //         if (PRODUCTION_ENV && !(isElectron || this.isCordova)) {
+        //             window.location.href = 'https://giddh.com/login/';
+        //         } else if (this.isCordova) {
+        //             this._generalService.invokeEvent.next('logoutCordova');
+        //             this.router.navigate(['login']);
+        //         } else {
+        //             window.location.href = AppUrl + 'login';
+        //         }
+        //     }
+        // }
         this._generalService.IAmLoaded.subscribe(s => {
             this.IAmLoaded = s;
         });
