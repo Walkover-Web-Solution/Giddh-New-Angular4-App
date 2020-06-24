@@ -41,8 +41,9 @@
             </div>
         </div>
         <div class="serach-accounts-groups" *ngIf="hasGroups">
-            <div class="search-groups" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn" [hidden]="item.type !== 'GROUP'">
-                <div class="single-search-group" *ngIf="item.type === 'GROUP'" (click)="itemSelected(item)">
+            <div class="search-groups" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn"
+                [hidden]="item.type !== 'GROUP'">
+                <div class="single-search-group cursor-pointer" *ngIf="item.type === 'GROUP'" (click)="itemSelected(item)">
                     <div class="group-icon">
                         <img src="{{imgPath}}mobile-home-icon/customer-group.svg">
                     </div>
@@ -61,8 +62,10 @@
             </div>
         </div>
         <div class="serach-accounts-groups" *ngIf="hasAccounts">
-            <div class="search-groups search-accounts" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn" [hidden]="item.type !== 'ACCOUNT'">
-                <div class="single-search-group" *ngIf="item.type === 'ACCOUNT'" (click)="itemSelected(item)">
+            <div class="search-groups search-accounts"
+                *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn"
+                [hidden]="item.type !== 'ACCOUNT'">
+                <div class="single-search-group cursor-pointer" *ngIf="item.type === 'ACCOUNT'" (click)="itemSelected(item)">
                     <div class="group-icon">
                         A/C
                     </div>

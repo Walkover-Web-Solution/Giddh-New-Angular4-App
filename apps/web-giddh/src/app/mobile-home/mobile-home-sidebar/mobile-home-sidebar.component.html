@@ -1,11 +1,26 @@
 <div class="mobile-home-sidebar-wrapper">
     <div class="sidebar-header">
+<<<<<<< HEAD
         <p class="company-name-alice">WW</p>
         <div class="close-btn"><i class="icon-cross"></i></div>
         <div class="company-details">
             <p class="company-name">Walkover Web Solutions Pvt. Ltd.</p>
             <p><small>(Branch Name) FY-Apr2019-Mar2020</small></p>
             <p><small>shubhendraagrawal@gmail.com</small></p>
+=======
+        <p class="company-name-alice">{{companyInitials}}</p>
+        <div class="close-btn cursor-pointer" (click)="closeMobileSidebar.emit(true)"><i class="icon-cross"></i></div>
+        <div class="company-details" *ngIf="selectedCompany">
+            <p class="company-name">{{selectedCompany.name}}</p>
+            <p>
+                <small>
+                    <span *ngIf="selectedCompany && selectedCompany?.nameAlias">
+                        ({{selectedCompany?.nameAlias}})
+                    </span> {{selectedCompany.activeFinancialYear?.uniqueName}}
+                </small>
+            </p>
+            <p><small>{{selectedCompany.email ? selectedCompany.email : selectedCompany?.createdBy?.email}}</small></p>
+>>>>>>> 63e0c8718... correction update for mobile apk
         </div>
     </div>
     <div class="sidebar-body">

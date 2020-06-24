@@ -30,6 +30,12 @@
             padding: 8px 10px;
             font-size: 18px;
         }
+        .company-details{
+            p.company-name{
+                white-space: normal;
+                word-break: break-word;
+            }
+        }
     }
     .sidebar-body{
         padding: 15px;
