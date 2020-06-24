@@ -89,7 +89,7 @@ export class SettingsIntegrationService {
     public updatePaymentKey(model): Observable<BaseResponse<string, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.UPADTE_PAYMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.UPDATE_PAYMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<string, any> = res;
             data.request = model;
             return data;
