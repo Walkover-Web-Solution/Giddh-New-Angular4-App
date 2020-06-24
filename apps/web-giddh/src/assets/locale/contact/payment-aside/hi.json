@@ -1,5 +1,10 @@
 {
-    "enter_otp" : "Enter OTP",
-    "resend_otp" : "Resend OTP",
-    "send_otp" : "Send OTP"
+    "enter_otp": "Enter OTP",
+    "resend_otp": "Resend OTP",
+    "send_otp": "Send OTP",
+    "pay_now": "Pay Now",
+    "select_bank": "Select Bank",
+    "resend": "Resend",
+    "cancel_otp": "Cancel OTP",
+    "success_bulk_payment": "Status of all payments will be mailed shortly."
 }

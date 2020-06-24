@@ -130,6 +130,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isBankUpdateInEdit: number = null;
     /** Update bank urn number */
     public updateBankUrnNumber: any;
+    /* This will clear the selected linked account */
     public forceClearLinkAccount$: Observable<IForceClear> = observableOf({ status: false });
 
     constructor(
@@ -312,7 +313,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
 
-        this.store.pipe(select(stores => stores.settings.usersWithCompanyPermissions), take(2)).subscribe(resp => {
+        this.store.pipe(select(stores => stores.settings.usersWithCompanyPermissions),  takeUntil(this.destroyed$)).subscribe(resp => {
             if (resp) {
                 let data = _.cloneDeep(resp);
                 let sortedArr = _.groupBy(this.prepareDataForUI(data), 'emailId');
