@@ -1098,7 +1098,7 @@ export class LoginActions {
         } else {
             this._router.navigate([route], parameter);
         }
-        if (isElectron || isCordova) {
+        if (isElectron) {
             window.location.reload();
         }
     }
