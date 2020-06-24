@@ -494,7 +494,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         if (this.isSubscribedPlanHaveAdditionalCharges) {
-            this.openCrossedTxLimitModel(this.crossedTxLimitModel);
+            if(!isCordova) {
+                this.openCrossedTxLimitModel(this.crossedTxLimitModel);
+            }
         }
         this.manageGroupsAccountsModal.onHidden.subscribe(e => {
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
@@ -736,8 +738,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
 
         if (this.selectedPlanStatus === 'expired') {// active expired
-            this.openExpiredPlanModel(this.expiredPlanModel);
+            if(!isCordova) {
+                this.openExpiredPlanModel(this.expiredPlanModel);
+            }
         }
+
         this.session$.subscribe((s) => {
             if (s === userLoginStateEnum.notLoggedIn) {
                 this.router.navigate(['/login']);
@@ -1124,15 +1129,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public logout() {
         if (isElectron) {
-            // this._aunthenticationServer.GoogleProvider.signOut();
             this.store.dispatch(this.loginAction.ClearSession());
-
         } else if (isCordova) {
             (window as any).plugins.googleplus.logout(
                 (msg) => {
                     this.store.dispatch(this.loginAction.ClearSession());
-                    // this.store.pipe(select(p=>p.session.user))
-                    // alert(msg); // do something useful instead of alerting
                 }
             );
         } else {
