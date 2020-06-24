@@ -6,11 +6,13 @@ import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { cloneDeep } from '../../lodash-optimized';
 import { LoginActions } from '../../actions/login.action';
+
 @Component({
     selector: 'mobile-seach-company',
     templateUrl: './mobile-search-company.component.html',
     styleUrls: ['./mobile-search-company.component.scss']
 })
+
 export class MobileSearchCompanyComponent implements OnInit, OnDestroy {
 
     /* Search element for focus */
@@ -24,24 +26,14 @@ export class MobileSearchCompanyComponent implements OnInit, OnDestroy {
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    public focusInSearchBox(e?: KeyboardEvent): void {
-        if (this.searchElement) {
-            this.searchElement.nativeElement.focus();
-        }
+    constructor(private store: Store<AppState>, private loginAction: LoginActions) {
+
     }
 
-    constructor(
-        private _store: Store<AppState>,
-        private _loginAction: LoginActions
-    ) { }
-
-    public ngOnInit() {
+    public ngOnInit(): void {
         document.querySelector('body').classList.add('remove-header-lower-layer');
 
-        this._store.pipe(
-            select((state: AppState) => state.session.companies),
-            takeUntil(this.destroyed$)
-        ).subscribe(companies => {
+        this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
             if (!companies || (companies.length === 0)) {
                 return;
             }
@@ -56,7 +48,7 @@ export class MobileSearchCompanyComponent implements OnInit, OnDestroy {
      *
      * @memberof MobileSearchCompanyComponent
      */
-    public ngOnDestroy() {
+    public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('remove-header-lower-layer');
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -69,7 +61,7 @@ export class MobileSearchCompanyComponent implements OnInit, OnDestroy {
      * 
      * @memberof MobileSearchCompanyComponent
      */
-    public filterCompanyList(ev: string) {
+    public filterCompanyList(ev: string): void {
         let companies: CompanyResponse[] = cloneDeep(this.allCompanies).filter(cmp => (cmp.name.toLowerCase().includes(ev.toLowerCase()) || cmp.nameAlias.toLowerCase().includes(ev.toLowerCase())));
         this.companyList = cloneDeep(companies);
     }
@@ -81,7 +73,19 @@ export class MobileSearchCompanyComponent implements OnInit, OnDestroy {
      *
      * @memberof MobileSearchCompanyComponent
      */
-    public changeCompany(selectedCompanyUniqueName: string) {
-        this._store.dispatch(this._loginAction.ChangeCompany(selectedCompanyUniqueName));
+    public changeCompany(selectedCompanyUniqueName: string): void {
+        this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName));
+    }
+
+    /**
+     * This is to put focus in search box
+     *
+     * @param {KeyboardEvent} [e]
+     * @memberof MobileSearchCompanyComponent
+     */
+    public focusInSearchBox(e?: KeyboardEvent): void {
+        if (this.searchElement) {
+            this.searchElement.nativeElement.focus();
+        }
     }
 }
