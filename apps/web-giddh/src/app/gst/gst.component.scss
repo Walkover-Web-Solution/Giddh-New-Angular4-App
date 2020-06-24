@@ -390,6 +390,12 @@ hr {
     position: absolute;
     top: 10px !important;
     left: 160px !important;
+    li{
+        a{
+            background-color: transparent !important;
+            border: none !important;
+        }
+    }
 }
 
 .icon-download {
@@ -401,7 +407,7 @@ hr {
 }
 
 ::ng-deep #monthPicker .btn-info > .text-success {
-    color: $chetwode-blue !important;
+    color: #2680EB !important;
 }
 ::ng-deep #monthPicker .btn-info:hover .text-success {
     color: #fff !important;
@@ -462,13 +468,8 @@ hr {
 }
 /*responsive*/
 @media (max-width: 767px) {
-    .view-summary-btn {
-        float: none !important;
-        display: block;
-        margin-top: 10px;
-    }
+  
     .return-content {
-        padding: 15px 0 0;
         background-color: #fff;
     }
     .filing-steps .font-large {
@@ -476,5 +477,17 @@ hr {
     }
     .return-content .content-graph {
         padding: 15px 0;
+    }
+}
+@media(max-width:575px){
+    .month-picker {
+        position: absolute;
+        top: 0 !important;
+        left: 0 !important;
+    }
+    .view-summary-btn {
+        float: none !important;
+        display: block;
+        margin-top: 10px;
     }
 }
