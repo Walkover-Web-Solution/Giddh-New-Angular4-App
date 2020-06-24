@@ -1,7 +1,7 @@
 <div class="mobile-home-sidebar-wrapper" (clickOutside)="closeModel()">
     <div class="sidebar-header">
         <p class="company-name-alice">{{companyInitials}}</p>
-        <div class="close-btn" (click)="closeMobileSidebar.emit(true)"><i class="icon-cross"></i></div>
+        <div class="close-btn cursor-pointer" (click)="closeMobileSidebar.emit(true)"><i class="icon-cross"></i></div>
         <div class="company-details" *ngIf="selectedCompany">
             <p class="company-name">{{selectedCompany.name}}</p>
             <p>
