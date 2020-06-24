@@ -67,7 +67,6 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
 
     constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions) {
-        this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
         this.subscriptions$ = this.store.pipe(select(s => s.subscriptions.subscriptions), takeUntil(this.destroyed$));
         this.companies$ = this.store.select(cmp => cmp.session.companies).pipe(takeUntil(this.destroyed$));
         this.activeCompanyUniqueName$ = this.store.pipe(select(cmp => cmp.session.companyUniqueName), takeUntil(this.destroyed$));
@@ -98,6 +97,8 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
             if (res && res.status === "success") {
                 if (!res.body || !res.body[0]) {
                     this.isPlanShow = true;
+                } else {
+                    this.store.dispatch(this._subscriptionsActions.SubscribedCompaniesResponse(res));
                 }
             } else {
                 this.isPlanShow = true;
