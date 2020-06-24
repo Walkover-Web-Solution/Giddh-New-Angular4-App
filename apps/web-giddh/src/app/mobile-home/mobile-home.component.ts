@@ -82,11 +82,9 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.activeCompanyUniqueName = res;
         });
 
-        this.isLoggedInWithSocialAccount$ = this.store.select(state => state.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
+        this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount, takeUntil(this.destroyed$)));
     }
-    navigate(element: HTMLElement): void {
-        element.scrollIntoView({ behavior: 'smooth' });
-    }
+
     /**
      * Initializes the component
      *
@@ -104,7 +102,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         // listen on input for search
-        this.searchSubject.pipe(debounceTime(300)).subscribe(term => {
+        this.searchSubject.pipe(debounceTime(300), takeUntil(this.destroyed$)).subscribe(term => {
             this.commandKRequestParams.page = 1;
             this.commandKRequestParams.q = term;
             this.searchCommandK(true);
@@ -145,17 +143,15 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     @HostListener('window:scroll', ['$event'])
-
-    onWindowScroll(e) {
+    public onWindowScroll(e): void {
         if (window.pageYOffset > 100) {
-          let element = document.getElementById('navbar');
-          element.classList.add('sticky');
+            let element = document.getElementById('navbar');
+            element.classList.add('sticky');
         } else {
-         let element = document.getElementById('navbar');
-           element.classList.remove('sticky');
+            let element = document.getElementById('navbar');
+            element.classList.remove('sticky');
         }
-     }
-
+    }
 
     /**
      * This function gets called after view initializes and will set focus in search box
@@ -173,7 +169,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      *
      * @memberof MobileHomeComponent
      */
-    public openMobileSidebar() {
+    public openMobileSidebar(): void {
         document.querySelector('body').classList.add('mobile-sidebar-open');
         setTimeout(() => {
             this.sideNavOpen = true;
@@ -185,10 +181,11 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      *
      * @memberof MobileHomeComponent
      */
-    public closeMobileSidebar() {
+    public closeMobileSidebar(): void {
         this.sideNavOpen = false;
         document.querySelector('body').classList.remove('mobile-sidebar-open');
     }
+
     /**
      * Releases all the observables to avoid memory leaks
      *
@@ -441,5 +438,13 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-
+    /**
+     * This will scroll to top
+     *
+     * @param {HTMLElement} element
+     * @memberof MobileHomeComponent
+     */
+    public navigate(element: HTMLElement): void {
+        element.scrollIntoView({ behavior: 'smooth' });
+    }
 }

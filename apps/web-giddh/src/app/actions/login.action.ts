@@ -1101,5 +1101,10 @@ export class LoginActions {
         if (isElectron) {
             window.location.reload();
         }
+        if(isCordova) {
+            setTimeout(() => {
+                window.location.reload();
+            }, 200);
+        }
     }
 }
