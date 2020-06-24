@@ -789,6 +789,7 @@ ul.sub-list {
     }
     .nav-left-bar {
         top: 0;
+        display: none;
     }
     .mobile_menu_icon {
         position: absolute;
@@ -873,6 +874,7 @@ ul.sub-list {
     }
     .plan-wrapper{
         padding: 15px 0 0;
+        display: none;
         .white-row{
             margin: 0 15px;
         }
@@ -886,7 +888,6 @@ ul.sub-list {
     .mobile-back-btn{
         display: none;
         color: #fff;
-        transform: rotate(90deg);
         margin-right: 10px;
     }
     .not-today{

@@ -80,6 +80,8 @@
                     color: $nero;
                     font-family: 'opensans-semibold';
                     display: flex;
+                    white-space: normal;
+                    word-break: break-word;
                     &:hover{
                         color: $deep-sky-blue;
                     }   

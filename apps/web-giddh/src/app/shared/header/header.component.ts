@@ -1393,12 +1393,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
         if (!this.modalService.getModalsCount()) {
-            this.modelRefExpirePlan = this.modalService.show(template);
+            this.modelRefExpirePlan = this.modalService.show(template,
+                Object.assign({}, { class: 'subscription-upgrade' })
+            );
         }
     }
 
     public openCrossedTxLimitModel(template: TemplateRef<any>) {  // show if Tx limit over
         this.modelRefCrossLimit = this.modalService.show(template);
+         
     }
 
     /**
