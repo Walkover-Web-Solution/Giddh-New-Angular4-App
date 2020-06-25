@@ -364,6 +364,7 @@ export class AuthenticationService {
      * @memberof AuthenticationService
      */
     public signupWithApple(request: any) {
+        console.log(request);
         return this._httpClient.post(this.config.apiUrl + LOGIN_API.LOGIN_WITH_APPLE, request).pipe(map((res) => {
             let data: BaseResponse<VerifyEmailResponseModel, string> = res as BaseResponse<VerifyEmailResponseModel, string>;
             return data;

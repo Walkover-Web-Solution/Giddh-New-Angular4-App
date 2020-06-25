@@ -164,17 +164,12 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isTwoWayAuthInSuccess$ = this.store.select(p => p.login.isTwoWayAuthSuccess);
 
         try {
-            console.log(isCordova());
-            console.log(window['cordova']);
             if (isCordova()) {
                 const bootstrap = () => {
                     platformBrowserDynamic().bootstrapModule(AppModule);
                 };
 
                 if (typeof window['cordova'] !== 'undefined') {
-                    if (isIOSCordova() || window['cordova']['platformId'] === "ios") {
-                        this.isCordovaAppleApp = true;
-                    }
                     document.addEventListener('deviceready', () => {
                         bootstrap();
                     }, false);
@@ -189,6 +184,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
+
+        if (typeof window['cordova'] !== 'undefined') {
+            if (isIOSCordova() || window['cordova']['platformId'] === "ios") {
+                this.isCordovaAppleApp = true;
+            }
+        }
 
         this.emailVerifyModal.config = { backdrop: "static" };
         this.twoWayAuthModal.config = { backdrop: "static" };
