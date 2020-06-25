@@ -628,10 +628,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             });
 
-        this.loadAPI = new Promise((resolve) => {
-            this.loadScript();
-            resolve(true);
-        });
         // TODO : It is commented due to we have implement calendly and its under discussion to remove
 
         // this.generalService.talkToSalesModal.subscribe(a => {
@@ -1409,32 +1405,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         const attrs = node.attributes;
         return (attrs.getNamedItem('dropdownToggle') && attrs.getNamedItem('switch-company')
             && attrs.getNamedItem('aria-expanded') && attrs.getNamedItem('aria-expanded').nodeValue === 'true');
-    }
-
-    public loadScript() {
-        let isFound = false;
-        let scripts = document.getElementsByTagName('script');
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < scripts.length; ++i) {
-            if (scripts[i].getAttribute('src') != null && scripts[i].getAttribute('src').includes('loader')) {
-                isFound = true;
-            }
-        }
-
-        if (!isFound) {
-            let dynamicScripts = ['https://random-scripts.herokuapp.com/superform/superform.js'];
-
-            // tslint:disable-next-line:prefer-for-of
-            for (let i = 0; i < dynamicScripts.length; i++) {
-                let node = document.createElement('script');
-                node.src = dynamicScripts[i];
-                node.type = 'text/javascript';
-                node.async = false;
-                node.charset = 'utf-8';
-                document.getElementsByTagName('head')[0].appendChild(node);
-            }
-
-        }
     }
 
     public scheduleNow() {
