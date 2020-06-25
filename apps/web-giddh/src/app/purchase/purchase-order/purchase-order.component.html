@@ -1,0 +1,212 @@
+<div class="container-fluid">
+    <div class="d-flex justify-content-between mt-15">
+        <div class="d-flex date-advanceSearch">
+            <!-- Invoice filter section -->
+            <form #invoiceForm="ngForm" novalidate class="form-inline">
+                <div class="form-group mrR1 d-flex">
+                    <div class="input-group">
+                        <span class="input-wrapper">
+                            <input type="text" name="dateRange" daterangepicker (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker"  />
+                        </span>
+                    </div>
+                    <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
+                        <span class="icon-advance-search"></span>
+                    </div>
+
+                    <!-- <div class="search-icon-block" (click)="openModal(template)">
+                        <i class="icon-search"></i>
+                    </div> -->
+                </div>
+            </form>
+
+
+            <!-- Invoice filter section ends -->
+            <!-- <div class="clear-filter" *ngIf="showAdvanceSearchIcon" (click)="resetAdvanceSearch()">
+                <button class="btn btn-filter">
+                    <span class="icon-cross"></span> Clear Filter
+                </button>
+            </div> -->
+        </div>
+        <div class="d-flex add-invoice">
+            <div>
+                <div class="btn-group" dropdown #dp="bs-dropdown">
+                    <button dropdownToggle type="button" class="btn btn-primary desktop-view-btn dropdown-toggle" aria-controls="dropdown-basic">
+                        More
+                        <span class="caret"></span>
+                    </button>
+                    <ul *dropdownMenu class="dropdown-menu fixedDropdownPlus" role="menu" aria-labelledby="button-basic">
+                        <li role="menuitem">
+                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="openModalBulkUpdate(template)">Bulk Update</a>
+                        </li>
+                        <li role="menuitem">
+                            <a class="dropdown-item cp" href="javascript:void(0)">
+                                Convert to bill</a>
+                        </li>
+                        <li role="menuitem">
+                            <a class="dropdown-item cp" href="javascript:void(0)">
+                                Expired</a>
+                        </li>
+                        <li role="menuitem">
+                            <a class="dropdown-item cp" href="javascript:void(0)">Delete</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="btn-wrapper">
+                <button class="btn btn-pink desktop-view-btn mr-0">+
+                    New Purchase
+                </button>
+            </div>
+        </div>
+    </div>
+    <table class="table basic mt-15 table-bordered giddh-table table-responsive">
+        <thead class="t-h-bg1">
+            <tr>
+                <th style="min-width:50px; width: 4%">
+                    <div class="table-checkbox-field">
+                        <img src="assets/images/unchecked.png">
+                        <!-- <img src="assets/images/checked.png"> -->
+                    </div>
+                </th>
+
+                <th>
+                    <div class="table-checkbox-field">
+                        #
+                    </div>
+                </th>
+
+                <th width="13%" class="td_in_searchBox">
+                Date
+                </th>
+
+                <th width="19%" class="td_in_searchBox" >
+                    Purchase Order
+                </th>
+
+                <th width="10%">
+                    <div class="d-flex">
+                        <div class="">Vendore name</div>
+                        <div class="icon-pointer">
+                        
+                        </div>
+                    </div>
+                </th>
+
+                <th width="12%">
+                    <div class="d-flex justify-content-end">
+                        <div class="text-right"> Total Amt.</div>
+                        <div class="icon-pointer">
+                        
+                        </div>
+                    </div>
+                </th>
+
+                <th width="12%" >
+                    <div class="d-flex justify-content-end">
+                        <div>Expected Delivery</div>
+                        <div class="icon-pointer">
+                        
+                        </div>
+                    </div>
+                </th>
+
+                <th width="10%">
+                    <div class="d-flex">
+                        <div class="">Status</div>
+                        <div class="icon-pointer">
+                        
+                        </div>
+                    </div>
+                </th>
+
+                <th width="10%">
+                    <div class="d-flex">
+                        <div class="flex-fill">Action</div>
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="table-checkbox-field">
+                    <div class="table-checkbox-field">
+                        <img  src="assets/images/unchecked.png"/>
+                    </div>
+                </td>
+                <td>
+                    1
+                </td>
+                <td>
+                    23/05/2020
+                </td>
+                <td>
+                    2355989
+                </td>
+                <td>
+                    Walkover Web solution
+                </td>
+                <td class="text-right"> 
+                    1000
+                </td>
+                <td>
+                    <span>Delivery in 7 days</span><br>
+                    <span>23/05/2020</span>
+                </td>
+                <td>
+                    Open
+                </td>
+                <td>
+                    <div class="action-icon">
+                        <a tooltip="Convert to bill">
+                            <i class="fa fa-check"></i>
+                        </a>
+                        <a tooltip="send Email">
+                            <i class="icon-mail"></i>
+                        </a>
+                         <a tooltip="Copy">
+                             <i class="icon-copy"></i>
+                         </a>
+                         <a tooltip="Delete">
+                             <i class="icon-trash"></i>
+                         </a>
+                    </div>
+
+                </td>
+            </tr>
+        </tbody>
+
+
+        <tbody hidden>
+            <tr>
+                <td colspan="8">
+                    <div class="no-data mrT2 loader-main">
+                        <div class="spinner2">
+                            <div class="cube1"></div>
+                            <div class="cube2"></div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<ng-template #template>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Bulk Update</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form">
+        <div class="d-flex">
+            <div>
+                <sh-select></sh-select>
+            </div>
+            <div>
+
+            </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>

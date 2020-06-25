@@ -1941,7 +1941,8 @@ header .navbar {
 .btn-primary:active,
 .open>.dropdown-toggle.btn-primary,
 .btn-primary:active:focus,
-.btn-primary:active:hover {
+.btn-primary:active:hover,
+.open>.dropdown-toggle.btn-primary:focus {
     background: $chetwode-blue;
     color: $white;
     border-color: $chetwode-blue;

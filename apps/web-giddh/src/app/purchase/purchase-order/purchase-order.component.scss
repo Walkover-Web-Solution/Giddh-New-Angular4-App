@@ -1,0 +1,81 @@
+@import "../../../assets/css/color.scss";
+
+    .date-advanceSearch{
+        justify-content: space-between;
+        align-items: center;
+        .form-group{
+            display: inline-flex;
+            .input-wrapper{
+                display: block !important;
+                width: 196px !important;
+                position: relative;
+                height: 36px !important;
+                border: 1px solid $gainsboro;
+                background-color: $white;
+                &:before{
+                    position: absolute;
+                    content: "";
+                    display: block;
+                    height: 36px;
+                    width: 1px;
+                    background-color: $gainsboro;
+                    left: 37px !important;
+                    z-index: 100;
+                    top: 0;
+                }
+                input.form-control{
+                    padding-left: 35px !important;
+                    background-image: url(../../../assets/images/calender.svg) !important;
+                    background-size: 17px !important;
+                    background-position: 9px 8px !important;
+                    background-repeat: no-repeat !important;
+                    padding-left: 45px !important;
+                    position: relative;
+                    z-index: 99;
+                    cursor: default;
+                    width: 100%;
+                }
+            }
+        }
+        .advance-icon,
+        .search-icon-block {
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            margin-left: 10px;
+            border: 1px solid $gainsboro;
+            border-radius: 2px;
+            color: $gray;
+            background: $white;
+            color: $gray;
+        }
+    }
+
+.giddh-table{
+    .action-icon {
+        display: flex;
+        align-items: center;
+        border: 1px solid $gainsboro;
+        a{
+            width: 30px;
+            font-size: 20px;
+            color: $gray;
+            border-right: 1px solid $gainsboro;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            cursor: pointer;
+        }
+     }
+}
+
+.table-checkbox-field{
+    img{width: 20px;}
+}
+.btn-group.open.show{
+    display: inline-block !important;
+}
