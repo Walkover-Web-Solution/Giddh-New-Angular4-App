@@ -215,15 +215,15 @@ export class LedgerVM {
         let data;
         let isReverseChargeAccount = false;
 
-        if(parentGroups) {
+        if (parentGroups) {
             parentGroups.forEach(key => {
-                if(key.uniqueName === "reversecharge") {
+                if (key.uniqueName === "reversecharge") {
                     isReverseChargeAccount = true;
                 }
             });
         }
 
-        if(isReverseChargeAccount) {
+        if (isReverseChargeAccount) {
             data = _.cloneDeep(underStandingTextData.find(p => p.accountType === "ReverseCharge"));
         } else {
             data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
@@ -355,6 +355,15 @@ export class BlankLedgerVM {
     public selectedCurrencyToDisplay?: 0 | 1 = 0;
     public passportNumber?: string;
     public touristSchemeApplicable?: boolean;
+    public invoiceLinkingRequest?: IInvoiceLinkingRequest;
+}
+
+export class IInvoiceLinkingRequest {
+    public linkedInvoices: ILinkedInvoice[];
+}
+
+export class ILinkedInvoice {
+    public invoiceUniqueName: string;
 }
 
 export class TransactionVM {

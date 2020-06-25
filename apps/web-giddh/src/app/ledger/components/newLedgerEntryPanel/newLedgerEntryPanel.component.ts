@@ -882,7 +882,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         });
 
         if (classList && classList instanceof Array) {
-            const shouldNotClose  = classList.some((className: DOMTokenList) => {
+            const shouldNotClose = classList.some((className: DOMTokenList) => {
                 if (!className) {
                     return;
                 }
@@ -907,6 +907,22 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.blankLedger.invoicesToBePaid.splice(indx, 1);
         }
         // this.selectedInvoice.emit(this.selectedInvoices);
+    }
+
+    /**
+     * Calculates conversion rate
+     *
+     * @param {ev} event Selected invoice for credit note
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public creditNoteInvoiceSelected(ev) {
+        this.blankLedger.invoiceLinkingRequest = {
+            linkedInvoices: [
+                {
+                    invoiceUniqueName: ev.value
+                }
+            ]
+        }
 
     }
 
