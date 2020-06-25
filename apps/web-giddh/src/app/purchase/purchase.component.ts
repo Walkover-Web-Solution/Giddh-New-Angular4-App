@@ -7,6 +7,7 @@ import { CompanyActions } from '../actions/company.actions';
 import { AppState } from '../store/roots';
 import { Store } from '@ngrx/store';
 import { StateDetailsRequest } from '../models/api-models/Company';
+import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 
 @Component({
     styleUrls: [`./purchase.component.scss`],
