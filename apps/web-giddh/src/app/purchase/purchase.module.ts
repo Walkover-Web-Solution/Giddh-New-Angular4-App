@@ -17,10 +17,12 @@ import {
     AsideMenuPurchaseInvoiceSettingComponent,
 } from './purchase-invoice/aside-menu/aside-menu-purchase-invoice-setting.component';
 import { PurchaseInvoiceComponent } from './purchase-invoice/purchase.invoice.component';
+import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
 import { ReconcileDesignComponent } from './purchase-invoice/reconcileDesign/reconcileDesign.component';
 import { PurchaseRecordComponent } from './purchase-record/component/purchase-record.component';
 import { PurchaseComponent } from './purchase.component';
 import { PurchaseRoutingModule } from './purchase.routing.module';
+import {ShSelectModule} from './theme/ng-virtual-select/sh-select.module';
 
 /**
  * Created by kunalsaxena on 9/1/17.
@@ -29,6 +31,7 @@ import { PurchaseRoutingModule } from './purchase.routing.module';
 @NgModule({
     declarations: [
         PurchaseInvoiceComponent,
+        PurchaseOrderComponent,
         PurchaseComponent,
         AsideMenuPurchaseInvoiceSettingComponent,
         ReconcileDesignComponent,
@@ -48,11 +51,13 @@ import { PurchaseRoutingModule } from './purchase.routing.module';
         AlertModule,
         ElementViewChildModule,
         PerfectScrollbarModule,
-        InvoiceRoutingModule
+        InvoiceRoutingModule,
+        ShSelectModule
     ],
     entryComponents: [],
     exports: [
-        AsideMenuPurchaseInvoiceSettingComponent
+        AsideMenuPurchaseInvoiceSettingComponent,
+        ShSelectModule
     ]
 })
 export class PurchaseModule {
