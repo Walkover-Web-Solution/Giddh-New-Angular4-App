@@ -882,6 +882,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.selectedBankTxnUniqueName = null;
     }
 
+    /**
+     * Calculates conversion rate
+     *
+     * @memberof LedgerComponent
+     */
     public clickUnpaidInvoiceList(e?: boolean) {
         if (e) {
             if (this.accountUniquename === 'cash' || this.accountUniquename === 'bankaccounts' && this.selectedTxnAccUniqueName) {
@@ -901,18 +906,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
             let date = moment().format('DD-MM-YYYY');
             this.invoiceList = [];
             this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((res: any) => {
-                _.map(res.body.invoiceList, (o) => {
-                    this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
+                _.map(res.body, (o) => {
+                    this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceUniqueName, isSelected: false });
                 });
                 _.uniqBy(this.invoiceList, 'value');
-                console.log(res);
             });
-
-            // this.invoiceList.push({
-            //     "label": "20200601-1",
-            //     "value": "20200601-1",
-            //     "isSelected": true
-            // });
         }
     }
 
@@ -1223,7 +1221,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (blankTransactionObj.otherTaxType === 'tds') {
                 delete blankTransactionObj['tcsCalculationMethod'];
             }
-
             this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
         } else {
             this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
