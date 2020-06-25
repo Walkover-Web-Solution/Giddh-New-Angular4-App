@@ -485,6 +485,7 @@ export class GeneralService {
         } else {
             return false;
         }
+
     }
 
     /**
@@ -509,4 +510,28 @@ export class GeneralService {
 
         return errorMessage;
     }
+
+    /* To get date range from DD-MM-YYYY to MM-DD-YYYY to set date in component datepicker
+     *
+     * @param {string} fromDate
+     * @param {string} toDate
+     * @memberof GeneralService
+     */
+    public dateConversionToSetComponentDatePicker(fromDateValue: string, toDateValue: string): any {
+        let fromDateInMmDdYy;
+        let toDateInMmDdYy;
+        if (fromDateValue && toDateValue) {
+            let fromDate = fromDateValue.split('-');
+            let toDate = toDateValue.split('-');
+
+            if (fromDate && fromDate.length) {
+                fromDateInMmDdYy = fromDate[1] + '-' + fromDate[0] + '-' + fromDate[2];
+            }
+            if (toDate && toDate.length) {
+                toDateInMmDdYy = toDate[1] + '-' + toDate[0] + '-' + toDate[2]
+            }
+        }
+        return { fromDate: fromDateInMmDdYy, todate: toDateInMmDdYy }
+    }
+
 }

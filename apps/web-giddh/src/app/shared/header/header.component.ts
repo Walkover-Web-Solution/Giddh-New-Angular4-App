@@ -291,7 +291,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         /* This will get the date range picker configurations */
         this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
             if (config) {
-                this.datePickerOptions = config;
+                let configDatePicker = cloneDeep(config);
+                if (configDatePicker && configDatePicker.ranges) {
+                    let modifiedRanges = [];
+                    configDatePicker.ranges.forEach(item => {
+                        if (item.name !== 'Today' && item.name !== 'Yesterday') {
+                            modifiedRanges.push(item);
+                        }
+                    });
+                    configDatePicker.ranges = modifiedRanges;
+                }
+                this.datePickerOptions = configDatePicker;
             }
         });
         // Reset old stored application date
@@ -484,7 +494,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         if (this.isSubscribedPlanHaveAdditionalCharges) {
-            this.openCrossedTxLimitModel(this.crossedTxLimitModel);
+            if(!isCordova) {
+                this.openCrossedTxLimitModel(this.crossedTxLimitModel);
+            }
         }
         this.manageGroupsAccountsModal.onHidden.subscribe(e => {
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
@@ -714,16 +726,23 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngAfterViewInit() {
-        /* TO SHOW NOTIFICATIONS */
-        let scriptTag = document.createElement('script');
-        scriptTag.src = 'https://cdn.headwayapp.co/widget.js';
-        scriptTag.type = 'text/javascript';
-        document.body.appendChild(scriptTag);
-        /* TO SHOW NOTIFICATIONS */
+        if(window['Headway'] === undefined) {
+            /* TO SHOW NOTIFICATIONS */
+            let scriptTag = document.createElement('script');
+            scriptTag.src = 'https://cdn.headwayapp.co/widget.js';
+            scriptTag.type = 'text/javascript';
+            document.body.appendChild(scriptTag);
+            /* TO SHOW NOTIFICATIONS */
+        } else {
+            window['Headway'].init();
+        }
 
         if (this.selectedPlanStatus === 'expired') {// active expired
-            this.openExpiredPlanModel(this.expiredPlanModel);
+            if(!isCordova) {
+                this.openExpiredPlanModel(this.expiredPlanModel);
+            }
         }
+
         this.session$.subscribe((s) => {
             if (s === userLoginStateEnum.notLoggedIn) {
                 this.router.navigate(['/login']);
@@ -747,21 +766,30 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // Get universal date
         this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj && dateObj.length) {
+                //  Commented may be use later for new datepicker
                 // if (!this.isDateRangeSelected) {
                 // this.datePickerOptions.startDate = moment(dateObj[0]);
                 // this.datePickerOptions.endDate = moment(dateObj[1]);
                 // this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1]), chosenLabel: dateObj[2]};
-                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.isDateRangeSelected = true;
-                const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-                const to: any = moment().format(GIDDH_DATE_FORMAT);
-                const fromFromStore = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                const toFromStore = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                // const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+                // const to: any = moment().format(GIDDH_DATE_FORMAT);
+                // const fromFromStore = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                // const toFromStore = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
 
-                if (from === fromFromStore && to === toFromStore) {
-                    this.isTodaysDateSelected = true;
+                // if (from === fromFromStore && to === toFromStore) {
+                //     this.isTodaysDateSelected = true;
+                // }
+                if (this.isTodaysDateSelected) {
+                    let today = _.cloneDeep([moment(), moment()]);
+                    this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
+                    this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                } else {
+                    this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                    this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.isDateRangeSelected = true;
                 }
+
+
                 // }
                 // let fromForDisplay = moment(dateObj[0]).format('D-MMM-YY');
                 // let toForDisplay = moment(dateObj[1]).format('D-MMM-YY');
@@ -810,10 +838,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleHelpSupportPane(show: boolean): void {
-        this.asideSettingMenuState = 'out';
-        document.querySelector('body').classList.remove('mobile-setting-sidebar');
-        this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
-        this.toggleBodyClass();
+        setTimeout(() => {
+            this.asideSettingMenuState = 'out';
+            document.querySelector('body').classList.remove('mobile-setting-sidebar');
+            this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
+            this.toggleBodyClass();
+        }, (this.asideHelpSupportMenuState === 'out') ? 100 : 0);
     }
     /**
      * This will toggle the settings popup
@@ -823,16 +853,44 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
-        this.isMobileSidebar = isMobileSidebar;
-        this.asideHelpSupportMenuState = 'out';
-        this.asideSettingMenuState = (show && this.asideSettingMenuState === 'out') ? 'in' : 'out';
-        this.toggleBodyClass();
+        setTimeout(() => {
+            this.isMobileSidebar = isMobileSidebar;
+            this.asideHelpSupportMenuState = 'out';
+            this.asideSettingMenuState = (show && this.asideSettingMenuState === 'out') ? 'in' : 'out';
+            this.toggleBodyClass();
 
-        if(this.asideSettingMenuState === "in") {
-            document.querySelector('body').classList.add('mobile-setting-sidebar');
-        } else {
-            document.querySelector('body').classList.remove('mobile-setting-sidebar');
-        }
+            if (this.asideSettingMenuState === "in") {
+                document.querySelector('body').classList.add('mobile-setting-sidebar');
+            } else {
+                document.querySelector('body').classList.remove('mobile-setting-sidebar');
+            }
+        }, (this.asideSettingMenuState === 'out') ? 100 : 0);
+    }
+
+    /**
+     * This will close the settings popup if click outside of popup
+     *
+     * @memberof HeaderComponent
+     */
+    public closeSettingPanOnOutsideClick() {
+        setTimeout(() => {
+            if (this.asideSettingMenuState === "in") {
+                this.asideSettingMenuState = 'out';
+            }
+        }, 50);
+    }
+
+    /**
+     * This will close the help popup if click outside of popup
+     *
+     * @memberof HeaderComponent
+     */
+    public closeHelpPanOnOutsideClick() {
+        setTimeout(() => {
+            if (this.asideHelpSupportMenuState === "in") {
+                this.asideHelpSupportMenuState = 'out';
+            }
+        }, 50);
     }
 
     /**
@@ -856,6 +914,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (this.companyDetailsDropDownWeb) {
             this.companyDetailsDropDownWeb.hide();
         }
+
+        this.toggleBodyScroll();
 
         // entry in db with confirmation
         let menu: any = {};
@@ -1069,15 +1129,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public logout() {
         if (isElectron) {
-            // this._aunthenticationServer.GoogleProvider.signOut();
             this.store.dispatch(this.loginAction.ClearSession());
-
         } else if (isCordova) {
             (window as any).plugins.googleplus.logout(
                 (msg) => {
                     this.store.dispatch(this.loginAction.ClearSession());
-                    // this.store.pipe(select(p=>p.session.user))
-                    // alert(msg); // do something useful instead of alerting
                 }
             );
         } else {
@@ -1338,12 +1394,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
         if (!this.modalService.getModalsCount()) {
-            this.modelRefExpirePlan = this.modalService.show(template);
+            this.modelRefExpirePlan = this.modalService.show(template,
+                Object.assign({}, { class: 'subscription-upgrade' })
+            );
         }
     }
 
     public openCrossedTxLimitModel(template: TemplateRef<any>) {  // show if Tx limit over
         this.modelRefCrossLimit = this.modalService.show(template);
+         
     }
 
     /**
@@ -1708,8 +1767,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
-            if(!this.isMobileSite && this.dateFieldPosition) {
-                this.dateFieldPosition.x -= 60;
+            if (!this.isMobileSite && this.dateFieldPosition) {
+                this.dateFieldPosition.x -= 150;
             }
         }
         this.modalRef = this.modalService.show(
@@ -1733,14 +1792,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
        * @param {*} value
        * @memberof ProfitLossComponent
        */
-    public dateSelectedCallback(value: any): void {
+    public dateSelectedCallback(value?: any): void {
         this.selectedRangeLabel = "";
 
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
+            this.hideGiddhDatepicker();
             this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
@@ -1750,6 +1809,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 toDate: this.toDate,
             };
             this.isTodaysDateSelected = false;
+            this.store.dispatch(this.companyActions.SetApplicationDate(dates));
+        } else {
+            this.isTodaysDateSelected = true;
+            let today = _.cloneDeep([moment(), moment()]);
+            // this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
+            this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
+            this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            let dates = {
+                fromDate: null,
+                toDate: null,
+                duration: null,
+                period: null,
+                noOfTransactions: null
+            };
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
         }
     }
@@ -1761,5 +1834,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public redirectToMobileHome(): void {
         this.router.navigate(['/pages/mobile-home']);
+    }
+
+    /**
+     * This will stop the body scroll if company dropdown is open
+     *
+     * @memberof HeaderComponent
+     */
+    public toggleBodyScroll(): void {
+        if(this.companyDropdown.isOpen && !this.isMobileSite) {
+            document.querySelector('body').classList.add('prevent-body-scroll');
+        } else {
+            document.querySelector('body').classList.remove('prevent-body-scroll');
+        }
     }
 }

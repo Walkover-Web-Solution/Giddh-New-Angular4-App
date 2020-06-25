@@ -2,7 +2,7 @@
 
     <div class="modal-header themeBg pd2 pdL2 pdR2 clearfix" style="background-color: #525252">
         <h3 class="modal-title bg" id="modal-title">Advance Search </h3>
-        <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="onCancel()"></i>
+        <i class="icon-cross text-right close_modal" aria-hidden="true" (click)="onCancel()"></i>
     </div>
 
     <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
@@ -21,12 +21,12 @@
                     <div class="col-sm-8 col-xs-12">
                         <div class="">
 
-                            <div class="col-xs-4" style="padding-left: 0">
+                            <div class="col-sm-4 col-xs-6" style="padding-left: 0">
                                 <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
                                     (selected)="dateChanged($event, 'invoice')"></sh-select>
                             </div>
 
-                            <div class="col-xs-8" style="padding: 0">
+                            <div class="col-sm-8 col-xs-6" style="padding: 0">
                                 <input type="text" name="invoiceDateRange" bsDatepicker class="form-control"
                                     style="width: 100%" [(ngModel)]="request.invoiceDate"
                                     [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" />
@@ -45,15 +45,15 @@
 
                     <div class="col-sm-8 col-xs-12">
 
-                        <div class="">
+                        <div class="total-amount">
 
-                            <div class="col-xs-8" style="padding-left: 0">
+                            <div class="col-sm-8 col-xs-6" style="padding-left: 0">
                                 <sh-select placeholder="Select" name="entryTotalBy" [options]="filtersForEntryTotal"
                                     [ItemHeight]="33" (selected)="invoiceTotalRangeChanged($event)"></sh-select>
                             </div>
 
-                            <div class="col-xs-4" style="padding: 0">
-                                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total">
+                            <div class="col-sm-4 col-xs-6" style="padding: 0">
+                                <input class="form-control" type="tel" placeholder="00" name="total" [(ngModel)]="request.total">
 
                             </div>
 
@@ -74,12 +74,12 @@
 
                         <div class="">
 
-                            <div class="col-xs-4" style="padding-left: 0">
+                            <div class="col-sm-4 col-xs-6" style="padding-left: 0">
                                 <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
                                     (selected)="dateChanged($event, 'due')"></sh-select>
                             </div>
 
-                            <div class="col-xs-8" style="padding: 0">
+                            <div class="col-sm-8 col-xs-6" style="padding: 0">
                                 <input type="text" bsDatepicker class="form-control" style="width: 100%" name="dueDate"
                                     [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" [(ngModel)]="request.dueDate" />
                             </div>
@@ -96,15 +96,15 @@
 
                     <div class="col-sm-8 col-xs-12">
 
-                        <div class="">
+                        <div class="due-amount">
 
-                            <div class="col-xs-8" style="padding-left: 0">
+                            <div class="col-sm-8 col-xs-6" style="padding-left: 0">
                                 <sh-select placeholder="Select" name="entryTotalBy" [options]="filtersForEntryTotal"
                                     [ItemHeight]="33" (selected)="dueTotalRangeChanged($event)"></sh-select>
                             </div>
 
-                            <div class="col-xs-4" style="padding: 0">
-                                <input class="form-control" placeholder="00" name="balanceDue"
+                            <div class="col-sm-4 col-xs-6" style="padding: 0">
+                                <input class="form-control" type="tel" placeholder="00" name="balanceDue"
                                     [(ngModel)]="request.balanceDue">
                             </div>
 
@@ -121,7 +121,7 @@
 
                     <div class="col-sm-8 col-xs-12">
 
-                        <div class="">
+                        <div class="status-discription">
 
                             <div class="col-sm-8 col-xs-12" style="padding-left: 0">
                                 <sh-select placeholder="Select Action" [multiple]="true"
@@ -144,7 +144,7 @@
 
                     <div class="col-sm-8 col-xs-12">
 
-                        <div class="">
+                        <div class="status-discription">
 
                             <div class="col-sm-8 col-xs-12" style="padding-left: 0">
                                 <textarea class="form-control" name="description"
@@ -199,15 +199,15 @@
 
                     <div class="col-xs-8">
 
-                        <div class="">
+                        <div class="total-amount">
 
-                            <div class="col-xs-8" style="padding-left: 0">
+                            <div class="col-sm-8 col-xs-6" style="padding-left: 0">
                                 <sh-select placeholder="Select Range" [options]="filtersForEntryTotal" [ItemHeight]="33"
                                     (selected)="invoiceTotalRangeChanged($event)"></sh-select>
                             </div>
 
-                            <div class="col-xs-4" style="padding: 0">
-                                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total">
+                            <div class="col-sm-4 col-xs-6" style="padding: 0">
+                                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total" type="tel">
 
                             </div>
 
@@ -224,11 +224,11 @@
 
                 <div class="row">
 
-                    <div class="col-xs-4">
+                    <div class="col-sm-4 col-xs-12">
                         <label>Expiry Date</label>
                     </div>
 
-                    <div class="col-xs-8">
+                    <div class="col-sm-8 col-xs-12">
 
                         <div class="">
 
@@ -246,23 +246,23 @@
 
                 <div class="row mt-2 mb-2">
 
-                    <div class="col-xs-4">
+                    <div class="col-sm-4 col-xs-12">
                         <label>Total Amt</label>
                     </div>
 
-                    <div class="col-xs-8">
+                    <div class="col-sm-8 col-xs-12">
 
-                        <div class="">
+                        <div class="total-amount">
 
-                            <div class="col-xs-8" style="padding-left: 0">
+                            <div class="col-sm-8 col-xs-6" style="padding-left: 0">
                                 <sh-select placeholder="Select Range" name="amountFieldSelector"
                                     [options]="filtersForAmount" [(ngModel)]="request.amountFieldSelector"
                                     [ItemHeight]="33" (selected)="amountRangeChanged($event)">
                                 </sh-select>
                             </div>
 
-                            <div class="col-xs-4" style="padding: 0">
-                                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.amount">
+                            <div class="col-sm-4 col-xs-6" style="padding: 0">
+                                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.amount" type="tel">
 
                             </div>
 
@@ -298,13 +298,13 @@
                         <label>Invoice Total Amt</label>
                     </div>
                     <div class="col-xs-8">
-                        <div class="">
-                            <div class="col-xs-8" style="padding-left: 0">
+                        <div class="status-discription">
+                            <div class="col-sm-8 col-xs-12" style="padding-left: 0">
                                 <sh-select placeholder="Select Range" [options]="filtersForEntryTotal" [ItemHeight]="33"
                                     (selected)="invoiceTotalRangeChanged($event)"></sh-select>
                             </div>
-                            <div class="col-xs-4" style="padding: 0">
-                                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total">
+                            <div class="col-sm-4 col-xs-12" style="padding: 0">
+                                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total" type="tel">
                             </div>
                         </div>
                     </div>
@@ -314,7 +314,7 @@
                         <label>Due Date Range</label>
                     </div>
                     <div class="col-sm-8 col-xs-12">
-                        <div class="">
+                        <div class="status-discription">
                             <div class="col-xs-4" style="padding-left: 0">
                                 <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
                                     (selected)="dateChanged($event, 'due')"></sh-select>

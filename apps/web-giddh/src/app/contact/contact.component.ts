@@ -48,6 +48,8 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../shared/helpers/defaultDateFormat';
 import { OnboardingFormRequest } from '../models/api-models/Common';
 import { CommonActions } from '../actions/common.actions';
+import { PAGINATION_LIMIT } from '../app.constant';
+import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 
 const CustomerType = [
     { label: 'Customer', value: 'customer' },
@@ -223,6 +225,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public isBulkPaymentShow: boolean = false;
     /** selected account list array */
     public selectedAccountsList: any[] = [];
+    /**pagination count */
+    public paginationLimit: number = PAGINATION_LIMIT;
+
 
     private checkboxInfo: any = {
         selectedPage: 1
@@ -238,6 +243,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     modalRef: BsModalRef;
     public selectedRangeLabel: any = "";
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /**True, if get accounts request in process */
+    public isGetAccountsInProcess: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -254,7 +261,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         private _groupWithAccountsAction: GroupWithAccountsAction,
         private _cdRef: ChangeDetectorRef, private _generalService: GeneralService,
         private _route: ActivatedRoute, private _generalAction: GeneralActions,
-        private _router: Router, private _breakPointObservar: BreakpointObserver, private modalService: BsModalService) {
+        private _router: Router, private _breakPointObservar: BreakpointObserver, private modalService: BsModalService,
+        private settingsProfileActions: SettingsProfileActions) {
         this.searchLoader$ = this.store.select(p => p.search.searchLoader);
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
@@ -293,6 +301,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             this.selectedCompany = store.session.companies.find((company) => company.uniqueName === store.session.companyUniqueName);
         }), takeUntil(this.destroyed$)).subscribe();
         this.store.dispatch(this._companyActions.getAllRegistrations());
+        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
     }
 
     /**
@@ -303,33 +312,36 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      */
     public openBulkPaymentModal(template: TemplateRef<any>, item?: any): void {
         this.isBulkPaymentShow = true;
-        if (item) {
-            if (this.isBankAccountAddedAccount(item)) {
-                this.selectedAccountsList = [];
-                this.selectedAccountsList.push(item);
+        this.selectedAccForPayment = null;
+        if (item && this.selectedAccountsList.length < 2) {
+            if (item.bankPaymentDetails) {
+                this.selectedAccForPayment = item;
             }
-        }
-        if (this.selectedAccountsList.length) {
-            this.selectedAccountsList = this.selectedAccountsList.filter(itemObject => {
-                return itemObject.accountBankDetails && itemObject.accountBankDetails.bankAccountNo !== '' && itemObject.accountBankDetails.bankName !== '' && itemObject.accountBankDetails.ifsc !== '';
-            });
-            if (this.selectedAccountsList.length < this.selectedCheckedContacts.length) {
-                this._toaster.infoToast(`${this.selectedCheckedContacts.length - this.selectedAccountsList.length} out of ${this.selectedCheckedContacts.length} transactions could not be processed as bank details of those accounts are not updated.`);
-            }
+        } else {
             if (this.selectedAccountsList.length) {
-                this.bulkPaymentModalRef = this.modalService.show(template,
-                    Object.assign({}, { class: 'payment-modal modal-lg' })
-                );
+                this.selectedAccountsList = this.selectedAccountsList.filter(itemObject => {
+                    return itemObject.bankPaymentDetails === true;
+                });
+                this.selectedAccountsList = this.selectedAccountsList.filter((data, index) => {
+                    return this.selectedAccountsList.indexOf(data) === index;
+                });
+                if (this.selectedAccountsList.length < this.selectedCheckedContacts.length) {
+                    this._toaster.infoToast(`${this.selectedCheckedContacts.length - this.selectedAccountsList.length} out of ${this.selectedCheckedContacts.length} transactions could not be processed as bank details of those accounts are not updated.`);
+                }
             }
         }
-
+        if (this.selectedAccountsList.length || this.selectedAccForPayment) {
+            this.bulkPaymentModalRef = this.modalService.show(template,
+                Object.assign({}, { class: 'payment-modal modal-lg' })
+            );
+        }
     }
     public sort(key, ord = 'asc') {
         this.key = key;
         this.order = ord;
 
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
-            null, 'false', 20, this.searchStr, key, ord);
+            null, 'false', PAGINATION_LIMIT, this.searchStr, key, ord);
     }
 
     public ngOnInit() {
@@ -362,7 +374,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
                 this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');
-                this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, this.searchStr);
+                this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr);
             }
         })).pipe(takeUntil(this.destroyed$)).subscribe();
 
@@ -370,7 +382,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             if (yes) {
                 if (this.accountAsideMenuState === 'in') {
                     this.toggleAccountAsidePane();
-                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, this.searchStr);
+                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr);
                 }
             }
         });
@@ -397,9 +409,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             .subscribe((term: any) => {
                 this.searchStr = term;
                 if (this.activeTab === 'customer') {
-                    this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, 'true', 20, term, this.key, this.order);
+                    this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, 'true', PAGINATION_LIMIT, term, this.key, this.order);
                 } else {
-                    this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, 'true', 20, term, this.key, this.order);
+                    this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, 'true', PAGINATION_LIMIT, term, this.key, this.order);
                 }
             });
         this._breakPointObservar.observe([
@@ -477,7 +489,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public performActions(type: number, account: any, event?: any) {
         this.selectedCheckedContacts = [];
         this.selectedCheckedContacts.push(account.uniqueName);
-        this.selectedAccountsList.push(account);
 
         switch (type) {
             case 0: // go to add and manage
@@ -537,7 +548,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.selectedAccountsList = [];
         if (tabName !== this.activeTab) {
             this.activeTab = tabName;
-            this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, '');
+            this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, '');
 
             this.store.dispatch(this._generalAction.setAppTitle(`/pages/contact/${tabName}`));
 
@@ -554,7 +565,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.tabSelected(tabName);
         this.searchStr = '';
         if (tabName === 'vendor') {
-            this.getAccounts(this.fromDate, this.toDate, type, null, 'true', 20, '');
+            this.getAccounts(this.fromDate, this.toDate, type, null, 'true', PAGINATION_LIMIT, '');
         }
         this.showFieldFilter = new CustomerVendorFiledFilter();
         let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer']));
@@ -603,10 +614,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.toggleAccountAsidePane();
     }
 
-    public openPaymentAside(acc: string) {
-        this.selectedAccForPayment = acc;
-        this.togglePaymentPane();
-    }
+    //  commenting for now may be use later for reference
+    // public openPaymentAside(acc: string) {
+    //     this.selectedAccForPayment = acc;
+    //     this.togglePaymentPane();
+    // }
 
     public toggleAccountAsidePane(event?): void {
         if (event) {
@@ -617,20 +629,21 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.toggleBodyClass();
     }
 
-    public togglePaymentPane(event?) {
-        if (event) {
-            event.preventDefault();
-        }
-        this.paymentAsideMenuState = this.paymentAsideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
-    }
+    //  commenting for now may be use later for reference
+    // public togglePaymentPane(event?) {
+    //     if (event) {
+    //         event.preventDefault();
+    //     }
+    //     this.paymentAsideMenuState = this.paymentAsideMenuState === 'out' ? 'in' : 'out';
+    //     this.toggleBodyClass();
+    // }
 
     public getUpdatedList(grpName?): void {
         setTimeout(() => {
             if (grpName) {
                 if (this.accountAsideMenuState === 'in') {
                     this.toggleAccountAsidePane();
-                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, '');
+                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, '');
                 }
             }
         }, 1000);
@@ -658,7 +671,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
         this.selectedCheckedContacts = [];
         this.selectedAccountsList = [];
-        this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'true', 20, this.searchStr, this.key, this.order);
+        this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
     }
 
     public hideListItems() {
@@ -862,7 +875,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
             let componentInstance = componentInstanceView.instance as PaginationComponent;
             componentInstance.totalItems = s.count * s.totalPages;
-            componentInstance.itemsPerPage = s.count;
+            componentInstance.itemsPerPage = this.paginationLimit;
             componentInstance.maxSize = 5;
             componentInstance.writeValue(s.page);
             componentInstance.boundaryLinks = true;
@@ -886,7 +899,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, this.searchStr);
+            this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr);
             this.detectChanges();
         }
     }
@@ -933,10 +946,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         // this.selectedcus = true;
         if (ev.target.checked) {
             this.selectedCheckedContacts.push(item.uniqueName);
-            this.selectedAccountsList.push(item);
-            // Note need to remove below
-            this.selectedAccForPayment = item;
-            // this.selectCustomer = true;
+            if (item.bankPaymentDetails) {
+                this.selectedAccountsList.push(item);
+            }
         } else {
             // this.selectCustomer = false;
             let itemIndx = this.selectedCheckedContacts.findIndex((element) => element === item.uniqueName);
@@ -957,7 +969,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.isAdvanceSearchApplied = false;
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
-            null, 'true', 20, '');
+            null, 'true', PAGINATION_LIMIT, '');
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
@@ -1011,7 +1023,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         }
         this.isAdvanceSearchApplied = true;
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
-            null, 'true', 20, '');
+            null, 'true', PAGINATION_LIMIT, '');
     }
 
     public setAmountType(category: string, amountType: string) {
@@ -1088,8 +1100,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      * @param {string} [order='asc'] Order of sorting (asc or desc)
      * @memberof ContactComponent
      */
-    private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, refresh?: string, count: number = 20, query?: string,
+    private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, refresh?: string, count: number = PAGINATION_LIMIT, query?: string,
         sortBy: string = '', order: string = 'asc'): void {
+        this.isGetAccountsInProcess = true;
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : 'false';
         fromDate = (fromDate) ? fromDate : '';
@@ -1126,8 +1139,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                     this.sundryCreditorsAccounts = _.cloneDeep(res.body.results);
 
                 }
+                this.selectedAccountsList = [];
+                this.selectedCheckedContacts = [];
                 this.detectChanges();
             }
+            this.isGetAccountsInProcess = false;
         });
     }
 
@@ -1216,7 +1232,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      */
     public closeBulkPaymentModel(): void {
         this.isBulkPaymentShow = false;
+        this.selectedAccForPayment = null;
         this.bulkPaymentModalRef.hide();
+        this.selectedAccountsList = [];
+        this.toggleAllSelection(false);
+        this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr);
     }
 
     /**

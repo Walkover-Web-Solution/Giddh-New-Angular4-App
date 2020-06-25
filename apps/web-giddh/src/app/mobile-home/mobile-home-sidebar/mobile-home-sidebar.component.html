@@ -1,0 +1,47 @@
+<div class="mobile-home-sidebar-wrapper" (clickOutside)="closeModel()">
+    <div class="sidebar-header">
+        <p class="company-name-alice">{{companyInitials}}</p>
+        <div class="close-btn cursor-pointer" (click)="closeMobileSidebar.emit(true)"><i class="icon-cross"></i></div>
+        <div class="company-details" *ngIf="selectedCompany">
+            <p class="company-name">{{selectedCompany.name}}</p>
+            <p>
+                <small>
+                    <span *ngIf="selectedCompany && selectedCompany?.nameAlias">
+                        ({{selectedCompany?.nameAlias}})
+                    </span> {{selectedCompany.activeFinancialYear?.uniqueName}}
+                </small>
+            </p>
+            <p><small>{{selectedCompany.email ? selectedCompany.email : selectedCompany?.createdBy?.email}}</small></p>
+        </div>
+    </div>
+    <div class="sidebar-body">
+        <ul>
+            <li>
+                <a href="javascript:;" hidden>Import/Export Data (Backup)</a>
+            </li>
+            <li>
+                <a href="https://changelog.giddh.com/" target="_blank">Changelog</a>
+            </li>
+            <li>
+                <a href="javascript:;" [routerLink]="['/pages/mobile-search-company']">Switch Company</a>
+            </li>
+            <li>
+                <a href="javascript:;" hidden>User Profile</a>
+            </li>
+            <li>
+                <a href="javascript:;" hidden>Session</a>
+            </li>
+            <li>
+                <a href="javascript:;" hidden>Company</a>
+            </li>
+            <li>
+                <a href="javascript:;" hidden>API</a>
+            </li>
+
+            <hr class="mt-1 mb-1 mr-15 ml-15">
+            <li (click)="logout()">
+                <a href="javascript:;">Logout</a>
+            </li>
+        </ul>
+    </div>
+</div>

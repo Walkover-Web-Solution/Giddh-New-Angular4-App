@@ -6,7 +6,7 @@
 
 .dropdown-menu {
     padding: 10px;
-    max-height: 162px;
+    max-height: 130px;
     overflow-y: scroll;
 }
 
@@ -152,9 +152,23 @@
 
     }
     .input-group-date-range-picker {
-        width: 100%;
+        width: 66%;
         .form-group{
             margin-bottom:0;
+        }
+    }
+}
+@media(max-width:370px){
+    .date-advanceSearch{
+        display: block;
+        .input-group-date-range-picker {
+            width: 70%;
+            .form-group{
+                margin-bottom:0;
+            }
+        }
+        .btn{
+            float: left !important;
         }
     }
 }

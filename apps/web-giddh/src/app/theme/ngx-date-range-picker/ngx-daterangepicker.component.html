@@ -49,13 +49,13 @@
         <div class="days-upto-select">
             <ul>
                 <li>
-                    <button><input type="text" (keyup)="uptoInputKeyUp($event)"
+                    <button><input type="tel" (keyup)="uptoInputKeyUp($event)"
                             (change)="uptoToday($event,$event.target.value)"> days up
                         to today
                     </button>
                 </li>
                 <li>
-                    <button><input type="text" (change)="uptoYesterday($event,$event.target.value)"
+                    <button><input type="tel" (change)="uptoYesterday($event,$event.target.value)"
                             (keyup)="uptoInputKeyUp($event)"> days
                         up to yesterday
                     </button>

@@ -187,20 +187,20 @@
     <div class="modal-dialog modal-sm" style="width: 298px">
         <div class="modal-content">
             <form autocomplete="off" novalidate name="chequeDetailForm" [formGroup]="chequeDetailForm"
-                class="new-account-form" (submit)="onSubmitChequeDetail()">
+                class="new-account-form">
                 <div class="modal-header">
                     <h3 class="modal-title">Cheque details (if any)</h3>
                 </div>
                 <div class="modal-body">
                     <div class="clearfix mrT1">
                         <label>Cheque Number:</label>
-                        <input #chequeNumberInput class="form-control" required formControlName="chequeNumber"
+                        <input (keydown.enter)="$event.preventDefault()" #chequeNumberInput class="form-control" required formControlName="chequeNumber"
                             name="account" type="text" placeholder="Cheque Number"
                             (keydown)="onCheckNumberFieldKeyDown($event, 'chqNumber', chequeClearanceDateInput)">
                     </div>
                     <div class="clearfix mrT1 check-clearance-date">
                         <label>Cheque Clearance Date:</label>
-                        <input #chequeClearanceDateInput="bsDatepicker" readonly bsDatepicker [bsConfig]="bsConfig" class="form-control"
+                        <input (keydown.enter)="$event.preventDefault()" #chequeClearanceInputField #chequeClearanceDateInput="bsDatepicker" readonly bsDatepicker [bsConfig]="bsConfig" class="form-control"
                             formControlName="chequeClearanceDate" name="account" type="text"
                             placeholder="Cheque Clearance Date"
                             (keydown)="onCheckNumberFieldKeyDown($event, 'chqDate', chequeClearanceDateInput)">
@@ -208,7 +208,7 @@
                 </div>
                 <div class="modal-footer">
                     <!-- [disabled]="chequeDetailForm.invalid" -->
-                    <button #chqFormSubmitBtn type="submit" class="btn btn-success" (click)="focusDebitCreditAmount()">Create</button>
+                    <button #chqFormSubmitBtn class="btn btn-success" (click)="onSubmitChequeDetail();focusDebitCreditAmount()">Create</button>
                     <button type="button" class="btn btn-default" (click)="closeChequeDetailForm()">Cancel</button>
                 </div>
             </form>

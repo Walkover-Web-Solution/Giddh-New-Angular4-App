@@ -170,6 +170,13 @@ form label {
         }
     }
 }
+.dropdown-loader {
+    position: absolute;
+    width: 18px;
+    z-index: 9;
+    right: 8px;
+    top: 9px;
+}
 @media (max-width: 1100px) {
     .payment-top-form {
         .otp-success-msg {
@@ -207,5 +214,11 @@ form label {
 @media (max-width: 480px) {
     .payment-top-form .d-flex .form-group, .payment-top-form .d-flex .form-group:last-child {
         min-width: 100%;
+    }
+    .amount-remark-section .d-flex {
+        display: block;
+        .form-group.pr-15 {
+            padding-right: 0px;
+        }
     }
 }

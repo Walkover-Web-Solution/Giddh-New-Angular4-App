@@ -201,7 +201,7 @@ td.card-header.clearfix {
     padding-right: 20px;
 }
 
-.invoiceNameDownload {
+.invoice-name-download {
     position: relative;
     text-align: right;
 }
@@ -459,6 +459,14 @@ span.icon-export-icon {
 /* responsive */
 
 @media (max-width: 768px) {
+    .invoice-name-download {
+        a{
+            padding-right: 0 !important;
+        }
+        .icon-download{
+            display: none;
+        }
+    }
     .search-icon-block {
         display: flex;
     }
@@ -545,7 +553,7 @@ span.icon-export-icon {
         top: 0px;
     }
     .input-grp-dateRangePicker .form-group {
-        margin-bottom: 10px;
+        margin-bottom: 2px;
     }
     .invoice-preview {
         padding-bottom: 0px;

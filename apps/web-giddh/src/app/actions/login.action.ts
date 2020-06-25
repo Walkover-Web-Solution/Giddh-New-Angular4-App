@@ -442,21 +442,20 @@ export class LoginActions {
             switchMap((action: CustomActions) => this._companyService.getStateDetails(action.payload)),
             map(response => {
                 if ((response.status === 'error' || ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) === -1) || (response.status === 'error' || response.code === 'NOT_FOUND')) {
-                    //
                     let dummyResponse = new BaseResponse<StateDetailsResponse, string>();
                     dummyResponse.body = new StateDetailsResponse();
                     dummyResponse.body.companyUniqueName = response.request;
                     dummyResponse.body.lastState = 'sales';
                     dummyResponse.status = 'success';
                     this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-                        this._router.navigate([dummyResponse.body.lastState]);
+                        this.finalNavigate(dummyResponse.body.lastState);
                     });
                     return this.ChangeCompanyResponse(dummyResponse);
                 }
                 if (response.body.companyUniqueName) {
                     if (response.body.lastState && ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) !== -1) {
                         this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-                            this._router.navigate([response.body.lastState]);
+                            this.finalNavigate(response.body.lastState);
                         });
                     } else {
                         if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
@@ -472,9 +471,9 @@ export class LoginActions {
                                 if (path.length > 0 && parament) {
                                     this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
                                         if (ROUTES.findIndex(p => p.path.split('/')[0] === path[0].split('/')[0]) > -1) {
-                                            this._router.navigate([path[0]], parament);
+                                            this.finalNavigate(path[0], parament);
                                         } else {
-                                            this._router.navigate(['home']);
+                                            this.finalNavigate('home');
                                         }
                                     });
                                 }
@@ -1126,15 +1125,24 @@ export class LoginActions {
         this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
         this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
+        this.finalNavigate(stateDetail.body.lastState);
+        return { type: 'EmptyAction' };
+    }
+
+    public finalNavigate(route: any, parameter?: any): void {
         if (screen.width <= 767 || isCordova) {
             this._router.navigate(["/pages/mobile-home"]);
         } else {
-            this._router.navigate([stateDetail.body.lastState]);
+            this._router.navigate([route], parameter);
         }
-        if (isElectron || isCordova) {
+        if (isElectron) {
             window.location.reload();
         }
-        return { type: 'EmptyAction' };
+        if(isCordova) {
+            setTimeout(() => {
+                window.location.reload();
+            }, 200);
+        }
     }
 
     public signupWithApple(request: any): CustomActions {

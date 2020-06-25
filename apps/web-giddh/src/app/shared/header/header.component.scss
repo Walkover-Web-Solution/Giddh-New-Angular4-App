@@ -419,7 +419,10 @@ a[vr-item]:focus {
 .d-inline-block {
     display: inline-block !important;
 }
-
+.notification{
+    padding: 0 !important;
+    margin-right: 10px !important;
+}
 .universal-date li {
     display: inline-block;
     position: relative;
@@ -429,13 +432,16 @@ a[vr-item]:focus {
     img{
         vertical-align: bottom;
         display: inline-block;
+        position: relative;
+        left: 16px;
+        padding: 0 20px;
     }
 }
 
 .universal-date li input {
     padding-left: 29px !important;
     color: #fff !important;
-    padding-right: 5px !important;
+    padding-right: 0 !important;
     text-align: left;
 }
 
@@ -473,8 +479,8 @@ a[vr-item]:focus {
     color: $white;
     position: relative;
     padding-left: 15px;
-    padding-top: 4px;
-    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-bottom: 6px;
     padding-right: 15px;
     border: 1px solid $white;
     border-radius: 20px;
@@ -499,17 +505,14 @@ span.icon-support.dropdown-toggle {
     height: 32px;
 }
 .date-range-picker{
-    max-width: 205px;
-    min-width: 205px;
+    max-width: 210px;
+    min-width: 210px;
 }
 
 .other a {
     color: $extra-dark-gray;
     text-transform: uppercase;
-    // font-family:$opensans-semibold;
 }
-
-
 .showMoreOpt {
     font-size: 14px;
     padding: 0 15px;
@@ -652,7 +655,7 @@ ul.sub-list {
     z-index: 10;
 }
 .help-setting-icons{
-    color: $white; 
+    color: $white;
     img{
         width: 18px;
         vertical-align: top;
@@ -683,7 +686,7 @@ ul.sub-list {
         color: $chetwode-blue;
         cursor:pointer;
     }
-    
+
     span.icon-traingle-info {
         color: $bitter-sweet;
         font-size: 15px;
@@ -734,17 +737,27 @@ ul.sub-list {
         top: 7px;
     }
     .lower-layer-header {
-        padding-top: 10px;
+        padding-top: 5px;
     }
     .hamburger_menu button {
-        width: 30px;
-        i{
+        width: 32px;
+        padding: 4px 4px 3px 0;
+        i {
             font-size: 20px !important;
         }
     }
-    
+
 }
 @media (max-width: 767px) {
+.notification{
+    margin-right: 0 !important;
+}
+.universal-date .btn-link {
+    border-bottom: none;
+    text-align: left;
+    height: 24px !important;
+    display: none !important;
+}
 .close-2 {
     top: 65px;
     right: 66px;
@@ -760,7 +773,7 @@ ul.sub-list {
         width: 270px;
         left: -270px;
     }
-    .upperLayerHeader {
+    .upper-layer-header {
         padding-top: 5px;
         .navbar-nav{
             margin-bottom: 5px;
@@ -776,6 +789,7 @@ ul.sub-list {
     }
     .nav-left-bar {
         top: 0;
+        display: none;
     }
     .mobile_menu_icon {
         position: absolute;
@@ -796,7 +810,7 @@ ul.sub-list {
     .nav-left-bar.open .mobile_menu_icon {
         display: flex;
     }
-    .upperLayerHeader .open .dropdown-menu {
+    .upper-layer-header .open .dropdown-menu {
         background-color: #fff;
         -webkit-background-clip: padding-box;
         background-clip: padding-box;
@@ -852,20 +866,29 @@ ul.sub-list {
     .cText.head-nav {
         display: none;
     }
+    .universal-date li{
+        display: block;
+    }
     .universal-date li input {
        height: 32px;
     }
     .plan-wrapper{
         padding: 15px 0 0;
+        display: none;
         .white-row{
             margin: 0 15px;
         }
     }
     .setting-menu-icon{
-        padding: 0 10px 0 3px;
+        padding: 4px 10px 4px 4px;
         display: none;
-        width: 30px;
+        width: 32px;
         text-align: center;
+    }
+    .mobile-back-btn{
+        display: none;
+        color: #fff;
+        margin-right: 10px;
     }
     .not-today{
         margin-right: 5px;
@@ -873,7 +896,7 @@ ul.sub-list {
     .date-range-picker{
         max-width: 190px;
         min-width: 190px;
-        font-size: 13px !important;
+        font-size: 12px !important;
     }
 }
 
@@ -915,12 +938,6 @@ ul.sub-list {
     .universal-date li {
         display: block;
         position: relative;
-    }
-    .universal-date .btn-link {
-        border-bottom: none;
-        text-align: left;
-        height: 24px !important;
-        display: none;
     }
     .lower-layer-header {
         padding-top: 5px;
