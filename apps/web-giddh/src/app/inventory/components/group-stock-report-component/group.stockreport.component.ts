@@ -756,7 +756,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         obj.reportType = reportType;
         obj.from = this.fromDate;
         obj.to = this.toDate;
-        obj.warehouseUniqueName = this.currentBranchAndWarehouse.warehouse;
+        obj.warehouseUniqueName = (this.currentBranchAndWarehouse.warehouse !== 'all-entities') ? this.currentBranchAndWarehouse.warehouse : null;
         obj.branchUniqueName = this.currentBranchAndWarehouse.branch;
         this.inventoryService.downloadAllInventoryReports(obj)
             .subscribe(res => {
