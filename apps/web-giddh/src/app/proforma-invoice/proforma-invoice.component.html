@@ -111,7 +111,7 @@
                                                         </ng-template>
 
                                                         <ng-template #notFoundLinkTemplate>
-                                                            <a href="javascript:void(0)" class="list-item" [keyboardShortcut]="'alt+c'" style="width:100%; display: flex;justify-content: space-between;">
+                                                            <a href="javascript:void(0)" class="list-item pl-05 pr-05" [keyboardShortcut]="'alt+c'" style="width:100%; display: flex;justify-content: space-between;">
                                                                 <div class="item">{{ customerNotFoundText }}</div>
                                                                 <div class="item">Alt+C</div>
                                                             </a>
@@ -1091,14 +1091,14 @@
                         </div>
                     </div>
 
-                    <div class="tableRow">
+                    <div class="tableRow" *ngIf="!excludeTax">
                         <div class="tableCell">Tax</div>
                         <div class="tableCell figureCell">
                             <span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.gstTaxesTotal | giddhCurrency}}
                         </div>
                     </div>
 
-                    <div class="tableRow">
+                    <div class="tableRow" *ngIf="!excludeTax">
                         <div class="tableCell">CESS</div>
                         <div class="tableCell figureCell"><span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.cessTotal | giddhCurrency}}
                         </div>
@@ -1840,13 +1840,13 @@
                 </div>
             </div>
 
-            <div class="tableRow">
+            <div class="tableRow" *ngIf="!excludeTax">
                 <div class="tableCell">Tax</div>
                 <div class="tableCell figureCell"><span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.gstTaxesTotal | giddhCurrency}}
                 </div>
             </div>
 
-            <div class="tableRow">
+            <div class="tableRow" *ngIf="!excludeTax">
                 <div class="tableCell">CESS</div>
                 <div class="tableCell figureCell"><span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.cessTotal | giddhCurrency}}
                 </div>

@@ -5110,8 +5110,13 @@ perfect-scrollbar.ps-show-active
 }
 
 .customItem:hover {
-    background-color: #e3e4ed !important;
+    background-color: $lavender !important;
     color: #5b64c9 !important;
+    &:hover {
+        .pull-left.ellp {
+            color: $chetwode-blue !important;
+        }
+    }
 }
 
 .or-line::before {
