@@ -157,6 +157,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
     public companyTaxesList: TaxResponse[] = [];
     public totalTdElementWidth: number = 0;
+    /** Amount of invoice select for credit note */
+    public selectedInvoiceAmount: number = 0;
     /** Default warehouse for a company */
     public defaultWarehouse: string;
     /** List of warehouses for a company */
@@ -628,6 +630,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 transaction.inventory.warehouse = { name: '', uniqueName: this.selectedWarehouse };
             }
         });
+        if (this.blankLedger.voucherType === 'credit note') {
+            if (this.blankLedger.compoundTotal > this.selectedInvoiceAmount) {
+                this._toasty.errorToast('Can not create credit note greater than invoice amount');
+                return;
+            }
+        }
         this.saveBlankLedger.emit(true);
     }
 
@@ -926,7 +934,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }
             ]
         }
-
+        this.selectedInvoiceAmount = ev.invoice.balanceDue.amountForAccount;
     }
 
     public getInvoiveListsData(e: any) {
