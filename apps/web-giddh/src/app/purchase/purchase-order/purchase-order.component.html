@@ -75,11 +75,11 @@
                     </div>
                 </th>
 
-                <th width="13%" class="td_in_searchBox">
+                <th width="5%" class="td_in_searchBox">
                 Date
                 </th>
 
-                <th width="19%" class="td_in_searchBox" >
+                <th width="20%" class="td_in_searchBox" >
                     Purchase Order
                 </th>
 
@@ -102,7 +102,7 @@
                 </th>
 
                 <th width="12%" >
-                    <div class="d-flex justify-content-end">
+                    <div class="d-flex">
                         <div>Expected Delivery</div>
                         <div class="icon-pointer">
                         
@@ -110,18 +110,12 @@
                     </div>
                 </th>
 
-                <th width="10%">
+                <th width="25%">
                     <div class="d-flex">
                         <div class="">Status</div>
                         <div class="icon-pointer">
                         
                         </div>
-                    </div>
-                </th>
-
-                <th width="10%">
-                    <div class="d-flex">
-                        <div class="flex-fill">Action</div>
                     </div>
                 </th>
             </tr>
@@ -149,28 +143,26 @@
                     1000
                 </td>
                 <td>
-                    <span>Delivery in 7 days</span><br>
+                    <span hidden>Delivery in 7 days</span>
                     <span>23/05/2020</span>
                 </td>
-                <td>
-                    Open
-                </td>
-                <td>
-                    <div class="action-icon">
+                <td class="d-flex align-items-center">
+                    <span class="d-flex">
+                    Open</span>
+                    <div class="action-icon ml-15">
                         <a tooltip="Convert to bill">
-                            <i class="fa fa-check"></i>
+                            <img src="../../../assets/images/tick.svg">
                         </a>
                         <a tooltip="send Email">
-                            <i class="icon-mail"></i>
+                            <img src="../../../assets/images/mail-icon.svg">
                         </a>
                          <a tooltip="Copy">
-                             <i class="icon-copy"></i>
+                             <img src="../../../assets/images/copy-icon-gray.svg">
                          </a>
                          <a tooltip="Delete">
                              <i class="icon-trash"></i>
                          </a>
                     </div>
-
                 </td>
             </tr>
         </tbody>
@@ -191,22 +183,35 @@
     </table>
 </div>
 <ng-template #template>
-    <div class="modal-header">
-      <h4 class="modal-title pull-left">Bulk Update</h4>
-      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <div class="form">
-        <div class="d-flex">
-            <div>
-                <sh-select></sh-select>
-            </div>
-            <div>
-
+    <div class="purchase-order-bulk-update">
+        <div class="modal-header">
+        <h4 class="modal-title pull-left">Bulk Update</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+        <div class="form">
+            <div class="d-flex flex-column">
+                <p class="mb-3">Choose a field from the dropdown and update with new information.</p>
+                <div class="d-flex justify-content-between mb-3 modal-form">
+                    <sh-select class="mr-15" [options]="selectOverDate"></sh-select>
+                    <div class="select-date">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Select date">
+                            <span class="input-group-addon">
+                                <span class="icon-calender"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <p class="mb-3">Note: All the selected Purchase Orders will be updated with new information and you cannot undo this.</p>
+                <div class="btn-group">
+                    <button class="btn btn-success">Update</button>
+                    <button class="btn btn-cancel">Cancel</button>
+                </div>
             </div>
         </div>
-      </div>
-    </div>
+        </div>
+</div>
   </ng-template>

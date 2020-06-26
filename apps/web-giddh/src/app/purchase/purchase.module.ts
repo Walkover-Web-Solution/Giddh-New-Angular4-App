@@ -22,7 +22,7 @@ import { ReconcileDesignComponent } from './purchase-invoice/reconcileDesign/rec
 import { PurchaseRecordComponent } from './purchase-record/component/purchase-record.component';
 import { PurchaseComponent } from './purchase.component';
 import { PurchaseRoutingModule } from './purchase.routing.module';
-import {ShSelectModule} from './theme/ng-virtual-select/sh-select.module';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 
 /**
  * Created by kunalsaxena on 9/1/17.
@@ -57,7 +57,6 @@ import {ShSelectModule} from './theme/ng-virtual-select/sh-select.module';
     entryComponents: [],
     exports: [
         AsideMenuPurchaseInvoiceSettingComponent,
-        ShSelectModule
     ]
 })
 export class PurchaseModule {

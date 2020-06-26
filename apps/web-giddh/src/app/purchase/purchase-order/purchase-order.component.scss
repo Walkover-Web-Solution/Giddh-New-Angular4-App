@@ -55,22 +55,42 @@
     }
 
 .giddh-table{
-    .action-icon {
-        display: flex;
-        align-items: center;
-        border: 1px solid $gainsboro;
-        a{
-            width: 30px;
-            font-size: 20px;
-            color: $gray;
-            border-right: 1px solid $gainsboro;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 5px;
-            cursor: pointer;
+    tr{
+        td{
+                .action-icon {
+                    display: flex;
+                    align-items: center;
+                    border: 1px solid $gainsboro;
+                    display: none;
+                    a{
+                        width: 30px;
+                        font-size: 20px;
+                        color: $gray;
+                        border-right: 1px solid $gainsboro;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;         
+                        padding: 0 5px;
+                        cursor: pointer;
+                        align-items: stretch;
+                        height: 30px;
+                        align-items: center;
+                        background-color: $white;
+                    
+                    }
+                    &:last-child{
+                        border-right:none !important;  
+                    }
+                }
+            }
         }
-     }
+        &:hover{
+            td{
+            .action-icon {
+                display: flex !important;
+            }
+        }
+        }
 }
 
 .table-checkbox-field{
@@ -78,4 +98,46 @@
 }
 .btn-group.open.show{
     display: inline-block !important;
+}
+.purchase-order-bulk-update{
+    .modal-header{
+        border-radius: 5px 5px 0 0;
+        h4{
+            color: $white;
+        }
+    }
+    .select-date{
+        .input-group{
+            display: block;
+            .form-control:focus{
+                z-index: 2;
+            }
+            .input-group-addon{
+                background-color: transparent;
+                position: absolute;
+                border: none;
+                z-index: 2;
+                right: 13px;
+                top: 5px;
+                color: $gray;
+            }
+        }
+    }
+    .modal-form{
+        sh-select,
+        .select-date{
+            width: 50%;
+            
+        }
+
+    }
+    p{
+        color: $dark-gray;
+        font-size: 14px;
+    }
+    .btn-group{
+        .btn{
+            border-radius: 2px !important;
+        }
+    }
 }

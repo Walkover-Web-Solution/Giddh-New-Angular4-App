@@ -9280,6 +9280,12 @@ span#HW_badge_cont:nth-child(3){
 .giddh-datepicker{
     cursor: pointer !important;
 }
+
+/*flex css start*/
+.flex-column{
+    flex-direction: column;
+}
+/*flex css start*/
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -10169,6 +10175,9 @@ span#HW_badge_cont:nth-child(3){
     }
     .edit-modal.modal-small {
         display: none;
+    }
+    .modal-sm {
+        width: 450px !important;
     }
 }
 
