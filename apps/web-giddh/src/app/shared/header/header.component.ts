@@ -1067,6 +1067,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public changeCompany(selectedCompanyUniqueName: string) {
+        this.companyDropdown.isOpen = false;
+        this.toggleBodyScroll();
         this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName));
     }
 
