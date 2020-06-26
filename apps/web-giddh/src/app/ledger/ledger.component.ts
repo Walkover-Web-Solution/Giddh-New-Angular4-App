@@ -907,10 +907,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.invoiceList = [];
             this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((res: any) => {
                 _.map(res.body, (o) => {
-                    this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceUniqueName, additional: o });
+                    this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceUniqueName, invoice: o });
                 });
                 _.uniqBy(this.invoiceList, 'value');
-                console.log(this.invoiceList);
             });
         }
     }
