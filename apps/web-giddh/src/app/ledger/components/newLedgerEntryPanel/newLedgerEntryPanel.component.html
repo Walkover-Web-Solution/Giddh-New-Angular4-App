@@ -332,7 +332,7 @@
                                     <label class="default_clr">Invoice No.</label>
 
                                     <sh-select [options]="invoiceList" [placeholder]="'Select Accounts'"
-                                        [notFoundLink]="true" (selected)="creditNoteInvoiceSelected($event)"
+                                        [notFoundLink]="false" (selected)="creditNoteInvoiceSelected($event)"
                                         [multiple]="false" [ItemHeight]="67" [showClear]="false"
                                         [useInBuiltFilterForFlattenAc]="true">
                                         <ng-template #optionTemplate let-option="option">
@@ -341,7 +341,7 @@
                                                 <div class="item">{{ option.label }}
                                                 </div>
                                                 <div class="item_unq">
-                                                    {{ option.invoiceUniqueName }}
+                                                    {{ option.value }}
                                                 </div>
                                             </a>
                                         </ng-template>
