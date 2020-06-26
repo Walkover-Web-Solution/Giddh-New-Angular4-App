@@ -1753,6 +1753,9 @@ modal-container.modal {
 .tooltip-box .tooltip {
     width: 150px;
 }
+.sh-select-border .menu .scrollable-content > .item {
+    border-bottom: 1px solid $gainsboro;
+}
 /* my css end */
 
 
@@ -8184,7 +8187,8 @@ ul#dropdown-nested li a {
 ul#dropdown-nested li:hover .dropdown-menu {
     display: block;
     right: auto;
-    top: 10px;
+    top: 0;
+    /*top: 10px;*/
     left: 184px;
 }
 

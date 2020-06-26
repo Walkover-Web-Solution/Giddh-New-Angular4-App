@@ -88,16 +88,6 @@
     font-size: 14px !important;
     font-family: opensans-regular !important;
 }
-
-.height-82px {
-    padding: 10px 10px 15px 10px;
-    border-top: 1px solid #c7c7c7;
-}
-
-ul.list-unstyled li {
-    margin-top: 7px;
-}
-
 ul.list-unstyled li a {
     color: black;
 }
@@ -125,15 +115,16 @@ ul.list-unstyled li a {
 }
 
 .li-link {
-    margin-top: 15px !important;
-    font-family: "opensans-regular";
-
+    a {
+        padding: 7px 10px;
+        display: block;
+    }
     &:first-child {
         margin-top: 0 !important;
     }
-
     a:hover {
-        color: $jacksons-purple !important;
+        color: $chetwode-blue !important;
+        background-color: $lavender;
     }
 }
 

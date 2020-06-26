@@ -1091,14 +1091,14 @@
                         </div>
                     </div>
 
-                    <div class="tableRow">
+                    <div class="tableRow" *ngIf="!excludeTax">
                         <div class="tableCell">Tax</div>
                         <div class="tableCell figureCell">
                             <span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.gstTaxesTotal | giddhCurrency}}
                         </div>
                     </div>
 
-                    <div class="tableRow">
+                    <div class="tableRow" *ngIf="!excludeTax">
                         <div class="tableCell">CESS</div>
                         <div class="tableCell figureCell"><span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.cessTotal | giddhCurrency}}
                         </div>
@@ -1840,13 +1840,13 @@
                 </div>
             </div>
 
-            <div class="tableRow">
+            <div class="tableRow" *ngIf="!excludeTax">
                 <div class="tableCell">Tax</div>
                 <div class="tableCell figureCell"><span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.gstTaxesTotal | giddhCurrency}}
                 </div>
             </div>
 
-            <div class="tableRow">
+            <div class="tableRow" *ngIf="!excludeTax">
                 <div class="tableCell">CESS</div>
                 <div class="tableCell figureCell"><span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.cessTotal | giddhCurrency}}
                 </div>
