@@ -115,6 +115,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
     @Output() public clickedOutsideEvent: EventEmitter<any> = new EventEmitter();
     @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
+    /** Emit event for getting invoice list for credit note linking */
     @Output() public getInvoiceListsForCreditNote: EventEmitter<any> = new EventEmitter();
     @ViewChild('entryContent') public entryContent: ElementRef;
     @ViewChild('sh') public sh: ShSelectComponent;
@@ -911,10 +912,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /**
      * Calculates conversion rate
      *
-     * @param {ev} event Selected invoice for credit note
+     * @param {any} event Selected invoice for credit note
      * @memberof NewLedgerEntryPanelComponent
      */
-    public creditNoteInvoiceSelected(ev) {
+    public creditNoteInvoiceSelected(ev): void {
         this.blankLedger.invoiceLinkingRequest = {
             linkedInvoices: [
                 {
@@ -931,8 +932,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.clickUnpaidInvoiceList.emit(true);
         } else if (e.value === 'credit note') {
             this.getInvoiceListsForCreditNote.emit(true);
-            // this.shouldShowAdvanceReceipt = false;
-            // this.isAdvanceReceipt = false;
         } else {
             this.shouldShowAdvanceReceipt = false;
             this.isAdvanceReceipt = false;
