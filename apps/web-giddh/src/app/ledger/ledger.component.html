@@ -166,13 +166,13 @@
         <div class="clearfix"></div>
         <h1 class="mrT2 primary_clr" *ngIf="isBankTransactionLoading">Loading Transactions...</h1>
         <section id="eledgerwrap" class="mrT2" *ngIf="lc.showEledger">
-            <div class="alert alert-danger fade in pr" style="padding-right:15px">
+            <div class="alert alert-danger ledger-book fade in pr" style="padding-right:15px">
                 <button type="button" class="close">
                     <span style="font-size:12px;font-weight:normal"
                         (click)="lc.showEledger = !lc.showEledger">Close</span>
                 </button>
 
-                <table class="table ledgerTable" style="margin-bottom:0">
+                <table class="table ledgerTable transaction-mapped-table" style="margin-bottom:0">
                     <thead>
                         <th class="nopad" colspan="6">
                             <div class="clearfix ldgTheadL">
@@ -184,12 +184,19 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="nopad bdrL bdrR hidden-xs" style="width:50%" colspan="3">
+                            <td width="100%" colspan="100%" class="ledger-head transaction-mapped">
+                                <table class="table" width="100%">
+                                    <tr>
+                                        <th colspan="6">Debit <span class="pull-right text-gray">Dr</span></th>
+                                        <th colspan="6">Credit <span class="pull-right text-gray">Cr</span></th>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="nopad bdrL bdrR hidden-xs transaction-mapped-head" style="width:50%" colspan="3">
                                 <table class="table">
                                     <thead>
-                                        <tr class="splBg">
-                                            <th colspan="100%">Debit (Dr)</th>
-                                        </tr>
                                         <tr class="dgreyBg">
                                             <th width="28%">Date
                                                 <span class="small">(DD-MM-YYYY)</span>
@@ -201,13 +208,10 @@
                                 </table>
                             </td>
                             <!-- main left td end here -->
-                            <td class="nopad bdrL bdrR hidden-xs" style="width:50%" colspan="3">
+                            <td class="nopad bdrL bdrR hidden-xs transaction-mapped-head" style="width:50%" colspan="3">
                                 <table class="table">
                                     <thead>
-                                        <tr class="splBg">
-                                            <th colspan="100%">Credit (Cr)</th>
-                                        </tr>
-                                        <tr class="">
+                                        <tr>
                                             <th width="28%">Date
                                                 <span class="small">(DD-MM-YYYY)</span>
                                             </th>
@@ -229,14 +233,16 @@
                                                     <tbody class="ledger-main">
                                                         <!-- [(ngModel)]="txn.isChecked" -->
                                                         <tr class="ledger-row" [ngClass]="{compoundEntry: txn.id === lc.selectedBankTxnUniqueName}">
-                                                            <td class="col-xs-1 text-center">
-                                                                <input type="checkbox" (click)="selectEntryForBulkAction($event, item)" />
+                                                           
+                                                            <td class="col-xs-3 col-md-3 col-lg-3">
+                                                                <div class="d-flex align-items-center">
+                                                                    <span>
+                                                                        <input type="checkbox" (click)="selectEntryForBulkAction($event, item)" /></span>
+                                                                    <span class="ml-05">
+                                                                        <input class="form-control" [maxlength]="10" autocomplete="off" name="bsdateledger" type="text" [(ngModel)]="item.entryDate" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [outsideClick]="true"></span>
+                                                                </div>
                                                             </td>
-                                                            <td class="col-xs-2">
-
-                                                                <input class="form-control" [maxlength]="10" autocomplete="off" name="bsdateledger" type="text" [(ngModel)]="item.entryDate" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [outsideClick]="true">
-                                                            </td>
-                                                            <td class="col-xs-7 select2-parent select2-ledger">
+                                                            <td class="col-xs-5 col-md-6 col-lg-6 select2-parent select2-ledger">
                                                                 <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [showClear]="false" [multiple]="false"
                                                                     [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                                                                     <ng-template #optionTemplate let-option="option">
@@ -267,7 +273,7 @@
                                                                 </ul>
                                                             </td>
 
-                                                            <td class="col-xs-3 pos-rel">
+                                                            <td class="col-xs-4 col-md-3 col-lg-3  pos-rel">
                                                                 <input class="form-control alR" type="text" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)" (click)="blankLedgerAmountClick()">
                                                             </td>
                                                         </tr>
@@ -294,14 +300,18 @@
                                                 <table class="width100">
                                                     <tbody class="ledger-main">
                                                         <tr class="ledger-row">
-                                                            <td class="col-xs-1 text-center">
-                                                                <input type="checkbox" [(ngModel)]="txn.isChecked" (click)="selectEntryForBulkAction($event, item)" />
-                                                            </td>
-                                                            <td class="col-xs-2">
-                                                                <input class="form-control" [maxlength]="10" name="bsDatess" autocomplete="off" type="text" #cbs='bsDatepicker' [(ngModel)]="item.entryDate" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [outsideClick]="true">
+                                                            <td class="col-xs-3 col-md-3 col-lg-3">
+                                                                <div class="d-flex align-items-center">
+                                                                    <span>
+                                                                        <input type="checkbox" [(ngModel)]="txn.isChecked" (click)="selectEntryForBulkAction($event, item)" />
+                                                                    </span>
+                                                                    <span class="ml-05">
+                                                                        <input class="form-control" [maxlength]="10" name="bsDates" autocomplete="off" type="text" #cbs='bsDatepicker' [(ngModel)]="item.entryDate" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [outsideClick]="true">
 
+                                                                    </span>
+                                                                </div>  
                                                             </td>
-                                                            <td class="col-xs-7 select2-parent select2-ledger ">
+                                                            <td class="col-xs-5 col-md-6 col-lg-6 select2-parent select2-ledger ">
                                                                 <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [ItemHeight]="67"
                                                                     [showClear]="false" [useInBuiltFilterForFlattenAc]="true">
                                                                     <ng-template #optionTemplate let-option="option">
@@ -333,7 +343,7 @@
                                                                 </ul>
                                                             </td>
 
-                                                            <td class="col-xs-3 pos-rel">
+                                                            <td class="col-xs-4 col-md-3 col-lg-3 pos-rel">
                                                                 <input class="form-control alR" type="text" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)" (click)="blankLedgerAmountClick()">
                                                             </td>
                                                         </tr>
