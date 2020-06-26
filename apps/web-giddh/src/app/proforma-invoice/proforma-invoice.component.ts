@@ -421,6 +421,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public editingHsnSac: any = "";
     /* This will hold if voucher type changed to make sure we don't destroy the data */
     public voucherTypeChanged: boolean = false;
+    /* This will hold if we need to hide total tax and have to exclude tax amount from total invoice amount */
+    public excludeTax: boolean = false;
+    /* This will hold the company country name */
+    public companyCountryName: string = '';
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -575,8 +579,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             });
         }).pipe(takeUntil(this.destroyed$)).subscribe();
 
+        this.activeAccount$.subscribe(data => {
+            if (data) {
+                this.checkIfNeedToExcludeTax(data);
+            }
+        });
+
         // get user country from his profile
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
+            this.companyCountryName = profile.country;
             await this.prepareCompanyCountryAndCurrencyFromProfile(profile);
         });
 
@@ -588,7 +599,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.route.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             this.voucherTypeChanged = false;
-            
+
             if (params['invoiceType']) {
                 // Reset voucher due to advance receipt model set voucher in invoice management
                 this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
@@ -703,7 +714,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                 }
 
-                if(!this.voucherTypeChanged && event.snapshot.params.invoiceType === this.invoiceType) {
+                if (!this.voucherTypeChanged && event.snapshot.params.invoiceType === this.invoiceType) {
                     this.destroyed$.next(true);
                     this.destroyed$.complete();
                 }
@@ -1484,6 +1495,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.initializeWarehouse();
         }
 
+        this.checkIfNeedToExcludeTax(data);
+
         this.getUpdatedStateCodes(data.country.countryCode).then(() => {
             if (data.addresses && data.addresses.length) {
                 data.addresses = [_.find(data.addresses, (tax) => tax.isDefault)];
@@ -1585,6 +1598,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.purchaseRecordInvoiceDate = '';
         this.purchaseRecordTaxNumber = '';
         this.purchaseRecordInvoiceNumber = '';
+        this.adjustPaymentBalanceDueData = 0;
+        this.depositAmount = 0;
         this.startLoader(false);
 
         this.assignDates();
@@ -1674,15 +1689,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                 let dateText = "Invoice";
 
-                if(this.isProformaInvoice) {
+                if (this.isProformaInvoice) {
                     dateText = "Proforma";
                 }
 
-                if(this.isEstimateInvoice) {
+                if (this.isEstimateInvoice) {
                     dateText = "Estimate";
                 }
 
-                this._toasty.errorToast('Due date cannot be less than '+dateText+' Date');
+                this._toasty.errorToast('Due date cannot be less than ' + dateText + ' Date');
                 return;
             }
         } else {
@@ -2083,7 +2098,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public calculateEntryTotal(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
-        trx.total = giddhRoundOff((trx.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
+        if (this.excludeTax) {
+            trx.total = giddhRoundOff((trx.amount - entry.discountSum), 2);
+        } else {
+            trx.total = giddhRoundOff((trx.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
+        }
 
         this.calculateSubTotal();
         this.calculateTotalDiscount();
@@ -2098,7 +2117,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             trx.rate = giddhRoundOff((trx.amount / trx.quantity), this.ratePrecision);
         }
 
-        if(this.isUpdateMode && (this.isEstimateInvoice || this.isProformaInvoice)) {
+        if (this.isUpdateMode && (this.isEstimateInvoice || this.isProformaInvoice)) {
             this.applyRoundOff = true;
         }
 
@@ -3211,15 +3230,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                 let dateText = "Invoice";
 
-                if(this.isProformaInvoice) {
+                if (this.isProformaInvoice) {
                     dateText = "Proforma";
                 }
 
-                if(this.isEstimateInvoice) {
+                if (this.isEstimateInvoice) {
                     dateText = "Estimate";
                 }
 
-                this._toasty.errorToast('Due date cannot be less than '+dateText+' Date');
+                this._toasty.errorToast('Due date cannot be less than ' + dateText + ' Date');
                 return;
             }
         } else {
@@ -4883,5 +4902,30 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         this.hsnDropdownShow = !this.hsnDropdownShow;
+    }
+
+    /**
+     * This will check if we need to exclude tax from total
+     *
+     * @param {*} data
+     * @memberof ProformaInvoiceComponent
+     */
+    public checkIfNeedToExcludeTax(data: any): void {
+        this.excludeTax = false;
+        let isPartyTypeSez = false;
+
+        if (this.isSalesInvoice || this.isCashInvoice) {
+            if (data && data.addresses && data.addresses.length > 0) {
+                data.addresses.forEach(address => {
+                    if (address.partyType && address.partyType.toLowerCase() === "sez") {
+                        isPartyTypeSez = true;
+                    }
+                });
+            }
+
+            if ((this.companyCountryName === "India" && data.country.countryName !== "India") || isPartyTypeSez) {
+                this.excludeTax = true;
+            }
+        }
     }
 }

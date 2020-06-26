@@ -14,7 +14,6 @@ console.log('\nRunning post-build tasks');
 
 // our version.json will be in the dist folder
 let rootDirectiory = '';
-// console.log(process.argv.length);
 for (var i = 0; i < process.argv.length; i++) {
     console.log(process.argv[i]);
     if (process.argv[i].startsWith('--path=')) {
@@ -36,7 +35,6 @@ let mainBundleRegexp = /^main.?([a-z0-9]*)?.js$/;
 readDir(path.join(__dirname, rootDirectiory))
     .then(files => {
         mainBundleFile = files.find(f => mainBundleRegexp.test(f));
-
         if (mainBundleFile) {
             let matchHash = mainBundleFile.match(mainBundleRegexp);
 

@@ -93,7 +93,7 @@
                                     <li role="menuitem" (click)="openEmailDialog();">Email</li>
                                     <li role="menuitem" (click)="openSmsDialog();">SMS</li>
                                     <li role="menuitem" (click)="downloadCSV();">Download CSV</li>
-                                    <li role="menuitem" *ngIf="selectedCheckedContacts.length>0" (click)="openBulkPaymentModal(template)">Bulk Payment</li>
+                                    <li role="menuitem" *ngIf="selectedAccountsList.length>0" (click)="openBulkPaymentModal(template)">Bulk Payment</li>
                                 </ul>
                             </div>
                         </div>
@@ -129,10 +129,16 @@
 
                     <div class="">
 
-                        <div *ngIf="!isMobileScreen">
+                        <div *ngIf="!isMobileScreen && !isGetAccountsInProcess">
                             <!-- <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true"> -->
                             <ng-container *ngTemplateOutlet='mainTable'></ng-container>
                             <!-- </perfect-scrollbar> -->
+                        </div>
+                        <div class="no-data mrT2 loader-main" *ngIf="!isMobileScreen && isGetAccountsInProcess">
+                            <div class="spinner2">
+                                <div class="cube1"></div>
+                                <div class="cube2"></div>
+                            </div>
                         </div>
 
                         <div *ngIf="isMobileScreen">
@@ -740,10 +746,10 @@
                             </ng-container>
                         </td>
                         <td data-title="Action" *ngIf="isICICIIntegrated">
-                            <button *ngIf="account.hasBankDetails" class="btn btn-small btn-success" (click)="openBulkPaymentModal(template, account)">
+                            <button *ngIf="account?.bankPaymentDetails && account?.country?.code==='IN'" class="btn btn-small btn-success" (click)="openBulkPaymentModal(template, account)">
                             Pay Now </button>
                             <!-- (click)="openPaymentAside(account)" -->
-                            <button *ngIf="!account.hasBankDetails " class="btn btn-small btn-succes " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
+                            <button *ngIf="!account.bankPaymentDetails " class="btn btn-small btn-succes " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
                             </button>
                         </td>
                     </tr>
@@ -775,7 +781,6 @@
     </div>
 
 </ng-template>
-
 
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>

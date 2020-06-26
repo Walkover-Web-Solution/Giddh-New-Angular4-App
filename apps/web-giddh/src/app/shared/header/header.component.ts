@@ -291,6 +291,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         /* This will get the date range picker configurations */
         this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
             if (config) {
+                // removed today and yesterday option from universal datepicker
+                // if (config && config.ranges && config.ranges.length && config.ranges[0] && config.ranges[0].name && config.ranges[0].name === 'Today') {
+                //         delete config.ranges[0];
+                // }
                 let configDatePicker = cloneDeep(config);
                 if (configDatePicker && configDatePicker.ranges) {
                     let modifiedRanges = [];
@@ -628,10 +632,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             });
 
-        this.loadAPI = new Promise((resolve) => {
-            this.loadScript();
-            resolve(true);
-        });
         // TODO : It is commented due to we have implement calendly and its under discussion to remove
 
         // this.generalService.talkToSalesModal.subscribe(a => {
@@ -875,6 +875,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (this.companyDetailsDropDownWeb) {
             this.companyDetailsDropDownWeb.hide();
         }
+
+        this.toggleBodyScroll();
 
         // entry in db with confirmation
         let menu: any = {};
@@ -1404,32 +1406,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             && attrs.getNamedItem('aria-expanded') && attrs.getNamedItem('aria-expanded').nodeValue === 'true');
     }
 
-    public loadScript() {
-        let isFound = false;
-        let scripts = document.getElementsByTagName('script');
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < scripts.length; ++i) {
-            if (scripts[i].getAttribute('src') != null && scripts[i].getAttribute('src').includes('loader')) {
-                isFound = true;
-            }
-        }
-
-        if (!isFound) {
-            let dynamicScripts = ['https://random-scripts.herokuapp.com/superform/superform.js'];
-
-            // tslint:disable-next-line:prefer-for-of
-            for (let i = 0; i < dynamicScripts.length; i++) {
-                let node = document.createElement('script');
-                node.src = dynamicScripts[i];
-                node.type = 'text/javascript';
-                node.async = false;
-                node.charset = 'utf-8';
-                document.getElementsByTagName('head')[0].appendChild(node);
-            }
-
-        }
-    }
-
     public scheduleNow() {
         let newwindow = window.open('https://app.intercom.io/a/meeting-scheduler/calendar/VEd2SmtLSyt2YisyTUpEYXBCRWg1YXkwQktZWmFwckF6TEtwM3J5Qm00R2dCcE5IWVZyS0JjSXF2L05BZVVWYS0tck81a21EMVZ5Z01SQWFIaG00RlozUT09--c6f3880a4ca63a84887d346889b11b56a82dd98f', 'scheduleWindow', 'height=650,width=1199,left=200,top=100`');
         if (window.focus) {
@@ -1794,5 +1770,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public redirectToMobileHome(): void {
         this.router.navigate(['/pages/mobile-home']);
+    }
+
+    /**
+     * This will stop the body scroll if company dropdown is open
+     *
+     * @memberof HeaderComponent
+     */
+    public toggleBodyScroll(): void {
+        if(this.companyDropdown.isOpen) {
+            document.querySelector('body').classList.add('prevent-body-scroll');
+        } else {
+            document.querySelector('body').classList.remove('prevent-body-scroll');
+        }
     }
 }

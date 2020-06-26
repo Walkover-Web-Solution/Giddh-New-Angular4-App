@@ -1,3 +1,10 @@
+<div class="no-data mrT2 loader-main" *ngIf="showLoader">
+    <div class="spinner2">
+        <div class="cube1"></div>
+        <div class="cube2"></div>
+    </div>
+</div>
+
 <section class="container nopad"></section>
 <!-- <div class="top-bar col-xs-12 bdrB">
   <h1 class="section-title">DayBook</h1>
@@ -6,6 +13,7 @@
 
 </div>
 
+<ng-container *ngIf="!showLoader">
 <div class="transactions-page mrT1 pos-rel clearfix">
 
     <!-- ledger header -->
@@ -41,14 +49,15 @@
                 </div>
                 <div class="clear-filter form-group" *ngIf="showAdvanceSearchIcon">
                     <button class="btn btn-filter" (click)="initialRequest();">
-                           <span class="icon-cross"></span> Clear Filter
-                        </button>
+                        <span class="icon-cross"></span> Clear Filter
+                    </button>
                 </div>
                 <div class="expand-export">
                     <button type="button" class="btn btn-default expandBtnHideDesktop" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
                                               'Expand All'}}
                     </button>
-                    <button type="button" class="btn btn-default export-btn pull-right" (click)="exportDaybook()">Export</button>
+                    <button type="button" class="btn btn-default export-btn pull-right"
+                        (click)="exportDaybook()">Export</button>
                 </div>
 
             </div>
@@ -98,7 +107,8 @@
                     </tr>
                 </thead>
 
-                <tbody *ngFor="let entry of (daybookData$ | async)?.entries" (click)="expandEntry(entry);" class="daybookTableTbody">
+                <tbody *ngFor="let entry of (daybookData$ | async)?.entries" (click)="expandEntry(entry);"
+                    class="daybookTableTbody">
                     <tr>
                         <td data-title="Date">{{ entry.entryDate }}</td>
                         <td data-title="Particular">{{ entry.particular.name }}</td>
@@ -167,13 +177,15 @@
 
     </div>
 </div>
-
+</ng-container>
 
 <!-- Advance search popup -->
 <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <daybook-advance-search-model #daybookAdvanceSearch [startDate]="daybookQueryRequest.from" [endDate]="daybookQueryRequest.to" (closeModelEvent)="closeAdvanceSearchPopup($event)"></daybook-advance-search-model>
+            <daybook-advance-search-model #daybookAdvanceSearch [startDate]="daybookQueryRequest.from"
+                [endDate]="daybookQueryRequest.to" (closeModelEvent)="closeAdvanceSearchPopup($event)">
+            </daybook-advance-search-model>
         </div>
     </div>
 </div>
