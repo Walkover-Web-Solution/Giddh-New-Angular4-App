@@ -336,28 +336,14 @@
                                         [multiple]="false" [ItemHeight]="67" [showClear]="false"
                                         [useInBuiltFilterForFlattenAc]="true">
                                         <ng-template #optionTemplate let-option="option">
-                                            <ng-container *ngIf="!option.additional?.stock">
-                                                <a href="javascript:void(0)" class="list-item"
-                                                    style="border-bottom: 1px solid #ccc;">
-                                                    <div class="item">{{ option.label }}
-                                                    </div>
-                                                    <div class="item_unq">
-                                                        {{ option.additional?.uniqueName }}
-                                                    </div>
-                                                </a>
-                                            </ng-container>
-                                            <ng-container *ngIf="option.additional?.stock">
-                                                <a href="javascript:void(0)" class="list-item"
-                                                    style="border-bottom: 1px solid #ccc;">
-                                                    <div class="item">{{ option.label }}
-                                                    </div>
-                                                    <div class="item_unq">
-                                                        {{ option.additional?.uniqueName }}
-                                                    </div>
-                                                    <div class="item_stock">Stock: {{ option.additional?.stock.name }}
-                                                    </div>
-                                                </a>
-                                            </ng-container>
+                                            <a href="javascript:void(0)" class="list-item"
+                                                style="border-bottom: 1px solid #ccc;">
+                                                <div class="item">{{ option.label }}
+                                                </div>
+                                                <div class="item_unq">
+                                                    {{ option.invoiceUniqueName }}
+                                                </div>
+                                            </a>
                                         </ng-template>
                                     </sh-select>
                                 </div>
