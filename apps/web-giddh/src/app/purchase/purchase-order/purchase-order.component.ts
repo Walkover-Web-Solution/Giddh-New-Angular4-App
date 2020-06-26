@@ -9,7 +9,8 @@ import {
     , PopoverDirective
 } from 'ngx-bootstrap'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-
+import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
+import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 @Component({
     selector: 'purchase-order',
     templateUrl: './purchase-order.component.html',
@@ -21,6 +22,11 @@ export class PurchaseOrderComponent implements OnInit {
     public modalRef: BsModalRef;
     public isMobileSite: boolean;
     public selectedDateRangeUi: any;
+    public selectOverDate: IOption[] = [
+        { label: "rakesh", value: "1234"}, { label: "rakesh2", value: "1235"}, 
+        { label: "rakesh", value: "1234"}, 
+        { label: "rakesh3", value: "1235"} ];
+
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     constructor(
         private modalService: BsModalService,
@@ -44,7 +50,9 @@ export class PurchaseOrderComponent implements OnInit {
     openModalBulkUpdate(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(
           template,
-          Object.assign({}, { class: 'purchase-order-bulk-update' })
+          Object.assign({}, { class: 'modal-sm' })
         );
       }
+
+
 }
