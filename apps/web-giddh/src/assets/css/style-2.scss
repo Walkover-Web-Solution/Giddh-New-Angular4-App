@@ -9616,6 +9616,9 @@ span#HW_badge_cont:nth-child(3){
     }
     .HW_badge_cont {
         left: -6px !important;
+        z-index: 9;
+        top: -25px !important;
+        position: absolute;
     }
     .setting-sidebar-open .desktop-header {
         padding-left: 0;
@@ -9774,7 +9777,7 @@ span#HW_badge_cont:nth-child(3){
     }
     .ledg-head .custom-tabs .nav.nav-tabs {
         left: 0;
-        top: 90px;
+        top: 95px;
         padding-top: 0 !important;
         position: fixed;
     }
