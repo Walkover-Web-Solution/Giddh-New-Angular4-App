@@ -238,7 +238,7 @@
                                                                 <div class="d-flex align-items-center">
                                                                     <span>
                                                                         <input type="checkbox" (click)="selectEntryForBulkAction($event, item)" /></span>
-                                                                    <span>
+                                                                    <span class="ml-05">
                                                                         <input class="form-control" [maxlength]="10" autocomplete="off" name="bsdateledger" type="text" [(ngModel)]="item.entryDate" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [outsideClick]="true"></span>
                                                                 </div>
                                                             </td>
@@ -305,7 +305,7 @@
                                                                     <span>
                                                                         <input type="checkbox" [(ngModel)]="txn.isChecked" (click)="selectEntryForBulkAction($event, item)" />
                                                                     </span>
-                                                                    <span>
+                                                                    <span class="ml-05">
                                                                         <input class="form-control" [maxlength]="10" name="bsDatess" autocomplete="off" type="text" #cbs='bsDatepicker' [(ngModel)]="item.entryDate" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [outsideClick]="true">
 
                                                                     </span>

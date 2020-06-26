@@ -552,10 +552,12 @@ sh-select:focus {
         position: static;
         th{
             border: none;
+            padding-top: 10px;
             &:first-child{
                 padding-right: 12px;
             }
         }
+
     }
     .transction-mapped-head{
         th{
