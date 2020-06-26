@@ -13,6 +13,7 @@ import { Router, NavigationStart } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
+import { DatePickerDefaultRangeEnum } from '../../app.constant';
 
 const moment = _moment;
 
@@ -1747,7 +1748,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     let loop = 0;
                     let ranges = [];
                     this.ranges.forEach(key => {
-                        if (key.name === "All Time") {
+                        if (key.name === DatePickerDefaultRangeEnum.AllTime) {
                             ranges[loop] = key;
 
                             ranges[loop].value = [
@@ -1755,7 +1756,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                                 moment()
                             ];
                             loop++;
-                        } else if (key.name === "This Financial Year to Date" && currentFinancialYear) {
+                        } else if (key.name === DatePickerDefaultRangeEnum.ThisFinancialYearToDate && currentFinancialYear) {
                             ranges[loop] = key;
 
                             ranges[loop].value = [
@@ -1763,7 +1764,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                                 moment()
                             ];
                             loop++;
-                        } else if (key.name === "Last Financial Year") {
+                        } else if (key.name === DatePickerDefaultRangeEnum.LastFinancialYear) {
                             if(lastFinancialYear && lastFinancialYear.start && lastFinancialYear.end && allFinancialYears.indexOf(lastFinancialYear.start.format("YYYY")) > -1) {
                                 ranges[loop] = key;
 
