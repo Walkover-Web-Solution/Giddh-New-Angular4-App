@@ -74,6 +74,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public selectedState: any = '';
     public stateGstCode: any[] = [];
     public formFields: any[] = [];
+    /** Observer to track get company profile API call in process */
+    public getCompanyProfileInProgress$: Observable<boolean>;
+
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -99,6 +102,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         digitAfterDecimal.map(d => {
             this.decimalDigitSource.push({ value: d.value, label: d.name });
         });
+        this.getCompanyProfileInProgress$ = this.store.pipe(select(s => s.settings.getProfileInProgress),takeUntil(this.destroyed$));
+
     }
 
     public ngOnInit() {
