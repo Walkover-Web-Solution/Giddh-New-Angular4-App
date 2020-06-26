@@ -718,7 +718,7 @@ $input-height: 3rem !default;
         bottom: 15px;
         background-color: $white;
         padding-top: 9px;
-        z-index: 99;
+        z-index: 999 !important;
         right: 0;
         width: calc(100% - 218px);
     }
