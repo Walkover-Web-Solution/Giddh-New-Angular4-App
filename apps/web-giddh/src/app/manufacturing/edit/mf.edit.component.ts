@@ -85,12 +85,12 @@ export class MfEditComponent implements OnInit {
         this.isGetManufactureStockInProgress$ = this.store.pipe(select(state => state.inventory.isGetManufactureStockInProgress), takeUntil(this.destroyed$));
         this.isStockWithRateInprogress$ = this.store.pipe(select(state => state.manufacturing.isStockWithRateInprogress), takeUntil(this.destroyed$));
 
-        this.groupsList$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
+        this.groupsList$ = this.store.pipe(select(p => p.general.groupswithaccounts),takeUntil(this.destroyed$));
 
         this.manufacturingDetails = new ManufacturingItemRequest();
         this.initializeOtherExpenseObj();
         // Update/Delete condition
-        this.store.select(p => p.manufacturing).pipe(takeUntil(this.destroyed$)).subscribe((o: any) => {
+        this.store.pipe(select(p => p.manufacturing),takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (o.stockToUpdate) {
                 this.isUpdateCase = true;
                 let manufacturingObj = _.cloneDeep(o.reportData.results.find((stock) => stock.uniqueName === o.stockToUpdate));

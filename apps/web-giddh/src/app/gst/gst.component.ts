@@ -98,7 +98,7 @@ export class GstComponent implements OnInit {
         this.store.pipe(select(createSelector([((s: AppState) => s.session.companies), ((s: AppState) => s.session.companyUniqueName)],
             (companies, uniqueName) => {
                 return companies.find(d => d.uniqueName === uniqueName);
-            }))
+            })), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             if (activeCompany) {
                 if (activeCompany.addresses && activeCompany.addresses.length) {
@@ -274,6 +274,6 @@ export class GstComponent implements OnInit {
             if(this.datepickerVisibility === "hidden") {
                 this.periodDropdown.hide();
             }
-        }, 500);    
+        }, 500);
     }
 }
