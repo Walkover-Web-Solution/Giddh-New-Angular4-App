@@ -392,19 +392,25 @@ export class LedgerService {
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
-    public getInvoiceListsForCreditNote(model: any, date: string) {
+    /**
+     * This will download/JSON to show the columnar report
+     *
+     * @param {any} model voucher type & account unique name
+     * @param {string} date Date
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof LedgerService
+     */
+    public getInvoiceListsForCreditNote(model: any, date: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.post(this.config.apiUrl + LEDGER_API.GET_VOUCHER_INVOICE_LIST
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':voucherDate', encodeURIComponent(date)), model
-        ).pipe(
-            map((res) => {
-                let data: BaseResponse<IUnpaidInvoiceListResponse, any> = res;
-                data.request = '';
-                data.queryString = {};
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+        ).pipe(map((res) => {
+            let data: BaseResponse<IUnpaidInvoiceListResponse, any> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
     public GetInvoiceList(model: any) {
