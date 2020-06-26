@@ -172,7 +172,7 @@
                         (click)="lc.showEledger = !lc.showEledger">Close</span>
                 </button>
 
-                <table class="table ledgerTable transction-mapped-table" style="margin-bottom:0">
+                <table class="table ledgerTable transaction-mapped-table" style="margin-bottom:0">
                     <thead>
                         <th class="nopad" colspan="6">
                             <div class="clearfix ldgTheadL">
@@ -184,7 +184,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td width="100%" colspan="100%" class="ledger-head transction-mapped">
+                            <td width="100%" colspan="100%" class="ledger-head transaction-mapped">
                                 <table class="table" width="100%">
                                     <tr>
                                         <th colspan="6">Debit <span class="pull-right text-gray">Dr</span></th>
@@ -194,7 +194,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="nopad bdrL bdrR hidden-xs transction-mapped-head" style="width:50%" colspan="3">
+                            <td class="nopad bdrL bdrR hidden-xs transaction-mapped-head" style="width:50%" colspan="3">
                                 <table class="table">
                                     <thead>
                                         <tr class="dgreyBg">
@@ -208,7 +208,7 @@
                                 </table>
                             </td>
                             <!-- main left td end here -->
-                            <td class="nopad bdrL bdrR hidden-xs transction-mapped-head" style="width:50%" colspan="3">
+                            <td class="nopad bdrL bdrR hidden-xs transaction-mapped-head" style="width:50%" colspan="3">
                                 <table class="table">
                                     <thead>
                                         <tr>
@@ -306,7 +306,7 @@
                                                                         <input type="checkbox" [(ngModel)]="txn.isChecked" (click)="selectEntryForBulkAction($event, item)" />
                                                                     </span>
                                                                     <span class="ml-05">
-                                                                        <input class="form-control" [maxlength]="10" name="bsDatess" autocomplete="off" type="text" #cbs='bsDatepicker' [(ngModel)]="item.entryDate" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [outsideClick]="true">
+                                                                        <input class="form-control" [maxlength]="10" name="bsDates" autocomplete="off" type="text" #cbs='bsDatepicker' [(ngModel)]="item.entryDate" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [outsideClick]="true">
 
                                                                     </span>
                                                                 </div>  
