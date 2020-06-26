@@ -888,20 +888,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     /**
      * Get Invoice list for credit note
-     *
+     * 
+     * @param {any} event Selected invoice for credit note
      * @memberof LedgerComponent
      */
-    public getInvoiceListsForCreditNote(e) {
-        if (e) {
+    public getInvoiceListsForCreditNote(ev): void {
+        if (ev) {
             let request = {
                 "accountUniqueNames": [this.selectedTxnAccUniqueName, this.accountUniquename],
                 "voucherType": "credit note"
             }
-            let date = moment().format('DD-MM-YYYY');
+            let date = moment().format(GIDDH_DATE_FORMAT);
             this.invoiceList = [];
             this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((res: any) => {
-                _.map(res.body, (o) => {
-                    this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceUniqueName, invoice: o });
+                _.map(res.body, (invoice) => {
+                    this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice });
                 });
                 _.uniqBy(this.invoiceList, 'value');
             });
