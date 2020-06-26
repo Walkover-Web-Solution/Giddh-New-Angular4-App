@@ -882,11 +882,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.selectedBankTxnUniqueName = null;
     }
 
-    /**
-     * Calculates conversion rate
-     *
-     * @memberof LedgerComponent
-     */
     public clickUnpaidInvoiceList(e?: boolean) {
         if (e) {
             if (this.accountUniquename === 'cash' || this.accountUniquename === 'bankaccounts' && this.selectedTxnAccUniqueName) {
@@ -897,6 +892,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Get Invoice list for credit note
+     *
+     * @memberof LedgerComponent
+     */
     public getInvoiceListsForCreditNote(e) {
         if (e) {
             let request = {
@@ -907,9 +907,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.invoiceList = [];
             this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((res: any) => {
                 _.map(res.body, (o) => {
-                    this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceUniqueName, isSelected: false });
+                    this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceUniqueName, additional: o });
                 });
                 _.uniqBy(this.invoiceList, 'value');
+                console.log(this.invoiceList);
             });
         }
     }
