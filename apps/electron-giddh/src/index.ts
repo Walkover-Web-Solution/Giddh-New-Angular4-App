@@ -137,7 +137,7 @@ ipcMain.on("authenticate-send-email", (event, arg) => {
     if (arg === "google") {
         const myApiOauth = new ElectronGoogleOAuth2(GoogleLoginElectronConfig.clientId,
             GoogleLoginElectronConfig.clientSecret,
-            ['https://www.googleapis.com/auth/drive.metadata.readonly', 'https://www.googleapis.com/auth/gmail.send'],
+            ['https://www.googleapis.com/auth/gmail.send'],
             {
                 successRedirectURL: PRODUCTION_ENV ? 'https://app.giddh.com/app-login-success' : 'https://stage.giddh.com/app-login-success',
                 loopbackInterfaceRedirectionPort: 45587,
