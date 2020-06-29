@@ -725,7 +725,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngAfterViewInit() {
         if (!document.querySelector('.giddh-calendly-calendar')) {
-            console.log(document.querySelector('.giddh-calendly-calendar'));
             /* TO SHOW NOTIFICATIONS */
             let scriptTag = document.createElement('script');
             scriptTag.src = 'https://cdn.headwayapp.co/widget.js';
