@@ -919,7 +919,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     /**
-     * Calculates conversion rate
+     * Selected invoice for credit note
      *
      * @param {any} event Selected invoice for credit note
      * @memberof NewLedgerEntryPanelComponent

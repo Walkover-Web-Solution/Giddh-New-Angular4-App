@@ -161,6 +161,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public totalTdElementWidth: number = 0;
     public multiCurrencyAccDetails: IFlattenAccountsResultItem = null;
     public selectedPettycashEntry$: Observable<PettyCashResonse>;
+    /** Amount of invoice select for credit note */
+    public selectedInvoiceAmount: number = 0;
+    /** Selected invoice for credit note */
+    public selectedInvoice: any = null;
     public accountPettyCashStream: any;
     /**To check tourist scheme applicable or not */
     public isTouristSchemeApplicable: boolean = false;
@@ -236,7 +240,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public ngOnInit() {
         this.store.pipe(select(state => state.ledger.refreshLedger), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response === true) {
+            if (response === true) {
                 this.store.dispatch(this._ledgerAction.refreshLedger(false));
                 this.entryAccountUniqueName = "";
                 this.closeUpdateLedgerModal.emit();
@@ -471,6 +475,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                     //#region transaction assignment process
                     this.vm.selectedLedger = resp[1];
+
+                    if (this.vm.selectedLedger && this.vm.selectedLedger.voucherGeneratedType === 'credit note') {
+                        this.getInvoiceListsForCreditNote();
+                    }
                     // Check the RCM checkbox if API returns subvoucher as Reverse charge
 
                     /** To check advance receipts adjustment for Tx (Using list of invoice is there or not)*/
@@ -1049,12 +1057,21 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         delete requestObj['tdsTaxes'];
         delete requestObj['tcsTaxes'];
 
+        if (this.vm.selectedLedger.voucherType === 'credit note') {
+            if (this.vm.selectedLedger.total.amount > this.selectedInvoiceAmount) {
+                this._toasty.errorToast('Can not create credit note greater than invoice amount');
+                return;
+            }
+        } else {
+            this.vm.selectedLedger.invoiceLinkingRequest = null;
+        }
+
         // if no petty cash mode then do normal update ledger request
         if (!this.isPettyCash) {
             requestObj['handleNetworkDisconnection'] = true;
             requestObj['refreshLedger'] = false;
 
-            if(this.entryAccountUniqueName && this.entryAccountUniqueName !== this.changedAccountUniq) {
+            if (this.entryAccountUniqueName && this.entryAccountUniqueName !== this.changedAccountUniq) {
                 requestObj['refreshLedger'] = true;
             }
 
@@ -1160,9 +1177,32 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
                 });
             });
+        } else if (e.value === 'credit note') {
+            this.getInvoiceListsForCreditNote();
         } else {
             this.invoiceList = [];
         }
+    }
+
+    /**
+     * Get Invoice list for credit note
+     * 
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public getInvoiceListsForCreditNote(): void {
+        let request = {
+            "accountUniqueNames": [this.vm.selectedLedger.particular.uniqueName, this.vm.selectedLedger.transactions[0].particular.name.toLowerCase()],
+            "voucherType": "credit note"
+        }
+        let date = moment().format(GIDDH_DATE_FORMAT);
+        this.invoiceList = [];
+        this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((res: any) => {
+            _.map(res.body, (invoice) => {
+                this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice });
+            });
+            _.uniqBy(this.invoiceList, 'value');
+            this.selectedInvoice = this.invoiceList.find(i => i.value === this.vm.selectedLedger.invoiceLinkingRequest.linkedInvoices[0].invoiceUniqueName);
+        });
     }
 
     public getInvoiveLists() {
@@ -1178,8 +1218,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
                 });
             });
-        } else {
-            this.invoiceList = [];
         }
     }
 
@@ -1191,6 +1229,23 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             let indx = this.vm.selectedLedger.invoicesToBePaid.indexOf(invoiceNo.label);
             this.vm.selectedLedger.invoicesToBePaid.splice(indx, 1);
         }
+    }
+
+    /**
+     * Selected invoice for credit note
+     *
+     * @param {any} event Selected invoice for credit note
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public creditNoteInvoiceSelected(ev): void {
+        this.vm.selectedLedger.invoiceLinkingRequest = {
+            linkedInvoices: [
+                {
+                    invoiceUniqueName: ev.value
+                }
+            ]
+        }
+        this.selectedInvoiceAmount = ev.invoice.balanceDue.amountForAccount;
     }
 
     public openHeaderDropDown() {
