@@ -60,7 +60,7 @@ export interface InventoryState {
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
-    return _.orderBy(mockData.map((m: IGroupsWithStocksHierarchyMinItem) => {
+    return mockData.map((m: IGroupsWithStocksHierarchyMinItem) => {
         m = Object.assign({}, m, {
             isActive: false,
             isOpen: false,
@@ -68,7 +68,7 @@ const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStoc
         });
         m.childStockGroups = prepare(m.childStockGroups);
         return m;
-    }), 'name');
+    });
 };
 
 /**
@@ -158,7 +158,6 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
                         }
                     }
                 }
-                groupArray = _.orderBy(groupArray, ['name']);
                 return Object.assign({}, state, { groupsWithStocks: groupArray });
             }
             return state;
