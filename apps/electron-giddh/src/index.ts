@@ -53,7 +53,7 @@ ipcMain.on("authenticate", (event, arg) => {
 
         const myApiOauth = new ElectronGoogleOAuth2(GoogleLoginElectronConfig.clientId,
             GoogleLoginElectronConfig.clientSecret,
-            ['https://www.googleapis.com/auth/gmail.send'],
+            ['email'],
             {
                 successRedirectURL: PRODUCTION_ENV ? 'https://app.giddh.com/app-login-success' : 'https://stage.giddh.com/app-login-success',
                 loopbackInterfaceRedirectionPort: 45587,
@@ -130,5 +130,29 @@ ipcMain.on("authenticate", (event, arg) => {
         // } catch (e) {
         //     //
         // }
+    }
+});
+
+ipcMain.on("authenticate-send-email", (event, arg) => {
+    if (arg === "google") {
+        const myApiOauth = new ElectronGoogleOAuth2(GoogleLoginElectronConfig.clientId,
+            GoogleLoginElectronConfig.clientSecret,
+            ['https://www.googleapis.com/auth/drive.metadata.readonly', 'https://www.googleapis.com/auth/gmail.send'],
+            {
+                successRedirectURL: PRODUCTION_ENV ? 'https://app.giddh.com/app-login-success' : 'https://stage.giddh.com/app-login-success',
+                loopbackInterfaceRedirectionPort: 45587,
+                refocusAfterSuccess: true,
+            }
+        );
+        myApiOauth.openAuthWindowAndGetTokens()
+            .then(token => {
+                event.returnValue = token;
+                if (event.reply) {
+                    event.reply('take-your-gmail-token', token);
+                } else if (event.sender.send) {
+                    event.sender.send('take-your-gmail-token', token);
+                }
+                // use your token.access_token
+            });
     }
 });
