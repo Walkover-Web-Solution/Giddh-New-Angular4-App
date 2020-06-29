@@ -85,12 +85,12 @@ export class MfEditComponent implements OnInit {
         this.isGetManufactureStockInProgress$ = this.store.pipe(select(state => state.inventory.isGetManufactureStockInProgress), takeUntil(this.destroyed$));
         this.isStockWithRateInprogress$ = this.store.pipe(select(state => state.manufacturing.isStockWithRateInprogress), takeUntil(this.destroyed$));
 
-        this.groupsList$ = this.store.pipe(select(p => p.general.groupswithaccounts),takeUntil(this.destroyed$));
+        this.groupsList$ = this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$));
 
         this.manufacturingDetails = new ManufacturingItemRequest();
         this.initializeOtherExpenseObj();
         // Update/Delete condition
-        this.store.pipe(select(p => p.manufacturing),takeUntil(this.destroyed$)).subscribe((o: any) => {
+        this.store.pipe(select(p => p.manufacturing), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (o.stockToUpdate) {
                 this.isUpdateCase = true;
                 let manufacturingObj = _.cloneDeep(o.reportData.results.find((stock) => stock.uniqueName === o.stockToUpdate));
@@ -209,13 +209,14 @@ export class MfEditComponent implements OnInit {
                 }
             })).pipe(takeUntil(this.destroyed$));
         // get stock with rate details
-        this.store.select(p => p.manufacturing).pipe(takeUntil(this.destroyed$)).subscribe((o: any) => {
+        this.store.pipe(select(manufacturingStore => manufacturingStore.manufacturing), takeUntil(this.destroyed$)).subscribe((res: any) => {
             let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
             if (!this.isUpdateCase) {
-                if (o.stockWithRate && o.stockWithRate.manufacturingDetails) {
+                if (res.stockWithRate && res.stockWithRate.manufacturingDetails) {
+                    this.initialQuantityObj = []; // Reset initaila quantity of selected stock
                     // In create only
-                    let manufacturingDetailsObjData = _.cloneDeep(o.stockWithRate.manufacturingDetails);
-                    manufacturingDetailsObj.linkedStocks = _.cloneDeep(o.stockWithRate.manufacturingDetails.linkedStocks);
+                    let manufacturingDetailsObjData = _.cloneDeep(res.stockWithRate.manufacturingDetails);
+                    manufacturingDetailsObj.linkedStocks = _.cloneDeep(res.stockWithRate.manufacturingDetails.linkedStocks);
                     // this.initialQuantityObj = manufacturingDetailsObj.linkedStocks;
                     // manufacturingDetailsObj.multipleOf = _.cloneDeep(o.stockWithRate.manufacturingDetails.manufacturingMultipleOf);
                     manufacturingDetailsObj.multipleOf = (manufacturingDetailsObjData.manufacturingQuantity / manufacturingDetailsObjData.manufacturingMultipleOf);
