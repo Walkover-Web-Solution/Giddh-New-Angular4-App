@@ -329,7 +329,7 @@
 
                             <td class="pdR1" *ngIf="blankLedger.voucherType == 'credit note'">
                                 <div class="form-group">
-                                    <label class="default_clr">Invoice No.</label>
+                                    <label class="default_clr">Voucher No.</label>
 
                                     <sh-select [options]="invoiceList" placeholder="Select Accounts"
                                         [notFoundLink]="false" (selected)="creditNoteInvoiceSelected($event)"
@@ -340,7 +340,11 @@
                                                 <div class="item">{{ option.label }}
                                                 </div>
                                                 <div class="item_unq">
-                                                    {{ option.value }}
+                                                    (Dated: {{ option.invoice?.invoiceDate}})
+                                                </div>
+                                                <div class="item_unq">
+                                                    (Due:
+                                                    {{ option.invoice?.balanceDue.amountForAccount | giddhCurrency }})
                                                 </div>
                                             </a>
                                         </ng-template>

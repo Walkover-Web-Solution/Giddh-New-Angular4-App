@@ -1057,13 +1057,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         delete requestObj['tdsTaxes'];
         delete requestObj['tcsTaxes'];
 
-        if (this.vm.selectedLedger.voucherType === 'credit note') {
-            if (this.vm.selectedLedger.total.amount > this.selectedInvoiceAmount) {
-                this._toasty.errorToast('Can not create credit note greater than invoice amount');
-                return;
-            }
-        } else {
-            this.vm.selectedLedger.invoiceLinkingRequest = null;
+        if (requestObj.voucherType !== 'credit note') {
+            requestObj.invoiceLinkingRequest = null;
         }
 
         // if no petty cash mode then do normal update ledger request
@@ -1179,6 +1174,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             });
         } else if (e.value === 'credit note') {
             this.getInvoiceListsForCreditNote();
+            this.vm.selectedLedger.generateInvoice = true;
         } else {
             this.invoiceList = [];
         }
@@ -1194,14 +1190,21 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             "accountUniqueNames": [this.vm.selectedLedger.particular.uniqueName, this.vm.selectedLedger.transactions[0].particular.name.toLowerCase()],
             "voucherType": "credit note"
         }
-        let date = moment().format(GIDDH_DATE_FORMAT);
+        let date = this.vm.selectedLedger.entryDate;
         this.invoiceList = [];
         this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((res: any) => {
             _.map(res.body, (invoice) => {
                 this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice });
             });
             _.uniqBy(this.invoiceList, 'value');
-            this.selectedInvoice = this.invoiceList.find(i => i.value === this.vm.selectedLedger.invoiceLinkingRequest.linkedInvoices[0].invoiceUniqueName);
+            let selectedInvoice = this.vm.selectedLedger.invoiceLinkingRequest.linkedInvoices[0];
+            let invoiceSelected = {
+                label: selectedInvoice.invoiceNumber,
+                value: selectedInvoice.invoiceUniqueName,
+                invoice: selectedInvoice
+            };
+            this.selectedInvoice = invoiceSelected.value;
+            this.invoiceList.push(invoiceSelected);
         });
     }
 

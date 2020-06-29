@@ -1421,6 +1421,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.voucherTypeChanged = true;
         this.router.navigate(['pages', 'proforma-invoice', 'invoice', val]);
         this.selectedVoucherType = val;
+        console.log(this.selectedVoucherType);
     }
 
     public prepareInvoiceTypeFlags() {
