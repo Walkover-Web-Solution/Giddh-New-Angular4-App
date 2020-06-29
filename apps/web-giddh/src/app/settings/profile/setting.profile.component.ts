@@ -102,7 +102,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         digitAfterDecimal.map(d => {
             this.decimalDigitSource.push({ value: d.value, label: d.name });
         });
-        this.getCompanyProfileInProgress$ = this.store.pipe(select(s => s.settings.getProfileInProgress),takeUntil(this.destroyed$));
+        this.getCompanyProfileInProgress$ = this.store.pipe(select(settingsStore => settingsStore.settings.getProfileInProgress),takeUntil(this.destroyed$));
 
     }
 
