@@ -56,7 +56,7 @@ export class StockListComponent implements OnInit, OnDestroy {
 
         if (this.Groups.stocks) {
             // this.Groups.stocks = [];
-            this.Groups.stocks = _.orderBy(this.Groups.stocks, ['name']);
+            // this.Groups.stocks = _.orderBy(this.Groups.stocks, ['name']);
         }
     }
 
