@@ -54,10 +54,6 @@ export class StockListComponent implements OnInit, OnDestroy {
             this.groupUniqueName = params['groupUniqueName'];
         });
 
-        if (this.Groups.stocks) {
-            // this.Groups.stocks = [];
-            this.Groups.stocks = _.orderBy(this.Groups.stocks, ['name']);
-        }
     }
 
     public ngOnDestroy() {
