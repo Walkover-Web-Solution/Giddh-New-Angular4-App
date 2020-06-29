@@ -1,0 +1,605 @@
+<form>
+    <div class="clearfix">
+        <div class="clearfix wrapperCustomerTable  pdT2">
+            <div class="customerInvoiceTable">
+                <div class="inner-container">
+                    <div class="inner-container">
+                        <div class="showforSmall-screen">
+                            <div class="text-right">
+                                <p class="fs20 b pbR1">
+                                    <span class="balance-due">Balance Due</span>
+                                    <span class="sp-rupees" *ngIf="isMulticurrencyAccount"> currency symbol
+                                        <strong>0.00</strong></span>
+                                    <!-- added multicurrency feature make it functional to change into appropriate currency -->
+                                    <span class="sp-rupees" *ngIf='isMulticurrencyAccount'>
+                                        <span *ngIf="isMulticurrencyAccount">currency symbol</span>
+                                    <span>0.00</span>
+                                    </span>
+                                    <span class="sp-rupees" *ngIf='!isMulticurrencyAccount'>0.00</span>
+                                </p>
+                            </div>
+                        </div>
+                         <!-- region customer section -->
+                         <div class="clearfix">
+                            <div class="row mb-1">
+                                <!-- region customer name -->
+                                <div class="col-sm-2">
+                                    <label>Vendor Name<span
+                                        class="red-text">*</span></label>
+                                </div>
+                                 <!-- region customer dropdown -->
+                                 <div class="col-sm-7 selectCustomerName">
+                                    <div class="clearfix d-flex flex-column">
+                                        <div class="d-flex flex-column">
+                                            <!-- region if not cashinvoice show customer dropdown -->
+                                           <sh-select></sh-select>
+                                            <!-- endregion -->
+                                             <p><small>Pending Purchase order of selected vendor</small></p>
+                                             <p class="font-14"><a href="javascript(void)">PO84709832 |</a>
+                                                <a  href="javascript(void)"> PO02948023 |</a>                        
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- endregion -->
+                            </div>
+                            <div class="row mb-1">
+                                <!-- region customer name -->
+                                <div class="col-sm-2">
+                                    <label>Source of Supply<span
+                                        class="red-text">*</span></label>
+                                </div>
+                                 <!-- region customer dropdown -->
+                                 <div class="col-sm-7 selectCustomerName">
+                                    <div class="clearfix d-flex flex-column">
+                                        <div class="d-flex flex-column">
+                                            <!-- region if not cashinvoice show customer dropdown -->
+                                           <sh-select></sh-select>
+                                            <!-- endregion -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- endregion -->
+                            </div>
+                            <div class="row mb-1">
+                                <!-- region customer name -->
+                                <div class="col-sm-2">
+                                    <label>Destination of Supply<span
+                                        class="red-text">*</span></label>
+                                </div>
+                                 <!-- region customer dropdown -->
+                                 <div class="col-sm-7 selectCustomerName">
+                                    <div class="clearfix d-flex flex-column">
+                                        <div class="d-flex flex-column">
+                                            <!-- region if not cashinvoice show customer dropdown -->
+                                           <sh-select></sh-select>
+                                            <!-- endregion -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- endregion -->
+                            </div>
+                            
+                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="customerInvoiceTable bg-white pdB2 pdT2">
+                <div class="inner-container">
+                    <div class="row mb-1">
+                        <div class="col-sm-2">
+                            <label>Deliver To<span
+                                class="red-text">*</span></label>
+                        </div>
+                         <!-- region customer dropdown -->
+                         <div class="col-sm-9 selectCustomerName">
+                            <section class="form-inline">
+
+                                <div class="wrap-billing-address clearfix">
+
+                                    <div class="row">
+                                        <!-- region billing address -->
+                                        <div class="col-sm-6 bill-add">
+
+                                            <div class="form-group">
+                                                <label>Billing Address</label>
+
+                                                <div class="billing-address clearfix">
+                                                    <textarea name="billingDetails.address" class="form-control" rows="3" autocomplete="off" autofocus="off" aria-autocomplete="none"></textarea>
+
+                                                    <div>
+                                                        <div class="col-sm-6 pd ">
+                                                            <label class="salesCountryLabel">
+                                                               India
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="col-sm-6 pd" #billingState>
+                                                            <sh-select [placeholder]="'State'" class="select-border-bottom">
+                                                            </sh-select>
+                                                        </div>
+
+                                                        <div class="col-sm-12 pd">
+                                                            
+                                                            <input maxLength="15" autocomplete="None" type="text" name="billingDetails.gstNumber" class="form-control input-custom"  placeholder="GSTIN" >
+                                                              
+                                                            <!-- <input maxLength="15" autocomplete="None" type="text" name="billingDetails.gstNumber" class="form-control input-custom" *ngIf="showTRNNo" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber" (change)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
+                                                                placeholder="TRN" /> -->
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <!-- endregion -->
+
+                                        <!-- region shipping address -->
+                                        <div class="col-sm-6 bill-add">
+
+                                            <div class="form-group p0 width100">
+                                                <label>
+                                                    <input type="checkbox" autocomplete="None" name=""> Shipping Address
+                                                    Same as Billing Address
+                                                </label>
+
+                                                <div class="billing-address">
+                                                    <textarea [readonly]="" name="shippingDetails.address" class="form-control" rows="3" autocomplete="off"></textarea>
+                                                    <div class="clearfix">
+
+                                                        <div class="form-group">
+
+                                                            <div class="col-sm-6 pd ">
+                                                                <div class="form-group">
+
+                                                                    <label class="salesCountryLabel">
+                                                                       India
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-sm-6 pd select-border-bottom" >
+                                                                <sh-select></sh-select>
+                                                            </div>
+
+                                                            <div class="col-sm-12 pd">
+                                                                <input [readonly]="" autocomplete="None" maxLength="15" type="text"  class="form-control input-custom"  placeholder="GSTIN" >
+                                                                <!-- <input [readonly]="" maxLength="15" autocomplete="None" type="text" name="shippingDetails.gstNumber" class="form-control input-custom" >
+                                                                    placeholder="TRN" /> -->
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- endregion -->
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                        <!-- endregion -->
+                    </div>
+                <div class="row mb-1">
+                    <!-- region customer name -->
+                    <div class="col-sm-2">
+                        <label>Warehouse<span
+                            class="red-text">*</span></label>
+                    </div>
+                     <!-- region customer dropdown -->
+                     <div class="col-sm-7 selectCustomerName">
+                        <div class="clearfix d-flex flex-column">
+                            <div class="d-flex flex-column">
+                                <!-- region if not cashinvoice show customer dropdown -->
+                               <sh-select></sh-select>
+                                <!-- endregion -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- endregion -->
+                </div>
+                <div class="row mb-1">
+                    <!-- region customer name -->
+                    <div class="col-sm-2">
+                        <label>Order #</label>
+                    </div>
+                     <!-- region customer dropdown -->
+                     <div class="col-sm-9 selectCustomerName order-expected-delivery d-flex">
+                        <!-- region if not cashinvoice show customer dropdown -->
+                        <div class="col-sm-6 pl-0">
+                            <sh-select></sh-select>
+                        </div>
+                        <!-- endregion -->
+                        <div class="col-sm-6 invoiceDateDueDate">
+                            <div class="d-flex">
+                                    <label>Expected Delivery</label>
+                                    <input type="text" class="form-control" placeholder="Select Date">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- endregion -->
+                </div>
+                <div class="row mTB1">
+                    <div class="col-sm-2">
+                        <label></label>
+                    </div>
+                    <div class="col-sm-7">
+                            <input id="reverse-charge" name="rcmEntry" class="checkbox-custom" type="checkbox">
+                            <label container="body" placement="bottom" containerClass="purchase-invoice-rcm" for="reverse-charge" class="checkbox-custom-label">
+                                Is this transaction applicable for reverse charge?
+                            </label>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <section class="staticInvoiceTable salseInvoicetable clearfix mrB2 whiteBg container-fluid">
+        <table class="table table-custom-invoice  basic">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Product/Service Description</th>
+                    <th>Qty/Unit</th>
+                    <th>Rate</th>
+                    <th>Amount</th>
+                    <th>Discount</th>
+                    <th>Tax</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                    <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature) -->
+                    <!-- region static entries-->
+                    <tr class="entriesTr set-active">
+                        <td>1</td>
+                        <td>
+                            <div class="productName">
+                                <label class="selectAccountLabel">Click to
+                                Select
+                                Account</label> Purchase oreder
+
+                            </div>
+
+                            <div class="skuNumber">
+                                <label>SKU:</label>Number
+                            </div>
+
+                            <div class="discription">
+                               Dummy text here
+
+                            </div>
+                            <p class="small text-muted sku_and_customfields" *ngIf="transaction.sku_and_customfields">
+                               5454545dummy</p>
+                            <div class="dateHsnCode">
+
+                                <div class="row">
+
+                                    <div class="col-xs-6 pdR0">
+                                        <div class="entryDate">
+                                            <label>Entry Date: </label> 20-12-2020
+                                            <span class="edit-icon cp" *ngIf="!isUpdateMode" hidden>
+                                                <img src="assets/images/edit-pencilicon.svg">
+                                            </span>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-6 pdL0" *ngIf="transaction.hsnNumber || transaction.sacNumber">
+                                        <div class="hsnCode text-right">
+                                            <label>HSN/SAC:</label>
+                                            <span>
+                                                2522525dummy number
+                                            <span class="edit-icon cp">
+                                                    <img src="assets/images/edit-pencilicon.svg">
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-right stockUnit">
+                            <div class="wrap-td-data">
+                              20dummy
+                            </div>
+                        </td>
+                        <td class="text-right tra-rate item-rate " style="height:1px;">
+                            <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
+                                <div class="td_Wrapper">
+                                    <div style="flex: 1;">
+                                        <div class="wrap-td-data"> <span>
+                                               $</span> 200
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div  class="differ-currency" hidden>
+                                    <span>$</span>
+                                    <span>200</span>
+
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-right  item-amount" style="height:1px;">
+                            <div class="td_Wrapper">
+                                <div style="flex: 1;">
+                                    <div class="wrap-td-data"><span>$
+                                        </span>200.00</div>
+                                </div>
+                            </div>
+                            <div class="differ-currency" hidden>
+                                <span>&</span>
+                                <span>200</span>
+                            </div>
+                        </td>
+                        <td class="item-discount" style="height:1px;">
+                            <div class=" text-right td_Wrapper">
+
+                                <div style="flex: 1;">
+                                    <div class="wrap-td-data"> <span>$
+                                        </span>0.00</div>
+                                </div>
+                            </div>
+                            <div class="differ-currency" hidden>
+                                <span>$</span>
+                                <span>0.00</span>
+                            </div>
+
+                        </td>
+                        <td class="text-right item-tax" style="height:1px;">
+                            <div class="td_Wrapper">
+                                <div style="flex:1;">
+                                    <div class="wrap-td-data"><span>$
+                                        </span>0.00</div>
+                                </div>
+                            </div>
+                            <div class="differ-currency" hidden>
+                                <span>$</span>
+                                <span>0.00</span>
+                            </div>
+                        </td>
+                        <td class="text-right item-tax dlt-abs" style="height:1px;">
+                            <div class="td_Wrapper">
+                                <div style="flex:1;">
+                                    <div class="wrap-td-data">
+                                        <span><span>$
+                                            </span>0.00</span>
+                                        <br>
+                                        <!-- <span *ngIf="entry.isOtherTaxApplicable">
+                                            {{ entry.otherTaxModal?.appliedOtherTax?.name }} : <span
+                                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}
+                                            </span>{{ entry.otherTaxSum }}
+                                        </span>
+                                    </div>
+                                    <div class="texIncurrency" *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && !isPurchaseInvoice">
+                                        {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
+                                        <span>{{baseCurrencySymbol}}</span>
+                                        <span>{{entry.otherTaxSum * exchangeRate | giddhCurrency}}</span>
+                                    </div> -->
+                                </div>
+
+                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                    <span>{{baseCurrencySymbol}}</span>
+                                    <span>{{transaction.total * exchangeRate | giddhCurrency}}</span>
+                                </div> -->
+                            </div>
+
+                            <div class="trash-icon-delete">
+                                <span class="cp">
+                                    <i class="icon-trash" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            </div>
+                            </td>
+
+                    </tr>
+                    <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
+                    <tr class="entriesTr defaultActive">
+                        <td>1</td>
+                        <td>
+
+                            <div class="productName">
+                                <div class="ng-select-wrap">
+                                    <sh-select></sh-select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="skuNumber">
+                                    <label>SKU:</label>Number
+                                </div>
+
+                                <div class="discription">
+                                    <textarea type="text" placeholder="Add Description" class="form-control">
+      </textarea>
+                                    <p class="small text-muted sku_and_customfields">
+                                       4454555</p>
+                                </div>
+
+                                <!-- region entry date/ hsncode -->
+                                <div class="dateHsnCode">
+                                    <div class="row">
+                                        <div class="col-xs-6 pdR0">
+                                            <div class="entryDate">
+                                                <label>Entry Date: </label>
+                                                <span hidden>
+                                                    <input type="text">
+                                                    <span class="edit-icon cp">
+                                                        <img src="assets/images/edit-pencilicon.svg">
+                                                    </span>
+                                                </span>
+
+                                                <span  hidden>
+                                                   20-12-2020
+                                                </span>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-6 pdL0">
+                                            <div class="wrap-hsnBox">
+                                                <div class="hsnCode text-right">
+                                                    <label>HSN/SAC:</label>
+                                                    <span>
+                                                       45454545
+                                                    <span class="updateText" hidden>Update
+                                                        </span>
+                                                    <span class="edit-icon cp">
+                                                            <img src="assets/images/edit-pencilicon.svg">
+                                                        </span>
+                                                    </span>
+                                                </div>
+
+                                                <div class="hsnCodeDropdown" hidden>
+                                                    <label>HSN/SAC</label>
+                                                    <input type="text" maxLength="10" placeholder="HSN/SAC Number" />
+                                                    <input type="text" maxLength="10" placeholder="HSN/SAC Number"/>
+                                                    <a>
+                                                    </a>
+                                                    <div class="btngroup m-t-10">
+                                                        <button class="btn btn-sm btn-success" type="button">Save
+                                                    </button>
+                                                        <button class="btn btn-sm btn-primary" type="button">
+                                                        Cancel
+                                                    </button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- endregion -->
+                            </div>
+                        </td>
+
+                        <td class="text-right stockUnit">
+                            <input type="text" placeholder="Quantity"/>
+
+                            <select class="form-control">
+                            <!-- <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">
+                                {{stock.text}}
+                            </option> -->
+                        </select>
+                        </td>
+
+                        <td class="text-right item-rate" style="
+          height: 1px;">
+                            <div class="td_Wrapper">
+
+                                <div style="flex: 1;">
+                                    <input type="text"  placeholder="Rate" class="form-control transaction-rate text-right"/>
+                                </div>
+                                <!-- please add condition for show and hide -->
+                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                    <span>{{baseCurrencySymbol}}</span>
+                                    <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span>
+                                </div> -->
+                            </div>
+                        </td>
+
+                        <td class="text-right item-amount" style="height:1px;">
+                            <div class="td_Wrapper">
+                                <div style="flex: 1;">
+                                    <input type="text" placeholder="Amount"/>
+                                </div>
+                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                    <span>{{baseCurrencySymbol}}</span>
+                                    <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
+                                </div> -->
+                            </div>
+                        </td>
+
+                        <td class="item-discount" style="height:1px;">
+                            <div class="td_Wrapper">
+                                <div class="text-right" style="flex:1;">
+                                    <!-- <discount-control-component #discountComponent [discountMenu]="false" [discountAccountsDetails]="entry.discounts" [discountSum]="entry.discountSum" [showHeaderText]="false" (hideOtherPopups)="closeTaxControlPopup()" (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
+                                        [maskInput]="inputMaskFormat" [prefixInput]="invFormData.accountDetails.currencySymbol" [suffixInput]="selectedSuffixForCurrency">
+                                    </discount-control-component> -->
+                                </div>
+                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                    <span>{{baseCurrencySymbol}}</span>
+                                    <span>{{entry.discountSum * exchangeRate | giddhCurrency}}</span>
+                                </div> -->
+                            </div>
+                        </td>
+
+                        <td class="pos-rel dropdown-container item-tax" style="height:1px;">
+                            <div class="td_Wrapper">
+                                <div class="text-right" style="flex:1;">
+                                    <!-- <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="allowedSelectionOfAType"
+                                        [showHeading]="false" [rootClass]="'salseInvoicetable'" (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)" (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat" [prefixInput]="invFormData.accountDetails.currencySymbol"
+                                        [suffixInput]="selectedSuffixForCurrency">
+                                    </tax-control> -->
+                                    
+                                </div>
+
+                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                    <span>{{baseCurrencySymbol}}</span>
+                                    <span>{{(entry.taxSum + entry.cessSum) * exchangeRate | giddhCurrency}}</span>
+                                </div> -->
+                            </div>
+                        </td>
+
+                        <td class="text-right item-total dlt-abs">
+                            <div class="td_Wrapper">
+
+                                <div style="flex:1;">
+                                    <input type="text" class="form-control text-right"  
+                                       />
+
+                                    <!-- <div *ngIf="isTcsTdsApplicable" class="wrap-otherTax">
+                                        <input type="checkbox" class="other-taxes-checkobx" [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable" name="entry.isOtherTaxApplicable_{{entryIdx}}" id="entry.isOtherTaxApplicable_{{entryIdx}}" (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
+                                        <label for="entry.isOtherTaxApplicable_{{entryIdx}}" *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable" style="font-size:13px;vertical-align: middle">Other Tax?</label>
+                                    </div> -->
+                                    <!-- <div *ngIf="entry.isOtherTaxApplicable" class="mrT1">
+
+                                        <span>
+
+                                            <div style="display: flex;align-items: center">
+                                                <span style="margin-right: 5px">
+                                                    <a href="javascript: void 0"
+                                                       (click)="toggleOtherTaxesAsidePane(true, entryIdx)">
+                                                        <img src="assets/images/edit-pencilicon.svg">
+                                                    </a>
+                                                </span>
+                                        <input class="text-right form-control other-taxes-input" disabled="disabled" [(ngModel)]="entry.otherTaxSum" [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" name="entry.otherTaxesSum_{{entryIdx}}"
+                                        />
+                                    </div>
+
+                                    <p style="margin-top: 5px; font-size: 12px; text-transform: capitalize; margin-bottom: 20px;">
+                                        {{ entry.otherTaxModal?.appliedOtherTax?.name}}</p>
+                                    </span>
+
+                                </div> -->
+                            </div>
+                            <!-- <div *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && !isPurchaseInvoice" class="texIncurrency" style="color:#999;">
+                                {{ entry.otherTaxModal?.appliedOtherTax?.name }}
+                                <span>{{baseCurrencySymbol}}</span> :
+                                <span>{{entry.otherTaxSum * exchangeRate | giddhCurrency}}</span>
+                            </div>
+                            <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                <span>{{baseCurrencySymbol}}</span>
+                                <span>{{transaction.total * exchangeRate | giddhCurrency}}</span>
+                            </div> -->
+
+
+                            <!-- <ng-container *ngTemplateOutlet="otherTaxesModal;context: {$implicit: entry }">
+                            </ng-container> -->
+
+</div>
+
+<div class="trash-icon-delete">
+<span class="cp">
+                                    <i class="icon-trash" aria-hidden="true"></i>
+                                </span>
+</div>
+</td>
+</tr>
+
+
+        </table>
+    </section>
+</form>
