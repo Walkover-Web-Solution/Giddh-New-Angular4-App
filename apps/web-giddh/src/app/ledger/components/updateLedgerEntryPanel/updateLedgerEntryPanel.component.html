@@ -914,17 +914,21 @@
                                 <td class="pdR1" *ngIf="vm.selectedLedger.voucher.shortCode == 'credit note'">
                                     <div class="form-group">
                                         <label class="default_clr">Invoice No.</label>
-    
-                                        <sh-select [options]="invoiceList" placeholder="Select Accounts" [(ngModel)]="selectedInvoice"
-                                            [notFoundLink]="false" (selected)="creditNoteInvoiceSelected($event)"
-                                            [multiple]="false" [ItemHeight]="67" [showClear]="false"
-                                            [useInBuiltFilterForFlattenAc]="true">
+
+                                        <sh-select [options]="invoiceList" placeholder="Select Accounts"
+                                            [(ngModel)]="selectedInvoice" [notFoundLink]="false"
+                                            (selected)="creditNoteInvoiceSelected($event)" [multiple]="false"
+                                            [ItemHeight]="67" [showClear]="false" [useInBuiltFilterForFlattenAc]="true">
                                             <ng-template #optionTemplate let-option="option">
                                                 <a href="javascript:void(0)" class="list-item sh-template">
                                                     <div class="item">{{ option.label }}
                                                     </div>
                                                     <div class="item_unq">
-                                                        {{ option.value }}
+                                                        (Dated: {{ option.invoice?.invoiceDate}})
+                                                    </div>
+                                                    <div class="item_unq">
+                                                        (Due:
+                                                        {{ option.invoice?.balanceDue.amountForAccount | giddhCurrency }})
                                                     </div>
                                                 </a>
                                             </ng-template>

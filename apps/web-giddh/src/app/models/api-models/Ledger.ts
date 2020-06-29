@@ -160,6 +160,7 @@ export class IInvoiceLinkingRequest {
 /** Model linked invoice */
 export class ILinkedInvoice {
     public invoiceUniqueName: string;
+    public invoiceNumber?: string;
 }
 
 /*
