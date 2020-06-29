@@ -18,6 +18,7 @@ import {
 } from './purchase-invoice/aside-menu/aside-menu-purchase-invoice-setting.component';
 import { PurchaseInvoiceComponent } from './purchase-invoice/purchase.invoice.component';
 import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
+import { CreatePurchaseOrderComponent } from './create-purchase-order/create-purchase-order.component';
 import { ReconcileDesignComponent } from './purchase-invoice/reconcileDesign/reconcileDesign.component';
 import { PurchaseRecordComponent } from './purchase-record/component/purchase-record.component';
 import { PurchaseComponent } from './purchase.component';
@@ -32,6 +33,7 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
     declarations: [
         PurchaseInvoiceComponent,
         PurchaseOrderComponent,
+        CreatePurchaseOrderComponent,
         PurchaseComponent,
         AsideMenuPurchaseInvoiceSettingComponent,
         ReconcileDesignComponent,
