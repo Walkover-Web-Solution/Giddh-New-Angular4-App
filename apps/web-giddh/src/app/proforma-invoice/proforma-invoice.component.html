@@ -369,8 +369,29 @@
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
                                         <!-- Enabled for CR/DR update flow -->
-                                        <input type="text" name="accountDetails.invoiceNum" class="form-control invoiceDate attentionTo" [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [disabled]="(isUpdateMode && !(isCreditNote || isDebitNote || isPurchaseInvoice)) ? 'disabled' : null" [(ngModel)]="invFormData.voucherDetails.voucherNumber"
+                                        <input *ngIf="selectedVoucherType !== 'credit note'" type="text" name="accountDetails.invoiceNum" class="form-control invoiceDate attentionTo" [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [disabled]="(isUpdateMode && !(isCreditNote || isDebitNote || isPurchaseInvoice)) ? 'disabled' : null" [(ngModel)]="invFormData.voucherDetails.voucherNumber"
                                         />
+
+                                        <ng-container *ngIf="selectedVoucherType === 'credit note'">
+                                            <sh-select [options]="invoiceList" placeholder="Select Accounts"
+                                                [notFoundLink]="false" (selected)="creditNoteInvoiceSelected($event)"
+                                                [multiple]="false" [ItemHeight]="67" [showClear]="false"
+                                                [useInBuiltFilterForFlattenAc]="true">
+                                                <ng-template #optionTemplate let-option="option">
+                                                    <a href="javascript:void(0)" class="list-item sh-template">
+                                                        <div class="item">{{ option.label }}
+                                                        </div>
+                                                        <div class="item_unq">
+                                                            (Dated: {{ option.invoice?.invoiceDate}})
+                                                        </div>
+                                                        <div class="item_unq">
+                                                            (Due:
+                                                            {{ option.invoice?.balanceDue.amountForAccount | giddhCurrency }})
+                                                        </div>
+                                                    </a>
+                                                </ng-template>
+                                            </sh-select>
+                                        </ng-container>
                                     </div>
                                     <div class="col-sm-6 invoiceDateDueDate">
                                         <div class="form-inline">
