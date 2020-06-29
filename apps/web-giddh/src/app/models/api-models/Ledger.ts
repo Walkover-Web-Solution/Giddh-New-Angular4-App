@@ -125,7 +125,8 @@ export class LedgerResponse {
     public passportNumber?: string;
     public touristSchemeApplicable?: boolean;
     public invoiceAdvanceReceiptAdjustment?: InvoiceAdvanceReceiptAdjustment;
-    public advanceReceiptAdjustment?: AdvanceReceiptAdjustment
+    public advanceReceiptAdjustment?: AdvanceReceiptAdjustment;
+    public invoiceLinkingRequest?: IInvoiceLinkingRequest;
 }
 /** Model for Ledger Advance receipts for invoices */
 export class InvoiceAdvanceReceiptAdjustment {
@@ -151,6 +152,15 @@ export class AdjustedAmount {
     amountForCompany: number;
 }
 
+/** Model invoice linking request */
+export class IInvoiceLinkingRequest {
+    public linkedInvoices: ILinkedInvoice[];
+}
+
+/** Model linked invoice */
+export class ILinkedInvoice {
+    public invoiceUniqueName: string;
+}
 
 /*
  * Model for mail ledger api request
