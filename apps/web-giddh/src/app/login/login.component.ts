@@ -163,22 +163,14 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isTwoWayAuthInProcess$ = this.store.select(p => p.login.isTwoWayAuthInProcess);
         this.isTwoWayAuthInSuccess$ = this.store.select(p => p.login.isTwoWayAuthSuccess);
 
-        try {
-            if (isCordova()) {
-                const bootstrap = () => {
-                    platformBrowserDynamic().bootstrapModule(AppModule);
-                };
+        if (isCordova()) {
+            const bootstrap = () => {
+                platformBrowserDynamic().bootstrapModule(AppModule);
+            };
 
-                if (typeof window['cordova'] !== 'undefined') {
-                    document.addEventListener('deviceready', () => {
-                        bootstrap();
-                    }, false);
-                } else {
-                    bootstrap();
-                }
-            }
-        } catch (error) {
-            console.log(error);
+            document.addEventListener('deviceready', () => {
+                bootstrap();
+            }, false);
         }
     }
 

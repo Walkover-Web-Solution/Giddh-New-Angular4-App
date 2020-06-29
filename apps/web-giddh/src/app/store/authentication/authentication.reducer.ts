@@ -428,6 +428,16 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
             }
             return state;
         }
+        case LoginActions.SignupWithAppleResponse: {
+            let newState = _.cloneDeep(state);
+            let appleResponse: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
+            if (appleResponse.status === 'success') {
+                newState.isLoggedInWithSocialAccount = true;
+            } else {
+                newState.isLoggedInWithSocialAccount = false;
+            }
+            return newState;
+        }
         default:
             return state;
     }
@@ -751,6 +761,20 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             return Object.assign({}, state, { financialYearChosenInReport: action.payload });
         case CompanyActions.RESET_USER_CHOSEN_FINANCIAL_YEAR:
             return Object.assign({}, state, { financialYearChosenInReport: '' });
+
+        case LoginActions.SignupWithAppleResponse: {
+            let data: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
+            if (data.status === 'success') {
+                return Object.assign({}, state, {
+                    user: data.body
+                });
+            } else {
+                return Object.assign({}, state, {
+                    user: null
+                });
+            }
+        }
+
         default:
             return state;
     }

@@ -694,6 +694,7 @@ export class LoginActions {
         .ofType(LoginActions.SignupWithAppleResponse).pipe(
             map((action: CustomActions) => {
                 let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
+                console.log(response);
                 if (response) {
                     if (response.status === 'error') {
                         this._toaster.errorToast(action.payload.message, action.payload.code);
@@ -883,7 +884,6 @@ export class LoginActions {
     }
 
     public LoginSuccessByOtherUrl(): CustomActions {
-        console.log("LOGINS");
         return {
             type: LoginActions.LoginSuccessBYUrl,
             payload: null
@@ -1076,7 +1076,6 @@ export class LoginActions {
     }
 
     public userAutoLoginResponse(response): CustomActions {
-        console.log(response);
         return {
             type: LoginActions.AutoLoginWithPasswdResponse,
             payload: response
