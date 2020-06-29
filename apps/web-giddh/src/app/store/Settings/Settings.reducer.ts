@@ -131,6 +131,7 @@ export const initialState: SettingsState = {
     isPaymentUpdationSuccess: false,
     taxes: null,
     branchRemoved: false,
+    // Get profile API call in process
     getProfileInProgress: false
 };
 
