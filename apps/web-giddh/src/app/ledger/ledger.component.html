@@ -228,7 +228,6 @@
                                             <td class="width100 pos-rel" *ngIf="txn.type === 'DEBIT'">
                                                 <table class="width100">
                                                     <tbody class="ledger-main">
-                                                        <!-- [(ngModel)]="txn.isChecked" -->
                                                         <tr class="ledger-row" [ngClass]="{compoundEntry: txn.id === lc.selectedBankTxnUniqueName}">
                                                             <td class="col-xs-1 text-center">
                                                                 <input type="checkbox" (click)="selectEntryForBulkAction($event, item)" />
@@ -401,6 +400,24 @@
         <!-- endregion -->
         <div class="mobile-ledger-view clearfix" *ngIf="isMobileScreen">
             <table *ngIf="allTransactionDates && allTransactionDates.length > 0">
+                <tr>
+                    <td class="border-none pt-0 pb-0">
+                        <table width="100%">
+                            <tr class="splBg">
+                                <td data-title="B/F Balance" class="col-xs-5 col-md-6 col-lg-6">By Balance B/F</td>
+                                <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 text-right">
+                                    <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
+                                        {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.forwardedBalance?.amount | giddhCurrency}}
+                                    </span><br>
+                                    <span class="amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                        {{ ledgerTxnBalance?.convertedCurrencySymbol }}{{ledgerTxnBalance?.convertedForwardedBalance?.amount | giddhCurrency }}
+                                    </span>
+                                    <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">0</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>    
                 <tr *ngFor="let transactionDate of allTransactionDates;">
                     <td class="border-none pt-0 pb-0">
                         <table width="100%">
@@ -439,6 +456,20 @@
                         </table>
                     </td>
                 </tr>
+                <tr *ngIf="ledgerTxnBalance?.closingBalance?.type === 'DEBIT'" [tooltip]="lc.ledgerUnderStandingObj.balanceText.dr" [placement]="'left'">
+                    <td class="border-none pt-0 pb-0">
+                        <table width="100%">
+                            <tr class="splBg">
+                                <td data-title="C/F Balance" class="col-xs-5 col-md-6 col-lg-6">By Balance C/F</td>
+                                <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 text-right">
+                                    <span class="digit-blue">
+                                        {{ ledgerTxnBalance?.currencySymbol }}{{ledgerTxnBalance?.closingBalance?.amount  | giddhCurrency}}
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr> 
             </table>
             <!-- region pagination -->
             <div class="text-center mrT2 page-count pa">

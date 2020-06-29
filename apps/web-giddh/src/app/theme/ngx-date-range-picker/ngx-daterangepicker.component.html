@@ -77,7 +77,7 @@
             <div class="custom-date">
                 <span class="custom-label">Custom</span>
                 <div class="custom-edit-block">
-                    <span class="custom-date-range">{{startDate.format("MMM DD")}} - {{endDate.format("MMM DD")}}</span>
+                    <span class="custom-date-range">{{startDate.format("MMM DD YYYY")}} - {{endDate.format("MMM DD YYYY")}}</span>
                     <span class="edit-dates" (click)="openModalWithClass(template)"><img
                             src="{{imgPath}}edit-pencilicon.svg"></span>
                 </div>
@@ -90,7 +90,7 @@
                 <div class="edit-date-container">              
                     <div class="modal-date-range">
                         <h5 class="modal-inside-heading">Custom</h5>
-                        <p>{{inlineStartDate.format("MMM DD")}} - {{inlineEndDate.format("MMM DD")}}</p>
+                        <p>{{inlineStartDate.format("MMM DD YYYY")}} - {{inlineEndDate.format("MMM DD YYYY")}}</p>
                         <span (click)="modalRef.hide()">
                             <i class="icon-calender"></i>
                         </span>

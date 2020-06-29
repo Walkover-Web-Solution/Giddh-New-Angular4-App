@@ -8,6 +8,7 @@ import { CompanyResponse } from '../../models/api-models/Company';
 import { cloneDeep } from '../../lodash-optimized';
 import { LoginActions } from '../../actions/login.action';
 import { AuthService } from '../../theme/ng-social-login-module/index';
+import { UserDetails } from '../../models/api-models/loginModels';
 
 @Component({
     selector: 'mobile-home-sidebar',
@@ -26,6 +27,8 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
     public isLoggedInWithSocialAccount$: Observable<boolean>;
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold the email of user */
+    public userEmail: any;
 
     constructor(private store: Store<AppState>, private loginAction: LoginActions, private socialAuthService: AuthService, private generalService: GeneralService) {
 
@@ -49,6 +52,7 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
 
                 if (selectedCmp) {
                     this.selectedCompany = cloneDeep(selectedCmp);
+                    console.log(this.selectedCompany);
                     let selectedCompanyArray = selectedCmp.name.split(" ");
                     let companyInitials = [];
                     for (let loop = 0; loop < selectedCompanyArray.length; loop++) {
@@ -60,6 +64,12 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
                     }
                     this.companyInitials = companyInitials.join(" ");
                 }
+            }
+        });
+
+        this.store.pipe(select((state: AppState) => state.session.user), takeUntil(this.destroyed$)).subscribe(user => {
+            if(user && user.user && user.user.email) {
+                this.userEmail = user.user.email;
             }
         });
 
