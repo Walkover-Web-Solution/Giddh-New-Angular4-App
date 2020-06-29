@@ -90,10 +90,10 @@ export class MfEditComponent implements OnInit {
         this.manufacturingDetails = new ManufacturingItemRequest();
         this.initializeOtherExpenseObj();
         // Update/Delete condition
-        this.store.pipe(select(p => p.manufacturing), takeUntil(this.destroyed$)).subscribe((o: any) => {
-            if (o.stockToUpdate) {
+        this.store.pipe(select(manufacturingStore => manufacturingStore.manufacturing), takeUntil(this.destroyed$)).subscribe((res: any) => {
+            if (res.stockToUpdate) {
                 this.isUpdateCase = true;
-                let manufacturingObj = _.cloneDeep(o.reportData.results.find((stock) => stock.uniqueName === o.stockToUpdate));
+                let manufacturingObj = _.cloneDeep(res.reportData.results.find((stock) => stock.uniqueName === res.stockToUpdate));
                 if (manufacturingObj) {
                     this.selectedProductName = `${manufacturingObj.stockName} (${manufacturingObj.stockUniqueName})`;
                     manufacturingObj.quantity = manufacturingObj.manufacturingQuantity;
