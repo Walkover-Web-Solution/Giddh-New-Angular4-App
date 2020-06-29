@@ -969,7 +969,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this._ledgerService.DownloadAttachement(fileName).subscribe(d => {
             if (d.status === 'success') {
                 let blob = base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
-                download(d.body.name, blob, `image/${d.body.fileType}`)
+                if(this.isMobileScreen) {
+                    saveAs(blob, `image/${d.body.fileType}`);
+                } else {
+                    download(d.body.name, blob, `image/${d.body.fileType}`)
+                }
             } else {
                 this._toaster.errorToast(d.message);
             }
@@ -986,9 +990,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this._ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).subscribe(d => {
             if (d.status === 'success') {
-                // debugger;
                 let blob = base64ToBlob(d.body, 'application/pdf', 512);
-                download(`${activeAccount.name} - ${invoiceName}.pdf`, blob, 'application/pdf');
+                if(this.isMobileScreen) {
+                    saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
+                } else {
+                    download(`${activeAccount.name} - ${invoiceName}.pdf`, blob, 'application/pdf');
+                }
             } else {
                 this._toaster.errorToast(d.message);
             }
