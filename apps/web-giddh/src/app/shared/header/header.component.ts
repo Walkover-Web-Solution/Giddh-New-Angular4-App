@@ -721,12 +721,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
 
     public ngAfterViewInit() {
-        /* TO SHOW NOTIFICATIONS */
-        let scriptTag = document.createElement('script');
-        scriptTag.src = 'https://cdn.headwayapp.co/widget.js';
-        scriptTag.type = 'text/javascript';
-        document.body.appendChild(scriptTag);
-        /* TO SHOW NOTIFICATIONS */
+        if (window['Headway'] === undefined) {
+            /* TO SHOW NOTIFICATIONS */
+            let scriptTag = document.createElement('script');
+            scriptTag.src = 'https://cdn.headwayapp.co/widget.js';
+            scriptTag.type = 'text/javascript';
+            scriptTag.defer = true;
+            document.body.appendChild(scriptTag);
+            /* TO SHOW NOTIFICATIONS */
+        } else {
+            window['Headway'].init();
+        }
 
         if (this.selectedPlanStatus === 'expired') {// active expired
             this.openExpiredPlanModel(this.expiredPlanModel);
