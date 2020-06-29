@@ -90,6 +90,7 @@ export interface SettingsState {
     inventory: any;
     updateProfileSuccess: boolean;
     updateProfileInProgress: boolean;
+    getProfileInProgress: boolean
     linkedAccounts: LinkedAccountsState;
     financialYears: IFinancialYearResponse;
     usersWithCompanyPermissions: any;
@@ -129,7 +130,9 @@ export const initialState: SettingsState = {
     isPaymentAdditionSuccess: false,
     isPaymentUpdationSuccess: false,
     taxes: null,
-    branchRemoved: false
+    branchRemoved: false,
+    // Get profile API call in process
+    getProfileInProgress: false
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
@@ -213,14 +216,19 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
 
         // region profile
 
+       case SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO: {
+            return Object.assign({}, state, { getProfileInProgress: true });
+       }
+
         case SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
             if (response.status === 'success') {
                 newState.profile = response.body;
                 newState.profileRequest = true;
+                newState.getProfileInProgress = false;
                 return Object.assign({}, state, newState);
             }
-            return { ...state, updateProfileInProgress: true };
+            return { ...state, updateProfileInProgress: true, getProfileInProgress: false };
         }
         case SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
