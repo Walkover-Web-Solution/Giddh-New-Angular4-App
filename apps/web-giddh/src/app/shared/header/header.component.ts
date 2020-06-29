@@ -725,7 +725,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             /* TO SHOW NOTIFICATIONS */
             let scriptTag = document.createElement('script');
             scriptTag.src = 'https://cdn.headwayapp.co/widget.js';
-            scriptTag.setAttribute('class', 'giddh-calendly-calendar');
             scriptTag.type = 'text/javascript';
             scriptTag.defer = true;
             document.body.appendChild(scriptTag);
