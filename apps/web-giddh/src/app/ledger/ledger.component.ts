@@ -893,7 +893,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public getInvoiceListsForCreditNote(ev): void {
-        if (ev) {
+        if (ev && this.selectedTxnAccUniqueName && this.accountUniquename) {
             let request = {
                 "accountUniqueNames": [this.selectedTxnAccUniqueName, this.accountUniquename],
                 "voucherType": "credit note"

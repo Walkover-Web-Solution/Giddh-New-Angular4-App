@@ -1190,7 +1190,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             "accountUniqueNames": [this.vm.selectedLedger.particular.uniqueName, this.vm.selectedLedger.transactions[0].particular.name.toLowerCase()],
             "voucherType": "credit note"
         }
-        let date = this.vm.selectedLedger.entryDate;
+        let date;
+        if (typeof this.vm.selectedLedger.entryDate === 'string') {
+            date = this.vm.selectedLedger.entryDate;
+        } else {
+            date = moment(this.vm.selectedLedger.entryDate).format(GIDDH_DATE_FORMAT);
+        }
         this.invoiceList = [];
         this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((res: any) => {
             _.map(res.body, (invoice) => {
