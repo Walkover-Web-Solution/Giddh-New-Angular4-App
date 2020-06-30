@@ -1439,7 +1439,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 "accountUniqueNames": [this.invFormData.voucherDetails.customerUniquename, 'sales'],
                 "voucherType": "credit note"
             }
-            let date = moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
+            let date;
+            if (typeof this.invFormData.voucherDetails.voucherDate === 'string') {
+                date = this.invFormData.voucherDetails.voucherDate;
+            } else {
+                date = moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
+            }
             this.invoiceList = [];
             this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((res: any) => {
                 _.map(res.body, (invoice) => {
