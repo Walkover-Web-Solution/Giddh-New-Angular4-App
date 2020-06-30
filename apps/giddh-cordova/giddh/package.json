@@ -65,9 +65,7 @@
       "cordova-plugin-filechooser": {},
       "cordova-plugin-filepicker": {},
       "cordova-plugin-file": {},
-      "cordova-plugin-file-opener2": {
-        "ANDROID_SUPPORT_V4_VERSION": "27.+"
-      },
+      "cordova-plugin-file-opener2": {},
       "cordova-plugin-wkwebview-engine": {},
       "cordova-plugin-inappbrowser-popup-bridge": {},
       "cordova-plugin-statusbar": {},
