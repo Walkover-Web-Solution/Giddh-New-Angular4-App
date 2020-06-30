@@ -1637,7 +1637,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (acc) {
                 this.isLedgerAccSelected = true;
                 this.selectedLedgerName = acc.uniqueName;
-                this.selectedPage = 'ledger - ' + acc.name;
+                if(this.isMobileSite) {
+                    this.selectedPage = acc.name;
+                } else {
+                    this.selectedPage = 'ledger - ' + acc.name;
+                }
                 return this.navigateToUser = false;
             }
         });
