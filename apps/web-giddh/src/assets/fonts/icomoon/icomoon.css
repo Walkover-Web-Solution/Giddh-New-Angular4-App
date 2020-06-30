@@ -25,19 +25,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-<<<<<<< HEAD
 .icon-back-arrow:before {
   content: "\e900";
-=======
-.icon-account:before {
-  content: "\e953";
-}
-.icon-group-folder:before {
-  content: "\e954";
-}
-.icon-bar:before {
-  content: "\e955";
->>>>>>> staging
 }
 
 .icon-log:before {
@@ -86,12 +75,6 @@
   content: "\e016";
 }
 .icon-home-icon:before {
-<<<<<<< HEAD
-=======
-  content: "\e900";
-}
-.icon-generate-invoice:before {
->>>>>>> staging
   content: "\e901";
 }
 .icon-generate-invoice:before {
@@ -109,17 +92,10 @@
 .icon-info:before {
   content: "\e906";
 }
-<<<<<<< HEAD
 .icon-expandIcon:before {
   content: "\e907";
 }
 .icon-advance-search:before {
-=======
-.icon-advance-search:before {
-  content: "\e907";
-}
-.icon-copy:before {
->>>>>>> staging
   content: "\e908";
 }
 .icon-copy:before {
@@ -212,12 +188,9 @@
 .icon-group:before {
   content: "\e926";
 }
-<<<<<<< HEAD
 .icon-bar:before {
   content: "\e927";
 }
-=======
->>>>>>> staging
 .icon-Search:before {
   content: "\e928";
 }
@@ -282,12 +255,6 @@
   content: "\e93c";
 }
 .icon-calender:before {
-<<<<<<< HEAD
-=======
-  content: "\e93c";
-}
-.icon-car:before {
->>>>>>> staging
   content: "\e93d";
 }
 .icon-car:before {
