@@ -17,7 +17,7 @@
         }
     }
     .mobile-item-wrapper{
-        padding: 0 8px 15px; 
+        padding: 0 8px 15px;
         margin-bottom: 0;
         .mobile-single-item {
             float: left;
@@ -47,7 +47,7 @@
                 align-items: center;
                 justify-content: center;
                 background-color: $white;
-                border-radius: 11px;    
+                border-radius: 11px;
                 margin-bottom: 8px;
                 img{
                     width: 58px;
@@ -83,7 +83,7 @@
                     }
                 }
                 .mobile-item-name{
-                    h4{        
+                    h4{
                         color:$midnight-blue;
                         text-overflow: ellipsis;
                         overflow: hidden;
@@ -105,6 +105,9 @@
                 padding-right: 10px;
                 color: $gray;
                 font-size: 12px;
+                .icon-account {
+                    font-size: 18px;
+                }
             }
             .group-name{
                 h4{
@@ -175,7 +178,7 @@
         margin: 0;
         padding: 15px 0 15px 10px;
         width: calc(100% - 36px);
-        position: relative;  
+        position: relative;
         .input-group{
             background-color: $white;
             border-radius: 50px;
@@ -250,7 +253,7 @@
             padding-left: 0;
             white-space: nowrap;
         }
-    } 
+    }
 }
 /*responsive*/
 @media(max-width:320px){

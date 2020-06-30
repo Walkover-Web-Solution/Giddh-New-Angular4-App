@@ -1,19 +1,20 @@
 @font-face {
-  font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?3ned1i');
-  src:  url('fonts/icomoon.eot?3ned1i#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?3ned1i') format('truetype'),
-    url('fonts/icomoon.woff?3ned1i') format('woff'),
-    url('fonts/icomoon.svg?3ned1i#icomoon') format('svg');
+  font-family: "icomoon";
+  src: url("fonts/icomoon.eot?lf4fyi");
+  src: url("fonts/icomoon.eot?lf4fyi#iefix") format("embedded-opentype"),
+      url("fonts/icomoon.ttf?lf4fyi") format("truetype"),
+      url("fonts/icomoon.woff?lf4fyi") format("woff"),
+      url("fonts/icomoon.svg?lf4fyi#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
-[class^="icon-"], [class*=" icon-"] {
+[class^="icon-"],
+[class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'icomoon' !important;
-  speak: never;
+  font-family: "icomoon" !important;
+  speak: none;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -25,14 +26,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-account:before {
-  content: "\e953";
+.icon-advance-search:before {
+  content: "\e907";
 }
-.icon-group-folder:before {
-  content: "\e954";
+.icon-calender:before {
+  content: "\e93c";
 }
-.icon-bar:before {
-  content: "\e955";
+.icon-home-icon:before {
+  content: "\e900";
 }
 .icon-log:before {
   content: "\e001";
@@ -79,9 +80,6 @@
 .icon-journal:before {
   content: "\e016";
 }
-.icon-home-icon:before {
-  content: "\e900";
-}
 .icon-generate-invoice:before {
   content: "\e901";
 }
@@ -99,9 +97,6 @@
 }
 .icon-expandIcon:before {
   content: "\e906";
-}
-.icon-advance-search:before {
-  content: "\e907";
 }
 .icon-copy:before {
   content: "\e908";
@@ -193,6 +188,9 @@
 .icon-group:before {
   content: "\e925";
 }
+.icon-bar:before {
+  content: "\e926";
+}
 .icon-Search:before {
   content: "\e927";
 }
@@ -255,9 +253,6 @@
 }
 .icon-dots-three-vertical:before {
   content: "\e93b";
-}
-.icon-calender:before {
-  content: "\e93c";
 }
 .icon-car:before {
   content: "\e93d";
