@@ -97,7 +97,8 @@
                                         <input type="text" autocomplete="off" name="datess" #dbs='bsDatepicker'
                                             [(ngModel)]="vm.selectedLedger.entryDate" class="form-control" bsDatepicker
                                             [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                            (click)="addBlankTrx('DEBIT', txn, $event)" placeholder="date">
+                                            (click)="addBlankTrx('DEBIT', txn, $event)" placeholder="date"
+                                            (ngModelChange)="getInvoiceListsForCreditNote()">
                                     </td>
 
                                     <td data-title="Particular" id="DbtTd"
