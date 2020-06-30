@@ -53,7 +53,7 @@ export class AsideHelpSupportComponent implements OnInit {
         if (isElectron) {
             (window as any).require("electron").shell.openExternal('https://calendly.com/sales-accounting-software/talk-to-sale');
         } else if (isCordova) {
-            //
+            window.open("https://calendly.com/sales-accounting-software/talk-to-sale", "_blank");
         } else {
             this.openScheduleCalendlyModel();
         }
