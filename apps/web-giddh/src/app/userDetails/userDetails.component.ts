@@ -380,11 +380,20 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
     /**
-     * deleteSession
+     * Deletes the session
+     *
+     * @param {string} sessionId Session ID
+     * @param {number} sessionIndex Index of session to be deleted required to delete the session from store
+     * @memberof UserDetailsComponent
      */
-    public deleteSession(sessionId: string) {
-        this.store.dispatch(this._sessionAction.deleteSession(sessionId));
+    public deleteSession(sessionId: string, sessionIndex: number): void {
+        const requestPayload = {
+            sessionId,
+            sessionIndex
+        };
+        this.store.dispatch(this._sessionAction.deleteSession(requestPayload));
     }
 
     public clearAllSession() {
