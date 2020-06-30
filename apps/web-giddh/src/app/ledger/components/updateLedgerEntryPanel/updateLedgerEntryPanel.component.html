@@ -736,11 +736,11 @@
                                     class="icon-edit11 font-10"></i></a>
                         </p>
                         <p class="font-12 text-light mb-1">
-                            {{ vm.baseCurrencyDetails?.symbol}}{{vm.selectedLedger?.invoiceAdvanceReceiptAdjustment?.totalAdjustmentAmount | giddhCurrency}}
+                            {{ vm.baseCurrencyDetails?.symbol}}{{vm.selectedLedger?.voucherAdjustmentsForInvoice?.totalAdjustmentAmount | giddhCurrency}}
                         </p>
                         <div class="clearfix adjustment-field">
                             <div class="row"
-                                *ngFor="let item of vm.selectedLedger?.invoiceAdvanceReceiptAdjustment?.adjustedInvoices; let entryIdx = index;">
+                                *ngFor="let item of vm.selectedLedger?.voucherAdjustmentsForInvoice?.adjustedInvoices; let entryIdx = index;">
                                 <div class="col-md-4 col-sm-5 pr-05">
                                     <div class="form-group">
                                         <label>Adjustment Invoices
