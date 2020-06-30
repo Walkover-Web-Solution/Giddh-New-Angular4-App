@@ -482,7 +482,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     // Check the RCM checkbox if API returns subvoucher as Reverse charge
 
                     /** To check advance receipts adjustment for Tx (Using list of invoice is there or not)*/
-                    if (this.vm && this.vm.selectedLedger && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices.length) {
+                    if (this.vm && this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustmentsForInvoice && this.vm.selectedLedger.voucherAdjustmentsForInvoice.adjustedInvoices && this.vm.selectedLedger.voucherAdjustmentsForInvoice.adjustedInvoices.length) {
                         this.isAdjustedInvoicesWithAdvanceReceipt = true;
                         this.calculateInclusiveTaxesForAdvanceReceiptsInvoices();
                     } else {
@@ -1519,12 +1519,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public adjustedInvoiceAmountChange(): void {
-        if (this.vm.selectedLedger && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices) {
+        if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustmentsForInvoice && this.vm.selectedLedger.voucherAdjustmentsForInvoice.adjustedInvoices) {
             let totalAmount: number = 0;
-            this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices.forEach(item => {
+            this.vm.selectedLedger.voucherAdjustmentsForInvoice.adjustedInvoices.forEach(item => {
                 totalAmount = Number(totalAmount) + Number(item.adjustedAmount.amountForAccount);
             });
-            this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.totalAdjustmentAmount = totalAmount;
+            this.vm.selectedLedger.voucherAdjustmentsForInvoice.totalAdjustmentAmount = totalAmount;
             this.checkAdjustedAmountExceed(Number(totalAmount));
             this.calculateInclusiveTaxesForAdvanceReceiptsInvoices();
         }
@@ -1536,7 +1536,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public calculateInclusiveTaxesForAdvanceReceiptsInvoices(): void {
-        this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices.map(item => {
+        this.vm.selectedLedger.voucherAdjustmentsForInvoice.adjustedInvoices.map(item => {
             item.taxAmount = this.generalService.calculateInclusiveOrExclusiveTaxes(true, item.adjustedAmount.amountForAccount, item.taxRate, 0);
         });
     }

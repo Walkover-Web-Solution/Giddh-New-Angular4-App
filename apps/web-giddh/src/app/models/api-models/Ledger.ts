@@ -124,12 +124,12 @@ export class LedgerResponse {
     public reverseChargeTaxableAmount?: number;
     public passportNumber?: string;
     public touristSchemeApplicable?: boolean;
-    public invoiceAdvanceReceiptAdjustment?: InvoiceAdvanceReceiptAdjustment;
+    public voucherAdjustmentsForInvoice?: VoucherAdjustmentsForInvoice;
     public advanceReceiptAdjustment?: AdvanceReceiptAdjustment;
     public invoiceLinkingRequest?: IInvoiceLinkingRequest;
 }
 /** Model for Ledger Advance receipts for invoices */
-export class InvoiceAdvanceReceiptAdjustment {
+export class VoucherAdjustmentsForInvoice {
     adjustedInvoices: AdjustedInvoice[];
     totalAdjustmentAmount: number;
     description: string;
