@@ -9622,7 +9622,7 @@ span#HW_badge_cont:nth-child(3){
     }
     .HW_badge_cont {
         left: -6px !important;
-        z-index: 9;
+        z-index: 991;
         top: -25px !important;
         position: absolute;
     }
@@ -9976,6 +9976,9 @@ span#HW_badge_cont:nth-child(3){
     }
     .ledg-head .custom-tabs .nav.nav-tabs {
         padding-top: 0 !important;
+    }
+    .digit-blue .tooltip.bs-tooltip-top{
+        display: block !important;
     }
 }
 

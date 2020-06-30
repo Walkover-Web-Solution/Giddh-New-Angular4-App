@@ -545,6 +545,14 @@ sh-select:focus {
 .input-wrapper.ipad-view-datepicker {
     display: none;
 }
+.no-btn,
+.no-btn:active,
+.no-btn:focus{
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    padding-left: 0;
+}
 /*responsive*/
 .modal-ledger {
     width: 70%;
