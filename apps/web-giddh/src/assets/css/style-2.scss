@@ -10019,6 +10019,13 @@ span#HW_badge_cont:nth-child(3){
     .pagination>li>span {
         padding: 6px 6px;
     }
+    header .hamburger_menu h4 {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-height: 20px;
+        width: calc(100% - 30px);
+    }
 }
 
 @media (max-width: 360px) {
