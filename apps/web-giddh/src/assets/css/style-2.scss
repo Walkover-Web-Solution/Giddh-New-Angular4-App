@@ -56,7 +56,6 @@
     background: $white;
 }
 
-
 /*
 .aging-table > thead > tr > th {
     background: #e5e5e5;
@@ -1332,7 +1331,9 @@ ul.sub-list {
 .width-100 {
     width: 100% !important;
 }
-
+.width-150 {
+    width: 150px;
+}
 .btn-green {
     background: $deep-sky-blue;
     color: $white;
