@@ -1,10 +1,10 @@
 <form>
     <div class="clearfix">
-        <div class="clearfix wrapperCustomerTable  pdT2">
-            <div class="customerInvoiceTable">
+        <div class="clearfix wrapper-customer-table  pdT2">
+            <div class="customer-purchase-table">
                 <div class="inner-container">
                     <div class="inner-container">
-                        <div class="showforSmall-screen">
+                        <div class="show-for-small-screen">
                             <div class="text-right">
                                 <p class="fs20 b pbR1">
                                     <span class="balance-due">Balance Due</span>
@@ -28,11 +28,11 @@
                                         class="red-text">*</span></label>
                                 </div>
                                  <!-- region customer dropdown -->
-                                 <div class="col-sm-7 selectCustomerName">
+                                 <div class="col-sm-7 select-customer-name">
                                     <div class="clearfix d-flex flex-column">
                                         <div class="d-flex flex-column">
                                             <!-- region if not cashinvoice show customer dropdown -->
-                                           <sh-select></sh-select>
+                                           <sh-select class="mb-05"></sh-select>
                                             <!-- endregion -->
                                              <p><small>Pending Purchase order of selected vendor</small></p>
                                              <p class="font-14"><a href="javascript(void)">PO84709832 |</a>
@@ -50,7 +50,7 @@
                                         class="red-text">*</span></label>
                                 </div>
                                  <!-- region customer dropdown -->
-                                 <div class="col-sm-7 selectCustomerName">
+                                 <div class="col-sm-7 select-customer-name">
                                     <div class="clearfix d-flex flex-column">
                                         <div class="d-flex flex-column">
                                             <!-- region if not cashinvoice show customer dropdown -->
@@ -68,7 +68,7 @@
                                         class="red-text">*</span></label>
                                 </div>
                                  <!-- region customer dropdown -->
-                                 <div class="col-sm-7 selectCustomerName">
+                                 <div class="col-sm-7 select-customer-name">
                                     <div class="clearfix d-flex flex-column">
                                         <div class="d-flex flex-column">
                                             <!-- region if not cashinvoice show customer dropdown -->
@@ -84,7 +84,7 @@
                     </div>
                 </div>
             </div>
-            <div class="customerInvoiceTable bg-white pdB2 pdT2">
+            <div class="customer-purchase-table bg-white pdB2 pdT2">
                 <div class="inner-container">
                     <div class="row mb-1">
                         <div class="col-sm-2">
@@ -92,7 +92,7 @@
                                 class="red-text">*</span></label>
                         </div>
                          <!-- region customer dropdown -->
-                         <div class="col-sm-9 selectCustomerName">
+                         <div class="col-sm-9 select-customer-name">
                             <section class="form-inline">
 
                                 <div class="wrap-billing-address clearfix">
@@ -109,7 +109,7 @@
 
                                                     <div>
                                                         <div class="col-sm-6 pd ">
-                                                            <label class="salesCountryLabel">
+                                                            <label class="sales-country-label">
                                                                India
                                                             </label>
                                                         </div>
@@ -152,7 +152,7 @@
                                                             <div class="col-sm-6 pd ">
                                                                 <div class="form-group">
 
-                                                                    <label class="salesCountryLabel">
+                                                                    <label class="sales-country-label">
                                                                        India
                                                                     </label>
                                                                 </div>
@@ -187,7 +187,7 @@
                             class="red-text">*</span></label>
                     </div>
                      <!-- region customer dropdown -->
-                     <div class="col-sm-7 selectCustomerName">
+                     <div class="col-sm-7 select-customer-name">
                         <div class="clearfix d-flex flex-column">
                             <div class="d-flex flex-column">
                                 <!-- region if not cashinvoice show customer dropdown -->
@@ -204,13 +204,13 @@
                         <label>Order #</label>
                     </div>
                      <!-- region customer dropdown -->
-                     <div class="col-sm-9 selectCustomerName order-expected-delivery d-flex">
+                     <div class="col-sm-9 select-customer-name order-expected-delivery d-flex">
                         <!-- region if not cashinvoice show customer dropdown -->
                         <div class="col-sm-6 pl-0">
                             <sh-select></sh-select>
                         </div>
                         <!-- endregion -->
-                        <div class="col-sm-6 invoiceDateDueDate">
+                        <div class="col-sm-6 invoice-due-date">
                             <div class="d-flex">
                                     <label>Expected Delivery</label>
                                     <input type="text" class="form-control" placeholder="Select Date">
@@ -234,7 +234,7 @@
             </div>
         </div>
     </div>
-    <section class="staticInvoiceTable salseInvoicetable clearfix mrB2 whiteBg container-fluid">
+    <section class="static-purchase-table create-purchase-order-table clearfix mb-2 bg-white container-fluid">
         <table class="table table-custom-invoice  basic">
             <thead>
                 <tr>
@@ -251,17 +251,17 @@
             <tbody>
                     <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature) -->
                     <!-- region static entries-->
-                    <tr class="entriesTr set-active">
+                    <tr class="entries-row set-active">
                         <td>1</td>
                         <td>
-                            <div class="productName">
+                            <div class="product-name">
                                 <label class="selectAccountLabel">Click to
                                 Select
                                 Account</label> Purchase oreder
 
                             </div>
 
-                            <div class="skuNumber">
+                            <div class="sku-number">
                                 <label>SKU:</label>Number
                             </div>
 
@@ -269,24 +269,24 @@
                                Dummy text here
 
                             </div>
-                            <p class="small text-muted sku_and_customfields" *ngIf="transaction.sku_and_customfields">
+                            <p class="small text-muted sku-custom-fields">
                                5454545dummy</p>
-                            <div class="dateHsnCode">
+                            <div class="date-hsn-code">
 
                                 <div class="row">
 
                                     <div class="col-xs-6 pdR0">
-                                        <div class="entryDate">
+                                        <div class="entry-date">
                                             <label>Entry Date: </label> 20-12-2020
-                                            <span class="edit-icon cp" *ngIf="!isUpdateMode" hidden>
+                                            <span class="edit-icon cp" hidden>
                                                 <img src="assets/images/edit-pencilicon.svg">
                                             </span>
 
                                         </div>
                                     </div>
 
-                                    <div class="col-xs-6 pdL0" *ngIf="transaction.hsnNumber || transaction.sacNumber">
-                                        <div class="hsnCode text-right">
+                                    <div class="col-xs-6 pdL0">
+                                        <div class="hsn-code text-right">
                                             <label>HSN/SAC:</label>
                                             <span>
                                                 2522525dummy number
@@ -299,13 +299,13 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="text-right stockUnit">
+                        <td class="text-right stock-unit">
                             <div class="wrap-td-data">
                               20dummy
                             </div>
                         </td>
                         <td class="text-right tra-rate item-rate " style="height:1px;">
-                            <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
+                            <div>
                                 <div class="td_Wrapper">
                                     <div style="flex: 1;">
                                         <div class="wrap-td-data"> <span>
@@ -395,33 +395,33 @@
 
                     </tr>
                     <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
-                    <tr class="entriesTr defaultActive">
+                    <tr class="entries-row default-active">
                         <td>1</td>
                         <td>
 
-                            <div class="productName">
+                            <div class="product-name">
                                 <div class="ng-select-wrap">
                                     <sh-select></sh-select>
                                 </div>
                             </div>
 
                             <div>
-                                <div class="skuNumber">
+                                <div class="sku-number">
                                     <label>SKU:</label>Number
                                 </div>
 
                                 <div class="discription">
                                     <textarea type="text" placeholder="Add Description" class="form-control">
       </textarea>
-                                    <p class="small text-muted sku_and_customfields">
+                                    <p class="small text-muted sku-custom-fields">
                                        4454555</p>
                                 </div>
 
                                 <!-- region entry date/ hsncode -->
-                                <div class="dateHsnCode">
+                                <div class="date-hsn-code">
                                     <div class="row">
                                         <div class="col-xs-6 pdR0">
-                                            <div class="entryDate">
+                                            <div class="entry-date">
                                                 <label>Entry Date: </label>
                                                 <span hidden>
                                                     <input type="text">
@@ -438,12 +438,12 @@
                                         </div>
 
                                         <div class="col-xs-6 pdL0">
-                                            <div class="wrap-hsnBox">
-                                                <div class="hsnCode text-right">
+                                            <div class="wrap-hsn-box">
+                                                <div class="hsn-code text-right">
                                                     <label>HSN/SAC:</label>
                                                     <span>
                                                        45454545
-                                                    <span class="updateText" hidden>Update
+                                                    <span class="update-text" hidden>Update
                                                         </span>
                                                     <span class="edit-icon cp">
                                                             <img src="assets/images/edit-pencilicon.svg">
@@ -451,7 +451,7 @@
                                                     </span>
                                                 </div>
 
-                                                <div class="hsnCodeDropdown" hidden>
+                                                <div class="hsn-code-dropdown" hidden>
                                                     <label>HSN/SAC</label>
                                                     <input type="text" maxLength="10" placeholder="HSN/SAC Number" />
                                                     <input type="text" maxLength="10" placeholder="HSN/SAC Number"/>
@@ -475,10 +475,10 @@
                             </div>
                         </td>
 
-                        <td class="text-right stockUnit">
-                            <input type="text" placeholder="Quantity"/>
+                        <td class="text-right stock-unit">
+                            <input type="text" placeholder="Quantity" class="text-right form-control" />
 
-                            <select class="form-control">
+                            <select class="form-control mt-05">
                             <!-- <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">
                                 {{stock.text}}
                             </option> -->
@@ -503,7 +503,7 @@
                         <td class="text-right item-amount" style="height:1px;">
                             <div class="td_Wrapper">
                                 <div style="flex: 1;">
-                                    <input type="text" placeholder="Amount"/>
+                                    <input type="text" placeholder="Amount" class="text-right form-control" />
                                 </div>
                                 <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                     <span>{{baseCurrencySymbol}}</span>
@@ -518,6 +518,7 @@
                                     <!-- <discount-control-component #discountComponent [discountMenu]="false" [discountAccountsDetails]="entry.discounts" [discountSum]="entry.discountSum" [showHeaderText]="false" (hideOtherPopups)="closeTaxControlPopup()" (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
                                         [maskInput]="inputMaskFormat" [prefixInput]="invFormData.accountDetails.currencySymbol" [suffixInput]="selectedSuffixForCurrency">
                                     </discount-control-component> -->
+                                    <sh-select></sh-select>
                                 </div>
                                 <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                     <span>{{baseCurrencySymbol}}</span>
@@ -529,8 +530,9 @@
                         <td class="pos-rel dropdown-container item-tax" style="height:1px;">
                             <div class="td_Wrapper">
                                 <div class="text-right" style="flex:1;">
-                                    <!-- <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="allowedSelectionOfAType"
-                                        [showHeading]="false" [rootClass]="'salseInvoicetable'" (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)" (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat" [prefixInput]="invFormData.accountDetails.currencySymbol"
+                                    <sh-select></sh-select>
+                                    <!-- <tax-control [taxes]="companyTaxesList" [date]="entry.entry-date" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="allowedSelectionOfAType"
+                                        [showHeading]="false" [rootClass]="'create-purchase-order-table'" (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)" (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat" [prefixInput]="invFormData.accountDetails.currencySymbol"
                                         [suffixInput]="selectedSuffixForCurrency">
                                     </tax-control> -->
                                     
@@ -597,9 +599,398 @@
                                 </span>
 </div>
 </td>
-</tr>
-
-
-        </table>
+                </tr>
+            </tbody>
+            <!-- region add bulk items -->
+            <div class="p-4 aquaColor add-line-bulk-item" style="width: max-content;">
+                <a href="javascript:void 0">+ Add New Line</a>
+                <span> | </span>
+                <a href="javascript:void 0">+ Add Bulk Entries</a>
+            </div>
+            <!-- endregion -->
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        <!-- region other details-->
+                        <div>
+                            <div class="collapse-pane clearfix">
+        
+                                <div class="collapse-pane-heading">
+        
+                                    <div class="ico-box-wrap">
+                                        <div class="ico-box">
+                                            <span aria-hidden="true"></span>
+                                        </div>
+                                    </div>
+        
+                                    <div class="ico-head">Other Details</div>
+                                </div>
+        
+                                <div class="clearfix max-600 pdL3 mr0">
+        
+                                    <div class="row">
+        
+                                        <div class="form-group col-xs-4">
+                                            <input type="text"  class="form-control"/>
+                                            <p class="text-danger">
+                                                Invalid Date
+                                            </p>
+                                        </div>
+        
+                                        <div class="form-group col-xs-4">
+                                            <input type="text" name="shippedVia" class="form-control"  />
+                                        </div>
+        
+                                        <div class="form-group col-xs-4">
+                                            <input type="text" name="trackingNumber" class="form-control" />
+                                        </div>
+        
+                                    </div>
+        
+                                    <div class="row">
+        
+                                        <div class="form-group col-xs-4">
+                                            <input type="text" name="customField1" class="form-control"/>
+                                        </div>
+        
+                                        <div class="form-group col-xs-4">
+                                            <input type="text" name="customField2"  class="form-control"/>
+                                        </div>
+        
+                                        <div class="form-group col-xs-4">
+                                            <input type="text" name="customField3"  class="form-control"/>
+                                        </div>
+        
+                                    </div>
+        
+                                </div>
+        
+                            </div>
+                        </div>
+                        <!-- endregion -->
+        
+                        <!-- region note/messages -->
+                        <div class="pdT1 pl0 max-600">
+        
+                            <label class="mrB1">Note</label>
+                            <textarea style="height:120px !important" class="form-control" name="message2">
+                        </textarea>
+                        </div>
+                        <!-- endregion -->
+        
+                        <!-- region attachment -->
+                        <div class="pdT1 pl0 max-600 pos-rel">
+        
+                            <label class="mrB1"><i class="glyphicon glyphicon-paperclip"></i>
+                                                Attachment</label>
+        
+                            <label class="custom-file-label form-control cp pos-rel" for="invoiceFile">
+                                                <em >Drag/Drop file or click here</em>
+                                                <em  class="text-success"></em>
+                                                <span class="text-success" hidden>
+                                                    <i class="fa fa-check"></i></span>
+                                                <input type="file" name="invoiceFile" id="invoiceFile">
+                            </label>
+        
+                        </div>
+                        <!-- endregion -->
+        
+                    </td>
+                    <!-- region total section -->
+                    <td colspan="4">
+        
+                        <section class="tableSec form-group">
+        
+                            <div class="tableRow">
+                                <div class="tableCell">Total Amount</div>
+                                <div class="tableCell figureCell">
+                                    <span>&</span>0.00
+                                </div>
+                            </div>
+        
+                            <div class="tableRow">
+                                <div class="tableCell">Discount</div>
+                                <div class="tableCell figureCell">
+                                    <span>$</span> 0.00
+                                </div>
+                            </div>
+        
+                            <div class="tableRow">
+                                <div class="tableCell">Taxable Value</div>
+                                <div class="tableCell figureCell">
+                                    <span>$</span>0.00
+                                </div>
+                            </div>
+        
+                            <div class="tableRow" hidden>
+                                <div class="tableCell">Tax</div>
+                                <div class="tableCell figureCell">
+                                    <span>$</span>0.00
+                                </div>
+                            </div>
+        
+                            <div class="tableRow">
+                                <div class="tableCell">CESS</div>
+                                <div class="tableCell figureCell"><span>$</span>0.00
+                                </div>
+                            </div>
+                            <div class="tableRow">
+        
+                                <div class="tableCell">
+                                    <strong>Round Off</strong>
+                                </div>
+        
+                                <div class="tableCell figureCell">
+                                    <strong> <span>$</span> 0.00</strong>
+                                </div>
+        
+                            </div>
+        
+                            <div class="tableRow ">
+        
+                                <div class="tableCell biggerDollar">
+                                    <strong>Total <span></span></strong>
+                                </div>
+        
+                                <div class="tableCell figureCell">
+                                    <strong><span>$</span>0.00</strong>
+                                </div>
+        
+                            </div>
+                            <!-- multicurrency feature (editable grand total make it functional) -->
+                            <div class="tableRow" hidden>
+                                <div class="tableCell biggerDollar">
+                                    <strong>Total <span></span></strong>
+                                </div>
+        
+                                <div class="tableCell figureCell">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+        
+                            <div class="tableRow" hidden>
+                                <div class="tableCell">TCS</div>
+                                <div class="tableCell figureCell"><span>$</span>0.00</div>
+                            </div>
+        
+                            <div class="tableRow" hidden>
+                                <div class="tableCell">TDS</div>
+                                <div class="tableCell figureCell"><span>$</span>0.00
+                                </div>
+                            </div>
+        
+                            <!--region balance due for non-purchase-->
+                            <div class="tableRow">
+        
+                                <div class="tableCell depositeSection" hidden>
+        
+                                    <div class="btn-group">
+        
+                                        <div id="deposit-dropdown" class="form-group pd1">
+                                            <p>Deposit</p>
+                                            <ul>
+                                                <ng-container>
+                                                    <li role="menuitem" class="mrT1 ">
+                                                        <div class="clearfix paymentMode deposit-payment-mode">
+        
+                                                            <div class="pull-right balanceDueText">
+                                                                <div class="clearfix mb-1 text-left">
+                                                                    <span class="pd0 mr-2 d-inline-block">
+                                                                                            <input class="radio-custom cp ml0"
+                                                                                                   name="advanceReceipt"
+                                                                                                   id="adjustAmountNo"
+                                                                                                   type="radio">
+                                                                                            <label class="radio-custom-label"
+                                                                                                   for="adjustAmountNo">No</label>
+                                                                                        </span>
+                                                                    <span class="pd0 d-inline-block">
+                                                                                            <input class="radio-custom cp ml0"
+                                                                                                   name="advanceReceipt"
+                                                                                                   id="adjustAmountYes"
+                                                                                                   type="radio">
+                                                                                            <label class="radio-custom-label"
+                                                                                                   for="adjustAmountYes">Yes</label>
+                                                                                        </span>
+                                                                </div>
+        
+                                                                <div class="clearfix">
+                                                                    <span class="pull-left">
+                                                                                            <p class="text-light mb-0">Advance
+                                                                                                Receipt</p>
+                                                                                            <p class="text-light">
+                                                                                                0.00
+                                                                                            </p>
+                                                                                        </span>
+                                                                    <a href="javascript:void(0)" class="font-12 pl-1 color-primary"><i
+                                                                                        class="icon-edit11"></i></a>
+                                                                </div>
+                                                            </div>
+        
+                                                            <label class="pull-right">Adjust Amount</label>
+                                                        </div>
+                                                    </li>
+                                                </ng-container>
+        
+                                                <ng-container >
+                                                    <li role="menuitem" class="mrT1 ">
+                                                        <div class="clearfix paymentMode">
+        
+                                                            <sh-select class="text-left">
+                                                                <!-- <ng-template #optionTemplate1 let-option="option">
+                                                                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                                                        <div class="item">{{ option.label }}
+                                                                        </div>
+                                                                        <div class="item_unq">{{ option.value }}
+                                                                        </div>
+                                                                    </a>
+                                                                </ng-template> -->
+                                                            </sh-select>
+                                                            <label class="pull-right">Payment Mode</label>
+                                                        </div>
+                                                    </li>
+        
+                                                    <li class="clearfix mrT1" >
+                                                        <input type="text" placeholder="Amount" name="dueAmount" class="form-control amountField text-right pull-right max100"/>
+                                                        <label class="pull-right">Amount</label>
+                                                    </li>
+        
+                                                    <li class="clearfix mrT1">
+                                                        <span class="amountField pull-right max100 amountFiledCash">
+                                                                            <span >$</span> 0.00</span>
+                                                        <label class="pull-right">Amount</label>
+                                                    </li>
+        
+                                                    <li class="clearfix mrT1 biggerDollar">
+                                                        <strong class="pull-right balanceDueText"> <span>
+                                                            <!-- {{invFormData.accountDetails.currencySymbol}} -->
+                                                        </span>
+                                                                            <ng-container >
+                                                                                <!-- {{adjustPaymentBalanceDueData | giddhCurrency }} -->
+                                                                            </ng-container>
+                                                                            <ng-container >
+                                                                                <!-- {{invFormData.voucherDetails.balanceDue | giddhCurrency }} -->
+                                                                            </ng-container>
+                                                                        </strong>
+                                                        <strong class="pull-right">Balance Due</strong>
+                                                    </li>
+                                                </ng-container>
+                                            </ul>
+                                        </div>
+        
+                                    </div>
+                                </div>
+                            </div>
+                            <!--endregion-->
+        
+                            <!-- region balance due for purchase -->
+                            <div class="tableRow">
+                                <div class="tableCell">
+                                    <strong>Balance Due</strong>
+                                </div>
+                                <div class="tableCell figureCell">
+                                    <strong>0.00</strong>
+                                </div>
+                            </div>
+                            <!-- endregion -->
+                        </section>
+                    </td>
+                    <!-- endregion -->
+                    <td></td>
+                </tr>
+            </tfoot>
+            </table>
     </section>
 </form>
+<section class="clearfix">
+
+    <section id="actionPane" class="text-center">
+
+        <div class="col-xs-12">
+
+            <!-- region generate mode -->
+            <div class="pull-right pr updateMode">
+                <button type="button" class="btn btn-danger d-inline-block v-align-middle">Clear</button>
+
+                <!-- region purchase invoice -->
+                <span class="d-inline-block v-align-middle">
+                                <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
+                            class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c
+                        </button> -->
+                                <button type="button" class="btn btn-default">Save</button>
+                            </span>
+                <!-- endregion -->
+
+                <!-- region non purchase -->
+                <span class="d-inline-block v-align-middle" hidden>
+                 <button type="button" class="btn btn-default">Generate<span>Cash </span> &amp; Update A/c
+                </button>
+
+                <div class="btn-group" dropdown [dropup]="true">
+                    <button type="button" class="btn btn-default generateInvoie">Generate<span>Cash</span></button>
+                    <button id="button-split" type="button" dropdownToggle class="btn btn-default dropdown-toggle dropdown-toggle-split" aria-controls="dropdown-split">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Split button!</span>
+                    </button>
+
+                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
+
+                        <li role="menuitem">
+                            <a class="dropdown-item cp">Create & Send</a>
+                        </li>
+
+                        <li role="menuitem">
+                            <a class="dropdown-item cp">Create& Print</a>
+                        </li>
+
+                        <li role="menuitem">
+                            <a class="dropdown-item cp">Generate & Recurring</a>
+                        </li>
+                    </ul>
+                </div>
+                </span>
+                <!-- endregion -->
+
+                <!-- region proforma/estimates -->
+                <span class="d-inline-block v-align-middle" hidden>
+
+                                <div class="btn-group" dropdown [dropup]="true">
+
+                                    <button type="button"
+                                            class="btn btn-default">Create </button>
+
+                                    <button id="button-split2" type="button" dropdownToggle
+                                            class="btn btn-default dropdown-toggle dropdown-toggle-split"
+                                            aria-controls="dropdown-split">
+                                        <span class="caret"></span>
+                <span class="sr-only">Split button!</span>
+                </button>
+
+                <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
+                    <li role="menuitem">
+                        <a class="dropdown-item cp">Create & Send</a>
+                    </li>
+
+                    <li role="menuitem">
+                        <a class="dropdown-item cp">Create & Print</a>
+                    </li>
+                </ul>
+            </div>
+            </span>
+            <!-- endregion -->
+
+        </div>
+        <!-- endregion -->
+
+        <!-- region update mode -->
+        <div class="pull-right pr" hidden>
+
+            <button type="button" class="btn btn-danger d-inline-block v-align-middle">Cancel</button>
+
+            <button type="button" class="btn btn-default">Update<span> Cash</span></button>
+        </div>
+        <!-- endregion -->
+
+        </div>
+    </section>
+</section>
+<!-- endregion -->
